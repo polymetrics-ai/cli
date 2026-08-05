@@ -801,6 +801,136 @@ func TestCLISurfaceRequestContractCanonicalizesArrayIndices(t *testing.T) {
 	}
 }
 
+func TestCLISurfaceOperationBodyMappingsUseEffectiveRuntimeShape(t *testing.T) {
+	tests := []struct {
+		name         string
+		rawSchema    string
+		static       map[string]any
+		flags        []engine.CLIFlag
+		wantFinding  string
+		wantFindings bool
+	}{
+		{
+			name:      "required object flag replaces static scalar",
+			rawSchema: `{"type":"object","additionalProperties":false,"required":["config"],"properties":{"config":{"type":"object","additionalProperties":false,"required":["value"],"properties":{"value":{"type":"string"}}}}}`,
+			static:    map[string]any{"config": "legacy"},
+			flags:     []engine.CLIFlag{{Name: "value", Type: "string", MapsTo: "/body/config/value", Required: true}},
+		},
+		{
+			name:         "scalar flag type mismatch",
+			rawSchema:    `{"type":"object","additionalProperties":false,"properties":{"count":{"type":"integer"}}}`,
+			flags:        []engine.CLIFlag{{Name: "count", Type: "string", MapsTo: "/body/count"}},
+			wantFinding:  "is incompatible with body_schema",
+			wantFindings: true,
+		},
+		{
+			name:         "array item flag type mismatch",
+			rawSchema:    `{"type":"object","additionalProperties":false,"properties":{"ids":{"type":"array","items":{"type":"integer"}}}}`,
+			flags:        []engine.CLIFlag{{Name: "ids", Type: "string_array", MapsTo: "/body/ids"}},
+			wantFinding:  "requires string items",
+			wantFindings: true,
+		},
+		{
+			name:         "dynamic array replaces static siblings",
+			rawSchema:    `{"type":"object","additionalProperties":false,"required":["items"],"properties":{"items":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["name","kind"],"properties":{"name":{"type":"string"},"kind":{"type":"string"}}}}}}`,
+			static:       map[string]any{"items": []any{map[string]any{"name": "static", "kind": "widget"}}},
+			flags:        []engine.CLIFlag{{Name: "name", Type: "string", MapsTo: "/body/items/0/name", Required: true}},
+			wantFinding:  "cannot assemble a schema-valid effective request body",
+			wantFindings: true,
+		},
+		{
+			name:         "sparse concrete array mapping",
+			rawSchema:    `{"type":"object","additionalProperties":false,"properties":{"items":{"type":"array","items":{"type":"object","additionalProperties":false,"properties":{"name":{"type":"string"}}}}}}`,
+			flags:        []engine.CLIFlag{{Name: "name", Type: "string", MapsTo: "/body/items/1/name", Required: true}},
+			wantFinding:  "sparse array index 1",
+			wantFindings: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			op := engine.OperationSpec{ID: "acme.widgets.preview", REST: &engine.RESTOperationSpec{BodySchema: json.RawMessage(tt.rawSchema)}}
+			if tt.static != nil {
+				op.REST.Body = &engine.RESTOperationBody{Fields: tt.static}
+			}
+			cmd := engine.CLICommand{Path: "widgets preview", Flags: tt.flags}
+			findings := checkCLISurfaceOperationBodyMappings(engine.Bundle{Name: "acme"}, 0, cmd, op)
+			if !tt.wantFindings {
+				if len(findings) != 0 {
+					t.Fatalf("findings = %+v, want none", findings)
+				}
+				return
+			}
+			for _, finding := range findings {
+				if strings.Contains(finding.Message, tt.wantFinding) {
+					return
+				}
+			}
+			t.Fatalf("findings = %+v, want message containing %q", findings, tt.wantFinding)
+		})
+	}
+}
+
+func TestCLISurfaceRequestContractRejectsOverwritingMappings(t *testing.T) {
+	tests := []struct {
+		name   string
+		flags  []engine.CLIFlag
+		fields []engine.RequestContractField
+	}{
+		{
+			name: "duplicate path",
+			flags: []engine.CLIFlag{
+				{Name: "first", MapsTo: "/path/id"},
+				{Name: "second", MapsTo: "/path/id"},
+			},
+			fields: []engine.RequestContractField{{Path: "/path/id"}},
+		},
+		{
+			name: "duplicate query",
+			flags: []engine.CLIFlag{
+				{Name: "first", MapsTo: "/query/filter"},
+				{Name: "second", MapsTo: "/query/filter"},
+			},
+			fields: []engine.RequestContractField{{Path: "/query/filter"}},
+		},
+		{
+			name: "duplicate body",
+			flags: []engine.CLIFlag{
+				{Name: "first", MapsTo: "/body/name"},
+				{Name: "second", MapsTo: "/body/name"},
+			},
+			fields: []engine.RequestContractField{{Path: "/body/name"}},
+		},
+		{
+			name: "body parent child",
+			flags: []engine.CLIFlag{
+				{Name: "config", MapsTo: "/body/config"},
+				{Name: "value", MapsTo: "/body/config/value"},
+			},
+			fields: []engine.RequestContractField{{Path: "/body/config"}, {Path: "/body/config/value"}},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			op := engine.OperationSpec{
+				ID:              "acme.widgets.preview",
+				RequestContract: &engine.RequestContractSpec{Fields: tt.fields},
+				REST: &engine.RESTOperationSpec{BodySchema: json.RawMessage(`{
+					"type":"object",
+					"additionalProperties":false,
+					"properties":{"name":{"type":"string"},"config":{"type":"object","additionalProperties":false,"properties":{"value":{"type":"string"}}}}
+				}`)},
+			}
+			findings := checkCLISurfaceRequestContractFlags(engine.Bundle{Name: "acme"}, 0, engine.CLICommand{Path: "widgets preview", Flags: tt.flags}, op)
+			for _, finding := range findings {
+				if strings.Contains(finding.Message, "conflicting request mappings") {
+					return
+				}
+			}
+			t.Fatalf("findings = %+v, want conflicting request mappings", findings)
+		})
+	}
+}
+
 func TestValidate_CLISurfaceOperationDirectReadRequiresBodyMappings(t *testing.T) {
 	cliSurface := `{
 		"tagline": "Work with CLI Surface from the command line.",

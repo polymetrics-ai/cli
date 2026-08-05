@@ -940,27 +940,44 @@ func checkCLISurfaceOperationBodyMappings(b engine.Bundle, i int, cmd engine.CLI
 	if err != nil {
 		return []Finding{{Connector: b.Name, File: "operations.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("operation %q body_schema cannot be expressed by CLI flags: %v", op.ID, err)}}
 	}
-	if op.REST.Body != nil && len(op.REST.Body.Fields) > 0 {
-		if err := schema.ValidatePartialRequestBody(op.REST.Body.Fields); err != nil {
-			return []Finding{{Connector: b.Name, File: "operations.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("operation %q rest.body is incompatible with body_schema: %v", op.ID, err)}}
-		}
-	}
-	if len(requiredPaths) == 0 {
-		return nil
-	}
 	mappedTargets := make([]cliBodyFlagMapping, 0, len(cmd.Flags))
+	requiredAssignments := make([]string, 0, len(cmd.Flags))
+	optionalAssignments := make([]string, 0, len(cmd.Flags))
+	var findings []Finding
 	for _, flag := range cmd.Flags {
+		namespace, _, err := engine.ParseRequestFieldPointer(flag.MapsTo)
+		if err != nil || namespace != "body" {
+			continue
+		}
+		if err := schema.ValidateRequestBodyInputType(flag.MapsTo, flag.Type); err != nil {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q flag --%s type %q is incompatible with body_schema at %q: %v", i, cmd.Path, op.ID, flag.Name, flag.Type, flag.MapsTo, err)})
+		}
 		target, err := engine.CanonicalRequestFieldPointer(flag.MapsTo, schema)
 		if err != nil {
 			continue
 		}
-		namespace, _, err := engine.ParseRequestFieldPointer(target)
-		if err == nil && namespace == "body" {
-			mappedTargets = append(mappedTargets, cliBodyFlagMapping{target: target, name: flag.Name, required: flag.Required})
+		mappedTargets = append(mappedTargets, cliBodyFlagMapping{target: target, name: flag.Name, required: flag.Required})
+		if flag.Required {
+			requiredAssignments = append(requiredAssignments, flag.MapsTo)
+		} else {
+			optionalAssignments = append(optionalAssignments, flag.MapsTo)
 		}
 	}
-	var findings []Finding
+	var staticBody map[string]any
+	if op.REST.Body != nil {
+		staticBody = op.REST.Body.Fields
+	}
+	if err := schema.ValidateEffectiveRequestBody(staticBody, requiredAssignments, optionalAssignments); err != nil {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q cannot assemble a schema-valid effective request body: %v", i, cmd.Path, op.ID, err)})
+	}
+	if len(requiredPaths) == 0 {
+		return findings
+	}
 	for _, requiredPath := range requiredPaths {
+		mapping, ok := commandBodyFlagCoveringRequiredPath(schema, mappedTargets, requiredPath)
+		if ok && mapping.required {
+			continue
+		}
 		if op.REST.Body != nil {
 			provided, err := operationStaticBodyProvidesPointer(schema, op.REST.Body.Fields, requiredPath)
 			if err != nil {
@@ -971,7 +988,6 @@ func checkCLISurfaceOperationBodyMappings(b engine.Bundle, i int, cmd engine.CLI
 				continue
 			}
 		}
-		mapping, ok := commandBodyFlagCoveringRequiredPath(schema, mappedTargets, requiredPath)
 		if !ok {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q requires %s but no command flag maps to it and rest.body does not provide it", i, cmd.Path, op.ID, requiredPath)})
 			continue
@@ -984,8 +1000,19 @@ func checkCLISurfaceOperationBodyMappings(b engine.Bundle, i int, cmd engine.CLI
 }
 
 func checkCLISurfaceRequestContractFlags(b engine.Bundle, i int, cmd engine.CLICommand, op engine.OperationSpec) []Finding {
-	if op.REST == nil || op.RequestContract == nil {
+	if op.REST == nil {
 		return nil
+	}
+	var findings []Finding
+	pointers := make([]string, 0, len(cmd.Flags))
+	for _, flag := range cmd.Flags {
+		pointers = append(pointers, flag.MapsTo)
+	}
+	if err := engine.ValidateRequestFieldPointerAssignments(pointers); err != nil {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented operation-backed command %d (%q) has conflicting request mappings: %v", i, cmd.Path, err)})
+	}
+	if op.RequestContract == nil {
+		return findings
 	}
 	noBody := op.REST.Body != nil && op.REST.Body.None
 	var bodySchema *engine.Schema
@@ -1001,7 +1028,6 @@ func checkCLISurfaceRequestContractFlags(b engine.Bundle, i int, cmd engine.CLIC
 		citations[strings.TrimSpace(field.Path)] = true
 	}
 	mappings := make(map[string]engine.CLIFlag, len(cmd.Flags))
-	var findings []Finding
 	for _, flag := range cmd.Flags {
 		mapsTo := flag.MapsTo
 		pointer, err := engine.CanonicalRequestFieldPointer(mapsTo, bodySchema)

@@ -474,6 +474,108 @@ func TestSchemaCompileErrorMessages(t *testing.T) {
 	}
 }
 
+func TestSchemaValidatesRequestBodyInputTypes(t *testing.T) {
+	sch, err := CompileSchema(json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"properties":{
+			"count":{"type":"integer"},
+			"names":{"type":"array","items":{"type":"string"}},
+			"ids":{"type":"array","items":{"type":"integer"}}
+		}
+	}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	tests := []struct {
+		name      string
+		pointer   string
+		inputType string
+		wantErr   bool
+	}{
+		{name: "integer", pointer: "/body/count", inputType: "integer"},
+		{name: "integer rejects string", pointer: "/body/count", inputType: "string", wantErr: true},
+		{name: "string array", pointer: "/body/names", inputType: "string_array"},
+		{name: "string array rejects integer items", pointer: "/body/ids", inputType: "string_array", wantErr: true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := sch.ValidateRequestBodyInputType(tt.pointer, tt.inputType)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("ValidateRequestBodyInputType() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestValidateRequestFieldPointerAssignmentsRejectsOverwrites(t *testing.T) {
+	tests := []struct {
+		name     string
+		pointers []string
+	}{
+		{name: "duplicate path", pointers: []string{"/path/id", "/path/id"}},
+		{name: "duplicate query", pointers: []string{"/query/filter", "/query/filter"}},
+		{name: "duplicate body", pointers: []string{"/body/name", "/body/name"}},
+		{name: "body parent child", pointers: []string{"/body/config", "/body/config/value"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := ValidateRequestFieldPointerAssignments(tt.pointers); err == nil {
+				t.Fatal("ValidateRequestFieldPointerAssignments() error = nil")
+			}
+		})
+	}
+}
+
+func TestSchemaValidatesEffectiveRequestBodyAssembly(t *testing.T) {
+	tests := []struct {
+		name     string
+		raw      string
+		static   map[string]any
+		required []string
+		optional []string
+		wantErr  bool
+	}{
+		{
+			name:     "required object override replaces static scalar",
+			raw:      `{"type":"object","additionalProperties":false,"required":["config"],"properties":{"config":{"type":"object","additionalProperties":false,"required":["value"],"properties":{"value":{"type":"string"}}}}}`,
+			static:   map[string]any{"config": "legacy"},
+			required: []string{"/body/config/value"},
+		},
+		{
+			name:     "dynamic array replacement must retain required siblings",
+			raw:      `{"type":"object","additionalProperties":false,"required":["items"],"properties":{"items":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["name","kind"],"properties":{"name":{"type":"string"},"kind":{"type":"string"}}}}}}`,
+			static:   map[string]any{"items": []any{map[string]any{"name": "static", "kind": "widget"}}},
+			required: []string{"/body/items/0/name"},
+			wantErr:  true,
+		},
+		{
+			name:     "required sparse array mapping",
+			raw:      `{"type":"object","additionalProperties":false,"properties":{"items":{"type":"array","items":{"type":"object","additionalProperties":false,"properties":{"name":{"type":"string"}}}}}}`,
+			required: []string{"/body/items/1/name"},
+			wantErr:  true,
+		},
+		{
+			name:     "optional sparse array mapping",
+			raw:      `{"type":"object","additionalProperties":false,"properties":{"items":{"type":"array","items":{"type":"object","additionalProperties":false,"properties":{"name":{"type":"string"}}}}}}`,
+			optional: []string{"/body/items/1/name"},
+			wantErr:  true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			sch, err := CompileSchema(json.RawMessage(tt.raw))
+			if err != nil {
+				t.Fatalf("CompileSchema: %v", err)
+			}
+			err = sch.ValidateEffectiveRequestBody(tt.static, tt.required, tt.optional)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("ValidateEffectiveRequestBody() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
 // --- array cardinality (minItems/maxItems) ---------------------------------
 //
 // The engine dialect had no way to say "this array must not be empty", which

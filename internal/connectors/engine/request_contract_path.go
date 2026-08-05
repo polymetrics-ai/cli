@@ -71,6 +71,54 @@ func ParseRequestFieldPointer(pointer string) (string, []string, error) {
 	return parseRequestFieldPointer(pointer)
 }
 
+func ValidateRequestFieldPointerAssignments(pointers []string) error {
+	type assignment struct {
+		pointer   string
+		namespace string
+		tokens    []string
+	}
+	assignments := make([]assignment, 0, len(pointers))
+	seen := map[string]bool{}
+	for _, pointer := range pointers {
+		namespace, tokens, err := parseRequestFieldPointer(pointer)
+		if err != nil {
+			return fmt.Errorf("invalid request mapping %q: %w", pointer, err)
+		}
+		normalized := requestFieldPointer(namespace, tokens...)
+		if seen[normalized] {
+			return fmt.Errorf("duplicate request mapping %q", normalized)
+		}
+		seen[normalized] = true
+		assignments = append(assignments, assignment{pointer: normalized, namespace: namespace, tokens: tokens})
+	}
+	for i, left := range assignments {
+		if left.namespace != "body" {
+			continue
+		}
+		for _, right := range assignments[i+1:] {
+			if right.namespace != "body" {
+				continue
+			}
+			if requestPointerTokensPrefix(left.tokens, right.tokens) || requestPointerTokensPrefix(right.tokens, left.tokens) {
+				return fmt.Errorf("conflicting parent-child request mappings %q and %q", left.pointer, right.pointer)
+			}
+		}
+	}
+	return nil
+}
+
+func requestPointerTokensPrefix(parent, child []string) bool {
+	if len(parent) >= len(child) {
+		return false
+	}
+	for i := range parent {
+		if parent[i] != child[i] {
+			return false
+		}
+	}
+	return true
+}
+
 func unescapeRequestFieldPointerToken(token string) (string, error) {
 	var decoded strings.Builder
 	for i := 0; i < len(token); i++ {

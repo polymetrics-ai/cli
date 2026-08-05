@@ -265,7 +265,7 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 		return cmd, command, nil
 	}
 	if cmd.Intent == "direct_read" && cmd.Availability == "implemented" && cmd.Operation != "" {
-		if err := validateOperationDirectReadCommand(connector, cmd); err != nil {
+		if _, err := validateOperationDirectReadCommand(connector, cmd); err != nil {
 			return connectors.CommandSurfaceCommand{}, command, err
 		}
 		return cmd, command, nil
@@ -345,10 +345,7 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 			Reason:       "connector does not support operation direct reads",
 		}
 	}
-	if err := validateOperationDirectReadCommand(connector, cmd); err != nil {
-		return Result{}, err
-	}
-	bodySchema, err := operationRequestBodySchema(connector, cmd)
+	bodySchema, err := validateOperationDirectReadCommand(connector, cmd)
 	if err != nil {
 		return Result{}, err
 	}
@@ -463,27 +460,59 @@ func validateDirectReadCommand(connector connectors.Connector, cmd connectors.Co
 	return nil
 }
 
-func validateOperationDirectReadCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
+func validateOperationDirectReadCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) (*engine.Schema, error) {
 	if _, ok := connector.(connectors.OperationDirectReader); !ok {
-		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not support operation direct reads"}
+		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not support operation direct reads"}
 	}
 	if strings.TrimSpace(cmd.Operation) == "" {
-		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands require operation"}
+		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands require operation"}
 	}
 	if len(cmd.APISurface) != 1 {
-		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands require exactly one api_surface endpoint"}
+		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands require exactly one api_surface endpoint"}
 	}
 	method := strings.ToUpper(strings.TrimSpace(cmd.APISurface[0].Method))
 	if method != http.MethodGet && method != http.MethodPost {
-		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct_read commands require GET or POST api_surface endpoints, got %s", method)}
+		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct_read commands require GET or POST api_surface endpoints, got %s", method)}
 	}
 	if isAbsoluteHTTPURL(cmd.APISurface[0].Path) {
-		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands must not reference an absolute URL"}
+		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands must not reference an absolute URL"}
 	}
 	if !isSupportedDirectReadOutputPolicy(cmd.OutputPolicy) {
-		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands require an explicit supported output_policy"}
+		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands require an explicit supported output_policy"}
 	}
-	return nil
+	pointers := make([]string, 0, len(cmd.Flags))
+	for _, flag := range cmd.Flags {
+		pointers = append(pointers, flag.MapsTo)
+	}
+	if err := engine.ValidateRequestFieldPointerAssignments(pointers); err != nil {
+		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: err.Error()}
+	}
+	bodySchema, err := operationRequestBodySchema(connector, cmd)
+	if err != nil {
+		return nil, err
+	}
+	if bodySchema == nil {
+		return nil, nil
+	}
+	var required, optional []string
+	for _, flag := range cmd.Flags {
+		namespace, _, err := engine.ParseRequestFieldPointer(flag.MapsTo)
+		if err != nil || namespace != "body" {
+			continue
+		}
+		if err := bodySchema.ValidateRequestBodyInputType(flag.MapsTo, flag.Type); err != nil {
+			return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s: %v", flag.Name, err)}
+		}
+		if flag.Required {
+			required = append(required, flag.MapsTo)
+		} else {
+			optional = append(optional, flag.MapsTo)
+		}
+	}
+	if err := bodySchema.ValidateRequestBodyPointerAssignments(required, optional); err != nil {
+		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: err.Error()}
+	}
+	return bodySchema, nil
 }
 
 func isSupportedDirectReadOutputPolicy(policy string) bool {

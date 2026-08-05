@@ -130,6 +130,33 @@ func (f *fakeConnector) DryRunWrite(_ context.Context, req connectors.WriteReque
 	return connectors.WritePreview{Action: req.Action, RecordsStaged: len(records)}, nil
 }
 
+type operationConnectorWithoutBodySchema struct {
+	delegate *fakeConnector
+}
+
+func (c *operationConnectorWithoutBodySchema) Name() string { return c.delegate.Name() }
+func (c *operationConnectorWithoutBodySchema) Metadata() connectors.Metadata {
+	return c.delegate.Metadata()
+}
+func (c *operationConnectorWithoutBodySchema) Check(ctx context.Context, cfg connectors.RuntimeConfig) error {
+	return c.delegate.Check(ctx, cfg)
+}
+func (c *operationConnectorWithoutBodySchema) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (connectors.Catalog, error) {
+	return c.delegate.Catalog(ctx, cfg)
+}
+func (c *operationConnectorWithoutBodySchema) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
+	return c.delegate.Read(ctx, req, emit)
+}
+func (c *operationConnectorWithoutBodySchema) Write(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
+	return c.delegate.Write(ctx, req, records)
+}
+func (c *operationConnectorWithoutBodySchema) CommandSurface() *connectors.CommandSurface {
+	return c.delegate.CommandSurface()
+}
+func (c *operationConnectorWithoutBodySchema) OperationDirectRead(ctx context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
+	return c.delegate.OperationDirectRead(ctx, req)
+}
+
 func TestRunImplementedStreamCommand(t *testing.T) {
 	connector := &fakeConnector{surface: &connectors.CommandSurface{
 		Commands: []connectors.CommandSurfaceCommand{
@@ -1620,6 +1647,86 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 	}
 }
 
+func TestPreflightValidatesOperationBodyMappings(t *testing.T) {
+	tests := []struct {
+		name            string
+		rawSchema       string
+		flags           []connectors.CommandSurfaceFlag
+		withoutProvider bool
+		want            string
+	}{
+		{
+			name:            "missing body schema provider",
+			rawSchema:       `{"type":"object","properties":{"name":{"type":"string"}}}`,
+			flags:           []connectors.CommandSurfaceFlag{{Name: "name", Type: "string", MapsTo: "/body/name"}},
+			withoutProvider: true,
+			want:            "require the operation body schema",
+		},
+		{
+			name:      "scalar type mismatch",
+			rawSchema: `{"type":"object","properties":{"count":{"type":"integer"}}}`,
+			flags:     []connectors.CommandSurfaceFlag{{Name: "count", Type: "string", MapsTo: "/body/count"}},
+			want:      "incompatible",
+		},
+		{
+			name:      "array item type mismatch",
+			rawSchema: `{"type":"object","properties":{"ids":{"type":"array","items":{"type":"integer"}}}}`,
+			flags:     []connectors.CommandSurfaceFlag{{Name: "ids", Type: "string_array", MapsTo: "/body/ids"}},
+			want:      "requires string items",
+		},
+		{
+			name:      "sparse required array pointer",
+			rawSchema: `{"type":"object","properties":{"items":{"type":"array","items":{"type":"object","properties":{"name":{"type":"string"}}}}}}`,
+			flags:     []connectors.CommandSurfaceFlag{{Name: "name", Type: "string", MapsTo: "/body/items/1/name", Required: true}},
+			want:      "sparse array index 1",
+		},
+		{
+			name:      "duplicate body target",
+			rawSchema: `{"type":"object","properties":{"name":{"type":"string"}}}`,
+			flags: []connectors.CommandSurfaceFlag{
+				{Name: "first", Type: "string", MapsTo: "/body/name"},
+				{Name: "second", Type: "string", MapsTo: "/body/name"},
+			},
+			want: "duplicate request mapping",
+		},
+		{
+			name:      "parent child body targets",
+			rawSchema: `{"type":"object","properties":{"config":{"type":"object","properties":{"value":{"type":"string"}}}}}`,
+			flags: []connectors.CommandSurfaceFlag{
+				{Name: "config", Type: "string", MapsTo: "/body/config"},
+				{Name: "value", Type: "string", MapsTo: "/body/config/value"},
+			},
+			want: "conflicting parent-child",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			schema, err := engine.CompileSchema(json.RawMessage(tt.rawSchema))
+			if err != nil {
+				t.Fatalf("CompileSchema: %v", err)
+			}
+			const operation = "acme.widgets.preview"
+			delegate := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+				Path:         "widgets preview",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Operation:    operation,
+				APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: "POST", Path: "/widgets:preview"}},
+				OutputPolicy: "json_redacted",
+				Flags:        tt.flags,
+			}}}, operationBodySchemas: map[string]*engine.Schema{operation: schema}}
+			var connector connectors.Connector = delegate
+			if tt.withoutProvider {
+				connector = &operationConnectorWithoutBodySchema{delegate: delegate}
+			}
+			err = Preflight(connector, []string{"widgets", "preview"})
+			if err == nil || !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("Preflight() error = %v, want containing %q", err, tt.want)
+			}
+		})
+	}
+}
+
 func TestRunOperationDirectReadUsesEscapedRequestPointers(t *testing.T) {
 	bodySchema, err := engine.CompileSchema(json.RawMessage(`{
 		"type":"object",
@@ -1646,7 +1753,7 @@ func TestRunOperationDirectReadUsesEscapedRequestPointers(t *testing.T) {
 	}
 	for i := 0; i <= 10; i++ {
 		name := fmt.Sprintf("item-%d", i)
-		arrayFlags = append(arrayFlags, connectors.CommandSurfaceFlag{Name: name, Type: "string", MapsTo: fmt.Sprintf("/body/items/%d/name", i)})
+		arrayFlags = append(arrayFlags, connectors.CommandSurfaceFlag{Name: name, Type: "string", MapsTo: fmt.Sprintf("/body/items/%d/name", i), Required: true})
 		flagValues[name] = []string{fmt.Sprintf("value-%d", i)}
 	}
 	commandFlags := append([]connectors.CommandSurfaceFlag{

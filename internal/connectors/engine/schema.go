@@ -126,6 +126,8 @@ type SchemaPathInfo struct {
 	IsArray  bool
 }
 
+type dynamicRequestBodyValue struct{}
+
 func (s *Schema) RequiredMappingPaths() ([]string, error) {
 	if s == nil || s.node == nil {
 		return nil, fmt.Errorf("schema is nil")
@@ -180,6 +182,154 @@ func (s *Schema) RequestFieldPointerInfo(pointer string) (SchemaPathInfo, error)
 		return SchemaPathInfo{}, err
 	}
 	return node.mappingPathInfo()
+}
+
+func (s *Schema) ValidateRequestBodyInputType(pointer, inputType string) error {
+	info, err := s.RequestFieldPointerInfo(pointer)
+	if err != nil {
+		return err
+	}
+	accepts := func(types ...string) bool {
+		for _, actual := range info.Types {
+			if actual == "any" {
+				return true
+			}
+			for _, expected := range types {
+				if actual == expected {
+					return true
+				}
+			}
+		}
+		return false
+	}
+	switch inputType {
+	case "", "string", "enum":
+		if accepts("string") {
+			return nil
+		}
+	case "integer":
+		if accepts("integer", "number") {
+			return nil
+		}
+	case "boolean":
+		if accepts("boolean") {
+			return nil
+		}
+	case "string_array":
+		if accepts("any") {
+			return nil
+		}
+		if !info.IsArray || !accepts("array") {
+			break
+		}
+		namespace, tokens, err := parseRequestFieldPointer(pointer)
+		if err != nil {
+			return err
+		}
+		itemInfo, err := s.RequestFieldPointerInfo(requestFieldPointer(namespace, append(tokens, "0")...))
+		if err != nil {
+			return fmt.Errorf("string_array mapping %q has no addressable item schema: %w", pointer, err)
+		}
+		for _, itemType := range itemInfo.Types {
+			if itemType == "string" || itemType == "any" {
+				return nil
+			}
+		}
+		return fmt.Errorf("string_array mapping %q requires string items, schema accepts %v", pointer, itemInfo.Types)
+	default:
+		return fmt.Errorf("request mapping %q uses unsupported input type %q", pointer, inputType)
+	}
+	return fmt.Errorf("request mapping %q input type %q is incompatible with schema types %v", pointer, inputType, info.Types)
+}
+
+func (s *Schema) ValidateRequestBodyPointerAssignments(required, optional []string) error {
+	all := append(append([]string(nil), required...), optional...)
+	if err := ValidateRequestFieldPointerAssignments(all); err != nil {
+		return err
+	}
+	if _, err := s.assembleDynamicRequestBody(required); err != nil {
+		return err
+	}
+	for _, pointer := range optional {
+		pointers := append(append([]string(nil), required...), pointer)
+		if _, err := s.assembleDynamicRequestBody(pointers); err != nil {
+			return err
+		}
+	}
+	if _, err := s.assembleDynamicRequestBody(all); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *Schema) ValidateEffectiveRequestBody(static map[string]any, required, optional []string) error {
+	if err := s.ValidateRequestBodyPointerAssignments(required, optional); err != nil {
+		return err
+	}
+	sets := make([][]string, 0, len(optional)+2)
+	sets = append(sets, required)
+	for _, pointer := range optional {
+		sets = append(sets, append(append([]string(nil), required...), pointer))
+	}
+	sets = append(sets, append(append([]string(nil), required...), optional...))
+	for _, pointers := range sets {
+		dynamic, err := s.assembleDynamicRequestBody(pointers)
+		if err != nil {
+			return err
+		}
+		body := MergeRequestBody(static, dynamic)
+		if err := s.node.validateWithDynamic(body, "", true); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (s *Schema) assembleDynamicRequestBody(pointers []string) (map[string]any, error) {
+	ordered := append([]string(nil), pointers...)
+	sort.Slice(ordered, func(i, j int) bool {
+		return requestFieldPointerLess(ordered[i], ordered[j])
+	})
+	body := map[string]any{}
+	for _, pointer := range ordered {
+		namespace, _, err := parseRequestFieldPointer(pointer)
+		if err != nil {
+			return nil, err
+		}
+		if namespace != "body" {
+			return nil, fmt.Errorf("request mapping %q is not body-scoped", pointer)
+		}
+		if err := s.SetRequestBodyPointer(body, pointer, dynamicRequestBodyValue{}); err != nil {
+			return nil, err
+		}
+	}
+	return body, nil
+}
+
+func requestFieldPointerLess(left, right string) bool {
+	leftNamespace, leftTokens, leftErr := parseRequestFieldPointer(left)
+	rightNamespace, rightTokens, rightErr := parseRequestFieldPointer(right)
+	if leftErr != nil || rightErr != nil {
+		return left < right
+	}
+	if leftNamespace != rightNamespace {
+		return leftNamespace < rightNamespace
+	}
+	limit := len(leftTokens)
+	if len(rightTokens) < limit {
+		limit = len(rightTokens)
+	}
+	for i := 0; i < limit; i++ {
+		leftIndex, leftErr := strconv.Atoi(leftTokens[i])
+		rightIndex, rightErr := strconv.Atoi(rightTokens[i])
+		if leftErr == nil && rightErr == nil && leftIndex != rightIndex {
+			return leftIndex < rightIndex
+		}
+		if leftTokens[i] != rightTokens[i] {
+			return leftTokens[i] < rightTokens[i]
+		}
+	}
+	return len(leftTokens) < len(rightTokens)
 }
 
 func (s *Schema) SetRequestBodyPointer(body map[string]any, pointer string, value any) error {
@@ -1067,6 +1217,15 @@ func (n *schemaNode) validatePartial(v any, path string) error {
 }
 
 func (n *schemaNode) validate(v any, path string) error {
+	return n.validateWithDynamic(v, path, false)
+}
+
+func (n *schemaNode) validateWithDynamic(v any, path string, allowDynamic bool) error {
+	if allowDynamic {
+		if _, ok := v.(dynamicRequestBodyValue); ok {
+			return nil
+		}
+	}
 	if len(n.types) > 0 && !typeMatches(v, n.types) {
 		return fmt.Errorf("%s: value does not match type %v", displayPath(path), n.types)
 	}
@@ -1090,7 +1249,7 @@ func (n *schemaNode) validate(v any, path string) error {
 			return fmt.Errorf("%s: value does not match pattern %q", displayPath(path), n.pattern.String())
 		}
 	case map[string]any:
-		if err := n.validateObject(val, path); err != nil {
+		if err := n.validateObjectWithDynamic(val, path, allowDynamic); err != nil {
 			return err
 		}
 	}
@@ -1105,7 +1264,7 @@ func (n *schemaNode) validate(v any, path string) error {
 		}
 		if n.items != nil {
 			for i, elem := range elems {
-				if err := n.items.validate(elem, fmt.Sprintf("%s/%d", path, i)); err != nil {
+				if err := n.items.validateWithDynamic(elem, fmt.Sprintf("%s/%d", path, i), allowDynamic); err != nil {
 					return err
 				}
 			}
@@ -1113,14 +1272,14 @@ func (n *schemaNode) validate(v any, path string) error {
 	}
 
 	for i, branch := range n.allOf {
-		if err := branch.validate(v, path); err != nil {
+		if err := branch.validateWithDynamic(v, path, allowDynamic); err != nil {
 			return fmt.Errorf("%s: allOf[%d]: %w", displayPath(path), i, err)
 		}
 	}
 	if len(n.anyOf) > 0 {
 		matched := false
 		for _, branch := range n.anyOf {
-			if branch.validate(v, path) == nil {
+			if branch.validateWithDynamic(v, path, allowDynamic) == nil {
 				matched = true
 				break
 			}
@@ -1132,7 +1291,7 @@ func (n *schemaNode) validate(v any, path string) error {
 	if len(n.oneOf) > 0 {
 		matches := 0
 		for _, branch := range n.oneOf {
-			if branch.validate(v, path) == nil {
+			if branch.validateWithDynamic(v, path, allowDynamic) == nil {
 				matches++
 			}
 		}
@@ -1155,6 +1314,10 @@ func (n *schemaNode) validateArrayCardinality(count int, path string) error {
 }
 
 func (n *schemaNode) validateObject(obj map[string]any, path string) error {
+	return n.validateObjectWithDynamic(obj, path, false)
+}
+
+func (n *schemaNode) validateObjectWithDynamic(obj map[string]any, path string, allowDynamic bool) error {
 	if n.hasMinProperties && len(obj) < n.minProperties {
 		return fmt.Errorf("%s: minProperties %d not satisfied (got %d)", displayPath(path), n.minProperties, len(obj))
 	}
@@ -1189,7 +1352,7 @@ func (n *schemaNode) validateObject(obj map[string]any, path string) error {
 			if !ok {
 				continue
 			}
-			if err := child.validate(obj[k], path+"/"+k); err != nil {
+			if err := child.validateWithDynamic(obj[k], path+"/"+k, allowDynamic); err != nil {
 				return err
 			}
 		}

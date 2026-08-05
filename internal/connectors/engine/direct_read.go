@@ -279,16 +279,7 @@ func operationReadBody(op OperationSpec, overrides map[string]any) (any, error) 
 	if op.REST.Body != nil {
 		staticBody = op.REST.Body.Fields
 	}
-	body := cloneAnyMap(staticBody)
-	for key, value := range overrides {
-		if current, ok := body[key].(map[string]any); ok {
-			if override, ok := value.(map[string]any); ok {
-				body[key] = mergeAnyMap(current, override)
-				continue
-			}
-		}
-		body[key] = cloneAnyValue(value)
-	}
+	body := MergeRequestBody(staticBody, overrides)
 	if len(op.REST.BodySchema) > 0 {
 		sch, err := CompileSchema(op.REST.BodySchema)
 		if err != nil {
@@ -307,6 +298,10 @@ func cloneAnyMap(in map[string]any) map[string]any {
 		out[key] = cloneAnyValue(value)
 	}
 	return out
+}
+
+func MergeRequestBody(static, overrides map[string]any) map[string]any {
+	return mergeAnyMap(static, overrides)
 }
 
 func mergeAnyMap(base, overrides map[string]any) map[string]any {
