@@ -54,8 +54,8 @@ func (i WriteActionInfo) IsBatchable() bool {
 
 // DefinitionProvider is implemented by engine-backed and Tier-3 connectors in
 // wave0; the method joins the core Connector interface in wave6 (design
-// §C.1). Callers that need a Definition today (e.g. certify, a future CLI
-// surface) must type-assert for this interface rather than assume every
+// §C.1). Callers that need a Definition today (e.g. certify and connector
+// inspection JSON) must type-assert for this interface rather than assume every
 // Connector implements it, mirroring the existing ManifestProvider pattern.
 type DefinitionProvider interface {
 	Definition() Definition
