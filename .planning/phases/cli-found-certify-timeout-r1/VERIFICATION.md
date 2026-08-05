@@ -2,26 +2,26 @@
 
 ## Planned local gates
 
-- [x] `go test -count=1 ./internal/connectors/certify` — 58.972s; 85/85 real CLI calls (cold count reported by verbose precursor)
-- [x] `go test -count=1 -run '^TestCertifyCLI' ./internal/cli` — 43.128s; 61/61 real CLI calls
-- [x] `go test -count=1 ./internal/cli`
+- [x] `go test -count=1 ./internal/connectors/certify` — rebase target run through `make certify-timing`: 57.399s; 85/85 real CLI calls
+- [x] `go test -count=1 -run '^TestCertifyCLI' ./internal/cli` — rebase target run through `make certify-timing`: 43.335s; 61/61 real CLI calls
+- [x] `go test -count=1 ./internal/cli` — 363.575s after rebase
 - [ ] `go test -race ./internal/connectors/certify` — the complete package reached Go's built-in 10-minute test timeout while the retained real CLI proof was running; do not rerun the same broad race command. The changed scripted-stage contract passed its focused race command.
 - [ ] `go test -race ./internal/cli` — the changed CLI route/fixture contract passed `go test -race -count=1 -run '^TestCertifyCLI' ./internal/cli`.
 - [x] timing parser/runner pass and controlled failure modes — `go test -count=1 ./internal/certifytiming ./cmd/certifytiming`
 - [x] enforced timing target — `make certify-timing` reports 85/85 and 61/61 invocation caps, 112.159s measured local wall time, and passes the fixed `4m15s` bound
 - [x] two cold local `-count=1 -json` timing samples: (1) harness 57.745s, CLI 42.359s, total 100.104s; (2) harness 56.539s, CLI 43.328s, total 99.867s. These diagnostics do not set the hosted wall-time limit.
-- [ ] `go vet ./...`
-- [ ] `go build ./cmd/pm`
-- [ ] `make tidy-check`
+- [x] `go vet ./...`
+- [x] `go build ./cmd/pm`
+- [x] `make tidy-check`
 - [x] `make lint`
-- [ ] `make docs-check`
-- [ ] `make smoke-no-build`
-- [ ] `make agent-contract-check`
-- [ ] `make connectorgen-validate`
-- [ ] `make connectorgen-surface-sync`
-- [ ] `make connector-boundary`
-- [ ] `make release-workflow-check`
-- [ ] `git diff --check`
+- [x] `make docs-check`
+- [x] `make smoke-no-build`
+- [x] `make agent-contract-check`
+- [x] `make connectorgen-validate`
+- [x] `make connectorgen-surface-sync`
+- [x] `make connector-boundary`
+- [x] `make release-workflow-check`
+- [ ] `git diff --check` — repeat after the final delivery-record update
 
 ## CI evidence required before measured threshold
 
@@ -86,6 +86,17 @@ on the same GitHub-hosted runner. It held the 85/85 and 61/61 deterministic
 counts, reported 101.291s harness wall time plus 55.114s CLI wall time
 (156.405s total), and passed the aggregate Verify gate. This confirmation
 precedes the required rebase-on-current-main validation.
+
+## Rebase validation
+
+The branch was cleanly rebased onto `origin/main` at `b0cd6cbcd` on
+2026-08-06. The rebase-local timing target passed at 119.492s under the 4m15s
+budget; the complete CLI package passed in 363.575s. The individual
+`tidy-check`, `lint`, `docs-check`, `smoke-no-build`, `agent-contract-check`,
+`connectorgen-validate`, `connectorgen-surface-sync`, `connector-boundary`,
+and `release-workflow-check` gates all passed, along with `go vet ./...` and
+`go build ./cmd/pm`. A fresh hosted Verify run is still required for the
+rebased commit range.
 
 ## Deliberate exclusions
 
