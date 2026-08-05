@@ -42,8 +42,9 @@ confirm the parent branch and parent PR, and delegate independent ready work thr
 
 Pi runtime constraints:
 
-- Use `agentScope: "both"` (or `"project"`) so project agents from `.pi/agents/` are visible.
-  The default `"user"` scope does not load project agents.
+- This retained compatibility prompt deliberately uses `agentScope: "both"` (or `"project"`) to
+  expose legacy project roles. The default `"clean-project"` scope admits only the two canonical
+  generated workers; see `.pi/extensions/pi-sub-agent/README.md`.
 - In non-interactive runs (`pi -p`), project agents are blocked unless you set
   `confirmProjectAgents: false`. Only set it to `false` after reviewing and trusting the project
   agents; otherwise run interactively.

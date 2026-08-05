@@ -18,13 +18,13 @@ sub-PRs into parent branches. Parent PRs into main remain human-gated. -->
 - PR base branch:
 - Sub-issue:
 
-## Parent Orchestration
+## Parent Job Ownership
 
-<!-- Fill this for parent issues, parent PRs, or sub-PRs managed by a parent issue orchestrator. -->
+<!-- Fill this for parent issues, parent PRs, or sub-PRs owned inline by the canonical worker. -->
 
-- Orchestrator:
+- Active canonical worker:
 - State ledger:
-- Worker handoff:
+- Durable handoff artifact:
 - Merge owner:
 - Integration state:
 

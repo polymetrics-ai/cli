@@ -1,8 +1,9 @@
 # GSD Universal Runtime Loop
 
-Use this workflow to run the same GSD universal programming loop from Claude Code, Codex, OpenCode,
-Pi, or another agent runtime. Runtime-specific files are activation adapters only; this file owns
-the shared workflow policy.
+Compatibility status: background procedure only. The active issue-first roles, state machine, GSD
+commands, and authority gates are owned by
+`.agents/agentic-delivery/canonical/delivery-contract.json`. Use this file only where it agrees with
+that contract; its legacy role-spawning instructions do not authorize delegation.
 
 ## Runtime Contract
 

@@ -15,7 +15,7 @@ runner-specific format.
   replace the bracketed variables before dispatch).
 - `validation-gates.md`: mandatory gates (JSON parse, connectorgen validate, secret scan, source
   links, operation classification, build/test, website idempotency, review).
-- `ownership-rules.md`: coordinator-owned vs worker-owned files to prevent shared-file collisions.
+- `ownership-rules.md`: parent-job-owned vs connector-owned files to prevent shared-file collisions.
 - `next-batches.md`: sequenced candidate connectors (GitLab, Slack, Stripe, Jira, Salesforce, …) for
   rolling out the GitHub pilot's CLI parity shape.
 
@@ -23,8 +23,8 @@ runner-specific format.
 
 All connector migration agents use the repo-local official GSD Core Pi adapter:
 
-- In Pi, use `/gsd <command>` or generated aliases such as `/gsd-programming-loop` and
-  `/gsd-code-review`.
+- In Pi, use `/gsd <command>` or generated aliases such as `/gsd-discuss-phase`,
+  `/gsd-plan-phase`, and `/gsd-code-review`. The pinned adapter has no `programming-loop` command.
 - In shell/non-interactive runners, use `scripts/gsd prompt <command> [args...]` and execute the
   generated prompt.
 - Read `.agents/agentic-delivery/references/gsd-pi-adapter.md` before GSD work.
@@ -36,10 +36,11 @@ When connector migration work adds or changes a CLI-visible connector surface, c
 
 ## Rules
 
-- Assign exactly one target connector per implementation agent.
-- Follow `ownership-rules.md` for coordinator-owned and worker-owned paths; connector lanes stay inside the declared target connector scope.
+- Assign exactly one target connector per connector implementation job.
+- Follow `ownership-rules.md` for parent-job-owned and connector-owned paths; connector lanes stay inside the declared target connector scope.
 - If connector implementation needs shared runtime/tooling, schema, generated-index, or unrelated connector changes, stop and create/link a separate foundation issue/PR before proceeding.
 - Record ownership guard evidence, changed-path compliance, target connector scope, and any foundation PR path in the worker handoff and PR body.
-- Do not commit from migration agents; the coordinator owns commits and merge validation.
+- Commit and push coherent green slices to the active issue branch; the active canonical worker
+  owns merge validation and the parent review-coverage record.
 - Stop for new dependencies, auth scope changes, secrets, destructive external actions, or quality
   gate reductions.

@@ -1,5 +1,10 @@
 # Universal Programming Loop Prompts
 
+Compatibility status: legacy multi-worker prompt family. For current issue-first work, use
+`.agents/agentic-delivery/canonical/delivery-contract.json` and the installed GSD sequence documented
+in `.agents/agentic-delivery/references/gsd-pi-adapter.md`; the role-spawning adapters below are not
+active canonical instructions.
+
 This repository uses GSD-style local programming loops for implementation phases.
 
 Use this prompt family when asking Codex, Claude, Pi, or another implementation agent to execute a scoped phase.

@@ -24,8 +24,8 @@
 # Model policy: Codex on the ChatGPT plan via the `openai-codex/*` provider ONLY. Never route
 # any role through OpenRouter or another pay-per-token gateway.
 #
-# Requires the `subagent` tool package once per machine:  pi install npm:pi-sub-agent
-# (project agents in .pi/agents/ are auto-discovered when running with --approve).
+# Uses the project-local `subagent` extension loaded from .pi/settings.json.
+# (project agents in .pi/agents/ are discovered when running with --approve).
 #
 # Usage:
 #   scripts/pi-shepherd-loop.sh "Add full CLI parity for the <name> connector"
