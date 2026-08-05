@@ -156,7 +156,7 @@ func TestOperationDirectWriteMultipartRequiresApprovalAndDispatchesOnce(t *testi
 		if err != nil {
 			t.Fatalf("Open attachment: %v", err)
 		}
-		defer file.Close()
+		defer func() { _ = file.Close() }()
 		got, err := io.ReadAll(file)
 		if err != nil {
 			t.Fatalf("ReadAll attachment: %v", err)
