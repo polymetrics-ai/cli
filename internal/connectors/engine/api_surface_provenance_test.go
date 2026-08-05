@@ -178,6 +178,31 @@ func TestValidateSurfaceProvenance(t *testing.T) {
 			wantEndpoints: 1,
 			wantCited:     0,
 		},
+		{
+			name: "pre_ledger_is_accepted_as_legacy_unverified",
+			surface: &APISurface{
+				Endpoints: []SurfaceEndpoint{{
+					Method: "GET",
+					Path:   "/widgets",
+				}},
+			},
+			wantStatus:    SurfaceProvenanceLegacyUnverified,
+			wantArtifacts: 0,
+			wantEndpoints: 1,
+			wantCited:     0,
+		},
+		{
+			name: "unsupported_ledger_version",
+			surface: func() *APISurface {
+				surface := completeSurfaceV2()
+				surface.OperationLedgerVersion = 3
+				return surface
+			}(),
+			wantStatus:    SurfaceProvenanceInvalid,
+			wantArtifacts: 1,
+			wantEndpoints: 1,
+			wantIssue:     "operation_ledger_version: 3 is unsupported; expected 1 or 2",
+		},
 	}
 
 	for _, tc := range tests {

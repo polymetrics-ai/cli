@@ -118,6 +118,32 @@ func TestSurfaceInventoryFromRawReportsProvenanceEvidence(t *testing.T) {
 			wantLedger:    1,
 			wantEndpoints: 1,
 		},
+		{
+			name: "unsupported_ledger_version_fails",
+			raw: `{
+				"operation_ledger_version": 3,
+				"artifacts": [{
+					"id": "acme-openapi-2026-08-06",
+					"url": "https://docs.acme.test/openapi.yaml",
+					"retrieved_at": "2026-08-06"
+				}],
+				"endpoints": [{
+					"method": "GET",
+					"path": "/widgets",
+					"provenance": {
+						"artifact": "acme-openapi-2026-08-06",
+						"source_url": "https://docs.acme.test/api/widgets"
+					},
+					"covered_by": {"stream": "widgets"}
+				}]
+			}`,
+			wantResult:       "fail",
+			wantStatus:       "invalid",
+			wantLedger:       3,
+			wantArtifacts:    1,
+			wantEndpoints:    1,
+			wantReasonSubstr: "operation_ledger_version: 3 is unsupported; expected 1 or 2",
+		},
 	}
 
 	for _, tc := range tests {
