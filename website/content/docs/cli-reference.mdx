@@ -138,6 +138,12 @@ pm credentials remove github-local
 
 Secrets must come from environment variables or stdin. Do not pass raw token values in chat, shell history, or docs.
 
+Before saving a credential, `pm` checks non-secret `--config` fields against
+only the selected connector's declared string `enum`, `pattern`, and `uri`,
+`date`, or `date-time` format constraints. It does not add required, type,
+default, unknown-field, or bounds policy. Errors identify the field and
+violated constraint without echoing the supplied value.
+
 ### `pm connections`
 
 ```bash

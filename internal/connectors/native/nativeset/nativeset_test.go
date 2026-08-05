@@ -1,9 +1,11 @@
 package nativeset
 
 import (
+	"encoding/json"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 func TestFactoriesExposeDefinitions(t *testing.T) {
@@ -70,5 +72,32 @@ func TestFactoriesExposeDefinitions(t *testing.T) {
 		if !seen {
 			t.Fatalf("Factories() missing %q", name)
 		}
+	}
+}
+
+func TestDefinitionConnectorForwardsDeclaredConfigurationConstraints(t *testing.T) {
+	spec, err := engine.CompileSchema(json.RawMessage(`{
+		"type": "object",
+		"properties": {
+			"environment": {"type": "string", "enum": ["production", "sandbox"]}
+		}
+	}`))
+	if err != nil {
+		t.Fatalf("CompileSchema() error = %v", err)
+	}
+
+	wrapped := definitionConnector{
+		Connector: connectors.Sample{},
+		base:      engine.NewBase(engine.Bundle{Spec: spec}),
+	}
+	validator, ok := any(wrapped).(connectors.ConfigurationConstraintValidator)
+	if !ok {
+		t.Fatal("definitionConnector does not expose ConfigurationConstraintValidator")
+	}
+	if !validator.HasConfigurationConstraints() {
+		t.Fatal("HasConfigurationConstraints() = false, want true for the wrapped bundle")
+	}
+	if err := connectors.ValidateConfiguration(wrapped, map[string]string{"environment": "preview"}); err == nil {
+		t.Fatal("ValidateConfiguration() error = nil, want wrapped enum rejection")
 	}
 }

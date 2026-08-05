@@ -86,6 +86,23 @@ func (c *Connector) CommandSurface() *connectors.CommandSurface {
 	return synthesizeCommandSurface(c.bundle)
 }
 
+// HasConfigurationConstraints reports whether this bundle declares
+// configuration-time constraints. It is intentionally separate from the
+// connector's optional interface presence so callers can distinguish a
+// constraint-free bundle from one whose constraints can be evaluated.
+func (c *Connector) HasConfigurationConstraints() bool {
+	return c.bundle.Spec != nil && c.bundle.Spec.HasConfigurationConstraints()
+}
+
+// ValidateConfiguration validates supplied credential configuration against
+// this bundle's declared configuration constraints.
+func (c *Connector) ValidateConfiguration(config map[string]string) error {
+	if c.bundle.Spec == nil {
+		return nil
+	}
+	return c.bundle.Spec.ValidateConfiguration(config)
+}
+
 func (c *Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) error {
 	return Check(ctx, c.bundle, cfg, c.hooks)
 }
@@ -114,6 +131,18 @@ func (c *Connector) DirectRead(ctx context.Context, req connectors.DirectReadReq
 
 func (c *Connector) OperationDirectRead(ctx context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
 	return OperationDirectRead(ctx, c.bundle, req, c.hooks)
+}
+
+func (c *Connector) PreviewOperationDirectWrite(ctx context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
+	return PreviewOperationDirectWrite(ctx, c.bundle, req, c.hooks)
+}
+
+func (c *Connector) OperationDirectWrite(ctx context.Context, req connectors.OperationDirectWriteRequest) (connectors.OperationDirectWriteResult, error) {
+	return OperationDirectWrite(ctx, c.bundle, req, c.hooks)
+}
+
+func (c *Connector) OperationDirectWriteMetadata(operation string) (connectors.OperationDirectWriteMetadata, error) {
+	return OperationDirectWriteMetadata(c.bundle, operation)
 }
 
 // OperationBinaryDownload satisfies connectors.OperationBinaryDownloader by
@@ -215,6 +244,21 @@ func (b Base) Definition() connectors.Definition {
 
 func (b Base) CommandSurface() *connectors.CommandSurface {
 	return synthesizeCommandSurface(b.bundle)
+}
+
+// HasConfigurationConstraints exposes bundle-declared configuration
+// constraints to Tier-3 native connectors that embed Base.
+func (b Base) HasConfigurationConstraints() bool {
+	return b.bundle.Spec != nil && b.bundle.Spec.HasConfigurationConstraints()
+}
+
+// ValidateConfiguration validates supplied credential configuration against
+// the embedded bundle's declared configuration constraints.
+func (b Base) ValidateConfiguration(config map[string]string) error {
+	if b.bundle.Spec == nil {
+		return nil
+	}
+	return b.bundle.Spec.ValidateConfiguration(config)
 }
 
 // synthesizeMetadata is the single source of truth for bundle -> Metadata,

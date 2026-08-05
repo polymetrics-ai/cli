@@ -160,6 +160,66 @@ type OperationDirectReader interface {
 	OperationDirectRead(context.Context, OperationDirectReadRequest) (DirectReadResult, error)
 }
 
+// OperationDirectWriteRequest is one declared, typed rest_write invocation.
+//
+// A caller must obtain PreviewDigest from PreviewOperationDirectWrite before
+// execution. Destructive operations additionally require approval evidence
+// issued for that exact preview; the engine consumes it at its shared write
+// gate immediately before dispatch.
+type OperationDirectWriteRequest struct {
+	Operation    string
+	Config       RuntimeConfig
+	PathParams   map[string]string
+	Query        map[string]string
+	Body         map[string]any
+	OutputPolicy string
+	// RedactFields remains part of the request contract for compatibility, but
+	// rest_write does not strip runtime content from it.
+	RedactFields  []string
+	Approval      *WriteApprovalEvidence
+	PreviewDigest string
+}
+
+// OperationDirectWriteResult is the typed result of a single declared
+// rest_write operation. Body is nil only for an output policy that
+// intentionally discards response content.
+type OperationDirectWriteResult struct {
+	Connector string `json:"connector"`
+	Operation string `json:"operation"`
+	Method    string `json:"method"`
+	Path      string `json:"path"`
+	Status    int    `json:"status"`
+	Body      any    `json:"body,omitempty"`
+}
+
+// OperationDirectWriteMetadata is the no-network operation metadata needed by
+// the connector-command plan lifecycle. It is intentionally a closed summary
+// rather than a raw operation definition, so callers cannot turn it into a
+// generic HTTP-write escape hatch.
+type OperationDirectWriteMetadata struct {
+	Operation             string
+	MutationClass         string
+	Risk                  string
+	Approval              string
+	ConfirmationChallenge string
+	OutputPolicy          string
+	Batchable             bool
+}
+
+// OperationDirectWriter is implemented by connectors that can preview and
+// execute a declared rest_write operation through the shared write gate.
+type OperationDirectWriter interface {
+	PreviewOperationDirectWrite(context.Context, OperationDirectWriteRequest) (WritePreview, error)
+	OperationDirectWrite(context.Context, OperationDirectWriteRequest) (OperationDirectWriteResult, error)
+}
+
+// OperationDirectWriteMetadataProvider exposes the plan-safe metadata for a
+// declared rest_write operation without preparing credentials or making a
+// network request.
+type OperationDirectWriteMetadataProvider interface {
+	OperationDirectWriteMetadata(operation string) (OperationDirectWriteMetadata, error)
+}
+
 // OperationBinaryDownloadRequest is one bounded binary/file download driven by
 // a declared binary_download operation.
 //
