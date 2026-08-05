@@ -1,0 +1,25 @@
+{
+  "record": {
+    "name": "fixture_name",
+    "display_name": "fixture_display_name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/measured_units",
+    "body": {
+      "name": "fixture_name",
+      "display_name": "fixture_display_name"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id",
+      "object": "fixture_object",
+      "name": "fixture_name",
+      "state": "active",
+      "created_at": "2026-01-02T03:04:05Z",
+      "updated_at": "2026-01-02T03:04:05Z"
+    }
+  }
+}

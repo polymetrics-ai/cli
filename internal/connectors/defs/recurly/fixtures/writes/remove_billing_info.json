@@ -1,0 +1,13 @@
+{
+  "record": {
+    "account_id": "fixture_account_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/accounts/fixture_account_id/billing_info"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

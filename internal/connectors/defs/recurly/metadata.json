@@ -1,23 +1,28 @@
 {
   "name": "recurly",
   "display_name": "Recurly",
-  "description": "Reads Recurly accounts, subscriptions, invoices, transactions, and plans through the Recurly v3 REST API.",
+  "description": "Reads Recurly accounts, subscriptions, invoices, transactions, catalog, usage, exports, preview resources, and related V3 API data; models typed reverse-ETL mutations for official POST/PUT/DELETE endpoints.",
   "integration_type": "api",
-  "docs_url": "https://developers.recurly.com/api/v2021-02-25/",
-  "release_stage": "ga",
+  "docs_url": "https://recurly.com/developers/api/v2021-02-25/",
+  "release_stage": "beta",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 200
+    "read_page_size": 200,
+    "write_batch_size": 25
+  },
+  "rate_limit": {
+    "requests_per_minute": 1000
   },
   "risk": {
-    "read": "external Recurly API read of subscription billing data",
-    "approval": "none; read-only billing API"
+    "read": "external Recurly API reads can expose account, billing, invoice, subscription, usage, and transaction data; direct preview reads are fixed-path and redacted",
+    "write": "typed Recurly reverse ETL mutations for accounts, billing, subscriptions, invoices, catalog, usage, coupons, exports, and related lifecycle resources",
+    "approval": "reverse ETL writes require plan, preview, explicit approval, execute; destructive lifecycle actions require destructive confirmation; each Recurly mutation receives a stable per-record Idempotency-Key across automatic retries"
   }
 }

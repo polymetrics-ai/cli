@@ -1,0 +1,27 @@
+{
+  "record": {
+    "plan_id": "fixture_plan_id",
+    "code": "fixture_code",
+    "name": "fixture_name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/plans/fixture_plan_id/add_ons",
+    "body": {
+      "code": "fixture_code",
+      "name": "fixture_name"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "code": "fixture_code",
+      "name": "fixture_name",
+      "id": "fixture_id",
+      "object": "fixture_object",
+      "state": "active",
+      "created_at": "2026-01-02T03:04:05Z",
+      "updated_at": "2026-01-02T03:04:05Z"
+    }
+  }
+}

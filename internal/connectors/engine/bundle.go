@@ -20,6 +20,7 @@ import (
 // design §F.3): dir name == metadata.name == registry key.
 var namePattern = regexp.MustCompile(`^[a-z0-9][a-z0-9-]*$`)
 var graphQLNamePattern = regexp.MustCompile(`^[_A-Za-z][_0-9A-Za-z]*$`)
+var httpHeaderNamePattern = regexp.MustCompile("^[!#$%&'*+.^_`|~0-9A-Za-z-]+$")
 
 // Bundle is a fully loaded and structurally validated connector definition.
 type Bundle struct {
@@ -451,13 +452,19 @@ type WriteAction struct {
 	Query        map[string]QueryParam `json:"query,omitempty"`
 	RedactFields []string              `json:"redact_fields,omitempty"` // record fields redacted from plan samples/previews/errors
 	BodyType     string                `json:"body_type,omitempty"`     // json (default) | form | none | graphql | json_array | multipart | base64_upload
-	BodyFields   []string              `json:"body_fields,omitempty"`
-	BodyField    string                `json:"body_field,omitempty"`
-	BodySchema   json.RawMessage       `json:"body_schema,omitempty"`
-	GraphQL      *GraphQLRequestSpec   `json:"graphql,omitempty"`
-	Multipart    *MultipartSpec        `json:"multipart,omitempty"`
-	Base64Upload *Base64UploadSpec     `json:"base64_upload,omitempty"`
-	RecordSchema json.RawMessage       `json:"record_schema"`
+	// BodyRequired forces an empty JSON object onto the wire when body construction
+	// resolves no fields. It is valid only for the default json body type.
+	BodyRequired bool                `json:"body_required,omitempty"`
+	BodyFields   []string            `json:"body_fields,omitempty"`
+	BodyField    string              `json:"body_field,omitempty"`
+	BodySchema   json.RawMessage     `json:"body_schema,omitempty"`
+	GraphQL      *GraphQLRequestSpec `json:"graphql,omitempty"`
+	Multipart    *MultipartSpec      `json:"multipart,omitempty"`
+	Base64Upload *Base64UploadSpec   `json:"base64_upload,omitempty"`
+	RecordSchema json.RawMessage     `json:"record_schema"`
+	// IdempotencyKeyHeader names a provider-documented request header. Execution
+	// generates one fresh key per record and reuses it only across that record's retries.
+	IdempotencyKeyHeader string `json:"idempotency_key_header,omitempty"`
 	// DynamicFields optionally declares ONE record field as a typed
 	// dynamic-key region. Absent means today's exact behavior.
 	DynamicFields *DynamicFieldsSpec `json:"dynamic_fields,omitempty"`
@@ -1368,6 +1375,12 @@ func validateWriteBodies(actions []WriteAction) error {
 			return err
 		}
 		bodyType := bodyTypeOf(action)
+		if action.BodyRequired && bodyType != "json" {
+			return fmt.Errorf("action %d (%q) body_required requires body_type json, got %q", i, action.Name, bodyType)
+		}
+		if header := strings.TrimSpace(action.IdempotencyKeyHeader); header != "" && !httpHeaderNamePattern.MatchString(header) {
+			return fmt.Errorf("action %d (%q) idempotency_key_header %q is not a valid HTTP header name", i, action.Name, action.IdempotencyKeyHeader)
+		}
 		if action.GraphQL != nil && bodyType != "graphql" {
 			return fmt.Errorf("action %d (%q) declares graphql but body_type is %q", i, action.Name, bodyType)
 		}

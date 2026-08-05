@@ -149,6 +149,9 @@ type Requester struct {
 
 	// MaxRetries is the number of additional attempts after the first (default 4).
 	MaxRetries int
+	// DisableRetries prevents every automatic replay, including transient-status,
+	// transport-error, and 401 reauthentication retries. The first attempt still runs.
+	DisableRetries bool
 	// BaseBackoff and MaxBackoff bound exponential backoff (defaults 500ms / 30s).
 	BaseBackoff time.Duration
 	MaxBackoff  time.Duration
@@ -171,6 +174,9 @@ func (r *Requester) clientFor(ctx context.Context) *http.Client {
 }
 
 func (r *Requester) maxRetries() int {
+	if r.DisableRetries {
+		return 0
+	}
 	if r.MaxRetries > 0 {
 		return r.MaxRetries
 	}
@@ -727,7 +733,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 		// Authenticators that do not implement AuthRefresher — every mode that
 		// predates the refresh-token grant — never enter this branch, so their
 		// 401 behaviour is byte-for-byte unchanged.
-		if resp.StatusCode == http.StatusUnauthorized && !reauthAttempted {
+		if resp.StatusCode == http.StatusUnauthorized && !reauthAttempted && !r.DisableRetries {
 			if refresher, ok := r.Auth.(AuthRefresher); ok {
 				// Set before the attempt: a refresh that itself errors must not
 				// buy a second one.

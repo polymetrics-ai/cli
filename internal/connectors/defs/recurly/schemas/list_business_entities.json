@@ -1,0 +1,173 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Recurly list_business_entities record",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "title": "Business entity ID"
+    },
+    "object": {
+      "type": "string",
+      "title": "Object type"
+    },
+    "code": {
+      "type": "string",
+      "title": "Business entity code",
+      "description": "The entity code of the business entity."
+    },
+    "name": {
+      "type": "string",
+      "title": "Name",
+      "description": "This name describes your business entity and will appear on the invoice."
+    },
+    "invoice_display_address": {
+      "type": "object",
+      "properties": {
+        "phone": {
+          "type": "string",
+          "title": "Phone number"
+        },
+        "street1": {
+          "type": "string",
+          "title": "Street 1"
+        },
+        "street2": {
+          "type": "string",
+          "title": "Street 2"
+        },
+        "city": {
+          "type": "string",
+          "title": "City"
+        },
+        "region": {
+          "type": "string",
+          "title": "State/Province",
+          "description": "State or province."
+        },
+        "postal_code": {
+          "type": "string",
+          "title": "Zip/Postal code",
+          "description": "Zip or postal code."
+        },
+        "country": {
+          "type": "string",
+          "title": "Country",
+          "description": "Country, 2-letter ISO 3166-1 alpha-2 code."
+        },
+        "geo_code": {
+          "type": "string",
+          "description": "Code that represents a geographic entity (location or object). Only returned when Vertex or Avalara for Communications is enabled."
+        }
+      },
+      "additionalProperties": false
+    },
+    "tax_address": {
+      "type": "object",
+      "properties": {
+        "phone": {
+          "type": "string",
+          "title": "Phone number"
+        },
+        "street1": {
+          "type": "string",
+          "title": "Street 1"
+        },
+        "street2": {
+          "type": "string",
+          "title": "Street 2"
+        },
+        "city": {
+          "type": "string",
+          "title": "City"
+        },
+        "region": {
+          "type": "string",
+          "title": "State/Province",
+          "description": "State or province."
+        },
+        "postal_code": {
+          "type": "string",
+          "title": "Zip/Postal code",
+          "description": "Zip or postal code."
+        },
+        "country": {
+          "type": "string",
+          "title": "Country",
+          "description": "Country, 2-letter ISO 3166-1 alpha-2 code."
+        },
+        "geo_code": {
+          "type": "string",
+          "description": "Code that represents a geographic entity (location or object). Only returned when Vertex or Avalara for Communications is enabled."
+        }
+      },
+      "additionalProperties": false
+    },
+    "origin_tax_address_source": {
+      "type": "string",
+      "enum": [
+        "origin",
+        "destination"
+      ],
+      "default": "origin",
+      "title": "Origin tax address source",
+      "description": "The source of the address that will be used as the origin in determining taxes. Available only when the site is on an Elite plan. A value of \"origin\" refers to the \"Business entity tax address\". A value of \"destination\" refers to the \"Customer tax address\"."
+    },
+    "destination_tax_address_source": {
+      "type": "string",
+      "enum": [
+        "destination",
+        "origin"
+      ],
+      "default": "destination",
+      "title": "Destination tax address source",
+      "description": "The source of the address that will be used as the destinaion in determining taxes. Available only when the site is on an Elite plan. A value of \"destination\" refers to the \"Customer tax address\". A value of \"origin\" refers to the \"Business entity tax address\"."
+    },
+    "default_vat_number": {
+      "type": "string",
+      "title": "Default VAT number",
+      "description": "VAT number for the customer used on the invoice."
+    },
+    "default_registration_number": {
+      "type": "string",
+      "title": "Default registration number",
+      "description": "Registration number for the customer used on the invoice."
+    },
+    "subscriber_location_countries": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "title": "Country code"
+      },
+      "title": "Subscriber location countries",
+      "description": "List of countries for which the business entity will be used."
+    },
+    "default_liability_gl_account_id": {
+      "type": "string",
+      "title": "General Ledger Account ID",
+      "description": "The ID of a general ledger account. General ledger accounts are\nonly accessible as a part of the Recurly RevRec Standard and\nRecurly RevRec Advanced features.\n"
+    },
+    "default_revenue_gl_account_id": {
+      "type": "string",
+      "title": "General Ledger Account ID",
+      "description": "The ID of a general ledger account. General ledger accounts are\nonly accessible as a part of the Recurly RevRec Standard and\nRecurly RevRec Advanced features.\n"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created at"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Last updated at"
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "additionalProperties": false
+}

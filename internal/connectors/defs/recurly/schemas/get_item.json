@@ -1,0 +1,196 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Recurly get_item record",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "title": "Item ID"
+    },
+    "object": {
+      "type": "string",
+      "title": "Object type"
+    },
+    "code": {
+      "type": "string",
+      "title": "Item code",
+      "description": "Unique code to identify the item.",
+      "pattern": "^[a-z0-9_+-]+$"
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive"
+      ],
+      "title": "State",
+      "description": "The current state of the item."
+    },
+    "name": {
+      "type": "string",
+      "title": "Name",
+      "description": "This name describes your item and will appear on the invoice when it's purchased on a one time basis."
+    },
+    "description": {
+      "type": "string",
+      "title": "Description",
+      "description": "Optional, description."
+    },
+    "external_sku": {
+      "type": "string",
+      "title": "External SKU",
+      "description": "Optional, stock keeping unit to link the item to other inventory systems."
+    },
+    "accounting_code": {
+      "type": "string",
+      "title": "Item accounting code",
+      "description": "Accounting code for invoice line items.",
+      "pattern": "^[a-z0-9_+-]+$"
+    },
+    "revenue_schedule_type": {
+      "type": "string",
+      "enum": [
+        "at_range_end",
+        "at_range_start",
+        "evenly",
+        "never"
+      ],
+      "title": "Revenue schedule type"
+    },
+    "performance_obligation_id": {
+      "type": "string",
+      "title": "Performance Obligation ID",
+      "description": "The ID of a performance obligation. Performance obligations are\nonly accessible as a part of the Recurly RevRec Standard and\nRecurly RevRec Advanced features.\n"
+    },
+    "liability_gl_account_id": {
+      "type": "string",
+      "title": "General Ledger Account ID",
+      "description": "The ID of a general ledger account. General ledger accounts are\nonly accessible as a part of the Recurly RevRec Standard and\nRecurly RevRec Advanced features.\n"
+    },
+    "revenue_gl_account_id": {
+      "type": "string",
+      "title": "General Ledger Account ID",
+      "description": "The ID of a general ledger account. General ledger accounts are\nonly accessible as a part of the Recurly RevRec Standard and\nRecurly RevRec Advanced features.\n"
+    },
+    "avalara_transaction_type": {
+      "type": "integer",
+      "title": "Avalara Transaction Type",
+      "description": "Used by Avalara for Communications taxes. The transaction type in combination with the service type describe how the item is taxed. Refer to [the documentation](https://help.avalara.com/AvaTax_for_Communications/Tax_Calculation/AvaTax_for_Communications_Tax_Engine/Mapping_Resources/TM_00115_AFC_Modules_Corresponding_Transaction_Types) for more available t/s types."
+    },
+    "avalara_service_type": {
+      "type": "integer",
+      "title": "Avalara Service Type",
+      "description": "Used by Avalara for Communications taxes. The transaction type in combination with the service type describe how the item is taxed. Refer to [the documentation](https://help.avalara.com/AvaTax_for_Communications/Tax_Calculation/AvaTax_for_Communications_Tax_Engine/Mapping_Resources/TM_00115_AFC_Modules_Corresponding_Transaction_Types) for more available t/s types."
+    },
+    "tax_code": {
+      "type": "string",
+      "title": "Tax code",
+      "description": "Optional field used by Avalara, Vertex, and Recurly's In-the-Box tax solution to determine taxation rules. You can pass in specific tax codes using any of these tax integrations. For Recurly's In-the-Box tax offering you can also choose to instead use simple values of `unknown`, `physical`, or `digital` tax codes."
+    },
+    "harmonized_system_code": {
+      "type": "string",
+      "title": "Harmonized System code",
+      "description": "The Harmonized System (HS) code is an internationally standardized system of names and numbers to classify traded products. The HS code, sometimes called Commodity Code, is used by customs authorities around the world to identify products when assessing duties and taxes. The HS code may also be referred to as the tariff code or customs code. Values should contain only digits and decimals.",
+      "pattern": "^\\d+(\\.\\d+)*$"
+    },
+    "tax_exempt": {
+      "type": "boolean",
+      "title": "Tax exempt?",
+      "description": "`true` exempts tax on the item, `false` applies tax on the item."
+    },
+    "custom_fields": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Field name",
+            "description": "Fields must be created in the UI before values can be assigned to them.",
+            "pattern": "(?i)^[a-z0-9_-]+$"
+          },
+          "value": {
+            "type": "string",
+            "title": "Field value",
+            "description": "Any values that resemble a credit card number or security code (CVV/CVC) will be rejected."
+          },
+          "source_record_type": {
+            "type": "string",
+            "enum": [
+              "account",
+              "plan",
+              "product",
+              "subscription"
+            ],
+            "title": "Source record type",
+            "description": "The type of record a custom field was automatically copied from."
+          },
+          "source_record_id": {
+            "type": "string",
+            "title": "Source record ID",
+            "description": "The UUID of the record this custom field was automatically copied from. Only present when the field was copied from another record."
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ],
+        "additionalProperties": false,
+        "title": "Custom field"
+      },
+      "title": "Custom fields",
+      "description": "The custom fields will only be altered when they are included in a request. Sending an empty array will not remove any existing values. To remove a field send the name with a null or empty value."
+    },
+    "currencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "title": "Currency",
+            "description": "3-letter ISO 4217 currency code."
+          },
+          "unit_amount": {
+            "type": "number",
+            "format": "float"
+          },
+          "tax_inclusive": {
+            "type": "boolean",
+            "default": false,
+            "title": "Tax Inclusive?",
+            "description": "This field is deprecated. Please do not use it."
+          }
+        },
+        "required": [
+          "currency",
+          "unit_amount"
+        ],
+        "additionalProperties": false
+      },
+      "title": "Item Pricing"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created at"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Last updated at"
+    },
+    "deleted_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Deleted at"
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "additionalProperties": false
+}
