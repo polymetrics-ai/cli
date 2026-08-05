@@ -531,8 +531,14 @@ func TestMultipartDirectWriteCommandRejectsChangedPayloadBeforeNetwork(t *testin
 
 func TestMultipartDirectWriteCommandBindsDeclaredUploadField(t *testing.T) {
 	ctx := context.Background()
-	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
-		t.Fatal("multipart preview reached the network")
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if r.URL.Path != "/api/attachments" {
+			t.Fatalf("request path = %q, want /api/attachments", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
 	}))
 	defer server.Close()
 
@@ -556,6 +562,19 @@ func TestMultipartDirectWriteCommandBindsDeclaredUploadField(t *testing.T) {
 	if preview == nil || len(plan.PayloadIdentity) != 1 || plan.PayloadIdentity[0].Field != "upload" || plan.PayloadIdentity[0].ContentSHA256 == "" {
 		t.Fatalf("declared upload payload identity = %#v / %#v, want the exact declared field and digest", plan, preview)
 	}
+	if calls != 0 {
+		t.Fatalf("declared upload preview calls = %d, want 0", calls)
+	}
+	if _, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:        plan.ID,
+		ApprovalToken: plan.ApprovalToken,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	}); err != nil {
+		t.Fatalf("RunReverseETL declared upload field: %v", err)
+	}
+	if calls != 1 {
+		t.Fatalf("declared upload execution calls = %d, want 1", calls)
+	}
 }
 
 func TestMultipartDirectWritePreflightRejectsMissingContractAndLegacyFileUpload(t *testing.T) {
@@ -576,6 +595,15 @@ func TestMultipartDirectWritePreflightRejectsMissingContractAndLegacyFileUpload(
 		err := commandrunner.Preflight(engine.New(bundle, nil), []string{"attachment", "create"})
 		if err == nil || !strings.Contains(err.Error(), "not executable") {
 			t.Fatalf("Preflight missing multipart contract = %v, want executable-claim rejection", err)
+		}
+	})
+
+	t.Run("missing api surface endpoint remains blocked", func(t *testing.T) {
+		bundle := multipartRestWriteDemoBundle()
+		bundle.Surface = nil
+		err := commandrunner.Preflight(engine.New(bundle, nil), []string{"attachment", "create"})
+		if err == nil || !strings.Contains(err.Error(), "api_surface") {
+			t.Fatalf("Preflight missing api_surface = %v, want endpoint provenance rejection", err)
 		}
 	})
 
