@@ -98,17 +98,21 @@ type ManifestProvider interface {
 }
 
 func ManifestOf(c Connector) Manifest {
+	var manifest Manifest
 	if provider, ok := c.(ManifestProvider); ok {
-		return manifestWithIcon(provider.Manifest())
+		manifest = provider.Manifest()
+	} else {
+		manifest = Manifest{
+			Metadata: c.Metadata(),
+			Risk: RiskSpec{
+				Read:     "connector-specific",
+				Write:    "connector-specific",
+				Approval: "external mutations require preview and approval",
+			},
+		}
 	}
-	return manifestWithIcon(Manifest{
-		Metadata: c.Metadata(),
-		Risk: RiskSpec{
-			Read:     "connector-specific",
-			Write:    "connector-specific",
-			Approval: "external mutations require preview and approval",
-		},
-	})
+	manifest.Metadata.Capabilities.CDC = MetadataOf(c).Capabilities.CDC
+	return manifestWithIcon(manifest)
 }
 
 func (r *Registry) Manifest(name string) (Manifest, bool) {

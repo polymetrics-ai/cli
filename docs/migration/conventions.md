@@ -15,6 +15,7 @@ One directory `internal/connectors/defs/<name>/`, zero Go:
 
 ```
 metadata.json        # identity + capabilities + risk (engine/bundle.go Metadata)
+changefeed.json      # optional evidence-backed changefeed declaration
 spec.json            # draft-07 connection spec; x-secret marks secret fields
 streams.json         # base HTTP config + streams[] (required unless dynamic_schema)
 writes.json          # actions[] (omit entirely when capabilities.write is false)
@@ -86,8 +87,9 @@ split (design §B.7), each file well under ~400 lines:
 - `cdc.go` — `ReadCDC()` (a documented stub is acceptable when the CDC dependency is gated — see
   postgres below).
 
-Still ship a bundle (`internal/connectors/defs/<name>/{metadata.json,spec.json,api_surface.json,
-docs.md}`) so identity/spec/docs stay uniform with every other connector; `metadata.json` sets
+Still ship a bundle (`internal/connectors/defs/<name>/{metadata.json,changefeed.json?,spec.json,
+api_surface.json,docs.md}`) so identity/spec/docs stay uniform with every other connector;
+`metadata.json` sets
 `capabilities.dynamic_schema: true` and the bundle ships **no `streams.json`** (the loader
 (`bundle.go`'s `loadStreams`) only tolerates a missing `streams.json` when `dynamic_schema` is
 true). The package embeds `engine.Base` (via `engine.NewBase(bundle)`) purely to serve
@@ -174,6 +176,17 @@ not a full override by default.
   closed exclusion-category vocabulary (design §E.1 rule 3, enforced by the loader's meta-schema
   enum): `destructive_admin`, `requires_elevated_scope`, `binary_payload`, `deprecated`,
   `non_data_endpoint`, `duplicate_of`, `out_of_scope`.
+- **`changefeed.json` is evidence-backed and fail-closed**: add this optional file only after
+  reviewing a provider artifact. It records a closed status (`implemented`, `planned`,
+  `unsupported`, or `unknown`), a closed mechanism (`logical_replication`, `incremental_cursor`,
+  `webhook`, `event_stream`, or `polling_watermark`), and a source artifact URL, version, and
+  retrieval date. An `implemented` declaration also requires a named executor, checkpoint and
+  recovery contract, delivery guarantees, and covered streams, but it does not set public `cdc`
+  by itself: the registered connector must expose a matching `ChangefeedExecutor`. An
+  `unsupported` declaration requires a reason and must not claim an executor, checkpoint, or
+  delivery contract. An absent descriptor is unknown and non-capable. The structural schema is
+  `internal/connectors/engine/schema/changefeed.schema.json`; runtime semantic checks live on
+  `connectors.ChangefeedDescriptor`.
 - **`docs.md` required headings** (exact text, `#`/`##` either level; `conformance`'s
   `docs_present` and `connectorgen validate`'s `docs_heading` rule both check presence by trimmed
   text only): `Overview`, `Auth setup`, `Streams notes`, `Write actions & risks`, `Known limits`.
