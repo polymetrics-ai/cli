@@ -7,7 +7,7 @@ and all unrelated safety controls.
 
 ## Slices
 
-1. **#3782 — runner red test and implementation**
+1. **#3782 — runner red test and implementation** — completed
    - Change the legacy masking assertions in `internal/connectors/commandrunner/runner_test.go`
      deliberately into content-preservation tests, and add a failing test for request forwarding
      where necessary.
