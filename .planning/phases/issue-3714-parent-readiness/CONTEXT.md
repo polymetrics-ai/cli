@@ -1,6 +1,6 @@
 # Context — issue #3714 parent readiness
 
-Parent issue: #3714  
+Parent issue: #3714
 Parent PR: #3723 (`refactor/3714-canonical-delivery-flow` → `main`)
 
 ## Fixed decisions
@@ -29,4 +29,3 @@ existing parent branch, wait for its checks, and mark the existing PR ready when
 - Changes to the destructive-write confirmation semantics.
 - Hand edits to `.claude/agents/**`, `.codex/agents/**`, or `.pi/agents/**` generated projections.
 - Credentialed connector checks, reverse-ETL execution, dependencies, or CLI-surface changes.
-

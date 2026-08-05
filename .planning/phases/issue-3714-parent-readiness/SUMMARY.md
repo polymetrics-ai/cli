@@ -28,8 +28,9 @@ coverage:
 
 ## Delivered locally
 
-- Merged `origin/main` into `refactor/3714-canonical-delivery-flow` as `fc99e1836`.
-- The merge was clean: no canonical contract, generator, generated-projection, or destructive-write
+- Merged `origin/main` twice as it advanced: `fc99e1836` for the original parent refresh and
+  `08377a5ae` for current `4871df2f8` (Recurly parity).
+- Both merges were clean: no canonical contract, generator, generated-projection, or destructive-write
   confirmation conflict needed resolution.
 - Regenerated the registered harness set using `agentcontractgen sync`; it changed zero files, and
   the drift checker passed. Codex, Claude, and Pi each retain both required worker projections.
@@ -37,6 +38,7 @@ coverage:
 
 ## Remaining gate
 
-Push this head, wait for the existing parent PR's full CI and automatic review route, then mark
+Commit and push this head, run a brand-new no-mistakes validation pass, wait for the existing
+parent PR's full CI and automatic review route, then mark
 #3723 ready only if every check is green and no actionable finding remains. The captain's review and
 final merge are outside this worker's authority.

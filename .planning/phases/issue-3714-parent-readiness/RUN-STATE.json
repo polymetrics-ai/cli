@@ -1,8 +1,8 @@
 {
   "phase": "issue-3714-parent-readiness",
-  "status": "refreshing_parent_main",
+  "status": "awaiting_fresh_validation",
   "verificationPassed": false,
-  "verificationNote": "Focused local validation passed. verificationPassed remains false until the full CI verify gate succeeds.",
+  "verificationNote": "The refreshed local validation passed. verificationPassed remains false until a fresh no-mistakes run reaches the CI-ready return point.",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -33,6 +33,11 @@
       "cycle": "main-refresh",
       "decision": "local_critical_path",
       "reason": "origin/main advanced to 4871df2f8 after the prior parent merge, so this same parent branch is being refreshed, regenerated, and sent through a brand-new validation run without rewriting history."
+    },
+    {
+      "cycle": "post-refresh-verify",
+      "decision": "local_critical_path",
+      "reason": "The clean 08377a5ae merge, zero-change projection regeneration, focused tests, and scoped gates passed. The next owner is a fresh no-mistakes run from the committed refreshed head."
     }
   ]
 }

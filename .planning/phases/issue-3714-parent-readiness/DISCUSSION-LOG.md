@@ -7,4 +7,3 @@ mainline commits, safety boundaries, and stop condition.
 The canonical contract forbids delegation, so the explicit execution decision is
 `local_critical_path`: all three worker waves are already integrated and this remaining task is a
 single parent-branch reconciliation.
-
