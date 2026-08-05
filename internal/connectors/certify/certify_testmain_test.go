@@ -17,10 +17,10 @@ import (
 // includes focused Harness and Sweeper coverage because they deliberately
 // exercise the same in-process cli.Run seam.
 //
-// This deliberately generous initial ceiling is a RED checkpoint: the
-// pre-refactor suite's repeated Runner.Run calls exceed it. The GREEN slice
-// narrows it to the measured retained-proof count.
-const certifyRealCLIInvocationBudget = 128
+// The pre-refactor suite made 782 calls. A cold -count=1 GREEN run makes 85,
+// so the ceiling intentionally has no slack: new real CLI work must be an
+// explicit change to this test contract rather than accidental duplication.
+const certifyRealCLIInvocationBudget = 85
 
 var certifyRealCLIInvocations atomic.Int64
 

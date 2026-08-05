@@ -49,3 +49,49 @@ while normal glue/source cases cost 26–28s and repeated write cases cost
 29–36s. The invocation failure, not that laptop duration, is the contract:
 the later scripted-driver migration must reduce equivalent real CLI work below
 the ceiling without removing assertions.
+
+### #3798/#3801 — GREEN invocation contract and scripted stage driver
+
+The test-only scripted driver rejects malformed command families, validates
+the harness-injected root, verifies command/envelope/exit transitions, and
+materializes the sample outbox protocol needed for the write lifecycle. The
+focused source, glue, write, failure, cleanup, and replay assertions remain
+in their existing test cases; only repeated real `cli.Run` execution was
+removed. `TestFullSweepSourceStagesAgainstSample` remains the one real
+full-source/read/flow/schedule proof.
+
+```text
+$ go test -count=1 ./internal/connectors/certify
+ok      polymetrics.ai/internal/connectors/certify    58.972s
+```
+
+The TestMain output from the preceding verbose cold run measured 85 real CLI
+invocations, so the committed deterministic ceiling is exactly 85 (the
+pre-refactor red run was 782). The cap is a count, not a duration budget.
+
+### #3805 — CLI router and complete-fixture rendering
+
+Before the fixture conversion, the focused cold route suite failed the
+initial counter as intended:
+
+```text
+$ go test -count=1 -v -run '^TestCertifyCLI' ./internal/cli
+...
+PASS
+certify CLI real invocations: 213 (budget 80)
+certify CLI real invocation budget exceeded: got 213, allowed 80; retain one certify router proof and render remaining cases from fixtures
+FAIL    polymetrics.ai/internal/cli    227.819s
+FAIL
+```
+
+After conversion, the single real `pm connectors certify sample --json` route
+also proves report persistence. Text rendering, persistence round-trip, and
+JSON/text batch output use complete Report/BatchReport fixtures; batch worker,
+ordering, resume, and exit behavior remain covered by their existing focused
+tests. The cold focused route run now makes 61 real calls and passes the exact
+61-call ceiling:
+
+```text
+$ go test -count=1 -run '^TestCertifyCLI' ./internal/cli
+ok      polymetrics.ai/internal/cli    43.128s
+```

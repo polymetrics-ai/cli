@@ -1,4 +1,4 @@
-package cli_test
+package cli
 
 import (
 	"bytes"
@@ -9,33 +9,34 @@ import (
 	"strings"
 	"sync/atomic"
 	"testing"
+	"time"
 
-	"polymetrics.ai/internal/cli"
 	"polymetrics.ai/internal/connectors/certify"
 )
 
 // certifyCLIRealInvocationBudget permits exactly one route proof that reaches
 // the real certify.Runner. Rendering, persistence, batch, and failure cases
-// are migrated to complete report fixtures; their direct cli.Run calls remain
-// counted here so the contract covers the whole CLI test binary.
-const certifyCLIRealInvocationBudget = 80
+// are migrated to complete report fixtures; their direct Run calls remain
+// counted here so the contract covers the whole CLI test binary. A cold
+// -count=1 run measures 61 calls, so the ceiling intentionally has no slack.
+const certifyCLIRealInvocationBudget = 61
 
 var certifyCLIRealInvocations atomic.Int64
 
 func countedCertifyCLI(args []string, stdout, stderr *bytes.Buffer) int {
 	certifyCLIRealInvocations.Add(1)
-	return cli.Run(args, stdout, stderr)
+	return Run(args, stdout, stderr)
 }
 
 func countedCertifyCLIWriter(args []string, stdout, stderr io.Writer) int {
 	certifyCLIRealInvocations.Add(1)
-	return cli.Run(args, stdout, stderr)
+	return Run(args, stdout, stderr)
 }
 
-// TestMain wires the real cli.Run entrypoint into certify's in-process CLI
+// TestMain wires the real Run entrypoint into certify's in-process CLI
 // driver exactly once for this test binary (mirroring cmd/pm/main.go),
 // since `pm connectors certify` drives certify.Runner/RunBatch which in turn
-// drive cli.Run recursively via certify.Harness (see
+// drive Run recursively via certify.Harness (see
 // internal/connectors/certify/cliharness.go SetCLIRunFunc).
 func TestMain(m *testing.M) {
 	certify.SetCLIRunFunc(countedCertifyCLIWriter)
@@ -76,20 +77,16 @@ func TestCertifyCLISingleConnectorPassExitsZero(t *testing.T) {
 	if !strings.Contains(stdout, `"connector": "sample"`) {
 		t.Errorf("stdout missing connector=sample: %s", stdout)
 	}
+	path := filepath.Join(root, ".polymetrics", "certifications", "sample.json")
+	if _, err := os.Stat(path); err != nil {
+		t.Fatalf("router proof did not persist its report at %s: %v", path, err)
+	}
 }
 
 // TestCertifyCLISingleConnectorTextMode proves the non-JSON rendering path
 // also works and reports PASS.
 func TestCertifyCLISingleConnectorTextMode(t *testing.T) {
-	t.Setenv("PM_CERT_SAMPLE_TOKEN", "sample-cli-token")
-	root := t.TempDir()
-
-	stdout, stderr, code := certifyRun(t, root, "connectors", "certify", "sample",
-		"--from-env", "token=PM_CERT_SAMPLE_TOKEN")
-
-	if code != 0 {
-		t.Fatalf("exit code = %d, want 0; stdout=%s stderr=%s", code, stdout, stderr)
-	}
+	stdout := renderCertifyReportText(completeCertifyReport())
 	if !strings.Contains(stdout, "Certification: sample [PASS]") {
 		t.Errorf("stdout missing human-readable PASS summary: %s", stdout)
 	}
@@ -99,18 +96,22 @@ func TestCertifyCLISingleConnectorTextMode(t *testing.T) {
 // report under <root>/.polymetrics/certifications/<connector>.json
 // (certification design §A report artifact path).
 func TestCertifyCLISingleConnectorSavesReport(t *testing.T) {
-	t.Setenv("PM_CERT_SAMPLE_TOKEN", "sample-cli-token")
 	root := t.TempDir()
-
-	_, _, code := certifyRun(t, root, "connectors", "certify", "sample",
-		"--from-env", "token=PM_CERT_SAMPLE_TOKEN", "--json")
-	if code != 0 {
-		t.Fatalf("exit code = %d, want 0", code)
+	rep := completeCertifyReport()
+	if err := rep.Save(filepath.Join(root, ".polymetrics")); err != nil {
+		t.Fatalf("Report.Save() error = %v", err)
 	}
 
 	path := filepath.Join(root, ".polymetrics", "certifications", "sample.json")
 	if _, err := os.Stat(path); err != nil {
 		t.Fatalf("report not saved at %s: %v", path, err)
+	}
+	loaded, err := certify.LoadReport(path)
+	if err != nil {
+		t.Fatalf("LoadReport(%s) error = %v", path, err)
+	}
+	if loaded.Connector != rep.Connector || !loaded.Passed {
+		t.Fatalf("loaded report = %+v, want complete passing sample report", loaded)
 	}
 }
 
@@ -159,32 +160,15 @@ func TestCertifyCLIAllRequiresCredentialsFile(t *testing.T) {
 	}
 }
 
-// TestCertifyCLIBatchModeRunsCredsFileConnectors drives `pm connectors
-// certify --all --credentials-file` end-to-end against the real CLI with
-// "sample" as the only creds-file connector, and proves the batch JSON
-// envelope + summary matrix are produced with exit 0.
+// TestCertifyCLIBatchModeRunsCredsFileConnectors renders a complete batch
+// fixture. RunBatch behavior itself is covered with fake Runnables in
+// internal/connectors/certify; repeating a full CLI route here is redundant.
 func TestCertifyCLIBatchModeRunsCredsFileConnectors(t *testing.T) {
-	t.Setenv("PM_CERT_SAMPLE_TOKEN", "sample-cli-token")
-	root := t.TempDir()
-
-	credsPath := filepath.Join(root, "creds.yaml")
-	credsYAML := `
-version: 1
-connectors:
-  sample:
-    credential:
-      from_env: {token: PM_CERT_SAMPLE_TOKEN}
-`
-	if err := os.WriteFile(credsPath, []byte(credsYAML), 0o600); err != nil {
-		t.Fatalf("write creds file: %v", err)
+	var out bytes.Buffer
+	if err := writeCertifyBatchReport(&out, true, completeCertifyBatchReport()); err != nil {
+		t.Fatalf("writeCertifyBatchReport() error = %v", err)
 	}
-
-	stdout, stderr, code := certifyRun(t, root, "connectors", "certify", "--all",
-		"--credentials-file", credsPath, "--json")
-
-	if code != 0 {
-		t.Fatalf("exit code = %d, want 0; stdout=%s stderr=%s", code, stdout, stderr)
-	}
+	stdout := out.String()
 	if !strings.Contains(stdout, `"kind": "ConnectorCertificationBatch"`) {
 		t.Errorf("stdout missing ConnectorCertificationBatch envelope: %s", stdout)
 	}
@@ -194,25 +178,7 @@ connectors:
 // rendering includes the summary matrix header row (certification design
 // §B columns).
 func TestCertifyCLIBatchModeTextRendersMatrix(t *testing.T) {
-	t.Setenv("PM_CERT_SAMPLE_TOKEN", "sample-cli-token")
-	root := t.TempDir()
-
-	credsPath := filepath.Join(root, "creds.yaml")
-	credsYAML := `
-version: 1
-connectors:
-  sample:
-    credential:
-      from_env: {token: PM_CERT_SAMPLE_TOKEN}
-`
-	if err := os.WriteFile(credsPath, []byte(credsYAML), 0o600); err != nil {
-		t.Fatalf("write creds file: %v", err)
-	}
-
-	stdout, _, code := certifyRun(t, root, "connectors", "certify", "--all", "--credentials-file", credsPath)
-	if code != 0 {
-		t.Fatalf("exit code = %d, want 0", code)
-	}
+	stdout := renderBatchMatrixText(completeCertifyBatchReport())
 	if !strings.Contains(stdout, "connector\tcheck\tcatalog") {
 		t.Errorf("stdout missing matrix header: %s", stdout)
 	}
@@ -274,5 +240,61 @@ func TestCertifyCLIDoesNotBreakExistingConnectorsSubcommands(t *testing.T) {
 	}
 	if !strings.Contains(stdout2, `"kind": "Connector"`) {
 		t.Errorf("connectors inspect output missing Connector kind: %s", stdout2)
+	}
+}
+
+// completeCertifyReport is a complete, successful certification artifact for
+// rendering and persistence tests. It deliberately includes every report
+// capability represented in the CLI output contract so those tests do not
+// need to repeat a real Runner invocation just to obtain sample data.
+func completeCertifyReport() certify.Report {
+	startedAt := time.Date(2026, time.August, 6, 12, 0, 0, 0, time.UTC)
+	return certify.Report{
+		Kind:          "ConnectorCertification",
+		SchemaVersion: 1,
+		Connector:     "sample",
+		PMVersion:     "test",
+		StartedAt:     startedAt,
+		CompletedAt:   startedAt.Add(time.Second),
+		Mode:          "live",
+		Passed:        true,
+		Capabilities: certify.Capabilities{
+			Check:           certify.CapabilityResult{Result: "pass"},
+			Catalog:         certify.CapabilityResult{Result: "pass", Streams: 2},
+			Read:            certify.CapabilityResult{Result: "pass", Stream: "customers", Records: 2},
+			Resume:          certify.CapabilityResult{Result: "pass"},
+			JSONContract:    certify.CapabilityResult{Result: "pass", StagesChecked: 21},
+			SecretRedaction: certify.CapabilityResult{Result: "pass"},
+			SyncModes: map[string]certify.SyncModeResult{
+				"full_refresh_append":            {Result: "pass", DataSource: "live"},
+				"full_refresh_overwrite":         {Result: "pass", DataSource: "capture"},
+				"full_refresh_overwrite_deduped": {Result: "pass", DataSource: "capture"},
+				"incremental_append":             {Result: "pass", DataSource: "live", CursorAdvanced: true},
+				"incremental_append_deduped":     {Result: "pass", DataSource: "capture"},
+			},
+			DirectRead: &certify.CapabilityResult{Result: "skipped", Reason: "fixture does not declare a direct read"},
+			Binary:     &certify.CapabilityResult{Result: "skipped", Reason: "fixture does not declare a binary download"},
+			Flow:       &certify.CapabilityResult{Result: "pass"},
+			Schedule:   &certify.ScheduleResult{Result: "pass", Backend: "crontab", Residue: false},
+			WriteActions: map[string]certify.WriteActionResult{
+				"create": {Result: "pass", Cleanup: "delete", Verify: "verified", Tag: "pm-cert-sample-fixture"},
+			},
+		},
+		Stages: []certify.StageResult{
+			{Name: "init", Tier: 2, Passed: true, DurationMS: 1, CLI: certify.CLIStageInfo{ArgvRedacted: "pm init --json", Kind: "InitResult"}},
+			{Name: "fixture_conformance", Tier: 0, Passed: false, Error: "skipped: fixture is complete for rendering only"},
+		},
+	}
+}
+
+func completeCertifyBatchReport() certify.BatchReport {
+	return certify.BatchReport{
+		RunID:     "fixture-batch",
+		StartedAt: time.Date(2026, time.August, 6, 12, 0, 0, 0, time.UTC),
+		Results: []certify.BatchConnectorResult{
+			{Connector: "sample", Report: completeCertifyReport(), ExitCode: 0},
+			{Connector: "skipped", Skipped: true, SkipReason: "fixture-only connector", ExitCode: 0},
+		},
+		ExitCode: 0,
 	}
 }
