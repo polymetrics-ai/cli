@@ -544,7 +544,7 @@ func (d ChangefeedDescriptor) IsImplemented() bool {
 
 // MatchesExecutor reports whether executor is the runtime counterpart of this
 // implemented descriptor. Matching requires the status, mechanism, named
-// executor, and ordered checkpoint keys to agree exactly.
+// executor, and checkpoint contract to agree exactly.
 func (d ChangefeedDescriptor) MatchesExecutor(executor ChangefeedExecutorDescriptor) bool {
 	if !d.IsImplemented() || executor.Status != ChangefeedStatusImplemented || d.Executor == nil || d.Checkpoint == nil {
 		return false
@@ -553,7 +553,9 @@ func (d ChangefeedDescriptor) MatchesExecutor(executor ChangefeedExecutorDescrip
 		d.Executor.Kind == executor.Executor.Kind &&
 		d.Executor.ID == executor.Executor.ID &&
 		d.Checkpoint.Kind == executor.Checkpoint.Kind &&
-		sameStrings(d.Checkpoint.Keys, executor.Checkpoint.Keys)
+		sameStrings(d.Checkpoint.Keys, executor.Checkpoint.Keys) &&
+		d.Checkpoint.CommitAfter == executor.Checkpoint.CommitAfter &&
+		d.Checkpoint.OnInvalid == executor.Checkpoint.OnInvalid
 }
 
 // Clone returns a defensive copy suitable for a public Definition projection.

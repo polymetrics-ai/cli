@@ -74,10 +74,15 @@ func TestHasImplementedChangefeedRequiresMatchingExecutor(t *testing.T) {
 	}
 
 	matching := ChangefeedExecutorDescriptor{
-		Status:     ChangefeedStatusImplemented,
-		Mechanism:  ChangefeedMechanismLogicalReplication,
-		Executor:   ChangefeedExecutorRef{Kind: "native", ID: "acme-logical"},
-		Checkpoint: ChangefeedCheckpoint{Kind: "lsn", Keys: []string{"lsn"}},
+		Status:    ChangefeedStatusImplemented,
+		Mechanism: ChangefeedMechanismLogicalReplication,
+		Executor:  ChangefeedExecutorRef{Kind: "native", ID: "acme-logical"},
+		Checkpoint: ChangefeedCheckpoint{
+			Kind:        "lsn",
+			Keys:        []string{"lsn"},
+			CommitAfter: "downstream_ack",
+			OnInvalid:   "resnapshot_required",
+		},
 	}
 
 	cases := []struct {
@@ -93,10 +98,43 @@ func TestHasImplementedChangefeedRequiresMatchingExecutor(t *testing.T) {
 		{
 			name: "wrong checkpoint does not match",
 			connector: changefeedTestExecutor{descriptor: ChangefeedExecutorDescriptor{
-				Status:     matching.Status,
-				Mechanism:  matching.Mechanism,
-				Executor:   matching.Executor,
-				Checkpoint: ChangefeedCheckpoint{Kind: "cursor", Keys: []string{"cursor"}},
+				Status:    matching.Status,
+				Mechanism: matching.Mechanism,
+				Executor:  matching.Executor,
+				Checkpoint: ChangefeedCheckpoint{
+					Kind:        "cursor",
+					Keys:        []string{"cursor"},
+					CommitAfter: matching.Checkpoint.CommitAfter,
+					OnInvalid:   matching.Checkpoint.OnInvalid,
+				},
+			}},
+			want: false,
+		},
+		{
+			name: "empty checkpoint commit_after does not match",
+			connector: changefeedTestExecutor{descriptor: ChangefeedExecutorDescriptor{
+				Status:    matching.Status,
+				Mechanism: matching.Mechanism,
+				Executor:  matching.Executor,
+				Checkpoint: ChangefeedCheckpoint{
+					Kind:      matching.Checkpoint.Kind,
+					Keys:      matching.Checkpoint.Keys,
+					OnInvalid: matching.Checkpoint.OnInvalid,
+				},
+			}},
+			want: false,
+		},
+		{
+			name: "empty checkpoint on_invalid does not match",
+			connector: changefeedTestExecutor{descriptor: ChangefeedExecutorDescriptor{
+				Status:    matching.Status,
+				Mechanism: matching.Mechanism,
+				Executor:  matching.Executor,
+				Checkpoint: ChangefeedCheckpoint{
+					Kind:        matching.Checkpoint.Kind,
+					Keys:        matching.Checkpoint.Keys,
+					CommitAfter: matching.Checkpoint.CommitAfter,
+				},
 			}},
 			want: false,
 		},
@@ -242,10 +280,15 @@ func TestDefinitionOfDerivesCDCFromMatchingChangefeedExecutor(t *testing.T) {
 	}
 	connector := changefeedDefinitionExecutor{
 		changefeedTestExecutor: changefeedTestExecutor{descriptor: ChangefeedExecutorDescriptor{
-			Status:     ChangefeedStatusImplemented,
-			Mechanism:  ChangefeedMechanismPollingWatermark,
-			Executor:   ChangefeedExecutorRef{Kind: "native", ID: "acme-poll"},
-			Checkpoint: ChangefeedCheckpoint{Kind: "watermark", Keys: []string{"updated_at", "id"}},
+			Status:    ChangefeedStatusImplemented,
+			Mechanism: ChangefeedMechanismPollingWatermark,
+			Executor:  ChangefeedExecutorRef{Kind: "native", ID: "acme-poll"},
+			Checkpoint: ChangefeedCheckpoint{
+				Kind:        "watermark",
+				Keys:        []string{"updated_at", "id"},
+				CommitAfter: "downstream_ack",
+				OnInvalid:   "resnapshot_required",
+			},
 		}},
 		definition: Definition{
 			Name:         "changefeed-test",
