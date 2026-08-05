@@ -162,6 +162,38 @@ func TestRequesterReauthRetriesEvenWithNoRetryBudget(t *testing.T) {
 	}
 }
 
+// A 401-triggered credential refresh is a retry even though it does not spend
+// MaxRetries. Non-idempotent rest_write dispatches set DisableRetries, so this
+// regression guard proves an expired/revoked credential cannot cause a second
+// mutation attempt through the auth-refresh path.
+func TestRequesterDisableRetriesSuppressesAuthRefresh(t *testing.T) {
+	var attempts int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		atomic.AddInt32(&attempts, 1)
+		w.WriteHeader(http.StatusUnauthorized)
+		_, _ = w.Write([]byte(`{"error":"invalid_token"}`))
+	}))
+	defer srv.Close()
+
+	auth := &countingRefresher{}
+	r := &Requester{BaseURL: srv.URL, Auth: auth, DisableRetries: true, Sleep: noSleep}
+
+	_, err := r.Do(context.Background(), http.MethodPost, "/mutate", nil, map[string]string{"name": "widget"})
+	if err == nil {
+		t.Fatal("Do() error = nil, want a terminal 401")
+	}
+	var httpErr *HTTPError
+	if !errors.As(err, &httpErr) || httpErr.Status != http.StatusUnauthorized {
+		t.Fatalf("Do() error = %v, want a terminal *HTTPError with status 401", err)
+	}
+	if got := atomic.LoadInt32(&attempts); got != 1 {
+		t.Fatalf("upstream attempts = %d, want exactly 1", got)
+	}
+	if got := atomic.LoadInt32(&auth.refreshed); got != 0 {
+		t.Fatalf("refreshes = %d, want 0 when retries are disabled", got)
+	}
+}
+
 // TestRequesterDoesNotRefreshWhenAuthenticatorIsNotARefresher is the
 // additive/opt-in proof: every existing auth mode — none, bearer, basic, the
 // two api-key modes, oauth2_client_credentials, custom — behaves byte-for-byte

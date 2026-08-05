@@ -812,17 +812,38 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 	}
 	if req.Preview {
 		runtime.ApprovedPayloadSHA256 = approvedPayloadSHA256(payloadIdentity)
-		dryRunner, ok := connector.(connectors.DryRunWriter)
-		if !ok {
-			return ReversePlan{}, nil, fmt.Errorf("connector %q does not support reverse ETL previews", connector.Name())
+		if writeCommand.Operation != "" {
+			directWriter, ok := connector.(connectors.OperationDirectWriter)
+			if !ok {
+				return ReversePlan{}, nil, fmt.Errorf("connector %q does not support direct-write previews", connector.Name())
+			}
+			preview, err := directWriter.PreviewOperationDirectWrite(ctx, connectors.OperationDirectWriteRequest{
+				Operation:  writeCommand.Operation,
+				Config:     runtime,
+				PathParams: writeCommand.PathParams,
+				Query:      writeCommand.Query,
+				Body:       map[string]any(writeCommand.Record),
+			})
+			if err != nil {
+				return ReversePlan{}, nil, err
+			}
+			writeCommand.Preview = &preview
+		} else {
+			dryRunner, ok := connector.(connectors.DryRunWriter)
+			if !ok {
+				return ReversePlan{}, nil, fmt.Errorf("connector %q does not support reverse ETL previews", connector.Name())
+			}
+			preview, err := dryRunner.DryRunWrite(ctx, connectors.WriteRequest{Action: writeCommand.Write, Config: runtime}, []connectors.Record{writeCommand.Record})
+			if err != nil {
+				return ReversePlan{}, nil, err
+			}
+			writeCommand.Preview = &preview
 		}
-		preview, err := dryRunner.DryRunWrite(ctx, connectors.WriteRequest{Action: writeCommand.Write, Config: runtime}, []connectors.Record{writeCommand.Record})
-		if err != nil {
-			return ReversePlan{}, nil, err
-		}
-		writeCommand.Preview = &preview
 	}
 	planHash, err := connectorCommandPlanHash(name, req.Connector, req.Credential, req.Config, writeCommand.Command, req.Path, writeCommand.Write, writeCommand.Record, payloadIdentity)
+	if writeCommand.Operation != "" {
+		planHash, err = operationConnectorCommandPlanHash(name, req.Connector, req.Credential, req.Config, writeCommand.Command, req.Path, writeCommand.Operation, writeCommand.PathParams, writeCommand.Query, writeCommand.Record, payloadIdentity)
+	}
 	if err != nil {
 		return ReversePlan{}, nil, err
 	}
@@ -835,7 +856,7 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 			PlanID: id, PlanHash: planHash, Mode: reversePlanModeConnectorCommand,
 			Connector: req.Connector, Operation: writeCommand.Write,
 			CredentialRevision: runtime.CredentialRevision, ConfigurationDigest: runtime.ConfigurationDigest,
-			Batchable: a.actionIsBatchable(req.Connector, writeCommand.Write), Scope: runtime.WriteApprovalScope,
+			Batchable: writeCommand.Batchable, Scope: runtime.WriteApprovalScope,
 			Confirmation: confirmation,
 		})
 		if err != nil {
@@ -846,29 +867,32 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 		expires = seal.ExpiresAt
 	}
 	plan := ReversePlan{
-		ID:                     id,
-		Name:                   name,
-		Status:                 "planned",
-		Mode:                   reversePlanModeConnectorCommand,
-		DestinationConnector:   req.Connector,
-		DestinationCredential:  req.Credential,
-		DestinationConfig:      cloneStringMap(req.Config),
-		Action:                 writeCommand.Write,
-		Mappings:               map[string]string{},
-		ConnectorCommand:       writeCommand.Command,
-		ConnectorCommandPath:   append([]string(nil), req.Path...),
-		ConnectorCommandRecord: cloneRecord(writeCommand.Record),
-		PayloadIdentity:        payloadIdentity,
-		ConfirmationChallenge:  writeCommand.ConfirmationChallenge,
-		ConfirmationPolicy:     confirmationFromChallenge(writeCommand.ConfirmationChallenge),
-		RecordCount:            1,
-		Sample:                 []connectors.Record{cloneRecord(writeCommand.RedactedRecord)},
-		PlanHash:               planHash,
-		PlanSeal:               planSeal,
-		CreatedAt:              created,
-		ExpiresAt:              expires,
+		ID:                         id,
+		Name:                       name,
+		Status:                     "planned",
+		Mode:                       reversePlanModeConnectorCommand,
+		DestinationConnector:       req.Connector,
+		DestinationCredential:      req.Credential,
+		DestinationConfig:          cloneStringMap(req.Config),
+		Action:                     writeCommand.Write,
+		Mappings:                   map[string]string{},
+		ConnectorCommand:           writeCommand.Command,
+		ConnectorCommandPath:       append([]string(nil), req.Path...),
+		ConnectorCommandOperation:  writeCommand.Operation,
+		ConnectorCommandPathParams: cloneStringMap(writeCommand.PathParams),
+		ConnectorCommandQuery:      cloneStringMap(writeCommand.Query),
+		ConnectorCommandRecord:     cloneRecord(writeCommand.Record),
+		PayloadIdentity:            payloadIdentity,
+		ConfirmationChallenge:      writeCommand.ConfirmationChallenge,
+		ConfirmationPolicy:         confirmationFromChallenge(writeCommand.ConfirmationChallenge),
+		RecordCount:                1,
+		Sample:                     []connectors.Record{cloneRecord(writeCommand.RedactedRecord)},
+		PlanHash:                   planHash,
+		PlanSeal:                   planSeal,
+		CreatedAt:                  created,
+		ExpiresAt:                  expires,
 	}
-	if strings.TrimSpace(writeCommand.ConfirmationChallenge) == "" {
+	if strings.TrimSpace(writeCommand.ConfirmationChallenge) == "" && writeCommand.Operation == "" {
 		token, err := randomToken(18)
 		if err != nil {
 			return ReversePlan{}, nil, err
@@ -882,7 +906,12 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 	if err := a.save(); err != nil {
 		return ReversePlan{}, nil, err
 	}
-	if writeCommand.Preview != nil && a.confirmationChallengeForPlan(plan) != "" {
+	if writeCommand.Preview != nil && writeCommand.Operation != "" {
+		plan, err = a.persistOperationDirectWritePreview(plan, *writeCommand.Preview)
+		if err != nil {
+			return ReversePlan{}, nil, err
+		}
+	} else if writeCommand.Preview != nil && a.confirmationChallengeForPlan(plan) != "" {
 		plan, err = a.persistDestructivePreview(plan, *writeCommand.Preview)
 		if err != nil {
 			return ReversePlan{}, nil, err
@@ -917,17 +946,7 @@ func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string) (Rever
 	if err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
-	currentHash, err := connectorCommandPlanHash(
-		plan.Name,
-		plan.DestinationConnector,
-		plan.DestinationCredential,
-		plan.DestinationConfig,
-		plan.ConnectorCommand,
-		plan.ConnectorCommandPath,
-		plan.Action,
-		plan.ConnectorCommandRecord,
-		payloadIdentity,
-	)
+	currentHash, err := connectorCommandHashForPlan(plan, payloadIdentity)
 	if err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
@@ -935,6 +954,27 @@ func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string) (Rever
 		return ReversePlan{}, connectors.WritePreview{}, errors.New("reverse plan command payload changed before preview")
 	}
 	runtime.ApprovedPayloadSHA256 = approvedPayloadSHA256(payloadIdentity)
+	if plan.ConnectorCommandOperation != "" {
+		directWriter, ok := writer.(connectors.OperationDirectWriter)
+		if !ok {
+			return ReversePlan{}, connectors.WritePreview{}, fmt.Errorf("connector %q no longer supports direct-write previews", writer.Name())
+		}
+		preview, err := directWriter.PreviewOperationDirectWrite(ctx, connectors.OperationDirectWriteRequest{
+			Operation:  plan.ConnectorCommandOperation,
+			Config:     runtime,
+			PathParams: plan.ConnectorCommandPathParams,
+			Query:      plan.ConnectorCommandQuery,
+			Body:       map[string]any(plan.ConnectorCommandRecord),
+		})
+		if err != nil {
+			return ReversePlan{}, connectors.WritePreview{}, err
+		}
+		plan, err = a.persistOperationDirectWritePreview(plan, preview)
+		if err != nil {
+			return ReversePlan{}, connectors.WritePreview{}, err
+		}
+		return plan, preview, nil
+	}
 	if validator, ok := writer.(connectors.WriteValidator); ok {
 		if err := validator.ValidateWrite(ctx, connectors.WriteRequest{Action: plan.Action, Config: runtime}, []connectors.Record{plan.ConnectorCommandRecord}); err != nil {
 			return ReversePlan{}, connectors.WritePreview{}, err
@@ -955,6 +995,35 @@ func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string) (Rever
 		}
 	}
 	return plan, preview, nil
+}
+
+func connectorCommandHashForPlan(plan ReversePlan, payloadIdentity []PayloadIdentity) (string, error) {
+	if plan.ConnectorCommandOperation != "" {
+		return operationConnectorCommandPlanHash(
+			plan.Name,
+			plan.DestinationConnector,
+			plan.DestinationCredential,
+			plan.DestinationConfig,
+			plan.ConnectorCommand,
+			plan.ConnectorCommandPath,
+			plan.ConnectorCommandOperation,
+			plan.ConnectorCommandPathParams,
+			plan.ConnectorCommandQuery,
+			plan.ConnectorCommandRecord,
+			payloadIdentity,
+		)
+	}
+	return connectorCommandPlanHash(
+		plan.Name,
+		plan.DestinationConnector,
+		plan.DestinationCredential,
+		plan.DestinationConfig,
+		plan.ConnectorCommand,
+		plan.ConnectorCommandPath,
+		plan.Action,
+		plan.ConnectorCommandRecord,
+		payloadIdentity,
+	)
 }
 
 // PreviewReversePlan materializes the exact mapped write request without
@@ -1087,6 +1156,63 @@ func (a *App) persistDestructivePreview(plan ReversePlan, preview connectors.Wri
 	return issued, nil
 }
 
+// persistOperationDirectWritePreview records a no-network direct-write preview
+// before it exposes an approval token. Destructive operations delegate to the
+// project-wide authenticated grant flow; non-destructive writes still require
+// a persisted preview and a single-use token, but do not mint approval
+// evidence that the engine gate does not require.
+func (a *App) persistOperationDirectWritePreview(plan ReversePlan, preview connectors.WritePreview) (ReversePlan, error) {
+	if plan.ConnectorCommandOperation == "" {
+		return ReversePlan{}, fmt.Errorf("reverse plan %q is not a direct-write command", plan.ID)
+	}
+	if strings.TrimSpace(preview.Digest) == "" {
+		return ReversePlan{}, fmt.Errorf("connector preview for direct-write plan %q has no digest", plan.ID)
+	}
+	if strings.TrimSpace(preview.ApprovalTarget.Connector) == "" || preview.ApprovalTarget.Connector != plan.DestinationConnector || preview.ApprovalTarget.Operation != plan.ConnectorCommandOperation {
+		return ReversePlan{}, fmt.Errorf("connector preview for direct-write plan %q has no matching approval target", plan.ID)
+	}
+	if a.confirmationChallengeForPlan(plan) != "" {
+		return a.persistDestructivePreview(plan, preview)
+	}
+
+	token, err := randomToken(18)
+	if err != nil {
+		return ReversePlan{}, err
+	}
+	now := time.Now().UTC()
+	var issued ReversePlan
+	updated, err := a.updateState(func(current state) (state, error) {
+		for i := range current.ReversePlans {
+			stored := current.ReversePlans[i]
+			if stored.ID != plan.ID {
+				continue
+			}
+			if err := a.previewabilityError(stored, now); err != nil {
+				return current, err
+			}
+			if stored.PlanHash != plan.PlanHash || stored.DestinationConnector != plan.DestinationConnector || stored.DestinationCredential != plan.DestinationCredential || stored.ConnectorCommandOperation != plan.ConnectorCommandOperation {
+				return current, fmt.Errorf("reverse plan %q changed while its direct-write preview was prepared", plan.ID)
+			}
+			stored.Status = "previewed"
+			stored.PreviewDigest = preview.Digest
+			stored.PreviewedAt = now
+			stored.ApprovalTokenHash = hashString(token)
+			stored.ApprovalGrant = nil
+			stored.ApprovalConsumedAt = time.Time{}
+			current.ReversePlans[i] = stored
+			issued = stored
+			issued.ApprovalToken = token
+			return current, nil
+		}
+		return current, fmt.Errorf("reverse plan %q not found", plan.ID)
+	})
+	if err != nil {
+		return ReversePlan{}, err
+	}
+	a.state = updated
+	return issued, nil
+}
+
 func (a *App) previewabilityError(plan ReversePlan, now time.Time) error {
 	if plan.Status != "planned" && plan.Status != "previewed" {
 		return fmt.Errorf("reverse plan %q was already %s", plan.ID, plan.Status)
@@ -1123,6 +1249,17 @@ func (a *App) confirmationPolicyForPlan(plan ReversePlan) connectors.WriteConfir
 	// a destructive-action confirmation gate from an already-created plan. The
 	// stored plan challenge remains a compatibility fallback for older plans or
 	// connectors that are temporarily unavailable.
+	if plan.ConnectorCommandOperation != "" {
+		if connector, ok := a.registry.Get(plan.DestinationConnector); ok {
+			if provider, ok := connector.(connectors.OperationDirectWriteMetadataProvider); ok {
+				if metadata, err := provider.OperationDirectWriteMetadata(plan.ConnectorCommandOperation); err == nil && metadata.Operation == plan.ConnectorCommandOperation {
+					if confirmation := confirmationFromChallenge(metadata.ConfirmationChallenge); confirmation.Kind != "" {
+						return confirmation
+					}
+				}
+			}
+		}
+	}
 	if confirmation := a.confirmationPolicyForAction(plan.DestinationConnector, plan.Action); confirmation.Kind != "" {
 		return confirmation
 	}
@@ -1145,6 +1282,28 @@ func (a *App) actionIsBatchable(connectorName, actionName string) bool {
 	return true
 }
 
+func (a *App) planIsBatchable(plan ReversePlan) (bool, error) {
+	if plan.ConnectorCommandOperation == "" {
+		return a.actionIsBatchable(plan.DestinationConnector, plan.Action), nil
+	}
+	connector, ok := a.registry.Get(plan.DestinationConnector)
+	if !ok {
+		return false, fmt.Errorf("connector %q is unavailable for direct-write batchability validation", plan.DestinationConnector)
+	}
+	provider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
+	if !ok {
+		return false, fmt.Errorf("connector %q no longer exposes direct-write metadata", plan.DestinationConnector)
+	}
+	metadata, err := provider.OperationDirectWriteMetadata(plan.ConnectorCommandOperation)
+	if err != nil {
+		return false, err
+	}
+	if metadata.Operation != plan.ConnectorCommandOperation {
+		return false, fmt.Errorf("connector %q direct-write metadata no longer matches operation %q", plan.DestinationConnector, plan.ConnectorCommandOperation)
+	}
+	return metadata.Batchable, nil
+}
+
 func (a *App) verifyPlanSealForRuntime(plan ReversePlan, runtime connectors.RuntimeConfig) error {
 	confirmation := a.confirmationPolicyForPlan(plan)
 	if confirmation.Kind == "" {
@@ -1153,11 +1312,15 @@ func (a *App) verifyPlanSealForRuntime(plan ReversePlan, runtime connectors.Runt
 	if plan.PlanSeal == nil {
 		return fmt.Errorf("reverse plan %q has no authenticated plan seal", plan.ID)
 	}
+	batchable, err := a.planIsBatchable(plan)
+	if err != nil {
+		return err
+	}
 	return a.approval.VerifyWritePlanSeal(*plan.PlanSeal, connectors.WritePlanSealExpectation{
 		PlanID: plan.ID, PlanHash: plan.PlanHash, Mode: plan.Mode,
 		Connector: plan.DestinationConnector, Operation: plan.Action,
 		CredentialRevision: runtime.CredentialRevision, ConfigurationDigest: runtime.ConfigurationDigest,
-		Batchable: a.actionIsBatchable(plan.DestinationConnector, plan.Action), Scope: runtime.WriteApprovalScope,
+		Batchable: batchable, Scope: runtime.WriteApprovalScope,
 		Confirmation: confirmation,
 	})
 }
@@ -1176,6 +1339,10 @@ func (a *App) verifyPlanSealForTarget(plan ReversePlan, target connectors.WriteA
 
 func (a *App) confirmationChallengeForPlan(plan ReversePlan) string {
 	return string(a.confirmationPolicyForPlan(plan).Kind)
+}
+
+func (a *App) planRequiresPersistedPreview(plan ReversePlan) bool {
+	return plan.ConnectorCommandOperation != "" || a.confirmationChallengeForPlan(plan) != ""
 }
 
 func (a *App) validatePlanConfirmation(plan ReversePlan, got connectors.WriteConfirmation) error {
@@ -1227,7 +1394,7 @@ func (a *App) RunReverseETL(ctx context.Context, req RunReverseETLRequest) (Reve
 	if err := a.previewabilityError(plan, time.Now().UTC()); err != nil {
 		return ReverseRun{}, err
 	}
-	if a.confirmationChallengeForPlan(plan) != "" && (plan.Status != "previewed" || plan.PreviewDigest == "" || plan.PreviewedAt.IsZero()) {
+	if a.planRequiresPersistedPreview(plan) && (plan.Status != "previewed" || plan.PreviewDigest == "" || plan.PreviewedAt.IsZero()) {
 		return ReverseRun{}, fmt.Errorf("reverse plan %q must be previewed before approval", plan.ID)
 	}
 	if plan.ApprovalTokenHash == "" {
@@ -1323,17 +1490,7 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, plan ReversePlan, req
 	if err != nil {
 		return ReverseRun{}, err
 	}
-	planHash, err := connectorCommandPlanHash(
-		plan.Name,
-		plan.DestinationConnector,
-		plan.DestinationCredential,
-		plan.DestinationConfig,
-		plan.ConnectorCommand,
-		plan.ConnectorCommandPath,
-		plan.Action,
-		plan.ConnectorCommandRecord,
-		payloadIdentity,
-	)
+	planHash, err := connectorCommandHashForPlan(plan, payloadIdentity)
 	if err != nil {
 		return ReverseRun{}, err
 	}
@@ -1342,6 +1499,9 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, plan ReversePlan, req
 		return ReverseRun{}, errors.New("reverse plan command payload changed since approval")
 	}
 	runtime.ApprovedPayloadSHA256 = approvedPayloadSHA256(plan.PayloadIdentity)
+	if plan.ConnectorCommandOperation != "" {
+		return a.runOperationDirectWritePlan(ctx, writer, runtime, plan, req)
+	}
 	runID, err := prefixedID("rrun")
 	if err != nil {
 		return ReverseRun{}, err
@@ -1360,6 +1520,54 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, plan ReversePlan, req
 	writeRequest.Approval = evidence
 	result, err := writer.Write(ctx, writeRequest, records)
 	return a.finishReverseWrite(plan.ID, run, result, len(records), err)
+}
+
+func (a *App) runOperationDirectWritePlan(ctx context.Context, writer connectors.Connector, runtime connectors.RuntimeConfig, plan ReversePlan, req RunReverseETLRequest) (ReverseRun, error) {
+	directWriter, ok := writer.(connectors.OperationDirectWriter)
+	if !ok {
+		return ReverseRun{}, fmt.Errorf("connector %q no longer supports direct writes", writer.Name())
+	}
+	operationRequest := connectors.OperationDirectWriteRequest{
+		Operation:  plan.ConnectorCommandOperation,
+		Config:     runtime,
+		PathParams: plan.ConnectorCommandPathParams,
+		Query:      plan.ConnectorCommandQuery,
+		Body:       map[string]any(plan.ConnectorCommandRecord),
+	}
+	preview, err := validateOperationDirectWritePreview(ctx, directWriter, plan, operationRequest)
+	if err != nil {
+		return ReverseRun{}, err
+	}
+	runID, err := prefixedID("rrun")
+	if err != nil {
+		return ReverseRun{}, err
+	}
+	run := ReverseRun{ID: runID, PlanID: plan.ID, Status: "running", RecordsStaged: 1, StartedAt: time.Now().UTC()}
+	evidence, _, err := a.consumePlanApproval(plan, req, preview)
+	if err != nil {
+		return ReverseRun{}, err
+	}
+	operationRequest.Approval = evidence
+	operationRequest.PreviewDigest = preview.Digest
+	operationResult, writeErr := directWriter.OperationDirectWrite(ctx, operationRequest)
+	writeResult := connectors.WriteResult{RecordsWritten: 1}
+	if writeErr != nil {
+		writeResult = connectors.WriteResult{RecordsFailed: 1}
+	} else {
+		run.OperationDirectWrite = &operationResult
+	}
+	return a.finishReverseWrite(plan.ID, run, writeResult, 1, writeErr)
+}
+
+func validateOperationDirectWritePreview(ctx context.Context, writer connectors.OperationDirectWriter, plan ReversePlan, request connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
+	preview, err := writer.PreviewOperationDirectWrite(ctx, request)
+	if err != nil {
+		return connectors.WritePreview{}, fmt.Errorf("revalidate direct-write preview: %w", err)
+	}
+	if strings.TrimSpace(plan.PreviewDigest) == "" || strings.TrimSpace(preview.Digest) == "" || subtle.ConstantTimeCompare([]byte(plan.PreviewDigest), []byte(preview.Digest)) != 1 {
+		return connectors.WritePreview{}, fmt.Errorf("reverse plan %q no longer matches its approved preview", plan.ID)
+	}
+	return preview, nil
 }
 
 func (a *App) loadReversePlan(id string) (ReversePlan, error) {
@@ -1389,7 +1597,7 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 			if err := a.previewabilityError(stored, now); err != nil {
 				return current, err
 			}
-			if stored.PlanHash != expected.PlanHash || stored.DestinationConnector != expected.DestinationConnector || stored.DestinationCredential != expected.DestinationCredential || stored.Action != expected.Action || stored.Mode != expected.Mode {
+			if stored.PlanHash != expected.PlanHash || stored.DestinationConnector != expected.DestinationConnector || stored.DestinationCredential != expected.DestinationCredential || stored.Action != expected.Action || stored.Mode != expected.Mode || stored.ConnectorCommandOperation != expected.ConnectorCommandOperation {
 				return current, fmt.Errorf("reverse plan %q changed before approval consumption", stored.ID)
 			}
 			if err := a.validatePlanConfirmation(stored, req.Confirmation); err != nil {
@@ -1401,12 +1609,17 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 			if !constantTimeStringEqual(stored.ApprovalTokenHash, hashString(req.ApprovalToken)) {
 				return current, errors.New("approval token is invalid")
 			}
-			if a.confirmationPolicyForPlan(stored).Kind != "" {
-				if stored.Status != "previewed" || stored.PreviewDigest == "" || stored.PreviewedAt.IsZero() || stored.ApprovalGrant == nil {
+			if a.planRequiresPersistedPreview(stored) {
+				if stored.Status != "previewed" || stored.PreviewDigest == "" || stored.PreviewedAt.IsZero() {
 					return current, fmt.Errorf("reverse plan %q must be previewed before approval", stored.ID)
 				}
 				if !constantTimeStringEqual(stored.PreviewDigest, preview.Digest) {
 					return current, fmt.Errorf("reverse plan %q no longer matches its approved preview", stored.ID)
+				}
+			}
+			if a.confirmationPolicyForPlan(stored).Kind != "" {
+				if stored.ApprovalGrant == nil {
+					return current, fmt.Errorf("reverse plan %q has no destructive approval grant", stored.ID)
 				}
 				verified, err := a.approval.VerifyWriteGrant(*stored.ApprovalGrant, connectors.WriteApprovalExpectation{
 					PlanID:        expected.ID,

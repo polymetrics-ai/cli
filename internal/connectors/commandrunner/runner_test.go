@@ -21,24 +21,26 @@ import (
 )
 
 type fakeConnector struct {
-	surface                *connectors.CommandSurface
-	manifest               connectors.Manifest
-	readReq                connectors.ReadRequest
-	directReadReq          connectors.DirectReadRequest
-	operationDirectReadReq connectors.OperationDirectReadRequest
-	binaryDownloadReq      connectors.OperationBinaryDownloadRequest
-	binaryDownloadErr      error
-	validateReq            connectors.WriteRequest
-	dryRunReq              connectors.WriteRequest
-	writeReq               connectors.WriteRequest
-	writeRecords           []connectors.Record
-	validateErr            error
-	dryRunErr              error
-	readErr                error
-	writeErr               error
-	readRecords            []connectors.Record
-	preview                connectors.WritePreview
-	writeResult            connectors.WriteResult
+	surface                 *connectors.CommandSurface
+	manifest                connectors.Manifest
+	readReq                 connectors.ReadRequest
+	directReadReq           connectors.DirectReadRequest
+	operationDirectReadReq  connectors.OperationDirectReadRequest
+	operationDirectWriteReq connectors.OperationDirectWriteRequest
+	directWriteMetadata     connectors.OperationDirectWriteMetadata
+	binaryDownloadReq       connectors.OperationBinaryDownloadRequest
+	binaryDownloadErr       error
+	validateReq             connectors.WriteRequest
+	dryRunReq               connectors.WriteRequest
+	writeReq                connectors.WriteRequest
+	writeRecords            []connectors.Record
+	validateErr             error
+	dryRunErr               error
+	readErr                 error
+	writeErr                error
+	readRecords             []connectors.Record
+	preview                 connectors.WritePreview
+	writeResult             connectors.WriteResult
 }
 
 func (f *fakeConnector) Name() string { return "github" }
@@ -86,6 +88,24 @@ func (f *fakeConnector) OperationDirectRead(_ context.Context, req connectors.Op
 		Status:    200,
 		Body:      map[string]any{"ok": true},
 	}, nil
+}
+func (f *fakeConnector) PreviewOperationDirectWrite(_ context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
+	f.operationDirectWriteReq = req
+	return connectors.WritePreview{Action: req.Operation, RecordsStaged: 1}, nil
+}
+func (f *fakeConnector) OperationDirectWrite(_ context.Context, req connectors.OperationDirectWriteRequest) (connectors.OperationDirectWriteResult, error) {
+	f.operationDirectWriteReq = req
+	return connectors.OperationDirectWriteResult{Connector: "github", Operation: req.Operation, Method: http.MethodPost, Path: "/api/vote", Status: http.StatusOK}, nil
+}
+func (f *fakeConnector) OperationDirectWriteMetadata(operation string) (connectors.OperationDirectWriteMetadata, error) {
+	metadata := f.directWriteMetadata
+	if metadata.Operation == "" {
+		metadata.Operation = operation
+	}
+	if metadata.OutputPolicy == "" {
+		metadata.OutputPolicy = "json_redacted"
+	}
+	return metadata, nil
 }
 func (f *fakeConnector) OperationBinaryDownload(_ context.Context, req connectors.OperationBinaryDownloadRequest) (connectors.OperationBinaryDownloadResult, error) {
 	f.binaryDownloadReq = req
@@ -1605,6 +1625,82 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 	emails, ok := connector.operationDirectReadReq.Body["emails"].([]string)
 	if !ok || len(emails) != 2 || emails[0] != "ada@example.com" || emails[1] != "grace@example.com" {
 		t.Fatalf("operation body = %#v, want typed emails", connector.operationDirectReadReq.Body)
+	}
+}
+
+func TestBuildOperationDirectWriteCommandUsesTypedInputsAndPlanLifecycle(t *testing.T) {
+	connector := &fakeConnector{
+		directWriteMetadata: connectors.OperationDirectWriteMetadata{
+			Operation:             "acme.vote",
+			MutationClass:         "destructive",
+			Risk:                  "high",
+			Approval:              "plan-preview-confirm-execute",
+			ConfirmationChallenge: "destructive",
+			OutputPolicy:          "json_redacted",
+			Batchable:             false,
+		},
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path:         "vote",
+			Intent:       "direct_write",
+			Availability: "implemented",
+			Operation:    "acme.vote",
+			APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodPost, Path: "/api/vote"}},
+			OutputPolicy: "json_redacted",
+			Flags: []connectors.CommandSurfaceFlag{
+				{Name: "id", Type: "string", MapsTo: "body.id", Required: true},
+				{Name: "dir", Type: "integer", MapsTo: "body.dir", Required: true},
+			},
+		}}},
+	}
+
+	command, err := BuildWriteCommand(context.Background(), connector, Request{
+		Path:  []string{"vote"},
+		Flags: map[string][]string{"id": {"t3_abc"}, "dir": {"1"}},
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand: %v", err)
+	}
+	if command.Operation != "acme.vote" || command.Write != "acme.vote" {
+		t.Fatalf("operation/write = %q/%q, want acme.vote", command.Operation, command.Write)
+	}
+	if command.Batchable {
+		t.Fatal("direct write command made batchable:false operation batchable")
+	}
+	if got := command.Record["dir"]; got != 1 {
+		t.Fatalf("typed body dir = %#v (%T), want integer 1", got, got)
+	}
+	if command.ConfirmationChallenge != "destructive" {
+		t.Fatalf("confirmation = %q, want destructive", command.ConfirmationChallenge)
+	}
+
+	_, err = Run(context.Background(), connector, Request{Path: []string{"vote"}}, func(connectors.Record) error {
+		t.Fatal("direct_write bypassed the plan lifecycle")
+		return nil
+	})
+	if err == nil || !strings.Contains(err.Error(), "plan, preview, approval, execute") {
+		t.Fatalf("Run(direct_write) error = %v, want plan lifecycle block", err)
+	}
+}
+
+func TestPreflightOperationDirectWriteRejectsMismatchedOperationPolicy(t *testing.T) {
+	connector := &fakeConnector{
+		directWriteMetadata: connectors.OperationDirectWriteMetadata{
+			Operation:    "acme.vote",
+			OutputPolicy: "write_result_redacted",
+		},
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path:         "vote",
+			Intent:       "direct_write",
+			Availability: "implemented",
+			Operation:    "acme.vote",
+			APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodPost, Path: "/api/vote"}},
+			OutputPolicy: "json_redacted",
+		}}},
+	}
+
+	err := Preflight(connector, []string{"vote"})
+	if err == nil || !strings.Contains(err.Error(), "output_policy") {
+		t.Fatalf("Preflight(direct_write) error = %v, want mismatched output_policy rejection", err)
 	}
 }
 

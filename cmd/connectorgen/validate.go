@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/fs"
+	"mime"
 	"regexp"
 	"sort"
 	"strings"
@@ -123,6 +124,18 @@ var directReadOutputPolicies = map[string]bool{
 	"repository_contents_directory":     true,
 	"json_redacted":                     true,
 	"clinical_json_redacted":            true,
+}
+
+// directWriteOutputPolicies mirrors engine.validateOperationDirectWriteOutputPolicy
+// and commandrunner.isSupportedDirectWriteOutputPolicy. A write command must
+// name the operation's exact policy: unlike direct reads, the operation's
+// response is part of the preview-bound write contract, not a display choice.
+var directWriteOutputPolicies = map[string]bool{
+	"none":                        true,
+	"json":                        true,
+	"json_redacted":               true,
+	"write_result_redacted":       true,
+	"gong_bounded_input_redacted": true,
 }
 
 var repositoryDirectReadOutputPolicies = map[string]bool{
@@ -866,12 +879,15 @@ func checkCLISurfaceOperationSafety(
 	if cmd.Intent == "binary_download" {
 		return checkCLISurfaceBinaryOperationSafety(b, i, cmd, op)
 	}
+	if cmd.Intent == "direct_write" {
+		return checkCLISurfaceDirectWriteOperationSafety(b, i, cmd, op)
+	}
 	if cmd.Intent != "direct_read" {
 		return []Finding{{
 			Connector: b.Name,
 			File:      "cli_surface.json",
 			Rule:      ruleCLISurfaceSafety,
-			Message:   fmt.Sprintf("implemented command %d (%q) references operation %q, but only direct_read rest_read and binary_download operation execution is supported", i, cmd.Path, cmd.Operation),
+			Message:   fmt.Sprintf("implemented command %d (%q) references operation %q, but its intent has no operation executor", i, cmd.Path, cmd.Operation),
 		}}
 	}
 	var findings []Finding
@@ -921,7 +937,84 @@ func checkCLISurfaceOperationSafety(
 	return findings
 }
 
+// checkCLISurfaceDirectWriteOperationSafety validates the operation-specific
+// half of a direct_write command. checkCLISurfaceIntent below independently
+// mirrors commandrunner's command-shape preflight; this helper makes the
+// operation itself safe for the engine's typed no-retry executor.
+func checkCLISurfaceDirectWriteOperationSafety(
+	b engine.Bundle,
+	i int,
+	cmd engine.CLICommand,
+	op engine.OperationSpec,
+) []Finding {
+	var findings []Finding
+	if op.Kind != "rest_write" || op.REST == nil {
+		return []Finding{{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("implemented direct write command %d (%q) operation %q must be rest_write", i, cmd.Path, cmd.Operation),
+		}}
+	}
+	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
+	if !mutationMethods[method] {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) operation %q must use POST, PUT, PATCH, or DELETE, got %s", i, cmd.Path, cmd.Operation, method)})
+	}
+	if isAbsoluteHTTPURL(op.REST.Path) {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) operation %q must use connector-relative path", i, cmd.Path, cmd.Operation)})
+	}
+	if op.REST.MaxBytes <= 0 {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) operation %q must declare positive rest.max_bytes", i, cmd.Path, cmd.Operation)})
+	}
+	if !supportedDirectWriteContentType(op.REST.ContentType) {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) operation %q must use application/json, application/x-www-form-urlencoded, or no content_type", i, cmd.Path, cmd.Operation)})
+	}
+	if !directWriteOutputPolicies[cmd.OutputPolicy] {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) operation %q must declare a supported output_policy", i, cmd.Path, cmd.Operation)})
+	} else if cmd.OutputPolicy != op.OutputPolicy {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) output_policy %q must match operation policy %q", i, cmd.Path, cmd.OutputPolicy, op.OutputPolicy)})
+	}
+
+	bodyMapped := false
+	for _, flag := range cmd.Flags {
+		mapsTo := strings.TrimSpace(flag.MapsTo)
+		switch {
+		case strings.HasPrefix(mapsTo, "path."), strings.HasPrefix(mapsTo, "query."):
+			// Typed path/query bindings are supported by the shared operation
+			// shaper and validated again at command runtime.
+		case strings.HasPrefix(mapsTo, "body."):
+			bodyMapped = true
+		default:
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) flag --%s maps to unsupported target %q", i, cmd.Path, flag.Name, flag.MapsTo)})
+		}
+	}
+	if bodyMapped && len(op.REST.BodySchema) == 0 {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) maps flags to body but operation %q has no body_schema", i, cmd.Path, op.ID)})
+	}
+	if len(op.REST.BodySchema) > 0 {
+		findings = append(findings, checkCLISurfaceOperationBodyMappingsForIntent(b, i, cmd, op, "direct write")...)
+	}
+	return findings
+}
+
+func supportedDirectWriteContentType(raw string) bool {
+	raw = strings.TrimSpace(raw)
+	if raw == "" {
+		return true
+	}
+	mediaType, _, err := mime.ParseMediaType(raw)
+	if err != nil {
+		return false
+	}
+	return strings.EqualFold(mediaType, "application/json") ||
+		strings.EqualFold(mediaType, "application/x-www-form-urlencoded")
+}
+
 func checkCLISurfaceOperationBodyMappings(b engine.Bundle, i int, cmd engine.CLICommand, op engine.OperationSpec) []Finding {
+	return checkCLISurfaceOperationBodyMappingsForIntent(b, i, cmd, op, "direct read")
+}
+
+func checkCLISurfaceOperationBodyMappingsForIntent(b engine.Bundle, i int, cmd engine.CLICommand, op engine.OperationSpec, intent string) []Finding {
 	if op.REST == nil || len(op.REST.BodySchema) == 0 {
 		return nil
 	}
@@ -947,11 +1040,11 @@ func checkCLISurfaceOperationBodyMappings(b engine.Bundle, i int, cmd engine.CLI
 		}
 		mapping, ok := commandBodyFlagCoveringRequiredPath(schema, mappedTargets, requiredPath)
 		if !ok {
-			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q requires body.%s but no command flag maps to it and rest.body does not provide it", i, cmd.Path, op.ID, requiredPath)})
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented %s command %d (%q) operation %q requires body.%s but no command flag maps to it and rest.body does not provide it", intent, i, cmd.Path, op.ID, requiredPath)})
 			continue
 		}
 		if !mapping.required {
-			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q requires body.%s but flag --%s is not marked required", i, cmd.Path, op.ID, requiredPath, mapping.name)})
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented %s command %d (%q) operation %q requires body.%s but flag --%s is not marked required", intent, i, cmd.Path, op.ID, requiredPath, mapping.name)})
 		}
 	}
 	return findings
@@ -1512,6 +1605,58 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 		if len(findings) > 0 {
 			return findings
 		}
+	case "direct_write":
+		// Mirrors commandrunner.validateOperationDirectWriteCommand. Direct
+		// execution still remains blocked there; satisfying this contract only
+		// makes the command eligible for App's plan -> preview -> approval
+		// lifecycle.
+		var findings []Finding
+		if cmd.Operation == "" {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceMissingMapping,
+				Message:   fmt.Sprintf("implemented direct write command %d (%q) must reference an operation", i, cmd.Path),
+			})
+		}
+		if len(cmd.APISurface) != 1 {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceMissingMapping,
+				Message:   fmt.Sprintf("implemented direct write command %d (%q) must reference exactly one api_surface endpoint", i, cmd.Path),
+			})
+		}
+		for _, ep := range cmd.APISurface {
+			method := strings.ToUpper(strings.TrimSpace(ep.Method))
+			if !mutationMethods[method] {
+				findings = append(findings, Finding{
+					Connector: b.Name,
+					File:      "cli_surface.json",
+					Rule:      ruleCLISurfaceSafety,
+					Message:   fmt.Sprintf("implemented direct write command %d (%q) must reference a POST, PUT, PATCH, or DELETE api_surface endpoint, got %s", i, cmd.Path, method),
+				})
+			}
+			if isAbsoluteHTTPURL(ep.Path) {
+				findings = append(findings, Finding{
+					Connector: b.Name,
+					File:      "cli_surface.json",
+					Rule:      ruleCLISurfaceSafety,
+					Message:   fmt.Sprintf("implemented direct write command %d (%q) must reference a connector-relative api_surface endpoint", i, cmd.Path),
+				})
+			}
+		}
+		if !directWriteOutputPolicies[cmd.OutputPolicy] {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("implemented direct write command %d (%q) must declare a supported output_policy", i, cmd.Path),
+			})
+		}
+		if len(findings) > 0 {
+			return findings
+		}
 	case "binary_download":
 		// Mirrors commandrunner.validateBinaryDownloadCommand. No output_policy
 		// applies: the response becomes a file, not a JSON body.
@@ -1575,8 +1720,13 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 }
 
 func checkCLISurfaceRiskApproval(b engine.Bundle, i int, cmd engine.CLICommand) []Finding {
-	if (cmd.Availability != "implemented" && cmd.Availability != "partial") || cmd.Intent != "reverse_etl" {
+	if (cmd.Availability != "implemented" && cmd.Availability != "partial") ||
+		(cmd.Intent != "reverse_etl" && cmd.Intent != "direct_write") {
 		return nil
+	}
+	label := "reverse ETL"
+	if cmd.Intent == "direct_write" {
+		label = "direct write"
 	}
 
 	var findings []Finding
@@ -1585,7 +1735,7 @@ func checkCLISurfaceRiskApproval(b engine.Bundle, i int, cmd engine.CLICommand) 
 			Connector: b.Name,
 			File:      "cli_surface.json",
 			Rule:      ruleCLISurfaceSafety,
-			Message:   fmt.Sprintf("reverse ETL command %d (%q) must declare risk text", i, cmd.Path),
+			Message:   fmt.Sprintf("%s command %d (%q) must declare risk text", label, i, cmd.Path),
 		})
 	}
 	if strings.TrimSpace(cmd.Approval) == "" {
@@ -1593,7 +1743,7 @@ func checkCLISurfaceRiskApproval(b engine.Bundle, i int, cmd engine.CLICommand) 
 			Connector: b.Name,
 			File:      "cli_surface.json",
 			Rule:      ruleCLISurfaceSafety,
-			Message:   fmt.Sprintf("reverse ETL command %d (%q) must declare approval text", i, cmd.Path),
+			Message:   fmt.Sprintf("%s command %d (%q) must declare approval text", label, i, cmd.Path),
 		})
 	}
 	return findings

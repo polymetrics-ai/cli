@@ -1,0 +1,472 @@
+package engine
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"mime"
+	"net/http"
+	"net/url"
+	"strings"
+	"time"
+
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/connectors/transportpolicy"
+	"polymetrics.ai/internal/safety"
+)
+
+const (
+	defaultOperationDirectWriteMaxBytes = 1 << 20
+	maxOperationDirectWriteBytes        = 16 << 20
+	defaultOperationDirectWriteTimeout  = 30 * time.Second
+
+	directWritePolicyNone                     = "none"
+	directWritePolicyJSON                     = "json"
+	directWritePolicyJSONRedacted             = "json_redacted"
+	directWritePolicyWriteResultRedacted      = "write_result_redacted"
+	directWritePolicyGongBoundedInputRedacted = "gong_bounded_input_redacted"
+)
+
+type preparedOperationDirectWrite struct {
+	op          OperationSpec
+	cfg         connectors.RuntimeConfig
+	method      string
+	path        string
+	requestPath string
+	query       url.Values
+	body        map[string]any
+	form        url.Values
+	format      string
+	policy      string
+	maxBytes    int
+	prepared    PreparedWrite
+}
+
+// PreviewOperationDirectWrite prepares a declared rest_write operation without
+// constructing a runtime or issuing any network request. Its digest binds the
+// exact typed request that OperationDirectWrite may later dispatch.
+func PreviewOperationDirectWrite(ctx context.Context, b Bundle, req connectors.OperationDirectWriteRequest, h Hooks) (connectors.WritePreview, error) {
+	prepared, err := prepareOperationDirectWrite(ctx, b, req, h)
+	if err != nil {
+		return connectors.WritePreview{}, err
+	}
+	return PreviewPreparedWrite(prepared.prepared)
+}
+
+// OperationDirectWrite dispatches exactly one typed, declared rest_write
+// operation after the preview-bound shared write gate authorizes it. It never
+// retries: rest_write definitions carry no idempotency proof in this executor,
+// so both transient retries and the requester’s auth-refresh retry are off.
+func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.OperationDirectWriteRequest, h Hooks) (connectors.OperationDirectWriteResult, error) {
+	prepared, err := prepareOperationDirectWrite(ctx, b, req, h)
+	if err != nil {
+		return connectors.OperationDirectWriteResult{}, err
+	}
+
+	var result connectors.OperationDirectWriteResult
+	err = ExecutePreparedWrite(ctx, prepared.prepared, req.Approval, req.PreviewDigest, func(gated context.Context) error {
+		// A redirect can replay a POST/PUT/PATCH/DELETE below Requester's retry
+		// loop. Reuse the shared prepared-write transport policy to refuse it:
+		// every rest_write is exactly the target that preview bound, regardless
+		// of whether the mutation also needs destructive confirmation evidence.
+		gated = transportpolicy.MarkDestructive(gated)
+		requestCtx, cancel := context.WithTimeout(gated, defaultOperationDirectWriteTimeout)
+		defer cancel()
+
+		rt, err := newRuntime(requestCtx, b, prepared.cfg, h)
+		if err != nil {
+			return err
+		}
+		requester := *rt.Requester
+		requester.DisableRetries = true
+
+		var response *connsdk.Response
+		switch prepared.format {
+		case "form":
+			response, err = requester.DoFormLimited(requestCtx, prepared.method, prepared.requestPath, prepared.query, prepared.form, prepared.maxBytes)
+		case "json", "none":
+			response, err = requester.DoLimited(requestCtx, prepared.method, prepared.requestPath, prepared.query, prepared.body, prepared.maxBytes)
+		default:
+			return fmt.Errorf("operation %q has unsupported prepared body format %q", prepared.op.ID, prepared.format)
+		}
+		if err != nil {
+			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
+			message := safety.RedactErrorText(err.Error())
+			if hint != "" {
+				message += ": " + hint
+			}
+			if class != "" {
+				message = class + ": " + message
+			}
+			return fmt.Errorf("operation direct write %q: %s", prepared.op.ID, message)
+		}
+		if len(response.Body) > prepared.maxBytes {
+			return fmt.Errorf("operation direct write response too large: %d bytes exceeds limit %d", len(response.Body), prepared.maxBytes)
+		}
+		body, err := operationDirectWriteResponseBody(prepared.policy, response.Body, prepared.maxBytes)
+		if err != nil {
+			return err
+		}
+		redactFields := append([]string(nil), req.RedactFields...)
+		if prepared.op.SensitivePolicy != nil {
+			redactFields = append(redactFields, prepared.op.SensitivePolicy.RedactFields...)
+		}
+		if body != nil && len(redactFields) > 0 {
+			body = redactNamedJSONFields(body, redactFields)
+		}
+		result = connectors.OperationDirectWriteResult{
+			Connector: b.Name,
+			Operation: prepared.op.ID,
+			Method:    prepared.method,
+			Path:      prepared.path,
+			Status:    response.Status,
+			Body:      body,
+		}
+		return nil
+	})
+	if err != nil {
+		return connectors.OperationDirectWriteResult{}, err
+	}
+	return result, nil
+}
+
+// OperationDirectWriteMetadata returns the closed plan-safe summary for one
+// declared rest_write operation. It validates the operation's executable
+// shape, but deliberately does not resolve config, build auth, or touch the
+// network.
+func OperationDirectWriteMetadata(b Bundle, operation string) (connectors.OperationDirectWriteMetadata, error) {
+	op, _, err := operationDirectWriteSpec(b, operation)
+	if err != nil {
+		return connectors.OperationDirectWriteMetadata{}, err
+	}
+	if _, _, err := operationDirectWriteContentType(op, nil); err != nil {
+		return connectors.OperationDirectWriteMetadata{}, err
+	}
+	if err := validateOperationDirectWriteOutputPolicy(op.OutputPolicy); err != nil {
+		return connectors.OperationDirectWriteMetadata{}, err
+	}
+	target := DestructiveTargetForOperation(b.Name, op)
+	confirmation := ""
+	if target.RequiresApproval() {
+		confirmation = string(connectors.ConfirmationKindDestructive)
+	}
+	return connectors.OperationDirectWriteMetadata{
+		Operation:             op.ID,
+		MutationClass:         op.MutationClass,
+		Risk:                  op.Risk,
+		Approval:              op.Approval,
+		ConfirmationChallenge: confirmation,
+		OutputPolicy:          op.OutputPolicy,
+		Batchable:             op.IsBatchable(),
+	}, nil
+}
+
+func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.OperationDirectWriteRequest, _ Hooks) (preparedOperationDirectWrite, error) {
+	if err := ctx.Err(); err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
+	op, method, err := operationDirectWriteSpec(b, req.Operation)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
+	cfg := materializeConfigDefaults(b, req.Config)
+	resolvedPath, err := resolveSurfaceEndpointPath(op.REST.Path, cfg, req.PathParams)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
+	queryMap := make(map[string]string, len(op.REST.Query)+len(req.Query))
+	for key, value := range op.REST.Query {
+		queryMap[key] = value
+	}
+	for key, value := range req.Query {
+		queryMap[key] = value
+	}
+	if err := requireOperationQueryGroups(op, queryMap); err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
+	query, err := directReadQuery(queryMap)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
+	policy := strings.TrimSpace(op.OutputPolicy)
+	if requested := strings.TrimSpace(req.OutputPolicy); requested != "" {
+		if requested != policy {
+			return preparedOperationDirectWrite{}, fmt.Errorf("operation %q output_policy must match declared policy %q", op.ID, policy)
+		}
+		policy = requested
+	}
+	if err := validateOperationDirectWriteOutputPolicy(policy); err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
+	body, err := operationWriteBody(op, req.Body)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
+	contentType, format, err := operationDirectWriteContentType(op, body)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
+	maxBytes := clampOperationDirectWriteMaxBytes(op.REST.MaxBytes)
+	form, encodedBody, err := operationDirectWritePreparedBody(op, body, format, maxBytes)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
+	baseURL, err := operationDirectWriteBaseURL(b, cfg)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
+	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, baseURL)
+	targetURL, err := operationDirectWriteRequestURL(baseURL, requestPath, query)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
+	targetURLWithoutQuery, err := operationDirectWriteRequestURL(baseURL, requestPath, nil)
+	if err != nil {
+		return preparedOperationDirectWrite{}, err
+	}
+	target := DestructiveTargetForOperation(b.Name, op)
+	prepared := PreparedWrite{
+		Target:              target,
+		CredentialRevision:  cfg.CredentialRevision,
+		ConfigurationDigest: cfg.ConfigurationDigest,
+		ApprovalScope:       cfg.WriteApprovalScope,
+		Batchable:           op.IsBatchable(),
+		RecordsStaged:       1,
+		Action:              op.ID,
+		Warnings:            []string{fmt.Sprintf("prepared rest_write operation %q (%s)", op.ID, method)},
+		Definition: map[string]any{
+			"kind":          op.Kind,
+			"operation":     op.ID,
+			"content_type":  contentType,
+			"output_policy": policy,
+		},
+		Requests: []PreparedRequest{{
+			Method:      method,
+			URL:         targetURL,
+			Target:      targetURLWithoutQuery,
+			Query:       query.Encode(),
+			ContentType: contentType,
+			BodyFormat:  format,
+			Body:        encodedBody,
+		}},
+	}
+	return preparedOperationDirectWrite{
+		op:          op,
+		cfg:         cfg,
+		method:      method,
+		path:        resolvedPath,
+		requestPath: requestPath,
+		query:       query,
+		body:        body,
+		form:        form,
+		format:      format,
+		policy:      policy,
+		maxBytes:    maxBytes,
+		prepared:    prepared,
+	}, nil
+}
+
+func operationDirectWriteSpec(b Bundle, id string) (OperationSpec, string, error) {
+	op, err := findOperation(b, id)
+	if err != nil {
+		return OperationSpec{}, "", err
+	}
+	if op.Kind != "rest_write" || op.REST == nil {
+		return OperationSpec{}, "", fmt.Errorf("operation direct write requires rest_write operation, got %q", op.Kind)
+	}
+	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
+	if !isOperationDirectWriteMethod(method) {
+		return OperationSpec{}, "", fmt.Errorf("operation direct write requires POST, PUT, PATCH, or DELETE, got %s", method)
+	}
+	if isAbsoluteHTTPURL(op.REST.Path) {
+		return OperationSpec{}, "", fmt.Errorf("operation direct write endpoint must be connector-relative, got absolute URL")
+	}
+	if err := requireOperationDirectWriteEndpoint(b, method, op.REST.Path); err != nil {
+		return OperationSpec{}, "", err
+	}
+	return op, method, nil
+}
+
+func isOperationDirectWriteMethod(method string) bool {
+	switch method {
+	case http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete:
+		return true
+	default:
+		return false
+	}
+}
+
+func requireOperationDirectWriteEndpoint(b Bundle, method, endpointPath string) error {
+	if b.Surface == nil {
+		return nil
+	}
+	for _, endpoint := range b.Surface.Endpoints {
+		if strings.EqualFold(endpoint.Method, method) && endpoint.Path == endpointPath {
+			if endpoint.Operation == nil {
+				return fmt.Errorf("api_surface endpoint %s %s is not declared as an operation", method, endpointPath)
+			}
+			return nil
+		}
+	}
+	return fmt.Errorf("api_surface endpoint %s %s not found", method, endpointPath)
+}
+
+func operationWriteBody(op OperationSpec, overrides map[string]any) (map[string]any, error) {
+	if op.REST == nil {
+		return nil, nil
+	}
+	body := cloneAnyMap(op.REST.Body)
+	for key, value := range overrides {
+		body[key] = value
+	}
+	if len(op.REST.BodySchema) > 0 {
+		sch, err := CompileSchema(op.REST.BodySchema)
+		if err != nil {
+			return nil, fmt.Errorf("operation %q: compile body_schema: %w", op.ID, err)
+		}
+		if err := sch.Validate(body); err != nil {
+			return nil, fmt.Errorf("operation %q: body_schema: %w", op.ID, err)
+		}
+	}
+	if len(body) == 0 {
+		return nil, nil
+	}
+	return body, nil
+}
+
+func operationDirectWriteContentType(op OperationSpec, body map[string]any) (contentType, format string, err error) {
+	declared := strings.TrimSpace(op.REST.ContentType)
+	if declared == "" {
+		if len(body) == 0 {
+			return "", "none", nil
+		}
+		return "application/json", "json", nil
+	}
+	mediaType, _, parseErr := mime.ParseMediaType(declared)
+	if parseErr != nil {
+		return "", "", fmt.Errorf("operation %q has invalid rest content_type %q: %w", op.ID, declared, parseErr)
+	}
+	switch strings.ToLower(mediaType) {
+	case "application/json":
+		if len(body) == 0 {
+			return "", "none", nil
+		}
+		return "application/json", "json", nil
+	case "application/x-www-form-urlencoded":
+		if len(body) == 0 {
+			return "", "none", nil
+		}
+		return "application/x-www-form-urlencoded", "form", nil
+	default:
+		return "", "", fmt.Errorf("operation %q rest_write content_type %q is not supported by the typed executor", op.ID, declared)
+	}
+}
+
+func operationDirectWritePreparedBody(op OperationSpec, body map[string]any, format string, maxBytes int) (url.Values, string, error) {
+	switch format {
+	case "none":
+		return nil, "", nil
+	case "json":
+		raw, err := json.Marshal(body)
+		if err != nil {
+			return nil, "", fmt.Errorf("operation %q: encode JSON request body: %w", op.ID, err)
+		}
+		if len(raw) > maxBytes {
+			return nil, "", fmt.Errorf("operation %q request body too large: %d bytes exceeds limit %d", op.ID, len(raw), maxBytes)
+		}
+		return nil, string(raw), nil
+	case "form":
+		form, err := operationDirectWriteForm(body)
+		if err != nil {
+			return nil, "", fmt.Errorf("operation %q form body: %w", op.ID, err)
+		}
+		encoded := form.Encode()
+		if len(encoded) > maxBytes {
+			return nil, "", fmt.Errorf("operation %q request body too large: %d bytes exceeds limit %d", op.ID, len(encoded), maxBytes)
+		}
+		return form, encoded, nil
+	default:
+		return nil, "", fmt.Errorf("operation %q has unsupported body format %q", op.ID, format)
+	}
+}
+
+func operationDirectWriteForm(body map[string]any) (url.Values, error) {
+	values := make(map[string]string, len(body))
+	for key, value := range body {
+		if value == nil {
+			continue
+		}
+		values[key] = stringifyAny(value)
+	}
+	return directReadQuery(values)
+}
+
+func clampOperationDirectWriteMaxBytes(declared int) int {
+	if declared <= 0 {
+		return defaultOperationDirectWriteMaxBytes
+	}
+	if declared > maxOperationDirectWriteBytes {
+		return maxOperationDirectWriteBytes
+	}
+	return declared
+}
+
+func operationDirectWriteBaseURL(b Bundle, cfg connectors.RuntimeConfig) (string, error) {
+	baseURL, err := Interpolate(b.HTTP.URL, requestVars(cfg, nil, ""))
+	if err != nil {
+		return "", fmt.Errorf("operation direct write resolve base URL: %w", err)
+	}
+	if strings.TrimSpace(baseURL) == "" {
+		return "", fmt.Errorf("operation direct write base URL is required")
+	}
+	return baseURL, nil
+}
+
+func operationDirectWriteRequestURL(baseURL, requestPath string, query url.Values) (string, error) {
+	parsed, err := url.Parse(joinURL(baseURL, requestPath))
+	if err != nil {
+		return "", fmt.Errorf("resolve operation direct write URL: %w", err)
+	}
+	if parsed.Scheme == "" || parsed.Host == "" {
+		return "", fmt.Errorf("operation direct write base URL is invalid")
+	}
+	if len(query) > 0 {
+		existing := parsed.Query()
+		for key, values := range query {
+			existing.Del(key)
+			for _, value := range values {
+				existing.Add(key, value)
+			}
+		}
+		parsed.RawQuery = existing.Encode()
+	}
+	return parsed.String(), nil
+}
+
+func validateOperationDirectWriteOutputPolicy(policy string) error {
+	switch policy {
+	case directWritePolicyNone, directWritePolicyJSON, directWritePolicyJSONRedacted, directWritePolicyWriteResultRedacted, directWritePolicyGongBoundedInputRedacted:
+		return nil
+	default:
+		return fmt.Errorf("operation direct write output policy %q is not supported", policy)
+	}
+}
+
+func operationDirectWriteResponseBody(policy string, raw []byte, maxBytes int) (any, error) {
+	if policy == directWritePolicyNone {
+		return nil, nil
+	}
+	decoded, err := decodeDirectReadBody(raw, maxBytes)
+	if err != nil {
+		return nil, fmt.Errorf("operation direct write response is not JSON: %w", err)
+	}
+	switch policy {
+	case directWritePolicyJSON:
+		return decoded, nil
+	case directWritePolicyJSONRedacted, directWritePolicyWriteResultRedacted, directWritePolicyGongBoundedInputRedacted:
+		return redactJSONValue(decoded), nil
+	default:
+		return nil, fmt.Errorf("operation direct write output policy %q is not supported", policy)
+	}
+}
