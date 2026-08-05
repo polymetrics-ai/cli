@@ -26,6 +26,7 @@ type fakeConnector struct {
 	readReq                connectors.ReadRequest
 	directReadReq          connectors.DirectReadRequest
 	operationDirectReadReq connectors.OperationDirectReadRequest
+	operationBodyContracts map[string]engine.OperationRequestBodyContract
 	binaryDownloadReq      connectors.OperationBinaryDownloadRequest
 	binaryDownloadErr      error
 	validateReq            connectors.WriteRequest
@@ -87,6 +88,9 @@ func (f *fakeConnector) OperationDirectRead(_ context.Context, req connectors.Op
 		Body:      map[string]any{"ok": true},
 	}, nil
 }
+func (f *fakeConnector) OperationRequestBodyContract(operation string) (engine.OperationRequestBodyContract, error) {
+	return f.operationBodyContracts[operation], nil
+}
 func (f *fakeConnector) OperationBinaryDownload(_ context.Context, req connectors.OperationBinaryDownloadRequest) (connectors.OperationBinaryDownloadResult, error) {
 	f.binaryDownloadReq = req
 	if f.binaryDownloadErr != nil {
@@ -124,6 +128,33 @@ func (f *fakeConnector) DryRunWrite(_ context.Context, req connectors.WriteReque
 		return f.preview, nil
 	}
 	return connectors.WritePreview{Action: req.Action, RecordsStaged: len(records)}, nil
+}
+
+type operationConnectorWithoutBodySchema struct {
+	delegate *fakeConnector
+}
+
+func (c *operationConnectorWithoutBodySchema) Name() string { return c.delegate.Name() }
+func (c *operationConnectorWithoutBodySchema) Metadata() connectors.Metadata {
+	return c.delegate.Metadata()
+}
+func (c *operationConnectorWithoutBodySchema) Check(ctx context.Context, cfg connectors.RuntimeConfig) error {
+	return c.delegate.Check(ctx, cfg)
+}
+func (c *operationConnectorWithoutBodySchema) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (connectors.Catalog, error) {
+	return c.delegate.Catalog(ctx, cfg)
+}
+func (c *operationConnectorWithoutBodySchema) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
+	return c.delegate.Read(ctx, req, emit)
+}
+func (c *operationConnectorWithoutBodySchema) Write(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
+	return c.delegate.Write(ctx, req, records)
+}
+func (c *operationConnectorWithoutBodySchema) CommandSurface() *connectors.CommandSurface {
+	return c.delegate.CommandSurface()
+}
+func (c *operationConnectorWithoutBodySchema) OperationDirectRead(ctx context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
+	return c.delegate.OperationDirectRead(ctx, req)
 }
 
 func TestRunImplementedStreamCommand(t *testing.T) {
@@ -1565,6 +1596,14 @@ func TestRunImplementedDirectReadCommand(t *testing.T) {
 }
 
 func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
+	bodySchema, err := engine.CompileSchema(json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"properties":{"emails":{"type":"array","items":{"type":"string"}}}
+	}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
 	connector := &fakeConnector{surface: &connectors.CommandSurface{
 		Commands: []connectors.CommandSurfaceCommand{
 			{
@@ -1577,15 +1616,17 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 				},
 				OutputPolicy: "json_redacted",
 				Flags: []connectors.CommandSurfaceFlag{
-					{Name: "email", Type: "string_array", MapsTo: "body.emails"},
+					{Name: "email", Type: "string_array", MapsTo: "/body/emails"},
 				},
 			},
 		},
+	}, operationBodyContracts: map[string]engine.OperationRequestBodyContract{
+		"gong.meetings_integration_status": {Method: http.MethodPost, Schema: bodySchema},
 	}}
 
 	result, err := Run(context.Background(), connector, Request{
 		Path:  []string{"meetings", "integration-status"},
-		Flags: map[string][]string{"email": {"ada@example.com", "grace@example.com"}},
+		Flags: map[string][]string{"email": {"ada@example.com, grace@example.com"}},
 	}, func(connectors.Record) error {
 		t.Fatal("emit called for operation direct-read command")
 		return nil
@@ -1608,6 +1649,302 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 	}
 }
 
+func TestPreflightValidatesOperationBodyMappings(t *testing.T) {
+	tests := []struct {
+		name            string
+		rawSchema       string
+		static          map[string]any
+		flags           []connectors.CommandSurfaceFlag
+		surfaceMethod   string
+		operationMethod string
+		withoutProvider bool
+		want            string
+	}{
+		{
+			name:            "missing body schema provider",
+			rawSchema:       `{"type":"object","properties":{"name":{"type":"string"}}}`,
+			flags:           []connectors.CommandSurfaceFlag{{Name: "name", Type: "string", MapsTo: "/body/name"}},
+			withoutProvider: true,
+			want:            "body schema and static body contract",
+		},
+		{
+			name:      "required body with zero mappings",
+			rawSchema: `{"type":"object","additionalProperties":false,"required":["name"],"properties":{"name":{"type":"string"}}}`,
+			want:      "required property missing",
+		},
+		{
+			name:            "stale surface method",
+			rawSchema:       `{"type":"object","additionalProperties":false,"required":["name"],"properties":{"name":{"type":"string"}}}`,
+			surfaceMethod:   http.MethodGet,
+			operationMethod: http.MethodPost,
+			want:            "api_surface method GET does not match operation method POST",
+		},
+		{
+			name:      "scalar type mismatch",
+			rawSchema: `{"type":"object","properties":{"count":{"type":"integer"}}}`,
+			flags:     []connectors.CommandSurfaceFlag{{Name: "count", Type: "string", MapsTo: "/body/count"}},
+			want:      "incompatible",
+		},
+		{
+			name:      "disjoint enum domain",
+			rawSchema: `{"type":"object","properties":{"state":{"type":"string","enum":["open"]}}}`,
+			flags:     []connectors.CommandSurfaceFlag{{Name: "state", Type: "enum", Values: []string{"closed"}, MapsTo: "/body/state"}},
+			want:      "enum value \"closed\" is not accepted",
+		},
+		{
+			name:      "integer domain excludes fractional number enum",
+			rawSchema: `{"type":"object","properties":{"count":{"type":"number","enum":[1.5]}}}`,
+			flags:     []connectors.CommandSurfaceFlag{{Name: "count", Type: "integer", MapsTo: "/body/count"}},
+			want:      "input domain has no values accepted",
+		},
+		{
+			name:      "required string domain excludes empty enum",
+			rawSchema: `{"type":"object","required":["name"],"properties":{"name":{"type":"string","enum":[""]}}}`,
+			flags:     []connectors.CommandSurfaceFlag{{Name: "name", Type: "string", MapsTo: "/body/name", Required: true}},
+			want:      "input domain has no values accepted",
+		},
+		{
+			name:      "date-time format excludes invalid enum",
+			rawSchema: `{"type":"object","properties":{"timestamp":{"type":"string","enum":["not-a-date"]}}}`,
+			flags:     []connectors.CommandSurfaceFlag{{Name: "timestamp", Type: "string", Format: "date-time", MapsTo: "/body/timestamp"}},
+			want:      "input domain has no values accepted",
+		},
+		{
+			name:      "string array cannot emit delimited enum item",
+			rawSchema: `{"type":"object","properties":{"labels":{"type":"array","items":{"type":"string","enum":["a,b"]}}}}`,
+			flags:     []connectors.CommandSurfaceFlag{{Name: "labels", Type: "string_array", MapsTo: "/body/labels"}},
+			want:      "input domain has no values accepted",
+		},
+		{
+			name:      "incompatible array cardinality",
+			rawSchema: `{"type":"object","properties":{"ids":{"type":"array","minItems":2,"items":{"type":"string"}}}}`,
+			flags:     []connectors.CommandSurfaceFlag{{Name: "ids", Type: "string_array", MaxItems: 1, MapsTo: "/body/ids"}},
+			want:      "cardinality",
+		},
+		{
+			name:      "required string-array excludes schema maximum zero",
+			rawSchema: `{"type":"object","required":["ids"],"properties":{"ids":{"type":"array","maxItems":0,"items":{"type":"string"}}}}`,
+			flags:     []connectors.CommandSurfaceFlag{{Name: "ids", Type: "string_array", MapsTo: "/body/ids", Required: true}},
+			want:      "cardinality",
+		},
+		{
+			name:      "finite enum rejects partial schema pattern match",
+			rawSchema: `{"type":"object","properties":{"state":{"type":"string","pattern":"^open$"}}}`,
+			flags:     []connectors.CommandSurfaceFlag{{Name: "state", Type: "enum", Values: []string{"open", "closed"}, MapsTo: "/body/state"}},
+			want:      "enum value \"closed\" is not accepted",
+		},
+		{
+			name:      "string-array excludes unsafe root enum item",
+			rawSchema: `{"type":"object","properties":{"labels":{"type":"array","enum":[["line\nbreak"]],"items":{"type":"string"}}}}`,
+			flags:     []connectors.CommandSurfaceFlag{{Name: "labels", Type: "string_array", MapsTo: "/body/labels"}},
+			want:      "no values accepted",
+		},
+		{
+			name:      "array item type mismatch",
+			rawSchema: `{"type":"object","properties":{"ids":{"type":"array","items":{"type":"integer"}}}}`,
+			flags:     []connectors.CommandSurfaceFlag{{Name: "ids", Type: "string_array", MapsTo: "/body/ids"}},
+			want:      "requires string items",
+		},
+		{
+			name:      "sparse required array pointer",
+			rawSchema: `{"type":"object","properties":{"items":{"type":"array","items":{"type":"object","properties":{"name":{"type":"string"}}}}}}`,
+			flags:     []connectors.CommandSurfaceFlag{{Name: "name", Type: "string", MapsTo: "/body/items/1/name", Required: true}},
+			want:      "sparse array index 1",
+		},
+		{
+			name:      "dynamic array replacement drops static sibling",
+			rawSchema: `{"type":"object","additionalProperties":false,"required":["items"],"properties":{"items":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["name","kind"],"properties":{"name":{"type":"string"},"kind":{"type":"string"}}}}}}`,
+			static:    map[string]any{"items": []any{map[string]any{"name": "static", "kind": "widget"}}},
+			flags:     []connectors.CommandSurfaceFlag{{Name: "name", Type: "string", MapsTo: "/body/items/0/name", Required: true}},
+			want:      "required property missing",
+		},
+		{
+			name:      "duplicate body target",
+			rawSchema: `{"type":"object","properties":{"name":{"type":"string"}}}`,
+			flags: []connectors.CommandSurfaceFlag{
+				{Name: "first", Type: "string", MapsTo: "/body/name"},
+				{Name: "second", Type: "string", MapsTo: "/body/name"},
+			},
+			want: "duplicate request mapping",
+		},
+		{
+			name:      "parent child body targets",
+			rawSchema: `{"type":"object","properties":{"config":{"type":"object","properties":{"value":{"type":"string"}}}}}`,
+			flags: []connectors.CommandSurfaceFlag{
+				{Name: "config", Type: "string", MapsTo: "/body/config"},
+				{Name: "value", Type: "string", MapsTo: "/body/config/value"},
+			},
+			want: "conflicting parent-child",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			schema, err := engine.CompileSchema(json.RawMessage(tt.rawSchema))
+			if err != nil {
+				t.Fatalf("CompileSchema: %v", err)
+			}
+			const operation = "acme.widgets.preview"
+			surfaceMethod := tt.surfaceMethod
+			if surfaceMethod == "" {
+				surfaceMethod = http.MethodPost
+			}
+			operationMethod := tt.operationMethod
+			if operationMethod == "" {
+				operationMethod = http.MethodPost
+			}
+			delegate := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+				Path:         "widgets preview",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Operation:    operation,
+				APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: surfaceMethod, Path: "/widgets:preview"}},
+				OutputPolicy: "json_redacted",
+				Flags:        tt.flags,
+			}}}, operationBodyContracts: map[string]engine.OperationRequestBodyContract{
+				operation: {Method: operationMethod, Schema: schema, Static: tt.static},
+			}}
+			var connector connectors.Connector = delegate
+			if tt.withoutProvider {
+				connector = &operationConnectorWithoutBodySchema{delegate: delegate}
+			}
+			err = Preflight(connector, []string{"widgets", "preview"})
+			if err == nil || !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("Preflight() error = %v, want containing %q", err, tt.want)
+			}
+		})
+	}
+}
+
+func TestPreflightRejectsOperationDirectReadDispatchKind(t *testing.T) {
+	const operation = "acme.widgets.create"
+	connector := engine.New(engine.Bundle{
+		Name: "acme",
+		Operations: []engine.OperationSpec{{
+			ID:           operation,
+			Kind:         "rest_write",
+			OutputPolicy: "json_redacted",
+			REST: &engine.RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/widgets",
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				BodySchema:  json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{}}`),
+			},
+		}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path:         "widgets create",
+			Intent:       "direct_read",
+			Availability: "implemented",
+			Operation:    operation,
+			APISurface:   []engine.CLISurfaceEndpointRef{{Method: http.MethodPost, Path: "/widgets"}},
+			OutputPolicy: "json_redacted",
+		}}},
+	}, nil)
+
+	err := Preflight(connector, []string{"widgets", "create"})
+	if err == nil || !strings.Contains(err.Error(), `got "rest_write"`) {
+		t.Fatalf("Preflight() error = %v, want rest_write dispatch rejection", err)
+	}
+}
+
+func TestPreflightAcceptsValidStaticOperationBodyWithoutMappings(t *testing.T) {
+	schema, err := engine.CompileSchema(json.RawMessage(`{"type":"object","additionalProperties":false,"required":["name"],"properties":{"name":{"type":"string"}}}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	const operation = "acme.widgets.preview"
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path:         "widgets preview",
+		Intent:       "direct_read",
+		Availability: "implemented",
+		Operation:    operation,
+		APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: "POST", Path: "/widgets:preview"}},
+		OutputPolicy: "json_redacted",
+	}}}, operationBodyContracts: map[string]engine.OperationRequestBodyContract{
+		operation: {Method: http.MethodPost, Schema: schema, Static: map[string]any{"name": "static"}},
+	}}
+	if err := Preflight(connector, []string{"widgets", "preview"}); err != nil {
+		t.Fatalf("Preflight: %v", err)
+	}
+}
+
+func TestRunOperationDirectReadUsesEscapedRequestPointers(t *testing.T) {
+	bodySchema, err := engine.CompileSchema(json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"properties":{
+			"a.b":{"type":"string"},
+			"a":{"type":"object","additionalProperties":false,"properties":{"b":{"type":"string"}}},
+			"x/y":{"type":"string"},
+			"m~n":{"type":"string"},
+			"0":{"type":"string"},
+			"items":{"type":"array","items":{"type":"object","additionalProperties":false,"properties":{"name":{"type":"string"}}}}
+		}
+	}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	arrayFlags := make([]connectors.CommandSurfaceFlag, 0, 11)
+	flagValues := map[string][]string{
+		"literal": {"literal-value"},
+		"nested":  {"nested-value"},
+		"slash":   {"slash-value"},
+		"tilde":   {"tilde-value"},
+		"numeric": {"numeric-object-value"},
+	}
+	for i := 0; i <= 10; i++ {
+		name := fmt.Sprintf("item-%d", i)
+		arrayFlags = append(arrayFlags, connectors.CommandSurfaceFlag{Name: name, Type: "string", MapsTo: fmt.Sprintf("/body/items/%d/name", i), Required: true})
+		flagValues[name] = []string{fmt.Sprintf("value-%d", i)}
+	}
+	commandFlags := append([]connectors.CommandSurfaceFlag{
+		{Name: "literal", Type: "string", MapsTo: "/body/a.b"},
+		{Name: "nested", Type: "string", MapsTo: "/body/a/b"},
+		{Name: "slash", Type: "string", MapsTo: "/body/x~1y"},
+		{Name: "tilde", Type: "string", MapsTo: "/body/m~0n"},
+		{Name: "numeric", Type: "string", MapsTo: "/body/0"},
+	}, arrayFlags...)
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path:         "widgets preview",
+		Intent:       "direct_read",
+		Availability: "implemented",
+		Operation:    "acme.widgets.preview",
+		APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: "POST", Path: "/widgets:preview"}},
+		OutputPolicy: "json_redacted",
+		Flags:        commandFlags,
+	}}}, operationBodyContracts: map[string]engine.OperationRequestBodyContract{
+		"acme.widgets.preview": {Method: http.MethodPost, Schema: bodySchema},
+	}}
+	_, err = Run(context.Background(), connector, Request{
+		Path:  []string{"widgets", "preview"},
+		Flags: flagValues,
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for operation direct read")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	body := connector.operationDirectReadReq.Body
+	if body["a.b"] != "literal-value" {
+		t.Fatalf("literal dotted body property = %#v", body["a.b"])
+	}
+	nested, _ := body["a"].(map[string]any)
+	if nested["b"] != "nested-value" {
+		t.Fatalf("nested body property = %#v", body["a"])
+	}
+	if body["x/y"] != "slash-value" || body["m~n"] != "tilde-value" {
+		t.Fatalf("escaped body properties = %#v", body)
+	}
+	if body["0"] != "numeric-object-value" {
+		t.Fatalf("numeric object property = %#v", body["0"])
+	}
+	items, _ := body["items"].([]any)
+	if len(items) != 11 || items[10].(map[string]any)["name"] != "value-10" {
+		t.Fatalf("array body property = %#v", body["items"])
+	}
+}
+
 func TestRunOperationDirectReadRequiredQueryFlags(t *testing.T) {
 	command := connectors.CommandSurfaceCommand{
 		Path:         "customers invoices list",
@@ -1619,14 +1956,19 @@ func TestRunOperationDirectReadRequiredQueryFlags(t *testing.T) {
 		},
 		OutputPolicy: "json_redacted",
 		Flags: []connectors.CommandSurfaceFlag{
-			{Name: "billing-setup", Type: "string", MapsTo: "query.billingSetup", Required: true},
-			{Name: "issue-month", Type: "enum", Values: []string{"JANUARY", "FEBRUARY"}, MapsTo: "query.issueMonth", Required: true},
-			{Name: "issue-year", Type: "string", MapsTo: "query.issueYear", Required: true},
+			{Name: "billing-setup", Type: "string", MapsTo: "/query/billingSetup", Required: true},
+			{Name: "issue-month", Type: "enum", Values: []string{"JANUARY", "FEBRUARY"}, MapsTo: "/query/issueMonth", Required: true},
+			{Name: "issue-year", Type: "string", MapsTo: "/query/issueYear", Required: true},
 		},
 	}
 
 	t.Run("missing required flag", func(t *testing.T) {
-		connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{command}}}
+		connector := &fakeConnector{
+			surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{command}},
+			operationBodyContracts: map[string]engine.OperationRequestBodyContract{
+				command.Operation: {Method: http.MethodGet},
+			},
+		}
 		_, err := Run(context.Background(), connector, Request{
 			Path: []string{"customers", "invoices", "list"},
 			Flags: map[string][]string{
@@ -1646,7 +1988,12 @@ func TestRunOperationDirectReadRequiredQueryFlags(t *testing.T) {
 	})
 
 	t.Run("maps required query flags", func(t *testing.T) {
-		connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{command}}}
+		connector := &fakeConnector{
+			surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{command}},
+			operationBodyContracts: map[string]engine.OperationRequestBodyContract{
+				command.Operation: {Method: http.MethodGet},
+			},
+		}
 		_, err := Run(context.Background(), connector, Request{
 			Path: []string{"customers", "invoices", "list"},
 			Flags: map[string][]string{
@@ -1666,6 +2013,32 @@ func TestRunOperationDirectReadRequiredQueryFlags(t *testing.T) {
 			t.Fatalf("operation query = %#v", query)
 		}
 	})
+}
+
+func TestRunOperationDirectReadMapsBracketedQueryPointer(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path:         "widgets list",
+		Intent:       "direct_read",
+		Availability: "implemented",
+		Operation:    "acme.widgets.list",
+		APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: "GET", Path: "/widgets"}},
+		OutputPolicy: "json_redacted",
+		Flags:        []connectors.CommandSurfaceFlag{{Name: "status", Type: "string", MapsTo: "/query/filter[status]"}},
+	}}}, operationBodyContracts: map[string]engine.OperationRequestBodyContract{
+		"acme.widgets.list": {Method: http.MethodGet},
+	}}
+	if _, err := Run(context.Background(), connector, Request{
+		Path:  []string{"widgets", "list"},
+		Flags: map[string][]string{"status": {"active"}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for operation direct read")
+		return nil
+	}); err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if got := connector.operationDirectReadReq.Query["filter[status]"]; got != "active" {
+		t.Fatalf("filter[status] = %q, want active", got)
+	}
 }
 
 func TestRunGongTypedPOSTDirectReadsIncludingTranscript(t *testing.T) {
@@ -1739,6 +2112,10 @@ func TestRunGongTypedPOSTDirectReadsIncludingTranscript(t *testing.T) {
 }
 
 func TestRunOperationDirectReadRejectsRawBodyAndMissingPolicy(t *testing.T) {
+	bodySchema, err := engine.CompileSchema(json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"emails":{"type":"array","items":{"type":"string"}}}}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
 	tests := []struct {
 		name    string
 		command connectors.CommandSurfaceCommand
@@ -1754,7 +2131,7 @@ func TestRunOperationDirectReadRejectsRawBodyAndMissingPolicy(t *testing.T) {
 				Operation:    "gong.meetings_integration_status",
 				APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: "POST", Path: "/v2/meetings/integration/status"}},
 				OutputPolicy: "json_redacted",
-				Flags:        []connectors.CommandSurfaceFlag{{Name: "email", Type: "string_array", MapsTo: "body.emails"}},
+				Flags:        []connectors.CommandSurfaceFlag{{Name: "email", Type: "string_array", MapsTo: "/body/emails"}},
 			},
 			flags: map[string][]string{"body": {`{"emails":["ada@example.com"]}`}},
 			want:  "unknown flag",
@@ -1767,15 +2144,34 @@ func TestRunOperationDirectReadRejectsRawBodyAndMissingPolicy(t *testing.T) {
 				Availability: "implemented",
 				Operation:    "gong.meetings_integration_status",
 				APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: "POST", Path: "/v2/meetings/integration/status"}},
-				Flags:        []connectors.CommandSurfaceFlag{{Name: "email", Type: "string_array", MapsTo: "body.emails"}},
+				Flags:        []connectors.CommandSurfaceFlag{{Name: "email", Type: "string_array", MapsTo: "/body/emails"}},
 			},
 			flags: map[string][]string{"email": {"ada@example.com"}},
 			want:  "output_policy",
 		},
+		{
+			name: "legacy dot mapping is rejected",
+			command: connectors.CommandSurfaceCommand{
+				Path:         "meetings integration-status",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Operation:    "gong.meetings_integration_status",
+				APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: "POST", Path: "/v2/meetings/integration/status"}},
+				OutputPolicy: "json_redacted",
+				Flags:        []connectors.CommandSurfaceFlag{{Name: "email", Type: "string_array", MapsTo: "body.emails"}},
+			},
+			flags: map[string][]string{"email": {"ada@example.com"}},
+			want:  "absolute escaped JSON Pointer",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{tt.command}}}
+			connector := &fakeConnector{
+				surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{tt.command}},
+				operationBodyContracts: map[string]engine.OperationRequestBodyContract{
+					"gong.meetings_integration_status": {Method: http.MethodPost, Schema: bodySchema},
+				},
+			}
 			_, err := Run(context.Background(), connector, Request{Path: strings.Fields(tt.command.Path), Flags: tt.flags}, func(connectors.Record) error {
 				t.Fatal("emit called for rejected operation direct-read command")
 				return nil

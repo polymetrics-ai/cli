@@ -9,6 +9,8 @@ import (
 	"strings"
 
 	"polymetrics.ai/internal/connectors/engine"
+	_ "polymetrics.ai/internal/connectors/hooks/hookset"
+	_ "polymetrics.ai/internal/connectors/native/nativeset"
 )
 
 // Rule identifiers named by every validate Finding. Kept as exported-looking
@@ -115,8 +117,6 @@ var surfaceOperationRisks = map[string]bool{
 	"high":     true,
 	"critical": true,
 }
-
-const maxCLIRecordPathArrayIndex = 128
 
 var directReadOutputPolicies = map[string]bool{
 	"repository_contents_file_metadata": true,
@@ -890,15 +890,17 @@ func checkCLISurfaceOperationSafety(
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q must declare positive rest.max_bytes", i, cmd.Path, cmd.Operation)})
 	}
 	if method == "POST" {
-		if !strings.EqualFold(strings.TrimSpace(op.REST.ContentType), "application/json") {
+		noBody := op.REST.Body != nil && op.REST.Body.None
+		if !noBody && !strings.EqualFold(strings.TrimSpace(op.REST.ContentType), "application/json") {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q POST must declare application/json content_type", i, cmd.Path, cmd.Operation)})
 		}
-		if len(op.REST.BodySchema) == 0 {
+		if !noBody && len(op.REST.BodySchema) == 0 {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q POST must declare body_schema", i, cmd.Path, cmd.Operation)})
-		} else {
+		} else if !noBody {
 			findings = append(findings, checkCLISurfaceOperationBodyMappings(b, i, cmd, op)...)
 		}
 	}
+	findings = append(findings, checkCLISurfaceRequestContractFlags(b, i, cmd, op)...)
 	if !directReadOutputPolicies[cmd.OutputPolicy] {
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q must declare a supported output_policy", i, cmd.Path, cmd.Operation)})
 	}
@@ -906,16 +908,14 @@ func checkCLISurfaceOperationSafety(
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q uses repository output policy %q but endpoint path lacks {path}", i, cmd.Path, cmd.Operation, cmd.OutputPolicy)})
 	}
 	for _, flag := range cmd.Flags {
-		mapsTo := strings.TrimSpace(flag.MapsTo)
-		switch {
-		case strings.HasPrefix(mapsTo, "path."), strings.HasPrefix(mapsTo, "query."):
-			// allowed
-		case strings.HasPrefix(mapsTo, "body."):
-			if method != "POST" {
-				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) flag --%s maps to body for non-POST operation", i, cmd.Path, flag.Name)})
-			}
-		default:
+		mapsTo := flag.MapsTo
+		namespace, _, err := engine.ParseRequestFieldPointer(mapsTo)
+		if err != nil {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) flag --%s maps to unsupported target %q", i, cmd.Path, flag.Name, flag.MapsTo)})
+			continue
+		}
+		if namespace == "body" && method != "POST" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) flag --%s maps to body for non-POST operation", i, cmd.Path, flag.Name)})
 		}
 	}
 	return findings
@@ -925,33 +925,152 @@ func checkCLISurfaceOperationBodyMappings(b engine.Bundle, i int, cmd engine.CLI
 	if op.REST == nil || len(op.REST.BodySchema) == 0 {
 		return nil
 	}
-	schema, err := parseCLIRecordSchema(op.REST.BodySchema)
+	schema, err := engine.CompileSchema(op.REST.BodySchema)
 	if err != nil {
 		return []Finding{{Connector: b.Name, File: "operations.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("operation %q has invalid body_schema for CLI validation: %v", op.ID, err)}}
 	}
-	requiredPaths := schema.requiredMappingPaths("")
-	if len(requiredPaths) == 0 {
-		return nil
+	root, err := schema.MappingPath("")
+	if err != nil {
+		return []Finding{{Connector: b.Name, File: "operations.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("operation %q body_schema cannot be inspected for CLI validation: %v", op.ID, err)}}
+	}
+	if root.IsArray {
+		return []Finding{{Connector: b.Name, File: "operations.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("operation %q root-array body_schema cannot be assembled by operation-backed CLI flags", op.ID)}}
+	}
+	requiredPaths, err := schema.RequiredRequestBodyPointers()
+	if err != nil {
+		return []Finding{{Connector: b.Name, File: "operations.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("operation %q body_schema cannot be expressed by CLI flags: %v", op.ID, err)}}
 	}
 	mappedTargets := make([]cliBodyFlagMapping, 0, len(cmd.Flags))
-	for _, flag := range cmd.Flags {
-		target, ok := strings.CutPrefix(flag.MapsTo, "body.")
-		if ok && target != "" {
-			mappedTargets = append(mappedTargets, cliBodyFlagMapping{target: target, name: flag.Name, required: flag.Required})
-		}
-	}
+	requiredAssignments := make([]string, 0, len(cmd.Flags))
+	optionalAssignments := make([]string, 0, len(cmd.Flags))
 	var findings []Finding
-	for _, requiredPath := range requiredPaths {
-		if operationStaticBodyProvidesPath(op.REST.Body, requiredPath) {
+	for _, flag := range cmd.Flags {
+		namespace, _, err := engine.ParseRequestFieldPointer(flag.MapsTo)
+		if err != nil || namespace != "body" {
 			continue
 		}
+		input := engine.RequestBodyInput{
+			Type:       flag.Type,
+			Values:     flag.Values,
+			Format:     flag.Format,
+			AllowEmpty: flag.AllowEmpty,
+			Required:   flag.Required,
+			MinItems:   flag.MinItems,
+			MaxItems:   flag.MaxItems,
+		}
+		if err := schema.ValidateRequestBodyInput(flag.MapsTo, input); err != nil {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q flag --%s type %q is incompatible with body_schema at %q: %v", i, cmd.Path, op.ID, flag.Name, flag.Type, flag.MapsTo, err)})
+		}
+		target, err := engine.CanonicalRequestFieldPointer(flag.MapsTo, schema)
+		if err != nil {
+			continue
+		}
+		mappedTargets = append(mappedTargets, cliBodyFlagMapping{target: target, name: flag.Name, required: flag.Required})
+		if flag.Required {
+			requiredAssignments = append(requiredAssignments, flag.MapsTo)
+		} else {
+			optionalAssignments = append(optionalAssignments, flag.MapsTo)
+		}
+	}
+	var staticBody map[string]any
+	if op.REST.Body != nil {
+		staticBody = op.REST.Body.Fields
+	}
+	if err := schema.ValidateEffectiveRequestBody(staticBody, requiredAssignments, optionalAssignments); err != nil {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q cannot assemble a schema-valid effective request body: %v", i, cmd.Path, op.ID, err)})
+	}
+	if len(requiredPaths) == 0 {
+		return findings
+	}
+	for _, requiredPath := range requiredPaths {
 		mapping, ok := commandBodyFlagCoveringRequiredPath(schema, mappedTargets, requiredPath)
+		if ok && mapping.required {
+			continue
+		}
+		if op.REST.Body != nil {
+			provided, err := operationStaticBodyProvidesPointer(schema, op.REST.Body.Fields, requiredPath)
+			if err != nil {
+				findings = append(findings, Finding{Connector: b.Name, File: "operations.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("operation %q rest.body value for %s is incompatible with body_schema: %v", op.ID, requiredPath, err)})
+				continue
+			}
+			if provided {
+				continue
+			}
+		}
 		if !ok {
-			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q requires body.%s but no command flag maps to it and rest.body does not provide it", i, cmd.Path, op.ID, requiredPath)})
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q requires %s but no command flag maps to it and rest.body does not provide it", i, cmd.Path, op.ID, requiredPath)})
 			continue
 		}
 		if !mapping.required {
-			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q requires body.%s but flag --%s is not marked required", i, cmd.Path, op.ID, requiredPath, mapping.name)})
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q requires %s but flag --%s is not marked required", i, cmd.Path, op.ID, requiredPath, mapping.name)})
+		}
+	}
+	return findings
+}
+
+func checkCLISurfaceRequestContractFlags(b engine.Bundle, i int, cmd engine.CLICommand, op engine.OperationSpec) []Finding {
+	if op.REST == nil {
+		return nil
+	}
+	var findings []Finding
+	pointers := make([]string, 0, len(cmd.Flags))
+	for _, flag := range cmd.Flags {
+		pointers = append(pointers, flag.MapsTo)
+	}
+	if err := engine.ValidateRequestFieldPointerAssignments(pointers); err != nil {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented operation-backed command %d (%q) has conflicting request mappings: %v", i, cmd.Path, err)})
+	}
+	if op.RequestContract == nil {
+		return findings
+	}
+	noBody := op.REST.Body != nil && op.REST.Body.None
+	var bodySchema *engine.Schema
+	if len(op.REST.BodySchema) != 0 {
+		compiled, err := engine.CompileSchema(op.REST.BodySchema)
+		if err != nil {
+			return []Finding{{Connector: b.Name, File: "operations.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("operation %q has invalid body_schema for request-contract flag validation: %v", op.ID, err)}}
+		}
+		bodySchema = compiled
+	}
+	citations := make(map[string]bool, len(op.RequestContract.Fields))
+	for _, field := range op.RequestContract.Fields {
+		citations[strings.TrimSpace(field.Path)] = true
+	}
+	mappings := make(map[string]engine.CLIFlag, len(cmd.Flags))
+	for _, flag := range cmd.Flags {
+		mapsTo := flag.MapsTo
+		pointer, err := engine.CanonicalRequestFieldPointer(mapsTo, bodySchema)
+		if err != nil {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented operation-backed command %d (%q) flag --%s has request mapping %q that cannot be matched to request-contract evidence: %v", i, cmd.Path, flag.Name, mapsTo, err)})
+			continue
+		}
+		namespace, _, err := engine.ParseRequestFieldPointer(pointer)
+		if err != nil {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented operation-backed command %d (%q) flag --%s has invalid request mapping %q: %v", i, cmd.Path, flag.Name, mapsTo, err)})
+			continue
+		}
+		if noBody && namespace == "body" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented no-body command %d (%q) flag --%s maps to body despite rest.body none", i, cmd.Path, flag.Name)})
+			continue
+		}
+		mappings[pointer] = flag
+		if !citations[pointer] {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented operation-backed command %d (%q) flag --%s maps to uncited request field %q", i, cmd.Path, flag.Name, pointer)})
+		}
+	}
+	for _, field := range op.RequestContract.Fields {
+		path := strings.TrimSpace(field.Path)
+		namespace, _, err := engine.ParseRequestFieldPointer(path)
+		if err != nil || namespace != "path" && namespace != "query" {
+			continue
+		}
+		flag, mapped := mappings[path]
+		if !mapped {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented operation-backed command %d (%q) request field %q must map to a command flag", i, cmd.Path, path)})
+			continue
+		}
+		if namespace == "path" && !flag.Required {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented operation-backed command %d (%q) path field %q maps to flag --%s that is not required", i, cmd.Path, path, flag.Name)})
 		}
 	}
 	return findings
@@ -963,31 +1082,54 @@ type cliBodyFlagMapping struct {
 	required bool
 }
 
-func operationStaticBodyProvidesPath(body map[string]any, path string) bool {
-	if len(body) == 0 || strings.TrimSpace(path) == "" {
-		return false
+func operationStaticBodyProvidesPointer(schema *engine.Schema, body map[string]any, pointer string) (bool, error) {
+	if len(body) == 0 {
+		return false, nil
 	}
-	var current any = body
-	for _, part := range strings.Split(path, ".") {
-		object, ok := current.(map[string]any)
-		if !ok {
-			return false
-		}
-		current, ok = object[part]
-		if !ok {
-			return false
-		}
+	namespace, tokens, err := engine.ParseRequestFieldPointer(pointer)
+	if err != nil || namespace != "body" {
+		return false, err
 	}
-	return true
+	return staticBodyValueProvidesTokens(schema, pointer, body, tokens)
 }
 
-func commandBodyFlagCoveringRequiredPath(schema *cliRecordSchemaNode, mappedTargets []cliBodyFlagMapping, requiredPath string) (cliBodyFlagMapping, bool) {
-	requiredNode, err := schema.recordPath(requiredPath)
+func staticBodyValueProvidesTokens(schema *engine.Schema, pointer string, current any, tokens []string) (bool, error) {
+	if len(tokens) == 0 {
+		if err := schema.ValidateRequestFieldPointerValue(pointer, current); err != nil {
+			return false, err
+		}
+		return true, nil
+	}
+	switch value := current.(type) {
+	case map[string]any:
+		next, ok := value[tokens[0]]
+		if !ok {
+			return false, nil
+		}
+		return staticBodyValueProvidesTokens(schema, pointer, next, tokens[1:])
+	case []any:
+		if tokens[0] != "0" || len(value) == 0 {
+			return false, nil
+		}
+		for _, item := range value {
+			provided, err := staticBodyValueProvidesTokens(schema, pointer, item, tokens[1:])
+			if err != nil || !provided {
+				return false, err
+			}
+		}
+		return true, nil
+	default:
+		return false, nil
+	}
+}
+
+func commandBodyFlagCoveringRequiredPath(schema *engine.Schema, mappedTargets []cliBodyFlagMapping, requiredPath string) (cliBodyFlagMapping, bool) {
+	requiredNode, err := schema.RequestFieldPointerInfo(requiredPath)
 	var optional cliBodyFlagMapping
 	optionalFound := false
 	for _, mapping := range mappedTargets {
 		covers := mapping.target == requiredPath
-		if !covers && err == nil && requiredNode != nil && (requiredNode.isObject() || requiredNode.isArray()) && dottedPathPrefix(requiredPath, mapping.target) {
+		if !covers && err == nil && (requiredNode.IsObject || requiredNode.IsArray) && strings.HasPrefix(mapping.target, requiredPath+"/") {
 			covers = true
 		}
 		if !covers {
@@ -1049,7 +1191,7 @@ func checkCLISurfaceValidationDeclarations(b engine.Bundle, i int, cmd engine.CL
 			{role: "left", target: constraint.Left},
 			{role: "right", target: constraint.Right},
 		} {
-			if err := validateCLIConstraintMappedTarget(ref.target); err != nil {
+			if err := validateCLIConstraintMappedTarget(ref.target, cmd.Operation != ""); err != nil {
 				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d %s target %q is invalid: %v", i, cmd.Path, j, ref.role, ref.target, err)})
 				continue
 			}
@@ -1078,7 +1220,17 @@ func checkCLISurfaceValidationDeclarations(b engine.Bundle, i int, cmd engine.CL
 	return findings
 }
 
-func validateCLIConstraintMappedTarget(target string) error {
+func validateCLIConstraintMappedTarget(target string, operationBacked bool) error {
+	if operationBacked {
+		namespace, _, err := engine.ParseRequestFieldPointer(target)
+		if err != nil {
+			return err
+		}
+		if namespace != "query" && namespace != "body" {
+			return fmt.Errorf("must use a /query or /body pointer")
+		}
+		return nil
+	}
 	switch {
 	case strings.HasPrefix(target, "query."):
 		return validateCLIConstraintPath(strings.TrimPrefix(target, "query."))
@@ -1131,12 +1283,17 @@ func checkCLISurfaceWriteFlags(
 		return nil
 	}
 
-	var schema *cliRecordSchemaNode
+	var schema *engine.Schema
+	var requiredPaths []string
 	if len(action.RecordSchema) > 0 {
 		var err error
-		schema, err = parseCLIRecordSchema(action.RecordSchema)
+		schema, err = engine.CompileSchema(action.RecordSchema)
 		if err != nil {
 			return []Finding{{Connector: b.Name, File: "writes.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("write %q has invalid record_schema for CLI validation: %v", action.Name, err)}}
+		}
+		requiredPaths, err = schema.RequiredMappingPaths()
+		if err != nil {
+			return []Finding{{Connector: b.Name, File: "writes.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("write %q record_schema cannot be expressed by CLI flags: %v", action.Name, err)}}
 		}
 	}
 
@@ -1163,21 +1320,19 @@ func checkCLISurfaceWriteFlags(
 		if schema == nil {
 			continue
 		}
-		leaf, err := schema.recordPath(target)
+		leaf, err := schema.MappingPath(target)
 		if err != nil {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) flag --%s maps outside write %q schema: %v", i, cmd.Path, flag.Name, cmd.Write, err)})
 			continue
 		}
 		if !cliFlagTypeMatchesSchema(flag.Type, leaf) {
-			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) flag --%s type %q is incompatible with record.%s schema type %s", i, cmd.Path, flag.Name, flag.Type, target, strings.Join(leaf.effectiveTypes(), ","))})
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) flag --%s type %q is incompatible with record.%s schema type %s", i, cmd.Path, flag.Name, flag.Type, target, strings.Join(leaf.Types, ","))})
 		}
 	}
 
 	required := map[string]bool{}
-	if schema != nil {
-		for _, field := range schema.requiredMappingPaths("") {
-			required[field] = true
-		}
+	for _, field := range requiredPaths {
+		required[field] = true
 	}
 	for _, field := range action.PathFields {
 		required[field] = true
@@ -1212,199 +1367,9 @@ func dottedPathPrefix(parent, child string) bool {
 	return strings.HasPrefix(child, parent+".")
 }
 
-type cliRecordSchemaNode struct {
-	types                []string
-	required             []string
-	properties           map[string]*cliRecordSchemaNode
-	items                *cliRecordSchemaNode
-	additionalProperties bool
-	hasAdditionalProps   bool
-}
-
-func parseCLIRecordSchema(raw json.RawMessage) (*cliRecordSchemaNode, error) {
-	var m map[string]json.RawMessage
-	if err := json.Unmarshal(raw, &m); err != nil {
-		return nil, err
-	}
-	return parseCLIRecordSchemaNode(m)
-}
-
-func parseCLIRecordSchemaNode(m map[string]json.RawMessage) (*cliRecordSchemaNode, error) {
-	n := &cliRecordSchemaNode{additionalProperties: true}
-	if raw, ok := m["type"]; ok {
-		var single string
-		if err := json.Unmarshal(raw, &single); err == nil {
-			n.types = []string{single}
-		} else if err := json.Unmarshal(raw, &n.types); err != nil {
-			return nil, err
-		}
-	}
-	if raw, ok := m["required"]; ok {
-		if err := json.Unmarshal(raw, &n.required); err != nil {
-			return nil, err
-		}
-	}
-	if raw, ok := m["additionalProperties"]; ok {
-		if err := json.Unmarshal(raw, &n.additionalProperties); err != nil {
-			return nil, err
-		}
-		n.hasAdditionalProps = true
-	}
-	if raw, ok := m["properties"]; ok {
-		var props map[string]map[string]json.RawMessage
-		if err := json.Unmarshal(raw, &props); err != nil {
-			return nil, err
-		}
-		n.properties = make(map[string]*cliRecordSchemaNode, len(props))
-		for name, prop := range props {
-			child, err := parseCLIRecordSchemaNode(prop)
-			if err != nil {
-				return nil, err
-			}
-			n.properties[name] = child
-		}
-	}
-	if raw, ok := m["items"]; ok {
-		var item map[string]json.RawMessage
-		if err := json.Unmarshal(raw, &item); err != nil {
-			return nil, err
-		}
-		child, err := parseCLIRecordSchemaNode(item)
-		if err != nil {
-			return nil, err
-		}
-		n.items = child
-	}
-	return n, nil
-}
-
-func (n *cliRecordSchemaNode) recordPath(path string) (*cliRecordSchemaNode, error) {
-	parts := strings.Split(path, ".")
-	cur := n
-	for _, part := range parts {
-		if part == "" {
-			return nil, fmt.Errorf("empty path segment")
-		}
-		if cur.isArray() {
-			if err := validateCLIRecordArrayIndex(part); err != nil {
-				return nil, err
-			}
-			if cur.items == nil {
-				return nil, fmt.Errorf("array segment %q has no item schema", part)
-			}
-			cur = cur.items
-			continue
-		}
-		if !cur.isObject() {
-			return nil, fmt.Errorf("%q descends into non-object schema", part)
-		}
-		child := cur.properties[part]
-		if child == nil {
-			return nil, fmt.Errorf("record field %q is not declared", part)
-		}
-		cur = child
-	}
-	return cur, nil
-}
-
-func validateCLIRecordArrayIndex(part string) error {
-	for _, r := range part {
-		if r < '0' || r > '9' {
-			return fmt.Errorf("array segment %q is not a numeric index", part)
-		}
-	}
-	if len(part) > 1 && strings.HasPrefix(part, "0") {
-		return fmt.Errorf("array index %q must not have leading zeroes", part)
-	}
-	if len(part) > 3 || (len(part) == 3 && part > "128") {
-		return fmt.Errorf("array index %q exceeds max %d", part, maxCLIRecordPathArrayIndex)
-	}
-	return nil
-}
-
-func (n *cliRecordSchemaNode) requiredMappingPaths(prefix string) []string {
-	if n == nil {
-		return nil
-	}
-	var out []string
-	for _, req := range n.required {
-		child := n.properties[req]
-		path := joinSchemaPath(prefix, req)
-		childPaths := child.requiredNodeMappingPaths(path)
-		if len(childPaths) == 0 {
-			out = append(out, path)
-			continue
-		}
-		out = append(out, childPaths...)
-	}
-	return out
-}
-
-func (n *cliRecordSchemaNode) requiredNodeMappingPaths(prefix string) []string {
-	if n == nil {
-		return nil
-	}
-	if n.isArray() {
-		if n.items == nil {
-			return nil
-		}
-		itemPrefix := joinSchemaPath(prefix, "0")
-		paths := n.items.requiredNodeMappingPaths(itemPrefix)
-		if len(paths) == 0 {
-			return []string{prefix}
-		}
-		return paths
-	}
-	if n.isObject() {
-		return n.requiredMappingPaths(prefix)
-	}
-	return nil
-}
-
-func joinSchemaPath(prefix, part string) string {
-	if prefix == "" {
-		return part
-	}
-	return prefix + "." + part
-}
-
-func (n *cliRecordSchemaNode) isArray() bool {
-	for _, typ := range n.types {
-		if typ == "array" {
-			return true
-		}
-	}
-	return false
-}
-
-func (n *cliRecordSchemaNode) isObject() bool {
-	if len(n.properties) > 0 {
-		return true
-	}
-	for _, typ := range n.types {
-		if typ == "object" {
-			return true
-		}
-	}
-	return len(n.types) == 0
-}
-
-func (n *cliRecordSchemaNode) effectiveTypes() []string {
-	if len(n.types) > 0 {
-		return n.types
-	}
-	if n.isArray() {
-		return []string{"array"}
-	}
-	if n.isObject() {
-		return []string{"object"}
-	}
-	return []string{"any"}
-}
-
-func cliFlagTypeMatchesSchema(flagType string, node *cliRecordSchemaNode) bool {
+func cliFlagTypeMatchesSchema(flagType string, node engine.SchemaPathInfo) bool {
 	schemaTypes := map[string]bool{}
-	for _, typ := range node.effectiveTypes() {
+	for _, typ := range node.Types {
 		schemaTypes[typ] = true
 	}
 	switch flagType {

@@ -219,13 +219,138 @@ not a full override by default.
   as sibling-derived and identify the cited sibling operation, so reviewers can audit the inference
   instead of mistaking it for first-party documentation of the target operation.
 
-  A genuinely empty documented body **MUST** be represented as `body: none` (the `writes.json`
-  spelling is `body_type: "none"`), never `body: {}`. Every documented path and query parameter
-  **MUST** instead be promoted to a command flag. If the definition/CLI surface cannot express the
-  no-body contract or those flags, defer the operation. This is a usability requirement, not a
-  stylistic preference: the 2026-08-04 hollow-command incident shipped two commands as implemented
-  with record schemas that admitted only `{}`; an empty record schema with no flags is unusable by
-  construction.
+  `operations.json` records that evidence in the supported `request_contract` block. Field paths
+  are escaped JSON Pointers rooted at `/body`, `/path`, or `/query`. Pointer tokens use the standard
+  `~0` escape for `~` and `~1` for `/`. Array elements use the canonical token `0`, independent of
+  the concrete index a CLI mapping validates. This representation is injective: a literal provider
+  property named `a.b` is `/body/a.b`, while nested properties `a` then `b` are `/body/a/b`.
+  Likewise, `x/y` is `/body/x~1y`. A root array element is `/body/0`, and an object field on that
+  element is `/body/0/<field>`. Each entry carries its own citation even when several fields share
+  a source:
+
+  ```json
+  {
+    "request_contract": {
+      "source_tier": 2,
+      "source_url": "https://example.invalid/openapi.json",
+      "source_location": "paths./widgets.post.description fenced request example",
+      "write_action": "create_widget",
+      "write_field_map": {
+        "/body/name": "/body/name"
+      },
+      "fields": [
+        {
+          "path": "/body/name",
+          "source_url": "https://example.invalid/openapi.json",
+          "source_location": "paths./widgets.post.description request example property name"
+        }
+      ]
+    }
+  }
+  ```
+
+  Tier 4 additionally requires `sibling_operation` naming the cited create/update operation.
+  Tier 5 has no executable representation: leave the operation deferred. The top-level operation
+  `source_url` remains endpoint provenance and does not replace the anchored `request_contract`
+  citations.
+
+  When a reviewed operation is promoted to a `writes.json` action, retain its evidence-bearing
+  `operations.json` row and set `request_contract.write_action` to the exact connector-local action
+  name. Every write action must have exactly one such forward link; dangling links and duplicate
+  claims are load errors. Method/path matching is not a substitute because templates can differ and
+  multiple operations can share the same method and path. The same operation-side contract must set
+  `write_field_map` for every effective write input. Keys use the linked write action's input name:
+  `/path/<path_fields entry>`, `/query/<outgoing query key>`, or `/body/<outgoing body field>`; values
+  name the cited `request_contract.fields[].path` on the retained operation. The loader derives the
+  complete input set for each supported body type and rejects missing or stale mappings, mappings
+  across namespaces, mappings to uncited request fields, and non-injective mappings that reuse one
+  citation for distinct write inputs. This explicit map is required even when names happen to
+  match, so a promotion cannot silently pair an empty operation contract with a body-bearing write
+  action. Body and query targets are always one-to-one. Path alternatives are allowed only when a
+  future representation identifies them explicitly as alternatives for one template slot; the
+  loader never infers aliases from matching values or names. For path inputs, every `record.*`
+  expression in the write template must have an exact `path_fields` entry and every declared path
+  field must be used; the loader rejects either direction of drift before deriving the map.
+
+  REST path placeholders use the shared validation/runtime grammar
+  `[A-Za-z_][A-Za-z0-9_.-]*`. The loader rejects unmatched braces and unsupported placeholder
+  characters, while runtime substitution uses the same parsed placeholders; names such as
+  `{subscription-id}` therefore cannot disappear from citation or flag validation.
+
+  For `rest.body_schema`, the loader resolves and inlines connector-local JSON Pointer `$ref`
+  values, preserves executable `allOf`, `anyOf`, and `oneOf` validation, and unions fields exposed
+  by those branches before checking citations. External, dangling, cyclic, or non-object
+  references fail loading. Every object node must declare `additionalProperties: false`; an open
+  object cannot prove that every transmitted field has a citation. Root-array elements use the
+  explicit `/body/0` pointer. A schema that still exposes no request fields fails instead of being treated
+  as an empty contract. An operation with neither a non-empty static body nor a body schema must
+  use `body: "none"`; omission and `{}` are invalid empty-body spellings.
+
+  Required CLI body mappings are derived from the engine's compiled schema semantics. `allOf`
+  requirements are combined. Closed-object `allOf` branches must expose compatible property sets;
+  incompatible branches are rejected during shared schema compilation instead of producing flags
+  for a body runtime can never accept. Type intersections preserve JSON Schema subtyping, including
+  `number` intersected with `integer` producing `integer`. An operation-backed command using
+  `anyOf` or `oneOf` is deferred because current CLI metadata cannot express alternative or
+  exclusive required-flag groups; the validator rejects it rather than silently ignoring an arm.
+  Every cited path and query parameter must map to a command flag for body-bearing and empty-body
+  operations alike.
+
+  Operation-backed CLI `maps_to` values use the same escaped JSON Pointer format as citations:
+  `/path/id`, `/query/filter`, `/body/a.b`, and `/body/a/b`. Dot-delimited request mappings are not
+  accepted on this surface. Runtime consumes the decoded pointer tokens directly, so a literal
+  property named `a.b` is transmitted as `a.b` while `/body/a/b` builds a nested object. Concrete
+  array indices are allowed in CLI mappings and canonicalize to the citation element token `0` for
+  evidence checks. Runtime assembly follows the compiled schema at every token: a numeric token is
+  an object key below an object schema and an array index only below an array schema. Array-indexed
+  flags are ordered numerically, so index `10` cannot be assembled before index `2`. When a static
+  body supplies an array, every supplied element is validated against the compiled item schema,
+  including types and nested requirements; presence in only the first element is insufficient.
+  Static objects and flag-built objects are recursively merged before final schema validation, so
+  a dynamic nested override preserves documented static siblings. Arrays and non-object values are
+  replaced as complete values rather than merged by position.
+
+  Query pointer tokens and runtime query names share one grammar. Plain identifier names remain
+  valid, and bracketed provider names such as `/query/filter[status]` and `/query/page[size]` are
+  supported. Every bracket must be balanced and contain a non-empty identifier; whitespace,
+  control characters, nested brackets, query delimiters, and malformed suffixes are rejected
+  before request construction.
+
+  Write actions using `json_array` require an exclusively array-rooted schema and map the outgoing
+  root-array element and its fields, not the source record's `body_field`. GraphQL variables map
+  below `/body/variables`; a template descriptor is one variable leaf, not separate `template` and
+  `type` wire fields. Multipart part names and the
+  transmitted base64 content property are explicit body fields; the base64 source path/value is
+  not transmitted. Query and multipart wire names with surrounding whitespace are rejected instead
+  of normalized away from what runtime would transmit. A write action declaring `dynamic_fields`,
+  or owned by effective connector write dispatch, cannot be linked until its effective dynamic or
+  hook-generated request has an operation-side representation with complete citations. This checks
+  actual execution ownership rather than optional `writes.json` marker fields.
+
+  The governing review lesson is: verify a fix at the layer that performs the action, not only at
+  the layer where metadata or validation changed. The recurring class is **correct at authoring but
+  wrong at runtime**. Citation collection, authoring validation, CLI assembly, body merge, query
+  construction, and effective write dispatch must agree on the same decoded request shape.
+
+  `docs/migration/request-contract-coverage.json` is the machine-readable rollout inventory, sorted
+  by each connector's remaining citation/link gap count and then connector slug. The accompanying
+  `docs/migration/request-contract-outbound-coverage.md` records each outbound-value mechanism,
+  enforcement mode, corpus counts, and focused evidence. The manifest's
+  `source_of_truth_api_docs_reference` is normally a URL string. When repository research finds no
+  authoritative public reference, it is an object with
+  `state: "no_discoverable_public_docs"` and a required `research_note`; free-form placeholder text
+  is not a valid state. The top-level schema-resolution and path-template sections record measured
+  corpus blockers that must be resolved during connector backfill.
+
+  A genuinely empty documented body **MUST** use `"body": "none"` in an `operations.json` REST
+  block; the `writes.json` spelling remains `"body_type": "none"`. `"body": {}` means an object
+  body assembled from static values and/or command flags and therefore does not declare an empty
+  body. Every documented path and query parameter on a no-body operation **MUST** instead appear in
+  `request_contract.fields` and be promoted to a command flag. If the definition/CLI surface cannot
+  express the no-body contract or those flags, defer the operation. This is a usability requirement,
+  not a stylistic preference: the 2026-08-04 hollow-command incident shipped two commands as
+  implemented with record schemas that admitted only `{}`; an empty record schema with no flags is
+  unusable by construction.
 - **Direct-read `output_policy` stays generic and bounded**: use `repository_contents_file_metadata`
   for a single repository file metadata response and `repository_contents_directory` for repository
   directory listings. Both policies reject sensitive repository paths before network access and
