@@ -49,9 +49,11 @@ func TestCheckProjectionRejectsDivergence(t *testing.T) {
 func TestProjectionDriftCheckAndSync(t *testing.T) {
 	repository := repositoryRoot(t)
 	contract := loadRepositoryContract(t, repository)
-	contract.Projections[0].Required = true
 
 	root := t.TempDir()
+	if updated, err := SyncProjections(root, contract); err != nil || updated != 2 {
+		t.Fatalf("create required Pi projections before block test: updated=%d err=%v", updated, err)
+	}
 	path := filepath.Join(root, filepath.FromSlash(contract.Projections[0].Path))
 	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
 		t.Fatal(err)
@@ -89,16 +91,122 @@ func TestProjectionDriftCheckAndSync(t *testing.T) {
 	}
 }
 
-func TestOptionalWaveProjectionMayBeAbsent(t *testing.T) {
+func TestOptionalNonPiWaveProjectionMayBeAbsent(t *testing.T) {
 	contract := loadRepositoryContract(t, repositoryRoot(t))
-	if err := CheckProjections(t.TempDir(), contract); err != nil {
-		t.Fatalf("optional Wave 2-4 projections should be absent in Wave 1: %v", err)
+	root := t.TempDir()
+	if updated, err := SyncProjections(root, contract); err != nil || updated != 2 {
+		t.Fatalf("create required Pi projections: updated=%d err=%v", updated, err)
+	}
+	if err := CheckProjections(root, contract); err != nil {
+		t.Fatalf("optional non-Pi projections should be absent: %v", err)
+	}
+}
+
+func TestPiProjectionsAreRequired(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+
+	for _, target := range contract.Projections {
+		if target.Harness != "pi" {
+			continue
+		}
+		if !target.Required {
+			t.Fatalf("Pi projection %s must be required once its wave owns the generated file", target.Path)
+		}
+		if target.RenderMode != "full" {
+			t.Fatalf("Pi projection %s must be a complete generated file", target.Path)
+		}
+	}
+}
+
+func TestSyncCreatesRequiredPiProjections(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	root := t.TempDir()
+	updated, err := SyncProjections(root, contract)
+	if err != nil {
+		t.Fatalf("SyncProjections must create required Pi projections: %v", err)
+	}
+	if updated != 2 {
+		t.Fatalf("SyncProjections created %d Pi projections, want 2", updated)
+	}
+	if err := CheckProjections(root, contract); err != nil {
+		t.Fatalf("created Pi projections must pass drift check: %v", err)
+	}
+	for _, target := range contract.Projections {
+		if target.Harness != "pi" {
+			continue
+		}
+		content, err := os.ReadFile(filepath.Join(root, filepath.FromSlash(target.Path)))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !bytes.HasPrefix(content, []byte("---\nname: ")) || !bytes.Contains(content, []byte("tools:\n")) {
+			t.Fatalf("Pi projection %s is not a complete generated Pi agent file", target.Path)
+		}
+	}
+}
+
+func TestPiProjectionRejectsWholeFileDrift(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	root := t.TempDir()
+	if updated, err := SyncProjections(root, contract); err != nil || updated != 2 {
+		t.Fatalf("create required Pi projections: updated=%d err=%v", updated, err)
+	}
+
+	var target ProjectionTarget
+	for _, candidate := range contract.Projections {
+		if candidate.Harness == "pi" && candidate.Role == contract.BaseRole.Name {
+			target = candidate
+			break
+		}
+	}
+	if target.Path == "" {
+		t.Fatal("missing delivery-worker Pi projection")
+	}
+	path := filepath.Join(root, filepath.FromSlash(target.Path))
+	content, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(path, append(content, []byte("\nhand-written footer\n")...), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := CheckProjections(root, contract); err == nil {
+		t.Fatal("CheckProjections accepted hand-written content in a complete Pi projection")
+	}
+	updated, err := SyncProjections(root, contract)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if updated != 1 {
+		t.Fatalf("SyncProjections updated %d drifted Pi projection(s), want 1", updated)
+	}
+	if err := CheckProjections(root, contract); err != nil {
+		t.Fatalf("Pi projection did not pass after sync: %v", err)
+	}
+}
+
+func TestSyncPiProjectionRejectsSymlinkParent(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	root := t.TempDir()
+	outside := t.TempDir()
+	if err := os.Symlink(outside, filepath.Join(root, ".pi")); err != nil {
+		t.Skipf("cannot create projection ancestor symlink: %v", err)
+	}
+
+	if _, err := SyncProjections(root, contract); err == nil {
+		t.Fatal("SyncProjections followed a required Pi projection ancestor outside the selected root")
+	}
+	entries, err := os.ReadDir(outside)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(entries) != 0 {
+		t.Fatalf("SyncProjections created Pi projection content outside the selected root: %#v", entries)
 	}
 }
 
 func TestProjectionIORejectsSymlinkEscape(t *testing.T) {
 	contract := loadRepositoryContract(t, repositoryRoot(t))
-	contract.Projections[0].Required = true
 	target := contract.Projections[0]
 
 	root := t.TempDir()

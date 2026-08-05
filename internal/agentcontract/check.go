@@ -64,9 +64,15 @@ func CheckProjections(root string, contract *Contract) (returnErr error) {
 			}
 			return fmt.Errorf("read %s projection %s: %w", target.Harness, target.Path, err)
 		}
-		expected, err := RenderBlock(contract, target.Role)
+		expected, err := RenderProjection(contract, target)
 		if err != nil {
 			return err
+		}
+		if target.RenderMode == "full" {
+			if err := CheckProjection(expected, content); err != nil {
+				return fmt.Errorf("check projection %s: %w", target.Path, err)
+			}
+			continue
 		}
 		actual, _, _, err := extractProjectionBlock(content)
 		if err != nil {
@@ -102,12 +108,40 @@ func SyncProjections(root string, contract *Contract) (updated int, returnErr er
 		if err != nil {
 			return updated, err
 		}
+		expected, err := RenderProjection(contract, target)
+		if err != nil {
+			return updated, err
+		}
 		content, err := projectionRoot.ReadFile(path)
 		if err != nil {
 			if os.IsNotExist(err) && !target.Required {
 				continue
 			}
+			if os.IsNotExist(err) && target.Required && target.RenderMode == "full" {
+				if err := ensureProjectionParent(projectionRoot, path); err != nil {
+					return updated, fmt.Errorf("create parent for projection %s: %w", target.Path, err)
+				}
+				if err := writeAtomic(projectionRoot, path, expected, 0o644); err != nil {
+					return updated, fmt.Errorf("write projection %s: %w", target.Path, err)
+				}
+				updated++
+				continue
+			}
 			return updated, fmt.Errorf("read %s projection %s: %w", target.Harness, target.Path, err)
+		}
+		if target.RenderMode == "full" {
+			if bytes.Equal(content, expected) {
+				continue
+			}
+			info, err := projectionRoot.Stat(path)
+			if err != nil {
+				return updated, fmt.Errorf("stat projection %s: %w", target.Path, err)
+			}
+			if err := writeAtomic(projectionRoot, path, expected, info.Mode().Perm()); err != nil {
+				return updated, fmt.Errorf("write projection %s: %w", target.Path, err)
+			}
+			updated++
+			continue
 		}
 		expected, start, end, err := replacementBlock(content, contract, target.Role)
 		if err != nil {
@@ -130,6 +164,14 @@ func SyncProjections(root string, contract *Contract) (updated int, returnErr er
 		updated++
 	}
 	return updated, nil
+}
+
+func ensureProjectionParent(root *os.Root, path string) error {
+	directory := filepath.Dir(path)
+	if directory == "." {
+		return nil
+	}
+	return root.MkdirAll(directory, 0o755)
 }
 
 func replacementBlock(content []byte, contract *Contract, role string) ([]byte, int, int, error) {

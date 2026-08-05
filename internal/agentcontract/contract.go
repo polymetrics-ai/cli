@@ -27,6 +27,7 @@ type Contract struct {
 	NoMistakes       NoMistakesContract `json:"no_mistakes"`
 	Authority        AuthorityContract  `json:"authority"`
 	Wayfinder        WayfinderDecision  `json:"wayfinder"`
+	PiHarness        PiHarness          `json:"pi_harness"`
 	Projections      []ProjectionTarget `json:"projections"`
 }
 
@@ -120,11 +121,18 @@ type WayfinderDecision struct {
 	Rationale   []string `json:"rationale"`
 }
 
+type PiHarness struct {
+	CleanProjectScope string   `json:"clean_project_scope"`
+	Roles             []string `json:"roles"`
+	ChildTools        []string `json:"child_tools"`
+}
+
 type ProjectionTarget struct {
-	Harness  string `json:"harness"`
-	Role     string `json:"role"`
-	Path     string `json:"path"`
-	Required bool   `json:"required"`
+	Harness    string `json:"harness"`
+	Role       string `json:"role"`
+	Path       string `json:"path"`
+	Required   bool   `json:"required"`
+	RenderMode string `json:"render_mode"`
 }
 
 func Load(path string) (*Contract, error) {
@@ -246,6 +254,9 @@ func (contract *Contract) Validate() error {
 	if contract.Wayfinder.Disposition != "rejected" || contract.Wayfinder.Dependency || len(contract.Wayfinder.Borrowed) != 3 || !allNonEmpty(contract.Wayfinder.Borrowed) || !allNonEmpty(contract.Wayfinder.Rationale) {
 		return fmt.Errorf("canonical contract: Wayfinder rejection and borrowed ideas are required")
 	}
+	if err := validatePiHarness(contract); err != nil {
+		return err
+	}
 	return validateProjections(contract.Projections)
 }
 
@@ -331,13 +342,18 @@ func equalRuleIDs(rules []Rule, want []string) bool {
 }
 
 func validateProjections(targets []ProjectionTarget) error {
-	expected := map[string]string{
-		"claude/pm-delivery-worker":  ".claude/agents/pm-delivery-worker.md",
-		"claude/pm-connector-worker": ".claude/agents/pm-connector-worker.md",
-		"codex/pm-delivery-worker":   ".codex/agents/pm-delivery-worker.toml",
-		"codex/pm-connector-worker":  ".codex/agents/pm-connector-worker.toml",
-		"pi/pm-delivery-worker":      ".pi/agents/pm-delivery-worker.md",
-		"pi/pm-connector-worker":     ".pi/agents/pm-connector-worker.md",
+	type expectation struct {
+		path       string
+		required   bool
+		renderMode string
+	}
+	expected := map[string]expectation{
+		"claude/pm-delivery-worker":  {path: ".claude/agents/pm-delivery-worker.md", required: false, renderMode: "block"},
+		"claude/pm-connector-worker": {path: ".claude/agents/pm-connector-worker.md", required: false, renderMode: "block"},
+		"codex/pm-delivery-worker":   {path: ".codex/agents/pm-delivery-worker.toml", required: false, renderMode: "block"},
+		"codex/pm-connector-worker":  {path: ".codex/agents/pm-connector-worker.toml", required: false, renderMode: "block"},
+		"pi/pm-delivery-worker":      {path: ".pi/agents/pm-delivery-worker.md", required: true, renderMode: "full"},
+		"pi/pm-connector-worker":     {path: ".pi/agents/pm-connector-worker.md", required: true, renderMode: "full"},
 	}
 	if len(targets) != len(expected) {
 		return fmt.Errorf("canonical contract: exactly six harness projection targets are required")
@@ -345,11 +361,25 @@ func validateProjections(targets []ProjectionTarget) error {
 	seen := make(map[string]bool, len(targets))
 	for _, target := range targets {
 		key := target.Harness + "/" + target.Role
-		wantPath, ok := expected[key]
-		if !ok || target.Path != wantPath || filepath.Clean(target.Path) != target.Path || filepath.IsAbs(target.Path) || seen[key] {
+		want, ok := expected[key]
+		if !ok || target.Path != want.path || target.Required != want.required || target.RenderMode != want.renderMode || filepath.Clean(target.Path) != target.Path || filepath.IsAbs(target.Path) || seen[key] {
 			return fmt.Errorf("canonical contract: invalid projection target %q at %q", key, target.Path)
 		}
 		seen[key] = true
+	}
+	return nil
+}
+
+func validatePiHarness(contract *Contract) error {
+	if contract.PiHarness.CleanProjectScope != "clean-project" {
+		return fmt.Errorf("canonical contract: Pi clean project scope must be clean-project")
+	}
+	if !slices.Equal(contract.PiHarness.Roles, []string{contract.BaseRole.Name, contract.ConnectorOverlay.Name}) {
+		return fmt.Errorf("canonical contract: Pi clean project roles must be the base and connector workers only")
+	}
+	allowedTools := []string{"read", "grep", "find", "ls", "bash", "edit", "write"}
+	if !slices.Equal(contract.PiHarness.ChildTools, allowedTools) || slices.Contains(contract.PiHarness.ChildTools, "subagent") {
+		return fmt.Errorf("canonical contract: Pi child tools must be the bounded non-delegating allowlist")
 	}
 	return nil
 }

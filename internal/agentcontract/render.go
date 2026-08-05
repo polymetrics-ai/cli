@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -86,6 +87,42 @@ func RenderBlock(contract *Contract, role string) ([]byte, error) {
 	fmt.Fprintf(&output, "Wayfinder is `%s` and is not a dependency. Borrow only %s. Rejection rationale: %s Do not install or rediscover it for this flow.\n\n", contract.Wayfinder.Disposition, joinNatural(contract.Wayfinder.Borrowed), strings.Join(contract.Wayfinder.Rationale, " "))
 	fmt.Fprintln(&output, endMarker)
 	return output.Bytes(), nil
+}
+
+// RenderProjection renders either a harness-owned canonical block or a complete generated file,
+// according to the registered projection target.
+func RenderProjection(contract *Contract, target ProjectionTarget) ([]byte, error) {
+	if err := contract.Validate(); err != nil {
+		return nil, err
+	}
+	if target.RenderMode == "block" {
+		return RenderBlock(contract, target.Role)
+	}
+	if target.RenderMode != "full" || target.Harness != "pi" {
+		return nil, fmt.Errorf("canonical contract: unsupported projection render mode %q for %s", target.RenderMode, target.Path)
+	}
+
+	block, err := RenderBlock(contract, target.Role)
+	if err != nil {
+		return nil, err
+	}
+
+	var output bytes.Buffer
+	fmt.Fprintln(&output, "---")
+	fmt.Fprintf(&output, "name: %s\n", yamlString(target.Role))
+	fmt.Fprintf(&output, "description: %s\n", yamlString(roleSummary(contract, target.Role)))
+	fmt.Fprintln(&output, "tools:")
+	for _, tool := range contract.PiHarness.ChildTools {
+		fmt.Fprintf(&output, "  - %s\n", yamlString(tool))
+	}
+	fmt.Fprintln(&output, "---")
+	fmt.Fprintln(&output)
+	output.Write(block)
+	return output.Bytes(), nil
+}
+
+func yamlString(value string) string {
+	return strconv.Quote(value)
 }
 
 func roleSummary(contract *Contract, role string) string {

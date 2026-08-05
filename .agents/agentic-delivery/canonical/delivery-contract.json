@@ -342,42 +342,64 @@
       "It stops at a plan instead of carrying delivery through TDD, review, integration, and captain-gated merge."
     ]
   },
+  "pi_harness": {
+    "clean_project_scope": "clean-project",
+    "roles": [
+      "pm-delivery-worker",
+      "pm-connector-worker"
+    ],
+    "child_tools": [
+      "read",
+      "grep",
+      "find",
+      "ls",
+      "bash",
+      "edit",
+      "write"
+    ]
+  },
   "projections": [
     {
       "harness": "claude",
       "role": "pm-delivery-worker",
       "path": ".claude/agents/pm-delivery-worker.md",
-      "required": false
+      "required": false,
+      "render_mode": "block"
     },
     {
       "harness": "claude",
       "role": "pm-connector-worker",
       "path": ".claude/agents/pm-connector-worker.md",
-      "required": false
+      "required": false,
+      "render_mode": "block"
     },
     {
       "harness": "codex",
       "role": "pm-delivery-worker",
       "path": ".codex/agents/pm-delivery-worker.toml",
-      "required": false
+      "required": false,
+      "render_mode": "block"
     },
     {
       "harness": "codex",
       "role": "pm-connector-worker",
       "path": ".codex/agents/pm-connector-worker.toml",
-      "required": false
+      "required": false,
+      "render_mode": "block"
     },
     {
       "harness": "pi",
       "role": "pm-delivery-worker",
       "path": ".pi/agents/pm-delivery-worker.md",
-      "required": false
+      "required": true,
+      "render_mode": "full"
     },
     {
       "harness": "pi",
       "role": "pm-connector-worker",
       "path": ".pi/agents/pm-connector-worker.md",
-      "required": false
+      "required": true,
+      "render_mode": "full"
     }
   ]
 }
