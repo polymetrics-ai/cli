@@ -34,7 +34,7 @@ type App struct {
 	store      statestore.JSONStore[state]
 	state      state
 	vault      *vault.Vault
-	approval   *connectors.WriteApprovalAuthority
+	approval   *projectWriteApprovalAuthority
 	registry   *connectors.Registry
 	sqlEngine  sqlQueryEngine
 }
@@ -111,7 +111,7 @@ func Open(root string) (*App, error) {
 	if err != nil {
 		return nil, err
 	}
-	approval, err := connectors.NewProcessWriteApprovalAuthority(v.WriteApprovalRoot())
+	approval, err := newProjectWriteApprovalAuthority(projectDir)
 	if err != nil {
 		return nil, err
 	}
@@ -899,7 +899,7 @@ func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string) (Rever
 	if plan.Mode != reversePlanModeConnectorCommand {
 		return ReversePlan{}, connectors.WritePreview{}, fmt.Errorf("reverse plan %q is not a connector command plan", id)
 	}
-	if err := previewabilityError(plan, time.Now().UTC()); err != nil {
+	if err := a.previewabilityError(plan, time.Now().UTC()); err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
 	writer, runtime, err := a.resolveEndpoint(ctx, EndpointConfig{
@@ -969,7 +969,7 @@ func (a *App) PreviewReversePlan(ctx context.Context, id string) (ReversePlan, c
 	if plan.Mode == reversePlanModeConnectorCommand {
 		return a.PreviewConnectorCommandPlan(ctx, id)
 	}
-	if err := previewabilityError(plan, time.Now().UTC()); err != nil {
+	if err := a.previewabilityError(plan, time.Now().UTC()); err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
 	if err := a.guardBatchableAction(plan.DestinationConnector, plan.Action, plan.SourceTable); err != nil {
@@ -1045,7 +1045,7 @@ func (a *App) persistDestructivePreview(plan ReversePlan, preview connectors.Wri
 			if stored.ID != plan.ID {
 				continue
 			}
-			if err := previewabilityError(stored, now); err != nil {
+			if err := a.previewabilityError(stored, now); err != nil {
 				return current, err
 			}
 			if stored.PlanHash != plan.PlanHash || stored.DestinationConnector != plan.DestinationConnector || stored.DestinationCredential != plan.DestinationCredential || stored.Action != plan.Action {
@@ -1087,10 +1087,12 @@ func (a *App) persistDestructivePreview(plan ReversePlan, preview connectors.Wri
 	return issued, nil
 }
 
-func previewabilityError(plan ReversePlan, now time.Time) error {
-	_ = now
+func (a *App) previewabilityError(plan ReversePlan, now time.Time) error {
 	if plan.Status != "planned" && plan.Status != "previewed" {
 		return fmt.Errorf("reverse plan %q was already %s", plan.ID, plan.Status)
+	}
+	if a.confirmationPolicyForPlan(plan).Kind == "" && (plan.CreatedAt.IsZero() || plan.ExpiresAt.IsZero() || !plan.ExpiresAt.After(plan.CreatedAt) || now.Before(plan.CreatedAt) || !now.Before(plan.ExpiresAt)) {
+		return fmt.Errorf("reverse plan %q approval has expired or is not active", plan.ID)
 	}
 	return nil
 }
@@ -1226,7 +1228,7 @@ func (a *App) RunReverseETL(ctx context.Context, req RunReverseETLRequest) (Reve
 	if err != nil {
 		return ReverseRun{}, err
 	}
-	if err := previewabilityError(plan, time.Now().UTC()); err != nil {
+	if err := a.previewabilityError(plan, time.Now().UTC()); err != nil {
 		return ReverseRun{}, err
 	}
 	if a.confirmationChallengeForPlan(plan) != "" && (plan.Status != "previewed" || plan.PreviewDigest == "" || plan.PreviewedAt.IsZero()) {
@@ -1388,7 +1390,7 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 			if stored.ID != expected.ID {
 				continue
 			}
-			if err := previewabilityError(stored, now); err != nil {
+			if err := a.previewabilityError(stored, now); err != nil {
 				return current, err
 			}
 			if stored.PlanHash != expected.PlanHash || stored.DestinationConnector != expected.DestinationConnector || stored.DestinationCredential != expected.DestinationCredential || stored.Action != expected.Action || stored.Mode != expected.Mode {
@@ -1418,7 +1420,7 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 					ApprovalToken: req.ApprovalToken,
 					Target:        preview.ApprovalTarget,
 					Confirmation:  req.Confirmation,
-				})
+				}, stored.PlanSeal)
 				if err != nil {
 					return current, err
 				}

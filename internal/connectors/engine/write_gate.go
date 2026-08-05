@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/transportpolicy"
 )
 
 // DestructiveTarget is the provider-neutral description consumed by the
@@ -94,6 +95,7 @@ func GateDestructiveExecution(ctx context.Context, target DestructiveTarget, evi
 		if err := evidence.Authorize(approvalTarget, previewDigest, time.Now().UTC()); err != nil {
 			return fmt.Errorf("engine: destructive operation %q: %w", target.Operation, err)
 		}
+		ctx = transportpolicy.MarkDestructive(ctx)
 	}
 	return execute(ctx)
 }

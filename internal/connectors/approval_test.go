@@ -3,14 +3,74 @@ package connectors_test
 import (
 	"bytes"
 	"crypto/sha256"
-	"errors"
+	"go/ast"
+	"go/parser"
+	"go/token"
 	"strings"
 	"testing"
 	"time"
 
 	"polymetrics.ai/internal/connectors"
-	"polymetrics.ai/internal/vault"
 )
+
+type callerProjectWriteApprovalEvidence struct{}
+
+func (callerProjectWriteApprovalEvidence) AuthorizeProjectWrite(connectors.WriteApprovalTarget, string, time.Time) error {
+	return nil
+}
+
+func TestProductionApprovalAuthorityIsNotPubliclyConstructible(t *testing.T) {
+	packages, err := parser.ParseDir(token.NewFileSet(), ".", nil, 0)
+	if err != nil {
+		t.Fatalf("ParseDir() error = %v", err)
+	}
+	for _, pkg := range packages {
+		for _, file := range pkg.Files {
+			ast.Inspect(file, func(node ast.Node) bool {
+				declaration, ok := node.(*ast.FuncDecl)
+				if ok && declaration.Recv == nil && declaration.Name.Name == "NewProcessWriteApprovalAuthority" {
+					t.Fatal("production write approval authority remains publicly constructible")
+				}
+				return true
+			})
+		}
+	}
+}
+
+func TestFixtureWriteApprovalGrantCannotBeVerifiedTwice(t *testing.T) {
+	authority, err := connectors.NewFixtureWriteApprovalAuthority()
+	if err != nil {
+		t.Fatalf("NewFixtureWriteApprovalAuthority() error = %v", err)
+	}
+	target := connectors.WriteApprovalTarget{
+		Connector: "acme", Operation: "delete_widget", Method: "DELETE", MutationClass: "delete",
+		TargetDigest: strings.Repeat("b", 64), CredentialRevision: strings.Repeat("c", 64),
+		ConfigurationDigest: strings.Repeat("d", 64), Scope: connectors.WriteApprovalScopeFixture,
+		Confirmation: connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	}
+	grant, err := authority.IssueWriteGrant(connectors.WriteApprovalGrantRequest{
+		PlanID: "rplan_fixture", PlanHash: strings.Repeat("a", 64), PreviewDigest: strings.Repeat("e", 64),
+		ApprovalToken: "fixture-token", Target: target,
+		Confirmation: connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	})
+	if err != nil {
+		t.Fatalf("IssueWriteGrant() error = %v", err)
+	}
+	expected := approvalExpectation(grant, target)
+	copiedAuthority := *authority
+	if _, err := authority.VerifyWriteGrant(grant, expected); err != nil {
+		t.Fatalf("VerifyWriteGrant(first) error = %v", err)
+	}
+	if _, err := copiedAuthority.VerifyWriteGrant(grant, expected); err == nil {
+		t.Fatal("VerifyWriteGrant(replay) returned fresh fixture evidence")
+	}
+}
+
+func TestProjectWriteApprovalEvidenceRejectsCallerImplementation(t *testing.T) {
+	if _, err := connectors.BindProjectWriteApprovalEvidence(callerProjectWriteApprovalEvidence{}); err == nil {
+		t.Fatal("BindProjectWriteApprovalEvidence() accepted caller implementation")
+	}
+}
 
 func TestWriteApprovalGrantAuthenticatesTargetExpiryAndCredentialRevision(t *testing.T) {
 	authority, err := connectors.NewUntrustedWriteApprovalAuthority(bytes.Repeat([]byte{0x71}, sha256.Size))
@@ -71,59 +131,6 @@ func TestWriteApprovalGrantAuthenticatesTargetExpiryAndCredentialRevision(t *tes
 	changedTarget.Batchable = !target.Batchable
 	if _, err := authority.VerifyWriteGrant(grant, approvalExpectation(grant, changedTarget)); err == nil {
 		t.Fatal("VerifyWriteGrant() accepted changed batchability")
-	}
-}
-
-func TestProcessWriteApprovalRequiresSealedPlanAndPersistentConsumption(t *testing.T) {
-	v, err := vault.Init(t.TempDir())
-	if err != nil {
-		t.Fatalf("vault.Init() error = %v", err)
-	}
-	authority, err := connectors.NewProcessWriteApprovalAuthority(v.WriteApprovalRoot())
-	if err != nil {
-		t.Fatalf("NewProcessWriteApprovalAuthority() error = %v", err)
-	}
-	revision, err := authority.CredentialRevision("cred_fixture", map[string]string{"token": "secret"})
-	if err != nil {
-		t.Fatalf("CredentialRevision() error = %v", err)
-	}
-	configuration, err := authority.ConfigurationDigest("cred_fixture", map[string]string{"base_url": "https://api.example.test"})
-	if err != nil {
-		t.Fatalf("ConfigurationDigest() error = %v", err)
-	}
-	confirmation := connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive}
-	seal, err := authority.IssueWritePlanSeal(connectors.WritePlanSealRequest{
-		PlanID: "rplan_fixture", PlanHash: strings.Repeat("a", 64), Connector: "acme", Operation: "delete_widget",
-		CredentialRevision: revision, ConfigurationDigest: configuration, Batchable: false,
-		Scope: connectors.WriteApprovalScopeProject, Confirmation: confirmation,
-	})
-	if err != nil {
-		t.Fatalf("IssueWritePlanSeal() error = %v", err)
-	}
-	target := connectors.WriteApprovalTarget{
-		Connector: "acme", Operation: "delete_widget", Method: "DELETE", MutationClass: "delete",
-		TargetDigest: strings.Repeat("b", 64), CredentialRevision: revision, ConfigurationDigest: configuration,
-		Batchable: false, Scope: connectors.WriteApprovalScopeProject, Confirmation: confirmation,
-	}
-	grant, err := authority.IssueWriteGrant(connectors.WriteApprovalGrantRequest{
-		PlanID: seal.PlanID, PlanHash: seal.PlanHash, PlanSeal: &seal,
-		PreviewDigest: strings.Repeat("c", 64), ApprovalToken: "fixture-token", Target: target, Confirmation: confirmation,
-	})
-	if err != nil {
-		t.Fatalf("IssueWriteGrant() error = %v", err)
-	}
-	if grant.ExpiresAt.After(time.Now().UTC().Add(16 * time.Minute)) {
-		t.Fatalf("grant expiry = %s, want trusted short-lived deadline", grant.ExpiresAt)
-	}
-	expected := connectors.WriteApprovalExpectation{
-		PlanID: grant.PlanID, PlanHash: grant.PlanHash, PreviewDigest: grant.PreviewDigest,
-		ApprovalToken: "fixture-token", Target: target, Confirmation: confirmation,
-	}
-	if _, err := authority.VerifyWriteGrant(grant, expected); err != nil {
-		t.Fatalf("VerifyWriteGrant(first) error = %v", err)
-	}
-	if _, err := authority.VerifyWriteGrant(grant, expected); !errors.Is(err, vault.ErrWriteApprovalConsumed) {
-		t.Fatalf("VerifyWriteGrant(replay) error = %v, want consumed marker rejection", err)
 	}
 }
 

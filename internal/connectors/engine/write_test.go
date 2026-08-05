@@ -19,6 +19,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/connectors/transportpolicy"
 )
 
 // newWriteTestBundle builds a minimal Bundle wired against srv with a single
@@ -112,6 +113,44 @@ func TestWriteRejectsDestructiveActionWithoutTypedApprovalEvidence(t *testing.T)
 	}
 	if calls != 0 {
 		t.Fatalf("DELETE dispatched before approval gate; calls=%d", calls)
+	}
+}
+
+func TestApprovedDestructiveWriteRefusesRedirectToUnapprovedTarget(t *testing.T) {
+	approvedCalls := 0
+	unapprovedCalls := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/approved/42":
+			approvedCalls++
+			http.Redirect(w, r, "/unapproved/42", http.StatusTemporaryRedirect)
+		case "/unapproved/42":
+			unapprovedCalls++
+			w.WriteHeader(http.StatusNoContent)
+		default:
+			t.Fatalf("unexpected request path %q", r.URL.Path)
+		}
+	}))
+	defer srv.Close()
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:       "remove_widget",
+		Kind:       "delete",
+		Method:     http.MethodDelete,
+		Path:       "/approved/{{ record.id }}",
+		PathFields: []string{"id"},
+		BodyType:   "none",
+	})
+	records := []connectors.Record{{"id": "42"}}
+	req := approvedWriteRequest(t, b, "remove_widget", records, nil)
+
+	if _, err := Write(context.Background(), b, req, records, nil); err == nil || !strings.Contains(strings.ToLower(err.Error()), "redirect") {
+		t.Fatalf("Write() error = %v, want redirect refusal", err)
+	}
+	if approvedCalls != 1 {
+		t.Fatalf("approved target calls = %d, want 1", approvedCalls)
+	}
+	if unapprovedCalls != 0 {
+		t.Fatalf("unapproved redirect target calls = %d, want 0", unapprovedCalls)
 	}
 }
 
@@ -305,7 +344,10 @@ func TestRestWriteOperationUsesSharedDestructiveExecutionGate(t *testing.T) {
 	}
 
 	evidence := approvedEvidenceForPreview(t, preview)
-	err = ExecutePreparedWrite(context.Background(), prepared, evidence, preview.Digest, func(context.Context) error {
+	err = ExecutePreparedWrite(context.Background(), prepared, evidence, preview.Digest, func(executeCtx context.Context) error {
+		if !transportpolicy.IsDestructive(executeCtx) {
+			return errors.New("destructive transport policy was not propagated")
+		}
 		executed = true
 		return nil
 	})

@@ -11,6 +11,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"sync/atomic"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
@@ -690,6 +691,35 @@ func TestWriteExecutesPreviouslyUncoveredTypedActions(t *testing.T) {
 				t.Fatalf("result=%+v calls=%d, want one successful request", res, calls)
 			}
 		})
+	}
+}
+
+func TestApprovedDestructiveWriteRefusesRedirectToUnapprovedTarget(t *testing.T) {
+	var initialCalls atomic.Int32
+	var redirectedCalls atomic.Int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/unapproved" {
+			redirectedCalls.Add(1)
+			_, _ = w.Write([]byte(`<Response/>`))
+			return
+		}
+		initialCalls.Add(1)
+		w.Header().Set("Location", "/unapproved")
+		w.WriteHeader(http.StatusTemporaryRedirect)
+	}))
+	defer srv.Close()
+
+	connector := native.New()
+	records := []connectors.Record{{}}
+	_, err := connector.Write(context.Background(), approvedSQSWriteRequest(t, connector, "delete_queue", testRuntimeConfig(srv.URL), records), records)
+	if err == nil || !strings.Contains(err.Error(), "redirect refused") {
+		t.Fatalf("Write delete_queue err = %v, want redirect refusal", err)
+	}
+	if got := initialCalls.Load(); got != 1 {
+		t.Fatalf("initial requests = %d, want 1", got)
+	}
+	if got := redirectedCalls.Load(); got != 0 {
+		t.Fatalf("redirected requests = %d, want 0", got)
 	}
 }
 

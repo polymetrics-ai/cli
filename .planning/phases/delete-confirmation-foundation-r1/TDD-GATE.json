@@ -46,7 +46,13 @@
     },
     {
       "id": "tdd-trusted-input-hardening",
-      "text": "task:tdd-trusted-input-hardening type:tdd — RED then GREEN process-owned vault authority, authenticated plan lifetime, configuration/batchability binding, CAS-protected whole-state writes, and monotonic vault consumption; complete the trusted-input sweep.",
+      "text": "task:tdd-trusted-input-hardening type:tdd — RED then GREEN App-owned vault authority, authenticated plan lifetime, configuration/batchability binding, CAS-protected whole-state writes, and monotonic project consumption; complete the trusted-input sweep.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "tdd-preview-execution-identity-review",
+      "text": "task:tdd-preview-execution-identity-review type:tdd — RED then GREEN App-private production authority, monotonic fixture grants, redirect refusal, hook-identical native preparation, and unsigned-plan expiry.",
       "docsOnly": false,
       "behavior": true
     },
@@ -96,11 +102,17 @@
     },
     {
       "id": "tdd-trusted-input-hardening",
-      "text": "task:tdd-trusted-input-hardening type:tdd — RED then GREEN process-owned vault authority, authenticated plan lifetime, configuration/batchability binding, CAS-protected whole-state writes, and monotonic vault consumption; complete the trusted-input sweep.",
+      "text": "task:tdd-trusted-input-hardening type:tdd — RED then GREEN App-owned vault authority, authenticated plan lifetime, configuration/batchability binding, CAS-protected whole-state writes, and monotonic project consumption; complete the trusted-input sweep.",
+      "docsOnly": false,
+      "behavior": true
+    },
+    {
+      "id": "tdd-preview-execution-identity-review",
+      "text": "task:tdd-preview-execution-identity-review type:tdd — RED then GREEN App-private production authority, monotonic fixture grants, redirect refusal, hook-identical native preparation, and unsigned-plan expiry.",
       "docsOnly": false,
       "behavior": true
     }
   ],
   "failures": [],
-  "updatedAt": "2026-08-04T23:43:32Z"
+  "updatedAt": "2026-08-05T01:13:51Z"
 }

@@ -587,6 +587,49 @@ func TestPreviewGrantExpiryIgnoresExtendedMutablePlanDeadline(t *testing.T) {
 	}
 }
 
+func TestRunReverseETLRejectsExpiredUnsignedPlan(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject() error = %v", err)
+	}
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open() error = %v", err)
+	}
+	outboxDir := filepath.Join(root, ".polymetrics", "outbox")
+	if _, err := a.AddCredential(ctx, app.AddCredentialRequest{
+		Name: "outbox-local", Connector: "outbox", Config: map[string]string{"path": outboxDir},
+	}); err != nil {
+		t.Fatalf("AddCredential(outbox) error = %v", err)
+	}
+	warehouseDir := filepath.Join(root, ".polymetrics", "warehouse")
+	if err := os.WriteFile(filepath.Join(warehouseDir, "safe_rows.jsonl"), []byte("{\"id\":\"row-1\"}\n"), 0o600); err != nil {
+		t.Fatalf("WriteFile(safe rows) error = %v", err)
+	}
+	plan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
+		Name: "safe_upsert", SourceTable: "safe_rows", DestinationConnector: "outbox",
+		DestinationCredential: "outbox-local", Action: "upsert", Mappings: map[string]string{"id": "id"},
+	})
+	if err != nil {
+		t.Fatalf("PlanReverseETL() error = %v", err)
+	}
+	if plan.PlanSeal != nil {
+		t.Fatal("safe reverse plan unexpectedly has a destructive plan seal")
+	}
+	mutateStoredReversePlan(t, a.ProjectDir(), plan.ID, func(stored map[string]any) {
+		stored["expires_at"] = time.Now().UTC().Add(-time.Minute).Format(time.RFC3339Nano)
+		stored["plan_seal"] = map[string]any{"version": 1}
+	})
+	expired, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open(expired state) error = %v", err)
+	}
+	if _, err := expired.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken}); err == nil || !strings.Contains(strings.ToLower(err.Error()), "expired") {
+		t.Fatalf("RunReverseETL() error = %v, want unsigned plan expiry rejection", err)
+	}
+}
+
 func TestExecutedDestructivePlanCannotBeRepreviewedForReplay(t *testing.T) {
 	ctx := context.Background()
 	calls := 0

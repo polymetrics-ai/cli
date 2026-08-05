@@ -9,7 +9,8 @@
   user assigned a single autonomous crewmate rather than parallel workers.
 - Loaded skills: `gsd-programming-loop`, `golang-how-to`, `golang-design-patterns`,
   `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`,
-  `golang-testing`, `golang-cli`, `golang-documentation`, and `no-mistakes`.
+  `golang-testing`, `golang-concurrency`, `golang-context`, `golang-lint`, `golang-cli`,
+  `golang-documentation`, and `no-mistakes`.
 
 ## Tasks
 
@@ -19,7 +20,8 @@
 - [x] task:tdd-execute-seam type:tdd — RED then GREEN the generic pre-dispatch wrapper and demonstrate a future `rest_write` executor closure can use it unchanged.
 - [x] task:tdd-bypass type:tdd — RED then GREEN direct-engine, connector-command, generic reverse-ETL, state-tamper, digest-mismatch, and bulk bypass resistance while preserving `batchable:false`.
 - [x] task:tdd-authenticated-grant-hardening type:tdd — RED then GREEN an external-key authenticated, target-bound, expiring, atomically consumed execution grant; canonical prepared-request digests; native SQS gate adoption; shared previewability; and real app approval fixtures.
-- [x] task:tdd-trusted-input-hardening type:tdd — RED then GREEN process-owned vault authority, authenticated plan lifetime, configuration/batchability binding, CAS-protected whole-state writes, and monotonic vault consumption; complete the trusted-input sweep.
+- [x] task:tdd-trusted-input-hardening type:tdd — RED then GREEN App-owned vault authority, authenticated plan lifetime, configuration/batchability binding, CAS-protected whole-state writes, and monotonic project consumption; complete the trusted-input sweep.
+- [x] task:tdd-preview-execution-identity-review type:tdd — RED then GREEN App-private production authority, monotonic fixture grants, redirect refusal, hook-identical native preparation, and unsigned-plan expiry.
 - [x] task:docs-verification type:docs — update lifecycle help/docs only where observable behavior changes, complete phase evidence, run separated local gates, and record 623/171/452 coverage.
 
 ## Path guard

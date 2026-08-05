@@ -356,7 +356,6 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 	if err != nil {
 		return connectors.WriteResult{RecordsFailed: len(records)}, err
 	}
-
 	result := connectors.WriteResult{}
 	for i, rec := range records {
 		if err := ctx.Err(); err != nil {

@@ -9,23 +9,23 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"reflect"
 	"sort"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"time"
-
-	"polymetrics.ai/internal/vault"
 )
 
 const (
 	writeApprovalGrantVersion = 2
-	writePlanSealVersion      = 1
-	writePlanLifetime         = 24 * time.Hour
 	writeApprovalLifetime     = 15 * time.Minute
 
 	WriteApprovalScopeProject = "project"
 	WriteApprovalScopeFixture = "fixture_loopback"
 )
+
+var ErrWriteApprovalConsumed = errors.New("write approval has already been consumed")
 
 type WriteApprovalTarget struct {
 	Connector           string            `json:"connector"`
@@ -115,23 +115,30 @@ type writeApprovalAuthorityKind uint8
 
 const (
 	writeApprovalAuthorityUntrusted writeApprovalAuthorityKind = iota
-	writeApprovalAuthorityProcess
 	writeApprovalAuthorityFixture
 )
 
 type WriteApprovalAuthority struct {
-	key  [sha256.Size]byte
-	kind writeApprovalAuthorityKind
-	root vault.WriteApprovalRoot
+	key      [sha256.Size]byte
+	kind     writeApprovalAuthorityKind
+	consumed *fixtureWriteApprovalConsumptions
+}
+
+type fixtureWriteApprovalConsumptions struct {
+	grants sync.Map
+}
+
+type projectWriteApprovalEvidence interface {
+	AuthorizeProjectWrite(WriteApprovalTarget, string, time.Time) error
 }
 
 type WriteApprovalEvidence struct {
-	target               WriteApprovalTarget
-	previewDigest        string
-	expiresAt            time.Time
-	authorityKind        writeApprovalAuthorityKind
-	persistentlyConsumed bool
-	use                  *writeApprovalUse
+	target        WriteApprovalTarget
+	previewDigest string
+	expiresAt     time.Time
+	authorityKind writeApprovalAuthorityKind
+	use           *writeApprovalUse
+	project       projectWriteApprovalEvidence
 }
 
 type writeApprovalUse struct {
@@ -142,15 +149,13 @@ func NewUntrustedWriteApprovalAuthority(key []byte) (*WriteApprovalAuthority, er
 	if len(key) < sha256.Size {
 		return nil, fmt.Errorf("write approval key must be at least %d bytes", sha256.Size)
 	}
-	digest := sha256.Sum256(append([]byte("polymetrics/write-approval-untrusted/v2\x00"), key...))
-	return &WriteApprovalAuthority{key: digest, kind: writeApprovalAuthorityUntrusted}, nil
-}
-
-func NewProcessWriteApprovalAuthority(root vault.WriteApprovalRoot) (*WriteApprovalAuthority, error) {
-	if !root.Valid() {
-		return nil, errors.New("trusted write approval root is required")
+	var authorityKey [sha256.Size]byte
+	if len(key) == sha256.Size {
+		copy(authorityKey[:], key)
+	} else {
+		authorityKey = sha256.Sum256(key)
 	}
-	return &WriteApprovalAuthority{kind: writeApprovalAuthorityProcess, root: root}, nil
+	return &WriteApprovalAuthority{key: authorityKey, kind: writeApprovalAuthorityUntrusted}, nil
 }
 
 func NewFixtureWriteApprovalAuthority() (*WriteApprovalAuthority, error) {
@@ -158,7 +163,19 @@ func NewFixtureWriteApprovalAuthority() (*WriteApprovalAuthority, error) {
 	if _, err := rand.Read(key[:]); err != nil {
 		return nil, fmt.Errorf("generate fixture write approval authority: %w", err)
 	}
-	return &WriteApprovalAuthority{key: key, kind: writeApprovalAuthorityFixture}, nil
+	return &WriteApprovalAuthority{key: key, kind: writeApprovalAuthorityFixture, consumed: &fixtureWriteApprovalConsumptions{}}, nil
+}
+
+func BindProjectWriteApprovalEvidence(evidence projectWriteApprovalEvidence) (*WriteApprovalEvidence, error) {
+	if evidence == nil {
+		return nil, errors.New("project write approval evidence is required")
+	}
+	typeOf := reflect.TypeOf(evidence)
+	valueOf := reflect.ValueOf(evidence)
+	if typeOf.Kind() != reflect.Pointer || valueOf.IsNil() || typeOf.Elem().PkgPath() != "polymetrics.ai/internal/app" || typeOf.Elem().Name() != "projectWriteApprovalEvidence" {
+		return nil, errors.New("project write approval evidence must originate from App approval consumption")
+	}
+	return &WriteApprovalEvidence{project: evidence}, nil
 }
 
 func (a *WriteApprovalAuthority) CredentialRevision(credentialID string, secrets map[string]string) (string, error) {
@@ -206,66 +223,6 @@ func (a *WriteApprovalAuthority) ConfigurationDigest(credentialID string, config
 	return a.authenticate(payload)
 }
 
-func (a *WriteApprovalAuthority) IssueWritePlanSeal(req WritePlanSealRequest) (WritePlanSeal, error) {
-	if a == nil || a.kind != writeApprovalAuthorityProcess {
-		return WritePlanSeal{}, errors.New("process-owned write approval authority is required")
-	}
-	if err := validatePlanSealRequest(req); err != nil {
-		return WritePlanSeal{}, err
-	}
-	authorityID, err := a.authorityID()
-	if err != nil {
-		return WritePlanSeal{}, err
-	}
-	now := time.Now().UTC()
-	seal := WritePlanSeal{
-		Version:             writePlanSealVersion,
-		AuthorityID:         authorityID,
-		PlanID:              req.PlanID,
-		PlanHash:            req.PlanHash,
-		Mode:                req.Mode,
-		Connector:           req.Connector,
-		Operation:           req.Operation,
-		CredentialRevision:  req.CredentialRevision,
-		ConfigurationDigest: req.ConfigurationDigest,
-		Batchable:           req.Batchable,
-		Scope:               req.Scope,
-		Confirmation:        req.Confirmation,
-		IssuedAt:            now,
-		ExpiresAt:           now.Add(writePlanLifetime),
-	}
-	seal.MAC, err = a.planSealMAC(seal)
-	if err != nil {
-		return WritePlanSeal{}, err
-	}
-	return seal, nil
-}
-
-func (a *WriteApprovalAuthority) VerifyWritePlanSeal(seal WritePlanSeal, expected WritePlanSealExpectation) error {
-	if a == nil || a.kind != writeApprovalAuthorityProcess {
-		return errors.New("process-owned write approval authority is required")
-	}
-	mac, err := a.planSealMAC(seal)
-	if err != nil {
-		return err
-	}
-	authorityID, err := a.authorityID()
-	if err != nil {
-		return err
-	}
-	if !constantStringEqual(mac, seal.MAC) || !constantStringEqual(authorityID, seal.AuthorityID) {
-		return errors.New("write plan seal authentication failed")
-	}
-	now := time.Now().UTC()
-	if seal.Version != writePlanSealVersion || seal.IssuedAt.IsZero() || seal.ExpiresAt.IsZero() || !seal.ExpiresAt.After(seal.IssuedAt) || now.Before(seal.IssuedAt) || !now.Before(seal.ExpiresAt) {
-		return errors.New("write plan seal has expired or is not active")
-	}
-	if !samePlanSealBinding(seal, expected) {
-		return errors.New("write plan seal does not match the stored plan")
-	}
-	return nil
-}
-
 func (a *WriteApprovalAuthority) IssueWriteGrant(req WriteApprovalGrantRequest) (WriteApprovalGrant, error) {
 	if a == nil {
 		return WriteApprovalGrant{}, errors.New("write approval authority is required")
@@ -277,38 +234,17 @@ func (a *WriteApprovalAuthority) IssueWriteGrant(req WriteApprovalGrantRequest) 
 	expiresAt := now.Add(writeApprovalLifetime)
 	planSealMAC := ""
 	switch a.kind {
-	case writeApprovalAuthorityProcess:
-		if req.PlanSeal == nil {
-			return WriteApprovalGrant{}, errors.New("authenticated write plan seal is required")
-		}
-		expected := WritePlanSealExpectation{
-			PlanID: req.PlanID, PlanHash: req.PlanHash, Mode: req.Mode,
-			Connector: req.Target.Connector, Operation: req.Target.Operation,
-			CredentialRevision: req.Target.CredentialRevision, ConfigurationDigest: req.Target.ConfigurationDigest,
-			Batchable: req.Target.Batchable, Scope: req.Target.Scope, Confirmation: req.Confirmation,
-		}
-		if err := a.VerifyWritePlanSeal(*req.PlanSeal, expected); err != nil {
-			return WriteApprovalGrant{}, err
-		}
-		if req.PlanSeal.ExpiresAt.Before(expiresAt) {
-			expiresAt = req.PlanSeal.ExpiresAt
-		}
-		planSealMAC = req.PlanSeal.MAC
-		if req.Target.Scope != WriteApprovalScopeProject {
-			return WriteApprovalGrant{}, errors.New("process write approval requires project scope")
-		}
-		consumed, err := a.root.Consumed(writeApprovalConsumptionID(req.PlanID, req.PlanHash, req.Mode))
-		if err != nil {
-			return WriteApprovalGrant{}, err
-		}
-		if consumed {
-			return WriteApprovalGrant{}, vault.ErrWriteApprovalConsumed
-		}
 	case writeApprovalAuthorityFixture:
 		if req.Target.Scope != WriteApprovalScopeFixture {
 			return WriteApprovalGrant{}, errors.New("fixture write approval requires fixture scope")
 		}
 	case writeApprovalAuthorityUntrusted:
+		if req.PlanSeal != nil {
+			planSealMAC = req.PlanSeal.MAC
+			if req.PlanSeal.ExpiresAt.Before(expiresAt) {
+				expiresAt = req.PlanSeal.ExpiresAt
+			}
+		}
 	default:
 		return WriteApprovalGrant{}, errors.New("write approval authority is invalid")
 	}
@@ -370,48 +306,42 @@ func (a *WriteApprovalAuthority) VerifyWriteGrant(grant WriteApprovalGrant, expe
 	if !constantStringEqual(grant.ApprovalTokenHash, hashApprovalToken(expected.ApprovalToken)) {
 		return nil, errors.New("approval token is invalid")
 	}
-	persistentlyConsumed := false
 	switch a.kind {
-	case writeApprovalAuthorityProcess:
-		if grant.Target.Scope != WriteApprovalScopeProject || strings.TrimSpace(grant.PlanSealMAC) == "" {
-			return nil, errors.New("write approval grant is not process-owned")
-		}
-		if err := a.root.Consume(writeApprovalConsumptionID(grant.PlanID, grant.PlanHash, grant.Mode), grant.Nonce, grant.MAC, now); err != nil {
-			return nil, fmt.Errorf("consume write approval grant: %w", err)
-		}
-		persistentlyConsumed = true
 	case writeApprovalAuthorityFixture:
 		if grant.Target.Scope != WriteApprovalScopeFixture {
 			return nil, errors.New("fixture write approval scope is invalid")
+		}
+		if a.consumed == nil {
+			return nil, errors.New("fixture write approval consumption registry is unavailable")
+		}
+		consumptionID := grant.AuthorityID + "\x00" + grant.Nonce + "\x00" + grant.MAC
+		if _, consumed := a.consumed.grants.LoadOrStore(consumptionID, struct{}{}); consumed {
+			return nil, ErrWriteApprovalConsumed
 		}
 	case writeApprovalAuthorityUntrusted:
 	default:
 		return nil, errors.New("write approval authority is invalid")
 	}
 	return &WriteApprovalEvidence{
-		target:               grant.Target,
-		previewDigest:        grant.PreviewDigest,
-		expiresAt:            grant.ExpiresAt,
-		authorityKind:        a.kind,
-		persistentlyConsumed: persistentlyConsumed,
-		use:                  &writeApprovalUse{},
+		target:        grant.Target,
+		previewDigest: grant.PreviewDigest,
+		expiresAt:     grant.ExpiresAt,
+		authorityKind: a.kind,
+		use:           &writeApprovalUse{},
 	}, nil
 }
 
 func (e *WriteApprovalEvidence) Authorize(target WriteApprovalTarget, previewDigest string, now time.Time) error {
-	if e == nil || e.use == nil {
+	if e == nil {
 		return errors.New("authenticated write approval evidence is required")
 	}
-	switch e.authorityKind {
-	case writeApprovalAuthorityProcess:
-		if !e.persistentlyConsumed || target.Scope != WriteApprovalScopeProject {
-			return errors.New("process-owned consumed write approval evidence is required")
-		}
-	case writeApprovalAuthorityFixture:
-		if target.Scope != WriteApprovalScopeFixture {
-			return errors.New("fixture write approval cannot authorize a project target")
-		}
-	default:
+	if e.project != nil {
+		return e.project.AuthorizeProjectWrite(target, previewDigest, now)
+	}
+	if e.use == nil {
+		return errors.New("authenticated write approval evidence is required")
+	}
+	if e.authorityKind != writeApprovalAuthorityFixture || target.Scope != WriteApprovalScopeFixture {
 		return errors.New("caller-selected write approval authority is not trusted")
 	}
 	if !sameApprovalTarget(e.target, target) || !constantStringEqual(e.previewDigest, previewDigest) {
@@ -425,25 +355,6 @@ func (e *WriteApprovalEvidence) Authorize(target WriteApprovalTarget, previewDig
 	}
 	if !e.use.consumed.CompareAndSwap(false, true) {
 		return errors.New("write approval evidence has already been consumed")
-	}
-	return nil
-}
-
-func validatePlanSealRequest(req WritePlanSealRequest) error {
-	if strings.TrimSpace(req.PlanID) == "" || strings.TrimSpace(req.PlanHash) == "" {
-		return errors.New("write plan seal requires a plan identity")
-	}
-	if strings.TrimSpace(req.Connector) == "" || strings.TrimSpace(req.Operation) == "" {
-		return errors.New("write plan seal requires connector and operation identity")
-	}
-	if strings.TrimSpace(req.CredentialRevision) == "" || strings.TrimSpace(req.ConfigurationDigest) == "" {
-		return errors.New("write plan seal requires credential and configuration identity")
-	}
-	if req.Scope != WriteApprovalScopeProject {
-		return errors.New("write plan seal requires project scope")
-	}
-	if req.Confirmation.Kind != ConfirmationKindDestructive {
-		return errors.New("write plan seal requires destructive confirmation")
 	}
 	return nil
 }
@@ -480,15 +391,6 @@ func validateApprovalTarget(target WriteApprovalTarget) error {
 	return nil
 }
 
-func (a *WriteApprovalAuthority) planSealMAC(seal WritePlanSeal) (string, error) {
-	seal.MAC = ""
-	payload, err := json.Marshal(seal)
-	if err != nil {
-		return "", fmt.Errorf("encode write plan seal: %w", err)
-	}
-	return a.authenticate(append([]byte("write-plan-seal-v1\x00"), payload...))
-}
-
 func (a *WriteApprovalAuthority) grantMAC(grant WriteApprovalGrant) (string, error) {
 	grant.MAC = ""
 	payload, err := json.Marshal(grant)
@@ -503,31 +405,12 @@ func (a *WriteApprovalAuthority) authorityID() (string, error) {
 }
 
 func (a *WriteApprovalAuthority) authenticate(payload []byte) (string, error) {
-	if a == nil {
-		return "", errors.New("write approval authority is required")
-	}
-	if a.kind == writeApprovalAuthorityProcess {
-		return a.root.Authenticate(payload)
-	}
-	if a.key == [sha256.Size]byte{} {
+	if a == nil || a.key == [sha256.Size]byte{} {
 		return "", errors.New("write approval authority is invalid")
 	}
 	mac := hmac.New(sha256.New, a.key[:])
 	_, _ = mac.Write(payload)
 	return hex.EncodeToString(mac.Sum(nil)), nil
-}
-
-func samePlanSealBinding(seal WritePlanSeal, expected WritePlanSealExpectation) bool {
-	return constantStringEqual(seal.PlanID, expected.PlanID) &&
-		constantStringEqual(seal.PlanHash, expected.PlanHash) &&
-		constantStringEqual(seal.Mode, expected.Mode) &&
-		constantStringEqual(seal.Connector, expected.Connector) &&
-		constantStringEqual(seal.Operation, expected.Operation) &&
-		constantStringEqual(seal.CredentialRevision, expected.CredentialRevision) &&
-		constantStringEqual(seal.ConfigurationDigest, expected.ConfigurationDigest) &&
-		seal.Batchable == expected.Batchable &&
-		constantStringEqual(seal.Scope, expected.Scope) &&
-		seal.Confirmation.Kind == expected.Confirmation.Kind
 }
 
 func sameGrantBinding(grant WriteApprovalGrant, expected WriteApprovalExpectation) bool {
@@ -553,10 +436,6 @@ func sameApprovalTarget(left, right WriteApprovalTarget) bool {
 func hashApprovalToken(token string) string {
 	digest := sha256.Sum256([]byte(token))
 	return hex.EncodeToString(digest[:])
-}
-
-func writeApprovalConsumptionID(planID, planHash, mode string) string {
-	return planID + "\x00" + planHash + "\x00" + mode
 }
 
 func constantStringEqual(left, right string) bool {
