@@ -167,19 +167,21 @@ type OperationDirectReader interface {
 // issued for that exact preview; the engine consumes it at its shared write
 // gate immediately before dispatch.
 type OperationDirectWriteRequest struct {
-	Operation     string
-	Config        RuntimeConfig
-	PathParams    map[string]string
-	Query         map[string]string
-	Body          map[string]any
-	OutputPolicy  string
+	Operation    string
+	Config       RuntimeConfig
+	PathParams   map[string]string
+	Query        map[string]string
+	Body         map[string]any
+	OutputPolicy string
+	// RedactFields remains part of the request contract for compatibility, but
+	// rest_write does not strip runtime content from it.
 	RedactFields  []string
 	Approval      *WriteApprovalEvidence
 	PreviewDigest string
 }
 
-// OperationDirectWriteResult is the safe, output-policy-filtered result of a
-// single declared rest_write operation. Body is nil for an output policy that
+// OperationDirectWriteResult is the typed result of a single declared
+// rest_write operation. Body is nil only for an output policy that
 // intentionally discards response content.
 type OperationDirectWriteResult struct {
 	Connector string `json:"connector"`

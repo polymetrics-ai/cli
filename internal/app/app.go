@@ -1556,7 +1556,7 @@ func (a *App) runOperationDirectWritePlan(ctx context.Context, writer connectors
 	} else {
 		run.OperationDirectWrite = &operationResult
 	}
-	return a.finishReverseWrite(plan.ID, run, writeResult, 1, writeErr)
+	return a.finishOperationDirectWrite(plan.ID, run, writeResult, 1, writeErr)
 }
 
 func validateOperationDirectWritePreview(ctx context.Context, writer connectors.OperationDirectWriter, plan ReversePlan, request connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
@@ -1653,6 +1653,22 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 }
 
 func (a *App) finishReverseWrite(planID string, run ReverseRun, result connectors.WriteResult, staged int, writeErr error) (ReverseRun, error) {
+	return a.finishReverseWriteWithErrorText(planID, run, result, staged, writeErr, func(err error) string {
+		return safety.RedactErrorText(err.Error())
+	})
+}
+
+// finishOperationDirectWrite preserves the direct-write error text in its
+// persisted report. The generic reverse-ETL path deliberately retains its
+// existing rendering behavior; only rest_write has the captain's complete
+// runtime-content policy.
+func (a *App) finishOperationDirectWrite(planID string, run ReverseRun, result connectors.WriteResult, staged int, writeErr error) (ReverseRun, error) {
+	return a.finishReverseWriteWithErrorText(planID, run, result, staged, writeErr, func(err error) string {
+		return err.Error()
+	})
+}
+
+func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, result connectors.WriteResult, staged int, writeErr error, errorText func(error) string) (ReverseRun, error) {
 	run.RecordsSucceeded = result.RecordsWritten
 	run.RecordsFailed = result.RecordsFailed
 	run.CompletedAt = time.Now().UTC()
@@ -1663,7 +1679,7 @@ func (a *App) finishReverseWrite(planID string, run ReverseRun, result connector
 		if run.RecordsFailed == 0 {
 			run.RecordsFailed = staged - result.RecordsWritten
 		}
-		run.Error = safety.RedactErrorText(writeErr.Error())
+		run.Error = errorText(writeErr)
 	} else {
 		run.Status = "completed"
 	}

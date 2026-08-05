@@ -17,15 +17,26 @@ The three historical data documents named in the task brief are absent from this
 checkout and the supplied workspace, so their contents cannot be verified or
 used as evidence.
 
+Captain decision `remove-write-redaction` (2026-08-05) supersedes the earlier
+write-output interpretation. `rest_write` declarations may retain every
+existing output-policy name, including `json_redacted`,
+`write_result_redacted`, and `gong_bounded_input_redacted`, but the direct
+write runtime must preserve complete content. The verified affected sites are
+the direct-write response policy branch, its request/sensitive-policy field
+filtering, commandrunner's direct-write record/error shaping, and the
+direct-write failure report. `direct_read.go` is out of scope and must remain
+behaviorally unchanged; no connector declaration will change.
+
 ## Delivery approach
 
-1. Add a red integration test using a disposable fixture bundle and loopback
-   server. It must prove the whole individual command lifecycle: typed form
-   shaping, offline preview, destructive confirmation, a single-use grant,
-   exactly one live request, response redaction, and no retry after a failure.
+1. Add red tests before production edits. They must prove the whole individual
+   command lifecycle keeps complete response, error, and preview-record
+   content while preserving typed form shaping, offline preview, destructive
+   confirmation, a single-use grant, exactly one live request, and no retry
+   after a failure.
 2. Add the public connector contracts and engine executor. Reuse the
    direct-read path for operation lookup, path/query/body shaping, API-surface
-   binding, bounded JSON result handling, and output-policy redaction. Reuse
+   binding, bounded JSON result handling, and output-policy decoding. Reuse
    `PreparedWrite`/`ExecutePreparedWrite` for preview binding and approval.
 3. Add an explicit no-retry mode to the requester and use it exclusively for
    `rest_write`: no transient retry and no auth-refresh retry. No idempotent
@@ -38,6 +49,12 @@ used as evidence.
    executable `direct_write` commands against supported `rest_write` metadata.
    Unsupported multipart, text/plain, and wildcard content types remain
    blocked until their separate typed payload contracts exist.
+6. Apply the captain's no-redaction correction only to `rest_write`: the three
+   legacy-named response policies decode intact JSON, operation-level
+   `RedactFields` are ignored by the direct-write result, direct-write errors
+   and plan samples remain complete, and the direct-write reverse-run report
+   keeps its original error text. Existing writes.json and read-path redaction
+   behavior stay unchanged.
 
 ## Guardrails
 
@@ -51,6 +68,10 @@ used as evidence.
 - `batchable:false` is represented as an optional operation declaration whose
   default is true; direct-write command execution is structurally one request,
   never a bulk loop.
+- `none` remains a semantic no-body response policy. Unrecognized output
+  policies still fail closed. Response/request size caps, typed confirmation,
+  preview digest binding, no-retry behavior, redirect refusal, endpoint
+  binding, and credential/configuration boundaries are not weakened.
 
 ## TDD and verification
 
@@ -60,6 +81,11 @@ package tests for `internal/connectors/engine`, `internal/connectors/connsdk`,
 `internal/cli` as applicable, then the non-suite `make verify` gates listed in
 AGENTS.md. The full `go test ./...` and `make verify` suite are CI work because
 they exceed the per-command timeout.
+
+CLI help/manual/website content is not applicable: no command, flag, help
+text, bundle declaration, or generated surface changes. The existing command
+continues to expose the same declared policies; only its runtime content
+handling changes.
 
 ## Required skills and workflow record
 

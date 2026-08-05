@@ -179,7 +179,7 @@ type ReverseRun struct {
 	RecordsFailed    int    `json:"records_failed"`
 	Error            string `json:"error,omitempty"`
 	// OperationDirectWrite is populated only for a successful direct_write
-	// command. Its body has already passed the operation output policy.
+	// command. Its body is decoded according to the operation output policy.
 	OperationDirectWrite *connectors.OperationDirectWriteResult `json:"operation_direct_write,omitempty"`
 	StartedAt            time.Time                              `json:"started_at"`
 	CompletedAt          time.Time                              `json:"completed_at,omitempty"`

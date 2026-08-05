@@ -3,6 +3,7 @@ package engine
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"mime"
 	"net/http"
@@ -13,7 +14,6 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/transportpolicy"
-	"polymetrics.ai/internal/safety"
 )
 
 const (
@@ -42,6 +42,18 @@ type preparedOperationDirectWrite struct {
 	maxBytes    int
 	prepared    PreparedWrite
 }
+
+type operationDirectWriteError struct {
+	operation string
+	message   string
+	cause     error
+}
+
+func (e *operationDirectWriteError) Error() string {
+	return fmt.Sprintf("operation direct write %q: %s", e.operation, e.message)
+}
+
+func (e *operationDirectWriteError) Unwrap() error { return e.cause }
 
 // PreviewOperationDirectWrite prepares a declared rest_write operation without
 // constructing a runtime or issuing any network request. Its digest binds the
@@ -92,14 +104,14 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		}
 		if err != nil {
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
-			message := safety.RedactErrorText(err.Error())
+			message := operationDirectWriteErrorText(err)
 			if hint != "" {
 				message += ": " + hint
 			}
 			if class != "" {
 				message = class + ": " + message
 			}
-			return fmt.Errorf("operation direct write %q: %s", prepared.op.ID, message)
+			return &operationDirectWriteError{operation: prepared.op.ID, message: message, cause: err}
 		}
 		if len(response.Body) > prepared.maxBytes {
 			return fmt.Errorf("operation direct write response too large: %d bytes exceeds limit %d", len(response.Body), prepared.maxBytes)
@@ -107,13 +119,6 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		body, err := operationDirectWriteResponseBody(prepared.policy, response.Body, prepared.maxBytes)
 		if err != nil {
 			return err
-		}
-		redactFields := append([]string(nil), req.RedactFields...)
-		if prepared.op.SensitivePolicy != nil {
-			redactFields = append(redactFields, prepared.op.SensitivePolicy.RedactFields...)
-		}
-		if body != nil && len(redactFields) > 0 {
-			body = redactNamedJSONFields(body, redactFields)
 		}
 		result = connectors.OperationDirectWriteResult{
 			Connector: b.Name,
@@ -129,6 +134,22 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		return connectors.OperationDirectWriteResult{}, err
 	}
 	return result, nil
+}
+
+// operationDirectWriteErrorText deliberately renders the captured HTTP error
+// directly instead of using HTTPError.Error, whose shared read-safe rendering
+// removes response content. rest_write output is complete by captain policy;
+// the requester's existing capture bound still limits the amount retained.
+func operationDirectWriteErrorText(err error) string {
+	var httpErr *connsdk.HTTPError
+	if errors.As(err, &httpErr) {
+		message := strings.TrimSpace(httpErr.Body)
+		if message == "" {
+			message = http.StatusText(httpErr.Status)
+		}
+		return fmt.Sprintf("http %d for %s: %s", httpErr.Status, httpErr.URL, message)
+	}
+	return err.Error()
 }
 
 // OperationDirectWriteMetadata returns the closed plan-safe summary for one
@@ -462,10 +483,13 @@ func operationDirectWriteResponseBody(policy string, raw []byte, maxBytes int) (
 		return nil, fmt.Errorf("operation direct write response is not JSON: %w", err)
 	}
 	switch policy {
-	case directWritePolicyJSON:
+	case directWritePolicyJSON,
+		directWritePolicyJSONRedacted,
+		directWritePolicyWriteResultRedacted,
+		directWritePolicyGongBoundedInputRedacted:
+		// The legacy policy names remain valid declaration values, but direct
+		// writes retain their complete decoded response content.
 		return decoded, nil
-	case directWritePolicyJSONRedacted, directWritePolicyWriteResultRedacted, directWritePolicyGongBoundedInputRedacted:
-		return redactJSONValue(decoded), nil
 	default:
 		return nil, fmt.Errorf("operation direct write output policy %q is not supported", policy)
 	}

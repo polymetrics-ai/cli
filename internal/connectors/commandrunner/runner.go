@@ -183,14 +183,14 @@ func buildOperationDirectWriteCommand(ctx context.Context, connector connectors.
 	}
 	pathParams, query, body, err := operationDirectReadOverrides(cmd, req.Flags)
 	if err != nil {
-		return WriteCommand{}, redactCommandError(err, cmd.RedactFields, req)
+		return WriteCommand{}, err
 	}
 	if err := validateCommandInputs(cmd, req.Config, mappedCommandInputs{Query: query, Body: body}); err != nil {
-		return WriteCommand{}, redactCommandError(err, cmd.RedactFields, req)
+		return WriteCommand{}, err
 	}
 	metadata, err := connector.(connectors.OperationDirectWriteMetadataProvider).OperationDirectWriteMetadata(cmd.Operation)
 	if err != nil {
-		return WriteCommand{}, redactCommandError(err, cmd.RedactFields, req)
+		return WriteCommand{}, err
 	}
 	if metadata.Operation != cmd.Operation {
 		return WriteCommand{}, &BlockedCommandError{Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_write metadata did not match command operation"}
@@ -211,7 +211,7 @@ func buildOperationDirectWriteCommand(ctx context.Context, connector connectors.
 		Approval:              firstNonEmpty(cmd.Approval, metadata.Approval, "direct writes require plan, preview, approval, execute"),
 		ConfirmationChallenge: metadata.ConfirmationChallenge,
 		Record:                cloneRecord(record),
-		RedactedRecord:        redactRecordWithFields(record, cmd.RedactFields),
+		RedactedRecord:        cloneRecord(record),
 		PathParams:            cloneStringMap(pathParams),
 		Query:                 cloneStringMap(query),
 		Batchable:             metadata.Batchable,

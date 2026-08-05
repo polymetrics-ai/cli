@@ -31,7 +31,7 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 			t.Fatalf("form dir = %q, want 1", got)
 		}
 		w.Header().Set("Content-Type", "application/json")
-		_, _ = w.Write([]byte(`{"ok":true,"token":"server-token"}`))
+		_, _ = w.Write([]byte(`{"ok":true,"token":"server-token","nested":{"token":"nested-server-token"}}`))
 	}))
 	defer srv.Close()
 
@@ -48,7 +48,10 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 			OutputPolicy:  "json_redacted",
 			MutationClass: "destructive",
 			Confirmation:  &ConfirmationSpec{Kind: "destructive"},
-			Batchable:     &batchable,
+			SensitivePolicy: &SensitivePolicySpec{
+				RedactFields: []string{"nested.token"},
+			},
+			Batchable: &batchable,
 			REST: &RESTOperationSpec{
 				Method:      http.MethodPost,
 				Path:        "/api/vote",
@@ -83,7 +86,8 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 			ConfigurationDigest: "fixture-configuration-digest",
 			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
 		},
-		Body: map[string]any{"id": "t3_abc", "dir": 1},
+		Body:         map[string]any{"id": "t3_abc", "dir": 1},
+		RedactFields: []string{"token"},
 	}
 
 	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
@@ -120,8 +124,15 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 	if !ok {
 		t.Fatalf("body type = %T, want map", result.Body)
 	}
-	if _, ok := body["token"]; ok || body["token_redacted"] != true {
-		t.Fatalf("result body did not redact token: %#v", body)
+	if got := body["token"]; got != "server-token" {
+		t.Fatalf("result token = %#v, want complete server token", got)
+	}
+	nested, ok := body["nested"].(map[string]any)
+	if !ok || nested["token"] != "nested-server-token" {
+		t.Fatalf("result nested body = %#v, want complete nested token", body["nested"])
+	}
+	if _, ok := body["token_redacted"]; ok {
+		t.Fatalf("result body marked token redacted: %#v", body)
 	}
 
 	if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err == nil {
@@ -134,12 +145,42 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 	}
 }
 
+func TestOperationDirectWriteRedactingPoliciesKeepResponseBody(t *testing.T) {
+	raw := []byte(`{"ok":true,"token":"server-token","nested":{"value":"visible"}}`)
+	for _, policy := range []string{
+		directWritePolicyJSONRedacted,
+		directWritePolicyWriteResultRedacted,
+		directWritePolicyGongBoundedInputRedacted,
+	} {
+		t.Run(policy, func(t *testing.T) {
+			body, err := operationDirectWriteResponseBody(policy, raw, 1024)
+			if err != nil {
+				t.Fatalf("operationDirectWriteResponseBody: %v", err)
+			}
+			decoded, ok := body.(map[string]any)
+			if !ok {
+				t.Fatalf("body type = %T, want map", body)
+			}
+			if got := decoded["token"]; got != "server-token" {
+				t.Fatalf("token = %#v, want complete response value", got)
+			}
+			nested, ok := decoded["nested"].(map[string]any)
+			if !ok || nested["value"] != "visible" {
+				t.Fatalf("nested = %#v, want complete response content", decoded["nested"])
+			}
+			if _, redacted := decoded["token_redacted"]; redacted {
+				t.Fatalf("response was redacted: %#v", decoded)
+			}
+		})
+	}
+}
+
 func TestOperationDirectWriteNeverRetriesNonIdempotentFailure(t *testing.T) {
 	calls := 0
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		calls++
 		w.WriteHeader(http.StatusInternalServerError)
-		_, _ = w.Write([]byte(`{"error":"failed"}`))
+		_, _ = w.Write([]byte(`{"error":"failed","token":"server-token"}`))
 	}))
 	defer srv.Close()
 
@@ -186,6 +227,8 @@ func TestOperationDirectWriteNeverRetriesNonIdempotentFailure(t *testing.T) {
 
 	if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err == nil {
 		t.Fatal("OperationDirectWrite error = nil, want HTTP 500")
+	} else if !strings.Contains(err.Error(), "server-token") {
+		t.Fatalf("OperationDirectWrite error = %q, want complete response error content", err)
 	}
 	if calls != 1 {
 		t.Fatalf("non-idempotent write calls = %d, want exactly 1", calls)

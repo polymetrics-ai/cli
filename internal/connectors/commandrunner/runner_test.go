@@ -1646,6 +1646,7 @@ func TestBuildOperationDirectWriteCommandUsesTypedInputsAndPlanLifecycle(t *test
 			Operation:    "acme.vote",
 			APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodPost, Path: "/api/vote"}},
 			OutputPolicy: "json_redacted",
+			RedactFields: []string{"id"},
 			Flags: []connectors.CommandSurfaceFlag{
 				{Name: "id", Type: "string", MapsTo: "body.id", Required: true},
 				{Name: "dir", Type: "integer", MapsTo: "body.dir", Required: true},
@@ -1669,6 +1670,9 @@ func TestBuildOperationDirectWriteCommandUsesTypedInputsAndPlanLifecycle(t *test
 	if got := command.Record["dir"]; got != 1 {
 		t.Fatalf("typed body dir = %#v (%T), want integer 1", got, got)
 	}
+	if got := command.RedactedRecord["id"]; got != "t3_abc" {
+		t.Fatalf("direct-write preview record id = %#v, want complete input", got)
+	}
 	if command.ConfirmationChallenge != "destructive" {
 		t.Fatalf("confirmation = %q, want destructive", command.ConfirmationChallenge)
 	}
@@ -1679,6 +1683,38 @@ func TestBuildOperationDirectWriteCommandUsesTypedInputsAndPlanLifecycle(t *test
 	})
 	if err == nil || !strings.Contains(err.Error(), "plan, preview, approval, execute") {
 		t.Fatalf("Run(direct_write) error = %v, want plan lifecycle block", err)
+	}
+}
+
+func TestBuildOperationDirectWriteCommandKeepsCompleteInputError(t *testing.T) {
+	connector := &fakeConnector{
+		directWriteMetadata: connectors.OperationDirectWriteMetadata{
+			Operation:    "acme.vote",
+			OutputPolicy: "json_redacted",
+		},
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path:         "vote",
+			Intent:       "direct_write",
+			Availability: "implemented",
+			Operation:    "acme.vote",
+			APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodPost, Path: "/api/vote"}},
+			OutputPolicy: "json_redacted",
+			RedactFields: []string{"dir"},
+			Flags: []connectors.CommandSurfaceFlag{
+				{Name: "dir", Type: "integer", MapsTo: "body.dir"},
+			},
+		}}},
+	}
+
+	_, err := BuildWriteCommand(context.Background(), connector, Request{
+		Path:  []string{"vote"},
+		Flags: map[string][]string{"dir": {"complete-input"}},
+	})
+	if err == nil {
+		t.Fatal("BuildWriteCommand error = nil, want invalid integer")
+	}
+	if !strings.Contains(err.Error(), "complete-input") {
+		t.Fatalf("BuildWriteCommand error = %q, want complete input value", err)
 	}
 }
 

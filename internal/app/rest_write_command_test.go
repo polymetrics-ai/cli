@@ -17,6 +17,10 @@ import (
 const restWriteDemoConnector = "restwrite-demo"
 
 func setupRestWriteDemoApp(t *testing.T, ctx context.Context, baseURL string) *app.App {
+	return setupRestWriteDemoAppWithBundle(t, ctx, baseURL, nil)
+}
+
+func setupRestWriteDemoAppWithBundle(t *testing.T, ctx context.Context, baseURL string, mutate func(*engine.Bundle)) *app.App {
 	t.Helper()
 	root := t.TempDir()
 	if err := app.InitProject(root); err != nil {
@@ -29,6 +33,9 @@ func setupRestWriteDemoApp(t *testing.T, ctx context.Context, baseURL string) *a
 	bundle, err := engine.Load(os.DirFS("testdata/bundles"), restWriteDemoConnector)
 	if err != nil {
 		t.Fatalf("engine.Load(%s): %v", restWriteDemoConnector, err)
+	}
+	if mutate != nil {
+		mutate(&bundle)
 	}
 	a.Registry().Register(engine.New(bundle, nil))
 	if _, err := a.AddCredential(ctx, app.AddCredentialRequest{
@@ -63,7 +70,9 @@ func TestDirectWriteCommandPlanPreviewApprovalAndExecute(t *testing.T) {
 	}))
 	defer server.Close()
 
-	a := setupRestWriteDemoApp(t, ctx, server.URL)
+	a := setupRestWriteDemoAppWithBundle(t, ctx, server.URL, func(bundle *engine.Bundle) {
+		bundle.CLISurface.Commands[0].RedactFields = []string{"id"}
+	})
 	plan, preview, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
 		Connector:  restWriteDemoConnector,
 		Credential: "restwrite-local",
@@ -89,6 +98,9 @@ func TestDirectWriteCommandPlanPreviewApprovalAndExecute(t *testing.T) {
 	if plan.PlanSeal == nil || plan.PlanSeal.Batchable {
 		t.Fatalf("plan seal batchable = %#v, want batchable:false from the operation declaration", plan.PlanSeal)
 	}
+	if len(plan.Sample) != 1 || plan.Sample[0]["id"] != "t3_abc" {
+		t.Fatalf("plan preview sample = %#v, want complete direct-write input", plan.Sample)
+	}
 
 	if _, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken}); err == nil {
 		t.Fatal("RunReverseETL dispatched a direct write without typed confirmation")
@@ -112,8 +124,11 @@ func TestDirectWriteCommandPlanPreviewApprovalAndExecute(t *testing.T) {
 		t.Fatal("run direct_write result = nil")
 	}
 	body, ok := run.OperationDirectWrite.Body.(map[string]any)
-	if !ok || body["token_redacted"] != true {
-		t.Fatalf("safe operation result = %#v, want token redaction", run.OperationDirectWrite.Body)
+	if !ok || body["token"] != "fixture-token" {
+		t.Fatalf("safe operation result = %#v, want complete token", run.OperationDirectWrite.Body)
+	}
+	if _, redacted := body["token_redacted"]; redacted {
+		t.Fatalf("safe operation result = %#v, must not contain a redaction marker", run.OperationDirectWrite.Body)
 	}
 
 	if _, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{
@@ -125,6 +140,48 @@ func TestDirectWriteCommandPlanPreviewApprovalAndExecute(t *testing.T) {
 	}
 	if calls != 1 {
 		t.Fatalf("replayed approval reached the network; calls = %d", calls)
+	}
+}
+
+func TestDirectWriteCommandFailurePreservesErrorContent(t *testing.T) {
+	ctx := context.Background()
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		_, _ = w.Write([]byte(`{"error":"fixture failure","token":"server-token"}`))
+	}))
+	defer server.Close()
+
+	a := setupRestWriteDemoApp(t, ctx, server.URL)
+	plan, _, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Connector:  restWriteDemoConnector,
+		Credential: "restwrite-local",
+		Path:       []string{"vote"},
+		Flags:      map[string][]string{"id": {"t3_abc"}, "dir": {"1"}},
+		Preview:    true,
+	})
+	if err != nil {
+		t.Fatalf("PlanConnectorCommand: %v", err)
+	}
+
+	run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:        plan.ID,
+		ApprovalToken: plan.ApprovalToken,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	})
+	if err == nil {
+		t.Fatal("RunReverseETL error = nil, want HTTP 500")
+	}
+	if calls != 1 || run.Status != "failed" {
+		t.Fatalf("failed run/calls = %+v/%d, want one failed direct write", run, calls)
+	}
+	if !strings.Contains(err.Error(), "server-token") {
+		t.Fatalf("RunReverseETL error = %q, want complete provider error content", err)
+	}
+	if !strings.Contains(run.Error, "server-token") {
+		t.Fatalf("persisted direct-write error = %q, want complete provider error content", run.Error)
 	}
 }
 
