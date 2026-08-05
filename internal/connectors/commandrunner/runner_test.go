@@ -29,6 +29,8 @@ type fakeConnector struct {
 	operationDirectWriteReq connectors.OperationDirectWriteRequest
 	directWriteMetadata     connectors.OperationDirectWriteMetadata
 	binaryDownloadReq       connectors.OperationBinaryDownloadRequest
+	directReadErr           error
+	operationDirectReadErr  error
 	binaryDownloadErr       error
 	validateReq             connectors.WriteRequest
 	dryRunReq               connectors.WriteRequest
@@ -77,6 +79,9 @@ func (f *fakeConnector) Read(_ context.Context, req connectors.ReadRequest, emit
 }
 func (f *fakeConnector) DirectRead(_ context.Context, req connectors.DirectReadRequest) (connectors.DirectReadResult, error) {
 	f.directReadReq = req
+	if f.directReadErr != nil {
+		return connectors.DirectReadResult{}, f.directReadErr
+	}
 	return connectors.DirectReadResult{
 		Connector: "github",
 		Method:    req.Method,
@@ -90,6 +95,9 @@ func (f *fakeConnector) DirectRead(_ context.Context, req connectors.DirectReadR
 }
 func (f *fakeConnector) OperationDirectRead(_ context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
 	f.operationDirectReadReq = req
+	if f.operationDirectReadErr != nil {
+		return connectors.DirectReadResult{}, f.operationDirectReadErr
+	}
 	return connectors.DirectReadResult{
 		Connector: "gong",
 		Method:    "POST",
@@ -950,7 +958,7 @@ func TestBuildWriteCommandAllowsEmptyRecordWhenConnectorValidatorAcceptsIt(t *te
 	}
 }
 
-func TestBuildWriteCommandPreviewDryRunsAndRedactsSecretLikeFields(t *testing.T) {
+func TestBuildWriteCommandPreviewDryRunsAndPreservesDeclaredFields(t *testing.T) {
 	connector := reverseETLFakeConnector()
 	connector.preview = connectors.WritePreview{
 		Action:        "create_deploy_key",
@@ -979,70 +987,57 @@ func TestBuildWriteCommandPreviewDryRunsAndRedactsSecretLikeFields(t *testing.T)
 	if connector.writeReq.Action != "" {
 		t.Fatalf("Write action = %q, want not called", connector.writeReq.Action)
 	}
-	if got := result.RedactedRecord["key"]; got != "***" {
-		t.Fatalf("plan record key = %#v, want redacted", got)
+	if got := result.RedactedRecord["key"]; got != "ssh-rsa AAAA-sensitive" {
+		t.Fatalf("plan record key = %#v, want complete input", got)
 	}
 }
 
-func TestRedactRecordRedactsDownloadContentAndMultipartFileFields(t *testing.T) {
-	redacted := redactRecord(connectors.Record{
+func TestRunETLCommandPreservesDeclaredAndHeuristicSensitiveFields(t *testing.T) {
+	record := connectors.Record{
 		"downloadMediaUrl": "https://media.example.test/call.mp4",
-		"content":          "sensitive body",
+		"content":          "complete body",
 		"media_file_path":  "fixtures/call.mp4",
 		"data_file_path":   "fixtures/crm.csv",
-		"title":            "visible",
+		"token":            "complete-token",
+		"patientUuid":      "patient-uuid",
+		"nested":           map[string]any{"content": "nested complete body", "key": "nested-key"},
+	}
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path:         "records list",
+		Intent:       "etl",
+		Availability: "implemented",
+		Stream:       "records",
+		RedactFields: []string{"content", "token", "nested"},
+	}}}, readRecords: []connectors.Record{record}}
+	var records []connectors.Record
+	_, err := Run(context.Background(), connector, Request{Path: []string{"records", "list"}, Limit: 1}, func(got connectors.Record) error {
+		records = append(records, got)
+		return nil
 	})
-	for _, key := range []string{"downloadMediaUrl", "content", "media_file_path", "data_file_path"} {
-		if redacted[key] != "***" {
-			t.Fatalf("redacted[%s] = %#v, want *** in %+v", key, redacted[key], redacted)
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	encoded, err := json.Marshal(records)
+	if err != nil {
+		t.Fatalf("Marshal: %v", err)
+	}
+	for _, raw := range []string{"https://media.example.test/call.mp4", "complete body", "fixtures/call.mp4", "fixtures/crm.csv", "complete-token", "patient-uuid", "nested complete body", "nested-key"} {
+		if !strings.Contains(string(encoded), raw) {
+			t.Fatalf("connector command output lost %q: %s", raw, encoded)
 		}
 	}
-	if redacted["title"] != "visible" {
-		t.Fatalf("redacted title = %v, want visible", redacted["title"])
+	if strings.Contains(string(encoded), "***") {
+		t.Fatalf("connector command output was masked: %s", encoded)
 	}
 }
 
-func TestRedactRecordKeepsClinicalLikeFieldsByDefault(t *testing.T) {
-	record := connectors.Record{
-		"patientUuid": "patient-uuid",
-		"identifier":  "SYN-12345",
-		"person":      map[string]any{"display": "Synthetic Person"},
-		"value":       "98.6",
-		"note":        "synthetic note",
-	}
-	redacted := redactRecord(record)
-	for key, want := range record {
-		if got := redacted[key]; fmt.Sprint(got) != fmt.Sprint(want) {
-			t.Fatalf("redacted[%s] = %#v, want unchanged %#v in %+v", key, got, want, redacted)
-		}
-	}
-}
-
-func TestRedactRecordWithExplicitFieldsRedactsBahmniClinicalPreviewFields(t *testing.T) {
-	redacted := redactRecordWithFields(connectors.Record{
-		"patientUuid": "patient-uuid",
-		"identifier":  "SYN-12345",
-		"person":      map[string]any{"display": "Synthetic Person"},
-		"value":       "98.6",
-		"title":       "visible",
-	}, []string{"patientUuid", "identifier", "person", "value"})
-	for _, key := range []string{"patientUuid", "identifier", "person", "value"} {
-		if redacted[key] != "***" {
-			t.Fatalf("redacted[%s] = %#v, want *** in %+v", key, redacted[key], redacted)
-		}
-	}
-	if redacted["title"] != "visible" {
-		t.Fatalf("redacted title = %v, want visible", redacted["title"])
-	}
-}
-
-func TestRunETLCommandAppliesRecursiveClinicalRedactFields(t *testing.T) {
+func TestRunETLCommandPreservesDeclaredNestedFields(t *testing.T) {
 	tests := []struct {
-		name         string
-		path         string
-		redactFields []string
-		record       connectors.Record
-		secretValues []string
+		name            string
+		path            string
+		redactFields    []string
+		record          connectors.Record
+		preservedValues []string
 	}{
 		{
 			name:         "patient",
@@ -1054,7 +1049,7 @@ func TestRunETLCommandAppliesRecursiveClinicalRedactFields(t *testing.T) {
 				"identifier": "SYN-HEN-RAW",
 				"person":     map[string]any{"givenName": "Raw", "familyName": "Name", "gender": "O"},
 			},
-			secretValues: []string{"patient-uuid-raw", "SYN-HEN-RAW", "Raw", "Name"},
+			preservedValues: []string{"patient-uuid-raw", "SYN-HEN-RAW", "Raw", "Name"},
 		},
 		{
 			name:         "encounter",
@@ -1066,7 +1061,7 @@ func TestRunETLCommandAppliesRecursiveClinicalRedactFields(t *testing.T) {
 				"patient":           map[string]any{"uuid": "patient-uuid-raw", "display": "SYN-HEN-RAW"},
 				"obs":               []any{map[string]any{"value": "fever raw"}},
 			},
-			secretValues: []string{"encounter-uuid-raw", "patient-uuid-raw", "SYN-HEN-RAW", "fever raw"},
+			preservedValues: []string{"encounter-uuid-raw", "patient-uuid-raw", "SYN-HEN-RAW", "fever raw"},
 		},
 		{
 			name:         "observation",
@@ -1079,28 +1074,28 @@ func TestRunETLCommandAppliesRecursiveClinicalRedactFields(t *testing.T) {
 				"obsDatetime": "2026-01-01T00:00:00Z",
 				"person":      map[string]any{"uuid": "patient-uuid-raw"},
 			},
-			secretValues: []string{"obs-uuid-raw", "Temperature", "38.6 raw", "patient-uuid-raw"},
+			preservedValues: []string{"obs-uuid-raw", "Temperature", "38.6 raw", "patient-uuid-raw"},
 		},
 		{
-			name:         "diagnosis",
-			path:         "diagnoses list",
-			redactFields: []string{"display", "certainty", "codedAnswer", "diagnosisDateTime", "existingObs", "order"},
-			record:       connectors.Record{"display": "raw diagnosis", "certainty": "CONFIRMED", "codedAnswer": map[string]any{"display": "Cold raw"}, "order": "PRIMARY"},
-			secretValues: []string{"raw diagnosis", "CONFIRMED", "Cold raw", "PRIMARY"},
+			name:            "diagnosis",
+			path:            "diagnoses list",
+			redactFields:    []string{"display", "certainty", "codedAnswer", "diagnosisDateTime", "existingObs", "order"},
+			record:          connectors.Record{"display": "raw diagnosis", "certainty": "CONFIRMED", "codedAnswer": map[string]any{"display": "Cold raw"}, "order": "PRIMARY"},
+			preservedValues: []string{"raw diagnosis", "CONFIRMED", "Cold raw", "PRIMARY"},
 		},
 		{
-			name:         "lab",
-			path:         "lab_results list",
-			redactFields: []string{"uuid", "display", "patient", "concept", "value", "obsDatetime"},
-			record:       connectors.Record{"uuid": "lab-uuid-raw", "concept": map[string]any{"display": "Serum glucose"}, "value": 120, "patient": map[string]any{"display": "SYN-HEN-RAW"}},
-			secretValues: []string{"lab-uuid-raw", "Serum glucose", "SYN-HEN-RAW", "120"},
+			name:            "lab",
+			path:            "lab_results list",
+			redactFields:    []string{"uuid", "display", "patient", "concept", "value", "obsDatetime"},
+			record:          connectors.Record{"uuid": "lab-uuid-raw", "concept": map[string]any{"display": "Serum glucose"}, "value": 120, "patient": map[string]any{"display": "SYN-HEN-RAW"}},
+			preservedValues: []string{"lab-uuid-raw", "Serum glucose", "SYN-HEN-RAW", "120"},
 		},
 		{
-			name:         "appointment",
-			path:         "appointments list",
-			redactFields: []string{"uuid", "patient", "providers", "startDateTime", "endDateTime", "comments", "status"},
-			record:       connectors.Record{"uuid": "appt-uuid-raw", "patient": map[string]any{"identifier": "SYN-HEN-RAW"}, "providers": []any{map[string]any{"name": "Provider Raw"}}, "comments": "raw appointment note", "status": "Scheduled"},
-			secretValues: []string{"appt-uuid-raw", "SYN-HEN-RAW", "Provider Raw", "raw appointment note", "Scheduled"},
+			name:            "appointment",
+			path:            "appointments list",
+			redactFields:    []string{"uuid", "patient", "providers", "startDateTime", "endDateTime", "comments", "status"},
+			record:          connectors.Record{"uuid": "appt-uuid-raw", "patient": map[string]any{"identifier": "SYN-HEN-RAW"}, "providers": []any{map[string]any{"name": "Provider Raw"}}, "comments": "raw appointment note", "status": "Scheduled"},
+			preservedValues: []string{"appt-uuid-raw", "SYN-HEN-RAW", "Provider Raw", "raw appointment note", "Scheduled"},
 		},
 	}
 
@@ -1126,19 +1121,19 @@ func TestRunETLCommandAppliesRecursiveClinicalRedactFields(t *testing.T) {
 				t.Fatalf("Marshal: %v", err)
 			}
 			out := string(encoded)
-			for _, raw := range tc.secretValues {
-				if strings.Contains(out, raw) {
-					t.Fatalf("redacted output leaked %q: %s", raw, out)
+			for _, raw := range tc.preservedValues {
+				if !strings.Contains(out, raw) {
+					t.Fatalf("connector command output lost %q: %s", raw, out)
 				}
 			}
-			if !strings.Contains(out, "***") {
-				t.Fatalf("redacted output %s missing redaction marker", out)
+			if strings.Contains(out, "***") {
+				t.Fatalf("connector command output was masked: %s", out)
 			}
 		})
 	}
 }
 
-func TestBuildWriteCommandRedactsClinicalNotePreviewRecord(t *testing.T) {
+func TestBuildWriteCommandPreservesClinicalNotePreviewRecord(t *testing.T) {
 	connector := &fakeConnector{
 		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
 			Path:         "notes create",
@@ -1171,15 +1166,17 @@ func TestBuildWriteCommandRedactsClinicalNotePreviewRecord(t *testing.T) {
 		t.Fatalf("Marshal: %v", err)
 	}
 	out := string(encoded)
-	if strings.Contains(out, "raw synthetic note text") || strings.Contains(out, "Consultation") {
-		t.Fatalf("note preview leaked raw note payload: %s", out)
+	for _, raw := range []string{"raw synthetic note text", "Consultation", "2026-01-01T00:00:00Z"} {
+		if !strings.Contains(out, raw) {
+			t.Fatalf("note preview lost raw note payload %q: %s", raw, out)
+		}
 	}
-	if got := cmd.RedactedRecord["notes"]; got != "***" {
-		t.Fatalf("redacted notes = %#v, want ***", got)
+	if strings.Contains(out, "***") {
+		t.Fatalf("note preview was masked: %s", out)
 	}
 }
 
-func TestRunETLCommandRedactsClinicalValuesFromErrors(t *testing.T) {
+func TestRunETLCommandPreservesClinicalValuesInErrors(t *testing.T) {
 	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
 		Path:         "observations list",
 		Intent:       "etl",
@@ -1200,12 +1197,12 @@ func TestRunETLCommandRedactsClinicalValuesFromErrors(t *testing.T) {
 	}
 	msg := err.Error()
 	for _, raw := range []string{"patient-uuid-raw", "fever raw"} {
-		if strings.Contains(msg, raw) {
-			t.Fatalf("error leaked %q: %s", raw, msg)
+		if !strings.Contains(msg, raw) {
+			t.Fatalf("error lost %q: %s", raw, msg)
 		}
 	}
-	if !strings.Contains(msg, "***") {
-		t.Fatalf("error %q missing redaction marker", msg)
+	if strings.Contains(msg, "***") {
+		t.Fatalf("error was masked: %q", msg)
 	}
 }
 
@@ -1624,6 +1621,7 @@ func TestRunImplementedDirectReadCommand(t *testing.T) {
 					{Method: "GET", Path: "/repos/{owner}/{repo}/contents/{path}"},
 				},
 				OutputPolicy: "repository_contents_file_metadata",
+				RedactFields: []string{"path"},
 				Flags: []connectors.CommandSurfaceFlag{
 					{Name: "path", Type: "string", MapsTo: "path.path"},
 				},
@@ -1657,6 +1655,9 @@ func TestRunImplementedDirectReadCommand(t *testing.T) {
 	if connector.directReadReq.OutputPolicy != "repository_contents_file_metadata" {
 		t.Fatalf("direct read output policy = %q, want repository_contents_file_metadata", connector.directReadReq.OutputPolicy)
 	}
+	if len(connector.directReadReq.RedactFields) != 0 {
+		t.Fatalf("direct read RedactFields = %#v, want empty", connector.directReadReq.RedactFields)
+	}
 }
 
 func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
@@ -1671,6 +1672,7 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 					{Method: "POST", Path: "/v2/meetings/integration/status"},
 				},
 				OutputPolicy: "json_redacted",
+				RedactFields: []string{"email"},
 				Flags: []connectors.CommandSurfaceFlag{
 					{Name: "email", Type: "string_array", MapsTo: "body.emails"},
 				},
@@ -1700,6 +1702,9 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 	emails, ok := connector.operationDirectReadReq.Body["emails"].([]string)
 	if !ok || len(emails) != 2 || emails[0] != "ada@example.com" || emails[1] != "grace@example.com" {
 		t.Fatalf("operation body = %#v, want typed emails", connector.operationDirectReadReq.Body)
+	}
+	if len(connector.operationDirectReadReq.RedactFields) != 0 {
+		t.Fatalf("operation direct read RedactFields = %#v, want empty", connector.operationDirectReadReq.RedactFields)
 	}
 }
 
@@ -2189,6 +2194,7 @@ func binaryDownloadTestConnector() *fakeConnector {
 					{Name: "artifact-id", Type: "string", MapsTo: "path.artifact_id"},
 					{Name: "archive-format", Type: "string", MapsTo: "path.archive_format"},
 				},
+				RedactFields: []string{"file_path"},
 			},
 		},
 	}}
@@ -2220,6 +2226,9 @@ func TestRunBinaryDownloadCommandPassesDestinationThrough(t *testing.T) {
 	}
 	if got := connector.binaryDownloadReq.PathParams["artifact_id"]; got != "42" {
 		t.Fatalf("PathParams[artifact_id] = %q, want %q", got, "42")
+	}
+	if len(connector.binaryDownloadReq.RedactFields) != 0 {
+		t.Fatalf("binary download RedactFields = %#v, want empty", connector.binaryDownloadReq.RedactFields)
 	}
 	// The response never becomes records: a download is a file, not a stream.
 	if result.Count != 0 || result.DirectRead != nil {
