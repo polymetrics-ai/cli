@@ -1,0 +1,113 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/interviewerPool.info",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": {
+        "id": "interviewer_pool_info_id_fixture_69",
+        "title": "Title fixture 69",
+        "isArchived": true,
+        "trainingPath": {
+          "id": "interviewer_pool_info_id_fixture_69",
+          "enabled": true,
+          "trainingStages": [
+            {
+              "id": "interviewer_pool_info_id_fixture_69",
+              "interviewerRole": "Shadow",
+              "interviewsRequired": 69,
+              "isArchived": true,
+              "approvalRequired": true,
+              "approvers": [
+                {
+                  "id": "interviewer_pool_info_id_fixture_69",
+                  "firstName": "Interviewer Pool Info Firstname Fixture 69",
+                  "lastName": "Interviewer Pool Info Lastname Fixture 69",
+                  "email": "interviewer_pool_info.email.69@example.invalid",
+                  "globalRole": "Organization Admin",
+                  "isEnabled": true,
+                  "updatedAt": "2026-01-13T09:00:00Z",
+                  "managerId": "interviewer_pool_info_managerid_fixture_69",
+                  "customFields": [
+                    {
+                      "id": "interviewer_pool_info_id_fixture_69",
+                      "isPrivate": true,
+                      "title": "Title fixture 69",
+                      "value": {
+                        "value": 69.0,
+                        "currencyCode": "interviewer_pool_info_currencycode_fixture_69"
+                      },
+                      "valueLabel": "interviewer_pool_info_valuelabel_fixture_69"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "qualifiedMembers": [
+          {
+            "id": "interviewer_pool_info_id_fixture_69",
+            "firstName": "Interviewer Pool Info Firstname Fixture 69",
+            "lastName": "Interviewer Pool Info Lastname Fixture 69",
+            "email": "interviewer_pool_info.email.69@example.invalid",
+            "globalRole": "Organization Admin",
+            "isEnabled": true,
+            "updatedAt": "2026-01-13T09:00:00Z",
+            "managerId": "interviewer_pool_info_managerid_fixture_69",
+            "customFields": [
+              {
+                "id": "interviewer_pool_info_id_fixture_69",
+                "isPrivate": true,
+                "title": "Title fixture 69",
+                "value": {
+                  "value": 69.0,
+                  "currencyCode": "interviewer_pool_info_currencycode_fixture_69"
+                },
+                "valueLabel": "interviewer_pool_info_valuelabel_fixture_69"
+              }
+            ],
+            "isPaused": true
+          }
+        ],
+        "trainees": [
+          {
+            "id": "interviewer_pool_info_id_fixture_69",
+            "firstName": "Interviewer Pool Info Firstname Fixture 69",
+            "lastName": "Interviewer Pool Info Lastname Fixture 69",
+            "email": "interviewer_pool_info.email.69@example.invalid",
+            "globalRole": "Organization Admin",
+            "isEnabled": true,
+            "updatedAt": "2026-01-13T09:00:00Z",
+            "managerId": "interviewer_pool_info_managerid_fixture_69",
+            "customFields": [
+              {
+                "id": "interviewer_pool_info_id_fixture_69",
+                "isPrivate": true,
+                "title": "Title fixture 69",
+                "value": {
+                  "value": 69.0,
+                  "currencyCode": "interviewer_pool_info_currencycode_fixture_69"
+                },
+                "valueLabel": "interviewer_pool_info_valuelabel_fixture_69"
+              }
+            ],
+            "isPaused": true,
+            "currentProgress": {
+              "trainingPathId": "interviewer_pool_info_trainingpathid_fixture_69",
+              "trainingPathStageId": "interviewer_pool_info_trainingpathstageid_fixture_69",
+              "interviewsCompleted": 69
+            }
+          }
+        ]
+      }
+    }
+  },
+  "read_query": {
+    "interviewerPoolId": "interviewerpoolid_fixture"
+  }
+}

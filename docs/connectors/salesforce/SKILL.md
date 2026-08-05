@@ -11,10 +11,11 @@ Reads Salesforce object metadata and allow-listed Account, Contact, and Lead SOQ
 
 ## Icon
 
+- id: salesforce
 - asset: icons/salesforce.svg
-- source: upstream_registry
-- review_status: upstream_seeded
-- review_url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/rest_rns.htm
+- source: official
+- review_status: official_verified
+- review_url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm
 
 ## Capabilities
 

@@ -1,0 +1,23 @@
+{
+  "record": {
+    "id": "billing_rate_fixture_1",
+    "label": "Updated Billing Rate",
+    "rate": 80,
+    "currency": "USD"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/billingRate/billing_rate_fixture_1",
+    "body": {
+      "label": "Updated Billing Rate",
+      "rate": 80,
+      "currency": "USD"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "billing_rate_fixture_1"
+    }
+  }
+}

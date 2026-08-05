@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Pexels photo/video search and curated/popular results plus featured and personal collections and their media through the Pexels REST API.
 
 ICON
+  id: pexels
   asset: icons/pexels.svg
   source: upstream_registry
   review_status: upstream_seeded

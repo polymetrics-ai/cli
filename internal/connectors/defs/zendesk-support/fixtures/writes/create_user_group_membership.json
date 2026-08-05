@@ -1,0 +1,19 @@
+{
+  "record": {
+    "user_id": "fixture-user-id",
+    "group_membership": {
+      "group_id": 1,
+      "default": true
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/users/fixture-user-id/group_memberships",
+    "body": {
+      "group_membership": {
+        "group_id": 1,
+        "default": true
+      }
+    }
+  }
+}

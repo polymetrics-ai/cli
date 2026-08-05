@@ -11,6 +11,7 @@ Reads Google Analytics 4 report presets plus bounded v1beta/v1alpha metadata res
 
 ## Icon
 
+- id: google-analytics
 - asset: icons/google-analytics.svg
 - source: upstream_registry
 - review_status: upstream_seeded

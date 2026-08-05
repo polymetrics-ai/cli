@@ -13,6 +13,7 @@ DESCRIPTION
   Reads StockData market quotes, prices, splits, dividends, news, entity stats, entities, and source metadata through the StockData API.
 
 ICON
+  id: stockdata
   asset: icons/stockdata.svg
   source: official
   review_status: official_verified

@@ -1,60 +1,31 @@
-# Overview
+# Recurly connector
 
-Reads Recurly accounts, subscriptions, invoices, transactions, and plans through the Recurly v3 REST
-API.
+## Overview
 
-Readable streams: `accounts`, `subscriptions`, `invoices`, `transactions`, `plans`.
+Declarative Recurly V3 connector generated from the official v2021-02-25 OpenAPI definition. The operation ledger maps all 197 documented operations to reachable commands: 93 ETL streams, 96 typed reverse-ETL write actions, 5 bounded JSON read/preview operations, and 3 bounded binary downloads.
 
-This connector is read-only; no write actions are declared.
-
-Service API documentation: https://developers.recurly.com/api/v2021-02-25/.
+Official source: https://recurly.com/developers/api/spec/v2021-02-25.yaml
 
 ## Auth setup
 
-Connection fields:
+Provide a Recurly API key through the connector credential flow or environment-backed secret input. Do not paste, print, summarize, or commit secret values. The declarative runtime uses HTTP Basic auth with the API key as the username and an empty password, plus the `Accept: application/vnd.recurly.v2021-02-25` header.
 
-- `api_key` (required, secret, string); Recurly private API key, sent as the HTTP Basic username
-  with an empty password (Authorization: Basic base64(api_key:)). Never logged.
-- `base_url` (optional, string); default `https://v3.recurly.com`; format `uri`; Recurly API base
-  URL override for tests or proxies.
-
-Secret fields are redacted in logs and write previews: `api_key`.
-
-Default configuration values: `base_url=https://v3.recurly.com`.
-
-Authentication behavior:
-
-- HTTP Basic authentication using `secrets.api_key`.
-
-Requests use the configured `base_url` value after applying defaults.
-
-Connection checks call GET `/accounts` with query `limit`=`1`.
+Path-scoped operations use fixed connector config keys such as `account_id`, `subscription_id`, `invoice_id`, and related Recurly identifiers. Inspect `spec.json` or `pm connectors inspect recurly --json` before creating credentials for scoped reads.
 
 ## Streams notes
 
-Default pagination: follows RFC 5988 Link headers with rel=next.
-
-- `accounts`: GET `/accounts` - records path `data`; query `limit`=`200`; follows RFC 5988 Link
-  headers with rel=next; computed output fields `code`, `created_at`, `email`, `id`, `state`,
-  `updated_at`.
-- `subscriptions`: GET `/subscriptions` - records path `data`; query `limit`=`200`; follows RFC 5988
-  Link headers with rel=next; computed output fields `account_id`, `created_at`, `id`, `plan_id`,
-  `state`, `updated_at`.
-- `invoices`: GET `/invoices` - records path `data`; query `limit`=`200`; follows RFC 5988 Link
-  headers with rel=next; computed output fields `account_id`, `created_at`, `id`, `state`, `total`.
-- `transactions`: GET `/transactions` - records path `data`; query `limit`=`200`; follows RFC 5988
-  Link headers with rel=next; computed output fields `account_id`, `amount`, `created_at`, `id`,
-  `status`.
-- `plans`: GET `/plans` - records path `data`; query `limit`=`200`; follows RFC 5988 Link headers
-  with rel=next; computed output fields `code`, `id`, `name`, `state`, `updated_at`.
+Streams are fixed Recurly endpoints with provider-shaped JSON schemas and sanitized OAS-derived conformance fixtures. Record objects are closed while the provider's explicitly opaque objects remain free-form. List endpoints read the Recurly `data` array; singular GET endpoints emit the response object. No arbitrary query, body, path, shell, file, or generic HTTP passthrough is exposed.
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: external Recurly API read of subscription billing data.
+Reverse ETL actions are generated from official POST, PUT, and DELETE operations and use closed `record_schema` definitions. Mutation execution must stay plan → preview → explicit approval → execute. Destructive lifecycle actions are marked with `confirm: destructive`.
+
+Recurly documents `Idempotency-Key` for POST, PUT, PATCH, and DELETE. The runtime generates one fresh key for each approved record and reuses that key only across automatic attempts for the same record. A declarative action without a documented provider idempotency header is executed once: transport failures and retryable provider responses are surfaced without replaying the mutation. Reconcile an ambiguous result with Recurly before creating a new approval; never blindly rerun a billing write.
+
+The pinned operation descriptions do not independently declare any DELETE operation intrinsically idempotent, so the connector does not assume that every DELETE can be retried without a key. `deactivate_account` requires an explicit `redact` choice, and `terminate_subscription` requires explicit `refund` and `charge` choices; the connector does not silently select Recurly's refund, usage-charge, or account-redaction defaults for the caller.
 
 ## Known limits
 
-- Batch defaults: read_page_size=200.
-- API coverage includes 5 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  destructive_admin=1, non_data_endpoint=1, out_of_scope=5.
+Recurly documents different fixed limits for sandbox traffic and production GET traffic, and returns the applicable limit in response headers. The connector therefore records the production GET figure as informational metadata but does not enforce a connector-wide runtime throttle; provider `429` responses are surfaced through the declared error map.
+
+The three official binary/export endpoints execute as bounded `binary_download` commands and write only below the caller-provided `--dest-root`. Their commandrunner/engine execution is covered by local synthetic fixtures. The connector has not been live-certified in this wave; no credentialed provider calls were run.

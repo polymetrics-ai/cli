@@ -1,6 +1,7 @@
 package conformance
 
 import (
+	"net/url"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -138,6 +139,27 @@ func TestWriteRequestShape_MismatchFails(t *testing.T) {
 	}
 	if !found {
 		t.Fatalf("expected a write_request_shape:update_widget result, got %+v", results)
+	}
+}
+
+func TestCompareWriteExpectationQuery(t *testing.T) {
+	tests := []struct {
+		name    string
+		got     url.Values
+		want    map[string]string
+		matches bool
+	}{
+		{name: "matches", got: url.Values{"refund": {"partial"}, "charge": {"false"}}, want: map[string]string{"refund": "partial", "charge": "false"}, matches: true},
+		{name: "missing", got: url.Values{"refund": {"partial"}}, want: map[string]string{"refund": "partial", "charge": "false"}},
+		{name: "different", got: url.Values{"refund": {"none"}, "charge": {"false"}}, want: map[string]string{"refund": "partial", "charge": "false"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mismatch := compareWriteExpectation(capturedRequest{Query: tt.got}, writeExpectation{Query: tt.want})
+			if (mismatch == "") != tt.matches {
+				t.Fatalf("mismatch = %q, matches = %v", mismatch, tt.matches)
+			}
+		})
 	}
 }
 

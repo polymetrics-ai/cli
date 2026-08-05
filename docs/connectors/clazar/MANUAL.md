@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Clazar cloud GTM data (buyers, listings, contracts, opportunities, private offers, reseller offers, contacts, and metering records) and writes buyer/opportunity/contract/private-offer/contact/metering mutations, contract activation, and metering-record submission, through the Clazar REST API using OAuth2 client credentials.
 
 ICON
+  id: clazar
   asset: icons/clazar.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -100,11 +101,11 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a Clazar contact record; approval required (destructive, irreversible)
   update_metering_record:
     endpoint: PATCH /metering/{{ record.id }}/
-    required fields: id
+    required fields: id, custom_properties
     risk: updates only the custom_properties of a submitted metering record; low-risk
   create_metering_records:
     endpoint: POST /metering/
-    optional fields: request
+    required fields: request
     risk: submits usage-based billing metering records that drive cloud marketplace invoicing for the buyer's contract; approval required (financial impact, effectively irreversible once billed)
 
 SECURITY

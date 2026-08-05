@@ -29,7 +29,11 @@ confirm the parent branch and parent PR, and delegate independent ready work thr
 
 - Dispatch `pm-gsd-worker` (mutating, `model: openai-codex/gpt-5.5:high`, scoped to
   `read,bash,edit,write,grep,find,ls`) for each independent ready sub-issue with disjoint write
-  scope. Give every mutating worker its own `cwd` (prefer a git worktree).
+  scope. Give every mutating worker its own `cwd` (prefer a git worktree). For connector
+  implementation lanes, the worker prompt must declare exactly one target connector, ownership
+  guard evidence expected, changed-path compliance evidence expected, and the foundation PR path
+  to use when shared runtime/tooling, schema, generated-index, or unrelated connector work is
+  required. Stop/split instead of letting a connector PR absorb that foundation work.
 - Dispatch `pm-scout` (read-only, `model: openai-codex/gpt-5.4-mini:high`) for reconnaissance
   sidecars.
 - Dispatch `pm-reviewer` (read-only, `thinking: xhigh`) for adversarial review sidecars.
@@ -38,8 +42,9 @@ confirm the parent branch and parent PR, and delegate independent ready work thr
 
 Pi runtime constraints:
 
-- Use `agentScope: "both"` (or `"project"`) so project agents from `.pi/agents/` are visible.
-  The default `"user"` scope does not load project agents.
+- This retained compatibility prompt deliberately uses `agentScope: "both"` (or `"project"`) to
+  expose legacy project roles. The default `"clean-project"` scope admits only the two canonical
+  generated workers; see `.pi/extensions/pi-sub-agent/README.md`.
 - In non-interactive runs (`pi -p`), project agents are blocked unless you set
   `confirmProjectAgents: false`. Only set it to `false` after reviewing and trusting the project
   agents; otherwise run interactively.

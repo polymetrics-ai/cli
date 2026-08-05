@@ -13,6 +13,7 @@ DESCRIPTION
   Reads AppsFlyer raw-data CSV export reports (installs, in-app events) through the AppsFlyer Pull API. Read-only.
 
 ICON
+  id: appsflyer
   asset: icons/appsflyer.svg
   source: upstream_registry
   review_status: upstream_seeded

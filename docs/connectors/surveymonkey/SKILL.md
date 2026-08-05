@@ -11,6 +11,7 @@ Reads and writes SurveyMonkey REST v3 and SCIM v2 resources through the document
 
 ## Icon
 
+- id: surveymonkey
 - asset: icons/surveymonkey.svg
 - source: upstream_registry
 - review_status: upstream_seeded

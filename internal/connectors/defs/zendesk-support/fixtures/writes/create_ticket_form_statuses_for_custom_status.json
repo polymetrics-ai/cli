@@ -1,0 +1,21 @@
+{
+  "record": {
+    "custom_status_id": "fixture-custom-status-id",
+    "ticket_form_status": [
+      {
+        "ticket_form_id": 1
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/custom_statuses/fixture-custom-status-id/ticket_form_statuses",
+    "body": {
+      "ticket_form_status": [
+        {
+          "ticket_form_id": 1
+        }
+      ]
+    }
+  }
+}

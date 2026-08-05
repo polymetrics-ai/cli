@@ -1,0 +1,102 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "audit_log_list",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the audit log entry"
+    },
+    "timestamp": {
+      "type": "string",
+      "description": "When the audited action occurred, as an ISO 8601 timestamp in UTC (e.g. 2026-06-02T15:04:05.123Z)."
+    },
+    "actor": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "The kind of actor that performed the action: \"User\", \"Automation\", or \"Other\"."
+        },
+        "id": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "id",
+        "email",
+        "name"
+      ]
+    },
+    "target": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ]
+    },
+    "category": {
+      "type": "string",
+      "description": "The action category with new categories appearing in responses over time; see the Audit Log Vocabulary guide."
+    },
+    "description": {
+      "type": "string",
+      "description": "A human-readable description of the audited action."
+    },
+    "request": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "ipAddress": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "ipAddress"
+      ]
+    },
+    "parentAction": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "name"
+      ]
+    },
+    "changedFields": {
+      "type": "object"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ]
+}

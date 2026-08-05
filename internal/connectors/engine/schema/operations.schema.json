@@ -22,6 +22,7 @@
               "stream_etl",
               "rest_read",
               "rest_write",
+              "provider_search",
               "graphql_query",
               "graphql_mutation",
               "xml_export",
@@ -52,6 +53,14 @@
             "enum": ["none", "create", "update", "delete", "admin", "destructive", "secret"]
           },
           "destructive": { "type": "boolean" },
+          "confirmation": {
+            "type": "object",
+            "required": ["kind"],
+            "additionalProperties": false,
+            "properties": {
+              "kind": { "type": "string", "enum": ["destructive"] }
+            }
+          },
           "secret_sensitive": { "type": "boolean" },
           "sensitive_policy": {
             "type": "object",
@@ -89,6 +98,21 @@
               "query": {
                 "type": "object",
                 "additionalProperties": true
+              },
+              "required_query": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["any_of"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "any_of": {
+                      "type": "array",
+                      "minItems": 1,
+                      "items": { "type": "string" }
+                    }
+                  }
+                }
               },
               "body": {
                 "type": "object",
@@ -130,7 +154,11 @@
               "path": { "type": "string" },
               "max_bytes": { "type": "integer" },
               "allow_overwrite": { "type": "boolean" },
-              "extract_archives": { "type": "boolean" }
+              "extract_archives": { "type": "boolean" },
+              "allow_cross_host": { "type": "boolean" },
+              "allowed_hosts": { "type": "array", "items": { "type": "string" } },
+              "content_types": { "type": "array", "items": { "type": "string" } },
+              "stall_timeout_seconds": { "type": "integer" }
             }
           },
           "file": {

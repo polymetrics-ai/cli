@@ -1,0 +1,22 @@
+{
+  "record": {
+    "name": "Fixture Event",
+    "eventCode": "EVT-1",
+    "backgroundColor": "#336699"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/event",
+    "body": {
+      "name": "Fixture Event",
+      "eventCode": "EVT-1",
+      "backgroundColor": "#336699"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "create_event_fixture"
+    }
+  }
+}

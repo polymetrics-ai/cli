@@ -1,0 +1,19 @@
+{
+  "record": {
+    "coupon_id": "fixture_coupon_id",
+    "number_of_unique_codes": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/coupons/fixture_coupon_id/generate_sync",
+    "body": {
+      "number_of_unique_codes": 1
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "fixture_object"
+    }
+  }
+}

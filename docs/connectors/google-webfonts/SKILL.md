@@ -11,6 +11,7 @@ Reads Google Web Fonts families (default, popular, trending, newest, and alphabe
 
 ## Icon
 
+- id: googleworkpace
 - asset: icons/googleworkpace.svg
 - source: upstream_registry
 - review_status: upstream_seeded

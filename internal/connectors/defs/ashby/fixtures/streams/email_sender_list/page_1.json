@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/emailSender.list",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "email": "email_sender_list.email.50@example.invalid",
+          "displayName": "Email Sender List Displayname Fixture 50",
+          "type": "Primary"
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  }
+}

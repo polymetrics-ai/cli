@@ -1,21 +1,29 @@
 {
   "name": "amazon-sqs",
   "display_name": "Amazon SQS",
-  "description": "Reads messages from Amazon SQS via signed ReceiveMessage calls. Read-only; messages are not deleted.",
+  "description": "Reads Amazon SQS queues and executes typed, approval-gated SQS message and queue actions through fixed AWS Query API operations.",
   "integration_type": "queue",
   "docs_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/Welcome.html",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": true
   },
+  "batch": {
+    "read_page_size": 10,
+    "write_batch_size": 10
+  },
   "risk": {
-    "read": "external AWS SQS queue read via signed ReceiveMessage calls (visibility timeout side effects per SQS semantics)",
-    "write": "n/a (read-only source)",
-    "approval": "none required for read-only sync"
+    "read": "signed, bounded Amazon SQS Query API reads against the configured queue or derived regional endpoint; ReceiveMessage can change message visibility per SQS semantics",
+    "write": "typed SendMessage, queue administration, permission, tag, visibility, delete, purge, and dead-letter redrive operations against fixed SQS targets only",
+    "approval": "all reverse ETL/provider write commands require plan, preview, explicit approval, and destructive confirmation for delete/purge/cancel/remove operations"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "Tier-3 native SigV4/XML SQS Query API; dynamic declarative replay is skipped because the declarative engine cannot execute AWS Query XML or SigV4 flows; native httptest fixtures cover SigV4 signing, credential-free fixture reads, direct-read validation/redaction, and representative typed write serialization"
   }
 }

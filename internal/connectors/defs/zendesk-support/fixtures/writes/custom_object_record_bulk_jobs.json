@@ -1,0 +1,17 @@
+{
+  "record": {
+    "custom_object_key": "fixture-custom-object-key",
+    "job": {
+      "action": "fixture-action"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/custom_objects/fixture-custom-object-key/jobs",
+    "body": {
+      "job": {
+        "action": "fixture-action"
+      }
+    }
+  }
+}

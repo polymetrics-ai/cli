@@ -24,7 +24,7 @@
 - [alpha-vantage](alpha-vantage/MANUAL.md): Reads Alpha Vantage daily, weekly, monthly, and intraday OHLCV time series plus the latest global quote for a configured stock symbol.
 - [amazon-ads](amazon-ads/MANUAL.md): Reads Amazon Advertising profiles, Sponsored Products campaigns, ad groups, product ads, keywords, negative keywords, and portfolios via the Amazon Ads API using a Login with Amazon (LWA) refresh-token grant. Read-only.
 - [amazon-seller-partner](amazon-seller-partner/MANUAL.md): Reads Amazon Selling Partner API orders, inventory, finance, catalog, listings, fulfillment, reports, feeds, seller, shipping, vendor, and supporting JSON resources via Login with Amazon (LWA) authentication; exposes declarative writes for SP-API mutations that fit path/body JSON requests.
-- [amazon-sqs](amazon-sqs/MANUAL.md): Reads messages from Amazon SQS via signed ReceiveMessage calls. Read-only; messages are not deleted.
+- [amazon-sqs](amazon-sqs/MANUAL.md): Reads Amazon SQS queues and executes typed, approval-gated SQS message and queue actions through fixed AWS Query API operations.
 - [amplitude](amplitude/MANUAL.md): Reads and manages Amplitude behavioral cohorts, chart annotations, annotation categories, event lists, and the governed taxonomy (event/category definitions) through the Amplitude Analytics REST API.
 - [apify-dataset](apify-dataset/MANUAL.md): Reads Apify dataset items and dataset metadata (item_collection, dataset_collection, dataset) through the Apify API v2.
 - [appcues](appcues/MANUAL.md): Reads and manages Appcues in-app guidance experiences (flows, Flows 2.0, pins, mobile experiences, launchpads, banners, checklists, embeds, NPS 2.0), audience data (segments, tags), operational resources (offline jobs, SDK authentication keys), and individual end-user/group profiles through the Appcues REST API v2.
@@ -33,8 +33,8 @@
 - [apple-search-ads](apple-search-ads/MANUAL.md): Reads Apple Search Ads campaigns, ad groups, targeting keywords, and ads via the Apple Search Ads Campaign Management API using an OAuth2 client-credentials grant scoped to an organization. Read-only.
 - [appsflyer](appsflyer/MANUAL.md): Reads AppsFlyer raw-data CSV export reports (installs, in-app events) through the AppsFlyer Pull API. Read-only.
 - [apptivo](apptivo/MANUAL.md): Reads Apptivo CRM customers, contacts, leads, and opportunities through the Apptivo REST DAO API (full refresh); deletes CRM customer records via the documented deleteCustomer DAO action.
-- [asana](asana/MANUAL.md): Reads implemented Asana project-management streams and safely plans implemented task/project/section/tag reverse-ETL actions. Tracks every official Asana API operation from the pinned OpenAPI source as covered or blocked/planned fixed-target metadata.
-- [ashby](ashby/MANUAL.md): Reads Ashby applicant-tracking data — candidates, jobs, applications, and users — through the Ashby REST API.
+- [asana](asana/MANUAL.md): Reads implemented Asana project-management streams and executes typed, approval-gated reverse-ETL write actions across tasks, projects, sections, tags, stories, goals, portfolios, teams, users, and workspaces. Tracks every official Asana API operation from the pinned OpenAPI source as covered or blocked/planned fixed-target metadata.
+- [ashby](ashby/MANUAL.md): Reads Ashby applicant-tracking data and exposes typed, gated Ashby reverse-ETL writes through the documented REST API.
 - [assemblyai](assemblyai/MANUAL.md): Reads AssemblyAI transcripts, per-transcript detail, sentences, paragraphs, and word-search matches, and submits new transcription jobs, through the AssemblyAI REST API.
 - [auth0](auth0/MANUAL.md): Reads Auth0 users, clients, connections, roles, organizations, role assignments, and organization memberships, and creates/updates users, clients, roles, and organizations, through the Auth0 Management API v2.
 - [aviationstack](aviationstack/MANUAL.md): Reads aviationstack flights and aviation reference data (airlines, airports, airplanes, countries) through the aviationstack REST API. Read-only.
@@ -220,7 +220,7 @@
 - [hibob](hibob/MANUAL.md): Reads HiBob HR data: employee profiles, company named lists, and people field definitions via the HiBob REST API (read-only).
 - [high-level](high-level/MANUAL.md): Reads HighLevel (Go HighLevel / LeadConnector) contacts, opportunities, pipelines, custom fields, and form submissions for a location through the HighLevel REST API.
 - [hoorayhr](hoorayhr/MANUAL.md): Reads HoorayHR users, time-off, leave-types, and sick-leave records through the HoorayHR REST API using session-token authentication.
-- [hubplanner](hubplanner/MANUAL.md): Reads Hubplanner resources, projects, clients, events, holidays, bookings, and billing rates through the Hubplanner REST API.
+- [hubplanner](hubplanner/MANUAL.md): Reads Hubplanner scheduling, project, resource, client, billing, time, vacation, custom-field, and webhook-subscription data and exposes typed reverse-ETL writes for documented Hubplanner REST resources.
 - [hubspot](hubspot/MANUAL.md): Connector-local HubSpot official API operation ledger and planned typed command surface.
 - [hugging-face-datasets](hugging-face-datasets/MANUAL.md): Reads dataset splits and per-split sizes from the Hugging Face dataset-viewer REST API. Read-only; an optional user access token unlocks gated and private datasets.
 - [humanitix](humanitix/MANUAL.md): Reads Humanitix events, orders, tickets, and tags through the Humanitix public REST API.
@@ -392,7 +392,7 @@
 - [recharge](recharge/MANUAL.md): Reads Recharge customers, subscriptions, and orders through the Recharge REST API.
 - [recreation](recreation/MANUAL.md): Reads Recreation.gov RIDB facilities, campsites, activities, organizations, and recreation areas through the RIDB REST API.
 - [recruitee](recruitee/MANUAL.md): Reads Recruitee offers, candidates, departments, sources, and tags through the Recruitee REST API.
-- [recurly](recurly/MANUAL.md): Reads Recurly accounts, subscriptions, invoices, transactions, and plans through the Recurly v3 REST API.
+- [recurly](recurly/MANUAL.md): Reads Recurly accounts, subscriptions, invoices, transactions, catalog, usage, exports, preview resources, and related V3 API data; models typed reverse-ETL mutations for official POST/PUT/DELETE endpoints.
 - [reddit](reddit/MANUAL.md): Reads subreddit posts and comments through the Reddit OAuth API listing endpoints.
 - [referralhero](referralhero/MANUAL.md): Reads ReferralHero lists, subscribers, referrals, rewards, coupon groups, and campaign-scoped subscriber resources, and performs approved ReferralHero API v2 mutations.
 - [rentcast](rentcast/MANUAL.md): Reads RentCast properties, sale listings, rental listings, market data, and value/rental estimates through the RentCast REST API. Read-only.
@@ -542,7 +542,7 @@
 - [you-need-a-budget-ynab](you-need-a-budget-ynab/MANUAL.md): Reads YNAB budgets, accounts, categories, payees, months, transactions, and scheduled transactions, and writes transaction/account/category/payee/scheduled-transaction mutations through the YNAB REST API.
 - [younium](younium/MANUAL.md): Reads and writes Younium accounts, subscriptions, invoices, products, payment terms, currencies, and webhooks through the Younium REST API.
 - [yousign](yousign/MANUAL.md): Reads and writes Yousign signature requests, contacts, documents, webhooks, templates, users, and workflow sessions through the Yousign REST API.
-- [youtube-analytics](youtube-analytics/MANUAL.md): Reads YouTube Reporting API jobs, report types, and generated reports via the Google OAuth 2.0 refresh-token grant.
+- [youtube-analytics](youtube-analytics/MANUAL.md): Reads YouTube Reporting API jobs, report types, report metadata, YouTube Analytics groups and group items, and safely plans documented job/group mutations via the Google OAuth 2.0 refresh-token grant.
 - [youtube-data](youtube-data/MANUAL.md): Reads channels, videos, playlists, playlist items, comment threads, search results, video categories, and i18n region/language reference data through the YouTube Data API.
 - [zapier-supported-storage](zapier-supported-storage/MANUAL.md): Reads and writes Zapier Storage key/value records.
 - [zapsign](zapsign/MANUAL.md): Reads and writes ZapSign documents, signers, templates, and webhooks.

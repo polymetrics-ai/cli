@@ -11,6 +11,7 @@ Reads and writes WorkRamp users and groups, and reads guides, resources, and SCO
 
 ## Icon
 
+- id: workramp
 - asset: icons/workramp.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -62,6 +63,7 @@ Reads and writes WorkRamp users and groups, and reads guides, resources, and SCO
 
 - create_user:
   - endpoint: POST /api/v1/users
+  - required fields: email
   - risk: creates a WorkRamp user account; approval required
 - update_user:
   - endpoint: POST /api/v1/users/{{ record.id }}
@@ -73,6 +75,7 @@ Reads and writes WorkRamp users and groups, and reads guides, resources, and SCO
   - risk: permanently deletes a WorkRamp user account; approval required
 - create_group:
   - endpoint: POST /api/v1/groups
+  - required fields: name
   - risk: creates a WorkRamp group; approval required
 - update_group:
   - endpoint: POST /api/v1/groups/{{ record.id }}

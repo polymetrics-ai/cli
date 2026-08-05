@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Google Analytics 4 report presets plus bounded v1beta/v1alpha metadata resources from the Google Analytics Data API. The provider-derived inventory contains 24 semantic operations (20 reads, 4 writes): 11 are executable read operations and 13 remain planned behind the shared provider-query or closed reverse-ETL foundations; no raw API access is exposed.
 
 ICON
+  id: google-analytics
   asset: icons/google-analytics.svg
   source: upstream_registry
   review_status: upstream_seeded

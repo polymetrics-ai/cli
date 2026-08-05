@@ -127,6 +127,52 @@ func TestReadRequestQueryOverridesStaticQuery(t *testing.T) {
 	}
 }
 
+func TestReadRequestQueryResolvesStreamQueryTemplate(t *testing.T) {
+	var gotQuery url.Values
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotQuery = r.URL.Query()
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{Query: map[string]QueryParam{
+		"mine": {Template: "{{ query.mine }}"},
+	}})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{
+		Stream: "widgets",
+		Query:  map[string]string{"mine": "true"},
+	}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if got := gotQuery.Get("mine"); got != "true" {
+		t.Fatalf("mine query = %q, want true", got)
+	}
+}
+
+func TestReadRequestQueryTemplateMissingFailsBeforeRequest(t *testing.T) {
+	requests := make(chan struct{}, 1)
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		requests <- struct{}{}
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{Query: map[string]QueryParam{
+		"groupId": {Template: "{{ query.groupId }}"},
+	}})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err == nil {
+		t.Fatal("Read: want unresolved query error")
+	}
+	if !strings.Contains(err.Error(), `unresolved key "groupId" in query`) {
+		t.Fatalf("Read error = %q, want unresolved groupId query key", err)
+	}
+	select {
+	case <-requests:
+		t.Fatal("request sent despite unresolved query template")
+	default:
+	}
+}
+
 // --- GraphQL request body support ---
 
 func TestReadGraphQLBodySendsFixedDocumentAndVariables(t *testing.T) {

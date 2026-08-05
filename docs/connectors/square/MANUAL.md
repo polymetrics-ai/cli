@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Square payments, refunds, customers, and locations through the Square Connect v2 REST API.
 
 ICON
+  id: square
   asset: icons/square.svg
   source: upstream_registry
   review_status: upstream_seeded

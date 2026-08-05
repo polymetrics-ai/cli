@@ -13,9 +13,11 @@ DESCRIPTION
   Reads and writes Mantle Core API resources through the heymantle.com REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -429,14 +431,15 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_agents:
     endpoint: POST /v1/agents
+    required fields: email
     risk: medium: external Mantle mutation; approval required
   create_ai_agents_agent_id_runs:
     endpoint: POST /v1/ai/agents/{{ record.agent_id }}/runs
-    required fields: agent_id
+    required fields: agent_id, prompt
     risk: medium: external Mantle side effect; approval required
   create_apps_app_id_checklists:
     endpoint: POST /v1/apps/{{ record.app_id }}/checklists
-    required fields: app_id
+    required fields: app_id, name
     risk: medium: external Mantle mutation; approval required
   create_apps_app_id_plans_features:
     endpoint: POST /v1/apps/{{ record.app_id }}/plans/features
@@ -444,7 +447,7 @@ REVERSE ETL ACTIONS
     risk: medium: external Mantle mutation; approval required
   create_apps_id_app_events:
     endpoint: POST /v1/apps/{{ record.id }}/app_events
-    required fields: id
+    required fields: id, type, customerId
     risk: medium: external Mantle mutation; approval required
   create_apps_id_plans:
     endpoint: POST /v1/apps/{{ record.id }}/plans
@@ -456,9 +459,11 @@ REVERSE ETL ACTIONS
     risk: medium: external Mantle mutation; approval required
   create_attachments:
     endpoint: POST /v1/attachments
+    required fields: filename
     risk: medium: external Mantle mutation; approval required
   create_channels:
     endpoint: POST /v1/channels
+    required fields: type, name
     risk: medium: external Mantle mutation; approval required
   create_companies:
     endpoint: POST /v1/companies
@@ -471,12 +476,15 @@ REVERSE ETL ACTIONS
     risk: medium: external Mantle mutation; approval required
   create_deal_activities:
     endpoint: POST /v1/deal_activities
+    required fields: name
     risk: medium: external Mantle mutation; approval required
   create_deal_flows:
     endpoint: POST /v1/deal_flows
+    required fields: name, dealStages
     risk: medium: external Mantle side effect; approval required
   create_deals:
     endpoint: POST /v1/deals
+    required fields: name
     risk: medium: external Mantle mutation; approval required
   create_deals_id_events:
     endpoint: POST /v1/deals/{{ record.id }}/events
@@ -484,34 +492,42 @@ REVERSE ETL ACTIONS
     risk: medium: external Mantle mutation; approval required
   create_docs_collections:
     endpoint: POST /v1/docs/collections
+    required fields: repositoryId, handle, title
     risk: medium: external Mantle mutation; approval required
   create_docs_groups:
     endpoint: POST /v1/docs/groups
+    required fields: repositoryId, collectionId, handle, title
     risk: medium: external Mantle mutation; approval required
   create_docs_pages:
     endpoint: POST /v1/docs/pages
+    required fields: repositoryId, groupId, handle, title
     risk: medium: external Mantle mutation; approval required
   create_docs_sites:
     endpoint: POST /v1/docs/sites
+    required fields: handle, title
     risk: medium: external Mantle mutation; approval required
   create_docs_sites_id_redirects:
     endpoint: POST /v1/docs/sites/{{ record.id }}/redirects
-    required fields: id
+    required fields: id, redirects
     risk: medium: external Mantle mutation; approval required
   create_email_campaigns:
     endpoint: POST /v1/email/campaigns
+    required fields: name
     risk: medium: external Mantle side effect; approval required
   create_flow_extensions_actions:
     endpoint: POST /v1/flow/extensions/actions
     risk: medium: external Mantle side effect; approval required
   create_flows:
     endpoint: POST /v1/flows
+    required fields: name
     risk: medium: external Mantle side effect; approval required
   create_journal_entries:
     endpoint: POST /v1/journal_entries
+    required fields: date, description
     risk: medium: external Mantle mutation; approval required
   create_lists:
     endpoint: POST /v1/lists
+    required fields: name
     risk: medium: external Mantle mutation; approval required
   create_meetings:
     endpoint: POST /v1/meetings
@@ -522,6 +538,7 @@ REVERSE ETL ACTIONS
     risk: medium: external Mantle mutation; approval required
   create_tasks:
     endpoint: POST /v1/tasks
+    required fields: title
     risk: medium: external Mantle mutation; approval required
   create_tasks_id_comments:
     endpoint: POST /v1/tasks/{{ record.id }}/comments
@@ -529,14 +546,15 @@ REVERSE ETL ACTIONS
     risk: medium: external Mantle mutation; approval required
   create_tasks_id_todo_items:
     endpoint: POST /v1/tasks/{{ record.id }}/todo-items
-    required fields: id
+    required fields: id, content
     risk: medium: external Mantle mutation; approval required
   create_tickets:
     endpoint: POST /v1/tickets
+    required fields: subject
     risk: medium: external Mantle mutation; approval required
   create_tickets_id_events:
     endpoint: POST /v1/tickets/{{ record.id }}/events
-    required fields: id
+    required fields: id, type, actorType
     risk: medium: external Mantle mutation; approval required
   create_tickets_id_messages:
     endpoint: POST /v1/tickets/{{ record.id }}/messages
@@ -544,12 +562,15 @@ REVERSE ETL ACTIONS
     risk: medium: external Mantle mutation; approval required
   create_tickets_saved_filters:
     endpoint: POST /v1/tickets/saved_filters
+    required fields: name
     risk: medium: external Mantle mutation; approval required
   create_tickets_saved_replies:
     endpoint: POST /v1/tickets/saved_replies
+    required fields: title
     risk: medium: external Mantle mutation; approval required
   create_timeline_comments:
     endpoint: POST /v1/timeline_comments
+    required fields: commentHtml
     risk: medium: external Mantle mutation; approval required
   create_usage_events:
     endpoint: POST /v1/usage_events
@@ -627,7 +648,7 @@ REVERSE ETL ACTIONS
     risk: high: external Mantle mutation or side effect; approval required
   delete_docs_sites_id_repositories:
     endpoint: DELETE /v1/docs/sites/{{ record.id }}/repositories
-    required fields: id
+    required fields: id, repositoryId
     risk: high: external Mantle mutation or side effect; approval required
   delete_email_campaigns_id:
     endpoint: DELETE /v1/email/campaigns/{{ record.id }}
@@ -667,7 +688,7 @@ REVERSE ETL ACTIONS
     risk: high: external Mantle mutation or side effect; approval required
   delete_meetings_id_permissions:
     endpoint: DELETE /v1/meetings/{{ record.id }}/permissions
-    required fields: id
+    required fields: id, userId
     risk: high: external Mantle mutation or side effect; approval required
   delete_synced_emails_id:
     endpoint: DELETE /v1/synced_emails/{{ record.id }}
@@ -715,7 +736,7 @@ REVERSE ETL ACTIONS
     risk: medium: external Mantle mutation; approval required
   execute_apps_id_skills_skill_id:
     endpoint: POST /v1/apps/{{ record.id }}/skills/{{ record.skill_id }}
-    required fields: id, skill_id
+    required fields: id, skill_id, targets
     risk: medium: external Mantle mutation; approval required
   execute_contacts_id_add_tags:
     endpoint: POST /v1/contacts/{{ record.id }}/addTags
@@ -727,7 +748,7 @@ REVERSE ETL ACTIONS
     risk: high: external Mantle mutation or side effect; approval required
   execute_customers_id_account_owners:
     endpoint: POST /v1/customers/{{ record.id }}/account_owners
-    required fields: id
+    required fields: id, userId, type
     risk: medium: external Mantle mutation; approval required
   execute_customers_id_add_tags:
     endpoint: POST /v1/customers/{{ record.id }}/addTags
@@ -739,9 +760,11 @@ REVERSE ETL ACTIONS
     risk: high: external Mantle mutation or side effect; approval required
   execute_devices:
     endpoint: POST /v1/devices
+    required fields: token, platform
     risk: medium: external Mantle mutation; approval required
   execute_docs_pages_generate:
     endpoint: POST /v1/docs/pages/generate
+    required fields: repositoryId, prompt
     risk: medium: external Mantle side effect; approval required
   execute_docs_pages_page_id_archive:
     endpoint: POST /v1/docs/pages/{{ record.page_id }}/archive
@@ -749,15 +772,15 @@ REVERSE ETL ACTIONS
     risk: high: external Mantle mutation or side effect; approval required
   execute_docs_pages_page_id_generate:
     endpoint: POST /v1/docs/pages/{{ record.page_id }}/generate
-    required fields: page_id
+    required fields: page_id, prompt
     risk: medium: external Mantle side effect; approval required
   execute_docs_pages_page_id_publish:
     endpoint: POST /v1/docs/pages/{{ record.page_id }}/publish
-    required fields: page_id
+    required fields: page_id, repositoryId
     risk: high: external Mantle mutation or side effect; approval required
   execute_docs_sites_id_repositories:
     endpoint: POST /v1/docs/sites/{{ record.id }}/repositories
-    required fields: id
+    required fields: id, repositoryId
     risk: medium: external Mantle mutation; approval required
   execute_email_campaigns_id_cancel:
     endpoint: POST /v1/email/campaigns/{{ record.id }}/cancel
@@ -765,7 +788,7 @@ REVERSE ETL ACTIONS
     risk: high: external Mantle mutation or side effect; approval required
   execute_email_campaigns_id_deliver:
     endpoint: POST /v1/email/campaigns/{{ record.id }}/deliver
-    required fields: id
+    required fields: id, customerId
     risk: high: external Mantle mutation or side effect; approval required
   execute_email_campaigns_id_send:
     endpoint: POST /v1/email/campaigns/{{ record.id }}/send
@@ -773,11 +796,11 @@ REVERSE ETL ACTIONS
     risk: high: external Mantle mutation or side effect; approval required
   execute_email_campaigns_id_test:
     endpoint: POST /v1/email/campaigns/{{ record.id }}/test
-    required fields: id
+    required fields: id, email
     risk: high: external Mantle mutation or side effect; approval required
   execute_email_unsubscribe_groups_id_members:
     endpoint: POST /v1/email/unsubscribe_groups/{{ record.id }}/members
-    required fields: id
+    required fields: id, emails
     risk: medium: external Mantle side effect; approval required
   execute_lists_id_add:
     endpoint: POST /v1/lists/{{ record.id }}/add
@@ -789,7 +812,7 @@ REVERSE ETL ACTIONS
     risk: high: external Mantle mutation or side effect; approval required
   execute_meetings_id_permissions:
     endpoint: POST /v1/meetings/{{ record.id }}/permissions
-    required fields: id
+    required fields: id, userId
     risk: medium: external Mantle mutation; approval required
   execute_meetings_id_task_suggestions_suggestion_id_accept:
     endpoint: POST /v1/meetings/{{ record.id }}/task-suggestions/{{ record.suggestion_id }}/accept
@@ -801,14 +824,14 @@ REVERSE ETL ACTIONS
     risk: medium: external Mantle side effect; approval required
   execute_meetings_id_transcribe:
     endpoint: POST /v1/meetings/{{ record.id }}/transcribe
-    required fields: id
+    required fields: id, recordingKey
     risk: medium: external Mantle mutation; approval required
   execute_synced_emails:
     endpoint: POST /v1/synced_emails
     risk: medium: external Mantle side effect; approval required
   execute_synced_emails_id_messages:
     endpoint: POST /v1/synced_emails/{{ record.id }}/messages
-    required fields: id
+    required fields: id, messages
     risk: medium: external Mantle side effect; approval required
   execute_tickets_id_ai_replies:
     endpoint: POST /v1/tickets/{{ record.id }}/ai-replies
@@ -840,7 +863,7 @@ REVERSE ETL ACTIONS
     risk: medium: external Mantle mutation; approval required
   update_companies_id:
     endpoint: PUT /v1/companies/{{ record.id }}
-    required fields: id
+    required fields: id, parentCustomerId
     risk: medium: external Mantle mutation; approval required
   update_contacts_id:
     endpoint: PUT /v1/contacts/{{ record.id }}
@@ -848,6 +871,7 @@ REVERSE ETL ACTIONS
     risk: medium: external Mantle mutation; approval required
   update_custom_data:
     endpoint: PUT /v1/custom_data
+    required fields: resourceId, resourceType, key, value
     risk: medium: external Mantle mutation; approval required
   update_customers_custom_fields_id:
     endpoint: PUT /v1/customers/custom_fields/{{ record.id }}
@@ -867,7 +891,7 @@ REVERSE ETL ACTIONS
     risk: medium: external Mantle mutation; approval required
   update_deal_flows_id:
     endpoint: PUT /v1/deal_flows/{{ record.id }}
-    required fields: id
+    required fields: id, name, dealStages
     risk: medium: external Mantle side effect; approval required
   update_deals_id:
     endpoint: PUT /v1/deals/{{ record.id }}
@@ -899,7 +923,7 @@ REVERSE ETL ACTIONS
     risk: medium: external Mantle mutation; approval required
   update_docs_sites_id_repositories:
     endpoint: PUT /v1/docs/sites/{{ record.id }}/repositories
-    required fields: id
+    required fields: id, attachments
     risk: medium: external Mantle mutation; approval required
   update_email_campaigns_id:
     endpoint: PUT /v1/email/campaigns/{{ record.id }}
@@ -935,10 +959,11 @@ REVERSE ETL ACTIONS
     risk: medium: external Mantle mutation; approval required
   update_meetings_id_visibility:
     endpoint: PUT /v1/meetings/{{ record.id }}/visibility
-    required fields: id
+    required fields: id, visibility
     risk: medium: external Mantle mutation; approval required
   update_notification_preferences:
     endpoint: PUT /v1/notification_preferences
+    required fields: helpDeskNotificationPreferences
     risk: medium: external Mantle mutation; approval required
   update_synced_emails_id:
     endpoint: PUT /v1/synced_emails/{{ record.id }}
@@ -978,7 +1003,7 @@ REVERSE ETL ACTIONS
     risk: medium: external Mantle mutation; approval required
   update_timeline_comments_id:
     endpoint: PUT /v1/timeline_comments/{{ record.id }}
-    required fields: id
+    required fields: id, commentHtml
     risk: medium: external Mantle mutation; approval required
   update_webhooks_id:
     endpoint: PUT /v1/webhooks/{{ record.id }}

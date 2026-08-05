@@ -11,6 +11,7 @@ Reads and writes Younium accounts, subscriptions, invoices, products, payment te
 
 ## Icon
 
+- id: younium
 - asset: icons/younium.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -68,6 +69,7 @@ Reads and writes Younium accounts, subscriptions, invoices, products, payment te
 
 - create_account:
   - endpoint: POST /Accounts
+  - required fields: name, currency
   - risk: creates a new billing account in Younium; external mutation, approval required
 - update_account:
   - endpoint: PATCH /Accounts/{{ record.id }}
@@ -75,7 +77,7 @@ Reads and writes Younium accounts, subscriptions, invoices, products, payment te
   - risk: mutates an existing account's billing/contact/tax metadata; external mutation, approval required
 - cancel_subscription:
   - endpoint: POST /Subscriptions/cancel/{{ record.id }}
-  - required fields: id
+  - required fields: id, cancellationDate, cancellationMode
   - risk: irreversibly schedules or immediately cancels an active subscription, ending future billing; external mutation, approval required
 - post_invoice:
   - endpoint: POST /Invoices/{{ record.id }}/post

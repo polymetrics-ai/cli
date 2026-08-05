@@ -426,7 +426,8 @@ func TestGitHubDestructiveCommandRequiresTypedConfirmation(t *testing.T) {
 
 	var planStdout, planStderr bytes.Buffer
 	code := cli.Run([]string{
-		"github", "repo", "delete-2",
+		"github", "repo", "deploy-key", "delete",
+		"--key-id", "42",
 		"--credential", "github-local",
 		"--root", root,
 	}, &planStdout, &planStderr)
@@ -434,14 +435,31 @@ func TestGitHubDestructiveCommandRequiresTypedConfirmation(t *testing.T) {
 		t.Fatalf("github repo delete plan code=%d stdout=%s stderr=%s", code, planStdout.String(), planStderr.String())
 	}
 	planID := extractReverseField(t, planStdout.String(), `Created connector command plan (\S+)`)
-	token := extractReverseField(t, planStdout.String(), `Approval token: (\S+)`)
+	if !strings.Contains(planStdout.String(), "Preview required before an approval token is issued.") {
+		t.Fatalf("destructive plan did not require preview before approval:\n%s", planStdout.String())
+	}
 	if calls != 0 {
 		t.Fatalf("plan dispatched destructive request; calls=%d", calls)
 	}
 
+	var previewStdout, previewStderr bytes.Buffer
+	code = cli.Run([]string{
+		"github", "repo", "deploy-key", "delete",
+		"--plan", planID,
+		"--preview",
+		"--root", root,
+	}, &previewStdout, &previewStderr)
+	if code != 0 {
+		t.Fatalf("github repo delete preview code=%d stdout=%s stderr=%s", code, previewStdout.String(), previewStderr.String())
+	}
+	token := extractReverseField(t, previewStdout.String(), `Approval token: (\S+)`)
+	if calls != 0 {
+		t.Fatalf("preview dispatched destructive request; calls=%d", calls)
+	}
+
 	var deniedStdout, deniedStderr bytes.Buffer
 	code = cli.Run([]string{
-		"github", "repo", "delete-2",
+		"github", "repo", "deploy-key", "delete",
 		"--plan", planID,
 		"--approve", token,
 		"--root", root,
@@ -456,7 +474,7 @@ func TestGitHubDestructiveCommandRequiresTypedConfirmation(t *testing.T) {
 
 	var runStdout, runStderr bytes.Buffer
 	code = cli.Run([]string{
-		"github", "repo", "delete-2",
+		"github", "repo", "deploy-key", "delete",
 		"--plan", planID,
 		"--approve", token,
 		"--confirm", "destructive",

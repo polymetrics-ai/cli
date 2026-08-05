@@ -7,8 +7,15 @@
 //	boundary [repo] [--json] [--base <ref>]
 //	                           scans shared Go for connector-specific policy
 //	                           outside definition-owned locations
+//	ownership [repo] [--json] [--base <ref>] [--scope-file <path>]
+//	                           validates changed paths for exactly one target connector
 //	gen                        regenerates hooks/hookset/hookset_gen.go and
 //	                           native/nativeset/nativeset_gen.go
+//	surface-sync [dir] [--check]
+//	                           derives operation-backed direct_read and
+//	                           binary_download command metadata (api_surface,
+//	                           output_policy, flag maps_to, rest.max_bytes)
+//	                           from operations.json
 //	new <name>                 scaffolds internal/connectors/defs/<name>/
 //
 // It owns bundle validation plus generated hook/native import sets for the
@@ -40,8 +47,12 @@ func run(args []string, stdout, stderr io.Writer) int {
 		return runValidate(args, stdout, stderr)
 	case "boundary":
 		return runBoundary(args, stdout, stderr)
+	case "ownership":
+		return runOwnership(args, stdout, stderr)
 	case "gen":
 		return runGen(args, stdout, stderr)
+	case "surface-sync":
+		return runSurfaceSync(args, stdout, stderr)
 	case "new":
 		return runNew(args, stdout, stderr)
 	case "-h", "--help", "help":
@@ -71,7 +82,9 @@ func usage() string {
 	return `usage:
   connectorgen validate [dir] [--json]   (default dir: internal/connectors/defs)
   connectorgen boundary [repo-root] [--json] [--base <ref>]
+  connectorgen ownership [repo-root] [--json] [--base <ref>] [--scope-file <path>]
   connectorgen gen
+  connectorgen surface-sync [dir] [--check]  (default dir: internal/connectors/defs)
   connectorgen new <name>`
 }
 

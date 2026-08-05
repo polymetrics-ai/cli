@@ -1,0 +1,21 @@
+{
+  "record": {
+    "section_gid": "fixture-section-gid",
+    "data": {
+      "task": "fixture-task",
+      "insert_after": "fixture-insert-after",
+      "insert_before": "fixture-insert-before"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/sections/fixture-section-gid/addTask",
+    "body": {
+      "data": {
+        "task": "fixture-task",
+        "insert_after": "fixture-insert-after",
+        "insert_before": "fixture-insert-before"
+      }
+    }
+  }
+}

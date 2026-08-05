@@ -1,0 +1,18 @@
+{
+  "record": {
+    "value": "Fixture unassigned work"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/unassigned-work",
+    "body": {
+      "value": "Fixture unassigned work"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "create_unassigned_work_fixture"
+    }
+  }
+}

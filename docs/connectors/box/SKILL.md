@@ -11,9 +11,17 @@ Reads Box users, groups, collections, folder items, webhooks, retention policies
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-box
+- asset: icons/simple-icons/box.svg
+- title: Box
+- simple_icon_slug: box
+- simple_icon_hex: 0061D5
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Box
+- match: exact-name-or-slug
+- matched_by: box
 
 ## Capabilities
 
@@ -90,6 +98,7 @@ Reads Box users, groups, collections, folder items, webhooks, retention policies
 
 - create_group:
   - endpoint: POST /groups
+  - required fields: name
   - risk: external mutation; creates a new Box enterprise group; approval required
 - update_group:
   - endpoint: PUT /groups/{{ record.id }}
@@ -101,6 +110,7 @@ Reads Box users, groups, collections, folder items, webhooks, retention policies
   - risk: destructive external mutation; permanently deletes a Box enterprise group; approval required
 - create_webhook:
   - endpoint: POST /webhooks
+  - required fields: target, address, triggers
   - risk: external mutation; creates a new Box webhook subscription that will POST event payloads to an external address; approval required
 - update_webhook:
   - endpoint: PUT /webhooks/{{ record.id }}
@@ -112,6 +122,7 @@ Reads Box users, groups, collections, folder items, webhooks, retention policies
   - risk: destructive external mutation; permanently deletes a Box webhook subscription; approval required
 - create_collaboration:
   - endpoint: POST /collaborations
+  - required fields: item, accessible_by, role
   - risk: external mutation; grants a user or group access to a Box file/folder; approval required
 - update_collaboration:
   - endpoint: PUT /collaborations/{{ record.id }}

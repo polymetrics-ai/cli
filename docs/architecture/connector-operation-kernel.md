@@ -1,6 +1,11 @@
 # Connector Operation Kernel
 
-Status: operation metadata and fixed direct-read execution foundation.
+Status: operation metadata and fixed direct-read/binary-download execution foundation.
+
+Started as the foundation slice for GitHub CLI parity (#56). The executor
+contract below describes what the runtime does today; `commandrunner` and
+`internal/connectors/engine` remain the authority when this document and the
+code disagree.
 
 ## Purpose
 
@@ -22,18 +27,19 @@ allowlist.
 
 Operation metadata is loaded and validated for every bundle. A command becomes
 executable only when its `cli_surface.json` entry is `availability: "implemented"`,
-`intent: "direct_read"`, references a `rest_read` operation, and the connector
-implements `OperationDirectReader`; otherwise `commandrunner` returns a blocked
-command error. Implemented operation direct reads are bounded to connector-relative
-GET/POST REST endpoints, require a supported `output_policy`, and reject raw
-method/path/body flags. Non-direct-read operation kinds remain planned until their
-typed executors land.
+and an intent with a runtime executor. Direct reads reference `rest_read`
+operations and the connector implements `OperationDirectReader`; they are bounded
+to connector-relative GET/POST REST endpoints, require a supported
+`output_policy`, and reject raw method/path/body flags. Bounded binary downloads
+also have an executor. GraphQL, XML, local git, local file, browser, composite,
+and mutation operation kinds remain blocked until their typed executors land.
 
 ## Supported Operation Kinds
 
 - `stream_etl`
 - `rest_read`
 - `rest_write`
+- `provider_search`
 - `graphql_query`
 - `graphql_mutation`
 - `xml_export`
@@ -48,6 +54,12 @@ typed executors land.
 Unknown kinds are rejected at load time. There is intentionally no generic
 shell, unrestricted HTTP write, generic SQL write, or arbitrary GraphQL kind.
 
+`provider_search` is a read that carries a fixed POST body containing bounded
+lists; every array must declare `maxItems`, the body schema must be closed
+(`additionalProperties: false`), and the method/path are fixed by the bundle.
+It is a distinct kind rather than a convention over `rest_read` so its bound
+rules are enforceable at load time.
+
 ## Safety Contract
 
 - Operations must be fixed, connector-scoped definitions.
@@ -55,8 +67,9 @@ shell, unrestricted HTTP write, generic SQL write, or arbitrary GraphQL kind.
 - Secrets must not appear in operation metadata, fixtures, logs, examples, or
   review comments.
 - GraphQL operations must use fixed documents and checked variables.
-- File and binary operations must define bounded output policy before becoming
-  executable.
+- Binary and file operations are bounded by a byte cap and an explicit
+  caller-supplied destination, never by an output policy: the response becomes a
+  file on disk, not a JSON body.
 - Local git/file operations must use allowlisted structured actions, never a
   shell string.
 - Generated candidates from provider specs are not executable until reviewed
@@ -64,10 +77,28 @@ shell, unrestricted HTTP write, generic SQL write, or arbitrary GraphQL kind.
 
 ## Runtime Behavior
 
-If a command references an operation outside the implemented direct-read contract,
-`commandrunner` returns a blocked command error naming the operation ID and why the
-executor is unavailable. This fail-closed behavior is deliberate: docs, validation,
-and parity planning can land before any new side-effecting executor is available.
+`commandrunner` decides whether an operation-backed command executes, and it
+decides before any network or filesystem access:
+
+- `intent:"direct_read"` with `availability:"implemented"` executes as a bounded
+  REST read under the command's `output_policy`.
+- `intent:"binary_download"` with `availability:"implemented"` executes through
+  `connectors.OperationBinaryDownloader`, which the declarative engine satisfies
+  with `engine.OperationBinaryDownload`. The endpoint must be a single
+  connector-relative GET, the caller must supply a destination root, and the
+  byte cap is the request value clamped by the operation's declared maximum and
+  then by the engine's own ceiling.
+- Every other command that references an `operation` returns a blocked command
+  error naming the operation ID and explaining that its executor is not
+  implemented. This fail-closed default is deliberate: it lets docs, validation,
+  and parity planning land before any new side-effecting executor is available.
+
+`availability: "implemented"` is a runtime claim, not a label.
+`TestEveryImplementedCommandPassesRuntimePreflight` in
+`internal/connectors/commandrunner/runner_test.go` sweeps every bundle in
+`defs.FS` through the real `commandrunner.Preflight`, so a command cannot claim
+it while the runtime blocks it. See AGENTS.md, "Command Surface Must Stay
+Executable".
 
 ## Example
 

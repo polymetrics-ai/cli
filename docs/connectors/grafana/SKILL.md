@@ -11,6 +11,7 @@ Reads Grafana dashboards, folders, data sources, organization users, and provisi
 
 ## Icon
 
+- id: grafana
 - asset: icons/grafana.svg
 - source: official
 - review_status: official_verified

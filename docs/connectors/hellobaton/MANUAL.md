@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Hellobaton projects, milestones, tasks, phases, companies, and users through the Hellobaton REST API.
 
 ICON
+  id: hellobaton
   asset: icons/hellobaton.svg
   source: upstream_registry
   review_status: upstream_seeded

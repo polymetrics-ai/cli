@@ -11,6 +11,7 @@ Reads Recharge customers, subscriptions, and orders through the Recharge REST AP
 
 ## Icon
 
+- id: recharge
 - asset: icons/recharge.svg
 - source: official
 - review_status: official_verified

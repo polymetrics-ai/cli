@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/user.info",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": {
+        "id": "user_info_id_fixture_47",
+        "firstName": "User Info Firstname Fixture 47",
+        "lastName": "User Info Lastname Fixture 47",
+        "email": "user_info.email.47@example.invalid",
+        "globalRole": "Organization Admin",
+        "isEnabled": true,
+        "updatedAt": "2026-02-19T23:00:00Z",
+        "managerId": "user_info_managerid_fixture_47",
+        "customFields": [
+          {
+            "id": "user_info_id_fixture_47",
+            "isPrivate": true,
+            "title": "Title fixture 47",
+            "value": {
+              "value": 47.0,
+              "currencyCode": "user_info_currencycode_fixture_47"
+            },
+            "valueLabel": "user_info_valuelabel_fixture_47"
+          }
+        ]
+      }
+    }
+  },
+  "read_query": {
+    "userId": "userid_fixture"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/price_segments/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": {
+      "id": "fixture_id",
+      "object": "fixture_object",
+      "code": "fixture_code"
+    }
+  }
+}

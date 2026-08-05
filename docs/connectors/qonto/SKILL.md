@@ -11,6 +11,7 @@ Reads Qonto bank transactions, memberships, and accounts through the Qonto REST 
 
 ## Icon
 
+- id: qonto
 - asset: icons/qonto.svg
 - source: upstream_registry
 - review_status: upstream_seeded

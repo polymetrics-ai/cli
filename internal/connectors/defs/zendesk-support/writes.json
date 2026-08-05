@@ -1089,6 +1089,5179 @@
       },
       "confirm": "destructive",
       "risk": "deletes a Zendesk ticket field record; destructive external mutation requiring approval"
+    },
+    {
+      "name": "update_account_email_settings",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/account/email_settings",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "settings"
+        ],
+        "properties": {
+          "settings": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "object",
+                "properties": {
+                  "accept_wildcard_emails": {
+                    "type": "boolean"
+                  },
+                  "custom_dkim_domain": {
+                    "type": "boolean"
+                  },
+                  "email_sender_authentication": {
+                    "type": "boolean"
+                  },
+                  "email_sender_authentication_profile": {
+                    "type": "string"
+                  },
+                  "email_status": {
+                    "type": "boolean"
+                  },
+                  "email_template_photos": {
+                    "type": "boolean"
+                  },
+                  "email_template_selection": {
+                    "type": "boolean"
+                  },
+                  "gmail_actions": {
+                    "type": "boolean"
+                  },
+                  "html_mail_template": {
+                    "type": "string"
+                  },
+                  "mail_delimiter": {
+                    "type": "string"
+                  },
+                  "modern_email_template": {
+                    "type": "boolean"
+                  },
+                  "multi_recipient_email_tickets": {
+                    "type": "boolean"
+                  },
+                  "no_mail_delimiter": {
+                    "type": "boolean"
+                  },
+                  "personalized_replies": {
+                    "type": "boolean"
+                  },
+                  "rich_content_in_emails": {
+                    "type": "boolean"
+                  },
+                  "send_gmail_messages_via_gmail": {
+                    "type": "boolean"
+                  },
+                  "text_mail_template": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "redact_fields": [
+        "settings.email.accept_wildcard_emails",
+        "settings.email.email_sender_authentication",
+        "settings.email.email_sender_authentication_profile",
+        "settings.email.email_status",
+        "settings.email.email_template_photos",
+        "settings.email.email_template_selection",
+        "settings.email.modern_email_template",
+        "settings.email.multi_recipient_email_tickets",
+        "settings.email.rich_content_in_emails"
+      ],
+      "risk": "external mutation; high-risk update against PUT /api/v2/account/email_settings; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_approval_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/approval_requests",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "message",
+          "subject",
+          "ticket_id"
+        ],
+        "properties": {
+          "assignee_group_id": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "assignee_user_id": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "ticket_id": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/approval_requests; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_attachment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/attachments/{{ record.attachment_id }}",
+      "path_fields": [
+        "attachment_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "attachment_id",
+          "attachment"
+        ],
+        "properties": {
+          "attachment_id": {
+            "type": "string"
+          },
+          "attachment": {
+            "type": "object",
+            "properties": {
+              "malware_access_override": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk update against PUT /api/v2/attachments/{attachment_id}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_bookmark",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/bookmarks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "bookmark"
+        ],
+        "properties": {
+          "bookmark": {
+            "type": "object",
+            "properties": {
+              "ticket_id": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /api/v2/bookmarks; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_brand",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/brands",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "brand"
+        ],
+        "properties": {
+          "brand": {
+            "type": "object",
+            "properties": {
+              "active": {
+                "type": "boolean"
+              },
+              "brand_url": {
+                "type": "string"
+              },
+              "default": {
+                "type": "boolean"
+              },
+              "has_help_center": {
+                "type": "boolean"
+              },
+              "host_mapping": {
+                "type": "string"
+              },
+              "is_deleted": {
+                "type": "boolean"
+              },
+              "logo": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "name": {
+                "type": "string"
+              },
+              "signature_template": {
+                "type": "string"
+              },
+              "subdomain": {
+                "type": "string"
+              },
+              "user_separation": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "subdomain"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "redact_fields": [
+        "brand.signature_template"
+      ],
+      "risk": "external mutation; high-risk create against POST /api/v2/brands; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_brand",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/brands/{{ record.brand_id }}",
+      "path_fields": [
+        "brand_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "brand_id",
+          "brand"
+        ],
+        "properties": {
+          "brand_id": {
+            "type": "string"
+          },
+          "brand": {
+            "type": "object",
+            "properties": {
+              "active": {
+                "type": "boolean"
+              },
+              "brand_url": {
+                "type": "string"
+              },
+              "default": {
+                "type": "boolean"
+              },
+              "has_help_center": {
+                "type": "boolean"
+              },
+              "host_mapping": {
+                "type": "string"
+              },
+              "is_deleted": {
+                "type": "boolean"
+              },
+              "logo": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "name": {
+                "type": "string"
+              },
+              "signature_template": {
+                "type": "string"
+              },
+              "subdomain": {
+                "type": "string"
+              },
+              "user_separation": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "subdomain"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "redact_fields": [
+        "brand.signature_template"
+      ],
+      "risk": "external mutation; high-risk update against PUT /api/v2/brands/{brand_id}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_ticket_or_voicemail_ticket",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/channels/voice/tickets",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ticket"
+        ],
+        "properties": {
+          "display_to_agent": {
+            "type": "integer"
+          },
+          "ticket": {
+            "type": "object",
+            "properties": {
+              "additional_collaborators": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "additional_tags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "assignee_email": {
+                "type": "string"
+              },
+              "assignee_id": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "attribute_value_ids": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              },
+              "brand_id": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "collaborator_ids": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              },
+              "collaborators": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "comment": {
+                "type": "object",
+                "properties": {
+                  "add_short_url": {
+                    "type": "boolean"
+                  },
+                  "author_id": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "body": {
+                    "type": "string"
+                  },
+                  "channel_back": {
+                    "type": "string"
+                  },
+                  "channel_source_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "html_body": {
+                    "type": "string"
+                  },
+                  "public": {
+                    "type": "boolean"
+                  },
+                  "translate_to": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "uploads": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "via": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                },
+                "additionalProperties": false
+              },
+              "custom_fields": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "value": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "id"
+                  ]
+                }
+              },
+              "custom_status_id": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "description": {
+                "type": "string"
+              },
+              "due_at": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "email_ccs": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "action": {
+                      "type": "string"
+                    },
+                    "user_email": {
+                      "type": "string"
+                    },
+                    "user_id": {
+                      "type": "integer"
+                    },
+                    "user_name": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "external_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "fields": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "value": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "id"
+                  ]
+                }
+              },
+              "followers": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "action": {
+                      "type": "string"
+                    },
+                    "user_email": {
+                      "type": "string"
+                    },
+                    "user_id": {
+                      "type": "integer"
+                    },
+                    "user_name": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "forum_topic_id": {
+                "type": "integer"
+              },
+              "group_id": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "macro_id": {
+                "type": "integer"
+              },
+              "macro_ids": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              },
+              "metadata": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "organization_id": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "origin_zrn": {
+                "type": "string"
+              },
+              "priority": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "problem_id": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "raw_subject": {
+                "type": "string"
+              },
+              "recipient": {
+                "type": "string"
+              },
+              "remove_tags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "requester": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "requester_id": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "safe_update": {
+                "type": "boolean"
+              },
+              "sharing_agreement_ids": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              },
+              "sharing_agreements": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "status": {
+                "type": "string"
+              },
+              "subject": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "submitter_id": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "support_type": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "suspended_ticket_id": {
+                "type": "integer"
+              },
+              "suspension_type_id": {
+                "type": "integer"
+              },
+              "system_metadata": {
+                "type": "object",
+                "properties": {
+                  "client": {
+                    "type": "string"
+                  },
+                  "ip_address": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "tags": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "tde_workspace": {
+                "type": "object",
+                "properties": {
+                  "previous_workspace": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "workspace": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                },
+                "additionalProperties": false
+              },
+              "ticket_form_id": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "tpe_voice_comment": {
+                "type": "object",
+                "properties": {
+                  "agent_id": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "answering_machine_detection_status": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "app_id": {
+                    "type": "integer"
+                  },
+                  "app_name": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "author_id": {
+                    "type": "integer"
+                  },
+                  "call_connected_at": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "call_disposition": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "call_ended_at": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "call_id": {
+                    "type": "integer"
+                  },
+                  "call_recording_consent": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "call_recording_consent_action": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "call_recording_consent_keypress": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "call_started_at": {
+                    "type": "string"
+                  },
+                  "call_type": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "callback_number": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "callback_requested_at": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "completion_status": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "connection_attempts": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "consultation_time": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "direction": {
+                    "type": "string"
+                  },
+                  "disconnection_reason": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "dnis": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "duration": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "end_user_id": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "end_user_location": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "exceeded_queue_time": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ]
+                  },
+                  "extension": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "external_id": {
+                    "type": "string"
+                  },
+                  "from_line": {
+                    "type": "string"
+                  },
+                  "from_line_nickname": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "hold_time": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "intent": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "ivr_destination_group_name": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "ivr_time_spent": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "language": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "line_type": {
+                    "type": "string"
+                  },
+                  "longest_hold_time": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "number_of_holds": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "outside_business_hours": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ]
+                  },
+                  "overflowed_to": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "phone_name": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "public": {
+                    "type": "boolean"
+                  },
+                  "quality_score": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "queue_name": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "queue_time": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "recorded": {
+                    "type": "boolean"
+                  },
+                  "recording_time": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "recording_type": {
+                    "type": "string"
+                  },
+                  "recording_url": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "sentiment_agent": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "sentiment_call": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "sentiment_customer": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "sentiment_trend": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "short_summary": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "summary": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "talk_time": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "time_to_answer": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "to_line": {
+                    "type": "string"
+                  },
+                  "to_line_nickname": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "transcript": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "via_id": {
+                    "type": "integer"
+                  },
+                  "video_recording_url": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "voicemail": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ]
+                  },
+                  "voicemail_requested_at": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "wait_time": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  }
+                },
+                "additionalProperties": false
+              },
+              "type": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "updated_stamp": {
+                "type": "string"
+              },
+              "via_followup_source_id": {
+                "type": "integer"
+              },
+              "via_id": {
+                "type": "integer"
+              },
+              "voice_comment": {
+                "type": "object",
+                "properties": {
+                  "answered_by_id": {
+                    "type": "integer"
+                  },
+                  "call_duration": {
+                    "type": "integer"
+                  },
+                  "from": {
+                    "type": "string"
+                  },
+                  "location": {
+                    "type": "string"
+                  },
+                  "public": {
+                    "type": "boolean"
+                  },
+                  "recording_type": {
+                    "type": "string"
+                  },
+                  "recording_url": {
+                    "type": "string"
+                  },
+                  "started_at": {
+                    "type": "string"
+                  },
+                  "to": {
+                    "type": "string"
+                  },
+                  "transcription_text": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "redact_fields": [
+        "ticket.assignee_email",
+        "ticket.tpe_voice_comment.phone_name",
+        "ticket.tpe_voice_comment.voicemail",
+        "ticket.tpe_voice_comment.voicemail_requested_at"
+      ],
+      "risk": "external mutation; medium-risk create against POST /api/v2/channels/voice/tickets; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_custom_object",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/custom_objects",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "custom_object"
+        ],
+        "properties": {
+          "custom_object": {
+            "type": "object",
+            "properties": {
+              "allows_attachments": {
+                "type": "boolean"
+              },
+              "allows_photos": {
+                "type": "boolean"
+              },
+              "description": {
+                "type": "string"
+              },
+              "include_in_list_view": {
+                "type": "boolean"
+              },
+              "key": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "title_pluralized": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/custom_objects; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_access_rule",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/access_rules",
+      "path_fields": [
+        "custom_object_key"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "custom_object_key",
+          "access_rule"
+        ],
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "access_rule": {
+            "type": "object",
+            "properties": {
+              "conditions": {
+                "type": "object",
+                "properties": {
+                  "all": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "any": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/custom_objects/{custom_object_key}/access_rules; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_access_rule",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/access_rules/{{ record.id }}",
+      "path_fields": [
+        "custom_object_key",
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "custom_object_key",
+          "id",
+          "access_rule"
+        ],
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "access_rule": {
+            "type": "object",
+            "properties": {
+              "conditions": {
+                "type": "object",
+                "properties": {
+                  "all": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "any": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk update against PATCH /api/v2/custom_objects/{custom_object_key}/access_rules/{id}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_custom_object_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/fields",
+      "path_fields": [
+        "custom_object_key"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "custom_object_key",
+          "custom_object_field"
+        ],
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "custom_object_field": {
+            "type": "object",
+            "properties": {
+              "active": {
+                "type": "boolean"
+              },
+              "custom_field_options": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "allow_solving": {
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "position": {
+                      "type": "integer"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "name",
+                    "value"
+                  ]
+                }
+              },
+              "description": {
+                "type": "string"
+              },
+              "key": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "properties": {
+                "type": "object",
+                "properties": {
+                  "allowed_currencies": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "autoincrement_enabled": {
+                    "type": "boolean"
+                  },
+                  "autoincrement_next_sequence": {
+                    "type": "integer"
+                  },
+                  "autoincrement_padding": {
+                    "type": "integer"
+                  },
+                  "autoincrement_prefix": {
+                    "type": "string"
+                  },
+                  "cascade_permissions_enabled": {
+                    "type": "boolean"
+                  },
+                  "is_unique": {
+                    "type": "boolean"
+                  },
+                  "rollup_aggregated_field": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "rollup_aggregation_type": {
+                    "type": "string"
+                  },
+                  "rollup_child_object": {
+                    "type": "string"
+                  },
+                  "rollup_filter_criteria": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                },
+                "additionalProperties": false
+              },
+              "raw_description": {
+                "type": "string"
+              },
+              "raw_title": {
+                "type": "string"
+              },
+              "regexp_for_validation": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "relationship_filter": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "relationship_target_type": {
+                "type": "string"
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "tag": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "key",
+              "title",
+              "type"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/custom_objects/{custom_object_key}/fields; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "custom_object_record_bulk_jobs",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/jobs",
+      "path_fields": [
+        "custom_object_key"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "custom_object_key",
+          "job"
+        ],
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "job": {
+            "type": "object",
+            "properties": {
+              "action": {
+                "type": "string"
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/custom_objects/{custom_object_key}/jobs; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_custom_object_record",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/records",
+      "path_fields": [
+        "custom_object_key"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "custom_object_key",
+          "custom_object_record"
+        ],
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "custom_object_record": {
+            "type": "object",
+            "properties": {
+              "custom_object_fields": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "external_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "photo": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/custom_objects/{custom_object_key}/records; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "upsert_custom_object_record_by_external_id_or_name",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/records",
+      "path_fields": [
+        "custom_object_key"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "custom_object_key",
+          "custom_object_record"
+        ],
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "custom_object_record": {
+            "type": "object",
+            "properties": {
+              "custom_object_fields": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "external_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "photo": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk update against PATCH /api/v2/custom_objects/{custom_object_key}/records; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_custom_object_record_attachment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/records/{{ record.record_id }}/attachments/{{ record.id }}",
+      "path_fields": [
+        "custom_object_key",
+        "record_id",
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "custom_object_key",
+          "record_id",
+          "id",
+          "custom_object_record_attachment"
+        ],
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "record_id": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "custom_object_record_attachment": {
+            "type": "object",
+            "properties": {
+              "malware_access_override": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "malware_access_override"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk update against PUT /api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_object_trigger",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/triggers",
+      "path_fields": [
+        "custom_object_key"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "custom_object_key",
+          "trigger"
+        ],
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "trigger": {
+            "type": "object",
+            "properties": {
+              "actions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "field": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "active": {
+                "type": "boolean"
+              },
+              "conditions": {
+                "type": "object",
+                "properties": {
+                  "all": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "any": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "raw_title": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "title"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/custom_objects/{custom_object_key}/triggers; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_object_trigger",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/triggers/{{ record.trigger_id }}",
+      "path_fields": [
+        "custom_object_key",
+        "trigger_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "custom_object_key",
+          "trigger_id",
+          "trigger"
+        ],
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "trigger_id": {
+            "type": "string"
+          },
+          "trigger": {
+            "type": "object",
+            "properties": {
+              "actions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "field": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "active": {
+                "type": "boolean"
+              },
+              "conditions": {
+                "type": "object",
+                "properties": {
+                  "all": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "any": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "raw_title": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "title"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk update against PUT /api/v2/custom_objects/{custom_object_key}/triggers/{trigger_id}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_many_object_triggers",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/triggers/update_many",
+      "path_fields": [
+        "custom_object_key"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "custom_object_key",
+          "triggers"
+        ],
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "triggers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "active": {
+                  "type": "boolean"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "position": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "id"
+              ]
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk update against PUT /api/v2/custom_objects/{custom_object_key}/triggers/update_many; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "bulk_update_default_custom_status",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/custom_status/default",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ids"
+        ],
+        "properties": {
+          "ids": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk update against PUT /api/v2/custom_status/default; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_custom_status",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/custom_statuses",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "custom_status"
+        ],
+        "properties": {
+          "custom_status": {
+            "type": "object",
+            "properties": {
+              "active": {
+                "type": "boolean"
+              },
+              "agent_label": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "end_user_description": {
+                "type": "string"
+              },
+              "end_user_label": {
+                "type": "string"
+              },
+              "status_category": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/custom_statuses; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_custom_status",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/custom_statuses/{{ record.custom_status_id }}",
+      "path_fields": [
+        "custom_status_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "custom_status_id",
+          "custom_status"
+        ],
+        "properties": {
+          "custom_status_id": {
+            "type": "string"
+          },
+          "custom_status": {
+            "type": "object",
+            "properties": {
+              "active": {
+                "type": "boolean"
+              },
+              "agent_label": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "end_user_description": {
+                "type": "string"
+              },
+              "end_user_label": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk update against PUT /api/v2/custom_statuses/{custom_status_id}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_ticket_form_statuses_for_custom_status",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/custom_statuses/{{ record.custom_status_id }}/ticket_form_statuses",
+      "path_fields": [
+        "custom_status_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "custom_status_id",
+          "ticket_form_status"
+        ],
+        "properties": {
+          "custom_status_id": {
+            "type": "string"
+          },
+          "ticket_form_status": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "ticket_form_id": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/custom_statuses/{custom_status_id}/ticket_form_statuses; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_deletion_schedule",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/deletion_schedules",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "deletion_schedule"
+        ],
+        "properties": {
+          "deletion_schedule": {
+            "type": "object",
+            "properties": {
+              "active": {
+                "type": "boolean"
+              },
+              "conditions": {
+                "type": "object",
+                "properties": {
+                  "all": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "any": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": {
+                "type": "string"
+              },
+              "object": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/deletion_schedules; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_deletion_schedule",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/deletion_schedules/{{ record.deletion_schedule_id }}",
+      "path_fields": [
+        "deletion_schedule_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "deletion_schedule_id",
+          "deletion_schedule"
+        ],
+        "properties": {
+          "deletion_schedule_id": {
+            "type": "string"
+          },
+          "deletion_schedule": {
+            "type": "object",
+            "properties": {
+              "active": {
+                "type": "boolean"
+              },
+              "conditions": {
+                "type": "object",
+                "properties": {
+                  "all": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "any": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": {
+                "type": "string"
+              },
+              "object": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk update against PUT /api/v2/deletion_schedules/{deletion_schedule_id}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_group_membership",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/group_memberships",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "group_membership"
+        ],
+        "properties": {
+          "group_membership": {
+            "type": "object",
+            "properties": {
+              "default": {
+                "type": "boolean"
+              },
+              "group_id": {
+                "type": "integer"
+              },
+              "user_id": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "group_id",
+              "user_id"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/group_memberships; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "group_membership_bulk_create",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/group_memberships/create_many",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "group_memberships"
+        ],
+        "properties": {
+          "group_memberships": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "default": {
+                  "type": "boolean"
+                },
+                "group_id": {
+                  "type": "integer"
+                },
+                "user_id": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "group_id",
+                "user_id"
+              ]
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/group_memberships/create_many; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "ticket_import",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/imports/tickets",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ticket"
+        ],
+        "properties": {
+          "ticket": {
+            "type": "object",
+            "properties": {
+              "assignee_id": {
+                "type": "integer"
+              },
+              "brand_id": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "collaborators": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "comment": {
+                "type": "object",
+                "properties": {
+                  "add_short_url": {
+                    "type": "boolean"
+                  },
+                  "author_id": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "body": {
+                    "type": "string"
+                  },
+                  "channel_back": {
+                    "type": "string"
+                  },
+                  "channel_source_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "html_body": {
+                    "type": "string"
+                  },
+                  "public": {
+                    "type": "boolean"
+                  },
+                  "translate_to": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "uploads": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "value": {
+                    "type": "string"
+                  },
+                  "via": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                },
+                "additionalProperties": false
+              },
+              "comments": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "add_short_url": {
+                      "type": "boolean"
+                    },
+                    "author_id": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "body": {
+                      "type": "string"
+                    },
+                    "channel_back": {
+                      "type": "string"
+                    },
+                    "channel_source_id": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "html_body": {
+                      "type": "string"
+                    },
+                    "public": {
+                      "type": "boolean"
+                    },
+                    "translate_to": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "uploads": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "value": {
+                      "type": "string"
+                    },
+                    "via": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "created_at": {
+                "type": "string"
+              },
+              "custom_fields": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "value": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "id"
+                  ]
+                }
+              },
+              "custom_status_id": {
+                "type": "integer"
+              },
+              "description": {
+                "type": "string"
+              },
+              "email_ccs": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "action": {
+                      "type": "string"
+                    },
+                    "user_email": {
+                      "type": "string"
+                    },
+                    "user_id": {
+                      "type": "integer"
+                    },
+                    "user_name": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "external_id": {
+                "type": "string"
+              },
+              "followers": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "action": {
+                      "type": "string"
+                    },
+                    "user_email": {
+                      "type": "string"
+                    },
+                    "user_id": {
+                      "type": "integer"
+                    },
+                    "user_name": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "group_id": {
+                "type": "integer"
+              },
+              "priority": {
+                "type": "string"
+              },
+              "recipient": {
+                "type": "string"
+              },
+              "requester_id": {
+                "type": "integer"
+              },
+              "solved_at": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "subject": {
+                "type": "string"
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "updated_at": {
+                "type": "string"
+              },
+              "via": {
+                "type": "object",
+                "properties": {
+                  "channel": {
+                    "type": "string"
+                  },
+                  "source": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/imports/tickets; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "ticket_bulk_import",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/imports/tickets/create_many",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "tickets"
+        ],
+        "properties": {
+          "tickets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "assignee_id": {
+                  "type": "integer"
+                },
+                "brand_id": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "collaborators": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "email": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "comment": {
+                  "type": "object",
+                  "properties": {
+                    "add_short_url": {
+                      "type": "boolean"
+                    },
+                    "author_id": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "body": {
+                      "type": "string"
+                    },
+                    "channel_back": {
+                      "type": "string"
+                    },
+                    "channel_source_id": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "html_body": {
+                      "type": "string"
+                    },
+                    "public": {
+                      "type": "boolean"
+                    },
+                    "translate_to": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "uploads": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "value": {
+                      "type": "string"
+                    },
+                    "via": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "comments": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "add_short_url": {
+                        "type": "boolean"
+                      },
+                      "author_id": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      },
+                      "body": {
+                        "type": "string"
+                      },
+                      "channel_back": {
+                        "type": "string"
+                      },
+                      "channel_source_id": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "html_body": {
+                        "type": "string"
+                      },
+                      "public": {
+                        "type": "boolean"
+                      },
+                      "translate_to": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "uploads": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "value": {
+                        "type": "string"
+                      },
+                      "via": {
+                        "type": "object",
+                        "additionalProperties": true
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "custom_fields": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "value": {
+                        "type": "object",
+                        "additionalProperties": true
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "id"
+                    ]
+                  }
+                },
+                "custom_status_id": {
+                  "type": "integer"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "email_ccs": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "action": {
+                        "type": "string"
+                      },
+                      "user_email": {
+                        "type": "string"
+                      },
+                      "user_id": {
+                        "type": "integer"
+                      },
+                      "user_name": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "external_id": {
+                  "type": "string"
+                },
+                "followers": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "action": {
+                        "type": "string"
+                      },
+                      "user_email": {
+                        "type": "string"
+                      },
+                      "user_id": {
+                        "type": "integer"
+                      },
+                      "user_name": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "group_id": {
+                  "type": "integer"
+                },
+                "priority": {
+                  "type": "string"
+                },
+                "recipient": {
+                  "type": "string"
+                },
+                "requester_id": {
+                  "type": "integer"
+                },
+                "solved_at": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "subject": {
+                  "type": "string"
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "via": {
+                  "type": "object",
+                  "properties": {
+                    "channel": {
+                      "type": "string"
+                    },
+                    "source": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/imports/tickets/create_many; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_itam_asset_type",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/it_asset_management/asset_types",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "asset_type"
+        ],
+        "properties": {
+          "asset_type": {
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "external_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "field_keys": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "parent_id": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "parent_id"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/it_asset_management/asset_types; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_itam_asset_type_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/it_asset_management/asset_types/{{ record.asset_type_id }}/fields",
+      "path_fields": [
+        "asset_type_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "asset_type_id",
+          "field"
+        ],
+        "properties": {
+          "asset_type_id": {
+            "type": "string"
+          },
+          "field": {
+            "type": "object",
+            "properties": {
+              "active": {
+                "type": "boolean"
+              },
+              "custom_field_options": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "allow_solving": {
+                      "type": "boolean"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "position": {
+                      "type": "integer"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "name",
+                    "value"
+                  ]
+                }
+              },
+              "description": {
+                "type": "string"
+              },
+              "key": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "properties": {
+                "type": "object",
+                "properties": {
+                  "allowed_currencies": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "autoincrement_enabled": {
+                    "type": "boolean"
+                  },
+                  "autoincrement_next_sequence": {
+                    "type": "integer"
+                  },
+                  "autoincrement_padding": {
+                    "type": "integer"
+                  },
+                  "autoincrement_prefix": {
+                    "type": "string"
+                  },
+                  "cascade_permissions_enabled": {
+                    "type": "boolean"
+                  },
+                  "is_unique": {
+                    "type": "boolean"
+                  },
+                  "rollup_aggregated_field": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "rollup_aggregation_type": {
+                    "type": "string"
+                  },
+                  "rollup_child_object": {
+                    "type": "string"
+                  },
+                  "rollup_filter_criteria": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                },
+                "additionalProperties": false
+              },
+              "raw_description": {
+                "type": "string"
+              },
+              "raw_title": {
+                "type": "string"
+              },
+              "regexp_for_validation": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "relationship_filter": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "relationship_target_type": {
+                "type": "string"
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "tag": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "key",
+              "title",
+              "type"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/it_asset_management/asset_types/{asset_type_id}/fields; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_itam_asset",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/it_asset_management/assets",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "asset"
+        ],
+        "properties": {
+          "asset": {
+            "type": "object",
+            "properties": {
+              "asset_tag": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "custom_field_values": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "external_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "location_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "manufacturer": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "model": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": "string"
+              },
+              "notes": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "organization_id": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "purchase_cost": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "purchase_date": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "serial_number": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "status_id": {
+                "type": "string"
+              },
+              "user_id": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "vendor": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "warranty_expiration": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "status_id"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/it_asset_management/assets; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "itam_asset_bulk_jobs",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/it_asset_management/assets/jobs",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "job"
+        ],
+        "properties": {
+          "job": {
+            "type": "object",
+            "properties": {
+              "action": {
+                "type": "string"
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/it_asset_management/assets/jobs; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_itam_location",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/it_asset_management/locations",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "location"
+        ],
+        "properties": {
+          "location": {
+            "type": "object",
+            "properties": {
+              "external_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "name"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/it_asset_management/locations; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_itam_status",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/it_asset_management/statuses",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "type": "object",
+            "properties": {
+              "category": {
+                "type": "string"
+              },
+              "description": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "external_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "category",
+              "name"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/it_asset_management/statuses; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_itam_status",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v2/it_asset_management/statuses/{{ record.status_id }}",
+      "path_fields": [
+        "status_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "status_id",
+          "status"
+        ],
+        "properties": {
+          "status_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "object",
+            "properties": {
+              "category": {
+                "type": "string"
+              },
+              "description": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "external_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk update against PATCH /api/v2/it_asset_management/statuses/{status_id}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_many_macros",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/macros/update_many",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "macros"
+        ],
+        "properties": {
+          "macros": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "active": {
+                  "type": "boolean"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "position": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "id"
+              ]
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk update against PUT /api/v2/macros/update_many; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_organization_subscription",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/organization_subscriptions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "organization_subscription"
+        ],
+        "properties": {
+          "organization_subscription": {
+            "type": "object",
+            "properties": {
+              "organization_id": {
+                "type": "integer"
+              },
+              "user_id": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/organization_subscriptions; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_saved_search",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/saved_searches",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name",
+          "query",
+          "type"
+        ],
+        "properties": {
+          "filters": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "query": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /api/v2/saved_searches; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_saved_search",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/saved_searches/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "query",
+          "type"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "filters": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "query": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk update against PUT /api/v2/saved_searches/{id}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "bulk_recover_suspended_tickets",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/suspended_tickets/bulk_recover",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "author"
+        ],
+        "properties": {
+          "author": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string"
+              },
+              "id": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "redact_fields": [
+        "author.email"
+      ],
+      "risk": "external mutation; high-risk update against PUT /api/v2/suspended_tickets/bulk_recover; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_task_list_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/task_list_templates",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "task_list_template"
+        ],
+        "properties": {
+          "task_list_template": {
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "is_active": {
+                "type": "boolean"
+              },
+              "is_required": {
+                "type": "boolean"
+              },
+              "name": {
+                "type": "string"
+              },
+              "tasks": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "description": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "position": {
+                      "type": "integer"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "name"
+                  ]
+                }
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "name"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/task_list_templates; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_task_list_template",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/task_list_templates/{{ record.task_list_template_id }}",
+      "path_fields": [
+        "task_list_template_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "task_list_template_id",
+          "task_list_template"
+        ],
+        "properties": {
+          "task_list_template_id": {
+            "type": "string"
+          },
+          "task_list_template": {
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "is_active": {
+                "type": "boolean"
+              },
+              "is_required": {
+                "type": "boolean"
+              },
+              "name": {
+                "type": "string"
+              },
+              "tasks": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk update against PUT /api/v2/task_list_templates/{task_list_template_id}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_ticket_content_pin",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/ticket_content_pins",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ticket_content_pin"
+        ],
+        "properties": {
+          "ticket_content_pin": {
+            "type": "object",
+            "properties": {
+              "content_id": {
+                "type": "string"
+              },
+              "content_type": {
+                "type": "string"
+              },
+              "locale": {
+                "type": "string"
+              },
+              "ticket_id": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "content_id",
+              "content_type",
+              "ticket_id"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/ticket_content_pins; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_ticket_form_statuses",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/ticket_forms/{{ record.ticket_form_id }}/ticket_form_statuses",
+      "path_fields": [
+        "ticket_form_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ticket_form_id",
+          "ticket_form_status"
+        ],
+        "properties": {
+          "ticket_form_id": {
+            "type": "string"
+          },
+          "ticket_form_status": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "custom_status_id": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "custom_status_id"
+              ]
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_ticket_form_statuses",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/ticket_forms/{{ record.ticket_form_id }}/ticket_form_statuses",
+      "path_fields": [
+        "ticket_form_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ticket_form_id",
+          "ticket_form_status"
+        ],
+        "properties": {
+          "ticket_form_id": {
+            "type": "string"
+          },
+          "ticket_form_status": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_destroy": {
+                  "type": "string"
+                },
+                "custom_status_id": {
+                  "type": "integer"
+                },
+                "id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk update against PUT /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_ticket_form_status_by_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/ticket_forms/{{ record.ticket_form_id }}/ticket_form_statuses/{{ record.ticket_form_status_id }}",
+      "path_fields": [
+        "ticket_form_id",
+        "ticket_form_status_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ticket_form_id",
+          "ticket_form_status_id",
+          "ticket_form_status"
+        ],
+        "properties": {
+          "ticket_form_id": {
+            "type": "string"
+          },
+          "ticket_form_status_id": {
+            "type": "string"
+          },
+          "ticket_form_status": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_destroy": {
+                  "type": "string"
+                },
+                "custom_status_id": {
+                  "type": "integer"
+                },
+                "id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk update against PUT /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses/{ticket_form_status_id}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_task_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/tickets/{{ record.ticket_id }}/task_lists",
+      "path_fields": [
+        "ticket_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ticket_id",
+          "task_list"
+        ],
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          },
+          "task_list": {
+            "type": "object",
+            "properties": {
+              "task_list_template_id": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; medium-risk create against POST /api/v2/tickets/{ticket_id}/task_lists; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "tickets_create_many",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/tickets/create_many",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "tickets"
+        ],
+        "properties": {
+          "tickets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "additional_collaborators": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "email": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "assignee_email": {
+                  "type": "string"
+                },
+                "assignee_id": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "attribute_value_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                },
+                "brand_id": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "collaborator_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                },
+                "collaborators": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "email": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "comment": {
+                  "type": "object",
+                  "properties": {
+                    "add_short_url": {
+                      "type": "boolean"
+                    },
+                    "author_id": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "body": {
+                      "type": "string"
+                    },
+                    "channel_back": {
+                      "type": "string"
+                    },
+                    "channel_source_id": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "html_body": {
+                      "type": "string"
+                    },
+                    "public": {
+                      "type": "boolean"
+                    },
+                    "translate_to": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "uploads": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "via": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "custom_fields": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "value": {
+                        "type": "object",
+                        "additionalProperties": true
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "id"
+                    ]
+                  }
+                },
+                "custom_status_id": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "description": {
+                  "type": "string"
+                },
+                "due_at": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "email_ccs": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "action": {
+                        "type": "string"
+                      },
+                      "user_email": {
+                        "type": "string"
+                      },
+                      "user_id": {
+                        "type": "integer"
+                      },
+                      "user_name": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "external_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "fields": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "value": {
+                        "type": "object",
+                        "additionalProperties": true
+                      }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                      "id"
+                    ]
+                  }
+                },
+                "followers": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "action": {
+                        "type": "string"
+                      },
+                      "user_email": {
+                        "type": "string"
+                      },
+                      "user_id": {
+                        "type": "integer"
+                      },
+                      "user_name": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "forum_topic_id": {
+                  "type": "integer"
+                },
+                "group_id": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "macro_id": {
+                  "type": "integer"
+                },
+                "macro_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                },
+                "metadata": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "organization_id": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "origin_zrn": {
+                  "type": "string"
+                },
+                "priority": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "problem_id": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "raw_subject": {
+                  "type": "string"
+                },
+                "recipient": {
+                  "type": "string"
+                },
+                "requester": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "requester_id": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "safe_update": {
+                  "type": "boolean"
+                },
+                "sharing_agreement_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                },
+                "sharing_agreements": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "status": {
+                  "type": "string"
+                },
+                "subject": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "submitter_id": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "support_type": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "suspended_ticket_id": {
+                  "type": "integer"
+                },
+                "suspension_type_id": {
+                  "type": "integer"
+                },
+                "system_metadata": {
+                  "type": "object",
+                  "properties": {
+                    "client": {
+                      "type": "string"
+                    },
+                    "ip_address": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "tags": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "tde_workspace": {
+                  "type": "object",
+                  "properties": {
+                    "previous_workspace": {
+                      "type": "object",
+                      "additionalProperties": true
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "workspace": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "ticket_form_id": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "tpe_voice_comment": {
+                  "type": "object",
+                  "properties": {
+                    "agent_id": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "answering_machine_detection_status": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "app_id": {
+                      "type": "integer"
+                    },
+                    "app_name": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "author_id": {
+                      "type": "integer"
+                    },
+                    "call_connected_at": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "call_disposition": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "call_ended_at": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "call_id": {
+                      "type": "integer"
+                    },
+                    "call_recording_consent": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "call_recording_consent_action": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "call_recording_consent_keypress": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "call_started_at": {
+                      "type": "string"
+                    },
+                    "call_type": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "callback_number": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "callback_requested_at": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "completion_status": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "connection_attempts": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "consultation_time": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "direction": {
+                      "type": "string"
+                    },
+                    "disconnection_reason": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "dnis": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "duration": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "end_user_id": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "end_user_location": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "exceeded_queue_time": {
+                      "type": [
+                        "boolean",
+                        "null"
+                      ]
+                    },
+                    "extension": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "external_id": {
+                      "type": "string"
+                    },
+                    "from_line": {
+                      "type": "string"
+                    },
+                    "from_line_nickname": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "hold_time": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "intent": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "ivr_destination_group_name": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "ivr_time_spent": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "language": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "line_type": {
+                      "type": "string"
+                    },
+                    "longest_hold_time": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "number_of_holds": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "outside_business_hours": {
+                      "type": [
+                        "boolean",
+                        "null"
+                      ]
+                    },
+                    "overflowed_to": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "phone_name": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "public": {
+                      "type": "boolean"
+                    },
+                    "quality_score": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "queue_name": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "queue_time": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "recorded": {
+                      "type": "boolean"
+                    },
+                    "recording_time": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "recording_type": {
+                      "type": "string"
+                    },
+                    "recording_url": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "sentiment_agent": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "sentiment_call": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "sentiment_customer": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "sentiment_trend": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "short_summary": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "summary": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "talk_time": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "time_to_answer": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "to_line": {
+                      "type": "string"
+                    },
+                    "to_line_nickname": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "transcript": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "via_id": {
+                      "type": "integer"
+                    },
+                    "video_recording_url": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "voicemail": {
+                      "type": [
+                        "boolean",
+                        "null"
+                      ]
+                    },
+                    "voicemail_requested_at": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "wait_time": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "type": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "updated_stamp": {
+                  "type": "string"
+                },
+                "via_followup_source_id": {
+                  "type": "integer"
+                },
+                "via_id": {
+                  "type": "integer"
+                },
+                "voice_comment": {
+                  "type": "object",
+                  "properties": {
+                    "answered_by_id": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "call_duration": {
+                      "type": "integer"
+                    },
+                    "from": {
+                      "type": "string"
+                    },
+                    "location": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "recording_url": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "to": {
+                      "type": "string"
+                    },
+                    "transcription_text": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/tickets/create_many; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_trigger_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/trigger_categories",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "trigger_category"
+        ],
+        "properties": {
+          "trigger_category": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "name"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/trigger_categories; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_trigger_category",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v2/trigger_categories/{{ record.trigger_category_id }}",
+      "path_fields": [
+        "trigger_category_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "trigger_category_id",
+          "trigger_category"
+        ],
+        "properties": {
+          "trigger_category_id": {
+            "type": "string"
+          },
+          "trigger_category": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk update against PATCH /api/v2/trigger_categories/{trigger_category_id}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "batch_operate_trigger_categories",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/trigger_categories/jobs",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "job"
+        ],
+        "properties": {
+          "job": {
+            "type": "object",
+            "properties": {
+              "action": {
+                "type": "string"
+              },
+              "items": {
+                "type": "object",
+                "properties": {
+                  "trigger_categories": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "triggers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/trigger_categories/jobs; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_many_triggers",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/triggers/update_many",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "triggers"
+        ],
+        "properties": {
+          "triggers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "active": {
+                  "type": "boolean"
+                },
+                "category_id": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "position": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "id"
+              ]
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk update against PUT /api/v2/triggers/update_many; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_user_group_membership",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/users/{{ record.user_id }}/group_memberships",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "user_id",
+          "group_membership"
+        ],
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "group_membership": {
+            "type": "object",
+            "properties": {
+              "default": {
+                "type": "boolean"
+              },
+              "group_id": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "group_id"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/users/{user_id}/group_memberships; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_current_user_settings",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/users/me/settings",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "settings"
+        ],
+        "properties": {
+          "settings": {
+            "type": "object",
+            "properties": {
+              "admin_center": {
+                "type": "object",
+                "properties": {
+                  "has_admin_center_side_nav_open": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "agent_home_pinned_views": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              },
+              "lotus": {
+                "type": "object",
+                "properties": {
+                  "agent_workspace_theme_preference": {
+                    "type": "string"
+                  },
+                  "agent_workspace_theme_preference_for_conversation_panel": {
+                    "type": "string"
+                  },
+                  "keyboard_shortcuts_enabled": {
+                    "type": "boolean"
+                  },
+                  "macro_shortcuts_enabled": {
+                    "type": "boolean"
+                  },
+                  "show_onboarding_tooltips": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "shared_views_order": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk update against PUT /api/v2/users/me/settings; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "create_workspace",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/workspaces",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "workspace"
+        ],
+        "properties": {
+          "workspace": {
+            "type": "object",
+            "properties": {
+              "conditions": {
+                "type": "object",
+                "properties": {
+                  "all": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "any": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": {
+                "type": "string"
+              },
+              "macros": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              },
+              "ticket_form_id": {
+                "type": "number"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk create against POST /api/v2/workspaces; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_workspace",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/workspaces/{{ record.workspace_id }}",
+      "path_fields": [
+        "workspace_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "workspace_id",
+          "workspace"
+        ],
+        "properties": {
+          "workspace_id": {
+            "type": "string"
+          },
+          "workspace": {
+            "type": "object",
+            "properties": {
+              "conditions": {
+                "type": "object",
+                "properties": {
+                  "all": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  },
+                  "any": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": true
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": {
+                "type": "string"
+              },
+              "macros": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              },
+              "ticket_form_id": {
+                "type": "number"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk update against PUT /api/v2/workspaces/{workspace_id}; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "reorder_workspaces",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/workspaces/reorder",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "ids"
+        ],
+        "properties": {
+          "ids": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation; high-risk update against PUT /api/v2/workspaces/reorder; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_permission_policy",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/permission_policies/{{ record.id }}",
+      "path_fields": [
+        "custom_object_key",
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "policy"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "custom_object_key",
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "custom_object_key": {
+            "type": "string",
+            "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/paths/~1api~1v2~1custom_objects~1{custom_object_key}~1permission_policies~1{id}/patch"
+          },
+          "id": {
+            "type": "string",
+            "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/paths/~1api~1v2~1custom_objects~1{custom_object_key}~1permission_policies~1{id}/patch"
+          },
+          "policy": {
+            "type": "object",
+            "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionPolicyUpdateRequest/properties/policy",
+            "additionalProperties": false,
+            "properties": {
+              "records": {
+                "type": "object",
+                "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionPolicyUpdateRequest/properties/policy/properties/records",
+                "additionalProperties": false,
+                "properties": {
+                  "create": {
+                    "type": "object",
+                    "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionPolicyUpdateRequest/properties/policy/properties/records/properties/create",
+                    "additionalProperties": false,
+                    "properties": {
+                      "allowed": { "type": "boolean", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/allowed" },
+                      "rule_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/rule_id" }
+                    }
+                  },
+                  "read": {
+                    "type": "object",
+                    "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionPolicyUpdateRequest/properties/policy/properties/records/properties/read",
+                    "additionalProperties": false,
+                    "properties": {
+                      "allowed": { "type": "boolean", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/allowed" },
+                      "rule_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/rule_id" }
+                    }
+                  },
+                  "update": {
+                    "type": "object",
+                    "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionPolicyUpdateRequest/properties/policy/properties/records/properties/update",
+                    "additionalProperties": false,
+                    "properties": {
+                      "allowed": { "type": "boolean", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/allowed" },
+                      "rule_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/rule_id" }
+                    }
+                  },
+                  "delete": {
+                    "type": "object",
+                    "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionPolicyUpdateRequest/properties/policy/properties/records/properties/delete",
+                    "additionalProperties": false,
+                    "properties": {
+                      "allowed": { "type": "boolean", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/allowed" },
+                      "rule_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/rule_id" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "updates a Zendesk custom-object permission policy through a typed, approval-gated request"
+    },
+    {
+      "name": "bulk_set_agent_attribute_values_job",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v2/routing/agents/instance_values/jobs",
+      "body_type": "json",
+      "body_fields": [
+        "job"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "job": {
+            "type": "object",
+            "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/BulkSkillBasedRoutingAttributeValuesRequest/properties/job",
+            "required": [
+              "action",
+              "attributes",
+              "items"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "action": {
+                "type": "string",
+                "enum": ["upsert", "update", "delete"],
+                "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/BulkSkillBasedRoutingAttributeValueJob/properties/action"
+              },
+              "attributes": {
+                "type": "object",
+                "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/BulkSkillBasedRoutingAttributeValueJob/properties/attributes",
+                "additionalProperties": false,
+                "properties": {
+                  "attribute_values": {
+                    "type": "array",
+                    "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/BulkSkillBasedRoutingAttributeValueJob/properties/attributes/properties/attribute_values",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "attribute_id": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/SkillBasedRoutingAttributeValueObject/properties/attribute_id" },
+                        "name": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/SkillBasedRoutingAttributeValueObject/properties/name" }
+                      }
+                    }
+                  }
+                }
+              },
+              "items": {
+                "type": "array",
+                "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/BulkSkillBasedRoutingAttributeValueJob/properties/items",
+                "items": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/BulkSkillBasedRoutingAttributeValueJob/properties/items/items" }
+              }
+            }
+          }
+        }
+      },
+      "risk": "starts a typed Zendesk agent-routing attribute-value job; approval is required"
+    },
+    {
+      "name": "create_many_users",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/users/create_many",
+      "body_type": "json",
+      "body_fields": ["users"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["users"],
+        "additionalProperties": false,
+        "properties": {
+          "users": {
+            "type": "array",
+            "maxItems": 100,
+            "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UsersRequest/properties/users and #/paths/~1api~1v2~1users~1create_many/post/description (up to 100 users)",
+            "items": {
+              "type": "object",
+              "required": ["name"],
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/name" },
+                "email": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/email" },
+                "external_id": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/external_id" },
+                "role": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/role" },
+                "alias": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/alias" },
+                "details": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/details" },
+                "phone": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/phone" },
+                "organization_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/organization_id" },
+                "default_group_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/default_group_id" },
+                "locale": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/locale" },
+                "suspended": { "type": "boolean", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/suspended" },
+                "tags": { "type": "array", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/tags", "items": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/tags/items" } }
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates up to 100 typed Zendesk users per request; approval is required"
+    },
+    {
+      "name": "create_or_update_many_users",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/api/v2/users/create_or_update_many",
+      "body_type": "json",
+      "body_fields": ["users"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["users"],
+        "additionalProperties": false,
+        "properties": {
+          "users": {
+            "type": "array",
+            "maxItems": 100,
+            "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UsersRequest/properties/users and #/paths/~1api~1v2~1users~1create_or_update_many/post/description (up to 100 users)",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/id" },
+                "name": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/name" },
+                "email": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/email" },
+                "external_id": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/external_id" },
+                "role": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/role" },
+                "alias": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/alias" },
+                "details": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/details" },
+                "phone": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/phone" },
+                "organization_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/organization_id" },
+                "locale": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/locale" },
+                "suspended": { "type": "boolean", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/suspended" },
+                "tags": { "type": "array", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/tags", "items": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/tags/items" } }
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates or updates up to 100 typed Zendesk users per request; approval is required"
+    },
+    {
+      "name": "request_user_create",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/users/request_create",
+      "body_type": "json",
+      "body_fields": ["user"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["user"],
+        "additionalProperties": false,
+        "properties": {
+          "user": {
+            "type": "object",
+            "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserRequest/properties/user",
+            "required": ["name"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/name" },
+              "email": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/email" },
+              "external_id": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/external_id" },
+              "role": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/role" },
+              "phone": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/phone" },
+              "organization_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/organization_id" },
+              "locale": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/locale" },
+              "tags": { "type": "array", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/tags", "items": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/tags/items" } }
+            }
+          }
+        }
+      },
+      "risk": "requests a typed Zendesk user creation; approval is required"
     }
   ]
 }

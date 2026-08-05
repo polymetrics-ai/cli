@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/surveyRequest.list",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "id": "survey_request_list_id_fixture_65",
+          "surveyUrl": "https://example.invalid/ashby/survey_request_list/surveyurl/65",
+          "surveyFormDefinitionId": "survey_request_list_surveyformdefinitionid_fixture_65",
+          "applicationId": "survey_request_list_applicationid_fixture_65",
+          "candidateId": "survey_request_list_candidateid_fixture_65"
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  },
+  "read_query": {
+    "surveyType": "surveytype_fixture"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Recurly list_entitlements record",
+  "type": "object",
+  "x-primary-key": [
+    "customer_permission_id"
+  ],
+  "properties": {
+    "object": {
+      "type": "string",
+      "description": "Entitlement"
+    },
+    "customer_permission": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Customer permission ID."
+        },
+        "code": {
+          "type": "string",
+          "description": "Customer permission code."
+        },
+        "name": {
+          "type": "string",
+          "description": "Customer permission name."
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of customer permission."
+        },
+        "object": {
+          "type": "string",
+          "description": "It will always be \"customer_permission\"."
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "id"
+      ]
+    },
+    "granted_by": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string",
+            "title": "Object Type"
+          },
+          "id": {
+            "type": "string",
+            "description": "The ID of the subscription or external subscription that grants the permission to the account."
+          }
+        },
+        "additionalProperties": false,
+        "description": "The subscription or external subscription that grants customer permissions."
+      },
+      "description": "Subscription or item that granted the customer permission."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Time object was created."
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Time the object was last updated"
+    },
+    "customer_permission_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "customer_permission",
+    "customer_permission_id"
+  ],
+  "additionalProperties": false
+}

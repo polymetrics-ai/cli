@@ -11,6 +11,7 @@ Reads Instagram Business/Creator account profile, media, and stories through the
 
 ## Icon
 
+- id: instagram
 - asset: icons/instagram.svg
 - source: upstream_registry
 - review_status: upstream_seeded

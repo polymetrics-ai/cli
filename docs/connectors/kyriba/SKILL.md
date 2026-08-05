@@ -11,6 +11,7 @@ Reads Kyriba bank accounts, transactions, statements, and payments through tenan
 
 ## Icon
 
+- id: kyriba
 - asset: icons/kyriba.svg
 - source: upstream_registry
 - review_status: upstream_seeded

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "group_fixture_delete"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/groups?id=group_fixture_delete"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

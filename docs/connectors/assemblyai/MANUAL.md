@@ -13,9 +13,11 @@ DESCRIPTION
   Reads AssemblyAI transcripts, per-transcript detail, sentences, paragraphs, and word-search matches, and submits new transcription jobs, through the AssemblyAI REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -68,6 +70,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_transcript:
     endpoint: POST /v2/transcript
+    required fields: audio_url
     risk: external mutation; submits a new transcription job against a caller-supplied audio_url and consumes AssemblyAI account balance/quota; approval required
 
 SECURITY

@@ -1,0 +1,23 @@
+{
+  "record": {
+    "id": "project_custom_field_fixture_1",
+    "label": "Updated Project Field",
+    "type": "TEXT",
+    "status": "ACTIVE"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/project/customField/template/project_custom_field_fixture_1",
+    "body": {
+      "label": "Updated Project Field",
+      "type": "TEXT",
+      "status": "ACTIVE"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "project_custom_field_fixture_1"
+    }
+  }
+}

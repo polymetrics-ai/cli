@@ -1,0 +1,32 @@
+{
+  "record": {
+    "tickets": [
+      {
+        "brand_id": 1,
+        "assignee_id": 1,
+        "collaborators": [
+          {
+            "email": "fixture@example.com"
+          }
+        ]
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/imports/tickets/create_many",
+    "body": {
+      "tickets": [
+        {
+          "brand_id": 1,
+          "assignee_id": 1,
+          "collaborators": [
+            {
+              "email": "fixture@example.com"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

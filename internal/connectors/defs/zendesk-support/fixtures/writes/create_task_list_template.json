@@ -1,0 +1,20 @@
+{
+  "record": {
+    "task_list_template": {
+      "name": "fixture-name",
+      "description": "fixture-description",
+      "is_active": true
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/task_list_templates",
+    "body": {
+      "task_list_template": {
+        "name": "fixture-name",
+        "description": "fixture-description",
+        "is_active": true
+      }
+    }
+  }
+}
