@@ -38,10 +38,11 @@ coverage gap visible without retrofitting coverage or blocking Wave 2.
   and plugin definitions, but managed definitions and CLI `--agents` remain higher-precedence
   caveats.
 - The two files must be complete generated projections so every frontmatter or body change fails
-  the drift check. The Claude renderer canonicalizes decoded CRLF values to LF, and the check/sync
-  boundary normalizes expected and actual whole-file bytes before exact comparison; every other
-  byte remains canonical. The existing bounded/symlink-safe projection writer remains the only
-  writer.
+  the drift check. The Claude renderer collapses any carriage-return run immediately before LF to
+  one LF in a linear pass, preserving bare carriage returns and reaching an idempotent fixed point.
+  The check/sync boundary applies the same canonicalization to expected and actual whole-file bytes
+  before exact comparison; every other byte remains canonical. The existing
+  bounded/symlink-safe projection writer remains the only writer.
 
 ## Scope fences
 

@@ -118,6 +118,17 @@ the review was performed inline against the parent-branch diff.
 - Action: make the Claude renderer emit LF-canonical whole files and normalize both expected and
   actual operands again at the shared check/sync boundary before exact comparison or writing.
 
+### R13 — non-idempotent repeated carriage-return normalization
+
+- Severity: warning
+- Disposition: fixed
+- Root cause: pairwise CRLF replacement reduced only the final carriage return in a repeated run,
+  so `\r\r\r\n` required three calls to reach LF and renderer/check/sync boundaries could compare
+  different intermediate forms.
+- Action: collapse each complete carriage-return run immediately before LF to one LF in a single
+  linear pass while preserving bare carriage returns. Add direct fixed-point cases and inject a
+  repeated run through canonical render/check/sync coverage.
+
 ## Final review
 
 No actionable source finding remains. The renderer derives every worker field from the checked-in
@@ -125,8 +136,9 @@ canonical policy; sync is root-contained and only creates the two required Claud
 Repository-wide nested-scope inventory plus EOL-normalized whole-file comparison prevents an extra
 definition or a locally edited tool, preload, or denylist from bypassing the canonical boundary.
 Only exact root `.git` metadata is pruned; case-variant and nested directories remain inventoried.
-The renderer and validator share LF-canonical expected/actual semantics. Official documentation
-demonstrates the plugin-namespace collision rule; generated-file tests demonstrate configured
-qualified identifiers and tool denial. They do not demonstrate authenticated clean-home runtime
-selection, plugin source/version pinning, or immunity to managed/CLI overrides. The clean-home
-smoke and Wave 1 coverage gap remain explicitly recorded under the captain's decisions above.
+The renderer and validator share idempotent LF-canonical expected/actual semantics, including
+repeated carriage-return runs. Official documentation demonstrates the plugin-namespace collision
+rule; generated-file tests demonstrate configured qualified identifiers and tool denial. They do
+not demonstrate authenticated clean-home runtime selection, plugin source/version pinning, or
+immunity to managed/CLI overrides. The clean-home smoke and Wave 1 coverage gap remain explicitly
+recorded under the captain's decisions above.

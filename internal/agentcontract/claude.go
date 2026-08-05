@@ -123,7 +123,27 @@ func normalizeClaudeProjection(content []byte) []byte {
 	if !bytes.Contains(content, []byte("\r\n")) {
 		return content
 	}
-	return bytes.ReplaceAll(content, []byte("\r\n"), []byte("\n"))
+
+	normalized := make([]byte, 0, len(content))
+	for index := 0; index < len(content); {
+		if content[index] != '\r' {
+			normalized = append(normalized, content[index])
+			index++
+			continue
+		}
+
+		runStart := index
+		for index < len(content) && content[index] == '\r' {
+			index++
+		}
+		if index < len(content) && content[index] == '\n' {
+			normalized = append(normalized, '\n')
+			index++
+			continue
+		}
+		normalized = append(normalized, content[runStart:index]...)
+	}
+	return normalized
 }
 
 func validateClaudeFrontmatter(frontmatter claudeFrontmatter, target ProjectionTarget, policy HarnessPolicy) error {
