@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"strings"
 	"testing"
+
+	"polymetrics.ai/internal/connectors"
 )
 
 func TestSchemaValidateConfigurationAppliesDeclaredConstraintsOnly(t *testing.T) {
@@ -86,5 +88,42 @@ func TestSchemaWithoutConfigurationConstraintsIsNotAdvertised(t *testing.T) {
 	}
 	if err := sch.ValidateConfiguration(map[string]string{"count": "not-an-integer", "extra": "still accepted"}); err != nil {
 		t.Fatalf("ValidateConfiguration() error = %v, want no new constraints", err)
+	}
+}
+
+func TestConnectorConfigurationConstraintContractReflectsDeclaration(t *testing.T) {
+	unconstrained, err := CompileSchema(json.RawMessage(`{
+		"type": "object",
+		"properties": {"count": {"type": "integer"}}
+	}`))
+	if err != nil {
+		t.Fatalf("CompileSchema(unconstrained) error = %v", err)
+	}
+	unconstrainedConnector := New(Bundle{Spec: unconstrained}, nil)
+	validator, ok := any(unconstrainedConnector).(connectors.ConfigurationConstraintValidator)
+	if !ok {
+		t.Fatal("engine connector does not expose ConfigurationConstraintValidator")
+	}
+	if validator.HasConfigurationConstraints() {
+		t.Fatal("HasConfigurationConstraints() = true, want false without a declared constraint")
+	}
+	if err := connectors.ValidateConfiguration(unconstrainedConnector, map[string]string{"count": "not-an-integer"}); err != nil {
+		t.Fatalf("ValidateConfiguration(unconstrained) error = %v, want no validation", err)
+	}
+
+	constrained, err := CompileSchema(json.RawMessage(`{
+		"type": "object",
+		"properties": {"environment": {"type": "string", "enum": ["production", "sandbox"]}}
+	}`))
+	if err != nil {
+		t.Fatalf("CompileSchema(constrained) error = %v", err)
+	}
+	constrainedConnector := New(Bundle{Spec: constrained}, nil)
+	validator, ok = any(constrainedConnector).(connectors.ConfigurationConstraintValidator)
+	if !ok || !validator.HasConfigurationConstraints() {
+		t.Fatal("constrained engine connector does not advertise its declared constraint")
+	}
+	if err := connectors.ValidateConfiguration(constrainedConnector, map[string]string{"environment": "preview"}); err == nil {
+		t.Fatal("ValidateConfiguration(constrained) error = nil, want enum rejection")
 	}
 }

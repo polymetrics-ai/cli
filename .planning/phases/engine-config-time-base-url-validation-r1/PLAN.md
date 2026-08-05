@@ -116,9 +116,9 @@ typed configuration representation and a test before it can claim support.
    advertises actual declarations through `HasConfigurationConstraints`, so a
    constraint-free connector remains genuinely unconstrained rather than
    looking auto-satisfied by a no-op forwarder.
-4. **Green — enforce only the surveyed declarative constraints at
-   `AddCredential`, before the vault or state mutation.** Errors must be
-   field/constraint-specific and must never echo values.
+4. **Green — complete.** Enforce only the surveyed declarative constraints at
+   `AddCredential`, before ID generation, vault, or state mutation. Errors are
+   field/constraint-specific and never echo input values.
 5. **Regression matrix.** Prove URI (`base_url`), pattern, enum, each declared
    format sibling, unconstrained inputs, and no-persistence-on-rejection. Add
    any narrowly needed schema unit tests.
@@ -127,7 +127,7 @@ typed configuration representation and a test before it can claim support.
 
 ## TDD gate tracking
 
-- [ ] Task: R1 type: tdd — reject a declared configuration constraint before
+- [x] Task: R1 type: tdd — reject a declared configuration constraint before
   credential persistence, beginning with the real GitHub `base_url` URI case.
 
 ## Constraint and compatibility principles

@@ -4,7 +4,7 @@
 
 | Area | Command / check | Result |
 | --- | --- | --- |
-| Red reproduction | focused app test before production code | pending |
+| Red reproduction | focused app test before production code | passed — recorded in `TDD-LEDGER.md` |
 | Engine constraint unit tests | `go test ./internal/connectors/engine/... -count=1` | pending |
 | App boundary tests | `go test ./internal/app/... -count=1` | pending |
 | Connector contracts | `go test ./internal/connectors/... -count=1` | pending |

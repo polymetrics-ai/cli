@@ -28,6 +28,7 @@ type schemaNode struct {
 	items                *schemaNode
 	enum                 []any
 	pattern              *regexp.Regexp
+	format               string
 	minProperties        int
 	hasMinProperties     bool
 	additionalProperties bool // true unless explicitly set to false
@@ -62,7 +63,9 @@ type schemaNode struct {
 	hasDefault bool
 }
 
-// annotationKeywords are accepted but only preserved, never enforced.
+// annotationKeywords are accepted by the schema compiler. Format remains an
+// annotation for full JSON-instance validation, while configuration-time
+// validation evaluates a bundled spec's declared top-level format constraints.
 var annotationKeywords = map[string]bool{
 	"format":      true,
 	"default":     true,
@@ -186,6 +189,14 @@ func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 			return nil, fmt.Errorf("compile schema: pattern %q: %w", pat, err)
 		}
 		n.pattern = re
+	}
+
+	if raw, ok := m["format"]; ok {
+		var format string
+		if err := json.Unmarshal(raw, &format); err != nil {
+			return nil, fmt.Errorf("compile schema: format: %w", err)
+		}
+		n.format = format
 	}
 
 	if raw, ok := m["minProperties"]; ok {

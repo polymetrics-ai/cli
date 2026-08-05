@@ -82,3 +82,25 @@ FAIL    polymetrics.ai/internal/app
 
 `TestAddCredentialLeavesConstraintFreeConnectorUnconstrained` was green in
 the same run, preserving the control case before the new engine seam exists.
+
+### Green transition — focused matrix
+
+Status: green-confirmed
+
+The implementation compiles declared formats into the engine schema, applies
+format/pattern/enum checks only to supplied configuration fields, and reaches
+that validator through the optional connector contract before credential ID,
+vault, or state mutation. The focused red tests now pass:
+
+```text
+$ go test ./internal/connectors/engine -run '^(TestSchemaValidateConfigurationAppliesDeclaredConstraintsOnly|TestSchemaWithoutConfigurationConstraintsIsNotAdvertised|TestConnectorConfigurationConstraintContractReflectsDeclaration)$' -count=1
+ok      polymetrics.ai/internal/connectors/engine
+
+$ go test ./internal/app -run '^(TestAddCredentialRejectsInvalidGitHubBaseURLAtConfigurationTime|TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime|TestAddCredentialLeavesConstraintFreeConnectorUnconstrained)$' -count=1
+ok      polymetrics.ai/internal/app
+```
+
+The engine contract test proves an unconstrained bundle advertises
+`HasConfigurationConstraints=false`; the application control test proves the
+real constraint-free Faker connector remains accepted without coercing its
+flat configuration strings.
