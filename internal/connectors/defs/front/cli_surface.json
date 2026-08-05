@@ -3184,6 +3184,22 @@
           "summary": "Maps to record.channel_id.",
           "maps_to": "record.channel_id",
           "allow_empty": false
+        },
+        {
+          "name": "undo-send-time",
+          "type": "integer",
+          "summary": "Optional undo-send window: 0, 5, 10, 15, 30, or 60 seconds.",
+          "maps_to": "record.settings.undo_send_time"
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "summary": "Optional Channel API status update.",
+          "maps_to": "record.status",
+          "values": [
+            "offline",
+            "ok"
+          ]
         }
       ],
       "api_surface": [
@@ -3194,7 +3210,7 @@
       ],
       "risk": "high: fixed Front PATCH /channels/{channel_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+      "notes": "One fixed action covers Front's duplicate Core and Channel API PATCH /channels/{channel_id} documentation rows. Undo-send-time accepts only 0, 5, 10, 15, 30, or 60; status accepts only offline or ok."
     },
     {
       "path": "update-comment",
@@ -4717,7 +4733,7 @@
         {
           "name": "undo-send-time",
           "type": "integer",
-          "summary": "Optional provider-enumerated undo-send window.",
+          "summary": "Optional undo-send window: 0, 5, 10, 15, 30, or 60 seconds.",
           "maps_to": "record.settings.undo_send_time"
         },
         {
@@ -4790,7 +4806,7 @@
         {
           "name": "undo-send-time",
           "type": "integer",
-          "summary": "Optional provider-enumerated undo-send window.",
+          "summary": "Optional undo-send window: 0, 5, 10, 15, 30, or 60 seconds.",
           "maps_to": "record.settings.undo_send_time"
         },
         {
@@ -4857,7 +4873,7 @@
         {
           "name": "undo-send-time",
           "type": "integer",
-          "summary": "Optional provider-enumerated undo-send window.",
+          "summary": "Optional undo-send window: 0, 5, 10, 15, 30, or 60 seconds.",
           "maps_to": "record.settings.undo_send_time"
         },
         {
@@ -4935,6 +4951,26 @@
           "required": true
         },
         {
+          "name": "type",
+          "type": "enum",
+          "summary": "Message type fixed to email for this body-format-capable command.",
+          "maps_to": "record.type",
+          "values": [
+            "email"
+          ],
+          "required": true
+        },
+        {
+          "name": "body-format",
+          "type": "enum",
+          "summary": "Optional email body format.",
+          "maps_to": "record.body_format",
+          "values": [
+            "html",
+            "markdown"
+          ]
+        },
+        {
           "name": "external-id",
           "type": "string",
           "summary": "Maps to record.external_id.",
@@ -4965,7 +5001,7 @@
       ],
       "risk": "high: fixed Front POST /inboxes/{inbox_id}/imported_messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+      "notes": "Front permits body-format only for email imports. This fixed CLI variant requires type=email; SMS, Intercom, and custom imports remain available through the typed record workflow without a raw body escape."
     },
     {
       "path": "removes-inbox-access",
@@ -5710,6 +5746,13 @@
           "summary": "Maps to record.body.",
           "maps_to": "record.body",
           "allow_empty": false
+        },
+        {
+          "name": "inbox-ids",
+          "type": "string_array",
+          "summary": "Optional non-empty inbox restriction; omit for all inboxes.",
+          "maps_to": "record.inbox_ids",
+          "min_items": 1
         }
       ],
       "api_surface": [
@@ -5720,7 +5763,7 @@
       ],
       "risk": "high: fixed Front POST /message_template_folders/{message_template_folder_id}/message_templates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+      "notes": "Omitting inbox-ids or supplying null through the typed record workflow makes the template available in all inboxes. A supplied inbox-ids array must contain at least one ID."
     },
     {
       "path": "delete-folder",
@@ -5873,6 +5916,13 @@
           "summary": "Maps to record.body.",
           "maps_to": "record.body",
           "allow_empty": false
+        },
+        {
+          "name": "inbox-ids",
+          "type": "string_array",
+          "summary": "Optional non-empty inbox restriction; omit for all inboxes.",
+          "maps_to": "record.inbox_ids",
+          "min_items": 1
         }
       ],
       "api_surface": [
@@ -5883,7 +5933,7 @@
       ],
       "risk": "high: fixed Front POST /message_templates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+      "notes": "Omitting inbox-ids or supplying null through the typed record workflow makes the template available in all inboxes. A supplied inbox-ids array must contain at least one ID."
     },
     {
       "path": "mark-message-seen",
@@ -6483,7 +6533,7 @@
       ],
       "risk": "high: fixed Front PATCH /teammate_groups/{teammate_group_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+      "notes": "Front contact permissions use access=all, contact_groups, contact_lists, or none. Contact-group IDs are valid only with contact_groups, and contact-list IDs only with contact_lists; the composed record rule is preserved in the connector-owned request contract."
     },
     {
       "path": "create-company-teammate-group",
@@ -6509,7 +6559,7 @@
       ],
       "risk": "high: fixed Front POST /teammate_groups mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+      "notes": "Front contact permissions use access=all, contact_groups, contact_lists, or none. Contact-group IDs are valid only with contact_groups, and contact-list IDs only with contact_lists; the composed record rule is preserved in the connector-owned request contract."
     },
     {
       "path": "create-teammate-group",
@@ -6860,6 +6910,13 @@
           "summary": "Maps to record.teammate_id.",
           "maps_to": "record.teammate_id",
           "allow_empty": false
+        },
+        {
+          "name": "username",
+          "type": "string",
+          "summary": "Optional username using only lowercase letters, numbers, and underscores.",
+          "maps_to": "record.username",
+          "allow_empty": false
         }
       ],
       "api_surface": [
@@ -6870,7 +6927,7 @@
       ],
       "risk": "high: fixed Front PATCH /teammates/{teammate_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+      "notes": "Front usernames accept only lowercase letters, numbers, and underscores. The fixed endpoint exposes no raw body passthrough."
     },
     {
       "path": "create-team-group",
@@ -7083,6 +7140,13 @@
           "summary": "Maps to record.body.",
           "maps_to": "record.body",
           "allow_empty": false
+        },
+        {
+          "name": "inbox-ids",
+          "type": "string_array",
+          "summary": "Optional non-empty inbox restriction; omit for all inboxes.",
+          "maps_to": "record.inbox_ids",
+          "min_items": 1
         }
       ],
       "api_surface": [
@@ -7093,7 +7157,7 @@
       ],
       "risk": "high: fixed Front POST /teams/{team_id}/message_templates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+      "notes": "Omitting inbox-ids or supplying null through the typed record workflow makes the template available in all inboxes. A supplied inbox-ids array must contain at least one ID."
     },
     {
       "path": "create-team-shift",

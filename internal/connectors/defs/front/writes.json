@@ -513,7 +513,15 @@
             "type": "object",
             "properties": {
               "undo_send_time": {
-                "type": "integer"
+                "type": "integer",
+                "enum": [
+                  0,
+                  5,
+                  10,
+                  15,
+                  30,
+                  60
+                ]
               },
               "all_teammates_can_reply": {
                 "type": "boolean"
@@ -525,7 +533,11 @@
             "additionalProperties": false
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "offline",
+              "ok"
+            ]
           }
         },
         "additionalProperties": false,
@@ -2024,7 +2036,15 @@
             "type": "object",
             "properties": {
               "undo_send_time": {
-                "type": "integer"
+                "type": "integer",
+                "enum": [
+                  0,
+                  5,
+                  10,
+                  15,
+                  30,
+                  60
+                ]
               },
               "all_teammates_can_reply": {
                 "type": "boolean"
@@ -2919,6 +2939,7 @@
               "array",
               "null"
             ],
+            "minItems": 1,
             "items": {
               "type": "string"
             }
@@ -3110,6 +3131,7 @@
               "array",
               "null"
             ],
+            "minItems": 1,
             "items": {
               "type": "string"
             }
@@ -4097,7 +4119,13 @@
                 "type": "object",
                 "properties": {
                   "access": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "all",
+                      "contact_groups",
+                      "contact_lists",
+                      "none"
+                    ]
                   },
                   "contact_group_ids": {
                     "type": "array",
@@ -4150,7 +4178,13 @@
                 "type": "object",
                 "properties": {
                   "access": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "all",
+                      "contact_groups",
+                      "contact_lists",
+                      "none"
+                    ]
                   },
                   "contact_group_ids": {
                     "type": "array",
@@ -4615,7 +4649,8 @@
             "type": "string"
           },
           "username": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[a-z0-9_]+$"
           },
           "first_name": {
             "type": "string"
@@ -4898,6 +4933,7 @@
               "array",
               "null"
             ],
+            "minItems": 1,
             "items": {
               "type": "string"
             }

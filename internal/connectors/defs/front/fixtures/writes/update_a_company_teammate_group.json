@@ -1,10 +1,28 @@
 {
   "record": {
-    "teammate_group_id": "fixture_teammate_group_id"
+    "teammate_group_id": "fixture_teammate_group_id",
+    "permissions": {
+      "contacts": {
+        "access": "contact_lists",
+        "contact_list_ids": [
+          "lst_fixture_1"
+        ]
+      }
+    }
   },
   "expect": {
     "method": "PATCH",
-    "path": "/teammate_groups/fixture_teammate_group_id"
+    "path": "/teammate_groups/fixture_teammate_group_id",
+    "body": {
+      "permissions": {
+        "contacts": {
+          "access": "contact_lists",
+          "contact_list_ids": [
+            "lst_fixture_1"
+          ]
+        }
+      }
+    }
   },
   "response": {
     "status": 200,

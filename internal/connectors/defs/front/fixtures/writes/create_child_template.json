@@ -3,7 +3,9 @@
     "message_template_folder_id": "fixture_message_template_folder_id",
     "name": "fixture_name",
     "body": "fixture_body",
-    "inbox_ids": null
+    "inbox_ids": [
+      "inb_fixture_1"
+    ]
   },
   "expect": {
     "method": "POST",
@@ -11,7 +13,9 @@
     "body": {
       "name": "fixture_name",
       "body": "fixture_body",
-      "inbox_ids": null
+      "inbox_ids": [
+        "inb_fixture_1"
+      ]
     }
   },
   "response": {

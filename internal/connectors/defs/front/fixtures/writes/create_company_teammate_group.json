@@ -1,12 +1,28 @@
 {
   "record": {
-    "name": "fixture_name"
+    "name": "fixture_name",
+    "permissions": {
+      "contacts": {
+        "access": "contact_groups",
+        "contact_group_ids": [
+          "grp_fixture_1"
+        ]
+      }
+    }
   },
   "expect": {
     "method": "POST",
     "path": "/teammate_groups",
     "body": {
-      "name": "fixture_name"
+      "name": "fixture_name",
+      "permissions": {
+        "contacts": {
+          "access": "contact_groups",
+          "contact_group_ids": [
+            "grp_fixture_1"
+          ]
+        }
+      }
     }
   },
   "response": {
