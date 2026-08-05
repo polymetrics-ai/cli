@@ -44,7 +44,7 @@ Branch: `fm/cli-found-multipart-writes-r1`.
    and semantic validation. Require literal `multipart/form-data`, a
    connector-relative path, positive aggregate/file and response caps, a
    recursively closed typed body schema, required string file source fields,
-   provider source citation, and only declared parts.
+   and only declared parts.
 3. REFACTOR: share the existing part media-type validator without changing
    `writes.json` behavior or provider bundles.
 
@@ -120,4 +120,3 @@ Branch: `fm/cli-found-multipart-writes-r1`.
 
 No no-mistakes run, push, PR creation, or merge occurs before firstmate asks
 for that explicitly, per the worker brief's Definition of done.
-
