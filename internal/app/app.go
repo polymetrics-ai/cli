@@ -1118,10 +1118,6 @@ func (a *App) confirmationPolicyForAction(connectorName, actionName string) conn
 	return connectors.WriteConfirmation{}
 }
 
-func (a *App) confirmationChallengeForAction(connectorName, actionName string) string {
-	return string(a.confirmationPolicyForAction(connectorName, actionName).Kind)
-}
-
 func (a *App) confirmationPolicyForPlan(plan ReversePlan) connectors.WriteConfirmation {
 	// Prefer the current connector manifest so a local state edit cannot remove
 	// a destructive-action confirmation gate from an already-created plan. The

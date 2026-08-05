@@ -69,7 +69,7 @@ pm reverse run plan_abc123 --approve <token> --json
 | `4` | Auth error | Surface to a human to add or rotate credentials. |
 | `5` | Connector error | Inspect the error detail field; may be retryable with backoff. |
 | `6` | Runtime unavailable | Surface: the required runtime dependency is not reachable. |
-| `7` | Approval required | Obtain an approval token from `pm reverse plan`, then retry. |
+| `7` | Approval required | Obtain the token from human-readable plan output, or from preview output for a destructive plan, then retry. |
 | `1` | Internal error | Report as a bug. |
 
 ## JSON output envelopes

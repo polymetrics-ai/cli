@@ -694,11 +694,12 @@ DESCRIPTION
   metadata and mask those fields in plan samples.
 
   Destructive plans do not receive an approval token during planning. Preview
-  performs the connector's no-network dry run, persists a digest of the exact
-  staged request, and only then issues a time-bounded token in human-readable
-  output. Execution recomputes that digest before dispatch and also requires
-  the closed typed confirmation --confirm destructive. HTTP DELETE is treated
-  as destructive even when connector metadata omits a confirmation declaration.
+  performs the connector's no-network dry run, persists a digest of the complete
+  staged request set and its execution identity, and only then issues a
+  time-bounded token in human-readable output. Execution recomputes that digest
+  before dispatch and also requires the closed typed confirmation --confirm
+  destructive. HTTP DELETE is treated as destructive even when connector
+  metadata omits a confirmation declaration.
 
   A connector may declare a write action non-batchable (batchable: false).
   Bulk plans over --source-table refuse such an action, naming the action and

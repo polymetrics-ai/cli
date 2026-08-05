@@ -29,8 +29,9 @@
 Production changes stay in the engine write path, shared write request types, approval flow,
 schemas, CLI lifecycle plumbing required by the changed flow, and tests. Captain decision
 `defs-delete-fixtures` approved test-only edits to the Asana and Zendesk Support reverse-ETL
-execution fixtures so their existing DELETE cases supply real preview-bound evidence. No bundle or
-other connector-definition file is modified.
+execution fixtures so their existing DELETE cases supply real preview-bound evidence. No bundle
+JSON or connector runtime definition is modified; documentation housekeeping may correct stale
+connector prose.
 
 ## Refactor gate
 

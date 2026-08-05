@@ -58,8 +58,8 @@ const (
 	reverseETLBoundEndpoints = 84
 
 	// blockedDestructiveOperations is the number of destructive_action rows
-	// that must remain unbound until cli-delete-confirmation-foundation-r1
-	// ships the destructive-write confirm gate.
+	// that remain unbound pending connector-local action, command, and fixture
+	// authoring; the shared gate alone does not promote them.
 	blockedDestructiveOperations = 88
 )
 

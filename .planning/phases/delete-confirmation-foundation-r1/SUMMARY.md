@@ -75,15 +75,16 @@ The end-to-end proof uses the existing canonical public command
 
 ## Fixture evidence
 
-Captain decision `defs-delete-fixtures` authorized exactly two test-only connector files:
+Captain decision `defs-delete-fixtures` authorized exactly two connector test files for behavioral
+evidence:
 
 - Asana `reverse_etl_execute_test.go` obtains destructive evidence through the real app canonical
   command plan, preview, typed confirmation, and execute lifecycle.
 - Zendesk Support `reverse_etl_execute_test.go` obtains the same evidence through the real app bulk
   plan, preview, typed confirmation, and execute lifecycle.
 
-Both retain their original HTTP method/path/body/redaction assertions. No bundle JSON or other
-connector file changed.
+Both retain their original HTTP method/path/body/redaction assertions. No bundle JSON or connector
+runtime definition changed; documentation housekeeping only corrects stale connector prose.
 
 ## TDD result
 

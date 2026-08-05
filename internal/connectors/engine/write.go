@@ -93,11 +93,10 @@ func validateWriteBody(action WriteAction, rec connectors.Record) error {
 	return err
 }
 
-// DryRunWrite validates every record and returns a staged-count preview
-// whose Warnings include the fully-resolved method/path for the FIRST
-// record (representative preview; every record shares the same action). Any
-// secret value is redacted (never interpolated in cleartext into the
-// preview) — DryRunWrite performs no network call.
+// DryRunWrite validates and prepares every record without a network call. Its
+// warnings show the first fully resolved method/path as a redacted
+// representative, while its digest binds the complete prepared request set and
+// execution identity used by the approval gate.
 func DryRunWrite(ctx context.Context, b Bundle, req connectors.WriteRequest, records []connectors.Record, h Hooks) (connectors.WritePreview, error) {
 	prepared, err := prepareDeclarativeWrite(ctx, b, req, records, h)
 	if err != nil {

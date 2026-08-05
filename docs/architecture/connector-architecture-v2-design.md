@@ -261,7 +261,7 @@ pagination that carries its own total), and `none`.
       "record_schema": { "type": "object", "required": ["name"], "properties": { "name": { "type": "string" } } },
       "delete": { "idempotent": true, "missing_ok_status": [404] },
       "risk": "permanently deletes a label",
-      "confirm": "destructive"
+      "confirmation": { "kind": "destructive" }
     },
     {
       "name": "merge_pull_request",
@@ -278,7 +278,7 @@ pagination that carries its own total), and `none`.
         }
       },
       "risk": "merges a pull request into its base branch",
-      "confirm": "destructive"
+      "confirmation": { "kind": "destructive" }
     }
   ]
 }
@@ -295,8 +295,11 @@ Write semantics baked into the format:
   This replaces github's hand-written validate/payload functions (~700 lines) for the ~90% of
   actions that are plain payload mapping. Multi-request compound actions (github's
   `create_pull_request` + reviewer follow-up) use a **write hook** (§B.7).
-- **`confirm: "destructive"`** feeds the existing plan → preview → approve flow with per-action
-  risk tiering.
+- **`confirmation: {"kind":"destructive"}`** is the closed declaration for new write actions and
+  operation metadata. Existing `confirm: "destructive"` bundles remain compatible, but the runtime
+  normalizes them into the same typed policy. HTTP `DELETE`, a delete/destructive mutation class,
+  and any unknown non-empty legacy `confirm` value fail closed even if the typed declaration is
+  absent or malformed.
 - **`batchable: false`** gates an action out of SourceTable-driven bulk reverse ETL. It defaults to
   `true`, so an action that omits it is unaffected. `PlanReverseETL` refuses a declared
   non-batchable action before it stores a plan or mints an approval token, and `RunReverseETL`
@@ -309,10 +312,10 @@ Write semantics baked into the format:
   provider rule about human intent (for example an API that permits proxying a human's action
   one-for-one but forbids a bot amplifying it).
 
-  `batchable` and `confirm` are **orthogonal**. `confirm` asks how severe one call is; `batchable`
-  asks whether the action may be fanned out at all. A vote is non-batchable but not destructive; a
-  bulk delete is destructive but legitimately batchable. An action may declare either, both, or
-  neither.
+  `batchable` and `confirmation` are **orthogonal**. `confirmation` asks how severe one call is;
+  `batchable` asks whether the action may be fanned out at all. A vote is non-batchable but not
+  destructive; a bulk delete is destructive but legitimately batchable. An action may declare
+  either, both, or neither.
 
 ## B. The declarative runtime engine
 
@@ -425,9 +428,15 @@ type WriteAction struct {
     BodyFields   []string        `json:"body_fields,omitempty"`
     RecordSchema json.RawMessage `json:"record_schema"`
     Delete       *DeleteSpec     `json:"delete,omitempty"` // idempotent, missing_ok_status
-    Risk         string          `json:"risk"`
-    Confirm      string          `json:"confirm,omitempty"` // "" | "destructive"
-    Hook         string          `json:"hook,omitempty"`    // custom executor
+    Risk         string            `json:"risk"`
+    Batchable    *bool             `json:"batchable,omitempty"`
+    Confirm      string            `json:"confirm,omitempty"` // legacy: "" | "destructive"
+    Confirmation *ConfirmationSpec `json:"confirmation,omitempty"`
+    Hook         string            `json:"hook,omitempty"` // custom executor
+}
+
+type ConfirmationSpec struct {
+    Kind connectors.ConfirmationKind `json:"kind"` // closed by schema to "destructive"
 }
 ```
 
@@ -463,12 +472,15 @@ loop; Retry-After handling already exists in connsdk.
 
 `ValidateWrite` = compile-once `record_schema` validation per record (structural errors carry
 record index, matching current behavior). Reverse-plan creation persists action `redact_fields` and
-masks matching sample fields. `DryRunWrite` = validation + fully-resolved request preview
-(`WritePreview.Warnings` includes resolved method/path with secrets and action `redact_fields`
-redacted). `Write` = per-record execution; returned write errors redact the same action fields while
-preserving typed wrapping. `kind: delete` honors `missing_ok_status` (a 404 on an idempotent delete
-counts as written, not failed). Batch semantics stay one-request-per-record (matches github/stripe
-today); `metadata.json.batch.write_batch_size` reserved for future bulk endpoints.
+masks matching sample fields. `DryRunWrite` validates and prepares every request without network
+access; `WritePreview.Warnings` shows the first resolved method/path as a redacted representative,
+while the preview digest binds the complete request set, connector/action target, credential and
+configuration identity, batchability, definition, and hook identity. Destructive execution
+re-prepares and compares that digest, then consumes authenticated single-use approval evidence
+through the provider-neutral gate before dispatch. `Write` returns redacted, typed errors.
+`kind: delete` honors `missing_ok_status` (a 404 on an idempotent delete counts as written, not
+failed). Batch semantics stay one-request-per-record (matches github/stripe today);
+`metadata.json.batch.write_batch_size` is reserved for future bulk endpoints.
 
 ### B.6 Sync modes — derived, never declared
 

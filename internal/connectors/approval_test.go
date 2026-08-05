@@ -20,7 +20,9 @@ func (callerProjectWriteApprovalEvidence) AuthorizeProjectWrite(connectors.Write
 }
 
 func TestProductionApprovalAuthorityIsNotPubliclyConstructible(t *testing.T) {
-	packages, err := parser.ParseDir(token.NewFileSet(), ".", nil, 0)
+	// ParseDir intentionally scans every Go source file, including build-tagged
+	// approval constructors that a package loader could omit for this platform.
+	packages, err := parser.ParseDir(token.NewFileSet(), ".", nil, 0) //nolint:staticcheck
 	if err != nil {
 		t.Fatalf("ParseDir() error = %v", err)
 	}

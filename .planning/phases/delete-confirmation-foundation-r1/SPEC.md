@@ -47,7 +47,8 @@ does not add connector aliases, synthetic duplicate commands, or a generic HTTP 
 
 - Binding the remaining connector operations.
 - Implementing the `rest_write` HTTP executor.
-- Editing any connector definition, especially `defs/zendesk-support/` or `defs/asana/`.
+- Editing connector runtime definitions or bundle JSON, especially under `defs/zendesk-support/`
+  or `defs/asana/`.
 - Live provider calls, credentialed tests, new dependencies, generic write tools, or main merge.
 
 ## Coverage statement
