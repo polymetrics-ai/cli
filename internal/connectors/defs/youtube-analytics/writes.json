@@ -1,0 +1,167 @@
+{
+  "actions": [
+    {
+      "name": "create_job",
+      "kind": "create",
+      "method": "POST",
+      "path": "/jobs",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["reportTypeId", "name"],
+        "additionalProperties": false,
+        "properties": {
+          "reportTypeId": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "risk": "creates a YouTube Reporting job that schedules future report generation; requires reverse ETL plan, preview, and explicit approval"
+    },
+    {
+      "name": "delete_job",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/jobs/{{ record.job_id }}",
+      "path_fields": ["job_id"],
+      "redact_fields": ["job_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["job_id"],
+        "additionalProperties": false,
+        "properties": {
+          "job_id": { "type": "string" }
+        }
+      },
+      "risk": "deletes a scheduled YouTube Reporting job and stops future report generation; destructive, redacts job_id in previews/errors, and requires reverse ETL plan, preview, explicit approval, and typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://youtubeanalytics.googleapis.com/v2/groups",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["snippet", "contentDetails"],
+        "additionalProperties": false,
+        "properties": {
+          "snippet": {
+            "type": "object",
+            "required": ["title"],
+            "additionalProperties": false,
+            "properties": {
+              "title": { "type": "string" }
+            }
+          },
+          "contentDetails": {
+            "type": "object",
+            "required": ["itemType"],
+            "additionalProperties": false,
+            "properties": {
+              "itemType": { "type": "string", "enum": ["youtube#channel", "youtube#playlist", "youtube#video", "youtubePartner#asset"] }
+            }
+          }
+        }
+      },
+      "risk": "creates a YouTube Analytics group; requires reverse ETL plan, preview, and explicit approval"
+    },
+    {
+      "name": "update_group",
+      "kind": "update",
+      "method": "PUT",
+      "path": "https://youtubeanalytics.googleapis.com/v2/groups",
+      "redact_fields": ["id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "snippet"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "snippet": {
+            "type": "object",
+            "required": ["title"],
+            "additionalProperties": false,
+            "properties": {
+              "title": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "updates a YouTube Analytics group's metadata (for example title); redacts group id in write errors and requires reverse ETL plan, preview, and explicit approval"
+    },
+    {
+      "name": "delete_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "https://youtubeanalytics.googleapis.com/v2/groups?id={{ record.id | urlencode }}",
+      "path_fields": ["id"],
+      "redact_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "deletes a YouTube Analytics group; destructive, redacts group id in previews/errors, and requires reverse ETL plan, preview, explicit approval, and typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_group_item",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://youtubeanalytics.googleapis.com/v2/groupItems",
+      "redact_fields": ["groupId", "resource.id"],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["groupId", "resource"],
+        "additionalProperties": false,
+        "properties": {
+          "groupId": { "type": "string" },
+          "resource": {
+            "type": "object",
+            "required": ["id"],
+            "additionalProperties": false,
+            "properties": {
+              "kind": { "type": "string", "enum": ["youtube#channel", "youtube#playlist", "youtube#video", "youtubePartner#asset"] },
+              "id": { "type": "string" }
+            }
+          }
+        }
+      },
+      "risk": "adds a channel, playlist, video, or asset to a YouTube Analytics group; redacts group/resource identifiers in write errors and requires reverse ETL plan, preview, and explicit approval"
+    },
+    {
+      "name": "delete_group_item",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "https://youtubeanalytics.googleapis.com/v2/groupItems?id={{ record.id | urlencode }}",
+      "path_fields": ["id"],
+      "redact_fields": ["id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" }
+        }
+      },
+      "risk": "removes an item from a YouTube Analytics group; destructive, redacts group-item id in previews/errors, and requires reverse ETL plan, preview, explicit approval, and typed confirmation",
+      "confirm": "destructive"
+    }
+  ]
+}
