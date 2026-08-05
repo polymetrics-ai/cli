@@ -62,6 +62,10 @@ Harness-specific files are generated projections of `canonical/delivery-contract
 Claude targets are required full-file projections. The four Codex and Pi targets remain optional
 until their owning harness waves add each wrapper; once present, their marked blocks are generated
 from the same source. No projection may copy GSD/TDD, review, or human-gate policy by hand.
+The Claude check inventories `.claude/agents` recursively and permits exactly the two registered
+regular Markdown definitions. Claude workers preload only plugin-qualified trusted skills and omit
+and deny runtime `Skill`; any repository-routed skill without a trusted namespace is documented as
+unavailable rather than exposed through a collision-prone name.
 
 ## Design principles
 

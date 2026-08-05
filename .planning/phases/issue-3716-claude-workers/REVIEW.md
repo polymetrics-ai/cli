@@ -22,8 +22,12 @@ the review was performed inline against the parent-branch diff.
 - Finding: the worker omitted `Skill`, so it could not load repository-required Go/design guidance.
 - Root cause: bare `Skill` would expose every discoverable skill, including unrelated skills able
   to use `context: fork`; adding the unscoped tool would violate the single-worker boundary.
-- Action: render only the required `Skill(name)` rules, deny `Agent` and `Task`, document the exact
-  reachable names, and validate the policy and generated full files.
+- Action: the first scoped-`Skill(name)` correction was incomplete because it retained unqualified
+  names that personal skills could shadow. The final correction uses Claude's documented `skills`
+  frontmatter, preloads only plugin-qualified `cc-skills-golang:*` and
+  `frontend-design:frontend-design` sources, and omits and denies runtime `Skill` together with
+  `Agent` and `Task`. The generator records the three unqualified design skills that become
+  unavailable and the handoff cost for website/docs UI work.
 
 ### R3 — clean-home selection evidence
 
@@ -47,10 +51,41 @@ the review was performed inline against the parent-branch diff.
 - Action: record PR #3724 as accepted after 23 successful checks, 6 skipped checks, and no failures,
   with no separate automated code-review pass. Do not retrofit coverage or block Wave 2.
 
+### R6 — recursive Claude agent inventory
+
+- Severity: error
+- Disposition: fixed
+- Root cause: whole-file checks covered only registered target paths even though Claude recursively
+  discovers every Markdown definition under `.claude/agents` and identifies agents by frontmatter
+  name.
+- Action: inventory the complete project tree before drift comparison and reject symlinks,
+  unexpected definitions, duplicate names, canonical name/path mismatches, and missing targets.
+
+### R7 — canonical path portability
+
+- Severity: warning
+- Disposition: fixed
+- Root cause: native `filepath.Clean` was applied to slash-separated JSON contract paths, so valid
+  targets normalize differently on Windows.
+- Action: validate contract paths with `io/fs.ValidPath` and `path.Clean`; convert to native paths
+  only at the filesystem boundary.
+
+### R8 — Windows GSD adapter execution
+
+- Severity: warning
+- Disposition: fixed
+- Root cause: the checker executed the extensionless JavaScript shebang file directly and its test
+  fixture required `/bin/sh`.
+- Action: resolve Node and pass `scripts/gsd` as its script argument; use a portable JavaScript test
+  fixture that also checks the selected working directory and argv.
+
 ## Final review
 
 No actionable source finding remains. The renderer derives every worker field from the checked-in
 canonical policy; sync is root-contained and only creates the two required Claude target files.
-Whole-file exact comparison prevents a locally edited tool, skill, or denylist rule from bypassing
-the canonical boundary. The clean-home smoke and Wave 1 coverage gap remain explicitly recorded
-under the captain's decisions above.
+Recursive inventory plus whole-file exact comparison prevents an extra definition or a locally
+edited tool, preload, or denylist from bypassing the canonical boundary. Official documentation
+demonstrates the plugin-namespace collision rule; generated-file tests demonstrate configured
+qualified identifiers and tool denial. They do not demonstrate authenticated clean-home runtime
+selection, plugin source/version pinning, or immunity to managed/CLI overrides. The clean-home
+smoke and Wave 1 coverage gap remain explicitly recorded under the captain's decisions above.

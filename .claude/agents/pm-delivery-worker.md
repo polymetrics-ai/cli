@@ -8,46 +8,28 @@ tools:
     - Grep
     - Read
     - Write
-    - Skill(golang-cli)
-    - Skill(golang-concurrency)
-    - Skill(golang-context)
-    - Skill(golang-database)
-    - Skill(golang-design-patterns)
-    - Skill(golang-documentation)
-    - Skill(golang-error-handling)
-    - Skill(golang-graphql)
-    - Skill(golang-how-to)
-    - Skill(golang-lint)
-    - Skill(golang-safety)
-    - Skill(golang-security)
-    - Skill(golang-spf13-cobra)
-    - Skill(golang-spf13-viper)
-    - Skill(golang-structs-interfaces)
-    - Skill(golang-testing)
-    - Skill(cc-skills-golang:golang-cli)
-    - Skill(cc-skills-golang:golang-concurrency)
-    - Skill(cc-skills-golang:golang-context)
-    - Skill(cc-skills-golang:golang-database)
-    - Skill(cc-skills-golang:golang-design-patterns)
-    - Skill(cc-skills-golang:golang-documentation)
-    - Skill(cc-skills-golang:golang-error-handling)
-    - Skill(cc-skills-golang:golang-graphql)
-    - Skill(cc-skills-golang:golang-how-to)
-    - Skill(cc-skills-golang:golang-lint)
-    - Skill(cc-skills-golang:golang-safety)
-    - Skill(cc-skills-golang:golang-security)
-    - Skill(cc-skills-golang:golang-spf13-cobra)
-    - Skill(cc-skills-golang:golang-spf13-viper)
-    - Skill(cc-skills-golang:golang-structs-interfaces)
-    - Skill(cc-skills-golang:golang-testing)
-    - Skill(frontend-design)
-    - Skill(frontend-design:frontend-design)
-    - Skill(vercel-composition-patterns)
-    - Skill(vercel-react-best-practices)
-    - Skill(web-design-guidelines)
+skills:
+    - cc-skills-golang:golang-cli
+    - cc-skills-golang:golang-concurrency
+    - cc-skills-golang:golang-context
+    - cc-skills-golang:golang-database
+    - cc-skills-golang:golang-design-patterns
+    - cc-skills-golang:golang-documentation
+    - cc-skills-golang:golang-error-handling
+    - cc-skills-golang:golang-graphql
+    - cc-skills-golang:golang-how-to
+    - cc-skills-golang:golang-lint
+    - cc-skills-golang:golang-safety
+    - cc-skills-golang:golang-security
+    - cc-skills-golang:golang-spf13-cobra
+    - cc-skills-golang:golang-spf13-viper
+    - cc-skills-golang:golang-structs-interfaces
+    - cc-skills-golang:golang-testing
+    - frontend-design:frontend-design
 disallowedTools:
     - Agent
     - Task
+    - Skill
 permissionMode: default
 ---
 
@@ -55,19 +37,21 @@ permissionMode: default
 
 Official behavior: https://code.claude.com/docs/en/sub-agents
 
-Discovery: Claude Code scans .claude/agents directories while walking upward from the current working directory.
+Discovery: Claude Code scans .claude/agents recursively while walking upward from the current working directory; names must be unique across each discovered tree.
 
 Precedence (highest first): managed definitions, CLI --agents, project .claude/agents, user ~/.claude/agents, and plugins. Managed definitions and CLI `--agents` remain higher-precedence caveats.
 
 Skill behavior: https://code.claude.com/docs/en/slash-commands
 
-Skill boundary: Only the listed scoped Skill(name) entries are reachable through the Skill tool. Bare Skill is forbidden, so unlisted project, user, plugin, and bundled skills, including skills that use context: fork, cannot be invoked through that tool. Agent and its Task alias are explicitly denied, so an allowed skill's allowed-tools metadata cannot restore delegation.
+Skill boundary: Only the listed plugin-qualified identifiers are preloaded through Claude's documented skills frontmatter. Plugin namespaces cannot collide with personal or project skill names. The Skill tool is omitted and denied, so no skill can be invoked during execution, including one that uses context: fork.
 
-Reachable skill names: `golang-cli`, `golang-concurrency`, `golang-context`, `golang-database`, `golang-design-patterns`, `golang-documentation`, `golang-error-handling`, `golang-graphql`, `golang-how-to`, `golang-lint`, `golang-safety`, `golang-security`, `golang-spf13-cobra`, `golang-spf13-viper`, `golang-structs-interfaces`, `golang-testing`, `cc-skills-golang:golang-cli`, `cc-skills-golang:golang-concurrency`, `cc-skills-golang:golang-context`, `cc-skills-golang:golang-database`, `cc-skills-golang:golang-design-patterns`, `cc-skills-golang:golang-documentation`, `cc-skills-golang:golang-error-handling`, `cc-skills-golang:golang-graphql`, `cc-skills-golang:golang-how-to`, `cc-skills-golang:golang-lint`, `cc-skills-golang:golang-safety`, `cc-skills-golang:golang-security`, `cc-skills-golang:golang-spf13-cobra`, `cc-skills-golang:golang-spf13-viper`, `cc-skills-golang:golang-structs-interfaces`, `cc-skills-golang:golang-testing`, `frontend-design`, `frontend-design:frontend-design`, `vercel-composition-patterns`, `vercel-react-best-practices`, and `web-design-guidelines`.
+Trusted preloaded skills: `cc-skills-golang:golang-cli`, `cc-skills-golang:golang-concurrency`, `cc-skills-golang:golang-context`, `cc-skills-golang:golang-database`, `cc-skills-golang:golang-design-patterns`, `cc-skills-golang:golang-documentation`, `cc-skills-golang:golang-error-handling`, `cc-skills-golang:golang-graphql`, `cc-skills-golang:golang-how-to`, `cc-skills-golang:golang-lint`, `cc-skills-golang:golang-safety`, `cc-skills-golang:golang-security`, `cc-skills-golang:golang-spf13-cobra`, `cc-skills-golang:golang-spf13-viper`, `cc-skills-golang:golang-structs-interfaces`, `cc-skills-golang:golang-testing`, and `frontend-design:frontend-design`.
 
-Isolation: The explicit tools allowlist omits Agent and bare Skill, while disallowedTools removes Agent and its Task alias. Claude Code documents that an agent without Agent cannot spawn subagents with that tool; scoped Skill(name) rules prevent unrelated fork-capable skills from becoming an alternate route.
+Unavailable repository-routed skills: `vercel-composition-patterns`, `vercel-react-best-practices`, and `web-design-guidelines`. Cost: Website and docs UI work requiring these design skills cannot satisfy repository skill routing in this Claude worker; preserve state and hand off to a captain-approved harness with trusted plugin packaging.
 
-Required clean-home smoke (not generation evidence): In a real authenticated Claude session using a clean trusted home with unrelated global agent and skill definitions, run `claude --agent pm-delivery-worker -p 'report the active agent name and available scoped skills without modifying files'`; verify the project role is selected, only the scoped skill names are callable, and Agent, Task, and unlisted fork-capable skills are unavailable.
+Isolation: The explicit tools allowlist omits Agent and Skill, while disallowedTools removes Agent, its Task alias, and Skill. Claude Code documents that omitting Agent blocks subagent spawning through that tool and omitting Skill prevents runtime skill invocation; plugin-qualified preloads avoid personal and project same-name shadowing.
+
+Required clean-home smoke (not generation evidence): In a real authenticated Claude session using a clean trusted home with unrelated global agent and skill definitions, run `claude --agent pm-delivery-worker -p 'report the active agent name, preloaded skill identifiers, and whether Agent, Task, or Skill is available without modifying files'`; verify the project role is selected, only the plugin-qualified preloads are present, and Agent, Task, Skill, and unrelated fork-capable skills are unavailable.
 
 <!-- BEGIN POLYMETRICS CANONICAL AGENT CONTRACT role=pm-delivery-worker version=1.2.0; DO NOT EDIT -->
 # pm-delivery-worker
