@@ -13,8 +13,10 @@ Status: review corrections applied; the outer executor owns remaining delivery g
   `context: fork` route.
 - [x] The canonical check recursively rejects extra definitions, duplicate names, symlinks, and
   canonical name/path mismatches across every repository-local `.claude/agents` scope.
-- [x] Canonical Claude projections parse and compare identically with LF or CRLF line endings;
-  sync treats CRLF-only differences as current.
+- [x] Inventory prunes only exact root `.git` metadata; `.GIT`, `.Git`, and nested paths remain in
+  the discoverable scope check.
+- [x] The Claude renderer emits LF-canonical expected bytes, checked-out CRLF normalizes to LF, and
+  sync treats either canonical-source or working-tree CRLF-only differences as current.
 - [x] Mutating a generated file to grant `Agent` fails the real drift check; sync restores it.
 - [x] Installed Claude CLI smoke discovers both project workers by name in this trusted checkout.
 - [x] Prior live ambient CLI/plugin fixtures demonstrate direct `Agent` delegation is blocked for
@@ -68,7 +70,8 @@ were copied or supplied. That result is not runtime precedence evidence.
 Static proof is separate: the generated definitions omit `Agent` and runtime `Skill`, documented
 precedence puts project agents above user/plugin agents, repository-wide recursive inventory
 requires exactly the two canonical definitions across all nested project scopes, and full-file
-drift enforcement matches both files after CRLF normalization. Managed definitions and CLI
+drift enforcement matches LF-canonical expected and actual files. Inventory excludes only exact
+root `.git` metadata; ordinary case variants remain checked. Managed definitions and CLI
 `--agents` remain higher-precedence and can replace a same-name project definition; launch
 configuration can also select a different plugin installation. This harness cannot prevent those
 overrides.
@@ -82,9 +85,12 @@ overrides.
 - The nested-scope/CRLF review round adds repository-depth inventory cases, a nested scope symlink
   case, direct CRLF parsing, accepted CRLF drift checks, and no-op CRLF sync to the same focused
   package command; the result is **PASS**.
+- The metadata/EOL review round adds `.GIT` and `.Git` inventory cases, exact root `.git` pruning,
+  canonical CRLF rendering, successful checking, and zero-update repeated sync; the same focused
+  package command passes.
 - Windows runtime execution was not performed; portability is source- and fixture-level evidence
-  from slash-native contract validation, CRLF-normalized projections, and Node-mediated adapter
-  invocation.
+  from slash-native contract validation, LF-canonical rendering/CRLF-normalized comparison, and
+  Node-mediated adapter invocation.
 
 ## Wave 1 dependency disposition
 

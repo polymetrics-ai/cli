@@ -33,12 +33,15 @@ coverage gap visible without retrofitting coverage or blocking Wave 2.
 - Claude project definitions are discovered from every `.claude/agents/` scope while walking from
   the current working directory to the repository root, and each scope is scanned recursively. The
   canonical check must inventory all repository-local scopes and reject extra files, duplicate
-  names, and symlinks. Project definitions outrank same-name user and plugin definitions, but
-  managed definitions and CLI `--agents` remain higher-precedence caveats.
+  names, and symlinks. It prunes only the exact root `.git` metadata directory; `.GIT`, `.Git`,
+  and nested directories are ordinary inventory paths. Project definitions outrank same-name user
+  and plugin definitions, but managed definitions and CLI `--agents` remain higher-precedence
+  caveats.
 - The two files must be complete generated projections so every frontmatter or body change fails
-  the drift check. CRLF and LF are treated as the same generated text at the Claude parsing and
-  comparison boundary; every other byte remains canonical. The existing bounded/symlink-safe
-  projection writer remains the only writer.
+  the drift check. The Claude renderer canonicalizes decoded CRLF values to LF, and the check/sync
+  boundary normalizes expected and actual whole-file bytes before exact comparison; every other
+  byte remains canonical. The existing bounded/symlink-safe projection writer remains the only
+  writer.
 
 ## Scope fences
 

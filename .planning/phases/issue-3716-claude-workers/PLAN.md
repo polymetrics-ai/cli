@@ -101,6 +101,19 @@ Issue: #3716. Parent: #3714. Branch: `fm/cli-agents-wave-claude-r1`.
 4. Keep the canonical-source-only rule, the `Agent`/`Task`/`Skill` denylist, and the
    captain-authorized clean-home smoke wording unchanged.
 
+### Slice 6 — REVIEW FIX: metadata identity and canonical EOL output
+
+1. Restrict inventory pruning to the repository root's exact `.git` metadata directory so
+   case-variant ordinary directories and nested project paths remain discoverable on
+   case-sensitive filesystems.
+2. Canonicalize Claude renderer output to LF, then normalize both expected and checked-out Claude
+   whole-file bytes at check/sync boundaries so canonical strings containing CRLF cannot create a
+   rewrite loop.
+3. Add focused regressions for `.GIT` and `.Git` nested agent definitions, exact root `.git`
+   metadata pruning, canonical CRLF rendering, successful checking, and no-op repeated sync.
+4. Preserve canonical ownership, qualified skill preloads, runtime `Skill` denial, the full
+   `Agent`/`Task`/`Skill` denylist, and the clean-home **NOT PERFORMED** wording.
+
 ## Verification
 
 - RED/GREEN: `go test ./internal/agentcontract ./cmd/agentcontractgen`.

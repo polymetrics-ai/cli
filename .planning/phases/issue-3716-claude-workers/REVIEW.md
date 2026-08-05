@@ -99,14 +99,34 @@ the review was performed inline against the parent-branch diff.
 - Action: normalize CRLF to LF for Claude frontmatter parsing, checking, and no-op sync comparison;
   retain byte-exact canonical comparison after that line-ending normalization.
 
+### R11 — case-folded Git metadata exclusion
+
+- Severity: error
+- Disposition: fixed
+- Root cause: repository inventory skipped every directory whose name case-folded to `.git`, even
+  though `.GIT` and `.Git` are ordinary discoverable project directories on case-sensitive hosts.
+- Action: prune only the exact root `.git` metadata directory. Inventory all case variants and
+  nested paths normally, then reject any unexpected or duplicate Claude definition they contain.
+
+### R12 — CRLF in canonical expected output
+
+- Severity: warning
+- Disposition: fixed
+- Root cause: the first EOL correction normalized only checked-out bytes. Canonical JSON strings
+  can decode escaped CRLF into renderer output, leaving expected CRLF unequal to normalized actual
+  LF and causing every sync to rewrite the same projection.
+- Action: make the Claude renderer emit LF-canonical whole files and normalize both expected and
+  actual operands again at the shared check/sync boundary before exact comparison or writing.
+
 ## Final review
 
 No actionable source finding remains. The renderer derives every worker field from the checked-in
 canonical policy; sync is root-contained and only creates the two required Claude target files.
 Repository-wide nested-scope inventory plus EOL-normalized whole-file comparison prevents an extra
 definition or a locally edited tool, preload, or denylist from bypassing the canonical boundary.
-Official documentation demonstrates the plugin-namespace collision rule; generated-file tests
-demonstrate configured qualified identifiers and tool denial. They do not demonstrate authenticated
-clean-home runtime selection, plugin source/version pinning, or immunity to managed/CLI overrides.
-The clean-home smoke and Wave 1 coverage gap remain explicitly recorded under the captain's
-decisions above.
+Only exact root `.git` metadata is pruned; case-variant and nested directories remain inventoried.
+The renderer and validator share LF-canonical expected/actual semantics. Official documentation
+demonstrates the plugin-namespace collision rule; generated-file tests demonstrate configured
+qualified identifiers and tool denial. They do not demonstrate authenticated clean-home runtime
+selection, plugin source/version pinning, or immunity to managed/CLI overrides. The clean-home
+smoke and Wave 1 coverage gap remain explicitly recorded under the captain's decisions above.

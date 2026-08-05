@@ -161,6 +161,51 @@ func TestClaudeProjectionCRLFIsNotDrift(t *testing.T) {
 	}
 }
 
+func TestClaudeProjectionCanonicalCRLFIsStable(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	foundPolicy := false
+	for index := range contract.HarnessPolicies {
+		if contract.HarnessPolicies[index].Harness != "claude" {
+			continue
+		}
+		contract.HarnessPolicies[index].ProjectDiscovery += "\r\nCanonical discovery continuation."
+		foundPolicy = true
+	}
+	if !foundPolicy {
+		t.Fatal("canonical contract does not define a Claude harness policy")
+	}
+
+	projection, err := RenderProjection(contract, contract.Projections[0])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if bytes.Contains(projection, []byte("\r\n")) {
+		t.Fatal("RenderProjection retained CRLF from canonical Claude policy")
+	}
+	if !bytes.Contains(projection, []byte("\nCanonical discovery continuation.")) {
+		t.Fatal("RenderProjection did not preserve canonical discovery text with LF")
+	}
+
+	root := t.TempDir()
+	updated, err := SyncProjections(root, contract)
+	if err != nil {
+		t.Fatalf("SyncProjections creates normalized Claude projections: %v", err)
+	}
+	if updated != 4 {
+		t.Fatalf("SyncProjections created %d normalized Claude and Codex projections, want 4", updated)
+	}
+	if err := CheckProjections(root, contract); err != nil {
+		t.Fatalf("CheckProjections rejected normalized canonical CRLF: %v", err)
+	}
+	updated, err = SyncProjections(root, contract)
+	if err != nil {
+		t.Fatalf("second SyncProjections rejected normalized canonical CRLF: %v", err)
+	}
+	if updated != 0 {
+		t.Fatalf("second SyncProjections updated %d projections, want 0", updated)
+	}
+}
+
 func TestCheckProjectionsRejectsClaudeAgentInventoryDrift(t *testing.T) {
 	contract := loadRepositoryContract(t, repositoryRoot(t))
 	target := contract.Projections[0]
@@ -199,6 +244,18 @@ func TestCheckProjectionsRejectsClaudeAgentInventoryDrift(t *testing.T) {
 			content:   []byte(strings.Replace(string(projection), "name: pm-delivery-worker", "name: unexpected-worker", 1)),
 			wantError: "unexpected definitions",
 		},
+		{
+			name:      "duplicate canonical name below uppercase git-like directory",
+			path:      ".GIT/.claude/agents/pm-delivery-worker.md",
+			content:   projection,
+			wantError: "duplicate claude project agent name",
+		},
+		{
+			name:      "unexpected definition below mixed-case git-like directory",
+			path:      ".Git/.claude/agents/unexpected-worker.md",
+			content:   []byte(strings.Replace(string(projection), "name: pm-delivery-worker", "name: unexpected-worker", 1)),
+			wantError: "unexpected definitions",
+		},
 	}
 
 	for _, test := range tests {
@@ -219,6 +276,32 @@ func TestCheckProjectionsRejectsClaudeAgentInventoryDrift(t *testing.T) {
 				t.Fatalf("CheckProjections error = %v, want substring %q", err, test.wantError)
 			}
 		})
+	}
+}
+
+func TestCheckProjectionsSkipsRootGitMetadata(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	root := t.TempDir()
+	if _, err := SyncProjections(root, contract); err != nil {
+		t.Fatalf("SyncProjections creates required Claude projections: %v", err)
+	}
+	projection, err := RenderProjection(contract, contract.Projections[0])
+	if err != nil {
+		t.Fatal(err)
+	}
+	metadataAgent := filepath.Join(root, ".git", ".claude", "agents", "pm-delivery-worker.md")
+	if err := os.MkdirAll(filepath.Dir(metadataAgent), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(root, ".git", "HEAD"), []byte("ref: refs/heads/main\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(metadataAgent, projection, 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := CheckProjections(root, contract); err != nil {
+		t.Fatalf("CheckProjections inventoried root Git metadata: %v", err)
 	}
 }
 

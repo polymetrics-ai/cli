@@ -86,6 +86,7 @@ func CheckProjections(root string, contract *Contract) (returnErr error) {
 				return fmt.Errorf("check projection %s: %w", target.Path, err)
 			}
 		case claudeMarkdownYAMLFrontmatter:
+			expected = normalizeClaudeProjection(expected)
 			actual = normalizeClaudeProjection(content)
 			policy, ok := contract.ProjectionFor(target.Harness)
 			if !ok {
@@ -136,7 +137,7 @@ func checkClaudeAgentInventory(projectionRoot *os.Root, contract *Contract) erro
 		if visitErr != nil {
 			return visitErr
 		}
-		if entry.IsDir() && strings.EqualFold(entry.Name(), ".git") {
+		if entry.IsDir() && agentPath == ".git" {
 			return fs.SkipDir
 		}
 		if entry.Type()&fs.ModeSymlink != 0 && isClaudeAgentInventoryPath(agentPath) {
@@ -244,6 +245,9 @@ func SyncProjections(root string, contract *Contract) (updated int, returnErr er
 			if !target.Required {
 				continue
 			}
+			if target.RenderMode == claudeMarkdownYAMLFrontmatter {
+				expected = normalizeClaudeProjection(expected)
+			}
 			if err := ensureProjectionDirectory(projectionRoot, filepath.Dir(path)); err != nil {
 				return updated, fmt.Errorf("create projection directory for %s: %w", target.Path, err)
 			}
@@ -269,6 +273,7 @@ func SyncProjections(root string, contract *Contract) (updated int, returnErr er
 			next = append(next, block...)
 			next = append(next, content[end:]...)
 		case claudeMarkdownYAMLFrontmatter:
+			expected = normalizeClaudeProjection(expected)
 			if bytes.Equal(normalizeClaudeProjection(content), expected) {
 				continue
 			}
