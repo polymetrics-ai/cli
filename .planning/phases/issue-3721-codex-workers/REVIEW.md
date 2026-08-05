@@ -13,8 +13,9 @@ No critical, warning, or informational findings remain.
 - The canonical source, rather than a hand-authored TOML file, owns every Codex-specific value.
 - Required Codex projections use whole-file drift comparison; optional Markdown adapters retain
   their existing marked-block behavior.
-- The renderer rejects an unsafe multiline-TOML delimiter, and projection I/O stays rooted in the
-  selected worktree. The symlink escape test now exercises the required `.codex` ancestor.
+- The TOML encoder and parser round-trip coverage preserve TOML-sensitive developer instructions,
+  and projection I/O stays rooted in the selected worktree. The symlink escape test now exercises
+  the required `.codex` ancestor.
 - The generated files have the exact documented standalone fields and set
   `agents.enabled = false` in role configuration. Tests parse the TOML and exercise the
   corresponding drift regression.
