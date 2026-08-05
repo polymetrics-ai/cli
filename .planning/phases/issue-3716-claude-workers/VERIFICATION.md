@@ -39,3 +39,17 @@ the user/plugin precedence ordering is the documented behavior, and the project 
 drift check is static evidence. Managed definitions and CLI `--agents` are documented as higher
 precedence than project roles, so they can intentionally replace a same-name project definition;
 this harness cannot prevent that override.
+
+## Completed local commands
+
+- `gofmt -w internal/agentcontract cmd/agentcontractgen`
+- `go test ./internal/agentcontract ./cmd/agentcontractgen -count=1`
+- `go vet ./internal/agentcontract ./cmd/agentcontractgen ./internal/cli`
+- `go test ./internal/cli -count=1`
+- `go build ./cmd/pm`
+- `make tidy-check`, `make docs-check-no-build`, `make smoke-no-build`, and `make lint`
+- `make agent-contract-check`, `make connector-boundary`, and `make release-workflow-check`
+- `make connectorgen-validate` and `make connectorgen-surface-sync`
+- `scripts/verify-gsd-workflow origin/main`
+
+All listed commands passed after the review follow-up listed in `REVIEW.md`.

@@ -89,11 +89,11 @@ func parseClaudeFrontmatter(content []byte) (claudeFrontmatter, error) {
 	var frontmatter claudeFrontmatter
 	const delimiter = "---\n"
 	if !bytes.HasPrefix(content, []byte(delimiter)) {
-		return frontmatter, fmt.Errorf("Claude projection frontmatter start marker is missing")
+		return frontmatter, fmt.Errorf("claude projection frontmatter start marker is missing")
 	}
 	end := bytes.Index(content[len(delimiter):], []byte("\n---\n"))
 	if end < 0 {
-		return frontmatter, fmt.Errorf("Claude projection frontmatter end marker is missing")
+		return frontmatter, fmt.Errorf("claude projection frontmatter end marker is missing")
 	}
 	end += len(delimiter)
 	decoder := yaml.NewDecoder(bytes.NewReader(content[len(delimiter):end]))
@@ -113,10 +113,10 @@ func parseClaudeFrontmatter(content []byte) (claudeFrontmatter, error) {
 func validateClaudeFrontmatter(frontmatter claudeFrontmatter, target ProjectionTarget, policy HarnessPolicy) error {
 	if frontmatter.Name != target.Role || strings.TrimSpace(frontmatter.Description) == "" ||
 		!slices.Equal(frontmatter.Tools, policy.Tools) || frontmatter.PermissionMode != policy.PermissionMode {
-		return fmt.Errorf("Claude projection frontmatter does not match the canonical %s policy", target.Harness)
+		return fmt.Errorf("claude projection frontmatter does not match the canonical %s policy", target.Harness)
 	}
 	if slices.Contains(frontmatter.Tools, policy.DelegationTool) {
-		return fmt.Errorf("Claude projection frontmatter must omit %s from its tools allowlist", policy.DelegationTool)
+		return fmt.Errorf("claude projection frontmatter must omit %s from its tools allowlist", policy.DelegationTool)
 	}
 	return nil
 }

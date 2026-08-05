@@ -12,9 +12,10 @@ Issue: #3716. Parent: #3714. Branch: `fm/cli-agents-wave-claude-r1`.
   inline as the discussion record.
 - `scripts/gsd prompt plan-phase issue-3716-claude-workers --tdd --skip-research`: generated and
   executed inline through the plan and RED/GREEN/REFACTOR slices below.
-- The phase will run generated `execute-phase`, `verify-work`, and `code-review` prompts inline
-  after implementation. No agent role is spawned; the canonical base worker declares delegation
-  `none`.
+- Generated `execute-phase`, `verify-work`, and `code-review` prompts were executed inline. The
+  Pi adapter cannot supply the workflow's reviewer/UAT subagents, so their prescribed artifacts
+  are recorded manually below; no agent role was spawned because the canonical base worker
+  declares delegation `none`.
 
 ## Required skills loaded
 
