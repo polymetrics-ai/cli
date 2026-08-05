@@ -65,6 +65,11 @@ Reads GNews articles from the keyword search and top-headlines endpoints of the 
 - approval: none; read-only news search API
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

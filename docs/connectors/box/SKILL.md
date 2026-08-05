@@ -140,6 +140,11 @@ Reads Box users, groups, collections, folder items, webhooks, retention policies
 - approval: required for every write action; read remains unapproved
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

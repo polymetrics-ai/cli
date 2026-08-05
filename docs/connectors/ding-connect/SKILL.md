@@ -84,6 +84,11 @@ Reads DingConnect reference catalogs (countries, currencies, regions, providers,
 - approval: required for the send_transfer write action; read streams remain unapproved
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

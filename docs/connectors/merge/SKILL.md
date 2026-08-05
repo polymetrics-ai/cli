@@ -71,6 +71,11 @@ Reads Merge ATS common-model objects (candidates, applications, jobs, offers, de
 - read risk: external Merge unified API read of ATS candidate and hiring data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

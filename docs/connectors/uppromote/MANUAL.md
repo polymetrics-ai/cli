@@ -117,6 +117,10 @@ SECURITY
   approval: none required; every modeled write is a create/approve/assign/mark-paid style mutation, not a destructive delete
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect uppromote

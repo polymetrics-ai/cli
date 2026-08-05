@@ -77,6 +77,11 @@ Reads Spotify Ads ad accounts, campaigns, ad sets, ads, businesses, business-sco
 - approval: reverse ETL plan approval required before writes; update_campaign can pause or archive live ad spend
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

@@ -63,6 +63,10 @@ SECURITY
   approval: none; read-only, no reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect timely

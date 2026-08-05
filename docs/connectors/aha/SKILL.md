@@ -74,6 +74,11 @@ Reads Aha! features, products, ideas, releases, initiatives, goals, epics, and u
 - read risk: external Aha! API read of planning and roadmap data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

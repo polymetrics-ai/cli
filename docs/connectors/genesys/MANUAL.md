@@ -57,6 +57,10 @@ SECURITY
   read risk: external Genesys Cloud Platform API read of user, queue, group, and division data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect genesys

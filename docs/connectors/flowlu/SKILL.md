@@ -68,6 +68,11 @@ Reads Flowlu CRM accounts, leads, tasks, projects, invoices, and agile issues th
 - approval: none; read-only API-key access
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

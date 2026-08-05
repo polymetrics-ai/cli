@@ -208,6 +208,11 @@ Reads Datadog monitors, dashboards, dashboard lists, users, SLOs, SLO correction
 - approval: required for every delete_*/cancel_downtime action (irreversible or alerting-suppressing) and for update_monitor/update_downtime/update_slo/update_user/update_synthetics_api_test/create_downtime/create_user (live alerting or access-control side effects); create_monitor/create_dashboard/create_dashboard_list/create_notebook/create_slo/create_event/create_synthetics_api_test/update_dashboard_list/update_api_key are low-risk
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

@@ -100,6 +100,10 @@ SECURITY
   write risk: creates/updates Auth0 users (including credentials), applications (clients), RBAC roles, and organizations; approval required for every action
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect auth0

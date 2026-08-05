@@ -896,6 +896,11 @@ Reads Amazon Selling Partner API orders, inventory, finance, catalog, listings, 
 - approval: reverse ETL writes require plan preview and approval token; destructive/cancel/delete actions are marked destructive
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

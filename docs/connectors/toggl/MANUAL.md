@@ -137,6 +137,10 @@ SECURITY
   approval: create/update actions execute without approval (low-risk, reversible via a follow-up write); delete_* actions are irreversible and should be gated by the caller's own reverse-ETL approval policy
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect toggl

@@ -150,6 +150,11 @@ Reads Castor EDC studies, users, countries, and audit-trail events through the C
 - approval: read: none; write: required for every action
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

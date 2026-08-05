@@ -521,6 +521,11 @@ Reads and writes SurveyMonkey REST v3 and SCIM v2 resources through the document
 - approval: reverse ETL writes require plan preview and approval token before any SurveyMonkey mutation is executed
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

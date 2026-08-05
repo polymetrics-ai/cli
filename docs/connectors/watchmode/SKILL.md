@@ -91,6 +91,11 @@ Reads Watchmode title search results, streaming sources, regions, networks, genr
 - approval: none; read-only public media metadata connector
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

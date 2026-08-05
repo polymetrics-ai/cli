@@ -289,6 +289,11 @@ Reads Picqer products, customers, orders, picklists, warehouses, suppliers, purc
 - approval: required for update/delete/cancel-shaped actions; create_customer/create_supplier/create_tag/create_purchaseorder/create_receipt/create_return/create_location/create_location_type/create_picking_container/create_picklist_batch/create_packaging/create_hook require no approval (low-risk, non-destructive)
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

@@ -63,6 +63,11 @@ Reads WooCommerce orders, products, customers, and coupons through the WooCommer
 - read risk: external WooCommerce store read of orders, products, customers, and coupons
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

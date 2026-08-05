@@ -63,6 +63,11 @@ Reads LinkedIn Ads accounts, campaign groups, campaigns, and creatives through t
 - read risk: external LinkedIn Marketing API read of ad account, campaign, and creative data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

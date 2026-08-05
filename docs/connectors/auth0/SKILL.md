@@ -105,6 +105,11 @@ Reads Auth0 users, clients, connections, roles, organizations, role assignments,
 - write risk: creates/updates Auth0 users (including credentials), applications (clients), RBAC roles, and organizations; approval required for every action
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

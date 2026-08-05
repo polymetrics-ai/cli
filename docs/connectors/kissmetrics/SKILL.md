@@ -61,6 +61,11 @@ Reads Kissmetrics products, reports, events, and properties through the Kissmetr
 - approval: none; read-only source
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

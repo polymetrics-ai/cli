@@ -56,6 +56,11 @@ Reads Gridly views, per-view records (with flattened column cells), and per-view
 - read risk: external Gridly API read of view/grid content
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

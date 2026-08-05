@@ -61,6 +61,11 @@ Reads Genesys Cloud users, queues, groups, and divisions through the Genesys Clo
 - read risk: external Genesys Cloud Platform API read of user, queue, group, and division data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

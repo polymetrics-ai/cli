@@ -103,6 +103,11 @@ Reads Chatwoot Support conversations, contacts, inboxes, agents, teams, labels, 
 - write risk: external mutation of Chatwoot contacts, conversations, messages, and labels; agent-visible and customer-visible side effects
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

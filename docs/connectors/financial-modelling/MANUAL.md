@@ -96,6 +96,10 @@ SECURITY
   read risk: external Financial Modeling Prep API read of market data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect financial-modelling

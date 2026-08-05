@@ -66,6 +66,11 @@ Reads Fulcrum forms, records, projects, choice lists, and classification sets th
 - read risk: external Fulcrum API read of form, record, and project data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

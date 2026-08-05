@@ -1041,6 +1041,11 @@ Reads and mutates Outreach REST API v2 JSON:API resources, including standard re
 - approval: write actions require explicit reverse-ETL approval; destructive deletes and bulk-destroy actions are marked destructive
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

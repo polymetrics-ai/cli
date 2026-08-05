@@ -65,6 +65,11 @@ Reads Apptivo CRM customers, contacts, leads, and opportunities through the Appt
 - approval: required; remove_customer is a destructive, irreversible external deletion
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

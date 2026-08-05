@@ -53,6 +53,10 @@ SECURITY
   read risk: external HoorayHR API read of employee, time-off, leave-type, and sick-leave data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect hoorayhr

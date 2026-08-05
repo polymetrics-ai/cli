@@ -109,6 +109,10 @@ SECURITY
   write risk: external Airtable API mutation of records, table/field schema, comments, and webhooks; schema mutations (create_table/update_table/create_field/update_field) are visible to every base collaborator, approval required
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect airtable

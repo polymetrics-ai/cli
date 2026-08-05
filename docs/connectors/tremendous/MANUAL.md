@@ -110,6 +110,10 @@ SECURITY
   approval: create_order, approve_order, reject_order, cancel_reward, and create_member move money or grant organization access and require approval; create_invoice, delete_invoice, resend_reward, generate_reward_link, create_webhook, and delete_webhook are lower-risk/reversible-adjacent actions that execute without approval
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect tremendous

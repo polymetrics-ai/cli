@@ -102,6 +102,10 @@ SECURITY
   write risk: external 100ms mutation: creates/updates rooms, creates templates, creates/updates room join-codes, and starts/stops room recordings; approval required
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect 100ms

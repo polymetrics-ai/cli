@@ -109,6 +109,11 @@ Reads DataScope locations, form answers, lists, notifications, task assignments,
 - approval: required for update_location/update_metadata_object/update_metadata_type/bulk_update_metadata_objects/change_form_answer; create_location/assign_task/create_metadata_object/create_metadata_type are low-risk
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

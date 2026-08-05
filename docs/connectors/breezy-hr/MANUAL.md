@@ -96,6 +96,10 @@ SECURITY
   approval: none required by default; review update_position_state (publishes job postings) and move_candidate_stage (may trigger candidate-facing communications) before use in an automated pipeline
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect breezy-hr

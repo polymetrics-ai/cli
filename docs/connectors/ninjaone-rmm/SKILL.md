@@ -61,6 +61,11 @@ Reads NinjaOne RMM organizations, devices, locations, activities, and policies t
 - read risk: external NinjaOne RMM API read of managed device and organization data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

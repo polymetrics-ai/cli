@@ -200,6 +200,10 @@ SECURITY
   approval: required for all write actions; every write action is an irreversible external delete
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect solarwinds-service-desk

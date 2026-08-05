@@ -61,6 +61,10 @@ SECURITY
   approval: required for the update_file write action; read remains unapproved
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect box-data-extract

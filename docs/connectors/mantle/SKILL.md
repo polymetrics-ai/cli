@@ -1023,6 +1023,11 @@ Reads and writes Mantle Core API resources through the heymantle.com REST API.
 - write risk: external Mantle API mutation of customer, billing, CRM, docs, email, helpdesk, webhook, and workflow resources; approval required
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

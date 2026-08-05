@@ -60,6 +60,11 @@ Reads Linkrunner mobile attribution campaigns and attributed users from the Link
 - read risk: external Linkrunner API read of mobile attribution campaign and user data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

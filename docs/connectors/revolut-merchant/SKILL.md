@@ -63,6 +63,11 @@ Reads Revolut Merchant orders, customers, settlements, and payment links through
 - read risk: external Revolut Merchant API read of order, customer, settlement, and payment-link data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

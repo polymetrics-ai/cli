@@ -61,6 +61,11 @@ Reads Leadfeeder accounts and their leads, visits, and custom feeds through the 
 - read risk: external Leadfeeder API read of account, lead, and visit data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

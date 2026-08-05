@@ -111,6 +111,10 @@ SECURITY
   approval: required for all writes; the 6 redact_*/redact_transaction_biometrics actions are destructive and irreversible (PII deletion), approve_inquiry/decline_inquiry make a final identity decision with downstream workflow/webhook side effects, and rerun_report has a metered billing side effect
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect persona

@@ -86,6 +86,10 @@ SECURITY
   approval: none for customer/team-member/answer/response upserts (low-risk CRM-style data); send_survey_email sends a real outbound email and should be reviewed before enabling in a caller with untrusted input
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect simplesat

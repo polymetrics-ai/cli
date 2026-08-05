@@ -464,6 +464,10 @@ SECURITY
   read risk: external TMDb API read of public catalog, search, account-state, and reference metadata
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect tmdb

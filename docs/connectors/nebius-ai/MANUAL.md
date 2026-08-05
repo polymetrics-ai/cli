@@ -199,6 +199,10 @@ SECURITY
   approval: required for every write action; destructive deletes require destructive confirmation
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect nebius-ai

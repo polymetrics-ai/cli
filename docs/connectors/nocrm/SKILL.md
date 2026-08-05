@@ -298,6 +298,11 @@ Reads noCRM.io CRM objects and exposes declarative write actions for supported n
 - approval: write actions require explicit approval; reads require none
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

@@ -85,6 +85,11 @@ Reads and writes ServiceNow incident, user, and group table data through the Ser
 - approval: none for incident/group create-update (low-risk ticketing/CRM-style data); review user create/update before enabling in a caller with untrusted input, since it can grant or revoke ServiceNow instance access
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

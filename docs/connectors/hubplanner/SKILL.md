@@ -501,6 +501,11 @@ Reads Hubplanner scheduling, project, resource, client, billing, time, vacation,
 - Help topics:
   - hubplanner safety - Hubplanner writes require reverse-ETL plan, preview, approval, and destructive confirmation for deletes.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

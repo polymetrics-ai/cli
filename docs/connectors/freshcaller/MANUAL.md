@@ -55,6 +55,10 @@ SECURITY
   read risk: external Freshcaller API read of call, agent, team, and phone number data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect freshcaller

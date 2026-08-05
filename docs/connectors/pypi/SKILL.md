@@ -47,6 +47,11 @@ Reads PyPI project metadata through the PyPI JSON API. Read-only and credential-
 - approval: none; read-only public package registry API
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

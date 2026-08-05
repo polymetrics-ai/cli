@@ -55,6 +55,11 @@ Reads Pivotal Tracker projects, stories, iterations, and epics through API v5.
 - read risk: external Pivotal Tracker API read of project, story, iteration, and epic data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

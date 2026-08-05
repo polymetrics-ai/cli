@@ -140,6 +140,10 @@ COMMAND SURFACE
   Help topics:
     parity - Google's current Discovery document lists 11 unique Search Console operations. Five reach ETL streams, four reach typed reverse-ETL writes, and URL Inspection plus Mobile-Friendly Test reach typed bounded direct reads. There are no generic raw HTTP, body, query, binary, CDC, excluded, or planned operations.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect google-search-console

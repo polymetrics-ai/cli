@@ -385,6 +385,10 @@ SECURITY
   approval: required for write actions; destructive and notification-sending actions carry explicit risk metadata
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect pandadoc

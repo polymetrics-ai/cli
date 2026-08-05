@@ -122,6 +122,10 @@ SECURITY
   write risk: external mutation of Circa contacts, events, companies, and event-contact registrations; create/update/delete affect live CRM/event data an operator relies on
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect circa

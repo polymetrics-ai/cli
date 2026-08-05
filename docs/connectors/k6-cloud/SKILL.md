@@ -54,6 +54,11 @@ Reads k6 Cloud organizations, projects, and load tests through the k6 Cloud REST
 - read risk: external k6 Cloud API read of organizations, projects, and load tests
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

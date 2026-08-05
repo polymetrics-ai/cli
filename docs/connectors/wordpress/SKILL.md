@@ -168,6 +168,11 @@ Reads and writes WordPress REST API content: posts, pages, comments, media, user
 - approval: read: none; write: required for every create/update/delete action
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

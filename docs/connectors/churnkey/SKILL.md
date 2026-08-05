@@ -65,6 +65,11 @@ Reads Churnkey cancel-flow sessions and aggregated session counts through the Ch
 - write risk: external mutation of Churnkey customer event/attribute data used to drive cancel-flow targeting; approval required
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

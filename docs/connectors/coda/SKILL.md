@@ -104,6 +104,11 @@ Reads Coda docs and doc-scoped tables, rows, columns, pages, formulas, and contr
 - approval: row/page create+update: none; delete_row/delete_rows/delete_page: approval required (irreversible); push_button: approval required (arbitrary doc-defined side effects)
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

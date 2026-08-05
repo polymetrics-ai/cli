@@ -468,6 +468,11 @@ Reads TMDb movie, TV, person, collection, company, keyword, review, account, sea
 - read risk: external TMDb API read of public catalog, search, account-state, and reference metadata
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

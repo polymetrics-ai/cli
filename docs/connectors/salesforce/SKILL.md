@@ -57,6 +57,11 @@ Reads Salesforce object metadata and allow-listed Account, Contact, and Lead SOQ
 - read risk: external Salesforce API read of object metadata, Account, Contact, and Lead records
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

@@ -69,6 +69,11 @@ Reads RentCast properties, sale listings, rental listings, market data, and valu
 - read risk: external RentCast API read of property, listing, market, and valuation data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

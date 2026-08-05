@@ -85,6 +85,10 @@ SECURITY
   approval: required for every write action; create_submission dispatches real signature-request emails/SMS to submitters unless send_email/send_sms are explicitly disabled
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect docuseal

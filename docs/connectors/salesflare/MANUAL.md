@@ -174,6 +174,10 @@ SECURITY
   approval: required for update/delete actions; create_* actions on accounts/contacts/opportunities/tags/tasks/meetings/calls/internal notes are low-risk and do not require approval; delete_* actions are destructive and irreversible
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect salesflare

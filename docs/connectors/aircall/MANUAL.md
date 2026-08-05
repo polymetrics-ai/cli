@@ -147,6 +147,10 @@ SECURITY
   write risk: external Aircall API mutation of agents, teams, contacts, tags, webhooks, and call archive/comment/tag state; approval required for user/team/contact/webhook create-update-delete, low-risk for additive call tagging/commenting
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect aircall

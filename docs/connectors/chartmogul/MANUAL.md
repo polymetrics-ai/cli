@@ -79,6 +79,10 @@ SECURITY
   write risk: external mutation of ChartMogul customer records; approval required
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect chartmogul

@@ -130,6 +130,10 @@ SECURITY
   approval: required for delete_job/delete_notification/delete_ssh_tunnel (irreversible) and for trigger_job_run/retry_failed_job/retry_run/cancel_run (real warehouse side effects); create_job/create_notification are low-risk
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect dbt

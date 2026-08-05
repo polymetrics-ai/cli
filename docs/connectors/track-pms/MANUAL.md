@@ -97,6 +97,10 @@ SECURITY
   approval: create_reservation, create_unit, and create_owner require approval (each creates a billable/bookable real-world resource record); update_unit, update_owner, create_contact, update_contact, and delete_contact execute without approval
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect track-pms

@@ -93,6 +93,11 @@ Reads Acuity Scheduling appointments, clients, appointment types, calendars, for
 - write risk: external Acuity Scheduling mutation: creates/updates/cancels live appointments, blocks off calendar time, and issues package/coupon certificates; approval required
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

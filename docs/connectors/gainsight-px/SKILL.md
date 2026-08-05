@@ -58,6 +58,11 @@ Reads Gainsight PX accounts, users, features, and segments through the aptrinsic
 - read risk: external Gainsight PX (aptrinsic) API read of account, user, feature, and segment data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

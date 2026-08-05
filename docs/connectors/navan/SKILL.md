@@ -62,6 +62,11 @@ Reads Navan flight, hotel, car, and rail travel bookings through the Navan REST 
 - read risk: external Navan API read of travel booking data (flight, hotel, car, rail)
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

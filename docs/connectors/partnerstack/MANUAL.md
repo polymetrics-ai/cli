@@ -58,6 +58,10 @@ SECURITY
   read risk: external PartnerStack API read of partnership and referral-customer data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect partnerstack

@@ -187,6 +187,10 @@ SECURITY
   approval: required for delete_config/delete_environment/delete_flag/delete_tag (destructive, cascades to dependent data); create/update actions are lower risk but still mutate shared product configuration
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect configcat

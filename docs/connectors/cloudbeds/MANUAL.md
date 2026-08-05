@@ -237,6 +237,10 @@ SECURITY
   approval: financial-transaction and delete-kind actions (post_payment/void_payment/post_adjustment/delete_adjustment/post_item/void_item/delete_guest_note/delete_reservation_note/delete_webhook/delete_room_block) require approval; profile/note/status/assignment/create-kind actions do not
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect cloudbeds

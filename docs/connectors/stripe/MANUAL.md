@@ -106,6 +106,10 @@ COMMAND SURFACE
   Help topics:
     destructive-confirmation - Stripe DELETE/destructive operations are in scope only through typed destructive confirmation and the reverse ETL plan → preview → approval → execute path.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect stripe

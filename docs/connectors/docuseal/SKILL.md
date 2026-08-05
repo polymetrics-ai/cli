@@ -90,6 +90,11 @@ Reads DocuSeal templates, submissions, and submitters, and writes submission/sub
 - approval: required for every write action; create_submission dispatches real signature-request emails/SMS to submitters unless send_email/send_sms are explicitly disabled
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

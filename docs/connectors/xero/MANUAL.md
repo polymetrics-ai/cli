@@ -782,6 +782,10 @@ COMMAND SURFACE
     xero reverse-etl - Reverse ETL writes use typed schemas and require plan, preview, explicit approval, and execute.
     xero attachments - Attachment metadata streams are available; binary/PDF download and upload execution is blocked on the shared binary/file runner.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect xero

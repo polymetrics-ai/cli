@@ -543,6 +543,11 @@ Reads and writes documented GoCardless REST API resources through the declarativ
 - approval: required for every write action; destructive actions are marked confirm: destructive
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

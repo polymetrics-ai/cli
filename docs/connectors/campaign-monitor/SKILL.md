@@ -153,6 +153,11 @@ Reads and writes Campaign Monitor clients, campaigns, subscriber lists, subscrib
 - approval: required for campaign-send and subscriber-delete actions; list/segment/subscriber-add/update mutations are lower risk
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

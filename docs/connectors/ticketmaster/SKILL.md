@@ -58,6 +58,11 @@ Reads events, venues, attractions, and classifications from the Ticketmaster Dis
 - read risk: external Ticketmaster Discovery API read of public event/venue data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

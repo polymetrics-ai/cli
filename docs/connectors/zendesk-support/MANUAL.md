@@ -1180,6 +1180,10 @@ COMMAND SURFACE
     zendesk-support safety - Writes use plan -> preview -> explicit approval -> execute; destructive and credential-sensitive operations require typed confirmation.
     zendesk-support operations - Official Support API operations not yet executable remain blocked typed metadata, never raw API passthrough.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect zendesk-support

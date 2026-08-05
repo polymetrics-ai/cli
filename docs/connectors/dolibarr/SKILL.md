@@ -171,6 +171,11 @@ Reads and writes Dolibarr ERP/CRM third parties, contacts, products, customer in
 - approval: required for every write action; delete_* actions are irreversible in Dolibarr
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

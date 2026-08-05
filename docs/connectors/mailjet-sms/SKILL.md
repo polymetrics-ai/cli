@@ -78,6 +78,11 @@ Reads Mailjet SMS messages, message counts, and export job status; writes SMS se
 - approval: required for all write actions
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

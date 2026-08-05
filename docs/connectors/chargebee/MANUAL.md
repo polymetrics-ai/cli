@@ -303,6 +303,10 @@ SECURITY
   write risk: external mutation of Chargebee billing data (customers, subscriptions, invoices, credit notes, orders, coupons, payment sources); several actions have direct financial/billing side effects and require approval
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect chargebee

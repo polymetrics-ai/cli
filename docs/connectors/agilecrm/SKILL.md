@@ -112,6 +112,11 @@ Reads AgileCRM contacts, deals, tasks, milestone pipelines, campaigns, and suppo
 - write risk: external mutation of live AgileCRM contacts, deals, and tasks including irreversible deletes; approval required for every write action
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

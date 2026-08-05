@@ -54,6 +54,11 @@ Reads Granola meeting notes metadata and full note detail (summary, owner, atten
 - read risk: external Granola API read of meeting notes metadata
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

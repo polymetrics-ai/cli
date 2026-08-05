@@ -57,6 +57,11 @@ Reads Workday REST API resources (workers, organizations, job profiles) with bea
 - approval: none; read-only, bearer-token auth
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

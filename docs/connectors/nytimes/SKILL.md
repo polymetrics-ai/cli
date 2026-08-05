@@ -57,6 +57,11 @@ Reads New York Times Most Popular (viewed, emailed, shared) articles via the NYT
 - read risk: external NYTimes API read of published article metadata (no PII)
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

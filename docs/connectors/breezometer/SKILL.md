@@ -93,6 +93,11 @@ Reads BreezoMeter (Google Environment) air quality, pollen, weather, and wildfir
 - approval: none; the sole write action is a stateless computation with no side effects on BreezoMeter's own data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

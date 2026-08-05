@@ -65,6 +65,11 @@ Reads articles and news sources from the News API (newsapi.org): the everything 
 - read risk: external News API read of article and source metadata
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

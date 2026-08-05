@@ -495,6 +495,10 @@ COMMAND SURFACE
   Help topics:
     hubplanner safety - Hubplanner writes require reverse-ETL plan, preview, approval, and destructive confirmation for deletes.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect hubplanner

@@ -101,6 +101,10 @@ SECURITY
   approval: required for all write actions except duplicate_link (low-risk copy operation); delete_link/delete_webhook/cancel_event are destructive and irreversible
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect savvycal

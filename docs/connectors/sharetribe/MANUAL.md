@@ -129,6 +129,10 @@ SECURITY
   approval: none for listing/user-profile/stock/availability-exception mutations (reversible, low-risk marketplace-operator actions); review transition_transaction and update_user_permissions before enabling in a caller with untrusted input, since transitions can trigger real payment capture/payout and permission changes affect account access
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect sharetribe

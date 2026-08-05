@@ -788,6 +788,11 @@ Reads and writes Xero Accounting API resources through declarative JSON bundle s
   - xero reverse-etl - Reverse ETL writes use typed schemas and require plan, preview, explicit approval, and execute.
   - xero attachments - Attachment metadata streams are available; binary/PDF download and upload execution is blocked on the shared binary/file runner.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

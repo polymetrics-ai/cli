@@ -70,6 +70,10 @@ SECURITY
   read risk: external Aha! API read of planning and roadmap data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect aha

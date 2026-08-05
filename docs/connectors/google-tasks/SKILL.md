@@ -59,6 +59,11 @@ Reads Google task lists and tasks through the Google Tasks REST API.
 - read risk: external Google Tasks API read of the authenticated user's task lists and tasks
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

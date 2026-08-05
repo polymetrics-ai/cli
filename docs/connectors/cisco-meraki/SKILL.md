@@ -137,6 +137,11 @@ Reads and writes Cisco Meraki organizations, networks, devices, admins, licenses
 - write risk: external mutation of Meraki network/device/admin/policy-object/configuration-template configuration; affects live network management state an operator relies on
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

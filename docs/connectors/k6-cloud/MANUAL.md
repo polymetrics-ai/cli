@@ -50,6 +50,10 @@ SECURITY
   read risk: external k6 Cloud API read of organizations, projects, and load tests
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect k6-cloud

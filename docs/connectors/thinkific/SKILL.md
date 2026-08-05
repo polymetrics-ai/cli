@@ -203,6 +203,11 @@ Reads and writes Thinkific courses, users, enrollments, products, orders, and si
 - approval: required for site_scripts create/update and delete_user (confirm: destructive); other writes are low-risk additive/idempotent mutations, no approval required
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

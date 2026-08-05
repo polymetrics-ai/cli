@@ -3031,6 +3031,11 @@ Reads and writes Zoho Books API v3 accounting resources using the declarative co
 - approval: writes require explicit user approval before execution; destructive deletes are marked destructive
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

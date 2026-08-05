@@ -66,6 +66,10 @@ SECURITY
   approval: required for the create_investment write action; read-only otherwise
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect countercyclical

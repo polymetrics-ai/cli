@@ -58,6 +58,10 @@ SECURITY
   read risk: external Navan API read of travel booking data (flight, hotel, car, rail)
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect navan

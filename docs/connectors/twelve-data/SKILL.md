@@ -60,6 +60,11 @@ Reads Twelve Data time series, quotes, stocks, and forex pair reference data.
 - approval: none; read-only, no reverse-ETL writes implemented by legacy
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

@@ -116,6 +116,11 @@ Reads Persona inquiries, accounts, reports, transactions, and cases, and perform
 - approval: required for all writes; the 6 redact_*/redact_transaction_biometrics actions are destructive and irreversible (PII deletion), approve_inquiry/decline_inquiry make a final identity decision with downstream workflow/webhook side effects, and rerun_report has a metered billing side effect
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

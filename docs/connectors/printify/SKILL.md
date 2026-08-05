@@ -202,6 +202,11 @@ Reads and writes Printify shops, catalog resources, products, orders, uploads, a
 - approval: reverse ETL writes require plan preview and approval token; destructive product/order/shop/upload/webhook actions are marked destructive
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

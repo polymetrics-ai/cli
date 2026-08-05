@@ -63,6 +63,11 @@ Reads Marketstack exchanges, tickers, end-of-day prices, splits, and dividends t
 - read risk: external Marketstack API read of financial market data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

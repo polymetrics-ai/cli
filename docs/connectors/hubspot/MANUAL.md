@@ -3171,6 +3171,10 @@ COMMAND SURFACE
     hubspot-destructive-confirmation - DELETE and destructive HubSpot operations are in scope only as typed destructive-confirmation actions behind plan, preview, explicit approval, and execute.
     hubspot-provider-query - Provider search/query remains distinct from warehouse pm query and is blocked pending shared foundation #2985.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect hubspot

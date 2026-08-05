@@ -205,6 +205,11 @@ Reads SolarWinds Service Desk incidents, problems, changes, change catalogs, rel
 - approval: required for all write actions; every write action is an irreversible external delete
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

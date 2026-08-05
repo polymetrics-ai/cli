@@ -64,6 +64,11 @@ Reads Lever Hiring opportunities, postings, users, requisitions, and stages thro
 - read risk: external Lever API read of candidate and hiring pipeline data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

@@ -102,7 +102,7 @@ REVERSE ETL ACTIONS
     risk: sends up to 10 messages per SQS batch request; FIFO queues may use message_deduplication_id for provider-supported idempotency
   set_queue_attributes:
     endpoint: POST SQS.SetQueueAttributes
-    required fields: attributes or attribute_name + attribute_value
+    optional fields: attribute_name, attribute_value, attributes
     risk: sets typed SQS queue attributes such as policy, redrive, encryption, retention, and visibility settings
   start_message_move_task:
     endpoint: POST SQS.StartMessageMoveTask
@@ -111,7 +111,7 @@ REVERSE ETL ACTIONS
     risk: starts an SQS dead-letter queue redrive message move task
   tag_queue:
     endpoint: POST SQS.TagQueue
-    required fields: tags or tag_key + tag_value
+    optional fields: tag_key, tag_value, tags
     risk: adds or updates tags on the configured SQS queue
   untag_queue:
     endpoint: POST SQS.UntagQueue
@@ -156,6 +156,10 @@ COMMAND SURFACE
     queue untag - Plan a typed Amazon SQS untag queue operation. [intent=reverse_etl availability=implemented write=untag_queue]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: removes tags from the configured SQS queue; flags: --tag-keys (required)
   Help topics:
     safety - Amazon SQS write commands always use reverse ETL plan, preview, approval, and execute; destructive commands require typed confirmation.
+
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
 
 EXAMPLES
   # Inspect as a manual

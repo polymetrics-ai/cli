@@ -116,6 +116,11 @@ Reads and writes Zoho Bigin pipelines, contacts, companies, products, tasks, eve
 - approval: required for all write actions; reads require no approval
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

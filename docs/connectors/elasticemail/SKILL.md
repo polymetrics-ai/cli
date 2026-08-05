@@ -200,6 +200,11 @@ Reads and writes Elastic Email contacts, campaigns, lists, segments, templates, 
 - approval: standard; no destructive-admin or elevated-scope actions are exposed
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

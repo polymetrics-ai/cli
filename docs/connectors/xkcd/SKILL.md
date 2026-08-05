@@ -50,6 +50,11 @@ Reads public XKCD comic metadata from the JSON API. Read-only.
 - approval: none; read-only public API
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

@@ -60,6 +60,11 @@ Reads aviationstack flights and aviation reference data (airlines, airports, air
 - read risk: external aviationstack API read of flight and aviation reference data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

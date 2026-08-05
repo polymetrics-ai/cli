@@ -61,6 +61,11 @@ Reads Recruitee offers, candidates, departments, sources, and tags through the R
 - approval: none; read-only ATS API
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

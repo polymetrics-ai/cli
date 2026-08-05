@@ -145,6 +145,10 @@ SECURITY
   write risk: external mutation of live Cin7 Core catalog, customer, supplier, and reference-table records; approval required
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect cin7

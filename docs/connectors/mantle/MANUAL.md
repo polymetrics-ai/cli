@@ -1018,6 +1018,10 @@ SECURITY
   write risk: external Mantle API mutation of customer, billing, CRM, docs, email, helpdesk, webhook, and workflow resources; approval required
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect mantle

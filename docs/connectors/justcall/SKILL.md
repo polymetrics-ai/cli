@@ -57,6 +57,11 @@ Reads JustCall users, call logs, SMS, contacts, and phone numbers through the Ju
 - read risk: external JustCall API read of users, call logs, SMS, contacts, and phone numbers
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

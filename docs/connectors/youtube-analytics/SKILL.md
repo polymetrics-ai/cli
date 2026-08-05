@@ -147,6 +147,11 @@ Reads YouTube Reporting API jobs, report types, report metadata, YouTube Analyti
   - content-owner-writes - Read streams support onBehalfOfContentOwner from content_owner_id; declarative write actions omit that optional query until write-action query templates are available.
   - destructive-confirmation - YouTube Reporting job deletes and YouTube Analytics group/group-item deletes require reverse ETL plan, preview, explicit approval, and typed destructive confirmation.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

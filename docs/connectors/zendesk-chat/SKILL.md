@@ -60,6 +60,11 @@ Reads Zendesk Chat agents, chats, departments, shortcuts, and triggers through t
 - read risk: external Zendesk Chat API read of agent, chat, and configuration data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

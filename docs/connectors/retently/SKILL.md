@@ -63,6 +63,11 @@ Reads Retently customers, survey responses, surveys, and campaigns through the R
 - read risk: external Retently API read of customer and NPS/CSAT survey response data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

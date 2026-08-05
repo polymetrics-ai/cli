@@ -145,6 +145,10 @@ SECURITY
   approval: required for every delete_* action, archive_project, and update_time_record (time entries may already be invoiced/locked); create/update of clients, projects, tasks, sections, time records, and expenses are low-risk
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect everhour

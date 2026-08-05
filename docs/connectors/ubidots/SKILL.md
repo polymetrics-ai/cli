@@ -98,6 +98,11 @@ Reads Ubidots devices, variables, variable values, device groups, device types, 
 - approval: required for delete_device/delete_variable; other writes are low-risk external mutations
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual
