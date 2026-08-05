@@ -119,7 +119,7 @@ func loadRegistry(source string) (registryFile, error) {
 		if err != nil {
 			return registryFile{}, fmt.Errorf("fetch registry: %w", err)
 		}
-		defer resp.Body.Close()
+		defer func() { _ = resp.Body.Close() }()
 		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 			return registryFile{}, fmt.Errorf("fetch registry returned %s", resp.Status)
 		}
@@ -559,7 +559,7 @@ func downloadIconAsset(client http.Client, iconsDir string, asset iconAsset) err
 	if err != nil {
 		return fmt.Errorf("fetch icon %s: %w", asset.SourceURL, err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		return fmt.Errorf("fetch icon %s returned %s", asset.SourceURL, resp.Status)
 	}
@@ -619,18 +619,5 @@ func stringValue(value any) string {
 
 func boolValue(value any) bool {
 	typed, _ := value.(bool)
-	return typed
-}
-
-func mapValue(value any) map[string]any {
-	typed, _ := value.(map[string]any)
-	if typed == nil {
-		return map[string]any{}
-	}
-	return typed
-}
-
-func anySlice(value any) []any {
-	typed, _ := value.([]any)
 	return typed
 }
