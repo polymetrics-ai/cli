@@ -9,9 +9,12 @@ Branch: `fm/cli-found-multipart-writes-r1`.
 - `scripts/gsd sources discuss-phase|plan-phase|execute-phase|verify-work|code-review`: passed.
 - Discuss prompt: `scripts/gsd prompt discuss-phase 3761`.
 - Plan prompt: `scripts/gsd prompt plan-phase issue-3761-multipart-rest-write --tdd --skip-research`.
-- Execute, verify, and review prompts will be generated and run inline after
-  their corresponding work is complete. The issue prohibits role spawning, so
-  no GSD/specialist role is spawned.
+- Execute, verify, and review prompts were generated with `scripts/gsd prompt
+  ...` and completed through the documented inline/manual fallback. This
+  issue-scoped phase is not a numbered ROADMAP phase and the worker brief
+  prohibits role spawning, so no GSD/specialist role is spawned; `SUMMARY.md`,
+  `VERIFICATION.md`, and `REVIEW.md` retain the equivalent execution,
+  coverage, and disposition evidence.
 - `go run ./cmd/agentcontractgen check` is included in the final non-aggregate
   verification gates.
 
