@@ -89,6 +89,10 @@ func New(cfg Config) (*Flow, error) {
 	if cfg.RedirectHost == "" {
 		cfg.RedirectHost = "127.0.0.1"
 	}
+	redirectIP := net.ParseIP(cfg.RedirectHost)
+	if redirectIP == nil || !redirectIP.IsLoopback() {
+		return nil, fmt.Errorf("loopback: redirect_host must be a literal loopback IP address, got %q", cfg.RedirectHost)
+	}
 	if cfg.RedirectPath == "" {
 		cfg.RedirectPath = "/callback"
 	}

@@ -259,6 +259,37 @@ func TestLoopbackFlowRequiresClientID(t *testing.T) {
 	}
 }
 
+func TestNewRejectsNonLoopbackRedirectHost(t *testing.T) {
+	for _, host := range []string{"0.0.0.0", "192.0.2.25", "example.invalid", "localhost"} {
+		t.Run(host, func(t *testing.T) {
+			_, err := loopback.New(loopback.Config{
+				AuthURL:      "https://example.invalid/authorize",
+				TokenURL:     "https://example.invalid/token",
+				ClientID:     "client-123",
+				RedirectHost: host,
+			})
+			if err == nil {
+				t.Fatalf("New() with RedirectHost %q: want loopback-host error, got nil", host)
+			}
+		})
+	}
+}
+
+func TestNewAllowsLiteralLoopbackRedirectHost(t *testing.T) {
+	for _, host := range []string{"127.0.0.1", "::1"} {
+		t.Run(host, func(t *testing.T) {
+			if _, err := loopback.New(loopback.Config{
+				AuthURL:      "https://example.invalid/authorize",
+				TokenURL:     "https://example.invalid/token",
+				ClientID:     "client-123",
+				RedirectHost: host,
+			}); err != nil {
+				t.Fatalf("New() with RedirectHost %q: %v", host, err)
+			}
+		})
+	}
+}
+
 func TestLoopbackFlowContextCancellation(t *testing.T) {
 	flow, err := loopback.New(loopback.Config{
 		AuthURL:     "https://example.invalid/authorize",

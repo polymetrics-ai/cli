@@ -17,14 +17,42 @@ package browserauth
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"time"
 )
+
+const reauthenticationSafetyMargin = 30 * time.Second
 
 // Credential is the result of a successful Login: exactly one of OAuth or
 // Session is set, matching which Flow produced it.
 type Credential struct {
 	OAuth   *OAuthCredential
 	Session *SessionCredential
+}
+
+// Validate enforces the public credential contract: each login has one
+// mechanism outcome, never both and never neither.
+func (c Credential) Validate() error {
+	if (c.OAuth == nil) == (c.Session == nil) {
+		return errors.New("browserauth: credential must contain exactly one of OAuth or Session")
+	}
+	return nil
+}
+
+// NeedsReauthentication reports whether this credential should be replaced by
+// another interactive Login. It does not try to refresh or silently replay a
+// browser session: a caller uses true as the signal to send the human through
+// the same approved browser-auth flow again.
+func (c Credential) NeedsReauthentication(now time.Time) bool {
+	if c.OAuth != nil {
+		return c.OAuth.Expired(now)
+	}
+	if c.Session != nil {
+		return c.Session.Expired(now)
+	}
+	// An invalid/no-outcome credential cannot authenticate a request safely.
+	return true
 }
 
 // OAuthCredential is what the loopback (authorization-code + PKCE) and
@@ -57,7 +85,7 @@ func (c OAuthCredential) Expired(now time.Time) bool {
 	if c.ExpiresAt.IsZero() {
 		return false
 	}
-	return !now.Before(c.ExpiresAt.Add(-30 * time.Second))
+	return !now.Before(c.ExpiresAt.Add(-reauthenticationSafetyMargin))
 }
 
 // SessionCredential is what the driver (browser session capture) flow
@@ -89,6 +117,17 @@ type SessionCredential struct {
 	ExpiresHint    *time.Time
 }
 
+// Expired reports whether the browser session should be reacquired. A missing
+// expiry hint means the provider did not expose a reliable session deadline;
+// callers may still reauthenticate after an upstream 401/403, but this helper
+// does not force an unnecessary browser login preemptively.
+func (c SessionCredential) Expired(now time.Time) bool {
+	if c.ExpiresHint == nil {
+		return false
+	}
+	return !now.Before(c.ExpiresHint.Add(-reauthenticationSafetyMargin))
+}
+
 // Cookie is one captured session cookie.
 type Cookie struct {
 	Name     string
@@ -116,5 +155,15 @@ type Flow interface {
 // "one command, two credential outcomes" design (report §3.2): the bundle
 // declares which flow it needs; the user never picks one.
 func Login(ctx context.Context, flow Flow) (Credential, error) {
-	return flow.Login(ctx)
+	if flow == nil {
+		return Credential{}, errors.New("browserauth: login flow is required")
+	}
+	credential, err := flow.Login(ctx)
+	if err != nil {
+		return Credential{}, err
+	}
+	if err := credential.Validate(); err != nil {
+		return Credential{}, fmt.Errorf("browserauth: %s returned invalid credential: %w", flow.Name(), err)
+	}
+	return credential, nil
 }
