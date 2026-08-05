@@ -8,18 +8,19 @@ import "encoding/json"
 // interfaces; wave6 folds Metadata/ManifestProvider into it and joins
 // Definition() to the core Connector interface. See API-CONTRACT.md §1.
 type Definition struct {
-	Name            string            `json:"name"`
-	DisplayName     string            `json:"display_name"`
-	Description     string            `json:"description,omitempty"`
-	IntegrationType string            `json:"integration_type"`
-	DocsURL         string            `json:"docs_url,omitempty"`
-	ReleaseStage    string            `json:"release_stage"`
-	Capabilities    Capabilities      `json:"capabilities"`
-	Spec            json.RawMessage   `json:"spec"`
-	Streams         []StreamSummary   `json:"streams"`
-	WriteActions    []WriteActionInfo `json:"write_actions,omitempty"`
-	Risk            RiskSpec          `json:"risk"`
-	Icon            *ConnectorIcon    `json:"icon,omitempty"`
+	Name            string                `json:"name"`
+	DisplayName     string                `json:"display_name"`
+	Description     string                `json:"description,omitempty"`
+	IntegrationType string                `json:"integration_type"`
+	DocsURL         string                `json:"docs_url,omitempty"`
+	ReleaseStage    string                `json:"release_stage"`
+	Capabilities    Capabilities          `json:"capabilities"`
+	Changefeed      *ChangefeedDescriptor `json:"changefeed,omitempty"`
+	Spec            json.RawMessage       `json:"spec"`
+	Streams         []StreamSummary       `json:"streams"`
+	WriteActions    []WriteActionInfo     `json:"write_actions,omitempty"`
+	Risk            RiskSpec              `json:"risk"`
+	Icon            *ConnectorIcon        `json:"icon,omitempty"`
 }
 
 // StreamSummary is one Definition.Streams entry. SyncModes is always DERIVED
@@ -66,8 +67,25 @@ func DefinitionOf(c Connector) (Definition, bool) {
 		return Definition{}, false
 	}
 	def := provider.Definition()
+	if def.Changefeed != nil {
+		def.Changefeed = def.Changefeed.Clone()
+	}
+	def.Capabilities.CDC = HasImplementedChangefeed(c, def.Changefeed)
 	def.Icon = MetadataWithIcon(c.Metadata()).Icon
 	return def, true
+}
+
+// MetadataOf returns the public metadata projection for c. CDC is derived
+// from the same descriptor/executor rule as DefinitionOf; legacy metadata and
+// CDCReader method presence never make it true on their own.
+func MetadataOf(c Connector) Metadata {
+	metadata := MetadataWithIcon(c.Metadata())
+	if def, ok := DefinitionOf(c); ok {
+		metadata.Capabilities.CDC = def.Capabilities.CDC
+	} else {
+		metadata.Capabilities.CDC = false
+	}
+	return metadata
 }
 
 func streamSummariesFromManifest(manifest Manifest) []StreamSummary {

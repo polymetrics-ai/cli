@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net/url"
 	"os"
 	"path/filepath"
 	"sort"
@@ -46,6 +47,7 @@ type Capabilities struct {
 	Read    bool `json:"read"`
 	Write   bool `json:"write"`
 	Query   bool `json:"query"`
+	CDC     bool `json:"cdc,omitempty"`
 }
 
 type Metadata struct {
@@ -389,6 +391,282 @@ type CDCReader interface {
 	ReadCDC(ctx context.Context, req CDCReadRequest, emit func(CDCEvent) error) error
 }
 
+// ChangefeedStatus is the closed lifecycle vocabulary for a declared
+// changefeed. A status is not itself an executable capability: only an
+// implemented descriptor with a matching ChangefeedExecutor is discoverable.
+type ChangefeedStatus string
+
+const (
+	ChangefeedStatusImplemented ChangefeedStatus = "implemented"
+	ChangefeedStatusPlanned     ChangefeedStatus = "planned"
+	ChangefeedStatusUnsupported ChangefeedStatus = "unsupported"
+	ChangefeedStatusUnknown     ChangefeedStatus = "unknown"
+)
+
+// ChangefeedMechanism is the closed taxonomy of consumable source mechanisms.
+// A snapshot pagination cursor is not a changefeed unless its descriptor
+// establishes one of these contracts.
+type ChangefeedMechanism string
+
+const (
+	ChangefeedMechanismLogicalReplication ChangefeedMechanism = "logical_replication"
+	ChangefeedMechanismIncrementalCursor  ChangefeedMechanism = "incremental_cursor"
+	ChangefeedMechanismWebhook            ChangefeedMechanism = "webhook"
+	ChangefeedMechanismEventStream        ChangefeedMechanism = "event_stream"
+	ChangefeedMechanismPollingWatermark   ChangefeedMechanism = "polling_watermark"
+)
+
+// ChangefeedSource records the provider artifact that supports a declared
+// changefeed contract. The retrieval date is a date-only ISO-8601 value.
+type ChangefeedSource struct {
+	ArtifactURL     string `json:"artifact_url"`
+	ArtifactVersion string `json:"artifact_version"`
+	RetrievedAt     string `json:"retrieved_at"`
+}
+
+// ChangefeedExecutorRef names the fixed executor selected by an implemented
+// descriptor. It is never supplied by a CLI caller.
+type ChangefeedExecutorRef struct {
+	Kind string `json:"kind"`
+	ID   string `json:"id"`
+}
+
+// ChangefeedCheckpoint declares the durable position and recovery contract.
+// State advances only after the descriptor's CommitAfter condition is met.
+type ChangefeedCheckpoint struct {
+	Kind        string   `json:"kind"`
+	Keys        []string `json:"keys"`
+	CommitAfter string   `json:"commit_after"`
+	OnInvalid   string   `json:"on_invalid"`
+}
+
+// ChangefeedDelivery records the source ordering, duplicate, and delete
+// guarantees. Values are provider-specific declarations rather than generic
+// promises made by the CLI.
+type ChangefeedDelivery struct {
+	Ordering   string   `json:"ordering"`
+	Duplicates string   `json:"duplicates"`
+	Deletes    string   `json:"deletes"`
+	DedupeKey  []string `json:"dedupe_key,omitempty"`
+}
+
+// ChangefeedDescriptor is the evidence-backed, declarative contract for a
+// connector changefeed. It is distinct from CDCReader because a reader method
+// can be an unsupported migration stub.
+type ChangefeedDescriptor struct {
+	Status     ChangefeedStatus       `json:"status"`
+	Mechanism  ChangefeedMechanism    `json:"mechanism"`
+	Source     ChangefeedSource       `json:"source"`
+	Reason     string                 `json:"reason,omitempty"`
+	Executor   *ChangefeedExecutorRef `json:"executor,omitempty"`
+	Checkpoint *ChangefeedCheckpoint  `json:"checkpoint,omitempty"`
+	Delivery   *ChangefeedDelivery    `json:"delivery,omitempty"`
+	Streams    []string               `json:"streams,omitempty"`
+}
+
+// ChangefeedExecutorDescriptor is the runtime half of an implemented
+// changefeed. It intentionally omits provider evidence: that remains in the
+// bundle declaration and the runtime proves only that it implements the same
+// executable contract.
+type ChangefeedExecutorDescriptor struct {
+	Status     ChangefeedStatus      `json:"status"`
+	Mechanism  ChangefeedMechanism   `json:"mechanism"`
+	Executor   ChangefeedExecutorRef `json:"executor"`
+	Checkpoint ChangefeedCheckpoint  `json:"checkpoint"`
+}
+
+// ChangefeedDescriptorProvider is implemented only by a runnable changefeed
+// executor. It is deliberately separate from CDCReader so a legacy stub
+// cannot advertise capability through method-set coincidence.
+type ChangefeedDescriptorProvider interface {
+	ChangefeedExecutorDescriptor() ChangefeedExecutorDescriptor
+}
+
+// ChangefeedExecutor is the explicit runtime admission contract. A connector
+// must both execute the legacy migration method and report a matching modern
+// descriptor before an implemented bundle declaration becomes public CDC.
+type ChangefeedExecutor interface {
+	CDCReader
+	ChangefeedDescriptorProvider
+}
+
+// Validate verifies the descriptor's closed vocabulary and the minimum
+// evidence needed to make an implemented or unsupported claim. It is used at
+// bundle-load time and never treats an incomplete declaration as executable.
+func (d ChangefeedDescriptor) Validate() error {
+	if !d.Status.valid() {
+		return fmt.Errorf("unsupported changefeed status %q", d.Status)
+	}
+	if !d.Mechanism.valid() {
+		return fmt.Errorf("unsupported changefeed mechanism %q", d.Mechanism)
+	}
+	if strings.TrimSpace(d.Source.ArtifactURL) == "" || strings.TrimSpace(d.Source.ArtifactVersion) == "" || strings.TrimSpace(d.Source.RetrievedAt) == "" {
+		return errors.New("changefeed source requires artifact_url, artifact_version, and retrieved_at")
+	}
+	artifactURL, err := url.ParseRequestURI(d.Source.ArtifactURL)
+	if err != nil || artifactURL.Host == "" || (artifactURL.Scheme != "http" && artifactURL.Scheme != "https") {
+		return errors.New("changefeed source artifact_url must be an absolute http or https URL")
+	}
+	if _, err := time.Parse("2006-01-02", d.Source.RetrievedAt); err != nil {
+		return fmt.Errorf("changefeed source retrieved_at must be an ISO-8601 date: %w", err)
+	}
+
+	switch d.Status {
+	case ChangefeedStatusImplemented:
+		if d.Executor == nil || strings.TrimSpace(d.Executor.Kind) == "" || strings.TrimSpace(d.Executor.ID) == "" {
+			return errors.New("implemented changefeed requires a named executor")
+		}
+		if err := validateChangefeedCheckpoint(d.Checkpoint); err != nil {
+			return err
+		}
+		if err := validateChangefeedDelivery(d.Delivery); err != nil {
+			return err
+		}
+		if err := validateChangefeedKeys("streams", d.Streams); err != nil {
+			return err
+		}
+	case ChangefeedStatusUnsupported:
+		if strings.TrimSpace(d.Reason) == "" {
+			return errors.New("unsupported changefeed requires a reason")
+		}
+		if d.Executor != nil || d.Checkpoint != nil || d.Delivery != nil {
+			return errors.New("unsupported changefeed cannot declare an executor, checkpoint, or delivery")
+		}
+	}
+	return nil
+}
+
+// IsImplemented reports whether the declaration is complete enough to be
+// considered for execution. A true result still needs a matching executor.
+func (d ChangefeedDescriptor) IsImplemented() bool {
+	return d.Status == ChangefeedStatusImplemented && d.Validate() == nil
+}
+
+// MatchesExecutor reports whether executor is the runtime counterpart of this
+// implemented descriptor. Matching requires the status, mechanism, named
+// executor, and ordered checkpoint keys to agree exactly.
+func (d ChangefeedDescriptor) MatchesExecutor(executor ChangefeedExecutorDescriptor) bool {
+	if !d.IsImplemented() || executor.Status != ChangefeedStatusImplemented || d.Executor == nil || d.Checkpoint == nil {
+		return false
+	}
+	return d.Mechanism == executor.Mechanism &&
+		d.Executor.Kind == executor.Executor.Kind &&
+		d.Executor.ID == executor.Executor.ID &&
+		d.Checkpoint.Kind == executor.Checkpoint.Kind &&
+		sameStrings(d.Checkpoint.Keys, executor.Checkpoint.Keys)
+}
+
+// Clone returns a defensive copy suitable for a public Definition projection.
+func (d ChangefeedDescriptor) Clone() *ChangefeedDescriptor {
+	clone := d
+	clone.Streams = append([]string(nil), d.Streams...)
+	if d.Executor != nil {
+		executor := *d.Executor
+		clone.Executor = &executor
+	}
+	if d.Checkpoint != nil {
+		checkpoint := *d.Checkpoint
+		checkpoint.Keys = append([]string(nil), d.Checkpoint.Keys...)
+		clone.Checkpoint = &checkpoint
+	}
+	if d.Delivery != nil {
+		delivery := *d.Delivery
+		delivery.DedupeKey = append([]string(nil), d.Delivery.DedupeKey...)
+		clone.Delivery = &delivery
+	}
+	return &clone
+}
+
+// HasImplementedChangefeed is the single capability projection rule. Legacy
+// CDCReader presence alone is insufficient; callers must use this helper when
+// deciding whether to expose CDC publicly.
+func HasImplementedChangefeed(c Connector, descriptor *ChangefeedDescriptor) bool {
+	if descriptor == nil || !descriptor.IsImplemented() {
+		return false
+	}
+	executor, ok := c.(ChangefeedExecutor)
+	if !ok {
+		return false
+	}
+	return descriptor.MatchesExecutor(executor.ChangefeedExecutorDescriptor())
+}
+
+func (s ChangefeedStatus) valid() bool {
+	switch s {
+	case ChangefeedStatusImplemented, ChangefeedStatusPlanned, ChangefeedStatusUnsupported, ChangefeedStatusUnknown:
+		return true
+	default:
+		return false
+	}
+}
+
+func (m ChangefeedMechanism) valid() bool {
+	switch m {
+	case ChangefeedMechanismLogicalReplication, ChangefeedMechanismIncrementalCursor, ChangefeedMechanismWebhook, ChangefeedMechanismEventStream, ChangefeedMechanismPollingWatermark:
+		return true
+	default:
+		return false
+	}
+}
+
+func validateChangefeedCheckpoint(checkpoint *ChangefeedCheckpoint) error {
+	if checkpoint == nil || strings.TrimSpace(checkpoint.Kind) == "" || strings.TrimSpace(checkpoint.CommitAfter) == "" || strings.TrimSpace(checkpoint.OnInvalid) == "" || len(checkpoint.Keys) == 0 {
+		return errors.New("implemented changefeed requires checkpoint kind, keys, commit_after, and on_invalid")
+	}
+	seen := make(map[string]struct{}, len(checkpoint.Keys))
+	for _, key := range checkpoint.Keys {
+		key = strings.TrimSpace(key)
+		if key == "" {
+			return errors.New("changefeed checkpoint keys cannot be empty")
+		}
+		if _, ok := seen[key]; ok {
+			return fmt.Errorf("changefeed checkpoint key %q is duplicated", key)
+		}
+		seen[key] = struct{}{}
+	}
+	return nil
+}
+
+func validateChangefeedDelivery(delivery *ChangefeedDelivery) error {
+	if delivery == nil || strings.TrimSpace(delivery.Ordering) == "" || strings.TrimSpace(delivery.Duplicates) == "" || strings.TrimSpace(delivery.Deletes) == "" {
+		return errors.New("implemented changefeed requires ordering, duplicates, and deletes guarantees")
+	}
+	if err := validateChangefeedKeys("delivery dedupe_key", delivery.DedupeKey); err != nil {
+		return err
+	}
+	return nil
+}
+
+func validateChangefeedKeys(name string, keys []string) error {
+	if len(keys) == 0 {
+		return fmt.Errorf("implemented changefeed requires %s", name)
+	}
+	seen := make(map[string]struct{}, len(keys))
+	for _, key := range keys {
+		key = strings.TrimSpace(key)
+		if key == "" {
+			return fmt.Errorf("changefeed %s cannot contain empty values", name)
+		}
+		if _, ok := seen[key]; ok {
+			return fmt.Errorf("changefeed %s value %q is duplicated", name, key)
+		}
+		seen[key] = struct{}{}
+	}
+	return nil
+}
+
+func sameStrings(left, right []string) bool {
+	if len(left) != len(right) {
+		return false
+	}
+	for i := range left {
+		if left[i] != right[i] {
+			return false
+		}
+	}
+	return true
+}
+
 type StatefulReader interface {
 	InitialState(ctx context.Context, stream string, cfg RuntimeConfig) (map[string]string, error)
 }
@@ -457,7 +735,7 @@ func (r *Registry) Get(name string) (Connector, bool) {
 func (r *Registry) List() []Metadata {
 	out := make([]Metadata, 0, len(r.connectors))
 	for _, connector := range r.connectors {
-		out = append(out, MetadataWithIcon(connector.Metadata()))
+		out = append(out, MetadataOf(connector))
 	}
 	sort.Slice(out, func(i, j int) bool { return out[i].Name < out[j].Name })
 	return out
@@ -485,7 +763,11 @@ func (r *Registry) CatalogEntries() []Definition {
 				Risk:            manifest.Risk,
 			}
 		}
-		def.Icon = MetadataWithIcon(connector.Metadata()).Icon
+		// Catalog is a public capability projection. The fallback definition
+		// has no changefeed descriptor, so it remains false even if a legacy
+		// connector happens to expose CDCReader or a hand-authored metadata bit.
+		def.Capabilities.CDC = HasImplementedChangefeed(connector, def.Changefeed)
+		def.Icon = MetadataOf(connector).Icon
 		out = append(out, def)
 	}
 	sort.Slice(out, func(i, j int) bool { return out[i].Name < out[j].Name })
