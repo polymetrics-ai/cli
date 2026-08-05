@@ -16,6 +16,12 @@ Implemented a connector-local Shopify Admin API parity bundle for parent issue #
 - Reverse ETL safety remains the existing plan -> preview -> explicit approval -> execute path; destructive Shopify actions additionally require typed `destructive` confirmation.
 - Fixture-only evidence is explicitly not certification.
 
+## Resume host policy (partial)
+
+- Tightened `shop_domain` to canonical lowercase `*.myshopify.com` only, rejecting custom storefront domains, schemes, paths, ports, and trailing dots before credential persistence.
+- Added connector-local rejection/acceptance evidence and app-level credential-boundary cases for the non-`myshopify.com` and canonical host paths.
+- Completion is blocked on generated icon coverage: the documented `make icons-generate` invocation against Airbyte's public OSS registry aborts on an unrelated canonical `customer-io` source/destination icon ambiguity. No generated registry file was hand-edited.
+
 ## Verification
 
 See `VERIFICATION.md`; public-doc re-audit, focused/full validation, conformance, docs validation, CLI/golden tests, vet, build, connector-boundary, and diff check passed.

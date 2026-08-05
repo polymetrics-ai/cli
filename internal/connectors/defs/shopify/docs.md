@@ -8,7 +8,7 @@ The connector implements a fixture-backed `shop` read stream and typed REST path
 
 ## Auth setup
 
-Configure `shop_domain` with the Shopify shop host and provide the Admin API token through the credential store or environment-backed secret input. Do not put token values in prompt text, docs, fixtures, or issue comments. Requests use the `X-Shopify-Access-Token` header.
+Configure `shop_domain` with the canonical lowercase Shopify Admin API host only, for example `fixture-shop.myshopify.com`; a merchant's custom storefront domain is not an Admin API host. Schemes, paths, ports, trailing dots, and non-`myshopify.com` hosts are refused before credentials are persisted. Provide the Admin API token through the credential store or environment-backed secret input. Do not put token values in prompt text, docs, fixtures, or issue comments. Requests use the `X-Shopify-Access-Token` header.
 
 ## Streams notes
 

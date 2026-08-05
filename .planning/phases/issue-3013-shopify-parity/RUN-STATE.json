@@ -1,8 +1,8 @@
 {
   "phase": "issue-3013-shopify-parity",
-  "status": "verification_passed",
+  "status": "blocked_shared_icon_registry_generation",
   "branch": "fm/cli-shopify-parity-wave01-r1",
-  "verificationPassed": true,
+  "verificationPassed": false,
   "gsdCommand": "scripts/gsd prompt quick \"Implement documented Shopify connector parity for issue 3013 within connector-local definition bundle, including destructive/delete operations with typed confirmation and plan-preview-approval-execute safety, no live credentials or provider calls\"",
   "programmingLoopFallback": "scripts/gsd prompt programming-loop init --phase issue-3013-shopify-parity --dry-run returned unknown GSD command: programming-loop",
   "orchestrationDecisions": [
@@ -21,8 +21,10 @@
     "go vet ./internal/connectors/... ./internal/cli/...",
     "go build ./cmd/pm",
     "make connector-boundary",
-    "git diff --check"
+    "git diff --check",
+    "go test ./internal/connectors/defs/shopify -run TestShopDomainUsesCanonicalAdminHost -count=1"
   ],
+  "blocker": "PM_ICON_REGISTRY_SOURCE was unset; documented Airbyte OSS registry generation aborts before output with ambiguous source/destination icon collapse for customer-io. Shopify remains absent from generated icon_data.json; no hand edit was made.",
   "liveProviderCalls": false,
   "credentialsUsed": false,
   "writesExecuted": false,

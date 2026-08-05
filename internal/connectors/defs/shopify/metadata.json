@@ -1,7 +1,7 @@
 {
   "name": "shopify",
   "display_name": "Shopify",
-  "description": "Connector-owned Shopify Admin API parity ledger with a fixture-backed Shop stream and typed destructive REST delete actions; remaining official operations are blocked/planned with source evidence.",
+  "description": "Connector-owned Shopify Admin API parity ledger with a fixture-backed Shop stream and typed destructive REST delete actions; Admin API requests accept only canonical lowercase *.myshopify.com hosts, and remaining official operations are blocked/planned with source evidence.",
   "integration_type": "api",
   "docs_url": "https://shopify.dev/docs/api/admin-graphql/latest/full-index",
   "release_stage": "alpha",

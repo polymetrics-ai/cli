@@ -221,6 +221,13 @@ func TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime
 			value:     "preview",
 			want:      []string{"mode", "enum"},
 		},
+		{
+			name:      "shopify admin host",
+			connector: "shopify",
+			field:     "shop_domain",
+			value:     "fixture-shop.invalid.example",
+			want:      []string{"shop_domain", "pattern"},
+		},
 	}
 
 	for _, tt := range tests {
@@ -245,6 +252,34 @@ func TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime
 				t.Fatalf("ListCredentials() = %#v, want no persisted credentials after validation failure", credentials)
 			}
 		})
+	}
+}
+
+func TestAddCredentialAcceptsShopifyCanonicalAdminHostAtConfigurationTime(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject() error = %v", err)
+	}
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open() error = %v", err)
+	}
+
+	credential, err := a.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "shopify-canonical-host",
+		Connector: "shopify",
+		Config:    map[string]string{"shop_domain": "fixture-shop.myshopify.com"},
+	})
+	if err != nil {
+		t.Fatalf("AddCredential(shopify canonical host) error = %v", err)
+	}
+	if credential.Connector != "shopify" {
+		t.Fatalf("AddCredential(shopify canonical host).Connector = %q, want shopify", credential.Connector)
+	}
+	if credentials := a.ListCredentials(); len(credentials) != 1 {
+		t.Fatalf("ListCredentials() = %#v, want one persisted Shopify credential", credentials)
 	}
 }
 

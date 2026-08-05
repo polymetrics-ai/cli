@@ -45,3 +45,28 @@ Results:
 - Website parity grep: no textual website connector-count docs required updates; website connector pages use dynamic `pm connectors inspect ${connector.slug}` examples.
 
 Not run: live Shopify provider calls, credentials, writes, certification, merges, or broad `go test ./...`/`make verify`.
+
+## Resume host-restriction checklist (2026-08-06)
+
+- [x] Red: `go test ./internal/connectors/defs/shopify -run TestShopDomainUsesCanonicalAdminHost -count=1` failed for `fixture-shop.invalid.example` before the pattern change.
+- [x] Green (connector-local): the Shopify validation test now accepts `fixture-shop.myshopify.com` and rejects a non-`myshopify.com` host without echoing it; the app-level rejection row and canonical-host acceptance test are present.
+- [ ] `go run ./cmd/pm docs generate --dir docs/cli --connectors-dir docs/connectors` regenerates Shopify manual/skill documentation without unrelated doc drift.
+- [ ] `go run ./cmd/connectorgen validate internal/connectors/defs` passes.
+- [ ] `go test ./internal/connectors/conformance -run 'TestConformance/shopify' -count=1` passes.
+- [ ] `go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1`, `go vet ./internal/connectors/... ./internal/cli/...`, `go build ./cmd/pm`, `make connector-boundary`, and `git diff --check` pass or have a recorded blocker.
+
+## Generated icon registry blocker (2026-08-06)
+
+`PM_ICON_REGISTRY_SOURCE` was not set in this worktree. Following the documented generator contract, the public Airbyte OSS registry was resolved from Airbyte's registry documentation and invoked without printing any credentials:
+
+```bash
+PM_ICON_REGISTRY_SOURCE='https://connectors.airbyte.com/files/registries/v0/oss_registry.json' make icons-generate
+```
+
+It stopped before writing generated output:
+
+```text
+iconregistrygen: ambiguous source/destination icon collapse for "customer-io": conflicting source URLs
+```
+
+The public source currently supplies distinct source and destination `customer-io` asset URLs that canonicalize to the same bare connector key. No registry JSON or icon output was hand-edited. Because Shopify still lacks its required generated registry row, app initialization panics at icon-coverage validation and both the app-level credential-boundary test and generated-doc command remain blocked. A shared generator ambiguity fix or a reviewed compatible pinned source is required.

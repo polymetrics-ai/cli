@@ -6,6 +6,7 @@
 - Required `scripts/gsd prompt programming-loop init --phase issue-3013-shopify-parity --dry-run` was attempted but the repo-local command registry returned `unknown GSD command: programming-loop`.
 - Fallback GSD command used: `scripts/gsd prompt quick "Implement documented Shopify connector parity for issue 3013 within connector-local definition bundle, including destructive/delete operations with typed confirmation and plan-preview-approval-execute safety, no live credentials or provider calls"`.
 - Manual universal-loop fallback: maintain this PLAN, `TDD-LEDGER.md`, `VERIFICATION.md`, `SUMMARY.md`, and `RUN-STATE.json`; record red/green evidence before production edits where possible.
+- Resume (2026-08-06): `scripts/gsd prompt discuss-phase issue-3013-shopify-parity --auto` and `scripts/gsd prompt plan-phase issue-3013-shopify-parity --tdd --skip-research --auto` were generated and executed inline. The lifecycle is inline because all remaining work owns one Shopify bundle and the task's no-delegation rule prevents an isolated mutating worker fan-out.
 
 ## Required skills loaded
 
@@ -61,11 +62,17 @@ Do not edit shared runtime, engine, CLI dispatcher, hook/native registries, depe
    - Update connector-local ledger, typed DELETE write schemas/fixtures, source inventory, docs, and verification evidence with truthful post-fix counts.
    - Keep DELETE/destructive operations in scope: executable only when represented by fixed write actions with `confirm: "destructive"`; query-identifier DELETE shapes remain blocked with the exact shared write-query dependency.
 
+6. **Credential-boundary host restriction (captain decision `admin-api-host-allowlist`)**
+   - Start red by adding the narrowly scoped Shopify row to the established credential-acceptance regression table in `internal/app/app_test.go`; it must reject a non-`myshopify.com` host before persistence, name `shop_domain` and `pattern`, and never echo the supplied value.
+   - Change only the connector-owned `shop_domain` declaration to `^[a-z0-9][a-z0-9-]*\\.myshopify\\.com$`; do not add a custom-domain allow-list, a scheme/path/port exception, or shared-runtime code.
+   - Add a green acceptance test for `fixture-shop.myshopify.com`, then regenerate Shopify manual/skill docs so the restriction is visible to operators.
+
 ## TDD/validation approach
 
 - Red/preflight: prove Shopify bundle is absent or invalid before scaffold; capture `connectorgen validate internal/connectors/defs/shopify` failure.
 - Green: generate connector-local bundle and pass focused validation/conformance as far as shared foundations allow.
 - Refactor: format/generated JSON deterministic order; keep docs and counts synchronized.
+- Resume host restriction: red credential-boundary test -> spec pattern/description -> green rejection and canonical-host acceptance tests -> generated docs -> focused app, conformance, connector validation, CLI/help, and boundary checks.
 
 ## Safety notes
 

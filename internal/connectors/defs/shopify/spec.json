@@ -9,8 +9,8 @@
   "properties": {
     "shop_domain": {
       "type": "string",
-      "description": "Shop domain, for example fixture-shop.myshopify.com. Do not include a scheme or path.",
-      "pattern": "^[A-Za-z0-9][A-Za-z0-9-]*(\\.myshopify\\.com|\\.[A-Za-z0-9.-]+)$"
+      "description": "Canonical Shopify Admin API host only, for example fixture-shop.myshopify.com. Custom storefront domains, schemes, paths, ports, and trailing dots are not accepted.",
+      "pattern": "^[a-z0-9][a-z0-9-]*\\.myshopify\\.com$"
     },
     "access_token": {
       "type": "string",
