@@ -64,13 +64,16 @@ func CheckProjections(root string, contract *Contract) (returnErr error) {
 			}
 			return fmt.Errorf("read %s projection %s: %w", target.Harness, target.Path, err)
 		}
-		expected, err := RenderBlock(contract, target.Role)
+		expected, err := RenderProjection(contract, target)
 		if err != nil {
 			return err
 		}
-		actual, _, _, err := extractProjectionBlock(content)
-		if err != nil {
-			return fmt.Errorf("check projection %s: %w", target.Path, err)
+		actual := content
+		if target.RenderMode == "markdown_block" {
+			actual, _, _, err = extractProjectionBlock(content)
+			if err != nil {
+				return fmt.Errorf("check projection %s: %w", target.Path, err)
+			}
 		}
 		if err := CheckProjection(expected, actual); err != nil {
 			return fmt.Errorf("check projection %s: %w", target.Path, err)
@@ -102,24 +105,44 @@ func SyncProjections(root string, contract *Contract) (updated int, returnErr er
 		if err != nil {
 			return updated, err
 		}
+		expected, err := RenderProjection(contract, target)
+		if err != nil {
+			return updated, err
+		}
 		content, err := projectionRoot.ReadFile(path)
 		if err != nil {
 			if os.IsNotExist(err) && !target.Required {
 				continue
 			}
-			return updated, fmt.Errorf("read %s projection %s: %w", target.Harness, target.Path, err)
-		}
-		expected, start, end, err := replacementBlock(content, contract, target.Role)
-		if err != nil {
-			return updated, fmt.Errorf("sync projection %s: %w", target.Path, err)
-		}
-		if bytes.Equal(content[start:end], expected) {
+			if !os.IsNotExist(err) {
+				return updated, fmt.Errorf("read %s projection %s: %w", target.Harness, target.Path, err)
+			}
+			if err := projectionRoot.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+				return updated, fmt.Errorf("create projection directory for %s: %w", target.Path, err)
+			}
+			if err := writeAtomic(projectionRoot, path, expected, 0o644); err != nil {
+				return updated, fmt.Errorf("create projection %s: %w", target.Path, err)
+			}
+			updated++
 			continue
 		}
-		next := make([]byte, 0, len(content)-end+start+len(expected))
-		next = append(next, content[:start]...)
-		next = append(next, expected...)
-		next = append(next, content[end:]...)
+
+		next := expected
+		if target.RenderMode == "markdown_block" {
+			block, start, end, err := replacementBlock(content, contract, target)
+			if err != nil {
+				return updated, fmt.Errorf("sync projection %s: %w", target.Path, err)
+			}
+			if bytes.Equal(content[start:end], block) {
+				continue
+			}
+			next = make([]byte, 0, len(content)-end+start+len(block))
+			next = append(next, content[:start]...)
+			next = append(next, block...)
+			next = append(next, content[end:]...)
+		} else if bytes.Equal(content, expected) {
+			continue
+		}
 		info, err := projectionRoot.Stat(path)
 		if err != nil {
 			return updated, fmt.Errorf("stat projection %s: %w", target.Path, err)
@@ -132,12 +155,12 @@ func SyncProjections(root string, contract *Contract) (updated int, returnErr er
 	return updated, nil
 }
 
-func replacementBlock(content []byte, contract *Contract, role string) ([]byte, int, int, error) {
+func replacementBlock(content []byte, contract *Contract, target ProjectionTarget) ([]byte, int, int, error) {
 	_, start, end, err := extractProjectionBlock(content)
 	if err != nil {
 		return nil, 0, 0, err
 	}
-	expected, err := RenderBlock(contract, role)
+	expected, err := RenderProjection(contract, target)
 	if err != nil {
 		return nil, 0, 0, err
 	}

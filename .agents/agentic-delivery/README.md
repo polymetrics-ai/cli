@@ -58,17 +58,23 @@ The `.agents/agentic-delivery/` directory holds shared contracts, conventions, a
 Specialized agent families can live beside it under `.agents/<functional-area>/` while reusing the
 same schema and issue-to-PR contract.
 
-Runtime-specific files, such as `.codex/agents/*.toml` and `.opencode/agents/*.md`, are thin
-activation adapters. The six `pm-delivery-worker` and `pm-connector-worker` targets registered in
-`canonical/delivery-contract.json` remain optional until their owning harness wave adds each
-wrapper. Once present, they project marked blocks from the canonical source and must not copy
-GSD/TDD, review, or human-gate policy by hand.
+Runtime-specific files, such as `.codex/agents/*.toml` and `.opencode/agents/*.md`, are generated
+activation adapters. `canonical/delivery-contract.json` is the sole owner of each registered
+target's path, render mode, and requiredness. The checked-in Codex adapters are complete standalone
+TOML files; Markdown adapters project marked blocks. Never hand-edit or copy GSD/TDD, review, or
+human-gate policy into an adapter.
+
+Codex loads the project-local `.codex` configuration layer only when the repository is trusted.
+The generated Codex workers therefore fail closed for project-local selection in an untrusted
+repository: trust it in Codex before selecting either worker. Their generated
+`agents.enabled = false` setting disables further Codex multi-agent delegation. The canonical
+`codex` section owns this isolation contract, its official documentation links, and the caveat that
+same-filename user/project standalone-agent precedence is undocumented.
 
 ## Design principles
 
 - `canonical/delivery-contract.json` is the sole owner of the canonical roles, ordered delivery
   states, tracker gates, GSD/no-mistakes topology, authority boundary, and projection registry.
-- Agent definitions are declarative YAML, but runtime-specific adapters stay optional.
 - Issues remain the unit of work. PRs must reference issues.
 - Large goals use parent issues with sub-issues. A sub-PR may advance to completed parent-branch
   integration without human approval only when all automated gates pass and no human gate is

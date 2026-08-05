@@ -35,6 +35,35 @@ func TestCanonicalContractRequiredInvariants(t *testing.T) {
 			},
 		},
 		{
+			name: "Codex delegation enabled",
+			mutate: func(value *Contract) {
+				enabled := true
+				value.Codex.ToolAccess.Value = &enabled
+			},
+		},
+		{
+			name: "Codex required field missing",
+			mutate: func(value *Contract) {
+				value.Codex.RequiredFields = value.Codex.RequiredFields[:2]
+			},
+		},
+		{
+			name: "Codex collision guidance missing",
+			mutate: func(value *Contract) {
+				value.Codex.CollisionBehavior = ""
+			},
+		},
+		{
+			name: "Codex render mode removed",
+			mutate: func(value *Contract) {
+				for index := range value.Projections {
+					if value.Projections[index].Harness == "codex" {
+						value.Projections[index].RenderMode = "markdown_block"
+					}
+				}
+			},
+		},
+		{
 			name: "yes allowed",
 			mutate: func(value *Contract) {
 				value.NoMistakes.ForbiddenFlags = nil
@@ -207,12 +236,12 @@ func TestRenderIsStableAndConnectorInheritsBase(t *testing.T) {
 		}
 	}
 
-	const expectedSHA256 = "8eeb8b7eb3a37eb991cff7736f60e1f2085760cb88b63692b9cc8991d3ec5f25"
+	const expectedSHA256 = "84b0f467472c602e611613171f6807affc20ae53e560a4bf09ccb38ff0100d05"
 	gotSHA256 := fmt.Sprintf("%x", sha256.Sum256(base))
 	if gotSHA256 != expectedSHA256 {
 		t.Fatalf("base rendering hash = %s, update expected hash after intentional canonical change", gotSHA256)
 	}
-	const expectedConnectorSHA256 = "124f7fb259a1bf8cc2d8002d62be81955996abf438ed6c814193139452cb118f"
+	const expectedConnectorSHA256 = "e9047b6c0b5ad4c14a4a4dcc137c1aafcc190617f1be7a43630dce2c56991fd5"
 	gotConnectorSHA256 := fmt.Sprintf("%x", sha256.Sum256(connector))
 	if gotConnectorSHA256 != expectedConnectorSHA256 {
 		t.Fatalf("connector rendering hash = %s, update expected hash after intentional canonical change", gotConnectorSHA256)

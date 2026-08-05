@@ -22,6 +22,7 @@ type Contract struct {
 	BaseRole         Role               `json:"base_role"`
 	StateMachine     StateMachine       `json:"state_machine"`
 	ConnectorOverlay ConnectorOverlay   `json:"connector_overlay"`
+	Codex            CodexContract      `json:"codex"`
 	Tracker          TrackerContract    `json:"tracker"`
 	GSD              GSDContract        `json:"gsd"`
 	NoMistakes       NoMistakesContract `json:"no_mistakes"`
@@ -63,6 +64,29 @@ type ConnectorOverlay struct {
 	CompletionWave int    `json:"completion_wave"`
 	WrapsState     string `json:"wraps_state"`
 	Steps          []Step `json:"steps"`
+}
+
+type CodexContract struct {
+	ProjectAgentDirectory   string             `json:"project_agent_directory"`
+	FileFormat              string             `json:"file_format"`
+	RequiredFields          []string           `json:"required_fields"`
+	ToolAccess              CodexToolAccess    `json:"tool_access"`
+	Discovery               string             `json:"discovery"`
+	ProjectTrustRequirement string             `json:"project_trust_requirement"`
+	ConfigurationPrecedence string             `json:"configuration_precedence"`
+	CollisionBehavior       string             `json:"collision_behavior"`
+	Documentation           CodexDocumentation `json:"documentation"`
+}
+
+type CodexToolAccess struct {
+	Setting string `json:"setting"`
+	Value   *bool  `json:"value"`
+	Effect  string `json:"effect"`
+}
+
+type CodexDocumentation struct {
+	Subagents    string `json:"subagents"`
+	ConfigBasics string `json:"config_basics"`
 }
 
 type TrackerContract struct {
@@ -121,10 +145,11 @@ type WayfinderDecision struct {
 }
 
 type ProjectionTarget struct {
-	Harness  string `json:"harness"`
-	Role     string `json:"role"`
-	Path     string `json:"path"`
-	Required bool   `json:"required"`
+	Harness    string `json:"harness"`
+	Role       string `json:"role"`
+	Path       string `json:"path"`
+	RenderMode string `json:"render_mode"`
+	Required   bool   `json:"required"`
 }
 
 func Load(path string) (*Contract, error) {
@@ -177,6 +202,9 @@ func (contract *Contract) Validate() error {
 	connectorIDs := []string{"source_policy_map", "bundle_operation_plan", "replay_conformance", "implementation_slices", "runtime_surface_gates", "website_data_refresh"}
 	if contract.ConnectorOverlay.Name != "pm-connector-worker" || contract.ConnectorOverlay.Inherits != contract.BaseRole.Name || strings.TrimSpace(contract.ConnectorOverlay.Summary) == "" || contract.ConnectorOverlay.CompletionWave != 5 || contract.ConnectorOverlay.WrapsState != "execute_tdd" || !equalStepIDs(contract.ConnectorOverlay.Steps, connectorIDs) {
 		return fmt.Errorf("canonical contract: connector role must inherit the base and wrap execute_tdd with the required ordered gates")
+	}
+	if err := contract.Codex.Validate(); err != nil {
+		return err
 	}
 	commands := []string{"discuss-phase", "plan-phase", "execute-phase", "verify-work", "code-review", "ship"}
 	if !slices.Equal(contract.GSD.Commands, commands) || contract.GSD.ShipUsed || strings.TrimSpace(contract.GSD.ShipExclusion) == "" {
@@ -247,6 +275,23 @@ func (contract *Contract) Validate() error {
 		return fmt.Errorf("canonical contract: Wayfinder rejection and borrowed ideas are required")
 	}
 	return validateProjections(contract.Projections)
+}
+
+func (contract CodexContract) Validate() error {
+	requiredFields := []string{"name", "description", "developer_instructions"}
+	if contract.ProjectAgentDirectory != ".codex/agents" || contract.FileFormat != "standalone_toml" || !slices.Equal(contract.RequiredFields, requiredFields) {
+		return fmt.Errorf("canonical contract: Codex project directory, standalone format, and required fields are invalid")
+	}
+	if contract.ToolAccess.Setting != "agents.enabled" || contract.ToolAccess.Value == nil || *contract.ToolAccess.Value || strings.TrimSpace(contract.ToolAccess.Effect) == "" {
+		return fmt.Errorf("canonical contract: Codex agent delegation must be explicitly disabled")
+	}
+	if strings.TrimSpace(contract.Discovery) == "" || strings.TrimSpace(contract.ProjectTrustRequirement) == "" || strings.TrimSpace(contract.ConfigurationPrecedence) == "" || strings.TrimSpace(contract.CollisionBehavior) == "" {
+		return fmt.Errorf("canonical contract: Codex discovery, trust, precedence, and collision guidance are required")
+	}
+	if contract.Documentation.Subagents != "https://learn.chatgpt.com/docs/agent-configuration/subagents" || contract.Documentation.ConfigBasics != "https://developers.openai.com/codex/config-basic/" {
+		return fmt.Errorf("canonical contract: Codex official documentation URLs are required")
+	}
+	return nil
 }
 
 func allNonEmpty(values []string) bool {
@@ -331,13 +376,18 @@ func equalRuleIDs(rules []Rule, want []string) bool {
 }
 
 func validateProjections(targets []ProjectionTarget) error {
-	expected := map[string]string{
-		"claude/pm-delivery-worker":  ".claude/agents/pm-delivery-worker.md",
-		"claude/pm-connector-worker": ".claude/agents/pm-connector-worker.md",
-		"codex/pm-delivery-worker":   ".codex/agents/pm-delivery-worker.toml",
-		"codex/pm-connector-worker":  ".codex/agents/pm-connector-worker.toml",
-		"pi/pm-delivery-worker":      ".pi/agents/pm-delivery-worker.md",
-		"pi/pm-connector-worker":     ".pi/agents/pm-connector-worker.md",
+	type projectionExpectation struct {
+		path       string
+		renderMode string
+		required   bool
+	}
+	expected := map[string]projectionExpectation{
+		"claude/pm-delivery-worker":  {path: ".claude/agents/pm-delivery-worker.md", renderMode: "markdown_block"},
+		"claude/pm-connector-worker": {path: ".claude/agents/pm-connector-worker.md", renderMode: "markdown_block"},
+		"codex/pm-delivery-worker":   {path: ".codex/agents/pm-delivery-worker.toml", renderMode: "standalone_toml", required: true},
+		"codex/pm-connector-worker":  {path: ".codex/agents/pm-connector-worker.toml", renderMode: "standalone_toml", required: true},
+		"pi/pm-delivery-worker":      {path: ".pi/agents/pm-delivery-worker.md", renderMode: "markdown_block"},
+		"pi/pm-connector-worker":     {path: ".pi/agents/pm-connector-worker.md", renderMode: "markdown_block"},
 	}
 	if len(targets) != len(expected) {
 		return fmt.Errorf("canonical contract: exactly six harness projection targets are required")
@@ -345,8 +395,8 @@ func validateProjections(targets []ProjectionTarget) error {
 	seen := make(map[string]bool, len(targets))
 	for _, target := range targets {
 		key := target.Harness + "/" + target.Role
-		wantPath, ok := expected[key]
-		if !ok || target.Path != wantPath || filepath.Clean(target.Path) != target.Path || filepath.IsAbs(target.Path) || seen[key] {
+		want, ok := expected[key]
+		if !ok || target.Path != want.path || target.RenderMode != want.renderMode || target.Required != want.required || filepath.Clean(target.Path) != target.Path || filepath.IsAbs(target.Path) || seen[key] {
 			return fmt.Errorf("canonical contract: invalid projection target %q at %q", key, target.Path)
 		}
 		seen[key] = true
