@@ -1689,7 +1689,7 @@ func TestPreflightValidatesOperationBodyMappings(t *testing.T) {
 			name:      "disjoint enum domain",
 			rawSchema: `{"type":"object","properties":{"state":{"type":"string","enum":["open"]}}}`,
 			flags:     []connectors.CommandSurfaceFlag{{Name: "state", Type: "enum", Values: []string{"closed"}, MapsTo: "/body/state"}},
-			want:      "no values accepted",
+			want:      "enum value \"closed\" is not accepted",
 		},
 		{
 			name:      "integer domain excludes fractional number enum",
@@ -1728,10 +1728,10 @@ func TestPreflightValidatesOperationBodyMappings(t *testing.T) {
 			want:      "cardinality",
 		},
 		{
-			name:      "finite enum excludes schema pattern",
+			name:      "finite enum rejects partial schema pattern match",
 			rawSchema: `{"type":"object","properties":{"state":{"type":"string","pattern":"^open$"}}}`,
-			flags:     []connectors.CommandSurfaceFlag{{Name: "state", Type: "enum", Values: []string{"closed"}, MapsTo: "/body/state"}},
-			want:      "no values accepted",
+			flags:     []connectors.CommandSurfaceFlag{{Name: "state", Type: "enum", Values: []string{"open", "closed"}, MapsTo: "/body/state"}},
+			want:      "enum value \"closed\" is not accepted",
 		},
 		{
 			name:      "string-array excludes unsafe root enum item",

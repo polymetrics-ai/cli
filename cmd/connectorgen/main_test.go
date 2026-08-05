@@ -834,7 +834,7 @@ func TestCLISurfaceOperationBodyMappingsUseEffectiveRuntimeShape(t *testing.T) {
 			name:         "disjoint enum domain",
 			rawSchema:    `{"type":"object","additionalProperties":false,"properties":{"state":{"type":"string","enum":["open"]}}}`,
 			flags:        []engine.CLIFlag{{Name: "state", Type: "enum", Values: []string{"closed"}, MapsTo: "/body/state"}},
-			wantFinding:  "no values accepted",
+			wantFinding:  "enum value \"closed\" is not accepted",
 			wantFindings: true,
 		},
 		{
@@ -880,10 +880,10 @@ func TestCLISurfaceOperationBodyMappingsUseEffectiveRuntimeShape(t *testing.T) {
 			wantFindings: true,
 		},
 		{
-			name:         "finite enum excludes schema pattern",
+			name:         "finite enum rejects partial schema pattern match",
 			rawSchema:    `{"type":"object","additionalProperties":false,"properties":{"state":{"type":"string","pattern":"^open$"}}}`,
-			flags:        []engine.CLIFlag{{Name: "state", Type: "enum", Values: []string{"closed"}, MapsTo: "/body/state"}},
-			wantFinding:  "no values accepted",
+			flags:        []engine.CLIFlag{{Name: "state", Type: "enum", Values: []string{"open", "closed"}, MapsTo: "/body/state"}},
+			wantFinding:  "enum value \"closed\" is not accepted",
 			wantFindings: true,
 		},
 		{

@@ -537,7 +537,8 @@ func TestSchemaValidatesRequestBodyInputDomains(t *testing.T) {
 		input   RequestBodyInput
 		wantErr bool
 	}{
-		{name: "overlapping enum", pointer: "/body/state", input: RequestBodyInput{Type: "enum", Values: []string{"closed", "open"}}},
+		{name: "finite enum rejects partial schema enum overlap", pointer: "/body/state", input: RequestBodyInput{Type: "enum", Values: []string{"open", "closed"}}, wantErr: true},
+		{name: "finite enum accepts complete schema enum overlap", pointer: "/body/state", input: RequestBodyInput{Type: "enum", Values: []string{"open", "paused"}}},
 		{name: "disjoint enum", pointer: "/body/state", input: RequestBodyInput{Type: "enum", Values: []string{"closed"}}, wantErr: true},
 		{name: "required string excludes empty enum", pointer: "/body/empty_only", input: RequestBodyInput{Type: "string", Required: true}, wantErr: true},
 		{name: "date-time format excludes invalid enum", pointer: "/body/timestamp", input: RequestBodyInput{Type: "string", Format: "date-time"}, wantErr: true},
@@ -547,7 +548,8 @@ func TestSchemaValidatesRequestBodyInputDomains(t *testing.T) {
 		{name: "cli maximum below schema minimum", pointer: "/body/ids", input: RequestBodyInput{Type: "string_array", MaxItems: 1}, wantErr: true},
 		{name: "cli minimum above schema maximum", pointer: "/body/ids", input: RequestBodyInput{Type: "string_array", MinItems: 5}, wantErr: true},
 		{name: "required string array excludes schema maximum zero", pointer: "/body/required_empty", input: RequestBodyInput{Type: "string_array", Required: true}, wantErr: true},
-		{name: "finite enum satisfies schema pattern", pointer: "/body/patterned_state", input: RequestBodyInput{Type: "enum", Values: []string{"closed", "open"}, Required: true}},
+		{name: "finite enum rejects partial schema pattern match", pointer: "/body/patterned_state", input: RequestBodyInput{Type: "enum", Values: []string{"open", "closed"}, Required: true}, wantErr: true},
+		{name: "finite enum accepts complete schema pattern match", pointer: "/body/patterned_state", input: RequestBodyInput{Type: "enum", Values: []string{"open"}, Required: true}},
 		{name: "finite enum excludes schema pattern", pointer: "/body/patterned_state", input: RequestBodyInput{Type: "enum", Values: []string{"closed"}, Required: true}, wantErr: true},
 		{name: "string array intersects item enum", pointer: "/body/labels", input: RequestBodyInput{Type: "string_array"}},
 		{name: "string array excludes delimited item enum", pointer: "/body/delimited_labels", input: RequestBodyInput{Type: "string_array"}, wantErr: true},

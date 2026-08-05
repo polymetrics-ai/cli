@@ -296,14 +296,14 @@ func (n *schemaNode) validateRequestInputEnumDomain(pointer string, input Reques
 				continue
 			}
 			hasEmittableValue = true
-			if err := n.validate(candidate, ""); err == nil {
-				return nil
+			if err := n.validate(candidate, ""); err != nil {
+				return fmt.Errorf("request mapping %q enum value %q is not accepted by schema constraints: %w", pointer, candidate, err)
 			}
 		}
 		if !hasEmittableValue {
 			return fmt.Errorf("enum mapping %q has no values the CLI can emit", pointer)
 		}
-		return fmt.Errorf("request mapping %q input domain has no values accepted by schema constraints", pointer)
+		return nil
 	}
 	constraints := n.mappingEnumConstraints()
 	if len(constraints) == 0 {
