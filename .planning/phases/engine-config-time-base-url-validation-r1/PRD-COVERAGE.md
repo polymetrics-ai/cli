@@ -14,4 +14,4 @@ Phase: engine-config-time-base-url-validation-r1
 | Observability plan | not applicable | No service or telemetry behaviour is introduced |
 | Rollback/runbook | not applicable | A normal commit revert removes this local validation change; no migration or external state |
 | Eval plan | not applicable | Deterministic Go validation, no AI behaviour |
-| Release notes | pending | `SUMMARY.md` at completion |
+| Release notes | present | `SUMMARY.md` |

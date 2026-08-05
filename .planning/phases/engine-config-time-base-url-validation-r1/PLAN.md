@@ -61,6 +61,7 @@ is recorded in `TDD-LEDGER.md`.
 | `format` is currently accepted as an annotation, not evaluated by `Schema.Validate` | `internal/connectors/engine/schema.go` |
 | Current `spec.json` declarations contain 554 URI, 81 date-time, and 20 date formats; 2 patterns; and 16 enums | read-only inventory over every `internal/connectors/defs/*/spec.json` root property |
 | No constrained property is a secret | same inventory (`x-secret: true` count: 0) |
+| Every declared enum value is a string | same inventory (`non-string enum` count: 0) |
 | No current spec, including nested nodes, declares a numeric, string, array, or object bound keyword | recursive read-only inventory over every `spec.json` (`minimum`, `maximum`, `exclusive*`, `minLength`, `maxLength`, `multipleOf`, `minItems`, `maxItems`, `minProperties`, `maxProperties`: 0) |
 
 ## Post-red survey and selected seam
@@ -94,7 +95,7 @@ existing full-instance `Schema.Validate`:
    `engine.Base`, and the promoted-native `definitionConnector` forwarder all
    expose the contract from the same compiled schema.
 4. Invoke that contract in `App.AddCredential` after existing local-path
-   safety checks and before ID generation, vault writes, or state mutation.
+   safety checks and before vault writes or state mutation.
 
 This intentionally does **not** enforce `required`, types, unknown fields,
 defaults, or secret values: the accepted credential configuration is a flat
@@ -108,11 +109,11 @@ parse/coercion contract before it can claim support.
 
 ## Planned sequence
 
-1. **Red — reproduce the real boundary failure.** Add and run the app-level
-   regression test; record its exact failure before production edits.
-2. **Survey — establish the actual declared constraint set.** Record every
-   constraint family and whether it is configuration-shaped. Do not invent
-   validation rules for keywords absent from connector specs.
+1. **Red — complete.** The app-level regression test reproduced the real
+   boundary failure before production edits; its exact failure is retained in
+   `TDD-LEDGER.md`.
+2. **Survey — complete.** The actual declared constraint set and deliberate
+   omissions are recorded above; no absent keyword received invented policy.
 3. **Design after red evidence — complete.** Reuse the loaded engine schema
    rather than duplicate connector-specific rules. The optional validator
    advertises actual declarations through `HasConfigurationConstraints`, so a
@@ -121,11 +122,12 @@ parse/coercion contract before it can claim support.
 4. **Green — complete.** Enforce only the surveyed declarative constraints at
    `AddCredential`, before vault or state mutation. Errors are
    field/constraint-specific and never echo input values.
-5. **Regression matrix.** Prove URI (`base_url`), pattern, enum, each declared
-   format sibling, unconstrained inputs, and no-persistence-on-rejection. Add
-   any narrowly needed schema unit tests.
-6. **Refactor and verify.** Run focused app/engine/connectors tests, the
-   executable configuration-time path, and the repo-required scoped gates.
+5. **Regression matrix — complete.** URI (`base_url`), both date formats,
+   both patterns, engine/Base-backed enums, unconstrained input, no-persistence,
+   and promoted-native forwarding all have red/green coverage.
+6. **Refactor and verify — complete.** Focused and scoped app/engine/connector
+   tests, the full CLI package, build/vet, and individual repository gates all
+   pass; details are in `VERIFICATION.md`.
 
 ### Forwarder audit
 
@@ -135,7 +137,7 @@ The post-green registry audit found a second generic seam:
 capability from that Base rather than leaving the wrapper unable to honour a
 future declared constraint. Its methods will report the Base's actual
 `HasConfigurationConstraints` result, not blanket success. The current survey
-shows all promoted-native specs are constraint-free, but the test constructs a
+shows all 29 promoted-native specs are constraint-free, but the test constructs a
 constrained wrapped bundle to lock the contract before it is needed. The
 red-forwarder test now passes with that delegation in place.
 

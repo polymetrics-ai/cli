@@ -5,21 +5,23 @@
 | Area | Command / check | Result |
 | --- | --- | --- |
 | Red reproduction | focused app test before production code | passed — recorded in `TDD-LEDGER.md` |
-| Engine constraint unit tests | `go test ./internal/connectors/engine/... -count=1` | pending |
-| App boundary tests | `go test ./internal/app/... -count=1` | pending |
-| Connector contracts | `go test ./internal/connectors/... -count=1` | pending |
-| CLI regression package | `go test ./internal/cli/... -count=1` | pending |
-| Format | `gofmt -w` changed Go files then `gofmt -l cmd internal` | pending |
-| Vet | `go vet ./...` | pending |
-| PM build | `go build ./cmd/pm` | pending |
-| Tidy | `make tidy-check` | pending |
-| Lint | `make lint` | pending |
-| Docs | `make docs-check` | pending / not expected to change |
-| Smoke | `make smoke-no-build` | pending |
-| Connector validation | `make connectorgen-validate` | pending |
-| Surface sync | `make connectorgen-surface-sync` | pending |
-| Boundary | `make connector-boundary` | pending |
-| Release workflow | `make release-workflow-check` | pending |
+| Engine constraint unit tests | `go test ./internal/connectors/engine -count=1` | passed (10.926s) |
+| App boundary tests | `go test ./internal/app -count=1` | passed (49.092s) |
+| Connector contracts | `go test ./internal/connectors`, `bundleregistry`, and `native/nativeset` | passed |
+| CLI regression package | `go test ./internal/cli -count=1` | passed (383.991s) |
+| Format | `gofmt -w` changed Go files then `gofmt -l cmd internal` | passed |
+| Vet | `go vet ./...` | passed |
+| PM build | `go build ./cmd/pm` | passed |
+| Tidy | `make tidy-check` | passed |
+| Lint | `make lint` | passed (0 issues) |
+| Docs | `make docs-check` | passed |
+| Smoke | `make smoke-no-build` | passed |
+| Connector validation | `make connectorgen-validate` | passed (550 connectors, 0 findings) |
+| Surface sync | `make connectorgen-surface-sync` | passed (550 connectors, 0 corrections) |
+| Boundary | `make connector-boundary` | passed (`clean`, 0 findings) |
+| Release workflow | `make release-workflow-check` | passed |
+| GSD evidence | `scripts/verify-gsd-workflow origin/main` | passed |
+| Scope guard | `git diff --name-only origin/main...HEAD -- internal/connectors/defs` | passed (empty; no bundle change) |
 
 `go test ./...` and `make verify` are intentionally not run as single commands
 in this per-command environment; CI carries the complete suite after the
