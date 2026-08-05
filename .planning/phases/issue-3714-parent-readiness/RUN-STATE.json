@@ -1,0 +1,14 @@
+{
+  "phase": "issue-3714-parent-readiness",
+  "status": "in_progress",
+  "verificationPassed": false,
+  "verificationNote": "Full integrated verification has not run yet.",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "The canonical delivery contract forbids delegation, and all three worker waves are already integrated; only parent-branch reconciliation remains."
+    }
+  ]
+}
+
