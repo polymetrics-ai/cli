@@ -148,6 +148,12 @@ not a full override by default.
   field that merely *looks* sensitive but is documentation-only (an optional Bearer-proxy key never
   wired into `auth`, e.g. searxng's `api_key`) is still marked `x-secret: true` — the marker is
   about the field's nature, not whether this bundle currently exercises it.
+- **JSON Schema `format` enforcement is intentionally narrow**: the engine validates string
+  instances declared with `format: "uri"` as absolute URIs and rejects whitespace, control
+  characters, backslashes, and malformed escaping. Other schema formats remain annotations unless
+  a surface-specific validator enforces them. Pair `format: "uri"` with `pattern` when the contract
+  is narrower than an absolute URI; Google Calendar watch actions use that combination to require
+  HTTPS callback URLs.
 - **Schema-as-projection**: a stream's `schemas/<stream>.json` `properties` set is derived
   **field-for-field** from what the legacy connector's own `mapRecord`/record-shaping function
   actually emits — not from guessing the raw API shape. In `"schema"` projection mode (the
