@@ -58,7 +58,12 @@ func ValidateSurfaceProvenance(surface *APISurface) SurfaceProvenanceValidation 
 	result.ArtifactCount = len(surface.Artifacts)
 	result.EndpointCount = len(surface.Endpoints)
 	switch surface.OperationLedgerVersion {
-	case 0, 1:
+	case 0:
+		if surface.operationLedgerVersionPresent {
+			result.addIssue("operation_ledger_version", "must be omitted or be 1 or 2")
+		}
+		return result
+	case 1:
 		return result
 	case 2:
 	default:

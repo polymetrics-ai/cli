@@ -623,13 +623,29 @@ type DeleteSpec struct {
 // APISurface is the parsed api_surface.json. When present, it supports
 // conformance and disk-backed direct-write endpoint cross-checks.
 type APISurface struct {
-	API                    string            `json:"api"`
-	Docs                   string            `json:"docs,omitempty"`
-	ReviewedAt             string            `json:"reviewed_at,omitempty"`
-	OperationLedgerVersion int               `json:"operation_ledger_version,omitempty"`
-	Scope                  string            `json:"scope,omitempty"`
-	Artifacts              []SurfaceArtifact `json:"artifacts,omitempty"`
-	Endpoints              []SurfaceEndpoint `json:"endpoints"`
+	API                           string            `json:"api"`
+	Docs                          string            `json:"docs,omitempty"`
+	ReviewedAt                    string            `json:"reviewed_at,omitempty"`
+	OperationLedgerVersion        int               `json:"operation_ledger_version,omitempty"`
+	Scope                         string            `json:"scope,omitempty"`
+	Artifacts                     []SurfaceArtifact `json:"artifacts,omitempty"`
+	Endpoints                     []SurfaceEndpoint `json:"endpoints"`
+	operationLedgerVersionPresent bool
+}
+
+func (surface *APISurface) UnmarshalJSON(raw []byte) error {
+	type decodedAPISurface APISurface
+	var decoded decodedAPISurface
+	if err := strictDecode(raw, &decoded); err != nil {
+		return err
+	}
+	var fields map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &fields); err != nil {
+		return err
+	}
+	*surface = APISurface(decoded)
+	_, surface.operationLedgerVersionPresent = fields["operation_ledger_version"]
+	return nil
 }
 
 // SurfaceArtifact is a provider artifact cited by v2 endpoint provenance.
