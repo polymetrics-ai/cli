@@ -1320,22 +1320,24 @@
         "properties": {
           "account_id": {
             "type": "string"
+          },
+          "redact": {
+            "type": "boolean",
+            "description": "Permanently removes all personally identifiable information (PII) from this account after it has been deactivated, to fulfill a data subject's right to erasure under GDPR and similar privacy regulations (e.g. CCPA). Cannot be undone."
           }
         },
         "required": [
-          "account_id"
+          "account_id",
+          "redact"
         ],
         "additionalProperties": false
       },
       "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
       "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
-      "idempotency_key_header": "Idempotency-Key"
+      "idempotency_key_header": "Idempotency-Key",
+      "query": {
+        "redact": "{{ record.redact }}"
+      }
     },
     {
       "name": "redact_account",
@@ -1477,12 +1479,6 @@
       },
       "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
       "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "idempotency_key_header": "Idempotency-Key"
     },
     {
@@ -1934,12 +1930,6 @@
       },
       "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
       "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "idempotency_key_header": "Idempotency-Key"
     },
     {
@@ -2873,12 +2863,6 @@
       },
       "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
       "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "idempotency_key_header": "Idempotency-Key"
     },
     {
@@ -3060,12 +3044,6 @@
       },
       "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
       "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "idempotency_key_header": "Idempotency-Key"
     },
     {
@@ -3098,12 +3076,6 @@
       },
       "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
       "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "idempotency_key_header": "Idempotency-Key"
     },
     {
@@ -3219,12 +3191,6 @@
       },
       "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
       "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "idempotency_key_header": "Idempotency-Key"
     },
     {
@@ -3724,12 +3690,6 @@
       },
       "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
       "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "idempotency_key_header": "Idempotency-Key"
     },
     {
@@ -3957,12 +3917,6 @@
       },
       "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
       "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "idempotency_key_header": "Idempotency-Key"
     },
     {
@@ -4276,12 +4230,6 @@
       },
       "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
       "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "idempotency_key_header": "Idempotency-Key"
     },
     {
@@ -4892,12 +4840,6 @@
       },
       "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
       "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "idempotency_key_header": "Idempotency-Key"
     },
     {
@@ -5043,12 +4985,6 @@
       },
       "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
       "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "idempotency_key_header": "Idempotency-Key"
     },
     {
@@ -5165,12 +5101,6 @@
       },
       "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
       "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "idempotency_key_header": "Idempotency-Key"
     },
     {
@@ -5242,12 +5172,6 @@
       },
       "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
       "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "idempotency_key_header": "Idempotency-Key"
     },
     {
@@ -6604,12 +6528,6 @@
       },
       "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
       "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "idempotency_key_header": "Idempotency-Key"
     },
     {
@@ -7696,12 +7614,6 @@
       },
       "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
       "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "idempotency_key_header": "Idempotency-Key"
     },
     {
@@ -8359,12 +8271,6 @@
       },
       "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
       "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "idempotency_key_header": "Idempotency-Key"
     },
     {
@@ -8532,12 +8438,6 @@
       },
       "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
       "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "idempotency_key_header": "Idempotency-Key"
     },
     {
@@ -10100,22 +10000,39 @@
         "properties": {
           "subscription_id": {
             "type": "string"
+          },
+          "refund": {
+            "type": "string",
+            "enum": [
+              "full",
+              "none",
+              "partial"
+            ],
+            "default": "none",
+            "description": "The type of refund to perform:\n\n* `full` - Performs a full refund of the last invoice for the current subscription term.\n* `partial` - Prorates a refund based on the amount of time remaining in the current bill cycle.\n* `none` - Terminates the subscription without a refund.\n\nIn the event that the most recent invoice is a $0 invoice paid entirely by credit, Recurly will apply the credit back to the customer’s account.\n\nYou may also terminate a subscription with no refund and then manually refund specific invoices.\n"
+          },
+          "charge": {
+            "type": "boolean",
+            "default": true,
+            "description": "Applicable only if the subscription has usage based add-ons and unbilled usage logged for the current billing cycle. If true, current billing cycle unbilled usage is billed on the final invoice. If false, Recurly will create a negative usage record for current billing cycle usage that will zero out the final invoice line items."
           }
         },
         "required": [
-          "subscription_id"
+          "subscription_id",
+          "refund"
         ],
         "additionalProperties": false
       },
       "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
       "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
-      "idempotency_key_header": "Idempotency-Key"
+      "idempotency_key_header": "Idempotency-Key",
+      "query": {
+        "refund": "{{ record.refund }}",
+        "charge": {
+          "template": "{{ record.charge }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
       "name": "cancel_subscription",
@@ -10766,12 +10683,6 @@
       },
       "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
       "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "idempotency_key_header": "Idempotency-Key"
     },
     {
@@ -10804,12 +10715,6 @@
       },
       "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
       "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "idempotency_key_header": "Idempotency-Key"
     },
     {
@@ -10946,12 +10851,6 @@
       },
       "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
       "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "idempotency_key_header": "Idempotency-Key"
     },
     {
@@ -10979,12 +10878,6 @@
       },
       "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
       "confirm": "destructive",
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "idempotency_key_header": "Idempotency-Key"
     },
     {

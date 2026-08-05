@@ -2034,6 +2034,13 @@
           "summary": "Path parameter `account_id`.",
           "maps_to": "record.account_id",
           "required": true
+        },
+        {
+          "name": "redact",
+          "type": "boolean",
+          "summary": "Typed Recurly request field `redact`.",
+          "maps_to": "record.redact",
+          "required": true
         }
       ],
       "api_surface": [
@@ -2043,7 +2050,7 @@
         }
       ],
       "examples": [
-        "pm recurly account deactivate --account-id \"<value>\" --json"
+        "pm recurly account deactivate --account-id \"<value>\" --redact \"<value>\" --json"
       ]
     },
     {
@@ -4552,6 +4559,24 @@
           "summary": "Path parameter `subscription_id`.",
           "maps_to": "record.subscription_id",
           "required": true
+        },
+        {
+          "name": "refund",
+          "type": "enum",
+          "summary": "Typed Recurly request field `refund`.",
+          "maps_to": "record.refund",
+          "values": [
+            "full",
+            "none",
+            "partial"
+          ],
+          "required": true
+        },
+        {
+          "name": "charge",
+          "type": "boolean",
+          "summary": "Typed Recurly request field `charge`.",
+          "maps_to": "record.charge"
         }
       ],
       "api_surface": [
@@ -4561,7 +4586,7 @@
         }
       ],
       "examples": [
-        "pm recurly subscription terminate --subscription-id \"<value>\" --json"
+        "pm recurly subscription terminate --subscription-id \"<value>\" --refund \"<value>\" --charge \"<value>\" --json"
       ]
     },
     {

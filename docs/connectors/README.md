@@ -392,7 +392,7 @@
 - [recharge](recharge/MANUAL.md): Reads Recharge customers, subscriptions, and orders through the Recharge REST API.
 - [recreation](recreation/MANUAL.md): Reads Recreation.gov RIDB facilities, campsites, activities, organizations, and recreation areas through the RIDB REST API.
 - [recruitee](recruitee/MANUAL.md): Reads Recruitee offers, candidates, departments, sources, and tags through the Recruitee REST API.
-- [recurly](recurly/MANUAL.md): Reads Recurly accounts, subscriptions, invoices, transactions, and plans through the Recurly v3 REST API.
+- [recurly](recurly/MANUAL.md): Reads Recurly accounts, subscriptions, invoices, transactions, catalog, usage, exports, preview resources, and related V3 API data; models typed reverse-ETL mutations for official POST/PUT/DELETE endpoints.
 - [reddit](reddit/MANUAL.md): Reads subreddit posts and comments through the Reddit OAuth API listing endpoints.
 - [referralhero](referralhero/MANUAL.md): Reads ReferralHero lists, subscribers, referrals, rewards, coupon groups, and campaign-scoped subscriber resources, and performs approved ReferralHero API v2 mutations.
 - [rentcast](rentcast/MANUAL.md): Reads RentCast properties, sale listings, rental listings, market data, and value/rental estimates through the RentCast REST API. Read-only.

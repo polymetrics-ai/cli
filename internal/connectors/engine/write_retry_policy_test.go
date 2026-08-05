@@ -36,6 +36,61 @@ func TestDeclarativeWriteRetryPolicy(t *testing.T) {
 		}
 	})
 
+	t.Run("explicitly idempotent delete retries without provider key", func(t *testing.T) {
+		var attempts int
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+			attempts++
+			if attempts == 1 {
+				http.Error(w, "retry", http.StatusInternalServerError)
+				return
+			}
+			w.WriteHeader(http.StatusNoContent)
+		}))
+		defer srv.Close()
+
+		rt := &Runtime{Requester: &connsdk.Requester{
+			BaseURL: srv.URL,
+			Sleep:   func(context.Context, time.Duration) error { return nil },
+		}}
+		action := WriteAction{
+			Name: "delete_widget", Kind: "delete", Method: http.MethodDelete, Path: "/widgets/fixture",
+			Delete: &DeleteSpec{Idempotent: true},
+		}
+		if err := executeWriteRecord(context.Background(), newWriteTestBundle(srv, action), action,
+			connectors.Record{}, 0, connectors.RuntimeConfig{}, rt); err != nil {
+			t.Fatalf("executeWriteRecord: %v", err)
+		}
+		if attempts != 2 {
+			t.Fatalf("attempts = %d, want 2", attempts)
+		}
+	})
+
+	t.Run("unmarked delete remains single attempt", func(t *testing.T) {
+		var attempts int
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+			attempts++
+			http.Error(w, "ambiguous", http.StatusInternalServerError)
+		}))
+		defer srv.Close()
+
+		rt := &Runtime{Requester: &connsdk.Requester{
+			BaseURL: srv.URL,
+			Sleep:   func(context.Context, time.Duration) error { return nil },
+		}}
+		action := WriteAction{
+			Name: "delete_widget", Kind: "delete", Method: http.MethodDelete, Path: "/widgets/fixture",
+			Delete: &DeleteSpec{},
+		}
+		err := executeWriteRecord(context.Background(), newWriteTestBundle(srv, action), action,
+			connectors.Record{}, 0, connectors.RuntimeConfig{}, rt)
+		if err == nil {
+			t.Fatal("executeWriteRecord succeeded after an ambiguous delete response")
+		}
+		if attempts != 1 {
+			t.Fatalf("attempts = %d, want 1", attempts)
+		}
+	})
+
 	t.Run("stable provider key across retries", func(t *testing.T) {
 		var attempts int
 		var keys []string

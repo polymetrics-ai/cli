@@ -21,9 +21,18 @@ SENSITIVE_FIELDS = %w[
 REMOVED_GENERATED_CLI_MAPPINGS = {
   "update_subscription" => ["record.custom_fields.0.name"]
 }.freeze
+CALLER_DECISION_QUERY_FIELDS = {
+  "deactivate_account" => %w[redact],
+  "terminate_subscription" => %w[refund]
+}.freeze
+MUTATION_QUERY_FIXTURE_VALUES = {
+  "deactivate_account" => {"redact" => true},
+  "terminate_subscription" => {"refund" => "partial", "charge" => false}
+}.freeze
 
 WORKTREE = File.expand_path("../../..", __dir__)
 BUNDLE = File.join(WORKTREE, "internal/connectors/defs/recurly")
+RETRY_RESEARCH_PATH = File.join(__dir__, "RECURLY-WRITE-RETRY-RESEARCH.json")
 
 def read_json(path)
   JSON.parse(File.read(path))
@@ -39,6 +48,11 @@ actual_sha = Digest::SHA256.hexdigest(oas_raw)
 abort "unexpected Recurly OAS digest #{actual_sha}" unless actual_sha == OAS_SHA256
 OAS = YAML.safe_load(oas_raw, aliases: true)
 SCHEMAS = OAS.fetch("components").fetch("schemas")
+IDEMPOTENCY_EVIDENCE_PATH = "info.description[section=Idempotent Requests]"
+idempotency_description = OAS.dig("info", "description").to_s
+abort "Recurly OAS no longer documents keyed DELETE idempotency" unless
+  idempotency_description.include?("Idempotent Requests") &&
+  idempotency_description.match?(/Idempotency-Key.*POST.*PUT.*PATCH.*DELETE/m)
 
 def deep_copy(value)
   Marshal.load(Marshal.dump(value))
@@ -208,10 +222,24 @@ def operation_parameters(path, operation)
   values.map { |parameter| local_ref(parameter, "parameters") }
 end
 
-def parameter_schema(path, operation, name)
-  parameter = operation_parameters(path, operation).find { |candidate| candidate["in"] == "path" && candidate["name"] == name }
-  abort "missing OAS path parameter #{name} for #{path}" unless parameter
+def parameter_schema(path, operation, location, name)
+  parameter = operation_parameters(path, operation).find do |candidate|
+    candidate["in"] == location && candidate["name"] == name
+  end
+  abort "missing OAS #{location} parameter #{name} for #{path}" unless parameter
   normalize_schema(parameter.fetch("schema"), :request)
+end
+
+def query_parameters(path, operation)
+  operation_parameters(path, operation).select { |parameter| parameter["in"] == "query" }
+end
+
+def operation_documents_intrinsic_idempotency?(operation)
+  [operation["summary"], operation["description"]].compact.join("\n").match?(/\bidempoten/i)
+end
+
+def query_fixture_value(value)
+  value.to_s
 end
 
 def schema_types(schema)
@@ -426,14 +454,23 @@ end.to_h
 
 writes_path = File.join(BUNDLE, "writes.json")
 writes_document = read_json(writes_path)
+delete_retry_evidence = []
+mutation_query_evidence = []
 writes_document.fetch("actions").each do |action|
   endpoint = write_endpoints[action.fetch("name")] || abort("missing surface endpoint for #{action.fetch('name')}")
   operation = operation_for(endpoint)
+  operation_id = operation.fetch("operationId")
   body_info = request_body_for(operation)
+  operation_query_parameters = query_parameters(endpoint.fetch("path"), operation)
 
   path_fields = Array(action["path_fields"])
   path_properties = path_fields.to_h do |field|
-    [field, parameter_schema(endpoint.fetch("path"), operation, field)]
+    [field, parameter_schema(endpoint.fetch("path"), operation, "path", field)]
+  end
+  query_properties = operation_query_parameters.to_h do |parameter|
+    schema = normalize_schema(parameter.fetch("schema"), :request)
+    schema["description"] = parameter["description"] if parameter["description"]
+    [parameter.fetch("name"), schema]
   end
   properties = deep_copy(path_properties)
   required = path_fields.dup
@@ -456,6 +493,25 @@ writes_document.fetch("actions").each do |action|
     action.delete("body_fields")
   end
 
+  overlap = properties.keys & query_properties.keys
+  abort "request/query field collision for #{action.fetch('name')}: #{overlap.join(', ')}" unless overlap.empty?
+  properties.merge!(deep_copy(query_properties))
+  required.concat(operation_query_parameters.filter_map do |parameter|
+    parameter.fetch("name") if parameter["required"] == true
+  end)
+  required.concat(Array(CALLER_DECISION_QUERY_FIELDS[action.fetch("name")]))
+
+  if operation_query_parameters.empty?
+    action.delete("query")
+  else
+    action["query"] = operation_query_parameters.to_h do |parameter|
+      name = parameter.fetch("name")
+      template = "{{ record.#{name} }}"
+      value = required.include?(name) ? template : {"template" => template, "omit_when_absent" => true}
+      [name, value]
+    end
+  end
+
   action["record_schema"] = {
     "$schema" => "http://json-schema.org/draft-07/schema#",
     "title" => "Recurly #{action.fetch('name')} record",
@@ -465,6 +521,49 @@ writes_document.fetch("actions").each do |action|
     "additionalProperties" => false
   }
   action["idempotency_key_header"] = "Idempotency-Key"
+  if action["kind"] == "delete"
+    intrinsic_idempotency = operation_documents_intrinsic_idempotency?(operation)
+    if intrinsic_idempotency
+      action["delete"] ||= {}
+      action["delete"]["idempotent"] = true
+    else
+      action.delete("delete")
+    end
+    operation_path = endpoint.fetch("path")
+    operation_method = endpoint.fetch("method")
+    delete_retry_evidence << {
+      "action" => action.fetch("name"),
+      "operation_id" => operation_id,
+      "method" => operation_method,
+      "path" => operation_path,
+      "operation_source_url" => "https://recurly.com/developers/api/v2021-02-25/#operation/#{operation_id}",
+      "operation_evidence_path" => "paths.#{operation_path}.#{operation_method.downcase}",
+      "intrinsic_idempotency_documented" => intrinsic_idempotency,
+      "retry_mode" => "provider_idempotency_key",
+      "idempotency_key_header" => "Idempotency-Key",
+      "idempotency_source_url" => OAS_URL,
+      "idempotency_evidence_path" => IDEMPOTENCY_EVIDENCE_PATH
+    }
+  end
+  combined_parameters = operation_parameters(endpoint.fetch("path"), operation)
+  operation_query_parameters.each do |parameter|
+    name = parameter.fetch("name")
+    parameter_index = combined_parameters.index(parameter) || abort("missing query parameter index for #{action.fetch('name')}.#{name}")
+    mutation_query_evidence << {
+      "action" => action.fetch("name"),
+      "operation_id" => operation_id,
+      "method" => endpoint.fetch("method"),
+      "path" => endpoint.fetch("path"),
+      "field" => "query.#{name}",
+      "local_source_path" => "writes.#{action.fetch('name')}.query.#{name}",
+      "provider_required" => parameter["required"] == true,
+      "local_required" => required.include?(name),
+      "source_url" => "https://recurly.com/developers/api/v2021-02-25/#operation/#{operation_id}",
+      "evidence_type" => "openapi.parameter",
+      "evidence_path" => "paths.#{endpoint.fetch('path')}.#{endpoint.fetch('method').downcase}.parameters.#{parameter_index}",
+      "schema" => deep_copy(query_properties.fetch(name))
+    }
+  end
   action["redact_fields"] = (Array(action["redact_fields"]) + sensitive_paths(action.fetch("record_schema"))).uniq.sort
   action.delete("redact_fields") if action["redact_fields"].empty?
   action["risk"] = action.fetch("risk").sub(
@@ -486,6 +585,12 @@ writes_document.fetch("actions").each do |action|
     end
     record.merge!(body_sample)
   end
+  operation_query_parameters.each do |parameter|
+    name = parameter.fetch("name")
+    value = MUTATION_QUERY_FIXTURE_VALUES.dig(action.fetch("name"), name)
+    value = sample_value(query_properties.fetch(name), name) if value.nil?
+    record[name] = value
+  end
 
   expected = {
     "method" => endpoint.fetch("method"),
@@ -494,6 +599,12 @@ writes_document.fetch("actions").each do |action|
   body_fields = Array(action["body_fields"])
   expected_body = record.select { |field, _| body_fields.include?(field) }
   expected["body"] = expected_body if body_info
+  unless operation_query_parameters.empty?
+    expected["query"] = operation_query_parameters.to_h do |parameter|
+      name = parameter.fetch("name")
+      [name, query_fixture_value(record.fetch(name))]
+    end
+  end
 
   response_status, response_schema_ref = response_for(operation)
   fixture_response = {"status" => response_status}
@@ -506,6 +617,16 @@ writes_document.fetch("actions").each do |action|
   write_json(File.join(BUNDLE, "fixtures", "writes", "#{action.fetch('name')}.json"), fixture)
 end
 write_json(writes_path, writes_document)
+write_json(RETRY_RESEARCH_PATH, {
+  "purpose" => "Raw Recurly operation retry and mutation-query evidence; not final citation metadata until the shared citation convention lands.",
+  "provider" => "Recurly",
+  "provider_reference_url" => "https://recurly.com/developers/api/v2021-02-25/",
+  "openapi_source_url" => OAS_URL,
+  "openapi_sha256" => OAS_SHA256,
+  "retry_policy" => "Unkeyed writes run once unless an action explicitly declares documented idempotent delete semantics. Recurly mutations send a stable per-record Idempotency-Key across automatic retries.",
+  "operations" => delete_retry_evidence,
+  "mutation_query_controls" => mutation_query_evidence
+})
 
 actions = writes_document.fetch("actions").to_h { |action| [action.fetch("name"), action] }
 cli_path = File.join(BUNDLE, "cli_surface.json")
@@ -525,6 +646,7 @@ cli_document.fetch("commands").each do |command|
     end
     desired_paths.concat(required_paths)
     desired_paths.concat(Array(action["path_fields"]))
+    desired_paths.concat(action.fetch("query", {}).keys)
 
     required_body_paths = required_paths - Array(action["path_fields"])
     if action["body_required"] && required_body_paths.empty?
@@ -576,7 +698,11 @@ cli_document.fetch("commands").each do |command|
       required_flag_names << body_flag.fetch("name") if body_flag && !required_flag_names.include?(body_flag.fetch("name"))
     end
     invocation = "pm recurly #{command.fetch('path')}"
-    required_flag_names.each { |name| invocation += " --#{name} \"<value>\"" }
+    query_flag_names = command.fetch("flags").filter_map do |flag|
+      field = flag.fetch("maps_to").delete_prefix("record.")
+      flag.fetch("name") if action.fetch("query", {}).key?(field)
+    end
+    (required_flag_names + query_flag_names).uniq.each { |name| invocation += " --#{name} \"<value>\"" }
     invocation += " --json"
     command["examples"] = [invocation]
     command["risk"] = action["risk"] if command.key?("risk")

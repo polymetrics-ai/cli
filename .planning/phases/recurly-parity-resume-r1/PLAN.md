@@ -57,6 +57,11 @@ verification checklist, prompt snapshot, summary, and run state are maintained d
    replay for link-pagination fixtures. Document the billing-write retry policy explicitly.
 10. Remove Recurly's newly introduced hard runtime limiter because the provider documents different
     sandbox and production/GET limits; retain only evidence-backed informational metadata.
+11. Preserve automatic retries for actions that explicitly declare idempotent delete semantics,
+    while keeping every other unkeyed mutation single-attempt. Regenerate the complete Recurly
+    mutation-query boundary from the pinned OAS, require callers to choose refund and account
+    redaction behavior, and record connector-local raw retry evidence without changing the shared
+    citation convention.
 
 ## TDD checkpoints
 
@@ -70,6 +75,9 @@ verification checklist, prompt snapshot, summary, and run state are maintained d
 - Red/green: focused regression tests must fail before decimal coercion, idempotency-bound retries,
   response-header replay, and the selected Recurly OAS-shape corrections, then pass together after
   the complete review-fix round.
+- Red/green: reasoned pre-fix inspection proves explicitly idempotent deletes are forced to one
+  attempt and all three Recurly mutation query controls are absent. Add focused regressions before
+  production edits, apply the whole fix round, then run one focused test command at the end.
 
 ## Verification plan
 

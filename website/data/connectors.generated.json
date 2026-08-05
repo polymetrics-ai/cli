@@ -219657,10 +219657,18 @@
               "values": [],
               "maps_to": "record.account_id",
               "required": true
+            },
+            {
+              "name": "redact",
+              "type": "boolean",
+              "summary": "Typed Recurly request field `redact`.",
+              "values": [],
+              "maps_to": "record.redact",
+              "required": true
             }
           ],
           "examples": [
-            "pm recurly account deactivate --account-id \"<value>\" --json"
+            "pm recurly account deactivate --account-id \"<value>\" --redact \"<value>\" --json"
           ],
           "output_policy": "",
           "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
@@ -222246,10 +222254,29 @@
               "values": [],
               "maps_to": "record.subscription_id",
               "required": true
+            },
+            {
+              "name": "refund",
+              "type": "enum",
+              "summary": "Typed Recurly request field `refund`.",
+              "values": [
+                "full",
+                "none",
+                "partial"
+              ],
+              "maps_to": "record.refund",
+              "required": true
+            },
+            {
+              "name": "charge",
+              "type": "boolean",
+              "summary": "Typed Recurly request field `charge`.",
+              "values": [],
+              "maps_to": "record.charge"
             }
           ],
           "examples": [
-            "pm recurly subscription terminate --subscription-id \"<value>\" --json"
+            "pm recurly subscription terminate --subscription-id \"<value>\" --refund \"<value>\" --charge \"<value>\" --json"
           ],
           "output_policy": "",
           "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
@@ -223256,7 +223283,7 @@
         }
       ]
     },
-    "docs_md": "# Recurly connector\n\n## Overview\n\nDeclarative Recurly V3 connector generated from the official v2021-02-25 OpenAPI definition. The operation ledger maps all 197 documented operations to reachable commands: 93 ETL streams, 96 typed reverse-ETL write actions, 5 bounded JSON read/preview operations, and 3 bounded binary downloads.\n\nOfficial source: https://recurly.com/developers/api/spec/v2021-02-25.yaml\n\n## Auth setup\n\nProvide a Recurly API key through the connector credential flow or environment-backed secret input. Do not paste, print, summarize, or commit secret values. The declarative runtime uses HTTP Basic auth with the API key as the username and an empty password, plus the `Accept: application/vnd.recurly.v2021-02-25` header.\n\nPath-scoped operations use fixed connector config keys such as `account_id`, `subscription_id`, `invoice_id`, and related Recurly identifiers. Inspect `spec.json` or `pm connectors inspect recurly --json` before creating credentials for scoped reads.\n\n## Streams notes\n\nStreams are fixed Recurly endpoints with provider-shaped JSON schemas and sanitized OAS-derived conformance fixtures. Record objects are closed while the provider's explicitly opaque objects remain free-form. List endpoints read the Recurly `data` array; singular GET endpoints emit the response object. No arbitrary query, body, path, shell, file, or generic HTTP passthrough is exposed.\n\n## Write actions & risks\n\nReverse ETL actions are generated from official POST, PUT, and DELETE operations and use closed `record_schema` definitions. Mutation execution must stay plan → preview → explicit approval → execute. Destructive lifecycle actions are marked with `confirm: destructive`.\n\nRecurly documents `Idempotency-Key` for POST, PUT, PATCH, and DELETE. The runtime generates one fresh key for each approved record and reuses that key only across automatic attempts for the same record. A declarative action without a documented provider idempotency header is executed once: transport failures and retryable provider responses are surfaced without replaying the mutation. Reconcile an ambiguous result with Recurly before creating a new approval; never blindly rerun a billing write.\n\n## Known limits\n\nRecurly documents different fixed limits for sandbox traffic and production GET traffic, and returns the applicable limit in response headers. The connector therefore records the production GET figure as informational metadata but does not enforce a connector-wide runtime throttle; provider `429` responses are surfaced through the declared error map.\n\nThe three official binary/export endpoints execute as bounded `binary_download` commands and write only below the caller-provided `--dest-root`. Their commandrunner/engine execution is covered by local synthetic fixtures. The connector has not been live-certified in this wave; no credentialed provider calls were run.\n",
+    "docs_md": "# Recurly connector\n\n## Overview\n\nDeclarative Recurly V3 connector generated from the official v2021-02-25 OpenAPI definition. The operation ledger maps all 197 documented operations to reachable commands: 93 ETL streams, 96 typed reverse-ETL write actions, 5 bounded JSON read/preview operations, and 3 bounded binary downloads.\n\nOfficial source: https://recurly.com/developers/api/spec/v2021-02-25.yaml\n\n## Auth setup\n\nProvide a Recurly API key through the connector credential flow or environment-backed secret input. Do not paste, print, summarize, or commit secret values. The declarative runtime uses HTTP Basic auth with the API key as the username and an empty password, plus the `Accept: application/vnd.recurly.v2021-02-25` header.\n\nPath-scoped operations use fixed connector config keys such as `account_id`, `subscription_id`, `invoice_id`, and related Recurly identifiers. Inspect `spec.json` or `pm connectors inspect recurly --json` before creating credentials for scoped reads.\n\n## Streams notes\n\nStreams are fixed Recurly endpoints with provider-shaped JSON schemas and sanitized OAS-derived conformance fixtures. Record objects are closed while the provider's explicitly opaque objects remain free-form. List endpoints read the Recurly `data` array; singular GET endpoints emit the response object. No arbitrary query, body, path, shell, file, or generic HTTP passthrough is exposed.\n\n## Write actions & risks\n\nReverse ETL actions are generated from official POST, PUT, and DELETE operations and use closed `record_schema` definitions. Mutation execution must stay plan → preview → explicit approval → execute. Destructive lifecycle actions are marked with `confirm: destructive`.\n\nRecurly documents `Idempotency-Key` for POST, PUT, PATCH, and DELETE. The runtime generates one fresh key for each approved record and reuses that key only across automatic attempts for the same record. A declarative action without a documented provider idempotency header is executed once: transport failures and retryable provider responses are surfaced without replaying the mutation. Reconcile an ambiguous result with Recurly before creating a new approval; never blindly rerun a billing write.\n\nThe pinned operation descriptions do not independently declare any DELETE operation intrinsically idempotent, so the connector does not assume that every DELETE can be retried without a key. `deactivate_account` requires an explicit `redact` choice, and `terminate_subscription` requires an explicit `refund` choice while also exposing the optional `charge` control; the connector does not silently select Recurly's refund or account-redaction defaults for the caller.\n\n## Known limits\n\nRecurly documents different fixed limits for sandbox traffic and production GET traffic, and returns the applicable limit in response headers. The connector therefore records the production GET figure as informational metadata but does not enforce a connector-wide runtime throttle; provider `429` responses are surfaced through the declared error map.\n\nThe three official binary/export endpoints execute as bounded `binary_download` commands and write only below the caller-provided `--dest-root`. Their commandrunner/engine execution is covered by local synthetic fixtures. The connector has not been live-certified in this wave; no credentialed provider calls were run.\n",
     "icon": {
       "id": "recurly",
       "path": "icons/recurly.svg",

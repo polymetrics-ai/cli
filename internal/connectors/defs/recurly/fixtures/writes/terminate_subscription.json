@@ -1,10 +1,16 @@
 {
   "record": {
-    "subscription_id": "fixture_subscription_id"
+    "subscription_id": "fixture_subscription_id",
+    "refund": "partial",
+    "charge": false
   },
   "expect": {
     "method": "DELETE",
-    "path": "/subscriptions/fixture_subscription_id"
+    "path": "/subscriptions/fixture_subscription_id",
+    "query": {
+      "refund": "partial",
+      "charge": "false"
+    }
   },
   "response": {
     "status": 200,

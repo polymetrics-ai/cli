@@ -1,10 +1,14 @@
 {
   "record": {
-    "account_id": "fixture_account_id"
+    "account_id": "fixture_account_id",
+    "redact": true
   },
   "expect": {
     "method": "DELETE",
-    "path": "/accounts/fixture_account_id"
+    "path": "/accounts/fixture_account_id",
+    "query": {
+      "redact": "true"
+    }
   },
   "response": {
     "status": 200,

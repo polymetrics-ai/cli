@@ -2,34 +2,46 @@ package recurly
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
+	"reflect"
 	"sort"
 	"strings"
 	"testing"
 )
 
 type reviewWriteAction struct {
-	Name                 string          `json:"name"`
-	BodyType             string          `json:"body_type"`
-	BodyRequired         bool            `json:"body_required"`
-	BodyFields           []string        `json:"body_fields"`
-	PathFields           []string        `json:"path_fields"`
-	IdempotencyKeyHeader string          `json:"idempotency_key_header"`
-	RedactFields         []string        `json:"redact_fields"`
-	RecordSchema         json.RawMessage `json:"record_schema"`
+	Name                 string                     `json:"name"`
+	Kind                 string                     `json:"kind"`
+	Method               string                     `json:"method"`
+	Path                 string                     `json:"path"`
+	BodyType             string                     `json:"body_type"`
+	BodyRequired         bool                       `json:"body_required"`
+	BodyFields           []string                   `json:"body_fields"`
+	PathFields           []string                   `json:"path_fields"`
+	IdempotencyKeyHeader string                     `json:"idempotency_key_header"`
+	RedactFields         []string                   `json:"redact_fields"`
+	Query                map[string]json.RawMessage `json:"query"`
+	Delete               *struct {
+		Idempotent bool `json:"idempotent"`
+	} `json:"delete"`
+	RecordSchema json.RawMessage `json:"record_schema"`
 }
 
 type reviewCLICommand struct {
-	Path      string `json:"path"`
-	Write     string `json:"write"`
-	Operation string `json:"operation"`
-	Flags     []struct {
-		Name     string `json:"name"`
-		Type     string `json:"type"`
-		MapsTo   string `json:"maps_to"`
-		Required bool   `json:"required"`
-	} `json:"flags"`
+	Path      string          `json:"path"`
+	Write     string          `json:"write"`
+	Operation string          `json:"operation"`
+	Flags     []reviewCLIFlag `json:"flags"`
+}
+
+type reviewCLIFlag struct {
+	Name     string   `json:"name"`
+	Type     string   `json:"type"`
+	MapsTo   string   `json:"maps_to"`
+	Required bool     `json:"required"`
+	Values   []string `json:"values"`
 }
 
 type reviewStream struct {
@@ -166,6 +178,152 @@ func TestReviewCLISurfaceCarriesTypedRequiredBodies(t *testing.T) {
 	t.Error("preview_gift_card command is missing")
 }
 
+func TestReviewMutationQueryControls(t *testing.T) {
+	var writesDocument struct {
+		Actions []reviewWriteAction `json:"actions"`
+	}
+	readReviewJSON(t, "writes.json", &writesDocument)
+	actions := make(map[string]reviewWriteAction, len(writesDocument.Actions))
+	for _, action := range writesDocument.Actions {
+		actions[action.Name] = action
+	}
+
+	deactivate := requireReviewAction(t, actions, "deactivate_account")
+	assertReviewQuery(t, deactivate, "redact", "{{ record.redact }}", false)
+	deactivateSchema := reviewSchemaObject(t, deactivate.RecordSchema)
+	if !reviewSchemaHasType(reviewProperty(t, deactivateSchema, "redact"), "boolean") {
+		t.Errorf("deactivate_account.redact is not boolean")
+	}
+	requireReviewFields(t, deactivateSchema, "redact")
+
+	terminate := requireReviewAction(t, actions, "terminate_subscription")
+	assertReviewQuery(t, terminate, "refund", "{{ record.refund }}", false)
+	assertReviewQuery(t, terminate, "charge", "{{ record.charge }}", true)
+	terminateSchema := reviewSchemaObject(t, terminate.RecordSchema)
+	refund := reviewProperty(t, terminateSchema, "refund")
+	if !reviewSchemaHasType(refund, "string") || !reflect.DeepEqual(reviewStringSlice(refund["enum"]), []string{"full", "none", "partial"}) {
+		t.Errorf("terminate_subscription.refund = %#v", refund)
+	}
+	if !reviewSchemaHasType(reviewProperty(t, terminateSchema, "charge"), "boolean") {
+		t.Errorf("terminate_subscription.charge is not boolean")
+	}
+	requireReviewFields(t, terminateSchema, "refund")
+
+	var cliDocument struct {
+		Commands []reviewCLICommand `json:"commands"`
+	}
+	readReviewJSON(t, "cli_surface.json", &cliDocument)
+	deactivateCommand := requireReviewCommand(t, cliDocument.Commands, "deactivate_account")
+	redactFlag := requireReviewFlag(t, deactivateCommand, "record.redact")
+	if redactFlag.Type != "boolean" || !redactFlag.Required {
+		t.Errorf("deactivate redact flag = %#v", redactFlag)
+	}
+	terminateCommand := requireReviewCommand(t, cliDocument.Commands, "terminate_subscription")
+	refundFlag := requireReviewFlag(t, terminateCommand, "record.refund")
+	if refundFlag.Type != "enum" || !refundFlag.Required || !reflect.DeepEqual(refundFlag.Values, []string{"full", "none", "partial"}) {
+		t.Errorf("terminate refund flag = %#v", refundFlag)
+	}
+	chargeFlag := requireReviewFlag(t, terminateCommand, "record.charge")
+	if chargeFlag.Type != "boolean" || chargeFlag.Required {
+		t.Errorf("terminate charge flag = %#v", chargeFlag)
+	}
+
+	assertReviewWriteFixtureQuery(t, "deactivate_account", map[string]string{"redact": "true"})
+	assertReviewWriteFixtureQuery(t, "terminate_subscription", map[string]string{"refund": "partial", "charge": "false"})
+}
+
+func TestReviewDeleteRetryEvidenceIsOperationScoped(t *testing.T) {
+	var writesDocument struct {
+		Actions []reviewWriteAction `json:"actions"`
+	}
+	readReviewJSON(t, "writes.json", &writesDocument)
+
+	var evidence struct {
+		OpenAPISHA256 string `json:"openapi_sha256"`
+		Operations    []struct {
+			Action                         string `json:"action"`
+			OperationID                    string `json:"operation_id"`
+			Method                         string `json:"method"`
+			Path                           string `json:"path"`
+			OperationSourceURL             string `json:"operation_source_url"`
+			OperationEvidencePath          string `json:"operation_evidence_path"`
+			IntrinsicIdempotencyDocumented bool   `json:"intrinsic_idempotency_documented"`
+			RetryMode                      string `json:"retry_mode"`
+			IdempotencyKeyHeader           string `json:"idempotency_key_header"`
+			IdempotencySourceURL           string `json:"idempotency_source_url"`
+			IdempotencyEvidencePath        string `json:"idempotency_evidence_path"`
+		} `json:"operations"`
+		MutationQueryControls []struct {
+			Action           string         `json:"action"`
+			OperationID      string         `json:"operation_id"`
+			Field            string         `json:"field"`
+			LocalSourcePath  string         `json:"local_source_path"`
+			ProviderRequired bool           `json:"provider_required"`
+			LocalRequired    bool           `json:"local_required"`
+			SourceURL        string         `json:"source_url"`
+			EvidenceType     string         `json:"evidence_type"`
+			EvidencePath     string         `json:"evidence_path"`
+			Schema           map[string]any `json:"schema"`
+		} `json:"mutation_query_controls"`
+	}
+	readReviewJSON(t, filepath.Join("..", "..", "..", "..", ".planning", "phases", "recurly-parity-resume-r1", "RECURLY-WRITE-RETRY-RESEARCH.json"), &evidence)
+	if evidence.OpenAPISHA256 != "b98a3f85d0a1190c2c8e11f57fa5ec13b841665e658596dcb5d7f3ddce70baca" {
+		t.Errorf("retry evidence OAS digest = %q", evidence.OpenAPISHA256)
+	}
+	byOperation := make(map[string]bool, len(evidence.Operations))
+	for _, operation := range evidence.Operations {
+		byOperation[operation.Action] = operation.IntrinsicIdempotencyDocumented
+		if operation.Method != "DELETE" || operation.Path == "" || operation.OperationSourceURL == "" || operation.OperationEvidencePath == "" {
+			t.Errorf("incomplete operation evidence for %q: %#v", operation.Action, operation)
+		}
+		if operation.RetryMode != "provider_idempotency_key" || operation.IdempotencyKeyHeader != "Idempotency-Key" || operation.IdempotencySourceURL == "" || operation.IdempotencyEvidencePath == "" {
+			t.Errorf("incomplete retry evidence for %q: %#v", operation.Action, operation)
+		}
+	}
+
+	var deletes int
+	for _, action := range writesDocument.Actions {
+		if action.Kind != "delete" {
+			continue
+		}
+		deletes++
+		documented, ok := byOperation[action.Name]
+		if !ok {
+			t.Errorf("delete %q has no operation-scoped retry evidence", action.Name)
+			continue
+		}
+		declared := action.Delete != nil && action.Delete.Idempotent
+		if declared != documented {
+			t.Errorf("delete %q idempotent declaration = %v, documented = %v", action.Name, declared, documented)
+		}
+	}
+	if deletes != 23 || len(evidence.Operations) != deletes {
+		t.Errorf("delete evidence count = %d for %d actions, want 23", len(evidence.Operations), deletes)
+	}
+	wantControls := map[string]bool{
+		"deactivate_account.query.redact":     true,
+		"terminate_subscription.query.refund": true,
+		"terminate_subscription.query.charge": false,
+	}
+	if len(evidence.MutationQueryControls) != len(wantControls) {
+		t.Errorf("mutation query evidence count = %d, want %d", len(evidence.MutationQueryControls), len(wantControls))
+	}
+	for _, control := range evidence.MutationQueryControls {
+		key := control.Action + "." + control.Field
+		wantRequired, ok := wantControls[key]
+		if !ok {
+			t.Errorf("unexpected mutation query evidence %q", key)
+			continue
+		}
+		if control.LocalRequired != wantRequired || control.LocalSourcePath == "" || control.SourceURL == "" || control.EvidenceType != "openapi.parameter" || control.EvidencePath == "" || len(control.Schema) == 0 {
+			t.Errorf("incomplete mutation query evidence %q: %#v", key, control)
+		}
+		if control.ProviderRequired {
+			t.Errorf("mutation query evidence %q unexpectedly marks provider-required", key)
+		}
+	}
+}
+
 func TestReviewStreamContractsAreProviderShaped(t *testing.T) {
 	var streamsDocument struct {
 		Base    map[string]any `json:"base"`
@@ -281,6 +439,76 @@ func requireReviewAction(t *testing.T, actions map[string]reviewWriteAction, nam
 		t.Fatalf("write %q is missing", name)
 	}
 	return action
+}
+
+func assertReviewQuery(t *testing.T, action reviewWriteAction, name, wantTemplate string, wantOmit bool) {
+	t.Helper()
+	raw, ok := action.Query[name]
+	if !ok {
+		t.Fatalf("write %q query lacks %q", action.Name, name)
+	}
+	var template string
+	if err := json.Unmarshal(raw, &template); err == nil {
+		if wantOmit {
+			t.Fatalf("write %q query %q is a plain template, want omit_when_absent", action.Name, name)
+		}
+	} else {
+		var value struct {
+			Template       string `json:"template"`
+			OmitWhenAbsent bool   `json:"omit_when_absent"`
+		}
+		if err := json.Unmarshal(raw, &value); err != nil {
+			t.Fatalf("parse write %q query %q: %v", action.Name, name, err)
+		}
+		template = value.Template
+		if value.OmitWhenAbsent != wantOmit {
+			t.Errorf("write %q query %q omit_when_absent = %v, want %v", action.Name, name, value.OmitWhenAbsent, wantOmit)
+		}
+	}
+	if template != wantTemplate {
+		t.Errorf("write %q query %q template = %q, want %q", action.Name, name, template, wantTemplate)
+	}
+}
+
+func requireReviewCommand(t *testing.T, commands []reviewCLICommand, write string) reviewCLICommand {
+	t.Helper()
+	for _, command := range commands {
+		if command.Write == write {
+			return command
+		}
+	}
+	t.Fatalf("CLI command for write %q is missing", write)
+	return reviewCLICommand{}
+}
+
+func requireReviewFlag(t *testing.T, command reviewCLICommand, mapsTo string) reviewCLIFlag {
+	t.Helper()
+	for _, flag := range command.Flags {
+		if flag.MapsTo == mapsTo {
+			return flag
+		}
+	}
+	t.Fatalf("CLI command %q lacks flag mapped to %q", command.Path, mapsTo)
+	return reviewCLIFlag{}
+}
+
+func assertReviewWriteFixtureQuery(t *testing.T, name string, want map[string]string) {
+	t.Helper()
+	var fixture struct {
+		Record map[string]any `json:"record"`
+		Expect struct {
+			Query map[string]string `json:"query"`
+		} `json:"expect"`
+	}
+	readReviewJSON(t, filepath.Join("fixtures", "writes", name+".json"), &fixture)
+	if !reflect.DeepEqual(fixture.Expect.Query, want) {
+		t.Errorf("write fixture %q query = %#v, want %#v", name, fixture.Expect.Query, want)
+	}
+	for field, value := range want {
+		if got, ok := fixture.Record[field]; !ok || fmt.Sprint(got) != value {
+			t.Errorf("write fixture %q record.%s = %#v, want %q", name, field, got, value)
+		}
+	}
 }
 
 func reviewSchemaObject(t *testing.T, raw json.RawMessage) map[string]any {

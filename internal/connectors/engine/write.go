@@ -500,7 +500,9 @@ func writeRequester(base *connsdk.Requester, action WriteAction) (*connsdk.Reque
 		requester.DefaultHeaders[name] = value
 	}
 	if header == "" {
-		requester.DisableRetries = true
+		if action.Kind != "delete" || action.Delete == nil || !action.Delete.Idempotent {
+			requester.DisableRetries = true
+		}
 		return &requester, nil
 	}
 	keyBytes := make([]byte, 16)
