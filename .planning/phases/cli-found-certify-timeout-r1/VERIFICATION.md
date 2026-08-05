@@ -31,6 +31,10 @@
   certify elapsed time, CLI elapsed time, slowest tests, and sample maximum.
 - [x] Record the arithmetic used to derive the explicit threshold and explain
   its margin. A local laptop measurement is not sufficient for #3807.
+- [x] Enforced hosted Verify — [run 31055574285 / job
+  92472218411](https://github.com/polymetrics-ai/cli/actions/runs/31055574285/job/92472218411)
+  passed with 156.405s measured target wall time below the `4m15s` bound and
+  then completed the unchanged aggregate Verify gate.
 
 ### Hosted timing observations (retrieved 2026-08-06)
 
@@ -72,6 +76,16 @@ variance plus 9.506s of explicit rounding room above the slowest sample. The
 Make timing target now passes that fixed value to the command, which enforces
 the sum of measured target process wall times and names observed/allowed values
 on failure. The deterministic 85/61 real-CLI caps remain the primary guard.
+
+### Enforced hosted confirmation
+
+[Verify run 31055574285 / job
+92472218411](https://github.com/polymetrics-ai/cli/actions/runs/31055574285/job/92472218411),
+retrieved 2026-08-06, ran `go run ./cmd/certifytiming --max-duration 4m15s`
+on the same GitHub-hosted runner. It held the 85/85 and 61/61 deterministic
+counts, reported 101.291s harness wall time plus 55.114s CLI wall time
+(156.405s total), and passed the aggregate Verify gate. This confirmation
+precedes the required rebase-on-current-main validation.
 
 ## Deliberate exclusions
 
