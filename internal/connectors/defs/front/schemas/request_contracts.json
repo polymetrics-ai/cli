@@ -748,6 +748,93 @@
         }
       ]
     },
+    "create_message": {
+      "type": "object",
+      "required": [
+        "channel_id",
+        "body"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "channel_id": {
+          "type": "string"
+        },
+        "to": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "cc": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "bcc": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sender_name": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "author_id": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "options": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "archive": {
+              "type": "boolean"
+            }
+          }
+        },
+        "signature_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "should_add_default_signature": {
+          "type": "boolean"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "to"
+          ]
+        },
+        {
+          "required": [
+            "cc"
+          ]
+        },
+        {
+          "required": [
+            "bcc"
+          ]
+        }
+      ]
+    },
     "create_conversation": {
       "type": "object",
       "required": [
@@ -767,7 +854,6 @@
         },
         "teammate_ids": {
           "type": "array",
-          "minItems": 1,
           "items": {
             "type": "string"
           }

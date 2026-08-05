@@ -3123,8 +3123,20 @@
         {
           "name": "to",
           "type": "string_array",
-          "summary": "Maps to record.to.",
+          "summary": "Primary recipient handles; Front requires at least one recipient array.",
           "maps_to": "record.to"
+        },
+        {
+          "name": "cc",
+          "type": "string_array",
+          "summary": "Copy recipient handles; Front requires at least one recipient array.",
+          "maps_to": "record.cc"
+        },
+        {
+          "name": "bcc",
+          "type": "string_array",
+          "summary": "Blind-copy recipient handles; Front requires at least one recipient array.",
+          "maps_to": "record.bcc"
         },
         {
           "name": "body",
@@ -3142,7 +3154,10 @@
       ],
       "risk": "high: fixed Front POST /channels/{channel_id}/messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Fixed Front endpoint; no raw method/path/body passthrough. This action is non-batchable and remains available only as a single-record command."
+      "notes": "Front requires at least one of to, cc, or bcc. The exact anyOf rule is preserved in the connector-owned request contract pending shared composition evaluation; all three typed arrays are exposed without a raw body escape. This action is non-batchable and remains available only as a single-record command.",
+      "examples": [
+        "pm front create-message --channel-id cha_fixture_1 --cc recipient@example.com --body 'Fixture message' --preview --json"
+      ]
     },
     {
       "path": "validate-channel",
@@ -4435,7 +4450,7 @@
     },
     {
       "path": "create-teammate-discussion",
-      "summary": "Create a discussion for one or more teammates.",
+      "summary": "Create a discussion for selected teammates.",
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_conversation",
@@ -4462,9 +4477,8 @@
         {
           "name": "teammate-ids",
           "type": "string_array",
-          "summary": "One or more destination teammate IDs.",
+          "summary": "Destination teammate IDs; Front declares no array minimum.",
           "maps_to": "record.teammate_ids",
-          "min_items": 1,
           "required": true
         },
         {
@@ -4491,7 +4505,7 @@
       ],
       "risk": "high: fixed Front POST /conversations mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Discussions require a starter comment and exactly one destination. This variant sends teammate-ids and never inbox-id; task-only fields are unavailable.",
+      "notes": "Discussions require a starter comment and exactly one destination property. This variant sends teammate-ids and never inbox-id; Front declares no teammate-ids array minimum, and task-only fields are unavailable.",
       "examples": [
         "pm front create-teammate-discussion --type discussion --subject 'Fixture discussion' --teammate-ids tea_fixture_1 --comment-body 'Opening comment' --preview --json"
       ]
@@ -4559,7 +4573,7 @@
     },
     {
       "path": "create-teammate-task",
-      "summary": "Create a task for one or more teammates.",
+      "summary": "Create a task for selected teammates.",
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_conversation",
@@ -4586,9 +4600,8 @@
         {
           "name": "teammate-ids",
           "type": "string_array",
-          "summary": "One or more destination teammate IDs.",
+          "summary": "Destination teammate IDs; Front declares no array minimum.",
           "maps_to": "record.teammate_ids",
-          "min_items": 1,
           "required": true
         },
         {
@@ -4613,7 +4626,7 @@
       ],
       "risk": "high: fixed Front POST /conversations mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Tasks require exactly one destination. This variant sends teammate-ids and never inbox-id; description and due-at are task-only fields.",
+      "notes": "Tasks require exactly one destination property. This variant sends teammate-ids and never inbox-id; Front declares no teammate-ids array minimum, and description and due-at are task-only fields.",
       "examples": [
         "pm front create-teammate-task --type task --subject 'Fixture task' --teammate-ids tea_fixture_1 --preview --json"
       ]
