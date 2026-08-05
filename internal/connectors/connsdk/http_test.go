@@ -71,6 +71,39 @@ func TestRequesterRetriesOn429ThenSucceeds(t *testing.T) {
 	}
 }
 
+func TestRequesterHonorsProviderRetryAfterBeyondFallbackCap(t *testing.T) {
+	var calls int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if atomic.AddInt32(&calls, 1) == 1 {
+			w.Header().Set("Retry-After", "90")
+			w.WriteHeader(http.StatusTooManyRequests)
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer srv.Close()
+
+	var waits []time.Duration
+	r := &Requester{
+		BaseURL:    srv.URL,
+		MaxRetries: 1,
+		MaxBackoff: 30 * time.Second,
+		Sleep: func(_ context.Context, d time.Duration) error {
+			waits = append(waits, d)
+			return nil
+		},
+	}
+	if _, err := r.Do(context.Background(), http.MethodGet, "/x", nil, nil); err != nil {
+		t.Fatalf("Do: %v", err)
+	}
+	if len(waits) != 1 {
+		t.Fatalf("waits = %v, want one wait", waits)
+	}
+	if got, want := waits[0], 90*time.Second; got != want {
+		t.Fatalf("provider Retry-After wait = %v, want exact %v", got, want)
+	}
+}
+
 // net/http treats a request carrying Idempotency-Key as replayable after some
 // transport failures. DisableRetries is the no-retry contract used by
 // rest_write, so it must remove that implicit retry signal as well as its own
