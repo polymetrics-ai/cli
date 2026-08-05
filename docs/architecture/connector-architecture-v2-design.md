@@ -36,10 +36,10 @@ Follow the Ruby pattern (`connection_specification.json` / `metadata.json` / `sc
 agent-readability (a 60-line schema file, not a 4,000-line manifest), diff hygiene (one stream =
 one file; parallel authoring doesn't conflict), concern separation matching the runtime
 (`spec.json` at connection-setup time, `streams.json` at read time, `writes.json` at reverse-ETL
-time, `api_surface.json` at conformance and disk-backed direct-write endpoint cross-checks,
-`certification.json` only by the certification harness). One deviation from Ruby:
-request/pagination/cursor config is **not** code — it is `streams.json`, interpreted by the
-engine.
+time, `api_surface.json` by authoring validation, conformance, full certification, and disk-backed
+direct-write endpoint cross-checks, `certification.json` only by the certification harness). One
+deviation from Ruby: request/pagination/cursor config is **not** code — it is `streams.json`,
+interpreted by the engine.
 
 ### Layout
 
@@ -52,7 +52,7 @@ internal/connectors/defs/
     spec.json                 // connection specification (JSON Schema draft-07)
     streams.json              // declarative read config: base HTTP + streams
     writes.json               // declarative write actions
-    api_surface.json          // API coverage + disk-backed direct-write endpoint cross-check manifest
+    api_surface.json          // API coverage/provenance manifest (authoring validation, conformance, certification, direct-write cross-checks)
     certification.json        // optional certify defaults, candidates, pairings
     schemas/
       issues.json             // per-stream record schema (draft-07 + x- extensions)
@@ -363,7 +363,7 @@ type Bundle struct {
     Streams  []StreamSpec      // streams.json "streams"
     Writes   []WriteAction     // writes.json (nil if absent)
     Schemas  map[string]*StreamSchema // stream name -> compiled schema + PK/cursor
-    Surface  *APISurface       // api_surface.json (conformance + disk-backed endpoint cross-check)
+    Surface  *APISurface       // api_surface.json (authoring validation, conformance, certification, disk-backed endpoint cross-check)
     Docs     string            // docs.md
     Fixtures fs.FS             // fixtures/ subtree
 }

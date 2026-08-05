@@ -187,12 +187,12 @@ pm connectors certify sample --full --json
 
 `pm connectors list` shows bundle-backed connectors. `pm connectors list --all` and `pm connectors catalog` expose the generated connector catalog with capability metadata, streams, write actions, and schema information.
 
-`pm connectors certify <connector> --full --json` includes an API-surface inventory. Its
-`capabilities.surface.provenance` block reports provider-artifact evidence separately from endpoint
-coverage and connector capabilities: ledger version, artifact count, endpoint count, cited endpoint
-count, and a status. Existing version-1 inventories report `legacy_unverified` during the staged
-migration; invalid version-2 provenance fails certification. Provenance never supplies a
-`covered_by` binding or enables a command.
+From a source checkout, `pm connectors certify <connector> --full --json` includes an API-surface
+inventory. Its `capabilities.surface.provenance` block reports provider-artifact evidence separately
+from endpoint coverage and connector capabilities: ledger version, artifact count, endpoint count,
+cited endpoint count, and a status. Existing version-1 and pre-ledger inventories report
+`legacy_unverified` during the staged migration; invalid version-2 provenance fails certification.
+Provenance never supplies a `covered_by` binding or enables a command.
 
 ## Extract, query, and write
 

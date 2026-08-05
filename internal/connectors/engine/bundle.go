@@ -621,8 +621,8 @@ type DeleteSpec struct {
 	MissingOkStatus []int `json:"missing_ok_status,omitempty"`
 }
 
-// APISurface is the parsed api_surface.json. When present, it supports
-// conformance and disk-backed direct-write endpoint cross-checks.
+// APISurface is the parsed api_surface.json used by authoring validation,
+// conformance, full certification, and disk-backed direct-write endpoint cross-checks.
 type APISurface struct {
 	API                    string            `json:"api"`
 	Docs                   string            `json:"docs,omitempty"`
@@ -634,7 +634,8 @@ type APISurface struct {
 }
 
 // SurfaceArtifact is a provider artifact cited by v2 endpoint provenance.
-// Semantic validation resolves its ID and validates its immutable source data.
+// Semantic validation resolves its ID and checks its URL, retrieval date, and
+// optional digest.
 type SurfaceArtifact struct {
 	ID          string `json:"id"`
 	URL         string `json:"url"`

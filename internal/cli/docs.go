@@ -378,13 +378,14 @@ ACTIONS
     Alias for the human connector manual.
 
   certify <connector>
-    Runs connector certification. With --full --json, the report includes the
-    API-surface inventory and provider-artifact provenance evidence separately
-    from endpoint coverage and connector capabilities. Version-1 ledgers remain
-    legacy_unverified during the staged migration. A complete version-2 ledger
-    reports its ledger version, artifact count, endpoint count, and cited
-    endpoint count; invalid version-2 provenance fails certification without
-    enabling or changing any connector capability.
+    Runs connector certification. With --full --json from a source checkout,
+    the report includes the API-surface inventory and provider-artifact
+    provenance evidence separately from endpoint coverage and connector
+    capabilities. Version-1 and pre-ledger inventories remain legacy_unverified
+    during the staged migration. A complete version-2 ledger reports its ledger
+    version, artifact count, endpoint count, and cited endpoint count; invalid
+    version-2 provenance fails certification without enabling or changing any
+    connector capability.
 
 EXAMPLES
   pm connectors

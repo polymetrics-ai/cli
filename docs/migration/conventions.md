@@ -187,16 +187,10 @@ not a full override by default.
   delivery contract. An absent descriptor is unknown and non-capable. The structural schema is
   `internal/connectors/engine/schema/changefeed.schema.json`; runtime semantic checks live on
   `connectors.ChangefeedDescriptor`.
-- **`api_surface.json` v2 provenance — evidence is parallel to coverage**: when a bundle is
-  migrated to `operation_ledger_version: 2`, add a root `artifacts[]` table with a stable `id`,
-  HTTPS provider artifact `url`, ISO-8601 full-date `retrieved_at`, and an optional provider
-  SHA-256 digest. Every endpoint then declares `provenance.artifact` (resolving to exactly one
-  table row) and an HTTPS `provenance.source_url` for that operation. Do not put provenance in
-  `covered_by`, do not treat it as a capability switch, and do not use it to waive the existing
-  stream/write/implemented-direct-read binding. `operation.source_url` is v1-only; v2 citations
-  are endpoint-local. Existing v1/pre-ledger bundles intentionally stay valid and certify as
-  `legacy_unverified` until the provider-artifact sweep migrates them — do not bulk-edit unrelated
-  bundles or infer artifact evidence from a bare URL.
+- **`api_surface.json` v2 provenance**: follow the authoritative
+  [provider-artifact contract](../architecture/connector-architecture-v2-design.md#version-2-provider-artifact-provenance).
+  Upgrade only bundles in the dedicated provider-artifact sweep; do not bulk-edit unrelated bundles
+  or infer v2 evidence from a bare URL.
 - **`docs.md` required headings** (exact text, `#`/`##` either level; `conformance`'s
   `docs_present` and `connectorgen validate`'s `docs_heading` rule both check presence by trimmed
   text only): `Overview`, `Auth setup`, `Streams notes`, `Write actions & risks`, `Known limits`.
