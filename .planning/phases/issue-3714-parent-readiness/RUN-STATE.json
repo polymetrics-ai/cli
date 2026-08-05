@@ -1,14 +1,33 @@
 {
   "phase": "issue-3714-parent-readiness",
-  "status": "in_progress",
+  "status": "awaiting_parent_ci",
   "verificationPassed": false,
-  "verificationNote": "Full integrated verification has not run yet.",
+  "verificationNote": "Focused local validation passed. verificationPassed remains false until the full CI verify gate succeeds.",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "The canonical delivery contract forbids delegation, and all three worker waves are already integrated; only parent-branch reconciliation remains."
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "The parent initially lacked origin/main; the ancestry assertion supplied the RED evidence before the clean merge supplied GREEN evidence."
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "Merged origin/main into the existing parent branch with no conflicts and regenerated the registered projections through agentcontractgen."
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "Focused tests and scoped gates passed after serial retry; remote full CI is the remaining verification authority."
+    },
+    {
+      "cycle": "review",
+      "decision": "local_critical_path",
+      "reason": "No local conflict resolution changed code or generated projections; the review artifact records the clean merge and pending automated parent review route."
     }
   ]
 }
-

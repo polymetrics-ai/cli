@@ -2,10 +2,10 @@
 
 | ID | Contract | RED evidence | GREEN evidence | Refactor / verification |
 |---|---|---|---|---|
-| R1 | Parent PR head contains current `origin/main` | Pending: `git merge-base --is-ancestor origin/main HEAD` must exit nonzero before integration | Pending: the same command exits zero after merging `origin/main` into the existing parent branch | `git log` records the three mainline commits beneath the parent head |
-| R2 | Every required Codex, Claude, and Pi projection matches the canonical source | Pending only if the post-merge drift check detects divergence; no projection will be edited by hand | `go run ./cmd/agentcontractgen sync` then `go run ./cmd/agentcontractgen check` succeeds | Focused generator tests preserve complete three-harness coverage |
-| R3 | Mainline destructive-write confirmation behavior survives the integration | Pending conflict/path inspection; no deliberate regression is introduced | Focused tests from the #3730 merge path pass on the integrated head | Broader parent/CI verification remains green |
+| R1 | Parent PR head contains current `origin/main` | `git merge-base --is-ancestor origin/main HEAD` exited nonzero before integration | `git merge --no-edit origin/main` created `fc99e1836`; the ancestry assertion then exited zero | `git log` shows #3730, #3731, and #3726 beneath the parent merge commit |
+| R2 | Every required Codex, Claude, and Pi projection matches the canonical source | No drift was found to repair; projections were not edited by hand | `go run ./cmd/agentcontractgen sync` synchronized `0` projections; `go run ./cmd/agentcontractgen check` passed | `go test ./internal/agentcontract ./cmd/agentcontractgen` passed after a serial retry |
+| R3 | Mainline destructive-write confirmation behavior survives the integration | Integration used Git's clean `ort` merge; no #3730 path or test was altered by conflict resolution | `go test -p 1 ./internal/app`, the focused CLI tests, `./internal/connectors`, and `./internal/connectors/engine` passed | `go vet` on affected packages, connector gates, lint, docs validation, and smoke passed; remote full CI remains pending |
 
-Only executed results will replace `Pending`; no pass result is inferred from the pre-integration
-parent CI run.
-
+The initial parallel focused-test attempt ran out of temporary disk space. After the volume was
+restored, fresh serial retries passed; the capacity error is not recorded as a product failure.
+Remote parent CI is still required before readiness is claimed.
