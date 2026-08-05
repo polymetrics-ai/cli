@@ -14,7 +14,7 @@ must have fresh red validation evidence before its production edit.
 | Front conformance | `go test ./internal/connectors/conformance/... -run 'TestConformance/front'` | exposes replay/schema/write-shape regressions | green after promotion |
 | binary promotion | focused Front validation + commandrunner preflight before edits | current `planned` binary rows demonstrate the gap to close | green: five `binary_download` commands are implemented |
 | citation convention | field matrix audit against provider docs | every request field cited or tier-5 deferred | research complete: 933 declared fields cited; 15 body-absence findings recorded |
-| CLI registration | `go test ./internal/cli/...` | generated help must include the recovered Front namespace | red: root golden transcripts omitted Front; deterministic regeneration produced the expected fixture; focused green test passed |
+| CLI registration | `go test ./internal/cli/...` | generated help must include the recovered Front namespace | green: root goldens regenerated and the full suite passed |
 
 ## Green evidence
 
@@ -27,3 +27,6 @@ must have fresh red validation evidence before its production edit.
 | binary promotion (green) | `go run ./cmd/connectorgen surface-sync --check && go run ./cmd/connectorgen validate internal/connectors/defs/front && go test ./internal/connectors/conformance/... -run 'TestConformance/front' -count=1 && go test ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1` | pass | Surface synchronization reported zero drift; Front had zero validator findings; focused conformance and current-main runtime preflight both passed after five binary promotions. |
 | CLI registration (red) | `go test ./internal/cli/... -count=1` | expected fail | Root golden transcripts did not contain the newly recovered `pm front` dynamic namespace; no implementation error or runtime blocker was reported. |
 | CLI registration (green) | `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test ./internal/cli -run TestGoldenTranscripts -count=1` | pass | Regenerated exactly nine root transcript entries to include Front; the focused golden suite passed in 34.432s. A full focused CLI rerun remains a final gate. |
+| CLI registration (final green) | `go test ./internal/cli/... -count=1` | pass | Full focused CLI suite passed in 418.708s after the deterministic golden regeneration. |
+| generated docs / website | `go run ./cmd/pm docs generate --dir docs/cli && go run ./cmd/pm docs validate --connectors-dir docs/connectors && cd website && pnpm run gen:website-data` | pass | Front manuals and catalog data regenerated. The generator's unrelated Amazon SQS text drift was explicitly excluded from this connector-owned slice. |
+| built CLI smoke | built `pm`: `pm help front`, `pm front`, `pm front --help`, binary command help, and `pm connectors inspect front --json` | pass | All expected Front command surfaces render; an isolated temporary project reaches the no-credential boundary without a provider request. |
