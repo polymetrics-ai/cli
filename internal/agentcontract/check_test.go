@@ -5,6 +5,7 @@ import (
 	"context"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"testing"
 
@@ -53,33 +54,44 @@ func TestProjectionDriftCheckAndSync(t *testing.T) {
 	contract := loadRepositoryContract(t, repository)
 
 	root := t.TempDir()
-	writeCodexProjections(t, root, contract)
-	path := filepath.Join(root, filepath.FromSlash(contract.Projections[0].Path))
-	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
-		t.Fatal(err)
+	updated, err := SyncProjections(root, contract)
+	if err != nil {
+		t.Fatalf("SyncProjections creates required projections: %v", err)
 	}
-	want, err := RenderBlock(contract, contract.BaseRole.Name)
+	if updated != 4 {
+		t.Fatalf("SyncProjections created %d projections, want 4", updated)
+	}
+	if err := CheckProjections(root, contract); err != nil {
+		t.Fatalf("matching projections failed: %v", err)
+	}
+
+	var claude ProjectionTarget
+	for _, target := range contract.Projections {
+		if target.Harness == "claude" {
+			claude = target
+			break
+		}
+	}
+	if claude.Path == "" {
+		t.Fatal("canonical contract does not register a Claude projection")
+	}
+	path := filepath.Join(root, filepath.FromSlash(claude.Path))
+	content, err := os.ReadFile(path)
 	if err != nil {
 		t.Fatal(err)
 	}
-	wrapper := append([]byte("---\nname: pm-delivery-worker\n---\n\n"), want...)
-	wrapper = append(wrapper, []byte("\nharness-owned footer\n")...)
-	if err := os.WriteFile(path, wrapper, 0o644); err != nil {
-		t.Fatal(err)
+	diverged := strings.Replace(string(content), "    - Bash", "    - Agent\n    - Bash", 1)
+	if diverged == string(content) {
+		t.Fatal("test fixture did not add Agent to the Claude tools allowlist")
 	}
-	if err := CheckProjections(root, contract); err != nil {
-		t.Fatalf("matching projection failed: %v", err)
-	}
-
-	diverged := strings.Replace(string(wrapper), "Receive one assigned job", "Receive many jobs", 1)
 	if err := os.WriteFile(path, []byte(diverged), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	if err := CheckProjections(root, contract); err == nil {
-		t.Fatal("CheckProjections accepted a diverged registered projection")
+		t.Fatal("CheckProjections accepted a Claude worker that grants Agent and can delegate to an ambient agent")
 	}
 
-	updated, err := SyncProjections(root, contract)
+	updated, err = SyncProjections(root, contract)
 	if err != nil {
 		t.Fatalf("SyncProjections: %v", err)
 	}
@@ -89,23 +101,42 @@ func TestProjectionDriftCheckAndSync(t *testing.T) {
 	if err := CheckProjections(root, contract); err != nil {
 		t.Fatalf("projection did not pass after sync: %v", err)
 	}
+	restored, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	frontmatter, err := parseClaudeFrontmatter(restored)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if slices.Contains(frontmatter.Tools, "Agent") {
+		t.Fatalf("sync did not remove Agent from the canonical tools allowlist: %#v", frontmatter.Tools)
+	}
 }
 
-func TestOptionalNonCodexProjectionsMayBeAbsent(t *testing.T) {
+func TestOptionalPiProjectionsMayBeAbsent(t *testing.T) {
 	contract := loadRepositoryContract(t, repositoryRoot(t))
 	root := t.TempDir()
 	if err := CheckProjections(root, contract); err == nil {
-		t.Fatal("CheckProjections accepted a root without the required Codex projections")
+		t.Fatal("CheckProjections accepted a root without required Claude and Codex projections")
 	}
 	updated, err := SyncProjections(root, contract)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if updated != 2 {
-		t.Fatalf("SyncProjections updated %d files, want the two required Codex projections", updated)
+	if updated != 4 {
+		t.Fatalf("SyncProjections updated %d files, want the four required Claude and Codex projections", updated)
 	}
 	if err := CheckProjections(root, contract); err != nil {
-		t.Fatalf("optional non-Codex projections should remain absent: %v", err)
+		t.Fatalf("optional Pi projections should remain absent: %v", err)
+	}
+	for _, target := range contract.Projections {
+		if target.Harness != "pi" {
+			continue
+		}
+		if _, err := os.Stat(filepath.Join(root, filepath.FromSlash(target.Path))); !os.IsNotExist(err) {
+			t.Fatalf("optional projection %s exists after sync: %v", target.Path, err)
+		}
 	}
 }
 
@@ -177,7 +208,13 @@ func codexCanDelegateToAmbientAgent(configuration *viper.Viper, ambientAgent str
 func TestCodexProjectionDriftRejectsDelegationRegression(t *testing.T) {
 	contract := loadRepositoryContract(t, repositoryRoot(t))
 	root := t.TempDir()
-	writeCodexProjections(t, root, contract)
+	updated, err := SyncProjections(root, contract)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if updated != 4 {
+		t.Fatalf("SyncProjections created %d projections, want 4", updated)
+	}
 
 	var target ProjectionTarget
 	for _, candidate := range contract.Projections {
@@ -201,7 +238,7 @@ func TestCodexProjectionDriftRejectsDelegationRegression(t *testing.T) {
 		t.Fatal("CheckProjections accepted a Codex worker with ambient delegation enabled")
 	}
 
-	updated, err := SyncProjections(root, contract)
+	updated, err = SyncProjections(root, contract)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -223,67 +260,62 @@ func parseCodexProjection(t *testing.T, content []byte) *viper.Viper {
 	return configuration
 }
 
-func writeCodexProjections(t *testing.T, root string, contract *Contract) {
-	t.Helper()
-	for _, target := range contract.Projections {
-		if target.Harness != "codex" {
-			continue
-		}
-		content, err := RenderProjection(contract, target)
-		if err != nil {
-			t.Fatal(err)
-		}
-		path := filepath.Join(root, filepath.FromSlash(target.Path))
-		if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
-			t.Fatal(err)
-		}
-		if err := os.WriteFile(path, content, 0o644); err != nil {
-			t.Fatal(err)
-		}
-	}
-}
-
 func TestProjectionIORejectsSymlinkEscape(t *testing.T) {
 	contract := loadRepositoryContract(t, repositoryRoot(t))
+	for _, harness := range []string{"claude", "codex"} {
+		t.Run(harness, func(t *testing.T) {
+			root := t.TempDir()
+			outside := t.TempDir()
+			original := make(map[string][]byte)
 
-	root := t.TempDir()
-	outside := t.TempDir()
-	original := make(map[string][]byte)
-	for _, target := range contract.Projections {
-		if target.Harness != "codex" {
-			continue
-		}
-		content, err := RenderProjection(contract, target)
-		if err != nil {
-			t.Fatal(err)
-		}
-		escapedPath := filepath.Join(outside, "agents", filepath.Base(target.Path))
-		if err := os.MkdirAll(filepath.Dir(escapedPath), 0o755); err != nil {
-			t.Fatal(err)
-		}
-		if err := os.WriteFile(escapedPath, content, 0o644); err != nil {
-			t.Fatal(err)
-		}
-		original[escapedPath] = content
-	}
-	if err := os.Symlink(outside, filepath.Join(root, ".codex")); err != nil {
-		t.Skipf("cannot create projection ancestor symlink: %v", err)
-	}
+			for _, target := range contract.Projections {
+				content, err := RenderProjection(contract, target)
+				if err != nil {
+					t.Fatal(err)
+				}
+				if target.Harness == harness {
+					relative := strings.TrimPrefix(target.Path, "."+harness+"/")
+					escapedPath := filepath.Join(outside, filepath.FromSlash(relative))
+					if err := os.MkdirAll(filepath.Dir(escapedPath), 0o755); err != nil {
+						t.Fatal(err)
+					}
+					if err := os.WriteFile(escapedPath, content, 0o644); err != nil {
+						t.Fatal(err)
+					}
+					original[escapedPath] = content
+					continue
+				}
+				if !target.Required {
+					continue
+				}
+				path := filepath.Join(root, filepath.FromSlash(target.Path))
+				if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+					t.Fatal(err)
+				}
+				if err := os.WriteFile(path, content, 0o644); err != nil {
+					t.Fatal(err)
+				}
+			}
 
-	if err := CheckProjections(root, contract); err == nil {
-		t.Fatal("CheckProjections followed a projection ancestor outside the selected root")
-	}
-	if _, err := SyncProjections(root, contract); err == nil {
-		t.Fatal("SyncProjections followed a projection ancestor outside the selected root")
-	}
-	for escapedPath, content := range original {
-		after, err := os.ReadFile(escapedPath)
-		if err != nil {
-			t.Fatal(err)
-		}
-		if !bytes.Equal(after, content) {
-			t.Fatal("SyncProjections modified a projection outside the selected root")
-		}
+			if err := os.Symlink(outside, filepath.Join(root, "."+harness)); err != nil {
+				t.Skipf("cannot create projection ancestor symlink: %v", err)
+			}
+			if err := CheckProjections(root, contract); err == nil {
+				t.Fatal("CheckProjections followed a projection ancestor outside the selected root")
+			}
+			if _, err := SyncProjections(root, contract); err == nil {
+				t.Fatal("SyncProjections followed a projection ancestor outside the selected root")
+			}
+			for escapedPath, content := range original {
+				after, err := os.ReadFile(escapedPath)
+				if err != nil {
+					t.Fatal(err)
+				}
+				if !bytes.Equal(after, content) {
+					t.Fatal("SyncProjections modified a projection outside the selected root")
+				}
+			}
+		})
 	}
 }
 

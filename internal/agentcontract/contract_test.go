@@ -29,6 +29,24 @@ func TestCanonicalContractRequiredInvariants(t *testing.T) {
 			},
 		},
 		{
+			name: "Claude tools include Agent",
+			mutate: func(value *Contract) {
+				value.HarnessPolicies[0].Tools = append(value.HarnessPolicies[0].Tools, "Agent")
+			},
+		},
+		{
+			name: "Claude precedence skips project",
+			mutate: func(value *Contract) {
+				value.HarnessPolicies[0].Precedence[2] = "user ~/.claude/agents"
+			},
+		},
+		{
+			name: "Claude project projection optional",
+			mutate: func(value *Contract) {
+				value.Projections[0].Required = false
+			},
+		},
+		{
 			name: "connector does not inherit base",
 			mutate: func(value *Contract) {
 				value.ConnectorOverlay.Inherits = "other-role"

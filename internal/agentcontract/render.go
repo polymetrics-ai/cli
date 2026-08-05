@@ -103,6 +103,15 @@ func RenderProjection(contract *Contract, target ProjectionTarget) ([]byte, erro
 			return nil, fmt.Errorf("canonical contract: standalone_toml render mode requires the Codex harness")
 		}
 		return renderCodexProjection(contract, target.Role)
+	case claudeMarkdownYAMLFrontmatter:
+		if target.Harness != "claude" {
+			return nil, fmt.Errorf("canonical contract: markdown_yaml_frontmatter render mode requires the Claude harness")
+		}
+		policy, ok := contract.HarnessPolicyFor(target.Harness)
+		if !ok {
+			return nil, fmt.Errorf("canonical contract: Claude harness policy is missing")
+		}
+		return renderClaudeProjection(contract, target, policy)
 	default:
 		return nil, fmt.Errorf("canonical contract: unknown projection render mode %q", target.RenderMode)
 	}
