@@ -71,8 +71,9 @@ func TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides(t *testing.T) {
 	if !ok {
 		t.Fatal("registry missing google-calendar")
 	}
-	if _, ok := googleCalendar.(*engine.Connector); !ok {
-		t.Fatalf("google-calendar registry type = %T, want engine-backed connector", googleCalendar)
+	googleCalendarDefinition, ok := connectors.DefinitionOf(googleCalendar)
+	if !ok || len(googleCalendarDefinition.WriteActions) != 26 {
+		t.Fatalf("google-calendar definition = %+v, want 26 engine-backed write actions", googleCalendarDefinition)
 	}
 	googleCalendarSurface, ok := googleCalendar.(connectors.CommandSurfaceProvider)
 	if !ok || googleCalendarSurface.CommandSurface() == nil {
