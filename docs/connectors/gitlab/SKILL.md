@@ -7,7 +7,7 @@ description: GitLab connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads GitLab projects, groups, users, and issues through the GitLab REST API v4.
+Reads GitLab projects, groups, users, and issues through existing GitLab REST API v4 ETL streams; its provider-owned ledger records the full published surface, but G1 declares no write command.
 
 ## Icon
 
@@ -19,7 +19,7 @@ Reads GitLab projects, groups, users, and issues through the GitLab REST API v4.
 
 ## Capabilities
 
-- check=true catalog=true read=true write=false query=false
+- check=true catalog=true read=true write=true query=false
 - Integration type: api
 
 ## Authentication
@@ -60,7 +60,30 @@ Reads GitLab projects, groups, users, and issues through the GitLab REST API v4.
 ## Security
 
 - read risk: external GitLab API read of projects, groups, users, and issues
+- write risk: GitLab publishes mutation endpoints, but this G1 bundle declares no executable write actions.
+- approval: Any future GitLab write must use the standard plan, preview, explicit approval, and execute flow; no GitLab writes are executable in this wave.
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+## Command Surface
+
+- Read the four existing GitLab ETL streams through typed commands.
+- Usage: pm gitlab <command> [flags]
+- Source CLI: GitLab REST API v4 (Official OpenAPI 3.0.0, info.version 19.3.0-pre, retrieved 2026-08-05)
+- Global flags:
+  - --credential (string): Credential name to use for the GitLab request.
+  - --connection (string): Alias for --credential.
+  - --config (string_array): Connector config override as key=value; never pass secret values here.
+  - --json (boolean): Emit machine-readable JSON output.
+  - --limit (integer): Maximum records to emit from a stream command.
+- ETL streams
+  - projects list - List GitLab projects as ETL records. [intent=etl availability=implemented stream=projects]
+  - groups list - List GitLab groups as ETL records. [intent=etl availability=implemented stream=groups]
+  - users list - List GitLab users as ETL records. [intent=etl availability=implemented stream=users]
+  - issues list - List GitLab issues as ETL records. [intent=etl availability=implemented stream=issues]
+- Help topics:
+  - authentication - Store GitLab access tokens with pm credentials; never pass secret values in command text.
+  - operation-inventory - The provider-owned GitLab OpenAPI v3 ledger records all 1,745 callable operations; this wave exposes only the four existing stream reads.
+  - known-limits - Of 1,745 inventoried operations, 4 are executable here; 1,618 need connector declarations, 45 need the multipart/file-upload foundation, 64 are provider-restricted, and 14 are deprecated exclusions.
 
 ## Commands
 

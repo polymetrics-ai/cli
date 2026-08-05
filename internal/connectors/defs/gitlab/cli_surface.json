@@ -1,0 +1,137 @@
+{
+  "tagline": "Read the four existing GitLab ETL streams through typed commands.",
+  "usage": "pm gitlab <command> [flags]",
+  "source_cli": {
+    "name": "GitLab REST API v4",
+    "docs": "https://docs.gitlab.com/api/openapi/",
+    "reference": "Official OpenAPI 3.0.0, info.version 19.3.0-pre, retrieved 2026-08-05",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "streams",
+      "title": "ETL streams",
+      "commands": [
+        "projects",
+        "groups",
+        "users",
+        "issues"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential name to use for the GitLab request."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential."
+    },
+    {
+      "name": "config",
+      "type": "string_array",
+      "summary": "Connector config override as key=value; never pass secret values here."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum records to emit from a stream command."
+    }
+  ],
+  "commands": [
+    {
+      "path": "projects list",
+      "summary": "List GitLab projects as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "projects",
+      "source_cli_path": "GET /projects",
+      "source_url": "https://docs.gitlab.com/api/projects/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects"
+        }
+      ],
+      "examples": [
+        "pm gitlab projects list --json --limit 25"
+      ]
+    },
+    {
+      "path": "groups list",
+      "summary": "List GitLab groups as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "groups",
+      "source_cli_path": "GET /groups",
+      "source_url": "https://docs.gitlab.com/api/groups/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups"
+        }
+      ],
+      "examples": [
+        "pm gitlab groups list --json --limit 25"
+      ]
+    },
+    {
+      "path": "users list",
+      "summary": "List GitLab users as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_cli_path": "GET /users",
+      "source_url": "https://docs.gitlab.com/api/users/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ],
+      "examples": [
+        "pm gitlab users list --json --limit 25"
+      ]
+    },
+    {
+      "path": "issues list",
+      "summary": "List GitLab issues as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "issues",
+      "source_cli_path": "GET /issues",
+      "source_url": "https://docs.gitlab.com/api/issues/",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/issues"
+        }
+      ],
+      "examples": [
+        "pm gitlab issues list --json --limit 25"
+      ]
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "authentication",
+      "summary": "Store GitLab access tokens with pm credentials; never pass secret values in command text."
+    },
+    {
+      "name": "operation-inventory",
+      "summary": "The provider-owned GitLab OpenAPI v3 ledger records all 1,745 callable operations; this wave exposes only the four existing stream reads."
+    },
+    {
+      "name": "known-limits",
+      "summary": "Of 1,745 inventoried operations, 4 are executable here; 1,618 need connector declarations, 45 need the multipart/file-upload foundation, 64 are provider-restricted, and 14 are deprecated exclusions."
+    }
+  ]
+}
