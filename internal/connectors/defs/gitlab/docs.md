@@ -70,5 +70,6 @@ use plan, preview, explicit approval, and execute. Output is not redacted by thi
   `GET /issues`).
 - Remaining provider operations: 1,618 need connector-owned declarations; 45 are blocked on the
   named multipart/file-upload operation foundation; 64 are provider-restricted; and 14 are deprecated
-  justified exclusions. Each disposition and source citation is in `api_surface.json`.
+  justified exclusions. Each disposition is in `api_surface.json`; the four G1 command citations are
+  in `cli_surface.json`.
 - The next planned wave is a bounded collaboration read slice (no more than 20 operations).

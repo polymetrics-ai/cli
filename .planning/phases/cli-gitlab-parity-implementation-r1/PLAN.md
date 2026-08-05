@@ -23,7 +23,7 @@
 - Land the corrected 1,745-row provider-owned `api_surface.json` first as a commit containing only that file.
 - Preserve report classifications exactly: 4 executable stream reads, 1,618 implementable-now rows blocked pending GitLab-owned declarations, 64 provider-restriction rows, 45 rows blocked on the named operation-level multipart/file-upload executor, and 14 deprecated justified exclusions.
 - G1 adds definition-owned CLI/help metadata only for existing `projects`, `groups`, `users`, and `issues` streams. It must not add provider operations, writes, generic request surfaces, credentials, or live calls.
-- Metadata must state `capabilities.write: true` after the inventory lands because the v1 ledger contains provider writes; this does not claim any write action or command is executable.
+- `capabilities.write` remains `false` until a GitLab write action is executable; metadata records the provider mutation surface in `risk.write` without advertising an executable write.
 - No output redaction declaration is added merely to satisfy a validator. There are no direct-read or write commands in G1.
 
 ## TDD slices
