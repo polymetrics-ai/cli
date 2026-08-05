@@ -628,29 +628,13 @@ type DeleteSpec struct {
 // APISurface is the parsed api_surface.json. When present, it supports
 // conformance and disk-backed direct-write endpoint cross-checks.
 type APISurface struct {
-	API                           string            `json:"api"`
-	Docs                          string            `json:"docs,omitempty"`
-	ReviewedAt                    string            `json:"reviewed_at,omitempty"`
-	OperationLedgerVersion        int               `json:"operation_ledger_version,omitempty"`
-	Scope                         string            `json:"scope,omitempty"`
-	Artifacts                     []SurfaceArtifact `json:"artifacts,omitempty"`
-	Endpoints                     []SurfaceEndpoint `json:"endpoints"`
-	operationLedgerVersionPresent bool
-}
-
-func (surface *APISurface) UnmarshalJSON(raw []byte) error {
-	type decodedAPISurface APISurface
-	var decoded decodedAPISurface
-	if err := strictDecode(raw, &decoded); err != nil {
-		return err
-	}
-	var fields map[string]json.RawMessage
-	if err := json.Unmarshal(raw, &fields); err != nil {
-		return err
-	}
-	*surface = APISurface(decoded)
-	_, surface.operationLedgerVersionPresent = fields["operation_ledger_version"]
-	return nil
+	API                    string            `json:"api"`
+	Docs                   string            `json:"docs,omitempty"`
+	ReviewedAt             string            `json:"reviewed_at,omitempty"`
+	OperationLedgerVersion int               `json:"operation_ledger_version,omitempty"`
+	Scope                  string            `json:"scope,omitempty"`
+	Artifacts              []SurfaceArtifact `json:"artifacts,omitempty"`
+	Endpoints              []SurfaceEndpoint `json:"endpoints"`
 }
 
 // SurfaceArtifact is a provider artifact cited by v2 endpoint provenance.
@@ -2319,6 +2303,17 @@ func loadStreamSchemas(sub fs.FS, dirName string, streams []StreamSpec) (map[str
 	return out, nil
 }
 
+func ParseAPISurface(raw []byte) (APISurface, error) {
+	if err := metaSchemas.apiSurface.Validate(mustDecodeAny(raw)); err != nil {
+		return APISurface{}, err
+	}
+	var surface APISurface
+	if err := strictDecode(raw, &surface); err != nil {
+		return APISurface{}, err
+	}
+	return surface, nil
+}
+
 func loadAPISurface(sub fs.FS, dirName string) (*APISurface, error) {
 	if !fileExists(sub, "api_surface.json") {
 		return nil, nil
@@ -2327,11 +2322,8 @@ func loadAPISurface(sub fs.FS, dirName string) (*APISurface, error) {
 	if err != nil {
 		return nil, fmt.Errorf("load bundle %s: %w", dirName, err)
 	}
-	if err := metaSchemas.apiSurface.Validate(mustDecodeAny(raw)); err != nil {
-		return nil, fmt.Errorf("load bundle %s: api_surface.json: %w", dirName, err)
-	}
-	var surface APISurface
-	if err := strictDecode(raw, &surface); err != nil {
+	surface, err := ParseAPISurface(raw)
+	if err != nil {
 		return nil, fmt.Errorf("load bundle %s: api_surface.json: %w", dirName, err)
 	}
 	return &surface, nil
