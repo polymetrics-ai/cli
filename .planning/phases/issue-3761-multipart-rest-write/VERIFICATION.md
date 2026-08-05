@@ -12,8 +12,10 @@ worker brief reserves that for a firstmate instruction.
   tests, and the two connector architecture docs.
 - No `internal/connectors/defs/**` provider adoption or generated artifacts.
 - `commandrunner/runner.go` remains unchanged. #3777 demonstrated its needed
-  runtime gap at the engine metadata boundary: a nil `api_surface` now fails
-  the real preflight path rather than minting an implemented command claim.
+  runtime gap at the engine metadata boundary: no available endpoint
+  declaration now fails the real preflight path rather than minting an
+  implemented command claim. The shipped-registry regression covers the
+  projection derived from embedded `rest_write` declarations.
 
 ## GSD evidence
 

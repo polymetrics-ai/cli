@@ -23,10 +23,11 @@ loopback tests were reviewed inline against the parent and child contracts.
    therefore reached preview without an approved digest. The retained red test
    failed with that error; the fix exports the closed multipart file-field list
    through direct-write metadata and hashes only those exact declared fields.
-2. `OperationDirectWriteMetadata` accepted a bundle with no `api_surface`,
-   allowing the real `commandrunner.Preflight` path to accept a provenance-free
+2. `OperationDirectWriteMetadata` accepted a fixture with no endpoint
+   declaration, allowing the real `commandrunner.Preflight` path to accept an
    implemented command. The retained red mutation set `bundle.Surface = nil`;
-   the engine now rejects it before preflight can pass.
+   the engine now rejects it before preflight can pass. The shipped-registry
+   regression keeps the operations-derived endpoint projection covered.
 3. Lint found one ignored test-file close result. The loopback fixture now
    explicitly discards that cleanup error; `make lint` is clean.
 

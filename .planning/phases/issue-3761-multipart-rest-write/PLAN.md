@@ -92,8 +92,8 @@ Branch: `fm/cli-found-multipart-writes-r1`.
    fails before the dispatcher exists.
 2. GREEN: prove the real `commandrunner.Preflight` and App/engine/requester
    path succeeds only with the closed contract and approved payload digest.
-3. REFACTOR: retain deliberate mutations proving legacy `file_upload`, absent
-   api-surface endpoint, unbounded response, missing source/cap, or disabled
+3. REFACTOR: retain deliberate mutations proving legacy `file_upload`, a missing
+   endpoint declaration, unbounded response, missing source/cap, or disabled
    dispatch cannot advertise `availability: implemented`.
 
 ## Verification checklist

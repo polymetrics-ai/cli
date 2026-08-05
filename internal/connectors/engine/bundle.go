@@ -35,14 +35,14 @@ type Bundle struct {
 	Operations         []OperationSpec                  // operations.json "operations"; nil when operations.json absent
 	RawOperations      json.RawMessage                  // verbatim operations.json bytes for validation/audit scanning
 	Schemas            map[string]*StreamSchema         // stream name -> compiled schema + PK/cursor
-	Surface            *APISurface                      // api_surface.json
-	directWriteSurface *APISurface
-	CLISurface         *CLISurface        // cli_surface.json
-	RawCLISurface      json.RawMessage    // verbatim cli_surface.json bytes; nil when absent
-	Certification      *CertificationSpec // certification.json; nil when absent
-	RawCertification   json.RawMessage    // verbatim certification.json bytes; nil when absent
-	Docs               string             // docs.md
-	Fixtures           fs.FS              // fixtures/ subtree; nil when absent
+	Surface            *APISurface                      // api_surface.json, when available on disk
+	directWriteSurface *APISurface                      // runtime projection from shipped rest_write declarations
+	CLISurface         *CLISurface                      // cli_surface.json
+	RawCLISurface      json.RawMessage                  // verbatim cli_surface.json bytes; nil when absent
+	Certification      *CertificationSpec               // certification.json; nil when absent
+	RawCertification   json.RawMessage                  // verbatim certification.json bytes; nil when absent
+	Docs               string                           // docs.md
+	Fixtures           fs.FS                            // fixtures/ subtree; nil when absent
 }
 
 // Metadata is the parsed metadata.json.
@@ -621,7 +621,7 @@ type DeleteSpec struct {
 }
 
 // APISurface is the parsed api_surface.json. When present, it supports
-// conformance and direct-write endpoint provenance checks.
+// conformance and disk-backed direct-write endpoint cross-checks.
 type APISurface struct {
 	API                    string            `json:"api"`
 	Docs                   string            `json:"docs,omitempty"`
@@ -1013,11 +1013,12 @@ func init() {
 // bundle's directory, excepting streams.json (conditionally required).
 //
 // api_surface.json is intentionally not required here. Production defs.FS
-// excludes it to keep cmd/pm small, while embedded rest_write definitions retain
-// the limited endpoint shape needed by direct-write preflight. When the file is
-// present, loadAPISurface parses and validates it, and direct-write preflight
-// checks its operation provenance so disk-backed validation keeps the full
-// coverage gate.
+// excludes it to keep cmd/pm small. Shipped direct-write endpoint validation is
+// derived only from embedded rest_write declarations, so it checks internal
+// declaration consistency rather than provider documented-surface provenance;
+// #3773 owns that separate per-operation foundation. When the file is present,
+// loadAPISurface parses and validates it, and disk-backed direct-write
+// preflight cross-checks the matching operation row for the full coverage gate.
 var requiredFiles = []string{"metadata.json", "spec.json", "docs.md"}
 
 // LoadAllError is the structured error LoadAll returns whenever one or more
@@ -1210,6 +1211,9 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 	}, nil
 }
 
+// deriveDirectWriteSurface builds the shipped runtime endpoint check solely
+// from rest_write declarations. It verifies internal declaration consistency,
+// not provider documented-surface provenance; #3773 owns that evidence model.
 func deriveDirectWriteSurface(operations []OperationSpec) *APISurface {
 	endpoints := make([]SurfaceEndpoint, 0)
 	for _, op := range operations {

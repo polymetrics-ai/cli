@@ -277,7 +277,7 @@ func TestRequesterDoMultipartEncodesFileAndAuth(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Open part: %v", err)
 		}
-		defer f.Close()
+		defer func() { _ = f.Close() }()
 		raw, _ := io.ReadAll(f)
 		sawFile = string(raw)
 		_, _ = w.Write([]byte(`{"ok":true}`))

@@ -44,19 +44,21 @@ connectors:
 | `writes.json` | 223 | 6,787,703 | yes | Reverse ETL write actions |
 | `schemas/*.json` | 6,791 | 7,402,300 | yes | Stream catalog, projection, primary keys, cursors, sync modes |
 | `docs.md` | 547 | 5,304,487 | yes | Human/agent connector manuals and docs checks |
-| `api_surface.json` | 547 | 7,045,880 | no | Authoring/conformance coverage; disk-backed direct-write provenance |
+| `api_surface.json` | 547 | 7,045,880 | no | Authoring/conformance coverage; disk-backed direct-write endpoint cross-check |
 | `fixtures/**` | 13,367 | 22,496,157 | no | Conformance replay only |
 
 Runtime raw embedded defs data is now about 23.82 MB. Non-embedded conformance,
-provenance, and replay data left out of `cmd/pm` is about 29.54 MB. The full
+coverage, and replay data left out of `cmd/pm` is about 29.54 MB. The full
 on-disk defs tree remains available for validation and tests.
 
 ## Validation boundary
 
 The engine loader now treats `api_surface.json` as optional in the embedded
 runtime bundle. When the file is present in a disk-backed bundle, the loader
-parses and validates it, and direct-write preflight can check endpoint
-provenance against it.
+parses and validates it, and direct-write preflight cross-checks the matching
+operation row. Shipped builds instead derive endpoint validation from their own
+`rest_write` declarations; the provenance limitation is documented in the
+connector authoring convention.
 
 `connectorgen validate internal/connectors/defs` remains strict: a bundle missing
 `api_surface.json` is still reported as an authoring/conformance failure. The

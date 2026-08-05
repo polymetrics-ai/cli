@@ -408,7 +408,7 @@ func TestMultipartDirectWriteCommandPreflightPlanPreviewApprovalAndExecute(t *te
 		if err != nil {
 			t.Fatalf("Open attachment: %v", err)
 		}
-		defer file.Close()
+		defer func() { _ = file.Close() }()
 		body, err := io.ReadAll(file)
 		if err != nil {
 			t.Fatalf("ReadAll attachment: %v", err)

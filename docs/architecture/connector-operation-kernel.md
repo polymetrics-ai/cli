@@ -92,12 +92,14 @@ decides before any network or filesystem access:
   then by the engine's own ceiling.
 - `intent:"direct_write"` with `availability:"implemented"` can enter the
   plan → preview → approval → execute lifecycle for one declared `rest_write`
-  operation. Disk-backed bundles verify the operation's fixed method/path
-  against an `api_surface.json` operation entry; production uses the limited
-  endpoint shape derived from embedded `rest_write` metadata because
-  `api_surface.json` is not embedded. Command preflight requires one
-  connector-relative mutating API-surface endpoint. `commandrunner` never
-  dispatches the write directly.
+  operation. Disk-backed bundles cross-check the operation's fixed method/path
+  against an `api_surface.json` operation entry. Shipped builds derive endpoint
+  validation only from embedded `rest_write` declarations because
+  `api_surface.json` is not embedded; that proves internal declaration
+  consistency, not provider documented-surface provenance. #3773 owns the
+  separate per-operation `api_surface` provenance foundation. Command preflight
+  requires one connector-relative mutating endpoint declaration.
+  `commandrunner` never dispatches the write directly.
 - Every other command that references an `operation` returns a blocked command
   error naming the operation ID and explaining that its executor is not
   implemented. This fail-closed default is deliberate: it lets docs, validation,

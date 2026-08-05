@@ -42,8 +42,8 @@ coverage:
 - Reused the established multipart canonical preview and transport path for
   bounded, single-attempt direct writes.
 - Bound direct command plans to exactly the declaration-owned file paths,
-  including fields not named `file_path`, and fail closed without API-surface
-  provenance.
+  including fields not named `file_path`, and fail closed without an available
+  endpoint declaration.
 - Documented the shared contract, with connector adoption and CLI parity left
   to provider lanes.
 

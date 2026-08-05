@@ -388,6 +388,8 @@ func isOperationDirectWriteMethod(method string) bool {
 func requireOperationDirectWriteEndpoint(b Bundle, method, endpointPath string) error {
 	surface := b.Surface
 	if surface == nil {
+		// defs.FS omits api_surface.json. The runtime fallback is the endpoint
+		// projection derived from its own shipped rest_write declarations.
 		surface = b.directWriteSurface
 	}
 	if surface == nil {
