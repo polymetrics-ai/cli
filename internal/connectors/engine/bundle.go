@@ -668,18 +668,23 @@ type SurfaceOperation struct {
 // loads and validates these definitions only; executors are added in later
 // issue slices and every unknown kind remains rejected by the meta-schema.
 type OperationSpec struct {
-	ID              string                  `json:"id"`
-	Kind            string                  `json:"kind"`
-	Summary         string                  `json:"summary"`
-	Description     string                  `json:"description,omitempty"`
-	SourceURL       string                  `json:"source_url,omitempty"`
-	Risk            string                  `json:"risk"`
-	Approval        string                  `json:"approval"`
-	OutputPolicy    string                  `json:"output_policy"`
-	AuthScopes      []string                `json:"auth_scopes,omitempty"`
-	MutationClass   string                  `json:"mutation_class,omitempty"`
-	Destructive     bool                    `json:"destructive,omitempty"`
-	Confirmation    *ConfirmationSpec       `json:"confirmation,omitempty"`
+	ID            string            `json:"id"`
+	Kind          string            `json:"kind"`
+	Summary       string            `json:"summary"`
+	Description   string            `json:"description,omitempty"`
+	SourceURL     string            `json:"source_url,omitempty"`
+	Risk          string            `json:"risk"`
+	Approval      string            `json:"approval"`
+	OutputPolicy  string            `json:"output_policy"`
+	AuthScopes    []string          `json:"auth_scopes,omitempty"`
+	MutationClass string            `json:"mutation_class,omitempty"`
+	Destructive   bool              `json:"destructive,omitempty"`
+	Confirmation  *ConfirmationSpec `json:"confirmation,omitempty"`
+	// Batchable gates this operation out of a bulk plan when explicitly false.
+	// It is a pointer because false is restrictive while the omitted default is
+	// permissive; see WriteAction.Batchable for the matching write-action
+	// contract. Read it through IsBatchable, never directly.
+	Batchable       *bool                   `json:"batchable,omitempty"`
 	SecretSensitive bool                    `json:"secret_sensitive,omitempty"`
 	SensitivePolicy *SensitivePolicySpec    `json:"sensitive_policy,omitempty"`
 	AuditEvent      string                  `json:"audit_event,omitempty"`
@@ -692,6 +697,13 @@ type OperationSpec struct {
 	LocalFile       *LocalFileOperationSpec `json:"local_file,omitempty"`
 	Browser         *BrowserOperationSpec   `json:"browser,omitempty"`
 	Composite       *CompositeOperationSpec `json:"composite,omitempty"`
+}
+
+// IsBatchable reports whether the operation may be placed in a bulk plan.
+// Only an explicit "batchable": false says no; one direct-write invocation is
+// nevertheless always prepared as exactly one request.
+func (o OperationSpec) IsBatchable() bool {
+	return o.Batchable == nil || *o.Batchable
 }
 
 type RESTOperationSpec struct {

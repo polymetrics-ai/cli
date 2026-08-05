@@ -45,9 +45,12 @@ type Result struct {
 }
 
 type WriteCommand struct {
-	Connector             string                   `json:"connector"`
-	Command               string                   `json:"command"`
-	Write                 string                   `json:"write"`
+	Connector string `json:"connector"`
+	Command   string `json:"command"`
+	Write     string `json:"write"`
+	// Operation is set only for a typed direct_write command. Write remains
+	// the plan action for backward-compatible reverse_etl command plans.
+	Operation             string                   `json:"operation,omitempty"`
 	MutationClass         string                   `json:"mutation_class"`
 	TargetResource        string                   `json:"target_resource"`
 	ApprovalRequired      bool                     `json:"approval_required"`
@@ -56,6 +59,9 @@ type WriteCommand struct {
 	ConfirmationChallenge string                   `json:"confirmation_challenge,omitempty"`
 	Record                connectors.Record        `json:"record,omitempty"`
 	RedactedRecord        connectors.Record        `json:"redacted_record,omitempty"`
+	PathParams            map[string]string        `json:"path_params,omitempty"`
+	Query                 map[string]string        `json:"query,omitempty"`
+	Batchable             bool                     `json:"batchable"`
 	Preview               *connectors.WritePreview `json:"preview,omitempty"`
 }
 
@@ -100,6 +106,9 @@ func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req 
 	cmd, command, err := resolvePreflightCommand(connector, req.Path)
 	if err != nil {
 		return WriteCommand{}, err
+	}
+	if cmd.Intent == "direct_write" {
+		return buildOperationDirectWriteCommand(ctx, connector, cmd, command, req)
 	}
 	if cmd.Intent != "reverse_etl" {
 		return WriteCommand{}, ErrNotWriteCommand
@@ -146,6 +155,7 @@ func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req 
 		ConfirmationChallenge: string(connectors.ConfirmationForWriteAction(action).Kind),
 		Record:                cloneRecord(record),
 		RedactedRecord:        redactRecordWithFields(record, cmd.RedactFields),
+		Batchable:             action.IsBatchable(),
 	}
 	if req.Preview {
 		dryRunner, ok := connector.(connectors.DryRunWriter)
@@ -165,6 +175,55 @@ func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req 
 		out.Preview = &preview
 	}
 	return out, nil
+}
+
+// buildOperationDirectWriteCommand shapes a declared direct_write command for
+// the existing connector-command plan lifecycle. It does not execute or
+// preview the write: those actions belong to App so the plan, preview digest,
+// typed confirmation, and single-use grant cannot be bypassed by a direct
+// commandrunner call.
+func buildOperationDirectWriteCommand(ctx context.Context, connector connectors.Connector, cmd connectors.CommandSurfaceCommand, command string, req Request) (WriteCommand, error) {
+	if cmd.Availability != "implemented" || strings.TrimSpace(cmd.Operation) == "" {
+		return WriteCommand{}, &BlockedCommandError{Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "implemented direct_write commands must reference an operation"}
+	}
+	if err := validateOperationDirectWriteCommand(connector, cmd); err != nil {
+		return WriteCommand{}, err
+	}
+	pathParams, query, body, err := operationDirectReadOverrides(cmd, req.Flags)
+	if err != nil {
+		return WriteCommand{}, err
+	}
+	if err := validateCommandInputs(cmd, req.Config, mappedCommandInputs{Query: query, Body: body}); err != nil {
+		return WriteCommand{}, err
+	}
+	metadata, err := connector.(connectors.OperationDirectWriteMetadataProvider).OperationDirectWriteMetadata(cmd.Operation)
+	if err != nil {
+		return WriteCommand{}, err
+	}
+	if metadata.Operation != cmd.Operation {
+		return WriteCommand{}, &BlockedCommandError{Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_write metadata did not match command operation"}
+	}
+	if metadata.OutputPolicy != cmd.OutputPolicy {
+		return WriteCommand{}, &BlockedCommandError{Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "direct_write command output_policy does not match declared operation"}
+	}
+	record := connectors.Record(body)
+	return WriteCommand{
+		Connector:             connector.Name(),
+		Command:               command,
+		Write:                 cmd.Operation,
+		Operation:             cmd.Operation,
+		MutationClass:         metadata.MutationClass,
+		TargetResource:        targetResourceOf(cmd),
+		ApprovalRequired:      true,
+		Risk:                  firstNonEmpty(cmd.Risk, metadata.Risk),
+		Approval:              firstNonEmpty(cmd.Approval, metadata.Approval, "direct writes require plan, preview, approval, execute"),
+		ConfirmationChallenge: metadata.ConfirmationChallenge,
+		Record:                cloneRecord(record),
+		RedactedRecord:        cloneRecord(record),
+		PathParams:            cloneStringMap(pathParams),
+		Query:                 cloneStringMap(query),
+		Batchable:             metadata.Batchable,
+	}, nil
 }
 
 func Run(ctx context.Context, connector connectors.Connector, req Request, emit func(connectors.Record) error) (Result, error) {
@@ -257,7 +316,9 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 	if !ok {
 		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{Connector: connector.Name(), Command: command, Reason: "unknown command"}
 	}
-	if cmd.Operation != "" && cmd.Intent != "binary_download" && (cmd.Intent != "direct_read" || cmd.Availability != "implemented") {
+	if cmd.Operation != "" && cmd.Intent != "binary_download" &&
+		(cmd.Intent != "direct_read" || cmd.Availability != "implemented") &&
+		(cmd.Intent != "direct_write" || cmd.Availability != "implemented") {
 		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
 			Connector:    connector.Name(),
 			Command:      command,
@@ -280,6 +341,12 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 	}
 	if cmd.Intent == "direct_read" && cmd.Availability == "implemented" {
 		if err := validateDirectReadCommand(connector, cmd); err != nil {
+			return connectors.CommandSurfaceCommand{}, command, err
+		}
+		return cmd, command, nil
+	}
+	if cmd.Intent == "direct_write" && cmd.Availability == "implemented" {
+		if err := validateOperationDirectWriteCommand(connector, cmd); err != nil {
 			return connectors.CommandSurfaceCommand{}, command, err
 		}
 		return cmd, command, nil
@@ -471,9 +538,68 @@ func validateOperationDirectReadCommand(connector connectors.Connector, cmd conn
 	return nil
 }
 
+// validateOperationDirectWriteCommand is deliberately limited to the shape
+// the rest_write engine executor can prove safe. Its result makes a command
+// eligible for the plan lifecycle only; resolveRunnableCommand still refuses
+// direct execution so every write traverses plan -> preview -> approval.
+func validateOperationDirectWriteCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
+	if _, ok := connector.(connectors.OperationDirectWriter); !ok {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not support operation direct writes"}
+	}
+	metadataProvider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
+	if !ok {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose operation direct-write metadata"}
+	}
+	if strings.TrimSpace(cmd.Operation) == "" {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "direct_write commands require operation"}
+	}
+	if len(cmd.APISurface) != 1 {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "direct_write commands require exactly one api_surface endpoint"}
+	}
+	method := strings.ToUpper(strings.TrimSpace(cmd.APISurface[0].Method))
+	if !isOperationDirectWriteMethod(method) {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("direct_write commands require POST, PUT, PATCH, or DELETE api_surface endpoints, got %s", method)}
+	}
+	if isAbsoluteHTTPURL(cmd.APISurface[0].Path) {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "direct_write commands must not reference an absolute URL"}
+	}
+	if !isSupportedDirectWriteOutputPolicy(cmd.OutputPolicy) {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "direct_write commands require an explicit supported output_policy"}
+	}
+	metadata, err := metadataProvider.OperationDirectWriteMetadata(cmd.Operation)
+	if err != nil {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("direct_write operation metadata is not executable: %v", err)}
+	}
+	if metadata.Operation != cmd.Operation {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "direct_write operation metadata did not match command operation"}
+	}
+	if metadata.OutputPolicy != cmd.OutputPolicy {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "direct_write command output_policy does not match declared operation"}
+	}
+	return nil
+}
+
 func isSupportedDirectReadOutputPolicy(policy string) bool {
 	switch policy {
 	case "repository_contents_file_metadata", "repository_contents_directory", "json_redacted", "clinical_json_redacted":
+		return true
+	default:
+		return false
+	}
+}
+
+func isSupportedDirectWriteOutputPolicy(policy string) bool {
+	switch policy {
+	case "none", "json", "json_redacted", "write_result_redacted", "gong_bounded_input_redacted":
+		return true
+	default:
+		return false
+	}
+}
+
+func isOperationDirectWriteMethod(method string) bool {
+	switch method {
+	case http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete:
 		return true
 	default:
 		return false
@@ -507,6 +633,8 @@ func findCommand(surface *connectors.CommandSurface, path string) (connectors.Co
 
 func blockReason(cmd connectors.CommandSurfaceCommand) string {
 	switch {
+	case cmd.Intent == "direct_write":
+		return "direct_write commands require plan, preview, approval, execute"
 	case cmd.Operation != "":
 		return fmt.Sprintf("operation %s executor is not implemented in this slice", cmd.Operation)
 	case cmd.Intent == "reverse_etl" && cmd.Write == "":
@@ -1211,6 +1339,17 @@ func cloneRecord(in connectors.Record) connectors.Record {
 	out := make(connectors.Record, len(in))
 	for k, v := range in {
 		out[k] = v
+	}
+	return out
+}
+
+func cloneStringMap(in map[string]string) map[string]string {
+	if len(in) == 0 {
+		return nil
+	}
+	out := make(map[string]string, len(in))
+	for key, value := range in {
+		out[key] = value
 	}
 	return out
 }
