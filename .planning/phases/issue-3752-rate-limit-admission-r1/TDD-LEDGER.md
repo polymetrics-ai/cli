@@ -8,9 +8,9 @@ canonical delivery contract forbids spawning GSD roles. This ledger is the durab
 
 | Slice | Red test / proof | Green assertion | Status |
 | --- | --- | --- | --- |
-| #3751 optional loader | `Load` has no `rate_limits.json` typed result; a fixture declaration cannot be loaded and validated | optional file returns nil when absent and typed data when present | Planned |
-| #3751 citation | table-driven declaration lacking `source.url` or `source.retrieved_at` is not rejected today | load error identifies `rate_limits.json` and the deficient citation | Planned |
-| #3751 selector/state | malformed endpoint/tier/auth selector, duplicate policy ID, invalid scope subject, and inconsistent unknown/not_applicable state | each is rejected before runtime; a real-shape declared policy survives typed load | Planned |
+| #3751 optional loader | `Load` has no `rate_limits.json` typed result; a fixture declaration cannot be loaded and validated | optional file returns nil when absent and typed data when present | Green |
+| #3751 citation | table-driven declaration lacking `source.url` or `source.retrieved_at` is not rejected today | load error identifies `rate_limits.json` and the deficient citation | Green |
+| #3751 selector/state | malformed endpoint/tier/auth selector, duplicate policy ID, invalid scope subject, and inconsistent unknown/not_applicable state | each is rejected before runtime; a real-shape declared policy survives typed load | Green |
 | #3752 provider reset | `Retry-After: 90` + `MaxBackoff: 30s` records `30s` through injected `Sleep` | the same fixture records exactly `90s` | Red |
 | #3752 reset typing | terminal 429 exposes only `*HTTPError` today | `errors.As(err, *RateLimitError)` exposes reset and still reaches `*HTTPError` | Planned |
 | #3752 fallback jitter | fallback retry has no jitter hook and retries in lockstep | injected full jitter is within cap; valid provider reset calls no jitter hook | Planned |
@@ -34,3 +34,20 @@ FAIL
 This is the confirmed live defect: `Requester.backoff` clamps a provider's deterministic 90-second
 reset to its 30-second fallback cap. The test and this evidence stay in the branch after the green
 implementation lands.
+
+Before the #3751 loader was added, its new fixture tests failed to compile because `Bundle` had no
+typed `RateLimits` result:
+
+```text
+$ go test ./internal/connectors/engine -run 'TestBundleLoad(ParsesProviderCitedRateLimits|RejectsUncitedOrMalformedRateLimits)' -count=1
+# polymetrics.ai/internal/connectors/engine [polymetrics.ai/internal/connectors/engine.test]
+internal/connectors/engine/bundle_test.go:294:7: b.RateLimits undefined (type Bundle has no field or method RateLimits)
+FAIL    polymetrics.ai/internal/connectors/engine [build failed]
+```
+
+After the loader/schema implementation:
+
+```text
+$ go test ./internal/connectors/engine -run 'TestBundleLoad(ParsesProviderCitedRateLimits|RejectsUncitedOrMalformedRateLimits)' -count=1
+ok      polymetrics.ai/internal/connectors/engine    0.497s
+```

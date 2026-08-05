@@ -299,6 +299,153 @@ func TestBundleLoadRejectsCertificationUnknownStream(t *testing.T) {
 	}
 }
 
+const validProviderCitedRateLimits = `{
+	"schema_version": 1,
+	"state": "declared",
+	"policies": [{
+		"id": "graphql-points",
+		"source": {
+			"url": "https://docs.example.test/rate-limits",
+			"retrieved_at": "2026-08-05",
+			"version": "2026-08"
+		},
+		"selector": {
+			"endpoints": [{"method": "POST", "path": "/graphql"}],
+			"tiers": ["enterprise"],
+			"auth_types": ["oauth_app"]
+		},
+		"scope": {"subject_kind": "installation"},
+		"budgets": [
+			{
+				"model": "fixed_window",
+				"dimension": "sustained",
+				"unit": "points",
+				"limit": 5000,
+				"window_seconds": 3600,
+				"cost": {"default_cost": 1, "response_header": "X-RateLimit-Cost"}
+			},
+			{
+				"model": "leaky_bucket",
+				"dimension": "burst",
+				"unit": "points",
+				"capacity": 40,
+				"restore_per_second": 2
+			}
+		]
+	}]
+}`
+
+func TestBundleLoadParsesProviderCitedRateLimits(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/rate_limits.json"] = &fstest.MapFile{Data: []byte(validProviderCitedRateLimits)}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if b.RateLimits == nil {
+		t.Fatal("RateLimits is nil")
+	}
+	if got, want := b.RateLimits.Policies[0].Source.RetrievedAt, "2026-08-05"; got != want {
+		t.Fatalf("retrieved_at = %q, want %q", got, want)
+	}
+	if got, want := len(b.RateLimits.Policies[0].Budgets), 2; got != want {
+		t.Fatalf("budget count = %d, want %d", got, want)
+	}
+}
+
+func TestBundleLoadRejectsUncitedOrMalformedRateLimits(t *testing.T) {
+	tests := []struct {
+		name string
+		data string
+		want string
+	}{
+		{
+			name: "policy lacks provider source",
+			data: strings.Replace(validProviderCitedRateLimits, `"source": {
+			"url": "https://docs.example.test/rate-limits",
+			"retrieved_at": "2026-08-05",
+			"version": "2026-08"
+		},`, "", 1),
+			want: "source",
+		},
+		{
+			name: "retrieval date is not a date",
+			data: strings.Replace(validProviderCitedRateLimits, "2026-08-05", "not-a-date", 1),
+			want: "retrieved_at",
+		},
+		{
+			name: "provider source cannot carry credentials",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://user:token@docs.example.test/rate-limits", 1),
+			want: "provider artifact URL",
+		},
+		{
+			name: "unknown cannot publish a policy",
+			data: strings.Replace(validProviderCitedRateLimits, `"state": "declared"`, `"state": "unknown"`, 1),
+			want: "unknown",
+		},
+		{
+			name: "not applicable requires a reason",
+			data: `{"schema_version": 1, "state": "not_applicable"}`,
+			want: "reason",
+		},
+		{
+			name: "endpoint must be connector relative",
+			data: strings.Replace(validProviderCitedRateLimits, `"path": "/graphql"`, `"path": "graphql"`, 1),
+			want: "endpoints[0].path",
+		},
+		{
+			name: "leaky bucket needs a positive restore rate",
+			data: strings.Replace(validProviderCitedRateLimits, `"restore_per_second": 2`, `"restore_per_second": 0`, 1),
+			want: "restore_per_second",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/rate_limits.json"] = &fstest.MapFile{Data: []byte(tt.data)}
+			_, err := Load(fsys, "acme")
+			if err == nil {
+				t.Fatal("Load: expected error")
+			}
+			if !strings.Contains(err.Error(), "rate_limits.json") || !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("Load error = %q, want rate_limits.json and %q", err, tt.want)
+			}
+		})
+	}
+}
+
+func TestBundleLoadParsesHonestRateLimitStates(t *testing.T) {
+	tests := []struct {
+		name   string
+		state  string
+		reason string
+	}{
+		{name: "unknown", state: "unknown", reason: "provider does not publish an enforceable limit"},
+		{name: "not applicable", state: "not_applicable", reason: "connector uses no provider HTTP API"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/rate_limits.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{
+				"schema_version": 1,
+				"state": %q,
+				"reason": %q
+			}`, tt.state, tt.reason))}
+
+			b, err := Load(fsys, "acme")
+			if err != nil {
+				t.Fatalf("Load: %v", err)
+			}
+			if b.RateLimits == nil || string(b.RateLimits.State) != tt.state {
+				t.Fatalf("RateLimits state = %#v, want %q", b.RateLimits, tt.state)
+			}
+		})
+	}
+}
+
 func TestBundleLoadEmbeddedGitHubCertification(t *testing.T) {
 	b, err := Load(defs.FS, "github")
 	if err != nil {

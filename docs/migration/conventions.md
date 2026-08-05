@@ -22,6 +22,7 @@ writes.json          # actions[] (omit entirely when capabilities.write is false
 api_surface.json     # coverage manifest (always required)
 cli_surface.json     # optional provider-style CLI/help metadata
 certification.json   # optional certify metadata: defaults, safe candidates, pairings
+rate_limits.json     # optional provider-cited rate-limit declaration (staged; see §3)
 schemas/<stream>.json  # one draft-07 schema per stream, x-primary-key/x-cursor-field
 fixtures/
   check.json
@@ -815,6 +816,30 @@ the correct, honest representation of "legacy documented this limit but never en
 client-side" (see stripe's `docs.md`). Any key on `metadata.json.rate_limit` beyond
 `requests_per_minute` (e.g. a `strategy` field) is not even a field on the Go type and is silently
 dropped — don't declare one.
+
+**Provider-cited `rate_limits.json` is a staged declaration, not an automatic throttle**: this
+optional, closed-schema file records a provider policy only when it can be cited. A declared policy
+must carry an HTTPS provider artifact URL and an ISO `retrieved_at` date; `version` is optional
+context, not a substitute for a retrieval date. Model the provider shape rather than flattening it
+to requests per minute: selectors can target an endpoint, tier, and auth type; budgets label their
+`burst` or `sustained` dimension, `requests` or `points` unit, and fixed/sliding-window or
+token/leaky-bucket replenishment model. Cost-weighted APIs can declare a default cost and the
+provider response header that reports cost.
+
+The root state is deliberately explicit: `declared` requires one or more cited policies, while
+`unknown` and `not_applicable` require a nonblank reason and cannot carry a policy. A policy's
+`scope.subject_kind` is one of `account`, `installation`, `application`, `endpoint`, or `ip`; it
+names a non-secret subject class only. Never put a credential, token-derived value, or runtime
+subject value in the declaration. The future registry's scope key is the credential binding plus
+policy ID plus this non-secret subject, not a raw credential (#3754).
+
+This file is parsed and validated by the bundle loader, but it does not yet select, pace, or
+observe traffic. #3753 owns attaching a resolved policy to every requester path; #3754 owns scope
+registries; #3755 owns operator output. Do not use this declaration to add a `streams.json`
+`base.rate_limit` throttle or change legacy behavior. Because Go's `embed` directives reject an
+unmatched optional wildcard, `internal/connectors/defs/defs.go` intentionally adds
+`*/rate_limits.json` only with the first production declaration; include that embed update in the
+same migration so the shipped CLI can read the file.
 
 **Write body construction** (`write.go`): `body_type` is one of `"json"` (default), `"form"`, `"none"`, `"graphql"`, `"json_array"`, `"multipart"`, or `"base64_upload"` (the `body_type` enum in `internal/connectors/engine/schema/writes.schema.json` is the authority). Default body = every record field **except** those named in `path_fields` (the path already carries them, e.g. `{{ record.id }}` for an update). `body_fields` (if set) restricts the body to an explicit allow-list instead (used for delete-with-body actions). `"form"` builds a `url.Values` body (Stripe-shape — compare `stripe/write.go`'s `customerForm`), sorted keys for deterministic encoding, empty-string values omitted. `"none"` with no `body_fields` sends no body at all (pure path-parameterized mutation/delete). For a JSON endpoint whose provider contract requires a body even when no body fields resolve, set `body_required: true`; it sends `{}` and is rejected on every non-JSON body type.
 

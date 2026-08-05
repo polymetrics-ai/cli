@@ -26,8 +26,10 @@ issue tree and the paths below.
 
 ### Slice A — #3751, declaration contract (first)
 
-1. Add optional `internal/connectors/defs/<connector>/rate_limits.json` to the production embed
-   pattern and the engine meta-schema compilation set.
+1. Add optional `internal/connectors/defs/<connector>/rate_limits.json` to the engine meta-schema
+   compilation set and typed loader. There is no production declaration in this slice; Go rejects
+   an unmatched optional `//go:embed */rate_limits.json` pattern, so the first migration that adds
+   a real declaration must add that explicit production embed pattern in the same change.
 2. Add typed declaration structures and a `Bundle.RateLimits` loader result. Keep it absent/nil for
    every legacy bundle; do not change old `metadata.json.rate_limit` or `streams.json.base.rate_limit`.
 3. Add the closed `rate_limits.schema.json` plus semantic validation:
