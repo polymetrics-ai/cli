@@ -537,8 +537,8 @@ func TestReverseManualExplainsConnectorCommandContentPolicy(t *testing.T) {
 	}
 	out := stdout.String()
 	for _, want := range []string{
-		"Connector-command content is complete",
-		"source-table plan output handling is unchanged",
+		"The connector command runner does not mask",
+		"This runner policy does not change source-table output or other execution paths.",
 		"does not automatically retry a failed dispatch",
 		"JSON plan and preview output omit tokens",
 	} {
@@ -547,6 +547,8 @@ func TestReverseManualExplainsConnectorCommandContentPolicy(t *testing.T) {
 		}
 	}
 	for _, obsolete := range []string{
+		"Connector-command content is complete",
+		"request, response, error, and preview content is complete",
 		"mask those fields in plan samples",
 		"connector-declared fields masked in sample rows",
 		"masks connector-declared sensitive record fields",

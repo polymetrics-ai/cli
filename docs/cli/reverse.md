@@ -27,10 +27,9 @@ DESCRIPTION
   The workflow is intentionally split into plan, preview, approval, and run.
   Agents can create and preview plans, but JSON plan output omits approval
   tokens so an agent cannot silently approve its own external mutation.
-  Connector-command content is complete: request, response, error, and preview
-  values are emitted unchanged. Connector-declared redact_fields remains
-  load-compatible metadata, not a command-runner masking instruction. The
-  separate source-table plan output handling is unchanged by this policy.
+  The connector command runner does not mask ETL or reverse-ETL command records
+  from declared redact_fields. Those declarations remain load-compatible metadata.
+  This runner policy does not change source-table output or other execution paths.
 
   Destructive plans do not receive an approval token during planning. Preview
   performs the connector's no-network dry run, persists a digest of the complete
@@ -64,9 +63,9 @@ COMMANDS
     Show a stored plan's mapped sample rows, action, and count. For a destructive
     plan, also materialize the request through the destination's no-network dry
     run, persist its digest, and issue the approval token in human-readable
-    output. JSON omits the token. For connector-command plans, request,
-    response, error, and preview content is complete; declared redact_fields
-    does not mask it. The separate source-table plan output handling is unchanged.
+    output. JSON omits the token. For connector-command plan construction, the
+    command runner passes records without masking declared redact_fields. This does
+    not change source-table output or the preview execution path.
 
   run
     Execute a stored plan only when --approve is supplied with the approval
@@ -132,10 +131,9 @@ SECURITY
   Execution requires a time-bounded, single-use approval token. Destructive
   tokens are created only after preview; execution revalidates the preview
   digest before dispatch. JSON plan and preview output omit tokens so agents
-  cannot silently self-approve external writes. Connector-command content is
-  complete; connector-declared redact_fields remains declaration compatibility
-  metadata rather than a runtime masking instruction. The separate source-table
-  plan output handling is unchanged.
+  cannot silently self-approve external writes. The connector command runner
+  leaves ETL and reverse-ETL command records unmasked by declared redact_fields;
+  declarations remain load-compatible. Other output paths retain their own policy.
 
 LEARN MORE
   Run pm reverse --help for this manual.
