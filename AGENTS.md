@@ -58,6 +58,9 @@ This repo uses official GSD Core workflows through a project-local Pi adapter:
 - The canonical issue-first flow is
   `.agents/agentic-delivery/canonical/delivery-contract.json`; run
   `go run ./cmd/agentcontractgen check` to validate its commands and registered projections.
+- The canonical Pi workers are generated `.pi/agents/pm-delivery-worker.md` and
+  `.pi/agents/pm-connector-worker.md`; use `go run ./cmd/agentcontractgen sync` and
+  `bash scripts/tests/pi-clean-project-agents.sh`, never hand-edit their generated files.
 - Inline/manual execution is allowed when the runtime cannot provide compatible isolated agents or
   the canonical contract forbids spawning them. Record the fallback in the planning trace, phase
   artifact, worker handoff, or PR body.

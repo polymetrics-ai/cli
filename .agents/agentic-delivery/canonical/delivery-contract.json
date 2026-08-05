@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "contract_version": "1.2.0",
+  "contract_version": "1.3.0",
   "source_id": "pm-issue-first-delivery",
   "ownership": {
     "source_path": ".agents/agentic-delivery/canonical/delivery-contract.json",
@@ -424,6 +424,22 @@
       "It stops at a plan instead of carrying delivery through TDD, review, integration, and captain-gated merge."
     ]
   },
+  "pi_harness": {
+    "clean_project_scope": "clean-project",
+    "roles": [
+      "pm-delivery-worker",
+      "pm-connector-worker"
+    ],
+    "child_tools": [
+      "read",
+      "grep",
+      "find",
+      "ls",
+      "bash",
+      "edit",
+      "write"
+    ]
+  },
   "projections": [
     {
       "harness": "claude",
@@ -457,15 +473,15 @@
       "harness": "pi",
       "role": "pm-delivery-worker",
       "path": ".pi/agents/pm-delivery-worker.md",
-      "render_mode": "markdown_block",
-      "required": false
+      "required": true,
+      "render_mode": "full"
     },
     {
       "harness": "pi",
       "role": "pm-connector-worker",
       "path": ".pi/agents/pm-connector-worker.md",
-      "render_mode": "markdown_block",
-      "required": false
+      "required": true,
+      "render_mode": "full"
     }
   ]
 }

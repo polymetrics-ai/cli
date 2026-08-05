@@ -60,9 +60,9 @@ same schema and issue-to-PR contract.
 
 Runtime-specific files, such as `.claude/agents/*.md`, `.codex/agents/*.toml`, and
 `.pi/agents/*.md`, are generated activation adapters. `canonical/delivery-contract.json` is the
-sole owner of each registered target's path, render mode, and requiredness. The checked-in Claude
-and Codex adapters are complete full-file projections; optional Pi adapters project marked blocks.
-Never hand-edit or copy GSD/TDD, review, or human-gate policy into an adapter.
+sole owner of each registered target's path, render mode, and requiredness. The checked-in Claude,
+Codex, and Pi adapters are complete required full-file projections. Regenerate them from the
+canonical source; never hand-edit or copy GSD/TDD, review, or human-gate policy into an adapter.
 
 Codex loads the project-local `.codex` configuration layer only when the repository is trusted.
 The generated Codex workers therefore fail closed for project-local selection in an untrusted
@@ -84,6 +84,8 @@ documented as unavailable rather than exposed through a collision-prone name.
 
 - `canonical/delivery-contract.json` is the sole owner of the canonical roles, ordered delivery
   states, tracker gates, GSD/no-mistakes topology, authority boundary, and projection registry.
+- Runtime-specific adapters are generated from the canonical JSON contract as their harness waves
+  land.
 - Issues remain the unit of work. PRs must reference issues.
 - Large goals use parent issues with sub-issues. A sub-PR may advance to completed parent-branch
   integration without human approval only when all automated gates pass and no human gate is

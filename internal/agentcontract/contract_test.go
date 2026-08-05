@@ -233,6 +233,24 @@ func TestCanonicalContractRequiredInvariants(t *testing.T) {
 				value.Authority.PauseWhen = value.Authority.PauseWhen[:len(value.Authority.PauseWhen)-1]
 			},
 		},
+		{
+			name: "Pi clean project scope changed",
+			mutate: func(value *Contract) {
+				value.PiHarness.CleanProjectScope = "project"
+			},
+		},
+		{
+			name: "Pi additional role allowed",
+			mutate: func(value *Contract) {
+				value.PiHarness.Roles = append(value.PiHarness.Roles, "ambient-worker")
+			},
+		},
+		{
+			name: "Pi child subagent tool allowed",
+			mutate: func(value *Contract) {
+				value.PiHarness.ChildTools = append(value.PiHarness.ChildTools, "subagent")
+			},
+		},
 	}
 
 	for _, test := range tests {
@@ -292,12 +310,12 @@ func TestRenderIsStableAndConnectorInheritsBase(t *testing.T) {
 		}
 	}
 
-	const expectedSHA256 = "cd548735a93c2c0fa5113082255ad07f5fa39af27a033b07797f2f370a2999b1"
+	const expectedSHA256 = "aee36b9878d12f70fea4324bfcfe5283de9178a391f481e18a64b280cc1fabf9"
 	gotSHA256 := fmt.Sprintf("%x", sha256.Sum256(base))
 	if gotSHA256 != expectedSHA256 {
 		t.Fatalf("base rendering hash = %s, update expected hash after intentional canonical change", gotSHA256)
 	}
-	const expectedConnectorSHA256 = "a0b5986925a716685b028b3617ba21b59216980e3f5f1fd5a323be75fd9b54c8"
+	const expectedConnectorSHA256 = "69feed369dd69280455ca2c85d7bf98a02c6498b639349177d9f7805302e3051"
 	gotConnectorSHA256 := fmt.Sprintf("%x", sha256.Sum256(connector))
 	if gotConnectorSHA256 != expectedConnectorSHA256 {
 		t.Fatalf("connector rendering hash = %s, update expected hash after intentional canonical change", gotConnectorSHA256)

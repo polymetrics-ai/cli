@@ -53,12 +53,12 @@ Isolation: The explicit tools allowlist omits Agent and Skill, while disallowedT
 
 Required clean-home smoke (not generation evidence): In a real authenticated Claude session using a clean trusted home with unrelated global agent and skill definitions, run `claude --agent pm-delivery-worker -p 'report the active agent name, preloaded skill identifiers, and whether Agent, Task, or Skill is available without modifying files'`; verify the project role is selected, only the plugin-qualified preloads are present, and Agent, Task, Skill, and unrelated fork-capable skills are unavailable.
 
-<!-- BEGIN POLYMETRICS CANONICAL AGENT CONTRACT role=pm-delivery-worker version=1.2.0; DO NOT EDIT -->
+<!-- BEGIN POLYMETRICS CANONICAL AGENT CONTRACT role=pm-delivery-worker version=1.3.0; DO NOT EDIT -->
 # pm-delivery-worker
 
 Own one issue-first delivery job from issue map through a captain-gated parent merge.
 
-Canonical source: `.agents/agentic-delivery/canonical/delivery-contract.json` (schema 1, contract 1.2.0). Edit this source, run go run ./cmd/agentcontractgen sync for registered projections, then run go run ./cmd/agentcontractgen check. Never hand-edit a generated projection.
+Canonical source: `.agents/agentic-delivery/canonical/delivery-contract.json` (schema 1, contract 1.3.0). Edit this source, run go run ./cmd/agentcontractgen sync for registered projections, then run go run ./cmd/agentcontractgen check. Never hand-edit a generated projection.
 
 ## Ownership and handoff
 
