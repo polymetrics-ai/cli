@@ -127,11 +127,43 @@ func TestCodexWorkersCannotDelegateToAmbientAgents(t *testing.T) {
 				t.Fatalf("%s is missing required Codex field %q", target.Role, field)
 			}
 		}
+		wantInstructions, err := renderCodexDeveloperInstructions(contract, target.Role)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if got := configuration.GetString("developer_instructions"); got != wantInstructions {
+			t.Fatalf("%s developer instructions changed during TOML serialization", target.Role)
+		}
 		for _, ambientAgent := range []string{"worker", "ambient-user-role"} {
 			if codexCanDelegateToAmbientAgent(configuration, ambientAgent) {
 				t.Fatalf("%s can delegate to ambient agent %q because agents.enabled is not false", target.Role, ambientAgent)
 			}
 		}
+	}
+}
+
+func TestCodexProjectionPreservesTOMLSensitiveInstructions(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract.Codex.CollisionBehavior = `Keep C:\work\worker and regex \d+\s.
+Preserve a trailing backslash \
+without TOML line folding and """ delimiters.`
+
+	target := ProjectionTarget{
+		Harness:    "codex",
+		Role:       contract.BaseRole.Name,
+		RenderMode: "standalone_toml",
+	}
+	rendered, err := RenderProjection(contract, target)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want, err := renderCodexDeveloperInstructions(contract, target.Role)
+	if err != nil {
+		t.Fatal(err)
+	}
+	configuration := parseCodexProjection(t, rendered)
+	if got := configuration.GetString("developer_instructions"); got != want {
+		t.Fatalf("developer instructions changed during TOML serialization\ngot:  %q\nwant: %q", got, want)
 	}
 }
 
