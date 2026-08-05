@@ -126,6 +126,13 @@ type SchemaPathInfo struct {
 	IsArray  bool
 }
 
+type RequestBodyInput struct {
+	Type     string
+	Values   []string
+	MinItems int
+	MaxItems int
+}
+
 type dynamicRequestBodyValue struct{}
 
 func (s *Schema) RequiredMappingPaths() ([]string, error) {
@@ -185,10 +192,63 @@ func (s *Schema) RequestFieldPointerInfo(pointer string) (SchemaPathInfo, error)
 }
 
 func (s *Schema) ValidateRequestBodyInputType(pointer, inputType string) error {
+	if inputType == "enum" {
+		inputType = "string"
+	}
+	return s.ValidateRequestBodyInput(pointer, RequestBodyInput{Type: inputType})
+}
+
+func (s *Schema) ValidateRequestBodyInput(pointer string, input RequestBodyInput) error {
 	info, err := s.RequestFieldPointerInfo(pointer)
 	if err != nil {
 		return err
 	}
+	if !inputTypeAccepted(info, input.Type) {
+		if input.Type != "" && input.Type != "string" && input.Type != "enum" && input.Type != "integer" && input.Type != "boolean" && input.Type != "string_array" {
+			return fmt.Errorf("request mapping %q uses unsupported input type %q", pointer, input.Type)
+		}
+		return fmt.Errorf("request mapping %q input type %q is incompatible with schema types %v", pointer, input.Type, info.Types)
+	}
+	if input.Type == "string_array" && !containsSchemaType(info.Types, "any") {
+		namespace, tokens, err := parseRequestFieldPointer(pointer)
+		if err != nil {
+			return err
+		}
+		itemInfo, err := s.RequestFieldPointerInfo(requestFieldPointer(namespace, append(tokens, "0")...))
+		if err != nil {
+			return fmt.Errorf("string_array mapping %q has no addressable item schema: %w", pointer, err)
+		}
+		for _, itemType := range itemInfo.Types {
+			if itemType == "string" || itemType == "any" {
+				break
+			}
+		}
+		if !containsSchemaType(itemInfo.Types, "string") && !containsSchemaType(itemInfo.Types, "any") {
+			return fmt.Errorf("string_array mapping %q requires string items, schema accepts %v", pointer, itemInfo.Types)
+		}
+	}
+	_, tokens, err := parseRequestFieldPointer(pointer)
+	if err != nil {
+		return err
+	}
+	node, _, err := s.requestMappingNode(tokens, pointer)
+	if err != nil {
+		return err
+	}
+	if input.Type == "enum" {
+		if err := node.validateRequestInputEnum(pointer, input.Values); err != nil {
+			return err
+		}
+	}
+	if input.Type == "string_array" {
+		if err := node.validateRequestInputCardinality(pointer, input.MinItems, input.MaxItems); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func inputTypeAccepted(info SchemaPathInfo, inputType string) bool {
 	accepts := func(types ...string) bool {
 		for _, actual := range info.Types {
 			if actual == "any" {
@@ -204,42 +264,86 @@ func (s *Schema) ValidateRequestBodyInputType(pointer, inputType string) error {
 	}
 	switch inputType {
 	case "", "string", "enum":
-		if accepts("string") {
-			return nil
-		}
+		return accepts("string")
 	case "integer":
-		if accepts("integer", "number") {
-			return nil
-		}
+		return accepts("integer", "number")
 	case "boolean":
-		if accepts("boolean") {
-			return nil
-		}
+		return accepts("boolean")
 	case "string_array":
-		if accepts("any") {
-			return nil
-		}
-		if !info.IsArray || !accepts("array") {
-			break
-		}
-		namespace, tokens, err := parseRequestFieldPointer(pointer)
-		if err != nil {
-			return err
-		}
-		itemInfo, err := s.RequestFieldPointerInfo(requestFieldPointer(namespace, append(tokens, "0")...))
-		if err != nil {
-			return fmt.Errorf("string_array mapping %q has no addressable item schema: %w", pointer, err)
-		}
-		for _, itemType := range itemInfo.Types {
-			if itemType == "string" || itemType == "any" {
-				return nil
+		return accepts("array") && (info.IsArray || containsSchemaType(info.Types, "any"))
+	default:
+		return false
+	}
+}
+
+func (n *schemaNode) validateRequestInputEnum(pointer string, values []string) error {
+	if len(values) == 0 {
+		return fmt.Errorf("enum mapping %q has no declared input values", pointer)
+	}
+	candidates := append([]string(nil), values...)
+	for _, constraint := range n.mappingEnumConstraints() {
+		accepted := candidates[:0]
+		for _, candidate := range candidates {
+			for _, want := range constraint {
+				if enumEquals(candidate, want) {
+					accepted = append(accepted, candidate)
+					break
+				}
 			}
 		}
-		return fmt.Errorf("string_array mapping %q requires string items, schema accepts %v", pointer, itemInfo.Types)
-	default:
-		return fmt.Errorf("request mapping %q uses unsupported input type %q", pointer, inputType)
+		candidates = accepted
+		if len(candidates) == 0 {
+			return fmt.Errorf("enum mapping %q has no values accepted by the schema", pointer)
+		}
 	}
-	return fmt.Errorf("request mapping %q input type %q is incompatible with schema types %v", pointer, inputType, info.Types)
+	return nil
+}
+
+func (n *schemaNode) mappingEnumConstraints() [][]any {
+	var out [][]any
+	if len(n.enum) > 0 {
+		out = append(out, n.enum)
+	}
+	for _, branch := range n.allOf {
+		out = append(out, branch.mappingEnumConstraints()...)
+	}
+	return out
+}
+
+func (n *schemaNode) validateRequestInputCardinality(pointer string, inputMin, inputMax int) error {
+	if inputMin < 0 || inputMax < 0 || inputMax > 0 && inputMin > inputMax {
+		return fmt.Errorf("string_array mapping %q has invalid input cardinality %d..%d", pointer, inputMin, inputMax)
+	}
+	lower := inputMin
+	upper := inputMax
+	hasUpper := inputMax > 0
+	schemaMin, hasSchemaMin, schemaMax, hasSchemaMax := n.mappingArrayCardinality()
+	if hasSchemaMin && schemaMin > lower {
+		lower = schemaMin
+	}
+	if hasSchemaMax && (!hasUpper || schemaMax < upper) {
+		upper = schemaMax
+		hasUpper = true
+	}
+	if hasUpper && lower > upper {
+		return fmt.Errorf("string_array mapping %q has no cardinality accepted by both CLI bounds and schema bounds", pointer)
+	}
+	return nil
+}
+
+func (n *schemaNode) mappingArrayCardinality() (int, bool, int, bool) {
+	minimum, hasMinimum := n.minItems, n.hasMinItems
+	maximum, hasMaximum := n.maxItems, n.hasMaxItems
+	for _, branch := range n.allOf {
+		branchMin, hasBranchMin, branchMax, hasBranchMax := branch.mappingArrayCardinality()
+		if hasBranchMin && (!hasMinimum || branchMin > minimum) {
+			minimum, hasMinimum = branchMin, true
+		}
+		if hasBranchMax && (!hasMaximum || branchMax < maximum) {
+			maximum, hasMaximum = branchMax, true
+		}
+	}
+	return minimum, hasMinimum, maximum, hasMaximum
 }
 
 func (s *Schema) ValidateRequestBodyPointerAssignments(required, optional []string) error {

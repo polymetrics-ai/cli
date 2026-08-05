@@ -26,7 +26,7 @@ type fakeConnector struct {
 	readReq                connectors.ReadRequest
 	directReadReq          connectors.DirectReadRequest
 	operationDirectReadReq connectors.OperationDirectReadRequest
-	operationBodySchemas   map[string]*engine.Schema
+	operationBodyContracts map[string]engine.OperationRequestBodyContract
 	binaryDownloadReq      connectors.OperationBinaryDownloadRequest
 	binaryDownloadErr      error
 	validateReq            connectors.WriteRequest
@@ -88,8 +88,8 @@ func (f *fakeConnector) OperationDirectRead(_ context.Context, req connectors.Op
 		Body:      map[string]any{"ok": true},
 	}, nil
 }
-func (f *fakeConnector) OperationRequestBodySchema(operation string) (*engine.Schema, error) {
-	return f.operationBodySchemas[operation], nil
+func (f *fakeConnector) OperationRequestBodyContract(operation string) (engine.OperationRequestBodyContract, error) {
+	return f.operationBodyContracts[operation], nil
 }
 func (f *fakeConnector) OperationBinaryDownload(_ context.Context, req connectors.OperationBinaryDownloadRequest) (connectors.OperationBinaryDownloadResult, error) {
 	f.binaryDownloadReq = req
@@ -1620,7 +1620,9 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 				},
 			},
 		},
-	}, operationBodySchemas: map[string]*engine.Schema{"gong.meetings_integration_status": bodySchema}}
+	}, operationBodyContracts: map[string]engine.OperationRequestBodyContract{
+		"gong.meetings_integration_status": {Schema: bodySchema},
+	}}
 
 	result, err := Run(context.Background(), connector, Request{
 		Path:  []string{"meetings", "integration-status"},
@@ -1651,6 +1653,7 @@ func TestPreflightValidatesOperationBodyMappings(t *testing.T) {
 	tests := []struct {
 		name            string
 		rawSchema       string
+		static          map[string]any
 		flags           []connectors.CommandSurfaceFlag
 		withoutProvider bool
 		want            string
@@ -1660,13 +1663,30 @@ func TestPreflightValidatesOperationBodyMappings(t *testing.T) {
 			rawSchema:       `{"type":"object","properties":{"name":{"type":"string"}}}`,
 			flags:           []connectors.CommandSurfaceFlag{{Name: "name", Type: "string", MapsTo: "/body/name"}},
 			withoutProvider: true,
-			want:            "require the operation body schema",
+			want:            "body schema and static body contract",
+		},
+		{
+			name:      "required body with zero mappings",
+			rawSchema: `{"type":"object","additionalProperties":false,"required":["name"],"properties":{"name":{"type":"string"}}}`,
+			want:      "required property missing",
 		},
 		{
 			name:      "scalar type mismatch",
 			rawSchema: `{"type":"object","properties":{"count":{"type":"integer"}}}`,
 			flags:     []connectors.CommandSurfaceFlag{{Name: "count", Type: "string", MapsTo: "/body/count"}},
 			want:      "incompatible",
+		},
+		{
+			name:      "disjoint enum domain",
+			rawSchema: `{"type":"object","properties":{"state":{"type":"string","enum":["open"]}}}`,
+			flags:     []connectors.CommandSurfaceFlag{{Name: "state", Type: "enum", Values: []string{"closed"}, MapsTo: "/body/state"}},
+			want:      "no values accepted",
+		},
+		{
+			name:      "incompatible array cardinality",
+			rawSchema: `{"type":"object","properties":{"ids":{"type":"array","minItems":2,"items":{"type":"string"}}}}`,
+			flags:     []connectors.CommandSurfaceFlag{{Name: "ids", Type: "string_array", MaxItems: 1, MapsTo: "/body/ids"}},
+			want:      "cardinality",
 		},
 		{
 			name:      "array item type mismatch",
@@ -1679,6 +1699,13 @@ func TestPreflightValidatesOperationBodyMappings(t *testing.T) {
 			rawSchema: `{"type":"object","properties":{"items":{"type":"array","items":{"type":"object","properties":{"name":{"type":"string"}}}}}}`,
 			flags:     []connectors.CommandSurfaceFlag{{Name: "name", Type: "string", MapsTo: "/body/items/1/name", Required: true}},
 			want:      "sparse array index 1",
+		},
+		{
+			name:      "dynamic array replacement drops static sibling",
+			rawSchema: `{"type":"object","additionalProperties":false,"required":["items"],"properties":{"items":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["name","kind"],"properties":{"name":{"type":"string"},"kind":{"type":"string"}}}}}}`,
+			static:    map[string]any{"items": []any{map[string]any{"name": "static", "kind": "widget"}}},
+			flags:     []connectors.CommandSurfaceFlag{{Name: "name", Type: "string", MapsTo: "/body/items/0/name", Required: true}},
+			want:      "required property missing",
 		},
 		{
 			name:      "duplicate body target",
@@ -1714,7 +1741,9 @@ func TestPreflightValidatesOperationBodyMappings(t *testing.T) {
 				APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: "POST", Path: "/widgets:preview"}},
 				OutputPolicy: "json_redacted",
 				Flags:        tt.flags,
-			}}}, operationBodySchemas: map[string]*engine.Schema{operation: schema}}
+			}}}, operationBodyContracts: map[string]engine.OperationRequestBodyContract{
+				operation: {Schema: schema, Static: tt.static},
+			}}
 			var connector connectors.Connector = delegate
 			if tt.withoutProvider {
 				connector = &operationConnectorWithoutBodySchema{delegate: delegate}
@@ -1724,6 +1753,27 @@ func TestPreflightValidatesOperationBodyMappings(t *testing.T) {
 				t.Fatalf("Preflight() error = %v, want containing %q", err, tt.want)
 			}
 		})
+	}
+}
+
+func TestPreflightAcceptsValidStaticOperationBodyWithoutMappings(t *testing.T) {
+	schema, err := engine.CompileSchema(json.RawMessage(`{"type":"object","additionalProperties":false,"required":["name"],"properties":{"name":{"type":"string"}}}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	const operation = "acme.widgets.preview"
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path:         "widgets preview",
+		Intent:       "direct_read",
+		Availability: "implemented",
+		Operation:    operation,
+		APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: "POST", Path: "/widgets:preview"}},
+		OutputPolicy: "json_redacted",
+	}}}, operationBodyContracts: map[string]engine.OperationRequestBodyContract{
+		operation: {Schema: schema, Static: map[string]any{"name": "static"}},
+	}}
+	if err := Preflight(connector, []string{"widgets", "preview"}); err != nil {
+		t.Fatalf("Preflight: %v", err)
 	}
 }
 
@@ -1771,7 +1821,9 @@ func TestRunOperationDirectReadUsesEscapedRequestPointers(t *testing.T) {
 		APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: "POST", Path: "/widgets:preview"}},
 		OutputPolicy: "json_redacted",
 		Flags:        commandFlags,
-	}}}, operationBodySchemas: map[string]*engine.Schema{"acme.widgets.preview": bodySchema}}
+	}}}, operationBodyContracts: map[string]engine.OperationRequestBodyContract{
+		"acme.widgets.preview": {Schema: bodySchema},
+	}}
 	_, err = Run(context.Background(), connector, Request{
 		Path:  []string{"widgets", "preview"},
 		Flags: flagValues,
@@ -2004,16 +2056,18 @@ func TestRunOperationDirectReadRejectsRawBodyAndMissingPolicy(t *testing.T) {
 				APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: "POST", Path: "/v2/meetings/integration/status"}},
 				OutputPolicy: "json_redacted",
 				Flags:        []connectors.CommandSurfaceFlag{{Name: "email", Type: "string_array", MapsTo: "body.emails"}},
+				},
+				flags: map[string][]string{"email": {"ada@example.com"}},
+				want:  "absolute escaped JSON Pointer",
 			},
-			flags: map[string][]string{"email": {"ada@example.com"}},
-			want:  "unsupported target",
-		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			connector := &fakeConnector{
-				surface:              &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{tt.command}},
-				operationBodySchemas: map[string]*engine.Schema{"gong.meetings_integration_status": bodySchema},
+				surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{tt.command}},
+				operationBodyContracts: map[string]engine.OperationRequestBodyContract{
+					"gong.meetings_integration_status": {Schema: bodySchema},
+				},
 			}
 			_, err := Run(context.Background(), connector, Request{Path: strings.Fields(tt.command.Path), Flags: tt.flags}, func(connectors.Record) error {
 				t.Fatal("emit called for rejected operation direct-read command")

@@ -114,3 +114,7 @@ func (c Connector) OperationDirectRead(ctx context.Context, req connectors.Opera
 func (c Connector) OperationRequestBodySchema(operation string) (*engine.Schema, error) {
 	return ashbyEngineConnector().OperationRequestBodySchema(operation)
 }
+
+func (c Connector) OperationRequestBodyContract(operation string) (engine.OperationRequestBodyContract, error) {
+	return ashbyEngineConnector().OperationRequestBodyContract(operation)
+}

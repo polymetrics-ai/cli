@@ -508,6 +508,40 @@ func TestSchemaValidatesRequestBodyInputTypes(t *testing.T) {
 	}
 }
 
+func TestSchemaValidatesRequestBodyInputDomains(t *testing.T) {
+	sch, err := CompileSchema(json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"properties":{
+			"state":{"type":"string","enum":["open","paused"]},
+			"ids":{"type":"array","minItems":2,"maxItems":4,"items":{"type":"string"}}
+		}
+	}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	tests := []struct {
+		name    string
+		pointer string
+		input   RequestBodyInput
+		wantErr bool
+	}{
+		{name: "overlapping enum", pointer: "/body/state", input: RequestBodyInput{Type: "enum", Values: []string{"closed", "open"}}},
+		{name: "disjoint enum", pointer: "/body/state", input: RequestBodyInput{Type: "enum", Values: []string{"closed"}}, wantErr: true},
+		{name: "compatible array bounds", pointer: "/body/ids", input: RequestBodyInput{Type: "string_array", MinItems: 1, MaxItems: 3}},
+		{name: "cli maximum below schema minimum", pointer: "/body/ids", input: RequestBodyInput{Type: "string_array", MaxItems: 1}, wantErr: true},
+		{name: "cli minimum above schema maximum", pointer: "/body/ids", input: RequestBodyInput{Type: "string_array", MinItems: 5}, wantErr: true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := sch.ValidateRequestBodyInput(tt.pointer, tt.input)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("ValidateRequestBodyInput() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
 func TestValidateRequestFieldPointerAssignmentsRejectsOverwrites(t *testing.T) {
 	tests := []struct {
 		name     string

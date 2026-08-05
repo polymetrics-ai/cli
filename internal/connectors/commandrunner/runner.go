@@ -379,34 +379,35 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 	return Result{Connector: connector.Name(), Command: cmd.Path, DirectRead: &direct}, nil
 }
 
-type operationRequestBodySchemaProvider interface {
-	OperationRequestBodySchema(string) (*engine.Schema, error)
+type operationRequestBodyContractProvider interface {
+	OperationRequestBodyContract(string) (engine.OperationRequestBodyContract, error)
 }
 
-func operationRequestBodySchema(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) (*engine.Schema, error) {
-	needsSchema := false
+func operationRequestBodyContract(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) (*engine.OperationRequestBodyContract, error) {
+	hasBodyMapping := false
 	for _, flag := range cmd.Flags {
 		namespace, _, err := engine.ParseRequestFieldPointer(flag.MapsTo)
 		if err == nil && namespace == "body" {
-			needsSchema = true
+			hasBodyMapping = true
 			break
 		}
 	}
-	if !needsSchema {
+	method := strings.ToUpper(strings.TrimSpace(cmd.APISurface[0].Method))
+	if method != http.MethodPost {
+		if hasBodyMapping {
+			return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read body mappings require POST"}
+		}
 		return nil, nil
 	}
-	provider, ok := connector.(operationRequestBodySchemaProvider)
+	provider, ok := connector.(operationRequestBodyContractProvider)
 	if !ok {
-		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read body mappings require the operation body schema"}
+		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read POST validation requires the operation body schema and static body contract"}
 	}
-	schema, err := provider.OperationRequestBodySchema(cmd.Operation)
+	contract, err := provider.OperationRequestBodyContract(cmd.Operation)
 	if err != nil {
-		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct_read body schema is unavailable: %v", err)}
+		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct_read body contract is unavailable: %v", err)}
 	}
-	if schema == nil {
-		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read body mappings require a declared body_schema"}
-	}
-	return schema, nil
+	return &contract, nil
 }
 
 func validateDirectReadCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
@@ -487,11 +488,11 @@ func validateOperationDirectReadCommand(connector connectors.Connector, cmd conn
 	if err := engine.ValidateRequestFieldPointerAssignments(pointers); err != nil {
 		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: err.Error()}
 	}
-	bodySchema, err := operationRequestBodySchema(connector, cmd)
+	bodyContract, err := operationRequestBodyContract(connector, cmd)
 	if err != nil {
 		return nil, err
 	}
-	if bodySchema == nil {
+	if bodyContract == nil {
 		return nil, nil
 	}
 	var required, optional []string
@@ -500,8 +501,11 @@ func validateOperationDirectReadCommand(connector connectors.Connector, cmd conn
 		if err != nil || namespace != "body" {
 			continue
 		}
-		if err := bodySchema.ValidateRequestBodyInputType(flag.MapsTo, flag.Type); err != nil {
-			return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s: %v", flag.Name, err)}
+		if bodyContract.Schema != nil {
+			input := engine.RequestBodyInput{Type: flag.Type, Values: flag.Values, MinItems: flag.MinItems, MaxItems: flag.MaxItems}
+			if err := bodyContract.Schema.ValidateRequestBodyInput(flag.MapsTo, input); err != nil {
+				return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s: %v", flag.Name, err)}
+			}
 		}
 		if flag.Required {
 			required = append(required, flag.MapsTo)
@@ -509,10 +513,10 @@ func validateOperationDirectReadCommand(connector connectors.Connector, cmd conn
 			optional = append(optional, flag.MapsTo)
 		}
 	}
-	if err := bodySchema.ValidateRequestBodyPointerAssignments(required, optional); err != nil {
+	if err := bodyContract.ValidateEffective(required, optional); err != nil {
 		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: err.Error()}
 	}
-	return bodySchema, nil
+	return bodyContract.Schema, nil
 }
 
 func isSupportedDirectReadOutputPolicy(policy string) bool {

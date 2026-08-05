@@ -949,7 +949,8 @@ func checkCLISurfaceOperationBodyMappings(b engine.Bundle, i int, cmd engine.CLI
 		if err != nil || namespace != "body" {
 			continue
 		}
-		if err := schema.ValidateRequestBodyInputType(flag.MapsTo, flag.Type); err != nil {
+		input := engine.RequestBodyInput{Type: flag.Type, Values: flag.Values, MinItems: flag.MinItems, MaxItems: flag.MaxItems}
+		if err := schema.ValidateRequestBodyInput(flag.MapsTo, input); err != nil {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q flag --%s type %q is incompatible with body_schema at %q: %v", i, cmd.Path, op.ID, flag.Name, flag.Type, flag.MapsTo, err)})
 		}
 		target, err := engine.CanonicalRequestFieldPointer(flag.MapsTo, schema)

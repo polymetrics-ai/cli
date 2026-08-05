@@ -3,6 +3,9 @@ package engine
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"net/http"
+	"strings"
 
 	"polymetrics.ai/internal/connectors"
 )
@@ -120,6 +123,10 @@ func (c *Connector) OperationRequestBodySchema(operation string) (*Schema, error
 	return operationRequestBodySchema(c.bundle, operation)
 }
 
+func (c *Connector) OperationRequestBodyContract(operation string) (OperationRequestBodyContract, error) {
+	return operationRequestBodyContract(c.bundle, operation)
+}
+
 // OperationBinaryDownload satisfies connectors.OperationBinaryDownloader by
 // delegating to the package-level executor. The engine-local request type stays
 // the executor's own contract; this adapter is the seam that lets a CLI command
@@ -213,15 +220,60 @@ func (b Base) OperationRequestBodySchema(operation string) (*Schema, error) {
 	return operationRequestBodySchema(b.bundle, operation)
 }
 
+func (b Base) OperationRequestBodyContract(operation string) (OperationRequestBodyContract, error) {
+	return operationRequestBodyContract(b.bundle, operation)
+}
+
+type OperationRequestBodyContract struct {
+	Schema *Schema
+	Static map[string]any
+	None   bool
+}
+
+func (c OperationRequestBodyContract) ValidateEffective(required, optional []string) error {
+	if c.None {
+		if len(required) != 0 || len(optional) != 0 {
+			return fmt.Errorf("operation declares body none and cannot accept body fields")
+		}
+		return nil
+	}
+	if c.Schema == nil {
+		return fmt.Errorf("operation POST request contract requires a declared body_schema")
+	}
+	return c.Schema.ValidateEffectiveRequestBody(c.Static, required, optional)
+}
+
 func operationRequestBodySchema(bundle Bundle, operation string) (*Schema, error) {
-	op, err := findOperation(bundle, operation)
+	contract, err := operationRequestBodyContract(bundle, operation)
 	if err != nil {
 		return nil, err
 	}
-	if op.REST == nil || len(op.REST.BodySchema) == 0 {
-		return nil, nil
+	return contract.Schema, nil
+}
+
+func operationRequestBodyContract(bundle Bundle, operation string) (OperationRequestBodyContract, error) {
+	op, err := findOperation(bundle, operation)
+	if err != nil {
+		return OperationRequestBodyContract{}, err
 	}
-	return CompileSchema(op.REST.BodySchema)
+	if op.REST == nil || strings.ToUpper(strings.TrimSpace(op.REST.Method)) != http.MethodPost {
+		return OperationRequestBodyContract{}, nil
+	}
+	if op.REST.Body != nil && op.REST.Body.None {
+		return OperationRequestBodyContract{None: true}, nil
+	}
+	if len(op.REST.BodySchema) == 0 {
+		return OperationRequestBodyContract{}, nil
+	}
+	schema, err := CompileSchema(op.REST.BodySchema)
+	if err != nil {
+		return OperationRequestBodyContract{}, err
+	}
+	var static map[string]any
+	if op.REST.Body != nil {
+		static = cloneAnyMap(op.REST.Body.Fields)
+	}
+	return OperationRequestBodyContract{Schema: schema, Static: static}, nil
 }
 
 // synthesizeMetadata is the single source of truth for bundle -> Metadata,

@@ -831,6 +831,20 @@ func TestCLISurfaceOperationBodyMappingsUseEffectiveRuntimeShape(t *testing.T) {
 			wantFindings: true,
 		},
 		{
+			name:         "disjoint enum domain",
+			rawSchema:    `{"type":"object","additionalProperties":false,"properties":{"state":{"type":"string","enum":["open"]}}}`,
+			flags:        []engine.CLIFlag{{Name: "state", Type: "enum", Values: []string{"closed"}, MapsTo: "/body/state"}},
+			wantFinding:  "no values accepted",
+			wantFindings: true,
+		},
+		{
+			name:         "incompatible string-array cardinality",
+			rawSchema:    `{"type":"object","additionalProperties":false,"properties":{"ids":{"type":"array","minItems":2,"items":{"type":"string"}}}}`,
+			flags:        []engine.CLIFlag{{Name: "ids", Type: "string_array", MaxItems: 1, MapsTo: "/body/ids"}},
+			wantFinding:  "cardinality",
+			wantFindings: true,
+		},
+		{
 			name:         "dynamic array replaces static siblings",
 			rawSchema:    `{"type":"object","additionalProperties":false,"required":["items"],"properties":{"items":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["name","kind"],"properties":{"name":{"type":"string"},"kind":{"type":"string"}}}}}}`,
 			static:       map[string]any{"items": []any{map[string]any{"name": "static", "kind": "widget"}}},
