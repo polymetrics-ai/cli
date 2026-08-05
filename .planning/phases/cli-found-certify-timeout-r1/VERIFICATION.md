@@ -7,8 +7,8 @@
 - [ ] `go test -count=1 ./internal/cli`
 - [ ] `go test -race ./internal/connectors/certify`
 - [ ] `go test -race ./internal/cli`
-- [ ] timing parser/runner pass and controlled failure modes
-- [ ] two cold local `-count=1 -json` samples for each target package
+- [x] timing parser/runner pass and controlled failure modes — `go test -count=1 ./internal/certifytiming ./cmd/certifytiming`
+- [ ] two cold local `-count=1 -json` samples for each target package (one sample: harness 57.745s, CLI 42.359s, total 100.104s)
 - [ ] `go vet ./...`
 - [ ] `go build ./cmd/pm`
 - [ ] `make tidy-check`
