@@ -58,6 +58,10 @@ func setupRestWriteDemoAppWithBundle(t *testing.T, ctx context.Context, baseURL 
 // this lifecycle test reaches commandrunner.Preflight and the engine without
 // adding a fixture command to a provider-facing cli_surface.json.
 func setupMultipartRestWriteDemoApp(t *testing.T, ctx context.Context, baseURL string) *app.App {
+	return setupMultipartRestWriteDemoAppWithBundle(t, ctx, baseURL, multipartRestWriteDemoBundle())
+}
+
+func setupMultipartRestWriteDemoAppWithBundle(t *testing.T, ctx context.Context, baseURL string, bundle engine.Bundle) *app.App {
 	t.Helper()
 	root := t.TempDir()
 	if err := app.InitProject(root); err != nil {
@@ -67,7 +71,7 @@ func setupMultipartRestWriteDemoApp(t *testing.T, ctx context.Context, baseURL s
 	if err != nil {
 		t.Fatalf("Open: %v", err)
 	}
-	a.Registry().Register(engine.New(multipartRestWriteDemoBundle(), nil))
+	a.Registry().Register(engine.New(bundle, nil))
 	if _, err := a.AddCredential(ctx, app.AddCredentialRequest{
 		Name:      "multipart-restwrite-local",
 		Connector: multipartRestWriteDemoConnector,
@@ -168,6 +172,25 @@ func multipartRestWriteDemoBundle() engine.Bundle {
 			}},
 		},
 	}
+}
+
+func multipartRestWriteDemoBundleWithUploadField() engine.Bundle {
+	bundle := multipartRestWriteDemoBundle()
+	operation := &bundle.Operations[0]
+	operation.REST.BodySchema = json.RawMessage(`{
+		"type": "object",
+		"additionalProperties": false,
+		"required": ["message", "upload"],
+		"properties": {
+			"message": {"type": "string"},
+			"upload": {"type": "string"}
+		}
+	}`)
+	operation.REST.Multipart.Parts[1].Field = "upload"
+	bundle.CLISurface.Commands[0].Flags[1] = engine.CLIFlag{
+		Name: "upload", Type: "string", Summary: "Project-relative upload path.", MapsTo: "body.upload", Required: true,
+	}
+	return bundle
 }
 
 func TestDirectWriteCommandPlanPreviewApprovalAndExecute(t *testing.T) {
@@ -503,6 +526,35 @@ func TestMultipartDirectWriteCommandRejectsChangedPayloadBeforeNetwork(t *testin
 	}
 	if calls != 0 {
 		t.Fatalf("changed multipart payload calls = %d, want 0", calls)
+	}
+}
+
+func TestMultipartDirectWriteCommandBindsDeclaredUploadField(t *testing.T) {
+	ctx := context.Background()
+	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		t.Fatal("multipart preview reached the network")
+	}))
+	defer server.Close()
+
+	a := setupMultipartRestWriteDemoAppWithBundle(t, ctx, server.URL, multipartRestWriteDemoBundleWithUploadField())
+	if err := os.WriteFile(filepath.Join(a.ProjectDir(), "attachment.txt"), []byte("fixture attachment bytes"), 0o600); err != nil {
+		t.Fatalf("WriteFile attachment: %v", err)
+	}
+	plan, preview, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Connector:  multipartRestWriteDemoConnector,
+		Credential: "multipart-restwrite-local",
+		Path:       []string{"attachment", "create"},
+		Flags: map[string][]string{
+			"message": {"fixture attachment"},
+			"upload":  {"attachment.txt"},
+		},
+		Preview: true,
+	})
+	if err != nil {
+		t.Fatalf("PlanConnectorCommand declared upload field: %v", err)
+	}
+	if preview == nil || len(plan.PayloadIdentity) != 1 || plan.PayloadIdentity[0].Field != "upload" || plan.PayloadIdentity[0].ContentSHA256 == "" {
+		t.Fatalf("declared upload payload identity = %#v / %#v, want the exact declared field and digest", plan, preview)
 	}
 }
 
