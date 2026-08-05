@@ -51,6 +51,28 @@ func TestRenderClaudeProjectionsIsStableAndSelfContained(t *testing.T) {
 	}
 }
 
+func TestParseClaudeFrontmatterAcceptsCRLF(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	target := contract.Projections[0]
+	policy, ok := contract.ProjectionFor(target.Harness)
+	if !ok {
+		t.Fatalf("canonical contract does not define a %s harness policy", target.Harness)
+	}
+	projection, err := RenderProjection(contract, target)
+	if err != nil {
+		t.Fatal(err)
+	}
+	projection = bytes.ReplaceAll(projection, []byte("\n"), []byte("\r\n"))
+
+	frontmatter, err := parseClaudeFrontmatter(projection)
+	if err != nil {
+		t.Fatalf("parseClaudeFrontmatter rejected CRLF projection: %v", err)
+	}
+	if err := validateClaudeFrontmatter(frontmatter, target, policy); err != nil {
+		t.Fatalf("validateClaudeFrontmatter rejected CRLF projection: %v", err)
+	}
+}
+
 func TestClaudeProjectWorkersBlockAmbientAgentDelegation(t *testing.T) {
 	root := repositoryRoot(t)
 	contract := loadRepositoryContract(t, root)

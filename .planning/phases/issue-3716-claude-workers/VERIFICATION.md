@@ -12,7 +12,9 @@ Status: review corrections applied; the outer executor owns remaining delivery g
 - [x] Neither worker grants `Agent`, runtime `Skill`, MCP, an orchestration persona, or an unlisted
   `context: fork` route.
 - [x] The canonical check recursively rejects extra definitions, duplicate names, symlinks, and
-  canonical name/path mismatches under `.claude/agents`.
+  canonical name/path mismatches across every repository-local `.claude/agents` scope.
+- [x] Canonical Claude projections parse and compare identically with LF or CRLF line endings;
+  sync treats CRLF-only differences as current.
 - [x] Mutating a generated file to grant `Agent` fails the real drift check; sync restores it.
 - [x] Installed Claude CLI smoke discovers both project workers by name in this trusted checkout.
 - [x] Prior live ambient CLI/plugin fixtures demonstrate direct `Agent` delegation is blocked for
@@ -64,9 +66,10 @@ by name. The earlier isolated home had no login and stopped before model executi
 were copied or supplied. That result is not runtime precedence evidence.
 
 Static proof is separate: the generated definitions omit `Agent` and runtime `Skill`, documented
-precedence puts project agents above user/plugin agents, recursive inventory requires exactly the
-two canonical definitions, and full-file drift enforcement matches both files. Managed definitions
-and CLI `--agents` remain higher-precedence and can replace a same-name project definition; launch
+precedence puts project agents above user/plugin agents, repository-wide recursive inventory
+requires exactly the two canonical definitions across all nested project scopes, and full-file
+drift enforcement matches both files after CRLF normalization. Managed definitions and CLI
+`--agents` remain higher-precedence and can replace a same-name project definition; launch
 configuration can also select a different plugin installation. This harness cannot prevent those
 overrides.
 
@@ -76,8 +79,12 @@ overrides.
 - Result: **PASS** — `internal/agentcontract` and `cmd/agentcontractgen` both passed.
 - The first focused run exposed an incorrectly scoped `WalkDir` error variable and failed to build;
   that local defect was corrected before the final passing fix-round run.
+- The nested-scope/CRLF review round adds repository-depth inventory cases, a nested scope symlink
+  case, direct CRLF parsing, accepted CRLF drift checks, and no-op CRLF sync to the same focused
+  package command; the result is **PASS**.
 - Windows runtime execution was not performed; portability is source- and fixture-level evidence
-  from slash-native contract validation and Node-mediated adapter invocation.
+  from slash-native contract validation, CRLF-normalized projections, and Node-mediated adapter
+  invocation.
 
 ## Wave 1 dependency disposition
 

@@ -6,7 +6,7 @@ The coverage-aware `SUMMARY.md` classifies all four deliverables as automated/no
 |---|---|---|
 | D1 generated workers | frontmatter/isolation unit test and canonical check | pass |
 | D2 blocked delegation | qualified-preload/denylist tests and prior trusted-home forced-Agent smoke | pass |
-| D3 canonical ownership | recursive inventory, deterministic renderer test, and make gate | pass |
+| D3 canonical ownership | nested-scope inventory, CRLF drift, deterministic renderer test, and make gate | pass |
 | D4 documented/scope boundary | generated policy and changed-path audit | pass |
 | D5 portable validation | slash-native path checks and Node-mediated adapter fixture | pass |
 
