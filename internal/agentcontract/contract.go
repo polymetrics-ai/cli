@@ -20,6 +20,7 @@ type Contract struct {
 	SourceID         string             `json:"source_id"`
 	Ownership        Ownership          `json:"ownership"`
 	BaseRole         Role               `json:"base_role"`
+	HarnessPolicies  []HarnessPolicy    `json:"harness_policies"`
 	StateMachine     StateMachine       `json:"state_machine"`
 	ConnectorOverlay ConnectorOverlay   `json:"connector_overlay"`
 	Tracker          TrackerContract    `json:"tracker"`
@@ -43,6 +44,20 @@ type Role struct {
 	Delegation       string   `json:"delegation"`
 	ForbiddenRoles   []string `json:"forbidden_roles"`
 	DurableHandoff   []string `json:"durable_handoff"`
+}
+
+// HarnessPolicy contains the native settings required to render a registered harness projection.
+type HarnessPolicy struct {
+	Harness             string   `json:"harness"`
+	Format              string   `json:"format"`
+	DocumentationURL    string   `json:"documentation_url"`
+	ProjectDiscovery    string   `json:"project_discovery"`
+	Precedence          []string `json:"precedence"`
+	Tools               []string `json:"tools"`
+	PermissionMode      string   `json:"permission_mode"`
+	DelegationTool      string   `json:"delegation_tool"`
+	DelegationGuarantee string   `json:"delegation_guarantee"`
+	SmokeProcedure      string   `json:"smoke_procedure"`
 }
 
 type StateMachine struct {
@@ -170,6 +185,9 @@ func (contract *Contract) Validate() error {
 			return fmt.Errorf("canonical contract: base role must forbid %q", forbidden)
 		}
 	}
+	if err := validateHarnessPolicies(contract.HarnessPolicies); err != nil {
+		return err
+	}
 	stateIDs := []string{"job_received", "issue_map", "parent_draft_pr", "map_wave_phase", "discuss_decisions", "plan_tdd", "execute_tdd", "verify_gaps", "review_no_mistakes", "open_sub_pr", "integrate_sub_pr", "integrated_parent_gates", "ready_parent", "captain_merge"}
 	if contract.StateMachine.Name != "issue-first-delivery" || contract.StateMachine.InitialState != stateIDs[0] || !equalStepIDs(contract.StateMachine.Steps, stateIDs) {
 		return fmt.Errorf("canonical contract: base state machine is incomplete or out of order")
@@ -247,6 +265,52 @@ func (contract *Contract) Validate() error {
 		return fmt.Errorf("canonical contract: Wayfinder rejection and borrowed ideas are required")
 	}
 	return validateProjections(contract.Projections)
+}
+
+// HarnessPolicyFor returns the canonical native projection policy for a harness.
+func (contract *Contract) HarnessPolicyFor(harness string) (HarnessPolicy, bool) {
+	for _, policy := range contract.HarnessPolicies {
+		if policy.Harness == harness {
+			return policy, true
+		}
+	}
+	return HarnessPolicy{}, false
+}
+
+func validateHarnessPolicies(policies []HarnessPolicy) error {
+	seen := make(map[string]bool, len(policies))
+	var claude *HarnessPolicy
+	for index := range policies {
+		policy := &policies[index]
+		if strings.TrimSpace(policy.Harness) == "" || strings.TrimSpace(policy.Format) == "" || seen[policy.Harness] {
+			return fmt.Errorf("canonical contract: harness policies must have unique non-empty harness and format fields")
+		}
+		seen[policy.Harness] = true
+		if policy.Harness == "claude" {
+			claude = policy
+		}
+	}
+	if claude == nil {
+		return fmt.Errorf("canonical contract: Claude harness policy is required")
+	}
+
+	const claudeFormat = "markdown_yaml_frontmatter"
+	const claudeDocumentationURL = "https://code.claude.com/docs/en/sub-agents"
+	if claude.Format != claudeFormat || claude.DocumentationURL != claudeDocumentationURL ||
+		strings.TrimSpace(claude.ProjectDiscovery) == "" || strings.TrimSpace(claude.DelegationGuarantee) == "" ||
+		strings.TrimSpace(claude.SmokeProcedure) == "" || !strings.Contains(claude.SmokeProcedure, "<role>") ||
+		claude.PermissionMode != "default" || claude.DelegationTool != "Agent" {
+		return fmt.Errorf("canonical contract: Claude format, documentation, discovery, delegation, permission, and smoke policy are required")
+	}
+	wantPrecedence := []string{"managed definitions", "CLI --agents", "project .claude/agents", "user ~/.claude/agents", "plugins"}
+	if !slices.Equal(claude.Precedence, wantPrecedence) {
+		return fmt.Errorf("canonical contract: Claude precedence must match the documented managed, CLI, project, user, plugin order")
+	}
+	wantTools := []string{"Bash", "Edit", "Glob", "Grep", "Read", "Write"}
+	if !slices.Equal(claude.Tools, wantTools) || slices.Contains(claude.Tools, claude.DelegationTool) {
+		return fmt.Errorf("canonical contract: Claude tools must be the minimal explicit allowlist and omit Agent")
+	}
+	return nil
 }
 
 func allNonEmpty(values []string) bool {
@@ -331,13 +395,17 @@ func equalRuleIDs(rules []Rule, want []string) bool {
 }
 
 func validateProjections(targets []ProjectionTarget) error {
-	expected := map[string]string{
-		"claude/pm-delivery-worker":  ".claude/agents/pm-delivery-worker.md",
-		"claude/pm-connector-worker": ".claude/agents/pm-connector-worker.md",
-		"codex/pm-delivery-worker":   ".codex/agents/pm-delivery-worker.toml",
-		"codex/pm-connector-worker":  ".codex/agents/pm-connector-worker.toml",
-		"pi/pm-delivery-worker":      ".pi/agents/pm-delivery-worker.md",
-		"pi/pm-connector-worker":     ".pi/agents/pm-connector-worker.md",
+	type expectedProjection struct {
+		path     string
+		required bool
+	}
+	expected := map[string]expectedProjection{
+		"claude/pm-delivery-worker":  {path: ".claude/agents/pm-delivery-worker.md", required: true},
+		"claude/pm-connector-worker": {path: ".claude/agents/pm-connector-worker.md", required: true},
+		"codex/pm-delivery-worker":   {path: ".codex/agents/pm-delivery-worker.toml", required: false},
+		"codex/pm-connector-worker":  {path: ".codex/agents/pm-connector-worker.toml", required: false},
+		"pi/pm-delivery-worker":      {path: ".pi/agents/pm-delivery-worker.md", required: false},
+		"pi/pm-connector-worker":     {path: ".pi/agents/pm-connector-worker.md", required: false},
 	}
 	if len(targets) != len(expected) {
 		return fmt.Errorf("canonical contract: exactly six harness projection targets are required")
@@ -345,8 +413,8 @@ func validateProjections(targets []ProjectionTarget) error {
 	seen := make(map[string]bool, len(targets))
 	for _, target := range targets {
 		key := target.Harness + "/" + target.Role
-		wantPath, ok := expected[key]
-		if !ok || target.Path != wantPath || filepath.Clean(target.Path) != target.Path || filepath.IsAbs(target.Path) || seen[key] {
+		want, ok := expected[key]
+		if !ok || target.Path != want.path || target.Required != want.required || filepath.Clean(target.Path) != target.Path || filepath.IsAbs(target.Path) || seen[key] {
 			return fmt.Errorf("canonical contract: invalid projection target %q at %q", key, target.Path)
 		}
 		seen[key] = true

@@ -29,6 +29,24 @@ func TestCanonicalContractRequiredInvariants(t *testing.T) {
 			},
 		},
 		{
+			name: "Claude tools include Agent",
+			mutate: func(value *Contract) {
+				value.HarnessPolicies[0].Tools = append(value.HarnessPolicies[0].Tools, "Agent")
+			},
+		},
+		{
+			name: "Claude precedence skips project",
+			mutate: func(value *Contract) {
+				value.HarnessPolicies[0].Precedence[2] = "user ~/.claude/agents"
+			},
+		},
+		{
+			name: "Claude project projection optional",
+			mutate: func(value *Contract) {
+				value.Projections[0].Required = false
+			},
+		},
+		{
 			name: "connector does not inherit base",
 			mutate: func(value *Contract) {
 				value.ConnectorOverlay.Inherits = "other-role"
@@ -207,12 +225,12 @@ func TestRenderIsStableAndConnectorInheritsBase(t *testing.T) {
 		}
 	}
 
-	const expectedSHA256 = "8eeb8b7eb3a37eb991cff7736f60e1f2085760cb88b63692b9cc8991d3ec5f25"
+	const expectedSHA256 = "84b0f467472c602e611613171f6807affc20ae53e560a4bf09ccb38ff0100d05"
 	gotSHA256 := fmt.Sprintf("%x", sha256.Sum256(base))
 	if gotSHA256 != expectedSHA256 {
 		t.Fatalf("base rendering hash = %s, update expected hash after intentional canonical change", gotSHA256)
 	}
-	const expectedConnectorSHA256 = "124f7fb259a1bf8cc2d8002d62be81955996abf438ed6c814193139452cb118f"
+	const expectedConnectorSHA256 = "e9047b6c0b5ad4c14a4a4dcc137c1aafcc190617f1be7a43630dce2c56991fd5"
 	gotConnectorSHA256 := fmt.Sprintf("%x", sha256.Sum256(connector))
 	if gotConnectorSHA256 != expectedConnectorSHA256 {
 		t.Fatalf("connector rendering hash = %s, update expected hash after intentional canonical change", gotConnectorSHA256)

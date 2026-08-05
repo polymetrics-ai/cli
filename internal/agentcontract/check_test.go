@@ -5,6 +5,7 @@ import (
 	"context"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"testing"
 )
@@ -49,35 +50,36 @@ func TestCheckProjectionRejectsDivergence(t *testing.T) {
 func TestProjectionDriftCheckAndSync(t *testing.T) {
 	repository := repositoryRoot(t)
 	contract := loadRepositoryContract(t, repository)
-	contract.Projections[0].Required = true
 
 	root := t.TempDir()
-	path := filepath.Join(root, filepath.FromSlash(contract.Projections[0].Path))
-	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
-		t.Fatal(err)
+	updated, err := SyncProjections(root, contract)
+	if err != nil {
+		t.Fatalf("SyncProjections creates required Claude projections: %v", err)
 	}
-	want, err := RenderBlock(contract, contract.BaseRole.Name)
+	if updated != 2 {
+		t.Fatalf("SyncProjections created %d projections, want 2", updated)
+	}
+	if err := CheckProjections(root, contract); err != nil {
+		t.Fatalf("matching projections failed: %v", err)
+	}
+
+	path := filepath.Join(root, filepath.FromSlash(contract.Projections[0].Path))
+	content, err := os.ReadFile(path)
 	if err != nil {
 		t.Fatal(err)
 	}
-	wrapper := append([]byte("---\nname: pm-delivery-worker\n---\n\n"), want...)
-	wrapper = append(wrapper, []byte("\nharness-owned footer\n")...)
-	if err := os.WriteFile(path, wrapper, 0o644); err != nil {
-		t.Fatal(err)
+	diverged := strings.Replace(string(content), "    - Bash", "    - Agent\n    - Bash", 1)
+	if diverged == string(content) {
+		t.Fatal("test fixture did not add Agent to the Claude tools allowlist")
 	}
-	if err := CheckProjections(root, contract); err != nil {
-		t.Fatalf("matching projection failed: %v", err)
-	}
-
-	diverged := strings.Replace(string(wrapper), "Receive one assigned job", "Receive many jobs", 1)
 	if err := os.WriteFile(path, []byte(diverged), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	if err := CheckProjections(root, contract); err == nil {
-		t.Fatal("CheckProjections accepted a diverged registered projection")
+		t.Fatal("CheckProjections accepted a Claude worker that grants Agent and can delegate to an ambient agent")
 	}
 
-	updated, err := SyncProjections(root, contract)
+	updated, err = SyncProjections(root, contract)
 	if err != nil {
 		t.Fatalf("SyncProjections: %v", err)
 	}
@@ -87,18 +89,40 @@ func TestProjectionDriftCheckAndSync(t *testing.T) {
 	if err := CheckProjections(root, contract); err != nil {
 		t.Fatalf("projection did not pass after sync: %v", err)
 	}
+	restored, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	frontmatter, err := parseClaudeFrontmatter(restored)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if slices.Contains(frontmatter.Tools, "Agent") {
+		t.Fatalf("sync did not remove Agent from the canonical tools allowlist: %#v", frontmatter.Tools)
+	}
 }
 
 func TestOptionalWaveProjectionMayBeAbsent(t *testing.T) {
 	contract := loadRepositoryContract(t, repositoryRoot(t))
-	if err := CheckProjections(t.TempDir(), contract); err != nil {
-		t.Fatalf("optional Wave 2-4 projections should be absent in Wave 1: %v", err)
+	root := t.TempDir()
+	if _, err := SyncProjections(root, contract); err != nil {
+		t.Fatalf("SyncProjections creates the required Wave 2 projections: %v", err)
+	}
+	if err := CheckProjections(root, contract); err != nil {
+		t.Fatalf("optional Wave 3-4 projections should be absent: %v", err)
+	}
+	for _, target := range contract.Projections {
+		if target.Harness == "claude" {
+			continue
+		}
+		if _, err := os.Stat(filepath.Join(root, filepath.FromSlash(target.Path))); !os.IsNotExist(err) {
+			t.Fatalf("optional projection %s exists after Claude-only sync: %v", target.Path, err)
+		}
 	}
 }
 
 func TestProjectionIORejectsSymlinkEscape(t *testing.T) {
 	contract := loadRepositoryContract(t, repositoryRoot(t))
-	contract.Projections[0].Required = true
 	target := contract.Projections[0]
 
 	root := t.TempDir()
@@ -107,12 +131,10 @@ func TestProjectionIORejectsSymlinkEscape(t *testing.T) {
 	if err := os.MkdirAll(filepath.Dir(escapedPath), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	block, err := RenderBlock(contract, target.Role)
+	original, err := RenderProjection(contract, target)
 	if err != nil {
 		t.Fatal(err)
 	}
-	original := append([]byte("---\nname: escaped\n---\n\n"), block...)
-	original = append(original, []byte("\noutside footer\n")...)
 	original = []byte(strings.Replace(string(original), "Receive one assigned job", "Receive escaped work", 1))
 	if err := os.WriteFile(escapedPath, original, 0o644); err != nil {
 		t.Fatal(err)

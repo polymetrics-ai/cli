@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "contract_version": "1.0.0",
+  "contract_version": "1.1.0",
   "source_id": "pm-issue-first-delivery",
   "ownership": {
     "source_path": ".agents/agentic-delivery/canonical/delivery-contract.json",
     "owner": "The one active canonical worker owns the assigned job and its parent GitHub state inline.",
-    "update_rule": "Edit this source, run go run ./cmd/agentcontractgen sync for existing registered projections, then run go run ./cmd/agentcontractgen check. Never hand-edit a generated block."
+    "update_rule": "Edit this source, run go run ./cmd/agentcontractgen sync for registered projections, then run go run ./cmd/agentcontractgen check. Never hand-edit a generated projection."
   },
   "base_role": {
     "name": "pm-delivery-worker",
@@ -27,6 +27,33 @@
       "GSD artifacts"
     ]
   },
+  "harness_policies": [
+    {
+      "harness": "claude",
+      "format": "markdown_yaml_frontmatter",
+      "documentation_url": "https://code.claude.com/docs/en/sub-agents",
+      "project_discovery": "Claude Code scans .claude/agents directories while walking upward from the current working directory.",
+      "precedence": [
+        "managed definitions",
+        "CLI --agents",
+        "project .claude/agents",
+        "user ~/.claude/agents",
+        "plugins"
+      ],
+      "tools": [
+        "Bash",
+        "Edit",
+        "Glob",
+        "Grep",
+        "Read",
+        "Write"
+      ],
+      "permission_mode": "default",
+      "delegation_tool": "Agent",
+      "delegation_guarantee": "The explicit tools allowlist omits Agent. Claude Code documents that an agent without Agent in its tools list cannot spawn any subagents with the Agent tool.",
+      "smoke_procedure": "From the trusted repository root, run `claude --agent <role> -p 'report the active agent name without modifying files'`; inspect the generated frontmatter and stream output for project discovery while keeping ambient fixture agents non-delegable."
+    }
+  ],
   "state_machine": {
     "name": "issue-first-delivery",
     "initial_state": "job_received",
@@ -347,13 +374,13 @@
       "harness": "claude",
       "role": "pm-delivery-worker",
       "path": ".claude/agents/pm-delivery-worker.md",
-      "required": false
+      "required": true
     },
     {
       "harness": "claude",
       "role": "pm-connector-worker",
       "path": ".claude/agents/pm-connector-worker.md",
-      "required": false
+      "required": true
     },
     {
       "harness": "codex",

@@ -64,13 +64,28 @@ func CheckProjections(root string, contract *Contract) (returnErr error) {
 			}
 			return fmt.Errorf("read %s projection %s: %w", target.Harness, target.Path, err)
 		}
-		expected, err := RenderBlock(contract, target.Role)
+		expected, err := RenderProjection(contract, target)
 		if err != nil {
 			return err
 		}
-		actual, _, _, err := extractProjectionBlock(content)
-		if err != nil {
-			return fmt.Errorf("check projection %s: %w", target.Path, err)
+		actual := content
+		if projectionRendersWholeFile(contract, target) {
+			policy, ok := contract.HarnessPolicyFor(target.Harness)
+			if !ok {
+				return fmt.Errorf("check projection %s: canonical %s policy is missing", target.Path, target.Harness)
+			}
+			frontmatter, err := parseClaudeFrontmatter(content)
+			if err != nil {
+				return fmt.Errorf("check projection %s: %w", target.Path, err)
+			}
+			if err := validateClaudeFrontmatter(frontmatter, target, policy); err != nil {
+				return fmt.Errorf("check projection %s: %w", target.Path, err)
+			}
+		} else {
+			actual, _, _, err = extractProjectionBlock(content)
+			if err != nil {
+				return fmt.Errorf("check projection %s: %w", target.Path, err)
+			}
 		}
 		if err := CheckProjection(expected, actual); err != nil {
 			return fmt.Errorf("check projection %s: %w", target.Path, err)
@@ -81,7 +96,7 @@ func CheckProjections(root string, contract *Contract) (returnErr error) {
 
 func CheckProjection(want, got []byte) error {
 	if !bytes.Equal(want, got) {
-		return fmt.Errorf("generated block diverges from canonical source; run go run ./cmd/agentcontractgen sync")
+		return fmt.Errorf("generated projection diverges from canonical source; run go run ./cmd/agentcontractgen sync")
 	}
 	return nil
 }
@@ -104,10 +119,45 @@ func SyncProjections(root string, contract *Contract) (updated int, returnErr er
 		}
 		content, err := projectionRoot.ReadFile(path)
 		if err != nil {
-			if os.IsNotExist(err) && !target.Required {
+			if !os.IsNotExist(err) {
+				return updated, fmt.Errorf("read %s projection %s: %w", target.Harness, target.Path, err)
+			}
+			if !target.Required {
 				continue
 			}
-			return updated, fmt.Errorf("read %s projection %s: %w", target.Harness, target.Path, err)
+			if !projectionRendersWholeFile(contract, target) {
+				return updated, fmt.Errorf("read %s projection %s: %w", target.Harness, target.Path, err)
+			}
+			expected, err := RenderProjection(contract, target)
+			if err != nil {
+				return updated, err
+			}
+			if err := ensureProjectionDirectory(projectionRoot, filepath.Dir(path)); err != nil {
+				return updated, fmt.Errorf("create projection directory for %s: %w", target.Path, err)
+			}
+			if err := writeAtomic(projectionRoot, path, expected, 0o644); err != nil {
+				return updated, fmt.Errorf("write projection %s: %w", target.Path, err)
+			}
+			updated++
+			continue
+		}
+		expected, err := RenderProjection(contract, target)
+		if err != nil {
+			return updated, err
+		}
+		if projectionRendersWholeFile(contract, target) {
+			if bytes.Equal(content, expected) {
+				continue
+			}
+			info, err := projectionRoot.Stat(path)
+			if err != nil {
+				return updated, fmt.Errorf("stat projection %s: %w", target.Path, err)
+			}
+			if err := writeAtomic(projectionRoot, path, expected, info.Mode().Perm()); err != nil {
+				return updated, fmt.Errorf("write projection %s: %w", target.Path, err)
+			}
+			updated++
+			continue
 		}
 		expected, start, end, err := replacementBlock(content, contract, target.Role)
 		if err != nil {
@@ -180,6 +230,23 @@ func projectionPath(path string) (string, error) {
 		return "", fmt.Errorf("canonical contract: projection path %q is not local", path)
 	}
 	return localPath, nil
+}
+
+func ensureProjectionDirectory(root *os.Root, directory string) error {
+	if directory == "." {
+		return nil
+	}
+	current := ""
+	for _, component := range strings.Split(filepath.ToSlash(directory), "/") {
+		if component == "" || component == "." || component == ".." {
+			return fmt.Errorf("invalid projection directory %q", directory)
+		}
+		current = filepath.Join(current, component)
+		if err := root.Mkdir(current, 0o755); err != nil && !os.IsExist(err) {
+			return err
+		}
+	}
+	return nil
 }
 
 func writeAtomic(root *os.Root, path string, content []byte, mode os.FileMode) error {
