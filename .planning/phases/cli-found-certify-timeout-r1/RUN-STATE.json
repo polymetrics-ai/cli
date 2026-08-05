@@ -52,7 +52,22 @@
       "totalElapsedSeconds": 100.104,
       "slowestCertifyTest": "TestFullSweepSourceStagesAgainstSample (49.160s)",
       "slowestCLITest": "TestCertifyCLISingleConnectorPassExitsZero (27.150s)"
-    }
+    },
+    "hostedTimingSamples": [
+      {
+        "run": "https://github.com/polymetrics-ai/cli/actions/runs/31053373131/job/92465443313",
+        "retrieved": "2026-08-06",
+        "runner": "GitHub-hosted Ubuntu 24.04.4 (ubuntu-24.04 image 20260720.247.2)",
+        "certifyElapsedSeconds": 87.621,
+        "certifyWallElapsedSeconds": 124.466,
+        "cliElapsedSeconds": 66.064,
+        "cliWallElapsedSeconds": 68.747,
+        "totalElapsedSeconds": 153.685,
+        "totalWallElapsedSeconds": 193.213,
+        "slowestCertifyTest": "TestFullSweepSourceStagesAgainstSample",
+        "slowestCLITest": "TestCertifyCLISingleConnectorPassExitsZero"
+      }
+    ]
   },
   "verificationPassed": false
 }
