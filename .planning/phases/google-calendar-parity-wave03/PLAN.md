@@ -20,15 +20,15 @@ Google's current Calendar v3 Discovery document (`revision=20260731`) lists 38 o
 
 1. **Red validator evidence:** preserve the current three failures that prove `freebusy query` does not mark its three required body inputs (`timeMin`, `timeMax`, `items[].id`) as required CLI flags.
 2. **Reachable read surface:** mark those flags required, keep the 11 fixture-backed GET streams and the bounded `freebusy query` direct read implemented, then run surface sync and focused conformance/CLI/runtime-preflight checks.
-3. **Honest mutation ledger:** retire the recovered checkpoint's 26 executable `rest_write` actions and commands. Each documented mutation becomes a blocked `api_surface` ledger row with the named missing foundation: `rest_write` is schema-only and has no commandrunner dispatch. Do not use `planned` as a resting state.
-4. **Citations and generated surfaces:** record provider-owned evidence for every declared request field in the phase research matrix; current main has no shared machine citation schema, so preserve convention-neutral evidence and regenerate only Google Calendar outputs.
-5. **Verification and handoff:** run the contract's focused gates on current main, build `pm`, verify help and representative read commands without credentials, update phase records, commit the green slice, then hand branch custody to no-mistakes.
-6. **Review remediation:** restore read-only alpha metadata, preserve unfiltered fresh event reads, retain legacy list-stream projection contracts, paginate settings, add connector-owned regressions, and refresh generated surfaces before one final focused package test.
+3. **Executable mutation surface:** replace each of the 26 stale `rest_write` blockers with a record-driven `writes.json` action. Every action needs a typed `record_schema`, path/query/body mapping, risk and confirmation metadata, a replay fixture, `api_surface` coverage, and an implemented reverse-ETL CLI command. `rest_write` remains unused: these actions execute through the existing write engine.
+4. **Citations and generated surfaces:** record provider-owned evidence for every declared request field in the phase research matrix, including each write path/query/body field and a per-mutation `writes.json` determination. Current main has no shared machine citation schema, so preserve convention-neutral evidence and regenerate only Google Calendar outputs.
+5. **Verification and handoff:** run the contract's focused gates on current main, build `pm`, verify help and representative read and write-plan commands without credentials, update phase records, commit the green slice, then hand branch custody to no-mistakes.
+6. **Review remediation:** preserve unfiltered fresh event reads, retain legacy list-stream projection contracts, paginate settings, add connector-owned regressions, and refresh generated surfaces before one final focused package test.
 
 ## Safety and non-goals
 
 - No credentialed Google calls, credential access, reverse-ETL execution, provider writes, dependencies, shared-schema changes, or main-branch merge.
-- `rest_write` is not an implementation path. The 26 mutation rows remain blocked until the dedicated executor foundation exists.
+- `rest_write` is not an implementation path. The 26 mutations are authored as typed `writes.json` actions, which the existing reverse-ETL executor can run.
 
 ## Orchestration decision
 

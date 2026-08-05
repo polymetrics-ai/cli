@@ -1,0 +1,4 @@
+{
+  "record": {"id": "channel_fixture_1", "type": "web_hook", "address": "https://example.invalid/calendar-hook"},
+  "expect": {"method": "POST", "path": "/users/me/calendarList/watch", "body": {"id": "channel_fixture_1", "type": "web_hook", "address": "https://example.invalid/calendar-hook"}}
+}

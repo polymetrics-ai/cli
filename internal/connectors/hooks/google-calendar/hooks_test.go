@@ -204,11 +204,105 @@ func TestBundleMetadataMatchesExecutableSurface(t *testing.T) {
 	if b.Metadata.ReleaseStage != "alpha" {
 		t.Fatalf("release stage = %q, want alpha", b.Metadata.ReleaseStage)
 	}
-	if b.Metadata.Capabilities.Write {
-		t.Fatal("write capability = true without executable writes")
+	if !b.Metadata.Capabilities.Write {
+		t.Fatal("write capability = false with executable writes")
 	}
-	if len(b.Writes) != 0 {
-		t.Fatalf("writes = %d, want 0", len(b.Writes))
+	want := map[string]struct{}{
+		"delete_acl_rule": {}, "insert_acl_rule": {}, "patch_acl_rule": {}, "update_acl_rule": {}, "watch_acl": {},
+		"delete_calendar_list_entry": {}, "insert_calendar_list_entry": {}, "patch_calendar_list_entry": {}, "update_calendar_list_entry": {}, "watch_calendar_list": {},
+		"clear_calendar": {}, "delete_calendar": {}, "insert_calendar": {}, "patch_calendar": {}, "transfer_calendar_ownership": {}, "update_calendar": {},
+		"stop_channel": {},
+		"delete_event": {}, "import_event": {}, "insert_event": {}, "move_event": {}, "patch_event": {}, "quick_add_event": {}, "update_event": {}, "watch_events": {},
+		"watch_settings": {},
+	}
+	if len(b.Writes) != len(want) {
+		t.Fatalf("writes = %d, want %d", len(b.Writes), len(want))
+	}
+	for _, action := range b.Writes {
+		if _, ok := want[action.Name]; !ok {
+			t.Fatalf("unexpected write action %q", action.Name)
+		}
+		delete(want, action.Name)
+	}
+	if len(want) != 0 {
+		t.Fatalf("missing write actions: %#v", want)
+	}
+}
+
+func TestWriteActionsSendDeclaredRecordQueries(t *testing.T) {
+	tests := []struct {
+		name      string
+		action    string
+		record    connectors.Record
+		wantPath  string
+		wantQuery map[string]string
+	}{
+		{
+			name:   "transfer calendar ownership",
+			action: "transfer_calendar_ownership",
+			record: connectors.Record{
+				"calendar_id":      "calendar-fixture",
+				"new_data_owner":   "owner@example.invalid",
+				"use_admin_access": true,
+			},
+			wantPath: "/calendar/v3/calendars/calendar-fixture/transferOwnership",
+			wantQuery: map[string]string{
+				"newDataOwner":   "owner@example.invalid",
+				"useAdminAccess": "true",
+			},
+		},
+		{
+			name:   "move event",
+			action: "move_event",
+			record: connectors.Record{
+				"calendar_id": "calendar-fixture",
+				"event_id":    "event-fixture",
+				"destination": "destination-fixture",
+			},
+			wantPath:  "/calendar/v3/calendars/calendar-fixture/events/event-fixture/move",
+			wantQuery: map[string]string{"destination": "destination-fixture"},
+		},
+		{
+			name:   "quick add event",
+			action: "quick_add_event",
+			record: connectors.Record{
+				"calendar_id": "calendar-fixture",
+				"text":        "fixture meeting tomorrow",
+			},
+			wantPath:  "/calendar/v3/calendars/calendar-fixture/events/quickAdd",
+			wantQuery: map[string]string{"text": "fixture meeting tomorrow"},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			conn, closeServer := newFixtureConnector(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if r.Method != http.MethodPost {
+					t.Errorf("method = %q, want POST", r.Method)
+				}
+				if r.URL.Path != tt.wantPath {
+					t.Errorf("path = %q, want %q", r.URL.Path, tt.wantPath)
+				}
+				for key, want := range tt.wantQuery {
+					if got := r.URL.Query().Get(key); got != want {
+						t.Errorf("query[%q] = %q, want %q", key, got, want)
+					}
+				}
+				_ = json.NewEncoder(w).Encode(map[string]any{})
+			}))
+			defer closeServer()
+
+			result, err := conn.Write(context.Background(), connectors.WriteRequest{
+				Action: tt.action,
+				Config: connectors.RuntimeConfig{ProjectDir: "__polymetrics_conformance_fixture__"},
+			}, []connectors.Record{tt.record})
+			if err != nil {
+				t.Fatalf("Write: %v", err)
+			}
+			if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
+				t.Fatalf("Write result = %+v, want one written record", result)
+			}
+		})
 	}
 }
 

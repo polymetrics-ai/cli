@@ -1,9 +1,9 @@
 {
   "phase": "google-calendar-parity-wave03",
   "branch": "fm/cli-google-calendar-parity-resume-r1",
-  "status": "complete_pending_no_mistakes",
+  "status": "ready_for_no_mistakes",
   "verificationPassed": true,
-  "verificationNotes": "Recovered PR #3554 is rebased on current main and the focused connector, conformance, CLI, generated-docs, website, lint, smoke, boundary, and release-workflow gates passed. The only runtime limitation is correctly represented as 26 rest_write-blocked ledger rows.",
+  "verificationNotes": "All 26 formerly blocked mutations are typed writes.json actions. Focused connector, conformance, command preflight, hook, CLI transcript/manual, build, vet, generated-docs/website, lint, smoke, boundary, release-workflow, and diff checks pass. No credentialed provider write was run.",
   "orchestrationDecisions": [
     {
       "cycle": "recovery_and_plan",
@@ -19,12 +19,20 @@
       "cycle": "fixture_conformance_recovery",
       "decision": "reapply_preserved_fixture_sentinel",
       "reason": "Current conformance omitted the Google hook's fixture sentinel and safely failed against synthetic OAuth values; the preserved PR's targeted ProjectDir marker restores no-network replay behavior."
+    },
+    {
+      "cycle": "write_action_authoring",
+      "decision": "typed_writes_json_for_all_mutations",
+      "reason": "The shared-contract correction confirms reverse-ETL record actions execute today. All 26 Google Calendar mutations are record-shaped and have a typed schema, fixture, API-surface mapping, CLI command, risk/confirmation metadata, and primary-provider field citations; none needs rest_write."
     }
   ],
   "counts": {
     "officialTotal": 38,
-    "reachable": 12,
-    "blockedRestWrite": 26,
+    "reachable": 38,
+    "blockedRestWrite": 0,
+    "planned": 0,
+    "writeActions": 26,
+    "citationFieldUses": 148,
     "certified": 0
   }
 }

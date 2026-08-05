@@ -2,9 +2,9 @@
 
 ## Overview
 
-This connector reads Google Calendar API v3 data through 11 declarative GET streams and offers one bounded, typed direct read: `freebusy query`. It does not expose a generic HTTP command.
+This connector exposes every documented Google Calendar API v3 operation through the declarative runtime: 11 GET streams, one bounded typed `freebusy query` direct read, and 26 typed reverse-ETL write actions. It does not expose generic HTTP access.
 
-The official Google Discovery document reviewed on 2026-08-05 (revision `20260731`) lists 38 operations. Twelve are currently reachable: 11 GET operations through streams and `freeBusy.query` through the typed direct-read command. The other 26 documented mutation operations are recorded in `api_surface.json` as blocked; they require `rest_write`, whose schema exists but whose command runner has no execution dispatch.
+The official Google Discovery document reviewed on 2026-08-05 (revision `20260731`) lists 38 operations: 11 GET, 15 POST, 4 PATCH, 4 PUT, and 4 DELETE. All 38 are reachable. The 26 mutation operations use the working `writes.json` record executor; none relies on the unavailable `rest_write` executor and no operation remains `planned` or blocked.
 
 ## Auth setup
 
@@ -29,16 +29,20 @@ The `events` stream is incremental on `updated`. An explicitly configured `start
 
 ## Write actions & risks
 
-No Google Calendar mutation is executable from this connector. All 26 documented non-read operations are explicit blocked ledger rows rather than advertised reverse-ETL commands:
+All 26 documented mutations are executable typed reverse-ETL actions. Every action has a record schema and replay fixture under `fixtures/writes/`, and every direct command follows the shared plan → preview → explicit approval → execute flow.
 
-- ACL, calendar-list, calendar, event, channel, and settings mutations all require the missing `rest_write` command-runner executor.
-- This includes destructive deletes and clears, ownership transfer, notification-channel management, and event/calendar updates.
+- ACL: delete, insert, patch, update, and watch.
+- Calendar list: delete, insert, patch, update, and watch.
+- Calendars: clear, delete, insert, patch, transfer ownership, and update.
+- Channels: stop.
+- Events: delete, import, insert, move, patch, quick-add, update, and watch.
+- Settings: watch.
 
-The connector therefore has no write plan, preview, approval, or execute surface to invoke. This is a runtime limitation, not a claim that the provider operations are absent.
+Deletes, calendar clearing, and ownership transfer require `--confirm destructive` in addition to the normal reverse-ETL approval. Notification-channel lifecycle actions, calendar clear/delete, ownership transfer, event move, and quick-add are non-batchable. Provider mutation request fields are typed and source-cited in the phase research ledger.
 
 ## Known limits
 
-- No live Google Calendar provider certification was performed; validation is fixture-backed.
-- `cdc=false`: Calendar watch operations are ledger-blocked, and webhook delivery/changefeed state is outside this connector.
+- No live Google Calendar provider certification was performed; reads and every write request shape are fixture-backed.
+- `cdc=false`: watch creation and stopping are supported as explicit write actions, but webhook delivery and changefeed state are outside this connector.
 - The direct free/busy operation is intentionally typed and bounded; it is not a generic Google Calendar HTTP facility.
-- Source audit: [Google Calendar API v3 Discovery](https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest) and [Google Calendar API v3 reference](https://developers.google.com/workspace/calendar/api/v3/reference). The phase research ledger records a provider citation for every declared request-field use.
+- Source audit: [Google Calendar API v3 Discovery](https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest) and [Google Calendar API v3 reference](https://developers.google.com/workspace/calendar/api/v3/reference). The phase research ledger records a primary-provider citation for all 148 declared request-field uses and all 38 operations.
