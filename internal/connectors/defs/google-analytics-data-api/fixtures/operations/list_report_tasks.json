@@ -1,0 +1,19 @@
+{
+  "request": {
+    "operation": "google-analytics-data-api.list_report_tasks",
+    "path_params": {
+      "property_id": "000000000"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "reportTasks": [
+        {
+          "name": "properties/000000000/reportTasks/report_task_fixture_1",
+          "state": "ACTIVE"
+        }
+      ]
+    }
+  }
+}

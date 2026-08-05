@@ -242,9 +242,16 @@ func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit f
 }
 
 var implementedDirectOperations = map[string]bool{
-	"google-analytics-data-api.get_metadata":          true,
-	"google-analytics-data-api.list_audience_exports": true,
-	"google-analytics-data-api.get_audience_export":   true,
+	"google-analytics-data-api.get_metadata":                  true,
+	"google-analytics-data-api.list_audience_exports":         true,
+	"google-analytics-data-api.get_audience_export":           true,
+	"google-analytics-data-api.get_property_quotas_snapshot":  true,
+	"google-analytics-data-api.list_audience_lists":           true,
+	"google-analytics-data-api.get_audience_list":             true,
+	"google-analytics-data-api.list_recurring_audience_lists": true,
+	"google-analytics-data-api.get_recurring_audience_list":   true,
+	"google-analytics-data-api.list_report_tasks":             true,
+	"google-analytics-data-api.get_report_task":               true,
 }
 
 // OperationDirectRead executes the connector's bounded direct-read operations.
@@ -293,6 +300,21 @@ func normalizeOperationDirectReadRequest(req connectors.OperationDirectReadReque
 			req.PathParams["audience_export_id"] = strings.TrimPrefix(id, "audienceExports/")
 		}
 	}
+	for _, resource := range []struct {
+		pathParam string
+		configKey string
+		prefix    string
+	}{
+		{pathParam: "audience_list_id", configKey: "audience_list_id", prefix: "audienceLists/"},
+		{pathParam: "recurring_audience_list_id", configKey: "recurring_audience_list_id", prefix: "recurringAudienceLists/"},
+		{pathParam: "report_task_id", configKey: "report_task_id", prefix: "reportTasks/"},
+	} {
+		if req.PathParams[resource.pathParam] == "" {
+			if id := strings.TrimSpace(req.Config.Config[resource.configKey]); id != "" {
+				req.PathParams[resource.pathParam] = strings.TrimPrefix(id, resource.prefix)
+			}
+		}
+	}
 	return req, nil
 }
 
@@ -338,6 +360,9 @@ func operationFixture(ctx context.Context, req connectors.OperationDirectReadReq
 	}
 	property := firstNonEmpty(req.PathParams["property_id"], gaFixturePropertyID)
 	audienceExportID := firstNonEmpty(req.PathParams["audience_export_id"], "audience_export_fixture_1")
+	audienceListID := firstNonEmpty(req.PathParams["audience_list_id"], "audience_list_fixture_1")
+	recurringAudienceListID := firstNonEmpty(req.PathParams["recurring_audience_list_id"], "recurring_audience_list_fixture_1")
+	reportTaskID := firstNonEmpty(req.PathParams["report_task_id"], "report_task_fixture_1")
 	switch req.Operation {
 	case "google-analytics-data-api.get_metadata":
 		return connectors.DirectReadResult{
@@ -377,6 +402,71 @@ func operationFixture(ctx context.Context, req connectors.OperationDirectReadReq
 				"state":       "ACTIVE",
 				"rowCount":    1,
 			},
+		}, nil
+	case "google-analytics-data-api.get_property_quotas_snapshot":
+		return connectors.DirectReadResult{
+			Connector: connectorName,
+			Method:    http.MethodGet,
+			Path:      fmt.Sprintf("v1alpha/properties/%s/propertyQuotasSnapshot", property),
+			Status:    http.StatusOK,
+			Body: map[string]any{
+				"name":             fmt.Sprintf("properties/%s/propertyQuotasSnapshot", property),
+				"coreTokensPerDay": map[string]any{"consumed": "1", "remaining": "199999"},
+			},
+		}, nil
+	case "google-analytics-data-api.list_audience_lists":
+		return connectors.DirectReadResult{
+			Connector: connectorName,
+			Method:    http.MethodGet,
+			Path:      fmt.Sprintf("v1alpha/properties/%s/audienceLists", property),
+			Status:    http.StatusOK,
+			Body: map[string]any{"audienceLists": []any{map[string]any{
+				"name": fmt.Sprintf("properties/%s/audienceLists/%s", property, audienceListID), "state": "ACTIVE",
+			}}},
+		}, nil
+	case "google-analytics-data-api.get_audience_list":
+		return connectors.DirectReadResult{
+			Connector: connectorName,
+			Method:    http.MethodGet,
+			Path:      fmt.Sprintf("v1alpha/properties/%s/audienceLists/%s", property, audienceListID),
+			Status:    http.StatusOK,
+			Body:      map[string]any{"name": fmt.Sprintf("properties/%s/audienceLists/%s", property, audienceListID), "state": "ACTIVE", "rowCount": 1},
+		}, nil
+	case "google-analytics-data-api.list_recurring_audience_lists":
+		return connectors.DirectReadResult{
+			Connector: connectorName,
+			Method:    http.MethodGet,
+			Path:      fmt.Sprintf("v1alpha/properties/%s/recurringAudienceLists", property),
+			Status:    http.StatusOK,
+			Body: map[string]any{"recurringAudienceLists": []any{map[string]any{
+				"name": fmt.Sprintf("properties/%s/recurringAudienceLists/%s", property, recurringAudienceListID), "state": "ACTIVE",
+			}}},
+		}, nil
+	case "google-analytics-data-api.get_recurring_audience_list":
+		return connectors.DirectReadResult{
+			Connector: connectorName,
+			Method:    http.MethodGet,
+			Path:      fmt.Sprintf("v1alpha/properties/%s/recurringAudienceLists/%s", property, recurringAudienceListID),
+			Status:    http.StatusOK,
+			Body:      map[string]any{"name": fmt.Sprintf("properties/%s/recurringAudienceLists/%s", property, recurringAudienceListID), "state": "ACTIVE"},
+		}, nil
+	case "google-analytics-data-api.list_report_tasks":
+		return connectors.DirectReadResult{
+			Connector: connectorName,
+			Method:    http.MethodGet,
+			Path:      fmt.Sprintf("v1alpha/properties/%s/reportTasks", property),
+			Status:    http.StatusOK,
+			Body: map[string]any{"reportTasks": []any{map[string]any{
+				"name": fmt.Sprintf("properties/%s/reportTasks/%s", property, reportTaskID), "state": "ACTIVE",
+			}}},
+		}, nil
+	case "google-analytics-data-api.get_report_task":
+		return connectors.DirectReadResult{
+			Connector: connectorName,
+			Method:    http.MethodGet,
+			Path:      fmt.Sprintf("v1alpha/properties/%s/reportTasks/%s", property, reportTaskID),
+			Status:    http.StatusOK,
+			Body:      map[string]any{"name": fmt.Sprintf("properties/%s/reportTasks/%s", property, reportTaskID), "state": "ACTIVE"},
 		}, nil
 	default:
 		return connectors.DirectReadResult{}, fmt.Errorf("google-analytics-data-api fixture operation %q: %w", req.Operation, connectors.ErrUnsupportedOperation)

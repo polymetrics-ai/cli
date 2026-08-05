@@ -28,6 +28,34 @@
       "commands": [
         "audience-exports"
       ]
+    },
+    {
+      "id": "property-quotas",
+      "title": "v1alpha property quota snapshot",
+      "commands": [
+        "property-quotas"
+      ]
+    },
+    {
+      "id": "audience-lists",
+      "title": "v1alpha audience-list metadata",
+      "commands": [
+        "audience-lists"
+      ]
+    },
+    {
+      "id": "recurring-audience-lists",
+      "title": "v1alpha recurring-audience-list metadata",
+      "commands": [
+        "recurring-audience-lists"
+      ]
+    },
+    {
+      "id": "report-tasks",
+      "title": "v1alpha report-task metadata",
+      "commands": [
+        "report-tasks"
+      ]
     }
   ],
   "global_flags": [
@@ -236,6 +264,255 @@
       "risk": "medium",
       "approval": "none",
       "notes": "Fixed GET metadata endpoint for an audience export; does not query user rows."
+    },
+    {
+      "path": "property-quotas get",
+      "summary": "Get the v1alpha GA4 property quota snapshot.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "google-analytics-data-api.get_property_quotas_snapshot",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.getPropertyQuotasSnapshot",
+      "flags": [
+        {
+          "name": "property-id",
+          "type": "string",
+          "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+          "maps_to": "path.property_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1alpha/properties/{property_id}/propertyQuotasSnapshot"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "low",
+      "approval": "none",
+      "notes": "Fixed v1alpha GET quota endpoint; no raw method, path, or body flags."
+    },
+    {
+      "path": "audience-lists list",
+      "summary": "List v1alpha GA4 audience-list metadata for one property.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "google-analytics-data-api.list_audience_lists",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.audienceLists.list",
+      "flags": [
+        {
+          "name": "property-id",
+          "type": "string",
+          "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+          "maps_to": "path.property_id",
+          "allow_empty": false
+        },
+        {
+          "name": "page-size",
+          "type": "integer",
+          "summary": "Optional pageSize query parameter, bounded by the provider response limit.",
+          "maps_to": "query.pageSize"
+        },
+        {
+          "name": "page-token",
+          "type": "string",
+          "summary": "Optional pageToken from a prior list response.",
+          "maps_to": "query.pageToken",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1alpha/properties/{property_id}/audienceLists"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "approval": "none",
+      "notes": "Fixed v1alpha GET list endpoint; it returns metadata only, not audience user rows."
+    },
+    {
+      "path": "audience-lists get",
+      "summary": "Get one v1alpha GA4 audience-list metadata resource.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "google-analytics-data-api.get_audience_list",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.audienceLists.get",
+      "flags": [
+        {
+          "name": "property-id",
+          "type": "string",
+          "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+          "maps_to": "path.property_id",
+          "allow_empty": false
+        },
+        {
+          "name": "audience-list-id",
+          "type": "string",
+          "summary": "Audience list ID from a list/create response.",
+          "maps_to": "path.audience_list_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1alpha/properties/{property_id}/audienceLists/{audience_list_id}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "approval": "none",
+      "notes": "Fixed v1alpha GET metadata endpoint; it does not query audience user rows."
+    },
+    {
+      "path": "recurring-audience-lists list",
+      "summary": "List v1alpha GA4 recurring-audience-list metadata for one property.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "google-analytics-data-api.list_recurring_audience_lists",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.recurringAudienceLists.list",
+      "flags": [
+        {
+          "name": "property-id",
+          "type": "string",
+          "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+          "maps_to": "path.property_id",
+          "allow_empty": false
+        },
+        {
+          "name": "page-size",
+          "type": "integer",
+          "summary": "Optional pageSize query parameter, bounded by the provider response limit.",
+          "maps_to": "query.pageSize"
+        },
+        {
+          "name": "page-token",
+          "type": "string",
+          "summary": "Optional pageToken from a prior list response.",
+          "maps_to": "query.pageToken",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1alpha/properties/{property_id}/recurringAudienceLists"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "approval": "none",
+      "notes": "Fixed v1alpha GET list endpoint; it returns metadata only."
+    },
+    {
+      "path": "recurring-audience-lists get",
+      "summary": "Get one v1alpha GA4 recurring-audience-list metadata resource.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "google-analytics-data-api.get_recurring_audience_list",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.recurringAudienceLists.get",
+      "flags": [
+        {
+          "name": "property-id",
+          "type": "string",
+          "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+          "maps_to": "path.property_id",
+          "allow_empty": false
+        },
+        {
+          "name": "recurring-audience-list-id",
+          "type": "string",
+          "summary": "Recurring audience list ID from a list/create response.",
+          "maps_to": "path.recurring_audience_list_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1alpha/properties/{property_id}/recurringAudienceLists/{recurring_audience_list_id}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "approval": "none",
+      "notes": "Fixed v1alpha GET metadata endpoint; it does not query audience user rows."
+    },
+    {
+      "path": "report-tasks list",
+      "summary": "List v1alpha GA4 report-task metadata for one property.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "google-analytics-data-api.list_report_tasks",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.reportTasks.list",
+      "flags": [
+        {
+          "name": "property-id",
+          "type": "string",
+          "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+          "maps_to": "path.property_id",
+          "allow_empty": false
+        },
+        {
+          "name": "page-size",
+          "type": "integer",
+          "summary": "Optional pageSize query parameter, bounded by the provider response limit.",
+          "maps_to": "query.pageSize"
+        },
+        {
+          "name": "page-token",
+          "type": "string",
+          "summary": "Optional pageToken from a prior list response.",
+          "maps_to": "query.pageToken",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1alpha/properties/{property_id}/reportTasks"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "approval": "none",
+      "notes": "Fixed v1alpha GET list endpoint; it returns task metadata, not report task content."
+    },
+    {
+      "path": "report-tasks get",
+      "summary": "Get one v1alpha GA4 report-task metadata resource.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "google-analytics-data-api.get_report_task",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.reportTasks.get",
+      "flags": [
+        {
+          "name": "property-id",
+          "type": "string",
+          "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+          "maps_to": "path.property_id",
+          "allow_empty": false
+        },
+        {
+          "name": "report-task-id",
+          "type": "string",
+          "summary": "Report task ID from a list/create response.",
+          "maps_to": "path.report_task_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1alpha/properties/{property_id}/reportTasks/{report_task_id}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "approval": "none",
+      "notes": "Fixed v1alpha GET metadata endpoint; it does not query report task content."
     },
     {
       "path": "reports run-realtime",

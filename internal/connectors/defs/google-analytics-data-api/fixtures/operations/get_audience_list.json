@@ -1,0 +1,17 @@
+{
+  "request": {
+    "operation": "google-analytics-data-api.get_audience_list",
+    "path_params": {
+      "property_id": "000000000",
+      "audience_list_id": "audience_list_fixture_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "name": "properties/000000000/audienceLists/audience_list_fixture_1",
+      "state": "ACTIVE",
+      "rowCount": 1
+    }
+  }
+}

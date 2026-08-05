@@ -1,0 +1,19 @@
+{
+  "request": {
+    "operation": "google-analytics-data-api.list_recurring_audience_lists",
+    "path_params": {
+      "property_id": "000000000"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "recurringAudienceLists": [
+        {
+          "name": "properties/000000000/recurringAudienceLists/recurring_audience_list_fixture_1",
+          "state": "ACTIVE"
+        }
+      ]
+    }
+  }
+}

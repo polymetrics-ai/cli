@@ -159,6 +159,13 @@ func TestOperationDirectReadFixtureCoversImplementedOperations(t *testing.T) {
 		"google-analytics-data-api.get_metadata",
 		"google-analytics-data-api.list_audience_exports",
 		"google-analytics-data-api.get_audience_export",
+		"google-analytics-data-api.get_property_quotas_snapshot",
+		"google-analytics-data-api.list_audience_lists",
+		"google-analytics-data-api.get_audience_list",
+		"google-analytics-data-api.list_recurring_audience_lists",
+		"google-analytics-data-api.get_recurring_audience_list",
+		"google-analytics-data-api.list_report_tasks",
+		"google-analytics-data-api.get_report_task",
 	} {
 		operation := operation
 		t.Run(operation, func(t *testing.T) {
@@ -251,6 +258,20 @@ func TestOperationDirectReadLiveUsesFixedGETEndpoints(t *testing.T) {
 			writeJSON(t, w, map[string]any{"audienceExports": []any{map[string]any{"name": "properties/123456/audienceExports/audience_export_fixture_1"}}})
 		case "/v1beta/properties/123456/audienceExports/audience_export_fixture_1":
 			writeJSON(t, w, map[string]any{"name": "properties/123456/audienceExports/audience_export_fixture_1", "state": "ACTIVE"})
+		case "/v1alpha/properties/123456/propertyQuotasSnapshot":
+			writeJSON(t, w, map[string]any{"name": "properties/123456/propertyQuotasSnapshot", "coreTokensPerDay": map[string]any{"remaining": "199999"}})
+		case "/v1alpha/properties/123456/audienceLists":
+			writeJSON(t, w, map[string]any{"audienceLists": []any{map[string]any{"name": "properties/123456/audienceLists/audience_list_fixture_1", "state": "ACTIVE"}}})
+		case "/v1alpha/properties/123456/audienceLists/audience_list_fixture_1":
+			writeJSON(t, w, map[string]any{"name": "properties/123456/audienceLists/audience_list_fixture_1", "state": "ACTIVE"})
+		case "/v1alpha/properties/123456/recurringAudienceLists":
+			writeJSON(t, w, map[string]any{"recurringAudienceLists": []any{map[string]any{"name": "properties/123456/recurringAudienceLists/recurring_audience_list_fixture_1", "state": "ACTIVE"}}})
+		case "/v1alpha/properties/123456/recurringAudienceLists/recurring_audience_list_fixture_1":
+			writeJSON(t, w, map[string]any{"name": "properties/123456/recurringAudienceLists/recurring_audience_list_fixture_1", "state": "ACTIVE"})
+		case "/v1alpha/properties/123456/reportTasks":
+			writeJSON(t, w, map[string]any{"reportTasks": []any{map[string]any{"name": "properties/123456/reportTasks/report_task_fixture_1", "state": "ACTIVE"}}})
+		case "/v1alpha/properties/123456/reportTasks/report_task_fixture_1":
+			writeJSON(t, w, map[string]any{"name": "properties/123456/reportTasks/report_task_fixture_1", "state": "ACTIVE"})
 		default:
 			t.Fatalf("unexpected path %s", r.URL.RequestURI())
 		}
@@ -260,13 +281,27 @@ func TestOperationDirectReadLiveUsesFixedGETEndpoints(t *testing.T) {
 	c := New()
 	c.Client = server.Client()
 	cfg := connectors.RuntimeConfig{
-		Config:  map[string]string{"base_url": server.URL, "property_ids": "123456", "audience_export_id": "audience_export_fixture_1"},
+		Config: map[string]string{
+			"base_url":                   server.URL,
+			"property_ids":               "123456",
+			"audience_export_id":         "audience_export_fixture_1",
+			"audience_list_id":           "audience_list_fixture_1",
+			"recurring_audience_list_id": "recurring_audience_list_fixture_1",
+			"report_task_id":             "report_task_fixture_1",
+		},
 		Secrets: map[string]string{"access_token": "fixture-access-token"},
 	}
 	for _, req := range []connectors.OperationDirectReadRequest{
 		{Operation: "google-analytics-data-api.get_metadata", Config: cfg, OutputPolicy: "json_redacted"},
 		{Operation: "google-analytics-data-api.list_audience_exports", Config: cfg, Query: map[string]string{"pageSize": "2", "pageToken": "next"}, OutputPolicy: "json_redacted"},
 		{Operation: "google-analytics-data-api.get_audience_export", Config: cfg, OutputPolicy: "json_redacted"},
+		{Operation: "google-analytics-data-api.get_property_quotas_snapshot", Config: cfg, OutputPolicy: "json_redacted"},
+		{Operation: "google-analytics-data-api.list_audience_lists", Config: cfg, OutputPolicy: "json_redacted"},
+		{Operation: "google-analytics-data-api.get_audience_list", Config: cfg, OutputPolicy: "json_redacted"},
+		{Operation: "google-analytics-data-api.list_recurring_audience_lists", Config: cfg, OutputPolicy: "json_redacted"},
+		{Operation: "google-analytics-data-api.get_recurring_audience_list", Config: cfg, OutputPolicy: "json_redacted"},
+		{Operation: "google-analytics-data-api.list_report_tasks", Config: cfg, OutputPolicy: "json_redacted"},
+		{Operation: "google-analytics-data-api.get_report_task", Config: cfg, OutputPolicy: "json_redacted"},
 	} {
 		result, err := c.OperationDirectRead(ctx, req)
 		if err != nil {
@@ -280,6 +315,13 @@ func TestOperationDirectReadLiveUsesFixedGETEndpoints(t *testing.T) {
 		"/v1beta/properties/123456/metadata",
 		"/v1beta/properties/123456/audienceExports?pageSize=2&pageToken=next",
 		"/v1beta/properties/123456/audienceExports/audience_export_fixture_1",
+		"/v1alpha/properties/123456/propertyQuotasSnapshot",
+		"/v1alpha/properties/123456/audienceLists",
+		"/v1alpha/properties/123456/audienceLists/audience_list_fixture_1",
+		"/v1alpha/properties/123456/recurringAudienceLists",
+		"/v1alpha/properties/123456/recurringAudienceLists/recurring_audience_list_fixture_1",
+		"/v1alpha/properties/123456/reportTasks",
+		"/v1alpha/properties/123456/reportTasks/report_task_fixture_1",
 	} {
 		if !seen[uri] {
 			t.Fatalf("server did not see %s; saw %#v", uri, seen)

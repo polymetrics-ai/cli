@@ -18,6 +18,18 @@
       "type": "string",
       "description": "Audience export identifier used by the get audience export direct command."
     },
+    "audience_list_id": {
+      "type": "string",
+      "description": "Audience list identifier used by the v1alpha audience-list get direct command."
+    },
+    "recurring_audience_list_id": {
+      "type": "string",
+      "description": "Recurring audience list identifier used by the v1alpha recurring-audience-list get direct command."
+    },
+    "report_task_id": {
+      "type": "string",
+      "description": "Report task identifier used by the v1alpha report-task get direct command."
+    },
     "access_token": {
       "type": "string",
       "x-secret": true,
