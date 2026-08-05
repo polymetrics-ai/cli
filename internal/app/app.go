@@ -216,7 +216,8 @@ func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (Cred
 	if err := connectors.RejectLegacyConnectorName(req.Connector); err != nil {
 		return CredentialMeta{}, err
 	}
-	if _, ok := a.registry.Get(req.Connector); !ok {
+	connector, ok := a.registry.Get(req.Connector)
+	if !ok {
 		return CredentialMeta{}, fmt.Errorf("connector %q not found", req.Connector)
 	}
 	if _, ok := a.findCredential(req.Name); ok {
@@ -234,6 +235,9 @@ func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (Cred
 	}
 	if err := a.validateCredentialConfig(req.Connector, req.Config); err != nil {
 		return CredentialMeta{}, err
+	}
+	if err := connectors.ValidateConfiguration(connector, req.Config); err != nil {
+		return CredentialMeta{}, fmt.Errorf("credential configuration: %w", err)
 	}
 	if err := a.vault.Put(ctx, id, req.Secrets); err != nil {
 		return CredentialMeta{}, err
