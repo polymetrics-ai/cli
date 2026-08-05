@@ -14,7 +14,8 @@ and all unrelated safety controls.
    - Run the narrow tests to capture the red failure before production edits.
    - In only the owned runner functions, preserve a write command's record clone, emit ETL records
      unchanged, return original errors, stop setting `RedactFields` on executor requests, and
-     delete the runner redaction helpers and now-unused safety import.
+     delete the runner redaction helpers while retaining unrelated safety utilities used by input
+     validation.
 
 2. **#3784 — application persistence proof** — completed
    - Add a credential-free fake connector test under `internal/app` that calls the public
