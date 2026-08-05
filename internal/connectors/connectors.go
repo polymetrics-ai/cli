@@ -77,12 +77,24 @@ const (
 // --help` reads it for the same line — five renderers, one field, never a
 // runtime inference (design report §5.2).
 type MechanismSpec struct {
-	Kind                 string `json:"kind"`
-	Label                string `json:"label,omitempty"`
-	SanctionedByProvider bool   `json:"sanctioned_by_provider"`
-	ProviderTermsURL     string `json:"provider_terms_url,omitempty"`
-	AuthFlow             string `json:"auth_flow,omitempty"`
-	OptInRequired        bool   `json:"opt_in_required,omitempty"`
+	Kind                      string                `json:"kind"`
+	Label                     string                `json:"label,omitempty"`
+	SanctionedByProvider      bool                  `json:"sanctioned_by_provider"`
+	ProviderTermsURL          string                `json:"provider_terms_url,omitempty"`
+	AuthFlow                  string                `json:"auth_flow,omitempty"`
+	OptInRequired             bool                  `json:"opt_in_required,omitempty"`
+	UpstreamPin               *MechanismUpstreamPin `json:"upstream_pin,omitempty"`
+	BreakageReviewCadenceDays int                   `json:"breakage_review_cadence_days,omitempty"`
+	DisabledReason            string                `json:"disabled_reason,omitempty"`
+}
+
+// MechanismUpstreamPin is the connector-facing view of the checked upstream
+// reference for an unofficial web-session mechanism. It remains metadata for
+// inspection and review; runtime code never scrapes or refreshes it.
+type MechanismUpstreamPin struct {
+	Repo       string `json:"repo"`
+	SHA        string `json:"sha"`
+	VerifiedAt string `json:"verified_at,omitempty"`
 }
 
 type Field struct {

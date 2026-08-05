@@ -5,6 +5,8 @@ import (
 	"strings"
 	"testing"
 	"testing/fstest"
+
+	"polymetrics.ai/internal/connectors"
 )
 
 func bundleFSWithMetadata(name, metadataJSON string) fstest.MapFS {
@@ -90,6 +92,41 @@ func TestMechanismWebSessionLoadsWhenValid(t *testing.T) {
 	}
 	if b.Metadata.Mechanism.UpstreamPin == nil || b.Metadata.Mechanism.UpstreamPin.SHA != "abcdef1234567890" {
 		t.Fatalf("UpstreamPin = %+v", b.Metadata.Mechanism.UpstreamPin)
+	}
+}
+
+func TestMechanismSynthesisPreservesWebGovernanceMetadata(t *testing.T) {
+	b, err := Load(bundleFSWithMetadata("acme-web", validWebSessionMetadata("acme-web")), "acme-web")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	// A disabled bundle is rejected by Load. Set this after the valid load to
+	// prove the public projection itself does not quietly discard the local
+	// kill-switch value when a native caller renders an already-loaded bundle.
+	b.Metadata.Mechanism.DisabledReason = "upstream contract changed; awaiting review"
+	c := New(b, nil)
+
+	for _, tc := range []struct {
+		name string
+		mech *connectors.MechanismSpec
+	}{
+		{name: "metadata", mech: c.Metadata().Mechanism},
+		{name: "definition", mech: c.Definition().Mechanism},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			if tc.mech == nil {
+				t.Fatal("Mechanism = nil")
+			}
+			if tc.mech.UpstreamPin == nil || tc.mech.UpstreamPin.Repo != "https://github.com/example/reference-cli" || tc.mech.UpstreamPin.SHA != "abcdef1234567890" || tc.mech.UpstreamPin.VerifiedAt != "2026-08-03" {
+				t.Fatalf("UpstreamPin = %+v, want the declared pin", tc.mech.UpstreamPin)
+			}
+			if tc.mech.BreakageReviewCadenceDays != 30 {
+				t.Fatalf("BreakageReviewCadenceDays = %d, want 30", tc.mech.BreakageReviewCadenceDays)
+			}
+			if tc.mech.DisabledReason != "upstream contract changed; awaiting review" {
+				t.Fatalf("DisabledReason = %q, want projected kill-switch reason", tc.mech.DisabledReason)
+			}
+		})
 	}
 }
 

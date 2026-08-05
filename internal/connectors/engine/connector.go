@@ -258,13 +258,24 @@ func synthesizeMechanism(b Bundle) *connectors.MechanismSpec {
 	if m == nil {
 		return nil
 	}
+	var upstreamPin *connectors.MechanismUpstreamPin
+	if m.UpstreamPin != nil {
+		upstreamPin = &connectors.MechanismUpstreamPin{
+			Repo:       m.UpstreamPin.Repo,
+			SHA:        m.UpstreamPin.SHA,
+			VerifiedAt: m.UpstreamPin.VerifiedAt,
+		}
+	}
 	return &connectors.MechanismSpec{
-		Kind:                 m.Kind,
-		Label:                m.Label,
-		SanctionedByProvider: m.SanctionedByProvider,
-		ProviderTermsURL:     m.ProviderTermsURL,
-		AuthFlow:             m.AuthFlow,
-		OptInRequired:        m.OptInRequired,
+		Kind:                      m.Kind,
+		Label:                     m.Label,
+		SanctionedByProvider:      m.SanctionedByProvider,
+		ProviderTermsURL:          m.ProviderTermsURL,
+		AuthFlow:                  m.AuthFlow,
+		OptInRequired:             m.OptInRequired,
+		UpstreamPin:               upstreamPin,
+		BreakageReviewCadenceDays: m.BreakageReviewCadenceDays,
+		DisabledReason:            m.DisabledReason,
 	}
 }
 

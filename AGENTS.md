@@ -23,8 +23,9 @@ the parent PR into `main` remains human-gated. Legacy connector Go under
 
 `internal/browserauth/` is the shared package that authenticates through a real browser and yields
 either an official OAuth token (`loopback/` PKCE, `device/` RFC 8628) or a captured browser session
-(`driver/`, go-rod-based — its `Session` interface is deliberately limited to Navigate/WaitFor/
-GetCookies/Close, enforced by a grep guard test, so it can never type a password). `store/` persists
+(`driver.NewFlow`, go-rod-based — its lower-level `Session` interface is deliberately limited to
+Navigate/WaitFor/GetCookies/Close, enforced by a grep guard test, so it can never type a password).
+`store/` persists
 both credential kinds and a risk-acceptance record in the vault. A connector's access mechanism is
 declared, never inferred, via `metadata.json`'s `mechanism` block (`engine.MechanismSpec`,
 `internal/connectors/engine/bundle.go`); a bundle whose name ends `-web` must declare

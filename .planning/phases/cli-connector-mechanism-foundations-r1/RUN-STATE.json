@@ -1,0 +1,20 @@
+{
+  "phase": "cli-connector-mechanism-foundations-r1",
+  "branch": "fm/cli-connector-mechanism-foundations-r1",
+  "status": "awaiting_pipeline_rebase",
+  "gsd_mode": "manual_fallback",
+  "reason": "The project-local GSD adapter does not expose the programming-loop command.",
+  "updated_at": "2026-08-05T08:04:58Z",
+  "orchestration_decisions": [
+    {
+      "cycle": "recovery-audit",
+      "decision": "local_critical_path",
+      "reason": "The recovered shared-foundation changes and their security boundaries are coupled; no independent, disjoint subtask remains for safe parallel execution."
+    },
+    {
+      "cycle": "post-local-verification",
+      "decision": "await_pipeline_rebase",
+      "reason": "Current main contains the required connectorgen surface-sync command while this recovered branch predates it. Surface-sync must run on the rebased branch and is not claimed as verified beforehand."
+    }
+  ]
+}
