@@ -84,7 +84,7 @@
       },
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered by internal/connectors/hooks/google-search-console/hooks_test.go and CLI direct-read fixtures exercise the typed POST operation; conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
+        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered by internal/connectors/hooks/google-search-console/hooks_test.go and represented by this typed ETL command surface; conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
       },
       "schema": "schemas/search_analytics_by_date.json"
     },
@@ -99,7 +99,7 @@
       },
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered by internal/connectors/hooks/google-search-console/hooks_test.go and CLI direct-read fixtures exercise the typed POST operation; conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
+        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered by internal/connectors/hooks/google-search-console/hooks_test.go and represented by this typed ETL command surface; conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
       },
       "schema": "schemas/search_analytics_by_country.json"
     },
@@ -114,7 +114,7 @@
       },
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered by internal/connectors/hooks/google-search-console/hooks_test.go and CLI direct-read fixtures exercise the typed POST operation; conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
+        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered by internal/connectors/hooks/google-search-console/hooks_test.go and represented by this typed ETL command surface; conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
       },
       "schema": "schemas/search_analytics_by_device.json"
     },
@@ -129,7 +129,7 @@
       },
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered by internal/connectors/hooks/google-search-console/hooks_test.go and CLI direct-read fixtures exercise the typed POST operation; conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
+        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered by internal/connectors/hooks/google-search-console/hooks_test.go and represented by this typed ETL command surface; conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
       },
       "schema": "schemas/search_analytics_by_page.json"
     },
@@ -144,7 +144,7 @@
       },
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered by internal/connectors/hooks/google-search-console/hooks_test.go and CLI direct-read fixtures exercise the typed POST operation; conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
+        "reason": "StreamHook-dispatched (POST body carries startDate/endDate/dimensions/rowLimit/startRow -- StreamSpec.Body is unwired by the declarative read path, engine/read.go always sends a nil body); hook-covered by internal/connectors/hooks/google-search-console/hooks_test.go and represented by this typed ETL command surface; conformance's declarative fixture replay cannot exercise a StreamHook-only POST-body read"
       },
       "schema": "schemas/search_analytics_by_query.json"
     }

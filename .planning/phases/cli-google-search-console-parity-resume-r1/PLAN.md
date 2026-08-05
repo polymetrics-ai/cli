@@ -44,9 +44,10 @@ reference genuinely reachable through the appropriate safe connector surface.
    distinguish source operations from convenience streams/commands, and leave no documented
    operation `planned`. Express record-shaped mutations through `writes.json`; do not mark
    `rest_write` operations implemented.
-5. Rebase late onto the landed citation-convention change, encode the researched citations in its
-   canonical shape, regenerate connector artifacts, and verify real command registration plus
-   representative fixture-backed requests.
+5. Check current `origin/main` late for the shared citation-convention change. If it has landed,
+   encode the researched citations in its canonical shape; otherwise retain the required research
+   matrix rather than inventing a competing bundle format. Regenerate connector artifacts and
+   verify real command registration plus representative fixture-backed requests.
 
 ## Safety and reporting
 
@@ -62,7 +63,7 @@ reference genuinely reachable through the appropriate safe connector surface.
 
 - `go run ./cmd/connectorgen surface-sync`
 - `go run ./cmd/connectorgen surface-sync --check`
-- `go run ./cmd/connectorgen validate google-search-console`
+- `go run ./cmd/connectorgen validate internal/connectors/defs/google-search-console`
 - `go test ./internal/connectors/conformance/...`
 - `go test ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight`
 - `go test ./internal/cli/...`

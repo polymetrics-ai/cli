@@ -65493,13 +65493,13 @@
         "access_token": {
           "type": "string",
           "x-secret": true,
-          "description": "Google OAuth 2.0 access token with Search Console read scope. Used only for Bearer auth; never logged. The 3-legged consent/acquisition and refresh-token-exchange dance is out of scope for this connector (credentials layer already owns it) -- see docs.md Known limits."
+          "description": "Google OAuth 2.0 access token with Search Console scope. Read-only ETL and direct reads can use https://www.googleapis.com/auth/webmasters.readonly; reverse ETL write actions require https://www.googleapis.com/auth/webmasters. Used only for Bearer auth; never logged. The 3-legged consent/acquisition and refresh-token-exchange dance is out of scope for this connector (credentials layer already owns it) -- see docs.md Known limits."
         },
         "base_url": {
           "type": "string",
           "format": "uri",
-          "default": "https://www.googleapis.com/webmasters/v3",
-          "description": "Search Console API base URL override for tests or proxies."
+          "default": "https://searchconsole.googleapis.com",
+          "description": "Search Console API base URL override for tests or proxies. The connector appends the official /webmasters/v3 and /v1 endpoint prefixes and avoids duplicating /webmasters/v3 when a legacy base URL already includes it."
         },
         "site_urls": {
           "type": "string",
@@ -65507,11 +65507,19 @@
         },
         "site_url": {
           "type": "string",
-          "description": "Single Search Console site property for site_details and sitemap_details."
+          "description": "Single Search Console site property for site_details, sitemap_details, and fixture/live certification defaults."
         },
         "feedpath": {
           "type": "string",
-          "description": "Sitemap feed URL/path for sitemap_details."
+          "description": "Sitemap feed URL/path for sitemap_details and sitemap write/delete certification defaults."
+        },
+        "inspection_url": {
+          "type": "string",
+          "description": "URL Inspection direct-read default URL; used only by certification sweeps when explicitly provided."
+        },
+        "mobile_test_url": {
+          "type": "string",
+          "description": "Mobile Friendly Test direct-read default URL; used only by certification sweeps when explicitly provided."
         },
         "start_date": {
           "type": "string",
@@ -65531,7 +65539,7 @@
         },
         "data_state": {
           "type": "string",
-          "description": "Search Analytics dataState filter (final or all). Omitted when unset, matching the API's own default."
+          "description": "Search Analytics dataState filter (final, all, or hourly_all). Omitted when unset, matching the API's own default."
         },
         "page_size": {
           "type": "integer",
@@ -65675,14 +65683,14 @@
         "name": "add_site",
         "kind": "create",
         "method": "PUT",
-        "path": "/sites/{{ record.site_url | urlencode }}",
+        "path": "/webmasters/v3/sites/{{ record.site_url | urlencode }}",
         "risk": "adds a site property to the authenticated Search Console account"
       },
       {
         "name": "delete_site",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/sites/{{ record.site_url | urlencode }}",
+        "path": "/webmasters/v3/sites/{{ record.site_url | urlencode }}",
         "risk": "removes a site property from the authenticated Search Console account",
         "confirm": "destructive"
       },
@@ -65690,14 +65698,14 @@
         "name": "submit_sitemap",
         "kind": "create",
         "method": "PUT",
-        "path": "/sites/{{ record.site_url | urlencode }}/sitemaps/{{ record.feedpath | urlencode }}",
+        "path": "/webmasters/v3/sites/{{ record.site_url | urlencode }}/sitemaps/{{ record.feedpath | urlencode }}",
         "risk": "submits a sitemap URL for a Search Console site property"
       },
       {
         "name": "delete_sitemap",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/sites/{{ record.site_url | urlencode }}/sitemaps/{{ record.feedpath | urlencode }}",
+        "path": "/webmasters/v3/sites/{{ record.site_url | urlencode }}/sitemaps/{{ record.feedpath | urlencode }}",
         "risk": "deletes a sitemap from a Search Console site property",
         "confirm": "destructive"
       }

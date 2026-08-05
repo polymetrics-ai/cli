@@ -24,4 +24,8 @@ mark `rest_write` as implemented.
 
 ## Verification result
 
-Pending current-main red/green cycles.
+Completed through the manual-GSD fallback: all focused current-main red/green cycles pass.
+The final provider inventory is 11 unique operations, all genuinely reachable; the generated
+surface has 15 commands and zero planned operations. `REQUEST-FIELD-MATRIX.md` contains 32/32
+provider-owned field citations while the shared canonical bundle convention remains unlanded on
+current `origin/main`.
