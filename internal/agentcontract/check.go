@@ -78,7 +78,7 @@ func CheckProjections(root string, contract *Contract) (returnErr error) {
 		if err != nil {
 			return err
 		}
-		actual := content
+		var actual []byte
 		if projectionRendersWholeFile(contract, target) {
 			expected = normalizeClaudeProjection(expected)
 			actual = normalizeClaudeProjection(content)
