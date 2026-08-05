@@ -6669,8 +6669,8 @@
     {
       "path": "binary download-attachment-for-a-comment",
       "summary": "Download attachment for a comment binary download surface.",
-      "intent": "direct_read",
-      "availability": "planned",
+      "intent": "binary_download",
+      "availability": "implemented",
       "operation": "front.download_attachment_for_a_comment",
       "source_url": "https://dev.frontapp.com/reference/download-attachment-for-a-comment.md",
       "flags": [
@@ -6689,15 +6689,21 @@
           "allow_empty": false
         }
       ],
-      "risk": "high: binary attachment download requires bounded local file-output handling",
-      "approval": "planned/blocked until shared binary-download execution contract is available",
-      "notes": "Typed fixed endpoint recorded in operations.json; execution is not claimed in this connector-local worker."
+      "risk": "high: bounded binary attachment download writes only beneath the caller-supplied destination root",
+      "approval": "none: fixed Front GET endpoint; the runtime requires --dest-root and enforces the operation byte cap",
+      "notes": "Typed binary download executed by the shared bounded file-output runtime.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/comments/{comment_id}/download/{attachment_link_id}"
+        }
+      ]
     },
     {
       "path": "binary download-attachment",
       "summary": "Download attachment binary download surface.",
-      "intent": "direct_read",
-      "availability": "planned",
+      "intent": "binary_download",
+      "availability": "implemented",
       "operation": "front.download_attachment",
       "source_url": "https://dev.frontapp.com/reference/download-attachment.md",
       "flags": [
@@ -6709,15 +6715,21 @@
           "allow_empty": false
         }
       ],
-      "risk": "high: binary attachment download requires bounded local file-output handling",
-      "approval": "planned/blocked until shared binary-download execution contract is available",
-      "notes": "Typed fixed endpoint recorded in operations.json; execution is not claimed in this connector-local worker."
+      "risk": "high: bounded binary attachment download writes only beneath the caller-supplied destination root",
+      "approval": "none: fixed Front GET endpoint; the runtime requires --dest-root and enforces the operation byte cap",
+      "notes": "Typed binary download executed by the shared bounded file-output runtime.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/download/{attachment_link_id}"
+        }
+      ]
     },
     {
       "path": "binary download-attachment-from-an-article",
       "summary": "Download attachment from an article binary download surface.",
-      "intent": "direct_read",
-      "availability": "planned",
+      "intent": "binary_download",
+      "availability": "implemented",
       "operation": "front.download_attachment_from_an_article",
       "source_url": "https://dev.frontapp.com/reference/download-attachment-from-an-article.md",
       "flags": [
@@ -6736,15 +6748,21 @@
           "allow_empty": false
         }
       ],
-      "risk": "high: binary attachment download requires bounded local file-output handling",
-      "approval": "planned/blocked until shared binary-download execution contract is available",
-      "notes": "Typed fixed endpoint recorded in operations.json; execution is not claimed in this connector-local worker."
+      "risk": "high: bounded binary attachment download writes only beneath the caller-supplied destination root",
+      "approval": "none: fixed Front GET endpoint; the runtime requires --dest-root and enforces the operation byte cap",
+      "notes": "Typed binary download executed by the shared bounded file-output runtime.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/knowledge_base_articles/{article_id}/download/{attachment_id}"
+        }
+      ]
     },
     {
       "path": "binary download-attachment-for-a-message-template",
       "summary": "Download attachment for a message template binary download surface.",
-      "intent": "direct_read",
-      "availability": "planned",
+      "intent": "binary_download",
+      "availability": "implemented",
       "operation": "front.download_attachment_for_a_message_template",
       "source_url": "https://dev.frontapp.com/reference/download-attachment-for-a-message-template.md",
       "flags": [
@@ -6763,15 +6781,21 @@
           "allow_empty": false
         }
       ],
-      "risk": "high: binary attachment download requires bounded local file-output handling",
-      "approval": "planned/blocked until shared binary-download execution contract is available",
-      "notes": "Typed fixed endpoint recorded in operations.json; execution is not claimed in this connector-local worker."
+      "risk": "high: bounded binary attachment download writes only beneath the caller-supplied destination root",
+      "approval": "none: fixed Front GET endpoint; the runtime requires --dest-root and enforces the operation byte cap",
+      "notes": "Typed binary download executed by the shared bounded file-output runtime.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/message_templates/{message_template_id}/download/{attachment_link_id}"
+        }
+      ]
     },
     {
       "path": "binary download-attachment-for-a-message",
       "summary": "Download attachment for a message binary download surface.",
-      "intent": "direct_read",
-      "availability": "planned",
+      "intent": "binary_download",
+      "availability": "implemented",
       "operation": "front.download_attachment_for_a_message",
       "source_url": "https://dev.frontapp.com/reference/download-attachment-for-a-message.md",
       "flags": [
@@ -6790,9 +6814,15 @@
           "allow_empty": false
         }
       ],
-      "risk": "high: binary attachment download requires bounded local file-output handling",
-      "approval": "planned/blocked until shared binary-download execution contract is available",
-      "notes": "Typed fixed endpoint recorded in operations.json; execution is not claimed in this connector-local worker."
+      "risk": "high: bounded binary attachment download writes only beneath the caller-supplied destination root",
+      "approval": "none: fixed Front GET endpoint; the runtime requires --dest-root and enforces the operation byte cap",
+      "notes": "Typed binary download executed by the shared bounded file-output runtime.",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/messages/{message_id}/download/{attachment_link_id}"
+        }
+      ]
     },
     {
       "path": "excluded update-channel",

@@ -1,0 +1,49 @@
+{
+  "phase": "front-parity-resume-r1",
+  "branch": "fm/cli-front-parity-resume-r1",
+  "status": "in_progress",
+  "verificationPassed": false,
+  "verificationNote": "Front-specific current-main gates pass. Full CLI suite first exposed stale root goldens; the deterministic focused golden update passed. Full rerun and final integration are pending.",
+  "gsd": {
+    "doctor": "passed",
+    "programmingLoopAvailable": false,
+    "fallback": "manual GSD lifecycle; adapter command and local helper script unavailable"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "single Front-owned connector bundle in an isolated worktree; active runtime instruction prohibits subagents"
+    }
+  ],
+  "gates": [
+    {
+      "command": "jq planned-binary reachability assertion",
+      "result": "expected_fail",
+      "notes": "five Front binary commands remain planned"
+    },
+    {
+      "command": "go test ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1",
+      "result": "pass"
+    },
+    {
+      "command": "go test ./internal/connectors/conformance/... -run 'TestConformance/front' -count=1",
+      "result": "pass"
+    },
+    {
+      "command": "go run ./cmd/connectorgen surface-sync --check && go run ./cmd/connectorgen validate internal/connectors/defs/front",
+      "result": "pass",
+      "notes": "No generated command-surface drift; Front has zero validator findings."
+    },
+    {
+      "command": "go test ./internal/cli/... -count=1",
+      "result": "expected_fail",
+      "notes": "Root help transcripts needed the recovered pm front dynamic namespace."
+    },
+    {
+      "command": "POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test ./internal/cli -run TestGoldenTranscripts -count=1",
+      "result": "pass",
+      "notes": "Regenerated nine deterministic root transcript records after Front registration."
+    }
+  ]
+}

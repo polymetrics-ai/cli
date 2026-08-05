@@ -1,0 +1,29 @@
+# TDD Ledger — Front parity resume
+
+## Recovery boundary
+
+The historical implementation was recovered as commits `a7df96e51` and `a8bf86569` onto current
+`origin/main`; this is not newly authored production code. Any new bundle behavior in this phase
+must have fresh red validation evidence before its production edit.
+
+## Active red-evidence checklist
+
+| Slice | Red command / observation | Expected evidence | Status |
+| --- | --- | --- | --- |
+| runtime reachability | `go test ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight` | exposes any post-#3712 invalid implemented Front command | green after promotion |
+| Front conformance | `go test ./internal/connectors/conformance/... -run 'TestConformance/front'` | exposes replay/schema/write-shape regressions | green after promotion |
+| binary promotion | focused Front validation + commandrunner preflight before edits | current `planned` binary rows demonstrate the gap to close | green: five `binary_download` commands are implemented |
+| citation convention | field matrix audit against provider docs | every request field cited or tier-5 deferred | research complete: 933 declared fields cited; 15 body-absence findings recorded |
+| CLI registration | `go test ./internal/cli/...` | generated help must include the recovered Front namespace | red: root golden transcripts omitted Front; deterministic regeneration produced the expected fixture; focused green test passed |
+
+## Green evidence
+
+| Slice | Command | Result | Evidence |
+| --- | --- | --- | --- |
+| binary promotion (red) | `jq -e '[.commands[] | select(.availability == "planned")] | length == 0' internal/connectors/defs/front/cli_surface.json` | expected fail | printed `false`, exit 1: five documented binary commands remain planned despite #3712 runtime wiring. |
+| connector validation semantics | `go run ./cmd/connectorgen validate front` | expected fail | current tool treats `front` as an unavailable root (`read root: open .: no such file or directory`); use the documented defs-root gate after edits. |
+| runtime preflight baseline | `go test ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1` | pass | all currently implemented commands—including Front's 249—pass real runtime preflight; planned binaries are outside the sweep. |
+| Front conformance baseline | `go test ./internal/connectors/conformance/... -run 'TestConformance/front' -count=1` | pass | recovered bundle's fixture replay and existing writes are healthy on current main. |
+| binary promotion (green) | `go run ./cmd/connectorgen surface-sync --check && go run ./cmd/connectorgen validate internal/connectors/defs/front && go test ./internal/connectors/conformance/... -run 'TestConformance/front' -count=1 && go test ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1` | pass | Surface synchronization reported zero drift; Front had zero validator findings; focused conformance and current-main runtime preflight both passed after five binary promotions. |
+| CLI registration (red) | `go test ./internal/cli/... -count=1` | expected fail | Root golden transcripts did not contain the newly recovered `pm front` dynamic namespace; no implementation error or runtime blocker was reported. |
+| CLI registration (green) | `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test ./internal/cli -run TestGoldenTranscripts -count=1` | pass | Regenerated exactly nine root transcript entries to include Front; the focused golden suite passed in 34.432s. A full focused CLI rerun remains a final gate. |
