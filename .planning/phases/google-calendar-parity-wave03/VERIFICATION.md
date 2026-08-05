@@ -20,7 +20,7 @@
 - Executable now: 38 (11 streams, `freeBusy.query`, and 26 reverse-ETL write actions).
 - Blocked: 0. The 2026-08-05 correction required all 26 record-shaped mutations to use the current `writes.json` executor; none requires `rest_write`.
 - Planned: 0.
-- Provider citations: 148/148 declared request-field uses (27 read/direct-read + 121 writes) and 38/38 operation-level sources, recorded in `REQUEST-FIELD-RESEARCH.md` and `google-calendar-official-operations.json`.
+- Provider citations: 149/149 declared request-field uses (27 read/direct-read + 122 writes) and 38/38 operation-level sources, recorded in `REQUEST-FIELD-RESEARCH.md` and `google-calendar-official-operations.json`.
 
 ## Write-action slice gates
 
