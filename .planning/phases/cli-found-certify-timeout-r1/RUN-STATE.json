@@ -86,6 +86,17 @@
       "unroundedSeconds": 245.494,
       "budget": "4m15s",
       "budgetSeconds": 255
+    },
+    "enforcementEvidence": {
+      "run": "https://github.com/polymetrics-ai/cli/actions/runs/31055574285/job/92472218411",
+      "retrieved": "2026-08-06",
+      "certifyWallElapsedSeconds": 101.291,
+      "cliWallElapsedSeconds": 55.114,
+      "totalWallElapsedSeconds": 156.405,
+      "certifyRealCLIInvocations": 85,
+      "cliRealCLIInvocations": 61,
+      "allowedDuration": "4m15s",
+      "aggregateVerify": "success"
     }
   },
   "verificationPassed": false
