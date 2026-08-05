@@ -36,6 +36,7 @@ Reads and safely reverse-ETLs Google Calendar calendars, calendar-list entries, 
 
 - calendarid
 - event_id
+- mode
 - rule_id
 - setting
 - start_date

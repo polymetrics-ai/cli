@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	googlecalendardefs "polymetrics.ai/internal/connectors/defs/google-calendar"
 	"polymetrics.ai/internal/connectors/engine"
 	googlecalendar "polymetrics.ai/internal/connectors/native/google-calendar"
 )
@@ -23,6 +24,11 @@ func TestFixtureModeEngineConnectorIsNetworkFree(t *testing.T) {
 	defer srv.Close()
 
 	bundle := loadPromotedBundle("google-calendar")
+	fixtures, err := googlecalendardefs.Fixtures()
+	if err != nil {
+		t.Fatalf("Fixtures: %v", err)
+	}
+	bundle.Fixtures = fixtures
 	bundle.HTTP.URL = srv.URL
 	bundle.HTTP.Auth = nil
 	connector := &fixtureModeEngineConnector{
@@ -34,17 +40,7 @@ func TestFixtureModeEngineConnectorIsNetworkFree(t *testing.T) {
 	if err := connector.Check(context.Background(), cfg); err != nil {
 		t.Fatalf("Check(fixture): %v", err)
 	}
-	var records []connectors.Record
-	err := connector.Read(context.Background(), connectors.ReadRequest{Stream: "events", Config: cfg}, func(record connectors.Record) error {
-		records = append(records, record)
-		return nil
-	})
-	if err != nil {
-		t.Fatalf("Read(fixture): %v", err)
-	}
-	if len(records) != 2 {
-		t.Fatalf("Read(fixture) records = %d, want 2", len(records))
-	}
+	assertFixtureModeReadCatalog(t, connector, cfg)
 
 	writeRequest := connectors.WriteRequest{Action: "insert_calendar", Config: cfg}
 	writeRecords := []connectors.Record{{"summary": "Fixture calendar"}}
@@ -95,23 +91,39 @@ func TestGoogleCalendarFactoryPreservesFixtureMode(t *testing.T) {
 	if err := connector.Check(context.Background(), cfg); err != nil {
 		t.Fatalf("factory Check(fixture): %v", err)
 	}
-	var records []connectors.Record
-	err := connector.Read(context.Background(), connectors.ReadRequest{Stream: "events", Config: cfg}, func(record connectors.Record) error {
-		records = append(records, record)
-		return nil
-	})
-	if err != nil {
-		t.Fatalf("factory Read(fixture): %v", err)
-	}
-	if len(records) != 2 {
-		t.Fatalf("factory Read(fixture) records = %d, want 2", len(records))
-	}
+	assertFixtureModeReadCatalog(t, connector, cfg)
 	result, err := connector.Write(context.Background(), connectors.WriteRequest{Action: "insert_calendar", Config: cfg}, []connectors.Record{{"summary": "Fixture calendar"}})
 	if !errors.Is(err, connectors.ErrUnsupportedOperation) {
 		t.Fatalf("factory Write(fixture) error = %v, want ErrUnsupportedOperation", err)
 	}
 	if result.RecordsFailed != 1 {
 		t.Fatalf("factory Write(fixture) failed records = %d, want 1", result.RecordsFailed)
+	}
+}
+
+func assertFixtureModeReadCatalog(t *testing.T, connector connectors.Connector, cfg connectors.RuntimeConfig) {
+	t.Helper()
+	catalog, err := connector.Catalog(context.Background(), cfg)
+	if err != nil {
+		t.Fatalf("Catalog(fixture): %v", err)
+	}
+	if len(catalog.Streams) != 11 {
+		t.Fatalf("Catalog(fixture) streams = %d, want 11", len(catalog.Streams))
+	}
+	for _, stream := range catalog.Streams {
+		t.Run(stream.Name, func(t *testing.T) {
+			records := 0
+			err := connector.Read(context.Background(), connectors.ReadRequest{Stream: stream.Name, Config: cfg}, func(connectors.Record) error {
+				records++
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Read(fixture): %v", err)
+			}
+			if records == 0 {
+				t.Fatal("Read(fixture) emitted no records")
+			}
+		})
 	}
 }
 

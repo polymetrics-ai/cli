@@ -50,6 +50,15 @@ func TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides(t *testing.T) {
 	if !ok || len(googleCalendarDefinition.WriteActions) != 26 {
 		t.Fatalf("google-calendar definition = %+v, want 26 engine-backed write actions", googleCalendarDefinition)
 	}
+	foundFixtureMode := false
+	for _, field := range connectors.ManifestOf(googleCalendar).ConfigFields {
+		if field.Name == "mode" {
+			foundFixtureMode = true
+		}
+	}
+	if !foundFixtureMode {
+		t.Fatal("google-calendar manifest is missing fixture mode configuration")
+	}
 	googleCalendarSurface, ok := googleCalendar.(connectors.CommandSurfaceProvider)
 	if !ok || googleCalendarSurface.CommandSurface() == nil {
 		t.Fatalf("google-calendar has no command surface: %T", googleCalendar)

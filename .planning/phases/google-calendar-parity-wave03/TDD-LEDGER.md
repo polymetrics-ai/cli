@@ -5,6 +5,8 @@
 | Slice | Command | Result | Expected failure |
 | --- | --- | --- | --- |
 | Current-main validation | `go run ./cmd/connectorgen validate internal/connectors/defs/google-calendar` | failed | `freebusy query` flags `--time-min`, `--time-max`, and `--calendar` map to required body paths but are not themselves required. |
+| Review round 4 fixture audit | Static catalog/read call-path comparison | failed | The engine catalog advertises 11 streams while `mode=fixture` delegates reads to the four-stream legacy connector. |
+| Review round 4 URI audit | Static schema-compiler inspection | failed | `format: uri` is accepted as annotation-only, so malformed percent escapes pass write validation. |
 
 The failure was reproduced after rebasing PR #3554 onto `origin/main`; the preserved green claims are historical only.
 
@@ -21,3 +23,4 @@ The failure was reproduced after rebasing PR #3554 onto `origin/main`; the prese
 | Citation research | Added provider field evidence without inventing a shared machine citation schema that is absent from current main. | `REQUEST-FIELD-RESEARCH.md` records 149/149 declared field uses and 38/38 operation-level sources. |
 | Generated parity | Regenerated the affected CLI manual/catalog/website outputs and root CLI golden transcripts. | Final docs/website/CLI gates remain in the verification checklist. |
 | Review remediation | Corrected stale release/write metadata, removed the implicit event cutoff, restored legacy list-stream projections, and added settings cursor pagination. | `go test ./internal/connectors/hooks/google-calendar -count=1` passes with connector-owned regressions for metadata, initial event queries, projection boundaries, and two-page settings reads. |
+| Fixture and URI remediation | Add in-memory bundle fixture replay for every advertised stream, restore `mode` configuration metadata, and enforce absolute URI syntax. | Focused engine, native registry, bundle registry, and Google Calendar hook tests cover all 11 streams, fail-closed fixture writes, malformed URI escapes, and valid HTTPS callbacks. |
