@@ -3,7 +3,7 @@
   "docs": "https://developers.google.com/youtube/analytics/reference/reports/query; https://developers.google.com/youtube/reporting/v1/reports",
   "reviewed_at": "2026-08-05",
   "operation_ledger_version": 1,
-  "scope": "Official public Google discovery documents re-audited for YouTube Analytics API v2 (revision 20260729, 8 operations) and YouTube Reporting API v1 (revision 20260729, 8 operations). Fifteen operations are executable through typed streams, reverse-ETL actions, or the bounded binary-download executor. Provider ad-hoc reports.query is the sole planned operation, pending typed provider-query foundation issue #2985.",
+  "scope": "Official public Google discovery documents re-audited for YouTube Analytics API v2 (revision 20260803, 8 operations) and YouTube Reporting API v1 (revision 20260803, 8 operations). Fifteen operations are executable through typed streams, reverse-ETL actions, or the bounded binary-download executor. Provider ad-hoc reports.query is the sole planned operation, pending typed provider-query foundation issue #2985.",
   "endpoints": [
     {
       "method": "GET",

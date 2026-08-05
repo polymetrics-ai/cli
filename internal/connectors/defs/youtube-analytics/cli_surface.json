@@ -4,7 +4,7 @@
   "source_cli": {
     "name": "YouTube Analytics and Reporting APIs",
     "docs": "https://developers.google.com/youtube/analytics",
-    "reference": "Google Discovery: YouTube Analytics API v2 revision 20260729 and YouTube Reporting API v1 revision 20260729",
+    "reference": "Google Discovery: YouTube Analytics API v2 revision 20260803 and YouTube Reporting API v1 revision 20260803",
     "source": "provider_api"
   },
   "groups": [
@@ -76,7 +76,7 @@
       "availability": "implemented",
       "stream": "jobs",
       "source_cli_path": "GET /v1/jobs",
-      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/jobs/list",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs/list",
       "flags": [
         {
           "name": "include-system-managed",
@@ -102,7 +102,7 @@
       "availability": "implemented",
       "stream": "job",
       "source_cli_path": "GET /v1/jobs/{jobId}",
-      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/jobs/get",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs/get",
       "api_surface": [
         {
           "method": "GET",
@@ -121,7 +121,7 @@
       "availability": "implemented",
       "write": "create_job",
       "source_cli_path": "POST /v1/jobs",
-      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/jobs/create",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs/create",
       "flags": [
         {
           "name": "report-type-id",
@@ -159,7 +159,7 @@
       "availability": "implemented",
       "write": "delete_job",
       "source_cli_path": "DELETE /v1/jobs/{jobId}",
-      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/jobs/delete",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs/delete",
       "flags": [
         {
           "name": "job-id",
@@ -192,7 +192,7 @@
       "availability": "implemented",
       "stream": "report_types",
       "source_cli_path": "GET /v1/reportTypes",
-      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/reportTypes/list",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/reportTypes/list",
       "flags": [
         {
           "name": "include-system-managed",
@@ -218,7 +218,7 @@
       "availability": "implemented",
       "stream": "reports",
       "source_cli_path": "GET /v1/jobs/{jobId}/reports",
-      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/jobs/reports/list",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs.reports/list",
       "flags": [
         {
           "name": "created-after",
@@ -263,7 +263,7 @@
       "availability": "implemented",
       "stream": "report",
       "source_cli_path": "GET /v1/jobs/{jobId}/reports/{reportId}",
-      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/jobs/reports/get",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs.reports/get",
       "api_surface": [
         {
           "method": "GET",
@@ -363,6 +363,19 @@
           "maps_to": "record.snippet.title",
           "allow_empty": false,
           "required": true
+        },
+        {
+          "name": "item-type",
+          "type": "enum",
+          "values": [
+            "youtube#channel",
+            "youtube#playlist",
+            "youtube#video",
+            "youtubePartner#asset"
+          ],
+          "summary": "Provider resource type the group will contain.",
+          "maps_to": "record.contentDetails.itemType",
+          "required": true
         }
       ],
       "api_surface": [
@@ -374,7 +387,7 @@
       "risk": "Creates a YouTube Analytics group; requires reverse ETL plan, preview, explicit approval, then execute.",
       "approval": "Plan first, inspect preview output, then run only with the generated approval token.",
       "examples": [
-        "pm youtube-analytics groups create --credential youtube-prod --title 'Owned fixture group' --preview --json"
+        "pm youtube-analytics groups create --credential youtube-prod --title 'Owned fixture group' --item-type youtube#video --preview --json"
       ]
     },
     {

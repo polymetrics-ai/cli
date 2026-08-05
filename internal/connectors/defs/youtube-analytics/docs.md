@@ -92,7 +92,8 @@ Destructive delete actions also require typed `--confirm destructive` at executi
 - `delete_job`: DELETE `/jobs/{{ record.job_id }}`; required `job_id`; redacted preview/error
   field `job_id`; destructive confirmation required.
 - `create_group`: POST `https://youtubeanalytics.googleapis.com/v2/groups`; required
-  `snippet.title`.
+  `snippet.title` and `contentDetails.itemType`; item type accepts `youtube#channel`,
+  `youtube#playlist`, `youtube#video`, or `youtubePartner#asset`.
 - `update_group`: PUT `https://youtubeanalytics.googleapis.com/v2/groups`; required `id` and
   `snippet.title`; group ID redacted in write errors.
 - `delete_group`: DELETE

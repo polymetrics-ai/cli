@@ -4,12 +4,12 @@ This is the required research record while the shared machine-readable citation 
 
 ## Sources and method
 
-Provider-owned Google reference pages were checked on 2026-08-05. Google provides prose parameter tables rather than OpenAPI request bodies for these APIs, so rows use tier 3 (`operation_reference`) unless explicitly marked tier 4 (`same_page_sibling`). Requiredness is provider wording, not inferred from the current bundle.
+Provider-owned Google reference pages were checked on 2026-08-05. Google provides prose parameter tables rather than OpenAPI request bodies for most of these APIs, so rows use tier 3 (`operation_reference`) unless explicitly marked tier 4 (`same_page_sibling`). The `media.download` row also cites Google's provider-owned Discovery document for its exact path parameter. Requiredness is provider wording, not inferred from the current bundle.
 
 | Operation(s) | Declared request fields | Source URL / section | Evidence type | Confidence | Requiredness rationale |
 | --- | --- | --- | --- | --- | --- |
 | `groups.list` | query `mine`, `onBehalfOfContentOwner`, paginator `pageToken` | https://developers.google.com/youtube/analytics/reference/groups/list — Parameters | operation_reference | high | Google requires exactly one of `id` or `mine`, and `mine` must be `true`. The connector deliberately supports only the closed `mine=true` mode: its one-value enum is required and the stream cannot interpolate the request without it. Content-owner context and page token remain optional. |
-| `groups.insert` | body `snippet.title` | https://developers.google.com/youtube/analytics/reference/groups/insert — Request body | operation_reference | high | Provider Group resource requires a title when creating a group. |
+| `groups.insert` | body `snippet.title`, `contentDetails.itemType` | https://developers.google.com/youtube/analytics/reference/groups/insert — Request body; https://developers.google.com/youtube/analytics/reference/groups — Resource representation | operation_reference | high | Google requires both fields when creating a group. The Group resource restricts item type to `youtube#channel`, `youtube#playlist`, `youtube#video`, or `youtubePartner#asset`; the write schema and typed CLI enum enforce those provider-owned values. |
 | `groups.update` | body `id`, `snippet.title` | https://developers.google.com/youtube/analytics/reference/groups/update — Request body | operation_reference | high | The resource identifies the group and the provider documents title as the updatable property. |
 | `groups.delete` | query `id` | https://developers.google.com/youtube/analytics/reference/groups/delete — Parameters | operation_reference | high | Provider marks the group identifier as required. |
 | `groupItems.list` | query `groupId`, `onBehalfOfContentOwner` | https://developers.google.com/youtube/analytics/reference/groupItems/list — Parameters | operation_reference | high | Provider requires `groupId`; content-owner context is optional. |
@@ -22,13 +22,13 @@ Provider-owned Google reference pages were checked on 2026-08-05. Google provide
 | `jobs.delete` | path `jobId` | https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs/delete — Path parameters | operation_reference | high | Google marks the job ID mandatory. |
 | `jobs.reports.list` | path `jobId`, query `createdAfter`, `onBehalfOfContentOwner`, `pageSize`, paginator `pageToken`, `startTimeAtOrAfter`, `startTimeBefore` | https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs.reports/list — Parameters | operation_reference | high | Job ID selects the report collection; remaining fields are optional filters/continuation controls. |
 | `jobs.reports.get` | path `jobId`, `reportId`, query `onBehalfOfContentOwner` | https://developers.google.com/youtube/reporting/v1/reference/rest/v1/jobs.reports/get — Path and query parameters | operation_reference | high | Both resource identifiers are path keys; content-owner context is optional. |
-| `media.download` | path `resourceName` mapped safely to internal `path`, static query `alt=media` | https://developers.google.com/youtube/reporting/v1/reports — Step 6: Download the report | same_page_sibling | high | The provider guide directs an authorized GET to the report download URL. Google client-library reference names required `resourceName`; connector maps it to safe multi-segment path expansion and never accepts an arbitrary URL. |
+| `media.download` | path `resourceName` mapped safely to internal `path`, static query `alt=media` | https://www.googleapis.com/discovery/v1/apis/youtubereporting/v1/rest — `resources.media.methods.download`; https://developers.google.com/youtube/reporting/v1/reports — Step 6: Download the report | operation_reference + same_page_sibling | high | Google's Discovery document marks `resourceName` required and declares GET `v1/media/{+resourceName}` with `alt=media`; the provider guide directs an authorized GET to the returned download URL. The connector maps the value to safe multi-segment path expansion and never accepts an arbitrary URL. |
 
 ## Coverage accounting
 
 - 16 documented operations: 15 reachable after `media.download` promotion; `reports.query` remains planned solely for typed provider-query foundation issue #2985.
 - All declared request-field uses are covered by 15 provider-owned citation rows. Repeated shared fields cite their operation-table row once.
-- Tier-5 deferrals: 0. The sole tier-4 citation is `media.download`, explicitly flagged because Google's Reporting guide documents its download step on the report-retrieval page rather than in a dedicated REST operation page.
+- Tier-5 deferrals: 0. The sole tier-4 supplement is `media.download`, explicitly flagged because Google's Reporting guide documents its download step on the report-retrieval page; the exact required path field is independently covered by the provider Discovery document.
 
 ## Mutation execution determination
 

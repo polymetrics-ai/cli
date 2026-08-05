@@ -2,6 +2,9 @@
   "record": {
     "snippet": {
       "title": "Owned fixture group"
+    },
+    "contentDetails": {
+      "itemType": "youtube#video"
     }
   },
   "expect": {
@@ -10,6 +13,9 @@
     "body": {
       "snippet": {
         "title": "Owned fixture group"
+      },
+      "contentDetails": {
+        "itemType": "youtube#video"
       }
     }
   },
@@ -21,6 +27,10 @@
       "snippet": {
         "title": "Owned fixture group",
         "publishedAt": "2026-01-01T00:00:00Z"
+      },
+      "contentDetails": {
+        "itemType": "youtube#video",
+        "itemCount": "0"
       }
     }
   }
