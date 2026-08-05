@@ -844,6 +844,42 @@ func TestBundleLoadRejectsInlineInputModeForSecretOperation(t *testing.T) {
 	}
 }
 
+func TestValidateSensitivePolicyRejectsUnknownInputModeForSecretOperation(t *testing.T) {
+	err := validateSensitivePolicy(0, OperationSpec{
+		ID:              "acme.secrets.put",
+		SecretSensitive: true,
+		SensitivePolicy: &SensitivePolicySpec{
+			InputMode:    "vault",
+			Transform:    "none",
+			ApprovalMode: "typed_confirmation",
+		},
+	})
+	if err == nil {
+		t.Fatal("validateSensitivePolicy: expected unknown input_mode for a secret operation to be rejected")
+	}
+	if !strings.Contains(err.Error(), "input_mode") || !strings.Contains(err.Error(), "known value") {
+		t.Fatalf("Load error = %q, want input_mode known-value rejection", err.Error())
+	}
+}
+
+func TestValidateSensitivePolicyRejectsUnknownTransformForSecretOperation(t *testing.T) {
+	err := validateSensitivePolicy(0, OperationSpec{
+		ID:              "acme.secrets.put",
+		SecretSensitive: true,
+		SensitivePolicy: &SensitivePolicySpec{
+			InputMode:    "env",
+			Transform:    "provider_specific",
+			ApprovalMode: "typed_confirmation",
+		},
+	})
+	if err == nil {
+		t.Fatal("validateSensitivePolicy: expected unknown transform for a secret operation to be rejected")
+	}
+	if !strings.Contains(err.Error(), "transform") || !strings.Contains(err.Error(), "known value") {
+		t.Fatalf("Load error = %q, want transform known-value rejection", err.Error())
+	}
+}
+
 func TestBundleLoadRejectsSecretOperationWithoutTypedConfirmation(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	policy := `, "sensitive_policy": {"input_mode": "env", "redact_fields": ["value"], "transform": "github_secret_encryption", "approval_mode": "none"}`
@@ -855,6 +891,48 @@ func TestBundleLoadRejectsSecretOperationWithoutTypedConfirmation(t *testing.T) 
 	}
 	if !strings.Contains(err.Error(), "typed_confirmation") {
 		t.Fatalf("Load error = %q, want typed_confirmation rejection", err.Error())
+	}
+}
+
+func TestBundleLoadAcceptsSecretOperationWithoutRedactFields(t *testing.T) {
+	tests := []struct {
+		name      string
+		operation string
+	}{
+		{
+			name: "secret_sensitive",
+			operation: strings.Replace(
+				secretWriteOp,
+				`"mutation_class": "secret"`,
+				`"mutation_class": "update"`,
+				1,
+			),
+		},
+		{
+			name: "secret mutation class",
+			operation: strings.Replace(
+				secretWriteOp,
+				`"secret_sensitive": true`,
+				`"secret_sensitive": false`,
+				1,
+			),
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fsys := fullValidBundleFS("acme")
+			policy := `, "sensitive_policy": {"input_mode": "env", "transform": "none", "approval_mode": "typed_confirmation"}`
+			fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{"operations":[%s]}`, fmt.Sprintf(tt.operation, policy)))}
+
+			bundle, err := Load(fsys, "acme")
+			if err != nil {
+				t.Fatalf("Load() error = %v", err)
+			}
+			if got := bundle.Operations[0].SensitivePolicy.RedactFields; len(got) != 0 {
+				t.Fatalf("redact_fields = %v, want no forced fields", got)
+			}
+		})
 	}
 }
 
