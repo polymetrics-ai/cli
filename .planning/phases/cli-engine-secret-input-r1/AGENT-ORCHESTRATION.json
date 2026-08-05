@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "cli-engine-secret-input-r1",
+  "mode": "local_critical_path",
+  "reason": "One bounded shared CLI/commandrunner/definition safety boundary; delegation would overlap active prerequisite lanes and the runtime instruction forbids proactive delegation.",
+  "storageDecision": "secret-storage-seam-collision: mechanism foundations owns persistence; binding deferred until it lands on main.",
+  "updatedAt": "2026-08-05T00:00:00.000Z"
+}

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "cli-engine-secret-input-r1",
+  "status": "completed_with_warnings",
+  "reason": "Planning complete under the manual GSD fallback; production work begins only after focused red-test evidence.",
+  "details": {
+    "storageBinding": "deferred to landed mechanism-foundations seam",
+    "prerequisites": [
+      "rest_write executor",
+      "schema-deriver union-arm fix",
+      "connector mechanism foundations"
+    ]
+  },
+  "updatedAt": "2026-08-05T00:00:00.000Z"
+}
