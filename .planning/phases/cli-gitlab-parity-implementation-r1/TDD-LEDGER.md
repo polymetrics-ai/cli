@@ -2,7 +2,7 @@
 
 ## Setup evidence
 
-- Isolation: `pwd -P` and `git rev-parse --show-toplevel` both resolve to `/Users/karthiksivadas/.treehouse/cli-83d592/38/cli`.
+- Isolation: `pwd -P` and `git rev-parse --show-toplevel` were verified in an isolated Git worktree.
 - Branch: `fm/cli-gitlab-parity-implementation-r1`.
 - `no-mistakes doctor`: daemon running and repository initialized.
 - No GitLab credentials, live API calls, provider writes, or secret values are used.
@@ -17,7 +17,7 @@
 
 | Slice | Evidence | Result |
 | --- | --- | --- |
-| G0 provider ledger | `jq` parses 1,745 entries with 4 executable / 1,618 implementable-now / 64 provider-restriction / 45 multipart-foundation / 14 justified-excluded dispositions. | Passed for row and disposition counts; the four `covered_by` ledger entries still need per-operation citation metadata. |
+| G0 provider ledger | `jq` parses 1,745 entries with 4 executable / 1,618 implementable-now / 64 provider-restriction / 45 multipart-foundation / 14 justified-excluded dispositions. | Passed for row and disposition counts; G1 records a provider `source_url` on each matching command in `cli_surface.json`. |
 | G1 command reachability | Built `./cmd/pm` resolves `pm gitlab`, `pm gitlab projects list --help`, `groups list --help`, `users list --help`, and `issues list --help`; `TestEveryImplementedCommandPassesRuntimePreflight` covers the real preflight. | Passed; each help path renders, and a non-executing command invocation reaches project initialization (not an unknown command) without credentials or a provider call. |
 | Bundle validity | `go run ./cmd/connectorgen validate internal/connectors/defs/gitlab` and `go run ./cmd/connectorgen surface-sync --check internal/connectors/defs/gitlab` pass. | Passed. |
 | Documentation parity | GitLab connector manual/website catalog are regenerated or verified through the repository's docs validation command. | Passed; `pm docs generate`, `pnpm --dir website gen:catalog`, and `pm docs validate --connectors-dir docs/connectors` complete. |

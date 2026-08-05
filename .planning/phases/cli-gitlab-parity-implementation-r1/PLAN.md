@@ -5,7 +5,7 @@
 - Branch: `fm/cli-gitlab-parity-implementation-r1` in the isolated treehouse worktree.
 - Production scope: `internal/connectors/defs/gitlab/**`, its connector-owned generated/manual documentation, and website catalog output generated from that bundle.
 - No shared engine, command runner, schema, dependency, credential, live-provider, or other-connector changes.
-- Authoritative inventory: `/Users/karthiksivadas/karthik-agent-workspace/data/cli-gitlab-provider-inventory-rebuild-r1/report.md`, GitLab OpenAPI v3 `19.3.0-pre`, retrieved 2026-08-05, SHA-256 `7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0`.
+- Authoritative inventory: the GitLab OpenAPI v3 `19.3.0-pre` artifact, retrieved 2026-08-05, SHA-256 `7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0`; its checked-in provider-owned ledger is `internal/connectors/defs/gitlab/api_surface.json`.
 
 ## GSD delivery trace
 

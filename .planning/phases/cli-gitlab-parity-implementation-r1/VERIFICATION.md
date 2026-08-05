@@ -6,7 +6,7 @@
 - [x] Provider artifact URL, version, retrieval date, and SHA-256 appear in `api_surface.json`.
 - [x] Each row has exactly one executable, blocked, or justified-excluded disposition.
 - [x] Counts match the report: executable 4; blocked pending GitLab declarations 1,618; provider restricted 64; blocked on multipart executor 45; justified excluded 14.
-- [ ] The four executable `covered_by` rows still need per-operation source citations in `api_surface.json`.
+- [x] Each executable G1 command carries a provider `source_url` in `cli_surface.json`; its matching `covered_by` endpoint binds that citation to the stream.
 
 ## CLI/help/docs/website parity
 
