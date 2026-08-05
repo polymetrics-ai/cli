@@ -53,10 +53,12 @@ func TestSurfaceInventoryFromRawReportsProvenanceEvidence(t *testing.T) {
 		wantEndpoints    int
 		wantCited        int
 		wantReasonSubstr string
+		wantParseErr     bool
 	}{
 		{
 			name: "complete_v2",
 			raw: `{
+				"api": "test API",
 				"operation_ledger_version": 2,
 				"artifacts": [{
 					"id": "acme-openapi-2026-08-06",
@@ -83,6 +85,7 @@ func TestSurfaceInventoryFromRawReportsProvenanceEvidence(t *testing.T) {
 		{
 			name: "invalid_v2_fails_with_actionable_provenance_diagnostic",
 			raw: `{
+				"api": "test API",
 				"operation_ledger_version": 2,
 				"artifacts": [{
 					"id": "acme-openapi-2026-08-06",
@@ -104,8 +107,23 @@ func TestSurfaceInventoryFromRawReportsProvenanceEvidence(t *testing.T) {
 			wantReasonSubstr: "provenance.source_url is required",
 		},
 		{
+			name: "pre_ledger_remains_legacy_unverified",
+			raw: `{
+				"api": "test API",
+				"endpoints": [{
+					"method": "GET",
+					"path": "/widgets",
+					"covered_by": {"stream": "widgets"}
+				}]
+			}`,
+			wantResult:    "pass",
+			wantStatus:    "legacy_unverified",
+			wantEndpoints: 1,
+		},
+		{
 			name: "v1_remains_legacy_unverified",
 			raw: `{
+				"api": "test API",
 				"operation_ledger_version": 1,
 				"endpoints": [{
 					"method": "GET",
@@ -119,8 +137,9 @@ func TestSurfaceInventoryFromRawReportsProvenanceEvidence(t *testing.T) {
 			wantEndpoints: 1,
 		},
 		{
-			name: "unsupported_ledger_version_fails",
+			name: "unsupported_ledger_version_is_rejected",
 			raw: `{
+				"api": "test API",
 				"operation_ledger_version": 3,
 				"artifacts": [{
 					"id": "acme-openapi-2026-08-06",
@@ -137,16 +156,12 @@ func TestSurfaceInventoryFromRawReportsProvenanceEvidence(t *testing.T) {
 					"covered_by": {"stream": "widgets"}
 				}]
 			}`,
-			wantResult:       "fail",
-			wantStatus:       "invalid",
-			wantLedger:       3,
-			wantArtifacts:    1,
-			wantEndpoints:    1,
-			wantReasonSubstr: "operation_ledger_version: 3 is unsupported; expected 1 or 2",
+			wantParseErr: true,
 		},
 		{
-			name: "explicit_zero_ledger_version_fails",
+			name: "explicit_zero_ledger_version_is_rejected",
 			raw: `{
+				"api": "test API",
 				"operation_ledger_version": 0,
 				"endpoints": [{
 					"method": "GET",
@@ -154,14 +169,12 @@ func TestSurfaceInventoryFromRawReportsProvenanceEvidence(t *testing.T) {
 					"covered_by": {"stream": "widgets"}
 				}]
 			}`,
-			wantResult:       "fail",
-			wantStatus:       "invalid",
-			wantEndpoints:    1,
-			wantReasonSubstr: "operation_ledger_version: must be omitted or be 1 or 2",
+			wantParseErr: true,
 		},
 		{
-			name: "null_ledger_version_fails",
+			name: "null_ledger_version_is_rejected",
 			raw: `{
+				"api": "test API",
 				"operation_ledger_version": null,
 				"endpoints": [{
 					"method": "GET",
@@ -169,16 +182,32 @@ func TestSurfaceInventoryFromRawReportsProvenanceEvidence(t *testing.T) {
 					"covered_by": {"stream": "widgets"}
 				}]
 			}`,
-			wantResult:       "fail",
-			wantStatus:       "invalid",
-			wantEndpoints:    1,
-			wantReasonSubstr: "operation_ledger_version: must be omitted or be 1 or 2",
+			wantParseErr: true,
+		},
+		{
+			name: "noncanonical_ledger_version_key_is_rejected",
+			raw: `{
+				"api": "test API",
+				"Operation_Ledger_Version": 0,
+				"endpoints": [{
+					"method": "GET",
+					"path": "/widgets",
+					"covered_by": {"stream": "widgets"}
+				}]
+			}`,
+			wantParseErr: true,
 		},
 	}
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			result, err := surfaceInventoryFromRaw([]byte(tc.raw))
+			if tc.wantParseErr {
+				if err == nil {
+					t.Fatal("surfaceInventoryFromRaw error = nil, want schema rejection")
+				}
+				return
+			}
 			if err != nil {
 				t.Fatalf("surfaceInventoryFromRaw: %v", err)
 			}

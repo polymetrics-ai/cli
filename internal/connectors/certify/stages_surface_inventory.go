@@ -1,7 +1,6 @@
 package certify
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io/fs"
@@ -77,8 +76,8 @@ func surfaceInventoryFor(connector string) (SurfaceResult, error) {
 }
 
 func surfaceInventoryFromRaw(raw []byte) (SurfaceResult, error) {
-	var surface engine.APISurface
-	if err := json.Unmarshal(raw, &surface); err != nil {
+	surface, err := engine.ParseAPISurface(raw)
+	if err != nil {
 		return SurfaceResult{}, err
 	}
 	provenance := engine.ValidateSurfaceProvenance(&surface)

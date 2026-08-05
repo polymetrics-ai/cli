@@ -2133,6 +2133,95 @@ func TestBundleLoadAPISurfaceV2ProvenanceContract(t *testing.T) {
 	}
 }
 
+func TestParseAPISurfaceEnforcesLedgerSchema(t *testing.T) {
+	tests := []struct {
+		name        string
+		raw         string
+		wantVersion int
+		wantErr     bool
+	}{
+		{
+			name: "pre_ledger_remains_valid",
+			raw: `{
+				"api": "test API",
+				"endpoints": []
+			}`,
+		},
+		{
+			name: "v1_remains_valid",
+			raw: `{
+				"api": "test API",
+				"operation_ledger_version": 1,
+				"endpoints": []
+			}`,
+			wantVersion: 1,
+		},
+		{
+			name: "v2_is_valid",
+			raw: `{
+				"api": "test API",
+				"operation_ledger_version": 2,
+				"endpoints": []
+			}`,
+			wantVersion: 2,
+		},
+		{
+			name: "zero_is_rejected",
+			raw: `{
+				"api": "test API",
+				"operation_ledger_version": 0,
+				"endpoints": []
+			}`,
+			wantErr: true,
+		},
+		{
+			name: "null_is_rejected",
+			raw: `{
+				"api": "test API",
+				"operation_ledger_version": null,
+				"endpoints": []
+			}`,
+			wantErr: true,
+		},
+		{
+			name: "unsupported_version_is_rejected",
+			raw: `{
+				"api": "test API",
+				"operation_ledger_version": 3,
+				"endpoints": []
+			}`,
+			wantErr: true,
+		},
+		{
+			name: "noncanonical_version_key_is_rejected",
+			raw: `{
+				"api": "test API",
+				"Operation_Ledger_Version": 1,
+				"endpoints": []
+			}`,
+			wantErr: true,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			surface, err := ParseAPISurface([]byte(tc.raw))
+			if tc.wantErr {
+				if err == nil {
+					t.Fatal("ParseAPISurface error = nil, want schema rejection")
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("ParseAPISurface: %v", err)
+			}
+			if surface.OperationLedgerVersion != tc.wantVersion {
+				t.Fatalf("OperationLedgerVersion = %d, want %d", surface.OperationLedgerVersion, tc.wantVersion)
+			}
+		})
+	}
+}
+
 func TestBundleLoadAPISurfaceOperationRejectsUnblockedDefault(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
