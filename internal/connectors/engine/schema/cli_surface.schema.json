@@ -43,7 +43,7 @@
           "name": { "type": "string" },
           "type": {
             "type": "string",
-            "enum": ["boolean", "string", "integer", "enum", "string_array"]
+            "enum": ["boolean", "string", "integer", "number", "enum", "string_array"]
           },
           "summary": { "type": "string" },
           "values": {
@@ -56,7 +56,9 @@
             "enum": ["date-time"]
           },
           "allow_empty": { "type": "boolean" },
-          "required": { "type": "boolean" }
+          "required": { "type": "boolean" },
+          "max_items": { "type": "integer" },
+          "min_items": { "type": "integer" }
         }
       }
     },
@@ -76,6 +78,7 @@
               "reverse_etl",
               "direct_read",
               "direct_write",
+              "binary_download",
               "local_workflow",
               "auth",
               "config",
@@ -111,7 +114,7 @@
                 "name": { "type": "string" },
                 "type": {
                   "type": "string",
-                  "enum": ["boolean", "string", "integer", "enum", "string_array"]
+                  "enum": ["boolean", "string", "integer", "number", "enum", "string_array"]
                 },
                 "summary": { "type": "string" },
                 "values": {
@@ -124,7 +127,9 @@
                   "enum": ["date-time"]
                 },
                 "allow_empty": { "type": "boolean" },
-                "required": { "type": "boolean" }
+                "required": { "type": "boolean" },
+                "max_items": { "type": "integer" },
+                "min_items": { "type": "integer" }
               }
             }
           },

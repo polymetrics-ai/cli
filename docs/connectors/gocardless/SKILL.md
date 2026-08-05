@@ -11,6 +11,7 @@ Reads and writes documented GoCardless REST API resources through the declarativ
 
 ## Icon
 
+- id: gocardless
 - asset: icons/gocardless.svg
 - source: upstream_registry
 - review_status: upstream_seeded

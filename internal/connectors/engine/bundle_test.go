@@ -1680,6 +1680,112 @@ func TestBundleLoadRejectsUnknownWritesActionKey(t *testing.T) {
 	}
 }
 
+func TestBundleLoadAcceptsClosedDestructiveWriteConfirmation(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/writes.json"] = &fstest.MapFile{Data: []byte(`{
+		"actions": [
+			{
+				"name": "delete_widget",
+				"kind": "delete",
+				"method": "DELETE",
+				"path": "/widgets/{{ record.id }}",
+				"path_fields": ["id"],
+				"record_schema": {
+					"type": "object",
+					"required": ["id"],
+					"additionalProperties": false,
+					"properties": {"id": {"type": "string"}}
+				},
+				"risk": "high",
+				"confirmation": {"kind": "destructive"}
+			}
+		]
+	}`)}
+
+	bundle, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load closed destructive write confirmation: %v", err)
+	}
+	if got := bundle.Writes[0].Confirmation; got == nil || got.Kind != "destructive" {
+		t.Fatalf("confirmation = %+v, want typed destructive policy", got)
+	}
+}
+
+func TestBundleLoadAcceptsClosedDestructiveOperationConfirmation(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [
+			{
+				"id": "acme.widgets.delete",
+				"kind": "rest_write",
+				"summary": "Delete one widget",
+				"risk": "high",
+				"approval": "plan, preview, approval, execute",
+				"output_policy": "json",
+				"mutation_class": "delete",
+				"confirmation": {"kind": "destructive"},
+				"rest": {"method": "DELETE", "path": "/widgets/{id}"}
+			}
+		]
+	}`)}
+
+	bundle, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load closed destructive operation confirmation: %v", err)
+	}
+	if got := bundle.Operations[0].Confirmation; got == nil || got.Kind != "destructive" {
+		t.Fatalf("confirmation = %+v, want typed destructive policy", got)
+	}
+}
+
+func TestBundleLoadRejectsOpenDestructiveConfirmation(t *testing.T) {
+	for _, confirmation := range []string{
+		`{"kind":"type-anything"}`,
+		`{"kind":"destructive","prompt":"please type yes"}`,
+	} {
+		t.Run(confirmation, func(t *testing.T) {
+			t.Run("writes", func(t *testing.T) {
+				fsys := fullValidBundleFS("acme")
+				fsys["acme/writes.json"] = &fstest.MapFile{Data: []byte(`{
+					"actions": [{
+						"name": "delete_widget",
+						"kind": "delete",
+						"method": "DELETE",
+						"path": "/widgets/{{ record.id }}",
+						"record_schema": {"type": "object", "properties": {}},
+						"risk": "high",
+						"confirmation": ` + confirmation + `
+					}]
+				}`)}
+
+				if _, err := Load(fsys, "acme"); err == nil {
+					t.Fatal("Load: expected open writes confirmation shape to be rejected")
+				}
+			})
+			t.Run("operations", func(t *testing.T) {
+				fsys := fullValidBundleFS("acme")
+				fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+					"operations": [{
+						"id": "acme.widgets.delete",
+						"kind": "rest_write",
+						"summary": "Delete one widget",
+						"risk": "high",
+						"approval": "plan, preview, approval, execute",
+						"output_policy": "json",
+						"mutation_class": "delete",
+						"confirmation": ` + confirmation + `,
+						"rest": {"method": "DELETE", "path": "/widgets/{id}"}
+					}]
+				}`)}
+
+				if _, err := Load(fsys, "acme"); err == nil {
+					t.Fatal("Load: expected open operations confirmation shape to be rejected")
+				}
+			})
+		})
+	}
+}
+
 func TestBundleLoadRejectsUnknownAPISurfaceEndpointKey(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
@@ -2087,5 +2193,180 @@ func TestLoadStreamsRecordsWithoutKeyedObjectDefaultsFalse(t *testing.T) {
 	}
 	if b.Streams[0].Records.KeyedObject {
 		t.Fatalf("Records.KeyedObject = true, want false (never declared)")
+	}
+}
+
+func operationsBundleFS(t *testing.T, operationsJSON string) fstest.MapFS {
+	t.Helper()
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(operationsJSON)}
+	return fsys
+}
+
+func TestBundleLoadAcceptsRequiredQueryGroups(t *testing.T) {
+	b, err := Load(operationsBundleFS(t, `{
+		"operations": [{
+			"id": "acme.users.list",
+			"kind": "rest_read",
+			"summary": "List users",
+			"risk": "medium",
+			"approval": "none",
+			"output_policy": "json_redacted",
+			"rest": {
+				"method": "GET",
+				"path": "/users",
+				"max_bytes": 1024,
+				"required_query": [{"any_of": ["email", "id"]}]
+			}
+		}]
+	}`), "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	groups := b.Operations[0].REST.RequiredQuery
+	if len(groups) != 1 || len(groups[0].AnyOf) != 2 {
+		t.Fatalf("required_query = %+v, want one group of two", groups)
+	}
+}
+
+func TestBundleLoadRejectsUnenforceableRequiredQuery(t *testing.T) {
+	tests := []struct {
+		name  string
+		group string
+	}{
+		{name: "empty any_of", group: `{"any_of": []}`},
+		{name: "missing any_of", group: `{}`},
+		{name: "blank parameter name", group: `{"any_of": ["email", "  "]}`},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := Load(operationsBundleFS(t, `{
+				"operations": [{
+					"id": "acme.users.list",
+					"kind": "rest_read",
+					"summary": "List users",
+					"risk": "medium",
+					"approval": "none",
+					"output_policy": "json_redacted",
+					"rest": {
+						"method": "GET",
+						"path": "/users",
+						"max_bytes": 1024,
+						"required_query": [`+tt.group+`]
+					}
+				}]
+			}`), "acme")
+			if err == nil {
+				t.Fatal("want load error: a group that can never be satisfied is unenforceable and must fail loudly")
+			}
+			if !strings.Contains(err.Error(), "required_query") {
+				t.Fatalf("error should name required_query, got %v", err)
+			}
+		})
+	}
+}
+
+func base64UploadBundleFS(t *testing.T, action string) fstest.MapFS {
+	t.Helper()
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/writes.json"] = &fstest.MapFile{Data: []byte(`{"actions": [` + action + `]}`)}
+	return fsys
+}
+
+const validBase64UploadAction = `{
+	"name": "upload_attachment",
+	"kind": "create",
+	"method": "POST",
+	"path": "/v0/{base_id}/{record_id}/{field}/uploadAttachment",
+	"risk": "medium",
+	"body_type": "base64_upload",
+	"base64_upload": {
+		"source_field": "file_path",
+		"content_field": "file",
+		"max_decoded_bytes": 3932160,
+		"max_encoded_bytes": 5242880
+	},
+	"record_schema": {"type": "object", "properties": {"file_path": {"type": "string"}}}
+}`
+
+func TestBundleLoadAcceptsBase64UploadAction(t *testing.T) {
+	b, err := Load(base64UploadBundleFS(t, validBase64UploadAction), "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	spec := b.Writes[0].Base64Upload
+	if spec == nil {
+		t.Fatal("base64_upload spec not parsed")
+	}
+	if spec.SourceField != "file_path" || spec.ContentField != "file" || spec.MaxDecodedBytes != 3932160 {
+		t.Fatalf("base64_upload = %+v", spec)
+	}
+}
+
+func TestBundleLoadRejectsInvalidBase64UploadAction(t *testing.T) {
+	tests := []struct {
+		name   string
+		action string
+		want   string
+	}{
+		{
+			name: "body_type without spec",
+			action: `{"name":"a","kind":"create","method":"POST","path":"/x","risk":"low",
+				"body_type":"base64_upload","record_schema":{"type":"object"}}`,
+			want: "base64_upload",
+		},
+		{
+			name: "spec without body_type",
+			action: `{"name":"a","kind":"create","method":"POST","path":"/x","risk":"low",
+				"base64_upload":{"source_field":"p","content_field":"f","max_decoded_bytes":10},
+				"record_schema":{"type":"object"}}`,
+			want: "base64_upload",
+		},
+		{
+			name: "missing content_field",
+			action: `{"name":"a","kind":"create","method":"POST","path":"/x","risk":"low","body_type":"base64_upload",
+				"base64_upload":{"source_field":"p","max_decoded_bytes":10},
+				"record_schema":{"type":"object"}}`,
+			want: "content_field",
+		},
+		{
+			name: "non-positive max_decoded_bytes",
+			action: `{"name":"a","kind":"create","method":"POST","path":"/x","risk":"low","body_type":"base64_upload",
+				"base64_upload":{"source_field":"p","content_field":"f","max_decoded_bytes":0},
+				"record_schema":{"type":"object"}}`,
+			want: "max_decoded_bytes",
+		},
+		{
+			name: "unknown source mode",
+			action: `{"name":"a","kind":"create","method":"POST","path":"/x","risk":"low","body_type":"base64_upload",
+				"base64_upload":{"source":"ftp","source_field":"p","content_field":"f","max_decoded_bytes":10},
+				"record_schema":{"type":"object"}}`,
+			want: "source",
+		},
+		{
+			name: "source_field equals content_field in path mode",
+			action: `{"name":"a","kind":"create","method":"POST","path":"/x","risk":"low","body_type":"base64_upload",
+				"base64_upload":{"source":"path","source_field":"f","content_field":"f","max_decoded_bytes":10},
+				"record_schema":{"type":"object"}}`,
+			want: "source_field",
+		},
+		{
+			name: "unsatisfiable encoded bound",
+			action: `{"name":"a","kind":"create","method":"POST","path":"/x","risk":"low","body_type":"base64_upload",
+				"base64_upload":{"source_field":"p","content_field":"f","max_decoded_bytes":1000,"max_encoded_bytes":4},
+				"record_schema":{"type":"object"}}`,
+			want: "max_encoded_bytes",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := Load(base64UploadBundleFS(t, tt.action), "acme")
+			if err == nil {
+				t.Fatal("want load error, got nil")
+			}
+			if !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("error should mention %q, got %v", tt.want, err)
+			}
+		})
 	}
 }

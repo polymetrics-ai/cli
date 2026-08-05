@@ -33,6 +33,20 @@ type schemaNode struct {
 	additionalProperties bool // true unless explicitly set to false
 	hasAdditionalProps   bool
 
+	// minItems/maxItems are the array-cardinality pair. Each carries its own
+	// has* flag rather than relying on the zero value, because an EXPLICIT
+	// "minItems": 0 (a documented "may be empty") must stay distinguishable
+	// from an absent keyword — the same distinction PaginationSpec.StartPage
+	// solves one layer up with a pointer.
+	//
+	// Bounded provider search depends on the same pair: an "ids[] bounded to
+	// 100" contract has to be declarable in the bundle and enforceable at load
+	// time, and unknown keywords are a compile error in this dialect.
+	minItems    int
+	hasMinItems bool
+	maxItems    int
+	hasMaxItems bool
+
 	// extensions
 	secret      bool     // x-secret
 	primaryKey  []string // x-primary-key (only meaningful at the root)
@@ -67,6 +81,8 @@ var structuralKeywords = map[string]bool{
 	"enum":                 true,
 	"pattern":              true,
 	"minProperties":        true,
+	"minItems":             true,
+	"maxItems":             true,
 	"additionalProperties": true,
 	"x-secret":             true,
 	"x-primary-key":        true,
@@ -181,6 +197,10 @@ func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 		n.hasMinProperties = true
 	}
 
+	if err := compileArrayCardinality(m, n); err != nil {
+		return nil, err
+	}
+
 	if raw, ok := m["default"]; ok {
 		var def any
 		dec := json.NewDecoder(strings.NewReader(string(raw)))
@@ -226,6 +246,53 @@ func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 	}
 
 	return n, nil
+}
+
+// compileArrayCardinality compiles the draft-07 minItems/maxItems pair.
+//
+// The engine dialect deliberately had no array-cardinality keyword, which made
+// "this documented request array must not be empty" inexpressible: a bundle
+// could declare an array field required, but not that it carries at least one
+// element, so an operation whose provider rejects an empty array could not be
+// declared executable without risking a malformed request. Two bundles already
+// document the gap in prose (defs/drip/writes.json, defs/zoho-bigin/writes.json)
+// and Airtable's operation ledger blocks 25 endpoints on it by name.
+//
+// Both bounds must be non-negative integers (draft-07), and a declared maxItems
+// below a declared minItems is unsatisfiable — always an authoring mistake, so
+// it fails at compile time rather than rejecting every instance at runtime.
+func compileArrayCardinality(m map[string]json.RawMessage, n *schemaNode) error {
+	if raw, ok := m["minItems"]; ok {
+		v, err := compileNonNegativeInt(raw, "minItems")
+		if err != nil {
+			return err
+		}
+		n.minItems = v
+		n.hasMinItems = true
+	}
+	if raw, ok := m["maxItems"]; ok {
+		v, err := compileNonNegativeInt(raw, "maxItems")
+		if err != nil {
+			return err
+		}
+		n.maxItems = v
+		n.hasMaxItems = true
+	}
+	if n.hasMinItems && n.hasMaxItems && n.maxItems < n.minItems {
+		return fmt.Errorf("compile schema: maxItems %d is below minItems %d", n.maxItems, n.minItems)
+	}
+	return nil
+}
+
+func compileNonNegativeInt(raw json.RawMessage, keyword string) (int, error) {
+	var v int
+	if err := json.Unmarshal(raw, &v); err != nil {
+		return 0, fmt.Errorf("compile schema: %s: %w", keyword, err)
+	}
+	if v < 0 {
+		return 0, fmt.Errorf("compile schema: %s must be non-negative, got %d", keyword, v)
+	}
+	return v, nil
 }
 
 func compileTypes(raw json.RawMessage) ([]string, error) {
@@ -283,14 +350,34 @@ func (n *schemaNode) validate(v any, path string) error {
 			return err
 		}
 	}
-	if elems, ok := arrayElements(v); ok && n.items != nil {
-		for i, elem := range elems {
-			if err := n.items.validate(elem, fmt.Sprintf("%s/%d", path, i)); err != nil {
-				return err
+	if elems, ok := arrayElements(v); ok {
+		// Cardinality applies to array INSTANCES only, per draft-07
+		// applicability. "required and non-empty" is therefore the composition
+		// required + minItems, exactly as it is in real draft-07 — enforcing on
+		// an absent value instead would silently change the meaning of every
+		// optional array field already declared in a bundle.
+		if err := n.validateArrayCardinality(len(elems), path); err != nil {
+			return err
+		}
+		if n.items != nil {
+			for i, elem := range elems {
+				if err := n.items.validate(elem, fmt.Sprintf("%s/%d", path, i)); err != nil {
+					return err
+				}
 			}
 		}
 	}
 
+	return nil
+}
+
+func (n *schemaNode) validateArrayCardinality(count int, path string) error {
+	if n.hasMinItems && count < n.minItems {
+		return fmt.Errorf("%s: minItems %d not satisfied (got %d)", displayPath(path), n.minItems, count)
+	}
+	if n.hasMaxItems && count > n.maxItems {
+		return fmt.Errorf("%s: maxItems %d exceeded (got %d)", displayPath(path), n.maxItems, count)
+	}
 	return nil
 }
 

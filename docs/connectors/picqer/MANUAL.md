@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Picqer products, customers, orders, picklists, warehouses, suppliers, purchase orders, returns, and warehouse-operations reference data, and writes order/purchase-order/return lifecycle and catalog mutations through the Picqer REST API.
 
 ICON
+  id: picqer
   asset: icons/picqer.svg
   source: official
   review_status: official_verified
@@ -135,6 +136,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_customer:
     endpoint: POST /customers
+    required fields: name
     risk: creates a new WMS customer record; low-risk external mutation, no approval required
   update_customer:
     endpoint: PUT /customers/{{ record.idcustomer }}
@@ -146,6 +148,7 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a customer record; destructive external mutation, approval required
   create_supplier:
     endpoint: POST /suppliers
+    required fields: name
     risk: creates a new supplier record; low-risk external mutation, no approval required
   update_supplier:
     endpoint: PUT /suppliers/{{ record.idsupplier }}
@@ -153,6 +156,7 @@ REVERSE ETL ACTIONS
     risk: updates an existing supplier's contact details; external mutation, approval required
   create_tag:
     endpoint: POST /tags
+    required fields: title, color, inherit
     risk: creates a new tag; low-risk external mutation, no approval required
   update_tag:
     endpoint: PUT /tags/{{ record.idtag }}
@@ -184,6 +188,7 @@ REVERSE ETL ACTIONS
     risk: cancels an order (Picqer's DELETE-shaped cancel, reversible via undo-cancellation, but stops all further fulfillment immediately); destructive external mutation, approval required
   create_purchaseorder:
     endpoint: POST /purchaseorders
+    required fields: idsupplier, idwarehouse
     risk: creates a new purchase order (concept status) with an optional initial product line list; low-risk external mutation, no approval required
   mark_purchaseorder_as_purchased:
     endpoint: POST /purchaseorders/{{ record.idpurchaseorder }}/mark-as-purchased
@@ -199,14 +204,15 @@ REVERSE ETL ACTIONS
     risk: cancels a purchase order; destructive external mutation, approval required
   create_receipt:
     endpoint: POST /receipts
+    required fields: idpurchaseorder
     risk: starts a new goods-receiving session against a purchase order (Picqer's v2 receipts API also accepts idsupplier in place of idpurchaseorder for supplier-only receiving; this action only models the idpurchaseorder-required shape, see docs.md Known limits); low-risk external mutation, no approval required
   complete_receipt:
     endpoint: PUT /receipts/{{ record.idreceipt }}
-    required fields: idreceipt
-    optional fields: status
+    required fields: idreceipt, status
     risk: marks a goods-receiving session as complete (Picqer's documented PUT /receipts/{idreceipt} {"status": "completed"} shape), finalizing received stock quantities in the background; external mutation, approval required
   create_return:
     endpoint: POST /returns
+    required fields: name
     risk: creates a new customer return record; low-risk external mutation, no approval required
   update_return:
     endpoint: PUT /returns/{{ record.idreturn }}
@@ -221,6 +227,7 @@ REVERSE ETL ACTIONS
     risk: processes one or more backorders for fulfillment now that stock is available; external mutation, approval required
   create_location:
     endpoint: POST /locations
+    required fields: name, idwarehouse
     risk: creates a new warehouse storage location; low-risk external mutation, no approval required
   update_location:
     endpoint: PUT /locations/{{ record.idlocation }}
@@ -232,6 +239,7 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a warehouse storage location; destructive external mutation, approval required
   create_location_type:
     endpoint: POST /location_types
+    required fields: name, color
     risk: creates a new location type; low-risk external mutation, no approval required
   update_location_type:
     endpoint: PUT /location_types/{{ record.id }}
@@ -239,6 +247,7 @@ REVERSE ETL ACTIONS
     risk: updates an existing location type's name/color; external mutation, approval required
   create_picking_container:
     endpoint: POST /picking-containers
+    required fields: name
     risk: creates a new picking container; low-risk external mutation, no approval required
   update_picking_container:
     endpoint: PUT /picking-containers/{{ record.idpicking_container }}
@@ -246,13 +255,15 @@ REVERSE ETL ACTIONS
     risk: updates an existing picking container's name; external mutation, approval required
   create_picklist_batch:
     endpoint: POST /picklists/batches
+    required fields: idwarehouse
     risk: creates a new picklist batch for warehouse picking; low-risk external mutation, no approval required
   create_shipment:
     endpoint: POST /picklists/{{ record.idpicklist }}/shipments
-    required fields: idpicklist
+    required fields: idpicklist, idshippingprovider_profile
     risk: creates a shipment for a picklist, booking it with the configured shipping provider and generating a shipping label; external mutation, approval required
   create_packaging:
     endpoint: POST /packagings
+    required fields: name
     risk: creates a new packaging type; low-risk external mutation, no approval required
   update_packaging:
     endpoint: PUT /packagings/{{ record.id }}
@@ -260,6 +271,7 @@ REVERSE ETL ACTIONS
     risk: updates an existing packaging type's dimensions/active status; external mutation, approval required
   create_hook:
     endpoint: POST /hooks
+    required fields: name, event, address
     risk: registers a new webhook subscription that will receive event notifications; low-risk external mutation, no approval required
   delete_hook:
     endpoint: DELETE /hooks/{{ record.idhook }}

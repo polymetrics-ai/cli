@@ -35,6 +35,12 @@ type CommandSurfaceFlag struct {
 	Format     string
 	AllowEmpty *bool
 	Required   bool
+	// MaxItems/MinItems bound a string_array flag's item count. This is a second,
+	// independent bound alongside the body schema's maxItems: the schema bound
+	// only fires after the flag has been expanded into a body, whereas this one
+	// can name the flag the user actually typed.
+	MaxItems int
+	MinItems int
 }
 
 type CommandSurfaceConstraint struct {

@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/project-manager",
+    "query": {
+      "page": "0",
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "project_manager_fixture_1",
+        "email": "manager@example.com",
+        "metadata": "",
+        "createdDate": "2026-01-01T00:00:00Z",
+        "updatedDate": "2026-01-02T00:00:00Z",
+        "note": "",
+        "firstName": "Fixture",
+        "lastName": "Manager",
+        "status": "STATUS_ACTIVE",
+        "role": "ROLE_OWNER",
+        "isProjectManager": true,
+        "links": {
+          "self": "/project-manager/project_manager_fixture_1"
+        }
+      }
+    ]
+  }
+}

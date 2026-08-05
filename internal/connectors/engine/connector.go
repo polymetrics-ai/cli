@@ -116,6 +116,31 @@ func (c *Connector) OperationDirectRead(ctx context.Context, req connectors.Oper
 	return OperationDirectRead(ctx, c.bundle, req, c.hooks)
 }
 
+// OperationBinaryDownload satisfies connectors.OperationBinaryDownloader by
+// delegating to the package-level executor. The engine-local request type stays
+// the executor's own contract; this adapter is the seam that lets a CLI command
+// reach it without the connectors package depending on engine internals.
+func (c *Connector) OperationBinaryDownload(ctx context.Context, req connectors.OperationBinaryDownloadRequest) (connectors.OperationBinaryDownloadResult, error) {
+	result, err := OperationBinaryDownload(ctx, c.bundle, BinaryDownloadRequest{
+		Operation:    req.Operation,
+		Config:       req.Config,
+		PathParams:   req.PathParams,
+		Query:        req.Query,
+		MaxBytes:     req.MaxBytes,
+		DestRoot:     req.DestRoot,
+		FileName:     req.FileName,
+		RedactFields: req.RedactFields,
+	}, c.hooks)
+	if err != nil {
+		return connectors.OperationBinaryDownloadResult{}, err
+	}
+	return connectors.OperationBinaryDownloadResult{
+		Connector: result.Connector,
+		Operation: result.Operation,
+		Record:    result.Record,
+	}, nil
+}
+
 // InitialState satisfies connectors.StatefulReader by delegating to the
 // package-level engine.InitialState.
 func (c *Connector) InitialState(ctx context.Context, stream string, cfg connectors.RuntimeConfig) (map[string]string, error) {
@@ -141,6 +166,18 @@ func (c *Connector) ValidateWrite(ctx context.Context, req connectors.WriteReque
 		return connectors.ErrUnsupportedOperation
 	}
 	return ValidateWrite(ctx, c.bundle, req, records)
+}
+
+// PreflightWriteAction exposes the declarative write promotion guard to the
+// command runner. Keeping the inspection beside the raw bundle schema makes
+// promotion enforcement part of the declarative runtime rather than a copied
+// static-validator rule.
+func (c *Connector) PreflightWriteAction(name string) error {
+	action, err := findWriteAction(c.bundle, name)
+	if err != nil {
+		return err
+	}
+	return ValidatePromotableRecordSchema(action.RecordSchema)
 }
 
 // DryRunWrite satisfies connectors.DryRunWriter.
@@ -239,6 +276,7 @@ func synthesizeManifest(b Bundle) connectors.Manifest {
 	syncModes = orderCanonicalModes(syncModes)
 
 	for _, a := range b.Writes {
+		confirm := confirmationKindForWriteAction(a)
 		writeActions = append(writeActions, connectors.WriteActionSpec{
 			Name:           a.Name,
 			RequiredFields: writeActionRequiredFields(a),
@@ -247,7 +285,8 @@ func synthesizeManifest(b Bundle) connectors.Manifest {
 			Path:           a.Path,
 			RedactFields:   append([]string(nil), a.RedactFields...),
 			Risk:           a.Risk,
-			Confirm:        a.Confirm,
+			Batchable:      cloneBoolPtr(a.Batchable),
+			Confirm:        confirm,
 		})
 	}
 
@@ -327,13 +366,15 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 
 	writeActions := make([]connectors.WriteActionInfo, 0, len(b.Writes))
 	for _, a := range b.Writes {
+		confirm := confirmationKindForWriteAction(a)
 		writeActions = append(writeActions, connectors.WriteActionInfo{
-			Name:    a.Name,
-			Kind:    a.Kind,
-			Method:  a.Method,
-			Path:    a.Path,
-			Risk:    a.Risk,
-			Confirm: a.Confirm,
+			Name:      a.Name,
+			Kind:      a.Kind,
+			Method:    a.Method,
+			Path:      a.Path,
+			Risk:      a.Risk,
+			Batchable: cloneBoolPtr(a.Batchable),
+			Confirm:   confirm,
 		})
 	}
 
@@ -440,6 +481,8 @@ func commandSurfaceFlag(flag CLIFlag) connectors.CommandSurfaceFlag {
 		Format:     flag.Format,
 		AllowEmpty: cloneBoolPtr(flag.AllowEmpty),
 		Required:   flag.Required,
+		MaxItems:   flag.MaxItems,
+		MinItems:   flag.MinItems,
 	}
 }
 

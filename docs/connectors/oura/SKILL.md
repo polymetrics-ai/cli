@@ -11,6 +11,7 @@ Reads Oura API v2 usercollection profile, daily summary, time-series, sleep, tag
 
 ## Icon
 
+- id: oura
 - asset: icons/oura.svg
 - source: upstream_registry
 - review_status: upstream_seeded

@@ -1,0 +1,37 @@
+{
+  "record": {
+    "product_code": "fixture_product_code",
+    "unit_amount": 12.34,
+    "currency": "USD",
+    "delivery": {
+      "method": "email"
+    },
+    "gifter_account": {
+      "code": "fixture_code"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/gift_cards",
+    "body": {
+      "product_code": "fixture_product_code",
+      "unit_amount": 12.34,
+      "currency": "USD",
+      "delivery": {
+        "method": "email"
+      },
+      "gifter_account": {
+        "code": "fixture_code"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_id",
+      "object": "fixture_object",
+      "created_at": "2026-01-02T03:04:05Z",
+      "updated_at": "2026-01-02T03:04:05Z"
+    }
+  }
+}

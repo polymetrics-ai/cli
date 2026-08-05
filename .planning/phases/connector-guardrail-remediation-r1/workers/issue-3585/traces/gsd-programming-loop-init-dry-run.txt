@@ -1,0 +1,2 @@
+scripts/gsd: unknown GSD command: programming-loop
+exit=1

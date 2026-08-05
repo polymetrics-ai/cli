@@ -11,6 +11,7 @@ Reads Workday tenant data (workers, organizations, positions) through conservati
 
 ## Icon
 
+- id: workday
 - asset: icons/workday.svg
 - source: official
 - review_status: official_verified

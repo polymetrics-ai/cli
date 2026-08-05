@@ -13,6 +13,7 @@ DESCRIPTION
   Reads articles and news sources from the News API (newsapi.org): the everything search, top headlines, and the sources directory.
 
 ICON
+  id: newsapi
   asset: icons/newsapi.svg
   source: upstream_registry
   review_status: upstream_seeded

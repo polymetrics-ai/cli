@@ -1,0 +1,25 @@
+{
+  "record": {
+    "custom_object_key": "fixture-custom-object-key",
+    "triggers": [
+      {
+        "id": 1,
+        "active": true,
+        "position": 1
+      }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v2/custom_objects/fixture-custom-object-key/triggers/update_many",
+    "body": {
+      "triggers": [
+        {
+          "id": 1,
+          "active": true,
+          "position": 1
+        }
+      ]
+    }
+  }
+}

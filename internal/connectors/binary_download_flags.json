@@ -1,0 +1,18 @@
+[
+  {
+    "name": "dest-root",
+    "type": "string",
+    "required": true,
+    "summary": "directory the download is written beneath; traversal outside it is refused."
+  },
+  {
+    "name": "file-name",
+    "type": "string",
+    "summary": "name for the downloaded file within --dest-root; must be a single path segment."
+  },
+  {
+    "name": "max-bytes",
+    "type": "integer",
+    "summary": "lower the operation's declared size cap; it can never raise it."
+  }
+]

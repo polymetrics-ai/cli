@@ -10,6 +10,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"polymetrics.ai/internal/safety"
 )
 
 // Vars is the variable environment available to templates: config values,
@@ -856,6 +858,7 @@ func ResolveCheckAuthSpec(spec AuthSpec, specKeys map[string]bool) error {
 		{"client_id", spec.ClientID},
 		{"client_secret", spec.ClientSecret},
 		{"scopes", spec.Scopes},
+		{"refresh_token", spec.RefreshToken},
 	}
 	for _, f := range fields {
 		if f.tmpl == "" {
@@ -877,6 +880,16 @@ func ResolveCheckAuthSpec(spec AuthSpec, specKeys map[string]bool) error {
 	for _, k := range extraKeys {
 		if err := ResolveCheck(spec.ExtraParams[k], specKeys); err != nil {
 			return fmt.Errorf("auth spec (mode %q) field %q: %w", spec.Mode, "extra_params."+k, err)
+		}
+	}
+	// refresh_token_store_key is NOT a template — it is a literal secret key
+	// name — so it gets an identifier check rather than a ResolveCheck. It is
+	// validated here as well as at build time so a malformed key fails
+	// `connectorgen validate` rather than only on a connector's first real
+	// sync, which is the whole point of static auth-spec validation (F9).
+	if spec.RefreshTokenStoreKey != "" {
+		if err := safety.ValidateIdentifier(spec.RefreshTokenStoreKey, "refresh_token_store_key"); err != nil {
+			return fmt.Errorf("auth spec (mode %q) field %q: %w", spec.Mode, "refresh_token_store_key", err)
 		}
 	}
 	if spec.When != "" {

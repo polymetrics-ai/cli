@@ -11,6 +11,7 @@ Reads Zendesk Talk phone numbers, greetings, greeting categories, IVRs, and agen
 
 ## Icon
 
+- id: zendesk-talk
 - asset: icons/zendesk-talk.svg
 - source: upstream_registry
 - review_status: upstream_seeded

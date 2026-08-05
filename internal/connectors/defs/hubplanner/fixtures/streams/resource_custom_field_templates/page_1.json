@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/resource/customField/template",
+    "query": {
+      "page": "0",
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "resource_custom_field_template_fixture_1",
+        "filterGrid": true,
+        "label": "Resource Skill",
+        "instructions": "Enter the skill",
+        "placeholderText": "",
+        "choices": [
+          {
+            "value": "Go"
+          }
+        ],
+        "canResourceEdit": false,
+        "type": "TEXT",
+        "category": "RESOURCE",
+        "status": "ACTIVE",
+        "allowMultipleValues": false,
+        "characterLimit": "30",
+        "isRequired": false,
+        "isChoicesSortedAlphabetically": true,
+        "createdDate": "2026-01-01T00:00:00Z",
+        "updatedDate": "2026-01-02T00:00:00Z"
+      }
+    ]
+  }
+}

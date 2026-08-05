@@ -17,14 +17,51 @@ variables:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       changes:
         - website/**/*
+        - internal/connectors/icon_data.json
+        - docs/connectors/icons/**/*
         - .gitlab-ci.yml
         - .github/workflows/website.yml
     - if: '$CI_COMMIT_BRANCH == "main"'
       changes:
         - website/**/*
+        - internal/connectors/icon_data.json
+        - docs/connectors/icons/**/*
         - .gitlab-ci.yml
         - .github/workflows/website.yml
     - if: '$CI_PIPELINE_SOURCE == "web"'
+
+# The generated website data is derived from the connector bundles, so this
+# check runs on bundle changes too, and stays out of `website:test` so that
+# wider trigger costs only a Node container. Mirrors
+# .github/workflows/website-data.yml.
+website:data:
+  stage: website-test
+  image: node:22-alpine
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes: &website_data_changes
+        - website/**/*
+        - internal/connectors/defs/**/*
+        - internal/connectors/icon_data.json
+        - docs/connectors/icons/**/*
+        - .gitlab-ci.yml
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes: *website_data_changes
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+  before_script:
+    - apk add --no-cache git
+  script:
+    # `npm run` needs no dependency install: the generators import only `node:`
+    # builtins, and package.json stays the single owner of the generator list.
+    - npm --prefix "$WEBSITE_DIR" run gen:website-data
+    - |
+      changed="$(git status --porcelain)"
+      if [ -n "$changed" ]; then
+        printf 'generated website data is stale; run `cd website && pnpm run gen:website-data` and commit the result\n'
+        printf '%s\n' "$changed"
+        git diff
+        exit 1
+      fi
 
 website:test:
   stage: website-test
@@ -35,21 +72,23 @@ website:test:
   script:
     - cd "$WEBSITE_DIR"
     - pnpm install --frozen-lockfile --reporter=silent
+    # Also checked by `website:data`, which carries the wider connector-bundle
+    # trigger. Kept here too because `website:image` and `website:deploy` chain
+    # off this job. Repo-wide rather than a hand-listed file set: an enumerated
+    # list goes stale the moment a generator gains an output.
     - pnpm run gen:website-data
     - |
-      changed="$(git status --short -- \
-        lib/connectors.catalog.generated.ts \
-        lib/connectors.generated.ts \
-        lib/connectors.enrichment.generated.ts \
-        lib/docs.generated.ts \
-        public/connectors/icons)"
+      changed="$(git status --porcelain)"
       if [ -n "$changed" ]; then
+        printf 'generated website data is stale; run `cd website && pnpm run gen:website-data` and commit the result\n'
         printf '%s\n' "$changed"
+        git diff
         exit 1
       fi
     - pnpm run lint
     - pnpm run typecheck
     - pnpm run test:unit
+    - pnpm run test:scripts
     - pnpm run test:e2e
     - pnpm run build
 
@@ -84,6 +123,8 @@ website:deploy:
     - if: '$CI_COMMIT_BRANCH == "main"'
       changes:
         - website/**/*
+        - internal/connectors/icon_data.json
+        - docs/connectors/icons/**/*
         - .gitlab-ci.yml
         - .github/workflows/website.yml
     - if: '$CI_PIPELINE_SOURCE == "web" && $CI_COMMIT_BRANCH == "main"'

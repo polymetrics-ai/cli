@@ -1,0 +1,21 @@
+{
+  "record": {
+    "team_gid": "fixture-team-gid",
+    "data": {
+      "name": "fixture-name",
+      "description": "fixture-description",
+      "edit_team_name_or_description_access_level": "fixture-edit-team-name-or-description-access-level"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/teams/fixture-team-gid",
+    "body": {
+      "data": {
+        "name": "fixture-name",
+        "description": "fixture-description",
+        "edit_team_name_or_description_access_level": "fixture-edit-team-name-or-description-access-level"
+      }
+    }
+  }
+}

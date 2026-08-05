@@ -11,6 +11,7 @@ Reads CoinMarketCap Pro API global market metrics, id/slug/symbol-keyed cryptocu
 
 ## Icon
 
+- id: coinmarketcap
 - asset: icons/coinmarketcap.svg
 - source: upstream_registry
 - review_status: upstream_seeded

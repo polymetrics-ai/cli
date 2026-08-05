@@ -1,0 +1,22 @@
+{
+  "record": {
+    "name": "Fixture Booking Category",
+    "type": "CUSTOM",
+    "gridColor": "#336699"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/categories",
+    "body": {
+      "name": "Fixture Booking Category",
+      "type": "CUSTOM",
+      "gridColor": "#336699"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "create_booking_category_fixture"
+    }
+  }
+}

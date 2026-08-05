@@ -1,0 +1,39 @@
+{
+  "actions": [
+    {
+      "name": "cast_vote",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/vote",
+      "batchable": false,
+      "body_type": "form",
+      "body_fields": ["id", "dir"],
+      "record_schema": {
+        "type": "object",
+        "required": ["id", "dir"],
+        "properties": {
+          "id": { "type": "string" },
+          "dir": { "type": "integer" }
+        }
+      },
+      "risk": "casts a vote as the authenticated human; must be invoked one at a time"
+    },
+    {
+      "name": "sync_profile",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/api/profile",
+      "body_type": "json",
+      "body_fields": ["id", "display_name"],
+      "record_schema": {
+        "type": "object",
+        "required": ["id", "display_name"],
+        "properties": {
+          "id": { "type": "string" },
+          "display_name": { "type": "string" }
+        }
+      },
+      "risk": "updates a profile; safe to batch"
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "vacations",
+  "type": "object",
+  "x-primary-key": [
+    "_id"
+  ],
+  "required": [
+    "_id"
+  ],
+  "properties": {
+    "_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "start": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "end": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "minutesPerDay": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "resource": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "approvalInfo": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "resourceType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "metadata": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "percentAllocation": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "creatorId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

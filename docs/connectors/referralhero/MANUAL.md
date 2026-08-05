@@ -13,9 +13,11 @@ DESCRIPTION
   Reads ReferralHero lists, subscribers, referrals, rewards, coupon groups, and campaign-scoped subscriber resources, and performs approved ReferralHero API v2 mutations.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -107,14 +109,15 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_list:
     endpoint: POST /lists
+    required fields: website, name
     risk: creates a live ReferralHero campaign/list in the account; external mutation, approval required
   add_subscriber:
     endpoint: POST /lists/{{ record.uuid }}/subscribers
-    required fields: uuid
+    required fields: uuid, email
     risk: creates or registers a live subscriber in a ReferralHero campaign and may trigger campaign email/referral workflows; approval required
   track_referral_conversion_event:
     endpoint: POST /lists/{{ record.uuid }}/subscribers/track_referral_conversion_event
-    required fields: uuid
+    required fields: uuid, email
     risk: confirms/unconfirms referral conversion state and may create a referral when a referrer is provided; external mutation, approval required
   confirm_subscriber_by_id:
     endpoint: POST /lists/{{ record.uuid }}/subscribers/{{ record.subscriber_id }}/confirm
@@ -122,7 +125,7 @@ REVERSE ETL ACTIONS
     risk: confirms a verified referral/subscriber conversion in the campaign; external mutation, approval required
   confirm_subscriber_by_identifier:
     endpoint: POST /lists/{{ record.uuid }}/subscribers/confirm
-    required fields: uuid
+    required fields: uuid, email
     risk: confirms a verified referral/subscriber conversion by unique identifier; external mutation, approval required
   update_subscriber:
     endpoint: POST /lists/{{ record.uuid }}/subscribers/{{ record.subscriber_id }}
@@ -130,15 +133,15 @@ REVERSE ETL ACTIONS
     risk: updates profile, identifier, points, address, or tag fields for a verified subscriber; external mutation, approval required
   add_points:
     endpoint: POST /lists/{{ record.uuid }}/subscribers/add_points
-    required fields: uuid
+    required fields: uuid, email, points
     risk: adds points to a subscriber, changing contest/reward standings; external mutation, approval required
   add_transaction:
     endpoint: POST /lists/{{ record.uuid }}/subscribers/add_transactions
-    required fields: uuid
+    required fields: uuid, email, amount
     risk: records a transaction against a subscriber and may affect conversion/reward calculations; external mutation, approval required
   add_bulk_transactions:
     endpoint: POST /lists/{{ record.uuid }}/subscribers/add_bulk_transactions
-    required fields: uuid
+    required fields: uuid, transactions
     risk: records up to 500 transactions in one call and emails an admin CSV result; high-blast-radius external mutation, approval required
   promote_subscriber:
     endpoint: POST /lists/{{ record.uuid }}/subscribers/{{ record.subscriber_id }}/promote
@@ -154,15 +157,15 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a subscriber from a live campaign; destructive external mutation, approval required
   update_reward_status:
     endpoint: POST /lists/{{ record.uuid }}/subscribers/update_reward_status
-    required fields: uuid
+    required fields: uuid, reward_id, status
     risk: changes fulfillment status for an unlocked reward; external mutation, approval required
   create_coupon_group:
     endpoint: POST /lists/{{ record.uuid }}/coupon_groups
-    required fields: uuid
+    required fields: uuid, name, coupons, active
     risk: creates a campaign coupon group and coupon inventory; external mutation, approval required
   create_coupons:
     endpoint: POST /lists/{{ record.uuid }}/coupons
-    required fields: uuid
+    required fields: uuid, coupon_group_id, coupons
     risk: adds redeemable coupon codes to an existing campaign coupon group; external mutation, approval required
   unqualify_referral:
     endpoint: POST /lists/{{ record.uuid }}/subscribers/{{ record.subscriber_id }}/unqualify

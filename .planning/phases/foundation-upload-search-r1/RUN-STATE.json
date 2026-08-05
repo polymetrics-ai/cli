@@ -1,0 +1,97 @@
+{
+  "phase": "foundation-upload-search-r1",
+  "parentIssue": 3694,
+  "subIssues": [3695, 3696, 3697],
+  "relatedIssue": 2985,
+  "branch": "fm/cli-freshchat-upload-foundations-r1",
+  "status": "implemented",
+  "verificationPassed": true,
+  "verificationBlocked": false,
+  "humanGated": true,
+  "gsd": {
+    "doctor": "passed",
+    "programmingLoopCommand": "scripts/gsd prompt programming-loop init --phase foundation-upload-search-r1 --dry-run",
+    "programmingLoopResult": "unavailable_unknown_command",
+    "manualFallback": true,
+    "fallbackCommand": "scripts/gsd prompt plan-phase foundation-upload-search-r1 --skip-research"
+  },
+  "identityException": {
+    "intendedAccount": "alfred-polymetrics-ai",
+    "actualAccount": "karthik-sivadas",
+    "reason": "No Alfred credential exists in this environment; the captain authorised a bounded exception covering issue creation only.",
+    "scope": "issue creation only; approvals, merges, and branch-protection remain the captain's, and firstmate owns every merge"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "One shared-runtime slice in an isolated worktree; no mutating subagents needed."
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "Containment, media-type bound, and provider_search implemented inline with red-first evidence per slice."
+    },
+    {
+      "cycle": "verify",
+      "decision": "scoped_local_gates",
+      "reason": "A full `go test ./...` exceeds the 10-minute tool-call limit across 550+ connectors, so local runs are scoped to changed packages plus internal/cli and CI carries the full suite."
+    }
+  ],
+  "findingThatReshapedThePhase": {
+    "claim": "Bounded multipart upload already ships and is CLI-reachable; it was not a missing capability.",
+    "establishedBy": "go build -o pm ./cmd/pm && ./pm gong calls upload-media --help",
+    "result": "availability: implemented; write: upload_call_media; 'Uses typed multipart write support; no generic upload command is exposed.'",
+    "consequence": "No second upload executor was built. The phase hardens the existing path instead."
+  },
+  "checks": [
+    { "command": "go vet ./internal/connectors/... ./cmd/connectorgen/", "result": "passed" },
+    {
+      "command": "go test ./internal/connectors/connsdk/ ./internal/connectors/engine/ ./internal/connectors/commandrunner/ ./internal/connectors/ -count=1",
+      "result": "passed",
+      "summary": "connsdk 0.519s, engine 2.349s, commandrunner 4.458s, connectors 0.615s"
+    },
+    {
+      "command": "go test ./internal/connectors/bundleregistry/ ./cmd/connectorgen/ ./internal/cli/... -count=1",
+      "result": "passed",
+      "summary": "bundleregistry 3.893s, connectorgen 8.914s, internal/cli 406.153s"
+    },
+    { "command": "go build ./cmd/pm", "result": "passed" },
+    {
+      "command": "./pm gong calls upload-media --help",
+      "result": "passed",
+      "summary": "availability: implemented; typed multipart write support reachable after the containment change"
+    },
+    {
+      "command": "go run ./cmd/connectorgen boundary . --json",
+      "result": "passed",
+      "summary": "the gate .github/workflows/connector-boundary.yml runs"
+    },
+    {
+      "command": "go run ./cmd/connectorgen ownership .",
+      "result": "expected_scope_missing",
+      "summary": "ownership_scope_missing: no connector target, which is correct for a foundation PR; its own remediation is 'move shared changes to a foundation PR'. Zero files under internal/connectors/defs/** changed."
+    },
+    {
+      "command": "scratch probe on unmodified connsdk",
+      "result": "red_as_expected",
+      "summary": "content from outside the intended root reached the wire ('OUTSIDE-ROOT-SECRET')"
+    },
+    {
+      "command": "mutant: revert file.open() to os.Open(file.Path) in writeMultipartFile",
+      "result": "red_as_expected",
+      "summary": "TestRequesterDoMultipartRefusesEscapingSymlinkSwappedAfterValidation fails"
+    },
+    {
+      "command": "regression introduced and fixed within the phase",
+      "result": "fixed",
+      "summary": "adding \"minimum\" to cli_surface.schema.json broke all 550 bundles because the meta-schemas are compiled by the engine's own restricted dialect; the bound moved to cmd/connectorgen/validate.go"
+    }
+  ],
+  "openItems": [
+    "The 32 file_upload operation-kind declarations (xero 22, zendesk-support 5, bitbucket 4, asana 1) remain load-validated but unexecutable, while the executable multipart contract lives in writes.json. Reconciling them requires connector-bundle edits that the path-ownership guardrail forbids on a foundation branch. Follow-up for the connector lanes, not silently absorbed here.",
+    "169 of 217 declared rest_read POST operations do not set additionalProperties: false. provider_search closes this by construction for the new kind; migrating the existing 169 is an unrelated change that must not ride a foundation PR.",
+    "Mutant reverting file.stat() in validateMultipartForm alone survives, because snapshotApprovedMultipartFiles performs a second confined stat. Defense in depth, not a coverage gap; recorded rather than papered over.",
+    "internal/connectors/certify is run separately with an extended Go timeout; a single full-suite run does not fit in one tool call."
+  ]
+}

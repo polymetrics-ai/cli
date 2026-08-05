@@ -11,6 +11,7 @@ Reads Pinterest ad accounts, boards, campaigns, ad groups, and audiences through
 
 ## Icon
 
+- id: pinterest
 - asset: icons/pinterest.svg
 - source: upstream_registry
 - review_status: upstream_seeded

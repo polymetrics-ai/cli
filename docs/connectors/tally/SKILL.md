@@ -11,6 +11,7 @@ Reads Tally.so forms, form-scoped submissions, webhooks, and workspaces, and wri
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
@@ -57,10 +58,11 @@ Reads Tally.so forms, form-scoped submissions, webhooks, and workspaces, and wri
 
 - create_webhook:
   - endpoint: POST /webhooks
+  - required fields: formId, url, eventTypes
   - risk: registers an external endpoint to receive form submission events
 - update_webhook:
   - endpoint: PATCH /webhooks/{{ record.id }}
-  - required fields: id
+  - required fields: id, formId, url, eventTypes, isEnabled
   - risk: changes where and whether an existing webhook delivers form submission events
 - delete_webhook:
   - endpoint: DELETE /webhooks/{{ record.id }}
@@ -68,6 +70,7 @@ Reads Tally.so forms, form-scoped submissions, webhooks, and workspaces, and wri
   - risk: stops delivery of form submission events to the webhook's registered endpoint; if this is the form's last webhook, the webhooks integration is also marked deleted
 - create_form:
   - endpoint: POST /forms
+  - required fields: blocks, status
   - risk: creates a new live form in the Tally account
 - update_form:
   - endpoint: PATCH /forms/{{ record.id }}
@@ -83,6 +86,7 @@ Reads Tally.so forms, form-scoped submissions, webhooks, and workspaces, and wri
   - risk: permanently removes a respondent's submission and its answers from Tally
 - create_workspace:
   - endpoint: POST /workspaces
+  - required fields: name
   - risk: creates a new workspace; requires the account to have a Pro subscription
 
 ## Security

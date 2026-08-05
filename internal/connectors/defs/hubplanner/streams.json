@@ -3,7 +3,12 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.api_key }}", "prefix": "" }
+      {
+        "mode": "api_key_header",
+        "header": "Authorization",
+        "value": "{{ secrets.api_key }}",
+        "prefix": ""
+      }
     ],
     "pagination": {
       "type": "page_number",
@@ -12,55 +17,190 @@
       "start_page": 0,
       "page_size": 200
     },
-    "check": { "method": "GET", "path": "/resource", "query": { "page": "0", "limit": "1" } },
+    "check": {
+      "method": "GET",
+      "path": "/resource",
+      "query": {
+        "page": "0",
+        "limit": "1"
+      }
+    },
     "error_map": [
-      { "status": 401, "hint": "hubplanner api_key is missing or invalid; re-run pm credentials add hubplanner" },
-      { "status": 403, "hint": "hubplanner api_key lacks access for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "hubplanner rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "hubplanner api_key is missing or invalid; re-run pm credentials add hubplanner"
+      },
+      {
+        "status": 403,
+        "hint": "hubplanner api_key lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "hubplanner rate limit exceeded; retry after the provider's backoff window"
+      }
     ]
   },
   "streams": [
     {
       "name": "resources",
       "path": "/resource",
-      "records": { "path": "" },
+      "records": {
+        "path": ""
+      },
       "schema": "schemas/resources.json"
     },
     {
       "name": "projects",
       "path": "/project",
-      "records": { "path": "" },
+      "records": {
+        "path": ""
+      },
       "schema": "schemas/projects.json"
     },
     {
       "name": "clients",
       "path": "/client",
-      "records": { "path": "" },
+      "records": {
+        "path": ""
+      },
       "schema": "schemas/clients.json"
     },
     {
       "name": "events",
       "path": "/event",
-      "records": { "path": "" },
+      "records": {
+        "path": ""
+      },
       "schema": "schemas/events.json"
     },
     {
       "name": "holidays",
       "path": "/holiday",
-      "records": { "path": "" },
+      "records": {
+        "path": ""
+      },
       "schema": "schemas/holidays.json"
     },
     {
       "name": "bookings",
       "path": "/booking",
-      "records": { "path": "" },
+      "records": {
+        "path": ""
+      },
       "schema": "schemas/bookings.json"
     },
     {
       "name": "billing_rates",
-      "path": "/billingrate",
-      "records": { "path": "" },
+      "path": "/billingRate",
+      "records": {
+        "path": ""
+      },
       "schema": "schemas/billing_rates.json"
+    },
+    {
+      "name": "booking_categories",
+      "path": "/categories",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/booking_categories.json"
+    },
+    {
+      "name": "resource_custom_field_templates",
+      "path": "/resource/customField/template",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/resource_custom_field_templates.json"
+    },
+    {
+      "name": "project_custom_field_templates",
+      "path": "/project/customField/template",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/project_custom_field_templates.json"
+    },
+    {
+      "name": "project_groups",
+      "path": "/projectgroup",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/project_groups.json"
+    },
+    {
+      "name": "resource_groups",
+      "path": "/resourcegroup",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/resource_groups.json"
+    },
+    {
+      "name": "cost_categories",
+      "path": "/costCategories",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/cost_categories.json"
+    },
+    {
+      "name": "project_managers",
+      "path": "/project-manager",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/project_managers.json"
+    },
+    {
+      "name": "project_tags",
+      "path": "/project-tag",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/project_tags.json"
+    },
+    {
+      "name": "resource_tags",
+      "path": "/resource-tag",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/resource_tags.json"
+    },
+    {
+      "name": "time_entries",
+      "path": "/timeentry",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/time_entries.json"
+    },
+    {
+      "name": "unassigned_work",
+      "path": "/unassigned-work",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/unassigned_work.json"
+    },
+    {
+      "name": "vacations",
+      "path": "/vacation",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/vacations.json"
+    },
+    {
+      "name": "webhook_subscriptions",
+      "path": "/subscription",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/webhook_subscriptions.json"
     }
   ]
 }

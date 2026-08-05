@@ -26,29 +26,45 @@ Choose the automated review route before posting review commands:
 For parent issues, sub-issues, and stacked PRs, follow:
 `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md`
 
-For parent issues that spawn or assign multiple workers, follow:
+For parent issues, sub-issues, and stacked PRs, use the single-worker compatibility ownership
+contract:
 `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`
-`.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`
+
+This contract supersedes the legacy parent-orchestration entry point. The canonical worker owns
+parent state inline and must not spawn or assign another worker or role. Legacy files remain only
+for Wave 6 cleanup and are not active instructions for this flow.
 
 Task type: `<task-type-from-task-skill-matrix>`
 
+Connector implementation scope (fill when applicable):
+- target connector scope: `<exactly one target connector slug>`
+- connector-owned paths: `<target defs/docs/fixtures/tests>`
+- ownership guard evidence required: `<command/check>`
+- changed-path compliance required: `<yes>`
+- foundation issue/PR path for shared runtime/tooling, schema, generated-index, or unrelated connector work: `<URL or blocker>`
+- no-mistakes handling: connector PR validation must stop/ask for foundation split instead of auto-absorbing generic shared changes
+
 Required skills:
-- `gsd-programming-loop` for implementation or behavior-changing work through `/gsd-programming-loop` in Pi or `scripts/gsd prompt programming-loop ...` from shell
+- the installed GSD sequence for implementation or behavior-changing work: `discuss-phase`,
+  `plan-phase --tdd`, `execute-phase`, `verify-work` with gap closure, then `code-review`
 - `golang-how-to` for Go work, plus task-specific Go skills from `required-skills-routing.md`
 - design skills such as `frontend-design`, `web-design-guidelines`, and `vercel-react-best-practices` for website/docs UI work
 - `<skill capability or local skill name>`
 
-Primary agent:
-`.agents/<functional-area>/agents/<type>/<agent>.agent.yaml`
+Canonical worker:
+- role: `pm-delivery-worker` or inheriting `pm-connector-worker`
+- source: `.agents/agentic-delivery/canonical/delivery-contract.json`
+- delegation: none
 
 Parent issue:
 - `<parent issue URL or "None">`
 
-Orchestration:
-- spawned by: `<parent issue orchestrator or "None">`
+Parent job ownership:
+- active owner: `<canonical worker or "not applicable">`
 - state ledger: `<issue comment, PR body section, file path, or "None">`
-- worker handoff template: `.agents/agentic-delivery/contracts/worker-handoff-template.md`
-- merge owner: `<parent issue orchestrator | assigned coordinator | not applicable>`
+- durable handoff: `<issues, branches, PRs, and GSD artifacts>`
+- sub-PR integration owner: `<canonical worker | not applicable>`
+- parent merge owner: `<captain | not applicable>`
 - Automated review coverage route: `<sub_pr | parent_pr_fallback | copilot_backup | blocked | not applicable>`
 - Copilot fallback route: `<copilot_backup | human | none | not applicable>`
 
@@ -67,14 +83,16 @@ PR body must include one of:
 - `Refs #<issue-number>` when the PR is stacked or incremental
 
 Before merge:
-- confirm `gsd-programming-loop` was loaded and followed through `/gsd-programming-loop ...` or
-  `scripts/gsd prompt programming-loop ...` for implementation or behavior-changing work, or record
-  the manual-GSD fallback when the repo-local adapter is unavailable
+- confirm the installed GSD lifecycle commands resolved through `scripts/gsd sources`, were
+  followed through Pi aliases or `scripts/gsd prompt ...`, and any inline/manual fallback was
+  recorded
 - confirm the GSD plan, TDD ledger, and verification checklist were created or updated before
   production edits
 - confirm required Go/design skills from `.agents/agentic-delivery/references/required-skills-routing.md` were loaded and recorded
 - for CLI feature work, confirm runtime help, bare namespace behavior, `docs/cli/**`, website docs,
   generated help/manual artifacts, and tests are updated or explicitly marked not applicable
+- for connector implementation work, confirm exactly one target connector, ownership guard evidence,
+  changed-path compliance, and any foundation PR path are recorded before PR review
 - commit and push coherent green slices to the active issue/PR branch after local green gates;
   never push to `main`
 - observe automatic Claude review after implementation when the PR is non-draft and targets
@@ -89,7 +107,7 @@ Before merge:
 - ensure accepted fix commits are Claude-reviewed; wait for automatic incremental review when
   active, and use manual `@claude review` only when automatic review is paused, disabled,
   skipped, rate-limit retry is due, or the automatic pause threshold was reached
-- merge sub-PRs into parent branches only when all automated gates pass and no human gate is
+- advance sub-PRs to canonical integration only when all automated gates pass and no human gate is
   triggered
 - require human approval before merging parent PRs into `main`
 ```

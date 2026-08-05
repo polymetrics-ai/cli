@@ -20,8 +20,21 @@ Before implementation or behavior-changing work:
 
 ```bash
 scripts/gsd doctor
-scripts/gsd prompt programming-loop init --phase <phase-or-issue> --dry-run
+scripts/gsd sources discuss-phase
+scripts/gsd sources plan-phase
+scripts/gsd sources execute-phase
+scripts/gsd sources verify-work
+scripts/gsd sources code-review
+scripts/gsd prompt discuss-phase <phase-or-issue>
+scripts/gsd prompt plan-phase <phase-or-issue> --tdd
+scripts/gsd prompt execute-phase <phase-or-issue>
+scripts/gsd prompt verify-work <phase-or-issue>
+scripts/gsd prompt code-review <phase-or-issue>
 ```
+
+When verification finds gaps, use `plan-phase <phase> --gaps`, then
+`execute-phase <phase> --gaps-only`, and verify again. The pinned adapter has no
+`programming-loop` command. Do not invoke it.
 
 Before planning/roadmap/codebase work:
 
@@ -39,7 +52,10 @@ In Pi after project trust/reload, use the interactive equivalents:
 /gsd map-codebase --fast
 /gsd new-project --from-existing --non-interactive
 /gsd plan-phase <phase> --skip-research
-/gsd-programming-loop init --phase <phase-or-issue> --dry-run
+/gsd-discuss-phase <phase-or-issue>
+/gsd-plan-phase <phase-or-issue> --tdd
+/gsd-execute-phase <phase-or-issue>
+/gsd-verify-work <phase-or-issue>
 /gsd-code-review <phase-or-issue>
 ```
 
@@ -50,8 +66,12 @@ In Pi after project trust/reload, use the interactive equivalents:
 - For runtime, RLM, Pi agent, Podman, PostgreSQL, DragonflyDB/Redis, Temporal, worker, perf-runtime, or website architecture work, agents must also follow `.agents/agentic-delivery/references/runtime-rlm-website-integration.md`.
 - For CLI command, flag, output, connector surface, help-topic, manual, or website-doc changes, agents must also follow `.agents/agentic-delivery/references/cli-help-docs-website-parity.md`.
 - Non-interactive or non-Pi runners must use `scripts/gsd prompt <command> [args...]` and then execute the generated prompt with their local tools.
-- Manual-GSD fallback is allowed only when `scripts/gsd doctor` fails or Pi project resources are unavailable; record the fallback in the phase, planning trace, handoff, or PR body.
+- Execute generated prompts inline when compatible isolated runtime agents are unavailable or the
+  canonical single-worker contract forbids spawning roles. Record the inline/manual fallback in the
+  phase, planning trace, handoff, or PR body without weakening TDD, verification, or review.
 - Do not copy raw upstream `agents/` or `commands/` files into this repo as runtime commands; use adapter-generated prompts and registry entries.
+- Run `go run ./cmd/agentcontractgen check` to validate the canonical source, registered projection
+  drift, and resolution of every referenced GSD command through `scripts/gsd sources`.
 
 ## Safety overlay
 

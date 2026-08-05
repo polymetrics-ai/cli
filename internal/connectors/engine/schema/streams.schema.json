@@ -32,6 +32,8 @@
               "client_secret": { "type": "string" },
               "scopes": { "type": "string" },
               "extra_params": { "type": "object" },
+              "refresh_token": { "type": "string" },
+              "refresh_token_store_key": { "type": "string" },
               "hook": { "type": "string" },
               "when": { "type": "string" }
             }
@@ -52,6 +54,11 @@
             "last_record_field": { "type": "string" },
             "stop_path": { "type": "string" },
             "next_url_path": { "type": "string" },
+            "start_index_param": { "type": "string" },
+            "count_param": { "type": "string" },
+            "total_path": { "type": "string" },
+            "start_index_path": { "type": "string" },
+            "start_index_base": { "type": "integer" },
             "page_size": { "type": "integer" },
             "max_pages": { "type": "integer" },
             "allow_cross_host": { "type": "boolean" }
@@ -146,6 +153,11 @@
               "last_record_field": { "type": "string" },
               "stop_path": { "type": "string" },
               "next_url_path": { "type": "string" },
+              "start_index_param": { "type": "string" },
+              "count_param": { "type": "string" },
+              "total_path": { "type": "string" },
+              "start_index_path": { "type": "string" },
+              "start_index_base": { "type": "integer" },
               "page_size": { "type": "integer" },
               "max_pages": { "type": "integer" },
               "allow_cross_host": { "type": "boolean" }

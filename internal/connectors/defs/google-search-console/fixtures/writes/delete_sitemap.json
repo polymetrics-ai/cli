@@ -5,7 +5,7 @@
   },
   "expect": {
     "method": "DELETE",
-    "path": "/sites/https://fixture.example.com//sitemaps/https://fixture.example.com/sitemap.xml"
+    "path": "/webmasters/v3/sites/https://fixture.example.com//sitemaps/https://fixture.example.com/sitemap.xml"
   },
   "response": {
     "status": 404,

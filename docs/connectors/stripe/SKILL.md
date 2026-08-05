@@ -11,6 +11,7 @@ Reads Stripe customers, charges, invoices, subscriptions, and products, and writ
 
 ## Icon
 
+- id: stripe
 - asset: icons/stripe.svg
 - source: upstream_registry
 - review_status: upstream_seeded

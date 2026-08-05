@@ -13,9 +13,11 @@ DESCRIPTION
   Reads the documented OnePageCRM API v3 CRM surface and exposes declarative write actions for supported JSON/path mutations.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -270,14 +272,15 @@ SYNC MODES
 REVERSE ETL ACTIONS
   update_user:
     endpoint: PUT /users/{{ record.user_id }}
-    required fields: user_id
+    required fields: user_id, first_name
     risk: Update a specific user; external OnePageCRM mutation, approval required
   create_lead_source:
     endpoint: POST /lead_sources
+    required fields: id
     risk: Create a new lead source; external OnePageCRM mutation, approval required
   update_lead_source:
     endpoint: PUT /lead_sources/{{ record.lead_source_id }}
-    required fields: lead_source_id
+    required fields: lead_source_id, id
     risk: Update a specific lead source; external OnePageCRM mutation, approval required
   delete_lead_source:
     endpoint: DELETE /lead_sources/{{ record.lead_source_id }}
@@ -285,10 +288,11 @@ REVERSE ETL ACTIONS
     risk: Delete a specific lead source; external OnePageCRM mutation, approval required
   create_status:
     endpoint: POST /statuses
+    required fields: id
     risk: Create a new status; external OnePageCRM mutation, approval required
   update_status:
     endpoint: PUT /statuses/{{ record.status_id }}
-    required fields: status_id
+    required fields: status_id, id
     risk: Update a specific status; external OnePageCRM mutation, approval required
   delete_status:
     endpoint: DELETE /statuses/{{ record.status_id }}
@@ -296,10 +300,11 @@ REVERSE ETL ACTIONS
     risk: Delete a specific status; external OnePageCRM mutation, approval required
   create_deal_field:
     endpoint: POST /deal_fields
+    required fields: id
     risk: Create a new deal field; external OnePageCRM mutation, approval required
   update_deal_field:
     endpoint: PUT /deal_fields/{{ record.deal_field_id }}
-    required fields: deal_field_id
+    required fields: deal_field_id, id
     risk: Update a specific deal field; external OnePageCRM mutation, approval required
   delete_deal_field:
     endpoint: DELETE /deal_fields/{{ record.deal_field_id }}
@@ -307,10 +312,11 @@ REVERSE ETL ACTIONS
     risk: Delete a specific deal field; external OnePageCRM mutation, approval required
   create_custom_field:
     endpoint: POST /custom_fields
+    required fields: id
     risk: Create a new custom field; external OnePageCRM mutation, approval required
   update_custom_field:
     endpoint: PUT /custom_fields/{{ record.custom_field_id }}
-    required fields: custom_field_id
+    required fields: custom_field_id, id
     risk: Update a specific custom field; external OnePageCRM mutation, approval required
   delete_custom_field:
     endpoint: DELETE /custom_fields/{{ record.custom_field_id }}
@@ -318,10 +324,11 @@ REVERSE ETL ACTIONS
     risk: Delete a specific custom field; external OnePageCRM mutation, approval required
   create_company_field:
     endpoint: POST /company_fields
+    required fields: id
     risk: Create a new company field; external OnePageCRM mutation, approval required
   update_company_field:
     endpoint: PUT /company_fields/{{ record.company_field_id }}
-    required fields: company_field_id
+    required fields: company_field_id, id
     risk: Update a specific company field; external OnePageCRM mutation, approval required
   delete_company_field:
     endpoint: DELETE /company_fields/{{ record.company_field_id }}
@@ -329,10 +336,11 @@ REVERSE ETL ACTIONS
     risk: Delete a specific company field; external OnePageCRM mutation, approval required
   create_predefined_action:
     endpoint: POST /predefined_actions
+    required fields: id
     risk: Create a new predefined action; external OnePageCRM mutation, approval required
   update_predefined_action:
     endpoint: PUT /predefined_actions/{{ record.predefined_action_id }}
-    required fields: predefined_action_id
+    required fields: predefined_action_id, id
     risk: Update a specific predefined action; external OnePageCRM mutation, approval required
   delete_predefined_action:
     endpoint: DELETE /predefined_actions/{{ record.predefined_action_id }}
@@ -340,10 +348,11 @@ REVERSE ETL ACTIONS
     risk: Delete a specific predefined action; external OnePageCRM mutation, approval required
   create_predefined_action_group:
     endpoint: POST /predefined_action_groups
+    required fields: text
     risk: Create a new predefined action group; external OnePageCRM mutation, approval required
   update_predefined_action_group:
     endpoint: PUT /predefined_action_groups/{{ record.predefined_action_group_id }}
-    required fields: predefined_action_group_id
+    required fields: predefined_action_group_id, text
     risk: Update a specific predefined action group; external OnePageCRM mutation, approval required
   delete_predefined_action_group:
     endpoint: DELETE /predefined_action_groups/{{ record.predefined_action_group_id }}
@@ -351,10 +360,11 @@ REVERSE ETL ACTIONS
     risk: Delete a specific predefined action group; external OnePageCRM mutation, approval required
   create_predefined_item:
     endpoint: POST /predefined_items
+    required fields: name
     risk: Create a new predefined item; external OnePageCRM mutation, approval required
   update_predefined_item:
     endpoint: PUT /predefined_items/{{ record.predefined_item_id }}
-    required fields: predefined_item_id
+    required fields: predefined_item_id, name
     risk: Update a specific predefined item; external OnePageCRM mutation, approval required
   delete_predefined_item:
     endpoint: DELETE /predefined_items/{{ record.predefined_item_id }}
@@ -362,6 +372,7 @@ REVERSE ETL ACTIONS
     risk: Delete a specific predefined item; external OnePageCRM mutation, approval required
   create_predefined_item_group:
     endpoint: POST /predefined_item_groups
+    required fields: name
     risk: Create a new predefined item group; external OnePageCRM mutation, approval required
   delete_predefined_item_group:
     endpoint: DELETE /predefined_item_groups/{{ record.predefined_item_group_id }}
@@ -369,10 +380,11 @@ REVERSE ETL ACTIONS
     risk: Delete a specific predefined item group; external OnePageCRM mutation, approval required
   create_note:
     endpoint: POST /notes
+    required fields: contact_id
     risk: Create a new note; external OnePageCRM mutation, approval required
   update_note:
     endpoint: PUT /notes/{{ record.note_id }}
-    required fields: note_id
+    required fields: note_id, contact_id
     risk: Update a specific note; external OnePageCRM mutation, approval required
   delete_note:
     endpoint: DELETE /notes/{{ record.note_id }}
@@ -380,14 +392,15 @@ REVERSE ETL ACTIONS
     risk: Delete a specific note; external OnePageCRM mutation, approval required
   create_note_attachment:
     endpoint: POST /notes/{{ record.note_id }}/attachments
-    required fields: note_id
+    required fields: note_id, reference_id
     risk: Create attachment and assign it to an existing note; external OnePageCRM mutation, approval required
   create_call:
     endpoint: POST /calls
+    required fields: contact_id
     risk: Create a call; external OnePageCRM mutation, approval required
   update_call:
     endpoint: PUT /calls/{{ record.call_id }}
-    required fields: call_id
+    required fields: call_id, contact_id
     risk: Update a specific call; external OnePageCRM mutation, approval required
   delete_call:
     endpoint: DELETE /calls/{{ record.call_id }}
@@ -395,14 +408,15 @@ REVERSE ETL ACTIONS
     risk: Delete a specific call; external OnePageCRM mutation, approval required
   create_call_attachment:
     endpoint: POST /calls/{{ record.call_id }}/attachments
-    required fields: call_id
+    required fields: call_id, reference_id
     risk: Create attachment and assign it to an existing call; external OnePageCRM mutation, approval required
   create_meeting:
     endpoint: POST /meetings
+    required fields: contact_id
     risk: Create a meeting; external OnePageCRM mutation, approval required
   update_meeting:
     endpoint: PUT /meetings/{{ record.meeting_id }}
-    required fields: meeting_id
+    required fields: meeting_id, contact_id
     risk: Update a specific meeting; external OnePageCRM mutation, approval required
   delete_meeting:
     endpoint: DELETE /meetings/{{ record.meeting_id }}
@@ -410,14 +424,15 @@ REVERSE ETL ACTIONS
     risk: Delete a specific meeting; external OnePageCRM mutation, approval required
   create_meeting_attachment:
     endpoint: POST /meetings/{{ record.meeting_id }}/attachments
-    required fields: meeting_id
+    required fields: meeting_id, reference_id
     risk: Create attachment and assign it to an existing meeting; external OnePageCRM mutation, approval required
   create_deal:
     endpoint: POST /deals
+    required fields: contact_id
     risk: Create a new deal; external OnePageCRM mutation, approval required
   update_deal:
     endpoint: PUT /deals/{{ record.deal_id }}
-    required fields: deal_id
+    required fields: deal_id, contact_id
     risk: Update a specific deal; external OnePageCRM mutation, approval required
   delete_deal:
     endpoint: DELETE /deals/{{ record.deal_id }}
@@ -425,14 +440,15 @@ REVERSE ETL ACTIONS
     risk: Delete a specific deal; external OnePageCRM mutation, approval required
   create_deal_attachment:
     endpoint: POST /deals/{{ record.deal_id }}/attachments
-    required fields: deal_id
+    required fields: deal_id, reference_id
     risk: Create attachment and assign it to an existing deal; external OnePageCRM mutation, approval required
   create_attachment:
     endpoint: POST /attachments
+    required fields: reference_id
     risk: Create a new attachment; external OnePageCRM mutation, approval required
   update_attachment:
     endpoint: PATCH /attachments/{{ record.attachment_id }}
-    required fields: attachment_id
+    required fields: attachment_id, attachment
     risk: Sets/updates attachment custom file name; external OnePageCRM mutation, approval required
   delete_attachment:
     endpoint: DELETE /attachments/{{ record.attachment_id }}
@@ -448,10 +464,11 @@ REVERSE ETL ACTIONS
     risk: Unpin attachment from its owner contact through its note/call/deal; external OnePageCRM mutation, approval required
   create_relationship_type:
     endpoint: POST /relationship_types
+    required fields: variants
     risk: Create a new relationship type; external OnePageCRM mutation, approval required
   update_relationship_type:
     endpoint: PUT /relationship_types/{{ record.relationship_type_id }}
-    required fields: relationship_type_id
+    required fields: relationship_type_id, variants
     risk: Update a specific relationship type; external OnePageCRM mutation, approval required
   delete_relationship_type:
     endpoint: DELETE /relationship_types/{{ record.relationship_type_id }}
@@ -459,10 +476,11 @@ REVERSE ETL ACTIONS
     risk: Delete a relationship type; external OnePageCRM mutation, approval required
   create_action:
     endpoint: POST /actions
+    required fields: contact_id
     risk: Create a new action; external OnePageCRM mutation, approval required
   update_action:
     endpoint: PUT /actions/{{ record.action_id }}
-    required fields: action_id
+    required fields: action_id, contact_id
     risk: Update a specific action; external OnePageCRM mutation, approval required
   delete_action:
     endpoint: DELETE /actions/{{ record.action_id }}
@@ -494,11 +512,11 @@ REVERSE ETL ACTIONS
     risk: Specify action to be swapped in as the logged API users next action; external OnePageCRM mutation, approval required
   update_company:
     endpoint: PUT /companies/{{ record.company_id }}
-    required fields: company_id
+    required fields: company_id, name
     risk: Update a specific company; external OnePageCRM mutation, approval required
   create_company_linked_contact:
     endpoint: POST /companies/{{ record.company_id }}/linked_contacts
-    required fields: company_id
+    required fields: company_id, contact_id
     risk: Link a contact to a specific company; external OnePageCRM mutation, approval required
   delete_company_linked_contact:
     endpoint: DELETE /companies/{{ record.company_id }}/linked_contacts/{{ record.contact_id }}
@@ -506,7 +524,7 @@ REVERSE ETL ACTIONS
     risk: Unlink a contact from a company; external OnePageCRM mutation, approval required
   enable_company_synced_status:
     endpoint: POST /companies/{{ record.company_id }}/synced_status
-    required fields: company_id
+    required fields: company_id, status_id
     risk: Enable company status sync; external OnePageCRM mutation, approval required
   delete_company_synced_status:
     endpoint: DELETE /companies/{{ record.company_id }}/synced_status
@@ -518,10 +536,11 @@ REVERSE ETL ACTIONS
     risk: Delete logo in then given company; external OnePageCRM mutation, approval required
   create_contact:
     endpoint: POST /contacts
+    required fields: title
     risk: Create a contact; external OnePageCRM mutation, approval required
   update_contact:
     endpoint: PUT /contacts/{{ record.contact_id }}
-    required fields: contact_id
+    required fields: contact_id, title
     risk: Update a specific contact; external OnePageCRM mutation, approval required
   delete_contact:
     endpoint: DELETE /contacts/{{ record.contact_id }}
@@ -537,31 +556,31 @@ REVERSE ETL ACTIONS
     risk: Save a specific OnePageCRM contact to Google Contacts; external OnePageCRM mutation, approval required
   create_contact_action:
     endpoint: POST /contacts/{{ record.contact_id }}/actions
-    required fields: contact_id
+    required fields: contact_id, assignee_id
     risk: Create an action for a specific contact; external OnePageCRM mutation, approval required
   create_contact_deal:
     endpoint: POST /contacts/{{ record.contact_id }}/deals
-    required fields: contact_id
+    required fields: contact_id, owner_id
     risk: Create a deal for a specific contact; external OnePageCRM mutation, approval required
   create_contact_note:
     endpoint: POST /contacts/{{ record.contact_id }}/notes
-    required fields: contact_id
+    required fields: contact_id, text
     risk: Create a note for a specific contact; external OnePageCRM mutation, approval required
   create_contact_call:
     endpoint: POST /contacts/{{ record.contact_id }}/calls
-    required fields: contact_id
+    required fields: contact_id, call_time_int
     risk: Create a call for a specific contact; external OnePageCRM mutation, approval required
   create_contact_meeting:
     endpoint: POST /contacts/{{ record.contact_id }}/meetings
-    required fields: contact_id
+    required fields: contact_id, meeting_time_int
     risk: Create a meeting for a specific contact; external OnePageCRM mutation, approval required
   create_contact_relationship:
     endpoint: POST /contacts/{{ record.contact_id }}/relationships
-    required fields: contact_id
+    required fields: contact_id, relationship_type_id
     risk: Create a relationships for a specific contact; external OnePageCRM mutation, approval required
   update_relationship:
     endpoint: PUT /contacts/{{ record.contact_id }}/relationships/{{ record.relationship_id }}
-    required fields: contact_id, relationship_id
+    required fields: contact_id, relationship_id, relationship_type_id
     risk: Update a specific relationship; external OnePageCRM mutation, approval required
   delete_contact_relationship:
     endpoint: DELETE /contacts/{{ record.contact_id }}/relationships/{{ record.relationship_id }}
@@ -593,11 +612,11 @@ REVERSE ETL ACTIONS
     risk: Remove star from a specific contact; external OnePageCRM mutation, approval required
   close_sales_cycle_contact:
     endpoint: PUT /contacts/{{ record.contact_id }}/close_sales_cycle
-    required fields: contact_id
+    required fields: contact_id, comment
     risk: Close the sales cycle for a specific contact; external OnePageCRM mutation, approval required
   force_close_sales_cycle_contact:
     endpoint: PUT /contacts/{{ record.contact_id }}/force_close_sales_cycle
-    required fields: contact_id
+    required fields: contact_id, comment
     risk: Force close the sales cycle for a specific contact; external OnePageCRM mutation, approval required
   reopen_sales_cycle_contact:
     endpoint: PUT /contacts/{{ record.contact_id }}/reopen_sales_cycle
@@ -605,7 +624,7 @@ REVERSE ETL ACTIONS
     risk: Reopen the sales cycle for a specific contact; external OnePageCRM mutation, approval required
   split_contact:
     endpoint: PUT /contacts/{{ record.contact_id }}/split
-    required fields: contact_id
+    required fields: contact_id, company_name
     risk: Split a contact from their current company (and potentially to a new company); external OnePageCRM mutation, approval required
   mark_as_read_notification:
     endpoint: POST /notifications/{{ record.notification_id }}/mark_as_read

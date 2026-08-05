@@ -13,6 +13,7 @@ DESCRIPTION
   Reads GlassFrog circles, roles, people, projects, and assignments through the GlassFrog API v3 (read-only full-refresh source).
 
 ICON
+  id: glassfrog
   asset: icons/glassfrog.svg
   source: upstream_registry
   review_status: upstream_seeded

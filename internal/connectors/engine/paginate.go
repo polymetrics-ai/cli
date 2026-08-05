@@ -18,10 +18,11 @@ type baseHostSetter interface {
 	setBaseOrigin(scheme, host string)
 }
 
-// newPaginator maps a bundle PaginationSpec onto a connsdk.Paginator. Four of
-// the six types reuse the existing connsdk constructors as-is; the other two
-// (cursor's last_record_field variant and next_url) plus link_header's
-// SSRF-guarded wrapper are engine-local implementations defined below that
+// newPaginator maps a bundle PaginationSpec onto a connsdk.Paginator. Two of
+// the seven types (offset_limit, and cursor's token_path variant) reuse the
+// existing connsdk constructors as-is; the rest — page_number, cursor's
+// last_record_field variant, next_url, start_index, plus link_header's
+// SSRF-guarded wrapper — are engine-local implementations defined below that
 // satisfy the same connsdk.Paginator contract — connsdk itself is not
 // modified.
 //
@@ -71,6 +72,9 @@ func newPaginator(spec PaginationSpec, pageSize int, recordsPath string) (connsd
 
 	case "next_url":
 		return newNextURLPaginator(spec)
+
+	case "start_index":
+		return newStartIndexPaginator(spec, size)
 
 	default:
 		return nil, fmt.Errorf("new paginator: unknown pagination type %q", spec.Type)
@@ -124,6 +128,158 @@ func newNextURLPaginator(spec PaginationSpec) (connsdk.Paginator, error) {
 		path:           spec.NextURLPath,
 		allowCrossHost: spec.AllowCrossHost,
 	}, nil
+}
+
+// SCIM 2.0 (RFC 7644 §3.4.2.4) names for the start_index strategy's request
+// params and response paths. They are defaults, not requirements: any 1-based
+// (or, with an explicit start_index_base, 0-based) index-plus-total API can
+// override each one.
+const (
+	defaultStartIndexParam    = "startIndex"
+	defaultStartIndexCount    = "count"
+	defaultStartIndexTotal    = "totalResults"
+	defaultStartIndexBodyPath = "startIndex"
+	defaultStartIndexBase     = 1
+)
+
+// startIndexPaginator implements pagination.type == "start_index": the caller
+// asks for a window with an index and a size, and the response reports where
+// the window actually started, how big it was, and how many records exist in
+// total. SCIM list endpoints are the motivating shape — Airtable's ledger
+// blocks GET /scim/v2/Groups and GET /scim/v2/Users on it, noting that there is
+// no next-page token to follow, so the "cursor" strategy cannot express it.
+//
+// Two properties keep the walk honest against a server that misreports:
+//
+//  1. the next index advances by the records the ENGINE actually extracted at
+//     the stream's own records path (recordCount — connsdk.Harvest and read.go
+//     both pass the RAW extracted length, before any filter or hook drop), never
+//     by the server's claimed itemsPerPage. A server that claims 100 while
+//     returning 2 would otherwise make the walk skip 98 records silently.
+//  2. the next index must strictly advance. A server that keeps echoing the
+//     same start index would loop forever; that is refused and reported
+//     through Err(), mirroring tokenPathCursor and nextURL rather than being
+//     mistaken for a benign end-of-pages.
+//
+// SCIM's itemsPerPage is deliberately NOT given a declarable path. Every job it
+// could do here is done more safely by recordCount (the advance) or by
+// total_results (the stop), and using it as a short-page stop signal would
+// silently truncate against the common server that caps the page size below the
+// requested count. An unused knob in a bundle schema is worse than an absent
+// one, so it is absent, with the reason recorded here.
+type startIndexPaginator struct {
+	indexParam string
+	countParam string
+
+	totalPath      string
+	bodyIndexPath  string
+	pageSize       int
+	firstIndex     int
+	currentIndex   int
+	lastErr        error
+	startedWalking bool
+}
+
+func newStartIndexPaginator(spec PaginationSpec, pageSize int) (connsdk.Paginator, error) {
+	firstIndex := defaultStartIndexBase
+	if spec.StartIndexBase != nil {
+		firstIndex = *spec.StartIndexBase
+	}
+	if firstIndex < 0 {
+		return nil, fmt.Errorf("new paginator: start_index: start_index_base must be non-negative, got %d", firstIndex)
+	}
+	if pageSize < 0 {
+		return nil, fmt.Errorf("new paginator: start_index: page_size must be non-negative, got %d", pageSize)
+	}
+	return &startIndexPaginator{
+		indexParam:    valueOrDefault(spec.StartIndexParam, defaultStartIndexParam),
+		countParam:    valueOrDefault(spec.CountParam, defaultStartIndexCount),
+		totalPath:     valueOrDefault(spec.TotalPath, defaultStartIndexTotal),
+		bodyIndexPath: valueOrDefault(spec.StartIndexPath, defaultStartIndexBodyPath),
+		pageSize:      pageSize,
+		firstIndex:    firstIndex,
+	}, nil
+}
+
+func valueOrDefault(value, fallback string) string {
+	if trimmed := strings.TrimSpace(value); trimmed != "" {
+		return trimmed
+	}
+	return fallback
+}
+
+func (p *startIndexPaginator) Start() *connsdk.NextPage {
+	p.currentIndex = p.firstIndex
+	p.lastErr = nil
+	p.startedWalking = true
+	return &connsdk.NextPage{Query: p.query(p.currentIndex)}
+}
+
+func (p *startIndexPaginator) query(index int) url.Values {
+	q := url.Values{}
+	q.Set(p.indexParam, strconv.Itoa(index))
+	if p.pageSize > 0 {
+		q.Set(p.countParam, strconv.Itoa(p.pageSize))
+	}
+	return q
+}
+
+func (p *startIndexPaginator) Next(resp *connsdk.Response, recordCount int) *connsdk.NextPage {
+	// An empty page is authoritative regardless of what total_results claims:
+	// a server that over-reports its total can never make the walk loop.
+	if resp == nil || recordCount <= 0 || !p.startedWalking {
+		return nil
+	}
+
+	base := p.currentIndex
+	if echoed, ok := p.intAt(resp.Body, p.bodyIndexPath); ok {
+		base = echoed
+	}
+
+	next := base + recordCount
+	if next <= p.currentIndex {
+		p.lastErr = fmt.Errorf("start_index: loop detected — next index %d does not advance past %d", next, p.currentIndex)
+		return nil
+	}
+	if total, ok := p.intAt(resp.Body, p.totalPath); ok && next > total {
+		return nil
+	}
+	if p.pageSize <= 0 {
+		// Without a page size the request carries no window, so a second
+		// request would repeat the first. Stop rather than loop.
+		return nil
+	}
+
+	p.currentIndex = next
+	return &connsdk.NextPage{Query: p.query(next)}
+}
+
+// Err returns the sticky loop-detection error, or nil when pagination stopped
+// for a benign reason (empty page, or the total reached) — mirrors
+// nextURL.Err()/tokenPathCursor.Err().
+func (p *startIndexPaginator) Err() error { return p.lastErr }
+
+// intAt reads a non-negative integer from a dotted body path. A missing path,
+// a non-numeric value, or a read error all report "absent" rather than zero,
+// so a body that simply omits total_results cannot be mistaken for one that
+// reports a total of zero.
+func (p *startIndexPaginator) intAt(body []byte, path string) (int, bool) {
+	if strings.TrimSpace(path) == "" {
+		return 0, false
+	}
+	raw, err := connsdk.StringAt(body, path)
+	if err != nil {
+		return 0, false
+	}
+	raw = strings.TrimSpace(raw)
+	if raw == "" {
+		return 0, false
+	}
+	value, err := strconv.Atoi(raw)
+	if err != nil || value < 0 {
+		return 0, false
+	}
+	return value, true
 }
 
 // nonePaginator issues exactly one request: Start returns the first (and

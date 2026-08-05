@@ -30,24 +30,45 @@ DESCRIPTION
   Newly created plans persist the destination write action's redact_fields
   metadata and mask those fields in plan samples.
 
+  Destructive plans do not receive an approval token during planning. Preview
+  performs the connector's no-network dry run, persists a digest of the complete
+  staged request set and its execution identity, and only then issues a
+  time-bounded token in human-readable output. Execution recomputes that digest
+  before dispatch and also requires the closed typed confirmation --confirm
+  destructive. HTTP DELETE is treated as destructive even when connector
+  metadata omits a confirmation declaration.
+
+  A connector may declare a write action non-batchable (batchable: false).
+  Bulk plans over --source-table refuse such an action, naming the action and
+  the individual pm command that still runs it. Those actions stay fully
+  available one record at a time as pm <connector> <command>, which keeps the
+  plan, preview, approval, and execute steps. Use it for operations that must
+  never be fanned out over many rows under a single approval. It is separate
+  from --confirm: batchable controls whether an action may run in bulk at all,
+  --confirm controls how severe one call is.
+
 COMMANDS
   list
     List reverse ETL plans and runs in the current project.
 
   plan
     Create a reverse ETL plan from a local warehouse table to a destination
-    connector. A human-readable plan prints an approval token for the user.
-    JSON output redacts the token.
+    connector. A human-readable non-destructive plan prints an approval token;
+    a destructive plan prints no token until preview succeeds. JSON output
+    always redacts tokens. A non-batchable destination action is refused here,
+    before any plan or approval token exists.
 
   preview
-    Show a stored plan, mapped sample rows, destination connector, action, and
-    record count before execution. Plans created with persisted redact_fields
-    metadata keep connector-declared fields masked in sample rows.
+    Show a stored plan's mapped sample rows, action, and count. For a destructive
+    plan, also materialize the request through the destination's no-network dry
+    run, persist its digest, and issue the approval token in human-readable
+    output. JSON redacts the token. Plans with persisted redact_fields keep
+    connector-declared fields masked in sample rows.
 
   run
     Execute a stored plan only when --approve is supplied with the approval
-    token from the human plan output. Destructive or sensitive plans can also
-    require the typed --confirm challenge printed by the plan output.
+    token from human-readable plan or preview output. Destructive plans require
+    a matching persisted preview and the closed --confirm destructive value.
 
   status
     Show a completed or failed reverse ETL run by run ID.
@@ -104,10 +125,11 @@ EXAMPLES
   pm reverse status rrun_abc123 --json
 
 SECURITY
-  Execution requires an approval token created by a prior plan. JSON plan output
-  omits the token so agents cannot silently self-approve external writes.
-  Reverse ETL never exposes raw secret values and masks connector-declared
-  sensitive record fields for plans created with persisted redact_fields metadata.
+  Execution requires a time-bounded, single-use approval token. Destructive
+  tokens are created only after preview; execution revalidates the preview
+  digest before dispatch. JSON plan and preview output omit tokens so agents
+  cannot silently self-approve external writes. Reverse ETL never exposes raw
+  secret values and masks connector-declared sensitive record fields.
 
 LEARN MORE
   Run pm reverse --help for this manual.

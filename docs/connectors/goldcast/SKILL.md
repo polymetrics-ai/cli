@@ -11,6 +11,7 @@ Reads Goldcast organizations, events, agenda items, discussion groups, and track
 
 ## Icon
 
+- id: goldcast
 - asset: icons/goldcast.svg
 - source: upstream_registry
 - review_status: upstream_seeded

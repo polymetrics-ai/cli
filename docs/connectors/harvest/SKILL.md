@@ -11,6 +11,7 @@ Reads Harvest clients, contacts, company settings, projects, tasks, task assignm
 
 ## Icon
 
+- id: harvest
 - asset: icons/harvest.svg
 - source: upstream_registry
 - review_status: upstream_seeded

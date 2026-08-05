@@ -83,7 +83,7 @@ func (ashbyEngineHooks) ExecuteWrite(ctx context.Context, action engine.WriteAct
 // mutation remains gated by the CLI's plan -> preview -> approval -> execute
 // lifecycle.
 func (c Connector) DryRunWrite(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WritePreview, error) {
-	return engine.DryRunWrite(ctx, ashbyBundle(), req, records, nil)
+	return engine.DryRunWrite(ctx, ashbyBundle(), req, records, ashbyEngineHooks{})
 }
 
 // Write executes only named Ashby write actions from writes.json. It does not

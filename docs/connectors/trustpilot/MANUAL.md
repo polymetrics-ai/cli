@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Trustpilot business-unit reviews, invitations, and business-unit profile metadata.
 
 ICON
+  id: trustpilot
   asset: icons/trustpilot.svg
   source: upstream_registry
   review_status: upstream_seeded

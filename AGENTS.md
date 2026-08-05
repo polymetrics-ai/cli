@@ -47,15 +47,23 @@ Polymetrics is a Go-only CLI monolith for dependency-free ETL, reverse ETL, conn
 
 This repo uses official GSD Core workflows through a project-local Pi adapter:
 
-- Interactive Pi: use `/gsd <command> [args...]` or generated aliases such as `/gsd-plan-phase`,
-  `/gsd-programming-loop`, and `/gsd-code-review` after project trust/reload.
+- Interactive Pi: use `/gsd <command> [args...]` or generated aliases such as
+  `/gsd-discuss-phase`, `/gsd-plan-phase`, `/gsd-execute-phase`, `/gsd-verify-work`, and
+  `/gsd-code-review` after project trust/reload.
 - Shell/non-interactive: use `scripts/gsd prompt <command> [args...]` and execute the generated
   prompt with local tools.
 - Health/provenance: run `scripts/gsd doctor`, `scripts/gsd list`, and
   `scripts/gsd sources <command>` when validating the adapter.
 - Agent reference: read `.agents/agentic-delivery/references/gsd-pi-adapter.md` before GSD work.
-- Manual-GSD fallback is allowed only when the adapter is unavailable; record the fallback in the
-  planning trace, phase artifact, worker handoff, or PR body.
+- The canonical issue-first flow is
+  `.agents/agentic-delivery/canonical/delivery-contract.json`; run
+  `go run ./cmd/agentcontractgen check` to validate its commands and registered projections.
+- The canonical Pi workers are generated `.pi/agents/pm-delivery-worker.md` and
+  `.pi/agents/pm-connector-worker.md`; use `go run ./cmd/agentcontractgen sync` and
+  `bash scripts/tests/pi-clean-project-agents.sh`, never hand-edit their generated files.
+- Inline/manual execution is allowed when the runtime cannot provide compatible isolated agents or
+  the canonical contract forbids spawning them. Record the fallback in the planning trace, phase
+  artifact, worker handoff, or PR body.
 
 ## CLI Help, Manual, Docs, And Website Parity
 
@@ -74,23 +82,19 @@ This repo uses official GSD Core workflows through a project-local Pi adapter:
 
 - For issue-to-PR work, read `.agents/agentic-delivery/contracts/issue-agent-contract.md` and keep
   the PR scoped to one primary issue.
-- For parent issues that spawn or assign multiple sub-issue workers, read
-  `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md` and follow
-  `.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`. The parent issue
-  orchestrator owns shared parent artifacts, parent PR state, sub-PR merge decisions, automated
-  review coverage routing, and final human-readiness.
-- When a task references a parent issue, sub-issues, stacked PRs, parent branch, parent PR, or
-  automated review coverage, invoke the parent issue orchestrator as the active owner before worker
-  execution. Do not stop at a plan when the parent issue has ready, unblocked sub-issues and the
-  runtime can spawn workers.
-- For implementation or behavior-changing work, `gsd-programming-loop` is mandatory. Load it before
-  coding through `/gsd-programming-loop` in Pi or `scripts/gsd prompt programming-loop ...` from
-  shell, follow its TDD/programming lifecycle, and record GSD/TDD evidence in the phase or PR
-  artifacts. If the repo-local GSD adapter is unavailable, run the manual GSD loop and record that
-  fallback explicitly; do not skip test-first implementation.
-- Treat `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md` as the shared runtime
-  policy for Codex, Claude, OpenCode, Pi, and future agents. Runtime adapters may activate the loop, but
-  must not weaken active orchestration, TDD, review, compact-mode, or human-gate requirements.
+- For a parent job with sub-issues and stacked PRs, the one canonical worker owns parent issue,
+  branch, PR, integration, review-coverage, and human-readiness state inline. Read
+  `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`; the compatibility filename
+  now contains the parent job ownership contract, not a dedicated role. Do not spawn an
+  orchestrator, shepherd, planner, reviewer, verifier, or GSD role.
+- For implementation or behavior-changing work, use the installed lifecycle:
+  `discuss-phase` → `plan-phase --tdd` → `execute-phase` → `verify-work`; plan and execute gaps with
+  `plan-phase --gaps` and `execute-phase --gaps-only` until green, then run `code-review`. Resolve
+  each command first with `scripts/gsd sources <command>` and record GSD/TDD evidence. Do not invoke
+  the absent `programming-loop` command.
+- `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md` is background procedure only
+  where it agrees with the canonical contract. It cannot authorize role spawning or weaken TDD,
+  review, compact-mode, or human gates.
 - Plan before coding. Create or update the issue's GSD plan, TDD ledger, and verification checklist
   before production edits, then keep them current as the implementation changes.
 - Commit and push regularly to the active issue/PR branch after each coherent green slice: plan
@@ -115,7 +119,7 @@ This repo uses official GSD Core workflows through a project-local Pi adapter:
   exists. If the automatic review does not run on the stacked sub-PR (for example, an untrusted
   author), a maintainer must invoke `@claude review` on it, or the parent PR must receive Claude
   review or a recorded Copilot/human fallback for the commit range that includes the sub-issue
-  before the sub-issue is considered integrated.
+  before the canonical `integrate_sub_pr` state is recorded.
 - If a parent branch has no diff yet, create a draft parent PR with a deliberate parent seed commit.
   Prefer a real roadmap/status scaffold when useful; otherwise use an empty commit to avoid noisy
   file churn.
@@ -135,6 +139,33 @@ This repo uses official GSD Core workflows through a project-local Pi adapter:
 - Resolve a Claude review thread only after every actionable finding has been addressed or
   explicitly dispositioned; resolve the conversation in GitHub rather than with a bot command.
 
+## Command Surface Must Stay Executable
+
+`availability: implemented` is a claim the runtime has to honour. Two rules keep
+it honest; both exist because a validator that hand-copied the runtime's rules
+drifted and let 174 commands validate clean while blocking on every invocation.
+
+- Do not restate a runtime rule inside `cmd/connectorgen`. The guard is
+  `TestEveryImplementedCommandPassesRuntimePreflight` in
+  `internal/connectors/commandrunner/runner_test.go`: it sweeps every bundle in
+  `defs.FS` through the real `commandrunner.Preflight`, so it covers new
+  executor kinds the day they land. Any `connectorgen` rule for an executable
+  intent must mirror its `commandrunner` counterpart exactly, and an absent
+  field is a finding, never a reason to skip a check.
+- Do not hand-edit command metadata that is derivable. Run
+  `go run ./cmd/connectorgen surface-sync` to fill `api_surface`, flag
+  `maps_to`, `output_policy`, and `rest.max_bytes` from the bundle's own
+  `operations.json`; `--check` fails when a bundle has drifted, and `make verify`
+  runs it as the `connectorgen-surface-sync` gate.
+- A declarative reverse-ETL `record_schema` rooted at `oneOf` or `anyOf` is
+  not one executable command contract. Runtime preflight expands its arms and
+  rejects promotion; model each reachable arm as a separate named action, or
+  leave it non-implemented until the required runtime capability exists.
+
+Never invent an `api_surface` endpoint to make a command look implemented. If
+the endpoint is not in the connector's own `api_surface.json` and
+`operations.json`, the command is not ready.
+
 ## Verification
 
 Use local gates before handing off code:
@@ -147,6 +178,14 @@ go build ./cmd/pm
 make verify
 ```
 
+Agents running under a per-command timeout should not run `go test ./...` or `make verify` (which
+includes it) as a single command: the suite spans 550+ connectors and `internal/cli` alone takes
+~6.5 minutes, so the whole run is routinely cut off — and a cutoff is indistinguishable from a hang.
+Scope local runs to the packages you changed plus `internal/cli`, in separate commands, run
+`make verify`'s other gates individually (`tidy-check`, `lint`, `docs-check`, `smoke-no-build`,
+`agent-contract-check`, `connectorgen-validate`, `connectorgen-surface-sync`, `connector-boundary`,
+`release-workflow-check`), and let CI carry the full suite.
+
 Runtime-backed checks are optional and require local services:
 
 ```bash
@@ -155,3 +194,10 @@ scripts/runtime.sh up
 POLYMETRICS_INTEGRATION=1 go test ./...
 scripts/runtime.sh down
 ```
+
+## Maintaining this file
+
+Keep this file for knowledge useful to almost every future agent session in this project.
+Do not repeat what the codebase already shows; point to the authoritative file or command instead.
+Prefer rewriting or pruning existing entries over appending new ones.
+When updating this file, preserve this bar for all agents and keep entries concise.

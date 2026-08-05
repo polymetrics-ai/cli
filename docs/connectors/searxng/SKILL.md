@@ -11,6 +11,7 @@ Reads web and Reddit search results from a SearXNG metasearch instance's JSON AP
 
 ## Icon
 
+- id: searxng
 - asset: icons/searxng.svg
 - source: official_site
 - review_status: manual_override

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "ids": [
+      "time_entry_fixture_1",
+      "time_entry_fixture_2"
+    ]
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/timeentry"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "delete_time_entries_fixture"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "record": {
+    "id": "booking_fixture_1",
+    "resource": "resource_fixture_1",
+    "project": "project_fixture_1",
+    "start": "2026-01-06T09:00:00Z",
+    "end": "2026-01-06T17:00:00Z",
+    "note": "updated fixture booking"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/booking/booking_fixture_1",
+    "body": {
+      "resource": "resource_fixture_1",
+      "project": "project_fixture_1",
+      "start": "2026-01-06T09:00:00Z",
+      "end": "2026-01-06T17:00:00Z",
+      "note": "updated fixture booking"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "booking_fixture_1"
+    }
+  }
+}

@@ -11,6 +11,7 @@ Reads Lago customers, invoices, subscriptions, plans, and billable metrics throu
 
 ## Icon
 
+- id: getlago
 - asset: icons/getlago.svg
 - source: upstream_registry
 - review_status: upstream_seeded

@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "resource_tag_fixture_1",
+    "value": "Updated Resource Tag"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/resource-tag/resource_tag_fixture_1",
+    "body": {
+      "value": "Updated Resource Tag"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "resource_tag_fixture_1"
+    }
+  }
+}

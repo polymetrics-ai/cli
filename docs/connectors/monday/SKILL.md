@@ -11,6 +11,7 @@ Reads monday.com boards, items, users, teams, and tags through the monday.com Gr
 
 ## Icon
 
+- id: monday
 - asset: icons/monday.svg
 - source: upstream_registry
 - review_status: upstream_seeded

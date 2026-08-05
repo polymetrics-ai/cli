@@ -11,6 +11,7 @@ Reads Primetric employees, projects, clients, and roles through OAuth-authentica
 
 ## Icon
 
+- id: primetric
 - asset: icons/primetric.svg
 - source: upstream_registry
 - review_status: upstream_seeded

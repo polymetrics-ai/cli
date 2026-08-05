@@ -11,6 +11,7 @@ Reads Recruitee offers, candidates, departments, sources, and tags through the R
 
 ## Icon
 
+- id: recruitee
 - asset: icons/recruitee.svg
 - source: upstream_registry
 - review_status: upstream_seeded

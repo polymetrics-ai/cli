@@ -210,9 +210,10 @@ projection**: by default the engine emits only declared properties (today's hand
 }
 ```
 
-Pagination types (all four already exist in `connsdk/paginate.go`): `link_header`, `page_number`,
+Pagination types (all five already exist in `connsdk/paginate.go`): `link_header`, `page_number`,
 `offset_limit`, `cursor` (body token), plus `next_url` (aircall's `meta.next_page_link`, a cursor
-variant where the token is a full URL) and `none`.
+variant where the token is a full URL), `start_index` (SCIM 2.0 RFC 7644 §3.4.2.4 1-based index
+pagination that carries its own total), and `none`.
 
 ### `writes.json` (github, abridged)
 
@@ -260,7 +261,7 @@ variant where the token is a full URL) and `none`.
       "record_schema": { "type": "object", "required": ["name"], "properties": { "name": { "type": "string" } } },
       "delete": { "idempotent": true, "missing_ok_status": [404] },
       "risk": "permanently deletes a label",
-      "confirm": "destructive"
+      "confirmation": { "kind": "destructive" }
     },
     {
       "name": "merge_pull_request",
@@ -277,7 +278,7 @@ variant where the token is a full URL) and `none`.
         }
       },
       "risk": "merges a pull request into its base branch",
-      "confirm": "destructive"
+      "confirmation": { "kind": "destructive" }
     }
   ]
 }
@@ -294,8 +295,27 @@ Write semantics baked into the format:
   This replaces github's hand-written validate/payload functions (~700 lines) for the ~90% of
   actions that are plain payload mapping. Multi-request compound actions (github's
   `create_pull_request` + reviewer follow-up) use a **write hook** (§B.7).
-- **`confirm: "destructive"`** feeds the existing plan → preview → approve flow with per-action
-  risk tiering.
+- **`confirmation: {"kind":"destructive"}`** is the closed declaration for new write actions and
+  operation metadata. Existing `confirm: "destructive"` bundles remain compatible, but the runtime
+  normalizes them into the same typed policy. HTTP `DELETE`, a delete/destructive mutation class,
+  and any unknown non-empty legacy `confirm` value fail closed even if the typed declaration is
+  absent or malformed.
+- **`batchable: false`** gates an action out of SourceTable-driven bulk reverse ETL. It defaults to
+  `true`, so an action that omits it is unaffected. `PlanReverseETL` refuses a declared
+  non-batchable action before it stores a plan or mints an approval token, and `RunReverseETL`
+  re-checks the live manifest before executing a stored bulk plan, so a hand-edited `state.json`
+  cannot launder one through. The action stays fully executable as its own
+  `pm <connector> <command>` — that single-record path is what the declaration exists to preserve.
+
+  Use it for operations that must never be fanned out over N records under one approval:
+  moderation actions, irreversible sends, rate-sensitive endpoints, and anything governed by a
+  provider rule about human intent (for example an API that permits proxying a human's action
+  one-for-one but forbids a bot amplifying it).
+
+  `batchable` and `confirmation` are **orthogonal**. `confirmation` asks how severe one call is;
+  `batchable` asks whether the action may be fanned out at all. A vote is non-batchable but not
+  destructive; a bulk delete is destructive but legitimately batchable. An action may declare
+  either, both, or neither.
 
 ## B. The declarative runtime engine
 
@@ -357,11 +377,14 @@ type HTTPBase struct {
 }
 
 type AuthSpec struct {
-    Mode   string `json:"mode"`   // none|bearer|basic|api_key_header|api_key_query|oauth2_client_credentials|custom
+    Mode   string `json:"mode"`   // none|bearer|basic|api_key_header|api_key_query|oauth2_client_credentials|oauth2_refresh_token|custom
     Token  string `json:"token,omitempty"`
     Username, Password string     // basic
     Header, Prefix, Param, Value string // api_key_*
-    TokenURL, ClientID, ClientSecret, Scopes string // oauth2_client_credentials
+    TokenURL, ClientID, ClientSecret, Scopes string // oauth2_client_credentials + oauth2_refresh_token
+    ExtraParams map[string]string `json:"extra_params,omitempty"` // extra token-request form params
+    RefreshToken string `json:"refresh_token,omitempty"`                    // oauth2_refresh_token
+    RefreshTokenStoreKey string `json:"refresh_token_store_key,omitempty"`  // oauth2_refresh_token: where a rotated grant is persisted
     Hook   string `json:"hook,omitempty"` // custom: hook name resolved via hooks registry
     When   string `json:"when,omitempty"` // condition over config values
 }
@@ -394,22 +417,12 @@ type IncrementalSpec struct {
     StartConfigKey string `json:"start_config_key,omitempty"`
     ClientFiltered bool   `json:"client_filtered,omitempty"` // API has no filter; engine drops old records
 }
-
-type WriteAction struct {
-    Name         string          `json:"name"`
-    Kind         string          `json:"kind"` // create|update|upsert|delete|custom
-    Method, Path string
-    PathFields   []string        `json:"path_fields,omitempty"`
-    RedactFields []string        `json:"redact_fields,omitempty"` // record fields redacted from plan samples, write previews/errors
-    BodyType     string          `json:"body_type,omitempty"` // json (default) | form | none
-    BodyFields   []string        `json:"body_fields,omitempty"`
-    RecordSchema json.RawMessage `json:"record_schema"`
-    Delete       *DeleteSpec     `json:"delete,omitempty"` // idempotent, missing_ok_status
-    Risk         string          `json:"risk"`
-    Confirm      string          `json:"confirm,omitempty"` // "" | "destructive"
-    Hook         string          `json:"hook,omitempty"`    // custom executor
-}
 ```
+
+`WriteAction` is intentionally not copied into this design snapshot. Its authoritative Go
+definition is `internal/connectors/engine/bundle.go`, and its authoritative JSON contract is
+`internal/connectors/engine/schema/writes.schema.json`; the authoring recipe lives in
+`docs/migration/conventions.md`.
 
 ### B.3 Interpolation — deliberately tiny
 
@@ -443,12 +456,15 @@ loop; Retry-After handling already exists in connsdk.
 
 `ValidateWrite` = compile-once `record_schema` validation per record (structural errors carry
 record index, matching current behavior). Reverse-plan creation persists action `redact_fields` and
-masks matching sample fields. `DryRunWrite` = validation + fully-resolved request preview
-(`WritePreview.Warnings` includes resolved method/path with secrets and action `redact_fields`
-redacted). `Write` = per-record execution; returned write errors redact the same action fields while
-preserving typed wrapping. `kind: delete` honors `missing_ok_status` (a 404 on an idempotent delete
-counts as written, not failed). Batch semantics stay one-request-per-record (matches github/stripe
-today); `metadata.json.batch.write_batch_size` reserved for future bulk endpoints.
+masks matching sample fields. `DryRunWrite` validates and prepares every request without network
+access; `WritePreview.Warnings` shows the first resolved method/path as a redacted representative,
+while the preview digest binds the complete request set, connector/action target, credential and
+configuration identity, batchability, definition, and hook identity. Destructive execution
+re-prepares and compares that digest, then consumes authenticated single-use approval evidence
+through the provider-neutral gate before dispatch. `Write` returns redacted, typed errors.
+`kind: delete` honors `missing_ok_status` (a 404 on an idempotent delete counts as written, not
+failed). Batch semantics stay one-request-per-record (matches github/stripe today);
+`metadata.json.batch.write_batch_size` is reserved for future bulk endpoints.
 
 ### B.6 Sync modes — derived, never declared
 
@@ -579,7 +595,9 @@ process-global `RegisterFactory` path is gone.
     for `hooks/*`, ~15 lines) and `native/nativeset/nativeset_gen.go` (~10 lines).
   - `new <name>` — scaffolds a defs bundle from templates.
 - `cmd/pm-cataloggen` (Airbyte importer) — **deleted**.
-- `cmd/iconregistrygen` — unchanged; keys become bare names.
+- `cmd/iconregistrygen` — emits bare connector keys, scopes rows to implemented defs plus runtime
+  builtins, and treats the existing registry as curated authored state. See
+  `docs/migration/icon-registry-single-source.md` for the registry contract.
 
 ### C.4 Catalog: generated from connectors, and the 646 vs 556 divergence
 
@@ -661,15 +679,15 @@ Static (per bundle): `spec_schema_valid`, `stream_schemas_valid`, `pk_fields_exi
 
 Dynamic (per bundle, fixture-backed): an `httptest.Server` replays
 `fixtures/streams/<stream>/page_N.json` (recorded real API pages, keyed by expected request
-path+query); the **real engine** runs against it:
+path+query); the **real engine** runs against it. Canonical fixture shapes and matching semantics
+live in the [connector authoring conventions](../migration/conventions.md#4-fixture-rules):
 - `check_fixture`, `read_fixture_nonempty` per stream with fixtures (first stream mandatory),
 - `pagination_terminates` (multi-page fixture consumed exactly once, no infinite loop),
 - `records_match_schema` (every emitted record validates against the stream schema),
 - `cursor_advances` (incremental: cursor after read == max cursor in fixtures; re-read with that
   cursor sends the right `request_param`),
-- `write_validate` + `write_request_shape` per action: `fixtures/writes/<action>.json` =
-  `{"record": {...}, "expect": {"method","path","body"}}`; engine dry-run must produce the
-  expected request; invalid-record cases must fail validation,
+- `write_validate` + `write_request_shape` per action; engine dry-run must satisfy the canonical
+  fixture contract, and invalid-record cases must fail validation,
 - `delete_semantics` for `kind:delete` actions (404 handling per `missing_ok_status`).
 
 Live (opt-in): `LiveConformanceProvider` supplies real credentials for a nightly job.

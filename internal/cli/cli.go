@@ -713,6 +713,7 @@ func connectorHelpFlagsArePassive(flags parsedFlags, surface *connectors.Command
 	declared := map[string]bool{
 		"credential": true, "connection": true, "config": true,
 		"limit": true, "max-bytes": true,
+		"dest-root": true, "file-name": true,
 	}
 	for _, flag := range surface.GlobalFlags {
 		declared[flag.Name] = true
@@ -873,8 +874,27 @@ func renderConnectorCommandDetail(connectorName string, surface *connectors.Comm
 			writeConnectorFlag(&b, flag)
 		}
 	}
+	writeConnectorDownloadFlags(&b, cmd)
 	writeConnectorGlobalFlags(&b, surface)
 	return b.String()
+}
+
+// writeConnectorDownloadFlags documents the destination flags that only a
+// binary_download command accepts. --dest-root is required: the destination is
+// never inferred, so a user who does not see it documented cannot run the
+// command at all.
+//
+// The flags come from connectors.BinaryDownloadFlags rather than from literals
+// here, so runtime help and the generated manual/skill/website docs cannot
+// document different flags.
+func writeConnectorDownloadFlags(b *strings.Builder, cmd connectors.CommandSurfaceCommand) {
+	if cmd.Intent != "binary_download" {
+		return
+	}
+	b.WriteString("\nDOWNLOAD FLAGS\n")
+	for _, flag := range connectors.BinaryDownloadFlags() {
+		writeConnectorFlag(b, flag)
+	}
 }
 
 func writeConnectorField(b *strings.Builder, title, value string) {
@@ -1030,7 +1050,7 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 	commandFlags := map[string][]string{}
 	for name, values := range flags.values {
 		switch name {
-		case "_", "credential", "connection", "config", "limit", "max-bytes", "plan", "preview", "approve", "confirm", "plan-name":
+		case "_", "credential", "connection", "config", "limit", "max-bytes", "plan", "preview", "approve", "confirm", "plan-name", "dest-root", "file-name":
 			continue
 		default:
 			commandFlags[name] = values
@@ -1064,6 +1084,8 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 		Config:   cfg,
 		Limit:    limit,
 		MaxBytes: maxBytes,
+		DestRoot: flags.first("dest-root"),
+		FileName: flags.first("file-name"),
 	}, func(record connectors.Record) error {
 		rows = append(rows, record)
 		return nil
@@ -1074,6 +1096,20 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 			return connectorCommandBlockedError(err)
 		}
 		return err
+	}
+	if result.BinaryDownload != nil {
+		if jsonOut {
+			return writeJSON(stdout, envelope{
+				"kind":      "ConnectorCommandBinaryDownload",
+				"connector": result.Connector,
+				"command":   result.Command,
+				"operation": result.BinaryDownload.Operation,
+				"record":    result.BinaryDownload.Record,
+			})
+		}
+		b, _ := json.MarshalIndent(result.BinaryDownload.Record, "", "  ")
+		_, _ = fmt.Fprintln(stdout, string(b))
+		return nil
 	}
 	if result.DirectRead != nil {
 		if jsonOut {
@@ -1123,16 +1159,23 @@ func validateConnectorLifecycleFlagValues(flags parsedFlags) error {
 	return nil
 }
 
+// connectorCommandMaxBytes returns what the user asked for, and nothing else.
+// Zero means "unset", which is how the runner is told to apply the intent's own
+// default.
+//
+// It deliberately applies no default and no ceiling. Every intent already owns
+// its own limit — commandrunner clamps direct reads to the direct-read ceiling
+// and the engine clamps a binary download to its operation's declared
+// max_bytes — and restating the direct-read ceiling here silently capped every
+// binary download at 16 MiB, against operations declaring 100 MiB, while the
+// help text promised the flag could only ever lower a cap.
 func connectorCommandMaxBytes(flags parsedFlags) (int, error) {
-	maxBytes, err := parseIntFlag("max-bytes", flags.first("max-bytes"), commandrunner.MaxOperationDirectReadBytes)
+	maxBytes, err := parseIntFlag("max-bytes", flags.first("max-bytes"), 0)
 	if err != nil {
 		return 0, err
 	}
-	if maxBytes <= 0 {
-		maxBytes = commandrunner.MaxOperationDirectReadBytes
-	}
-	if maxBytes > commandrunner.MaxOperationDirectReadBytes {
-		maxBytes = commandrunner.MaxOperationDirectReadBytes
+	if maxBytes < 0 {
+		return 0, validationErrorf("invalid --max-bytes %d, want a positive integer", maxBytes)
 	}
 	return maxBytes, nil
 }
@@ -1158,7 +1201,12 @@ func runConnectorWriteCommand(ctx context.Context, a *app.App, connectorName, cr
 		}
 		return writeJSON(stdout, env)
 	}
-	_, _ = fmt.Fprintf(stdout, "Created connector command plan %s for %s\nApproval token: %s\n", plan.ID, plan.ConnectorCommand, plan.ApprovalToken)
+	_, _ = fmt.Fprintf(stdout, "Created connector command plan %s for %s\n", plan.ID, plan.ConnectorCommand)
+	if plan.ApprovalToken == "" {
+		_, _ = fmt.Fprintln(stdout, "Preview required before an approval token is issued.")
+	} else {
+		_, _ = fmt.Fprintf(stdout, "Approval token: %s\n", plan.ApprovalToken)
+	}
 	if plan.ConfirmationChallenge != "" {
 		_, _ = fmt.Fprintf(stdout, "Confirmation required: --confirm %s\n", plan.ConfirmationChallenge)
 	}
@@ -1179,7 +1227,11 @@ func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connector
 		return err
 	}
 	if approvalToken != "" {
-		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: approvalToken, Confirmation: flags.first("confirm")})
+		confirmation, err := connectors.ParseWriteConfirmation(flags.first("confirm"))
+		if err != nil {
+			return validationErrorf("invalid --confirm: %v", err)
+		}
+		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: approvalToken, Confirmation: confirmation})
 		if err != nil {
 			return err
 		}
@@ -1204,6 +1256,9 @@ func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connector
 		_, _ = fmt.Fprintf(stdout, "Reverse plan %s previews %s via %s\n", plan.ID, plan.ConnectorCommand, plan.Action)
 		for _, warning := range writePreview.Warnings {
 			_, _ = fmt.Fprintf(stdout, "- %s\n", warning)
+		}
+		if plan.ApprovalToken != "" {
+			_, _ = fmt.Fprintf(stdout, "Approval token: %s\n", plan.ApprovalToken)
 		}
 		return nil
 	}
@@ -1423,7 +1478,12 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 		if jsonOut {
 			return writeJSON(stdout, envelope{"kind": "ReversePlan", "plan": safeReversePlanForOutput(plan), "approval_required": true})
 		}
-		_, _ = fmt.Fprintf(stdout, "Created reverse plan %s with %d records\nApproval token: %s\n", plan.ID, plan.RecordCount, plan.ApprovalToken)
+		_, _ = fmt.Fprintf(stdout, "Created reverse plan %s with %d records\n", plan.ID, plan.RecordCount)
+		if plan.ApprovalToken == "" {
+			_, _ = fmt.Fprintln(stdout, "Preview required before an approval token is issued.")
+		} else {
+			_, _ = fmt.Fprintf(stdout, "Approval token: %s\n", plan.ApprovalToken)
+		}
 		if plan.ConfirmationChallenge != "" {
 			_, _ = fmt.Fprintf(stdout, "Confirmation required: --confirm %s\n", plan.ConfirmationChallenge)
 		}
@@ -1436,27 +1496,43 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 		if err != nil {
 			return err
 		}
+		var writePreview *connectors.WritePreview
+		if plan.ConnectorCommand != "" || plan.ConfirmationPolicy.Kind != "" || plan.ConfirmationChallenge != "" {
+			previewedPlan, preview, err := a.PreviewReversePlan(ctx, args[1])
+			if err != nil {
+				return err
+			}
+			plan = previewedPlan
+			writePreview = &preview
+		}
 		if jsonOut {
 			env := envelope{"kind": "ReversePlanPreview", "plan": safeReversePlanForOutput(plan)}
-			if plan.ConnectorCommand != "" {
-				safePlan, writePreview, err := a.PreviewConnectorCommandPlan(ctx, args[1])
-				if err != nil {
-					return err
-				}
-				env["plan"] = safeReversePlanForOutput(safePlan)
+			if writePreview != nil {
 				env["write_preview"] = writePreview
 			}
 			return writeJSON(stdout, env)
 		}
 		b, _ := json.MarshalIndent(safeReversePlanForOutput(plan), "", "  ")
 		_, _ = fmt.Fprintln(stdout, string(b))
+		if writePreview != nil {
+			for _, warning := range writePreview.Warnings {
+				_, _ = fmt.Fprintf(stdout, "- %s\n", warning)
+			}
+		}
+		if plan.ApprovalToken != "" {
+			_, _ = fmt.Fprintf(stdout, "Approval token: %s\n", plan.ApprovalToken)
+		}
 		return nil
 	case "run":
 		if len(args) < 2 {
 			return errUsage
 		}
 		flags := parseFlags(args[2:])
-		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: args[1], ApprovalToken: flags.first("approve"), Confirmation: flags.first("confirm")})
+		confirmation, err := connectors.ParseWriteConfirmation(flags.first("confirm"))
+		if err != nil {
+			return validationErrorf("invalid --confirm: %v", err)
+		}
+		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: args[1], ApprovalToken: flags.first("approve"), Confirmation: confirmation})
 		if err != nil {
 			return err
 		}

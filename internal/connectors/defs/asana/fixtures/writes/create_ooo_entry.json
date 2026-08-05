@@ -1,0 +1,22 @@
+{
+  "record": {
+    "data": {
+      "end_date": "fixture-end-date",
+      "start_date": "fixture-start-date",
+      "user": "fixture-user",
+      "workspace": "fixture-workspace"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/ooo_entries",
+    "body": {
+      "data": {
+        "end_date": "fixture-end-date",
+        "start_date": "fixture-start-date",
+        "user": "fixture-user",
+        "workspace": "fixture-workspace"
+      }
+    }
+  }
+}

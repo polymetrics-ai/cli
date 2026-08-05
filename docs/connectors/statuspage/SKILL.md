@@ -11,6 +11,7 @@ Reads Statuspage pages, components, incidents, subscribers, component groups, me
 
 ## Icon
 
+- id: statuspage
 - asset: icons/statuspage.svg
 - source: upstream_registry
 - review_status: upstream_seeded
