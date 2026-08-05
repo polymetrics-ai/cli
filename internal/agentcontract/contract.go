@@ -520,7 +520,7 @@ func validateProjections(targets []ProjectionTarget) error {
 		key := target.Harness + "/" + target.Role
 		want, ok := expected[key]
 		if !ok || target.Path != want.path || target.RenderMode != want.renderMode || target.Required != want.required ||
-			!fs.ValidPath(target.Path) || path.Clean(target.Path) != target.Path || seen[key] {
+			!fs.ValidPath(target.Path) || path.Clean(target.Path) != target.Path || path.IsAbs(target.Path) || seen[key] {
 			return fmt.Errorf("canonical contract: invalid projection target %q at %q", key, target.Path)
 		}
 		seen[key] = true

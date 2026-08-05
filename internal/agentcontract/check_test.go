@@ -313,6 +313,69 @@ func TestClaudeProjectionCanonicalRepeatedCRIsStable(t *testing.T) {
 	}
 }
 
+func TestFullProjectionIORejectsInRootSymlinks(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	var target ProjectionTarget
+	for _, candidate := range contract.Projections {
+		if candidate.Harness == "pi" && candidate.Role == contract.BaseRole.Name {
+			target = candidate
+			break
+		}
+	}
+	if target.Path == "" {
+		t.Fatal("missing delivery-worker Pi projection")
+	}
+
+	tests := []struct {
+		name   string
+		mutate func(*testing.T, string, string)
+	}{
+		{
+			name: "projection file",
+			mutate: func(t *testing.T, _, targetPath string) {
+				realPath := targetPath + ".real"
+				if err := os.Rename(targetPath, realPath); err != nil {
+					t.Fatal(err)
+				}
+				if err := os.Symlink(filepath.Base(realPath), targetPath); err != nil {
+					t.Skipf("cannot create projection file symlink: %v", err)
+				}
+			},
+		},
+		{
+			name: "projection ancestor",
+			mutate: func(t *testing.T, root, _ string) {
+				piPath := filepath.Join(root, ".pi")
+				realPath := filepath.Join(root, ".pi-real")
+				if err := os.Rename(piPath, realPath); err != nil {
+					t.Fatal(err)
+				}
+				if err := os.Symlink(filepath.Base(realPath), piPath); err != nil {
+					t.Skipf("cannot create projection ancestor symlink: %v", err)
+				}
+			},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := t.TempDir()
+			if updated, err := SyncProjections(root, contract); err != nil || updated != 6 {
+				t.Fatalf("create required harness projections: updated=%d err=%v", updated, err)
+			}
+			targetPath := filepath.Join(root, filepath.FromSlash(target.Path))
+			test.mutate(t, root, targetPath)
+
+			if err := CheckProjections(root, contract); err == nil || !strings.Contains(err.Error(), "symbolic link") {
+				t.Fatalf("CheckProjections must reject the symlink, got %v", err)
+			}
+			if _, err := SyncProjections(root, contract); err == nil || !strings.Contains(err.Error(), "symbolic link") {
+				t.Fatalf("SyncProjections must reject the symlink, got %v", err)
+			}
+		})
+	}
+}
+
 func TestCheckProjectionsRejectsClaudeAgentInventoryDrift(t *testing.T) {
 	contract := loadRepositoryContract(t, repositoryRoot(t))
 	target := contract.Projections[0]
