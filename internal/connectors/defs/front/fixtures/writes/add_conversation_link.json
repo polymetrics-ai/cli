@@ -1,10 +1,18 @@
 {
   "record": {
-    "conversation_id": "fixture_conversation_id"
+    "conversation_id": "fixture_conversation_id",
+    "link_ids": [
+      "fixture_link_id"
+    ]
   },
   "expect": {
     "method": "POST",
-    "path": "/conversations/fixture_conversation_id/links"
+    "path": "/conversations/fixture_conversation_id/links",
+    "body": {
+      "link_ids": [
+        "fixture_link_id"
+      ]
+    }
   },
   "response": {
     "status": 201,

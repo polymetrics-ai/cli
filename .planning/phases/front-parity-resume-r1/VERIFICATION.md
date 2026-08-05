@@ -1,9 +1,8 @@
 # Verification — Front parity resume
 
-Status: **passed locally** on commit `a2b7de01a`. Front-specific current-main gates, the full
-focused CLI suite, generator checks, and built-CLI help/inspect smoke checks passed. The first full
-CLI run exposed only stale root golden transcripts; deterministic regeneration fixed them and the
-full rerun passed.
+Status: **connector-local review remediation passed; shared composition integration pending**.
+The current worktree passed JSON parsing, Front validation, surface synchronization, focused Front
+conformance, and implemented-command runtime preflight after the conditional-contract changes.
 
 Required gates:
 
@@ -38,3 +37,14 @@ Final local evidence:
 Citation-convention note: a fresh `git fetch origin` found no landed shared machine-readable
 field-citation convention on `origin/main`. The phase therefore retains the contract-approved
 research matrix and does not invent a competing bundle schema.
+
+Composition note: exact Front request rules are preserved in the connector-owned draft-07
+`schemas/request_contracts.json`, and fixed typed CLI variants construct provider-valid requests.
+Current main does not evaluate composed keywords, so full generic record validation depends on the
+in-flight shared normalized-schema composition lane. No shared validation/runtime file is changed
+by this remediation.
+
+Review-remediation evidence: `connectorgen validate` reported zero Front findings,
+`surface-sync --check` reported zero drift, Front conformance passed in 1.661s, and the real
+implemented-command runtime preflight passed in 1.362s. JSON parsing covered the Front API surface,
+operations, writes, CLI surface, draft-07 request contracts, and run state.

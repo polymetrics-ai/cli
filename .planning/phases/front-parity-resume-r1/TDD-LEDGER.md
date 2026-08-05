@@ -15,6 +15,8 @@ must have fresh red validation evidence before its production edit.
 | binary promotion | focused Front validation + commandrunner preflight before edits | current `planned` binary rows demonstrate the gap to close | green: five `binary_download` commands are implemented |
 | citation convention | field matrix audit against provider docs | every request field cited or tier-5 deferred | research complete: 933 declared fields cited; 15 body-absence findings recorded |
 | CLI registration | `go test ./internal/cli/...` | generated help must include the recovered Front namespace | green: root goldens regenerated and the full suite passed |
+| conditional provider contracts | static provider/OpenAPI comparison of analytics, draft/template, link, conversation, channel, call, and merge requests | current flattened schemas and fixtures omit discriminator/allOf/cross-field obligations | remediated connector-locally with fixed variants, provider-valid fixtures, and draft-07 contract sidecar; shared composition enforcement pending |
+| human-intent batching | inspect `create_message`, `create_message_reply`, and `mark_message_seen` action metadata | absent `batchable` defaults true | remediated: all three actions declare `batchable: false` |
 
 ## Green evidence
 
@@ -30,3 +32,4 @@ must have fresh red validation evidence before its production edit.
 | CLI registration (final green) | `go test ./internal/cli/... -count=1` | pass | Full focused CLI suite passed in 418.708s after the deterministic golden regeneration. |
 | generated docs / website | `go run ./cmd/pm docs generate --dir docs/cli && go run ./cmd/pm docs validate --connectors-dir docs/connectors && cd website && pnpm run gen:website-data` | pass | Front manuals and catalog data regenerated. The generator's unrelated Amazon SQS text drift was explicitly excluded from this connector-owned slice. |
 | built CLI smoke | built `pm`: `pm help front`, `pm front`, `pm front --help`, binary command help, and `pm connectors inspect front --json` | pass | All expected Front command surfaces render; an isolated temporary project reaches the no-credential boundary without a provider request. |
+| conditional-contract review | `jq empty` on changed Front JSON, `connectorgen validate`, `surface-sync --check`, focused Front conformance, and implemented-command runtime preflight | pass | Zero Front findings and zero surface drift; conformance passed in 1.661s and runtime preflight passed in 1.362s. Shared composition integration remains an explicitly recorded external dependency. |

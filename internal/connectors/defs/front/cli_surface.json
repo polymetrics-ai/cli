@@ -134,6 +134,9 @@
       "title": "Direct/provider search and binary surfaces",
       "commands": [
         "analytics exports create",
+        "analytics exports create-events",
+        "analytics exports create-parameterized-event",
+        "analytics exports create-smart-qa-event",
         "analytics exports get",
         "analytics reports create",
         "analytics reports get",
@@ -177,6 +180,7 @@
         "delete-a-contact",
         "update-a-contact",
         "merge-contacts",
+        "merge-contacts-into-target",
         "create-contact",
         "update-conversation-assignee",
         "add-comment",
@@ -185,6 +189,7 @@
         "add-conversation-followers",
         "remove-conversation-links",
         "add-conversation-link",
+        "add-conversation-link-by-url",
         "create-message-reply",
         "update-conversation-reminders",
         "remove-conversation-tag",
@@ -192,9 +197,14 @@
         "delete-conversation",
         "update-conversation",
         "create-conversation",
+        "create-teammate-discussion",
+        "create-inbox-task",
+        "create-teammate-task",
         "delete-draft",
         "edit-draft",
         "create-a-channel",
+        "create-smtp-channel",
+        "create-twilio-channel",
         "import-inbox-message",
         "removes-inbox-access",
         "add-inbox-access",
@@ -214,6 +224,7 @@
         "create-a-knowledge-base",
         "update-a-link",
         "create-link",
+        "create-pattern-link",
         "create-child-folder",
         "create-child-template",
         "delete-folder",
@@ -272,6 +283,7 @@
         "add-call-summary",
         "add-call-transcript",
         "create-call",
+        "create-outbound-call",
         "sync-application-message-template",
         "sync-inbound-message",
         "sync-outbound-message",
@@ -3129,7 +3141,7 @@
       ],
       "risk": "high: fixed Front POST /channels/{channel_id}/messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+      "notes": "Fixed Front endpoint; no raw method/path/body passthrough. This action is non-batchable and remains available only as a single-record command."
     },
     {
       "path": "validate-channel",
@@ -3696,7 +3708,7 @@
     },
     {
       "path": "merge-contacts",
-      "summary": "Merge contacts through Front reverse ETL.",
+      "summary": "Merge two or more contacts without a separate target.",
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "merge_contacts",
@@ -3705,8 +3717,11 @@
         {
           "name": "contact-ids",
           "type": "string_array",
-          "summary": "Maps to record.contact_ids.",
-          "maps_to": "record.contact_ids"
+          "summary": "Two to fifty contact IDs to merge.",
+          "maps_to": "record.contact_ids",
+          "min_items": 2,
+          "max_items": 50,
+          "required": true
         }
       ],
       "api_surface": [
@@ -3717,7 +3732,49 @@
       ],
       "risk": "high: fixed Front POST /contacts/merge mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+      "notes": "Without target-contact-id, Front requires 2-50 contact IDs. Use merge-contacts-into-target for the distinct target form.",
+      "examples": [
+        "pm front merge-contacts --contact-ids con_fixture_1,con_fixture_2 --preview --json"
+      ]
+    },
+    {
+      "path": "merge-contacts-into-target",
+      "summary": "Merge one or more source contacts into a separate target.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "merge_contacts",
+      "source_url": "https://dev.frontapp.com/reference/merge-contacts.md",
+      "flags": [
+        {
+          "name": "target-contact-id",
+          "type": "string",
+          "summary": "Target contact ID; do not repeat it in contact-ids.",
+          "maps_to": "record.target_contact_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "contact-ids",
+          "type": "string_array",
+          "summary": "One to forty-nine source contact IDs, excluding the target.",
+          "maps_to": "record.contact_ids",
+          "min_items": 1,
+          "max_items": 49,
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/merge"
+        }
+      ],
+      "risk": "high: fixed Front POST /contacts/merge mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
+      "notes": "Front accepts 1-49 source IDs when a separate target is supplied. The target must not be repeated in contact-ids.",
+      "examples": [
+        "pm front merge-contacts-into-target --target-contact-id con_fixture_target --contact-ids con_fixture_source --preview --json"
+      ]
     },
     {
       "path": "create-contact",
@@ -3839,16 +3896,26 @@
         {
           "name": "conversation-id",
           "type": "string",
-          "summary": "Maps to record.conversation_id.",
+          "summary": "Conversation receiving the reply draft.",
           "maps_to": "record.conversation_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "channel-id",
+          "type": "string",
+          "summary": "Channel from which the draft will be sent.",
+          "maps_to": "record.channel_id",
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "body",
           "type": "string",
-          "summary": "Maps to record.body.",
+          "summary": "Draft body.",
           "maps_to": "record.body",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -3859,7 +3926,10 @@
       ],
       "risk": "high: fixed Front POST /conversations/{conversation_id}/drafts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+      "notes": "Front's composed ReplyDraft contract requires channel-id and body; conversation-id supplies the fixed path. Multipart attachments remain deferred.",
+      "examples": [
+        "pm front create-draft-reply --conversation-id cnv_fixture_1 --channel-id cha_fixture_1 --body 'Fixture draft' --preview --json"
+      ]
     },
     {
       "path": "delete-conversation-followers",
@@ -3959,7 +4029,7 @@
     },
     {
       "path": "add-conversation-link",
-      "summary": "Add conversation link through Front reverse ETL.",
+      "summary": "Add one to ten existing links to a conversation.",
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_conversation_link",
@@ -3968,9 +4038,19 @@
         {
           "name": "conversation-id",
           "type": "string",
-          "summary": "Maps to record.conversation_id.",
+          "summary": "Conversation ID.",
           "maps_to": "record.conversation_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "link-ids",
+          "type": "string_array",
+          "summary": "One to ten existing Front link IDs.",
+          "maps_to": "record.link_ids",
+          "min_items": 1,
+          "max_items": 10,
+          "required": true
         }
       ],
       "api_surface": [
@@ -3981,7 +4061,49 @@
       ],
       "risk": "high: fixed Front POST /conversations/{conversation_id}/links mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+      "notes": "Front requires exactly one selector: this command sends link-ids only. Use add-conversation-link-by-url for external URLs.",
+      "examples": [
+        "pm front add-conversation-link --conversation-id cnv_fixture_1 --link-ids top_fixture_1 --preview --json"
+      ]
+    },
+    {
+      "path": "add-conversation-link-by-url",
+      "summary": "Add one to ten external links to a conversation.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_conversation_link",
+      "source_url": "https://dev.frontapp.com/reference/add-conversation-link.md",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Conversation ID.",
+          "maps_to": "record.conversation_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "link-external-urls",
+          "type": "string_array",
+          "summary": "One to ten external link URLs.",
+          "maps_to": "record.link_external_urls",
+          "min_items": 1,
+          "max_items": 10,
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/conversations/{conversation_id}/links"
+        }
+      ],
+      "risk": "high: fixed Front POST /conversations/{conversation_id}/links mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
+      "notes": "Front requires exactly one selector: this command sends link-external-urls only and never combines it with link-ids.",
+      "examples": [
+        "pm front add-conversation-link-by-url --conversation-id cnv_fixture_1 --link-external-urls https://example.invalid/order/1 --preview --json"
+      ]
     },
     {
       "path": "create-message-reply",
@@ -4014,7 +4136,7 @@
       ],
       "risk": "high: fixed Front POST /conversations/{conversation_id}/messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+      "notes": "Fixed Front endpoint; no raw method/path/body passthrough. This action is non-batchable and remains available only as a single-record command."
     },
     {
       "path": "update-conversation-reminders",
@@ -4173,7 +4295,7 @@
     },
     {
       "path": "create-conversation",
-      "summary": "Create discussion/task conversation through Front reverse ETL.",
+      "summary": "Create a discussion in exactly one inbox.",
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_conversation",
@@ -4182,21 +4304,43 @@
         {
           "name": "type",
           "type": "enum",
-          "summary": "Maps to record.type.",
+          "summary": "Conversation type fixed to discussion.",
           "maps_to": "record.type",
           "values": [
-            "discussion",
-            "task"
+            "discussion"
           ],
           "required": true
         },
         {
           "name": "subject",
           "type": "string",
-          "summary": "Maps to record.subject.",
+          "summary": "Discussion subject.",
           "maps_to": "record.subject",
           "allow_empty": false,
           "required": true
+        },
+        {
+          "name": "inbox-id",
+          "type": "string",
+          "summary": "Destination inbox ID.",
+          "maps_to": "record.inbox_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "comment-body",
+          "type": "string",
+          "summary": "Required starter comment body.",
+          "maps_to": "record.comment.body",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "comment-author-id",
+          "type": "string",
+          "summary": "Optional starter comment author teammate ID.",
+          "maps_to": "record.comment.author_id",
+          "allow_empty": false
         }
       ],
       "api_surface": [
@@ -4207,7 +4351,195 @@
       ],
       "risk": "high: fixed Front POST /conversations mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+      "notes": "Discussions require a starter comment and exactly one destination. This variant sends inbox-id and never teammate-ids; task-only fields are unavailable.",
+      "examples": [
+        "pm front create-conversation --type discussion --subject 'Fixture discussion' --inbox-id inb_fixture_1 --comment-body 'Opening comment' --preview --json"
+      ]
+    },
+    {
+      "path": "create-teammate-discussion",
+      "summary": "Create a discussion for one or more teammates.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_conversation",
+      "source_url": "https://dev.frontapp.com/reference/create-conversation.md",
+      "flags": [
+        {
+          "name": "type",
+          "type": "enum",
+          "summary": "Conversation type fixed to discussion.",
+          "maps_to": "record.type",
+          "values": [
+            "discussion"
+          ],
+          "required": true
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "summary": "Discussion subject.",
+          "maps_to": "record.subject",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "teammate-ids",
+          "type": "string_array",
+          "summary": "One or more destination teammate IDs.",
+          "maps_to": "record.teammate_ids",
+          "min_items": 1,
+          "required": true
+        },
+        {
+          "name": "comment-body",
+          "type": "string",
+          "summary": "Required starter comment body.",
+          "maps_to": "record.comment.body",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "comment-author-id",
+          "type": "string",
+          "summary": "Optional starter comment author teammate ID.",
+          "maps_to": "record.comment.author_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/conversations"
+        }
+      ],
+      "risk": "high: fixed Front POST /conversations mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
+      "notes": "Discussions require a starter comment and exactly one destination. This variant sends teammate-ids and never inbox-id; task-only fields are unavailable.",
+      "examples": [
+        "pm front create-teammate-discussion --type discussion --subject 'Fixture discussion' --teammate-ids tea_fixture_1 --comment-body 'Opening comment' --preview --json"
+      ]
+    },
+    {
+      "path": "create-inbox-task",
+      "summary": "Create a task in exactly one inbox.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_conversation",
+      "source_url": "https://dev.frontapp.com/reference/create-conversation.md",
+      "flags": [
+        {
+          "name": "type",
+          "type": "enum",
+          "summary": "Conversation type fixed to task.",
+          "maps_to": "record.type",
+          "values": [
+            "task"
+          ],
+          "required": true
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "summary": "Task title.",
+          "maps_to": "record.subject",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "inbox-id",
+          "type": "string",
+          "summary": "Destination inbox ID.",
+          "maps_to": "record.inbox_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Optional task description.",
+          "maps_to": "record.description",
+          "allow_empty": false
+        },
+        {
+          "name": "due-at",
+          "type": "integer",
+          "summary": "Optional future Unix due timestamp.",
+          "maps_to": "record.due_at"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/conversations"
+        }
+      ],
+      "risk": "high: fixed Front POST /conversations mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
+      "notes": "Tasks require exactly one destination. This variant sends inbox-id and never teammate-ids; description and due-at are task-only fields.",
+      "examples": [
+        "pm front create-inbox-task --type task --subject 'Fixture task' --inbox-id inb_fixture_1 --preview --json"
+      ]
+    },
+    {
+      "path": "create-teammate-task",
+      "summary": "Create a task for one or more teammates.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_conversation",
+      "source_url": "https://dev.frontapp.com/reference/create-conversation.md",
+      "flags": [
+        {
+          "name": "type",
+          "type": "enum",
+          "summary": "Conversation type fixed to task.",
+          "maps_to": "record.type",
+          "values": [
+            "task"
+          ],
+          "required": true
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "summary": "Task title.",
+          "maps_to": "record.subject",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "teammate-ids",
+          "type": "string_array",
+          "summary": "One or more destination teammate IDs.",
+          "maps_to": "record.teammate_ids",
+          "min_items": 1,
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Optional task description.",
+          "maps_to": "record.description",
+          "allow_empty": false
+        },
+        {
+          "name": "due-at",
+          "type": "integer",
+          "summary": "Optional future Unix due timestamp.",
+          "maps_to": "record.due_at"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/conversations"
+        }
+      ],
+      "risk": "high: fixed Front POST /conversations mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
+      "notes": "Tasks require exactly one destination. This variant sends teammate-ids and never inbox-id; description and due-at are task-only fields.",
+      "examples": [
+        "pm front create-teammate-task --type task --subject 'Fixture task' --teammate-ids tea_fixture_1 --preview --json"
+      ]
     },
     {
       "path": "delete-draft",
@@ -4253,16 +4585,26 @@
         {
           "name": "message-id",
           "type": "string",
-          "summary": "Maps to record.message_id.",
+          "summary": "Draft message ID.",
           "maps_to": "record.message_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "channel-id",
+          "type": "string",
+          "summary": "Channel from which the draft will be sent.",
+          "maps_to": "record.channel_id",
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "body",
           "type": "string",
-          "summary": "Maps to record.body.",
+          "summary": "Updated draft body.",
           "maps_to": "record.body",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -4273,11 +4615,14 @@
       ],
       "risk": "high: fixed Front PATCH /drafts/{message_id}/ mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+      "notes": "Front's composed EditDraft contract requires channel-id and body in addition to the message-id path. Multipart attachments remain deferred.",
+      "examples": [
+        "pm front edit-draft --message-id msg_fixture_1 --channel-id cha_fixture_1 --body 'Updated draft' --preview --json"
+      ]
     },
     {
       "path": "create-a-channel",
-      "summary": "Create a channel through Front reverse ETL.",
+      "summary": "Create a custom Front channel.",
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_a_channel",
@@ -4286,7 +4631,7 @@
         {
           "name": "inbox-id",
           "type": "string",
-          "summary": "Maps to record.inbox_id.",
+          "summary": "Inbox receiving the channel.",
           "maps_to": "record.inbox_id",
           "allow_empty": false,
           "required": true
@@ -4294,13 +4639,111 @@
         {
           "name": "type",
           "type": "enum",
-          "summary": "Maps to record.type.",
+          "summary": "Channel type fixed to custom.",
           "maps_to": "record.type",
           "values": [
-            "custom",
-            "smtp",
-            "twilio"
+            "custom"
           ],
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Optional channel name.",
+          "maps_to": "record.name",
+          "allow_empty": false
+        },
+        {
+          "name": "undo-send-time",
+          "type": "integer",
+          "summary": "Optional provider-enumerated undo-send window.",
+          "maps_to": "record.settings.undo_send_time"
+        },
+        {
+          "name": "all-teammates-can-reply",
+          "type": "boolean",
+          "summary": "Whether teammates without inbox access may reply.",
+          "maps_to": "record.settings.all_teammates_can_reply"
+        },
+        {
+          "name": "webhook-url",
+          "type": "string",
+          "summary": "Optional custom-channel outbound webhook URL.",
+          "maps_to": "record.settings.webhook_url",
+          "allow_empty": false
+        },
+        {
+          "name": "application-uid",
+          "type": "string",
+          "summary": "Optional developer application UID; valid only for custom channels.",
+          "maps_to": "record.application_uid",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/inboxes/{inbox_id}/channels"
+        }
+      ],
+      "risk": "high: fixed Front POST /inboxes/{inbox_id}/channels mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
+      "notes": "Custom channels do not require send-as. Application UID is valid only on this custom variant; credential maps remain available only through secret-safe record workflows.",
+      "examples": [
+        "pm front create-a-channel --inbox-id inb_fixture_1 --type custom --webhook-url https://example.invalid/front --preview --json"
+      ]
+    },
+    {
+      "path": "create-smtp-channel",
+      "summary": "Create an SMTP Front channel.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_channel",
+      "source_url": "https://dev.frontapp.com/reference/create-a-channel.md",
+      "flags": [
+        {
+          "name": "inbox-id",
+          "type": "string",
+          "summary": "Inbox receiving the channel.",
+          "maps_to": "record.inbox_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "enum",
+          "summary": "Channel type fixed to smtp.",
+          "maps_to": "record.type",
+          "values": [
+            "smtp"
+          ],
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Optional channel name.",
+          "maps_to": "record.name",
+          "allow_empty": false
+        },
+        {
+          "name": "undo-send-time",
+          "type": "integer",
+          "summary": "Optional provider-enumerated undo-send window.",
+          "maps_to": "record.settings.undo_send_time"
+        },
+        {
+          "name": "all-teammates-can-reply",
+          "type": "boolean",
+          "summary": "Whether teammates without inbox access may reply.",
+          "maps_to": "record.settings.all_teammates_can_reply"
+        },
+        {
+          "name": "send-as",
+          "type": "string",
+          "summary": "Required SMTP sending address.",
+          "maps_to": "record.send_as",
+          "allow_empty": false,
           "required": true
         }
       ],
@@ -4312,7 +4755,84 @@
       ],
       "risk": "high: fixed Front POST /inboxes/{inbox_id}/channels mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+      "notes": "Front requires send-as for SMTP channels. Custom-only application, credential, webhook, and Twilio settings are unavailable on this variant.",
+      "examples": [
+        "pm front create-smtp-channel --inbox-id inb_fixture_1 --type smtp --send-as support@example.invalid --preview --json"
+      ]
+    },
+    {
+      "path": "create-twilio-channel",
+      "summary": "Create a Twilio Front channel.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_a_channel",
+      "source_url": "https://dev.frontapp.com/reference/create-a-channel.md",
+      "flags": [
+        {
+          "name": "inbox-id",
+          "type": "string",
+          "summary": "Inbox receiving the channel.",
+          "maps_to": "record.inbox_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "enum",
+          "summary": "Channel type fixed to twilio.",
+          "maps_to": "record.type",
+          "values": [
+            "twilio"
+          ],
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Optional channel name.",
+          "maps_to": "record.name",
+          "allow_empty": false
+        },
+        {
+          "name": "undo-send-time",
+          "type": "integer",
+          "summary": "Optional provider-enumerated undo-send window.",
+          "maps_to": "record.settings.undo_send_time"
+        },
+        {
+          "name": "all-teammates-can-reply",
+          "type": "boolean",
+          "summary": "Whether teammates without inbox access may reply.",
+          "maps_to": "record.settings.all_teammates_can_reply"
+        },
+        {
+          "name": "send-as",
+          "type": "string",
+          "summary": "Required Twilio sending address.",
+          "maps_to": "record.send_as",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "twilio-sid",
+          "type": "string",
+          "summary": "Optional Twilio channel SID.",
+          "maps_to": "record.settings.sid",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/inboxes/{inbox_id}/channels"
+        }
+      ],
+      "risk": "high: fixed Front POST /inboxes/{inbox_id}/channels mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
+      "notes": "Front requires send-as for Twilio channels. Custom-only application, credential, and webhook fields are unavailable; auth tokens are not accepted inline by this command.",
+      "examples": [
+        "pm front create-twilio-channel --inbox-id inb_fixture_1 --type twilio --send-as +15550100 --twilio-sid AC_fixture --preview --json"
+      ]
     },
     {
       "path": "import-inbox-message",
@@ -4996,12 +5516,28 @@
     },
     {
       "path": "create-link",
-      "summary": "Create link through Front reverse ETL.",
+      "summary": "Create a link from an external URL.",
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_link",
       "source_url": "https://dev.frontapp.com/reference/create-link.md",
-      "flags": [],
+      "flags": [
+        {
+          "name": "external-url",
+          "type": "string",
+          "summary": "Required external resource URL.",
+          "maps_to": "record.external_url",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Optional link name.",
+          "maps_to": "record.name",
+          "allow_empty": false
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",
@@ -5010,7 +5546,47 @@
       ],
       "risk": "high: fixed Front POST /links mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+      "notes": "Front requires exactly one link target. This command sends external-url only; use create-pattern-link for an application-object pattern.",
+      "examples": [
+        "pm front create-link --external-url https://example.invalid/order/1 --name 'Fixture order' --preview --json"
+      ]
+    },
+    {
+      "path": "create-pattern-link",
+      "summary": "Create a link from an application-object pattern.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_link",
+      "source_url": "https://dev.frontapp.com/reference/create-link.md",
+      "flags": [
+        {
+          "name": "pattern",
+          "type": "string",
+          "summary": "Required application-object pattern value.",
+          "maps_to": "record.pattern",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Optional link name.",
+          "maps_to": "record.name",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/links"
+        }
+      ],
+      "risk": "high: fixed Front POST /links mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
+      "notes": "Front requires exactly one link target. This command sends pattern only and never external-url.",
+      "examples": [
+        "pm front create-pattern-link --pattern ORDER-123 --name 'Fixture order' --preview --json"
+      ]
     },
     {
       "path": "create-child-folder",
@@ -5272,7 +5848,7 @@
       ],
       "risk": "high: fixed Front POST /messages/{message_id}/seen mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+      "notes": "Fixed Front endpoint; no raw method/path/body passthrough. This action is non-batchable and remains available only as a single-record command."
     },
     {
       "path": "remove-teammates-from-shift",
@@ -6831,7 +7407,7 @@
     },
     {
       "path": "analytics exports create",
-      "summary": "Create a new analytics export with bounded JSON output.",
+      "summary": "Create a message analytics export with bounded JSON output.",
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "front.create_analytics_export",
@@ -6840,14 +7416,15 @@
         {
           "name": "columns",
           "type": "string_array",
-          "summary": "Maps to request body columns.",
+          "summary": "One or more documented message export columns.",
           "maps_to": "body.columns",
+          "min_items": 1,
           "required": true
         },
         {
           "name": "type",
           "type": "enum",
-          "summary": "Maps to request body type.",
+          "summary": "Front analytics export discriminator; this command accepts only messages.",
           "maps_to": "body.type",
           "values": [
             "messages"
@@ -6857,16 +7434,65 @@
         {
           "name": "start",
           "type": "integer",
-          "summary": "Maps to request body start.",
+          "summary": "Start time in Unix seconds.",
           "maps_to": "body.start",
           "required": true
         },
         {
           "name": "end",
           "type": "integer",
-          "summary": "Maps to request body end.",
+          "summary": "End time in Unix seconds.",
           "maps_to": "body.end",
           "required": true
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "summary": "Optional IANA timezone name.",
+          "maps_to": "body.timezone",
+          "allow_empty": false
+        },
+        {
+          "name": "filter-tag-ids",
+          "type": "string_array",
+          "summary": "Optional Front tag IDs filter.",
+          "maps_to": "body.filters.tag_ids",
+          "min_items": 1
+        },
+        {
+          "name": "filter-teammate-ids",
+          "type": "string_array",
+          "summary": "Optional Front teammate IDs filter.",
+          "maps_to": "body.filters.teammate_ids",
+          "min_items": 1
+        },
+        {
+          "name": "filter-channel-ids",
+          "type": "string_array",
+          "summary": "Optional Front channel IDs filter.",
+          "maps_to": "body.filters.channel_ids",
+          "min_items": 1
+        },
+        {
+          "name": "filter-inbox-ids",
+          "type": "string_array",
+          "summary": "Optional Front inbox IDs filter.",
+          "maps_to": "body.filters.inbox_ids",
+          "min_items": 1
+        },
+        {
+          "name": "filter-team-ids",
+          "type": "string_array",
+          "summary": "Optional Front team IDs filter.",
+          "maps_to": "body.filters.team_ids",
+          "min_items": 1
+        },
+        {
+          "name": "filter-account-ids",
+          "type": "string_array",
+          "summary": "Optional Front account IDs filter.",
+          "maps_to": "body.filters.account_ids",
+          "min_items": 1
         }
       ],
       "output_policy": "json_redacted",
@@ -6879,7 +7505,372 @@
       ],
       "risk": "high: analytics report/export metadata may expose operational content; output is bounded and redacted",
       "approval": "none for read/query; no provider write execution is performed by these direct-read commands",
-      "notes": "Fixed provider search/query endpoint; distinct from warehouse pm query."
+      "notes": "Message exports accept only documented message columns. Event exports use the fixed-event or parameterized-event commands; no raw request body is accepted.",
+      "examples": [
+        "pm front analytics exports create --columns 'Message ID,Conversation ID' --type messages --start 1893456000 --end 1893542400 --json"
+      ]
+    },
+    {
+      "path": "analytics exports create-events",
+      "summary": "Create a fixed-column event analytics export with bounded JSON output.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "front.create_analytics_export",
+      "source_url": "https://dev.frontapp.com/reference/create-analytics-export.md",
+      "flags": [
+        {
+          "name": "columns",
+          "type": "string_array",
+          "summary": "One or more documented fixed event export columns.",
+          "maps_to": "body.columns",
+          "min_items": 1,
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "enum",
+          "summary": "Front analytics export discriminator; this command accepts only events.",
+          "maps_to": "body.type",
+          "values": [
+            "events"
+          ],
+          "required": true
+        },
+        {
+          "name": "start",
+          "type": "integer",
+          "summary": "Start time in Unix seconds.",
+          "maps_to": "body.start",
+          "required": true
+        },
+        {
+          "name": "end",
+          "type": "integer",
+          "summary": "End time in Unix seconds.",
+          "maps_to": "body.end",
+          "required": true
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "summary": "Optional IANA timezone name.",
+          "maps_to": "body.timezone",
+          "allow_empty": false
+        },
+        {
+          "name": "filter-tag-ids",
+          "type": "string_array",
+          "summary": "Optional Front tag IDs filter.",
+          "maps_to": "body.filters.tag_ids",
+          "min_items": 1
+        },
+        {
+          "name": "filter-teammate-ids",
+          "type": "string_array",
+          "summary": "Optional Front teammate IDs filter.",
+          "maps_to": "body.filters.teammate_ids",
+          "min_items": 1
+        },
+        {
+          "name": "filter-channel-ids",
+          "type": "string_array",
+          "summary": "Optional Front channel IDs filter.",
+          "maps_to": "body.filters.channel_ids",
+          "min_items": 1
+        },
+        {
+          "name": "filter-inbox-ids",
+          "type": "string_array",
+          "summary": "Optional Front inbox IDs filter.",
+          "maps_to": "body.filters.inbox_ids",
+          "min_items": 1
+        },
+        {
+          "name": "filter-team-ids",
+          "type": "string_array",
+          "summary": "Optional Front team IDs filter.",
+          "maps_to": "body.filters.team_ids",
+          "min_items": 1
+        },
+        {
+          "name": "filter-account-ids",
+          "type": "string_array",
+          "summary": "Optional Front account IDs filter.",
+          "maps_to": "body.filters.account_ids",
+          "min_items": 1
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/analytics/exports"
+        }
+      ],
+      "risk": "high: analytics report/export metadata may expose operational content; output is bounded and redacted",
+      "approval": "none for read/query; no provider write execution is performed by these direct-read commands",
+      "notes": "Event exports with a fixed column use this command. Time-in-status, transitions, custom-field, updated-custom-field, and Smart QA columns require the typed parameterized commands.",
+      "examples": [
+        "pm front analytics exports create-events --columns 'Activity ID,Conversation ID' --type events --start 1893456000 --end 1893542400 --json"
+      ]
+    },
+    {
+      "path": "analytics exports create-parameterized-event",
+      "summary": "Create a parameterized event analytics export with bounded JSON output.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "front.create_analytics_export",
+      "source_url": "https://dev.frontapp.com/reference/create-analytics-export.md",
+      "flags": [
+        {
+          "name": "column-name",
+          "type": "enum",
+          "summary": "Parameterized event column name.",
+          "maps_to": "body.columns.0.name",
+          "values": [
+            "Time spent in Ticket Status",
+            "Transitions to Ticket Status",
+            "Custom Field",
+            "Updated Custom Field"
+          ],
+          "required": true
+        },
+        {
+          "name": "column-id",
+          "type": "string",
+          "summary": "Ticket-status or custom-field public API ID.",
+          "maps_to": "body.columns.0.id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "enum",
+          "summary": "Front analytics export discriminator; this command accepts only events.",
+          "maps_to": "body.type",
+          "values": [
+            "events"
+          ],
+          "required": true
+        },
+        {
+          "name": "start",
+          "type": "integer",
+          "summary": "Start time in Unix seconds.",
+          "maps_to": "body.start",
+          "required": true
+        },
+        {
+          "name": "end",
+          "type": "integer",
+          "summary": "End time in Unix seconds.",
+          "maps_to": "body.end",
+          "required": true
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "summary": "Optional IANA timezone name.",
+          "maps_to": "body.timezone",
+          "allow_empty": false
+        },
+        {
+          "name": "filter-tag-ids",
+          "type": "string_array",
+          "summary": "Optional Front tag IDs filter.",
+          "maps_to": "body.filters.tag_ids",
+          "min_items": 1
+        },
+        {
+          "name": "filter-teammate-ids",
+          "type": "string_array",
+          "summary": "Optional Front teammate IDs filter.",
+          "maps_to": "body.filters.teammate_ids",
+          "min_items": 1
+        },
+        {
+          "name": "filter-channel-ids",
+          "type": "string_array",
+          "summary": "Optional Front channel IDs filter.",
+          "maps_to": "body.filters.channel_ids",
+          "min_items": 1
+        },
+        {
+          "name": "filter-inbox-ids",
+          "type": "string_array",
+          "summary": "Optional Front inbox IDs filter.",
+          "maps_to": "body.filters.inbox_ids",
+          "min_items": 1
+        },
+        {
+          "name": "filter-team-ids",
+          "type": "string_array",
+          "summary": "Optional Front team IDs filter.",
+          "maps_to": "body.filters.team_ids",
+          "min_items": 1
+        },
+        {
+          "name": "filter-account-ids",
+          "type": "string_array",
+          "summary": "Optional Front account IDs filter.",
+          "maps_to": "body.filters.account_ids",
+          "min_items": 1
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/analytics/exports"
+        }
+      ],
+      "risk": "high: analytics report/export metadata may expose operational content; output is bounded and redacted",
+      "approval": "none for read/query; no provider write execution is performed by these direct-read commands",
+      "notes": "Parameterized event columns are encoded as one fixed {name,id} object. Use a ticket-status ID for status columns and a custom-field ID for custom-field columns.",
+      "examples": [
+        "pm front analytics exports create-parameterized-event --column-name 'Time spent in Ticket Status' --column-id sts_fixture_1 --type events --start 1893456000 --end 1893542400 --json"
+      ]
+    },
+    {
+      "path": "analytics exports create-smart-qa-event",
+      "summary": "Create a Smart QA event analytics export with bounded JSON output.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "front.create_analytics_export",
+      "source_url": "https://dev.frontapp.com/reference/create-analytics-export.md",
+      "flags": [
+        {
+          "name": "column-name",
+          "type": "enum",
+          "summary": "Smart QA parameterized column name.",
+          "maps_to": "body.columns.0.name",
+          "values": [
+            "Smart QA score"
+          ],
+          "required": true
+        },
+        {
+          "name": "column-id",
+          "type": "enum",
+          "summary": "Documented Smart QA criterion ID.",
+          "maps_to": "body.columns.0.id",
+          "values": [
+            "Comprehension",
+            "Solution_Offered",
+            "Professionalism",
+            "Professional_Behavior",
+            "Professional_Relationship",
+            "Readability",
+            "Grammar_Spelling",
+            "General_Empathy",
+            "Cognitive_Empathy",
+            "Emotional_Empathy",
+            "Compassionate_Empathy",
+            "Tone",
+            "Adaptive_Tone",
+            "Neutral_Tone",
+            "Positive_Tone",
+            "Brevity",
+            "Demo_Offered",
+            "Information_Gathering",
+            "Upsell",
+            "Friendly",
+            "Greeting_Offered",
+            "Personalisation",
+            "Adaptability"
+          ],
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "enum",
+          "summary": "Front analytics export discriminator; this command accepts only events.",
+          "maps_to": "body.type",
+          "values": [
+            "events"
+          ],
+          "required": true
+        },
+        {
+          "name": "start",
+          "type": "integer",
+          "summary": "Start time in Unix seconds.",
+          "maps_to": "body.start",
+          "required": true
+        },
+        {
+          "name": "end",
+          "type": "integer",
+          "summary": "End time in Unix seconds.",
+          "maps_to": "body.end",
+          "required": true
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "summary": "Optional IANA timezone name.",
+          "maps_to": "body.timezone",
+          "allow_empty": false
+        },
+        {
+          "name": "filter-tag-ids",
+          "type": "string_array",
+          "summary": "Optional Front tag IDs filter.",
+          "maps_to": "body.filters.tag_ids",
+          "min_items": 1
+        },
+        {
+          "name": "filter-teammate-ids",
+          "type": "string_array",
+          "summary": "Optional Front teammate IDs filter.",
+          "maps_to": "body.filters.teammate_ids",
+          "min_items": 1
+        },
+        {
+          "name": "filter-channel-ids",
+          "type": "string_array",
+          "summary": "Optional Front channel IDs filter.",
+          "maps_to": "body.filters.channel_ids",
+          "min_items": 1
+        },
+        {
+          "name": "filter-inbox-ids",
+          "type": "string_array",
+          "summary": "Optional Front inbox IDs filter.",
+          "maps_to": "body.filters.inbox_ids",
+          "min_items": 1
+        },
+        {
+          "name": "filter-team-ids",
+          "type": "string_array",
+          "summary": "Optional Front team IDs filter.",
+          "maps_to": "body.filters.team_ids",
+          "min_items": 1
+        },
+        {
+          "name": "filter-account-ids",
+          "type": "string_array",
+          "summary": "Optional Front account IDs filter.",
+          "maps_to": "body.filters.account_ids",
+          "min_items": 1
+        }
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/analytics/exports"
+        }
+      ],
+      "risk": "high: analytics report/export metadata may expose operational content; output is bounded and redacted",
+      "approval": "none for read/query; no provider write execution is performed by these direct-read commands",
+      "notes": "Smart QA exports encode the criterion as one fixed {name,id} column object; both fields are required and selected from provider-documented enums.",
+      "examples": [
+        "pm front analytics exports create-smart-qa-event --column-name 'Smart QA score' --column-id Comprehension --type events --start 1893456000 --end 1893542400 --json"
+      ]
     },
     {
       "path": "analytics exports get",
@@ -7178,7 +8169,7 @@
     },
     {
       "path": "create-call",
-      "summary": "Create a call through Front reverse ETL.",
+      "summary": "Create an inbound Front call.",
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_call",
@@ -7187,7 +8178,7 @@
         {
           "name": "channel-id",
           "type": "string",
-          "summary": "Maps to record.channel_id.",
+          "summary": "Front channel ID.",
           "maps_to": "record.channel_id",
           "allow_empty": false,
           "required": true
@@ -7195,7 +8186,7 @@
         {
           "name": "external-call-id",
           "type": "string",
-          "summary": "Maps to record.external_call_id.",
+          "summary": "External call identifier.",
           "maps_to": "record.external_call_id",
           "allow_empty": false,
           "required": true
@@ -7203,7 +8194,7 @@
         {
           "name": "initial-status",
           "type": "enum",
-          "summary": "Maps to record.initial_status.",
+          "summary": "Initial call status.",
           "maps_to": "record.initial_status",
           "values": [
             "queued",
@@ -7214,10 +8205,104 @@
         {
           "name": "direction",
           "type": "enum",
-          "summary": "Maps to record.direction.",
+          "summary": "Call direction fixed to inbound.",
           "maps_to": "record.direction",
           "values": [
-            "inbound",
+            "inbound"
+          ],
+          "required": true
+        },
+        {
+          "name": "parent-external-call-id",
+          "type": "string",
+          "summary": "Parent external call identifier.",
+          "maps_to": "record.parent_external_call_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "started-at",
+          "type": "integer",
+          "summary": "Optional Unix call start timestamp.",
+          "maps_to": "record.started_at"
+        },
+        {
+          "name": "agent-email-address",
+          "type": "string",
+          "summary": "Optional agent email address.",
+          "maps_to": "record.agent_email_address",
+          "allow_empty": false
+        },
+        {
+          "name": "from-handle",
+          "type": "string",
+          "summary": "Required inbound caller handle.",
+          "maps_to": "record.from.handle",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "from-name",
+          "type": "string",
+          "summary": "Optional inbound caller name.",
+          "maps_to": "record.from.name",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/channels/{channel_id}/calls"
+        }
+      ],
+      "risk": "high: fixed Front POST /channels/{channel_id}/calls mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
+      "notes": "Inbound calls require from-handle. Use create-outbound-call for the outbound branch, which requires to-handle.",
+      "examples": [
+        "pm front create-call --channel-id cha_fixture_1 --external-call-id call_fixture_1 --initial-status ringing --direction inbound --parent-external-call-id call_fixture_1 --from-handle +15550100 --preview --json"
+      ]
+    },
+    {
+      "path": "create-outbound-call",
+      "summary": "Create an outbound Front call.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_call",
+      "source_url": "https://dev.frontapp.com/reference/create-call.md",
+      "flags": [
+        {
+          "name": "channel-id",
+          "type": "string",
+          "summary": "Front channel ID.",
+          "maps_to": "record.channel_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "external-call-id",
+          "type": "string",
+          "summary": "External call identifier.",
+          "maps_to": "record.external_call_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "initial-status",
+          "type": "enum",
+          "summary": "Initial call status.",
+          "maps_to": "record.initial_status",
+          "values": [
+            "queued",
+            "ringing"
+          ],
+          "required": true
+        },
+        {
+          "name": "direction",
+          "type": "enum",
+          "summary": "Call direction fixed to outbound.",
+          "maps_to": "record.direction",
+          "values": [
             "outbound"
           ],
           "required": true
@@ -7225,36 +8310,36 @@
         {
           "name": "parent-external-call-id",
           "type": "string",
-          "summary": "Maps to record.parent_external_call_id.",
+          "summary": "Parent external call identifier.",
           "maps_to": "record.parent_external_call_id",
           "allow_empty": false,
           "required": true
         },
         {
-          "name": "from-handle",
-          "type": "string",
-          "summary": "Maps to record.from.handle.",
-          "maps_to": "record.from.handle",
-          "allow_empty": false
+          "name": "started-at",
+          "type": "integer",
+          "summary": "Optional Unix call start timestamp.",
+          "maps_to": "record.started_at"
         },
         {
-          "name": "from-name",
+          "name": "agent-email-address",
           "type": "string",
-          "summary": "Maps to record.from.name.",
-          "maps_to": "record.from.name",
+          "summary": "Optional agent email address.",
+          "maps_to": "record.agent_email_address",
           "allow_empty": false
         },
         {
           "name": "to-handle",
           "type": "string",
-          "summary": "Maps to record.to.handle.",
+          "summary": "Required outbound recipient handle.",
           "maps_to": "record.to.handle",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "to-name",
           "type": "string",
-          "summary": "Maps to record.to.name.",
+          "summary": "Optional outbound recipient name.",
           "maps_to": "record.to.name",
           "allow_empty": false
         }
@@ -7267,7 +8352,10 @@
       ],
       "risk": "high: fixed Front POST /channels/{channel_id}/calls mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+      "notes": "Outbound calls require to-handle. Use create-call for the inbound branch, which requires from-handle.",
+      "examples": [
+        "pm front create-outbound-call --channel-id cha_fixture_1 --external-call-id call_fixture_1 --initial-status queued --direction outbound --parent-external-call-id call_fixture_1 --to-handle +15550101 --preview --json"
+      ]
     },
     {
       "path": "update-call",
@@ -7494,9 +8582,85 @@
         {
           "name": "channel-id",
           "type": "string",
-          "summary": "Maps to record.channel_id.",
+          "summary": "Application channel ID.",
           "maps_to": "record.channel_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "external-id",
+          "type": "string",
+          "summary": "Provider template external ID.",
+          "maps_to": "record.external_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Template name.",
+          "maps_to": "record.name",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "blurb",
+          "type": "string",
+          "summary": "Template preview blurb.",
+          "maps_to": "record.blurb",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "is-disabled",
+          "type": "boolean",
+          "summary": "Whether the template is disabled.",
+          "maps_to": "record.is_disabled",
+          "required": true
+        },
+        {
+          "name": "status-name",
+          "type": "enum",
+          "summary": "Template approval status.",
+          "maps_to": "record.status_name",
+          "values": [
+            "PENDING",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "required": true
+        },
+        {
+          "name": "variable-uid",
+          "type": "string",
+          "summary": "First variable mapping UID.",
+          "maps_to": "record.variable_mappings.0.uid",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "variable-name",
+          "type": "string",
+          "summary": "First variable mapping name.",
+          "maps_to": "record.variable_mappings.0.name",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "variable-type",
+          "type": "string",
+          "summary": "First variable mapping type.",
+          "maps_to": "record.variable_mappings.0.type",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "template-preview",
+          "type": "string",
+          "summary": "Rendered template preview.",
+          "maps_to": "record.template_preview",
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -7507,7 +8671,10 @@
       ],
       "risk": "high: fixed Front PUT /channels/{channel_id}/application_message_templates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Fixed Front endpoint; requires an application-type channel per provider docs. No raw method/path/body passthrough."
+      "notes": "Front requires external-id, name, blurb, is-disabled, status-name, at least one complete variable mapping, and template-preview; channel-id supplies the fixed path.",
+      "examples": [
+        "pm front sync-application-message-template --channel-id cha_fixture_1 --external-id tpl_fixture_1 --name 'Fixture template' --blurb 'Fixture blurb' --is-disabled false --status-name APPROVED --variable-uid var_fixture_1 --variable-name customer_name --variable-type string --template-preview 'Hello {{customer_name}}' --preview --json"
+      ]
     },
     {
       "path": "update-application-message-template",

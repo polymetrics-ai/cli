@@ -451,6 +451,7 @@
         ]
       },
       "risk": "high: fixed Front POST /channels/{channel_id}/messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "batchable": false,
       "confirm": "destructive"
     },
     {
@@ -1116,7 +1117,9 @@
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "minItems": 1,
+            "maxItems": 50
           }
         },
         "additionalProperties": false,
@@ -1335,7 +1338,8 @@
         "additionalProperties": false,
         "required": [
           "conversation_id",
-          "body"
+          "body",
+          "channel_id"
         ]
       },
       "risk": "high: fixed Front POST /conversations/{conversation_id}/drafts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
@@ -1473,10 +1477,14 @@
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "minItems": 1,
+            "maxItems": 10
           },
           "link_external_urls": {
             "type": "array",
+            "minItems": 1,
+            "maxItems": 10,
             "items": {
               "type": "string"
             }
@@ -1575,6 +1583,7 @@
         ]
       },
       "risk": "high: fixed Front POST /conversations/{conversation_id}/messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "batchable": false,
       "confirm": "destructive"
     },
     {
@@ -1805,6 +1814,7 @@
           },
           "teammate_ids": {
             "type": "array",
+            "minItems": 1,
             "items": {
               "type": "string"
             }
@@ -1953,7 +1963,8 @@
         "additionalProperties": false,
         "required": [
           "message_id",
-          "body"
+          "body",
+          "channel_id"
         ]
       },
       "risk": "high: fixed Front PATCH /drafts/{message_id}/ mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
@@ -3097,6 +3108,7 @@
         ]
       },
       "risk": "high: fixed Front POST /messages/{message_id}/seen mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "batchable": false,
       "confirm": "destructive"
     },
     {
@@ -5794,6 +5806,7 @@
           },
           "variable_mappings": {
             "type": "array",
+            "minItems": 1,
             "items": {
               "type": "object",
               "required": [
@@ -5822,7 +5835,14 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "channel_id"
+          "channel_id",
+          "external_id",
+          "name",
+          "blurb",
+          "is_disabled",
+          "status_name",
+          "variable_mappings",
+          "template_preview"
         ]
       },
       "risk": "high: fixed Front PUT /channels/{channel_id}/application_message_templates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",

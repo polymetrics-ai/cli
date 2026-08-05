@@ -20,60 +20,31 @@
           "properties": {
             "columns": {
               "type": "array",
+              "minItems": 1,
               "items": {
-                "type": "string",
-                "enum": [
-                  "Message ID",
-                  "Segment ID",
-                  "Conversation ID",
-                  "Ticket IDs",
-                  "Segment",
-                  "Direction",
-                  "Status",
-                  "Inbox",
-                  "Inbox API ID",
-                  "Inbox at activity time",
-                  "Inbox API IDs at activity time",
-                  "Message date",
-                  "Autoreply",
-                  "Reaction time",
-                  "Total reply time",
-                  "Handle time",
-                  "Response time",
-                  "Attributed to",
-                  "Assignee",
-                  "Author",
-                  "Contact name",
-                  "Contact handle",
-                  "Account names",
-                  "From",
-                  "To",
-                  "Cc",
-                  "Bcc",
-                  "Extract",
-                  "Tags",
-                  "Tag API IDs",
-                  "Message API ID",
-                  "Conversation API ID",
-                  "New Conversation",
-                  "First response",
-                  "Business hours",
-                  "Subject",
-                  "Segment start",
-                  "Segment end",
-                  "Segment closed",
-                  "Last segment activity",
-                  "Segment cumulative teammates",
-                  "Ticket status name",
-                  "Ticket status category",
-                  "Custom Field"
-                ]
+                "type": [
+                  "string",
+                  "object"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": [
+                      "string",
+                      "integer"
+                    ]
+                  }
+                },
+                "additionalProperties": false
               }
             },
             "type": {
               "type": "string",
               "enum": [
-                "messages"
+                "messages",
+                "events"
               ]
             },
             "start": {
@@ -81,6 +52,58 @@
             },
             "end": {
               "type": "number"
+            },
+            "timezone": {
+              "type": "string"
+            },
+            "filters": {
+              "type": "object",
+              "minProperties": 1,
+              "properties": {
+                "tag_ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "teammate_ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "channel_ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "inbox_ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "team_ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "account_ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": false
             }
           },
           "required": [
@@ -89,7 +112,7 @@
             "start",
             "end"
           ],
-          "additionalProperties": true
+          "additionalProperties": false
         }
       }
     },

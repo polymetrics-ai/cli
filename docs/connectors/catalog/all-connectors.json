@@ -55047,6 +55047,7 @@
         "method": "POST",
         "path": "/channels/{{ record.channel_id }}/messages",
         "risk": "high: fixed Front POST /channels/{channel_id}/messages mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "batchable": false,
         "confirm": "destructive"
       },
       {
@@ -55271,6 +55272,7 @@
         "method": "POST",
         "path": "/conversations/{{ record.conversation_id }}/messages",
         "risk": "high: fixed Front POST /conversations/{conversation_id}/messages mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "batchable": false,
         "confirm": "destructive"
       },
       {
@@ -55567,6 +55569,7 @@
         "method": "POST",
         "path": "/messages/{{ record.message_id }}/seen",
         "risk": "high: fixed Front POST /messages/{message_id}/seen mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "batchable": false,
         "confirm": "destructive"
       },
       {
