@@ -46,7 +46,7 @@ func multipartRestWriteBundleFS(rest, kind string) fstest.MapFS {
 			"method": "POST",
 			"path": "/attachments",
 			"operation": {
-				"model": "write_action",
+				"model": "destructive_action",
 				"status": "blocked",
 				"risk": "medium",
 				"blocked_by_default": true,
@@ -70,6 +70,13 @@ func multipartRestWriteBundleFS(rest, kind string) fstest.MapFS {
 }
 
 func TestBundleLoadAcceptsTypedMultipartRestWriteContract(t *testing.T) {
+	_, err := Load(multipartRestWriteBundleFS(validMultipartRestWrite, "rest_write"), "acme")
+	if err != nil {
+		t.Fatalf("Load typed multipart rest_write: %v", err)
+	}
+}
+
+func TestOperationDirectWriteMetadataRecognizesTypedMultipartRestWrite(t *testing.T) {
 	bundle, err := Load(multipartRestWriteBundleFS(validMultipartRestWrite, "rest_write"), "acme")
 	if err != nil {
 		t.Fatalf("Load typed multipart rest_write: %v", err)
@@ -183,7 +190,16 @@ func TestBundleLoadRejectsUnsafeMultipartRestWriteContracts(t *testing.T) {
 				"path": "/attachments",
 				"content_type": "multipart/form-data",
 				"max_bytes": 1024,
-				"multipart": {"max_bytes": 2048, "parts": []}
+				"multipart": {
+					"max_bytes": 2048,
+					"parts": [{
+						"name": "attachment",
+						"type": "file",
+						"field": "media_file_path",
+						"required": true,
+						"max_bytes": 1024
+					}]
+				}
 			}`,
 			wantErr: "body_schema",
 		},

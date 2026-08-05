@@ -715,6 +715,11 @@ type RESTOperationSpec struct {
 	Query       map[string]string `json:"query,omitempty"`
 	Body        map[string]any    `json:"body,omitempty"`
 	BodySchema  json.RawMessage   `json:"body_schema,omitempty"`
+	// Multipart is an opt-in, operation-level multipart/form-data contract.
+	// It deliberately reuses writes.json's bounded field/file part model; an
+	// absent block preserves metadata-only multipart rows until their connector
+	// adoption lane supplies an executable declared contract.
+	Multipart *MultipartSpec `json:"multipart,omitempty"`
 	// RequiredQuery declares query-parameter cardinality for endpoints that
 	// must never be called unfiltered — a listing that returns an entire
 	// enterprise when no filter is supplied, for example. Every group must be
@@ -1931,8 +1936,183 @@ func validateRequiredQuery(i int, op OperationSpec) error {
 	return nil
 }
 
+// validateOperationMultipartSemantics closes the operation-level multipart
+// contract before a connector can expose it as an executable rest_write. The
+// ordinary writes.json multipart path remains its own established contract;
+// this is deliberately opt-in so a historical content_type annotation cannot
+// become a live upload merely by loading a new engine version.
+func validateOperationMultipartSemantics(i int, op OperationSpec) error {
+	if op.REST == nil || op.REST.Multipart == nil {
+		return nil
+	}
+	if op.Kind != "rest_write" {
+		return fmt.Errorf("operation %d (%q) rest.multipart is only valid for rest_write operations, got %q", i, op.ID, op.Kind)
+	}
+	if op.REST.ContentType != "multipart/form-data" {
+		return fmt.Errorf("operation %d (%q) rest.multipart requires literal content_type multipart/form-data", i, op.ID)
+	}
+	if strings.TrimSpace(op.REST.Path) == "" || isAbsoluteHTTPURL(op.REST.Path) || strings.HasPrefix(strings.TrimSpace(op.REST.Path), "//") {
+		return fmt.Errorf("operation %d (%q) rest.multipart endpoint must be connector-relative", i, op.ID)
+	}
+	if op.REST.MaxBytes <= 0 {
+		return fmt.Errorf("operation %d (%q) rest.multipart requires positive rest.max_bytes response capture limit", i, op.ID)
+	}
+	if len(op.REST.BodySchema) == 0 {
+		return fmt.Errorf("operation %d (%q) rest.multipart requires body_schema", i, op.ID)
+	}
+
+	var bodySchema map[string]any
+	if err := json.Unmarshal(op.REST.BodySchema, &bodySchema); err != nil {
+		return fmt.Errorf("operation %d (%q) rest.multipart body_schema is not an object: %w", i, op.ID, err)
+	}
+	if !isObjectType(bodySchema) {
+		return fmt.Errorf("operation %d (%q) rest.multipart body_schema must be an object", i, op.ID)
+	}
+	if _, err := CompileSchema(op.REST.BodySchema); err != nil {
+		return fmt.Errorf("operation %d (%q) rest.multipart body_schema: %w", i, op.ID, err)
+	}
+	if err := requireClosedMultipartBodySchema(i, op.ID, bodySchema, "body_schema"); err != nil {
+		return err
+	}
+
+	multipart := op.REST.Multipart
+	if multipart.MaxBytes <= 0 {
+		return fmt.Errorf("operation %d (%q) rest.multipart requires a positive aggregate max_bytes", i, op.ID)
+	}
+	if len(multipart.Parts) == 0 {
+		return fmt.Errorf("operation %d (%q) rest.multipart requires non-empty parts", i, op.ID)
+	}
+	partNames := make(map[string]struct{}, len(multipart.Parts))
+	for partIndex, part := range multipart.Parts {
+		name := strings.TrimSpace(part.Name)
+		if name == "" || strings.TrimSpace(part.Field) == "" {
+			return fmt.Errorf("operation %d (%q) rest.multipart part %d requires name and field", i, op.ID, partIndex)
+		}
+		if _, duplicate := partNames[name]; duplicate {
+			return fmt.Errorf("operation %d (%q) rest.multipart part %d duplicates name %q", i, op.ID, partIndex, name)
+		}
+		partNames[name] = struct{}{}
+
+		fieldSchema, required, err := multipartBodySchemaField(bodySchema, part.Field)
+		if err != nil {
+			return fmt.Errorf("operation %d (%q) rest.multipart part %d must reference a declared body field %q: %w", i, op.ID, partIndex, part.Field, err)
+		}
+		switch part.Type {
+		case "field":
+			// The compiled closed body schema remains the source of truth for
+			// every scalar/object type a field part may carry.
+		case "file":
+			if !part.Required || !required || !multipartSchemaString(fieldSchema) {
+				return fmt.Errorf("operation %d (%q) rest.multipart file part %q must reference a required string body field", i, op.ID, part.Name)
+			}
+			if part.MaxBytes <= 0 {
+				return fmt.Errorf("operation %d (%q) rest.multipart file part %q requires a positive max_bytes", i, op.ID, part.Name)
+			}
+		default:
+			return fmt.Errorf("operation %d (%q) rest.multipart part %d has unsupported type %q", i, op.ID, partIndex, part.Type)
+		}
+		if declared := strings.TrimSpace(part.ContentType); declared != "" {
+			if _, _, err := mime.ParseMediaType(declared); err != nil {
+				return fmt.Errorf("operation %d (%q) rest.multipart part %d content_type %q is not a valid media type: %w", i, op.ID, partIndex, part.ContentType, err)
+			}
+		}
+		if err := validateMultipartMediaTypes(part); err != nil {
+			return fmt.Errorf("operation %d (%q) rest.multipart part %d: %w", i, op.ID, partIndex, err)
+		}
+	}
+	return nil
+}
+
+// requireClosedMultipartBodySchema recursively closes every object reachable
+// from an operation multipart body. Command flags can materialize dotted body
+// paths, so closing only the root would still leave an undeclared nested body
+// key available to a caller.
+func requireClosedMultipartBodySchema(i int, id string, node map[string]any, path string) error {
+	if isObjectType(node) {
+		if closed, ok := node["additionalProperties"].(bool); !ok || closed {
+			return fmt.Errorf("operation %d (%q) rest.multipart %s is an object and must declare additionalProperties: false", i, id, path)
+		}
+	}
+	if items, ok := node["items"].(map[string]any); ok {
+		if err := requireClosedMultipartBodySchema(i, id, items, path+"/items"); err != nil {
+			return err
+		}
+	}
+	properties, ok := node["properties"].(map[string]any)
+	if !ok {
+		return nil
+	}
+	names := make([]string, 0, len(properties))
+	for name := range properties {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		child, ok := properties[name].(map[string]any)
+		if !ok {
+			continue
+		}
+		if err := requireClosedMultipartBodySchema(i, id, child, path+"/"+name); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// multipartBodySchemaField resolves a dotted part field through the declared
+// body schema and reports whether every object edge is required. File parts
+// need that stronger guarantee so a missing path cannot silently become an
+// optional inline payload at execution time.
+func multipartBodySchemaField(root map[string]any, field string) (map[string]any, bool, error) {
+	current := root
+	required := true
+	for _, segment := range strings.Split(field, ".") {
+		if strings.TrimSpace(segment) == "" {
+			return nil, false, fmt.Errorf("field path contains an empty segment")
+		}
+		properties, ok := current["properties"].(map[string]any)
+		if !ok {
+			return nil, false, fmt.Errorf("field path has no declared property %q", segment)
+		}
+		raw, ok := properties[segment]
+		if !ok {
+			return nil, false, fmt.Errorf("field path has no declared property %q", segment)
+		}
+		next, ok := raw.(map[string]any)
+		if !ok {
+			return nil, false, fmt.Errorf("field path property %q is not a schema object", segment)
+		}
+		if !multipartSchemaRequired(current, segment) {
+			required = false
+		}
+		current = next
+	}
+	return current, required, nil
+}
+
+func multipartSchemaRequired(node map[string]any, name string) bool {
+	required, ok := node["required"].([]any)
+	if !ok {
+		return false
+	}
+	for _, raw := range required {
+		if candidate, ok := raw.(string); ok && candidate == name {
+			return true
+		}
+	}
+	return false
+}
+
+func multipartSchemaString(node map[string]any) bool {
+	typeName, ok := node["type"].(string)
+	return ok && typeName == "string"
+}
+
 func validateOperationSemantics(i int, op OperationSpec) error {
 	if err := validateRequiredQuery(i, op); err != nil {
+		return err
+	}
+	if err := validateOperationMultipartSemantics(i, op); err != nil {
 		return err
 	}
 	switch op.Kind {
