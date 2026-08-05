@@ -4,7 +4,7 @@
   "subIssues": [3798, 3801, 3805, 3806, 3807],
   "branch": "fm/cli-found-certify-timeout-r1",
   "parentDraftPR": "https://github.com/polymetrics-ai/cli/pull/3808",
-  "status": "planning",
+  "status": "executing",
   "workflow": {
     "tddMode": true,
     "adapter": "inline_manual_fallback",
@@ -24,7 +24,14 @@
     "parent_draft_pr",
     "map_wave_phase",
     "discuss_decisions",
-    "plan_tdd"
+    "plan_tdd",
+    "execute_tdd"
   ],
+  "redEvidence": {
+    "certifyRealCLIInvocations": 782,
+    "certifyPackageElapsedSeconds": 578.282,
+    "budget": 128,
+    "command": "go test -count=1 -v ./internal/connectors/certify"
+  },
   "verificationPassed": false
 }

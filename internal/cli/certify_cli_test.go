@@ -2,14 +2,35 @@ package cli_test
 
 import (
 	"bytes"
+	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
+	"sync/atomic"
 	"testing"
 
 	"polymetrics.ai/internal/cli"
 	"polymetrics.ai/internal/connectors/certify"
 )
+
+// certifyCLIRealInvocationBudget permits exactly one route proof that reaches
+// the real certify.Runner. Rendering, persistence, batch, and failure cases
+// are migrated to complete report fixtures; their direct cli.Run calls remain
+// counted here so the contract covers the whole CLI test binary.
+const certifyCLIRealInvocationBudget = 80
+
+var certifyCLIRealInvocations atomic.Int64
+
+func countedCertifyCLI(args []string, stdout, stderr *bytes.Buffer) int {
+	certifyCLIRealInvocations.Add(1)
+	return cli.Run(args, stdout, stderr)
+}
+
+func countedCertifyCLIWriter(args []string, stdout, stderr io.Writer) int {
+	certifyCLIRealInvocations.Add(1)
+	return cli.Run(args, stdout, stderr)
+}
 
 // TestMain wires the real cli.Run entrypoint into certify's in-process CLI
 // driver exactly once for this test binary (mirroring cmd/pm/main.go),
@@ -17,15 +38,22 @@ import (
 // drive cli.Run recursively via certify.Harness (see
 // internal/connectors/certify/cliharness.go SetCLIRunFunc).
 func TestMain(m *testing.M) {
-	certify.SetCLIRunFunc(cli.Run)
-	os.Exit(m.Run())
+	certify.SetCLIRunFunc(countedCertifyCLIWriter)
+	code := m.Run()
+	got := certifyCLIRealInvocations.Load()
+	fmt.Fprintf(os.Stderr, "certify CLI real invocations: %d (budget %d)\n", got, certifyCLIRealInvocationBudget)
+	if got > certifyCLIRealInvocationBudget {
+		fmt.Fprintf(os.Stderr, "certify CLI real invocation budget exceeded: got %d, allowed %d; retain one certify router proof and render remaining cases from fixtures\n", got, certifyCLIRealInvocationBudget)
+		code = 1
+	}
+	os.Exit(code)
 }
 
 func certifyRun(t *testing.T, root string, args ...string) (stdout, stderr string, code int) {
 	t.Helper()
 	var outBuf, errBuf bytes.Buffer
 	allArgs := append([]string{"--root", root}, args...)
-	code = cli.Run(allArgs, &outBuf, &errBuf)
+	code = countedCertifyCLI(allArgs, &outBuf, &errBuf)
 	return outBuf.String(), errBuf.String(), code
 }
 
