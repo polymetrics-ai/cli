@@ -24,6 +24,15 @@ Twilio-only SID/auth-token fields in the composed custom-channel branch. The sta
 fixture now proves the provider-valid empty-array form, while CLI help labels its fixed one-mapping
 shape accurately.
 
+The recipient/destination correction replaces `create_message`'s unconditional `to` requirement
+with Front's inclusive `to`/`cc`/`bcc` `anyOf`, exposes all three typed CLI arrays, and uses a
+cc-only fixture. It also removes the uncited `create_conversation.teammate_ids` minimum from the
+action, sidecar, and both teammate CLI variants. The post-remediation citation sweep accounts for
+844 encoded constraint occurrences: 843 trace to Front-owned request-field evidence, while the one
+connector-local recording path is excluded because it is transport input rather than a provider
+field. The accounting includes three cited `minProperties` rules and excludes the request field
+named `pattern` from schema-keyword counts.
+
 Final record-driven composition enforcement remains paused on the in-flight shared normalized-schema
 composition support. Current main's minimal compiler cannot evaluate `oneOf`, `allOf`, `if`/`then`,
 `not`, or `anyOf`, and this connector lane intentionally did not change shared validation/runtime.

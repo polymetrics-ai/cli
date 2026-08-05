@@ -1,8 +1,8 @@
 {
   "record": {
     "channel_id": "fixture_channel_id",
-    "to": [
-      "fixture_to"
+    "cc": [
+      "fixture_cc"
     ],
     "body": "fixture_body",
     "signature_id": null
@@ -11,8 +11,8 @@
     "method": "POST",
     "path": "/channels/fixture_channel_id/messages",
     "body": {
-      "to": [
-        "fixture_to"
+      "cc": [
+        "fixture_cc"
       ],
       "body": "fixture_body",
       "signature_id": null
