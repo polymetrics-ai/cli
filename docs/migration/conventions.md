@@ -815,12 +815,13 @@ operation-level evidence.
 
 A `file` part may also declare `allowed_media_types`, which bounds what the file's **own bytes** may sniff as (`http.DetectContentType`), checked before any request is made. Three consequences worth knowing: it is the only restriction on a part's type, so **a single-entry list is how a bundle demands exactly one type**; when it is present the part's wire `Content-Type` header is set from the sniffed type rather than from the declared `content_type`, because the sniffed type has just been proven to be one the bundle accepts and asserting the declared one over disagreeing bytes would be a claim we had already falsified; and when it is absent the declared `content_type` is sent untouched, since nothing verified the sniff and `http.DetectContentType` is coarse (every CSV sniffs as `text/plain`). Omit the key to leave a part unconstrained — a present-but-empty list is a load-time error rather than a silent "allow anything", and a `content_type` outside its own `allowed_media_types` is rejected at load time as an unsatisfiable declaration.
 
-`redact_fields` is an action-local list of record paths whose values must be removed from
-operator-visible write surfaces. It is for non-secret identifiers or clinical values that can appear
-in templated paths or upstream error text; reverse-plan creation persists the list and masks matching
-sample fields, `DryRunWrite` replaces those path values in the resolved request preview, and `Write`
+`redact_fields` on a `writes.json` action applies to source-table reverse-ETL and engine write
+surfaces. It is for non-secret identifiers or clinical values that can appear in templated paths or
+upstream error text; source-table reverse-plan creation persists the list and masks matching sample
+fields, `DryRunWrite` replaces those path values in the resolved request preview, and `Write`
 redacts raw and URL-encoded literal forms from returned write errors while preserving typed error
-wrapping.
+wrapping. `cli_surface.json` declarations remain load-compatible metadata, but `commandrunner` does
+not use them to mutate connector-command records or errors, or to forward them to executors.
 
 `confirmation` is the closed confirmation declaration for new actions:
 `"confirmation": {"kind": "destructive"}`. The writes and operations schemas are authoritative;
