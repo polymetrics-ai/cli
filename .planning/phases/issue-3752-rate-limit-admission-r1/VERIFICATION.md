@@ -1,33 +1,48 @@
 # Verification checklist — issue-3752-rate-limit-admission-r1
 
-Status: **planned; no implementation verification claimed yet**.
+Status: **scoped local verification complete; full CI/no-mistakes remains firstmate-gated**.
 
 ## Targeted behavior gates
 
-- [ ] Run the red B1 defect test before modifying requester retry code; capture the actual `30s` vs `90s` failure in `TDD-LEDGER.md`.
-- [ ] `go test ./internal/connectors/connsdk -run 'TestRequester.*(RateLimit|RetryAfter|Admission|Observation|Jitter)' -count=1`
-- [ ] `go test ./internal/connectors/engine -run 'TestBundleLoad.*RateLimit|Test.*RateLimit.*Declaration' -count=1`
-- [ ] `go test -race ./internal/connectors/connsdk -count=1`
-- [ ] Run the changed-package suites: `go test ./internal/connectors/connsdk ./internal/connectors/engine ./internal/connectors/bundleregistry ./cmd/connectorgen -count=1`.
-- [ ] Confirm a terminal 429 is both `*connsdk.RateLimitError` and its wrapped safe `*connsdk.HTTPError`; no fixture credential text appears in `err.Error()` or observer values.
-- [ ] Confirm admission cancellation occurs before any `httptest` handler hit for JSON/form/multipart and `DoStream`.
+- [x] Red B1 test ran before requester changes; its actual `30s` vs `90s` failure is retained in `TDD-LEDGER.md`.
+- [x] Requester behavior suite passed via `go test ./internal/connectors/connsdk -count=1`.
+- [x] Loader declaration suite passed via `go test ./internal/connectors/engine -count=1`.
+- [x] Focused race suites passed for every new requester and loader test.
+- [ ] Full `go test -race ./internal/connectors/connsdk -count=1` is not green: the unchanged
+  `multipart_bounds_test.go:42,104` has an existing test-data race (the same lines are present at
+  `origin/main`). This slice does not alter that test or multipart implementation; targeted new
+  rate-limit tests pass under `-race` and the ordinary package suite passes.
+- [x] Changed-package suites passed: `go test ./internal/connectors/connsdk ./internal/connectors/engine ./internal/connectors/bundleregistry ./cmd/connectorgen -count=1`.
+- [x] `TestRequesterReturnsTypedRateLimitErrorAndObservation` proves a terminal 429 is both
+  `*connsdk.RateLimitError` and its wrapped `*connsdk.HTTPError`, with no fixture credential text
+  in `err.Error()` or typed observation values.
+- [x] `TestRequesterAdmissionPreventsEveryTransportSend` and
+  `TestRequesterAdmissionHonorsCallerCancellationBeforeSend` prove no `httptest` send for JSON,
+  form, multipart, or stream admission rejection/cancellation.
 
 ## Loader and fleet compatibility gates
 
-- [ ] `go test ./internal/connectors/engine -run 'TestBundleLoad|TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides' -count=1`
-- [ ] `go run ./cmd/connectorgen validate`
-- [ ] `go run ./cmd/connectorgen surface-sync --check`
-- [ ] Confirm `rate_limits.json` is optional and no existing bundle declaration is edited or required.
-- [ ] Confirm no command `availability: implemented`, `api_surface`, `operations.json`, `cli_surface.json`, or commandrunner preflight contract changed. The 213-command defect class is therefore not expanded by this foundation.
+- [x] `go test ./internal/connectors/engine -count=1`.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs` — `550 connector(s) checked, 0 findings`.
+- [x] `go run ./cmd/connectorgen surface-sync --check` — `550 connector(s) scanned`, no drift.
+- [x] `rate_limits.json` is optional; no `internal/connectors/defs/<connector>/` declaration was
+  changed. `TestProductionDefinitionsEmbedEveryRateLimitDeclaration` prevents a future real
+  declaration from being silently absent from production `defs.FS`.
+- [x] Changed-path audit against `origin/main` found no `commandrunner`, command metadata,
+  `api_surface`, `operations.json`, `cli_surface.json`, or connector-bundle migration path. The
+  213-command runtime-preflight defect class is not expanded.
 
 ## Hygiene and project gates
 
-- [ ] `gofmt -w internal/connectors/connsdk internal/connectors/engine`
-- [ ] `go vet ./internal/connectors/connsdk ./internal/connectors/engine ./internal/connectors/bundleregistry ./cmd/connectorgen`
-- [ ] `go build ./cmd/pm`
-- [ ] Run `make verify`'s non-full-suite gates separately: `tidy-check`, `lint`, `docs-check`, `smoke-no-build`, `agent-contract-check`, `connectorgen-validate`, `connectorgen-surface-sync`, `connector-boundary`, and `release-workflow-check`.
-- [ ] `scripts/verify-gsd-workflow origin/main`
-- [ ] Check changed paths and enforce scope: no `internal/connectors/defs/<connector>/` migration, no `commandrunner`, and no deferred #3753/#3754/#3755 engine/CLI surface edits.
+- [x] `gofmt` ran on changed Go files.
+- [x] Targeted `go vet` passed.
+- [x] `go build ./cmd/pm` passed.
+- [x] Individual non-full-suite gates passed: `tidy-check`, `lint`, `docs-check-no-build`,
+  `smoke-no-build`, `agent-contract-check`, `connectorgen-validate`,
+  `connectorgen-surface-sync`, `connector-boundary`, and `release-workflow-check`.
+- [x] `scripts/verify-gsd-workflow origin/main` passed with GSD/TDD evidence.
+- [x] Changed-path audit confirms no connector migration, `commandrunner`, or deferred #3753/#3754/
+  #3755 read/write/direct-operation/CLI activation edit.
 
 ## Deliberately not applicable in this slice
 
@@ -39,6 +54,7 @@ Status: **planned; no implementation verification claimed yet**.
 
 ## Final review sequence
 
-After local gates, generate and execute the GSD `execute-phase`, `verify-work`, and `code-review`
-prompts inline; record real outputs, plan gaps if any, and do not start no-mistakes until firstmate
-directs the validation/ship stage. Review findings are dispositioned, never silently ignored.
+The `execute-phase`, `verify-work`, and `code-review` prompts were generated and followed through
+the documented inline fallback because Pi role spawning is forbidden by the delivery contract and
+this task. `UAT.md` and `REVIEW.md` record the resulting automated evidence and review dispositions.
+Do not start no-mistakes or a PR until firstmate directs the validation/ship stage.

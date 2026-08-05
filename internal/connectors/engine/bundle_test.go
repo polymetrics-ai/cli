@@ -3,7 +3,11 @@ package engine
 import (
 	"errors"
 	"fmt"
+	"io/fs"
 	"os"
+	"path"
+	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -354,6 +358,46 @@ func TestBundleLoadParsesProviderCitedRateLimits(t *testing.T) {
 	}
 }
 
+func TestBundleLoadAcceptsProviderArtifactURLWithAnchor(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/rate_limits.json"] = &fstest.MapFile{Data: []byte(strings.Replace(
+		validProviderCitedRateLimits,
+		"https://docs.example.test/rate-limits",
+		"https://docs.example.test/rate-limits#provider-policy",
+		1,
+	))}
+
+	if _, err := Load(fsys, "acme"); err != nil {
+		t.Fatalf("Load: provider documentation anchor must be a valid artifact URL: %v", err)
+	}
+}
+
+func TestProductionDefinitionsEmbedEveryRateLimitDeclaration(t *testing.T) {
+	_, thisFile, _, ok := runtime.Caller(0)
+	if !ok {
+		t.Fatal("runtime.Caller: locate bundle test source")
+	}
+	defsDir := filepath.Clean(filepath.Join(filepath.Dir(thisFile), "..", "defs"))
+	entries, err := os.ReadDir(defsDir)
+	if err != nil {
+		t.Fatalf("ReadDir(%s): %v", defsDir, err)
+	}
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+		name := path.Join(entry.Name(), "rate_limits.json")
+		if _, err := os.Stat(filepath.Join(defsDir, filepath.FromSlash(name))); errors.Is(err, os.ErrNotExist) {
+			continue
+		} else if err != nil {
+			t.Fatalf("Stat(%s): %v", name, err)
+		}
+		if _, err := fs.ReadFile(defs.FS, name); err != nil {
+			t.Errorf("production defs.FS omits %s: add it to defs.go's embed pattern with this declaration: %v", name, err)
+		}
+	}
+}
+
 func TestBundleLoadRejectsUncitedOrMalformedRateLimits(t *testing.T) {
 	tests := []struct {
 		name string
@@ -395,9 +439,19 @@ func TestBundleLoadRejectsUncitedOrMalformedRateLimits(t *testing.T) {
 			want: "endpoints[0].path",
 		},
 		{
+			name: "endpoint path cannot carry outer whitespace",
+			data: strings.Replace(validProviderCitedRateLimits, `"path": "/graphql"`, `"path": " /graphql"`, 1),
+			want: "endpoints[0].path",
+		},
+		{
 			name: "leaky bucket needs a positive restore rate",
 			data: strings.Replace(validProviderCitedRateLimits, `"restore_per_second": 2`, `"restore_per_second": 0`, 1),
 			want: "restore_per_second",
+		},
+		{
+			name: "cost header must be an HTTP field name",
+			data: strings.Replace(validProviderCitedRateLimits, "X-RateLimit-Cost", "X Rate Limit Cost", 1),
+			want: "cost.response_header",
 		},
 	}
 

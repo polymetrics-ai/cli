@@ -128,7 +128,7 @@ func validateRateLimitSelector(selector connsdk.RateLimitSelector) error {
 			return fmt.Errorf("endpoints[%d].method %q is not an HTTP method", i, endpoint.Method)
 		}
 		path := strings.TrimSpace(endpoint.Path)
-		if !strings.HasPrefix(path, "/") || strings.HasPrefix(path, "//") || strings.ContainsAny(path, "\r\n?#") {
+		if path != endpoint.Path || !strings.HasPrefix(path, "/") || strings.HasPrefix(path, "//") || strings.ContainsAny(path, "\r\n?#") {
 			return fmt.Errorf("endpoints[%d].path must be a rooted connector-relative path", i)
 		}
 	}
@@ -235,8 +235,10 @@ func validateRateLimitCost(cost *connsdk.RateLimitCost) error {
 	if err := requirePositiveRateLimitFloat("cost.default_cost", cost.DefaultCost); err != nil && cost.DefaultCost != nil {
 		return err
 	}
-	if strings.ContainsAny(cost.ResponseHeader, "\r\n") {
-		return fmt.Errorf("cost.response_header must not contain control characters")
+	if header := strings.TrimSpace(cost.ResponseHeader); header != "" {
+		if header != cost.ResponseHeader || !httpHeaderNamePattern.MatchString(header) {
+			return fmt.Errorf("cost.response_header must be an HTTP field name")
+		}
 	}
 	return nil
 }

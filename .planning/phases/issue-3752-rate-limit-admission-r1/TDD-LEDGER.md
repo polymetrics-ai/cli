@@ -77,3 +77,17 @@ ok      polymetrics.ai/internal/connectors/connsdk    0.873s
 $ go test -race ./internal/connectors/connsdk -run '^(TestRequesterHonorsProviderRetryAfterBeyondFallbackCap|TestRequesterFallbackRetryUsesBoundedFullJitter|TestRequesterAdmissionPreventsEveryTransportSend|TestRequesterAdmissionHonorsCallerCancellationBeforeSend|TestRequesterAdmitsEveryRetryAttempt|TestRequesterReturnsTypedRateLimitErrorAndObservation|TestParseRetryAfterAtPreservesProviderDate|TestRateLimitObservationParsesStandardBudgetHeaders|TestDoStreamReturnsTypedRateLimitError)$' -count=1
 ok      polymetrics.ai/internal/connectors/connsdk    1.286s
 ```
+
+The manual review added two declaration-validation regression cases before the validation fix:
+
+```text
+$ go test ./internal/connectors/engine -run TestBundleLoadRejectsUncitedOrMalformedRateLimits -count=1
+--- FAIL: TestBundleLoadRejectsUncitedOrMalformedRateLimits
+    --- FAIL: endpoint_path_cannot_carry_outer_whitespace
+    --- FAIL: cost_header_must_be_an_HTTP_field_name
+FAIL
+```
+
+After rejecting whitespace-deformed endpoint selectors and non-token cost header names, the focused
+loader suite and the full engine package both passed. The review also added the production-embed
+guard for a future real `rate_limits.json` declaration.
