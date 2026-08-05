@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/invoices/synthetic-conformance-value/related_invoices",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "object": "list",
+      "data": [
+        {
+          "id": "list_related_invoices_fixture_1",
+          "object": "list_related_invoices",
+          "code": "list_related_invoices_code_1",
+          "state": "active",
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "has_more": false
+    }
+  }
+}

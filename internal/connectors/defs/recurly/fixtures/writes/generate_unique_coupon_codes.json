@@ -1,0 +1,16 @@
+{
+  "record": {
+    "coupon_id": "fixture_coupon_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/coupons/fixture_coupon_id/generate"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

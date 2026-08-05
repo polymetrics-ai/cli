@@ -1,0 +1,16 @@
+{
+  "record": {
+    "item_id": "fixture_item_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/items/fixture_item_id/reactivate"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

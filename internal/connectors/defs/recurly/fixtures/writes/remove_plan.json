@@ -1,0 +1,16 @@
+{
+  "record": {
+    "plan_id": "fixture_plan_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/plans/fixture_plan_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

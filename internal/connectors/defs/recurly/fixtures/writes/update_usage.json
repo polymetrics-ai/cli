@@ -1,0 +1,22 @@
+{
+  "record": {
+    "usage_id": "fixture_usage_id",
+    "amount": 2.0,
+    "usage_timestamp": "2026-01-01T00:00:00Z"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/usage/fixture_usage_id",
+    "body": {
+      "amount": 2.0,
+      "usage_timestamp": "2026-01-01T00:00:00Z"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

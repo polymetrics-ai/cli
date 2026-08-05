@@ -1,0 +1,19 @@
+{
+  "record": {
+    "name": "fixture_name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/external_products",
+    "body": {
+      "name": "fixture_name"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

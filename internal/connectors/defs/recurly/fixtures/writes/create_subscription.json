@@ -1,0 +1,27 @@
+{
+  "record": {
+    "plan_code": "fixture_plan_code",
+    "currency": "USD",
+    "account": {
+      "code": "fixture_code"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subscriptions",
+    "body": {
+      "plan_code": "fixture_plan_code",
+      "currency": "USD",
+      "account": {
+        "code": "fixture_code"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "record": {
+    "external_subscription_id": "fixture_external_subscription_id",
+    "external_id": "fixture_external_id",
+    "state": "paid",
+    "total": "fixture_total",
+    "currency": "USD",
+    "purchased_at": "2026-01-01T00:00:00Z"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/external_subscriptions/fixture_external_subscription_id/external_invoices",
+    "body": {
+      "external_id": "fixture_external_id",
+      "state": "paid",
+      "total": "fixture_total",
+      "currency": "USD",
+      "purchased_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

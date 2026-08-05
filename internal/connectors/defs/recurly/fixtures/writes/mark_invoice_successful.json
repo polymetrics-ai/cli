@@ -1,0 +1,16 @@
+{
+  "record": {
+    "invoice_id": "fixture_invoice_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/invoices/fixture_invoice_id/mark_successful"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "record": {
+    "product_code": "fixture_product_code",
+    "unit_amount": 12.34,
+    "currency": "USD"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/gift_cards",
+    "body": {
+      "product_code": "fixture_product_code",
+      "unit_amount": 12.34,
+      "currency": "USD"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

@@ -1,0 +1,4419 @@
+{
+  "actions": [
+    {
+      "name": "create_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts",
+      "path_fields": [],
+      "redact_fields": [
+        "billing_info",
+        "vat_number"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "The unique identifier of the account. This cannot be changed once the account is created."
+          },
+          "username": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "preferred_locale": {
+            "type": "string"
+          },
+          "preferred_time_zone": {
+            "type": "string"
+          },
+          "cc_emails": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string"
+          },
+          "vat_number": {
+            "type": "string"
+          },
+          "tax_exempt": {
+            "type": "boolean"
+          },
+          "exemption_certificate": {
+            "type": "string"
+          },
+          "override_business_entity_id": {
+            "type": "string"
+          },
+          "parent_account_code": {
+            "type": "string"
+          },
+          "parent_account_id": {
+            "type": "string"
+          },
+          "bill_to": {
+            "type": "string"
+          },
+          "transaction_type": {
+            "type": "string"
+          },
+          "dunning_campaign_id": {
+            "type": "string"
+          },
+          "invoice_template_id": {
+            "type": "string"
+          },
+          "address": {
+            "type": "object",
+            "properties": {
+              "phone": {
+                "type": "string",
+                "description": "Phone number."
+              },
+              "street1": {
+                "type": "string",
+                "description": "Street address line 1."
+              },
+              "street2": {
+                "type": "string",
+                "description": "Street address line 2."
+              },
+              "city": {
+                "type": "string",
+                "description": "City."
+              },
+              "region": {
+                "type": "string",
+                "description": "State or province."
+              },
+              "postal_code": {
+                "type": "string",
+                "description": "Zip or postal code."
+              },
+              "country": {
+                "type": "string",
+                "description": "Country, 2-letter ISO 3166-1 alpha-2 code."
+              },
+              "geo_code": {
+                "type": "string",
+                "description": "Geographic entity code (Vertex/Avalara)."
+              }
+            },
+            "additionalProperties": false
+          },
+          "billing_info": {
+            "type": "object",
+            "properties": {
+              "token_id": {
+                "type": "string",
+                "description": "Recurly token representing the billing info."
+              },
+              "first_name": {
+                "type": "string"
+              },
+              "last_name": {
+                "type": "string"
+              },
+              "company": {
+                "type": "string"
+              },
+              "address": {
+                "type": "object",
+                "properties": {
+                  "phone": {
+                    "type": "string",
+                    "description": "Phone number."
+                  },
+                  "street1": {
+                    "type": "string",
+                    "description": "Street address line 1."
+                  },
+                  "street2": {
+                    "type": "string",
+                    "description": "Street address line 2."
+                  },
+                  "city": {
+                    "type": "string",
+                    "description": "City."
+                  },
+                  "region": {
+                    "type": "string",
+                    "description": "State or province."
+                  },
+                  "postal_code": {
+                    "type": "string",
+                    "description": "Zip or postal code."
+                  },
+                  "country": {
+                    "type": "string",
+                    "description": "Country, 2-letter ISO 3166-1 alpha-2 code."
+                  },
+                  "geo_code": {
+                    "type": "string",
+                    "description": "Geographic entity code (Vertex/Avalara)."
+                  }
+                },
+                "additionalProperties": false
+              },
+              "number": {
+                "type": "string",
+                "description": "Credit card number (write-only)."
+              },
+              "month": {
+                "type": "string",
+                "description": "Credit card expiration month."
+              },
+              "year": {
+                "type": "string",
+                "description": "Credit card expiration year."
+              },
+              "cvv": {
+                "type": "string",
+                "description": "Credit card verification value (write-only)."
+              },
+              "currency": {
+                "type": "string",
+                "description": "3-letter ISO 4217 currency code."
+              },
+              "vat_number": {
+                "type": "string"
+              },
+              "ip_address": {
+                "type": "string"
+              },
+              "gateway_token": {
+                "type": "string"
+              },
+              "gateway_code": {
+                "type": "string",
+                "description": "Gateway-specific identifier."
+              },
+              "payment_gateway_references": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "reference_type": {
+                      "type": "string",
+                      "enum": [
+                        "stripe_confirmation_token",
+                        "upi_vpa"
+                      ]
+                    },
+                    "token": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "gateway_attributes": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "amazon_billing_agreement_id": {
+                "type": "string"
+              },
+              "paypal_billing_agreement_id": {
+                "type": "string"
+              },
+              "roku_billing_agreement_id": {
+                "type": "string"
+              },
+              "fraud_session_id": {
+                "type": "string"
+              },
+              "adyen_risk_profile_reference_id": {
+                "type": "string"
+              },
+              "transaction_type": {
+                "type": "string"
+              },
+              "three_d_secure_action_result_token_id": {
+                "type": "string"
+              },
+              "iban": {
+                "type": "string"
+              },
+              "name_on_account": {
+                "type": "string"
+              },
+              "account_number": {
+                "type": "string"
+              },
+              "routing_number": {
+                "type": "string"
+              },
+              "sort_code": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "description": "Billing info type."
+              },
+              "account_type": {
+                "type": "string"
+              },
+              "tax_identifier": {
+                "type": "string"
+              },
+              "tax_identifier_type": {
+                "type": "string"
+              },
+              "primary_payment_method": {
+                "type": "boolean"
+              },
+              "backup_payment_method": {
+                "type": "boolean"
+              },
+              "external_hpp_type": {
+                "type": "string"
+              },
+              "online_banking_payment_type": {
+                "type": "string"
+              },
+              "card_type": {
+                "type": "string"
+              },
+              "card_network_preference": {
+                "type": "string"
+              },
+              "return_url": {
+                "type": "string"
+              },
+              "authentication_method": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "custom_fields": {
+            "type": "array",
+            "description": "Custom fields; sending an empty array removes none, sending a name with null/empty removes that field.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The custom field's name."
+                },
+                "value": {
+                  "type": "string",
+                  "description": "The custom field's value; null/empty removes an existing value."
+                }
+              },
+              "required": [
+                "name",
+                "value"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "entity_use_code": {
+            "type": "string"
+          },
+          "bill_date": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "code",
+        "username",
+        "email",
+        "preferred_locale",
+        "preferred_time_zone",
+        "cc_emails",
+        "first_name",
+        "last_name",
+        "company",
+        "vat_number",
+        "tax_exempt",
+        "exemption_certificate",
+        "override_business_entity_id",
+        "parent_account_code",
+        "parent_account_id",
+        "bill_to",
+        "transaction_type",
+        "dunning_campaign_id",
+        "invoice_template_id",
+        "address",
+        "billing_info",
+        "custom_fields",
+        "entity_use_code",
+        "bill_date"
+      ]
+    },
+    {
+      "name": "update_account",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/accounts/{{ record.account_id }}",
+      "path_fields": [
+        "account_id"
+      ],
+      "redact_fields": [
+        "billing_info",
+        "vat_number"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          },
+          "username": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "preferred_locale": {
+            "type": "string"
+          },
+          "preferred_time_zone": {
+            "type": "string"
+          },
+          "cc_emails": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string"
+          },
+          "vat_number": {
+            "type": "string"
+          },
+          "tax_exempt": {
+            "type": "boolean"
+          },
+          "exemption_certificate": {
+            "type": "string"
+          },
+          "override_business_entity_id": {
+            "type": "string"
+          },
+          "parent_account_code": {
+            "type": "string"
+          },
+          "parent_account_id": {
+            "type": "string"
+          },
+          "bill_to": {
+            "type": "string"
+          },
+          "transaction_type": {
+            "type": "string"
+          },
+          "dunning_campaign_id": {
+            "type": "string"
+          },
+          "invoice_template_id": {
+            "type": "string"
+          },
+          "address": {
+            "type": "object",
+            "properties": {
+              "phone": {
+                "type": "string",
+                "description": "Phone number."
+              },
+              "street1": {
+                "type": "string",
+                "description": "Street address line 1."
+              },
+              "street2": {
+                "type": "string",
+                "description": "Street address line 2."
+              },
+              "city": {
+                "type": "string",
+                "description": "City."
+              },
+              "region": {
+                "type": "string",
+                "description": "State or province."
+              },
+              "postal_code": {
+                "type": "string",
+                "description": "Zip or postal code."
+              },
+              "country": {
+                "type": "string",
+                "description": "Country, 2-letter ISO 3166-1 alpha-2 code."
+              },
+              "geo_code": {
+                "type": "string",
+                "description": "Geographic entity code (Vertex/Avalara)."
+              }
+            },
+            "additionalProperties": false
+          },
+          "billing_info": {
+            "type": "object",
+            "properties": {
+              "token_id": {
+                "type": "string",
+                "description": "Recurly token representing the billing info."
+              },
+              "first_name": {
+                "type": "string"
+              },
+              "last_name": {
+                "type": "string"
+              },
+              "company": {
+                "type": "string"
+              },
+              "address": {
+                "type": "object",
+                "properties": {
+                  "phone": {
+                    "type": "string",
+                    "description": "Phone number."
+                  },
+                  "street1": {
+                    "type": "string",
+                    "description": "Street address line 1."
+                  },
+                  "street2": {
+                    "type": "string",
+                    "description": "Street address line 2."
+                  },
+                  "city": {
+                    "type": "string",
+                    "description": "City."
+                  },
+                  "region": {
+                    "type": "string",
+                    "description": "State or province."
+                  },
+                  "postal_code": {
+                    "type": "string",
+                    "description": "Zip or postal code."
+                  },
+                  "country": {
+                    "type": "string",
+                    "description": "Country, 2-letter ISO 3166-1 alpha-2 code."
+                  },
+                  "geo_code": {
+                    "type": "string",
+                    "description": "Geographic entity code (Vertex/Avalara)."
+                  }
+                },
+                "additionalProperties": false
+              },
+              "number": {
+                "type": "string",
+                "description": "Credit card number (write-only)."
+              },
+              "month": {
+                "type": "string",
+                "description": "Credit card expiration month."
+              },
+              "year": {
+                "type": "string",
+                "description": "Credit card expiration year."
+              },
+              "cvv": {
+                "type": "string",
+                "description": "Credit card verification value (write-only)."
+              },
+              "currency": {
+                "type": "string",
+                "description": "3-letter ISO 4217 currency code."
+              },
+              "vat_number": {
+                "type": "string"
+              },
+              "ip_address": {
+                "type": "string"
+              },
+              "gateway_token": {
+                "type": "string"
+              },
+              "gateway_code": {
+                "type": "string",
+                "description": "Gateway-specific identifier."
+              },
+              "payment_gateway_references": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "reference_type": {
+                      "type": "string",
+                      "enum": [
+                        "stripe_confirmation_token",
+                        "upi_vpa"
+                      ]
+                    },
+                    "token": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "gateway_attributes": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "amazon_billing_agreement_id": {
+                "type": "string"
+              },
+              "paypal_billing_agreement_id": {
+                "type": "string"
+              },
+              "roku_billing_agreement_id": {
+                "type": "string"
+              },
+              "fraud_session_id": {
+                "type": "string"
+              },
+              "adyen_risk_profile_reference_id": {
+                "type": "string"
+              },
+              "transaction_type": {
+                "type": "string"
+              },
+              "three_d_secure_action_result_token_id": {
+                "type": "string"
+              },
+              "iban": {
+                "type": "string"
+              },
+              "name_on_account": {
+                "type": "string"
+              },
+              "account_number": {
+                "type": "string"
+              },
+              "routing_number": {
+                "type": "string"
+              },
+              "sort_code": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "description": "Billing info type."
+              },
+              "account_type": {
+                "type": "string"
+              },
+              "tax_identifier": {
+                "type": "string"
+              },
+              "tax_identifier_type": {
+                "type": "string"
+              },
+              "primary_payment_method": {
+                "type": "boolean"
+              },
+              "backup_payment_method": {
+                "type": "boolean"
+              },
+              "external_hpp_type": {
+                "type": "string"
+              },
+              "online_banking_payment_type": {
+                "type": "string"
+              },
+              "card_type": {
+                "type": "string"
+              },
+              "card_network_preference": {
+                "type": "string"
+              },
+              "return_url": {
+                "type": "string"
+              },
+              "authentication_method": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "custom_fields": {
+            "type": "array",
+            "description": "Custom fields; sending an empty array removes none, sending a name with null/empty removes that field.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The custom field's name."
+                },
+                "value": {
+                  "type": "string",
+                  "description": "The custom field's value; null/empty removes an existing value."
+                }
+              },
+              "required": [
+                "name",
+                "value"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "entity_use_code": {
+            "type": "string"
+          },
+          "bill_date": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "account_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "username",
+        "email",
+        "preferred_locale",
+        "preferred_time_zone",
+        "cc_emails",
+        "first_name",
+        "last_name",
+        "company",
+        "vat_number",
+        "tax_exempt",
+        "exemption_certificate",
+        "override_business_entity_id",
+        "parent_account_code",
+        "parent_account_id",
+        "bill_to",
+        "transaction_type",
+        "dunning_campaign_id",
+        "invoice_template_id",
+        "address",
+        "billing_info",
+        "custom_fields",
+        "entity_use_code",
+        "bill_date"
+      ]
+    },
+    {
+      "name": "deactivate_account",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accounts/{{ record.account_id }}",
+      "path_fields": [
+        "account_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          }
+        },
+        "required": [
+          "account_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "redact_account",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/accounts/{{ record.account_id }}/redact",
+      "path_fields": [
+        "account_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          }
+        },
+        "required": [
+          "account_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_account_acquisition",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/accounts/{{ record.account_id }}/acquisition",
+      "path_fields": [
+        "account_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          }
+        },
+        "required": [
+          "account_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "remove_account_acquisition",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accounts/{{ record.account_id }}/acquisition",
+      "path_fields": [
+        "account_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          }
+        },
+        "required": [
+          "account_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "reactivate_account",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/accounts/{{ record.account_id }}/reactivate",
+      "path_fields": [
+        "account_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          }
+        },
+        "required": [
+          "account_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "update_billing_info",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/accounts/{{ record.account_id }}/billing_info",
+      "path_fields": [
+        "account_id"
+      ],
+      "redact_fields": [
+        "account_number",
+        "card_network_preference",
+        "card_type",
+        "cvv",
+        "gateway_attributes",
+        "gateway_code",
+        "gateway_token",
+        "number",
+        "payment_gateway_references",
+        "routing_number",
+        "three_d_secure_action_result_token_id",
+        "token_id",
+        "vat_number"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          }
+        },
+        "required": [
+          "account_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "remove_billing_info",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accounts/{{ record.account_id }}/billing_info",
+      "path_fields": [
+        "account_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          }
+        },
+        "required": [
+          "account_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "verify_billing_info",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts/{{ record.account_id }}/billing_info/verify",
+      "path_fields": [
+        "account_id"
+      ],
+      "redact_fields": [
+        "gateway_code",
+        "three_d_secure_action_result_token_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          }
+        },
+        "required": [
+          "account_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "verify_billing_info_cvv",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts/{{ record.account_id }}/billing_info/verify_cvv",
+      "path_fields": [
+        "account_id"
+      ],
+      "redact_fields": [
+        "gateway_code",
+        "three_d_secure_action_result_token_id",
+        "token_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          }
+        },
+        "required": [
+          "account_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "create_billing_info",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts/{{ record.account_id }}/billing_infos",
+      "path_fields": [
+        "account_id"
+      ],
+      "redact_fields": [
+        "account_number",
+        "card_network_preference",
+        "card_type",
+        "cvv",
+        "gateway_attributes",
+        "gateway_code",
+        "gateway_token",
+        "number",
+        "payment_gateway_references",
+        "routing_number",
+        "three_d_secure_action_result_token_id",
+        "token_id",
+        "vat_number"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          },
+          "token_id": {
+            "type": "string",
+            "description": "Recurly token representing the billing info."
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string"
+          },
+          "address": {
+            "type": "object",
+            "properties": {
+              "phone": {
+                "type": "string",
+                "description": "Phone number."
+              },
+              "street1": {
+                "type": "string",
+                "description": "Street address line 1."
+              },
+              "street2": {
+                "type": "string",
+                "description": "Street address line 2."
+              },
+              "city": {
+                "type": "string",
+                "description": "City."
+              },
+              "region": {
+                "type": "string",
+                "description": "State or province."
+              },
+              "postal_code": {
+                "type": "string",
+                "description": "Zip or postal code."
+              },
+              "country": {
+                "type": "string",
+                "description": "Country, 2-letter ISO 3166-1 alpha-2 code."
+              },
+              "geo_code": {
+                "type": "string",
+                "description": "Geographic entity code (Vertex/Avalara)."
+              }
+            },
+            "additionalProperties": false
+          },
+          "number": {
+            "type": "string",
+            "description": "Credit card number (write-only)."
+          },
+          "month": {
+            "type": "string",
+            "description": "Credit card expiration month."
+          },
+          "year": {
+            "type": "string",
+            "description": "Credit card expiration year."
+          },
+          "cvv": {
+            "type": "string",
+            "description": "Credit card verification value (write-only)."
+          },
+          "currency": {
+            "type": "string",
+            "description": "3-letter ISO 4217 currency code."
+          },
+          "vat_number": {
+            "type": "string"
+          },
+          "ip_address": {
+            "type": "string"
+          },
+          "gateway_token": {
+            "type": "string"
+          },
+          "gateway_code": {
+            "type": "string",
+            "description": "Gateway-specific identifier."
+          },
+          "payment_gateway_references": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "reference_type": {
+                  "type": "string",
+                  "enum": [
+                    "stripe_confirmation_token",
+                    "upi_vpa"
+                  ]
+                },
+                "token": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "gateway_attributes": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "amazon_billing_agreement_id": {
+            "type": "string"
+          },
+          "paypal_billing_agreement_id": {
+            "type": "string"
+          },
+          "roku_billing_agreement_id": {
+            "type": "string"
+          },
+          "fraud_session_id": {
+            "type": "string"
+          },
+          "adyen_risk_profile_reference_id": {
+            "type": "string"
+          },
+          "transaction_type": {
+            "type": "string"
+          },
+          "three_d_secure_action_result_token_id": {
+            "type": "string"
+          },
+          "iban": {
+            "type": "string"
+          },
+          "name_on_account": {
+            "type": "string"
+          },
+          "account_number": {
+            "type": "string"
+          },
+          "routing_number": {
+            "type": "string"
+          },
+          "sort_code": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "description": "Billing info type."
+          },
+          "account_type": {
+            "type": "string"
+          },
+          "tax_identifier": {
+            "type": "string"
+          },
+          "tax_identifier_type": {
+            "type": "string"
+          },
+          "primary_payment_method": {
+            "type": "boolean"
+          },
+          "backup_payment_method": {
+            "type": "boolean"
+          },
+          "external_hpp_type": {
+            "type": "string"
+          },
+          "online_banking_payment_type": {
+            "type": "string"
+          },
+          "card_type": {
+            "type": "string"
+          },
+          "card_network_preference": {
+            "type": "string"
+          },
+          "return_url": {
+            "type": "string"
+          },
+          "authentication_method": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "account_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "token_id",
+        "first_name",
+        "last_name",
+        "company",
+        "address",
+        "number",
+        "month",
+        "year",
+        "cvv",
+        "currency",
+        "vat_number",
+        "ip_address",
+        "gateway_token",
+        "gateway_code",
+        "payment_gateway_references",
+        "gateway_attributes",
+        "amazon_billing_agreement_id",
+        "paypal_billing_agreement_id",
+        "roku_billing_agreement_id",
+        "fraud_session_id",
+        "adyen_risk_profile_reference_id",
+        "transaction_type",
+        "three_d_secure_action_result_token_id",
+        "iban",
+        "name_on_account",
+        "account_number",
+        "routing_number",
+        "sort_code",
+        "type",
+        "account_type",
+        "tax_identifier",
+        "tax_identifier_type",
+        "primary_payment_method",
+        "backup_payment_method",
+        "external_hpp_type",
+        "online_banking_payment_type",
+        "card_type",
+        "card_network_preference",
+        "return_url",
+        "authentication_method"
+      ]
+    },
+    {
+      "name": "update_a_billing_info",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/accounts/{{ record.account_id }}/billing_infos/{{ record.billing_info_id }}",
+      "path_fields": [
+        "account_id",
+        "billing_info_id"
+      ],
+      "redact_fields": [
+        "account_number",
+        "card_network_preference",
+        "card_type",
+        "cvv",
+        "gateway_attributes",
+        "gateway_code",
+        "gateway_token",
+        "number",
+        "payment_gateway_references",
+        "routing_number",
+        "three_d_secure_action_result_token_id",
+        "token_id",
+        "vat_number",
+        "billing_info_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          },
+          "billing_info_id": {
+            "type": "string",
+            "description": "Path parameter `billing_info_id`."
+          }
+        },
+        "required": [
+          "account_id",
+          "billing_info_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "remove_a_billing_info",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accounts/{{ record.account_id }}/billing_infos/{{ record.billing_info_id }}",
+      "path_fields": [
+        "account_id",
+        "billing_info_id"
+      ],
+      "redact_fields": [
+        "billing_info_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          },
+          "billing_info_id": {
+            "type": "string",
+            "description": "Path parameter `billing_info_id`."
+          }
+        },
+        "required": [
+          "account_id",
+          "billing_info_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "verify_billing_infos",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts/{{ record.account_id }}/billing_infos/{{ record.billing_info_id }}/verify",
+      "path_fields": [
+        "account_id",
+        "billing_info_id"
+      ],
+      "redact_fields": [
+        "gateway_code",
+        "three_d_secure_action_result_token_id",
+        "billing_info_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          },
+          "billing_info_id": {
+            "type": "string",
+            "description": "Path parameter `billing_info_id`."
+          }
+        },
+        "required": [
+          "account_id",
+          "billing_info_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "verify_billing_infos_cvv",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts/{{ record.account_id }}/billing_infos/{{ record.billing_info_id }}/verify_cvv",
+      "path_fields": [
+        "account_id",
+        "billing_info_id"
+      ],
+      "redact_fields": [
+        "gateway_code",
+        "three_d_secure_action_result_token_id",
+        "token_id",
+        "billing_info_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          },
+          "billing_info_id": {
+            "type": "string",
+            "description": "Path parameter `billing_info_id`."
+          }
+        },
+        "required": [
+          "account_id",
+          "billing_info_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "create_coupon_redemption",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts/{{ record.account_id }}/coupon_redemptions/active",
+      "path_fields": [
+        "account_id"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          },
+          "coupon_id": {
+            "type": "string",
+            "description": "Coupon ID"
+          }
+        },
+        "required": [
+          "account_id",
+          "coupon_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "coupon_id"
+      ]
+    },
+    {
+      "name": "remove_coupon_redemption",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accounts/{{ record.account_id }}/coupon_redemptions/active",
+      "path_fields": [
+        "account_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          }
+        },
+        "required": [
+          "account_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "remove_coupon_redemption_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accounts/{{ record.account_id }}/coupon_redemptions/{{ record.coupon_redemption_id }}",
+      "path_fields": [
+        "account_id",
+        "coupon_redemption_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          },
+          "coupon_redemption_id": {
+            "type": "string",
+            "description": "Path parameter `coupon_redemption_id`."
+          }
+        },
+        "required": [
+          "account_id",
+          "coupon_redemption_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_account_external_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts/{{ record.account_id }}/external_accounts",
+      "path_fields": [
+        "account_id"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          },
+          "external_account_code": {
+            "type": "string",
+            "description": "Represents the account code for the external account."
+          },
+          "external_connection_type": {
+            "type": "string",
+            "description": "Represents the connection type. One of the connection types of your enabled App Connectors"
+          }
+        },
+        "required": [
+          "account_id",
+          "external_account_code",
+          "external_connection_type"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "external_account_code",
+        "external_connection_type"
+      ]
+    },
+    {
+      "name": "update_account_external_account",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/accounts/{{ record.account_id }}/external_accounts/{{ record.external_account_id }}",
+      "path_fields": [
+        "account_id",
+        "external_account_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          },
+          "external_account_id": {
+            "type": "string",
+            "description": "Path parameter `external_account_id`."
+          }
+        },
+        "required": [
+          "account_id",
+          "external_account_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "delete_account_external_account",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accounts/{{ record.account_id }}/external_accounts/{{ record.external_account_id }}",
+      "path_fields": [
+        "account_id",
+        "external_account_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          },
+          "external_account_id": {
+            "type": "string",
+            "description": "Path parameter `external_account_id`."
+          }
+        },
+        "required": [
+          "account_id",
+          "external_account_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_invoice",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts/{{ record.account_id }}/invoices",
+      "path_fields": [
+        "account_id"
+      ],
+      "redact_fields": [
+        "po_number"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          },
+          "currency": {
+            "type": "string",
+            "description": "3-letter ISO 4217 currency code."
+          }
+        },
+        "required": [
+          "account_id",
+          "currency"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "currency"
+      ]
+    },
+    {
+      "name": "create_line_item",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts/{{ record.account_id }}/line_items",
+      "path_fields": [
+        "account_id"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          },
+          "currency": {
+            "type": "string",
+            "description": "3-letter ISO 4217 currency code. If `item_code`/`item_id` is part of the request then `currency` is optional, if the site has a single default currency. `currency` is required if `item_code`/`item_id` is present, and there are multiple currencies defined on the site. If `item_code`/`item_id` is not present `currency` is required."
+          },
+          "unit_amount": {
+            "type": "number",
+            "description": "A positive or negative amount with `type=charge` will result in a positive `unit_amount`. A positive or negative amount with `type=credit` will result in a negative `unit_amount`. If `item_code`/`item_id` is present, `unit_amount` can be passed in, to override the `Item`'s `unit_amount`. If `item_code`/`item_id` is not present then `unit_amount` is required."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "charge",
+              "credit"
+            ],
+            "description": "Line item type. If `item_code`/`item_id` is present then `type` should not be present. If `item_code`/`item_id` is not present then `type` is required."
+          }
+        },
+        "required": [
+          "account_id",
+          "currency",
+          "unit_amount",
+          "type"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "currency",
+        "unit_amount",
+        "type"
+      ]
+    },
+    {
+      "name": "create_account_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts/{{ record.account_id }}/notes",
+      "path_fields": [
+        "account_id"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          },
+          "message": {
+            "type": "string",
+            "description": "The content of the account note."
+          }
+        },
+        "required": [
+          "account_id",
+          "message"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "message"
+      ]
+    },
+    {
+      "name": "remove_account_note",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accounts/{{ record.account_id }}/notes/{{ record.account_note_id }}",
+      "path_fields": [
+        "account_id",
+        "account_note_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          },
+          "account_note_id": {
+            "type": "string",
+            "description": "Path parameter `account_note_id`."
+          }
+        },
+        "required": [
+          "account_id",
+          "account_note_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_shipping_address",
+      "kind": "create",
+      "method": "POST",
+      "path": "/accounts/{{ record.account_id }}/shipping_addresses",
+      "path_fields": [
+        "account_id"
+      ],
+      "redact_fields": [
+        "vat_number"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "street1": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "postal_code": {
+            "type": "string",
+            "description": "Zip or postal code."
+          },
+          "country": {
+            "type": "string",
+            "description": "Country, 2-letter ISO 3166-1 alpha-2 code."
+          }
+        },
+        "required": [
+          "account_id",
+          "first_name",
+          "last_name",
+          "street1",
+          "city",
+          "postal_code",
+          "country"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "first_name",
+        "last_name",
+        "street1",
+        "city",
+        "postal_code",
+        "country"
+      ]
+    },
+    {
+      "name": "update_shipping_address",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/accounts/{{ record.account_id }}/shipping_addresses/{{ record.shipping_address_id }}",
+      "path_fields": [
+        "account_id",
+        "shipping_address_id"
+      ],
+      "redact_fields": [
+        "vat_number"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          },
+          "shipping_address_id": {
+            "type": "string",
+            "description": "Path parameter `shipping_address_id`."
+          }
+        },
+        "required": [
+          "account_id",
+          "shipping_address_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "remove_shipping_address",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/accounts/{{ record.account_id }}/shipping_addresses/{{ record.shipping_address_id }}",
+      "path_fields": [
+        "account_id",
+        "shipping_address_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Path parameter `account_id`."
+          },
+          "shipping_address_id": {
+            "type": "string",
+            "description": "Path parameter `shipping_address_id`."
+          }
+        },
+        "required": [
+          "account_id",
+          "shipping_address_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_coupon",
+      "kind": "create",
+      "method": "POST",
+      "path": "/coupons",
+      "path_fields": [],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "The code the customer enters to redeem the coupon."
+          },
+          "discount_type": {
+            "type": "string",
+            "enum": [
+              "fixed",
+              "free_trial",
+              "percent"
+            ],
+            "description": "The type of discount provided by the coupon (how the amount discounted is calculated)"
+          },
+          "name": {
+            "type": "string",
+            "description": "The internal name for the coupon."
+          }
+        },
+        "required": [
+          "code",
+          "discount_type",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "code",
+        "discount_type",
+        "name"
+      ]
+    },
+    {
+      "name": "update_coupon",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/coupons/{{ record.coupon_id }}",
+      "path_fields": [
+        "coupon_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "coupon_id": {
+            "type": "string",
+            "description": "Path parameter `coupon_id`."
+          }
+        },
+        "required": [
+          "coupon_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "deactivate_coupon",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/coupons/{{ record.coupon_id }}",
+      "path_fields": [
+        "coupon_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "coupon_id": {
+            "type": "string",
+            "description": "Path parameter `coupon_id`."
+          }
+        },
+        "required": [
+          "coupon_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "generate_unique_coupon_codes",
+      "kind": "create",
+      "method": "POST",
+      "path": "/coupons/{{ record.coupon_id }}/generate",
+      "path_fields": [
+        "coupon_id"
+      ],
+      "redact_fields": [
+        "number_of_unique_codes"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "coupon_id": {
+            "type": "string",
+            "description": "Path parameter `coupon_id`."
+          }
+        },
+        "required": [
+          "coupon_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "generate_unique_coupon_codes_sync",
+      "kind": "create",
+      "method": "POST",
+      "path": "/coupons/{{ record.coupon_id }}/generate_sync",
+      "path_fields": [
+        "coupon_id"
+      ],
+      "redact_fields": [
+        "number_of_unique_codes"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "coupon_id": {
+            "type": "string",
+            "description": "Path parameter `coupon_id`."
+          },
+          "number_of_unique_codes": {
+            "type": "integer",
+            "description": "The quantity of unique coupon codes to generate. A bulk coupon can have up to 100,000 unique codes (or your site's configured limit)."
+          }
+        },
+        "required": [
+          "coupon_id",
+          "number_of_unique_codes"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "number_of_unique_codes"
+      ]
+    },
+    {
+      "name": "restore_coupon",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/coupons/{{ record.coupon_id }}/restore",
+      "path_fields": [
+        "coupon_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "coupon_id": {
+            "type": "string",
+            "description": "Path parameter `coupon_id`."
+          }
+        },
+        "required": [
+          "coupon_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "create_general_ledger_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/general_ledger_accounts",
+      "path_fields": [],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "account_type": {
+            "type": "string",
+            "enum": [
+              "liability",
+              "revenue"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "account_type"
+      ]
+    },
+    {
+      "name": "update_general_ledger_account",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/general_ledger_accounts/{{ record.general_ledger_account_id }}",
+      "path_fields": [
+        "general_ledger_account_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "general_ledger_account_id": {
+            "type": "string",
+            "description": "Path parameter `general_ledger_account_id`."
+          }
+        },
+        "required": [
+          "general_ledger_account_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "create_item",
+      "kind": "create",
+      "method": "POST",
+      "path": "/items",
+      "path_fields": [],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Unique code to identify the item."
+          },
+          "name": {
+            "type": "string",
+            "description": "This name describes your item and will appear on the invoice when it's purchased on a one time basis."
+          }
+        },
+        "required": [
+          "code",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "code",
+        "name"
+      ]
+    },
+    {
+      "name": "update_item",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/items/{{ record.item_id }}",
+      "path_fields": [
+        "item_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "description": "Path parameter `item_id`."
+          }
+        },
+        "required": [
+          "item_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "deactivate_item",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/items/{{ record.item_id }}",
+      "path_fields": [
+        "item_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "description": "Path parameter `item_id`."
+          }
+        },
+        "required": [
+          "item_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "reactivate_item",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/items/{{ record.item_id }}/reactivate",
+      "path_fields": [
+        "item_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "description": "Path parameter `item_id`."
+          }
+        },
+        "required": [
+          "item_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "create_measured_unit",
+      "kind": "create",
+      "method": "POST",
+      "path": "/measured_units",
+      "path_fields": [],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Unique internal name of the measured unit on your site."
+          },
+          "display_name": {
+            "type": "string",
+            "description": "Display name for the measured unit."
+          }
+        },
+        "required": [
+          "name",
+          "display_name"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "name",
+        "display_name"
+      ]
+    },
+    {
+      "name": "update_measured_unit",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/measured_units/{{ record.measured_unit_id }}",
+      "path_fields": [
+        "measured_unit_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "measured_unit_id": {
+            "type": "string",
+            "description": "Path parameter `measured_unit_id`."
+          }
+        },
+        "required": [
+          "measured_unit_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "remove_measured_unit",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/measured_units/{{ record.measured_unit_id }}",
+      "path_fields": [
+        "measured_unit_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "measured_unit_id": {
+            "type": "string",
+            "description": "Path parameter `measured_unit_id`."
+          }
+        },
+        "required": [
+          "measured_unit_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_external_product",
+      "kind": "create",
+      "method": "POST",
+      "path": "/external_products",
+      "path_fields": [],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "External product name."
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "name"
+      ]
+    },
+    {
+      "name": "update_external_product",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/external_products/{{ record.external_product_id }}",
+      "path_fields": [
+        "external_product_id"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "external_product_id": {
+            "type": "string",
+            "description": "Path parameter `external_product_id`."
+          },
+          "plan_id": {
+            "type": "string",
+            "description": "Recurly plan UUID."
+          }
+        },
+        "required": [
+          "external_product_id",
+          "plan_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "plan_id"
+      ]
+    },
+    {
+      "name": "deactivate_external_products",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/external_products/{{ record.external_product_id }}",
+      "path_fields": [
+        "external_product_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "external_product_id": {
+            "type": "string",
+            "description": "Path parameter `external_product_id`."
+          }
+        },
+        "required": [
+          "external_product_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_external_product_external_product_reference",
+      "kind": "create",
+      "method": "POST",
+      "path": "/external_products/{{ record.external_product_id }}/external_product_references",
+      "path_fields": [
+        "external_product_id"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "external_product_id": {
+            "type": "string",
+            "description": "Path parameter `external_product_id`."
+          },
+          "reference_code": {
+            "type": "string",
+            "description": "A code which associates the external product to a corresponding object or resource in an external platform like the Apple App Store or Google Play Store."
+          },
+          "external_connection_type": {
+            "type": "string",
+            "description": "Represents the connection type. One of the connection types of your enabled App Connectors"
+          }
+        },
+        "required": [
+          "external_product_id",
+          "reference_code",
+          "external_connection_type"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "reference_code",
+        "external_connection_type"
+      ]
+    },
+    {
+      "name": "deactivate_external_product_external_product_reference",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/external_products/{{ record.external_product_id }}/external_product_references/{{ record.external_product_reference_id }}",
+      "path_fields": [
+        "external_product_id",
+        "external_product_reference_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "external_product_id": {
+            "type": "string",
+            "description": "Path parameter `external_product_id`."
+          },
+          "external_product_reference_id": {
+            "type": "string",
+            "description": "Path parameter `external_product_reference_id`."
+          }
+        },
+        "required": [
+          "external_product_id",
+          "external_product_reference_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_external_subscription",
+      "kind": "create",
+      "method": "POST",
+      "path": "/external_subscriptions",
+      "path_fields": [],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "external_id": {
+            "type": "string",
+            "description": "Id of the subscription in the external system, i.e. Apple App Store or Google Play Store."
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "An indication of the quantity of a subscribed item's quantity."
+          },
+          "activated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the external subscription was activated in the external platform."
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the external subscription expires in the external platform."
+          }
+        },
+        "required": [
+          "external_id",
+          "quantity",
+          "activated_at",
+          "expires_at"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "external_id",
+        "quantity",
+        "activated_at",
+        "expires_at"
+      ]
+    },
+    {
+      "name": "put_external_subscription",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/external_subscriptions/{{ record.external_subscription_id }}",
+      "path_fields": [
+        "external_subscription_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "external_subscription_id": {
+            "type": "string",
+            "description": "Path parameter `external_subscription_id`."
+          }
+        },
+        "required": [
+          "external_subscription_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "create_external_invoice",
+      "kind": "create",
+      "method": "POST",
+      "path": "/external_subscriptions/{{ record.external_subscription_id }}/external_invoices",
+      "path_fields": [
+        "external_subscription_id"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "external_subscription_id": {
+            "type": "string",
+            "description": "Path parameter `external_subscription_id`."
+          },
+          "external_id": {
+            "type": "string",
+            "description": "An identifier which associates the external invoice to a corresponding object in an external platform."
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "paid"
+            ]
+          },
+          "total": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string",
+            "description": "3-letter ISO 4217 currency code."
+          },
+          "purchased_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the invoice was created in the external platform."
+          }
+        },
+        "required": [
+          "external_subscription_id",
+          "external_id",
+          "state",
+          "total",
+          "currency",
+          "purchased_at"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "external_id",
+        "state",
+        "total",
+        "currency",
+        "purchased_at"
+      ]
+    },
+    {
+      "name": "update_invoice",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/invoices/{{ record.invoice_id }}",
+      "path_fields": [
+        "invoice_id"
+      ],
+      "redact_fields": [
+        "gateway_code",
+        "po_number"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "invoice_id": {
+            "type": "string",
+            "description": "Path parameter `invoice_id`."
+          }
+        },
+        "required": [
+          "invoice_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "apply_credit_balance",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/invoices/{{ record.invoice_id }}/apply_credit_balance",
+      "path_fields": [
+        "invoice_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "invoice_id": {
+            "type": "string",
+            "description": "Path parameter `invoice_id`."
+          }
+        },
+        "required": [
+          "invoice_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "collect_invoice",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/invoices/{{ record.invoice_id }}/collect",
+      "path_fields": [
+        "invoice_id"
+      ],
+      "redact_fields": [
+        "billing_info_id",
+        "three_d_secure_action_result_token_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "invoice_id": {
+            "type": "string",
+            "description": "Path parameter `invoice_id`."
+          }
+        },
+        "required": [
+          "invoice_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "mark_invoice_failed",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/invoices/{{ record.invoice_id }}/mark_failed",
+      "path_fields": [
+        "invoice_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "invoice_id": {
+            "type": "string",
+            "description": "Path parameter `invoice_id`."
+          }
+        },
+        "required": [
+          "invoice_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "mark_invoice_successful",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/invoices/{{ record.invoice_id }}/mark_successful",
+      "path_fields": [
+        "invoice_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "invoice_id": {
+            "type": "string",
+            "description": "Path parameter `invoice_id`."
+          }
+        },
+        "required": [
+          "invoice_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "reopen_invoice",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/invoices/{{ record.invoice_id }}/reopen",
+      "path_fields": [
+        "invoice_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "invoice_id": {
+            "type": "string",
+            "description": "Path parameter `invoice_id`."
+          }
+        },
+        "required": [
+          "invoice_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "void_invoice",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/invoices/{{ record.invoice_id }}/void",
+      "path_fields": [
+        "invoice_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "invoice_id": {
+            "type": "string",
+            "description": "Path parameter `invoice_id`."
+          }
+        },
+        "required": [
+          "invoice_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "record_external_transaction",
+      "kind": "create",
+      "method": "POST",
+      "path": "/invoices/{{ record.invoice_id }}/transactions",
+      "path_fields": [
+        "invoice_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "invoice_id": {
+            "type": "string",
+            "description": "Path parameter `invoice_id`."
+          }
+        },
+        "required": [
+          "invoice_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "refund_invoice",
+      "kind": "create",
+      "method": "POST",
+      "path": "/invoices/{{ record.invoice_id }}/refund",
+      "path_fields": [
+        "invoice_id"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "invoice_id": {
+            "type": "string",
+            "description": "Path parameter `invoice_id`."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "amount",
+              "percentage",
+              "line_items"
+            ],
+            "description": "The type of refund. Amount and line items cannot both be specified in the request."
+          },
+          "amount": {
+            "type": "number",
+            "description": "The total amount to refund. Must be used when type is `amount`."
+          },
+          "percentage": {
+            "type": "integer",
+            "description": "The percentage of the invoice's remaining balance to refund. Must be used when type is `percentage`."
+          },
+          "line_items": {
+            "type": "array",
+            "description": "Line items to refund. Must be used when type is `line_items`.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Line item ID."
+                },
+                "quantity": {
+                  "type": "integer",
+                  "description": "Line item quantity to refund."
+                },
+                "quantity_decimal": {
+                  "type": "string",
+                  "description": "Decimal quantity to refund."
+                },
+                "amount": {
+                  "type": "number",
+                  "description": "Specific amount to refund from the adjustment."
+                },
+                "percentage": {
+                  "type": "integer",
+                  "description": "Percentage of the adjustment's remaining balance to refund (1-100)."
+                },
+                "prorate": {
+                  "type": "boolean",
+                  "default": false
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "refund_method": {
+            "type": "string",
+            "description": "How to refund: `all_credit`, `all_transaction`, or `transaction_first`."
+          },
+          "credit_customer_notes": {
+            "type": "string",
+            "description": "Notes to append to the credit invoice."
+          },
+          "external_refund": {
+            "type": "object",
+            "description": "Indicates the refund was settled outside of Recurly and a manual transaction should be created to track it.",
+            "properties": {
+              "payment_method": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "refunded_at": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "payment_method"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "invoice_id",
+          "type"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical \u2014 refund_invoice moves money by refunding an invoice; requires destructive confirmation and reverse ETL plan/preview/approval/execute. Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "type",
+        "amount",
+        "percentage",
+        "line_items",
+        "refund_method",
+        "credit_customer_notes",
+        "external_refund"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_invoice_retry",
+      "kind": "create",
+      "method": "POST",
+      "path": "/invoices/recovery",
+      "path_fields": [],
+      "redact_fields": [
+        "po_number"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "description": "3-letter ISO 4217 currency code."
+          },
+          "due_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date invoice was originally due. Must be in the past."
+          },
+          "external_recovery_eligible": {
+            "type": "boolean",
+            "description": "Must be set to `true` to acknowledge that the invoice is eligible for external recovery. Requests with `false`, omitted, or non-boolean values will be rejected."
+          },
+          "account": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "The unique identifier of the account. This cannot be changed once the account is created."
+              },
+              "billing_infos": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "gateway_code": {
+                      "type": "string",
+                      "description": "An identifier for a specific payment gateway."
+                    },
+                    "payment_gateway_references": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "reference_type": {
+                            "type": "string",
+                            "enum": [
+                              "stripe_confirmation_token",
+                              "upi_vpa"
+                            ],
+                            "description": "The type of reference token. Required if token is passed in for Stripe Gateway or Ebanx UPI."
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "transactions": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "gateway_error_code": {
+                            "type": "string",
+                            "description": "The error code returned by the payment gateway for the original payment collection attempt."
+                          },
+                          "attempted_collection_date": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "The date the original payment collection was attempted."
+                          }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                          "gateway_error_code",
+                          "attempted_collection_date"
+                        ]
+                      }
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "gateway_code",
+                    "payment_gateway_references",
+                    "transactions"
+                  ]
+                }
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "code",
+              "billing_infos"
+            ]
+          },
+          "line_items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "unit_amount": {
+                  "type": "number",
+                  "description": "A positive or negative amount will result in a positive `unit_amount`."
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "unit_amount"
+              ]
+            }
+          }
+        },
+        "required": [
+          "currency",
+          "due_at",
+          "external_recovery_eligible",
+          "account",
+          "line_items"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "currency",
+        "due_at",
+        "external_recovery_eligible",
+        "account",
+        "line_items"
+      ]
+    },
+    {
+      "name": "remove_line_item",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/line_items/{{ record.line_item_id }}",
+      "path_fields": [
+        "line_item_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "line_item_id": {
+            "type": "string",
+            "description": "Path parameter `line_item_id`."
+          }
+        },
+        "required": [
+          "line_item_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_plan",
+      "kind": "create",
+      "method": "POST",
+      "path": "/plans",
+      "path_fields": [],
+      "redact_fields": [
+        "trial_requires_billing_info"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Unique code to identify the plan. This is used in Hosted Payment Page URLs and in the invoice exports."
+          },
+          "name": {
+            "type": "string",
+            "description": "This name describes your plan and will appear on the Hosted Payment Page and the subscriber's invoice."
+          },
+          "currencies": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "currency": {
+                  "type": "string",
+                  "description": "3-letter ISO 4217 currency code."
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "code",
+          "name",
+          "currencies"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "code",
+        "name",
+        "currencies"
+      ]
+    },
+    {
+      "name": "update_plan",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/plans/{{ record.plan_id }}",
+      "path_fields": [
+        "plan_id"
+      ],
+      "redact_fields": [
+        "trial_requires_billing_info"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "plan_id": {
+            "type": "string",
+            "description": "Path parameter `plan_id`."
+          }
+        },
+        "required": [
+          "plan_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "remove_plan",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/plans/{{ record.plan_id }}",
+      "path_fields": [
+        "plan_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "plan_id": {
+            "type": "string",
+            "description": "Path parameter `plan_id`."
+          }
+        },
+        "required": [
+          "plan_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_plan_add_on",
+      "kind": "create",
+      "method": "POST",
+      "path": "/plans/{{ record.plan_id }}/add_ons",
+      "path_fields": [
+        "plan_id"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "plan_id": {
+            "type": "string",
+            "description": "Path parameter `plan_id`."
+          },
+          "code": {
+            "type": "string",
+            "description": "The unique identifier for the add-on within its plan. If `item_code`/`item_id` is part of the request then `code` must be absent. If `item_code`/`item_id` is not present `code` is required."
+          },
+          "name": {
+            "type": "string",
+            "description": "Describes your add-on and will appear in subscribers' invoices. If `item_code`/`item_id` is part of the request then `name` must be absent. If `item_code`/`item_id` is not present `name` is required."
+          }
+        },
+        "required": [
+          "plan_id",
+          "code",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "code",
+        "name"
+      ]
+    },
+    {
+      "name": "update_plan_add_on",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/plans/{{ record.plan_id }}/add_ons/{{ record.add_on_id }}",
+      "path_fields": [
+        "plan_id",
+        "add_on_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "plan_id": {
+            "type": "string",
+            "description": "Path parameter `plan_id`."
+          },
+          "add_on_id": {
+            "type": "string",
+            "description": "Path parameter `add_on_id`."
+          }
+        },
+        "required": [
+          "plan_id",
+          "add_on_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "remove_plan_add_on",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/plans/{{ record.plan_id }}/add_ons/{{ record.add_on_id }}",
+      "path_fields": [
+        "plan_id",
+        "add_on_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "plan_id": {
+            "type": "string",
+            "description": "Path parameter `plan_id`."
+          },
+          "add_on_id": {
+            "type": "string",
+            "description": "Path parameter `add_on_id`."
+          }
+        },
+        "required": [
+          "plan_id",
+          "add_on_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_shipping_method",
+      "kind": "create",
+      "method": "POST",
+      "path": "/shipping_methods",
+      "path_fields": [],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "The internal name used identify the shipping method."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the shipping method displayed to customers."
+          }
+        },
+        "required": [
+          "code",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "code",
+        "name"
+      ]
+    },
+    {
+      "name": "update_shipping_method",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/shipping_methods/{{ record.shipping_method_id }}",
+      "path_fields": [
+        "shipping_method_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "shipping_method_id": {
+            "type": "string",
+            "description": "Path parameter `shipping_method_id`."
+          }
+        },
+        "required": [
+          "shipping_method_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "deactivate_shipping_method",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/shipping_methods/{{ record.shipping_method_id }}",
+      "path_fields": [
+        "shipping_method_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "shipping_method_id": {
+            "type": "string",
+            "description": "Path parameter `shipping_method_id`."
+          }
+        },
+        "required": [
+          "shipping_method_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_subscription",
+      "kind": "create",
+      "method": "POST",
+      "path": "/subscriptions",
+      "path_fields": [],
+      "redact_fields": [
+        "billing_info_id",
+        "gateway_code",
+        "gift_card_redemption_code",
+        "po_number"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "plan_code": {
+            "type": "string",
+            "description": "You must provide either a `plan_code` or `plan_id`. If both are provided the `plan_id` will be used."
+          },
+          "currency": {
+            "type": "string",
+            "description": "3-letter ISO 4217 currency code."
+          },
+          "account": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "The unique identifier of the account. This cannot be changed once the account is created."
+              }
+            },
+            "required": [
+              "code"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "plan_code",
+          "currency",
+          "account"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "plan_code",
+        "currency",
+        "account"
+      ]
+    },
+    {
+      "name": "update_subscription",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/subscriptions/{{ record.subscription_id }}",
+      "path_fields": [
+        "subscription_id"
+      ],
+      "redact_fields": [
+        "billing_info_id",
+        "gateway_code",
+        "po_number"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "subscription_id": {
+            "type": "string",
+            "description": "Path parameter `subscription_id`."
+          },
+          "collection_method": {
+            "type": "string"
+          },
+          "custom_fields": {
+            "type": "array",
+            "description": "Custom fields; sending an empty array removes none, sending a name with null/empty removes that field.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The custom field's name."
+                },
+                "value": {
+                  "type": "string",
+                  "description": "The custom field's value; null/empty removes an existing value."
+                }
+              },
+              "required": [
+                "name",
+                "value"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "remaining_billing_cycles": {
+            "type": "integer"
+          },
+          "renewal_billing_cycles": {
+            "type": "integer"
+          },
+          "auto_renew": {
+            "type": "boolean"
+          },
+          "next_bill_date": {
+            "type": "string"
+          },
+          "revenue_schedule_type": {
+            "type": "string"
+          },
+          "terms_and_conditions": {
+            "type": "string"
+          },
+          "customer_notes": {
+            "type": "string"
+          },
+          "po_number": {
+            "type": "string"
+          },
+          "price_segment_id": {
+            "type": "string"
+          },
+          "net_terms": {
+            "type": "integer"
+          },
+          "net_terms_type": {
+            "type": "string"
+          },
+          "credit_application_policy": {
+            "type": "string"
+          },
+          "gateway_code": {
+            "type": "string"
+          },
+          "tax_inclusive": {
+            "type": "boolean"
+          },
+          "shipping": {
+            "type": "object",
+            "properties": {
+              "object": {
+                "type": "string"
+              },
+              "address": {
+                "type": "object",
+                "properties": {
+                  "first_name": {
+                    "type": "string"
+                  },
+                  "last_name": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "street1": {
+                    "type": "string"
+                  },
+                  "street2": {
+                    "type": "string"
+                  },
+                  "city": {
+                    "type": "string"
+                  },
+                  "region": {
+                    "type": "string"
+                  },
+                  "postal_code": {
+                    "type": "string"
+                  },
+                  "country": {
+                    "type": "string"
+                  },
+                  "company": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "first_name",
+                  "last_name",
+                  "street1",
+                  "city",
+                  "postal_code",
+                  "country"
+                ],
+                "additionalProperties": false
+              },
+              "address_id": {
+                "type": "string",
+                "description": "Assign a shipping address from the account's existing shipping addresses."
+              }
+            },
+            "additionalProperties": false
+          },
+          "billing_info_id": {
+            "type": "string"
+          },
+          "transaction_descriptor_suffix": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "subscription_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "collection_method",
+        "custom_fields",
+        "remaining_billing_cycles",
+        "renewal_billing_cycles",
+        "auto_renew",
+        "next_bill_date",
+        "revenue_schedule_type",
+        "terms_and_conditions",
+        "customer_notes",
+        "po_number",
+        "price_segment_id",
+        "net_terms",
+        "net_terms_type",
+        "credit_application_policy",
+        "gateway_code",
+        "tax_inclusive",
+        "shipping",
+        "billing_info_id",
+        "transaction_descriptor_suffix"
+      ]
+    },
+    {
+      "name": "terminate_subscription",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/subscriptions/{{ record.subscription_id }}",
+      "path_fields": [
+        "subscription_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "subscription_id": {
+            "type": "string",
+            "description": "Path parameter `subscription_id`."
+          }
+        },
+        "required": [
+          "subscription_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "cancel_subscription",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/subscriptions/{{ record.subscription_id }}/cancel",
+      "path_fields": [
+        "subscription_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "subscription_id": {
+            "type": "string",
+            "description": "Path parameter `subscription_id`."
+          }
+        },
+        "required": [
+          "subscription_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "reactivate_subscription",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/subscriptions/{{ record.subscription_id }}/reactivate",
+      "path_fields": [
+        "subscription_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "subscription_id": {
+            "type": "string",
+            "description": "Path parameter `subscription_id`."
+          }
+        },
+        "required": [
+          "subscription_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "pause_subscription",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/subscriptions/{{ record.subscription_id }}/pause",
+      "path_fields": [
+        "subscription_id"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "subscription_id": {
+            "type": "string",
+            "description": "Path parameter `subscription_id`."
+          },
+          "remaining_pause_cycles": {
+            "type": "integer",
+            "description": "Number of billing cycles to pause the subscriptions. A value of 0 will cancel any pending pauses on the subscription."
+          }
+        },
+        "required": [
+          "subscription_id",
+          "remaining_pause_cycles"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "remaining_pause_cycles"
+      ]
+    },
+    {
+      "name": "resume_subscription",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/subscriptions/{{ record.subscription_id }}/resume",
+      "path_fields": [
+        "subscription_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "subscription_id": {
+            "type": "string",
+            "description": "Path parameter `subscription_id`."
+          }
+        },
+        "required": [
+          "subscription_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "convert_trial",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/subscriptions/{{ record.subscription_id }}/convert_trial",
+      "path_fields": [
+        "subscription_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "subscription_id": {
+            "type": "string",
+            "description": "Path parameter `subscription_id`."
+          }
+        },
+        "required": [
+          "subscription_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "create_subscription_change",
+      "kind": "create",
+      "method": "POST",
+      "path": "/subscriptions/{{ record.subscription_id }}/change",
+      "path_fields": [
+        "subscription_id"
+      ],
+      "redact_fields": [
+        "billing_info",
+        "po_number"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "subscription_id": {
+            "type": "string",
+            "description": "Path parameter `subscription_id`."
+          }
+        },
+        "required": [
+          "subscription_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "remove_subscription_change",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/subscriptions/{{ record.subscription_id }}/change",
+      "path_fields": [
+        "subscription_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "subscription_id": {
+            "type": "string",
+            "description": "Path parameter `subscription_id`."
+          }
+        },
+        "required": [
+          "subscription_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "remove_subscription_coupon_redemption",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/subscriptions/{{ record.subscription_id }}/coupon_redemptions/{{ record.coupon_redemption_id }}",
+      "path_fields": [
+        "subscription_id",
+        "coupon_redemption_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "subscription_id": {
+            "type": "string",
+            "description": "Path parameter `subscription_id`."
+          },
+          "coupon_redemption_id": {
+            "type": "string",
+            "description": "Path parameter `coupon_redemption_id`."
+          }
+        },
+        "required": [
+          "subscription_id",
+          "coupon_redemption_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_usage",
+      "kind": "create",
+      "method": "POST",
+      "path": "/subscriptions/{{ record.subscription_id }}/add_ons/{{ record.add_on_id }}/usage",
+      "path_fields": [
+        "subscription_id",
+        "add_on_id"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "subscription_id": {
+            "type": "string",
+            "description": "Path parameter `subscription_id`."
+          },
+          "add_on_id": {
+            "type": "string",
+            "description": "Path parameter `add_on_id`."
+          },
+          "merchant_tag": {
+            "type": "string",
+            "description": "Custom field used to identify the usage record."
+          },
+          "amount": {
+            "type": "number",
+            "description": "Used to determine the unit amount of the usage to record."
+          },
+          "recording_timestamp": {
+            "type": "string",
+            "description": "When the usage was recorded."
+          },
+          "usage_timestamp": {
+            "type": "string",
+            "description": "When the usage actually occurred."
+          }
+        },
+        "required": [
+          "subscription_id",
+          "add_on_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "merchant_tag",
+        "amount",
+        "recording_timestamp",
+        "usage_timestamp"
+      ]
+    },
+    {
+      "name": "update_usage",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/usage/{{ record.usage_id }}",
+      "path_fields": [
+        "usage_id"
+      ],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "usage_id": {
+            "type": "string",
+            "description": "Path parameter `usage_id`."
+          },
+          "merchant_tag": {
+            "type": "string",
+            "description": "Custom field used to identify the usage record."
+          },
+          "amount": {
+            "type": "number",
+            "description": "Used to determine the unit amount of the usage to record."
+          },
+          "recording_timestamp": {
+            "type": "string",
+            "description": "When the usage was recorded."
+          },
+          "usage_timestamp": {
+            "type": "string",
+            "description": "When the usage actually occurred."
+          }
+        },
+        "required": [
+          "usage_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "merchant_tag",
+        "amount",
+        "recording_timestamp",
+        "usage_timestamp"
+      ]
+    },
+    {
+      "name": "remove_usage",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/usage/{{ record.usage_id }}",
+      "path_fields": [
+        "usage_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "usage_id": {
+            "type": "string",
+            "description": "Path parameter `usage_id`."
+          }
+        },
+        "required": [
+          "usage_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "deactivate_unique_coupon_code",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/unique_coupon_codes/{{ record.unique_coupon_code_id }}",
+      "path_fields": [
+        "unique_coupon_code_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "unique_coupon_code_id": {
+            "type": "string",
+            "description": "Path parameter `unique_coupon_code_id`."
+          }
+        },
+        "required": [
+          "unique_coupon_code_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "reactivate_unique_coupon_code",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/unique_coupon_codes/{{ record.unique_coupon_code_id }}/restore",
+      "path_fields": [
+        "unique_coupon_code_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "unique_coupon_code_id": {
+            "type": "string",
+            "description": "Path parameter `unique_coupon_code_id`."
+          }
+        },
+        "required": [
+          "unique_coupon_code_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "create_purchase",
+      "kind": "create",
+      "method": "POST",
+      "path": "/purchases",
+      "path_fields": [],
+      "redact_fields": [
+        "billing_info_id",
+        "gateway_code",
+        "gift_card_redemption_code",
+        "po_number"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "description": "3-letter ISO 4217 currency code."
+          },
+          "account": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "The unique identifier of the account. This cannot be changed once the account is created."
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "code"
+            ]
+          }
+        },
+        "required": [
+          "currency",
+          "account"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "currency",
+        "account"
+      ]
+    },
+    {
+      "name": "create_pending_purchase",
+      "kind": "create",
+      "method": "POST",
+      "path": "/purchases/pending",
+      "path_fields": [],
+      "redact_fields": [
+        "billing_info_id",
+        "gateway_code",
+        "gift_card_redemption_code",
+        "po_number"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "description": "3-letter ISO 4217 currency code."
+          },
+          "account": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "The unique identifier of the account. This cannot be changed once the account is created."
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "code"
+            ]
+          }
+        },
+        "required": [
+          "currency",
+          "account"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "currency",
+        "account"
+      ]
+    },
+    {
+      "name": "create_authorize_purchase",
+      "kind": "create",
+      "method": "POST",
+      "path": "/purchases/authorize",
+      "path_fields": [],
+      "redact_fields": [
+        "billing_info_id",
+        "gateway_code",
+        "gift_card_redemption_code",
+        "po_number"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "description": "3-letter ISO 4217 currency code."
+          },
+          "account": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "The unique identifier of the account. This cannot be changed once the account is created."
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "code"
+            ]
+          }
+        },
+        "required": [
+          "currency",
+          "account"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "currency",
+        "account"
+      ]
+    },
+    {
+      "name": "create_capture_purchase",
+      "kind": "create",
+      "method": "POST",
+      "path": "/purchases/{{ record.transaction_id }}/capture",
+      "path_fields": [
+        "transaction_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "transaction_id": {
+            "type": "string",
+            "description": "Path parameter `transaction_id`."
+          }
+        },
+        "required": [
+          "transaction_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "cancel_purchase",
+      "kind": "create",
+      "method": "POST",
+      "path": "/purchases/{{ record.transaction_id }}/cancel/",
+      "path_fields": [
+        "transaction_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "transaction_id": {
+            "type": "string",
+            "description": "Path parameter `transaction_id`."
+          }
+        },
+        "required": [
+          "transaction_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "put_dunning_campaign_bulk_update",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/dunning_campaigns/{{ record.dunning_campaign_id }}/bulk_update",
+      "path_fields": [
+        "dunning_campaign_id"
+      ],
+      "redact_fields": [],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "dunning_campaign_id": {
+            "type": "string",
+            "description": "Path parameter `dunning_campaign_id`."
+          }
+        },
+        "required": [
+          "dunning_campaign_id"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+    },
+    {
+      "name": "create_gift_card",
+      "kind": "create",
+      "method": "POST",
+      "path": "/gift_cards",
+      "path_fields": [],
+      "redact_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "product_code": {
+            "type": "string",
+            "description": "The product code or SKU of the gift card product."
+          },
+          "unit_amount": {
+            "type": "number",
+            "description": "The amount of the gift card, which is the amount of the charge to the gifter account and the amount of credit that is applied to the recipient account upon successful redemption."
+          },
+          "currency": {
+            "type": "string",
+            "description": "3-letter ISO 4217 currency code."
+          }
+        },
+        "required": [
+          "product_code",
+          "unit_amount",
+          "currency"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "product_code",
+        "unit_amount",
+        "currency"
+      ]
+    },
+    {
+      "name": "redeem_gift_card",
+      "kind": "create",
+      "method": "POST",
+      "path": "/gift_cards/{{ record.redemption_code }}/redeem",
+      "path_fields": [
+        "redemption_code"
+      ],
+      "redact_fields": [
+        "redemption_code"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "redemption_code": {
+            "type": "string",
+            "description": "Path parameter `redemption_code`."
+          },
+          "recipient_account": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "code"
+            ]
+          }
+        },
+        "required": [
+          "redemption_code",
+          "recipient_account"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "recipient_account"
+      ]
+    }
+  ]
+}

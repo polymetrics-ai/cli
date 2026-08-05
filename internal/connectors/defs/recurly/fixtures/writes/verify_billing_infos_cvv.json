@@ -1,0 +1,17 @@
+{
+  "record": {
+    "account_id": "fixture_account_id",
+    "billing_info_id": "fixture_billing_info_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/fixture_account_id/billing_infos/fixture_billing_info_id/verify_cvv"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

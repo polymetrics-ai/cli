@@ -1,0 +1,30 @@
+{
+  "record": {
+    "account_id": "fixture_account_id",
+    "first_name": "fixture_first_name",
+    "last_name": "fixture_last_name",
+    "street1": "fixture_street1",
+    "city": "fixture_city",
+    "postal_code": "fixture_postal_code",
+    "country": "US"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/fixture_account_id/shipping_addresses",
+    "body": {
+      "first_name": "fixture_first_name",
+      "last_name": "fixture_last_name",
+      "street1": "fixture_street1",
+      "city": "fixture_city",
+      "postal_code": "fixture_postal_code",
+      "country": "US"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

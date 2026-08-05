@@ -1,0 +1,16 @@
+{
+  "record": {
+    "external_product_id": "fixture_external_product_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/external_products/fixture_external_product_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

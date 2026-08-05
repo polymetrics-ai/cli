@@ -1,0 +1,22 @@
+{
+  "record": {
+    "subscription_id": "fixture_subscription_id",
+    "auto_renew": true,
+    "customer_notes": "fixture custom notes"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/subscriptions/fixture_subscription_id",
+    "body": {
+      "auto_renew": true,
+      "customer_notes": "fixture custom notes"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

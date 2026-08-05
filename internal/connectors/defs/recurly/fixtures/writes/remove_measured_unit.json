@@ -1,0 +1,16 @@
+{
+  "record": {
+    "measured_unit_id": "fixture_measured_unit_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/measured_units/fixture_measured_unit_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

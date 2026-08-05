@@ -1,0 +1,22 @@
+{
+  "record": {
+    "account_id": "fixture_account_id",
+    "external_account_code": "fixture_external_account_code",
+    "external_connection_type": "fixture_external_connection_type"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/fixture_account_id/external_accounts",
+    "body": {
+      "external_account_code": "fixture_external_account_code",
+      "external_connection_type": "fixture_external_connection_type"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

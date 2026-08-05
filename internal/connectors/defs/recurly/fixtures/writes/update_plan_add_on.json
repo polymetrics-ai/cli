@@ -1,0 +1,17 @@
+{
+  "record": {
+    "plan_id": "fixture_plan_id",
+    "add_on_id": "fixture_add_on_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/plans/fixture_plan_id/add_ons/fixture_add_on_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

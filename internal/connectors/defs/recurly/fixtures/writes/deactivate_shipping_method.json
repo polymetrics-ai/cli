@@ -1,0 +1,16 @@
+{
+  "record": {
+    "shipping_method_id": "fixture_shipping_method_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/shipping_methods/fixture_shipping_method_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

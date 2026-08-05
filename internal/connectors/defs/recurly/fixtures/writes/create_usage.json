@@ -1,0 +1,23 @@
+{
+  "record": {
+    "subscription_id": "fixture_subscription_id",
+    "add_on_id": "fixture_add_on_id",
+    "amount": 1.5,
+    "merchant_tag": "fixture_merchant"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subscriptions/fixture_subscription_id/add_ons/fixture_add_on_id/usage",
+    "body": {
+      "amount": 1.5,
+      "merchant_tag": "fixture_merchant"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}

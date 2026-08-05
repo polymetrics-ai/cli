@@ -1,0 +1,16 @@
+{
+  "record": {
+    "account_id": "fixture_account_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accounts/fixture_account_id/billing_info/verify"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "recurly_write_fixture",
+      "id": "synthetic-write-response"
+    }
+  }
+}
