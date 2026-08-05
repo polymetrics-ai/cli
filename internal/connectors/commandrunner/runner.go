@@ -871,7 +871,10 @@ func commandValueEmpty(value any) bool {
 	case string:
 		return strings.TrimSpace(typed) == ""
 	case []string:
-		return len(typed) == 0
+		// Required-flag raw presence is established before coercion. Array
+		// cardinality is enforced by coerceFlagValue's min_items validation, so
+		// an explicitly supplied, zero-minimum array may legitimately be empty.
+		return false
 	default:
 		return false
 	}
@@ -1278,7 +1281,7 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 		}
 		return parsed, nil
 	case "string_array":
-		var out []string
+		out := make([]string, 0)
 		for _, raw := range clean {
 			for _, item := range strings.Split(raw, ",") {
 				item = strings.TrimSpace(item)
