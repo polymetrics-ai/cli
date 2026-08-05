@@ -1695,66 +1695,46 @@
     {
       "method": "GET",
       "path": "/comments/{comment_id}/download/{attachment_link_id}",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Front binary attachment download is documented and typed in operations.json but remains planned until the shared bounded file-output execution contract is available for connector-local binary commands.",
-        "source_url": "https://dev.frontapp.com/reference/download-attachment-for-a-comment.md",
-        "notes": "lane=binary_read; operation_id=download-attachment-for-a-comment"
+      "covered_by": {
+        "direct_reads": [
+          "binary download-attachment-for-a-comment"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/download/{attachment_link_id}",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Front binary attachment download is documented and typed in operations.json but remains planned until the shared bounded file-output execution contract is available for connector-local binary commands.",
-        "source_url": "https://dev.frontapp.com/reference/download-attachment.md",
-        "notes": "lane=binary_read; operation_id=download-attachment"
+      "covered_by": {
+        "direct_reads": [
+          "binary download-attachment"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/knowledge_base_articles/{article_id}/download/{attachment_id}",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Front binary attachment download is documented and typed in operations.json but remains planned until the shared bounded file-output execution contract is available for connector-local binary commands.",
-        "source_url": "https://dev.frontapp.com/reference/download-attachment-from-an-article.md",
-        "notes": "lane=binary_read; operation_id=download-attachment-from-an-article"
+      "covered_by": {
+        "direct_reads": [
+          "binary download-attachment-from-an-article"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/message_templates/{message_template_id}/download/{attachment_link_id}",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Front binary attachment download is documented and typed in operations.json but remains planned until the shared bounded file-output execution contract is available for connector-local binary commands.",
-        "source_url": "https://dev.frontapp.com/reference/download-attachment-for-a-message-template.md",
-        "notes": "lane=binary_read; operation_id=download-attachment-for-a-message-template"
+      "covered_by": {
+        "direct_reads": [
+          "binary download-attachment-for-a-message-template"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/messages/{message_id}/download/{attachment_link_id}",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Front binary attachment download is documented and typed in operations.json but remains planned until the shared bounded file-output execution contract is available for connector-local binary commands.",
-        "source_url": "https://dev.frontapp.com/reference/download-attachment-for-a-message.md",
-        "notes": "lane=binary_read; operation_id=download-attachment-for-a-message"
+      "covered_by": {
+        "direct_reads": [
+          "binary download-attachment-for-a-message"
+        ]
       }
     },
     {

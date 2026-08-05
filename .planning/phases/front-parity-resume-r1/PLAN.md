@@ -1,0 +1,53 @@
+# PLAN — Front documented-operation parity resume
+
+## Goal
+
+Recover the preserved Front bundle on current `origin/main`, then make every operation in Front's
+provider-owned API reference genuinely reachable through the supported declarative mechanisms.
+Do not describe the connector as complete while any operation remains `planned`.
+
+## Scope and ownership
+
+- Own: `internal/connectors/defs/front/**`, Front-generated docs/catalog/website data, focused
+  CLI generated fixtures, and this phase's artifacts.
+- Do not edit shared engine/schema/validator files, another connector, or a generic write executor.
+- Use `writes.json` for record-shaped mutations; never mark `rest_write` implemented.
+- Keep the duplicate-document row and its recorded rationale. Promote the five bounded binary
+  downloads now that current main dispatches `binary_download`.
+
+## Required evidence
+
+1. Establish the actual operation total from Front-owned documentation, not a historic count.
+2. Maintain a provider-field research matrix: every path/query/body/form/file request field gets
+   a provider URL/section, evidence tier, confidence, and requiredness rationale. The matrix is
+   research evidence only until the shared citation convention lands; do not invent a competing
+   bundle schema.
+3. Prove each `availability: implemented` command passes the real commandrunner preflight and
+   execute representative built-`pm` commands without credentials.
+4. Regenerate only Front-derived documentation/website artifacts after the bundle stabilizes.
+
+## Execution slices
+
+1. Capture current-main baseline and runtime reachability failures (red evidence).
+2. Reconcile Front's current official reference, revise the operation ledger/count, and fill the
+   citation matrix.
+3. Convert supported operations to streams, writes, direct reads, or bounded binary downloads;
+   retain only an exact accepted reason for any remainder.
+4. Run surface sync, focused conformance/commandrunner/CLI/build gates, documentation generation,
+   and live help/command smoke checks.
+5. Update phase evidence, commit coherent green slices, then hand off to no-mistakes.
+
+## GSD / skills
+
+Loaded: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`,
+`golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, `golang-cli`,
+`golang-documentation`, `golang-lint`, `gsd-programming-loop`, and `no-mistakes`.
+
+`scripts/gsd doctor` passed, but `scripts/gsd prompt programming-loop ...` is absent from the
+adapter and `scripts/programming-loop.mjs` does not exist. This phase follows the manual GSD
+fallback recorded in `PROMPTS.md` and retains strict TDD evidence.
+
+## Orchestration decision
+
+`local_critical_path`: this is one connector-owned bundle in an isolated worktree. The active
+runtime instruction forbids spawning subagents; no mutable delegation is safe or necessary.
