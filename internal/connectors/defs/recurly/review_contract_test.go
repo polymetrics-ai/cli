@@ -242,7 +242,13 @@ func TestReviewTerminateSubscriptionRequiresChargeBeforePreview(t *testing.T) {
 	if err != nil {
 		t.Fatalf("load Recurly bundle: %v", err)
 	}
-	req := connectors.WriteRequest{Action: "terminate_subscription"}
+	req := connectors.WriteRequest{
+		Action: "terminate_subscription",
+		Config: connectors.RuntimeConfig{
+			CredentialRevision:  "recurly-fixture-credential-revision",
+			ConfigurationDigest: "recurly-fixture-configuration-digest",
+		},
+	}
 	withoutCharge := connectors.Record{"subscription_id": "fixture_subscription_id", "refund": "none"}
 	if err := engine.ValidateWrite(context.Background(), bundle, req, []connectors.Record{withoutCharge}); err == nil {
 		t.Fatal("terminate_subscription validation accepted a record without charge")
