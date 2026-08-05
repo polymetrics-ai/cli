@@ -953,14 +953,8 @@
     {
       "method": "PATCH",
       "path": "/api/v2/custom_objects/{custom_object_key}/permission_policies/{id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=UpdatePermissionPolicy; summary=Update Permission Policy; tags=Custom Object Permissions"
+      "covered_by": {
+        "write": "update_permission_policy"
       }
     },
     {
@@ -4186,14 +4180,8 @@
     {
       "method": "POST",
       "path": "/api/v2/routing/agents/instance_values/jobs",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=BulkSetAgentAttributeValuesJob; summary=Bulk Set Agent Attribute Values Jobs; tags=Skill Based Routing, Job Statuses"
+      "covered_by": {
+        "write": "bulk_set_agent_attribute_values_job"
       }
     },
     {
@@ -5849,9 +5837,9 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.",
+        "reason": "Blocked by default until the shared write surface can bind separate bulk and batch actions to this one endpoint and render record-array selectors into the ids query parameter. The pinned Zendesk Support OAS declares two closed typed oneOf arms; no free-form payload is involved.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=TicketsUpdateMany; summary=Update Many Tickets; tags=Tickets"
+        "notes": "operationId=TicketsUpdateMany; source shape is oneOf[{ticket}, {tickets: array maxItems 100}]. Future actions must be tickets_update_many_bulk (ticket plus ids query) and tickets_update_many_batch (tickets array, maxItems 100)."
       }
     },
     {
@@ -6943,14 +6931,8 @@
     {
       "method": "POST",
       "path": "/api/v2/users/create_many",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateManyUsers; summary=Create Many Users; tags=Users"
+      "covered_by": {
+        "write": "create_many_users"
       }
     },
     {
@@ -6969,14 +6951,8 @@
     {
       "method": "POST",
       "path": "/api/v2/users/create_or_update_many",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateOrUpdateManyUsers; summary=Create Or Update Many Users; tags=Users"
+      "covered_by": {
+        "write": "create_or_update_many_users"
       }
     },
     {
@@ -7093,14 +7069,8 @@
     {
       "method": "POST",
       "path": "/api/v2/users/request_create",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=RequestUserCreate; summary=Request User Create; tags=Users"
+      "covered_by": {
+        "write": "request_user_create"
       }
     },
     {
@@ -7137,9 +7107,9 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.",
+        "reason": "Blocked by default until the shared write surface can bind separate bulk and batch actions to this one endpoint and render record-array selectors into ids or external_ids query parameters. The pinned Zendesk Support OAS declares two closed typed oneOf arms; no free-form payload is involved.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=UpdateManyUsers; summary=Update Many Users; tags=Users"
+        "notes": "operationId=UpdateManyUsers; source shape is oneOf[{user}, {users: array<UserInput>}]. Future actions must be update_many_users_bulk (user plus ids/external_ids query) and update_many_users_batch (users array)."
       }
     },
     {

@@ -12,7 +12,7 @@ The issue must provide:
 - non-goals or exclusions
 - acceptance criteria
 - required reading
-- required skills or task type, including `gsd-programming-loop` through the repo-local GSD/Pi
+- required skills or task type, including the installed GSD phase lifecycle through the repo-local
   adapter for implementation or behavior-changing work and required Go/design skills from
   `.agents/agentic-delivery/references/required-skills-routing.md`
 - TDD plan
@@ -35,11 +35,14 @@ before implementation.
    `golang-how-to`; for CLI work include `golang-cli`; for website/design work include the relevant
    design skills such as `frontend-design`, `web-design-guidelines`, and
    `vercel-react-best-practices`.
-5. For implementation or behavior-changing work, load and follow `gsd-programming-loop` before
-   coding through `/gsd-programming-loop ...` in Pi or `scripts/gsd prompt programming-loop ...`
-   from shell. Read `.agents/agentic-delivery/references/gsd-pi-adapter.md` first. If the adapter is
-   unavailable, run the manual GSD loop and record the fallback in the phase, handoff, planning
-   trace, or PR artifacts; do not skip TDD evidence.
+5. For implementation or behavior-changing work, read
+   `.agents/agentic-delivery/references/gsd-pi-adapter.md`, resolve every command through
+   `scripts/gsd sources`, then follow `discuss-phase` → `plan-phase --tdd` → `execute-phase` →
+   `verify-work`, including `plan-phase --gaps` and `execute-phase --gaps-only` when needed, then
+   `code-review`. The pinned adapter does not provide `programming-loop`; never make it a required
+   command. When compatible isolated runtime agents are unavailable or the canonical contract
+   forbids role spawning, execute the generated prompts inline and record that fallback without
+   weakening TDD evidence.
 6. Create or update the GSD plan, TDD ledger, and verification checklist for the issue before
    production edits. The plan must name the slice boundaries, expected red/green/refactor evidence,
    verification commands, and commit/push checkpoints. For CLI command, flag, output, connector
@@ -114,15 +117,16 @@ Stop and ask for human approval before:
 ## Parent/subissue work
 
 Use `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md` when the issue belongs
-to a parent roadmap. A sub-PR may be merged into the parent branch without human approval only after
-all automated checks pass, automated review comments are resolved, review coverage exists through
-the sub-PR, main-targeted parent PR, or an approved fallback route, and no human gate is triggered.
+to a parent roadmap. A sub-PR may advance to the canonical `integrate_sub_pr` state without human
+approval only after all automated checks pass, automated review comments are resolved, review
+coverage exists through the sub-PR, main-targeted parent PR, or an approved fallback route, and no
+human gate is triggered.
 
-For parent issues with multiple workers, use
-`.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`. The parent orchestrator owns
-shared parent artifacts and default sub-PR merge decisions. Worker agents implement one sub-issue
-and report back with `.agents/agentic-delivery/contracts/worker-handoff-template.md` unless the
-orchestrator explicitly delegates additional authority.
+For parent jobs, use `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`. The
+compatibility filename now defines single-worker parent ownership: the canonical worker owns shared
+parent artifacts, processes ready sub-issues without spawning roles, and makes sub-PR integration
+decisions after the preserved check/review gates pass. GitHub issues, branches, PRs, and GSD
+artifacts are the durable handoff state.
 
 The parent PR into `main` always requires human approval.
 
@@ -134,8 +138,8 @@ Every implementation PR must include:
 - connector implementation evidence when applicable: exactly one target connector, ownership guard evidence, changed-path compliance, and any foundation issue/PR path
 - summary of changes
 - red/green/refactor evidence when behavior changed
-- GSD programming-loop evidence, including the `/gsd...` or `scripts/gsd prompt ...` command used,
-  or an explicit manual-GSD fallback note
+- GSD lifecycle evidence, including the `/gsd-*` or `scripts/gsd prompt ...` commands used and any
+  explicit inline/manual fallback note
 - Required Go/design skills loaded, with task-specific notes from
   `.agents/agentic-delivery/references/required-skills-routing.md`
 - CLI help/manual/website parity evidence for CLI feature work, including bare namespace behavior

@@ -490,13 +490,14 @@ func TestValidate_CLISurfaceImplementedRawAPIIsBlocked(t *testing.T) {
 	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
 }
 
-func TestValidate_CLISurfaceImplementedDirectWriteIsBlocked(t *testing.T) {
-	cliSurface := strings.Replace(validCLISurfaceJSON(), `"intent": "reverse_etl"`, `"intent": "direct_write"`, 1)
-	report, err := validateDir(cliSurfaceBundleFS(cliSurface))
+func TestValidate_CLISurfaceImplementedDirectWritePasses(t *testing.T) {
+	report, err := validateDir(directWriteCLISurfaceBundleFS())
 	if err != nil {
 		t.Fatalf("validateDir: %v", err)
 	}
-	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for valid direct_write cli surface, got %+v", report.Findings)
+	}
 }
 
 func TestValidate_CLISurfaceImplementedDirectReadWithOutputPolicyPasses(t *testing.T) {
@@ -1812,6 +1813,75 @@ func directReadCLISurfaceBundleFS(cliSurface string) fstest.MapFS {
 func directReadCLISurfaceBundleFSWithAPI(cliSurface, apiSurface string) fstest.MapFS {
 	fsys := cliSurfaceBundleFS(cliSurface)
 	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
+	return fsys
+}
+
+func directWriteCLISurfaceBundleFS() fstest.MapFS {
+	fsys := cliSurfaceBundleFS(`{
+		"tagline": "Work with CLI Surface from the command line.",
+		"usage": "pm cli-surface <command> [flags]",
+		"commands": [
+			{
+				"path": "widget archive",
+				"summary": "Archive a widget",
+				"intent": "direct_write",
+				"availability": "implemented",
+				"operation": "cli-surface.widgets.archive",
+				"source_cli_path": "clis widget archive",
+				"api_surface": [
+					{ "method": "POST", "path": "/widgets/{id}/archive" }
+				],
+				"output_policy": "json_redacted",
+				"flags": [
+					{ "name": "id", "type": "string", "maps_to": "path.id" }
+				],
+				"risk": "archives a widget",
+				"approval": "requires plan, preview, typed confirmation, and execute",
+				"examples": ["pm cli-surface widget archive --id w_1 --json"]
+			}
+		]
+	}`)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+			{
+				"method": "POST",
+				"path": "/widgets/{id}/archive",
+				"operation": {
+					"model": "destructive_action",
+					"status": "blocked",
+					"risk": "high",
+					"blocked_by_default": true,
+					"reason": "Typed rest_write operation",
+					"notes": "Declared only through the direct-write executor."
+				}
+			}
+		]
+	}`)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [
+			{
+				"id": "cli-surface.widgets.archive",
+				"kind": "rest_write",
+				"summary": "Archive a widget",
+				"risk": "high",
+				"approval": "requires plan, preview, typed confirmation, and execute",
+				"output_policy": "json_redacted",
+				"mutation_class": "destructive",
+				"destructive": true,
+				"confirmation": { "kind": "destructive" },
+				"batchable": false,
+				"rest": {
+					"method": "POST",
+					"path": "/widgets/{id}/archive",
+					"max_bytes": 1024
+				}
+			}
+		]
+	}`)}
 	return fsys
 }
 

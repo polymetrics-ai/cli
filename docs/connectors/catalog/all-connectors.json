@@ -118986,15 +118986,15 @@
   {
     "name": "recurly",
     "display_name": "Recurly",
-    "description": "Reads Recurly accounts, subscriptions, invoices, transactions, and plans through the Recurly v3 REST API.",
+    "description": "Reads Recurly accounts, subscriptions, invoices, transactions, catalog, usage, exports, preview resources, and related V3 API data; models typed reverse-ETL mutations for official POST/PUT/DELETE endpoints.",
     "integration_type": "api",
-    "docs_url": "https://developers.recurly.com/api/v2021-02-25/",
-    "release_stage": "ga",
+    "docs_url": "https://recurly.com/developers/api/v2021-02-25/",
+    "release_stage": "beta",
     "capabilities": {
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -119007,18 +119007,180 @@
       "properties": {
         "api_key": {
           "type": "string",
-          "x-secret": true,
-          "description": "Recurly private API key, sent as the HTTP Basic username with an empty password (Authorization: Basic base64(api_key:)). Never logged."
+          "description": "Recurly API key. Never store or print secret values.",
+          "x-secret": true
         },
         "base_url": {
           "type": "string",
           "format": "uri",
           "default": "https://v3.recurly.com",
-          "description": "Recurly API base URL override for tests or proxies."
+          "description": "Recurly V3 API base URL."
+        },
+        "account_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "account_note_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "add_on_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "billing_info_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "business_entity_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "coupon_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "coupon_redemption_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "credit_payment_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "custom_field_definition_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "dunning_campaign_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "export_date": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "external_account_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "external_invoice_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "external_payment_phase_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "external_product_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "external_product_reference_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "external_subscription_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "general_ledger_account_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "gift_card_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "invoice_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "invoice_template_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "item_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "line_item_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "measured_unit_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "performance_obligation_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "plan_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "price_segment_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "redemption_code": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "shipping_address_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "shipping_method_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "site_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "subscription_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "transaction_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "unique_coupon_code_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
+        },
+        "usage_id": {
+          "type": "string",
+          "description": "Optional fixed Recurly path parameter value used by scoped stream/direct commands."
         }
       }
     },
     "streams": [
+      {
+        "name": "list_sites",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_site",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
       {
         "name": "accounts",
         "primary_key": [
@@ -119032,11 +119194,505 @@
         ]
       },
       {
-        "name": "subscriptions",
+        "name": "get_account",
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updated_at",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_account_acquisition",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_account_balance",
+        "primary_key": [
+          "account_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_billing_info",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_billing_infos",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_a_billing_info",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_account_coupon_redemptions",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_active_coupon_redemptions",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_coupon_redemption",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_account_credit_payments",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_account_external_account",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_account_external_account",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_account_external_invoices",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_account_invoices",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_account_line_items",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_account_notes",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_account_note",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_shipping_addresses",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_shipping_address",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_account_subscriptions",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_account_transactions",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_child_accounts",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_account_acquisition",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_coupons",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_coupon",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_unique_coupon_codes",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_credit_payments",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_credit_payment",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_custom_field_definitions",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_custom_field_definition",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_general_ledger_accounts",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_general_ledger_account",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_performance_obligation",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_performance_obligations",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_invoice_template_accounts",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_items",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_item",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_measured_unit",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_measured_unit",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_external_products",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_external_product",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_external_product_external_product_references",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_external_product_external_product_reference",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_external_subscriptions",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_external_subscription",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_external_subscription_external_invoices",
+        "primary_key": [
+          "id"
+        ],
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
@@ -119056,11 +119712,65 @@
         ]
       },
       {
-        "name": "transactions",
+        "name": "get_invoice",
         "primary_key": [
           "id"
         ],
-        "cursor_field": "created_at",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_invoice_line_items",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_invoice_coupon_redemptions",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_related_invoices",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_line_items",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_line_item",
+        "primary_key": [
+          "id"
+        ],
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
@@ -119078,11 +119788,1113 @@
           "full_refresh_overwrite",
           "full_refresh_overwrite_deduped"
         ]
+      },
+      {
+        "name": "get_plan",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_plan_add_ons",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_plan_add_on",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_price_segments",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_price_segment",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_add_ons",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_add_on",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_shipping_methods",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_shipping_method",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "subscriptions",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updated_at",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_subscription",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_subscription_change",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_subscription_invoices",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_subscription_line_items",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_subscription_coupon_redemptions",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_subscription_coupon_redemption",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_usage",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_usage",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "transactions",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_at",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_transaction",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_unique_coupon_code",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_dunning_campaigns",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_dunning_campaign",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_invoice_templates",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_invoice_template",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_external_invoices",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "show_external_invoice",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_external_subscription_external_payment_phases",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_external_subscription_external_payment_phase",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_entitlements",
+        "primary_key": [
+          "customer_permission_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_account_external_subscriptions",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_business_entity",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_business_entities",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_gift_cards",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_gift_card",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_business_entity_invoices",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      }
+    ],
+    "write_actions": [
+      {
+        "name": "create_account",
+        "kind": "create",
+        "method": "POST",
+        "path": "/accounts",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "update_account",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/accounts/{{ record.account_id }}",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "deactivate_account",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/accounts/{{ record.account_id }}",
+        "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "redact_account",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/accounts/{{ record.account_id }}/redact",
+        "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_account_acquisition",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/accounts/{{ record.account_id }}/acquisition",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "remove_account_acquisition",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/accounts/{{ record.account_id }}/acquisition",
+        "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "reactivate_account",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/accounts/{{ record.account_id }}/reactivate",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "update_billing_info",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/accounts/{{ record.account_id }}/billing_info",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "remove_billing_info",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/accounts/{{ record.account_id }}/billing_info",
+        "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "verify_billing_info",
+        "kind": "create",
+        "method": "POST",
+        "path": "/accounts/{{ record.account_id }}/billing_info/verify",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "verify_billing_info_cvv",
+        "kind": "create",
+        "method": "POST",
+        "path": "/accounts/{{ record.account_id }}/billing_info/verify_cvv",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "create_billing_info",
+        "kind": "create",
+        "method": "POST",
+        "path": "/accounts/{{ record.account_id }}/billing_infos",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "update_a_billing_info",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/accounts/{{ record.account_id }}/billing_infos/{{ record.billing_info_id }}",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "remove_a_billing_info",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/accounts/{{ record.account_id }}/billing_infos/{{ record.billing_info_id }}",
+        "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "verify_billing_infos",
+        "kind": "create",
+        "method": "POST",
+        "path": "/accounts/{{ record.account_id }}/billing_infos/{{ record.billing_info_id }}/verify",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "verify_billing_infos_cvv",
+        "kind": "create",
+        "method": "POST",
+        "path": "/accounts/{{ record.account_id }}/billing_infos/{{ record.billing_info_id }}/verify_cvv",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "create_coupon_redemption",
+        "kind": "create",
+        "method": "POST",
+        "path": "/accounts/{{ record.account_id }}/coupon_redemptions/active",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "remove_coupon_redemption",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/accounts/{{ record.account_id }}/coupon_redemptions/active",
+        "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_coupon_redemption_by_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/accounts/{{ record.account_id }}/coupon_redemptions/{{ record.coupon_redemption_id }}",
+        "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_account_external_account",
+        "kind": "create",
+        "method": "POST",
+        "path": "/accounts/{{ record.account_id }}/external_accounts",
+        "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "update_account_external_account",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/accounts/{{ record.account_id }}/external_accounts/{{ record.external_account_id }}",
+        "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "delete_account_external_account",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/accounts/{{ record.account_id }}/external_accounts/{{ record.external_account_id }}",
+        "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_invoice",
+        "kind": "create",
+        "method": "POST",
+        "path": "/accounts/{{ record.account_id }}/invoices",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "create_line_item",
+        "kind": "create",
+        "method": "POST",
+        "path": "/accounts/{{ record.account_id }}/line_items",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "create_account_note",
+        "kind": "create",
+        "method": "POST",
+        "path": "/accounts/{{ record.account_id }}/notes",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "remove_account_note",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/accounts/{{ record.account_id }}/notes/{{ record.account_note_id }}",
+        "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_shipping_address",
+        "kind": "create",
+        "method": "POST",
+        "path": "/accounts/{{ record.account_id }}/shipping_addresses",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "update_shipping_address",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/accounts/{{ record.account_id }}/shipping_addresses/{{ record.shipping_address_id }}",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "remove_shipping_address",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/accounts/{{ record.account_id }}/shipping_addresses/{{ record.shipping_address_id }}",
+        "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_coupon",
+        "kind": "create",
+        "method": "POST",
+        "path": "/coupons",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "update_coupon",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/coupons/{{ record.coupon_id }}",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "deactivate_coupon",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/coupons/{{ record.coupon_id }}",
+        "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "generate_unique_coupon_codes",
+        "kind": "create",
+        "method": "POST",
+        "path": "/coupons/{{ record.coupon_id }}/generate",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "generate_unique_coupon_codes_sync",
+        "kind": "create",
+        "method": "POST",
+        "path": "/coupons/{{ record.coupon_id }}/generate_sync",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "restore_coupon",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/coupons/{{ record.coupon_id }}/restore",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "create_general_ledger_account",
+        "kind": "create",
+        "method": "POST",
+        "path": "/general_ledger_accounts",
+        "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "update_general_ledger_account",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/general_ledger_accounts/{{ record.general_ledger_account_id }}",
+        "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "create_item",
+        "kind": "create",
+        "method": "POST",
+        "path": "/items",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "update_item",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/items/{{ record.item_id }}",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "deactivate_item",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/items/{{ record.item_id }}",
+        "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "reactivate_item",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/items/{{ record.item_id }}/reactivate",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "create_measured_unit",
+        "kind": "create",
+        "method": "POST",
+        "path": "/measured_units",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "update_measured_unit",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/measured_units/{{ record.measured_unit_id }}",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "remove_measured_unit",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/measured_units/{{ record.measured_unit_id }}",
+        "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_external_product",
+        "kind": "create",
+        "method": "POST",
+        "path": "/external_products",
+        "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "update_external_product",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/external_products/{{ record.external_product_id }}",
+        "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "deactivate_external_products",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/external_products/{{ record.external_product_id }}",
+        "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_external_product_external_product_reference",
+        "kind": "create",
+        "method": "POST",
+        "path": "/external_products/{{ record.external_product_id }}/external_product_references",
+        "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "deactivate_external_product_external_product_reference",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/external_products/{{ record.external_product_id }}/external_product_references/{{ record.external_product_reference_id }}",
+        "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_external_subscription",
+        "kind": "create",
+        "method": "POST",
+        "path": "/external_subscriptions",
+        "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "put_external_subscription",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/external_subscriptions/{{ record.external_subscription_id }}",
+        "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "create_external_invoice",
+        "kind": "create",
+        "method": "POST",
+        "path": "/external_subscriptions/{{ record.external_subscription_id }}/external_invoices",
+        "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "update_invoice",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/invoices/{{ record.invoice_id }}",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "apply_credit_balance",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/invoices/{{ record.invoice_id }}/apply_credit_balance",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "collect_invoice",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/invoices/{{ record.invoice_id }}/collect",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "mark_invoice_failed",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/invoices/{{ record.invoice_id }}/mark_failed",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "mark_invoice_successful",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/invoices/{{ record.invoice_id }}/mark_successful",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "reopen_invoice",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/invoices/{{ record.invoice_id }}/reopen",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "void_invoice",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/invoices/{{ record.invoice_id }}/void",
+        "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "record_external_transaction",
+        "kind": "create",
+        "method": "POST",
+        "path": "/invoices/{{ record.invoice_id }}/transactions",
+        "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "refund_invoice",
+        "kind": "create",
+        "method": "POST",
+        "path": "/invoices/{{ record.invoice_id }}/refund",
+        "risk": "critical — refund_invoice moves money by refunding an invoice; requires destructive confirmation and reverse ETL plan/preview/approval/execute. Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_invoice_retry",
+        "kind": "create",
+        "method": "POST",
+        "path": "/invoices/recovery",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "remove_line_item",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/line_items/{{ record.line_item_id }}",
+        "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_plan",
+        "kind": "create",
+        "method": "POST",
+        "path": "/plans",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "update_plan",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/plans/{{ record.plan_id }}",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "remove_plan",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/plans/{{ record.plan_id }}",
+        "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_plan_add_on",
+        "kind": "create",
+        "method": "POST",
+        "path": "/plans/{{ record.plan_id }}/add_ons",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "update_plan_add_on",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/plans/{{ record.plan_id }}/add_ons/{{ record.add_on_id }}",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "remove_plan_add_on",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/plans/{{ record.plan_id }}/add_ons/{{ record.add_on_id }}",
+        "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_shipping_method",
+        "kind": "create",
+        "method": "POST",
+        "path": "/shipping_methods",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "update_shipping_method",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/shipping_methods/{{ record.shipping_method_id }}",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "deactivate_shipping_method",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/shipping_methods/{{ record.shipping_method_id }}",
+        "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_subscription",
+        "kind": "create",
+        "method": "POST",
+        "path": "/subscriptions",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "update_subscription",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/subscriptions/{{ record.subscription_id }}",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "terminate_subscription",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/subscriptions/{{ record.subscription_id }}",
+        "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "cancel_subscription",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/subscriptions/{{ record.subscription_id }}/cancel",
+        "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "reactivate_subscription",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/subscriptions/{{ record.subscription_id }}/reactivate",
+        "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "pause_subscription",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/subscriptions/{{ record.subscription_id }}/pause",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "resume_subscription",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/subscriptions/{{ record.subscription_id }}/resume",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "convert_trial",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/subscriptions/{{ record.subscription_id }}/convert_trial",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "create_subscription_change",
+        "kind": "create",
+        "method": "POST",
+        "path": "/subscriptions/{{ record.subscription_id }}/change",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "remove_subscription_change",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/subscriptions/{{ record.subscription_id }}/change",
+        "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_subscription_coupon_redemption",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/subscriptions/{{ record.subscription_id }}/coupon_redemptions/{{ record.coupon_redemption_id }}",
+        "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_usage",
+        "kind": "create",
+        "method": "POST",
+        "path": "/subscriptions/{{ record.subscription_id }}/add_ons/{{ record.add_on_id }}/usage",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "update_usage",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/usage/{{ record.usage_id }}",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "remove_usage",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/usage/{{ record.usage_id }}",
+        "risk": "critical — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "deactivate_unique_coupon_code",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/unique_coupon_codes/{{ record.unique_coupon_code_id }}",
+        "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "reactivate_unique_coupon_code",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/unique_coupon_codes/{{ record.unique_coupon_code_id }}/restore",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "create_purchase",
+        "kind": "create",
+        "method": "POST",
+        "path": "/purchases",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "create_pending_purchase",
+        "kind": "create",
+        "method": "POST",
+        "path": "/purchases/pending",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "create_authorize_purchase",
+        "kind": "create",
+        "method": "POST",
+        "path": "/purchases/authorize",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "create_capture_purchase",
+        "kind": "create",
+        "method": "POST",
+        "path": "/purchases/{{ record.transaction_id }}/capture",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "cancel_purchase",
+        "kind": "create",
+        "method": "POST",
+        "path": "/purchases/{{ record.transaction_id }}/cancel/",
+        "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "put_dunning_campaign_bulk_update",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/dunning_campaigns/{{ record.dunning_campaign_id }}/bulk_update",
+        "risk": "high — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "create_gift_card",
+        "kind": "create",
+        "method": "POST",
+        "path": "/gift_cards",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
+      },
+      {
+        "name": "redeem_gift_card",
+        "kind": "create",
+        "method": "POST",
+        "path": "/gift_cards/{{ record.redemption_code }}/redeem",
+        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and the runtime binds one fresh key to each approved record and reuses it only for that record's automatic retries."
       }
     ],
     "risk": {
-      "read": "external Recurly API read of subscription billing data",
-      "approval": "none; read-only billing API"
+      "read": "external Recurly API reads can expose account, billing, invoice, subscription, usage, and transaction data; direct preview reads are fixed-path and redacted",
+      "write": "typed Recurly reverse ETL mutations for accounts, billing, subscriptions, invoices, catalog, usage, coupons, exports, and related lifecycle resources",
+      "approval": "reverse ETL writes require plan, preview, explicit approval, execute; destructive lifecycle actions require destructive confirmation; each Recurly mutation receives a stable per-record Idempotency-Key across automatic retries"
     },
     "icon": {
       "id": "recurly",
@@ -162287,6 +164099,41 @@
         "method": "PUT",
         "path": "/api/v2/workspaces/reorder",
         "risk": "external mutation; high-risk update against PUT /api/v2/workspaces/reorder; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_permission_policy",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/permission_policies/{{ record.id }}",
+        "risk": "updates a Zendesk custom-object permission policy through a typed, approval-gated request"
+      },
+      {
+        "name": "bulk_set_agent_attribute_values_job",
+        "kind": "update",
+        "method": "POST",
+        "path": "/api/v2/routing/agents/instance_values/jobs",
+        "risk": "starts a typed Zendesk agent-routing attribute-value job; approval is required"
+      },
+      {
+        "name": "create_many_users",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/users/create_many",
+        "risk": "creates up to 100 typed Zendesk users per request; approval is required"
+      },
+      {
+        "name": "create_or_update_many_users",
+        "kind": "upsert",
+        "method": "POST",
+        "path": "/api/v2/users/create_or_update_many",
+        "risk": "creates or updates up to 100 typed Zendesk users per request; approval is required"
+      },
+      {
+        "name": "request_user_create",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/users/request_create",
+        "risk": "requests a typed Zendesk user creation; approval is required"
       }
     ],
     "risk": {

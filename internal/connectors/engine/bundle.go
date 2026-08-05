@@ -20,6 +20,7 @@ import (
 // design §F.3): dir name == metadata.name == registry key.
 var namePattern = regexp.MustCompile(`^[a-z0-9][a-z0-9-]*$`)
 var graphQLNamePattern = regexp.MustCompile(`^[_A-Za-z][_0-9A-Za-z]*$`)
+var httpHeaderNamePattern = regexp.MustCompile("^[!#$%&'*+.^_`|~0-9A-Za-z-]+$")
 
 // Bundle is a fully loaded and structurally validated connector definition.
 type Bundle struct {
@@ -451,13 +452,19 @@ type WriteAction struct {
 	Query        map[string]QueryParam `json:"query,omitempty"`
 	RedactFields []string              `json:"redact_fields,omitempty"` // record fields redacted from plan samples/previews/errors
 	BodyType     string                `json:"body_type,omitempty"`     // json (default) | form | none | graphql | json_array | multipart | base64_upload
-	BodyFields   []string              `json:"body_fields,omitempty"`
-	BodyField    string                `json:"body_field,omitempty"`
-	BodySchema   json.RawMessage       `json:"body_schema,omitempty"`
-	GraphQL      *GraphQLRequestSpec   `json:"graphql,omitempty"`
-	Multipart    *MultipartSpec        `json:"multipart,omitempty"`
-	Base64Upload *Base64UploadSpec     `json:"base64_upload,omitempty"`
-	RecordSchema json.RawMessage       `json:"record_schema"`
+	// BodyRequired forces an empty JSON object onto the wire when body construction
+	// resolves no fields. It is valid only for the default json body type.
+	BodyRequired bool                `json:"body_required,omitempty"`
+	BodyFields   []string            `json:"body_fields,omitempty"`
+	BodyField    string              `json:"body_field,omitempty"`
+	BodySchema   json.RawMessage     `json:"body_schema,omitempty"`
+	GraphQL      *GraphQLRequestSpec `json:"graphql,omitempty"`
+	Multipart    *MultipartSpec      `json:"multipart,omitempty"`
+	Base64Upload *Base64UploadSpec   `json:"base64_upload,omitempty"`
+	RecordSchema json.RawMessage     `json:"record_schema"`
+	// IdempotencyKeyHeader names a provider-documented request header. Execution
+	// generates one fresh key per record and reuses it only across that record's retries.
+	IdempotencyKeyHeader string `json:"idempotency_key_header,omitempty"`
 	// DynamicFields optionally declares ONE record field as a typed
 	// dynamic-key region. Absent means today's exact behavior.
 	DynamicFields *DynamicFieldsSpec `json:"dynamic_fields,omitempty"`
@@ -661,18 +668,23 @@ type SurfaceOperation struct {
 // loads and validates these definitions only; executors are added in later
 // issue slices and every unknown kind remains rejected by the meta-schema.
 type OperationSpec struct {
-	ID              string                  `json:"id"`
-	Kind            string                  `json:"kind"`
-	Summary         string                  `json:"summary"`
-	Description     string                  `json:"description,omitempty"`
-	SourceURL       string                  `json:"source_url,omitempty"`
-	Risk            string                  `json:"risk"`
-	Approval        string                  `json:"approval"`
-	OutputPolicy    string                  `json:"output_policy"`
-	AuthScopes      []string                `json:"auth_scopes,omitempty"`
-	MutationClass   string                  `json:"mutation_class,omitempty"`
-	Destructive     bool                    `json:"destructive,omitempty"`
-	Confirmation    *ConfirmationSpec       `json:"confirmation,omitempty"`
+	ID            string            `json:"id"`
+	Kind          string            `json:"kind"`
+	Summary       string            `json:"summary"`
+	Description   string            `json:"description,omitempty"`
+	SourceURL     string            `json:"source_url,omitempty"`
+	Risk          string            `json:"risk"`
+	Approval      string            `json:"approval"`
+	OutputPolicy  string            `json:"output_policy"`
+	AuthScopes    []string          `json:"auth_scopes,omitempty"`
+	MutationClass string            `json:"mutation_class,omitempty"`
+	Destructive   bool              `json:"destructive,omitempty"`
+	Confirmation  *ConfirmationSpec `json:"confirmation,omitempty"`
+	// Batchable gates this operation out of a bulk plan when explicitly false.
+	// It is a pointer because false is restrictive while the omitted default is
+	// permissive; see WriteAction.Batchable for the matching write-action
+	// contract. Read it through IsBatchable, never directly.
+	Batchable       *bool                   `json:"batchable,omitempty"`
 	SecretSensitive bool                    `json:"secret_sensitive,omitempty"`
 	SensitivePolicy *SensitivePolicySpec    `json:"sensitive_policy,omitempty"`
 	AuditEvent      string                  `json:"audit_event,omitempty"`
@@ -685,6 +697,13 @@ type OperationSpec struct {
 	LocalFile       *LocalFileOperationSpec `json:"local_file,omitempty"`
 	Browser         *BrowserOperationSpec   `json:"browser,omitempty"`
 	Composite       *CompositeOperationSpec `json:"composite,omitempty"`
+}
+
+// IsBatchable reports whether the operation may be placed in a bulk plan.
+// Only an explicit "batchable": false says no; one direct-write invocation is
+// nevertheless always prepared as exactly one request.
+func (o OperationSpec) IsBatchable() bool {
+	return o.Batchable == nil || *o.Batchable
 }
 
 type RESTOperationSpec struct {
@@ -1368,6 +1387,12 @@ func validateWriteBodies(actions []WriteAction) error {
 			return err
 		}
 		bodyType := bodyTypeOf(action)
+		if action.BodyRequired && bodyType != "json" {
+			return fmt.Errorf("action %d (%q) body_required requires body_type json, got %q", i, action.Name, bodyType)
+		}
+		if header := strings.TrimSpace(action.IdempotencyKeyHeader); header != "" && !httpHeaderNamePattern.MatchString(header) {
+			return fmt.Errorf("action %d (%q) idempotency_key_header %q is not a valid HTTP header name", i, action.Name, action.IdempotencyKeyHeader)
+		}
 		if action.GraphQL != nil && bodyType != "graphql" {
 			return fmt.Errorf("action %d (%q) declares graphql but body_type is %q", i, action.Name, bodyType)
 		}
@@ -1951,8 +1976,8 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 
 // validateSensitivePolicy enforces the sensitive/admin reverse-ETL policy model
 // (#41). An operation that is secret_sensitive or has mutation_class "secret"
-// must declare a sensitive_policy with: a non-inline input_mode, at least one
-// redact_fields entry, and approval_mode "typed_confirmation". The transform,
+// must declare a sensitive_policy with: a non-inline input_mode and
+// approval_mode "typed_confirmation". The transform,
 // when set, must be a known value. Live secret writes remain blocked in this
 // issue; this is schema + validator support only.
 func validateSensitivePolicy(i int, op OperationSpec) error {
@@ -1964,7 +1989,7 @@ func validateSensitivePolicy(i int, op OperationSpec) error {
 			return nil
 		}
 	} else if op.SensitivePolicy == nil {
-		return fmt.Errorf("operation %d (%q) is secret_sensitive but declares no sensitive_policy (input_mode, redact_fields, approval_mode)", i, op.ID)
+		return fmt.Errorf("operation %d (%q) is secret_sensitive but declares no sensitive_policy (input_mode, approval_mode)", i, op.ID)
 	}
 	p := op.SensitivePolicy
 	switch strings.ToLower(strings.TrimSpace(p.InputMode)) {
@@ -1976,9 +2001,6 @@ func validateSensitivePolicy(i int, op OperationSpec) error {
 		// allowed
 	default:
 		return fmt.Errorf("operation %d (%q) sensitive_policy input_mode %q is not a known value", i, op.ID, p.InputMode)
-	}
-	if isSecret && len(p.RedactFields) == 0 {
-		return fmt.Errorf("operation %d (%q) sensitive_policy must declare at least one redact_fields entry", i, op.ID)
 	}
 	switch strings.ToLower(strings.TrimSpace(p.Transform)) {
 	case "", "none", "github_secret_encryption":

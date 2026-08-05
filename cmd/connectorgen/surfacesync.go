@@ -13,8 +13,8 @@ import (
 )
 
 // surfaceSync derives the command-surface metadata that operation-backed
-// direct_read and binary_download commands need in order to actually execute,
-// from the bundle's own operations.json.
+// direct_read, direct_write, and binary_download commands need in order to
+// actually execute, from the bundle's own operations.json.
 //
 // It exists because the same facts previously had to be hand-copied into
 // cli_surface.json, and hand-copying is what let 174 commands claim
@@ -31,28 +31,32 @@ import (
 // docs and the website advertised an endpoint the executor never calls:
 //
 //   - api_surface  <- the operation's endpoint method + path, taken from the
-//     block its kind declares (rest for direct_read, binary for
-//     binary_download). The endpoint is already tracked in api_surface.json,
-//     whose covered_by names this exact command, so this is a join across three
-//     consistent files, never an invented endpoint.
+//     block its kind declares (rest for direct_read and direct_write, binary
+//     for binary_download). The endpoint is already tracked in
+//     api_surface.json, so this is a join across consistent files, never an
+//     invented endpoint.
 //   - flags[].maps_to <- "path.<var>" when the flag's name matches a {var} in
 //     that endpoint's path.
 //
 // DEFAULTED — the bundle author's value wins; only an absent or unusable one is
 // replaced:
 //
-//   - output_policy <- defaultDirectReadOutputPolicy when unset or unsupported.
-//     Operations declare "json", which is not a legal direct-read policy in any
-//     layer; the redacting variant is the only supported analogue. A
-//     binary_download carries no output policy at all: the response becomes a
-//     file, not a JSON body.
+//   - direct_read output_policy <- defaultDirectReadOutputPolicy when unset or
+//     unsupported. Operations declare "json", which is not a legal
+//     direct-read policy in any layer; the redacting variant is the only
+//     supported analogue.
+//   - direct_write output_policy <- operations[].output_policy exactly. The
+//     response contract is bound into its preview digest, so this is derived,
+//     not a display preference.
+//   - a binary_download carries no output policy at all: the response becomes
+//     a file, not a JSON body.
 //   - rest.max_bytes <- defaultOperationRESTMaxBytes when unset or
-//     non-positive, matching the engine's own defaultDirectReadMaxBytes. A
+//     non-positive, matching the direct operation executors' default. A
 //     positive value is the operation's own declaration and is left alone.
 //
 // It never touches a command that is not an implemented operation-backed
-// direct_read or binary_download, and never invents an endpoint for an
-// operation that does not declare one.
+// direct_read, direct_write, or binary_download, and never invents an endpoint
+// for an operation that does not declare one.
 const (
 	// defaultDirectReadOutputPolicy mirrors engine.directReadPolicyJSONRedacted.
 	defaultDirectReadOutputPolicy = "json_redacted"
@@ -217,7 +221,7 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			continue
 		}
 		intent := stringField(cmd, "intent")
-		if intent != "direct_read" && intent != "binary_download" {
+		if intent != "direct_read" && intent != "direct_write" && intent != "binary_download" {
 			continue
 		}
 		if stringField(cmd, "availability") != "implemented" {
@@ -232,8 +236,8 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			continue
 		}
 		// The endpoint block is whichever one the operation's kind declares.
-		// A direct read never borrows a binary operation's endpoint and a
-		// binary download never borrows a REST one, so a mismatched pair is
+		// A direct operation never borrows a binary operation's endpoint and
+		// a binary download never borrows a REST one, so a mismatched pair is
 		// left untouched for the validator to report.
 		kind := stringField(op, "kind")
 		blockName := "rest"
@@ -241,6 +245,7 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			blockName = "binary"
 		}
 		if (intent == "direct_read" && kind != "rest_read") ||
+			(intent == "direct_write" && kind != "rest_write") ||
 			(intent == "binary_download" && kind != "binary_download") {
 			continue
 		}
@@ -269,11 +274,22 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			stats.Corrected.APISurface++
 		}
 
-		// DEFAULTED for a direct read, and absent by construction for a binary
-		// download: the response becomes a file, not a JSON body.
+		// A direct write's response policy is part of the operation's own
+		// preview-bound contract, so it must exactly match. Direct reads use a
+		// supported default and binary downloads carry no body policy.
 		switch policy := strings.TrimSpace(stringField(cmd, "output_policy")); {
 		case intent == "binary_download":
 			if cmd.remove("output_policy") {
+				stats.Corrected.OutputPolicy++
+			}
+		case intent == "direct_write":
+			want := stringField(op, "output_policy")
+			switch {
+			case policy == "":
+				cmd.set("output_policy", want)
+				stats.Filled.OutputPolicy++
+			case policy != want:
+				cmd.set("output_policy", want)
 				stats.Corrected.OutputPolicy++
 			}
 		case policy == "":
@@ -314,11 +330,11 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			}
 		}
 
-		// DEFAULTED, and only for rest_read: a binary_download operation must
-		// declare its own positive max_bytes at bundle load, and a positive
-		// rest.max_bytes is the operation's own declaration rather than
-		// anything this tool derives.
-		if intent == "direct_read" {
+		// DEFAULTED for REST direct operations: a binary_download operation
+		// must declare its own positive max_bytes at bundle load, and a
+		// positive rest.max_bytes is the operation's own declaration rather
+		// than anything this tool derives.
+		if intent == "direct_read" || intent == "direct_write" {
 			maxBytes, present := block.get("max_bytes")
 			if !positiveNumber(maxBytes) {
 				block.set("max_bytes", json.Number(fmt.Sprint(defaultOperationRESTMaxBytes)))

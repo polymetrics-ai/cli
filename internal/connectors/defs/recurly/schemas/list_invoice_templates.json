@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Recurly list_invoice_templates record",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "code": {
+      "type": "string",
+      "description": "Invoice template code."
+    },
+    "name": {
+      "type": "string",
+      "description": "Invoice template name."
+    },
+    "description": {
+      "type": "string",
+      "description": "Invoice template description."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the invoice template was created in Recurly."
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the invoice template was updated in Recurly."
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "additionalProperties": false
+}

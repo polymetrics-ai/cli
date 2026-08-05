@@ -866,8 +866,8 @@ func isAllDigitsForAssertion(s string) bool {
 
 // --- write fixture parsing -------------------------------------------------
 
-// writeFixture is fixtures/writes/<action>.json's shape (design §E.2):
-// {"record": {...}, "expect": {"method","path","body"}}.
+// writeFixture is fixtures/writes/<action>.json's shape (migration conventions §4):
+// {"record": {...}, "expect": {"method","path","query"?,"body"?}}.
 type writeFixture struct {
 	Record   map[string]any   `json:"record"`
 	Expect   writeExpectation `json:"expect"`
@@ -875,9 +875,10 @@ type writeFixture struct {
 }
 
 type writeExpectation struct {
-	Method string         `json:"method"`
-	Path   string         `json:"path"`
-	Body   map[string]any `json:"body,omitempty"`
+	Method string            `json:"method"`
+	Path   string            `json:"path"`
+	Query  map[string]string `json:"query,omitempty"`
+	Body   map[string]any    `json:"body,omitempty"`
 }
 
 // loadWriteFixture reads fixtures/writes/<action>.json.
@@ -920,6 +921,11 @@ func compareWriteExpectation(got capturedRequest, want writeExpectation) string 
 	}
 	if want.Path != "" && got.Path != want.Path {
 		return fmt.Sprintf("path = %q, want %q", got.Path, want.Path)
+	}
+	for key, wantValue := range want.Query {
+		if gotValue := got.Query.Get(key); gotValue != wantValue {
+			return fmt.Sprintf("query %q = %q, want %q", key, gotValue, wantValue)
+		}
 	}
 	for k, wantVal := range want.Body {
 		gotVal, ok := got.Body[k]

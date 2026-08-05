@@ -20,6 +20,7 @@
           "query": { "type": "object" },
           "redact_fields": { "type": "array", "items": { "type": "string" } },
           "body_type": { "type": "string", "enum": ["json", "form", "none", "graphql", "json_array", "multipart", "base64_upload"] },
+          "body_required": { "type": "boolean" },
           "body_fields": { "type": "array", "items": { "type": "string" } },
           "body_field": { "type": "string" },
           "body_schema": { "type": "object" },
@@ -78,6 +79,7 @@
             }
           },
           "record_schema": { "type": "object" },
+          "idempotency_key_header": { "type": "string", "pattern": "^[!#$%&'*+.^_`|~0-9A-Za-z-]+$" },
           "dynamic_fields": {
             "type": "object",
             "required": ["field", "key_pattern"],

@@ -1,0 +1,24 @@
+{
+  "record": {
+    "shipping_method_id": "fixture_shipping_method_id",
+    "code": "fixture_code"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/shipping_methods/fixture_shipping_method_id",
+    "body": {
+      "code": "fixture_code"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id",
+      "object": "fixture_object",
+      "code": "fixture_code",
+      "name": "fixture_name",
+      "created_at": "2026-01-02T03:04:05Z",
+      "updated_at": "2026-01-02T03:04:05Z"
+    }
+  }
+}

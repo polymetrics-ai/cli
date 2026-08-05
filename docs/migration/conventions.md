@@ -182,6 +182,8 @@ not a full override by default.
   reviewer or a future capability-expansion agent doesn't have to re-derive the reasoning.
 - **`cli_surface.json` validation stays definition-owned**: command-specific flags and constraints
   belong in the connector's CLI surface metadata, never in provider-named shared runner branches.
+  Use `flags[].type:"number"` for finite decimal-valued inputs; it maps to JSON Schema `number`
+  (not `integer`), and the runtime rejects NaN and infinite values.
   Use `flags[].format:"date-time"` for RFC3339/ISO-8601 timestamp flags,
   `flags[].allow_empty:false` to reject present blank string flags, `flags[].required:true` for
   command inputs that must be present before execution, `flags[].max_items`/`flags[].min_items`
@@ -407,10 +409,11 @@ errors; never a silently unauthenticated request). Only the grant and two fields
 Runtime behaviour a bundle gets for free, none of which is declarable: the access token is exchanged
 once and reused until shortly before expiry (safety margin clamped to half the lifetime, so a very
 short-lived token still caches rather than re-exchanging per request); a missing/zero/unparseable
-`expires_in` is treated as a conservative five-minute life, never as "never expires"; a 401 triggers
-at most ONE refresh-and-retry per request, so a revoked grant terminates instead of hammering the
-token endpoint; and the exchange is serialised, so concurrent callers sharing an authenticator
-produce one exchange whose result they share. Rotation persistence is per-credential and local —
+`expires_in` is treated as a conservative five-minute life, never as "never expires"; an otherwise
+retry-eligible request gets at most ONE 401 refresh-and-retry (declarative writes follow the retry
+policy below), so a revoked grant terminates instead of hammering the token endpoint; and the
+exchange is serialised, so concurrent callers sharing an authenticator produce one exchange whose
+result they share. Rotation persistence is per-credential and local —
 `internal/vault`, AES-256-GCM, `0600` under `.polymetrics/vault` — with zero centralized custody.
 The refresh token, client secret and access token never appear in argv, logs or error text: the
 token endpoint's error body is never surfaced (RFC 6749 §5.2 lets it echo the grant back), and
@@ -795,7 +798,16 @@ client-side" (see stripe's `docs.md`). Any key on `metadata.json.rate_limit` bey
 `requests_per_minute` (e.g. a `strategy` field) is not even a field on the Go type and is silently
 dropped — don't declare one.
 
-**Write body construction** (`write.go`): `body_type` is one of `"json"` (default), `"form"`, `"none"`, `"graphql"`, `"json_array"`, `"multipart"`, or `"base64_upload"` (the `body_type` enum in `internal/connectors/engine/schema/writes.schema.json` is the authority). Default body = every record field **except** those named in `path_fields` (the path already carries them, e.g. `{{ record.id }}` for an update). `body_fields` (if set) restricts the body to an explicit allow-list instead (used for delete-with-body actions). `"form"` builds a `url.Values` body (Stripe-shape — compare `stripe/write.go`'s `customerForm`), sorted keys for deterministic encoding, empty-string values omitted. `"none"` with no `body_fields` sends no body at all (pure path-parameterized mutation/delete).
+**Write body construction** (`write.go`): `body_type` is one of `"json"` (default), `"form"`, `"none"`, `"graphql"`, `"json_array"`, `"multipart"`, or `"base64_upload"` (the `body_type` enum in `internal/connectors/engine/schema/writes.schema.json` is the authority). Default body = every record field **except** those named in `path_fields` (the path already carries them, e.g. `{{ record.id }}` for an update). `body_fields` (if set) restricts the body to an explicit allow-list instead (used for delete-with-body actions). `"form"` builds a `url.Values` body (Stripe-shape — compare `stripe/write.go`'s `customerForm`), sorted keys for deterministic encoding, empty-string values omitted. `"none"` with no `body_fields` sends no body at all (pure path-parameterized mutation/delete). For a JSON endpoint whose provider contract requires a body even when no body fields resolve, set `body_required: true`; it sends `{}` and is rejected on every non-JSON body type.
+
+**Write retries require operation-scoped evidence** (`write.go`'s `writeRequester`): an action may
+declare `idempotency_key_header` only when provider documentation covers that operation. The runtime
+then generates one fresh 128-bit key per record and reuses it only for automatic attempts of that
+record, overriding any same-named base header. An unkeyed action retains automatic retries only when
+it is a delete with `delete.idempotent: true`; every other unkeyed mutation runs once, including no
+automatic 401 refresh, so an ambiguous transport/provider result is surfaced instead of replayed.
+Do not infer idempotency from the HTTP method or apply a provider-wide header without
+operation-level evidence.
 
 `"base64_upload"` is a **typed** JSON body, not a raw request escape hatch — method, path and body structure stay bundle metadata. It carries a base64-encoded payload in exactly one declared JSON property, everything else being an ordinary record field governed by the action's closed `record_schema`. Declare it via a `base64_upload` block with `source` (`"path"` default — read a local file — or `"base64"` — take an already-encoded string), `source_field`, `content_field`, `max_decoded_bytes` (required, positive, clamped to a 16 MiB engine ceiling — an unbounded inline upload is a memory-exhaustion vector), and optional `max_encoded_bytes` (defaults to the base64 length of the decoded bound). Two properties every author must know: the `source_field` is **removed from the body before transmission** — in `"path"` mode it holds a local filesystem path, and transmitting it would leak the operator's directory layout to the provider; and in path mode the file is read under `os.Root` containment (refuses traversal, symlink escape and the check-then-open TOCTOU race in one primitive, not a lexical prefix check), bounded (read one byte past the limit and REJECT rather than truncate — a truncated attachment is a silently corrupt upload), and verified against the approved-payload SHA-256 digest exactly as the `multipart` file part does, so plan/preview/approve/execute still binds the approved bytes.
 
@@ -849,6 +861,11 @@ per-record request error, or ctx cancellation), the loop stops immediately;
   whose runtime `ReadRequest.Query` values are not URL query parameters, such as fixed GraphQL
   documents that take command flags in the POST body. Use this only for replay input; do not model
   required command flags as GraphQL variable defaults.
+- A stream fixture response may include `"headers"`, with each header value written as either one
+  string or an array of strings. The replay harness expands `{{ base_url }}` inside those values to
+  its loopback origin; use that placeholder for recorded `Link` pagination instead of committing an
+  ephemeral test-server URL. When `Content-Type` is absent, replay still defaults it to
+  `application/json`.
 - **A 2-page fixture is REQUIRED whenever the bundle declares pagination** for at least one
   stream (`conformance`'s `pagination_terminates` dynamic check needs a second page to prove the
   engine consumes each page exactly once and terminates). See
@@ -884,9 +901,10 @@ per-record request error, or ctx cancellation), the loop stops immediately;
   conformance limitation that no longer exists.
 - `fixtures/check.json`: `{"request": {...}, "response": {"status": 200, "body": {...}}}` — used
   by `check_fixture`.
-- `fixtures/writes/<action>.json`: `{"record": {...}, "expect": {"method", "path", "body"?},
+- `fixtures/writes/<action>.json`: `{"record": {...}, "expect": {"method", "path", "query"?, "body"?},
   "response"?: {"status", "body"}}` — used by `write_validate`/`write_request_shape`; the engine's
-  dry-run/actual request must match `expect` exactly for a valid `record`, and a deliberately
+  dry-run/actual request must match the declared method/path and every expected query/body entry
+  for a valid `record`, and a deliberately
   invalid record (missing a required field) must fail validation in its own dedicated fixture/test
   case. The optional `response` block (R3) lets you declare what the write-replay capture server
   answers with, instead of the default `200 {}` — needed whenever a `WriteHook`'s follow-up logic

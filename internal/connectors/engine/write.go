@@ -2,6 +2,7 @@ package engine
 
 import (
 	"context"
+	"crypto/rand"
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/hex"
@@ -408,18 +409,22 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 	if err != nil {
 		return err
 	}
+	requester, err := writeRequester(rt.Requester, action)
+	if err != nil {
+		return err
+	}
 
 	switch bodyTypeOf(action) {
 	case "form":
 		form := buildForm(rec, action.PathFields)
-		_, err := rt.Requester.DoForm(ctx, method, path, query, form)
+		_, err := requester.DoForm(ctx, method, path, query, form)
 		return err
 	case "graphql":
 		payload, err := buildGraphQLPayload(action.GraphQL, vars)
 		if err != nil {
 			return err
 		}
-		resp, err := rt.Requester.Do(ctx, method, path, query, payload)
+		resp, err := requester.Do(ctx, method, path, query, payload)
 		if err != nil {
 			return err
 		}
@@ -427,17 +432,17 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 	case "none":
 		body := buildBodyFieldsPayload(rec, action.BodyFields)
 		if len(body) == 0 {
-			_, err := rt.Requester.Do(ctx, method, path, query, nil)
+			_, err := requester.Do(ctx, method, path, query, nil)
 			return err
 		}
-		_, err := rt.Requester.Do(ctx, method, path, query, body)
+		_, err := requester.Do(ctx, method, path, query, body)
 		return err
 	case "json_array":
 		payload, err := buildJSONArrayPayload(action, rec)
 		if err != nil {
 			return err
 		}
-		_, err = rt.Requester.Do(ctx, method, path, query, payload)
+		_, err = requester.Do(ctx, method, path, query, payload)
 		return err
 	case "multipart":
 		root, err := openMultipartRoot(cfg.ProjectDir)
@@ -449,14 +454,14 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 		if err != nil {
 			return err
 		}
-		_, err = rt.Requester.DoMultipart(ctx, method, path, query, form)
+		_, err = requester.DoMultipart(ctx, method, path, query, form)
 		return err
 	case "base64_upload":
 		payload, err := buildBase64UploadPayload(action, rec, recordIndex, cfg)
 		if err != nil {
 			return err
 		}
-		_, err = rt.Requester.Do(ctx, method, path, query, payload)
+		_, err = requester.Do(ctx, method, path, query, payload)
 		return err
 	default: // "json" (default)
 		var body map[string]any
@@ -470,12 +475,44 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 			return err
 		}
 		var payload any
-		if len(body) > 0 {
+		if len(body) > 0 || action.BodyRequired {
+			if body == nil {
+				body = map[string]any{}
+			}
 			payload = body
 		}
-		_, err := rt.Requester.Do(ctx, method, path, query, payload)
+		_, err := requester.Do(ctx, method, path, query, payload)
 		return err
 	}
+}
+
+// writeRequester clones the shared requester and permits mutation replay only
+// when the action carries provider-scoped idempotency evidence.
+func writeRequester(base *connsdk.Requester, action WriteAction) (*connsdk.Requester, error) {
+	if base == nil {
+		return nil, fmt.Errorf("engine: write action %q: requester is nil", action.Name)
+	}
+	header := strings.TrimSpace(action.IdempotencyKeyHeader)
+	requester := *base
+	requester.DefaultHeaders = make(map[string]string, len(base.DefaultHeaders)+1)
+	for name, value := range base.DefaultHeaders {
+		if header != "" && strings.EqualFold(name, header) {
+			continue
+		}
+		requester.DefaultHeaders[name] = value
+	}
+	if header == "" {
+		if action.Kind != "delete" || action.Delete == nil || !action.Delete.Idempotent {
+			requester.DisableRetries = true
+		}
+		return &requester, nil
+	}
+	keyBytes := make([]byte, 16)
+	if _, err := rand.Read(keyBytes); err != nil {
+		return nil, fmt.Errorf("engine: write action %q: create idempotency key: %w", action.Name, err)
+	}
+	requester.DefaultHeaders[header] = hex.EncodeToString(keyBytes)
+	return &requester, nil
 }
 
 const (

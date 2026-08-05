@@ -1,0 +1,24 @@
+{
+  "record": {
+    "currency": "USD",
+    "account": {
+      "code": "fixture_code"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/purchases/authorize",
+    "body": {
+      "currency": "USD",
+      "account": {
+        "code": "fixture_code"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "fixture_object"
+    }
+  }
+}

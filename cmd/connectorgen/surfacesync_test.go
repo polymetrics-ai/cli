@@ -67,6 +67,36 @@ func directReadBundle(apiSurface []any, outputPolicy string, mapsTo string) (any
 	return cli, ops
 }
 
+func directWriteBundle(apiSurface []any, outputPolicy string, mapsTo string) (any, any) {
+	command := map[string]any{
+		"path":         "issues close",
+		"intent":       "direct_write",
+		"availability": "implemented",
+		"operation":    "acme.issue.close",
+		"flags":        []any{map[string]any{"name": "issue-id", "type": "string"}},
+	}
+	if apiSurface != nil {
+		command["api_surface"] = apiSurface
+	}
+	if outputPolicy != "" {
+		command["output_policy"] = outputPolicy
+	}
+	if mapsTo != "" {
+		command["flags"] = []any{map[string]any{"name": "issue-id", "type": "string", "maps_to": mapsTo}}
+	}
+	cli := map[string]any{"usage": "pm acme <command>", "commands": []any{command}}
+	ops := map[string]any{"operations": []any{map[string]any{
+		"id":            "acme.issue.close",
+		"kind":          "rest_write",
+		"output_policy": "write_result_redacted",
+		"rest": map[string]any{
+			"method": "POST",
+			"path":   "/issues/{issue_id}/close",
+		},
+	}}}
+	return cli, ops
+}
+
 // TestSyncBundleReportsDivergentAPISurface is the check the tool documents but
 // did not perform: a hand-edited or stale api_surface previously passed --check
 // clean, because syncBundle only ever filled an ABSENT field. The executor
@@ -123,6 +153,39 @@ func TestSyncBundleReportsDivergentFlagMapsTo(t *testing.T) {
 	flag, _ := flags[0].(map[string]any)
 	if flag["maps_to"] != "path.issue_id" {
 		t.Fatalf("maps_to = %v, want path.issue_id", flag["maps_to"])
+	}
+}
+
+// A rest_write command has no author-selected output policy: its declared
+// operation is the one source of truth for both the response contract and the
+// endpoint the executor will call. Keeping either hand-edited means a command
+// can pass help/docs review while its plan dispatches something else.
+func TestSyncBundleDirectWriteDerivesOperationContract(t *testing.T) {
+	stale := []any{map[string]any{"method": "POST", "path": "/issues/{issue_id}/close/stale"}}
+	cli, ops := directWriteBundle(stale, "json_redacted", "query.issue_id")
+	dir := writeSyncBundle(t, cli, ops)
+
+	stats, err := syncBundle(dir, true)
+	if err != nil {
+		t.Fatalf("syncBundle check: %v", err)
+	}
+	if stats.Corrected.APISurface != 1 || stats.Corrected.OutputPolicy != 1 ||
+		stats.Corrected.FlagMapsTo != 1 || stats.Filled.MaxBytes != 1 {
+		t.Fatalf("direct_write stats = %+v, want endpoint/policy/flag corrections and max_bytes fill", stats)
+	}
+
+	if _, err := syncBundle(dir, false); err != nil {
+		t.Fatalf("syncBundle write: %v", err)
+	}
+	command := readSyncedCommand(t, dir)
+	if got := command["output_policy"]; got != "write_result_redacted" {
+		t.Fatalf("output_policy = %v, want declared write_result_redacted", got)
+	}
+	if got := command["api_surface"]; !endpointPathIs(got, "/issues/{issue_id}/close") {
+		t.Fatalf("api_surface = %v, want operation endpoint", got)
+	}
+	if got := command["flags"]; !flagMapsTo(got, "path.issue_id") {
+		t.Fatalf("flags = %v, want path.issue_id", got)
 	}
 }
 

@@ -14,6 +14,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"reflect"
 	"sort"
 	"strconv"
 	"strings"
@@ -34,28 +35,30 @@ const (
 	// counted as supported-but-unreachable.
 	blockedReverseETLReason = "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
 
-	// noRequestContractReason and noBoundedShapeReason are where the rows this
+	// noRequestContractReason and the two named bulk/batch blockers are where the rows this
 	// lane could NOT promote went. They are counted, not hand-waved: a bounded
 	// record schema has to come from the pinned OpenAPI source the bundle
 	// already cites, and inventing one would reproduce exactly the
 	// implemented-but-unreachable hole this repository is closing.
 	noRequestContractReason = "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
 
-	noBoundedShapeReason = "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface."
+	ticketsBulkBatchSplitReason = "Blocked by default until the shared write surface can bind separate bulk and batch actions to this one endpoint and render record-array selectors into the ids query parameter. The pinned Zendesk Support OAS declares two closed typed oneOf arms; no free-form payload is involved."
+
+	usersBulkBatchSplitReason = "Blocked by default until the shared write surface can bind separate bulk and batch actions to this one endpoint and render record-array selectors into ids or external_ids query parameters. The pinned Zendesk Support OAS declares two closed typed oneOf arms; no free-form payload is involved."
 
 	// promotedReverseETLOperations plus the two deferred counts must equal the
 	// ledger rows that originally carried blockedReverseETLReason, so the
 	// shortfall can never be hidden by rewording a reason string.
-	promotedReverseETLOperations = 57
+	promotedReverseETLOperations = 62
 	deferredNoRequestContract    = 98
-	deferredNoBoundedShape       = 7
+	deferredBulkBatchSplit       = 2
 	originalBlockedReverseETL    = 162
 
 	// reverseETLBoundEndpoints is the measured number of api_surface.json rows
 	// bound to a write action, pinned on its own so the ledger arithmetic can
 	// never be satisfied by dropping covered_by blocks and re-blocking them
 	// under a freshly worded reason.
-	reverseETLBoundEndpoints = 84
+	reverseETLBoundEndpoints = 89
 
 	// blockedDestructiveOperations is the number of destructive_action rows
 	// that remain unbound pending connector-local action, command, and fixture
@@ -95,7 +98,7 @@ func TestReverseETLLedgerReconciles(t *testing.T) {
 	b := loadBundle(t)
 
 	var stillGeneric []string
-	promoted, noContract, noShape := 0, 0, 0
+	promoted, noContract, bulkBatchSplit := 0, 0, 0
 	for _, ep := range b.Surface.Endpoints {
 		if ep.CoveredBy != nil && ep.CoveredBy.Write != "" {
 			promoted++
@@ -109,8 +112,8 @@ func TestReverseETLLedgerReconciles(t *testing.T) {
 			stillGeneric = append(stillGeneric, fmt.Sprintf("%s %s", ep.Method, ep.Path))
 		case noRequestContractReason:
 			noContract++
-		case noBoundedShapeReason:
-			noShape++
+		case ticketsBulkBatchSplitReason, usersBulkBatchSplitReason:
+			bulkBatchSplit++
 		}
 	}
 
@@ -122,15 +125,15 @@ func TestReverseETLLedgerReconciles(t *testing.T) {
 	if noContract != deferredNoRequestContract {
 		t.Errorf("rows blocked on a missing request contract = %d, want %d", noContract, deferredNoRequestContract)
 	}
-	if noShape != deferredNoBoundedShape {
-		t.Errorf("rows blocked on an unbounded request shape = %d, want %d", noShape, deferredNoBoundedShape)
+	if bulkBatchSplit != deferredBulkBatchSplit {
+		t.Errorf("rows blocked on the named bulk/batch action split = %d, want %d", bulkBatchSplit, deferredBulkBatchSplit)
 	}
 	if promoted != reverseETLBoundEndpoints {
 		t.Errorf("api_surface rows bound to a write action = %d, want %d", promoted, reverseETLBoundEndpoints)
 	}
-	if got := promotedReverseETLOperations + noContract + noShape; got != originalBlockedReverseETL {
+	if got := promotedReverseETLOperations + noContract + bulkBatchSplit; got != originalBlockedReverseETL {
 		t.Fatalf("promoted(%d) + deferred(%d+%d) = %d, want %d ledger rows accounted for",
-			promotedReverseETLOperations, noContract, noShape, got, originalBlockedReverseETL)
+			promotedReverseETLOperations, noContract, bulkBatchSplit, got, originalBlockedReverseETL)
 	}
 }
 
@@ -322,6 +325,182 @@ func TestReverseETLWriteActionsExecute(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+func TestZendeskFoundationWriteBoundsAreEnforced(t *testing.T) {
+	b := loadBundle(t)
+	tests := []struct {
+		name   string
+		action string
+		record connectors.Record
+	}{
+		{
+			name:   "create users maxItems 100",
+			action: "create_many_users",
+			record: connectors.Record{"users": repeatedObjects(101, func(i int) map[string]any { return map[string]any{"name": fmt.Sprintf("Fixture %d", i)} })},
+		},
+		{
+			name:   "upsert users maxItems 100",
+			action: "create_or_update_many_users",
+			record: connectors.Record{"users": repeatedObjects(101, func(i int) map[string]any { return map[string]any{"external_id": fmt.Sprintf("fixture-%d", i)} })},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := engine.ValidateWrite(context.Background(), b, connectors.WriteRequest{Action: tt.action}, []connectors.Record{tt.record})
+			if err == nil {
+				t.Fatalf("ValidateWrite(%q) = nil for 101 items", tt.action)
+			}
+		})
+	}
+}
+
+// UserMergeInput deliberately has no required property in the pinned OAS:
+// callers can identify an existing user by id, email, or external_id. The
+// selected merge arm must retain that flexibility rather than inventing an
+// external_id-only requirement while making the shape closed.
+func TestZendeskFoundationMergeUserAcceptsOASIdentifierVariants(t *testing.T) {
+	b := loadBundle(t)
+	for name, user := range map[string]map[string]any{
+		"id":    {"id": 101},
+		"email": {"email": "fixture@example.invalid"},
+	} {
+		t.Run(name, func(t *testing.T) {
+			err := engine.ValidateWrite(context.Background(), b, connectors.WriteRequest{Action: "create_or_update_many_users"}, []connectors.Record{{"users": []any{user}}})
+			if err != nil {
+				t.Fatalf("ValidateWrite(%q) = %v, want UserMergeInput identifier accepted", name, err)
+			}
+		})
+	}
+}
+
+func repeatedObjects(count int, build func(int) map[string]any) []any {
+	objects := make([]any, 0, count)
+	for i := 0; i < count; i++ {
+		objects = append(objects, build(i))
+	}
+	return objects
+}
+
+func TestZendeskFoundationRequestFieldsCitePinnedOAS(t *testing.T) {
+	b := loadBundle(t)
+	foundation := map[string]bool{
+		"update_permission_policy":            true,
+		"bulk_set_agent_attribute_values_job": true,
+		"create_many_users":                   true,
+		"create_or_update_many_users":         true,
+		"request_user_create":                 true,
+	}
+	for _, action := range b.Writes {
+		if !foundation[action.Name] {
+			continue
+		}
+		var schema map[string]any
+		if err := json.Unmarshal(action.RecordSchema, &schema); err != nil {
+			t.Fatalf("unmarshal %q record schema: %v", action.Name, err)
+		}
+		assertSchemaFieldsCitePinnedOAS(t, action.Name, schema)
+	}
+}
+
+// TestZendeskFoundationOperationRequestFieldsCitePinnedOAS keeps the
+// operation ledger as auditable as the executable write definitions. The
+// operations remain the canonical per-endpoint request contracts even after a
+// write action has been promoted, so a field must not be cited in one place
+// and become anonymous in the other.
+func TestZendeskFoundationOperationRequestFieldsCitePinnedOAS(t *testing.T) {
+	b := loadBundle(t)
+	foundation := map[string]bool{
+		"zendesk-support.update_permission_policy":            true,
+		"zendesk-support.bulk_set_agent_attribute_values_job": true,
+		"zendesk-support.create_many_users":                   true,
+		"zendesk-support.create_or_update_many_users":         true,
+		"zendesk-support.request_user_create":                 true,
+	}
+	for _, operation := range b.Operations {
+		if !foundation[operation.ID] {
+			continue
+		}
+		if operation.REST == nil {
+			t.Errorf("foundation operation %q has no REST request contract", operation.ID)
+			continue
+		}
+		var schema map[string]any
+		if err := json.Unmarshal(operation.REST.BodySchema, &schema); err != nil {
+			t.Fatalf("unmarshal %q body schema: %v", operation.ID, err)
+		}
+		assertSchemaFieldsCitePinnedOAS(t, operation.ID, schema)
+	}
+}
+
+// TestZendeskFoundationOperationBodiesMatchExecutableSchemas keeps the OAS
+// operation ledger and the action the operator can invoke on one contract.
+// Path parameters are record fields for the write action but not request-body
+// fields, so the permission-policy action is the one intentional exception.
+func TestZendeskFoundationOperationBodiesMatchExecutableSchemas(t *testing.T) {
+	b := loadBundle(t)
+	actions := map[string]engine.WriteAction{}
+	for _, action := range b.Writes {
+		actions[action.Name] = action
+	}
+	pairs := map[string]string{
+		"zendesk-support.update_permission_policy":            "update_permission_policy",
+		"zendesk-support.bulk_set_agent_attribute_values_job": "bulk_set_agent_attribute_values_job",
+		"zendesk-support.create_many_users":                   "create_many_users",
+		"zendesk-support.create_or_update_many_users":         "create_or_update_many_users",
+		"zendesk-support.request_user_create":                 "request_user_create",
+	}
+	for _, operation := range b.Operations {
+		actionName, ok := pairs[operation.ID]
+		if !ok {
+			continue
+		}
+		action, ok := actions[actionName]
+		if !ok {
+			t.Fatalf("operation %q refers to missing action %q", operation.ID, actionName)
+		}
+		if operation.REST == nil {
+			t.Fatalf("operation %q has no REST contract", operation.ID)
+		}
+		var want, got map[string]any
+		if err := json.Unmarshal(action.RecordSchema, &want); err != nil {
+			t.Fatalf("unmarshal %q record schema: %v", actionName, err)
+		}
+		if err := json.Unmarshal(operation.REST.BodySchema, &got); err != nil {
+			t.Fatalf("unmarshal %q body schema: %v", operation.ID, err)
+		}
+		delete(want, "$schema")
+		delete(got, "title")
+		if actionName == "update_permission_policy" {
+			properties := want["properties"].(map[string]any)
+			delete(properties, "custom_object_key")
+			delete(properties, "id")
+			delete(want, "required")
+		}
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("operation %q body schema differs from executable action %q", operation.ID, actionName)
+		}
+	}
+}
+
+func assertSchemaFieldsCitePinnedOAS(t *testing.T, path string, schema map[string]any) {
+	t.Helper()
+	if properties, ok := schema["properties"].(map[string]any); ok {
+		for name, rawChild := range properties {
+			child, ok := rawChild.(map[string]any)
+			if !ok {
+				t.Errorf("%s.%s is not an object schema", path, name)
+				continue
+			}
+			if description, _ := child["description"].(string); !strings.Contains(description, "https://developer.zendesk.com/zendesk/oas.yaml#") {
+				t.Errorf("%s.%s lacks a pinned OAS citation", path, name)
+			}
+			assertSchemaFieldsCitePinnedOAS(t, path+"."+name, child)
+		}
+	}
+	if items, ok := schema["items"].(map[string]any); ok {
+		assertSchemaFieldsCitePinnedOAS(t, path+"[]", items)
 	}
 }
 

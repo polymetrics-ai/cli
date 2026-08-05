@@ -1,0 +1,283 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Recurly list_account_external_subscriptions record",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "title": "External subscription ID",
+      "description": "System-generated unique identifier for an external subscription ID, e.g. `e28zov4fw0v2`."
+    },
+    "object": {
+      "type": "string",
+      "title": "Object type"
+    },
+    "account": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "object": {
+          "type": "string",
+          "title": "Object type"
+        },
+        "code": {
+          "type": "string",
+          "description": "The unique identifier of the account."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The email address used for communicating with this customer."
+        },
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "company": {
+          "type": "string"
+        },
+        "parent_account_id": {
+          "type": "string"
+        },
+        "bill_to": {
+          "type": "string"
+        },
+        "dunning_campaign_id": {
+          "type": "string",
+          "title": "Dunning Campaign ID",
+          "description": "Unique ID to identify a dunning campaign. Used to specify if a non-default dunning campaign should be assigned to this account. For sites without multiple dunning campaigns enabled, the default dunning campaign will always be used."
+        }
+      },
+      "additionalProperties": false,
+      "title": "Account mini details"
+    },
+    "external_product_reference": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "External Product ID",
+          "description": "System-generated unique identifier for an external product ID, e.g. `e28zov4fw0v2`."
+        },
+        "object": {
+          "type": "string",
+          "title": "object"
+        },
+        "reference_code": {
+          "type": "string",
+          "title": "reference_code",
+          "description": "A code which associates the external product to a corresponding object or resource in an external platform like the Apple App Store or Google Play Store."
+        },
+        "external_connection_type": {
+          "type": "string",
+          "title": "external_connection_type",
+          "description": "Source connection platform."
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the external product was created in Recurly."
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the external product was updated in Recurly."
+        }
+      },
+      "additionalProperties": false,
+      "title": "External Product Reference details",
+      "description": "External Product Reference details"
+    },
+    "external_payment_phases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "External payment phase ID",
+            "description": "System-generated unique identifier for an external payment phase ID, e.g. `e28zov4fw0v2`."
+          },
+          "object": {
+            "type": "string",
+            "title": "Object type"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Started At"
+          },
+          "ends_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Ends At"
+          },
+          "starting_billing_period_index": {
+            "type": "integer",
+            "title": "Starting Billing Period Index"
+          },
+          "ending_billing_period_index": {
+            "type": "integer",
+            "title": "Ending Billing Period Index"
+          },
+          "offer_type": {
+            "type": "string",
+            "title": "Offer Type",
+            "description": "Type of discount offer given, e.g. \"FREE_TRIAL\""
+          },
+          "offer_name": {
+            "type": "string",
+            "title": "Offer Name",
+            "description": "Name of the discount offer given, e.g. \"introductory\""
+          },
+          "period_count": {
+            "type": "integer",
+            "title": "Period Count",
+            "description": "Number of billing periods"
+          },
+          "period_length": {
+            "type": "string",
+            "title": "Period Length",
+            "description": "Billing cycle length"
+          },
+          "amount": {
+            "type": "string",
+            "format": "decimal",
+            "title": "Amount",
+            "description": "Allows up to 9 decimal places"
+          },
+          "currency": {
+            "type": "string",
+            "title": "Currency",
+            "description": "3-letter ISO 4217 currency code."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created at",
+            "description": "When the external subscription was created in Recurly."
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated at",
+            "description": "When the external subscription was updated in Recurly."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Details of payments in the lifecycle of a subscription from an external resource that is not managed by the Recurly platform, e.g. App Store or Google Play Store."
+      },
+      "title": "External payment phases",
+      "description": "The phases of the external subscription payment lifecycle."
+    },
+    "external_id": {
+      "type": "string",
+      "title": "External Id",
+      "description": "The id of the subscription in the external systems., I.e. Apple App Store or Google Play Store."
+    },
+    "uuid": {
+      "type": "string",
+      "title": "Uuid",
+      "description": "Universally Unique Identifier created automatically."
+    },
+    "last_purchased": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Last purchased",
+      "description": "When a new billing event occurred on the external subscription in conjunction with a recent billing period, reactivation or upgrade/downgrade."
+    },
+    "auto_renew": {
+      "type": "boolean",
+      "default": false,
+      "title": "Auto-renew",
+      "description": "An indication of whether or not the external subscription will auto-renew at the expiration date."
+    },
+    "in_grace_period": {
+      "type": "boolean",
+      "default": false,
+      "title": "In grace period",
+      "description": "An indication of whether or not the external subscription is in a grace period."
+    },
+    "app_identifier": {
+      "type": "string",
+      "title": "App identifier",
+      "description": "Identifier of the app that generated the external subscription."
+    },
+    "quantity": {
+      "type": "integer",
+      "default": 1,
+      "title": "Quantity",
+      "description": "An indication of the quantity of a subscribed item's quantity."
+    },
+    "state": {
+      "type": "string",
+      "default": "active",
+      "description": "External subscriptions can be active, canceled, expired, past_due, voided, revoked, or paused."
+    },
+    "activated_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Activated at",
+      "description": "When the external subscription was activated in the external platform."
+    },
+    "canceled_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Canceled at",
+      "description": "When the external subscription was canceled in the external platform."
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Expires at",
+      "description": "When the external subscription expires in the external platform."
+    },
+    "trial_started_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Trial started at",
+      "description": "When the external subscription trial period started in the external platform."
+    },
+    "trial_ends_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Trial ends at",
+      "description": "When the external subscription trial period ends in the external platform."
+    },
+    "test": {
+      "type": "boolean",
+      "default": false,
+      "title": "Test",
+      "description": "An indication of whether or not the external subscription was purchased in a sandbox environment."
+    },
+    "imported": {
+      "type": "boolean",
+      "default": false,
+      "title": "Imported",
+      "description": "An indication of whether or not the external subscription was created by a historical data import."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created at",
+      "description": "When the external subscription was created in Recurly."
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Updated at",
+      "description": "When the external subscription was updated in Recurly."
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "additionalProperties": false
+}

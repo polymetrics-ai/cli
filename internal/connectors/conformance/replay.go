@@ -8,11 +8,13 @@ import (
 	"net/http/httptest"
 	"path"
 	"sort"
+	"strings"
 	"sync"
 )
 
 // fixturePage is one recorded API page: fixtures/streams/<stream>/page_N.json,
-// shape {"request":{"method","path","query"},"read_query":{...},"response":{"status","body"}}.
+// shape {"request":{"method","path","query"},"read_query":{...},
+// "response":{"status","headers"?,"body"}}.
 // read_query is optional harness input for parameterized streams whose runtime
 // request needs connectors.ReadRequest.Query values that are not URL query
 // params, e.g. GraphQL command flags embedded in the POST body.
@@ -33,8 +35,33 @@ type fixtureRequest struct {
 }
 
 type fixtureResponse struct {
-	Status int             `json:"status"`
-	Body   json.RawMessage `json:"body"`
+	Status  int             `json:"status"`
+	Headers fixtureHeaders  `json:"headers,omitempty"`
+	Body    json.RawMessage `json:"body"`
+}
+
+type fixtureHeaders map[string][]string
+
+func (h *fixtureHeaders) UnmarshalJSON(data []byte) error {
+	var raw map[string]json.RawMessage
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+	values := make(fixtureHeaders, len(raw))
+	for name, encoded := range raw {
+		var multiple []string
+		if err := json.Unmarshal(encoded, &multiple); err == nil {
+			values[name] = multiple
+			continue
+		}
+		var single string
+		if err := json.Unmarshal(encoded, &single); err != nil {
+			return fmt.Errorf("response header %q must be a string or string array", name)
+		}
+		values[name] = []string{single}
+	}
+	*h = values
+	return nil
 }
 
 // loadFixturePages reads and parses every fixtures/streams/<stream>/page_*.json
@@ -118,6 +145,7 @@ func newStreamReplayServer(fixtures fs.FS, stream string, tracker *hitTracker) (
 	}
 	served := make([]bool, len(pages))
 
+	baseURL := ""
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		idx := matchFixturePage(pages, served, r)
 		if idx < 0 {
@@ -129,7 +157,10 @@ func newStreamReplayServer(fixtures fs.FS, stream string, tracker *hitTracker) (
 			tracker.record(stream)
 		}
 		page := pages[idx]
-		w.Header().Set("Content-Type", "application/json")
+		applyFixtureResponseHeaders(w.Header(), page.Response.Headers, baseURL)
+		if w.Header().Get("Content-Type") == "" {
+			w.Header().Set("Content-Type", "application/json")
+		}
 		status := page.Response.Status
 		if status == 0 {
 			status = http.StatusOK
@@ -142,7 +173,9 @@ func newStreamReplayServer(fixtures fs.FS, stream string, tracker *hitTracker) (
 		}
 	}
 
-	return httptest.NewServer(http.HandlerFunc(handler)), nil
+	server := httptest.NewServer(http.HandlerFunc(handler))
+	baseURL = server.URL
+	return server, nil
 }
 
 // reusableStreamReplayServer serves one stream's fixture pages at a time while
@@ -191,7 +224,10 @@ func (rs *reusableStreamReplayServer) serveHTTP(w http.ResponseWriter, r *http.R
 	if tracker != nil {
 		tracker.record(stream)
 	}
-	w.Header().Set("Content-Type", "application/json")
+	applyFixtureResponseHeaders(w.Header(), page.Response.Headers, rs.URL)
+	if w.Header().Get("Content-Type") == "" {
+		w.Header().Set("Content-Type", "application/json")
+	}
 	status := page.Response.Status
 	if status == 0 {
 		status = http.StatusOK
@@ -201,6 +237,14 @@ func (rs *reusableStreamReplayServer) serveHTTP(w http.ResponseWriter, r *http.R
 		_, _ = w.Write(page.Response.Body)
 	} else {
 		_, _ = w.Write([]byte("{}"))
+	}
+}
+
+func applyFixtureResponseHeaders(target http.Header, source fixtureHeaders, baseURL string) {
+	for name, values := range source {
+		for _, value := range values {
+			target.Add(name, strings.ReplaceAll(value, "{{ base_url }}", baseURL))
+		}
 	}
 }
 
