@@ -19,6 +19,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/connectors/transportpolicy"
 )
 
 // newWriteTestBundle builds a minimal Bundle wired against srv with a single
@@ -84,6 +85,307 @@ type capturedRequest struct {
 	contentType string
 }
 
+func TestWriteRejectsDestructiveActionWithoutTypedApprovalEvidence(t *testing.T) {
+	calls := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer srv.Close()
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:       "remove_widget",
+		Kind:       "custom",
+		Method:     http.MethodDelete,
+		Path:       "/widgets/{{ record.id }}",
+		PathFields: []string{"id"},
+		BodyType:   "none",
+	})
+
+	_, err := Write(context.Background(), b, connectors.WriteRequest{Action: "remove_widget", Config: connectors.RuntimeConfig{
+		CredentialRevision: "fixture-credential-revision", ConfigurationDigest: "fixture-configuration-digest",
+		WriteApprovalScope: connectors.WriteApprovalScopeFixture,
+	}}, []connectors.Record{{"id": "42"}}, nil)
+	if err == nil {
+		t.Fatal("Write() dispatched DELETE without typed approval evidence")
+	}
+	if !strings.Contains(strings.ToLower(err.Error()), "approval") {
+		t.Fatalf("Write() error = %v, want approval rejection", err)
+	}
+	if calls != 0 {
+		t.Fatalf("DELETE dispatched before approval gate; calls=%d", calls)
+	}
+}
+
+func TestApprovedDestructiveWriteRefusesRedirectToUnapprovedTarget(t *testing.T) {
+	approvedCalls := 0
+	unapprovedCalls := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/approved/42":
+			approvedCalls++
+			http.Redirect(w, r, "/unapproved/42", http.StatusTemporaryRedirect)
+		case "/unapproved/42":
+			unapprovedCalls++
+			w.WriteHeader(http.StatusNoContent)
+		default:
+			t.Fatalf("unexpected request path %q", r.URL.Path)
+		}
+	}))
+	defer srv.Close()
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:       "remove_widget",
+		Kind:       "delete",
+		Method:     http.MethodDelete,
+		Path:       "/approved/{{ record.id }}",
+		PathFields: []string{"id"},
+		BodyType:   "none",
+	})
+	records := []connectors.Record{{"id": "42"}}
+	req := approvedWriteRequest(t, b, "remove_widget", records, nil)
+
+	if _, err := Write(context.Background(), b, req, records, nil); err == nil || !strings.Contains(strings.ToLower(err.Error()), "redirect") {
+		t.Fatalf("Write() error = %v, want redirect refusal", err)
+	}
+	if approvedCalls != 1 {
+		t.Fatalf("approved target calls = %d, want 1", approvedCalls)
+	}
+	if unapprovedCalls != 0 {
+		t.Fatalf("unapproved redirect target calls = %d, want 0", unapprovedCalls)
+	}
+}
+
+func TestGateRejectsForgedAndReplayedDestructiveEvidence(t *testing.T) {
+	prepared := PreparedWrite{Target: DestructiveTarget{
+		Connector:     "acme",
+		Operation:     "delete_widget",
+		Method:        http.MethodDelete,
+		MutationClass: "delete",
+		Confirmation:  connectors.ConfirmationKindDestructive,
+	}, CredentialRevision: "fixture-credential-revision", ConfigurationDigest: "fixture-configuration-digest", ApprovalScope: connectors.WriteApprovalScopeFixture, Batchable: false, RecordsStaged: 1, Action: "delete_widget", Definition: map[string]any{"kind": "delete"}, Requests: []PreparedRequest{{Method: http.MethodDelete, URL: "http://127.0.0.1/widgets/42", Target: "http://127.0.0.1/widgets/42"}}}
+	preview, err := PreviewPreparedWrite(prepared)
+	if err != nil {
+		t.Fatalf("PreviewPreparedWrite() error = %v", err)
+	}
+
+	t.Run("forged", func(t *testing.T) {
+		executed := false
+		err := ExecutePreparedWrite(context.Background(), prepared, &connectors.WriteApprovalEvidence{}, preview.Digest, func(context.Context) error {
+			executed = true
+			return nil
+		})
+		if err == nil || executed {
+			t.Fatal("GateDestructiveExecution() accepted caller-minted evidence")
+		}
+	})
+
+	t.Run("caller-selected-authority", func(t *testing.T) {
+		authority, err := connectors.NewUntrustedWriteApprovalAuthority(bytes.Repeat([]byte{0x31}, sha256.Size))
+		if err != nil {
+			t.Fatalf("NewUntrustedWriteApprovalAuthority() error = %v", err)
+		}
+		evidence := approvedEvidenceWithAuthority(t, authority, preview)
+		executed := false
+		err = ExecutePreparedWrite(context.Background(), prepared, evidence, preview.Digest, func(context.Context) error {
+			executed = true
+			return nil
+		})
+		if err == nil || executed {
+			t.Fatal("ExecutePreparedWrite() trusted caller-selected approval authority")
+		}
+	})
+
+	t.Run("replayed", func(t *testing.T) {
+		evidence := approvedEvidenceForPreview(t, preview)
+		copiedEvidence := *evidence
+		var executions int
+		for _, attemptEvidence := range []*connectors.WriteApprovalEvidence{evidence, &copiedEvidence} {
+			_ = ExecutePreparedWrite(context.Background(), prepared, attemptEvidence, preview.Digest, func(context.Context) error {
+				executions++
+				return nil
+			})
+		}
+		if executions != 1 {
+			t.Fatalf("approved closure executions = %d, want exactly one", executions)
+		}
+	})
+}
+
+func TestGateBindsConfigurationAndBatchability(t *testing.T) {
+	prepared := PreparedWrite{
+		Target: DestructiveTarget{
+			Connector: "acme", Operation: "delete_widget", Method: http.MethodDelete,
+			MutationClass: "delete", Confirmation: connectors.ConfirmationKindDestructive,
+		},
+		CredentialRevision:  "fixture-credential-revision",
+		ConfigurationDigest: "fixture-configuration-one",
+		ApprovalScope:       connectors.WriteApprovalScopeFixture,
+		Batchable:           false,
+		RecordsStaged:       1,
+		Action:              "delete_widget",
+		Definition:          map[string]any{"kind": "delete"},
+		Requests: []PreparedRequest{{
+			Method: http.MethodDelete, URL: "http://127.0.0.1/widgets/42", Target: "http://127.0.0.1/widgets/42",
+		}},
+	}
+	preview, err := PreviewPreparedWrite(prepared)
+	if err != nil {
+		t.Fatalf("PreviewPreparedWrite() error = %v", err)
+	}
+	for _, mutate := range []struct {
+		name string
+		fn   func(*PreparedWrite)
+	}{
+		{name: "configuration", fn: func(changed *PreparedWrite) { changed.ConfigurationDigest = "fixture-configuration-two" }},
+		{name: "batchability", fn: func(changed *PreparedWrite) { changed.Batchable = true }},
+	} {
+		t.Run(mutate.name, func(t *testing.T) {
+			changed := prepared
+			mutate.fn(&changed)
+			executed := false
+			err := ExecutePreparedWrite(context.Background(), changed, approvedEvidenceForPreview(t, preview), preview.Digest, func(context.Context) error {
+				executed = true
+				return nil
+			})
+			if err == nil || executed {
+				t.Fatalf("ExecutePreparedWrite() accepted %s drift", mutate.name)
+			}
+		})
+	}
+}
+
+func TestZeroRecordPreparedWriteNeverInvokesExecutor(t *testing.T) {
+	prepared := PreparedWrite{
+		Target: DestructiveTarget{
+			Connector: "acme", Operation: "purge_widgets", Method: http.MethodPost,
+			MutationClass: "delete", Confirmation: connectors.ConfirmationKindDestructive,
+		},
+		CredentialRevision:  "fixture-credential-revision",
+		ConfigurationDigest: "fixture-configuration-digest",
+		ApprovalScope:       connectors.WriteApprovalScopeFixture,
+		Action:              "purge_widgets",
+		Definition:          map[string]any{"kind": "delete"},
+	}
+	preview, err := PreviewPreparedWrite(prepared)
+	if err != nil {
+		t.Fatalf("PreviewPreparedWrite() error = %v", err)
+	}
+	executed := false
+	err = ExecutePreparedWrite(context.Background(), prepared, approvedEvidenceForPreview(t, preview), preview.Digest, func(context.Context) error {
+		executed = true
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("ExecutePreparedWrite() error = %v", err)
+	}
+	if executed {
+		t.Fatal("ExecutePreparedWrite() invoked executor for an empty prepared write")
+	}
+}
+
+func TestWriteFailsClosedForUnknownConfirmationDeclaration(t *testing.T) {
+	calls := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer srv.Close()
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:     "dangerous_widget_action",
+		Kind:     "custom",
+		Method:   http.MethodPost,
+		Path:     "/widgets",
+		BodyType: "json",
+		Confirm:  "type-anything",
+	})
+
+	if _, err := Write(context.Background(), b, connectors.WriteRequest{Action: "dangerous_widget_action", Config: connectors.RuntimeConfig{
+		CredentialRevision: "fixture-credential-revision", ConfigurationDigest: "fixture-configuration-digest",
+		WriteApprovalScope: connectors.WriteApprovalScopeFixture,
+	}}, []connectors.Record{{"id": "42"}}, nil); err == nil {
+		t.Fatal("Write() accepted an unknown non-empty confirmation declaration")
+	}
+	if calls != 0 {
+		t.Fatalf("write dispatched after unknown confirmation declaration; calls=%d", calls)
+	}
+}
+
+func TestRestWriteOperationUsesSharedDestructiveExecutionGate(t *testing.T) {
+	executed := false
+	operation := OperationSpec{
+		ID:            "acme.widgets.delete",
+		Kind:          "rest_write",
+		MutationClass: "delete",
+		REST:          &RESTOperationSpec{Method: http.MethodDelete, Path: "/widgets/{id}"},
+		Confirmation:  &ConfirmationSpec{Kind: "destructive"},
+	}
+	prepared := PreparedWrite{
+		Target:              DestructiveTargetForOperation("acme", operation),
+		CredentialRevision:  "fixture-credential-revision",
+		ConfigurationDigest: "fixture-configuration-digest",
+		ApprovalScope:       connectors.WriteApprovalScopeFixture,
+		Batchable:           false,
+		RecordsStaged:       1,
+		Action:              operation.ID,
+		Definition:          operation,
+		Requests:            []PreparedRequest{{Method: http.MethodDelete, URL: "http://127.0.0.1/widgets/42", Target: "http://127.0.0.1/widgets/42"}},
+	}
+	preview, err := PreviewPreparedWrite(prepared)
+	if err != nil {
+		t.Fatalf("PreviewPreparedWrite(rest_write): %v", err)
+	}
+	if err := ExecutePreparedWrite(context.Background(), prepared, nil, preview.Digest, func(context.Context) error {
+		executed = true
+		return nil
+	}); err == nil {
+		t.Fatal("unapproved rest_write closure executed without approval evidence")
+	}
+	if executed {
+		t.Fatal("unapproved rest_write closure was invoked")
+	}
+
+	evidence := approvedEvidenceForPreview(t, preview)
+	err = ExecutePreparedWrite(context.Background(), prepared, evidence, preview.Digest, func(executeCtx context.Context) error {
+		if !transportpolicy.IsDestructive(executeCtx) {
+			return errors.New("destructive transport policy was not propagated")
+		}
+		executed = true
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("GateDestructiveExecution(rest_write): %v", err)
+	}
+	if !executed {
+		t.Fatal("approved rest_write closure was not executed")
+	}
+}
+
+func TestRestWriteDestructiveFlagCannotBeOverriddenByMutationClass(t *testing.T) {
+	target := DestructiveTargetForOperation("acme", OperationSpec{
+		ID:            "acme.widgets.admin_delete",
+		Kind:          "rest_write",
+		MutationClass: "admin",
+		Destructive:   true,
+		REST:          &RESTOperationSpec{Method: http.MethodPost, Path: "/widgets/delete"},
+	})
+	if !target.RequiresApproval() {
+		t.Fatal("destructive operation flag was downgraded by a non-empty mutation class")
+	}
+}
+
+func TestPreparedWriteRejectsRequestMethodOutsideTargetPolicy(t *testing.T) {
+	prepared := PreparedWrite{
+		Target: DestructiveTarget{Connector: "acme", Operation: "delete_widget", Method: http.MethodPost},
+		Action: "delete_widget",
+		Requests: []PreparedRequest{{
+			Method: http.MethodDelete,
+			URL:    "https://api.example.test/widgets/42",
+		}},
+	}
+	if _, err := PreviewPreparedWrite(prepared); err == nil {
+		t.Fatal("PreviewPreparedWrite() accepted a DELETE outside the normalized target policy")
+	}
+}
+
 func (c *capturedRequest) form() url.Values {
 	v, _ := url.ParseQuery(string(c.body))
 	return v
@@ -93,6 +395,71 @@ func (c *capturedRequest) json() map[string]any {
 	var m map[string]any
 	_ = json.Unmarshal(c.body, &m)
 	return m
+}
+
+func approvedWriteRequest(t *testing.T, b Bundle, action string, records []connectors.Record, h Hooks) connectors.WriteRequest {
+	t.Helper()
+	authority := fixtureWriteApprovalAuthority(t)
+	revision, err := authority.CredentialRevision("fixture-credential", nil)
+	if err != nil {
+		t.Fatalf("CredentialRevision(%s): %v", action, err)
+	}
+	configurationDigest, err := authority.ConfigurationDigest("fixture-credential", nil)
+	if err != nil {
+		t.Fatalf("ConfigurationDigest(%s): %v", action, err)
+	}
+	req := connectors.WriteRequest{Action: action, Config: connectors.RuntimeConfig{
+		CredentialRevision: revision, ConfigurationDigest: configurationDigest,
+		WriteApprovalScope: connectors.WriteApprovalScopeFixture,
+	}}
+	preview, err := DryRunWrite(context.Background(), b, req, records, h)
+	if err != nil {
+		t.Fatalf("DryRunWrite(%s): %v", action, err)
+	}
+	req.Approval = approvedEvidenceWithAuthority(t, authority, preview)
+	return req
+}
+
+func fixtureWriteApprovalAuthority(t *testing.T) *connectors.WriteApprovalAuthority {
+	t.Helper()
+	authority, err := connectors.NewFixtureWriteApprovalAuthority()
+	if err != nil {
+		t.Fatalf("NewFixtureWriteApprovalAuthority() error = %v", err)
+	}
+	return authority
+}
+
+func approvedEvidenceForPreview(t *testing.T, preview connectors.WritePreview) *connectors.WriteApprovalEvidence {
+	t.Helper()
+	return approvedEvidenceWithAuthority(t, fixtureWriteApprovalAuthority(t), preview)
+}
+
+func approvedEvidenceWithAuthority(t *testing.T, authority *connectors.WriteApprovalAuthority, preview connectors.WritePreview) *connectors.WriteApprovalEvidence {
+	t.Helper()
+	token := "fixture-approval-token"
+	grant, err := authority.IssueWriteGrant(connectors.WriteApprovalGrantRequest{
+		PlanID:        "rplan_fixture",
+		PlanHash:      strings.Repeat("a", 64),
+		PreviewDigest: preview.Digest,
+		ApprovalToken: token,
+		Target:        preview.ApprovalTarget,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	})
+	if err != nil {
+		t.Fatalf("IssueWriteGrant() error = %v", err)
+	}
+	evidence, err := authority.VerifyWriteGrant(grant, connectors.WriteApprovalExpectation{
+		PlanID:        grant.PlanID,
+		PlanHash:      grant.PlanHash,
+		PreviewDigest: preview.Digest,
+		ApprovalToken: token,
+		Target:        preview.ApprovalTarget,
+		Confirmation:  grant.Confirmation,
+	})
+	if err != nil {
+		t.Fatalf("VerifyWriteGrant() error = %v", err)
+	}
+	return evidence
 }
 
 func TestDryRunWriteMaterializesSpecDefaultBaseURL(t *testing.T) {
@@ -256,9 +623,8 @@ func TestWriteNoneBodyTypeSendsNoBody(t *testing.T) {
 		BodyType:   "none",
 	})
 
-	_, err := Write(context.Background(), b, connectors.WriteRequest{Action: "update_widget"}, []connectors.Record{
-		{"id": "42"},
-	}, nil)
+	records := []connectors.Record{{"id": "42"}}
+	_, err := Write(context.Background(), b, approvedWriteRequest(t, b, "update_widget", records, nil), records, nil)
 	if err != nil {
 		t.Fatalf("Write: %v", err)
 	}
@@ -278,9 +644,8 @@ func TestWriteBodyFieldsAllowListForDeleteWithBody(t *testing.T) {
 		BodyFields: []string{"message", "sha", "branch"},
 	})
 
-	_, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_file"}, []connectors.Record{
-		{"path": "a.txt", "message": "remove file", "sha": "abc123", "branch": "main", "extra_untouched": "x"},
-	}, nil)
+	records := []connectors.Record{{"path": "a.txt", "message": "remove file", "sha": "abc123", "branch": "main", "extra_untouched": "x"}}
+	_, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_file", records, nil), records, nil)
 	if err != nil {
 		t.Fatalf("Write: %v", err)
 	}
@@ -320,9 +685,8 @@ func TestWriteGraphQLBodyUsesFixedDocumentAndDeclaredVariables(t *testing.T) {
 		}`),
 	})
 
-	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_issue"}, []connectors.Record{
-		{"issue_id": "I_kwDO123"},
-	}, nil)
+	records := []connectors.Record{{"issue_id": "I_kwDO123"}}
+	result, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_issue", records, nil), records, nil)
 	if err != nil {
 		t.Fatalf("Write: %v", err)
 	}
@@ -396,9 +760,8 @@ func TestWriteGraphQLErrorsFailClosed(t *testing.T) {
 		RecordSchema: json.RawMessage(`{"type":"object","required":["issue_id"],"properties":{"issue_id":{"type":"string"}}}`),
 	})
 
-	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_issue"}, []connectors.Record{
-		{"issue_id": "I_kwDO123"},
-	}, nil)
+	records := []connectors.Record{{"issue_id": "I_kwDO123"}}
+	result, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_issue", records, nil), records, nil)
 	if err == nil {
 		t.Fatalf("Write: want GraphQL errors[] to fail closed")
 	}
@@ -500,6 +863,75 @@ func TestDryRunWritePreviewResolvedMethodPathSecretsRedacted(t *testing.T) {
 	}
 }
 
+func TestDryRunWriteDigestBindsCanonicalRequestAndCredentialRevision(t *testing.T) {
+	records := []connectors.Record{{"id": "42", "keep": "yes", "drop": "no"}}
+	base := Bundle{
+		Name: "twilio",
+		HTTP: HTTPBase{URL: "https://api.twilio.test/Accounts/{{ secrets.account_sid }}"},
+		Writes: []WriteAction{{
+			Name:       "delete_message",
+			Kind:       "delete",
+			Method:     http.MethodDelete,
+			Path:       "/Messages/{{ record.id }}",
+			PathFields: []string{"id"},
+			BodyFields: []string{"keep"},
+			Query:      map[string]QueryParam{"mode": {Template: "soft"}},
+			Hook:       "twilio-v1",
+		}},
+	}
+
+	preview := func(t *testing.T, bundle Bundle, sid string) connectors.WritePreview {
+		t.Helper()
+		authority := fixtureWriteApprovalAuthority(t)
+		revision, err := authority.CredentialRevision("twilio-fixture", map[string]string{"account_sid": sid})
+		if err != nil {
+			t.Fatalf("CredentialRevision() error = %v", err)
+		}
+		configurationDigest, err := authority.ConfigurationDigest("twilio-fixture", nil)
+		if err != nil {
+			t.Fatalf("ConfigurationDigest() error = %v", err)
+		}
+		got, err := DryRunWrite(context.Background(), bundle, connectors.WriteRequest{
+			Action: "delete_message",
+			Config: connectors.RuntimeConfig{
+				Secrets: map[string]string{"account_sid": sid}, CredentialRevision: revision,
+				ConfigurationDigest: configurationDigest, WriteApprovalScope: connectors.WriteApprovalScopeProject,
+			},
+		}, records, nil)
+		if err != nil {
+			t.Fatalf("DryRunWrite() error = %v", err)
+		}
+		return got
+	}
+
+	original := preview(t, base, "AC-one")
+	changedCredential := preview(t, base, "AC-two")
+	if original.Digest == changedCredential.Digest {
+		t.Fatal("preview digest did not bind the secret-derived account target")
+	}
+
+	changedQuery := base
+	changedQuery.Writes = append([]WriteAction(nil), base.Writes...)
+	changedQuery.Writes[0].Query = map[string]QueryParam{"mode": {Template: "hard"}}
+	if original.Digest == preview(t, changedQuery, "AC-one").Digest {
+		t.Fatal("preview digest did not bind the resolved query")
+	}
+
+	changedBody := base
+	changedBody.Writes = append([]WriteAction(nil), base.Writes...)
+	changedBody.Writes[0].BodyFields = []string{"drop"}
+	if original.Digest == preview(t, changedBody, "AC-one").Digest {
+		t.Fatal("preview digest did not bind body construction")
+	}
+
+	changedHook := base
+	changedHook.Writes = append([]WriteAction(nil), base.Writes...)
+	changedHook.Writes[0].Hook = "twilio-v2"
+	if original.Digest == preview(t, changedHook, "AC-one").Digest {
+		t.Fatal("preview digest did not bind hook identity")
+	}
+}
+
 func TestDryRunWritePreviewResolvedPathRedactsConfiguredRecordFields(t *testing.T) {
 	b := Bundle{
 		Name: "clinical",
@@ -577,9 +1009,8 @@ func TestWriteDeleteMissingOkStatusCountsAsWritten(t *testing.T) {
 		Delete:     &DeleteSpec{Idempotent: true, MissingOkStatus: []int{404}},
 	})
 
-	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_label"}, []connectors.Record{
-		{"name": "bug"},
-	}, nil)
+	records := []connectors.Record{{"name": "bug"}}
+	result, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_label", records, nil), records, nil)
 	if err != nil {
 		t.Fatalf("Write: %v (404 on idempotent delete should count as written, not error)", err)
 	}
@@ -602,9 +1033,8 @@ func TestWriteDeleteNonListed404Fails(t *testing.T) {
 		Delete:     &DeleteSpec{Idempotent: false},
 	})
 
-	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_label"}, []connectors.Record{
-		{"name": "bug"},
-	}, nil)
+	records := []connectors.Record{{"name": "bug"}}
+	result, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_label", records, nil), records, nil)
 	if err == nil {
 		t.Fatalf("Write: want error for 404 not in missing_ok_status")
 	}
@@ -629,9 +1059,8 @@ func TestWriteNonListedStatusFails(t *testing.T) {
 		Delete:     &DeleteSpec{Idempotent: true, MissingOkStatus: []int{404}},
 	})
 
-	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_label"}, []connectors.Record{
-		{"name": "bug"},
-	}, nil)
+	records := []connectors.Record{{"name": "bug"}}
+	result, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_label", records, nil), records, nil)
 	if err == nil {
 		t.Fatalf("Write: want error for 400 (not a missing_ok_status match)")
 	}
@@ -1125,8 +1554,8 @@ func TestWriteRecordSchemaMinItemsRejectsEmptyArray(t *testing.T) {
 		t.Fatalf("request must not be issued for an invalid record, got %s %s", cap.method, cap.path)
 	}
 
-	if _, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_records"},
-		[]connectors.Record{{"records": []any{"rec1"}}}, nil); err != nil {
+	validRecords := []connectors.Record{{"records": []any{"rec1"}}}
+	if _, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_records", validRecords, nil), validRecords, nil); err != nil {
 		t.Fatalf("non-empty array: unexpected error: %v", err)
 	}
 }

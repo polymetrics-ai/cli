@@ -6,6 +6,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"mime"
@@ -20,6 +21,7 @@ import (
 	"strings"
 	"time"
 
+	"polymetrics.ai/internal/connectors/transportpolicy"
 	"polymetrics.ai/internal/safety"
 )
 
@@ -162,6 +164,10 @@ func (r *Requester) client() *http.Client {
 		return r.Client
 	}
 	return &http.Client{Timeout: 60 * time.Second}
+}
+
+func (r *Requester) clientFor(ctx context.Context) *http.Client {
+	return transportpolicy.HTTPClient(ctx, r.client())
 }
 
 func (r *Requester) maxRetries() int {
@@ -687,12 +693,15 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 			}
 		}
 
-		resp, err := r.client().Do(req)
+		resp, err := r.clientFor(ctx).Do(req)
 		bodyErr := cleanupRequestBody(body)
 		if err != nil {
 			lastErr = fmt.Errorf("send request: %w", err)
 			if bodyErr != nil {
 				lastErr = fmt.Errorf("send request: %w", bodyErr)
+			}
+			if errors.Is(err, transportpolicy.ErrRedirectRefused) {
+				return nil, lastErr
 			}
 			if attempt < attempts-1 {
 				if werr := r.sleep(ctx, r.backoff(attempt, "")); werr != nil {

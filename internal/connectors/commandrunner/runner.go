@@ -134,7 +134,7 @@ func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req 
 		ApprovalRequired:      true,
 		Risk:                  firstNonEmpty(cmd.Risk, action.Risk),
 		Approval:              firstNonEmpty(cmd.Approval, "reverse ETL writes require plan, preview, approval, execute"),
-		ConfirmationChallenge: strings.TrimSpace(action.Confirm),
+		ConfirmationChallenge: string(connectors.ConfirmationForWriteAction(action).Kind),
 		Record:                cloneRecord(record),
 		RedactedRecord:        redactRecordWithFields(record, cmd.RedactFields),
 	}

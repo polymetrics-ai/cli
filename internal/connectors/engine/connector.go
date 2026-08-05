@@ -264,6 +264,7 @@ func synthesizeManifest(b Bundle) connectors.Manifest {
 	syncModes = orderCanonicalModes(syncModes)
 
 	for _, a := range b.Writes {
+		confirm := confirmationKindForWriteAction(a)
 		writeActions = append(writeActions, connectors.WriteActionSpec{
 			Name:           a.Name,
 			RequiredFields: writeActionRequiredFields(a),
@@ -273,7 +274,7 @@ func synthesizeManifest(b Bundle) connectors.Manifest {
 			RedactFields:   append([]string(nil), a.RedactFields...),
 			Risk:           a.Risk,
 			Batchable:      cloneBoolPtr(a.Batchable),
-			Confirm:        a.Confirm,
+			Confirm:        confirm,
 		})
 	}
 
@@ -353,6 +354,7 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 
 	writeActions := make([]connectors.WriteActionInfo, 0, len(b.Writes))
 	for _, a := range b.Writes {
+		confirm := confirmationKindForWriteAction(a)
 		writeActions = append(writeActions, connectors.WriteActionInfo{
 			Name:      a.Name,
 			Kind:      a.Kind,
@@ -360,7 +362,7 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 			Path:      a.Path,
 			Risk:      a.Risk,
 			Batchable: cloneBoolPtr(a.Batchable),
-			Confirm:   a.Confirm,
+			Confirm:   confirm,
 		})
 	}
 

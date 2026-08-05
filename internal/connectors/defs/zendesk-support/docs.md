@@ -173,10 +173,12 @@ Risk classes:
 
 - Nine `delete` actions (`delete_ticket`, `delete_user`, `delete_organization`, `delete_group`,
   `delete_macro`, `delete_trigger`, `delete_automation`, `delete_view`, `delete_ticket_field`) carry
-  `confirm: "destructive"` and treat status `404` as success. They are the only destructive actions;
-  the 88 remaining `destructive_action` rows stay unbound until
-  `cli-delete-confirmation-foundation-r1` ships the destructive-write confirm gate, and
-  `reverse_etl_execute_test.go`'s `TestDestructiveOperationsStayBlocked` fails if that count moves.
+  the legacy `confirm: "destructive"` declaration normalized by the shared typed gate and treat
+  status `404` as success. They are the only destructive actions. The shared gate makes the 88
+  remaining `destructive_action` rows technically bindable, but they stay unbound pending
+  connector-local typed action schemas, canonical command mappings, and fixtures;
+  `reverse_etl_execute_test.go`'s `TestDestructiveOperationsStayBlocked` fails if that count moves
+  without that authoring work.
 - Bulk and import actions (`tickets_create_many`, `ticket_import`, `ticket_bulk_import`,
   `group_membership_bulk_create`, `update_many_macros`, `update_many_triggers`,
   `update_many_object_triggers`, `bulk_update_default_custom_status`,
@@ -187,8 +189,8 @@ Risk classes:
   `update_current_user_settings`, `reorder_workspaces`) change configuration for the whole Zendesk
   account rather than a single record.
 - The 27 pre-existing `writes <action> plan` commands stay at `availability: "partial"` in
-  `cli_surface.json`: nine of them are bound deletes, and promoting them would change destructive
-  execution posture ahead of the confirmation foundation.
+  `cli_surface.json`: this foundation supplies the shared gate but deliberately does not promote or
+  bind connector commands; that remains connector-authoring work.
 
 ## Known limits
 
