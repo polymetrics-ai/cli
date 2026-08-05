@@ -45,9 +45,12 @@ affected packages and their JSON forms.
 Own certify tests plus only the minimal behavior-preserving harness seam. Write
 driver-protocol red tests first, then migrate error/stage scenarios one family
 at a time from repeated `Runner.Run` execution to a deterministic scripted
-driver. Retain the exhaustive real proof of full sweep, flow, schedule, and
-destructive plan → preview → approval → execute. Preserve no-retry and
-approval-replay-negative assertions.
+driver. Retain the exhaustive real proof of full source/read sweep with
+flow/schedule. The scripted driver must preserve the destructive plan →
+preview → approval → execute lifecycle, no-retry behavior, and
+approval-replay-negative assertions; the sample connector has no
+definition-owned full write inventory, so `--full --write` is a documented
+non-passing combination rather than a second real proof.
 
 Checkpoint: each migrated family has red/green evidence and the contract is
 green because equivalent full runner work is no longer duplicated.
