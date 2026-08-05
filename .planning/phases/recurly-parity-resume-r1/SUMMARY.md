@@ -2,6 +2,10 @@
 
 Status: implementation complete; final citation-convention integration and final focused gate rerun pending.
 
+Paused only for the shared request-contract convention: its source lane remains active and has not
+landed on `origin/main`. The branch intentionally does not claim completion until its 538 raw
+field citations are represented in that canonical, enforced format.
+
 Current executed evidence:
 
 - Recurly's v2021-02-25 provider OpenAPI reports 197 method/path operations. The bundle has exact

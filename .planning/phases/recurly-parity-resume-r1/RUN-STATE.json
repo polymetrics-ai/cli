@@ -1,11 +1,16 @@
 {
   "phase": "recurly-parity-resume-r1",
-  "state": "running",
+  "state": "paused_for_shared_citation_convention",
   "manualGSD": {
     "reason": "scripts/gsd prompt programming-loop init --phase recurly-parity-resume-r1 --dry-run returned unknown GSD command: programming-loop",
     "fallback": "manual plan, TDD ledger, verification checklist, prompt snapshot, summary, and run state"
   },
   "verificationPassed": false,
+  "externalDependency": {
+    "name": "canonical request_contract citation convention",
+    "status": "active in the shared conventions lane; not yet landed on origin/main",
+    "resumeAction": "rebase onto the landed convention, apply the 538-field Recurly research matrix, then rerun focused gates and no-mistakes"
+  },
   "orchestrationDecisions": [
     {
       "cycle": "plan",
