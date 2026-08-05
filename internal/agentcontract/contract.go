@@ -5,8 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
-	"path/filepath"
+	"path"
 	"slices"
 	"strings"
 	"unicode"
@@ -20,6 +21,7 @@ type Contract struct {
 	SourceID         string             `json:"source_id"`
 	Ownership        Ownership          `json:"ownership"`
 	BaseRole         Role               `json:"base_role"`
+	HarnessPolicies  []HarnessPolicy    `json:"harness_policies"`
 	StateMachine     StateMachine       `json:"state_machine"`
 	ConnectorOverlay ConnectorOverlay   `json:"connector_overlay"`
 	Codex            CodexContract      `json:"codex"`
@@ -44,6 +46,27 @@ type Role struct {
 	Delegation       string   `json:"delegation"`
 	ForbiddenRoles   []string `json:"forbidden_roles"`
 	DurableHandoff   []string `json:"durable_handoff"`
+}
+
+// HarnessPolicy contains the native settings required to render a registered harness projection.
+type HarnessPolicy struct {
+	Harness                string   `json:"harness"`
+	Format                 string   `json:"format"`
+	DocumentationURL       string   `json:"documentation_url"`
+	ProjectDiscovery       string   `json:"project_discovery"`
+	Precedence             []string `json:"precedence"`
+	Tools                  []string `json:"tools"`
+	SkillTool              string   `json:"skill_tool"`
+	PreloadedSkills        []string `json:"preloaded_skills"`
+	UnavailableSkills      []string `json:"unavailable_skills"`
+	UnavailableSkillCost   string   `json:"unavailable_skill_cost"`
+	SkillsDocumentationURL string   `json:"skills_documentation_url"`
+	SkillBoundary          string   `json:"skill_boundary"`
+	DisallowedTools        []string `json:"disallowed_tools"`
+	PermissionMode         string   `json:"permission_mode"`
+	DelegationTool         string   `json:"delegation_tool"`
+	DelegationGuarantee    string   `json:"delegation_guarantee"`
+	SmokeProcedure         string   `json:"smoke_procedure"`
 }
 
 type StateMachine struct {
@@ -195,6 +218,9 @@ func (contract *Contract) Validate() error {
 			return fmt.Errorf("canonical contract: base role must forbid %q", forbidden)
 		}
 	}
+	if err := validateHarnessPolicies(contract.HarnessPolicies); err != nil {
+		return err
+	}
 	stateIDs := []string{"job_received", "issue_map", "parent_draft_pr", "map_wave_phase", "discuss_decisions", "plan_tdd", "execute_tdd", "verify_gaps", "review_no_mistakes", "open_sub_pr", "integrate_sub_pr", "integrated_parent_gates", "ready_parent", "captain_merge"}
 	if contract.StateMachine.Name != "issue-first-delivery" || contract.StateMachine.InitialState != stateIDs[0] || !equalStepIDs(contract.StateMachine.Steps, stateIDs) {
 		return fmt.Errorf("canonical contract: base state machine is incomplete or out of order")
@@ -294,6 +320,93 @@ func (contract CodexContract) Validate() error {
 	return nil
 }
 
+// ProjectionFor returns the canonical native projection policy for a harness.
+func (contract *Contract) ProjectionFor(harness string) (HarnessPolicy, bool) {
+	for _, policy := range contract.HarnessPolicies {
+		if policy.Harness == harness {
+			return policy, true
+		}
+	}
+	return HarnessPolicy{}, false
+}
+
+func validateHarnessPolicies(policies []HarnessPolicy) error {
+	seen := make(map[string]bool, len(policies))
+	var claude *HarnessPolicy
+	for index := range policies {
+		policy := &policies[index]
+		if strings.TrimSpace(policy.Harness) == "" || strings.TrimSpace(policy.Format) == "" || seen[policy.Harness] {
+			return fmt.Errorf("canonical contract: harness policies must have unique non-empty harness and format fields")
+		}
+		seen[policy.Harness] = true
+		if policy.Harness == "claude" {
+			claude = policy
+		}
+	}
+	if claude == nil {
+		return fmt.Errorf("canonical contract: Claude harness policy is required")
+	}
+
+	const claudeFormat = "markdown_yaml_frontmatter"
+	const claudeDocumentationURL = "https://code.claude.com/docs/en/sub-agents"
+	const claudeSkillsDocumentationURL = "https://code.claude.com/docs/en/slash-commands"
+	const claudeUnavailableSkillCost = "Website and docs UI work requiring these design skills cannot satisfy repository skill routing in this Claude worker; preserve state and hand off to a captain-approved harness with trusted plugin packaging."
+	if claude.Format != claudeFormat || claude.DocumentationURL != claudeDocumentationURL ||
+		claude.SkillsDocumentationURL != claudeSkillsDocumentationURL ||
+		strings.TrimSpace(claude.ProjectDiscovery) == "" || strings.TrimSpace(claude.DelegationGuarantee) == "" ||
+		strings.TrimSpace(claude.SkillBoundary) == "" || !strings.Contains(claude.SkillBoundary, "context: fork") ||
+		claude.UnavailableSkillCost != claudeUnavailableSkillCost ||
+		strings.TrimSpace(claude.SmokeProcedure) == "" || !strings.Contains(claude.SmokeProcedure, "<role>") ||
+		claude.PermissionMode != "default" || claude.DelegationTool != "Agent" || claude.SkillTool != "Skill" {
+		return fmt.Errorf("canonical contract: Claude format, documentation, discovery, delegation, permission, and smoke policy are required")
+	}
+	wantPrecedence := []string{"managed definitions", "CLI --agents", "project .claude/agents", "user ~/.claude/agents", "plugins"}
+	if !slices.Equal(claude.Precedence, wantPrecedence) {
+		return fmt.Errorf("canonical contract: Claude precedence must match the documented managed, CLI, project, user, plugin order")
+	}
+	wantTools := []string{"Bash", "Edit", "Glob", "Grep", "Read", "Write"}
+	wantDisallowedTools := []string{"Agent", "Task", "Skill"}
+	if !slices.Equal(claude.Tools, wantTools) || !slices.Equal(claude.PreloadedSkills, claudePreloadedSkills()) ||
+		!slices.Equal(claude.UnavailableSkills, claudeUnavailableSkills()) ||
+		!slices.Equal(claude.DisallowedTools, wantDisallowedTools) ||
+		slices.Contains(claude.Tools, claude.DelegationTool) || slices.Contains(claude.Tools, claude.SkillTool) ||
+		!slices.Contains(claude.DisallowedTools, claude.DelegationTool) ||
+		!slices.Contains(claude.DisallowedTools, claude.SkillTool) {
+		return fmt.Errorf("canonical contract: Claude tools must use the minimal base allowlist, trusted preloaded skills, and Agent/Task/Skill denylist")
+	}
+	return nil
+}
+
+func claudePreloadedSkills() []string {
+	return []string{
+		"cc-skills-golang:golang-cli",
+		"cc-skills-golang:golang-concurrency",
+		"cc-skills-golang:golang-context",
+		"cc-skills-golang:golang-database",
+		"cc-skills-golang:golang-design-patterns",
+		"cc-skills-golang:golang-documentation",
+		"cc-skills-golang:golang-error-handling",
+		"cc-skills-golang:golang-graphql",
+		"cc-skills-golang:golang-how-to",
+		"cc-skills-golang:golang-lint",
+		"cc-skills-golang:golang-safety",
+		"cc-skills-golang:golang-security",
+		"cc-skills-golang:golang-spf13-cobra",
+		"cc-skills-golang:golang-spf13-viper",
+		"cc-skills-golang:golang-structs-interfaces",
+		"cc-skills-golang:golang-testing",
+		"frontend-design:frontend-design",
+	}
+}
+
+func claudeUnavailableSkills() []string {
+	return []string{
+		"vercel-composition-patterns",
+		"vercel-react-best-practices",
+		"web-design-guidelines",
+	}
+}
+
 func allNonEmpty(values []string) bool {
 	if len(values) == 0 {
 		return false
@@ -382,8 +495,8 @@ func validateProjections(targets []ProjectionTarget) error {
 		required   bool
 	}
 	expected := map[string]projectionExpectation{
-		"claude/pm-delivery-worker":  {path: ".claude/agents/pm-delivery-worker.md", renderMode: "markdown_block"},
-		"claude/pm-connector-worker": {path: ".claude/agents/pm-connector-worker.md", renderMode: "markdown_block"},
+		"claude/pm-delivery-worker":  {path: ".claude/agents/pm-delivery-worker.md", renderMode: "markdown_yaml_frontmatter", required: true},
+		"claude/pm-connector-worker": {path: ".claude/agents/pm-connector-worker.md", renderMode: "markdown_yaml_frontmatter", required: true},
 		"codex/pm-delivery-worker":   {path: ".codex/agents/pm-delivery-worker.toml", renderMode: "standalone_toml", required: true},
 		"codex/pm-connector-worker":  {path: ".codex/agents/pm-connector-worker.toml", renderMode: "standalone_toml", required: true},
 		"pi/pm-delivery-worker":      {path: ".pi/agents/pm-delivery-worker.md", renderMode: "markdown_block"},
@@ -396,7 +509,8 @@ func validateProjections(targets []ProjectionTarget) error {
 	for _, target := range targets {
 		key := target.Harness + "/" + target.Role
 		want, ok := expected[key]
-		if !ok || target.Path != want.path || target.RenderMode != want.renderMode || target.Required != want.required || filepath.Clean(target.Path) != target.Path || filepath.IsAbs(target.Path) || seen[key] {
+		if !ok || target.Path != want.path || target.RenderMode != want.renderMode || target.Required != want.required ||
+			!fs.ValidPath(target.Path) || path.Clean(target.Path) != target.Path || seen[key] {
 			return fmt.Errorf("canonical contract: invalid projection target %q at %q", key, target.Path)
 		}
 		seen[key] = true

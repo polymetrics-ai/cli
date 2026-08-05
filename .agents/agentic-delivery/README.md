@@ -58,11 +58,11 @@ The `.agents/agentic-delivery/` directory holds shared contracts, conventions, a
 Specialized agent families can live beside it under `.agents/<functional-area>/` while reusing the
 same schema and issue-to-PR contract.
 
-Runtime-specific files, such as `.codex/agents/*.toml` and `.opencode/agents/*.md`, are generated
-activation adapters. `canonical/delivery-contract.json` is the sole owner of each registered
-target's path, render mode, and requiredness. The checked-in Codex adapters are complete standalone
-TOML files; Markdown adapters project marked blocks. Never hand-edit or copy GSD/TDD, review, or
-human-gate policy into an adapter.
+Runtime-specific files, such as `.claude/agents/*.md`, `.codex/agents/*.toml`, and
+`.pi/agents/*.md`, are generated activation adapters. `canonical/delivery-contract.json` is the
+sole owner of each registered target's path, render mode, and requiredness. The checked-in Claude
+and Codex adapters are complete full-file projections; optional Pi adapters project marked blocks.
+Never hand-edit or copy GSD/TDD, review, or human-gate policy into an adapter.
 
 Codex loads the project-local `.codex` configuration layer only when the repository is trusted.
 The generated Codex workers therefore fail closed for project-local selection in an untrusted
@@ -70,6 +70,15 @@ repository: trust it in Codex before selecting either worker. Their generated
 `agents.enabled = false` setting disables further Codex multi-agent delegation. The canonical
 `codex` section owns this isolation contract, its official documentation links, and the caveat that
 same-filename user/project standalone-agent precedence is undocumented.
+
+The Claude check inventories every repository-local `.claude/agents` scope recursively while
+pruning only the exact root `.git` metadata directory. It rejects scope symlinks, extra Markdown
+definitions, duplicate names, and missing or non-regular registered definitions; exactly the two
+registered Markdown files may define Claude agents. Whole-file comparison normalizes each
+carriage-return run immediately before LF to one LF, so CRLF checkout conversion does not create
+drift; every other byte remains exact. Claude workers preload only plugin-qualified trusted skills
+and omit and deny runtime `Skill`; any repository-routed skill without a trusted namespace is
+documented as unavailable rather than exposed through a collision-prone name.
 
 ## Design principles
 

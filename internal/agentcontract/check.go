@@ -6,9 +6,12 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"fmt"
+	"io/fs"
 	"os"
 	"os/exec"
+	pathpkg "path"
 	"path/filepath"
+	"slices"
 	"strings"
 )
 
@@ -29,9 +32,13 @@ func CheckGSDCommands(ctx context.Context, root string, commands []string) error
 	if err != nil {
 		return fmt.Errorf("resolve GSD repository root: %w", err)
 	}
+	node, err := exec.LookPath("node")
+	if err != nil {
+		return fmt.Errorf("resolve Node executable for GSD adapter: %w", err)
+	}
 	script := filepath.Join(absoluteRoot, "scripts", "gsd")
 	for _, command := range commands {
-		invocation := exec.CommandContext(ctx, script, "sources", command)
+		invocation := exec.CommandContext(ctx, node, script, "sources", command)
 		invocation.Dir = absoluteRoot
 		output, err := invocation.CombinedOutput()
 		if err != nil {
@@ -51,6 +58,9 @@ func CheckProjections(root string, contract *Contract) (returnErr error) {
 			returnErr = fmt.Errorf("close projection root: %w", err)
 		}
 	}()
+	if err := checkClaudeAgentInventory(projectionRoot, contract); err != nil {
+		return err
+	}
 
 	for _, target := range contract.Projections {
 		path, err := projectionPath(target.Path)
@@ -69,9 +79,24 @@ func CheckProjections(root string, contract *Contract) (returnErr error) {
 			return err
 		}
 		actual := content
-		if target.RenderMode == "markdown_block" {
+		switch target.RenderMode {
+		case "markdown_block":
 			actual, _, _, err = extractProjectionBlock(content)
 			if err != nil {
+				return fmt.Errorf("check projection %s: %w", target.Path, err)
+			}
+		case claudeMarkdownYAMLFrontmatter:
+			expected = normalizeClaudeProjection(expected)
+			actual = normalizeClaudeProjection(content)
+			policy, ok := contract.ProjectionFor(target.Harness)
+			if !ok {
+				return fmt.Errorf("check projection %s: canonical %s policy is missing", target.Path, target.Harness)
+			}
+			frontmatter, err := parseClaudeFrontmatter(actual)
+			if err != nil {
+				return fmt.Errorf("check projection %s: %w", target.Path, err)
+			}
+			if err := validateClaudeFrontmatter(frontmatter, target, policy); err != nil {
 				return fmt.Errorf("check projection %s: %w", target.Path, err)
 			}
 		}
@@ -82,9 +107,112 @@ func CheckProjections(root string, contract *Contract) (returnErr error) {
 	return nil
 }
 
+func checkClaudeAgentInventory(projectionRoot *os.Root, contract *Contract) error {
+	const agentDirectory = ".claude/agents"
+	expected := make(map[string]string)
+	expectedPaths := make([]string, 0, 2)
+	for _, target := range contract.Projections {
+		if target.Harness != "claude" {
+			continue
+		}
+		expected[target.Path] = target.Role
+		expectedPaths = append(expectedPaths, target.Path)
+	}
+	slices.Sort(expectedPaths)
+
+	for _, directory := range []string{".claude", agentDirectory} {
+		info, err := projectionRoot.Lstat(filepath.FromSlash(directory))
+		if err != nil {
+			return fmt.Errorf("inspect Claude project agent inventory: %w", err)
+		}
+		if info.Mode()&os.ModeSymlink != 0 || !info.IsDir() {
+			return fmt.Errorf("inspect Claude project agent inventory: %s must be a directory, not a symlink or special file", directory)
+		}
+	}
+
+	found := make(map[string]bool, len(expected))
+	seenNames := make(map[string]string, len(expected))
+	unexpected := make([]string, 0)
+	walkErr := fs.WalkDir(projectionRoot.FS(), ".", func(agentPath string, entry fs.DirEntry, visitErr error) error {
+		if visitErr != nil {
+			return visitErr
+		}
+		if entry.IsDir() && agentPath == ".git" {
+			return fs.SkipDir
+		}
+		if entry.Type()&fs.ModeSymlink != 0 && isClaudeAgentInventoryPath(agentPath) {
+			return fmt.Errorf("claude project agent inventory contains symlink %s", agentPath)
+		}
+		if entry.IsDir() || !isClaudeAgentDefinitionPath(agentPath) {
+			return nil
+		}
+		if !entry.Type().IsRegular() {
+			return fmt.Errorf("claude project agent definition %s is not a regular file", agentPath)
+		}
+		content, err := fs.ReadFile(projectionRoot.FS(), agentPath)
+		if err != nil {
+			return fmt.Errorf("read claude project agent definition %s: %w", agentPath, err)
+		}
+		frontmatter, err := parseClaudeFrontmatter(content)
+		if err != nil {
+			return fmt.Errorf("parse claude project agent definition %s: %w", agentPath, err)
+		}
+		if previous, ok := seenNames[frontmatter.Name]; ok {
+			return fmt.Errorf("duplicate claude project agent name %q at %s and %s", frontmatter.Name, previous, agentPath)
+		}
+		seenNames[frontmatter.Name] = agentPath
+		role, ok := expected[agentPath]
+		if !ok {
+			unexpected = append(unexpected, agentPath)
+			return nil
+		}
+		if frontmatter.Name != role {
+			return fmt.Errorf("claude project agent definition %s declares name %q, want %q", agentPath, frontmatter.Name, role)
+		}
+		found[agentPath] = true
+		return nil
+	})
+	if walkErr != nil {
+		return fmt.Errorf("inspect Claude project agent inventory: %w", walkErr)
+	}
+	if len(unexpected) != 0 {
+		slices.Sort(unexpected)
+		return fmt.Errorf("inspect Claude project agent inventory: unexpected definitions %s; only %s are permitted", strings.Join(unexpected, ", "), strings.Join(expectedPaths, ", "))
+	}
+	for _, expectedPath := range expectedPaths {
+		if !found[expectedPath] {
+			return fmt.Errorf("inspect Claude project agent inventory: missing required definition %s", expectedPath)
+		}
+	}
+	return nil
+}
+
+func isClaudeAgentDefinitionPath(agentPath string) bool {
+	components := strings.Split(agentPath, "/")
+	for index := 0; index+2 < len(components); index++ {
+		if strings.EqualFold(components[index], ".claude") && strings.EqualFold(components[index+1], "agents") {
+			return strings.EqualFold(pathpkg.Ext(agentPath), ".md")
+		}
+	}
+	return false
+}
+
+func isClaudeAgentInventoryPath(agentPath string) bool {
+	components := strings.Split(agentPath, "/")
+	for index, component := range components {
+		if !strings.EqualFold(component, ".claude") {
+			continue
+		}
+		if index == len(components)-1 || strings.EqualFold(components[index+1], "agents") {
+			return true
+		}
+	}
+	return false
+}
+
 func CheckProjection(want, got []byte) error {
 	if !bytes.Equal(want, got) {
-		return fmt.Errorf("generated block diverges from canonical source; run go run ./cmd/agentcontractgen sync")
+		return fmt.Errorf("generated projection diverges from canonical source; run go run ./cmd/agentcontractgen sync")
 	}
 	return nil
 }
@@ -111,24 +239,28 @@ func SyncProjections(root string, contract *Contract) (updated int, returnErr er
 		}
 		content, err := projectionRoot.ReadFile(path)
 		if err != nil {
-			if os.IsNotExist(err) && !target.Required {
-				continue
-			}
 			if !os.IsNotExist(err) {
 				return updated, fmt.Errorf("read %s projection %s: %w", target.Harness, target.Path, err)
 			}
-			if err := projectionRoot.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+			if !target.Required {
+				continue
+			}
+			if target.RenderMode == claudeMarkdownYAMLFrontmatter {
+				expected = normalizeClaudeProjection(expected)
+			}
+			if err := ensureProjectionDirectory(projectionRoot, filepath.Dir(path)); err != nil {
 				return updated, fmt.Errorf("create projection directory for %s: %w", target.Path, err)
 			}
 			if err := writeAtomic(projectionRoot, path, expected, 0o644); err != nil {
-				return updated, fmt.Errorf("create projection %s: %w", target.Path, err)
+				return updated, fmt.Errorf("write projection %s: %w", target.Path, err)
 			}
 			updated++
 			continue
 		}
 
-		next := expected
-		if target.RenderMode == "markdown_block" {
+		var next []byte
+		switch target.RenderMode {
+		case "markdown_block":
 			block, start, end, err := replacementBlock(content, contract, target)
 			if err != nil {
 				return updated, fmt.Errorf("sync projection %s: %w", target.Path, err)
@@ -136,11 +268,22 @@ func SyncProjections(root string, contract *Contract) (updated int, returnErr er
 			if bytes.Equal(content[start:end], block) {
 				continue
 			}
-			next = make([]byte, 0, len(content)-end+start+len(block))
 			next = append(next, content[:start]...)
 			next = append(next, block...)
 			next = append(next, content[end:]...)
-		} else if bytes.Equal(content, expected) {
+		case claudeMarkdownYAMLFrontmatter:
+			expected = normalizeClaudeProjection(expected)
+			if bytes.Equal(normalizeClaudeProjection(content), expected) {
+				continue
+			}
+			next = expected
+		default:
+			if bytes.Equal(content, expected) {
+				continue
+			}
+			next = expected
+		}
+		if next == nil {
 			continue
 		}
 		info, err := projectionRoot.Stat(path)
@@ -203,6 +346,23 @@ func projectionPath(path string) (string, error) {
 		return "", fmt.Errorf("canonical contract: projection path %q is not local", path)
 	}
 	return localPath, nil
+}
+
+func ensureProjectionDirectory(root *os.Root, directory string) error {
+	if directory == "." {
+		return nil
+	}
+	current := ""
+	for _, component := range strings.Split(filepath.ToSlash(directory), "/") {
+		if component == "" || component == "." || component == ".." {
+			return fmt.Errorf("invalid projection directory %q", directory)
+		}
+		current = filepath.Join(current, component)
+		if err := root.Mkdir(current, 0o755); err != nil && !os.IsExist(err) {
+			return err
+		}
+	}
+	return nil
 }
 
 func writeAtomic(root *os.Root, path string, content []byte, mode os.FileMode) error {

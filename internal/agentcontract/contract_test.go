@@ -29,6 +29,62 @@ func TestCanonicalContractRequiredInvariants(t *testing.T) {
 			},
 		},
 		{
+			name: "Claude tools include Agent",
+			mutate: func(value *Contract) {
+				value.HarnessPolicies[0].Tools = append(value.HarnessPolicies[0].Tools, "Agent")
+			},
+		},
+		{
+			name: "Claude tools include bare Skill",
+			mutate: func(value *Contract) {
+				value.HarnessPolicies[0].Tools = append(value.HarnessPolicies[0].Tools, "Skill")
+			},
+		},
+		{
+			name: "Claude trusted preload removed",
+			mutate: func(value *Contract) {
+				policy := &value.HarnessPolicies[0]
+				policy.PreloadedSkills = policy.PreloadedSkills[:len(policy.PreloadedSkills)-1]
+			},
+		},
+		{
+			name: "Claude unqualified skill added",
+			mutate: func(value *Contract) {
+				policy := &value.HarnessPolicies[0]
+				policy.PreloadedSkills = append(policy.PreloadedSkills, "gsd-programming-loop")
+			},
+		},
+		{
+			name: "Claude Task alias not denied",
+			mutate: func(value *Contract) {
+				value.HarnessPolicies[0].DisallowedTools = []string{"Agent", "Skill"}
+			},
+		},
+		{
+			name: "Claude Skill tool not denied",
+			mutate: func(value *Contract) {
+				value.HarnessPolicies[0].DisallowedTools = []string{"Agent", "Task"}
+			},
+		},
+		{
+			name: "Claude unavailable skill cost removed",
+			mutate: func(value *Contract) {
+				value.HarnessPolicies[0].UnavailableSkillCost = ""
+			},
+		},
+		{
+			name: "Claude precedence skips project",
+			mutate: func(value *Contract) {
+				value.HarnessPolicies[0].Precedence[2] = "user ~/.claude/agents"
+			},
+		},
+		{
+			name: "Claude project projection optional",
+			mutate: func(value *Contract) {
+				value.Projections[0].Required = false
+			},
+		},
+		{
 			name: "connector does not inherit base",
 			mutate: func(value *Contract) {
 				value.ConnectorOverlay.Inherits = "other-role"
@@ -236,12 +292,12 @@ func TestRenderIsStableAndConnectorInheritsBase(t *testing.T) {
 		}
 	}
 
-	const expectedSHA256 = "84b0f467472c602e611613171f6807affc20ae53e560a4bf09ccb38ff0100d05"
+	const expectedSHA256 = "cd548735a93c2c0fa5113082255ad07f5fa39af27a033b07797f2f370a2999b1"
 	gotSHA256 := fmt.Sprintf("%x", sha256.Sum256(base))
 	if gotSHA256 != expectedSHA256 {
 		t.Fatalf("base rendering hash = %s, update expected hash after intentional canonical change", gotSHA256)
 	}
-	const expectedConnectorSHA256 = "e9047b6c0b5ad4c14a4a4dcc137c1aafcc190617f1be7a43630dce2c56991fd5"
+	const expectedConnectorSHA256 = "a0b5986925a716685b028b3617ba21b59216980e3f5f1fd5a323be75fd9b54c8"
 	gotConnectorSHA256 := fmt.Sprintf("%x", sha256.Sum256(connector))
 	if gotConnectorSHA256 != expectedConnectorSHA256 {
 		t.Fatalf("connector rendering hash = %s, update expected hash after intentional canonical change", gotConnectorSHA256)

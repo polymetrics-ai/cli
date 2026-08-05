@@ -82,30 +82,33 @@ keywords for PRs targeting the default branch.
    confirm exactly one target connector, ownership guard evidence, changed-path compliance, and any
    foundation issue/PR path before production edits; split shared runtime/tooling or unrelated
    connector work before the connector sub-PR proceeds.
-6. Open the sub-PR against the parent branch with `Refs #<sub-issue>` and `Refs #<parent-issue>`.
-7. Run targeted verification and broader issue verification.
-8. Run the Claude review loop and reply to every actionable finding with a disposition. Use
-   automatic review whenever the PR is non-draft and targets a reviewed base branch. Use manual
-   review commands only under the fallback conditions in `workflows/claude-review-loop.md`.
-   If Claude is rate-limited, skipped, disabled, paused, or unavailable and review coverage is
-   blocking progress, request GitHub Copilot review once as backup when enabled.
-9. Commit and push green sub-issue slices to the sub-issue branch after local green gates. Never
+6. Run targeted verification and broader issue verification.
+7. Run the installed `code-review` flow, disposition every finding, and complete the applicable
+   no-mistakes child review, test, docs, and lint gates without `--yes`.
+8. Commit and push green sub-issue slices to the sub-issue branch after local green gates. Never
    push to `main`; stop only when a human gate is triggered.
-10. If Claude skips the sub-PR because the base branch is not `main`, record that skip as a
+9. Open the sub-PR against the parent branch with `Refs #<sub-issue>` and `Refs #<parent-issue>`.
+10. After the PR exists, wait for CI and run the Claude review loop, replying to every actionable
+    finding with a disposition. Use automatic review whenever the PR is non-draft and targets a
+    reviewed base branch. Use manual review commands only under the fallback conditions in
+    `workflows/claude-review-loop.md`. If Claude is rate-limited, skipped, disabled, paused, or
+    unavailable and review coverage is blocking progress, request GitHub Copilot review once as
+    backup when enabled.
+11. If Claude skips the sub-PR because the base branch is not `main`, record that skip as a
     review-routing event, not as approval. If parent-PR fallback is selected, a technical landing
     may expose that commit range on the parent PR, but record the wave checkpoint as held for parent
     review; it is not canonical integration and must not unblock dependent work.
-11. Advance `integrate_sub_pr` only after every automated gate is green, review coverage is
+12. Advance `integrate_sub_pr` only after every automated gate is green, review coverage is
     satisfied through the sub-PR, parent-PR fallback, or recorded Copilot/human fallback, and no
     human gate is triggered.
-12. After advancing `integrate_sub_pr`, push the parent branch and update the parent PR's
+13. After advancing `integrate_sub_pr`, push the parent branch and update the parent PR's
     integrated-subissue list. If the parent PR is non-draft and targets `main`, wait for automatic
     Claude review. If the parent PR is draft or automatic review is skipped, record parent-level
     coverage as pending or use the fallback rules in
     `workflows/automated-review-routing-loop.md`.
-13. Comment on the sub-issue with the merged sub-PR, commit, verification, automated review coverage
+14. Comment on the sub-issue with the merged sub-PR, commit, verification, automated review coverage
     route, and parent PR status.
-14. Leave the sub-issue open until the parent PR lands on `main`, unless the canonical worker
+15. Leave the sub-issue open until the parent PR lands on `main`, unless the canonical worker
     explicitly decides that parent-branch integration is the definition of done.
 
 ## Parent PR execution loop
