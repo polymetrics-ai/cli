@@ -1,11 +1,19 @@
 {
   "record": {
     "knowledge_base_id": "fixture_knowledge_base_id",
-    "locale": "fixture_locale"
+    "locale": "fixture_locale",
+    "author_id": "fixture_author_id",
+    "subject": "Fixture article",
+    "content": "Fixture article content."
   },
   "expect": {
     "method": "POST",
-    "path": "/knowledge_bases/fixture_knowledge_base_id/locales/fixture_locale/articles"
+    "path": "/knowledge_bases/fixture_knowledge_base_id/locales/fixture_locale/articles",
+    "body": {
+      "author_id": "fixture_author_id",
+      "subject": "Fixture article",
+      "content": "Fixture article content."
+    }
   },
   "response": {
     "status": 201,

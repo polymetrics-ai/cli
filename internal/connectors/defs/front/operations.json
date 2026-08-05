@@ -69,10 +69,25 @@
                   "Custom Field"
                 ]
               }
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "messages"
+              ]
+            },
+            "start": {
+              "type": "number"
+            },
+            "end": {
+              "type": "number"
             }
           },
           "required": [
-            "columns"
+            "columns",
+            "type",
+            "start",
+            "end"
           ],
           "additionalProperties": true
         }

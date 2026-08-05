@@ -1,10 +1,16 @@
 {
   "record": {
-    "article_id": "fixture_article_id"
+    "article_id": "fixture_article_id",
+    "author_id": "fixture_author_id",
+    "content": "Fixture article content."
   },
   "expect": {
     "method": "PATCH",
-    "path": "/knowledge_base_articles/fixture_article_id/content"
+    "path": "/knowledge_base_articles/fixture_article_id/content",
+    "body": {
+      "author_id": "fixture_author_id",
+      "content": "Fixture article content."
+    }
   },
   "response": {
     "status": 200,

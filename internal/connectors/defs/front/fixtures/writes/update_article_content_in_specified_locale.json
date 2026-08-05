@@ -1,11 +1,17 @@
 {
   "record": {
     "article_id": "fixture_article_id",
-    "locale": "fixture_locale"
+    "locale": "fixture_locale",
+    "author_id": "fixture_author_id",
+    "content": "Fixture article content."
   },
   "expect": {
     "method": "PATCH",
-    "path": "/knowledge_base_articles/fixture_article_id/locales/fixture_locale/content"
+    "path": "/knowledge_base_articles/fixture_article_id/locales/fixture_locale/content",
+    "body": {
+      "author_id": "fixture_author_id",
+      "content": "Fixture article content."
+    }
   },
   "response": {
     "status": 200,

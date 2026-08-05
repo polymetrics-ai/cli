@@ -24,7 +24,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "account_id",
           "contact_ids"
@@ -63,7 +63,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "account_id",
           "contact_ids"
@@ -90,7 +90,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "account_id"
         ]
@@ -139,7 +139,7 @@
             "additionalProperties": true
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "account_id"
         ]
@@ -176,7 +176,10 @@
             "additionalProperties": true
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false,
+        "required": [
+          "name"
+        ]
       },
       "risk": "high: fixed Front POST /accounts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "confirm": "destructive"
@@ -211,13 +214,15 @@
                 "type": "string"
               }
             },
-            "additionalProperties": true
+            "additionalProperties": false,
+            "minProperties": 1
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "application_uid",
-          "event_type"
+          "event_type",
+          "app_object"
         ]
       },
       "risk": "critical: fixed Front POST /applications/{application_uid}/events mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
@@ -270,12 +275,6 @@
           "quote_body": {
             "type": "string"
           },
-          "attachments": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
           "mode": {
             "type": "string",
             "enum": [
@@ -290,7 +289,7 @@
             "type": "boolean"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "channel_id",
           "body"
@@ -332,7 +331,7 @@
             "required": [
               "handle"
             ],
-            "additionalProperties": true
+            "additionalProperties": false
           },
           "subject": {
             "type": "string"
@@ -359,16 +358,10 @@
                 "additionalProperties": true
               }
             },
-            "additionalProperties": true
-          },
-          "attachments": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "additionalProperties": false
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "channel_id",
           "sender",
@@ -441,13 +434,7 @@
                 "type": "boolean"
               }
             },
-            "additionalProperties": true
-          },
-          "attachments": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "additionalProperties": false
           },
           "signature_id": {
             "type": "string"
@@ -456,7 +443,7 @@
             "type": "boolean"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "channel_id",
           "to",
@@ -484,7 +471,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "channel_id"
         ]
@@ -528,10 +515,13 @@
                 "type": "string"
               }
             },
-            "additionalProperties": true
+            "additionalProperties": false
+          },
+          "status": {
+            "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "channel_id"
         ]
@@ -563,7 +553,7 @@
             "type": "boolean"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "comment_id"
         ]
@@ -596,15 +586,9 @@
           },
           "is_pinned": {
             "type": "boolean"
-          },
-          "attachments": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "comment_id",
           "body"
@@ -645,7 +629,7 @@
             "type": "boolean"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "name"
         ]
@@ -677,7 +661,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "contact_group_id",
           "contact_ids"
@@ -716,7 +700,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "contact_group_id",
           "contact_ids"
@@ -743,7 +727,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "contact_group_id"
         ]
@@ -769,7 +753,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "name"
         ]
@@ -801,7 +785,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "contact_list_id",
           "contact_ids"
@@ -840,7 +824,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "contact_list_id",
           "contact_ids"
@@ -867,7 +851,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "contact_list_id"
         ]
@@ -893,7 +877,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "name"
         ]
@@ -937,7 +921,7 @@
             "type": "boolean"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "contact_id",
           "handle",
@@ -986,7 +970,7 @@
             ]
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "contact_id",
           "handle",
@@ -1020,7 +1004,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "contact_id",
           "author_id",
@@ -1048,7 +1032,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "contact_id"
         ]
@@ -1085,9 +1069,6 @@
           "description": {
             "type": "string"
           },
-          "avatar": {
-            "type": "string"
-          },
           "links": {
             "type": "array",
             "items": {
@@ -1112,7 +1093,7 @@
             "additionalProperties": true
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "contact_id"
         ]
@@ -1138,7 +1119,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "contact_ids"
         ]
@@ -1158,9 +1139,6 @@
             "type": "string"
           },
           "description": {
-            "type": "string"
-          },
-          "avatar": {
             "type": "string"
           },
           "links": {
@@ -1211,11 +1189,15 @@
                 "handle",
                 "source"
               ],
-              "additionalProperties": true
-            }
+              "additionalProperties": false
+            },
+            "minItems": 1
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false,
+        "required": [
+          "handles"
+        ]
       },
       "risk": "high: fixed Front POST /contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "confirm": "destructive"
@@ -1241,7 +1223,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "conversation_id",
           "assignee_id"
@@ -1275,15 +1257,9 @@
           },
           "is_pinned": {
             "type": "boolean"
-          },
-          "attachments": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "conversation_id",
           "body"
@@ -1339,12 +1315,6 @@
           "quote_body": {
             "type": "string"
           },
-          "attachments": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
           "mode": {
             "type": "string",
             "enum": [
@@ -1362,7 +1332,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "conversation_id",
           "body"
@@ -1395,7 +1365,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "conversation_id",
           "teammate_ids"
@@ -1434,7 +1404,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "conversation_id",
           "teammate_ids"
@@ -1467,7 +1437,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "conversation_id",
           "link_ids"
@@ -1512,7 +1482,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "conversation_id"
         ]
@@ -1589,13 +1559,7 @@
                 "type": "boolean"
               }
             },
-            "additionalProperties": true
-          },
-          "attachments": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "additionalProperties": false
           },
           "signature_id": {
             "type": "string"
@@ -1604,7 +1568,7 @@
             "type": "boolean"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "conversation_id",
           "body"
@@ -1640,7 +1604,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "conversation_id",
           "teammate_id",
@@ -1674,7 +1638,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "conversation_id",
           "tag_ids"
@@ -1713,7 +1677,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "conversation_id",
           "tag_ids"
@@ -1740,7 +1704,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "conversation_id"
         ]
@@ -1813,7 +1777,7 @@
             "additionalProperties": true
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "conversation_id"
         ]
@@ -1856,18 +1820,12 @@
               },
               "body": {
                 "type": "string"
-              },
-              "attachments": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
               }
             },
             "required": [
               "body"
             ],
-            "additionalProperties": true
+            "additionalProperties": false
           },
           "description": {
             "type": "string"
@@ -1881,7 +1839,7 @@
             "additionalProperties": true
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "type",
           "subject"
@@ -1911,7 +1869,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "draft_id",
           "version"
@@ -1973,12 +1931,6 @@
           "quote_body": {
             "type": "string"
           },
-          "attachments": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
           "mode": {
             "type": "string",
             "enum": [
@@ -1998,7 +1950,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "message_id",
           "body"
@@ -2016,7 +1968,9 @@
         "inbox_id"
       ],
       "redact_fields": [
-        "inbox_id"
+        "inbox_id",
+        "settings.auth_token",
+        "credentials"
       ],
       "record_schema": {
         "type": "object",
@@ -2046,7 +2000,7 @@
                 "type": "string"
               }
             },
-            "additionalProperties": true
+            "additionalProperties": false
           },
           "type": {
             "type": "string",
@@ -2058,9 +2012,17 @@
           },
           "send_as": {
             "type": "string"
+          },
+          "application_uid": {
+            "type": "string"
+          },
+          "credentials": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": true
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "inbox_id",
           "type"
@@ -2102,7 +2064,7 @@
             "required": [
               "handle"
             ],
-            "additionalProperties": true
+            "additionalProperties": false
           },
           "to": {
             "type": "array",
@@ -2181,16 +2143,10 @@
             "required": [
               "is_inbound"
             ],
-            "additionalProperties": true
-          },
-          "attachments": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "additionalProperties": false
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "inbox_id",
           "sender",
@@ -2228,7 +2184,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "inbox_id",
           "teammate_ids"
@@ -2267,7 +2223,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "inbox_id",
           "teammate_ids"
@@ -2302,7 +2258,7 @@
             "additionalProperties": true
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "name"
         ]
@@ -2344,9 +2300,11 @@
             ]
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
-          "article_id"
+          "article_id",
+          "author_id",
+          "content"
         ]
       },
       "risk": "high: fixed Front PATCH /knowledge_base_articles/{article_id}/content mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
@@ -2391,10 +2349,12 @@
             ]
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "article_id",
-          "locale"
+          "locale",
+          "author_id",
+          "content"
         ]
       },
       "risk": "high: fixed Front PATCH /knowledge_base_articles/{article_id}/locales/{locale}/content mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
@@ -2418,7 +2378,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "article_id"
         ]
@@ -2456,7 +2416,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "category_id"
         ]
@@ -2493,7 +2453,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "category_id",
           "locale"
@@ -2520,7 +2480,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "category_id"
         ]
@@ -2571,9 +2531,12 @@
             ]
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
-          "knowledge_base_id"
+          "knowledge_base_id",
+          "author_id",
+          "subject",
+          "content"
         ]
       },
       "risk": "high: fixed Front POST /knowledge_bases/{knowledge_base_id}/articles mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
@@ -2606,7 +2569,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "knowledge_base_id",
           "name"
@@ -2636,9 +2599,10 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
-          "knowledge_base_id"
+          "knowledge_base_id",
+          "name"
         ]
       },
       "risk": "high: fixed Front PATCH /knowledge_bases/{knowledge_base_id}/content mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
@@ -2686,10 +2650,13 @@
             ]
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "knowledge_base_id",
-          "locale"
+          "locale",
+          "author_id",
+          "subject",
+          "content"
         ]
       },
       "risk": "high: fixed Front POST /knowledge_bases/{knowledge_base_id}/locales/{locale}/articles mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
@@ -2727,7 +2694,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "knowledge_base_id",
           "locale",
@@ -2763,10 +2730,11 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "knowledge_base_id",
-          "locale"
+          "locale",
+          "name"
         ]
       },
       "risk": "high: fixed Front PATCH /knowledge_bases/{knowledge_base_id}/locales/{locale}/content mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
@@ -2791,7 +2759,7 @@
             ]
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "name"
         ]
@@ -2820,7 +2788,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "link_id"
         ]
@@ -2846,7 +2814,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "high: fixed Front POST /links mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "confirm": "destructive"
@@ -2872,7 +2840,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "message_template_folder_id",
           "name"
@@ -2914,7 +2882,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "message_template_folder_id",
           "name",
@@ -2942,7 +2910,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "message_template_folder_id"
         ]
@@ -2980,7 +2948,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "message_template_folder_id"
         ]
@@ -3003,7 +2971,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "name"
         ]
@@ -3029,7 +2997,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "message_template_id"
         ]
@@ -3061,7 +3029,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "message_template_id"
         ]
@@ -3094,15 +3062,9 @@
             "items": {
               "type": "string"
             }
-          },
-          "attachments": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "name",
           "body"
@@ -3129,7 +3091,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "message_id"
         ]
@@ -3161,7 +3123,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "shift_id",
           "teammate_ids"
@@ -3200,7 +3162,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "shift_id",
           "teammate_ids"
@@ -3264,7 +3226,7 @@
                   "start",
                   "end"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               },
               "tue": {
                 "type": "object",
@@ -3280,7 +3242,7 @@
                   "start",
                   "end"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               },
               "wed": {
                 "type": "object",
@@ -3296,7 +3258,7 @@
                   "start",
                   "end"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               },
               "thu": {
                 "type": "object",
@@ -3312,7 +3274,7 @@
                   "start",
                   "end"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               },
               "fri": {
                 "type": "object",
@@ -3328,7 +3290,7 @@
                   "start",
                   "end"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               },
               "sat": {
                 "type": "object",
@@ -3344,7 +3306,7 @@
                   "start",
                   "end"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               },
               "sun": {
                 "type": "object",
@@ -3360,10 +3322,10 @@
                   "start",
                   "end"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               }
             },
-            "additionalProperties": true
+            "additionalProperties": false
           },
           "teammate_ids": {
             "type": "array",
@@ -3372,7 +3334,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "shift_id"
         ]
@@ -3426,7 +3388,7 @@
                   "start",
                   "end"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               },
               "tue": {
                 "type": "object",
@@ -3442,7 +3404,7 @@
                   "start",
                   "end"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               },
               "wed": {
                 "type": "object",
@@ -3458,7 +3420,7 @@
                   "start",
                   "end"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               },
               "thu": {
                 "type": "object",
@@ -3474,7 +3436,7 @@
                   "start",
                   "end"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               },
               "fri": {
                 "type": "object",
@@ -3490,7 +3452,7 @@
                   "start",
                   "end"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               },
               "sat": {
                 "type": "object",
@@ -3506,7 +3468,7 @@
                   "start",
                   "end"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               },
               "sun": {
                 "type": "object",
@@ -3522,10 +3484,10 @@
                   "start",
                   "end"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               }
             },
-            "additionalProperties": true
+            "additionalProperties": false
           },
           "teammate_ids": {
             "type": "array",
@@ -3534,12 +3496,13 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "name",
           "color",
           "timezone",
-          "teammate_ids"
+          "teammate_ids",
+          "times"
         ]
       },
       "risk": "high: fixed Front POST /shifts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
@@ -3563,7 +3526,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "signature_id"
         ]
@@ -3616,7 +3579,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "signature_id"
         ]
@@ -3665,7 +3628,7 @@
             "type": "boolean"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "tag_id",
           "name"
@@ -3692,7 +3655,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "tag_id"
         ]
@@ -3750,7 +3713,7 @@
             "type": "boolean"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "tag_id"
         ]
@@ -3790,7 +3753,7 @@
             "type": "boolean"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "name"
         ]
@@ -3822,7 +3785,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "teammate_group_id",
           "inbox_ids"
@@ -3861,7 +3824,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "teammate_group_id",
           "inbox_ids"
@@ -3894,7 +3857,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "teammate_group_id",
           "teammate_ids"
@@ -3933,7 +3896,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "teammate_group_id",
           "teammate_ids"
@@ -3966,7 +3929,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "teammate_group_id",
           "team_ids"
@@ -4005,7 +3968,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "teammate_group_id",
           "team_ids"
@@ -4032,7 +3995,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "teammate_group_id"
         ]
@@ -4094,13 +4057,13 @@
                 "required": [
                   "access"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               }
             },
-            "additionalProperties": true
+            "additionalProperties": false
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "teammate_group_id"
         ]
@@ -4147,13 +4110,13 @@
                 "required": [
                   "access"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               }
             },
-            "additionalProperties": true
+            "additionalProperties": false
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "name"
         ]
@@ -4182,7 +4145,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "teammate_id",
           "name"
@@ -4212,7 +4175,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "teammate_id",
           "name"
@@ -4242,9 +4205,6 @@
             "type": "string"
           },
           "description": {
-            "type": "string"
-          },
-          "avatar": {
             "type": "string"
           },
           "links": {
@@ -4295,13 +4255,15 @@
                 "handle",
                 "source"
               ],
-              "additionalProperties": true
-            }
+              "additionalProperties": false
+            },
+            "minItems": 1
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
-          "teammate_id"
+          "teammate_id",
+          "handles"
         ]
       },
       "risk": "high: fixed Front POST /teammates/{teammate_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
@@ -4331,7 +4293,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "teammate_id",
           "name"
@@ -4370,7 +4332,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "teammate_id",
           "name",
@@ -4406,7 +4368,7 @@
             "additionalProperties": true
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "teammate_id",
           "name"
@@ -4451,7 +4413,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "teammate_id",
           "name",
@@ -4502,7 +4464,7 @@
             "type": "boolean"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "teammate_id",
           "name"
@@ -4559,10 +4521,10 @@
                 }
               }
             },
-            "additionalProperties": true
+            "additionalProperties": false
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "teammate_id",
           "name",
@@ -4607,7 +4569,7 @@
             "additionalProperties": true
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "teammate_id"
         ]
@@ -4636,7 +4598,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "team_id",
           "name"
@@ -4666,7 +4628,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "team_id",
           "name"
@@ -4696,9 +4658,6 @@
             "type": "string"
           },
           "description": {
-            "type": "string"
-          },
-          "avatar": {
             "type": "string"
           },
           "links": {
@@ -4749,13 +4708,15 @@
                 "handle",
                 "source"
               ],
-              "additionalProperties": true
-            }
+              "additionalProperties": false
+            },
+            "minItems": 1
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
-          "team_id"
+          "team_id",
+          "handles"
         ]
       },
       "risk": "high: fixed Front POST /teams/{team_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
@@ -4796,7 +4757,7 @@
             "additionalProperties": true
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "team_id",
           "name"
@@ -4829,7 +4790,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "team_id",
           "name"
@@ -4872,15 +4833,9 @@
             "items": {
               "type": "string"
             }
-          },
-          "attachments": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "team_id",
           "name",
@@ -4945,7 +4900,7 @@
                   "start",
                   "end"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               },
               "tue": {
                 "type": "object",
@@ -4961,7 +4916,7 @@
                   "start",
                   "end"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               },
               "wed": {
                 "type": "object",
@@ -4977,7 +4932,7 @@
                   "start",
                   "end"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               },
               "thu": {
                 "type": "object",
@@ -4993,7 +4948,7 @@
                   "start",
                   "end"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               },
               "fri": {
                 "type": "object",
@@ -5009,7 +4964,7 @@
                   "start",
                   "end"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               },
               "sat": {
                 "type": "object",
@@ -5025,7 +4980,7 @@
                   "start",
                   "end"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               },
               "sun": {
                 "type": "object",
@@ -5041,10 +4996,10 @@
                   "start",
                   "end"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               }
             },
-            "additionalProperties": true
+            "additionalProperties": false
           },
           "teammate_ids": {
             "type": "array",
@@ -5053,13 +5008,14 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "team_id",
           "name",
           "color",
           "timezone",
-          "teammate_ids"
+          "teammate_ids",
+          "times"
         ]
       },
       "risk": "high: fixed Front POST /teams/{team_id}/shifts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
@@ -5104,7 +5060,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "team_id",
           "name",
@@ -5155,7 +5111,7 @@
             "type": "boolean"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "team_id",
           "name"
@@ -5188,7 +5144,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "team_id",
           "teammate_ids"
@@ -5227,7 +5183,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "team_id",
           "teammate_ids"
@@ -5293,7 +5249,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "team_id",
           "name",
@@ -5321,7 +5277,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "time_off_id"
         ]
@@ -5383,10 +5339,10 @@
                 }
               }
             },
-            "additionalProperties": true
+            "additionalProperties": false
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "time_off_id"
         ]
@@ -5418,7 +5374,7 @@
             }
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "view_id",
           "teammate_ids"
@@ -5484,7 +5440,7 @@
             "type": "string"
           }
         },
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "view_id"
         ]
@@ -5547,7 +5503,10 @@
                 "type": "string"
               }
             },
-            "additionalProperties": true
+            "additionalProperties": false,
+            "required": [
+              "handle"
+            ]
           },
           "to": {
             "type": "object",
@@ -5559,13 +5518,20 @@
                 "type": "string"
               }
             },
-            "additionalProperties": true
+            "additionalProperties": false,
+            "required": [
+              "handle"
+            ]
           }
         },
         "type": "object",
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
-          "channel_id"
+          "channel_id",
+          "external_call_id",
+          "initial_status",
+          "direction",
+          "parent_external_call_id"
         ]
       },
       "risk": "high: fixed Front POST /channels/{channel_id}/calls mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
@@ -5613,10 +5579,11 @@
           }
         },
         "type": "object",
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "channel_id",
-          "external_call_id"
+          "external_call_id",
+          "call_status"
         ]
       },
       "risk": "high: fixed Front PATCH /channels/{channel_id}/calls/{external_call_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
@@ -5633,7 +5600,8 @@
       ],
       "redact_fields": [
         "channel_id",
-        "external_call_id"
+        "external_call_id",
+        "recording_file_path"
       ],
       "body_type": "multipart",
       "multipart": {
@@ -5676,7 +5644,7 @@
           }
         },
         "type": "object",
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "channel_id",
           "external_call_id",
@@ -5713,10 +5681,11 @@
           }
         },
         "type": "object",
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "channel_id",
-          "external_call_id"
+          "external_call_id",
+          "content"
         ]
       },
       "risk": "high: fixed Front POST /channels/{channel_id}/calls/{external_call_id}/summary mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
@@ -5772,14 +5741,16 @@
                 }
               },
               "additionalProperties": false
-            }
+            },
+            "minItems": 1
           }
         },
         "type": "object",
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "channel_id",
-          "external_call_id"
+          "external_call_id",
+          "lines"
         ]
       },
       "risk": "high: fixed Front POST /channels/{channel_id}/calls/{external_call_id}/transcript mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
@@ -5849,7 +5820,7 @@
           }
         },
         "type": "object",
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "channel_id"
         ]
@@ -5923,7 +5894,7 @@
           }
         },
         "type": "object",
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "channel_id",
           "external_id"
@@ -5996,9 +5967,12 @@
           }
         },
         "type": "object",
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
-          "channel_id"
+          "channel_id",
+          "sender",
+          "body",
+          "metadata"
         ]
       },
       "risk": "high: fixed Front POST /channels/{channel_id}/inbound_messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
@@ -6042,7 +6016,8 @@
                 }
               },
               "additionalProperties": false
-            }
+            },
+            "minItems": 1
           },
           "subject": {
             "type": "string"
@@ -6077,9 +6052,12 @@
           }
         },
         "type": "object",
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
-          "channel_id"
+          "channel_id",
+          "to",
+          "body",
+          "metadata"
         ]
       },
       "risk": "high: fixed Front POST /channels/{channel_id}/outbound_messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
@@ -6122,11 +6100,12 @@
           }
         },
         "type": "object",
-        "additionalProperties": true,
+        "additionalProperties": false,
         "required": [
           "channel_id",
           "conv_ext_id",
-          "message_ext_id"
+          "message_ext_id",
+          "status"
         ]
       },
       "risk": "high: fixed Front PUT /channels/{channel_id}/conversations/{conv_ext_id}/messages/{message_ext_id}/status mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",

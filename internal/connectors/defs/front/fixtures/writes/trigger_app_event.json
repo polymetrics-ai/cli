@@ -1,13 +1,19 @@
 {
   "record": {
     "application_uid": "fixture_application_uid",
-    "event_type": "fixture_event_type"
+    "event_type": "fixture_event_type",
+    "app_object": {
+      "id": "fixture_app_object_id"
+    }
   },
   "expect": {
     "method": "POST",
     "path": "/applications/fixture_application_uid/events",
     "body": {
-      "event_type": "fixture_event_type"
+      "event_type": "fixture_event_type",
+      "app_object": {
+        "id": "fixture_app_object_id"
+      }
     }
   },
   "response": {

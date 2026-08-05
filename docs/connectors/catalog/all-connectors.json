@@ -54347,44 +54347,70 @@
     "streams": [
       {
         "name": "contacts",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updated_at",
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite"
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
         "name": "conversations",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "last_message_at",
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite"
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
         "name": "inboxes",
+        "primary_key": [
+          "id"
+        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite"
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
         "name": "tags",
+        "primary_key": [
+          "id"
+        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite"
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
         "name": "teammates",
+        "primary_key": [
+          "id"
+        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite"
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
         "name": "channels",
+        "primary_key": [
+          "id"
+        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite"
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
         ]
       },
       {

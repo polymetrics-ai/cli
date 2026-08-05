@@ -4,6 +4,12 @@
     "name": "fixture_name",
     "color": "black",
     "timezone": "fixture_timezone",
+    "times": {
+      "mon": {
+        "start": "09:00",
+        "end": "17:00"
+      }
+    },
     "teammate_ids": [
       "fixture_teammate_ids"
     ]
@@ -15,6 +21,12 @@
       "name": "fixture_name",
       "color": "black",
       "timezone": "fixture_timezone",
+      "times": {
+        "mon": {
+          "start": "09:00",
+          "end": "17:00"
+        }
+      },
       "teammate_ids": [
         "fixture_teammate_ids"
       ]

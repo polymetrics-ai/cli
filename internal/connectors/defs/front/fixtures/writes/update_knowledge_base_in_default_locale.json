@@ -1,10 +1,14 @@
 {
   "record": {
-    "knowledge_base_id": "fixture_knowledge_base_id"
+    "knowledge_base_id": "fixture_knowledge_base_id",
+    "name": "Fixture Knowledge Base"
   },
   "expect": {
     "method": "PATCH",
-    "path": "/knowledge_bases/fixture_knowledge_base_id/content"
+    "path": "/knowledge_bases/fixture_knowledge_base_id/content",
+    "body": {
+      "name": "Fixture Knowledge Base"
+    }
   },
   "response": {
     "status": 200,
