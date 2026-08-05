@@ -15,6 +15,19 @@
     "resumeAction": "integrate the landed shared composition convention, bind Front schemas/request_contracts.json through that canonical mechanism, then rerun focused connector gates",
     "prohibitedLocalWorkaround": "do not add a Front-private evaluator or change shared validation/runtime files from this lane"
   },
+  "cliEmptyRequiredArrayDependency": {
+    "name": "cli-engine-empty-required-array-r1",
+    "status": "pending shared presence-aware required-array handling",
+    "affectedCommands": [
+      "create-teammate-discussion: create_conversation.teammate_ids",
+      "create-teammate-task: create_conversation.teammate_ids",
+      "analytics exports create: columns",
+      "analytics exports create-events: columns"
+    ],
+    "currentBehavior": "A blank required string_array flag is coerced to [] and rejected as missing before Front can receive it.",
+    "connectorDecision": "Keep Front's required-property/no-minItems schemas truthful and disclose the CLI limitation in command help and connector docs.",
+    "prohibitedLocalWorkaround": "Do not change shared commandrunner, engine, schema, validation, or runtime code from this Front lane."
+  },
   "orchestrationDecisions": [
     {
       "cycle": "plan",

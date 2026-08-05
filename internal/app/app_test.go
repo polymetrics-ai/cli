@@ -224,12 +224,12 @@ func TestBitbucketReverseETLClosedSchemasDoNotReceiveInternalPlanFields(t *testi
 		t.Fatalf("PlanReverseETL(delete issue) error = %v", err)
 	}
 	assertNoInternalReversePlanField(t, deletePlan.Sample)
-	deletePreview, err := a.GetReversePlan(deletePlan.ID)
+	deletePreview, _, err := a.PreviewReversePlan(ctx, deletePlan.ID)
 	if err != nil {
-		t.Fatalf("GetReversePlan(delete issue) error = %v", err)
+		t.Fatalf("PreviewReversePlan(delete issue) error = %v", err)
 	}
 	assertNoInternalReversePlanField(t, deletePreview.Sample)
-	deleteRun, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: deletePlan.ID, ApprovalToken: deletePlan.ApprovalToken, Confirmation: "destructive"})
+	deleteRun, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: deletePreview.ID, ApprovalToken: deletePreview.ApprovalToken, Confirmation: connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive}})
 	if err != nil {
 		t.Fatalf("RunReverseETL(delete issue) error = %v", err)
 	}

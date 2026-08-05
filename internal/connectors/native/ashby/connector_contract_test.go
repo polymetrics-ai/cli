@@ -1146,6 +1146,65 @@ func TestWriteAcceptsSuccessfulAshbyEnvelope(t *testing.T) {
 	}
 }
 
+func TestDestructiveWriteUsesSameHookAwarePreviewAtExecution(t *testing.T) {
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if r.URL.Path != "/application.delete" {
+			t.Fatalf("path = %q, want /application.delete", r.URL.Path)
+		}
+		_, _ = w.Write([]byte(`{"success":true,"results":{}}`))
+	}))
+	defer server.Close()
+
+	authority, err := connectors.NewFixtureWriteApprovalAuthority()
+	if err != nil {
+		t.Fatalf("NewFixtureWriteApprovalAuthority() error = %v", err)
+	}
+	cfg := connectors.RuntimeConfig{
+		Config:             map[string]string{"base_url": server.URL},
+		Secrets:            map[string]string{"api_key": "test_key"},
+		WriteApprovalScope: connectors.WriteApprovalScopeFixture,
+	}
+	cfg.CredentialRevision, err = authority.CredentialRevision("ashby-fixture", cfg.Secrets)
+	if err != nil {
+		t.Fatalf("CredentialRevision() error = %v", err)
+	}
+	cfg.ConfigurationDigest, err = authority.ConfigurationDigest("ashby-fixture", cfg.Config)
+	if err != nil {
+		t.Fatalf("ConfigurationDigest() error = %v", err)
+	}
+	records := []connectors.Record{{"applicationId": "application_fixture"}}
+	req := connectors.WriteRequest{Action: "delete_application", Config: cfg}
+	preview, err := New().(connectors.DryRunWriter).DryRunWrite(context.Background(), req, records)
+	if err != nil {
+		t.Fatalf("DryRunWrite() error = %v", err)
+	}
+	grant, err := authority.IssueWriteGrant(connectors.WriteApprovalGrantRequest{
+		PlanID: "rplan_fixture", PlanHash: strings.Repeat("a", 64), PreviewDigest: preview.Digest,
+		ApprovalToken: "fixture-token", Target: preview.ApprovalTarget,
+		Confirmation: connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	})
+	if err != nil {
+		t.Fatalf("IssueWriteGrant() error = %v", err)
+	}
+	req.Approval, err = authority.VerifyWriteGrant(grant, connectors.WriteApprovalExpectation{
+		PlanID: grant.PlanID, PlanHash: grant.PlanHash, PreviewDigest: preview.Digest,
+		ApprovalToken: "fixture-token", Target: preview.ApprovalTarget, Confirmation: grant.Confirmation,
+	})
+	if err != nil {
+		t.Fatalf("VerifyWriteGrant() error = %v", err)
+	}
+
+	result, err := New().Write(context.Background(), req, records)
+	if err != nil {
+		t.Fatalf("Write() error = %v", err)
+	}
+	if result.RecordsWritten != 1 || result.RecordsFailed != 0 || calls != 1 {
+		t.Fatalf("Write() result = %+v, calls = %d, want one successful request", result, calls)
+	}
+}
+
 func TestCommandSurfaceDirectReadsDoNotRedactNonCredentialFields(t *testing.T) {
 	surface := New().(connectors.CommandSurfaceProvider).CommandSurface()
 	for _, cmd := range surface.Commands {

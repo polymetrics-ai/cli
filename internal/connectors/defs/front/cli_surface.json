@@ -4477,7 +4477,7 @@
         {
           "name": "teammate-ids",
           "type": "string_array",
-          "summary": "Destination teammate IDs; Front declares no array minimum.",
+          "summary": "Required destination teammate IDs; Front permits an empty array, but this CLI flag cannot send one pending cli-engine-empty-required-array-r1.",
           "maps_to": "record.teammate_ids",
           "required": true
         },
@@ -4505,7 +4505,7 @@
       ],
       "risk": "high: fixed Front POST /conversations mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Discussions require a starter comment and exactly one destination property. This variant sends teammate-ids and never inbox-id; Front declares no teammate-ids array minimum, and task-only fields are unavailable.",
+      "notes": "Discussions require a starter comment and exactly one destination property. This variant sends teammate-ids and never inbox-id; Front permits an empty teammate-ids array, but the required CLI flag cannot transmit [] pending cli-engine-empty-required-array-r1. Task-only fields are unavailable.",
       "examples": [
         "pm front create-teammate-discussion --type discussion --subject 'Fixture discussion' --teammate-ids tea_fixture_1 --comment-body 'Opening comment' --preview --json"
       ]
@@ -4600,7 +4600,7 @@
         {
           "name": "teammate-ids",
           "type": "string_array",
-          "summary": "Destination teammate IDs; Front declares no array minimum.",
+          "summary": "Required destination teammate IDs; Front permits an empty array, but this CLI flag cannot send one pending cli-engine-empty-required-array-r1.",
           "maps_to": "record.teammate_ids",
           "required": true
         },
@@ -4626,7 +4626,7 @@
       ],
       "risk": "high: fixed Front POST /conversations mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Tasks require exactly one destination property. This variant sends teammate-ids and never inbox-id; Front declares no teammate-ids array minimum, and description and due-at are task-only fields.",
+      "notes": "Tasks require exactly one destination property. This variant sends teammate-ids and never inbox-id; Front permits an empty teammate-ids array, but the required CLI flag cannot transmit [] pending cli-engine-empty-required-array-r1. Description and due-at are task-only fields.",
       "examples": [
         "pm front create-teammate-task --type task --subject 'Fixture task' --teammate-ids tea_fixture_1 --preview --json"
       ]
@@ -7554,7 +7554,7 @@
         {
           "name": "columns",
           "type": "string_array",
-          "summary": "One or more documented message export columns.",
+          "summary": "Required documented message export columns; Front permits an empty array, but this CLI flag cannot send one pending cli-engine-empty-required-array-r1.",
           "maps_to": "body.columns",
           "required": true
         },
@@ -7636,7 +7636,7 @@
       ],
       "risk": "high: analytics report/export metadata may expose operational content; output is bounded and redacted",
       "approval": "none for read/query; no provider write execution is performed by these direct-read commands",
-      "notes": "Message exports accept only documented message columns. Event exports use the fixed-event or parameterized-event commands; no raw request body is accepted.",
+      "notes": "Message exports accept only documented message columns. Front permits columns: [], but the required CLI flag cannot transmit it pending cli-engine-empty-required-array-r1. Event exports use the fixed-event or parameterized-event commands; no raw request body is accepted.",
       "examples": [
         "pm front analytics exports create --columns 'Message ID,Conversation ID' --type messages --start 1893456000 --end 1893542400 --json"
       ]
@@ -7652,7 +7652,7 @@
         {
           "name": "columns",
           "type": "string_array",
-          "summary": "One or more documented fixed event export columns.",
+          "summary": "Required documented fixed event export columns; Front permits an empty array, but this CLI flag cannot send one pending cli-engine-empty-required-array-r1.",
           "maps_to": "body.columns",
           "required": true
         },
@@ -7734,7 +7734,7 @@
       ],
       "risk": "high: analytics report/export metadata may expose operational content; output is bounded and redacted",
       "approval": "none for read/query; no provider write execution is performed by these direct-read commands",
-      "notes": "Event exports with a fixed column use this command. Time-in-status, transitions, custom-field, updated-custom-field, and Smart QA columns require the typed parameterized commands.",
+      "notes": "Event exports with a fixed column use this command. Front permits columns: [], but the required CLI flag cannot transmit it pending cli-engine-empty-required-array-r1. Time-in-status, transitions, custom-field, updated-custom-field, and Smart QA columns require the typed parameterized commands.",
       "examples": [
         "pm front analytics exports create-events --columns 'Activity ID,Conversation ID' --type events --start 1893456000 --end 1893542400 --json"
       ]

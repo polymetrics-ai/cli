@@ -50,6 +50,18 @@ call-field nullability in both connector contracts, prohibit Twilio-only secrets
 channel branch, exercise the empty-array template form in the write fixture, and synchronize CLI
 help plus cited generated surfaces without changing shared code.
 
+## Empty required-array CLI dependency
+
+Front requires the `teammate_ids` and analytics-export `columns` properties but declares no
+`minItems` for either, so the Front action, sidecar, and operation schemas retain required-property
+semantics without a local array minimum. Current shared command handling coerces a blank
+`string_array` flag to `[]` and then rejects that value as a missing required flag. Until
+`cli-engine-empty-required-array-r1` adds presence-aware required-array handling,
+`create-teammate-discussion` and `create-teammate-task` (`create_conversation.teammate_ids`) plus
+`analytics exports create` and `analytics exports create-events` (`columns`) cannot transmit an
+explicit empty array through their CLI flags. The connector help and docs disclose this dependency;
+this Front lane must not change shared commandrunner, engine, schema, validation, or runtime code.
+
 ## GSD / skills
 
 Loaded: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`,

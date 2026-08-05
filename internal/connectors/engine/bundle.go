@@ -12,6 +12,8 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+
+	"polymetrics.ai/internal/connectors"
 )
 
 // namePattern is the shared connector/stream/action naming rule (design §A,
@@ -467,9 +469,17 @@ type WriteAction struct {
 	// mark every hand-constructed WriteAction as non-batchable. nil means the
 	// bundle did not declare it, which is the permissive default every shipped
 	// action relies on. Read it through IsBatchable, never directly.
-	Batchable *bool  `json:"batchable,omitempty"`
-	Confirm   string `json:"confirm,omitempty"` // "" | "destructive"
-	Hook      string `json:"hook,omitempty"`
+	Batchable    *bool             `json:"batchable,omitempty"`
+	Confirm      string            `json:"confirm,omitempty"` // legacy: "" | "destructive"
+	Confirmation *ConfirmationSpec `json:"confirmation,omitempty"`
+	Hook         string            `json:"hook,omitempty"`
+}
+
+// ConfirmationSpec is the closed, declarative confirmation policy shared by
+// write actions and operation executors. Bundle schemas reject unknown kinds
+// and fields before this type is decoded.
+type ConfirmationSpec struct {
+	Kind connectors.ConfirmationKind `json:"kind"`
 }
 
 // DynamicFieldsSpec declares ONE record field as a typed dynamic-key region,
@@ -662,6 +672,7 @@ type OperationSpec struct {
 	AuthScopes      []string                `json:"auth_scopes,omitempty"`
 	MutationClass   string                  `json:"mutation_class,omitempty"`
 	Destructive     bool                    `json:"destructive,omitempty"`
+	Confirmation    *ConfirmationSpec       `json:"confirmation,omitempty"`
 	SecretSensitive bool                    `json:"secret_sensitive,omitempty"`
 	SensitivePolicy *SensitivePolicySpec    `json:"sensitive_policy,omitempty"`
 	AuditEvent      string                  `json:"audit_event,omitempty"`

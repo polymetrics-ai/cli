@@ -48,14 +48,14 @@ type Hooks struct{}
 
 func (h *Hooks) ConnectorName() string { return "google-search-console" }
 
-// analyticsDimensions is the per-stream fixed one-dimension searchAnalytics
+// analyticsDimensions is the per-stream fixed searchAnalytics
 // dimension set, mirroring legacy streams.go's gscStreamDefs routing table.
 var analyticsDimensions = map[string][]string{
 	"search_analytics_by_date":    {"date"},
-	"search_analytics_by_country": {"country"},
-	"search_analytics_by_device":  {"device"},
-	"search_analytics_by_page":    {"page"},
-	"search_analytics_by_query":   {"query"},
+	"search_analytics_by_country": {"date", "country"},
+	"search_analytics_by_device":  {"date", "device"},
+	"search_analytics_by_page":    {"date", "page"},
+	"search_analytics_by_query":   {"date", "query"},
 }
 
 // ReadStream implements engine.StreamHook. It handles sitemaps plus every
@@ -105,7 +105,7 @@ func (h *Hooks) readSitemaps(ctx context.Context, r *connsdk.Requester, cfg conn
 		if err := ctx.Err(); err != nil {
 			return err
 		}
-		path := "/sites/" + url.PathEscape(site) + "/sitemaps"
+		path := gscAPIPrefix + "/sites/" + url.PathEscape(site) + "/sitemaps"
 		resp, err := r.Do(ctx, http.MethodGet, path, nil, nil)
 		if err != nil {
 			return fmt.Errorf("read google-search-console sitemaps for %s: %w", site, err)
@@ -125,6 +125,8 @@ func (h *Hooks) readSitemaps(ctx context.Context, r *connsdk.Requester, cfg conn
 	}
 	return nil
 }
+
+const gscAPIPrefix = "/webmasters/v3"
 
 func sitemapRecord(site string, item map[string]any) connectors.Record {
 	return connectors.Record{
@@ -169,7 +171,7 @@ type analyticsRequestBody struct {
 // advancing startRow by the number of rows received, until a short (or
 // empty) page is returned, or maxPages (0 = unbounded) is reached.
 func (h *Hooks) readAnalyticsForSite(ctx context.Context, r *connsdk.Requester, site string, dims []string, startDate, endDate, searchType, dataState string, pageSize, maxPages int, emit func(connectors.Record) error) error {
-	path := "/sites/" + url.PathEscape(site) + "/searchAnalytics/query"
+	path := gscAPIPrefix + "/sites/" + url.PathEscape(site) + "/searchAnalytics/query"
 	startRow := 0
 	for page := 0; maxPages == 0 || page < maxPages; page++ {
 		if err := ctx.Err(); err != nil {

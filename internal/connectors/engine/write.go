@@ -93,36 +93,16 @@ func validateWriteBody(action WriteAction, rec connectors.Record) error {
 	return err
 }
 
-// DryRunWrite validates every record and returns a staged-count preview
-// whose Warnings include the fully-resolved method/path for the FIRST
-// record (representative preview; every record shares the same action). Any
-// secret value is redacted (never interpolated in cleartext into the
-// preview) — DryRunWrite performs no network call.
+// DryRunWrite validates and prepares every record without a network call. Its
+// warnings show the first fully resolved method/path as a redacted
+// representative, while its digest binds the complete prepared request set and
+// execution identity used by the approval gate.
 func DryRunWrite(ctx context.Context, b Bundle, req connectors.WriteRequest, records []connectors.Record, h Hooks) (connectors.WritePreview, error) {
-	if err := ValidateWrite(ctx, b, req, records); err != nil {
-		return connectors.WritePreview{}, err
-	}
-	action, err := findWriteAction(b, req.Action)
+	prepared, err := prepareDeclarativeWrite(ctx, b, req, records, h)
 	if err != nil {
 		return connectors.WritePreview{}, err
 	}
-
-	cfg := materializeConfigDefaults(b, req.Config)
-
-	warnings := []string{fmt.Sprintf("%s executes a live mutation only after approval; dry run performs no external call", action.Name)}
-	if len(records) > 0 {
-		method, path, err := resolveWriteRequestLine(b, action, records[0], cfg)
-		if err != nil {
-			return connectors.WritePreview{}, err
-		}
-		warnings = append(warnings, fmt.Sprintf("resolved request: %s %s", method, path))
-	}
-
-	return connectors.WritePreview{
-		RecordsStaged: len(records),
-		Action:        action.Name,
-		Warnings:      warnings,
-	}, nil
+	return PreviewPreparedWrite(prepared)
 }
 
 // resolveWriteRequestLine interpolates the action's base URL and path
@@ -343,7 +323,12 @@ func joinURL(base, path string) string {
 // RecordsWritten; the loop stops immediately rather than continuing best-
 // effort.
 func Write(ctx context.Context, b Bundle, req connectors.WriteRequest, records []connectors.Record, h Hooks) (connectors.WriteResult, error) {
-	if err := ValidateWrite(ctx, b, req, records); err != nil {
+	prepared, err := prepareDeclarativeWrite(ctx, b, req, records, h)
+	if err != nil {
+		return connectors.WriteResult{RecordsFailed: len(records)}, err
+	}
+	preview, err := PreviewPreparedWrite(prepared)
+	if err != nil {
 		return connectors.WriteResult{RecordsFailed: len(records)}, err
 	}
 	action, err := findWriteAction(b, req.Action)
@@ -351,13 +336,25 @@ func Write(ctx context.Context, b Bundle, req connectors.WriteRequest, records [
 		return connectors.WriteResult{RecordsFailed: len(records)}, err
 	}
 
+	var result connectors.WriteResult
+	err = ExecutePreparedWrite(ctx, prepared, req.Approval, preview.Digest, func(executeCtx context.Context) error {
+		var executeErr error
+		result, executeErr = executeApprovedWrite(executeCtx, b, action, req, records, h)
+		return executeErr
+	})
+	if err != nil && result.RecordsWritten == 0 && result.RecordsFailed == 0 {
+		result.RecordsFailed = len(records)
+	}
+	return result, err
+}
+
+func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req connectors.WriteRequest, records []connectors.Record, h Hooks) (connectors.WriteResult, error) {
 	cfg := materializeConfigDefaults(b, req.Config)
 
 	rt, err := newRuntime(ctx, b, cfg, h)
 	if err != nil {
 		return connectors.WriteResult{RecordsFailed: len(records)}, err
 	}
-
 	result := connectors.WriteResult{}
 	for i, rec := range records {
 		if err := ctx.Err(); err != nil {
@@ -459,7 +456,7 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 		if err != nil {
 			return err
 		}
-		_, err = rt.Requester.Do(ctx, method, path, nil, payload)
+		_, err = rt.Requester.Do(ctx, method, path, query, payload)
 		return err
 	default: // "json" (default)
 		var body map[string]any

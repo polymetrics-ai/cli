@@ -11,6 +11,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"sync/atomic"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
@@ -680,7 +681,9 @@ func TestWriteExecutesPreviouslyUncoveredTypedActions(t *testing.T) {
 			}))
 			defer srv.Close()
 
-			res, err := native.New().Write(context.Background(), connectors.WriteRequest{Action: tc.action, Config: testRuntimeConfig(srv.URL)}, []connectors.Record{tc.record})
+			connector := native.New()
+			records := []connectors.Record{tc.record}
+			res, err := connector.Write(context.Background(), approvedSQSWriteRequest(t, connector, tc.action, testRuntimeConfig(srv.URL), records), records)
 			if err != nil {
 				t.Fatalf("Write %s: %v", tc.action, err)
 			}
@@ -688,6 +691,35 @@ func TestWriteExecutesPreviouslyUncoveredTypedActions(t *testing.T) {
 				t.Fatalf("result=%+v calls=%d, want one successful request", res, calls)
 			}
 		})
+	}
+}
+
+func TestApprovedDestructiveWriteRefusesRedirectToUnapprovedTarget(t *testing.T) {
+	var initialCalls atomic.Int32
+	var redirectedCalls atomic.Int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/unapproved" {
+			redirectedCalls.Add(1)
+			_, _ = w.Write([]byte(`<Response/>`))
+			return
+		}
+		initialCalls.Add(1)
+		w.Header().Set("Location", "/unapproved")
+		w.WriteHeader(http.StatusTemporaryRedirect)
+	}))
+	defer srv.Close()
+
+	connector := native.New()
+	records := []connectors.Record{{}}
+	_, err := connector.Write(context.Background(), approvedSQSWriteRequest(t, connector, "delete_queue", testRuntimeConfig(srv.URL), records), records)
+	if err == nil || !strings.Contains(err.Error(), "redirect refused") {
+		t.Fatalf("Write delete_queue err = %v, want redirect refusal", err)
+	}
+	if got := initialCalls.Load(); got != 1 {
+		t.Fatalf("initial requests = %d, want 1", got)
+	}
+	if got := redirectedCalls.Load(); got != 0 {
+		t.Fatalf("redirected requests = %d, want 0", got)
 	}
 }
 
@@ -748,7 +780,7 @@ func TestWriteSendMessageAndDeleteBatchChunking(t *testing.T) {
 	for i := range records {
 		records[i] = connectors.Record{"receipt_handle": "rh"}
 	}
-	res, err = c.Write(context.Background(), connectors.WriteRequest{Action: "delete_message_batch", Config: cfg}, records)
+	res, err = c.Write(context.Background(), approvedSQSWriteRequest(t, c, "delete_message_batch", cfg, records), records)
 	if err != nil {
 		t.Fatalf("Write delete_message_batch: %v", err)
 	}
@@ -887,12 +919,39 @@ func TestWriteWithNoSourceRowsDoesNotExecuteDestructiveZeroFieldAction(t *testin
 	if preview.RecordsStaged != 0 {
 		t.Fatalf("preview.RecordsStaged = %d, want 0", preview.RecordsStaged)
 	}
-	res, err := c.Write(context.Background(), connectors.WriteRequest{Action: "purge_queue", Config: cfg}, nil)
+	res, err := c.Write(context.Background(), approvedSQSWriteRequest(t, c, "purge_queue", cfg, nil), nil)
 	if err != nil {
 		t.Fatalf("Write purge_queue empty rows: %v", err)
 	}
 	if res.RecordsWritten != 0 || res.RecordsFailed != 0 || calls != 0 {
 		t.Fatalf("result=%+v calls=%d, want no-op", res, calls)
+	}
+}
+
+func TestDestructiveWriteUsesPreparedPreviewAndSharedGate(t *testing.T) {
+	var calls int
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		_, _ = w.Write([]byte(`<DeleteMessageResponse/>`))
+	}))
+	defer srv.Close()
+
+	c := native.New()
+	cfg := testRuntimeConfig(srv.URL)
+	records := []connectors.Record{{"receipt_handle": "receipt-handle-placeholder"}}
+	preview, err := c.DryRunWrite(context.Background(), connectors.WriteRequest{Action: "delete_message", Config: cfg}, records)
+	if err != nil {
+		t.Fatalf("DryRunWrite(delete_message) error = %v", err)
+	}
+	if preview.Digest == "" {
+		t.Error("destructive SQS preview returned no digest")
+	}
+
+	if _, err := c.Write(context.Background(), connectors.WriteRequest{Action: "delete_message", Config: cfg}, records); err == nil {
+		t.Error("destructive SQS write bypassed shared approval gate")
+	}
+	if calls != 0 {
+		t.Fatalf("destructive SQS request dispatched without approval; calls=%d", calls)
 	}
 }
 
@@ -921,14 +980,15 @@ func TestWriteNormalizesActionAndSendsQueueURL(t *testing.T) {
 	if preview.Action != "purge_queue" || preview.RecordsStaged != 0 || !strings.Contains(strings.Join(preview.Warnings, " "), "destructive") {
 		t.Fatalf("preview = %+v, want normalized zero-staged destructive action", preview)
 	}
-	res, err := c.Write(context.Background(), connectors.WriteRequest{Action: " purge_queue ", Config: cfg}, nil)
+	res, err := c.Write(context.Background(), approvedSQSWriteRequest(t, c, " purge_queue ", cfg, nil), nil)
 	if err != nil {
 		t.Fatalf("Write purge_queue empty: %v", err)
 	}
 	if res.RecordsWritten != 0 || res.RecordsFailed != 0 || calls != 0 {
 		t.Fatalf("empty write result=%+v calls=%d, want no execution", res, calls)
 	}
-	res, err = c.Write(context.Background(), connectors.WriteRequest{Action: " purge_queue ", Config: cfg}, []connectors.Record{{}})
+	records := []connectors.Record{{}}
+	res, err = c.Write(context.Background(), approvedSQSWriteRequest(t, c, " purge_queue ", cfg, records), records)
 	if err != nil {
 		t.Fatalf("Write purge_queue explicit record: %v", err)
 	}
@@ -1377,8 +1437,67 @@ func testRuntimeConfig(endpoint string) connectors.RuntimeConfig {
 			"endpoint_url": endpoint,
 			"region":       "us-east-1",
 		},
-		Secrets: map[string]string{"access_key": "AKIATEST", "secret_key": "synthetic-signing-key"},
+		Secrets:             map[string]string{"access_key": "AKIATEST", "secret_key": "synthetic-signing-key"},
+		CredentialRevision:  "amazon-sqs-fixture-credential-revision",
+		ConfigurationDigest: "amazon-sqs-fixture-configuration-digest",
+		WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
 	}
+}
+
+func approvedSQSWriteRequest(t *testing.T, connector native.Connector, action string, cfg connectors.RuntimeConfig, records []connectors.Record) connectors.WriteRequest {
+	t.Helper()
+	var destructive bool
+	for _, declared := range connector.Manifest().WriteActions {
+		if declared.Name == strings.TrimSpace(action) {
+			destructive = connectors.ConfirmationForWriteAction(declared).Kind == connectors.ConfirmationKindDestructive
+			break
+		}
+	}
+	if !destructive {
+		return connectors.WriteRequest{Action: action, Config: cfg}
+	}
+	authority, err := connectors.NewFixtureWriteApprovalAuthority()
+	if err != nil {
+		t.Fatalf("NewFixtureWriteApprovalAuthority() error = %v", err)
+	}
+	cfg.CredentialRevision, err = authority.CredentialRevision("amazon-sqs-fixture", cfg.Secrets)
+	if err != nil {
+		t.Fatalf("CredentialRevision(%s) error = %v", action, err)
+	}
+	cfg.ConfigurationDigest, err = authority.ConfigurationDigest("amazon-sqs-fixture", cfg.Config)
+	if err != nil {
+		t.Fatalf("ConfigurationDigest(%s) error = %v", action, err)
+	}
+	cfg.WriteApprovalScope = connectors.WriteApprovalScopeFixture
+	req := connectors.WriteRequest{Action: action, Config: cfg}
+	preview, err := connector.DryRunWrite(context.Background(), req, records)
+	if err != nil {
+		t.Fatalf("DryRunWrite(%s) error = %v", action, err)
+	}
+	token := "amazon-sqs-fixture-approval"
+	grant, err := authority.IssueWriteGrant(connectors.WriteApprovalGrantRequest{
+		PlanID:        "rplan_amazon_sqs_fixture",
+		PlanHash:      strings.Repeat("a", 64),
+		PreviewDigest: preview.Digest,
+		ApprovalToken: token,
+		Target:        preview.ApprovalTarget,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	})
+	if err != nil {
+		t.Fatalf("IssueWriteGrant(%s) error = %v", action, err)
+	}
+	req.Approval, err = authority.VerifyWriteGrant(grant, connectors.WriteApprovalExpectation{
+		PlanID:        grant.PlanID,
+		PlanHash:      grant.PlanHash,
+		PreviewDigest: grant.PreviewDigest,
+		ApprovalToken: token,
+		Target:        grant.Target,
+		Confirmation:  grant.Confirmation,
+	})
+	if err != nil {
+		t.Fatalf("VerifyWriteGrant(%s) error = %v", action, err)
+	}
+	return req
 }
 
 func countAction(actions []string, want string) int {

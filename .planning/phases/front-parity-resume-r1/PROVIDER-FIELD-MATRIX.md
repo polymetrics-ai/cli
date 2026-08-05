@@ -41,6 +41,13 @@ therefore excluded from provider-field citation coverage. The sweep removed the 
 `minProperties` rules: non-empty analytics export/report filter objects and the application-event
 object selector. No uncited Front request constraint remains.
 
+The provider schemas still permit an explicitly supplied empty `create_conversation.teammate_ids`
+or analytics-export `columns` array. That is a CLI transport limitation rather than a request
+constraint: the current required `string_array` path coerces blank input to `[]` and then rejects it
+as missing. `cli-engine-empty-required-array-r1` is tracked for the two teammate conversation
+commands and the `analytics exports create` / `analytics exports create-events` commands; this
+matrix and the Front-owned schemas retain the provider's no-`minItems` evidence unchanged.
+
 ## Tier-5 body-absence findings
 
 The following non-GET provider operations have no machine-readable `requestBody` in their embedded OpenAPI. Per the shared contract, this is not treated as proof that a body cannot exist and no body fields are inferred. These are **operation-level Tier-5 candidate-body findings**, not invented field rows; every provider-declared field remains cited above.

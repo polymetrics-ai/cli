@@ -791,7 +791,7 @@ func TestBuildWriteCommandPlansWithoutExecuting(t *testing.T) {
 	}
 }
 
-func TestBuildWriteCommandCarriesDestructiveConfirmationChallenge(t *testing.T) {
+func TestBuildWriteCommandInfersDestructiveConfirmationFromDeleteMethod(t *testing.T) {
 	connector := &fakeConnector{
 		surface: &connectors.CommandSurface{
 			Commands: []connectors.CommandSurfaceCommand{
@@ -806,7 +806,7 @@ func TestBuildWriteCommandCarriesDestructiveConfirmationChallenge(t *testing.T) 
 		},
 		manifest: connectors.Manifest{
 			WriteActions: []connectors.WriteActionSpec{
-				{Name: "repo", Method: "DELETE", Path: "/repos/{owner}/{repo}", Risk: "critical", Confirm: "destructive"},
+				{Name: "repo", Method: "DELETE", Path: "/repos/{owner}/{repo}", Risk: "critical"},
 			},
 		},
 	}

@@ -18,6 +18,7 @@ import (
 	"sync"
 	"testing"
 
+	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
@@ -55,8 +56,8 @@ const (
 	reverseETLBoundEndpoints = 73
 
 	// blockedDestructiveOperations is the number of destructive_action rows
-	// that must remain unbound until cli-delete-confirmation-foundation-r1
-	// ships the destructive-write confirm gate.
+	// that remain unbound pending connector-local action, command, and fixture
+	// authoring; the shared gate alone does not promote them.
 	blockedDestructiveOperations = 36
 )
 
@@ -71,8 +72,11 @@ func loadBundle(t *testing.T) engine.Bundle {
 
 func runtimeConfig(baseURL string) connectors.RuntimeConfig {
 	return connectors.RuntimeConfig{
-		Config:  map[string]string{"base_url": baseURL},
-		Secrets: map[string]string{"access_token": "synthetic-test-token"},
+		Config:              map[string]string{"base_url": baseURL},
+		Secrets:             map[string]string{"access_token": "synthetic-test-token"},
+		CredentialRevision:  "asana-fixture-credential-revision",
+		ConfigurationDigest: "asana-fixture-configuration-digest",
+		WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
 	}
 }
 
@@ -129,8 +133,8 @@ func TestReverseETLLedgerReconciles(t *testing.T) {
 }
 
 // TestDestructiveOperationsStayBlocked pins the destructive rows that must NOT
-// be promoted before the destructive-write confirm gate exists, and requires
-// every bound DELETE to carry a typed confirmation challenge.
+// be promoted by this foundation PR, and requires every already-bound DELETE
+// to carry a typed confirmation challenge through the shared gate.
 func TestDestructiveOperationsStayBlocked(t *testing.T) {
 	b := loadBundle(t)
 	actions := map[string]engine.WriteAction{}
@@ -160,7 +164,7 @@ func TestDestructiveOperationsStayBlocked(t *testing.T) {
 		}
 	}
 	if unbound != blockedDestructiveOperations {
-		t.Fatalf("destructive_action rows still blocked = %d, want %d (promoting a destructive operation needs the destructive-write confirm gate)",
+		t.Fatalf("destructive_action rows still unbound = %d, want %d (connector binding is outside this foundation PR)",
 			unbound, blockedDestructiveOperations)
 	}
 }
@@ -182,6 +186,20 @@ func TestReverseETLWriteActionsExecute(t *testing.T) {
 	cfg := runtimeConfig(capture.URL)
 	replay := b
 	conn := engine.New(replay, engine.HooksFor(b.Name))
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject() = %v", err)
+	}
+	application, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open() = %v", err)
+	}
+	if _, err := application.AddCredential(context.Background(), app.AddCredentialRequest{
+		Name: b.Name + "-fixture", Connector: b.Name,
+		Config: map[string]string{"base_url": capture.URL}, Secrets: map[string]string{"access_token": "synthetic-test-token"},
+	}); err != nil {
+		t.Fatalf("AddCredential(%s) = %v", b.Name, err)
+	}
 
 	commandsByWrite := map[string]connectors.CommandSurfaceCommand{}
 	for _, cmd := range conn.CommandSurface().Commands {
@@ -233,15 +251,37 @@ func TestReverseETLWriteActionsExecute(t *testing.T) {
 
 			// execute: the real engine issues the request.
 			capture.Reset()
-			result, err := engine.Write(context.Background(), replay,
-				connectors.WriteRequest{Action: action.Name, Config: cfg},
-				[]connectors.Record{connectors.Record(fixture.Record)},
-				engine.HooksFor(b.Name))
-			if err != nil {
-				t.Fatalf("engine.Write(%q) = %v, want nil", action.Name, err)
+			records := []connectors.Record{connectors.Record(fixture.Record)}
+			hooks := engine.HooksFor(b.Name)
+			written, failed := 0, 0
+			if engine.DestructiveTargetForWrite(b.Name, action).RequiresApproval() {
+				plan, preview, err := application.PlanConnectorCommand(context.Background(), app.PlanConnectorCommandRequest{
+					Name: action.Name, Connector: b.Name, Credential: b.Name + "-fixture", Path: path,
+					Flags: flagsFromRecord(cmd, fixture.Record), Preview: true,
+				})
+				if err != nil {
+					t.Fatalf("PlanConnectorCommand(%q) = %v", action.Name, err)
+				}
+				if preview == nil || preview.Digest == "" || plan.ApprovalToken == "" {
+					t.Fatalf("PlanConnectorCommand(%q) did not produce genuine preview approval", action.Name)
+				}
+				run, err := application.RunReverseETL(context.Background(), app.RunReverseETLRequest{
+					PlanID: plan.ID, ApprovalToken: plan.ApprovalToken,
+					Confirmation: connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+				})
+				if err != nil {
+					t.Fatalf("RunReverseETL(%q) = %v", action.Name, err)
+				}
+				written, failed = run.RecordsSucceeded, run.RecordsFailed
+			} else {
+				result, err := engine.Write(context.Background(), replay, connectors.WriteRequest{Action: action.Name, Config: cfg}, records, hooks)
+				if err != nil {
+					t.Fatalf("engine.Write(%q) = %v, want nil", action.Name, err)
+				}
+				written, failed = result.RecordsWritten, result.RecordsFailed
 			}
-			if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
-				t.Fatalf("engine.Write(%q) result = %+v, want 1 written 0 failed", action.Name, result)
+			if written != 1 || failed != 0 {
+				t.Fatalf("write(%q) result = %d written %d failed, want 1 written 0 failed", action.Name, written, failed)
 			}
 			got := capture.Last()
 			if got == nil {

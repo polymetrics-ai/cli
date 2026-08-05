@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/sites" },
+  "request": { "method": "GET", "path": "/webmasters/v3/sites" },
   "response": {
     "status": 200,
     "body": {

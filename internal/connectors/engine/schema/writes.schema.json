@@ -105,6 +105,14 @@
           "risk": { "type": "string" },
           "batchable": { "type": "boolean", "default": true },
           "confirm": { "type": "string", "enum": ["", "destructive"] },
+          "confirmation": {
+            "type": "object",
+            "required": ["kind"],
+            "additionalProperties": false,
+            "properties": {
+              "kind": { "type": "string", "enum": ["destructive"] }
+            }
+          },
           "hook": { "type": "string" }
         }
       }

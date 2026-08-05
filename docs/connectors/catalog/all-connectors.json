@@ -2470,7 +2470,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/contacts/{{ record.id }}",
-        "risk": "external mutation; irreversibly deletes a live AgileCRM contact; approval required"
+        "risk": "external mutation; irreversibly deletes a live AgileCRM contact; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_deal",
@@ -2491,7 +2492,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/opportunity/{{ record.id }}",
-        "risk": "external mutation; irreversibly deletes a live AgileCRM deal; approval required"
+        "risk": "external mutation; irreversibly deletes a live AgileCRM deal; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_task",
@@ -2512,7 +2514,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/tasks/{{ record.id }}",
-        "risk": "external mutation; irreversibly deletes a live AgileCRM task; approval required"
+        "risk": "external mutation; irreversibly deletes a live AgileCRM task; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -2838,7 +2841,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/users/{{ record.id }}",
-        "risk": "permanently removes an Aircall agent seat; irreversible, frees the associated license; approval required"
+        "risk": "permanently removes an Aircall agent seat; irreversible, frees the associated license; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_team",
@@ -2852,7 +2856,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/teams/{{ record.id }}",
-        "risk": "permanently removes a team; agents assigned to it lose that team's routing/membership immediately"
+        "risk": "permanently removes a team; agents assigned to it lose that team's routing/membership immediately",
+        "confirm": "destructive"
       },
       {
         "name": "add_user_to_team",
@@ -2866,7 +2871,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/teams/{{ record.team_id }}/users/{{ record.user_id }}",
-        "risk": "removes an agent from a team, changing that agent's call routing/membership immediately"
+        "risk": "removes an agent from a team, changing that agent's call routing/membership immediately",
+        "confirm": "destructive"
       },
       {
         "name": "create_contact",
@@ -2887,7 +2893,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/contacts/{{ record.id }}",
-        "risk": "permanently removes a directory contact; irreversible"
+        "risk": "permanently removes a directory contact; irreversible",
+        "confirm": "destructive"
       },
       {
         "name": "create_tag",
@@ -2908,7 +2915,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/tags/{{ record.id }}",
-        "risk": "permanently removes a tag; it is un-applied from every call that previously carried it"
+        "risk": "permanently removes a tag; it is un-applied from every call that previously carried it",
+        "confirm": "destructive"
       },
       {
         "name": "create_webhook",
@@ -2929,7 +2937,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/webhooks/{{ record.id }}",
-        "risk": "permanently removes a webhook subscription; event delivery to its target URL stops immediately"
+        "risk": "permanently removes a webhook subscription; event delivery to its target URL stops immediately",
+        "confirm": "destructive"
       },
       {
         "name": "archive_call",
@@ -3099,7 +3108,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}",
-        "risk": "permanently removes a record from the base/table; irreversible"
+        "risk": "permanently removes a record from the base/table; irreversible",
+        "confirm": "destructive"
       },
       {
         "name": "create_table",
@@ -3148,7 +3158,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments/{{ record.id }}",
-        "risk": "permanently removes a comment from a record; irreversible"
+        "risk": "permanently removes a comment from a record; irreversible",
+        "confirm": "destructive"
       },
       {
         "name": "create_webhook",
@@ -3162,7 +3173,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/bases/{{ config.base_id }}/webhooks/{{ record.id }}",
-        "risk": "permanently removes a webhook subscription; notification delivery to its target URL stops immediately"
+        "risk": "permanently removes a webhook subscription; notification delivery to its target URL stops immediately",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -7191,7 +7203,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/3/annotations/{{ record.id }}",
-        "risk": "permanently deletes a chart annotation"
+        "risk": "permanently deletes a chart annotation",
+        "confirm": "destructive"
       },
       {
         "name": "create_annotation_category",
@@ -7212,7 +7225,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/3/annotation-categories/{{ record.id }}",
-        "risk": "permanently deletes an annotation category shared across the Amplitude project"
+        "risk": "permanently deletes an annotation category shared across the Amplitude project",
+        "confirm": "destructive"
       },
       {
         "name": "create_taxonomy_category",
@@ -7233,7 +7247,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/2/taxonomy/category/{{ record.category_id }}",
-        "risk": "permanently deletes an event category from the Amplitude project's governed taxonomy"
+        "risk": "permanently deletes an event category from the Amplitude project's governed taxonomy",
+        "confirm": "destructive"
       },
       {
         "name": "create_taxonomy_event",
@@ -7254,7 +7269,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/2/taxonomy/event/{{ record.event_type }}",
-        "risk": "soft-deletes a governed event type from the Amplitude project's taxonomy (recoverable via the restore endpoint, not modeled as a separate write action)"
+        "risk": "soft-deletes a governed event type from the Amplitude project's taxonomy (recoverable via the restore endpoint, not modeled as a separate write action)",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -7724,7 +7740,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/accounts/{{ config.account_id }}/segments/{{ record.id }}",
-        "risk": "permanently deletes a user segment; any flow/banner/checklist targeting rule referencing it stops matching"
+        "risk": "permanently deletes a user segment; any flow/banner/checklist targeting rule referencing it stops matching",
+        "confirm": "destructive"
       },
       {
         "name": "add_segment_user_ids",
@@ -7752,7 +7769,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/accounts/{{ config.account_id }}/users/{{ record.user_id }}/profile",
-        "risk": "permanently deletes an end user's profile, properties, and flow/banner completion history (async job)"
+        "risk": "permanently deletes an end user's profile, properties, and flow/banner completion history (async job)",
+        "confirm": "destructive"
       },
       {
         "name": "track_user_event",
@@ -7794,7 +7812,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/accounts/{{ config.account_id }}/sdk_keys/{{ record.id }}",
-        "risk": "permanently revokes an SDK authentication key; any client still using it immediately loses ingestion access"
+        "risk": "permanently revokes an SDK authentication key; any client still using it immediately loses ingestion access",
+        "confirm": "destructive"
       },
       {
         "name": "enable_sdk_key_enforcement",
@@ -8108,7 +8127,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/events/{{ record.id }}",
-        "risk": "permanently deletes an event marker from every Appfigures analytics chart"
+        "risk": "permanently deletes an event marker from every Appfigures analytics chart",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -8376,7 +8396,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/account/users",
-        "risk": "irreversible external mutation; revokes an AppFollow account user's access; approval required"
+        "risk": "irreversible external mutation; revokes an AppFollow account user's access; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "add_collection",
@@ -8390,7 +8411,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/account/apps",
-        "risk": "irreversible external deletion; removes an app collection and every app tracked under it; approval required"
+        "risk": "irreversible external deletion; removes an app collection and every app tracked under it; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "add_app",
@@ -8404,7 +8426,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/account/apps/app",
-        "risk": "irreversible external deletion; stops tracking an app under a collection; approval required"
+        "risk": "irreversible external deletion; stops tracking an app under a collection; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -14477,7 +14500,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/posts/{{ record.id }}",
-        "risk": "permanently removes an announcement post; irreversible; approval required"
+        "risk": "permanently removes an announcement post; irreversible; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_post_comment",
@@ -14491,7 +14515,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/posts/{{ record.post_id }}/comments/{{ record.id }}",
-        "risk": "permanently removes a comment from a post; irreversible; approval required"
+        "risk": "permanently removes a comment from a post; irreversible; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_feature_request",
@@ -14512,7 +14537,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/feature-requests/{{ record.id }}",
-        "risk": "permanently removes a feature request; irreversible; approval required"
+        "risk": "permanently removes a feature request; irreversible; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_feature_request_comment",
@@ -14526,7 +14552,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/feature-requests/{{ record.feature_request_id }}/comments/{{ record.id }}",
-        "risk": "permanently removes a comment from a feature request; irreversible; approval required"
+        "risk": "permanently removes a comment from a feature request; irreversible; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_post_reaction",
@@ -14540,7 +14567,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/posts/{{ record.post_id }}/reactions/{{ record.id }}",
-        "risk": "permanently removes a reaction from a post; irreversible; approval required"
+        "risk": "permanently removes a reaction from a post; irreversible; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_feature_request_vote",
@@ -14554,7 +14582,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/feature-requests/{{ record.feature_request_id }}/votes/{{ record.id }}",
-        "risk": "permanently removes a vote from a feature request; irreversible; approval required"
+        "risk": "permanently removes a vote from a feature request; irreversible; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -14821,7 +14850,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/brands/{{ record.brand_id }}/contacts/{{ record.id }}",
-        "risk": "permanently removes a contact from a brand; irreversible; approval required"
+        "risk": "permanently removes a contact from a brand; irreversible; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_list",
@@ -14842,7 +14872,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/brands/{{ record.brand_id }}/lists/{{ record.id }}",
-        "risk": "permanently removes a list from a brand (contacts in the list are NOT deleted); irreversible; approval required"
+        "risk": "permanently removes a list from a brand (contacts in the list are NOT deleted); irreversible; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_field",
@@ -14863,7 +14894,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/brands/{{ record.brand_id }}/fields/{{ record.id }}",
-        "risk": "permanently removes a custom contact field from a brand; irreversible; approval required"
+        "risk": "permanently removes a custom contact field from a brand; irreversible; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_message_type",
@@ -14884,7 +14916,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/brands/{{ record.brand_id }}/message-types/{{ record.id }}",
-        "risk": "permanently removes a message type from a brand; irreversible; approval required"
+        "risk": "permanently removes a message type from a brand; irreversible; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_segment",
@@ -14905,7 +14938,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/brands/{{ record.brand_id }}/segments/{{ record.id }}",
-        "risk": "permanently removes a segment from a brand; irreversible; approval required"
+        "risk": "permanently removes a segment from a brand; irreversible; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_sender",
@@ -14926,7 +14960,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/brands/{{ record.brand_id }}/senders/{{ record.id }}",
-        "risk": "permanently removes a sender identity from a brand; irreversible; approval required"
+        "risk": "permanently removes a sender identity from a brand; irreversible; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_template",
@@ -14947,7 +14982,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/brands/{{ record.brand_id }}/templates/{{ record.id }}",
-        "risk": "permanently removes a template from a brand; irreversible; approval required"
+        "risk": "permanently removes a template from a brand; irreversible; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_user",
@@ -14968,7 +15004,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/users/{{ record.id }}",
-        "risk": "permanently removes a user from the BigMailer account; irreversible; approval required"
+        "risk": "permanently removes a user from the BigMailer account; irreversible; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -17437,7 +17474,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/bitlinks/{{ record.id }}",
-        "risk": "permanently removes a bitlink; any traffic still hitting the short URL starts failing to resolve"
+        "risk": "permanently removes a bitlink; any traffic still hitting the short URL starts failing to resolve",
+        "confirm": "destructive"
       },
       {
         "name": "update_bitlink_tags",
@@ -17451,7 +17489,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/bitlinks/{{ record.id }}/tags",
-        "risk": "removes the named tags from a bitlink; irreversible without re-adding them via update_bitlink_tags"
+        "risk": "removes the named tags from a bitlink; irreversible without re-adding them via update_bitlink_tags",
+        "confirm": "destructive"
       },
       {
         "name": "create_campaign",
@@ -17514,7 +17553,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/webhooks/{{ record.guid }}",
-        "risk": "permanently removes a webhook subscription; event delivery to its target URL stops immediately"
+        "risk": "permanently removes a webhook subscription; event delivery to its target URL stops immediately",
+        "confirm": "destructive"
       },
       {
         "name": "create_custom_bitlink",
@@ -17549,7 +17589,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/qr-codes/{{ record.qrcode_id }}",
-        "risk": "permanently removes a QR code resource; any already-printed/distributed copy of the code stops resolving"
+        "risk": "permanently removes a QR code resource; any already-printed/distributed copy of the code stops resolving",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -18212,7 +18253,8 @@
         "kind": "update",
         "method": "DELETE",
         "path": "/v1/document/deleteTags",
-        "risk": "external mutation; removes label tags from a BoldSign document; approval required"
+        "risk": "external mutation; removes label tags from a BoldSign document; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "update_user",
@@ -19288,14 +19330,16 @@
         "kind": "delete",
         "method": "POST",
         "path": "/email/bounce/remove",
-        "risk": "clears an email address's hard-bounced status, allowing future sends to resume; use only after confirming the underlying delivery issue is actually resolved, or the address will likely hard-bounce again and harm sender reputation"
+        "risk": "clears an email address's hard-bounced status, allowing future sends to resume; use only after confirming the underlying delivery issue is actually resolved, or the address will likely hard-bounce again and harm sender reputation",
+        "confirm": "destructive"
       },
       {
         "name": "remove_email_spam",
         "kind": "delete",
         "method": "POST",
         "path": "/email/spam/remove",
-        "risk": "clears an email address's spam-complaint status, allowing future sends to resume; reversing a genuine spam complaint risks another complaint and further sender-reputation damage"
+        "risk": "clears an email address's spam-complaint status, allowing future sends to resume; reversing a genuine spam complaint risks another complaint and further sender-reputation damage",
+        "confirm": "destructive"
       },
       {
         "name": "set_email_subscription_status",
@@ -19309,7 +19353,8 @@
         "kind": "delete",
         "method": "POST",
         "path": "/sms/invalid_phone_numbers/remove",
-        "risk": "clears the invalid-number flag for phone numbers, allowing future SMS/MMS sends to resume; use only after confirming the number can actually receive messages again, or it will likely be re-flagged and waste sending budget"
+        "risk": "clears the invalid-number flag for phone numbers, allowing future SMS/MMS sends to resume; use only after confirming the number can actually receive messages again, or it will likely be re-flagged and waste sending budget",
+        "confirm": "destructive"
       },
       {
         "name": "create_preference_center",
@@ -19975,7 +20020,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/contacts/{{ record.identifier }}",
-        "risk": "permanently removes a contact and its engagement history; irreversible"
+        "risk": "permanently removes a contact and its engagement history; irreversible",
+        "confirm": "destructive"
       },
       {
         "name": "create_contacts_list",
@@ -20003,7 +20049,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/senders/{{ record.senderId }}",
-        "risk": "permanently removes a sending identity; any scheduled campaign still referencing it will fail to send"
+        "risk": "permanently removes a sending identity; any scheduled campaign still referencing it will fail to send",
+        "confirm": "destructive"
       },
       {
         "name": "create_company",
@@ -20052,7 +20099,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/webhooks/{{ record.webhookId }}",
-        "risk": "permanently removes a webhook subscription; irreversible"
+        "risk": "permanently removes a webhook subscription; irreversible",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -20325,7 +20373,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v1/vendors/{{ record.id }}",
-        "risk": "permanently removes a vendor record; any transfer still referencing it as counterparty will fail to resolve"
+        "risk": "permanently removes a vendor record; any transfer still referencing it as counterparty will fail to resolve",
+        "confirm": "destructive"
       },
       {
         "name": "create_department",
@@ -20409,7 +20458,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v1/webhooks/{{ record.id }}",
-        "risk": "permanently removes a webhook subscription; irreversible"
+        "risk": "permanently removes a webhook subscription; irreversible",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -20724,7 +20774,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/organizations/{{ config.organization }}/pipelines/{{ record.slug }}",
-        "risk": "permanently deletes a pipeline and its build history; irreversible"
+        "risk": "permanently deletes a pipeline and its build history; irreversible",
+        "confirm": "destructive"
       },
       {
         "name": "create_build",
@@ -20808,7 +20859,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/organizations/{{ config.organization }}/teams/{{ record.id }}",
-        "risk": "permanently deletes a team and its pipeline/member associations; irreversible"
+        "risk": "permanently deletes a team and its pipeline/member associations; irreversible",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -21207,7 +21259,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v2/event-types/{{ record.id }}",
-        "risk": "destructive; permanently deletes an event type, breaking any existing public booking links; approval required"
+        "risk": "destructive; permanently deletes an event type, breaking any existing public booking links; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_schedule",
@@ -21228,7 +21281,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v2/schedules/{{ record.id }}",
-        "risk": "destructive; permanently deletes an availability schedule; approval required"
+        "risk": "destructive; permanently deletes an availability schedule; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_webhook",
@@ -21242,7 +21296,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v2/webhooks/{{ record.id }}",
-        "risk": "destructive; permanently deletes a webhook subscription; approval required"
+        "risk": "destructive; permanently deletes a webhook subscription; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -21510,14 +21565,16 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/webhook_subscriptions/{{ record.uuid }}",
-        "risk": "destructive; permanently deletes a webhook subscription; approval required"
+        "risk": "destructive; permanently deletes a webhook subscription; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "remove_organization_membership",
         "kind": "delete",
         "method": "DELETE",
         "path": "/organization_memberships/{{ record.uuid }}",
-        "risk": "destructive; permanently removes a user's membership from the organization, revoking their access; approval required"
+        "risk": "destructive; permanently removes a user's membership from the organization, revoking their access; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "invite_user_to_organization",
@@ -21845,7 +21902,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/a/{{ config.account_id }}/tags/{{ record.id }}.json",
-        "risk": "permanently removes a tag, including from every call/text interaction it has been applied to; irreversible, approval recommended"
+        "risk": "permanently removes a tag, including from every call/text interaction it has been applied to; irreversible, approval recommended",
+        "confirm": "destructive"
       },
       {
         "name": "create_company",
@@ -21880,7 +21938,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/a/{{ config.account_id }}/users/{{ record.id }}.json",
-        "risk": "permanently removes a user's access to the account; requires an administrator-scoped API key; irreversible, approval required"
+        "risk": "permanently removes a user's access to the account; requires an administrator-scoped API key; irreversible, approval required",
+        "confirm": "destructive"
       },
       {
         "name": "update_call",
@@ -21922,7 +21981,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/a/{{ config.account_id }}/integrations/{{ record.id }}.json",
-        "risk": "disables (the docs' own term; not a hard delete) an integration; stops any external data flow it previously drove; approval recommended"
+        "risk": "disables (the docs' own term; not a hard delete) an integration; stops any external data flow it previously drove; approval recommended",
+        "confirm": "destructive"
       },
       {
         "name": "create_integration_filter",
@@ -21943,7 +22003,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/a/{{ config.account_id }}/integration_triggers/{{ record.id }}.json",
-        "risk": "removes a filter; the parent integration keeps firing for every call, unfiltered, once this is removed; low-risk, no approval required"
+        "risk": "removes a filter; the parent integration keeps firing for every call, unfiltered, once this is removed; low-risk, no approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_notification",
@@ -21964,7 +22025,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/a/{{ config.account_id }}/notifications/{{ record.id }}.json",
-        "risk": "permanently removes a notification subscription (restricted to notifications managed by the current user); irreversible, low-risk, no approval required"
+        "risk": "permanently removes a notification subscription (restricted to notifications managed by the current user); irreversible, low-risk, no approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_caller_id",
@@ -21978,7 +22040,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/a/{{ config.account_id }}/caller_ids/{{ record.id }}.json",
-        "risk": "removes an outbound caller id from the company; irreversible, low-risk, no approval required"
+        "risk": "removes an outbound caller id from the company; irreversible, low-risk, no approval required",
+        "confirm": "destructive"
       },
       {
         "name": "update_sms_thread",
@@ -22013,7 +22076,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/a/{{ config.account_id }}/message-flows/{{ record.id }}.json",
-        "risk": "permanently removes a message flow; any tracker still referencing it stops running the automated SMS steps; irreversible, approval recommended"
+        "risk": "permanently removes a message flow; any tracker still referencing it stops running the automated SMS steps; irreversible, approval recommended",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -22249,7 +22313,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/lists/{{ record.ListID }}.json",
-        "risk": "permanently removes a subscriber list and all of its subscribers/segments; irreversible, approval required"
+        "risk": "permanently removes a subscriber list and all of its subscribers/segments; irreversible, approval required",
+        "confirm": "destructive"
       },
       {
         "name": "add_subscriber",
@@ -22277,7 +22342,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/subscribers/{{ record.ListID }}.json?email={{ record.EmailAddress | urlencode }}",
-        "risk": "permanently removes a subscriber's record from a list (distinct from unsubscribing — this deletes the record entirely); irreversible, approval recommended"
+        "risk": "permanently removes a subscriber's record from a list (distinct from unsubscribing — this deletes the record entirely); irreversible, approval recommended",
+        "confirm": "destructive"
       },
       {
         "name": "create_segment",
@@ -22298,7 +22364,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/segments/{{ record.SegmentID }}.json",
-        "risk": "permanently removes a segment; any campaign scheduled to send to it loses that targeting; irreversible, low-risk, no approval required"
+        "risk": "permanently removes a segment; any campaign scheduled to send to it loses that targeting; irreversible, low-risk, no approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_campaign",
@@ -22326,7 +22393,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/campaigns/{{ record.CampaignID }}.json",
-        "risk": "permanently removes a draft or sent campaign's record from Campaign Monitor; irreversible, approval recommended"
+        "risk": "permanently removes a draft or sent campaign's record from Campaign Monitor; irreversible, approval recommended",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -22831,7 +22899,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/parties/{{ record.id }}",
-        "risk": "external mutation; irreversibly deletes a live Capsule CRM contact and its associated history; approval required"
+        "risk": "external mutation; irreversibly deletes a live Capsule CRM contact and its associated history; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_opportunity",
@@ -22852,7 +22921,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/opportunities/{{ record.id }}",
-        "risk": "external mutation; irreversibly deletes a live Capsule CRM sales opportunity; approval required"
+        "risk": "external mutation; irreversibly deletes a live Capsule CRM sales opportunity; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_kase",
@@ -22873,7 +22943,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/kases/{{ record.id }}",
-        "risk": "external mutation; irreversibly deletes a live Capsule CRM case/project; approval required"
+        "risk": "external mutation; irreversibly deletes a live Capsule CRM case/project; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_task",
@@ -22894,7 +22965,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/tasks/{{ record.id }}",
-        "risk": "external mutation; irreversibly deletes a live Capsule CRM task; approval required"
+        "risk": "external mutation; irreversibly deletes a live Capsule CRM task; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -23836,7 +23908,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/edit/deliveries/{{ record.id }}",
-        "risk": "cancels a not-yet-triggered Delivery; irreversible once the target has already been shown, approval required"
+        "risk": "cancels a not-yet-triggered Delivery; irreversible once the target has already been shown, approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_webhook",
@@ -23850,7 +23923,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/edit/webhooks/{{ record.id }}",
-        "risk": "irreversible removal of an outbound webhook subscription; approval required"
+        "risk": "irreversible removal of an outbound webhook subscription; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -24352,7 +24426,8 @@
         "kind": "delete",
         "method": "POST",
         "path": "/customers/{{ record.id }}/delete",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_item",
@@ -24373,7 +24448,8 @@
         "kind": "delete",
         "method": "POST",
         "path": "/items/{{ record.id }}/delete",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_item_price",
@@ -24394,7 +24470,8 @@
         "kind": "delete",
         "method": "POST",
         "path": "/item_prices/{{ record.id }}/delete",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_item_family",
@@ -24415,7 +24492,8 @@
         "kind": "delete",
         "method": "POST",
         "path": "/item_families/{{ record.id }}/delete",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_subscription",
@@ -24471,7 +24549,8 @@
         "kind": "delete",
         "method": "POST",
         "path": "/coupons/{{ record.id }}/delete",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_order",
@@ -24527,7 +24606,8 @@
         "kind": "delete",
         "method": "POST",
         "path": "/webhook_endpoints/{{ record.id }}/delete",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_comment",
@@ -24541,7 +24621,8 @@
         "kind": "delete",
         "method": "POST",
         "path": "/comments/{{ record.id }}/delete",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "add_promotional_credit",
@@ -24569,7 +24650,8 @@
         "kind": "delete",
         "method": "POST",
         "path": "/virtual_bank_accounts/{{ record.id }}/delete",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_card_payment_source",
@@ -24583,7 +24665,8 @@
         "kind": "delete",
         "method": "POST",
         "path": "/payment_sources/{{ record.id }}/delete",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -24748,7 +24831,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/customers/{{ record.customer_id }}",
-        "risk": "irreversible deletion of a customer record (and, by ChargeDesk's own default, all associated charges/tickets); approval required"
+        "risk": "irreversible deletion of a customer record (and, by ChargeDesk's own default, all associated charges/tickets); approval required",
+        "confirm": "destructive"
       },
       {
         "name": "update_charge",
@@ -24762,7 +24846,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/charges/{{ record.charge_id }}",
-        "risk": "irreversible deletion of a charge record; approval required"
+        "risk": "irreversible deletion of a charge record; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "refund_charge",
@@ -24804,7 +24889,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/webhooks/{{ record.webhook_id }}",
-        "risk": "irreversible removal of an outbound webhook subscription; approval required"
+        "risk": "irreversible removal of an outbound webhook subscription; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_agent",
@@ -24818,7 +24904,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/agents/{{ record.email }}",
-        "risk": "irreversible removal of a support agent's ChargeDesk account access; approval required"
+        "risk": "irreversible removal of a support agent's ChargeDesk account access; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -25608,7 +25695,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/consumers/{{ record.consumerid }}",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -26093,7 +26181,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/ref/category?ID={{ record.ID }}",
-        "risk": "external mutation; irreversibly deletes a live Cin7 Core product category; approval required"
+        "risk": "external mutation; irreversibly deletes a live Cin7 Core product category; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_brand",
@@ -26314,7 +26403,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/contacts/{{ record.id }}",
-        "risk": "irreversible external deletion of a CRM contact; approval required"
+        "risk": "irreversible external deletion of a CRM contact; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_event",
@@ -26335,7 +26425,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/events/{{ record.id }}",
-        "risk": "irreversible external deletion of an event; approval required"
+        "risk": "irreversible external deletion of an event; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_company",
@@ -26356,7 +26447,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/companies/{{ record.id }}",
-        "risk": "irreversible external deletion of a company; approval required"
+        "risk": "irreversible external deletion of a company; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "add_event_contact",
@@ -26377,7 +26469,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/events/{{ record.event_id }}/contacts/{{ record.contact_id }}",
-        "risk": "irreversible external removal of a contact's event registration; approval required"
+        "risk": "irreversible external removal of a contact's event registration; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -26584,7 +26677,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/schedule/{{ record.id }}",
-        "risk": "irreversible external deletion of a scheduled-pipeline trigger; approval required"
+        "risk": "irreversible external deletion of a scheduled-pipeline trigger; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_environment_variable",
@@ -26598,7 +26692,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/envvar/{{ record.name }}",
-        "risk": "irreversible external deletion of a project environment variable; may break future CI runs that depend on it; approval required"
+        "risk": "irreversible external deletion of a project environment variable; may break future CI runs that depend on it; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_checkout_key",
@@ -26612,7 +26707,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/project/{{ config.vcs_type }}/{{ config.org }}/{{ config.repo }}/checkout-key/{{ record.fingerprint }}",
-        "risk": "irreversible external revocation of a deploy/checkout SSH key; may break future CI checkouts that depend on it; approval required"
+        "risk": "irreversible external revocation of a deploy/checkout SSH key; may break future CI checkouts that depend on it; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -26829,7 +26925,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/networks/{{ record.id }}",
-        "risk": "irreversible external deletion of a Meraki network and all its devices' configuration; approval required"
+        "risk": "irreversible external deletion of a Meraki network and all its devices' configuration; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "update_device",
@@ -26857,7 +26954,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/organizations/{{ record.organizationId }}/admins/{{ record.id }}",
-        "risk": "irreversible external revocation of a dashboard administrator's access to this organization; approval required"
+        "risk": "irreversible external revocation of a dashboard administrator's access to this organization; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_config_template",
@@ -26878,7 +26976,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/organizations/{{ record.organizationId }}/configTemplates/{{ record.id }}",
-        "risk": "irreversible external deletion of a configuration template; may unbind networks currently attached to it; approval required"
+        "risk": "irreversible external deletion of a configuration template; may unbind networks currently attached to it; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_policy_object",
@@ -26899,7 +26998,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/organizations/{{ record.organizationId }}/policyObjects/{{ record.id }}",
-        "risk": "irreversible external deletion of a network policy object; may break firewall/traffic-shaping rules that reference it; approval required"
+        "risk": "irreversible external deletion of a network policy object; may break firewall/traffic-shaping rules that reference it; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -27046,7 +27146,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/users/{{ config.user_id }}/apps/{{ config.app_id }}/datasets",
-        "risk": "permanently deletes one or more Clarifai datasets and their inputs/annotations within the configured app; irreversible; approval required"
+        "risk": "permanently deletes one or more Clarifai datasets and their inputs/annotations within the configured app; irreversible; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -27278,7 +27379,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/contacts/{{ record.id }}/",
-        "risk": "permanently deletes a Clazar contact record; approval required (destructive, irreversible)"
+        "risk": "permanently deletes a Clazar contact record; approval required (destructive, irreversible)",
+        "confirm": "destructive"
       },
       {
         "name": "update_metering_record",
@@ -27484,7 +27586,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/task/{{ record.id }}",
-        "risk": "permanently deletes a ClickUp task; irreversible; approval required"
+        "risk": "permanently deletes a ClickUp task; irreversible; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_task_comment",
@@ -27505,7 +27608,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/task/{{ record.task_id }}/tag/{{ record.tag_name }}",
-        "risk": "removes a tag from a task (does not delete the tag from the Space); low-risk"
+        "risk": "removes a tag from a task (does not delete the tag from the Space); low-risk",
+        "confirm": "destructive"
       },
       {
         "name": "set_custom_field_value",
@@ -27540,7 +27644,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/folder/{{ record.id }}",
-        "risk": "permanently deletes a ClickUp Folder and every List/task inside it; irreversible; approval required"
+        "risk": "permanently deletes a ClickUp Folder and every List/task inside it; irreversible; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_list",
@@ -27561,7 +27666,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/list/{{ record.id }}",
-        "risk": "permanently deletes a ClickUp List and every task inside it; irreversible; approval required"
+        "risk": "permanently deletes a ClickUp List and every task inside it; irreversible; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_space",
@@ -27582,7 +27688,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/space/{{ record.id }}",
-        "risk": "permanently deletes a ClickUp Space and every Folder/List/task inside it; irreversible; approval required"
+        "risk": "permanently deletes a ClickUp Space and every Folder/List/task inside it; irreversible; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_webhook",
@@ -27603,7 +27710,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/webhook/{{ record.id }}",
-        "risk": "stops event delivery to a registered webhook endpoint; approval required (irreversible without re-registering)"
+        "risk": "stops event delivery to a registered webhook endpoint; approval required (irreversible without re-registering)",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -27823,7 +27931,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v1/workspaces/{{ config.workspace_id }}/clients/{{ record.id }}",
-        "risk": "external mutation; irreversibly deletes a live Clockify client; approval required"
+        "risk": "external mutation; irreversibly deletes a live Clockify client; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_project",
@@ -27844,7 +27953,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v1/workspaces/{{ config.workspace_id }}/projects/{{ record.id }}",
-        "risk": "external mutation; irreversibly deletes a live Clockify project; approval required"
+        "risk": "external mutation; irreversibly deletes a live Clockify project; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_tag",
@@ -27865,7 +27975,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v1/workspaces/{{ config.workspace_id }}/tags/{{ record.id }}",
-        "risk": "external mutation; irreversibly deletes a live Clockify tag; approval required"
+        "risk": "external mutation; irreversibly deletes a live Clockify tag; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_task",
@@ -27886,7 +27997,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v1/workspaces/{{ config.workspace_id }}/projects/{{ record.projectId }}/tasks/{{ record.id }}",
-        "risk": "external mutation; irreversibly deletes a live Clockify task; approval required"
+        "risk": "external mutation; irreversibly deletes a live Clockify task; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -28164,7 +28276,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v2/customers/{{ record.id }}",
-        "risk": "external mutation; irreversibly deletes a live Clockodo customer; approval required"
+        "risk": "external mutation; irreversibly deletes a live Clockodo customer; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_project",
@@ -28185,7 +28298,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v2/projects/{{ record.id }}",
-        "risk": "external mutation; irreversibly removes a live Clockodo project; approval required"
+        "risk": "external mutation; irreversibly removes a live Clockodo project; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_service",
@@ -28206,7 +28320,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v2/services/{{ record.id }}",
-        "risk": "external mutation; irreversibly deletes a live Clockodo service; approval required"
+        "risk": "external mutation; irreversibly deletes a live Clockodo service; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_team",
@@ -28227,7 +28342,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v2/teams/{{ record.id }}",
-        "risk": "external mutation; irreversibly deletes a live Clockodo team; approval required"
+        "risk": "external mutation; irreversibly deletes a live Clockodo team; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_lumpsum_service",
@@ -28248,7 +28364,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v2/lumpsumservices/{{ record.id }}",
-        "risk": "external mutation; irreversibly deletes a live Clockodo lump-sum service; approval required"
+        "risk": "external mutation; irreversibly deletes a live Clockodo lump-sum service; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -28480,7 +28597,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/lead/{{ record.id }}",
-        "risk": "external mutation; irreversibly deletes a live Close lead and its contacts/opportunities; approval required"
+        "risk": "external mutation; irreversibly deletes a live Close lead and its contacts/opportunities; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_contact",
@@ -28501,7 +28619,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/contact/{{ record.id }}",
-        "risk": "external mutation; irreversibly deletes a live Close contact; approval required"
+        "risk": "external mutation; irreversibly deletes a live Close contact; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_opportunity",
@@ -28522,7 +28641,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/opportunity/{{ record.id }}",
-        "risk": "external mutation; irreversibly deletes a live Close opportunity; approval required"
+        "risk": "external mutation; irreversibly deletes a live Close opportunity; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_task",
@@ -28543,7 +28663,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/task/{{ record.id }}",
-        "risk": "external mutation; irreversibly deletes a live Close task; approval required"
+        "risk": "external mutation; irreversibly deletes a live Close task; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -28879,7 +29000,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/deleteGuestNote?propertyID={{ record.propertyID }}\u0026guestID={{ record.guestID }}\u0026noteID={{ record.noteID }}",
-        "risk": "irreversibly removes a guest note; approval required"
+        "risk": "irreversibly removes a guest note; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_reservation",
@@ -28914,7 +29036,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/deleteReservationNote?propertyID={{ record.propertyID }}\u0026reservationID={{ record.reservationID }}\u0026reservationNoteID={{ record.reservationNoteID }}",
-        "risk": "irreversibly removes a reservation note; approval required"
+        "risk": "irreversibly removes a reservation note; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "check_in_room",
@@ -28949,7 +29072,8 @@
         "kind": "delete",
         "method": "POST",
         "path": "/postVoidPayment",
-        "risk": "irreversibly voids a recorded payment; a real financial reversal — approval required"
+        "risk": "irreversibly voids a recorded payment; a real financial reversal — approval required",
+        "confirm": "destructive"
       },
       {
         "name": "post_adjustment",
@@ -28963,7 +29087,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/deleteAdjustment?reservationID={{ record.reservationID }}\u0026adjustmentID={{ record.adjustmentID }}",
-        "risk": "irreversibly removes a folio adjustment; a real financial reversal — approval required"
+        "risk": "irreversibly removes a folio adjustment; a real financial reversal — approval required",
+        "confirm": "destructive"
       },
       {
         "name": "post_item",
@@ -28977,7 +29102,8 @@
         "kind": "delete",
         "method": "POST",
         "path": "/postVoidItem",
-        "risk": "irreversibly voids a previously-sold item line; a real financial reversal — approval required"
+        "risk": "irreversibly voids a previously-sold item line; a real financial reversal — approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_item_category",
@@ -29047,7 +29173,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/deleteWebhook?subscriptionID={{ record.subscriptionID }}",
-        "risk": "removes a webhook subscription; approval required (stops event delivery to the subscribed endpoint)"
+        "risk": "removes a webhook subscription; approval required (stops event delivery to the subscribed endpoint)",
+        "confirm": "destructive"
       },
       {
         "name": "create_room_block",
@@ -29068,7 +29195,8 @@
         "kind": "delete",
         "method": "POST",
         "path": "/deleteRoomBlock",
-        "risk": "releases a room block back to general sale; irreversible for any rooms already picked up under it — approval required"
+        "risk": "releases a room block back to general sale; irreversible for any rooms already picked up under it — approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -29243,7 +29371,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v1/headless/course/{{ record.id }}",
-        "risk": "soft-deletes a course (recoverable via restore_course within Coassemble's retention window); approval required"
+        "risk": "soft-deletes a course (recoverable via restore_course within Coassemble's retention window); approval required",
+        "confirm": "destructive"
       },
       {
         "name": "restore_course",
@@ -29257,7 +29386,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v1/headless/tracking",
-        "risk": "permanently erases one learner's tracking/progress record for a course; irreversible, approval required"
+        "risk": "permanently erases one learner's tracking/progress record for a course; irreversible, approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_collection",
@@ -29271,7 +29401,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v1/headless/collection/{{ record.id }}",
-        "risk": "soft-deletes a collection (recoverable via restore_collection); approval required"
+        "risk": "soft-deletes a collection (recoverable via restore_collection); approval required",
+        "confirm": "destructive"
       },
       {
         "name": "restore_collection",
@@ -29292,7 +29423,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v1/headless/client/{{ record.clientIdentifier }}",
-        "risk": "irreversibly removes a client (multi-tenant sub-account) and its documented on-delete effects on associated users; approval required"
+        "risk": "irreversibly removes a client (multi-tenant sub-account) and its documented on-delete effects on associated users; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "update_user",
@@ -29306,7 +29438,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v1/headless/user/{{ record.identifier }}",
-        "risk": "irreversibly removes a learner identity, applying Coassemble's server-side DEFAULT handling for that identity's course progress (the real endpoint also accepts optional action=reallocate|delete|ignore/reallocateTo/clientIdentifier query params to control that handling explicitly, and Coassemble's own docs do not fully specify their exact semantics beyond \"choose what to do with any courses associated with this identifier\" — this action deliberately does not expose them, since the write-action path/query dialect has no way to send an optional record field only when present, and silently defaulting an ambiguous, irreversible per-learner-data-retention choice would be worse than declaring it out of scope; approval required"
+        "risk": "irreversibly removes a learner identity, applying Coassemble's server-side DEFAULT handling for that identity's course progress (the real endpoint also accepts optional action=reallocate|delete|ignore/reallocateTo/clientIdentifier query params to control that handling explicitly, and Coassemble's own docs do not fully specify their exact semantics beyond \"choose what to do with any courses associated with this identifier\" — this action deliberately does not expose them, since the write-action path/query dialect has no way to send an optional record field only when present, and silently defaulting an ambiguous, irreversible per-learner-data-retention choice would be worse than declaring it out of scope; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "translate_course",
@@ -29334,7 +29467,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v1/headless/translation/{{ record.course_id }}/{{ record.language }}",
-        "risk": "permanently removes a language variant of a course; irreversible, approval required"
+        "risk": "permanently removes a language variant of a course; irreversible, approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -29497,14 +29631,16 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/docs/{{ config.doc_id }}/tables/{{ record.table_id }}/rows/{{ record.row_id }}",
-        "risk": "permanently removes a row from a Coda table; irreversible, queued for async processing (202)"
+        "risk": "permanently removes a row from a Coda table; irreversible, queued for async processing (202)",
+        "confirm": "destructive"
       },
       {
         "name": "delete_rows",
         "kind": "delete",
         "method": "DELETE",
         "path": "/docs/{{ config.doc_id }}/tables/{{ record.table_id }}/rows",
-        "risk": "permanently removes multiple rows from a Coda table in one request; irreversible, queued for async processing (202)"
+        "risk": "permanently removes multiple rows from a Coda table in one request; irreversible, queued for async processing (202)",
+        "confirm": "destructive"
       },
       {
         "name": "push_button",
@@ -29532,7 +29668,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/docs/{{ config.doc_id }}/pages/{{ record.page_id }}",
-        "risk": "permanently removes a page (and its subpages/content) from the doc; irreversible, queued for async processing (202)"
+        "risk": "permanently removes a page (and its subpages/content) from the doc; irreversible, queued for async processing (202)",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -31541,7 +31678,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/organizations/{{ config.organization_id }}/folders/{{ record.id }}",
-        "risk": "permanently deletes a Concord folder; destructive, external mutation; approval required"
+        "risk": "permanently deletes a Concord folder; destructive, external mutation; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_report",
@@ -31562,7 +31700,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/organizations/{{ config.organization_id }}/reports/{{ record.id }}",
-        "risk": "permanently deletes a Concord saved report; destructive, external mutation; approval required"
+        "risk": "permanently deletes a Concord saved report; destructive, external mutation; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_clause",
@@ -31583,7 +31722,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/organizations/{{ config.organization_id }}/clauses/{{ record.id }}",
-        "risk": "permanently deletes a Concord clause template; destructive, external mutation; approval required"
+        "risk": "permanently deletes a Concord clause template; destructive, external mutation; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_group",
@@ -31611,7 +31751,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/organizations/{{ config.organization_id }}/approvals/{{ record.id }}",
-        "risk": "permanently deletes a Concord company approval workflow; destructive, external mutation; approval required"
+        "risk": "permanently deletes a Concord company approval workflow; destructive, external mutation; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -32041,7 +32182,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v1/configs/{{ record.configId }}",
-        "risk": "permanently deletes a ConfigCat config and every feature flag/setting defined in it; destructive, external mutation; approval required"
+        "risk": "permanently deletes a ConfigCat config and every feature flag/setting defined in it; destructive, external mutation; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_environment",
@@ -32062,7 +32204,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v1/environments/{{ record.environmentId }}",
-        "risk": "permanently deletes a ConfigCat environment and every feature flag value/SDK key scoped to it; destructive, external mutation; approval required"
+        "risk": "permanently deletes a ConfigCat environment and every feature flag value/SDK key scoped to it; destructive, external mutation; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_flag",
@@ -32083,7 +32226,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v1/settings/{{ record.settingId }}",
-        "risk": "permanently deletes a ConfigCat feature flag/setting and its values in every environment; destructive, external mutation; approval required"
+        "risk": "permanently deletes a ConfigCat feature flag/setting and its values in every environment; destructive, external mutation; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_tag",
@@ -32104,7 +32248,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v1/tags/{{ record.tagId }}",
-        "risk": "permanently deletes a ConfigCat tag and untags every feature flag that used it; destructive, external mutation; approval required"
+        "risk": "permanently deletes a ConfigCat tag and untags every feature flag that used it; destructive, external mutation; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -32496,7 +32641,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/subscribers/{{ record.subscriber_id }}/tags/{{ record.tag_id }}",
-        "risk": "removes a tag from a subscriber; external mutation, no approval required"
+        "risk": "removes a tag from a subscriber; external mutation, no approval required",
+        "confirm": "destructive"
       },
       {
         "name": "subscribe_to_form",
@@ -32531,7 +32677,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/broadcasts/{{ record.id }}",
-        "risk": "permanently deletes a draft or scheduled broadcast record; irreversible, approval required"
+        "risk": "permanently deletes a draft or scheduled broadcast record; irreversible, approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_custom_field",
@@ -32566,7 +32713,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/automations/hooks/{{ record.rule_id }}",
-        "risk": "permanently deletes a webhook automation; irreversible, approval required"
+        "risk": "permanently deletes a webhook automation; irreversible, approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -33356,7 +33504,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/snippets/{{ record.name }}",
-        "risk": "external mutation; permanently removes a snippet; irreversible, breaks any message/newsletter still referencing it; approval required"
+        "risk": "external mutation; permanently removes a snippet; irreversible, breaks any message/newsletter still referencing it; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_reporting_webhook",
@@ -33377,7 +33526,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/reporting_webhooks/{{ record.id }}",
-        "risk": "external mutation; permanently removes a reporting webhook; event delivery to its target URL stops immediately; approval required"
+        "risk": "external mutation; permanently removes a reporting webhook; event delivery to its target URL stops immediately; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_manual_segment",
@@ -33391,7 +33541,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/segments/{{ record.id }}",
-        "risk": "external mutation; permanently removes a manual segment; irreversible, any campaign/newsletter targeting it loses that audience slice immediately; approval required"
+        "risk": "external mutation; permanently removes a manual segment; irreversible, any campaign/newsletter targeting it loses that audience slice immediately; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "send_email",
@@ -33509,14 +33660,16 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/users?user_id={{ record.user_id }}",
-        "risk": "external mutation; irreversibly deletes a live Customerly user and every conversation/survey/campaign record tied to them; approval required"
+        "risk": "external mutation; irreversibly deletes a live Customerly user and every conversation/survey/campaign record tied to them; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "delete_lead",
         "kind": "delete",
         "method": "DELETE",
         "path": "/leads?email={{ record.email }}",
-        "risk": "external mutation; irreversibly deletes a live Customerly lead and every associated record; approval required"
+        "risk": "external mutation; irreversibly deletes a live Customerly lead and every associated record; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "unsubscribe_user",
@@ -33537,7 +33690,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/tags",
-        "risk": "external mutation; permanently removes a tag definition from the app; it is un-applied from every contact that carried it; approval required"
+        "risk": "external mutation; permanently removes a tag definition from the app; it is un-applied from every contact that carried it; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "send_message",
@@ -33817,7 +33971,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v1/monitor/{{ record.id }}",
-        "risk": "irreversibly removes a monitor and its alerting history reference; approval required"
+        "risk": "irreversibly removes a monitor and its alerting history reference; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_dashboard",
@@ -33838,7 +33993,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v1/dashboard/{{ record.id }}",
-        "risk": "irreversibly removes a dashboard; approval required"
+        "risk": "irreversibly removes a dashboard; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_dashboard_list",
@@ -33859,7 +34015,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v1/dashboard/lists/manual/{{ record.id }}",
-        "risk": "irreversibly removes a dashboard list (folder); the dashboards themselves are unaffected, approval required"
+        "risk": "irreversibly removes a dashboard list (folder); the dashboards themselves are unaffected, approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_downtime",
@@ -33880,7 +34037,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v1/downtime/{{ record.id }}",
-        "risk": "cancels a scheduled/active downtime; alerting resumes immediately for its scope, approval required"
+        "risk": "cancels a scheduled/active downtime; alerting resumes immediately for its scope, approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_notebook",
@@ -33901,7 +34059,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v1/notebooks/{{ record.id }}",
-        "risk": "irreversibly removes a notebook; approval required"
+        "risk": "irreversibly removes a notebook; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_slo",
@@ -33922,7 +34081,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v1/slo/{{ record.id }}",
-        "risk": "irreversibly removes an SLO and its historical error-budget tracking; approval required"
+        "risk": "irreversibly removes an SLO and its historical error-budget tracking; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_user",
@@ -33943,7 +34103,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v1/user/{{ record.handle }}",
-        "risk": "disables a user's access to the Datadog organization; approval required"
+        "risk": "disables a user's access to the Datadog organization; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_event",
@@ -33985,7 +34146,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v1/api_key/{{ record.key }}",
-        "risk": "irreversibly revokes an organization API key; every agent/integration still using it immediately loses ingest access, approval required"
+        "risk": "irreversibly revokes an organization API key; every agent/integration still using it immediately loses ingest access, approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -34376,7 +34538,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/accounts/{{ config.account_id }}/jobs/{{ record.id }}/",
-        "risk": "irreversible removal of a job definition (its schedule/trigger and run history reference); approval required"
+        "risk": "irreversible removal of a job definition (its schedule/trigger and run history reference); approval required",
+        "confirm": "destructive"
       },
       {
         "name": "trigger_job_run",
@@ -34425,7 +34588,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/accounts/{{ config.account_id }}/notifications/{{ record.id }}/",
-        "risk": "removes an existing job-status notification configuration; approval required"
+        "risk": "removes an existing job-status notification configuration; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_ssh_tunnel",
@@ -34446,7 +34610,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/accounts/{{ config.account_id }}/encryptions/{{ record.id }}/",
-        "risk": "removes an SSH tunnel; the associated warehouse connection falls back to unencrypted/direct connectivity, approval required"
+        "risk": "removes an SSH tunnel; the associated warehouse connection falls back to unencrypted/direct connectivity, approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -34732,7 +34897,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/people/{{ record.person_id }}.json",
-        "risk": "deletes a Delighted person record"
+        "risk": "deletes a Delighted person record",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -34908,7 +35074,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v1/resource/OperationalUnit/{{ record.Id }}",
-        "risk": "irreversible deletion of a real Deputy department/operational unit; approval required"
+        "risk": "irreversible deletion of a real Deputy department/operational unit; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_leave",
@@ -34929,7 +35096,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v1/resource/Leave/{{ record.Id }}",
-        "risk": "irreversible deletion of a real Deputy leave request; approval required"
+        "risk": "irreversible deletion of a real Deputy leave request; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_roster",
@@ -34950,7 +35118,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v1/resource/Roster/{{ record.Id }}",
-        "risk": "irreversible deletion of a real Deputy roster/shift; approval required"
+        "risk": "irreversible deletion of a real Deputy roster/shift; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_webhook",
@@ -34971,7 +35140,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v1/resource/Webhook/{{ record.Id }}",
-        "risk": "irreversible deletion of a real Deputy webhook subscription; approval required"
+        "risk": "irreversible deletion of a real Deputy webhook subscription; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_team",
@@ -34992,7 +35162,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v1/resource/Team/{{ record.Id }}",
-        "risk": "irreversible deletion of a real Deputy team; approval required"
+        "risk": "irreversible deletion of a real Deputy team; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -36188,7 +36359,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/submissions/{{ record.id }}",
-        "risk": "external mutation; archives a live DocuSeal submission (soft-delete, still recoverable via the DocuSeal UI); approval required"
+        "risk": "external mutation; archives a live DocuSeal submission (soft-delete, still recoverable via the DocuSeal UI); approval required",
+        "confirm": "destructive"
       },
       {
         "name": "update_submitter",
@@ -36209,7 +36381,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/templates/{{ record.id }}",
-        "risk": "external mutation; archives a live DocuSeal template (soft-delete, recoverable by unarchiving via update_template); approval required"
+        "risk": "external mutation; archives a live DocuSeal template (soft-delete, recoverable by unarchiving via update_template); approval required",
+        "confirm": "destructive"
       },
       {
         "name": "clone_template",
@@ -36448,7 +36621,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/thirdparties/{{ record.id }}",
-        "risk": "external mutation; irreversibly deletes a live Dolibarr third party; approval required"
+        "risk": "external mutation; irreversibly deletes a live Dolibarr third party; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_contact",
@@ -36469,7 +36643,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/contacts/{{ record.id }}",
-        "risk": "external mutation; irreversibly deletes a live Dolibarr contact; approval required"
+        "risk": "external mutation; irreversibly deletes a live Dolibarr contact; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_product",
@@ -36490,7 +36665,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/products/{{ record.id }}",
-        "risk": "external mutation; irreversibly deletes a live Dolibarr product/service; approval required"
+        "risk": "external mutation; irreversibly deletes a live Dolibarr product/service; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_invoice",
@@ -36511,7 +36687,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/invoices/{{ record.id }}",
-        "risk": "external mutation; irreversibly deletes a live Dolibarr invoice (only permitted while in draft status); approval required"
+        "risk": "external mutation; irreversibly deletes a live Dolibarr invoice (only permitted while in draft status); approval required",
+        "confirm": "destructive"
       },
       {
         "name": "validate_invoice",
@@ -36539,7 +36716,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/orders/{{ record.id }}",
-        "risk": "external mutation; irreversibly deletes a live Dolibarr order (only permitted while in draft status); approval required"
+        "risk": "external mutation; irreversibly deletes a live Dolibarr order (only permitted while in draft status); approval required",
+        "confirm": "destructive"
       },
       {
         "name": "validate_order",
@@ -37129,7 +37307,8 @@
         "kind": "custom",
         "method": "DELETE",
         "path": "/{{ config.account_id }}/subscribers/{{ record.subscriber_id }}/tags/{{ record.tag }}",
-        "risk": "removes a tag from a subscriber, potentially triggering any workflow with a matching tag-removed trigger; low-risk external mutation, no approval required"
+        "risk": "removes a tag from a subscriber, potentially triggering any workflow with a matching tag-removed trigger; low-risk external mutation, no approval required",
+        "confirm": "destructive"
       },
       {
         "name": "record_event",
@@ -37937,7 +38116,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/customers/{{ record.customerNumber }}",
-        "risk": "permanently removes a customer record; e-conomic rejects the delete (409) if the customer has any booked entries, but a customer with no bookkeeping history is removed irreversibly"
+        "risk": "permanently removes a customer record; e-conomic rejects the delete (409) if the customer has any booked entries, but a customer with no bookkeeping history is removed irreversibly",
+        "confirm": "destructive"
       },
       {
         "name": "create_product",
@@ -37958,7 +38138,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/products/{{ record.productNumber }}",
-        "risk": "permanently removes a product from the catalog; e-conomic rejects the delete (409) if the product is referenced by any booked invoice line"
+        "risk": "permanently removes a product from the catalog; e-conomic rejects the delete (409) if the product is referenced by any booked invoice line",
+        "confirm": "destructive"
       },
       {
         "name": "create_supplier",
@@ -37979,7 +38160,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/suppliers/{{ record.supplierNumber }}",
-        "risk": "permanently removes a supplier record; e-conomic rejects the delete (409) if the supplier has any booked entries"
+        "risk": "permanently removes a supplier record; e-conomic rejects the delete (409) if the supplier has any booked entries",
+        "confirm": "destructive"
       },
       {
         "name": "create_draft_invoice",
@@ -39224,7 +39406,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/contacts/{{ record.Email }}",
-        "risk": "permanently removes a contact and its activity/consent history from the account"
+        "risk": "permanently removes a contact and its activity/consent history from the account",
+        "confirm": "destructive"
       },
       {
         "name": "create_list",
@@ -39245,7 +39428,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/lists/{{ record.ListName }}",
-        "risk": "permanently removes a contact list; any campaign still targeting this list by name will fail to resolve its recipients"
+        "risk": "permanently removes a contact list; any campaign still targeting this list by name will fail to resolve its recipients",
+        "confirm": "destructive"
       },
       {
         "name": "add_list_contacts",
@@ -39273,7 +39457,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/segments/{{ record.Name }}",
-        "risk": "permanently removes a segment; any campaign still targeting this segment by name will fail to resolve its recipients"
+        "risk": "permanently removes a segment; any campaign still targeting this segment by name will fail to resolve its recipients",
+        "confirm": "destructive"
       },
       {
         "name": "create_template",
@@ -39294,7 +39479,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/templates/{{ record.Name }}",
-        "risk": "permanently removes a template; any campaign still referencing this template by name will fail to build its content"
+        "risk": "permanently removes a template; any campaign still referencing this template by name will fail to build its content",
+        "confirm": "destructive"
       },
       {
         "name": "create_campaign",
@@ -39322,7 +39508,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/campaigns/{{ record.Name }}",
-        "risk": "permanently removes a campaign; if it has not finished sending, any remaining scheduled deliveries are cancelled"
+        "risk": "permanently removes a campaign; if it has not finished sending, any remaining scheduled deliveries are cancelled",
+        "confirm": "destructive"
       },
       {
         "name": "create_webhook",
@@ -39343,7 +39530,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/webhook/{{ record.WebhookID }}",
-        "risk": "permanently removes a webhook subscription; event delivery to its target URL stops immediately"
+        "risk": "permanently removes a webhook subscription; event delivery to its target URL stops immediately",
+        "confirm": "destructive"
       },
       {
         "name": "create_domain",
@@ -39357,7 +39545,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/domains/{{ record.Domain }}",
-        "risk": "permanently removes a verified sending domain; any campaign configured to send from this domain will fail until reconfigured"
+        "risk": "permanently removes a verified sending domain; any campaign configured to send from this domain will fail until reconfigured",
+        "confirm": "destructive"
       },
       {
         "name": "create_inbound_route",
@@ -39378,7 +39567,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/inboundroute/{{ record.PublicId }}",
-        "risk": "permanently removes an inbound-mail routing rule; matching inbound mail is no longer forwarded once removed"
+        "risk": "permanently removes an inbound-mail routing rule; matching inbound mail is no longer forwarded once removed",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -39614,7 +39804,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/lists/{{ record.id }}",
-        "risk": "permanently removes a list and all of its contacts/tags/custom fields"
+        "risk": "permanently removes a list and all of its contacts/tags/custom fields",
+        "confirm": "destructive"
       },
       {
         "name": "create_list_contact",
@@ -39635,7 +39826,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/lists/{{ record.list_id }}/contacts/{{ record.member_id }}",
-        "risk": "permanently removes a contact from a list and its subscription/consent history"
+        "risk": "permanently removes a contact from a list and its subscription/consent history",
+        "confirm": "destructive"
       },
       {
         "name": "create_list_tag",
@@ -39656,7 +39848,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/lists/{{ record.list_id }}/tags/{{ record.tag }}",
-        "risk": "permanently removes a tag from a list and from every contact currently carrying it"
+        "risk": "permanently removes a tag from a list and from every contact currently carrying it",
+        "confirm": "destructive"
       },
       {
         "name": "create_list_field",
@@ -39677,7 +39870,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/lists/{{ record.list_id }}/fields/{{ record.tag }}",
-        "risk": "permanently removes a custom field and its stored values from every contact on the list"
+        "risk": "permanently removes a custom field and its stored values from every contact on the list",
+        "confirm": "destructive"
       },
       {
         "name": "start_automation",
@@ -41570,7 +41764,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/clients/{{ record.id }}",
-        "risk": "permanently removes a client and its association with any linked projects; irreversible, approval required"
+        "risk": "permanently removes a client and its association with any linked projects; irreversible, approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_project",
@@ -41598,7 +41793,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/projects/{{ record.id }}",
-        "risk": "permanently removes a project and its tasks/sections/time associations; irreversible, approval required"
+        "risk": "permanently removes a project and its tasks/sections/time associations; irreversible, approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_task",
@@ -41619,7 +41815,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/tasks/{{ record.id }}",
-        "risk": "permanently removes a task and its logged time association; irreversible, approval required"
+        "risk": "permanently removes a task and its logged time association; irreversible, approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_section",
@@ -41633,7 +41830,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/sections/{{ record.id }}",
-        "risk": "permanently removes a task section; any tasks in it become unsectioned, approval required"
+        "risk": "permanently removes a task section; any tasks in it become unsectioned, approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_time_record",
@@ -41654,7 +41852,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/time/{{ record.id }}",
-        "risk": "permanently removes a logged time entry, which can affect billing/invoicing history; irreversible, approval required"
+        "risk": "permanently removes a logged time entry, which can affect billing/invoicing history; irreversible, approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_expense",
@@ -41668,7 +41867,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/expenses/{{ record.id }}",
-        "risk": "permanently removes a logged expense, which can affect billing/invoicing history; irreversible, approval required"
+        "risk": "permanently removes a logged expense, which can affect billing/invoicing history; irreversible, approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -42905,7 +43105,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/forms/{{ record.form_id }}/submissions/{{ record.submission_id }}",
-        "risk": "permanently deletes a single form response; irreversible, approval required"
+        "risk": "permanently deletes a single form response; irreversible, approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -61826,7 +62027,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{{ config.owner }}/{{ config.repo }}/labels/{{ record.name }}",
-        "risk": "removes a label from the repository and existing issue metadata"
+        "risk": "removes a label from the repository and existing issue metadata",
+        "confirm": "destructive"
       },
       {
         "name": "create_milestone",
@@ -61847,7 +62049,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{{ config.owner }}/{{ config.repo }}/milestones/{{ record.milestone_number }}",
-        "risk": "removes repository planning metadata from GitHub"
+        "risk": "removes repository planning metadata from GitHub",
+        "confirm": "destructive"
       },
       {
         "name": "create_release",
@@ -61868,7 +62071,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{{ config.owner }}/{{ config.repo }}/releases/{{ record.release_id }}",
-        "risk": "removes release metadata from GitHub; tags are not deleted by this action"
+        "risk": "removes release metadata from GitHub; tags are not deleted by this action",
+        "confirm": "destructive"
       },
       {
         "name": "dispatch_workflow",
@@ -61896,7 +62100,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}",
-        "risk": "removes workflow run history from GitHub"
+        "risk": "removes workflow run history from GitHub",
+        "confirm": "destructive"
       },
       {
         "name": "create_pull_request_review",
@@ -61917,7 +62122,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{{ config.owner }}/{{ config.repo }}/contents/{{ record.path }}",
-        "risk": "writes a commit that removes a file from the repository"
+        "risk": "writes a commit that removes a file from the repository",
+        "confirm": "destructive"
       },
       {
         "name": "create_webhook",
@@ -61938,7 +62144,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}",
-        "risk": "removes a webhook; the target will stop receiving repository event payloads"
+        "risk": "removes a webhook; the target will stop receiving repository event payloads",
+        "confirm": "destructive"
       },
       {
         "name": "create_deploy_key",
@@ -61952,7 +62159,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{{ config.owner }}/{{ config.repo }}/keys/{{ record.key_id }}",
-        "risk": "revokes an SSH deploy key's access to the repository"
+        "risk": "revokes an SSH deploy key's access to the repository",
+        "confirm": "destructive"
       },
       {
         "name": "create_or_update_environment",
@@ -61966,7 +62174,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{{ config.owner }}/{{ config.repo }}/environments/{{ record.environment_name }}",
-        "risk": "removes a deployment environment and its protection rules"
+        "risk": "removes a deployment environment and its protection rules",
+        "confirm": "destructive"
       },
       {
         "name": "create_commit_comment",
@@ -61987,7 +62196,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{{ config.owner }}/{{ config.repo }}/comments/{{ record.comment_id }}",
-        "risk": "removes a commit comment"
+        "risk": "removes a commit comment",
+        "confirm": "destructive"
       },
       {
         "name": "update_issue_comment",
@@ -62001,7 +62211,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{ record.comment_id }}",
-        "risk": "removes an issue or pull request comment"
+        "risk": "removes an issue or pull request comment",
+        "confirm": "destructive"
       },
       {
         "name": "lock_issue",
@@ -62015,7 +62226,8 @@
         "kind": "update",
         "method": "DELETE",
         "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/lock",
-        "risk": "reopens an issue or pull request to comments from non-collaborators"
+        "risk": "reopens an issue or pull request to comments from non-collaborators",
+        "confirm": "destructive"
       },
       {
         "name": "set_issue_labels",
@@ -62036,7 +62248,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/labels/{{ record.name }}",
-        "risk": "removes a single label from an issue or pull request"
+        "risk": "removes a single label from an issue or pull request",
+        "confirm": "destructive"
       },
       {
         "name": "add_issue_assignees",
@@ -62050,7 +62263,8 @@
         "kind": "update",
         "method": "DELETE",
         "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/assignees",
-        "risk": "removes assignees from an issue or pull request"
+        "risk": "removes assignees from an issue or pull request",
+        "confirm": "destructive"
       },
       {
         "name": "create_review_comment",
@@ -62071,7 +62285,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/comments/{{ record.comment_id }}",
-        "risk": "removes a pull request review comment"
+        "risk": "removes a pull request review comment",
+        "confirm": "destructive"
       },
       {
         "name": "submit_pull_request_review",
@@ -62106,7 +62321,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{{ config.owner }}/{{ config.repo }}/releases/assets/{{ record.asset_id }}",
-        "risk": "removes a downloadable asset from a published release"
+        "risk": "removes a downloadable asset from a published release",
+        "confirm": "destructive"
       },
       {
         "name": "replace_repo_topics",
@@ -62127,7 +62343,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{{ config.owner }}/{{ config.repo }}/collaborators/{{ record.username }}",
-        "risk": "revokes a collaborator's access to the repository"
+        "risk": "revokes a collaborator's access to the repository",
+        "confirm": "destructive"
       },
       {
         "name": "create_ref",
@@ -62205,7 +62422,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{{ config.owner }}/{{ config.repo }}/rulesets/{{ record.ruleset_id }}",
-        "risk": "removes a repository ruleset, lifting any push/merge/deletion restrictions it enforced"
+        "risk": "removes a repository ruleset, lifting any push/merge/deletion restrictions it enforced",
+        "confirm": "destructive"
       },
       {
         "name": "update_secret_scanning_alert",
@@ -62248,14 +62466,16 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/actions/caches",
-        "risk": "medium"
+        "risk": "medium",
+        "confirm": "destructive"
       },
       {
         "name": "actions_caches_cache_id",
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/actions/caches/{cache_id}",
-        "risk": "medium"
+        "risk": "medium",
+        "confirm": "destructive"
       },
       {
         "name": "actions_jobs_job_id_rerun",
@@ -62346,14 +62566,16 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "actions_runners_runner_id_labels",
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "actions_runners_runner_id_labels3",
@@ -62374,7 +62596,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "actions_runs_run_id_approve",
@@ -62410,7 +62633,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "actions_secrets_secret_name3",
@@ -62431,7 +62655,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/actions/variables/{name}",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "actions_variables_name3",
@@ -62473,14 +62698,16 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/autolinks/{autolink_id}",
-        "risk": "medium"
+        "risk": "medium",
+        "confirm": "destructive"
       },
       {
         "name": "automated_security_fixes",
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/automated-security-fixes",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "automated_security_fixes3",
@@ -62494,7 +62721,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/branches/{branch}/protection",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "branches_branch_protection3",
@@ -62508,7 +62736,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "branches_branch_protection_enforce_admins3",
@@ -62522,7 +62751,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "branches_branch_protection_required_pull_request_reviews3",
@@ -62536,7 +62766,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "branches_branch_protection_required_signatures3",
@@ -62550,7 +62781,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "branches_branch_protection_required_status_checks3",
@@ -62564,7 +62796,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "branches_branch_protection_required_status_checks_contexts3",
@@ -62585,14 +62818,16 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "branches_branch_protection_restrictions_apps",
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "branches_branch_protection_restrictions_apps3",
@@ -62613,7 +62848,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "branches_branch_protection_restrictions_teams3",
@@ -62634,7 +62870,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "branches_branch_protection_restrictions_users3",
@@ -62726,14 +62963,16 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "code_scanning_codeql_databases_language",
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases/{language}",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "code_scanning_codeql_variant_analyses",
@@ -62768,7 +63007,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
-        "risk": "medium"
+        "risk": "medium",
+        "confirm": "destructive"
       },
       {
         "name": "codespaces_secrets_secret_name3",
@@ -62789,14 +63029,16 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}",
-        "risk": "medium"
+        "risk": "medium",
+        "confirm": "destructive"
       },
       {
         "name": "dependabot_secrets_secret_name",
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "dependabot_secrets_secret_name3",
@@ -62846,7 +63088,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "environments_environment_name_deployment_branch_policies_branch_policy_id3",
@@ -62867,14 +63110,16 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "environments_environment_name_secrets_secret_name",
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "environments_environment_name_secrets_secret_name3",
@@ -62895,7 +63140,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "environments_environment_name_variables_name3",
@@ -62951,7 +63197,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/immutable-releases",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "immutable_releases3",
@@ -62965,7 +63212,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/import",
-        "risk": "medium"
+        "risk": "medium",
+        "confirm": "destructive"
       },
       {
         "name": "import3",
@@ -63000,7 +63248,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/interaction-limits",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "interaction_limits3",
@@ -63014,7 +63263,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "interaction_limits_pulls_bypass_list3",
@@ -63028,7 +63278,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/invitations/{invitation_id}",
-        "risk": "medium"
+        "risk": "medium",
+        "confirm": "destructive"
       },
       {
         "name": "invitations_invitation_id2",
@@ -63042,7 +63293,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/pin",
-        "risk": "medium"
+        "risk": "medium",
+        "confirm": "destructive"
       },
       {
         "name": "issues_comments_comment_id_pin2",
@@ -63063,7 +63315,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}",
-        "risk": "medium"
+        "risk": "medium",
+        "confirm": "destructive"
       },
       {
         "name": "issues_issue_number_dependencies_blocked_by2",
@@ -63077,7 +63330,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by/{issue_id}",
-        "risk": "medium"
+        "risk": "medium",
+        "confirm": "destructive"
       },
       {
         "name": "issues_issue_number_issue_field_values2",
@@ -63098,7 +63352,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values/{issue_field_id}",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "issues_issue_number_reactions2",
@@ -63112,14 +63367,16 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}",
-        "risk": "medium"
+        "risk": "medium",
+        "confirm": "destructive"
       },
       {
         "name": "issues_issue_number_sub_issue",
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issue",
-        "risk": "medium"
+        "risk": "medium",
+        "confirm": "destructive"
       },
       {
         "name": "issues_issue_number_sub_issues2",
@@ -63154,7 +63411,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/pages",
-        "risk": "medium"
+        "risk": "medium",
+        "confirm": "destructive"
       },
       {
         "name": "pages3",
@@ -63196,7 +63454,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/private-vulnerability-reporting",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "private_vulnerability_reporting3",
@@ -63224,7 +63483,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}",
-        "risk": "medium"
+        "risk": "medium",
+        "confirm": "destructive"
       },
       {
         "name": "pulls_pull_number_codespaces",
@@ -63238,7 +63498,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
-        "risk": "medium"
+        "risk": "medium",
+        "confirm": "destructive"
       },
       {
         "name": "releases_generate_notes",
@@ -63266,7 +63527,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions/{reaction_id}",
-        "risk": "medium"
+        "risk": "medium",
+        "confirm": "destructive"
       },
       {
         "name": "secret_scanning_push_protection_bypasses",
@@ -63322,7 +63584,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/subscription",
-        "risk": "medium"
+        "risk": "medium",
+        "confirm": "destructive"
       },
       {
         "name": "subscription3",
@@ -63344,7 +63607,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/repos/{owner}/{repo}/vulnerability-alerts",
-        "risk": "high"
+        "risk": "high",
+        "confirm": "destructive"
       },
       {
         "name": "vulnerability_alerts3",
@@ -63882,7 +64146,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/users/{{ config.user_id }}/drafts/{{ record.id }}",
-        "risk": "permanently deletes a draft; irreversible"
+        "risk": "permanently deletes a draft; irreversible",
+        "confirm": "destructive"
       },
       {
         "name": "create_label",
@@ -63910,7 +64175,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/users/{{ config.user_id }}/labels/{{ record.id }}",
-        "risk": "removes a user label from the account and from every message/thread that carried it; system labels reject deletion with an error"
+        "risk": "removes a user label from the account and from every message/thread that carried it; system labels reject deletion with an error",
+        "confirm": "destructive"
       },
       {
         "name": "create_filter",
@@ -63924,7 +64190,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/users/{{ config.user_id }}/settings/filters/{{ record.id }}",
-        "risk": "removes an existing mail filter; future messages stop being auto-actioned by it"
+        "risk": "removes an existing mail filter; future messages stop being auto-actioned by it",
+        "confirm": "destructive"
       },
       {
         "name": "create_send_as",
@@ -63952,7 +64219,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/users/{{ config.user_id }}/settings/sendAs/{{ record.sendAsEmail }}",
-        "risk": "removes a custom From: alias (the account's primary address cannot be deleted; Gmail rejects that request)"
+        "risk": "removes a custom From: alias (the account's primary address cannot be deleted; Gmail rejects that request)",
+        "confirm": "destructive"
       },
       {
         "name": "verify_send_as",
@@ -63973,7 +64241,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/users/{{ config.user_id }}/settings/delegates/{{ record.delegateEmail }}",
-        "risk": "revokes another account's delegated access to this mailbox"
+        "risk": "revokes another account's delegated access to this mailbox",
+        "confirm": "destructive"
       },
       {
         "name": "create_forwarding_address",
@@ -63987,7 +64256,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/users/{{ config.user_id }}/settings/forwardingAddresses/{{ record.forwardingEmail }}",
-        "risk": "removes a forwarding address; if it is the account's current auto-forwarding target, forwarding stops"
+        "risk": "removes a forwarding address; if it is the account's current auto-forwarding target, forwarding stops",
+        "confirm": "destructive"
       },
       {
         "name": "update_auto_forwarding",
@@ -67132,25 +67402,33 @@
         "access_token": {
           "type": "string",
           "x-secret": true,
-          "description": "Google OAuth 2.0 access token with Search Console read scope. Used only for Bearer auth; never logged. The 3-legged consent/acquisition and refresh-token-exchange dance is out of scope for this connector (credentials layer already owns it) -- see docs.md Known limits."
+          "description": "Google OAuth 2.0 access token with Search Console scope. Read-only ETL and direct reads can use https://www.googleapis.com/auth/webmasters.readonly; reverse ETL write actions require https://www.googleapis.com/auth/webmasters. Used only for Bearer auth; never logged. The 3-legged consent/acquisition and refresh-token-exchange dance is out of scope for this connector (credentials layer already owns it) -- see docs.md Known limits."
         },
         "base_url": {
           "type": "string",
           "format": "uri",
-          "default": "https://www.googleapis.com/webmasters/v3",
-          "description": "Search Console API base URL override for tests or proxies."
+          "default": "https://searchconsole.googleapis.com",
+          "description": "Search Console API root URL override for tests or proxies. Supply only an origin root such as https://host, with no path, query, fragment, or user info; http://host[:port] is supported for local test proxies. Pathful values are unsupported and are not silently corrected. The connector appends the official /webmasters/v3 and /v1 endpoint prefixes."
         },
         "site_urls": {
           "type": "string",
-          "description": "Comma- or newline-separated Search Console site properties (e.g. https://example.com/ or sc-domain:example.com) to fan out over for the sitemaps and search_analytics_* streams. Required for those streams only; sites itself is account-scoped and does not reference it."
+          "description": "Comma- or newline-separated Search Console site properties (e.g. https://example.com/ or sc-domain:example.com) to fan out over for the sitemaps and search_analytics_* streams. When unset, those streams fall back to site_url; sites itself is account-scoped and does not reference either field."
         },
         "site_url": {
           "type": "string",
-          "description": "Single Search Console site property for site_details and sitemap_details."
+          "description": "Single Search Console site property for site_details and sitemap_details, as the sitemaps and search_analytics_* fallback, and for fixture/live certification defaults."
         },
         "feedpath": {
           "type": "string",
-          "description": "Sitemap feed URL/path for sitemap_details."
+          "description": "Sitemap feed URL/path for sitemap_details and sitemap write/delete certification defaults."
+        },
+        "inspection_url": {
+          "type": "string",
+          "description": "URL Inspection direct-read default URL; used only by certification sweeps when explicitly provided."
+        },
+        "mobile_test_url": {
+          "type": "string",
+          "description": "Mobile Friendly Test direct-read default URL; used only by certification sweeps when explicitly provided."
         },
         "start_date": {
           "type": "string",
@@ -67170,7 +67448,7 @@
         },
         "data_state": {
           "type": "string",
-          "description": "Search Analytics dataState filter (final or all). Omitted when unset, matching the API's own default."
+          "description": "Search Analytics dataState filter (final, all, or hourly_all). Omitted when unset, matching the API's own default."
         },
         "page_size": {
           "type": "integer",
@@ -67314,14 +67592,14 @@
         "name": "add_site",
         "kind": "create",
         "method": "PUT",
-        "path": "/sites/{{ record.site_url | urlencode }}",
+        "path": "/webmasters/v3/sites/{{ record.site_url | urlencode }}",
         "risk": "adds a site property to the authenticated Search Console account"
       },
       {
         "name": "delete_site",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/sites/{{ record.site_url | urlencode }}",
+        "path": "/webmasters/v3/sites/{{ record.site_url | urlencode }}",
         "risk": "removes a site property from the authenticated Search Console account",
         "confirm": "destructive"
       },
@@ -67329,14 +67607,14 @@
         "name": "submit_sitemap",
         "kind": "create",
         "method": "PUT",
-        "path": "/sites/{{ record.site_url | urlencode }}/sitemaps/{{ record.feedpath | urlencode }}",
+        "path": "/webmasters/v3/sites/{{ record.site_url | urlencode }}/sitemaps/{{ record.feedpath | urlencode }}",
         "risk": "submits a sitemap URL for a Search Console site property"
       },
       {
         "name": "delete_sitemap",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/sites/{{ record.site_url | urlencode }}/sitemaps/{{ record.feedpath | urlencode }}",
+        "path": "/webmasters/v3/sites/{{ record.site_url | urlencode }}/sitemaps/{{ record.feedpath | urlencode }}",
         "risk": "deletes a sitemap from a Search Console site property",
         "confirm": "destructive"
       }
@@ -109333,7 +109611,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/companies/{{ record.company_id }}/absences/{{ record.absence_id }}",
-        "risk": "external mutation; cancels an existing PayFit absence; approval required"
+        "risk": "external mutation; cancels an existing PayFit absence; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_collaborator",
@@ -110982,7 +111261,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v1/campaigns/{{ record.campaign_id }}/leads/{{ record.id }}",
-        "risk": "removes a lead from a live outbound-email campaign, stopping any further scheduled automated outreach to it in that sequence; approval required"
+        "risk": "removes a lead from a live outbound-email campaign, stopping any further scheduled automated outreach to it in that sequence; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "reply_to_campaign_message",
@@ -127567,7 +127847,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/accounts/{{ record.id }}",
-        "risk": "destructive/irreversible: permanently deletes a CRM account; approval required"
+        "risk": "destructive/irreversible: permanently deletes a CRM account; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_contact",
@@ -127588,7 +127869,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/contacts/{{ record.id }}",
-        "risk": "destructive/irreversible: permanently deletes a CRM contact; approval required"
+        "risk": "destructive/irreversible: permanently deletes a CRM contact; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_opportunity",
@@ -127609,7 +127891,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/opportunities/{{ record.id }}",
-        "risk": "destructive/irreversible: permanently deletes a CRM opportunity/deal; approval required"
+        "risk": "destructive/irreversible: permanently deletes a CRM opportunity/deal; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_tag",
@@ -127630,7 +127913,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/tags/{{ record.id }}",
-        "risk": "destructive/irreversible: permanently deletes a CRM tag from every record it's applied to; approval required"
+        "risk": "destructive/irreversible: permanently deletes a CRM tag from every record it's applied to; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_task",
@@ -127651,7 +127935,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/tasks/{{ record.id }}",
-        "risk": "destructive/irreversible: permanently deletes a CRM task; approval required"
+        "risk": "destructive/irreversible: permanently deletes a CRM task; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_meeting",
@@ -127672,7 +127957,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/meetings/{{ record.meeting_id }}",
-        "risk": "destructive/irreversible: permanently deletes a CRM meeting/calendar entry; approval required"
+        "risk": "destructive/irreversible: permanently deletes a CRM meeting/calendar entry; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_call",
@@ -127700,7 +127986,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/messages/{{ record.message_id }}",
-        "risk": "destructive/irreversible: permanently deletes a CRM internal note; approval required"
+        "risk": "destructive/irreversible: permanently deletes a CRM internal note; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -128267,7 +128554,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v1/links/{{ record.id }}",
-        "risk": "destructive/irreversible: permanently deletes a scheduling link; approval required"
+        "risk": "destructive/irreversible: permanently deletes a scheduling link; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "duplicate_link",
@@ -128302,7 +128590,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v1/webhooks/{{ record.id }}",
-        "risk": "destructive/irreversible: permanently deletes a webhook subscription; approval required"
+        "risk": "destructive/irreversible: permanently deletes a webhook subscription; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -128960,7 +129249,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v1/products/{{ record.id }}",
-        "risk": "permanently removes a product; breaks any existing order-fulfillment/download links referencing it"
+        "risk": "permanently removes a product; breaks any existing order-fulfillment/download links referencing it",
+        "confirm": "destructive"
       },
       {
         "name": "create_subscription",
@@ -128981,7 +129271,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v1/subscriptions/{{ record.id }}",
-        "risk": "permanently removes a subscription product; does not itself cancel any buyer's already-active recurring order (see cancel_order_subscription)"
+        "risk": "permanently removes a subscription product; does not itself cancel any buyer's already-active recurring order (see cancel_order_subscription)",
+        "confirm": "destructive"
       },
       {
         "name": "create_discount",
@@ -129002,7 +129293,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v1_2/discounts/{{ record.id }}",
-        "risk": "permanently removes a discount code; any buyer with the code saved can no longer redeem it"
+        "risk": "permanently removes a discount code; any buyer with the code saved can no longer redeem it",
+        "confirm": "destructive"
       },
       {
         "name": "update_bundle",
@@ -129016,7 +129308,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v1/packages/{{ record.id }}",
-        "risk": "permanently removes a bundle; breaks any existing order-fulfillment links referencing it"
+        "risk": "permanently removes a bundle; breaks any existing order-fulfillment links referencing it",
+        "confirm": "destructive"
       },
       {
         "name": "refund_order",
@@ -129177,7 +129470,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/addressbooks/{{ record.id }}",
-        "risk": "permanently removes an address book and all its subscriber associations; irreversible"
+        "risk": "permanently removes an address book and all its subscriber associations; irreversible",
+        "confirm": "destructive"
       },
       {
         "name": "add_emails_to_book",
@@ -129191,7 +129485,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/addressbooks/{{ record.id }}/emails",
-        "risk": "unsubscribes the given email addresses from an address book; irreversible without re-adding them"
+        "risk": "unsubscribes the given email addresses from an address book; irreversible without re-adding them",
+        "confirm": "destructive"
       },
       {
         "name": "create_campaign",
@@ -129205,7 +129500,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/campaigns/{{ record.id }}",
-        "risk": "cancels a scheduled/in-progress campaign; stops further sends but does not un-send already-delivered emails"
+        "risk": "cancels a scheduled/in-progress campaign; stops further sends but does not un-send already-delivered emails",
+        "confirm": "destructive"
       },
       {
         "name": "add_sender",
@@ -129219,7 +129515,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/senders",
-        "risk": "removes a sender email address; any campaign still referencing it as its sender will fail to send"
+        "risk": "removes a sender email address; any campaign still referencing it as its sender will fail to send",
+        "confirm": "destructive"
       },
       {
         "name": "add_to_blacklist",
@@ -129233,7 +129530,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/blacklist",
-        "risk": "removes an address from the account-wide suppression list; future campaigns can reach it again"
+        "risk": "removes an address from the account-wide suppression list; future campaigns can reach it again",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -130025,7 +130323,8 @@
         "kind": "delete",
         "method": "POST",
         "path": "/integration_api/availability_exceptions/delete",
-        "risk": "permanently removes an availability exception by id, restoring the listing's default availability plan for that time range"
+        "risk": "permanently removes an availability exception by id, restoring the listing's default availability plan for that time range",
+        "confirm": "destructive"
       },
       {
         "name": "set_listing_stock",
@@ -134653,7 +134952,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "do-not-contact?team_id={{ config.team_id }}",
-        "risk": "external mutation; removes entries from the do-not-contact suppression list, which re-enables outreach to those emails/domains; approval required"
+        "risk": "external mutation; removes entries from the do-not-contact suppression list, which re-enables outreach to those emails/domains; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "add_emails_to_do_not_contact",
@@ -136719,140 +137019,160 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/incidents/{{ record.id }}.json",
-        "risk": "external mutation; permanently deletes a SolarWinds Service Desk incident record; approval required"
+        "risk": "external mutation; permanently deletes a SolarWinds Service Desk incident record; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "delete_problem",
         "kind": "delete",
         "method": "DELETE",
         "path": "/problems/{{ record.id }}.json",
-        "risk": "external mutation; permanently deletes a SolarWinds Service Desk problem record; approval required"
+        "risk": "external mutation; permanently deletes a SolarWinds Service Desk problem record; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "delete_change",
         "kind": "delete",
         "method": "DELETE",
         "path": "/changes/{{ record.id }}.json",
-        "risk": "external mutation; permanently deletes a SolarWinds Service Desk change record; approval required"
+        "risk": "external mutation; permanently deletes a SolarWinds Service Desk change record; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "delete_change_catalog",
         "kind": "delete",
         "method": "DELETE",
         "path": "/change_catalogs/{{ record.id }}.json",
-        "risk": "external mutation; permanently deletes a SolarWinds Service Desk change catalog record; approval required"
+        "risk": "external mutation; permanently deletes a SolarWinds Service Desk change catalog record; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "delete_release",
         "kind": "delete",
         "method": "DELETE",
         "path": "/releases/{{ record.id }}.json",
-        "risk": "external mutation; permanently deletes a SolarWinds Service Desk release record; approval required"
+        "risk": "external mutation; permanently deletes a SolarWinds Service Desk release record; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "delete_solution",
         "kind": "delete",
         "method": "DELETE",
         "path": "/solutions/{{ record.id }}.json",
-        "risk": "external mutation; permanently deletes a SolarWinds Service Desk solution record; approval required"
+        "risk": "external mutation; permanently deletes a SolarWinds Service Desk solution record; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "delete_catalog_item",
         "kind": "delete",
         "method": "DELETE",
         "path": "/catalog_items/{{ record.id }}.json",
-        "risk": "external mutation; permanently deletes a SolarWinds Service Desk catalog item record; approval required"
+        "risk": "external mutation; permanently deletes a SolarWinds Service Desk catalog item record; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "delete_configuration_item",
         "kind": "delete",
         "method": "DELETE",
         "path": "/configuration_items/{{ record.id }}.json",
-        "risk": "external mutation; permanently deletes a SolarWinds Service Desk configuration item record; approval required"
+        "risk": "external mutation; permanently deletes a SolarWinds Service Desk configuration item record; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "delete_user",
         "kind": "delete",
         "method": "DELETE",
         "path": "/users/{{ record.id }}.json",
-        "risk": "external mutation; permanently deletes a SolarWinds Service Desk user record; approval required"
+        "risk": "external mutation; permanently deletes a SolarWinds Service Desk user record; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "delete_site",
         "kind": "delete",
         "method": "DELETE",
         "path": "/sites/{{ record.id }}.json",
-        "risk": "external mutation; permanently deletes a SolarWinds Service Desk site record; approval required"
+        "risk": "external mutation; permanently deletes a SolarWinds Service Desk site record; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "delete_department",
         "kind": "delete",
         "method": "DELETE",
         "path": "/departments/{{ record.id }}.json",
-        "risk": "external mutation; permanently deletes a SolarWinds Service Desk department record; approval required"
+        "risk": "external mutation; permanently deletes a SolarWinds Service Desk department record; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "delete_role",
         "kind": "delete",
         "method": "DELETE",
         "path": "/roles/{{ record.id }}.json",
-        "risk": "external mutation; permanently deletes a SolarWinds Service Desk role record; approval required"
+        "risk": "external mutation; permanently deletes a SolarWinds Service Desk role record; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "delete_group",
         "kind": "delete",
         "method": "DELETE",
         "path": "/groups/{{ record.id }}.json",
-        "risk": "external mutation; permanently deletes a SolarWinds Service Desk group record; approval required"
+        "risk": "external mutation; permanently deletes a SolarWinds Service Desk group record; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "delete_category",
         "kind": "delete",
         "method": "DELETE",
         "path": "/categories/{{ record.id }}.json",
-        "risk": "external mutation; permanently deletes a SolarWinds Service Desk category record; approval required"
+        "risk": "external mutation; permanently deletes a SolarWinds Service Desk category record; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "delete_hardware",
         "kind": "delete",
         "method": "DELETE",
         "path": "/hardwares/{{ record.id }}.json",
-        "risk": "external mutation; permanently deletes a SolarWinds Service Desk hardware record; approval required"
+        "risk": "external mutation; permanently deletes a SolarWinds Service Desk hardware record; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "delete_mobile",
         "kind": "delete",
         "method": "DELETE",
         "path": "/mobiles/{{ record.id }}.json",
-        "risk": "external mutation; permanently deletes a SolarWinds Service Desk mobile record; approval required"
+        "risk": "external mutation; permanently deletes a SolarWinds Service Desk mobile record; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "delete_other_asset",
         "kind": "delete",
         "method": "DELETE",
         "path": "/other_assets/{{ record.id }}.json",
-        "risk": "external mutation; permanently deletes a SolarWinds Service Desk other asset record; approval required"
+        "risk": "external mutation; permanently deletes a SolarWinds Service Desk other asset record; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "delete_contract",
         "kind": "delete",
         "method": "DELETE",
         "path": "/contracts/{{ record.id }}.json",
-        "risk": "external mutation; permanently deletes a SolarWinds Service Desk contract record; approval required"
+        "risk": "external mutation; permanently deletes a SolarWinds Service Desk contract record; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "delete_purchase_order",
         "kind": "delete",
         "method": "DELETE",
         "path": "/purchase_orders/{{ record.id }}.json",
-        "risk": "external mutation; permanently deletes a SolarWinds Service Desk purchase order record; approval required"
+        "risk": "external mutation; permanently deletes a SolarWinds Service Desk purchase order record; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "delete_vendor",
         "kind": "delete",
         "method": "DELETE",
         "path": "/vendors/{{ record.id }}.json",
-        "risk": "external mutation; permanently deletes a SolarWinds Service Desk vendor record; approval required"
+        "risk": "external mutation; permanently deletes a SolarWinds Service Desk vendor record; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -137077,7 +137397,8 @@
         "kind": "delete",
         "method": "POST",
         "path": "/api/webhooks/delete",
-        "risk": "external mutation; permanently removes a webhook; approval required"
+        "risk": "external mutation; permanently removes a webhook; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "add_issue_comment",
@@ -137569,7 +137890,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/templates/{{ record.id }}",
-        "risk": "external mutation; permanently deletes a message template; approval required"
+        "risk": "external mutation; permanently deletes a message template; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_sending_domain",
@@ -137590,7 +137912,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/sending-domains/{{ record.domain }}",
-        "risk": "external mutation; permanently removes a sending domain; approval required"
+        "risk": "external mutation; permanently removes a sending domain; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_or_update_suppression",
@@ -137604,7 +137927,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/suppression-list/{{ record.recipient }}",
-        "risk": "external mutation; removes a recipient's suppression entry, re-enabling delivery to that address; approval required"
+        "risk": "external mutation; removes a recipient's suppression entry, re-enabling delivery to that address; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_ip_pool",
@@ -137625,7 +137949,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/ip-pools/{{ record.id }}",
-        "risk": "external mutation; permanently deletes an IP pool; approval required"
+        "risk": "external mutation; permanently deletes an IP pool; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_webhook",
@@ -137646,7 +137971,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/webhooks/{{ record.id }}",
-        "risk": "external mutation; permanently deletes a webhook; approval required"
+        "risk": "external mutation; permanently deletes a webhook; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_subaccount",
@@ -137674,7 +138000,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/tracking-domains/{{ record.domain }}",
-        "risk": "external mutation; permanently removes a tracking domain; approval required"
+        "risk": "external mutation; permanently removes a tracking domain; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_inbound_domain",
@@ -137688,7 +138015,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/inbound-domains/{{ record.domain }}",
-        "risk": "external mutation; permanently removes an inbound domain, stopping inbound relay of mail addressed to it; approval required"
+        "risk": "external mutation; permanently removes an inbound domain, stopping inbound relay of mail addressed to it; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_relay_webhook",
@@ -137709,7 +138037,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/relay-webhooks/{{ record.id }}",
-        "risk": "external mutation; permanently deletes a relay webhook; approval required"
+        "risk": "external mutation; permanently deletes a relay webhook; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -138448,7 +138777,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/webhook_subscriptions/{{ record.id }}",
-        "risk": "permanently removes a webhook subscription, stopping future event notifications to that endpoint; external mutation, approval required"
+        "risk": "permanently removes a webhook subscription, stopping future event notifications to that endpoint; external mutation, approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -138659,7 +138989,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/gates/{{ record.id }}",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_dynamic_config",
@@ -138680,7 +139011,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/dynamic_configs/{{ record.id }}",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_segment",
@@ -138694,7 +139026,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/segments/{{ record.id }}",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_tag",
@@ -138715,7 +139048,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/tags/{{ record.id }}",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_target_app",
@@ -138736,7 +139070,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/target_app/{{ record.id }}",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_holdout",
@@ -138750,7 +139085,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/holdouts/{{ record.id }}",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_layer",
@@ -138764,7 +139100,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/layers/{{ record.id }}",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_key",
@@ -138778,7 +139115,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/keys/{{ record.key }}",
-        "risk": "irreversible external deletion of a live API credential; approval required"
+        "risk": "irreversible external deletion of a live API credential; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -139943,7 +140281,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/contacts/{{ record.id }}",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_question",
@@ -139964,7 +140303,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/questions/{{ record.question_id }}",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_contact_list",
@@ -139985,7 +140325,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/contact_lists/{{ record.id }}",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_contact_property",
@@ -140006,7 +140347,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/contact_properties/{{ record.id }}",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_survey_folder",
@@ -140027,7 +140369,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/survey_folders/{{ record.id }}",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_team",
@@ -140055,7 +140398,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/tickets/{{ record.id }}",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_webhook",
@@ -140076,7 +140420,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/webhooks/{{ record.id }}",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_user",
@@ -140097,7 +140442,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/users/{{ record.id }}",
-        "risk": "irreversible external deletion of a user account; approval required"
+        "risk": "irreversible external deletion of a user account; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_reminder",
@@ -140111,7 +140457,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/reminders/{{ record.id }}",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_variable",
@@ -140125,7 +140472,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/variables/{{ record.variable_id }}",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_channel",
@@ -140139,7 +140487,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/channels/{{ record.id }}",
-        "risk": "irreversible external deletion; approval required"
+        "risk": "irreversible external deletion; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -140300,7 +140649,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/datasets/{{ record.id }}",
-        "risk": "irreversibly deletes a dataset and its records; approval required"
+        "risk": "irreversibly deletes a dataset and its records; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_dataset_record",
@@ -140328,7 +140678,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/users/{{ record.username }}",
-        "risk": "irreversibly deletes a server user and revokes their access; approval required"
+        "risk": "irreversibly deletes a server user and revokes their access; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -141991,7 +142342,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/app/{{ record.id }}",
-        "risk": "irreversibly deletes an application and all its endpoints, messages, and delivery history; approval required"
+        "risk": "irreversibly deletes an application and all its endpoints, messages, and delivery history; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_endpoint",
@@ -142012,7 +142364,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/app/{{ record.app_id }}/endpoint/{{ record.id }}",
-        "risk": "irreversibly deletes a webhook delivery endpoint and stops all future deliveries to it; approval required"
+        "risk": "irreversibly deletes a webhook delivery endpoint and stops all future deliveries to it; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_event_type",
@@ -142033,7 +142386,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/event-type/{{ record.name }}",
-        "risk": "archives (soft-deletes) an event type definition; approval required"
+        "risk": "archives (soft-deletes) an event type definition; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "send_message",
@@ -142061,7 +142415,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/connector/{{ record.id }}",
-        "risk": "irreversibly deletes a connector transformation template; approval required"
+        "risk": "irreversibly deletes a connector transformation template; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_operational_webhook_endpoint",
@@ -142082,7 +142437,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/operational-webhook/endpoint/{{ record.id }}",
-        "risk": "irreversibly deletes an operational webhook endpoint and stops all future account-level event deliveries to it; approval required"
+        "risk": "irreversibly deletes an operational webhook endpoint and stops all future account-level event deliveries to it; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -142223,7 +142579,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/contacts/{{ record.id }}",
-        "risk": "irreversibly deletes a contact; approval required"
+        "risk": "irreversibly deletes a contact; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_tag",
@@ -142244,7 +142601,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/tags/{{ record.id }}",
-        "risk": "irreversibly deletes a tag, removing it from every contact it is assigned to; approval required"
+        "risk": "irreversibly deletes a tag, removing it from every contact it is assigned to; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "add_contact_tag",
@@ -142258,7 +142616,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/contacts/{{ record.contact_id }}/tags/{{ record.tag_id }}",
-        "risk": "removes a tag from a contact; removing certain tags can trigger Systeme.io automations; external mutation, no approval required"
+        "risk": "removes a tag from a contact; removing certain tags can trigger Systeme.io automations; external mutation, no approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_contact_field",
@@ -142279,7 +142638,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/contact_fields/{{ record.id }}",
-        "risk": "irreversibly deletes a custom contact field definition and its stored values on every contact; approval required"
+        "risk": "irreversibly deletes a custom contact field definition and its stored values on every contact; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_funnel",
@@ -142815,7 +143175,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/videos/{{ record.id }}",
-        "risk": "permanently deletes a generated video and its hosted/download URLs"
+        "risk": "permanently deletes a generated video and its hosted/download URLs",
+        "confirm": "destructive"
       },
       {
         "name": "create_conversation",
@@ -142836,7 +143197,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/conversations/{{ record.id }}",
-        "risk": "permanently deletes a conversation and its recorded history; use end_conversation instead for routine call cleanup"
+        "risk": "permanently deletes a conversation and its recorded history; use end_conversation instead for routine call cleanup",
+        "confirm": "destructive"
       },
       {
         "name": "create_pal",
@@ -142850,7 +143212,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/pals/{{ record.id }}",
-        "risk": "permanently deletes a PAL; any conversation still referencing its pal_id will fail to start"
+        "risk": "permanently deletes a PAL; any conversation still referencing its pal_id will fail to start",
+        "confirm": "destructive"
       },
       {
         "name": "create_guardrail",
@@ -142864,7 +143227,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/guardrails/{{ record.id }}",
-        "risk": "permanently deletes a guardrail; any PAL referencing it via guardrail_ids loses that behavioral boundary immediately"
+        "risk": "permanently deletes a guardrail; any PAL referencing it via guardrail_ids loses that behavioral boundary immediately",
+        "confirm": "destructive"
       },
       {
         "name": "create_objective",
@@ -142878,7 +143242,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/objectives/{{ record.id }}",
-        "risk": "permanently deletes an objective; any PAL referencing it via objectives_id loses that goal-oriented instruction immediately"
+        "risk": "permanently deletes an objective; any PAL referencing it via objectives_id loses that goal-oriented instruction immediately",
+        "confirm": "destructive"
       },
       {
         "name": "create_document",
@@ -142892,7 +143257,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/documents/{{ record.id }}",
-        "risk": "permanently deletes a knowledge-base document and its processed data; any PAL referencing it via document_ids loses that knowledge source immediately"
+        "risk": "permanently deletes a knowledge-base document and its processed data; any PAL referencing it via document_ids loses that knowledge source immediately",
+        "confirm": "destructive"
       },
       {
         "name": "create_pronunciation_dictionary",
@@ -142906,7 +143272,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/pronunciation-dictionaries/{{ record.id }}",
-        "risk": "permanently deletes a pronunciation dictionary and removes it from every linked PAL"
+        "risk": "permanently deletes a pronunciation dictionary and removes it from every linked PAL",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -143730,7 +144097,8 @@
         "kind": "delete",
         "method": "POST",
         "path": "index.php?/api/v2/delete_run/{{ record.id }}",
-        "risk": "permanently deletes a test run and all of its tests and results; irreversible"
+        "risk": "permanently deletes a test run and all of its tests and results; irreversible",
+        "confirm": "destructive"
       },
       {
         "name": "add_result_for_case",
@@ -144125,7 +144493,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/public/v1/coupons/{{ record.id }}",
-        "risk": "permanently deletes a coupon; any customer relying on the code at checkout will see it rejected"
+        "risk": "permanently deletes a coupon; any customer relying on the code at checkout will see it rejected",
+        "confirm": "destructive"
       },
       {
         "name": "create_collection",
@@ -144146,7 +144515,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/public/v1/collections/{{ record.id }}",
-        "risk": "permanently deletes a course category; any public page linking to it will 404"
+        "risk": "permanently deletes a course category; any public page linking to it will 404",
+        "confirm": "destructive"
       },
       {
         "name": "add_products_to_collection",
@@ -144160,7 +144530,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/public/v1/collection_memberships/{{ record.collection_id }}",
-        "risk": "removes one or more products from a public category, which can hide previously-listed courses from that category's landing page"
+        "risk": "removes one or more products from a public category, which can hide previously-listed courses from that category's landing page",
+        "confirm": "destructive"
       },
       {
         "name": "create_group",
@@ -144174,7 +144545,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/public/v1/groups/{{ record.id }}",
-        "risk": "permanently deletes a Group; members lose any group-scoped access/reporting association"
+        "risk": "permanently deletes a Group; members lose any group-scoped access/reporting association",
+        "confirm": "destructive"
       },
       {
         "name": "add_user_to_groups",
@@ -144202,7 +144574,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/public/v1/instructors/{{ record.id }}",
-        "risk": "permanently deletes an Instructor profile; any course crediting them loses that attribution"
+        "risk": "permanently deletes an Instructor profile; any course crediting them loses that attribution",
+        "confirm": "destructive"
       },
       {
         "name": "create_promotion",
@@ -144223,7 +144596,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/public/v1/promotions/{{ record.id }}",
-        "risk": "permanently deletes an active discount promotion; checkout pricing reverts to full price immediately"
+        "risk": "permanently deletes an active discount promotion; checkout pricing reverts to full price immediately",
+        "confirm": "destructive"
       },
       {
         "name": "create_site_script",
@@ -144246,7 +144620,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/public/v1/site_scripts/{{ record.id }}",
-        "risk": "removes an injected site script from every scoped page immediately"
+        "risk": "removes an injected site script from every scoped page immediately",
+        "confirm": "destructive"
       },
       {
         "name": "create_course_review",
@@ -145740,14 +146115,16 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/discounts/{{ record.id }}",
-        "risk": "permanently deletes a discount code; any customer relying on the code at checkout will see it rejected"
+        "risk": "permanently deletes a discount code; any customer relying on the code at checkout will see it rejected",
+        "confirm": "destructive"
       },
       {
         "name": "delete_hold",
         "kind": "delete",
         "method": "DELETE",
         "path": "/holds/{{ record.id }}",
-        "risk": "releases a hold, returning its reserved tickets to public sale immediately"
+        "risk": "releases a hold, returning its reserved tickets to public sale immediately",
+        "confirm": "destructive"
       },
       {
         "name": "create_check_in",
@@ -145796,7 +146173,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/membership_types/{{ record.id }}",
-        "risk": "permanently deletes a membership type; any issued membership referencing it is orphaned"
+        "risk": "permanently deletes a membership type; any issued membership referencing it is orphaned",
+        "confirm": "destructive"
       },
       {
         "name": "create_issued_membership",
@@ -145838,7 +146216,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/vouchers/{{ record.id }}",
-        "risk": "permanently deletes a voucher and every un-redeemed code issued under it"
+        "risk": "permanently deletes a voucher and every un-redeemed code issued under it",
+        "confirm": "destructive"
       },
       {
         "name": "void_voucher_code",
@@ -145866,7 +146245,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/products/{{ record.id }}",
-        "risk": "permanently deletes a sellable product; it becomes unavailable at checkout immediately"
+        "risk": "permanently deletes a sellable product; it becomes unavailable at checkout immediately",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -145979,7 +146359,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/project/{{ record.projectId }}/task/{{ record.id }}",
-        "risk": "permanently removes a task from the given project; irreversible, no undo via the API"
+        "risk": "permanently removes a task from the given project; irreversible, no undo via the API",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -148087,7 +148468,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/projects/{{ record.id }}",
-        "risk": "permanently removes a project and everything in it (its sections, tasks, and comments); irreversible"
+        "risk": "permanently removes a project and everything in it (its sections, tasks, and comments); irreversible",
+        "confirm": "destructive"
       },
       {
         "name": "create_section",
@@ -148108,7 +148490,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/sections/{{ record.id }}",
-        "risk": "permanently removes a section and every task in it; irreversible"
+        "risk": "permanently removes a section and every task in it; irreversible",
+        "confirm": "destructive"
       },
       {
         "name": "create_task",
@@ -148143,7 +148526,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/tasks/{{ record.id }}",
-        "risk": "permanently removes a task; irreversible"
+        "risk": "permanently removes a task; irreversible",
+        "confirm": "destructive"
       },
       {
         "name": "create_comment",
@@ -148164,7 +148548,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/comments/{{ record.id }}",
-        "risk": "permanently removes a comment; irreversible"
+        "risk": "permanently removes a comment; irreversible",
+        "confirm": "destructive"
       },
       {
         "name": "create_label",
@@ -148185,7 +148570,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/labels/{{ record.id }}",
-        "risk": "permanently deletes a personal label; it is removed from every task that used it"
+        "risk": "permanently deletes a personal label; it is removed from every task that used it",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -148358,7 +148744,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/workspaces/{{ config.workspace_id }}/time_entries/{{ record.id }}",
-        "risk": "permanently deletes a time entry; irreversible"
+        "risk": "permanently deletes a time entry; irreversible",
+        "confirm": "destructive"
       },
       {
         "name": "create_project",
@@ -148379,7 +148766,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/workspaces/{{ config.workspace_id }}/projects/{{ record.id }}",
-        "risk": "permanently deletes a project; also removes its association from any time entries that referenced it"
+        "risk": "permanently deletes a project; also removes its association from any time entries that referenced it",
+        "confirm": "destructive"
       },
       {
         "name": "create_client",
@@ -148400,7 +148788,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/workspaces/{{ config.workspace_id }}/clients/{{ record.id }}",
-        "risk": "permanently deletes a client; projects previously associated with it lose that association"
+        "risk": "permanently deletes a client; projects previously associated with it lose that association",
+        "confirm": "destructive"
       },
       {
         "name": "create_tag",
@@ -148421,7 +148810,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/workspaces/{{ config.workspace_id }}/tags/{{ record.id }}",
-        "risk": "permanently deletes a tag; it is removed from every time entry that referenced it"
+        "risk": "permanently deletes a tag; it is removed from every time entry that referenced it",
+        "confirm": "destructive"
       },
       {
         "name": "create_task",
@@ -148442,7 +148832,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/workspaces/{{ config.workspace_id }}/projects/{{ record.project_id }}/tasks/{{ record.id }}",
-        "risk": "permanently deletes a task; time entries previously linked to it lose that association"
+        "risk": "permanently deletes a task; time entries previously linked to it lose that association",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -148617,7 +149008,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/crm/contacts/{{ record.id }}",
-        "risk": "permanently deletes a CRM contact; irreversible, and may disassociate the contact from any reservations that reference it"
+        "risk": "permanently deletes a CRM contact; irreversible, and may disassociate the contact from any reservations that reference it",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -148895,7 +149287,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v2/invoices/{{ record.id }}",
-        "risk": "removes an invoice; per Tremendous's own docs this is a cosmetic operation with no further financial consequence (an already-paid invoice's funds are unaffected)"
+        "risk": "removes an invoice; per Tremendous's own docs this is a cosmetic operation with no further financial consequence (an already-paid invoice's funds are unaffected)",
+        "confirm": "destructive"
       },
       {
         "name": "create_member",
@@ -148916,7 +149309,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v2/webhooks/{{ record.id }}",
-        "risk": "permanently removes the organization's webhook subscription; event delivery stops immediately"
+        "risk": "permanently removes the organization's webhook subscription; event delivery stops immediately",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -151754,7 +152148,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "api/v2.0/devices/{{ record.id }}/",
-        "risk": "permanently deletes a device and all of its variables/values; destructive and irreversible; approval required"
+        "risk": "permanently deletes a device and all of its variables/values; destructive and irreversible; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_variable",
@@ -151775,7 +152170,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "api/v2.0/variables/{{ record.id }}/",
-        "risk": "permanently deletes a variable and all of its stored values; destructive and irreversible; approval required"
+        "risk": "permanently deletes a variable and all of its stored values; destructive and irreversible; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_variable_value",
@@ -152098,7 +152494,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "api/v2/webhook-subscriptions",
-        "risk": "removes a webhook subscription; the external endpoint stops receiving that event type, no approval required"
+        "risk": "removes a webhook subscription; the external endpoint stops receiving that event type, no approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -152595,7 +152992,8 @@
         "kind": "delete",
         "method": "PUT",
         "path": "/api/v2/admin/suggestions/{{ record.id }}/delete",
-        "risk": "soft-deletes (moderates) a suggestion; UserVoice's own API keeps a matching restore endpoint (not modeled here) so this is a reversible moderation action, not permanent data loss, but is still marked destructive-shaped for operator awareness"
+        "risk": "soft-deletes (moderates) a suggestion; UserVoice's own API keeps a matching restore endpoint (not modeled here) so this is a reversible moderation action, not permanent data loss, but is still marked destructive-shaped for operator awareness",
+        "confirm": "destructive"
       },
       {
         "name": "create_comment",
@@ -154329,7 +154727,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/customers/{{ record.id }}",
-        "risk": "destructive external mutation (deletes a customer permanently); approval required"
+        "risk": "destructive external mutation (deletes a customer permanently); approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_supplier",
@@ -154350,7 +154749,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/suppliers/{{ record.id }}",
-        "risk": "destructive external mutation (deletes a supplier permanently); approval required"
+        "risk": "destructive external mutation (deletes a supplier permanently); approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_product",
@@ -154371,7 +154771,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/products/{{ record.id }}",
-        "risk": "destructive external mutation (deletes a product permanently); approval required"
+        "risk": "destructive external mutation (deletes a product permanently); approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_unit",
@@ -154392,7 +154793,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/units/{{ record.id }}",
-        "risk": "destructive external mutation (deletes a unit permanently); approval required"
+        "risk": "destructive external mutation (deletes a unit permanently); approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_payment_term",
@@ -154413,7 +154815,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/payment-terms/{{ record.id }}",
-        "risk": "destructive external mutation (deletes a payment term permanently); approval required"
+        "risk": "destructive external mutation (deletes a payment term permanently); approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -154924,7 +155327,8 @@
         "kind": "delete",
         "method": "POST",
         "path": "/wa-api/queue/delete?restid={{ config.restid }}\u0026queue_id={{ record.queue_id }}",
-        "risk": "removes a guest from the restaurant's walk-in queue; external mutation, approval required"
+        "risk": "removes a guest from the restaurant's walk-in queue; external mutation, approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -155572,7 +155976,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/sitemap/{{ record.id }}",
-        "risk": "permanently removes a sitemap; any scraping job history tied to it is not itself deleted but the configuration can no longer be reused or edited"
+        "risk": "permanently removes a sitemap; any scraping job history tied to it is not itself deleted but the configuration can no longer be reused or edited",
+        "confirm": "destructive"
       },
       {
         "name": "create_scraping_job",
@@ -155586,7 +155991,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/scraping-job/{{ record.id }}",
-        "risk": "permanently removes a scraping job and its scraped data; any already-downloaded export is unaffected, but the job's stored records become unrecoverable through the API"
+        "risk": "permanently removes a scraping job and its scraped data; any already-downloaded export is unaffected, but the job's stored records become unrecoverable through the API",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -155840,7 +156246,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v2/collections/{{ record.collection_id }}/items/{{ record.id }}",
-        "risk": "permanently removes a staged CMS item from the collection; if the item was previously published live, it remains live until a subsequent unpublish, since delete only affects the staged copy per Webflow's staged/live item model"
+        "risk": "permanently removes a staged CMS item from the collection; if the item was previously published live, it remains live until a subsequent unpublish, since delete only affects the staged copy per Webflow's staged/live item model",
+        "confirm": "destructive"
       },
       {
         "name": "publish_collection_item",
@@ -155868,7 +156275,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v2/assets/{{ record.id }}",
-        "risk": "permanently deletes an uploaded asset from the site's asset library; any live page still referencing the asset's URL will show a broken image/file link"
+        "risk": "permanently deletes an uploaded asset from the site's asset library; any live page still referencing the asset's URL will show a broken image/file link",
+        "confirm": "destructive"
       },
       {
         "name": "create_webhook",
@@ -155882,7 +156290,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v2/webhooks/{{ record.id }}",
-        "risk": "permanently removes a webhook subscription; Webflow stops sending event payloads for it immediately"
+        "risk": "permanently removes a webhook subscription; Webflow stops sending event payloads for it immediately",
+        "confirm": "destructive"
       },
       {
         "name": "update_order",
@@ -158137,7 +158546,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v2/clients/{{ record.uuid }}",
-        "risk": "permanently deletes a WorkflowMax client record; approval required"
+        "risk": "permanently deletes a WorkflowMax client record; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_job",
@@ -158151,7 +158561,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v2/jobs/{{ record.uuid }}",
-        "risk": "permanently deletes a WorkflowMax job; approval required"
+        "risk": "permanently deletes a WorkflowMax job; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_client_contact",
@@ -158172,7 +158583,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/v2/clients/contacts/{{ record.uuid }}",
-        "risk": "permanently deletes a WorkflowMax client-contact record; approval required"
+        "risk": "permanently deletes a WorkflowMax client-contact record; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -158317,7 +158729,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/v1/users/{{ record.id }}",
-        "risk": "permanently deletes a WorkRamp user account; approval required"
+        "risk": "permanently deletes a WorkRamp user account; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_group",
@@ -158617,7 +159030,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/forms/{{ config.form_hash }}/webhooks/{{ record.hash }}.json",
-        "risk": "irreversible external deletion; removes a registered webhook from the configured form; approval required"
+        "risk": "irreversible external deletion; removes a registered webhook from the configured form; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -161097,7 +161511,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/core/v3/stores/{{ config.store_id }}/collections/{{ record.collection_yotpo_id }}/products",
-        "risk": "irreversible external mutation; removes a product from an existing collection; approval required"
+        "risk": "irreversible external mutation; removes a product from an existing collection; approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_webhook_target",
@@ -161118,7 +161533,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/core/v3/stores/{{ config.store_id }}/webhooks/targets/{{ record.yotpo_id }}",
-        "risk": "irreversible external deletion; removes a registered webhook target (any subscription still referencing it becomes inactive); approval required"
+        "risk": "irreversible external deletion; removes a registered webhook target (any subscription still referencing it becomes inactive); approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_webhook_filter",
@@ -161139,7 +161555,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/core/v3/stores/{{ config.store_id }}/webhooks/filters/{{ record.yotpo_id }}",
-        "risk": "irreversible external deletion; removes a webhook filter (only unused filters can be deleted, per Yotpo's own constraint); approval required"
+        "risk": "irreversible external deletion; removes a webhook filter (only unused filters can be deleted, per Yotpo's own constraint); approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_webhook_subscription",
@@ -161160,7 +161577,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/core/v3/stores/{{ config.store_id }}/webhooks/subscriptions/{{ record.yotpo_id }}",
-        "risk": "irreversible external deletion; stops webhook event delivery for an existing target/filter combination; approval required"
+        "risk": "irreversible external deletion; stops webhook event delivery for an existing target/filter combination; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -161339,7 +161757,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/budgets/{{ config.budget_id }}/transactions/{{ record.id }}",
-        "risk": "irreversible external deletion; deletes a budget transaction (YNAB marks it deleted rather than purging, but it disappears from active budget totals); approval required"
+        "risk": "irreversible external deletion; deletes a budget transaction (YNAB marks it deleted rather than purging, but it disappears from active budget totals); approval required",
+        "confirm": "destructive"
       },
       {
         "name": "create_account",
@@ -161395,7 +161814,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/budgets/{{ config.budget_id }}/scheduled_transactions/{{ record.id }}",
-        "risk": "irreversible external deletion; removes a recurring scheduled transaction; approval required"
+        "risk": "irreversible external deletion; removes a recurring scheduled transaction; approval required",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -162173,7 +162593,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/api/records?key={{ record.key }}",
-        "risk": "irreversibly deletes a single key from the caller's Zapier Storage bucket"
+        "risk": "irreversibly deletes a single key from the caller's Zapier Storage bucket",
+        "confirm": "destructive"
       },
       {
         "name": "delete_all_records",
@@ -162298,7 +162719,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/docs/{{ record.token }}/delete/",
-        "risk": "soft-deletes a document, hiding it from the ZapSign web interface for end users while it remains readable via the API"
+        "risk": "soft-deletes a document, hiding it from the ZapSign web interface for end users while it remains readable via the API",
+        "confirm": "destructive"
       },
       {
         "name": "add_signer",
@@ -162319,7 +162741,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/signer/{{ record.token }}/remove/",
-        "risk": "permanently removes a signer from a document; this is irreversible, and re-adding the same person issues a brand new signing token/link"
+        "risk": "permanently removes a signer from a document; this is irreversible, and re-adding the same person issues a brand new signing token/link",
+        "confirm": "destructive"
       },
       {
         "name": "create_webhook",
@@ -162333,7 +162756,8 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/webhooks/{{ record.id }}/",
-        "risk": "permanently removes a webhook subscription; event delivery to its target URL stops immediately"
+        "risk": "permanently removes a webhook subscription; event delivery to its target URL stops immediately",
+        "confirm": "destructive"
       }
     ],
     "risk": {
@@ -162573,14 +162997,16 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/objects/records/{{ record.id }}",
-        "risk": "permanently deletes a legacy object record; Zendesk requires every relationship record referencing this object record to be deleted first, or this request fails"
+        "risk": "permanently deletes a legacy object record; Zendesk requires every relationship record referencing this object record to be deleted first, or this request fails",
+        "confirm": "destructive"
       },
       {
         "name": "delete_object_type",
         "kind": "delete",
         "method": "DELETE",
         "path": "/objects/types/{{ record.key }}",
-        "risk": "permanently deletes a legacy object type definition; only succeeds if every object record of that type has already been deleted. Standard Zendesk object types (users, tickets, organizations) cannot be deleted this way and the API rejects the request"
+        "risk": "permanently deletes a legacy object type definition; only succeeds if every object record of that type has already been deleted. Standard Zendesk object types (users, tickets, organizations) cannot be deleted this way and the API rejects the request",
+        "confirm": "destructive"
       },
       {
         "name": "create_relationship_record",
@@ -162594,14 +163020,16 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/relationships/records/{{ record.id }}",
-        "risk": "permanently removes a relationship record between two object records; irreversible, does not affect either underlying record"
+        "risk": "permanently removes a relationship record between two object records; irreversible, does not affect either underlying record",
+        "confirm": "destructive"
       },
       {
         "name": "delete_relationship_type",
         "kind": "delete",
         "method": "DELETE",
         "path": "/relationships/types/{{ record.key }}",
-        "risk": "permanently deletes a legacy relationship type; only succeeds if every relationship record of that type has already been deleted"
+        "risk": "permanently deletes a legacy relationship type; only succeeds if every relationship record of that type has already been deleted",
+        "confirm": "destructive"
       }
     ],
     "risk": {
