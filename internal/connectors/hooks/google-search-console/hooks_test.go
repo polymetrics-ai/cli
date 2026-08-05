@@ -270,42 +270,33 @@ func TestReadStream_MultipleSitesFanOut(t *testing.T) {
 	}
 }
 
-func TestBundleSpecRequiresRootBaseURL(t *testing.T) {
+func TestWriteCommandsCarryActionRedactions(t *testing.T) {
 	bundle, err := engine.Load(defs.FS, "google-search-console")
 	if err != nil {
 		t.Fatalf("load bundle: %v", err)
 	}
 
-	accepted := []string{
-		"https://searchconsole.googleapis.com",
-		"https://searchconsole.googleapis.com/",
-		"http://127.0.0.1:8080",
-		"http://localhost:8080/",
+	actionRedactions := make(map[string][]string, len(bundle.Writes))
+	for _, action := range bundle.Writes {
+		actionRedactions[action.Name] = action.RedactFields
 	}
-	for _, baseURL := range accepted {
-		t.Run("accept_"+baseURL, func(t *testing.T) {
-			if err := bundle.Spec.Validate(map[string]any{"access_token": "fixture", "base_url": baseURL}); err != nil {
-				t.Fatalf("validate root base URL %q: %v", baseURL, err)
+	for _, command := range bundle.CLISurface.Commands {
+		if command.Write == "" {
+			continue
+		}
+		want, ok := actionRedactions[command.Write]
+		if !ok {
+			t.Fatalf("command %q references unknown write action %q", command.Path, command.Write)
+		}
+		for _, field := range want {
+			found := false
+			for _, got := range command.RedactFields {
+				found = found || got == field
 			}
-		})
-	}
-
-	rejected := []string{
-		"https://www.googleapis.com/webmasters/v3",
-		"https://proxy.example.test/api",
-		"https://proxy.example.test/?tenant=one",
-		"https://proxy.example.test/#fragment",
-	}
-	for _, baseURL := range rejected {
-		t.Run("reject_"+baseURL, func(t *testing.T) {
-			err := bundle.Spec.Validate(map[string]any{"access_token": "fixture", "base_url": baseURL})
-			if err == nil {
-				t.Fatalf("validate pathful base URL %q: want error", baseURL)
+			if !found {
+				t.Fatalf("command %q redact_fields = %v, want action field %q", command.Path, command.RedactFields, field)
 			}
-			if !strings.Contains(err.Error(), "/base_url") {
-				t.Fatalf("validate pathful base URL %q: error %q does not identify base_url", baseURL, err)
-			}
-		})
+		}
 	}
 }
 

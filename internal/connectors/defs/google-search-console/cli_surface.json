@@ -178,6 +178,7 @@
       "flags": [
         { "name": "site-url", "type": "string", "summary": "Search Console site property URL or sc-domain property.", "maps_to": "record.site_url", "allow_empty": false }
       ],
+      "redact_fields": ["site_url"],
       "risk": "medium: adds a site property to the authenticated Search Console account; requires reverse ETL plan and approval",
       "approval": "Use reverse ETL plan -> preview -> approval -> execute. No raw HTTP body is accepted; the record must match writes.json.",
       "examples": ["pm google-search-console sites add --credential gsc-prod --site-url https://example.com/ --preview --json"]
