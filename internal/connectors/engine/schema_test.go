@@ -524,6 +524,8 @@ func TestSchemaValidatesRequestBodyInputDomains(t *testing.T) {
 			"required_empty_pattern":{"type":"string","pattern":"^$"},
 			"required_whitespace_pattern":{"type":"string","pattern":"^ +$"},
 			"formatted_open_pattern":{"type":"string","pattern":"^open$"},
+			"single_digit_hour_pattern":{"type":"string","pattern":"T3:"},
+			"two_digit_hour_pattern":{"type":"string","pattern":"T03:"},
 			"compatible_pattern":{"type":"string","pattern":"^[a-z]+$"},
 			"empty_pattern_labels":{"type":"array","items":{"type":"string","pattern":"^$"}},
 			"delimited_pattern_labels":{"type":"array","items":{"type":"string","pattern":"^a,b$"}},
@@ -543,6 +545,7 @@ func TestSchemaValidatesRequestBodyInputDomains(t *testing.T) {
 		name    string
 		pointer string
 		input   RequestBodyInput
+		witness string
 		wantErr bool
 	}{
 		{name: "finite enum rejects partial schema enum overlap", pointer: "/body/state", input: RequestBodyInput{Type: "enum", Values: []string{"open", "closed"}}, wantErr: true},
@@ -562,6 +565,8 @@ func TestSchemaValidatesRequestBodyInputDomains(t *testing.T) {
 		{name: "required string excludes empty-only pattern", pointer: "/body/required_empty_pattern", input: RequestBodyInput{Type: "string", Required: true}, wantErr: true},
 		{name: "required string excludes whitespace-only pattern", pointer: "/body/required_whitespace_pattern", input: RequestBodyInput{Type: "string", Required: true}, wantErr: true},
 		{name: "date-time excludes incompatible pattern", pointer: "/body/formatted_open_pattern", input: RequestBodyInput{Type: "string", Format: "date-time", Required: true}, wantErr: true},
+		{name: "date-time accepts runtime single-digit hour", pointer: "/body/single_digit_hour_pattern", input: RequestBodyInput{Type: "string", Format: "date-time", Required: true}, witness: "2026-08-05T3:04:05Z"},
+		{name: "date-time accepts standard two-digit hour", pointer: "/body/two_digit_hour_pattern", input: RequestBodyInput{Type: "string", Format: "date-time", Required: true}, witness: "2026-08-05T03:04:05Z"},
 		{name: "string array excludes empty-only item pattern", pointer: "/body/empty_pattern_labels", input: RequestBodyInput{Type: "string_array"}, wantErr: true},
 		{name: "string array excludes delimiter-only item pattern", pointer: "/body/delimited_pattern_labels", input: RequestBodyInput{Type: "string_array"}, wantErr: true},
 		{name: "string rejects incompatible allOf patterns", pointer: "/body/incompatible_patterns", input: RequestBodyInput{Type: "string", Required: true}, wantErr: true},
@@ -575,6 +580,9 @@ func TestSchemaValidatesRequestBodyInputDomains(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			if tt.witness != "" && !requestInputDomainAcceptsValue(tt.input, tt.witness) {
+				t.Fatalf("runtime input domain rejected witness %q", tt.witness)
+			}
 			err := sch.ValidateRequestBodyInput(tt.pointer, tt.input)
 			if (err != nil) != tt.wantErr {
 				t.Fatalf("ValidateRequestBodyInput() error = %v, wantErr %v", err, tt.wantErr)

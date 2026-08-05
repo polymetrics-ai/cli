@@ -569,7 +569,7 @@ func requestInputFormatProgram(input RequestBodyInput) (*syntax.Prog, bool) {
 		return nil, true
 	case "date-time":
 		const safeSpace = `[ \x{A0}\x{1680}\x{2000}-\x{200A}\x{202F}\x{205F}\x{3000}]`
-		core := `[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:[.,][0-9]+)?(?:Z|[+-][0-9]{2}:[0-9]{2})`
+		core := `[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{1,2}:[0-9]{2}:[0-9]{2}(?:[.,][0-9]+)?(?:Z|[+-][0-9]{2}:[0-9]{2})`
 		if !input.Required && input.AllowEmpty != nil && *input.AllowEmpty {
 			core = `(?:` + core + `)?`
 		}
