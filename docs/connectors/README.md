@@ -197,7 +197,7 @@
 - [gong](gong/MANUAL.md): Reads Gong users, calls, scorecards, settings, flows, and related public API resources; executes selected typed POST read-query commands; models Gong mutations, multipart uploads, and top-level array uploads as typed reverse-ETL actions.
 - [google-ads](google-ads/MANUAL.md): Declarative Google Ads connector for v22 customer, campaign, ad group, direct-read, and limited guarded reverse-ETL API surfaces.
 - [google-analytics-data-api](google-analytics-data-api/MANUAL.md): Reads Google Analytics 4 reports (active users, traffic sources, devices, pages) from the Analytics Data API runReport endpoint. Read-only.
-- [google-calendar](google-calendar/MANUAL.md): Reads Google Calendar calendars, calendar-list entries, events, recurring-event instances, colors, settings, and ACL rules, plus a bounded typed free/busy query, through the Calendar API v3 using an OAuth2 refresh token.
+- [google-calendar](google-calendar/MANUAL.md): Reads and safely reverse-ETLs Google Calendar calendars, calendar-list entries, events, ACL rules, and notification channels, plus a bounded typed free/busy query, through the Calendar API v3 using an OAuth2 refresh token.
 - [google-classroom](google-classroom/MANUAL.md): Reads Google Classroom courses, teachers, students, course work, and announcements through the Classroom REST API using an OAuth2 refresh token.
 - [google-directory](google-directory/MANUAL.md): Reads Google Admin SDK Directory users, groups, organizational units, and ChromeOS devices via bearer-token OAuth. Read-only.
 - [google-forms](google-forms/MANUAL.md): Reads Google Forms metadata, form items, and submitted responses through the Google Forms REST API using an OAuth 2.0 refresh-token grant.
