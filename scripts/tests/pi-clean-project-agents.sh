@@ -75,6 +75,28 @@ try {
   fs.rmSync(symlinkRoot, { recursive: true, force: true });
 }
 
+const deliveryWorkerPath = path.join(repoRoot, ".pi", "agents", "pm-delivery-worker.md");
+const originalDeliveryWorker = fs.readFileSync(deliveryWorkerPath, "utf8");
+try {
+  const handEditedWorker = originalDeliveryWorker.replace(/^tools:\n(?:  - .*\n)+/m, "");
+  assert.notEqual(handEditedWorker, originalDeliveryWorker, "test fixture must remove generated worker tools");
+  fs.writeFileSync(deliveryWorkerPath, handEditedWorker);
+  assert.deepEqual(agentsModule.discoverAgents(repoRoot, "clean-project").agents, [], "clean-project must reject a parseable generated worker that diverges from the canonical projection");
+} finally {
+  fs.writeFileSync(deliveryWorkerPath, originalDeliveryWorker);
+}
+
+const canonicalContractPath = path.join(repoRoot, ".agents", "agentic-delivery", "canonical", "delivery-contract.json");
+const originalContract = fs.readFileSync(canonicalContractPath, "utf8");
+try {
+  const handEditedContract = originalContract.replace("\"clean_project_scope\": \"clean-project\"", "\"clean_project_scope\": \"project\"");
+  assert.notEqual(handEditedContract, originalContract, "test fixture must alter the clean-project scope");
+  fs.writeFileSync(canonicalContractPath, handEditedContract);
+  assert.deepEqual(agentsModule.discoverAgents(repoRoot, "clean-project").agents, [], "clean-project must reject a parseable contract that fails canonical validation");
+} finally {
+  fs.writeFileSync(canonicalContractPath, originalContract);
+}
+
 const contract = JSON.parse(fs.readFileSync(path.join(repoRoot, ".agents/agentic-delivery/canonical/delivery-contract.json"), "utf8"));
 const expectedTools = contract.pi_harness.child_tools;
 for (const agent of discovery.agents) {
