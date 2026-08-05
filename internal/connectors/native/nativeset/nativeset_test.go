@@ -6,6 +6,53 @@ import (
 	"polymetrics.ai/internal/connectors"
 )
 
+func TestPromotedFactoryManifestUsesBundleDefinition(t *testing.T) {
+	var connector connectors.Connector
+	for _, factory := range Factories() {
+		if factory.Name == "aws-cloudtrail" {
+			connector = factory.New()
+			break
+		}
+	}
+	if connector == nil {
+		t.Fatal("Factories() missing aws-cloudtrail")
+	}
+
+	def, ok := connectors.DefinitionOf(connector)
+	if !ok {
+		t.Fatal("aws-cloudtrail connector does not implement DefinitionProvider")
+	}
+
+	manifest := connectors.ManifestOf(connector)
+	if len(manifest.Streams) != len(def.Streams) {
+		t.Fatalf("aws-cloudtrail manifest streams = %d, want %d (from bundle definition)", len(manifest.Streams), len(def.Streams))
+	}
+	if !hasConfigField(manifest.ConfigFields, "aws_region_name") {
+		t.Fatalf("aws-cloudtrail manifest config fields = %+v, want aws_region_name", manifest.ConfigFields)
+	}
+	if !hasSecretField(manifest.SecretFields, "aws_key_id") || !hasSecretField(manifest.SecretFields, "aws_secret_key") {
+		t.Fatalf("aws-cloudtrail manifest secret fields = %+v, want aws_key_id and aws_secret_key", manifest.SecretFields)
+	}
+}
+
+func hasConfigField(fields []connectors.ConfigField, name string) bool {
+	for _, field := range fields {
+		if field.Name == name {
+			return true
+		}
+	}
+	return false
+}
+
+func hasSecretField(fields []connectors.SecretField, name string) bool {
+	for _, field := range fields {
+		if field.Name == name {
+			return true
+		}
+	}
+	return false
+}
+
 func TestFactoriesExposeDefinitions(t *testing.T) {
 	want := map[string]bool{
 		"alpha-vantage":             false,
