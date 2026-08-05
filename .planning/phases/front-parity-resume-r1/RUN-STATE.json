@@ -1,9 +1,9 @@
 {
   "phase": "front-parity-resume-r1",
   "branch": "fm/cli-front-parity-resume-r1",
-  "status": "in_progress",
-  "verificationPassed": false,
-  "verificationNote": "Front-specific current-main gates pass. Full CLI suite first exposed stale root goldens; the deterministic focused golden update passed. Full rerun and final integration are pending.",
+  "status": "ready_for_no_mistakes",
+  "verificationPassed": true,
+  "verificationNote": "All declared local current-main gates pass. The first full CLI run exposed stale root goldens; deterministic regeneration fixed them and the full CLI rerun passed in 418.708s. Fresh origin/main remains the branch base.",
   "gsd": {
     "doctor": "passed",
     "programmingLoopAvailable": false,
@@ -44,6 +44,16 @@
       "command": "POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test ./internal/cli -run TestGoldenTranscripts -count=1",
       "result": "pass",
       "notes": "Regenerated nine deterministic root transcript records after Front registration."
+    },
+    {
+      "command": "go test ./internal/cli/... -count=1",
+      "result": "pass",
+      "notes": "Full focused CLI suite passed in 418.708s after golden regeneration."
+    },
+    {
+      "command": "pm docs generate/validate, website pnpm run gen:website-data, built pm Front help/inspect smoke",
+      "result": "pass",
+      "notes": "Front generated docs/catalog and runtime help are synchronized; safe smoke stops before any credential or provider request."
     }
   ]
 }

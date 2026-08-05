@@ -10,4 +10,5 @@ The temporary provider-field research matrix records 933 provider-declared reque
 Front-owned OpenAPI citations and requiredness rationale. It also records 15 non-GET
 no-`requestBody` findings without inferring undocumented body fields.
 
-Final current-main gate reruns, a fresh remote integration check, and no-mistakes remain pending.
+Current-main gates and the fresh remote integration check are complete. The branch is ready for the
+required no-mistakes review; no operation remains `planned`.
