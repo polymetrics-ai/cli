@@ -268,7 +268,6 @@ func SyncProjections(root string, contract *Contract) (updated int, returnErr er
 			if bytes.Equal(content[start:end], block) {
 				continue
 			}
-			next = make([]byte, 0, len(content)-end+start+len(block))
 			next = append(next, content[:start]...)
 			next = append(next, block...)
 			next = append(next, content[end:]...)
