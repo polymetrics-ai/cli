@@ -101,8 +101,9 @@ string map today, and those would alter existing behavior or cross the
 storage/secret ownership boundary. Bounds are also deliberately omitted:
 there are zero such declarations in every current `spec.json`, and the only
 already-supported bounds (`minItems`/`maxItems`) describe JSON array instances,
-not scalar credential-map strings. A future declaration requires a dedicated,
-typed configuration representation and a test before it can claim support.
+not scalar credential-map strings. A future string bound needs an explicit
+semantics-and-test addition; a numeric bound additionally needs a deliberate
+parse/coercion contract before it can claim support.
 
 ## Planned sequence
 
@@ -117,7 +118,7 @@ typed configuration representation and a test before it can claim support.
    constraint-free connector remains genuinely unconstrained rather than
    looking auto-satisfied by a no-op forwarder.
 4. **Green — complete.** Enforce only the surveyed declarative constraints at
-   `AddCredential`, before ID generation, vault, or state mutation. Errors are
+   `AddCredential`, before vault or state mutation. Errors are
    field/constraint-specific and never echo input values.
 5. **Regression matrix.** Prove URI (`base_url`), pattern, enum, each declared
    format sibling, unconstrained inputs, and no-persistence-on-rejection. Add

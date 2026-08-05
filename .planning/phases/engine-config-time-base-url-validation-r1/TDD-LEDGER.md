@@ -89,8 +89,8 @@ Status: green-confirmed
 
 The implementation compiles declared formats into the engine schema, applies
 format/pattern/enum checks only to supplied configuration fields, and reaches
-that validator through the optional connector contract before credential ID,
-vault, or state mutation. The focused red tests now pass:
+that validator through the optional connector contract before vault or state
+mutation. The focused red tests now pass:
 
 ```text
 $ go test ./internal/connectors/engine -run '^(TestSchemaValidateConfigurationAppliesDeclaredConstraintsOnly|TestSchemaWithoutConfigurationConstraintsIsNotAdvertised|TestConnectorConfigurationConstraintContractReflectsDeclaration)$' -count=1
