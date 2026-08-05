@@ -8,14 +8,13 @@ Readable streams: `sites`, `site_details`, `sitemaps`, `sitemap_details`,
 `search_analytics_by_date`, `search_analytics_by_country`, `search_analytics_by_device`,
 `search_analytics_by_page`, `search_analytics_by_query`.
 
-Typed direct reads: `direct search-analytics query`, `direct url-inspection inspect`,
-`direct mobile-friendly-test run`.
+Typed direct reads: `direct url-inspection inspect`, `direct mobile-friendly-test run`.
 
 Write actions: `add_site`, `delete_site`, `submit_sitemap`, `delete_sitemap`.
 
 Service API documentation: https://developers.google.com/webmaster-tools/v1/api_reference_index.
-Official source audit for this checkpoint is archived under
-`.planning/phases/issue-3038-google-search-console-parity-wave03/research/`.
+The current provider Discovery inventory and per-request-field citation research are recorded under
+`.planning/phases/cli-google-search-console-parity-resume-r1/research/`.
 
 ## Auth setup
 
@@ -43,7 +42,8 @@ Connection fields:
   `search_analytics_*` streams.
 - `end_date` (optional, string); format `date`; upper bound for `search_analytics_*` streams.
 - `search_type` (optional, string); default `web`; stream Search Analytics type filter.
-- `data_state` (optional, string); stream Search Analytics dataState filter.
+- `data_state` (optional, string); stream Search Analytics dataState filter (`final`, `all`, or
+  `hourly_all`).
 - `page_size` (optional, integer); default `25000`; Search Analytics rowLimit per stream page.
 - `max_pages` (optional, string); positive integer or `all`/`unlimited` for stream pagination.
 - `mode` (optional, string); `live` or `fixture`.
@@ -74,11 +74,6 @@ All direct reads are fixed-target POST operations with closed request-body schem
 `application/json`, `json_redacted` output, and a 1 MiB operation response cap. They do not accept a
 raw method, path, query, or body escape hatch.
 
-- `direct search-analytics query`: POST
-  `/webmasters/v3/sites/{siteUrl}/searchAnalytics/query`; supports required `--site-url`,
-  `--start-date`, and `--end-date`, optional bounded dimension slots `--dimension-1` through
-  `--dimension-5`, `--type`, `--data-state`, and `--aggregation-type`. The first page is fixed to
-  `rowLimit=25000`, `startRow=0`.
 - `direct url-inspection inspect`: POST `/v1/urlInspection/index:inspect`; supports
   `--inspection-url`, `--site-url`, and optional `--language-code`.
 - `direct mobile-friendly-test run`: POST `/v1/urlTestingTools/mobileFriendlyTest:run`; supports
@@ -107,6 +102,7 @@ operations also require typed confirmation. No write action accepts a raw body.
 
 - Fixture and local validation only in this wave; this file does not claim live provider
   certification.
-- API coverage is 11/11 documented operations from the official audit: 4 ETL read endpoint groups,
-  4 reverse-ETL writes, and 3 typed bounded direct reads. There are 0 excluded, binary, CDC, or
-  generic raw operations.
+- API coverage is 11/11 unique provider-published operations: five operations are reachable via
+  ETL streams, four via typed reverse-ETL writes, and two additional operations via typed bounded
+  direct reads. Search Analytics has five dimension-specific ETL conveniences over its single
+  documented POST operation. There are 0 excluded, binary, CDC, generic raw, or planned operations.

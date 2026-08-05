@@ -1,9 +1,9 @@
 {
   "api": "Google Search Console API (Search Console v3 + searchconsole v1)",
   "docs": "https://developers.google.com/webmaster-tools/v1/api_reference_index",
-  "reviewed_at": "2026-07-31",
+  "reviewed_at": "2026-08-05",
   "operation_ledger_version": 1,
-  "scope": "Official discovery re-audit for Google Search Console found 11 documented operations: 4 ETL reads, 4 reverse-ETL writes, and 3 typed bounded direct/provider-search reads. There are no binary, CDC, generic raw HTTP/body/query, or excluded operations in this connector-owned parity checkpoint.",
+  "scope": "Google's current Discovery document has 11 unique published operations: five read operations reach ETL streams, four record-shaped mutations reach typed reverse-ETL writes, and URL Inspection plus Mobile-Friendly Test reach typed bounded direct reads. Search Analytics reaches five dimension-specific ETL stream conveniences over its single documented POST. There are no binary, CDC, generic raw HTTP/body/query, excluded, or planned operations.",
   "endpoints": [
     {
       "method": "GET",
@@ -37,8 +37,7 @@
       "method": "POST",
       "path": "/webmasters/v3/sites/{siteUrl}/searchAnalytics/query",
       "covered_by": {
-        "stream": "search_analytics_by_date",
-        "direct_read": "direct search-analytics query"
+        "stream": "search_analytics_by_date"
       }
     },
     {

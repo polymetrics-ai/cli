@@ -53,7 +53,7 @@
     },
     "data_state": {
       "type": "string",
-      "description": "Search Analytics dataState filter (final or all). Omitted when unset, matching the API's own default."
+      "description": "Search Analytics dataState filter (final, all, or hourly_all). Omitted when unset, matching the API's own default."
     },
     "page_size": {
       "type": "integer",

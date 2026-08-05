@@ -132,9 +132,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "search_analytics_by_date",
-      "api_surface": [
-        { "method": "POST", "path": "/webmasters/v3/sites/{siteUrl}/searchAnalytics/query" }
-      ],
       "examples": ["pm google-search-console search-analytics by-date --config site_urls=https://example.com/ --json --limit 25"]
     },
     {
@@ -143,9 +140,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "search_analytics_by_country",
-      "api_surface": [
-        { "method": "POST", "path": "/webmasters/v3/sites/{siteUrl}/searchAnalytics/query" }
-      ],
       "examples": ["pm google-search-console search-analytics by-country --config site_urls=https://example.com/ --json --limit 25"]
     },
     {
@@ -154,9 +148,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "search_analytics_by_device",
-      "api_surface": [
-        { "method": "POST", "path": "/webmasters/v3/sites/{siteUrl}/searchAnalytics/query" }
-      ],
       "examples": ["pm google-search-console search-analytics by-device --config site_urls=https://example.com/ --json --limit 25"]
     },
     {
@@ -165,9 +156,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "search_analytics_by_page",
-      "api_surface": [
-        { "method": "POST", "path": "/webmasters/v3/sites/{siteUrl}/searchAnalytics/query" }
-      ],
       "examples": ["pm google-search-console search-analytics by-page --config site_urls=https://example.com/ --json --limit 25"]
     },
     {
@@ -239,34 +227,6 @@
       "examples": ["pm google-search-console sitemaps delete --site-url https://example.com/ --feedpath https://example.com/sitemap.xml --preview --json"]
     },
     {
-      "path": "direct search-analytics query",
-      "summary": "Run the official Search Analytics query operation as a typed bounded direct read.",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "google-search-console.searchanalytics_query",
-      "source_url": "https://developers.google.com/webmaster-tools/v1/searchanalytics/query",
-      "flags": [
-        { "name": "site-url", "type": "string", "summary": "Search Console site property URL or sc-domain property.", "maps_to": "path.siteUrl", "allow_empty": false },
-        { "name": "start-date", "type": "string", "summary": "Inclusive YYYY-MM-DD lower bound.", "maps_to": "body.startDate", "allow_empty": false },
-        { "name": "end-date", "type": "string", "summary": "Inclusive YYYY-MM-DD upper bound.", "maps_to": "body.endDate", "allow_empty": false },
-        { "name": "dimension-1", "type": "enum", "summary": "First Search Analytics dimension.", "values": ["DATE", "QUERY", "PAGE", "COUNTRY", "DEVICE", "SEARCH_APPEARANCE"], "maps_to": "body.dimensions.0" },
-        { "name": "dimension-2", "type": "enum", "summary": "Second Search Analytics dimension.", "values": ["DATE", "QUERY", "PAGE", "COUNTRY", "DEVICE", "SEARCH_APPEARANCE"], "maps_to": "body.dimensions.1" },
-        { "name": "dimension-3", "type": "enum", "summary": "Third Search Analytics dimension.", "values": ["DATE", "QUERY", "PAGE", "COUNTRY", "DEVICE", "SEARCH_APPEARANCE"], "maps_to": "body.dimensions.2" },
-        { "name": "dimension-4", "type": "enum", "summary": "Fourth Search Analytics dimension.", "values": ["DATE", "QUERY", "PAGE", "COUNTRY", "DEVICE", "SEARCH_APPEARANCE"], "maps_to": "body.dimensions.3" },
-        { "name": "dimension-5", "type": "enum", "summary": "Fifth Search Analytics dimension.", "values": ["DATE", "QUERY", "PAGE", "COUNTRY", "DEVICE", "SEARCH_APPEARANCE"], "maps_to": "body.dimensions.4" },
-        { "name": "type", "type": "enum", "summary": "Search type filter.", "values": ["WEB", "IMAGE", "VIDEO", "NEWS", "DISCOVER", "GOOGLE_NEWS"], "maps_to": "body.type" },
-        { "name": "data-state", "type": "enum", "summary": "Search Analytics data state.", "values": ["FINAL", "ALL"], "maps_to": "body.dataState" },
-        { "name": "aggregation-type", "type": "enum", "summary": "Aggregation type.", "values": ["AUTO", "BY_PROPERTY", "BY_PAGE"], "maps_to": "body.aggregationType" }
-      ],
-      "api_surface": [
-        { "method": "POST", "path": "/webmasters/v3/sites/{siteUrl}/searchAnalytics/query" }
-      ],
-      "output_policy": "json_redacted",
-      "redact_fields": ["siteUrl"],
-      "risk": "low: bounded Search Console JSON read; fixed endpoint, closed request body schema, 1 MiB response cap, and redacted siteUrl-shaped fields",
-      "examples": ["pm google-search-console direct search-analytics query --site-url https://example.com/ --start-date 2026-06-01 --end-date 2026-06-30 --dimension-1 QUERY --json"]
-    },
-    {
       "path": "direct url-inspection inspect",
       "summary": "Run the official URL Inspection operation as a typed bounded direct read.",
       "intent": "direct_read",
@@ -274,8 +234,8 @@
       "operation": "google-search-console.urlinspection_index_inspect",
       "source_url": "https://developers.google.com/webmaster-tools/v1/urlInspection.index/inspect",
       "flags": [
-        { "name": "inspection-url", "type": "string", "summary": "Fully-qualified URL to inspect.", "maps_to": "body.inspectionUrl", "allow_empty": false },
-        { "name": "site-url", "type": "string", "summary": "Search Console site property URL or sc-domain property.", "maps_to": "body.siteUrl", "allow_empty": false },
+        { "name": "inspection-url", "type": "string", "summary": "Fully-qualified URL to inspect.", "maps_to": "body.inspectionUrl", "allow_empty": false, "required": true },
+        { "name": "site-url", "type": "string", "summary": "Search Console site property URL or sc-domain property.", "maps_to": "body.siteUrl", "allow_empty": false, "required": true },
         { "name": "language-code", "type": "string", "summary": "Optional BCP-47 language code for localized inspection messages.", "maps_to": "body.languageCode" }
       ],
       "api_surface": [
@@ -294,7 +254,7 @@
       "operation": "google-search-console.mobile_friendly_test_run",
       "source_url": "https://developers.google.com/webmaster-tools/v1/urlTestingTools.mobileFriendlyTest/run",
       "flags": [
-        { "name": "url", "type": "string", "summary": "Fully-qualified URL to test.", "maps_to": "body.url", "allow_empty": false },
+        { "name": "url", "type": "string", "summary": "Fully-qualified URL to test.", "maps_to": "body.url", "allow_empty": false, "required": true },
         { "name": "request-screenshot", "type": "boolean", "summary": "Request a screenshot in the provider response.", "maps_to": "body.requestScreenshot" }
       ],
       "api_surface": [
@@ -309,7 +269,7 @@
   "help_topics": [
     {
       "name": "parity",
-      "summary": "Official Search Console parity in this bundle covers 11 operations: 4 ETL read endpoint groups, 4 reverse-ETL write actions, and 3 typed bounded direct reads. There are no generic raw HTTP, body, query, binary, or CDC escape hatches."
+      "summary": "Google's current Discovery document lists 11 unique Search Console operations. Five reach ETL streams, four reach typed reverse-ETL writes, and URL Inspection plus Mobile-Friendly Test reach typed bounded direct reads. There are no generic raw HTTP, body, query, binary, CDC, excluded, or planned operations."
     }
   ]
 }

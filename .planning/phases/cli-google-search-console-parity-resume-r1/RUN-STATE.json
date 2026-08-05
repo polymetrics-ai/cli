@@ -1,0 +1,34 @@
+{
+  "phase": "cli-google-search-console-parity-resume-r1",
+  "status": "in_progress",
+  "manual_gsd_fallback": {
+    "reason": "The repo-local GSD adapter does not expose programming-loop and the expected repo helper is absent.",
+    "evidence": [
+      "scripts/gsd doctor",
+      "scripts/gsd prompt programming-loop init --phase cli-google-search-console-parity-resume-r1 --dry-run"
+    ]
+  },
+  "verificationPassed": false,
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "One connector bundle/hook repair lane; task does not request delegated workers."
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "Capture the current-main validator failure before changing recovered metadata."
+    },
+    {
+      "cycle": "validator-red",
+      "decision": "local_critical_path",
+      "reason": "Focused current-main validation reproduced all nine known findings."
+    },
+    {
+      "cycle": "runtime-reachability",
+      "decision": "retire_redundant_direct_command",
+      "reason": "Current-main path safety rejects the documented URL-valued Search Analytics siteUrl before dispatch. The same provider operation is genuinely reachable through five connector-specific ETL streams that safely path-escape site properties, so retaining a broken duplicate direct command would violate availability: implemented."
+    }
+  ]
+}

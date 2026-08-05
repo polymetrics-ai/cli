@@ -1,49 +1,6 @@
 {
   "operations": [
     {
-      "id": "google-search-console.searchanalytics_query",
-      "kind": "rest_read",
-      "summary": "Run a bounded Search Analytics query for a verified site property.",
-      "description": "Typed Search Analytics direct read for the official webmasters.searchanalytics.query operation. It accepts a closed set of date, dimension, type, dataState, and aggregationType inputs and fixes rowLimit/startRow to the first bounded page.",
-      "source_url": "https://developers.google.com/webmaster-tools/v1/searchanalytics/query",
-      "risk": "low",
-      "approval": "not_required",
-      "output_policy": "json_redacted",
-      "auth_scopes": ["https://www.googleapis.com/auth/webmasters.readonly", "https://www.googleapis.com/auth/webmasters"],
-      "sensitive_policy": {
-        "redact_fields": ["siteUrl"]
-      },
-      "rest": {
-        "method": "POST",
-        "path": "/webmasters/v3/sites/{siteUrl}/searchAnalytics/query",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body": {
-          "dimensions": ["DATE"],
-          "rowLimit": 25000,
-          "startRow": 0
-        },
-        "body_schema": {
-          "type": "object",
-          "required": ["startDate", "endDate", "dimensions", "rowLimit", "startRow"],
-          "properties": {
-            "startDate": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
-            "endDate": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
-            "dimensions": {
-              "type": "array",
-              "items": { "type": "string", "enum": ["DATE", "QUERY", "PAGE", "COUNTRY", "DEVICE", "SEARCH_APPEARANCE"] }
-            },
-            "type": { "type": "string", "enum": ["WEB", "IMAGE", "VIDEO", "NEWS", "DISCOVER", "GOOGLE_NEWS"] },
-            "dataState": { "type": "string", "enum": ["FINAL", "ALL"] },
-            "aggregationType": { "type": "string", "enum": ["AUTO", "BY_PROPERTY", "BY_PAGE"] },
-            "rowLimit": { "type": "integer", "enum": [25000] },
-            "startRow": { "type": "integer", "enum": [0] }
-          },
-          "additionalProperties": false
-        }
-      }
-    },
-    {
       "id": "google-search-console.urlinspection_index_inspect",
       "kind": "rest_read",
       "summary": "Inspect indexed status for one URL in a verified site property.",

@@ -28,29 +28,6 @@
   },
   "direct_read_candidates": [
     {
-      "stage_name": "direct_read_sweep_searchanalytics_query",
-      "command": "direct search-analytics query",
-      "args": [
-        { "connector": true },
-        { "literal": "direct" },
-        { "literal": "search-analytics" },
-        { "literal": "query" },
-        { "literal": "--credential" },
-        { "source_credential": true },
-        { "literal": "--site-url" },
-        { "config_key": "site_url" },
-        { "literal": "--start-date" },
-        { "config_key": "start_date", "default": "2026-06-01" },
-        { "literal": "--end-date" },
-        { "config_key": "end_date", "default": "2026-06-30" },
-        { "literal": "--dimension-1" },
-        { "literal": "DATE" },
-        { "literal": "--max-bytes" },
-        { "literal": "1048576" },
-        { "literal": "--json" }
-      ]
-    },
-    {
       "stage_name": "direct_read_sweep_urlinspection_index_inspect",
       "command": "direct url-inspection inspect",
       "args": [
