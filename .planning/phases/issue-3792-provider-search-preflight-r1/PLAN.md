@@ -38,6 +38,22 @@ The current defect is that `validateOperationDirectReadCommand`
 and a supported policy. It does not load or inspect the referenced operation; the executor later
 rejects unsupported kinds (`engine/direct_read.go:32-67`).
 
+## Blocking result — 2026-08-06
+
+This issue cannot be delivered independently in the current repository state.
+A strict, no-network candidate was assessed and then completely reverted (no
+production change is retained): its focused tests passed, but the real
+`TestEveryImplementedCommandPassesRuntimePreflight` sweep reported
+`178 of 1239 commands marked "implemented" fail runtime Preflight`.
+That is an acceptance failure, not a tolerable migration warning.
+
+The candidate cannot be narrowed to bundle connectors or to `provider_search`
+alone: that would leave other operation-backed implemented commands on the
+generic-reader preflight, contradicting the issue's required shared eligibility
+contract and real sweep. Requiring the local contract from every reader instead
+blocks native executable readers that do not expose the required operation
+metadata. Details and next dependencies are recorded in `VERIFICATION.md`.
+
 ## Slice A — RED: prove generic-reader preflight is insufficient
 
 1. Add a commandrunner regression using a fake that implements the proposed no-network preflight
