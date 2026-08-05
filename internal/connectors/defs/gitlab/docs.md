@@ -54,8 +54,9 @@ Default pagination: follows RFC 5988 Link headers with rel=next.
 
 ## Write actions & risks
 
-The GitLab provider inventory includes 975 writes. `capabilities.write=true` records that published
-surface; it does not make a write command executable. This G1 bundle declares no GitLab write action.
+The GitLab provider inventory includes 975 writes. `capabilities.write=false` until at least one
+GitLab write action is executable; the provider inventory is not an executable capability. This G1
+bundle declares no GitLab write action.
 
 Read behavior: external GitLab API read of projects, groups, users, and issues. Any future write must
 use plan, preview, explicit approval, and execute. Output is not redacted by this connector.
