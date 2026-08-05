@@ -5,20 +5,21 @@
   "x-primary-key": [
     "id"
   ],
+  "x-cursor-field": "updated_at",
+  "required": [
+    "id"
+  ],
   "properties": {
     "id": {
-      "type": [
-        "string",
-        "integer"
-      ]
+      "type": "string"
     },
-    "object": {
+    "account_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "code": {
+    "plan_id": {
       "type": [
         "string",
         "null"
@@ -34,16 +35,13 @@
       "type": [
         "string",
         "null"
-      ],
-      "format": "date-time"
+      ]
     },
     "updated_at": {
       "type": [
         "string",
         "null"
-      ],
-      "format": "date-time"
+      ]
     }
-  },
-  "additionalProperties": true
+  }
 }

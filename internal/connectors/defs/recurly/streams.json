@@ -67,10 +67,20 @@
     {
       "name": "accounts",
       "path": "/accounts",
+      "query": {
+        "limit": "200"
+      },
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "code": "{{ record.code }}",
+        "email": "{{ record.email }}",
+        "state": "{{ record.state }}",
+        "created_at": "{{ record.created_at }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
       "schema": "schemas/accounts.json"
     },
     {
@@ -570,10 +580,19 @@
     {
       "name": "invoices",
       "path": "/invoices",
+      "query": {
+        "limit": "200"
+      },
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "account_id": "{{ record.account.id }}",
+        "state": "{{ record.state }}",
+        "total": "{{ record.total }}",
+        "created_at": "{{ record.created_at }}"
+      },
       "schema": "schemas/invoices.json"
     },
     {
@@ -641,10 +660,19 @@
     {
       "name": "plans",
       "path": "/plans",
+      "query": {
+        "limit": "200"
+      },
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "code": "{{ record.code }}",
+        "name": "{{ record.name }}",
+        "state": "{{ record.state }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
       "schema": "schemas/plans.json"
     },
     {
@@ -751,10 +779,20 @@
     {
       "name": "subscriptions",
       "path": "/subscriptions",
+      "query": {
+        "limit": "200"
+      },
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "account_id": "{{ record.account.id }}",
+        "plan_id": "{{ record.plan.id }}",
+        "state": "{{ record.state }}",
+        "created_at": "{{ record.created_at }}",
+        "updated_at": "{{ record.updated_at }}"
+      },
       "schema": "schemas/subscriptions.json"
     },
     {
@@ -848,10 +886,19 @@
     {
       "name": "transactions",
       "path": "/transactions",
+      "query": {
+        "limit": "200"
+      },
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "account_id": "{{ record.account.id }}",
+        "status": "{{ record.status }}",
+        "amount": "{{ record.amount }}",
+        "created_at": "{{ record.created_at }}"
+      },
       "schema": "schemas/transactions.json"
     },
     {

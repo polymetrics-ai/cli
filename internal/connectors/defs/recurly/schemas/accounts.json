@@ -5,20 +5,21 @@
   "x-primary-key": [
     "id"
   ],
+  "x-cursor-field": "updated_at",
+  "required": [
+    "id"
+  ],
   "properties": {
     "id": {
-      "type": [
-        "string",
-        "integer"
-      ]
+      "type": "string"
     },
-    "object": {
+    "code": {
       "type": [
         "string",
         "null"
       ]
     },
-    "code": {
+    "email": {
       "type": [
         "string",
         "null"
@@ -41,9 +42,7 @@
       "type": [
         "string",
         "null"
-      ],
-      "format": "date-time"
+      ]
     }
-  },
-  "additionalProperties": true
+  }
 }

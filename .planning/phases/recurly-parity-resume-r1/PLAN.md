@@ -42,6 +42,10 @@ verification checklist, prompt snapshot, summary, and run state are maintained d
 6. Run the connector gates, build `pm`, execute representative help and Recurly commands, regenerate
    Recurly-owned docs/catalog/website output late, commit coherent green slices, and then run
    `no-mistakes` on the committed feature branch.
+7. Before the pre-citation `no-mistakes` run, compare every Recurly artifact that existed on current
+   `origin/main` with the recovered definition. Preserve the five legacy streams' query defaults,
+   schema primary/cursor/required metadata, typed fields, computed projections, and representative
+   fixture records; add a connector-local regression test for that recovery invariant.
 
 ## TDD checkpoints
 
@@ -50,6 +54,8 @@ verification checklist, prompt snapshot, summary, and run state are maintained d
 - Green: validator, conformance, runtime preflight, and targeted CLI tests pass after flag fixes.
 - Red/green: each binary command must fail before its metadata promotion and execute successfully
   against a bounded fixture/replay path afterward.
+- Red/green: a recovery-preservation test must demonstrate the legacy-stream metadata loss before
+  restoring it from current `origin/main`, then prove the restored metadata stays present.
 
 ## Verification plan
 

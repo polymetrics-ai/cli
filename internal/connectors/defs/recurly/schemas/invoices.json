@@ -5,20 +5,15 @@
   "x-primary-key": [
     "id"
   ],
+  "x-cursor-field": "created_at",
+  "required": [
+    "id"
+  ],
   "properties": {
     "id": {
-      "type": [
-        "string",
-        "integer"
-      ]
+      "type": "string"
     },
-    "object": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "code": {
+    "account_id": {
       "type": [
         "string",
         "null"
@@ -30,20 +25,17 @@
         "null"
       ]
     },
+    "total": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
     "created_at": {
       "type": [
         "string",
         "null"
-      ],
-      "format": "date-time"
-    },
-    "updated_at": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "format": "date-time"
+      ]
     }
-  },
-  "additionalProperties": true
+  }
 }

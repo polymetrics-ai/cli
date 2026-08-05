@@ -5,28 +5,29 @@
   "x-primary-key": [
     "id"
   ],
+  "x-cursor-field": "created_at",
+  "required": [
+    "id"
+  ],
   "properties": {
     "id": {
-      "type": [
-        "string",
-        "integer"
-      ]
+      "type": "string"
     },
-    "object": {
+    "account_id": {
       "type": [
         "string",
         "null"
       ]
     },
-    "code": {
+    "status": {
       "type": [
         "string",
         "null"
       ]
     },
-    "state": {
+    "amount": {
       "type": [
-        "string",
+        "number",
         "null"
       ]
     },
@@ -34,16 +35,7 @@
       "type": [
         "string",
         "null"
-      ],
-      "format": "date-time"
-    },
-    "updated_at": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "format": "date-time"
+      ]
     }
-  },
-  "additionalProperties": true
+  }
 }

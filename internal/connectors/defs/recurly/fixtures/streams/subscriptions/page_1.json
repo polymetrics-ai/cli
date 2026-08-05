@@ -2,7 +2,9 @@
   "request": {
     "method": "GET",
     "path": "/subscriptions",
-    "query": {}
+    "query": {
+      "limit": "200"
+    }
   },
   "response": {
     "status": 200,
@@ -13,10 +15,34 @@
       "object": "list",
       "data": [
         {
-          "id": "subscriptions_fixture_1",
-          "object": "list_subscriptions",
-          "code": "subscriptions_code_1",
+          "id": "sub_fixture_1",
           "state": "active",
+          "account": {
+            "id": "acct_fixture_1",
+            "code": "fixture_1",
+            "object": "account_mini"
+          },
+          "plan": {
+            "id": "plan_fixture_1",
+            "code": "fixture-plan",
+            "object": "plan_mini"
+          },
+          "created_at": "2026-01-01T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
+        },
+        {
+          "id": "sub_fixture_2",
+          "state": "canceled",
+          "account": {
+            "id": "acct_fixture_2",
+            "code": "fixture_2",
+            "object": "account_mini"
+          },
+          "plan": {
+            "id": "plan_fixture_1",
+            "code": "fixture-plan",
+            "object": "plan_mini"
+          },
           "created_at": "2026-01-01T00:00:00Z",
           "updated_at": "2026-01-02T00:00:00Z"
         }
