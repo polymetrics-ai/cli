@@ -39,10 +39,9 @@ func New() *Hooks { return &Hooks{} }
 func (h *Hooks) ConnectorName() string { return "github" }
 
 var (
-	_ engine.Hooks              = (*Hooks)(nil)
-	_ engine.AuthHook           = (*Hooks)(nil)
-	_ engine.WriteHook          = (*Hooks)(nil)
-	_ engine.WriteDispatchOwner = (*Hooks)(nil)
+	_ engine.Hooks     = (*Hooks)(nil)
+	_ engine.AuthHook  = (*Hooks)(nil)
+	_ engine.WriteHook = (*Hooks)(nil)
 )
 
 // Authenticator mints an RS256 JWT (matches legacy's githubAppJWT) and
@@ -216,47 +215,25 @@ var pullCoreFields = []string{"title", "body", "state", "base", "maintainer_can_
 // ExecuteWrite: 4 compound actions + label color normalization; anything
 // else returns handled=false (declarative fallback).
 func (h *Hooks) ExecuteWrite(ctx context.Context, action engine.WriteAction, rec connectors.Record, rt *engine.Runtime) (bool, error) {
-	handler := githubWriteHandler(action.Name)
-	if handler == nil {
-		return false, nil
-	}
-	return true, handler(ctx, rt, rec)
-}
-
-func (h *Hooks) OwnsWriteAction(action string) bool {
-	return githubWriteHandler(action) != nil
-}
-
-type githubWriteActionHandler func(context.Context, *engine.Runtime, connectors.Record) error
-
-func githubWriteHandler(action string) githubWriteActionHandler {
-	switch action {
+	switch action.Name {
 	case "close_issue":
-		return func(ctx context.Context, rt *engine.Runtime, rec connectors.Record) error {
-			return closeResource(ctx, rt, "issues", "issue_number", rec)
-		}
+		return true, closeResource(ctx, rt, "issues", "issue_number", rec)
 	case "close_pull_request":
-		return func(ctx context.Context, rt *engine.Runtime, rec connectors.Record) error {
-			return closeResource(ctx, rt, "pulls", "pull_number", rec)
-		}
+		return true, closeResource(ctx, rt, "pulls", "pull_number", rec)
 	case "reopen_issue":
-		return func(ctx context.Context, rt *engine.Runtime, rec connectors.Record) error {
-			return reopenResource(ctx, rt, "issues", "issue_number", rec)
-		}
+		return true, reopenResource(ctx, rt, "issues", "issue_number", rec)
 	case "reopen_pull_request":
-		return func(ctx context.Context, rt *engine.Runtime, rec connectors.Record) error {
-			return reopenResource(ctx, rt, "pulls", "pull_number", rec)
-		}
+		return true, reopenResource(ctx, rt, "pulls", "pull_number", rec)
 	case "create_pull_request":
-		return createPullRequest
+		return true, createPullRequest(ctx, rt, rec)
 	case "update_pull_request":
-		return updatePullRequest
+		return true, updatePullRequest(ctx, rt, rec)
 	case "create_label":
-		return createLabel
+		return true, createLabel(ctx, rt, rec)
 	case "update_label":
-		return updateLabel
+		return true, updateLabel(ctx, rt, rec)
 	default:
-		return nil
+		return false, nil
 	}
 }
 

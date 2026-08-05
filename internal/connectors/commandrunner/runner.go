@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
-	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/safety"
 )
 
@@ -265,7 +264,7 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 		return cmd, command, nil
 	}
 	if cmd.Intent == "direct_read" && cmd.Availability == "implemented" && cmd.Operation != "" {
-		if _, err := validateOperationDirectReadCommand(connector, cmd); err != nil {
+		if err := validateOperationDirectReadCommand(connector, cmd); err != nil {
 			return connectors.CommandSurfaceCommand{}, command, err
 		}
 		return cmd, command, nil
@@ -345,11 +344,10 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 			Reason:       "connector does not support operation direct reads",
 		}
 	}
-	bodySchema, err := validateOperationDirectReadCommand(connector, cmd)
-	if err != nil {
+	if err := validateOperationDirectReadCommand(connector, cmd); err != nil {
 		return Result{}, err
 	}
-	pathParams, query, body, err := operationDirectReadOverrides(cmd, req.Flags, bodySchema)
+	pathParams, query, body, err := operationDirectReadOverrides(cmd, req.Flags)
 	if err != nil {
 		return Result{}, redactCommandError(err, cmd.RedactFields, req)
 	}
@@ -377,41 +375,6 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 		return Result{}, redactCommandError(err, cmd.RedactFields, req)
 	}
 	return Result{Connector: connector.Name(), Command: cmd.Path, DirectRead: &direct}, nil
-}
-
-type operationRequestBodyContractProvider interface {
-	OperationRequestBodyContract(string) (engine.OperationRequestBodyContract, error)
-}
-
-func operationRequestBodyContract(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) (*engine.OperationRequestBodyContract, error) {
-	hasBodyMapping := false
-	for _, flag := range cmd.Flags {
-		namespace, _, err := engine.ParseRequestFieldPointer(flag.MapsTo)
-		if err == nil && namespace == "body" {
-			hasBodyMapping = true
-			break
-		}
-	}
-	provider, ok := connector.(operationRequestBodyContractProvider)
-	if !ok {
-		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read validation requires the operation method, body schema and static body contract"}
-	}
-	contract, err := provider.OperationRequestBodyContract(cmd.Operation)
-	if err != nil {
-		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct_read contract is unavailable: %v", err)}
-	}
-	operationMethod := strings.ToUpper(strings.TrimSpace(contract.Method))
-	surfaceMethod := strings.ToUpper(strings.TrimSpace(cmd.APISurface[0].Method))
-	if surfaceMethod != operationMethod {
-		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("api_surface method %s does not match operation method %s", surfaceMethod, operationMethod)}
-	}
-	if operationMethod != http.MethodPost {
-		if hasBodyMapping {
-			return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read body mappings require POST"}
-		}
-		return nil, nil
-	}
-	return &contract, nil
 }
 
 func validateDirectReadCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
@@ -465,70 +428,27 @@ func validateDirectReadCommand(connector connectors.Connector, cmd connectors.Co
 	return nil
 }
 
-func validateOperationDirectReadCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) (*engine.Schema, error) {
+func validateOperationDirectReadCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
 	if _, ok := connector.(connectors.OperationDirectReader); !ok {
-		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not support operation direct reads"}
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not support operation direct reads"}
 	}
 	if strings.TrimSpace(cmd.Operation) == "" {
-		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands require operation"}
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands require operation"}
 	}
 	if len(cmd.APISurface) != 1 {
-		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands require exactly one api_surface endpoint"}
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands require exactly one api_surface endpoint"}
 	}
 	method := strings.ToUpper(strings.TrimSpace(cmd.APISurface[0].Method))
 	if method != http.MethodGet && method != http.MethodPost {
-		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct_read commands require GET or POST api_surface endpoints, got %s", method)}
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct_read commands require GET or POST api_surface endpoints, got %s", method)}
 	}
 	if isAbsoluteHTTPURL(cmd.APISurface[0].Path) {
-		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands must not reference an absolute URL"}
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands must not reference an absolute URL"}
 	}
 	if !isSupportedDirectReadOutputPolicy(cmd.OutputPolicy) {
-		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands require an explicit supported output_policy"}
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands require an explicit supported output_policy"}
 	}
-	pointers := make([]string, 0, len(cmd.Flags))
-	for _, flag := range cmd.Flags {
-		pointers = append(pointers, flag.MapsTo)
-	}
-	if err := engine.ValidateRequestFieldPointerAssignments(pointers); err != nil {
-		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: err.Error()}
-	}
-	bodyContract, err := operationRequestBodyContract(connector, cmd)
-	if err != nil {
-		return nil, err
-	}
-	if bodyContract == nil {
-		return nil, nil
-	}
-	var required, optional []string
-	for _, flag := range cmd.Flags {
-		namespace, _, err := engine.ParseRequestFieldPointer(flag.MapsTo)
-		if err != nil || namespace != "body" {
-			continue
-		}
-		if bodyContract.Schema != nil {
-			input := engine.RequestBodyInput{
-				Type:       flag.Type,
-				Values:     flag.Values,
-				Format:     flag.Format,
-				AllowEmpty: flag.AllowEmpty,
-				Required:   flag.Required,
-				MinItems:   flag.MinItems,
-				MaxItems:   flag.MaxItems,
-			}
-			if err := bodyContract.Schema.ValidateRequestBodyInput(flag.MapsTo, input); err != nil {
-				return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s: %v", flag.Name, err)}
-			}
-		}
-		if flag.Required {
-			required = append(required, flag.MapsTo)
-		} else {
-			optional = append(optional, flag.MapsTo)
-		}
-	}
-	if err := bodyContract.ValidateEffective(required, optional); err != nil {
-		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: err.Error()}
-	}
-	return bodyContract.Schema, nil
+	return nil
 }
 
 func isSupportedDirectReadOutputPolicy(policy string) bool {
@@ -625,7 +545,7 @@ func streamOverrides(cmd connectors.CommandSurfaceCommand, cfg connectors.Runtim
 		switch {
 		case strings.HasPrefix(flag.MapsTo, "query."):
 			target := strings.TrimPrefix(flag.MapsTo, "query.")
-			if err := safety.ValidateQueryParameterName(target, "query parameter"); err != nil {
+			if err := safety.ValidateIdentifier(target, "query parameter"); err != nil {
 				return connectors.RuntimeConfig{}, nil, err
 			}
 			query[target] = value
@@ -730,21 +650,6 @@ func validationValueWithFallback(primary, fallback string, cfg connectors.Runtim
 
 func validationTargetValue(target string, cfg connectors.RuntimeConfig, inputs mappedCommandInputs) (string, bool, string, error) {
 	switch {
-	case strings.HasPrefix(target, "/"):
-		namespace, tokens, err := engine.ParseRequestFieldPointer(target)
-		if err != nil {
-			return "", false, target, &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("invalid command validation target %q: %v", target, err)}
-		}
-		switch namespace {
-		case "query":
-			value, present := inputs.Query[tokens[0]]
-			return strings.TrimSpace(value), present, target, nil
-		case "body":
-			value, present := nestedBodyPointerValue(inputs.Body, tokens)
-			return strings.TrimSpace(fmt.Sprint(value)), present, target, nil
-		default:
-			return "", false, target, &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("unsupported command validation target %q", target)}
-		}
 	case strings.HasPrefix(target, "query."):
 		key := strings.TrimPrefix(target, "query.")
 		value, present := inputs.Query[key]
@@ -780,32 +685,6 @@ func nestedBodyValue(body map[string]any, path string) (any, bool) {
 	return cur, true
 }
 
-func nestedBodyPointerValue(body map[string]any, tokens []string) (any, bool) {
-	if body == nil || len(tokens) == 0 {
-		return nil, false
-	}
-	var current any = body
-	for _, token := range tokens {
-		switch value := current.(type) {
-		case map[string]any:
-			var ok bool
-			current, ok = value[token]
-			if !ok || current == nil {
-				return nil, false
-			}
-		case []any:
-			index, ok, err := pathArrayIndex(token)
-			if err != nil || !ok || index >= len(value) {
-				return nil, false
-			}
-			current = value[index]
-		default:
-			return nil, false
-		}
-	}
-	return current, true
-}
-
 func parseDateTimeValue(value, label string) (time.Time, error) {
 	parsed, err := time.Parse(time.RFC3339, strings.TrimSpace(value))
 	if err != nil {
@@ -830,11 +709,24 @@ func validateRequiredCommandFlags(cmd connectors.CommandSurfaceCommand, flags ma
 		if err != nil {
 			return err
 		}
-		if engine.CommandInputValueEmpty(value) {
+		if commandValueEmpty(value) {
 			return missingRequiredFlagError(cmd, flag.Name)
 		}
 	}
 	return nil
+}
+
+func commandValueEmpty(value any) bool {
+	switch typed := value.(type) {
+	case nil:
+		return true
+	case string:
+		return strings.TrimSpace(typed) == ""
+	case []string:
+		return len(typed) == 0
+	default:
+		return false
+	}
 }
 
 func missingRequiredFlagError(cmd connectors.CommandSurfaceCommand, name string) error {
@@ -875,16 +767,20 @@ func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
 }
 
 func validateFlagFormat(flag connectors.CommandSurfaceFlag, value string) error {
-	if !engine.CommandInputFormatSupported(flag.Format) {
+	switch flag.Format {
+	case "":
+		return nil
+	case "date-time":
+		if _, err := time.Parse(time.RFC3339, value); err != nil {
+			return fmt.Errorf("invalid --%s %q, want ISO-8601/RFC3339 timestamp", flag.Name, value)
+		}
+		return nil
+	default:
 		return &BlockedCommandError{
 			Command: "unknown",
 			Reason:  fmt.Sprintf("flag --%s has unsupported format %q", flag.Name, flag.Format),
 		}
 	}
-	if engine.CommandInputFormatAccepts(flag.Format, value) {
-		return nil
-	}
-	return fmt.Errorf("invalid --%s %q, want ISO-8601/RFC3339 timestamp", flag.Name, value)
 }
 
 func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, map[string]string, error) {
@@ -928,7 +824,7 @@ func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string]
 			pathParams[target] = value
 		case strings.HasPrefix(flag.MapsTo, "query."):
 			target := strings.TrimPrefix(flag.MapsTo, "query.")
-			if err := safety.ValidateQueryParameterName(target, "query parameter"); err != nil {
+			if err := safety.ValidateIdentifier(target, "query parameter"); err != nil {
 				return nil, nil, err
 			}
 			query[target] = value
@@ -944,7 +840,7 @@ func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string]
 	return pathParams, query, nil
 }
 
-func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string, bodySchema *engine.Schema) (map[string]string, map[string]string, map[string]any, error) {
+func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, map[string]string, map[string]any, error) {
 	allowed := map[string]connectors.CommandSurfaceFlag{}
 	for _, flag := range cmd.Flags {
 		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
@@ -959,20 +855,7 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 	pathParams := map[string]string{}
 	query := map[string]string{}
 	body := map[string]any{}
-	names := make([]string, 0, len(flags))
-	for name := range flags {
-		names = append(names, name)
-	}
-	sort.Slice(names, func(i, j int) bool {
-		left := allowed[names[i]].MapsTo
-		right := allowed[names[j]].MapsTo
-		if left == right {
-			return names[i] < names[j]
-		}
-		return requestPointerLess(left, right)
-	})
-	for _, name := range names {
-		values := flags[name]
+	for name, values := range flags {
 		if len(values) == 0 {
 			continue
 		}
@@ -987,55 +870,29 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 		if err != nil {
 			return nil, nil, nil, err
 		}
-		namespace, tokens, err := engine.ParseRequestFieldPointer(flag.MapsTo)
-		if err != nil {
-			return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo)}
-		}
-		switch namespace {
-		case "path":
-			pathParams[tokens[0]] = stringifyCommandValue(value)
-		case "query":
-			query[tokens[0]] = stringifyCommandValue(value)
-		case "body":
-			if err := setRequestBodyValue(bodySchema, body, flag.MapsTo, value); err != nil {
+		switch {
+		case strings.HasPrefix(flag.MapsTo, "path."):
+			target := strings.TrimPrefix(flag.MapsTo, "path.")
+			if err := safety.ValidateIdentifier(target, "path parameter"); err != nil {
 				return nil, nil, nil, err
 			}
+			pathParams[target] = stringifyCommandValue(value)
+		case strings.HasPrefix(flag.MapsTo, "query."):
+			target := strings.TrimPrefix(flag.MapsTo, "query.")
+			if err := safety.ValidateIdentifier(target, "query parameter"); err != nil {
+				return nil, nil, nil, err
+			}
+			query[target] = stringifyCommandValue(value)
+		case strings.HasPrefix(flag.MapsTo, "body."):
+			target := strings.TrimPrefix(flag.MapsTo, "body.")
+			if err := setBodyValue(body, target, value); err != nil {
+				return nil, nil, nil, err
+			}
+		default:
+			return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo)}
 		}
 	}
 	return pathParams, query, body, nil
-}
-
-func requestPointerLess(left, right string) bool {
-	leftNamespace, leftTokens, leftErr := engine.ParseRequestFieldPointer(left)
-	rightNamespace, rightTokens, rightErr := engine.ParseRequestFieldPointer(right)
-	if leftErr != nil || rightErr != nil {
-		return left < right
-	}
-	if leftNamespace != rightNamespace {
-		return leftNamespace < rightNamespace
-	}
-	limit := len(leftTokens)
-	if len(rightTokens) < limit {
-		limit = len(rightTokens)
-	}
-	for i := 0; i < limit; i++ {
-		leftIndex, leftNumeric, leftIndexErr := pathArrayIndex(leftTokens[i])
-		rightIndex, rightNumeric, rightIndexErr := pathArrayIndex(rightTokens[i])
-		if leftIndexErr == nil && rightIndexErr == nil && leftNumeric && rightNumeric && leftIndex != rightIndex {
-			return leftIndex < rightIndex
-		}
-		if leftTokens[i] != rightTokens[i] {
-			return leftTokens[i] < rightTokens[i]
-		}
-	}
-	return len(leftTokens) < len(rightTokens)
-}
-
-func setRequestBodyValue(schema *engine.Schema, body map[string]any, pointer string, value any) error {
-	if schema == nil {
-		return fmt.Errorf("body field %q requires body_schema", pointer)
-	}
-	return schema.SetRequestBodyPointer(body, pointer, value)
 }
 
 func setBodyValue(body map[string]any, path string, value any) error {
@@ -1267,7 +1124,15 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 		}
 		return parsed, nil
 	case "string_array":
-		out := engine.ParseStringArrayInput(clean)
+		var out []string
+		for _, raw := range clean {
+			for _, item := range strings.Split(raw, ",") {
+				item = strings.TrimSpace(item)
+				if item != "" {
+					out = append(out, item)
+				}
+			}
+		}
 		// Bounded here as well as in the body schema: the schema fires on the
 		// assembled body, this fires on the flag the user typed, so the error can
 		// name it.

@@ -17,10 +17,6 @@ var (
 	ashbyBundleErr   error
 )
 
-func init() {
-	engine.RegisterWriteDispatchOwner("ashby", func() engine.WriteDispatchOwner { return ashbyEngineHooks{} })
-}
-
 func ashbyBundle() engine.Bundle {
 	ashbyBundleOnce.Do(func() {
 		ashbyBundleValue, ashbyBundleErr = engine.Load(defs.FS, "ashby")
@@ -61,8 +57,6 @@ func (c Connector) ValidateWrite(ctx context.Context, req connectors.WriteReques
 type ashbyEngineHooks struct{}
 
 func (ashbyEngineHooks) ConnectorName() string { return "ashby" }
-
-func (ashbyEngineHooks) OwnsWriteAction(string) bool { return true }
 
 func (ashbyEngineHooks) ExecuteWrite(ctx context.Context, action engine.WriteAction, rec connectors.Record, rt *engine.Runtime) (bool, error) {
 	if rt == nil || rt.Requester == nil {
@@ -109,12 +103,4 @@ func (c Connector) OperationDirectRead(ctx context.Context, req connectors.Opera
 		return connectors.DirectReadResult{}, fmt.Errorf("ashby direct read: %w", err)
 	}
 	return result, nil
-}
-
-func (c Connector) OperationRequestBodySchema(operation string) (*engine.Schema, error) {
-	return ashbyEngineConnector().OperationRequestBodySchema(operation)
-}
-
-func (c Connector) OperationRequestBodyContract(operation string) (engine.OperationRequestBodyContract, error) {
-	return ashbyEngineConnector().OperationRequestBodyContract(operation)
 }

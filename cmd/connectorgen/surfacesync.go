@@ -35,9 +35,8 @@ import (
 //     binary_download). The endpoint is already tracked in api_surface.json,
 //     whose covered_by names this exact command, so this is a join across three
 //     consistent files, never an invented endpoint.
-//   - flags[].maps_to <- "/path/<var>" for operation-backed direct reads, or
-//     "path.<var>" for binary downloads, when the flag's name matches a {var}
-//     in that endpoint's path.
+//   - flags[].maps_to <- "path.<var>" when the flag's name matches a {var} in
+//     that endpoint's path.
 //
 // DEFAULTED — the bundle author's value wins; only an absent or unusable one is
 // replaced:
@@ -305,9 +304,6 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			// DERIVED: a flag named after a path variable resolves that
 			// variable. Any other target leaves the path unresolvable.
 			want := "path." + name
-			if intent == "direct_read" {
-				want = "/path/" + name
-			}
 			switch got := strings.TrimSpace(stringField(flag, "maps_to")); {
 			case got == "":
 				flag.set("maps_to", want)

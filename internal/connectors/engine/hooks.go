@@ -58,10 +58,6 @@ type WriteHook interface {
 	ExecuteWrite(ctx context.Context, action WriteAction, rec connectors.Record, rt *Runtime) (handled bool, err error)
 }
 
-type WriteDispatchOwner interface {
-	OwnsWriteAction(action string) bool
-}
-
 // CheckHook overrides the connector's Check(). handled=false tells the
 // engine to fall back to the declarative check request.
 type CheckHook interface {
@@ -76,11 +72,6 @@ var hookRegistry = struct {
 	mu        sync.RWMutex
 	factories map[string]func() Hooks
 }{factories: make(map[string]func() Hooks)}
-
-var writeDispatchOwnerRegistry = struct {
-	mu        sync.RWMutex
-	factories map[string]func() WriteDispatchOwner
-}{factories: make(map[string]func() WriteDispatchOwner)}
 
 // RegisterHooks registers a hook-set factory under name. It is intended to
 // be called from a hooks/<name> package's init(); the generated
@@ -108,24 +99,6 @@ func HooksFor(name string) Hooks {
 	return factory()
 }
 
-func RegisterWriteDispatchOwner(name string, factory func() WriteDispatchOwner) {
-	writeDispatchOwnerRegistry.mu.Lock()
-	defer writeDispatchOwnerRegistry.mu.Unlock()
-	writeDispatchOwnerRegistry.factories[name] = factory
-}
-
-func writeDispatchOwnerFor(name string) WriteDispatchOwner {
-	writeDispatchOwnerRegistry.mu.RLock()
-	factory, ok := writeDispatchOwnerRegistry.factories[name]
-	writeDispatchOwnerRegistry.mu.RUnlock()
-	if ok {
-		return factory()
-	}
-	hooks := HooksFor(name)
-	owner, _ := hooks.(WriteDispatchOwner)
-	return owner
-}
-
 // unregisterHooks removes a previously registered hook factory. It exists
 // for test cleanup so process-global registration does not leak between
 // tests.
@@ -133,10 +106,4 @@ func unregisterHooks(name string) {
 	hookRegistry.mu.Lock()
 	defer hookRegistry.mu.Unlock()
 	delete(hookRegistry.factories, name)
-}
-
-func unregisterWriteDispatchOwner(name string) {
-	writeDispatchOwnerRegistry.mu.Lock()
-	defer writeDispatchOwnerRegistry.mu.Unlock()
-	delete(writeDispatchOwnerRegistry.factories, name)
 }

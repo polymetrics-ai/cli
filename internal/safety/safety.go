@@ -108,33 +108,6 @@ func ValidateIdentifier(value, field string) error {
 	return nil
 }
 
-func ValidateQueryParameterName(value, field string) error {
-	if err := RejectDangerousChars(value, field); err != nil {
-		return err
-	}
-	open := strings.IndexByte(value, '[')
-	if open < 0 {
-		return ValidateIdentifier(value, field)
-	}
-	if err := ValidateIdentifier(value[:open], field); err != nil {
-		return err
-	}
-	for rest := value[open:]; rest != ""; {
-		if rest[0] != '[' {
-			return fmt.Errorf("%s has malformed bracket segment", field)
-		}
-		close := strings.IndexByte(rest, ']')
-		if close < 0 {
-			return fmt.Errorf("%s has an unclosed bracket segment", field)
-		}
-		if err := ValidateIdentifier(rest[1:close], field+" bracket"); err != nil {
-			return err
-		}
-		rest = rest[close+1:]
-	}
-	return nil
-}
-
 func ValidateRelativePath(value, field string) error {
 	if strings.TrimSpace(value) == "" {
 		return fmt.Errorf("%s is required", field)

@@ -74,7 +74,7 @@ func directReadBundle(apiSurface []any, outputPolicy string, mapsTo string) (any
 // one endpoint while the command called another.
 func TestSyncBundleReportsDivergentAPISurface(t *testing.T) {
 	stale := []any{map[string]any{"method": "GET", "path": "/issues/{issue_id}/stale"}}
-	cli, ops := directReadBundle(stale, "json_redacted", "/path/issue_id")
+	cli, ops := directReadBundle(stale, "json_redacted", "path.issue_id")
 	dir := writeSyncBundle(t, cli, ops)
 
 	stats, err := syncBundle(dir, true)
@@ -102,7 +102,7 @@ func TestSyncBundleReportsDivergentAPISurface(t *testing.T) {
 
 func TestSyncBundleReportsDivergentFlagMapsTo(t *testing.T) {
 	surface := []any{map[string]any{"method": "GET", "path": "/issues/{issue_id}"}}
-	cli, ops := directReadBundle(surface, "json_redacted", "/query/issue_id")
+	cli, ops := directReadBundle(surface, "json_redacted", "query.issue_id")
 	dir := writeSyncBundle(t, cli, ops)
 
 	stats, err := syncBundle(dir, true)
@@ -121,8 +121,8 @@ func TestSyncBundleReportsDivergentFlagMapsTo(t *testing.T) {
 		t.Fatalf("flags = %v, want one", flags)
 	}
 	flag, _ := flags[0].(map[string]any)
-	if flag["maps_to"] != "/path/issue_id" {
-		t.Fatalf("maps_to = %v, want /path/issue_id", flag["maps_to"])
+	if flag["maps_to"] != "path.issue_id" {
+		t.Fatalf("maps_to = %v, want path.issue_id", flag["maps_to"])
 	}
 }
 
@@ -132,7 +132,7 @@ func TestSyncBundleOutputPolicyCorrectsOnlyUnsupportedValues(t *testing.T) {
 	surface := []any{map[string]any{"method": "GET", "path": "/issues/{issue_id}"}}
 
 	t.Run("unsupported is corrected", func(t *testing.T) {
-		cli, ops := directReadBundle(surface, "json", "/path/issue_id")
+		cli, ops := directReadBundle(surface, "json", "path.issue_id")
 		dir := writeSyncBundle(t, cli, ops)
 		stats, err := syncBundle(dir, false)
 		if err != nil {
@@ -147,7 +147,7 @@ func TestSyncBundleOutputPolicyCorrectsOnlyUnsupportedValues(t *testing.T) {
 	})
 
 	t.Run("supported is untouched", func(t *testing.T) {
-		cli, ops := directReadBundle(surface, "clinical_json_redacted", "/path/issue_id")
+		cli, ops := directReadBundle(surface, "clinical_json_redacted", "path.issue_id")
 		dir := writeSyncBundle(t, cli, ops)
 		stats, err := syncBundle(dir, true)
 		if err != nil {
@@ -205,7 +205,7 @@ func TestSyncBundleMaxBytesFillsAndCorrects(t *testing.T) {
 	surface := []any{map[string]any{"method": "GET", "path": "/issues/{issue_id}"}}
 
 	t.Run("absent is filled", func(t *testing.T) {
-		cli, ops := directReadBundle(surface, "json_redacted", "/path/issue_id")
+		cli, ops := directReadBundle(surface, "json_redacted", "path.issue_id")
 		rest := ops.(map[string]any)["operations"].([]any)[0].(map[string]any)["rest"].(map[string]any)
 		delete(rest, "max_bytes")
 		dir := writeSyncBundle(t, cli, ops)
@@ -219,7 +219,7 @@ func TestSyncBundleMaxBytesFillsAndCorrects(t *testing.T) {
 	})
 
 	t.Run("non-positive is corrected", func(t *testing.T) {
-		cli, ops := directReadBundle(surface, "json_redacted", "/path/issue_id")
+		cli, ops := directReadBundle(surface, "json_redacted", "path.issue_id")
 		ops.(map[string]any)["operations"].([]any)[0].(map[string]any)["rest"].(map[string]any)["max_bytes"] = 0
 		dir := writeSyncBundle(t, cli, ops)
 		stats, err := syncBundle(dir, true)
@@ -232,7 +232,7 @@ func TestSyncBundleMaxBytesFillsAndCorrects(t *testing.T) {
 	})
 
 	t.Run("positive is a deliberate declaration", func(t *testing.T) {
-		cli, ops := directReadBundle(surface, "json_redacted", "/path/issue_id")
+		cli, ops := directReadBundle(surface, "json_redacted", "path.issue_id")
 		ops.(map[string]any)["operations"].([]any)[0].(map[string]any)["rest"].(map[string]any)["max_bytes"] = 4194304
 		dir := writeSyncBundle(t, cli, ops)
 		stats, err := syncBundle(dir, true)
@@ -249,7 +249,7 @@ func TestSyncBundleMaxBytesFillsAndCorrects(t *testing.T) {
 // --check would fail on every repository it is meant to protect.
 func TestSyncBundleConsistentBundleIsClean(t *testing.T) {
 	surface := []any{map[string]any{"method": "GET", "path": "/issues/{issue_id}"}}
-	cli, ops := directReadBundle(surface, "json_redacted", "/path/issue_id")
+	cli, ops := directReadBundle(surface, "json_redacted", "path.issue_id")
 	dir := writeSyncBundle(t, cli, ops)
 
 	stats, err := syncBundle(dir, true)

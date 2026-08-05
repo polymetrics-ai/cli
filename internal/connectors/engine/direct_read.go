@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	stdpath "path"
+	"regexp"
 	"strings"
 	"time"
 
@@ -26,16 +27,43 @@ const (
 	directReadPolicyClinicalJSONRedacted           = "clinical_json_redacted"
 )
 
+var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
+
 func OperationDirectRead(ctx context.Context, b Bundle, req connectors.OperationDirectReadRequest, h Hooks) (connectors.DirectReadResult, error) {
 	if err := ctx.Err(); err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	op, err := findOperation(b, req.Operation)
+	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
 	// provider_search shares this executor deliberately: its response bounding,
 	// clamping, redaction and output-policy handling are the same as any other
 	// bounded read. What differs is the stricter front half, which is enforced at
 	// bundle load (validateProviderSearchSemantics), not here.
-	op, method, _, err := operationDirectReadSpec(b, req.Operation)
-	if err != nil {
+	if (op.Kind != "rest_read" && op.Kind != "provider_search") || op.REST == nil {
+		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read requires rest_read or provider_search operation, got %q", op.Kind)
+	}
+	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
+	if method != http.MethodGet && method != http.MethodPost {
+		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read requires GET or POST, got %s", method)
+	}
+	if op.Kind == "provider_search" && method != http.MethodPost {
+		return connectors.DirectReadResult{}, fmt.Errorf("provider search requires POST, got %s", method)
+	}
+	if isAbsoluteHTTPURL(op.REST.Path) {
+		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read endpoint must be connector-relative, got absolute URL")
+	}
+	if method == http.MethodPost && !strings.EqualFold(strings.TrimSpace(op.REST.ContentType), "application/json") {
+		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read POST requires application/json content_type")
+	}
+	if method == http.MethodPost && len(op.REST.BodySchema) == 0 {
+		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read POST requires body_schema")
+	}
+	if op.REST.MaxBytes <= 0 {
+		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read requires positive max_bytes")
+	}
+	if err := requireOperationDirectReadEndpoint(b, method, op.REST.Path); err != nil {
 		return connectors.DirectReadResult{}, err
 	}
 	cfg := materializeConfigDefaults(b, req.Config)
@@ -193,40 +221,6 @@ func findOperation(b Bundle, id string) (OperationSpec, error) {
 	return OperationSpec{}, fmt.Errorf("operation %q not found in bundle %q", id, b.Name)
 }
 
-func operationDirectReadSpec(b Bundle, operation string) (OperationSpec, string, bool, error) {
-	op, err := findOperation(b, operation)
-	if err != nil {
-		return OperationSpec{}, "", false, err
-	}
-	if (op.Kind != "rest_read" && op.Kind != "provider_search") || op.REST == nil {
-		return OperationSpec{}, "", false, fmt.Errorf("operation direct read requires rest_read or provider_search operation, got %q", op.Kind)
-	}
-	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
-	if method != http.MethodGet && method != http.MethodPost {
-		return OperationSpec{}, "", false, fmt.Errorf("operation direct read requires GET or POST, got %s", method)
-	}
-	if op.Kind == "provider_search" && method != http.MethodPost {
-		return OperationSpec{}, "", false, fmt.Errorf("provider search requires POST, got %s", method)
-	}
-	if isAbsoluteHTTPURL(op.REST.Path) {
-		return OperationSpec{}, "", false, fmt.Errorf("operation direct read endpoint must be connector-relative, got absolute URL")
-	}
-	noBody := op.REST.Body != nil && op.REST.Body.None
-	if method == http.MethodPost && !noBody && !strings.EqualFold(strings.TrimSpace(op.REST.ContentType), "application/json") {
-		return OperationSpec{}, "", false, fmt.Errorf("operation direct read POST requires application/json content_type")
-	}
-	if method == http.MethodPost && !noBody && len(op.REST.BodySchema) == 0 {
-		return OperationSpec{}, "", false, fmt.Errorf("operation direct read POST requires body_schema")
-	}
-	if op.REST.MaxBytes <= 0 {
-		return OperationSpec{}, "", false, fmt.Errorf("operation direct read requires positive max_bytes")
-	}
-	if err := requireOperationDirectReadEndpoint(b, method, op.REST.Path); err != nil {
-		return OperationSpec{}, "", false, err
-	}
-	return op, method, noBody, nil
-}
-
 func requireOperationDirectReadEndpoint(b Bundle, method, endpointPath string) error {
 	if b.Surface == nil {
 		return nil
@@ -277,17 +271,10 @@ func operationReadBody(op OperationSpec, overrides map[string]any) (any, error) 
 	if op.REST == nil || strings.ToUpper(strings.TrimSpace(op.REST.Method)) != http.MethodPost {
 		return nil, nil
 	}
-	if op.REST.Body != nil && op.REST.Body.None {
-		if len(overrides) != 0 {
-			return nil, fmt.Errorf("operation %q declares body none and cannot accept body fields", op.ID)
-		}
-		return nil, nil
+	body := cloneAnyMap(op.REST.Body)
+	for key, value := range overrides {
+		body[key] = value
 	}
-	var staticBody map[string]any
-	if op.REST.Body != nil {
-		staticBody = op.REST.Body.Fields
-	}
-	body := MergeRequestBody(staticBody, overrides)
 	if len(op.REST.BodySchema) > 0 {
 		sch, err := CompileSchema(op.REST.BodySchema)
 		if err != nil {
@@ -303,42 +290,9 @@ func operationReadBody(op OperationSpec, overrides map[string]any) (any, error) 
 func cloneAnyMap(in map[string]any) map[string]any {
 	out := make(map[string]any, len(in))
 	for key, value := range in {
-		out[key] = cloneAnyValue(value)
+		out[key] = value
 	}
 	return out
-}
-
-func MergeRequestBody(static, overrides map[string]any) map[string]any {
-	return mergeAnyMap(static, overrides)
-}
-
-func mergeAnyMap(base, overrides map[string]any) map[string]any {
-	out := cloneAnyMap(base)
-	for key, value := range overrides {
-		if current, ok := out[key].(map[string]any); ok {
-			if override, ok := value.(map[string]any); ok {
-				out[key] = mergeAnyMap(current, override)
-				continue
-			}
-		}
-		out[key] = cloneAnyValue(value)
-	}
-	return out
-}
-
-func cloneAnyValue(value any) any {
-	switch typed := value.(type) {
-	case map[string]any:
-		return cloneAnyMap(typed)
-	case []any:
-		out := make([]any, len(typed))
-		for i, item := range typed {
-			out[i] = cloneAnyValue(item)
-		}
-		return out
-	default:
-		return value
-	}
 }
 
 func clampOperationDirectReadMaxBytes(requested, operationMax int) int {
@@ -391,11 +345,7 @@ func validateDirectReadOutputPolicy(policy, endpointPath string, pathParams map[
 }
 
 func repositoryDirectReadPathValue(policy, endpointPath string, pathParams map[string]string, cfg connectors.RuntimeConfig) (string, error) {
-	hasPath, err := surfacePathHasVariable(endpointPath, "path")
-	if err != nil {
-		return "", err
-	}
-	if !hasPath {
+	if !surfacePathHasVariable(endpointPath, "path") {
 		return "", fmt.Errorf("direct read output policy %q requires endpoint path variable {path}", policy)
 	}
 	if pathParams != nil && pathParams["path"] != "" {
@@ -407,17 +357,13 @@ func repositoryDirectReadPathValue(policy, endpointPath string, pathParams map[s
 	return "", nil
 }
 
-func surfacePathHasVariable(template, name string) (bool, error) {
-	variables, err := parsePathTemplate(template)
-	if err != nil {
-		return false, fmt.Errorf("invalid direct read path template %q: %w", template, err)
-	}
-	for _, variable := range variables {
-		if variable.Name == name {
-			return true, nil
+func surfacePathHasVariable(template, name string) bool {
+	for _, match := range surfacePathVarPattern.FindAllStringSubmatch(template, -1) {
+		if len(match) == 2 && match[1] == name {
+			return true
 		}
 	}
-	return false, nil
+	return false
 }
 
 func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
@@ -654,32 +600,34 @@ func resolveSurfaceEndpointPath(template string, cfg connectors.RuntimeConfig, p
 	if isAbsoluteHTTPURL(template) {
 		return "", fmt.Errorf("direct read endpoint must be connector-relative, got absolute URL")
 	}
-	variables, err := parsePathTemplate(template)
-	if err != nil {
-		return "", fmt.Errorf("invalid direct read path template %q: %w", template, err)
-	}
-	var resolved strings.Builder
-	resolved.Grow(len(template))
-	last := 0
-	for _, variable := range variables {
-		resolved.WriteString(template[last:variable.Start])
-		name := variable.Name
+	var firstErr error
+	resolved := surfacePathVarPattern.ReplaceAllStringFunc(template, func(match string) string {
+		if firstErr != nil {
+			return ""
+		}
+		name := strings.Trim(match, "{}")
 		value, ok := pathParams[name]
 		if !ok || value == "" {
 			value, ok = cfg.Config[name]
 		}
 		if !ok || value == "" {
-			return "", fmt.Errorf("missing path variable %q", name)
+			firstErr = fmt.Errorf("missing path variable %q", name)
+			return ""
 		}
 		encoded, err := encodeSurfacePathValue(name, value)
 		if err != nil {
-			return "", err
+			firstErr = err
+			return ""
 		}
-		resolved.WriteString(encoded)
-		last = variable.End
+		return encoded
+	})
+	if firstErr != nil {
+		return "", firstErr
 	}
-	resolved.WriteString(template[last:])
-	return resolved.String(), nil
+	if strings.Contains(resolved, "{") || strings.Contains(resolved, "}") {
+		return "", fmt.Errorf("unresolved path template %q", template)
+	}
+	return resolved, nil
 }
 
 func encodeSurfacePathValue(name, value string) (string, error) {
@@ -709,7 +657,7 @@ func encodeSurfacePathValue(name, value string) (string, error) {
 func directReadQuery(query map[string]string) (url.Values, error) {
 	values := url.Values{}
 	for name, value := range query {
-		if err := safety.ValidateQueryParameterName(name, "query parameter"); err != nil {
+		if err := safety.ValidateIdentifier(name, "query parameter"); err != nil {
 			return nil, err
 		}
 		if err := safety.RejectDangerousChars(value, "query parameter "+name); err != nil {
