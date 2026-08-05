@@ -157,6 +157,10 @@ drifted and let 174 commands validate clean while blocking on every invocation.
   `maps_to`, `output_policy`, and `rest.max_bytes` from the bundle's own
   `operations.json`; `--check` fails when a bundle has drifted, and `make verify`
   runs it as the `connectorgen-surface-sync` gate.
+- A declarative reverse-ETL `record_schema` rooted at `oneOf` or `anyOf` is
+  not one executable command contract. Runtime preflight expands its arms and
+  rejects promotion; model each reachable arm as a separate named action, or
+  leave it non-implemented until the required runtime capability exists.
 
 Never invent an `api_surface` endpoint to make a command look implemented. If
 the endpoint is not in the connector's own `api_surface.json` and

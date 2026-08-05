@@ -1,0 +1,24 @@
+{
+  "record": {
+    "users": [
+      {
+        "name": "Fixture user",
+        "email": "fixture-user@example.invalid",
+        "tags": ["fixture"]
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/users/create_many",
+    "body": {
+      "users": [
+        {
+          "name": "Fixture user",
+          "email": "fixture-user@example.invalid",
+          "tags": ["fixture"]
+        }
+      ]
+    }
+  }
+}

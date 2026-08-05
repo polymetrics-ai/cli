@@ -41,6 +41,15 @@ type fakeConnector struct {
 	writeResult            connectors.WriteResult
 }
 
+type preflightFakeConnector struct {
+	*fakeConnector
+	preflightErr error
+}
+
+func (f *preflightFakeConnector) PreflightWriteAction(string) error {
+	return f.preflightErr
+}
+
 func (f *fakeConnector) Name() string { return "github" }
 func (f *fakeConnector) Metadata() connectors.Metadata {
 	return connectors.Metadata{Name: "github", DisplayName: "GitHub"}
@@ -706,6 +715,72 @@ func TestRunBlocksNonStreamCommands(t *testing.T) {
 			}
 			if !strings.Contains(err.Error(), tt.want) {
 				t.Fatalf("Run error = %q, want to contain %q", err.Error(), tt.want)
+			}
+		})
+	}
+}
+
+func TestPreflightRejectsEngineReportedUnpromotableWrite(t *testing.T) {
+	connector := &preflightFakeConnector{
+		fakeConnector: reverseETLFakeConnector(),
+		preflightErr:  errors.New("record_schema admits only an empty object ({})"),
+	}
+
+	err := Preflight(connector, []string{"issue", "create"})
+	if err == nil {
+		t.Fatal("Preflight error = nil, want unpromotable write rejection")
+	}
+	var blocked *BlockedCommandError
+	if !errors.As(err, &blocked) {
+		t.Fatalf("Preflight error type = %T, want BlockedCommandError", err)
+	}
+	if !strings.Contains(blocked.Reason, "not promotable") || !strings.Contains(blocked.Reason, "empty object") {
+		t.Fatalf("Preflight reason = %q, want hollow record-schema detail", blocked.Reason)
+	}
+}
+
+// Regression for the 2026-08-04 hollow-command incident. This drives the real
+// declarative connector through the same commandrunner preflight that the CLI
+// calls, rather than duplicating the engine's promotion rule in a validator.
+func TestPreflightRejectsHollowDeclarativeRecordSchemas(t *testing.T) {
+	tests := []struct {
+		name   string
+		schema string
+		want   string
+	}{
+		{
+			name: "union root with substantive arms",
+			schema: `{"oneOf":[
+				{"type":"object","required":["ticket"],"properties":{"ticket":{"type":"object","properties":{"subject":{"type":"string"}}}}},
+				{"type":"object","required":["tickets"],"properties":{"tickets":{"type":"array","maxItems":100,"items":{"type":"object","properties":{"id":{"type":"integer"}}}}}}
+			]}`,
+			want: "separate named write action",
+		},
+		{
+			name:   "collapsed empty record",
+			schema: `{"type":"object","properties":{},"additionalProperties":false}`,
+			want:   "only an empty object",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			connector := engine.New(engine.Bundle{
+				Name: "widgets",
+				Writes: []engine.WriteAction{{
+					Name:         "update_widgets",
+					Kind:         "update",
+					Method:       "PUT",
+					Path:         "/widgets/update_many",
+					RecordSchema: json.RawMessage(tt.schema),
+				}},
+				CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+					Path: "widgets update-many", Intent: "reverse_etl", Availability: "implemented", Write: "update_widgets",
+				}}},
+			}, nil)
+
+			err := Preflight(connector, []string{"widgets", "update-many"})
+			if err == nil || !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("Preflight error = %v, want %q", err, tt.want)
 			}
 		})
 	}

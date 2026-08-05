@@ -1,0 +1,22 @@
+{
+  "record": {
+    "users": [
+      {
+        "external_id": "fixture-user",
+        "name": "Fixture user"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/users/create_or_update_many",
+    "body": {
+      "users": [
+        {
+          "external_id": "fixture-user",
+          "name": "Fixture user"
+        }
+      ]
+    }
+  }
+}

@@ -168,6 +168,18 @@ func (c *Connector) ValidateWrite(ctx context.Context, req connectors.WriteReque
 	return ValidateWrite(ctx, c.bundle, req, records)
 }
 
+// PreflightWriteAction exposes the declarative write promotion guard to the
+// command runner. Keeping the inspection beside the raw bundle schema makes
+// promotion enforcement part of the declarative runtime rather than a copied
+// static-validator rule.
+func (c *Connector) PreflightWriteAction(name string) error {
+	action, err := findWriteAction(c.bundle, name)
+	if err != nil {
+		return err
+	}
+	return ValidatePromotableRecordSchema(action.RecordSchema)
+}
+
 // DryRunWrite satisfies connectors.DryRunWriter.
 func (c *Connector) DryRunWrite(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WritePreview, error) {
 	if len(c.bundle.Writes) == 0 {

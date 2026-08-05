@@ -253339,6 +253339,31 @@
         "name": "reorder_workspaces",
         "method": "PUT",
         "kind": "update"
+      },
+      {
+        "name": "update_permission_policy",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "bulk_set_agent_attribute_values_job",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "create_many_users",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "create_or_update_many_users",
+        "method": "POST",
+        "kind": "upsert"
+      },
+      {
+        "name": "request_user_create",
+        "method": "POST",
+        "kind": "create"
       }
     ],
     "cli_surface": {
@@ -256613,18 +256638,92 @@
           "path": "operations update_permission_policy",
           "summary": "Update Permission Policy",
           "intent": "reverse_etl",
-          "availability": "planned",
+          "availability": "implemented",
           "stream": "",
-          "write": "",
-          "operation": "zendesk-support.update_permission_policy",
+          "write": "update_permission_policy",
           "source_cli_path": "",
           "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-          "flags": [],
+          "flags": [
+            {
+              "name": "custom-object-key",
+              "type": "string",
+              "summary": "Required custom_object_key path parameter.",
+              "values": [],
+              "maps_to": "record.custom_object_key",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "policy-id",
+              "type": "string",
+              "summary": "Required permission-policy id path parameter.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "create-allowed",
+              "type": "boolean",
+              "summary": "Optional policy.records.create.allowed request field.",
+              "values": [],
+              "maps_to": "record.policy.records.create.allowed"
+            },
+            {
+              "name": "create-rule-id",
+              "type": "integer",
+              "summary": "Optional policy.records.create.rule_id request field.",
+              "values": [],
+              "maps_to": "record.policy.records.create.rule_id"
+            },
+            {
+              "name": "read-allowed",
+              "type": "boolean",
+              "summary": "Optional policy.records.read.allowed request field.",
+              "values": [],
+              "maps_to": "record.policy.records.read.allowed"
+            },
+            {
+              "name": "read-rule-id",
+              "type": "integer",
+              "summary": "Optional policy.records.read.rule_id request field.",
+              "values": [],
+              "maps_to": "record.policy.records.read.rule_id"
+            },
+            {
+              "name": "update-allowed",
+              "type": "boolean",
+              "summary": "Optional policy.records.update.allowed request field.",
+              "values": [],
+              "maps_to": "record.policy.records.update.allowed"
+            },
+            {
+              "name": "update-rule-id",
+              "type": "integer",
+              "summary": "Optional policy.records.update.rule_id request field.",
+              "values": [],
+              "maps_to": "record.policy.records.update.rule_id"
+            },
+            {
+              "name": "delete-allowed",
+              "type": "boolean",
+              "summary": "Optional policy.records.delete.allowed request field.",
+              "values": [],
+              "maps_to": "record.policy.records.delete.allowed"
+            },
+            {
+              "name": "delete-rule-id",
+              "type": "integer",
+              "summary": "Optional policy.records.delete.rule_id request field.",
+              "values": [],
+              "maps_to": "record.policy.records.delete.rule_id"
+            }
+          ],
           "examples": [],
           "output_policy": "",
           "risk": "high",
           "approval": "reverse ETL plan, preview, explicit approval, execute",
-          "notes": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface."
+          "notes": "Typed PermissionPolicyUpdateRequest from the pinned OAS; execution remains approval-gated."
         },
         {
           "path": "operations list_custom_object_records",
@@ -262167,18 +262266,54 @@
           "path": "operations bulk_set_agent_attribute_values_job",
           "summary": "Bulk Set Agent Attribute Values Jobs",
           "intent": "reverse_etl",
-          "availability": "planned",
+          "availability": "implemented",
           "stream": "",
-          "write": "",
-          "operation": "zendesk-support.bulk_set_agent_attribute_values_job",
+          "write": "bulk_set_agent_attribute_values_job",
           "source_cli_path": "",
           "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-          "flags": [],
+          "flags": [
+            {
+              "name": "action",
+              "type": "enum",
+              "summary": "Required job.action request field.",
+              "values": [
+                "upsert",
+                "update",
+                "delete"
+              ],
+              "maps_to": "record.job.action",
+              "required": true
+            },
+            {
+              "name": "attribute-id",
+              "type": "string",
+              "summary": "Optional job.attributes.attribute_values.0.attribute_id request field.",
+              "values": [],
+              "maps_to": "record.job.attributes.attribute_values.0.attribute_id",
+              "allow_empty": false
+            },
+            {
+              "name": "attribute-name",
+              "type": "string",
+              "summary": "Optional job.attributes.attribute_values.0.name request field.",
+              "values": [],
+              "maps_to": "record.job.attributes.attribute_values.0.name",
+              "allow_empty": false
+            },
+            {
+              "name": "agent-id",
+              "type": "integer",
+              "summary": "Required first job.items agent id; reverse-ETL records can carry the full typed items array.",
+              "values": [],
+              "maps_to": "record.job.items.0",
+              "required": true
+            }
+          ],
           "examples": [],
           "output_policy": "",
           "risk": "high",
           "approval": "reverse ETL plan, preview, explicit approval, execute",
-          "notes": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface."
+          "notes": "Typed BulkSkillBasedRoutingAttributeValuesRequest from the pinned OAS; execution remains approval-gated."
         },
         {
           "path": "operations create_attribute",
@@ -264800,7 +264935,7 @@
           "output_policy": "",
           "risk": "medium",
           "approval": "reverse ETL plan, preview, explicit approval, execute",
-          "notes": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface."
+          "notes": "Pinned OAS declares typed bulk and batch oneOf arms. Promotion is deferred until one endpoint can bind separate write actions and record-array selectors can render to the ids query parameter. Intended actions: tickets_update_many_bulk and tickets_update_many_batch."
         },
         {
           "path": "operations list_trigger_categories",
@@ -266283,18 +266418,111 @@
           "path": "operations create_many_users",
           "summary": "Create Many Users",
           "intent": "reverse_etl",
-          "availability": "planned",
+          "availability": "implemented",
           "stream": "",
-          "write": "",
-          "operation": "zendesk-support.create_many_users",
+          "write": "create_many_users",
           "source_cli_path": "",
           "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-          "flags": [],
+          "flags": [
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Required users.0.name field.",
+              "values": [],
+              "maps_to": "record.users.0.name",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "email",
+              "type": "string",
+              "summary": "Optional users.0.email field.",
+              "values": [],
+              "maps_to": "record.users.0.email",
+              "allow_empty": false
+            },
+            {
+              "name": "external-id",
+              "type": "string",
+              "summary": "Optional users.0.external_id field.",
+              "values": [],
+              "maps_to": "record.users.0.external_id",
+              "allow_empty": false
+            },
+            {
+              "name": "role",
+              "type": "string",
+              "summary": "Optional users.0.role field.",
+              "values": [],
+              "maps_to": "record.users.0.role",
+              "allow_empty": false
+            },
+            {
+              "name": "alias",
+              "type": "string",
+              "summary": "Optional users.0.alias field.",
+              "values": [],
+              "maps_to": "record.users.0.alias",
+              "allow_empty": false
+            },
+            {
+              "name": "details",
+              "type": "string",
+              "summary": "Optional users.0.details field.",
+              "values": [],
+              "maps_to": "record.users.0.details",
+              "allow_empty": false
+            },
+            {
+              "name": "phone",
+              "type": "string",
+              "summary": "Optional users.0.phone field.",
+              "values": [],
+              "maps_to": "record.users.0.phone",
+              "allow_empty": false
+            },
+            {
+              "name": "organization-id",
+              "type": "integer",
+              "summary": "Optional users.0.organization_id field.",
+              "values": [],
+              "maps_to": "record.users.0.organization_id"
+            },
+            {
+              "name": "default-group-id",
+              "type": "integer",
+              "summary": "Optional users.0.default_group_id field.",
+              "values": [],
+              "maps_to": "record.users.0.default_group_id"
+            },
+            {
+              "name": "locale",
+              "type": "string",
+              "summary": "Optional users.0.locale field.",
+              "values": [],
+              "maps_to": "record.users.0.locale",
+              "allow_empty": false
+            },
+            {
+              "name": "suspended",
+              "type": "boolean",
+              "summary": "Optional users.0.suspended field.",
+              "values": [],
+              "maps_to": "record.users.0.suspended"
+            },
+            {
+              "name": "tags",
+              "type": "string_array",
+              "summary": "Optional users.0.tags field.",
+              "values": [],
+              "maps_to": "record.users.0.tags"
+            }
+          ],
           "examples": [],
           "output_policy": "",
           "risk": "high",
           "approval": "reverse ETL plan, preview, explicit approval, execute",
-          "notes": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface."
+          "notes": "Typed UserCreateInput selected from the OAS UserInput union; body schema enforces the documented 100-user maximum."
         },
         {
           "path": "operations create_or_update_user",
@@ -266317,18 +266545,110 @@
           "path": "operations create_or_update_many_users",
           "summary": "Create Or Update Many Users",
           "intent": "reverse_etl",
-          "availability": "planned",
+          "availability": "implemented",
           "stream": "",
-          "write": "",
-          "operation": "zendesk-support.create_or_update_many_users",
+          "write": "create_or_update_many_users",
           "source_cli_path": "",
           "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-          "flags": [],
+          "flags": [
+            {
+              "name": "external-id",
+              "type": "string",
+              "summary": "Optional users.0.external_id merge key; id or email are also accepted by the OAS merge arm.",
+              "values": [],
+              "maps_to": "record.users.0.external_id",
+              "allow_empty": false
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Optional users.0.name field.",
+              "values": [],
+              "maps_to": "record.users.0.name",
+              "allow_empty": false
+            },
+            {
+              "name": "email",
+              "type": "string",
+              "summary": "Optional users.0.email field.",
+              "values": [],
+              "maps_to": "record.users.0.email",
+              "allow_empty": false
+            },
+            {
+              "name": "user-id",
+              "type": "integer",
+              "summary": "Optional users.0.id field.",
+              "values": [],
+              "maps_to": "record.users.0.id"
+            },
+            {
+              "name": "role",
+              "type": "string",
+              "summary": "Optional users.0.role field.",
+              "values": [],
+              "maps_to": "record.users.0.role",
+              "allow_empty": false
+            },
+            {
+              "name": "alias",
+              "type": "string",
+              "summary": "Optional users.0.alias field.",
+              "values": [],
+              "maps_to": "record.users.0.alias",
+              "allow_empty": false
+            },
+            {
+              "name": "details",
+              "type": "string",
+              "summary": "Optional users.0.details field.",
+              "values": [],
+              "maps_to": "record.users.0.details",
+              "allow_empty": false
+            },
+            {
+              "name": "phone",
+              "type": "string",
+              "summary": "Optional users.0.phone field.",
+              "values": [],
+              "maps_to": "record.users.0.phone",
+              "allow_empty": false
+            },
+            {
+              "name": "organization-id",
+              "type": "integer",
+              "summary": "Optional users.0.organization_id field.",
+              "values": [],
+              "maps_to": "record.users.0.organization_id"
+            },
+            {
+              "name": "locale",
+              "type": "string",
+              "summary": "Optional users.0.locale field.",
+              "values": [],
+              "maps_to": "record.users.0.locale",
+              "allow_empty": false
+            },
+            {
+              "name": "suspended",
+              "type": "boolean",
+              "summary": "Optional users.0.suspended field.",
+              "values": [],
+              "maps_to": "record.users.0.suspended"
+            },
+            {
+              "name": "tags",
+              "type": "string_array",
+              "summary": "Optional users.0.tags field.",
+              "values": [],
+              "maps_to": "record.users.0.tags"
+            }
+          ],
           "examples": [],
           "output_policy": "",
           "risk": "high",
           "approval": "reverse ETL plan, preview, explicit approval, execute",
-          "notes": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface."
+          "notes": "Typed UserMergeInput selected from the OAS UserInput union; body schema enforces the documented 100-user maximum."
         },
         {
           "path": "operations destroy_many_users",
@@ -266545,18 +266865,81 @@
           "path": "operations request_user_create",
           "summary": "Request User Create",
           "intent": "reverse_etl",
-          "availability": "planned",
+          "availability": "implemented",
           "stream": "",
-          "write": "",
-          "operation": "zendesk-support.request_user_create",
+          "write": "request_user_create",
           "source_cli_path": "",
           "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-          "flags": [],
+          "flags": [
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Required user.name field.",
+              "values": [],
+              "maps_to": "record.user.name",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "email",
+              "type": "string",
+              "summary": "Optional user.email field.",
+              "values": [],
+              "maps_to": "record.user.email",
+              "allow_empty": false
+            },
+            {
+              "name": "external-id",
+              "type": "string",
+              "summary": "Optional user.external_id field.",
+              "values": [],
+              "maps_to": "record.user.external_id",
+              "allow_empty": false
+            },
+            {
+              "name": "role",
+              "type": "string",
+              "summary": "Optional user.role field.",
+              "values": [],
+              "maps_to": "record.user.role",
+              "allow_empty": false
+            },
+            {
+              "name": "phone",
+              "type": "string",
+              "summary": "Optional user.phone field.",
+              "values": [],
+              "maps_to": "record.user.phone",
+              "allow_empty": false
+            },
+            {
+              "name": "organization-id",
+              "type": "integer",
+              "summary": "Optional user.organization_id field.",
+              "values": [],
+              "maps_to": "record.user.organization_id"
+            },
+            {
+              "name": "locale",
+              "type": "string",
+              "summary": "Optional user.locale field.",
+              "values": [],
+              "maps_to": "record.user.locale",
+              "allow_empty": false
+            },
+            {
+              "name": "tags",
+              "type": "string_array",
+              "summary": "Optional user.tags field.",
+              "values": [],
+              "maps_to": "record.user.tags"
+            }
+          ],
           "examples": [],
           "output_policy": "",
           "risk": "medium",
           "approval": "reverse ETL plan, preview, explicit approval, execute",
-          "notes": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface."
+          "notes": "Typed UserCreateInput selected from the OAS UserInput union."
         },
         {
           "path": "operations search_users",
@@ -266607,7 +266990,7 @@
           "output_policy": "",
           "risk": "medium",
           "approval": "reverse ETL plan, preview, explicit approval, execute",
-          "notes": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface."
+          "notes": "Pinned OAS declares typed bulk and batch oneOf arms. Promotion is deferred until one endpoint can bind separate write actions and record-array selectors can render to ids or external_ids query parameters. Intended actions: update_many_users_bulk and update_many_users_batch."
         },
         {
           "path": "operations show_view",
