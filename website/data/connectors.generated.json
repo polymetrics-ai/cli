@@ -76403,8 +76403,494 @@
         "kind": "delete"
       }
     ],
-    "cli_surface": null,
-    "docs_md": "# Overview\n\nReads Google Search Console sites, sitemaps, and Search Analytics performance reports (by date,\nquery, page, country, and device) through the Search Console v3 REST API; submits/removes sites and\nsitemaps through explicit write actions.\n\nReadable streams: `sites`, `site_details`, `sitemaps`, `sitemap_details`,\n`search_analytics_by_date`, `search_analytics_by_country`, `search_analytics_by_device`,\n`search_analytics_by_page`, `search_analytics_by_query`.\n\nWrite actions: `add_site`, `delete_site`, `submit_sitemap`, `delete_sitemap`.\n\nService API documentation: https://developers.google.com/webmaster-tools/v1/api_reference_index.\n\n## Auth setup\n\nConnection fields:\n\n- `access_token` (required, secret, string); Google OAuth 2.0 access token with Search Console read\n  scope. Used only for Bearer auth; never logged. The 3-legged consent/acquisition and\n  refresh-token-exchange dance is out of scope for this connector (credentials layer already owns\n  it) -- see docs.md Known limits.\n- `base_url` (optional, string); default `https://www.googleapis.com/webmasters/v3`; format `uri`;\n  Search Console API base URL override for tests or proxies.\n- `data_state` (optional, string); Search Analytics dataState filter (final or all). Omitted when\n  unset, matching the API's own default.\n- `end_date` (optional, string); format `date`; YYYY-MM-DD upper bound for search_analytics_*\n  streams. Defaults to today (UTC) when unset.\n- `feedpath` (optional, string); Sitemap feed URL/path for sitemap_details.\n- `max_pages` (optional, string); Maximum pages fetched per site for search_analytics_* streams. A\n  positive integer, or 'all'/'unlimited' (default) for no cap.\n- `mode` (optional, string).\n- `page_size` (optional, integer); default `25000`; Search Analytics rowLimit per page. Search\n  Console caps this at 25000.\n- `search_type` (optional, string); default `web`; Search Analytics searchType/type filter (web,\n  image, video, news, discover, googleNews).\n- `site_url` (optional, string); Single Search Console site property for site_details and\n  sitemap_details.\n- `site_urls` (optional, string); Comma- or newline-separated Search Console site properties (e.g.\n  https://example.com/ or sc-domain:example.com) to fan out over for the sitemaps and\n  search_analytics_* streams. Required for those streams only; sites itself is account-scoped and\n  does not reference it.\n- `start_date` (optional, string); default `2021-01-01`; format `date`; YYYY-MM-DD lower bound for\n  search_analytics_* streams. The incremental cursor (previously-synced date), when present,\n  overrides this on a repeat sync.\n\nSecret fields are redacted in logs and write previews: `access_token`.\n\nDefault configuration values: `base_url=https://www.googleapis.com/webmasters/v3`,\n`page_size=25000`, `search_type=web`, `start_date=2021-01-01`.\n\nAuthentication behavior:\n\n- Bearer token authentication using `secrets.access_token`.\n\nRequests use the configured `base_url` value after applying defaults.\n\nConnection checks call GET `/sites`.\n\n## Streams notes\n\nDefault pagination: single request; no pagination.\n\n- `sites`: GET `/sites` - records path `siteEntry`; computed output fields `permission_level`,\n  `site_url`.\n- `site_details`: GET `/sites/{{ config.site_url }}` - single-object response; records path `.`;\n  computed output fields `permission_level`, `site_url`.\n- `sitemaps`: GET `/sites/{{ fanout.id }}/sitemaps` - records path `sitemap`; computed output fields\n  `errors`, `is_pending`, `is_sitemaps_index`, `last_downloaded`, `last_submitted`, `path`, `type`,\n  `warnings`; fan-out; ids from config field `site_urls`; id inserted into the request path; stamps\n  `site_url`.\n- `sitemap_details`: GET `/sites/{{ config.site_url }}/sitemaps/{{ config.feedpath }}` -\n  single-object response; records path `.`; computed output fields `errors`, `is_pending`,\n  `is_sitemaps_index`, `last_downloaded`, `last_submitted`, `path`, `site_url`, `type`, `warnings`.\n- `search_analytics_by_date`: POST `/sites/{{ fanout.id }}/searchAnalytics/query` - records path\n  `rows`; fan-out; ids from config field `site_urls`; id inserted into the request path.\n- `search_analytics_by_country`: POST `/sites/{{ fanout.id }}/searchAnalytics/query` - records path\n  `rows`; fan-out; ids from config field `site_urls`; id inserted into the request path.\n- `search_analytics_by_device`: POST `/sites/{{ fanout.id }}/searchAnalytics/query` - records path\n  `rows`; fan-out; ids from config field `site_urls`; id inserted into the request path.\n- `search_analytics_by_page`: POST `/sites/{{ fanout.id }}/searchAnalytics/query` - records path\n  `rows`; fan-out; ids from config field `site_urls`; id inserted into the request path.\n- `search_analytics_by_query`: POST `/sites/{{ fanout.id }}/searchAnalytics/query` - records path\n  `rows`; fan-out; ids from config field `site_urls`; id inserted into the request path.\n\n## Write actions & risks\n\nOverall write risk: adds or removes Search Console site properties and submits or deletes sitemap\nresources.\n\nReverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:\n\n- `add_site`: PUT `/sites/{{ record.site_url | urlencode }}` - kind `create`; body type `none`; path\n  fields `site_url`; required record fields `site_url`; accepted fields `site_url`; risk: adds a\n  site property to the authenticated Search Console account.\n- `delete_site`: DELETE `/sites/{{ record.site_url | urlencode }}` - kind `delete`; body type\n  `none`; path fields `site_url`; required record fields `site_url`; accepted fields `site_url`;\n  missing records treated as success for status `404`; confirmation `destructive`; risk: removes a\n  site property from the authenticated Search Console account.\n- `submit_sitemap`: PUT `/sites/{{ record.site_url | urlencode }}/sitemaps/{{ record.feedpath |\n  urlencode }}` - kind `create`; body type `none`; path fields `site_url`, `feedpath`; required\n  record fields `site_url`, `feedpath`; accepted fields `feedpath`, `site_url`; risk: submits a\n  sitemap URL for a Search Console site property.\n- `delete_sitemap`: DELETE `/sites/{{ record.site_url | urlencode }}/sitemaps/{{ record.feedpath |\n  urlencode }}` - kind `delete`; body type `none`; path fields `site_url`, `feedpath`; required\n  record fields `site_url`, `feedpath`; accepted fields `feedpath`, `site_url`; missing records\n  treated as success for status `404`; confirmation `destructive`; risk: deletes a sitemap from a\n  Search Console site property.\n\n## Known limits\n\n- Batch defaults: read_page_size=25000.\n- API coverage includes 9 stream-backed endpoint group(s), 4 write-backed endpoint group(s).\n- Other documented endpoints are not exposed by this connector where they are classified as\n  out_of_scope=1.\n",
+    "cli_surface": {
+      "tagline": "Inspect, read, and safely plan typed Google Search Console operations.",
+      "usage": "pm google-search-console <command> [flags]",
+      "source_cli": {
+        "name": "Google Search Console API",
+        "docs": "https://developers.google.com/webmaster-tools/v1/api_reference_index",
+        "reference": "Official REST discovery documents for Search Console v3 and searchconsole v1",
+        "source": "provider_api"
+      },
+      "groups": [
+        {
+          "id": "sites",
+          "title": "Sites",
+          "commands": [
+            "sites"
+          ]
+        },
+        {
+          "id": "sitemaps",
+          "title": "Sitemaps",
+          "commands": [
+            "sitemaps"
+          ]
+        },
+        {
+          "id": "search-analytics",
+          "title": "Search Analytics",
+          "commands": [
+            "search-analytics"
+          ]
+        },
+        {
+          "id": "direct",
+          "title": "Typed Direct Reads",
+          "commands": [
+            "direct"
+          ]
+        }
+      ],
+      "global_flags": [
+        {
+          "name": "credential",
+          "type": "string",
+          "summary": "Credential name to use for the Google Search Console request.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "connection",
+          "type": "string",
+          "summary": "Alias for --credential.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "config",
+          "type": "string_array",
+          "summary": "Connector config override as key=value.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "json",
+          "type": "boolean",
+          "summary": "Emit machine-readable JSON output.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum PM ETL records to emit; does not control Search Console rowLimit.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "max-bytes",
+          "type": "integer",
+          "summary": "Maximum direct-read response bytes; typed operations are capped at 16 MiB and each Google Search Console operation declares a lower limit.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "plan",
+          "type": "string",
+          "summary": "Execute an approved reverse-ETL plan by id.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "preview",
+          "type": "boolean",
+          "summary": "Preview a reverse-ETL write command without making a network mutation.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "approve",
+          "type": "string",
+          "summary": "Approval token required to execute a reverse-ETL plan.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "confirm",
+          "type": "string",
+          "summary": "Typed confirmation challenge for destructive reverse-ETL writes.",
+          "values": [],
+          "maps_to": ""
+        }
+      ],
+      "commands": [
+        {
+          "path": "sites list",
+          "summary": "List verified Search Console site properties as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "sites",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm google-search-console sites list --credential gsc-prod --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "sites get",
+          "summary": "Read one verified Search Console site property as an ETL record.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "site_details",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm google-search-console sites get --credential gsc-prod --config site_url=https://example.com/ --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "sitemaps list",
+          "summary": "List sitemap entries for configured Search Console site properties.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "sitemaps",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm google-search-console sitemaps list --credential gsc-prod --config site_urls=https://example.com/ --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "sitemaps get",
+          "summary": "Read one sitemap entry for a Search Console site property.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "sitemap_details",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm google-search-console sitemaps get --credential gsc-prod --config site_url=https://example.com/ --config feedpath=https://example.com/sitemap.xml --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "search-analytics by-date",
+          "summary": "Read Search Analytics rows grouped by date.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "search_analytics_by_date",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm google-search-console search-analytics by-date --credential gsc-prod --config site_urls=https://example.com/ --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "search-analytics by-country",
+          "summary": "Read Search Analytics rows grouped by date and country.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "search_analytics_by_country",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm google-search-console search-analytics by-country --credential gsc-prod --config site_urls=https://example.com/ --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "search-analytics by-device",
+          "summary": "Read Search Analytics rows grouped by date and device.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "search_analytics_by_device",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm google-search-console search-analytics by-device --credential gsc-prod --config site_urls=https://example.com/ --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "search-analytics by-page",
+          "summary": "Read Search Analytics rows grouped by date and page.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "search_analytics_by_page",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm google-search-console search-analytics by-page --credential gsc-prod --config site_urls=https://example.com/ --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "search-analytics by-query",
+          "summary": "Read Search Analytics rows grouped by date and query.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "search_analytics_by_query",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm google-search-console search-analytics by-query --credential gsc-prod --config site_urls=https://example.com/ --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "sites add",
+          "summary": "Plan adding a Search Console site property through reverse ETL.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "add_site",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "site-url",
+              "type": "string",
+              "summary": "Search Console site property URL or sc-domain property.",
+              "values": [],
+              "maps_to": "record.site_url",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm google-search-console sites add --credential gsc-prod --site-url https://example.com/ --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "medium: adds a site property to the authenticated Search Console account; requires reverse ETL plan and approval",
+          "approval": "Use reverse ETL plan -> preview -> approval -> execute. No raw HTTP body is accepted; the record must match writes.json.",
+          "notes": ""
+        },
+        {
+          "path": "sites delete",
+          "summary": "Plan deleting a Search Console site property through destructive reverse ETL.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_site",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "site-url",
+              "type": "string",
+              "summary": "Search Console site property URL or sc-domain property.",
+              "values": [],
+              "maps_to": "record.site_url",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm google-search-console sites delete --credential gsc-prod --site-url https://example.com/ --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "high: removes a site property from the authenticated Search Console account; requires reverse ETL plan, approval, and destructive confirmation",
+          "approval": "Use reverse ETL plan -> preview -> approval -> typed destructive confirmation -> execute. Missing provider records are idempotent for HTTP 404.",
+          "notes": ""
+        },
+        {
+          "path": "sitemaps submit",
+          "summary": "Plan submitting a sitemap URL for a Search Console site property.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "submit_sitemap",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "site-url",
+              "type": "string",
+              "summary": "Search Console site property URL or sc-domain property.",
+              "values": [],
+              "maps_to": "record.site_url",
+              "allow_empty": false
+            },
+            {
+              "name": "feedpath",
+              "type": "string",
+              "summary": "Sitemap feed URL/path to submit.",
+              "values": [],
+              "maps_to": "record.feedpath",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm google-search-console sitemaps submit --credential gsc-prod --site-url https://example.com/ --feedpath https://example.com/sitemap.xml --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "medium: submits a sitemap URL for a Search Console site property; requires reverse ETL plan and approval",
+          "approval": "Use reverse ETL plan -> preview -> approval -> execute. No raw HTTP body is accepted; the record must match writes.json.",
+          "notes": ""
+        },
+        {
+          "path": "sitemaps delete",
+          "summary": "Plan deleting a sitemap URL from a Search Console site property through destructive reverse ETL.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_sitemap",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "site-url",
+              "type": "string",
+              "summary": "Search Console site property URL or sc-domain property.",
+              "values": [],
+              "maps_to": "record.site_url",
+              "allow_empty": false
+            },
+            {
+              "name": "feedpath",
+              "type": "string",
+              "summary": "Sitemap feed URL/path to delete.",
+              "values": [],
+              "maps_to": "record.feedpath",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm google-search-console sitemaps delete --credential gsc-prod --site-url https://example.com/ --feedpath https://example.com/sitemap.xml --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "high: deletes a sitemap from a Search Console site property; requires reverse ETL plan, approval, and destructive confirmation",
+          "approval": "Use reverse ETL plan -> preview -> approval -> typed destructive confirmation -> execute. Missing provider records are idempotent for HTTP 404.",
+          "notes": ""
+        },
+        {
+          "path": "direct url-inspection inspect",
+          "summary": "Run the official URL Inspection operation as a typed bounded direct read.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google-search-console.urlinspection_index_inspect",
+          "source_cli_path": "",
+          "source_url": "https://developers.google.com/webmaster-tools/v1/urlInspection.index/inspect",
+          "flags": [
+            {
+              "name": "inspection-url",
+              "type": "string",
+              "summary": "Fully-qualified URL to inspect.",
+              "values": [],
+              "maps_to": "body.inspectionUrl",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "site-url",
+              "type": "string",
+              "summary": "Search Console site property URL or sc-domain property.",
+              "values": [],
+              "maps_to": "body.siteUrl",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "language-code",
+              "type": "string",
+              "summary": "Optional BCP-47 language code for localized inspection messages.",
+              "values": [],
+              "maps_to": "body.languageCode"
+            }
+          ],
+          "examples": [
+            "pm google-search-console direct url-inspection inspect --credential gsc-prod --inspection-url https://example.com/page --site-url https://example.com/ --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "low: bounded Search Console JSON read; fixed endpoint, closed request body schema, 1 MiB response cap, and redacted URL-shaped fields",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct mobile-friendly-test run",
+          "summary": "Run the official Mobile Friendly Test operation as a typed bounded direct read.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google-search-console.mobile_friendly_test_run",
+          "source_cli_path": "",
+          "source_url": "https://www.googleapis.com/discovery/v1/apis/searchconsole/v1/rest",
+          "flags": [
+            {
+              "name": "url",
+              "type": "string",
+              "summary": "Fully-qualified URL to test.",
+              "values": [],
+              "maps_to": "body.url",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "request-screenshot",
+              "type": "boolean",
+              "summary": "Request a screenshot in the provider response.",
+              "values": [],
+              "maps_to": "body.requestScreenshot"
+            }
+          ],
+          "examples": [
+            "pm google-search-console direct mobile-friendly-test run --credential gsc-prod --url https://example.com/page --request-screenshot false --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "low: bounded Search Console JSON read; fixed endpoint, closed request body schema, 1 MiB response cap, and redacted URL/screenshot-shaped fields",
+          "approval": "",
+          "notes": ""
+        }
+      ],
+      "help_topics": [
+        {
+          "name": "parity",
+          "summary": "Google's current Discovery document lists 11 unique Search Console operations. Five reach ETL streams, four reach typed reverse-ETL writes, and URL Inspection plus Mobile-Friendly Test reach typed bounded direct reads. There are no generic raw HTTP, body, query, binary, CDC, excluded, or planned operations."
+        }
+      ]
+    },
+    "docs_md": "# Overview\n\nReads Google Search Console sites, sitemap metadata, and Search Analytics performance reports (by\ndate, query, page, country, and device) through the official Search Console REST APIs; submits or\nremoves site/sitemap resources only through typed reverse-ETL write actions.\n\nReadable streams: `sites`, `site_details`, `sitemaps`, `sitemap_details`,\n`search_analytics_by_date`, `search_analytics_by_country`, `search_analytics_by_device`,\n`search_analytics_by_page`, `search_analytics_by_query`.\n\nTyped direct reads: `direct url-inspection inspect`, `direct mobile-friendly-test run`.\n\nWrite actions: `add_site`, `delete_site`, `submit_sitemap`, `delete_sitemap`.\n\nService API documentation: https://developers.google.com/webmaster-tools/v1/api_reference_index.\nThe current provider Discovery inventory and per-request-field citation research are recorded under\n`.planning/phases/cli-google-search-console-parity-resume-r1/research/`.\n\n## Auth setup\n\nConnection fields:\n\n- `access_token` (required, secret, string); Google OAuth 2.0 access token with Search Console\n  scope. Read-only ETL and direct reads can use\n  `https://www.googleapis.com/auth/webmasters.readonly`; reverse-ETL write actions require\n  `https://www.googleapis.com/auth/webmasters`. Used only for Bearer auth; never logged. The\n  3-legged consent/acquisition and refresh-token-exchange dance is out of scope for this connector\n  (credentials layer already owns it).\n- `base_url` (optional, string); default `https://searchconsole.googleapis.com`; format `uri`;\n  Search Console API root URL override for tests or proxies. Supply only an origin root such as\n  `https://host`, with no path, query, fragment, or user info; `http://host[:port]` is supported for\n  local test proxies. Pathful values are unsupported and are not silently corrected. The connector\n  appends the official `/webmasters/v3` and `/v1` prefixes.\n- `site_urls` (optional, string); comma- or newline-separated Search Console site properties (for\n  example `https://example.com/` or `sc-domain:example.com`) to fan out over for `sitemaps` and\n  `search_analytics_*` streams. When unset, those streams fall back to `site_url`.\n- `site_url` (optional, string); single Search Console site property for `site_details`,\n  `sitemap_details`, the `sitemaps` and `search_analytics_*` fallback, and certification defaults.\n- `feedpath` (optional, string); sitemap feed URL/path for `sitemap_details` and sitemap\n  write/delete certification defaults.\n- `inspection_url` and `mobile_test_url` (optional, string); fixture/live certification defaults for\n  typed direct-read sweeps.\n- `start_date` (optional, string); default `2021-01-01`; format `date`; lower bound for\n  `search_analytics_*` streams.\n- `end_date` (optional, string); format `date`; upper bound for `search_analytics_*` streams.\n- `search_type` (optional, string); default `web`; stream Search Analytics type filter.\n- `data_state` (optional, string); stream Search Analytics dataState filter (`final`, `all`, or\n  `hourly_all`).\n- `page_size` (optional, integer); default `25000`; Search Analytics rowLimit per stream page.\n- `max_pages` (optional, string); positive integer or `all`/`unlimited` for stream pagination.\n- `mode` (optional, string); `live` or `fixture`.\n\nSecret fields are redacted in logs and write previews: `access_token`.\n\nDefault configuration values: `base_url=https://searchconsole.googleapis.com`, `page_size=25000`,\n`search_type=web`, `start_date=2021-01-01`.\n\nConnection checks call GET `/webmasters/v3/sites`.\n\n## Streams notes\n\nDefault pagination: single request; Search Analytics streams page through a connector-owned hook\nbecause the official operation is a POST whose cursor (`startRow`) lives inside the JSON body.\n\n- `sites`: GET `/webmasters/v3/sites` - records path `siteEntry`.\n- `site_details`: GET `/webmasters/v3/sites/{{ config.site_url }}` - single-object response.\n- `sitemaps`: GET `/webmasters/v3/sites/{{ fanout.id }}/sitemaps` - records path `sitemap`; fans\n  out over `site_urls` and falls back to `site_url` in the hook.\n- `sitemap_details`: GET `/webmasters/v3/sites/{{ config.site_url }}/sitemaps/{{ config.feedpath }}`.\n- `search_analytics_by_date`: POST `/webmasters/v3/sites/{{ fanout.id }}/searchAnalytics/query`\n  with the fixed `date` dimension; fans out over `site_urls` and falls back to `site_url`.\n- `search_analytics_by_country`, `search_analytics_by_device`, `search_analytics_by_page`, and\n  `search_analytics_by_query`: the same POST with `date` plus the named dimension. Each record is\n  therefore grouped per date and dimension value; `date` remains the incremental cursor and part\n  of the primary key.\n\n## Typed direct reads\n\nAll direct reads are fixed-target POST operations with closed request-body schemas,\n`application/json`, `json_redacted` output, and a 1 MiB operation response cap. They do not accept a\nraw method, path, query, or body escape hatch.\n\n- `direct url-inspection inspect`: POST `/v1/urlInspection/index:inspect`; supports\n  `--inspection-url`, `--site-url`, and optional `--language-code`.\n- `direct mobile-friendly-test run`: POST `/v1/urlTestingTools/mobileFriendlyTest:run`; supports\n  `--url` and optional `--request-screenshot`.\n\n## Write actions & risks\n\nOverall write risk: adds or removes Search Console site properties and submits or deletes sitemap\nresources. Reverse ETL writes must follow plan -> preview -> approval -> execute. Destructive\noperations also require typed confirmation. No write action accepts a raw body.\n\n- `add_site`: PUT `/webmasters/v3/sites/{{ record.site_url | urlencode }}` - kind `create`; record\n  schema is closed over required `site_url`; redacts `site_url`.\n- `delete_site`: DELETE `/webmasters/v3/sites/{{ record.site_url | urlencode }}` - kind `delete`;\n  record schema is closed over required `site_url`; redacts `site_url`; idempotent when the provider\n  returns HTTP 404; confirmation `destructive`.\n- `submit_sitemap`: PUT\n  `/webmasters/v3/sites/{{ record.site_url | urlencode }}/sitemaps/{{ record.feedpath | urlencode }}`\n  - kind `create`; record schema is closed over required `site_url` and `feedpath`; redacts both.\n- `delete_sitemap`: DELETE\n  `/webmasters/v3/sites/{{ record.site_url | urlencode }}/sitemaps/{{ record.feedpath | urlencode }}`\n  - kind `delete`; record schema is closed over required `site_url` and `feedpath`; redacts both;\n  idempotent when the provider returns HTTP 404; confirmation `destructive`.\n\n## Known limits\n\n- Fixture and local validation only in this wave; this file does not claim live provider\n  certification.\n- `base_url` must be an origin-only root such as `https://searchconsole.googleapis.com`.\n  Credential creation and command overlays do not enforce that shape, so validate overrides before\n  use; pathful values are unsupported and are not silently corrected.\n- API coverage is 11/11 unique provider-published operations: five operations are reachable via\n  ETL streams, four via typed reverse-ETL writes, and two additional operations via typed bounded\n  direct reads. Search Analytics has five dimension-specific ETL conveniences over its single\n  documented POST operation. There are 0 excluded, binary, CDC, generic raw, or planned operations.\n",
     "icon": {
       "id": "googlesearchconsole",
       "path": "icons/googlesearchconsole.svg",

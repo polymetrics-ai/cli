@@ -7,25 +7,33 @@
     "access_token": {
       "type": "string",
       "x-secret": true,
-      "description": "Google OAuth 2.0 access token with Search Console read scope. Used only for Bearer auth; never logged. The 3-legged consent/acquisition and refresh-token-exchange dance is out of scope for this connector (credentials layer already owns it) -- see docs.md Known limits."
+      "description": "Google OAuth 2.0 access token with Search Console scope. Read-only ETL and direct reads can use https://www.googleapis.com/auth/webmasters.readonly; reverse ETL write actions require https://www.googleapis.com/auth/webmasters. Used only for Bearer auth; never logged. The 3-legged consent/acquisition and refresh-token-exchange dance is out of scope for this connector (credentials layer already owns it) -- see docs.md Known limits."
     },
     "base_url": {
       "type": "string",
       "format": "uri",
-      "default": "https://www.googleapis.com/webmasters/v3",
-      "description": "Search Console API base URL override for tests or proxies."
+      "default": "https://searchconsole.googleapis.com",
+      "description": "Search Console API root URL override for tests or proxies. Supply only an origin root such as https://host, with no path, query, fragment, or user info; http://host[:port] is supported for local test proxies. Pathful values are unsupported and are not silently corrected. The connector appends the official /webmasters/v3 and /v1 endpoint prefixes."
     },
     "site_urls": {
       "type": "string",
-      "description": "Comma- or newline-separated Search Console site properties (e.g. https://example.com/ or sc-domain:example.com) to fan out over for the sitemaps and search_analytics_* streams. Required for those streams only; sites itself is account-scoped and does not reference it."
+      "description": "Comma- or newline-separated Search Console site properties (e.g. https://example.com/ or sc-domain:example.com) to fan out over for the sitemaps and search_analytics_* streams. When unset, those streams fall back to site_url; sites itself is account-scoped and does not reference either field."
     },
     "site_url": {
       "type": "string",
-      "description": "Single Search Console site property for site_details and sitemap_details."
+      "description": "Single Search Console site property for site_details and sitemap_details, as the sitemaps and search_analytics_* fallback, and for fixture/live certification defaults."
     },
     "feedpath": {
       "type": "string",
-      "description": "Sitemap feed URL/path for sitemap_details."
+      "description": "Sitemap feed URL/path for sitemap_details and sitemap write/delete certification defaults."
+    },
+    "inspection_url": {
+      "type": "string",
+      "description": "URL Inspection direct-read default URL; used only by certification sweeps when explicitly provided."
+    },
+    "mobile_test_url": {
+      "type": "string",
+      "description": "Mobile Friendly Test direct-read default URL; used only by certification sweeps when explicitly provided."
     },
     "start_date": {
       "type": "string",
@@ -45,7 +53,7 @@
     },
     "data_state": {
       "type": "string",
-      "description": "Search Analytics dataState filter (final or all). Omitted when unset, matching the API's own default."
+      "description": "Search Analytics dataState filter (final, all, or hourly_all). Omitted when unset, matching the API's own default."
     },
     "page_size": {
       "type": "integer",

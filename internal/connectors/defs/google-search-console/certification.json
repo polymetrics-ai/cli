@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "source": {
+    "default_stream": "sites",
+    "source_credential_defaults": {
+      "site_url": "https://fixture.example.com/",
+      "site_urls": "https://fixture.example.com/",
+      "feedpath": "https://fixture.example.com/sitemap.xml",
+      "inspection_url": "https://fixture.example.com/page.html",
+      "mobile_test_url": "https://fixture.example.com/page.html",
+      "start_date": "2026-06-01",
+      "end_date": "2026-06-30"
+    },
+    "live_unavailable": [
+      {
+        "kind": "Error",
+        "contains": [
+          "http 401",
+          "http 403",
+          "status 401",
+          "status 403",
+          "account lacks access",
+          "has not been granted the required scopes",
+          "interpolate: unresolved key"
+        ]
+      }
+    ]
+  },
+  "direct_read_candidates": [
+    {
+      "stage_name": "direct_read_sweep_urlinspection_index_inspect",
+      "command": "direct url-inspection inspect",
+      "args": [
+        { "connector": true },
+        { "literal": "direct" },
+        { "literal": "url-inspection" },
+        { "literal": "inspect" },
+        { "literal": "--credential" },
+        { "source_credential": true },
+        { "literal": "--inspection-url" },
+        { "config_key": "inspection_url" },
+        { "literal": "--site-url" },
+        { "config_key": "site_url" },
+        { "literal": "--max-bytes" },
+        { "literal": "1048576" },
+        { "literal": "--json" }
+      ]
+    },
+    {
+      "stage_name": "direct_read_sweep_mobile_friendly_test_run",
+      "command": "direct mobile-friendly-test run",
+      "args": [
+        { "connector": true },
+        { "literal": "direct" },
+        { "literal": "mobile-friendly-test" },
+        { "literal": "run" },
+        { "literal": "--credential" },
+        { "source_credential": true },
+        { "literal": "--url" },
+        { "config_key": "mobile_test_url" },
+        { "literal": "--request-screenshot" },
+        { "literal": "false" },
+        { "literal": "--max-bytes" },
+        { "literal": "1048576" },
+        { "literal": "--json" }
+      ]
+    }
+  ],
+  "write_pairings": [
+    {
+      "create": "add_site",
+      "cleanup": "delete_site",
+      "cleanup_kind": "delete",
+      "id_field": "site_url",
+      "verify_stream": "sites",
+      "verify_field": "site_url"
+    },
+    {
+      "create": "submit_sitemap",
+      "cleanup": "delete_sitemap",
+      "cleanup_kind": "delete",
+      "id_field": "feedpath",
+      "verify_stream": "sitemaps",
+      "verify_field": "path"
+    }
+  ]
+}
