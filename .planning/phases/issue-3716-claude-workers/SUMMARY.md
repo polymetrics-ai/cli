@@ -29,7 +29,7 @@ coverage:
         ref: internal/agentcontract/claude_test.go TestRenderClaudeProjectionsIsStableAndSelfContained
         status: pass
       - kind: unit
-        ref: internal/agentcontract/check_test.go TestCheckProjectionsRejectsClaudeAgentInventoryDrift and TestClaudeProjectionCRLFIsNotDrift
+        ref: internal/agentcontract/check_test.go inventory and canonical/working-tree CRLF tests
         status: pass
       - kind: other
         ref: make agent-contract-check
@@ -73,8 +73,9 @@ coverage:
   website/docs UI job requiring them must hand off to an approved harness rather than weakening
   isolation.
 - Added red/green regression coverage for missing project workers, invalid `Agent` drift, atomic
-  sync repair, frontmatter requirements, repository-wide nested extra/duplicate agent inventory,
-  CRLF-equivalent parsing/drift checks, and connector inheritance.
+  sync repair, frontmatter requirements, repository-wide nested extra/duplicate agent inventory
+  including case-variant Git-like paths, canonical and working-tree CRLF stability, and connector
+  inheritance.
 - Made slash-separated contract path validation independent of the host OS and execute the
   extensionless GSD JavaScript adapter through Node.
 - Recorded the official Claude Code discovery, precedence, and tool-access rules together with an
@@ -87,9 +88,10 @@ same-name worker eligible to be selected. GREEN generated required project files
 no-`Agent` policy. Review hardening replaced collision-prone skill rules with qualified preloads,
 denied runtime `Skill`, and added an `Agent`/`Task`/`Skill` denylist so unrelated
 `context: fork` skills cannot be invoked. Repository-wide inventory and EOL-normalized drift tests
-demonstrate that policy is canonical and repaired by the actual generator. The prior trusted-home
-Claude Code v2.1.222 smoke forced an `Agent` call against ambient fixtures and returned
-`AGENT_UNAVAILABLE` without tool use.
+demonstrate that policy is canonical and repaired by the actual generator. Only exact root `.git`
+metadata is pruned, while the renderer and validator share LF-canonical whole-file semantics. The
+prior trusted-home Claude Code v2.1.222 smoke forced an `Agent` call against ambient fixtures and
+returned `AGENT_UNAVAILABLE` without tool use.
 
 ## Isolation boundary
 

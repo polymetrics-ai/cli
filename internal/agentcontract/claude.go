@@ -82,7 +82,7 @@ func renderClaudeProjection(contract *Contract, target ProjectionTarget, policy 
 	fmt.Fprintf(&output, "Required clean-home smoke (not generation evidence): %s\n\n", strings.ReplaceAll(policy.SmokeProcedure, "<role>", target.Role))
 	output.Write(block)
 
-	result := output.Bytes()
+	result := normalizeClaudeProjection(output.Bytes())
 	parsed, err := parseClaudeFrontmatter(result)
 	if err != nil {
 		return nil, err
