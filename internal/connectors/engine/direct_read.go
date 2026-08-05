@@ -281,7 +281,13 @@ func operationReadBody(op OperationSpec, overrides map[string]any) (any, error) 
 	}
 	body := cloneAnyMap(staticBody)
 	for key, value := range overrides {
-		body[key] = value
+		if current, ok := body[key].(map[string]any); ok {
+			if override, ok := value.(map[string]any); ok {
+				body[key] = mergeAnyMap(current, override)
+				continue
+			}
+		}
+		body[key] = cloneAnyValue(value)
 	}
 	if len(op.REST.BodySchema) > 0 {
 		sch, err := CompileSchema(op.REST.BodySchema)
@@ -298,9 +304,38 @@ func operationReadBody(op OperationSpec, overrides map[string]any) (any, error) 
 func cloneAnyMap(in map[string]any) map[string]any {
 	out := make(map[string]any, len(in))
 	for key, value := range in {
-		out[key] = value
+		out[key] = cloneAnyValue(value)
 	}
 	return out
+}
+
+func mergeAnyMap(base, overrides map[string]any) map[string]any {
+	out := cloneAnyMap(base)
+	for key, value := range overrides {
+		if current, ok := out[key].(map[string]any); ok {
+			if override, ok := value.(map[string]any); ok {
+				out[key] = mergeAnyMap(current, override)
+				continue
+			}
+		}
+		out[key] = cloneAnyValue(value)
+	}
+	return out
+}
+
+func cloneAnyValue(value any) any {
+	switch typed := value.(type) {
+	case map[string]any:
+		return cloneAnyMap(typed)
+	case []any:
+		out := make([]any, len(typed))
+		for i, item := range typed {
+			out[i] = cloneAnyValue(item)
+		}
+		return out
+	default:
+		return value
+	}
 }
 
 func clampOperationDirectReadMaxBytes(requested, operationMax int) int {
@@ -671,7 +706,7 @@ func encodeSurfacePathValue(name, value string) (string, error) {
 func directReadQuery(query map[string]string) (url.Values, error) {
 	values := url.Values{}
 	for name, value := range query {
-		if err := safety.ValidateIdentifier(name, "query parameter"); err != nil {
+		if err := safety.ValidateQueryParameterName(name, "query parameter"); err != nil {
 			return nil, err
 		}
 		if err := safety.RejectDangerousChars(value, "query parameter "+name); err != nil {

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 	"unicode"
+
+	"polymetrics.ai/internal/safety"
 )
 
 func requestFieldPointer(namespace string, tokens ...string) string {
@@ -56,6 +58,11 @@ func parseRequestFieldPointer(pointer string) (string, []string, error) {
 	}
 	if namespace != "body" && len(tokens) != 1 {
 		return "", nil, fmt.Errorf("%s namespace requires exactly one field token", namespace)
+	}
+	if namespace == "query" {
+		if err := safety.ValidateQueryParameterName(tokens[0], "query parameter"); err != nil {
+			return "", nil, err
+		}
 	}
 	return namespace, tokens, nil
 }

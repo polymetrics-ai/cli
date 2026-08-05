@@ -940,6 +940,11 @@ func checkCLISurfaceOperationBodyMappings(b engine.Bundle, i int, cmd engine.CLI
 	if err != nil {
 		return []Finding{{Connector: b.Name, File: "operations.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("operation %q body_schema cannot be expressed by CLI flags: %v", op.ID, err)}}
 	}
+	if op.REST.Body != nil && len(op.REST.Body.Fields) > 0 {
+		if err := schema.ValidatePartialRequestBody(op.REST.Body.Fields); err != nil {
+			return []Finding{{Connector: b.Name, File: "operations.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("operation %q rest.body is incompatible with body_schema: %v", op.ID, err)}}
+		}
+	}
 	if len(requiredPaths) == 0 {
 		return nil
 	}
@@ -956,8 +961,15 @@ func checkCLISurfaceOperationBodyMappings(b engine.Bundle, i int, cmd engine.CLI
 	}
 	var findings []Finding
 	for _, requiredPath := range requiredPaths {
-		if op.REST.Body != nil && operationStaticBodyProvidesPointer(op.REST.Body.Fields, requiredPath) {
-			continue
+		if op.REST.Body != nil {
+			provided, err := operationStaticBodyProvidesPointer(schema, op.REST.Body.Fields, requiredPath)
+			if err != nil {
+				findings = append(findings, Finding{Connector: b.Name, File: "operations.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("operation %q rest.body value for %s is incompatible with body_schema: %v", op.ID, requiredPath, err)})
+				continue
+			}
+			if provided {
+				continue
+			}
 		}
 		mapping, ok := commandBodyFlagCoveringRequiredPath(schema, mappedTargets, requiredPath)
 		if !ok {
@@ -1035,37 +1047,44 @@ type cliBodyFlagMapping struct {
 	required bool
 }
 
-func operationStaticBodyProvidesPointer(body map[string]any, pointer string) bool {
+func operationStaticBodyProvidesPointer(schema *engine.Schema, body map[string]any, pointer string) (bool, error) {
 	if len(body) == 0 {
-		return false
+		return false, nil
 	}
 	namespace, tokens, err := engine.ParseRequestFieldPointer(pointer)
 	if err != nil || namespace != "body" {
-		return false
+		return false, err
 	}
-	return staticBodyValueProvidesTokens(body, tokens)
+	return staticBodyValueProvidesTokens(schema, pointer, body, tokens)
 }
 
-func staticBodyValueProvidesTokens(current any, tokens []string) bool {
+func staticBodyValueProvidesTokens(schema *engine.Schema, pointer string, current any, tokens []string) (bool, error) {
 	if len(tokens) == 0 {
-		return true
+		if err := schema.ValidateRequestFieldPointerValue(pointer, current); err != nil {
+			return false, err
+		}
+		return true, nil
 	}
 	switch value := current.(type) {
 	case map[string]any:
 		next, ok := value[tokens[0]]
-		return ok && staticBodyValueProvidesTokens(next, tokens[1:])
+		if !ok {
+			return false, nil
+		}
+		return staticBodyValueProvidesTokens(schema, pointer, next, tokens[1:])
 	case []any:
 		if tokens[0] != "0" || len(value) == 0 {
-			return false
+			return false, nil
 		}
 		for _, item := range value {
-			if !staticBodyValueProvidesTokens(item, tokens[1:]) {
-				return false
+			provided, err := staticBodyValueProvidesTokens(schema, pointer, item, tokens[1:])
+			if err != nil || !provided {
+				return false, err
 			}
 		}
-		return true
+		return true, nil
 	default:
-		return false
+		return false, nil
 	}
 }
 

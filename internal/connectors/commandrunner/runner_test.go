@@ -26,6 +26,7 @@ type fakeConnector struct {
 	readReq                connectors.ReadRequest
 	directReadReq          connectors.DirectReadRequest
 	operationDirectReadReq connectors.OperationDirectReadRequest
+	operationBodySchemas   map[string]*engine.Schema
 	binaryDownloadReq      connectors.OperationBinaryDownloadRequest
 	binaryDownloadErr      error
 	validateReq            connectors.WriteRequest
@@ -86,6 +87,9 @@ func (f *fakeConnector) OperationDirectRead(_ context.Context, req connectors.Op
 		Status:    200,
 		Body:      map[string]any{"ok": true},
 	}, nil
+}
+func (f *fakeConnector) OperationRequestBodySchema(operation string) (*engine.Schema, error) {
+	return f.operationBodySchemas[operation], nil
 }
 func (f *fakeConnector) OperationBinaryDownload(_ context.Context, req connectors.OperationBinaryDownloadRequest) (connectors.OperationBinaryDownloadResult, error) {
 	f.binaryDownloadReq = req
@@ -1565,6 +1569,14 @@ func TestRunImplementedDirectReadCommand(t *testing.T) {
 }
 
 func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
+	bodySchema, err := engine.CompileSchema(json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"properties":{"emails":{"type":"array","items":{"type":"string"}}}
+	}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
 	connector := &fakeConnector{surface: &connectors.CommandSurface{
 		Commands: []connectors.CommandSurfaceCommand{
 			{
@@ -1581,7 +1593,7 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 				},
 			},
 		},
-	}}
+	}, operationBodySchemas: map[string]*engine.Schema{"gong.meetings_integration_status": bodySchema}}
 
 	result, err := Run(context.Background(), connector, Request{
 		Path:  []string{"meetings", "integration-status"},
@@ -1609,6 +1621,41 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 }
 
 func TestRunOperationDirectReadUsesEscapedRequestPointers(t *testing.T) {
+	bodySchema, err := engine.CompileSchema(json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"properties":{
+			"a.b":{"type":"string"},
+			"a":{"type":"object","additionalProperties":false,"properties":{"b":{"type":"string"}}},
+			"x/y":{"type":"string"},
+			"m~n":{"type":"string"},
+			"0":{"type":"string"},
+			"items":{"type":"array","items":{"type":"object","additionalProperties":false,"properties":{"name":{"type":"string"}}}}
+		}
+	}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	arrayFlags := make([]connectors.CommandSurfaceFlag, 0, 11)
+	flagValues := map[string][]string{
+		"literal": {"literal-value"},
+		"nested":  {"nested-value"},
+		"slash":   {"slash-value"},
+		"tilde":   {"tilde-value"},
+		"numeric": {"numeric-object-value"},
+	}
+	for i := 0; i <= 10; i++ {
+		name := fmt.Sprintf("item-%d", i)
+		arrayFlags = append(arrayFlags, connectors.CommandSurfaceFlag{Name: name, Type: "string", MapsTo: fmt.Sprintf("/body/items/%d/name", i)})
+		flagValues[name] = []string{fmt.Sprintf("value-%d", i)}
+	}
+	commandFlags := append([]connectors.CommandSurfaceFlag{
+		{Name: "literal", Type: "string", MapsTo: "/body/a.b"},
+		{Name: "nested", Type: "string", MapsTo: "/body/a/b"},
+		{Name: "slash", Type: "string", MapsTo: "/body/x~1y"},
+		{Name: "tilde", Type: "string", MapsTo: "/body/m~0n"},
+		{Name: "numeric", Type: "string", MapsTo: "/body/0"},
+	}, arrayFlags...)
 	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
 		Path:         "widgets preview",
 		Intent:       "direct_read",
@@ -1616,25 +1663,11 @@ func TestRunOperationDirectReadUsesEscapedRequestPointers(t *testing.T) {
 		Operation:    "acme.widgets.preview",
 		APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: "POST", Path: "/widgets:preview"}},
 		OutputPolicy: "json_redacted",
-		Flags: []connectors.CommandSurfaceFlag{
-			{Name: "literal", Type: "string", MapsTo: "/body/a.b"},
-			{Name: "nested", Type: "string", MapsTo: "/body/a/b"},
-			{Name: "slash", Type: "string", MapsTo: "/body/x~1y"},
-			{Name: "tilde", Type: "string", MapsTo: "/body/m~0n"},
-			{Name: "first", Type: "string", MapsTo: "/body/items/0/name"},
-			{Name: "second", Type: "string", MapsTo: "/body/items/1/name"},
-		},
-	}}}}
-	_, err := Run(context.Background(), connector, Request{
-		Path: []string{"widgets", "preview"},
-		Flags: map[string][]string{
-			"literal": {"literal-value"},
-			"nested":  {"nested-value"},
-			"slash":   {"slash-value"},
-			"tilde":   {"tilde-value"},
-			"first":   {"first-value"},
-			"second":  {"second-value"},
-		},
+		Flags:        commandFlags,
+	}}}, operationBodySchemas: map[string]*engine.Schema{"acme.widgets.preview": bodySchema}}
+	_, err = Run(context.Background(), connector, Request{
+		Path:  []string{"widgets", "preview"},
+		Flags: flagValues,
 	}, func(connectors.Record) error {
 		t.Fatal("emit called for operation direct read")
 		return nil
@@ -1653,8 +1686,11 @@ func TestRunOperationDirectReadUsesEscapedRequestPointers(t *testing.T) {
 	if body["x/y"] != "slash-value" || body["m~n"] != "tilde-value" {
 		t.Fatalf("escaped body properties = %#v", body)
 	}
+	if body["0"] != "numeric-object-value" {
+		t.Fatalf("numeric object property = %#v", body["0"])
+	}
 	items, _ := body["items"].([]any)
-	if len(items) != 2 || items[1].(map[string]any)["name"] != "second-value" {
+	if len(items) != 11 || items[10].(map[string]any)["name"] != "value-10" {
 		t.Fatalf("array body property = %#v", body["items"])
 	}
 }
@@ -1717,6 +1753,30 @@ func TestRunOperationDirectReadRequiredQueryFlags(t *testing.T) {
 			t.Fatalf("operation query = %#v", query)
 		}
 	})
+}
+
+func TestRunOperationDirectReadMapsBracketedQueryPointer(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path:         "widgets list",
+		Intent:       "direct_read",
+		Availability: "implemented",
+		Operation:    "acme.widgets.list",
+		APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: "GET", Path: "/widgets"}},
+		OutputPolicy: "json_redacted",
+		Flags:        []connectors.CommandSurfaceFlag{{Name: "status", Type: "string", MapsTo: "/query/filter[status]"}},
+	}}}}
+	if _, err := Run(context.Background(), connector, Request{
+		Path:  []string{"widgets", "list"},
+		Flags: map[string][]string{"status": {"active"}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for operation direct read")
+		return nil
+	}); err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if got := connector.operationDirectReadReq.Query["filter[status]"]; got != "active" {
+		t.Fatalf("filter[status] = %q, want active", got)
+	}
 }
 
 func TestRunGongTypedPOSTDirectReadsIncludingTranscript(t *testing.T) {
@@ -1790,6 +1850,10 @@ func TestRunGongTypedPOSTDirectReadsIncludingTranscript(t *testing.T) {
 }
 
 func TestRunOperationDirectReadRejectsRawBodyAndMissingPolicy(t *testing.T) {
+	bodySchema, err := engine.CompileSchema(json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"emails":{"type":"array","items":{"type":"string"}}}}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
 	tests := []struct {
 		name    string
 		command connectors.CommandSurfaceCommand
@@ -1840,7 +1904,10 @@ func TestRunOperationDirectReadRejectsRawBodyAndMissingPolicy(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{tt.command}}}
+			connector := &fakeConnector{
+				surface:              &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{tt.command}},
+				operationBodySchemas: map[string]*engine.Schema{"gong.meetings_integration_status": bodySchema},
+			}
 			_, err := Run(context.Background(), connector, Request{Path: strings.Fields(tt.command.Path), Flags: tt.flags}, func(connectors.Record) error {
 				t.Fatal("emit called for rejected operation direct-read command")
 				return nil

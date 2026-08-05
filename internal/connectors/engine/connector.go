@@ -116,6 +116,10 @@ func (c *Connector) OperationDirectRead(ctx context.Context, req connectors.Oper
 	return OperationDirectRead(ctx, c.bundle, req, c.hooks)
 }
 
+func (c *Connector) OperationRequestBodySchema(operation string) (*Schema, error) {
+	return operationRequestBodySchema(c.bundle, operation)
+}
+
 // OperationBinaryDownload satisfies connectors.OperationBinaryDownloader by
 // delegating to the package-level executor. The engine-local request type stays
 // the executor's own contract; this adapter is the seam that lets a CLI command
@@ -203,6 +207,21 @@ func (b Base) Definition() connectors.Definition {
 
 func (b Base) CommandSurface() *connectors.CommandSurface {
 	return synthesizeCommandSurface(b.bundle)
+}
+
+func (b Base) OperationRequestBodySchema(operation string) (*Schema, error) {
+	return operationRequestBodySchema(b.bundle, operation)
+}
+
+func operationRequestBodySchema(bundle Bundle, operation string) (*Schema, error) {
+	op, err := findOperation(bundle, operation)
+	if err != nil {
+		return nil, err
+	}
+	if op.REST == nil || len(op.REST.BodySchema) == 0 {
+		return nil, nil
+	}
+	return CompileSchema(op.REST.BodySchema)
 }
 
 // synthesizeMetadata is the single source of truth for bundle -> Metadata,

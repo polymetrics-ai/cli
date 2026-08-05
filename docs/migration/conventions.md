@@ -301,9 +301,20 @@ not a full override by default.
   accepted on this surface. Runtime consumes the decoded pointer tokens directly, so a literal
   property named `a.b` is transmitted as `a.b` while `/body/a/b` builds a nested object. Concrete
   array indices are allowed in CLI mappings and canonicalize to the citation element token `0` for
-  evidence checks. When a static body supplies a required array element field, every supplied
-  element must contain that field; validating only the first element is insufficient because
-  runtime validates the complete array.
+  evidence checks. Runtime assembly follows the compiled schema at every token: a numeric token is
+  an object key below an object schema and an array index only below an array schema. Array-indexed
+  flags are ordered numerically, so index `10` cannot be assembled before index `2`. When a static
+  body supplies an array, every supplied element is validated against the compiled item schema,
+  including types and nested requirements; presence in only the first element is insufficient.
+  Static objects and flag-built objects are recursively merged before final schema validation, so
+  a dynamic nested override preserves documented static siblings. Arrays and non-object values are
+  replaced as complete values rather than merged by position.
+
+  Query pointer tokens and runtime query names share one grammar. Plain identifier names remain
+  valid, and bracketed provider names such as `/query/filter[status]` and `/query/page[size]` are
+  supported. Every bracket must be balanced and contain a non-empty identifier; whitespace,
+  control characters, nested brackets, query delimiters, and malformed suffixes are rejected
+  before request construction.
 
   Write actions using `json_array` require an exclusively array-rooted schema and map the outgoing
   root-array element and its fields, not the source record's `body_field`. GraphQL variables map
@@ -317,8 +328,9 @@ not a full override by default.
   actual execution ownership rather than optional `writes.json` marker fields.
 
   The governing review lesson is: verify a fix at the layer that performs the action, not only at
-  the layer where metadata or validation changed. Citation collection, authoring validation, CLI
-  assembly, and effective write dispatch must agree on the same decoded request shape.
+  the layer where metadata or validation changed. The recurring class is **correct at authoring but
+  wrong at runtime**. Citation collection, authoring validation, CLI assembly, body merge, query
+  construction, and effective write dispatch must agree on the same decoded request shape.
 
   `docs/migration/request-contract-coverage.json` is the machine-readable rollout inventory, sorted
   by each connector's remaining citation/link gap count and then connector slug. The accompanying

@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"regexp"
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -181,6 +182,122 @@ func (s *Schema) RequestFieldPointerInfo(pointer string) (SchemaPathInfo, error)
 	return node.mappingPathInfo()
 }
 
+func (s *Schema) SetRequestBodyPointer(body map[string]any, pointer string, value any) error {
+	if s == nil || s.node == nil {
+		return fmt.Errorf("schema is nil")
+	}
+	namespace, tokens, err := parseRequestFieldPointer(pointer)
+	if err != nil {
+		return err
+	}
+	if namespace != "body" {
+		return fmt.Errorf("request field pointer %q is not body-scoped", pointer)
+	}
+	updated, err := s.node.setRequestPointerValue(body, tokens, value, pointer)
+	if err != nil {
+		return err
+	}
+	if _, ok := updated.(map[string]any); !ok {
+		return fmt.Errorf("request body schema root must be an object")
+	}
+	return nil
+}
+
+func (n *schemaNode) setRequestPointerValue(current any, tokens []string, value any, pointer string) (any, error) {
+	if len(tokens) == 0 {
+		return value, nil
+	}
+	if err := n.mappingConstraintError(pointer); err != nil {
+		return nil, err
+	}
+	isArray := n.mappingIsArray()
+	isObject := n.mappingIsObject()
+	if isArray && isObject {
+		return nil, fmt.Errorf("request field %q traverses an ambiguous object-or-array schema", pointer)
+	}
+	if isArray {
+		itemsSchema, ok := n.mappingItems()
+		if !ok {
+			return nil, fmt.Errorf("request field %q traverses an array without an item schema", pointer)
+		}
+		if err := validateMappingArrayIndex(tokens[0]); err != nil {
+			return nil, err
+		}
+		index, err := strconv.Atoi(tokens[0])
+		if err != nil {
+			return nil, fmt.Errorf("array segment %q is not a numeric index", tokens[0])
+		}
+		var items []any
+		if current != nil {
+			var ok bool
+			items, ok = current.([]any)
+			if !ok {
+				return nil, fmt.Errorf("request field %q conflicts with existing non-array value", pointer)
+			}
+		}
+		if index > len(items) {
+			return nil, fmt.Errorf("request field %q uses sparse array index %d", pointer, index)
+		}
+		if index == len(items) {
+			items = append(items, nil)
+		}
+		updated, err := itemsSchema.setRequestPointerValue(items[index], tokens[1:], value, pointer)
+		if err != nil {
+			return nil, err
+		}
+		items[index] = updated
+		return items, nil
+	}
+	if !isObject {
+		return nil, fmt.Errorf("request field %q traverses a non-container schema", pointer)
+	}
+	var object map[string]any
+	if current == nil {
+		object = map[string]any{}
+	} else {
+		var ok bool
+		object, ok = current.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("request field %q conflicts with existing non-object value", pointer)
+		}
+	}
+	child, ok := n.mappingProperty(tokens[0])
+	if !ok {
+		return nil, fmt.Errorf("record field %q is not declared", tokens[0])
+	}
+	updated, err := child.setRequestPointerValue(object[tokens[0]], tokens[1:], value, pointer)
+	if err != nil {
+		return nil, err
+	}
+	object[tokens[0]] = updated
+	return object, nil
+}
+
+func (s *Schema) ValidateRequestFieldPointerValue(pointer string, value any) error {
+	if s == nil || s.node == nil {
+		return fmt.Errorf("schema is nil")
+	}
+	namespace, tokens, err := parseRequestFieldPointer(pointer)
+	if err != nil {
+		return err
+	}
+	if namespace != "body" {
+		return fmt.Errorf("request field pointer %q is not body-scoped", pointer)
+	}
+	node, _, err := s.requestMappingNode(tokens, pointer)
+	if err != nil {
+		return err
+	}
+	return node.validate(value, pointer)
+}
+
+func (s *Schema) ValidatePartialRequestBody(body map[string]any) error {
+	if s == nil || s.node == nil {
+		return fmt.Errorf("schema is nil")
+	}
+	return s.node.validatePartial(body, "")
+}
+
 func (s *Schema) MappingPath(path string) (SchemaPathInfo, error) {
 	if s == nil || s.node == nil {
 		return SchemaPathInfo{}, fmt.Errorf("schema is nil")
@@ -200,10 +317,11 @@ func (s *Schema) MappingPath(path string) (SchemaPathInfo, error) {
 			if err := validateMappingArrayIndex(part); err != nil {
 				return SchemaPathInfo{}, err
 			}
-			if current.items == nil {
+			items, ok := current.mappingItems()
+			if !ok {
 				return SchemaPathInfo{}, fmt.Errorf("array segment %q has no item schema", part)
 			}
-			current = current.items
+			current = items
 			continue
 		}
 		child, ok := current.mappingProperty(part)
@@ -341,10 +459,11 @@ func (n *schemaNode) collectRequiredRequestMappings(prefix string, paths map[str
 
 func (n *schemaNode) collectRequiredRequestNodeMappings(prefix string, paths map[string]bool) error {
 	if n.mappingIsArray() {
-		if n.items == nil {
+		items, ok := n.mappingItems()
+		if !ok {
 			return nil
 		}
-		return n.items.collectRequiredRequestNodeMappings(appendRequestFieldPointer(prefix, "0"), paths)
+		return items.collectRequiredRequestNodeMappings(appendRequestFieldPointer(prefix, "0"), paths)
 	}
 	if !n.mappingIsObject() {
 		return nil
@@ -354,10 +473,11 @@ func (n *schemaNode) collectRequiredRequestNodeMappings(prefix string, paths map
 
 func (n *schemaNode) collectRequiredNodeMappingPaths(prefix string, paths map[string]bool) error {
 	if n.mappingIsArray() {
-		if n.items == nil {
+		items, ok := n.mappingItems()
+		if !ok {
 			return nil
 		}
-		return n.items.collectRequiredNodeMappingPaths(joinMappingPath(prefix, "0"), paths)
+		return items.collectRequiredNodeMappingPaths(joinMappingPath(prefix, "0"), paths)
 	}
 	if !n.mappingIsObject() {
 		return nil
@@ -373,6 +493,25 @@ func (n *schemaNode) mappingProperty(name string) (*schemaNode, bool) {
 	for _, branch := range n.allOf {
 		if child, ok := branch.mappingProperty(name); ok {
 			matches = append(matches, child)
+		}
+	}
+	if len(matches) == 0 {
+		return nil, false
+	}
+	if len(matches) == 1 {
+		return matches[0], true
+	}
+	return &schemaNode{allOf: matches, additionalProperties: true}, true
+}
+
+func (n *schemaNode) mappingItems() (*schemaNode, bool) {
+	var matches []*schemaNode
+	if n.items != nil {
+		matches = append(matches, n.items)
+	}
+	for _, branch := range n.allOf {
+		if items, ok := branch.mappingItems(); ok {
+			matches = append(matches, items)
 		}
 	}
 	if len(matches) == 0 {
@@ -504,11 +643,12 @@ func (s *Schema) requestMappingNode(tokens []string, pointer string) (*schemaNod
 			if err := validateMappingArrayIndex(part); err != nil {
 				return nil, nil, err
 			}
-			if current.items == nil {
+			items, ok := current.mappingItems()
+			if !ok {
 				return nil, nil, fmt.Errorf("array segment %q has no item schema", part)
 			}
 			canonical = append(canonical, "0")
-			current = current.items
+			current = items
 			continue
 		}
 		child, ok := current.mappingProperty(part)
@@ -859,6 +999,71 @@ func compileTypes(raw json.RawMessage) ([]string, error) {
 // JSON-pointer-ish path to the offending value.
 func (s *Schema) Validate(v any) error {
 	return s.node.validate(v, "")
+}
+
+func (n *schemaNode) validatePartial(v any, path string) error {
+	if len(n.types) > 0 && !typeMatches(v, n.types) {
+		return fmt.Errorf("%s: value does not match type %v", displayPath(path), n.types)
+	}
+	if len(n.enum) > 0 {
+		matched := false
+		for _, want := range n.enum {
+			if enumEquals(v, want) {
+				matched = true
+				break
+			}
+		}
+		if !matched {
+			return fmt.Errorf("%s: value not in enum %v", displayPath(path), n.enum)
+		}
+	}
+	if val, ok := v.(string); ok && n.pattern != nil && !n.pattern.MatchString(val) {
+		return fmt.Errorf("%s: value does not match pattern %q", displayPath(path), n.pattern.String())
+	}
+	if obj, ok := v.(map[string]any); ok {
+		if n.hasAdditionalProps && !n.additionalProperties {
+			keys := make([]string, 0, len(obj))
+			for key := range obj {
+				keys = append(keys, key)
+			}
+			sort.Strings(keys)
+			for _, key := range keys {
+				if _, declared := n.properties[key]; !declared {
+					return fmt.Errorf("%s/%s: additional property not allowed", displayPath(path), key)
+				}
+			}
+		}
+		for key, child := range n.properties {
+			value, present := obj[key]
+			if !present {
+				continue
+			}
+			if err := child.validatePartial(value, path+"/"+key); err != nil {
+				return err
+			}
+		}
+	}
+	if elems, ok := arrayElements(v); ok {
+		if err := n.validateArrayCardinality(len(elems), path); err != nil {
+			return err
+		}
+		if n.items != nil {
+			for i, elem := range elems {
+				if err := n.items.validate(elem, fmt.Sprintf("%s/%d", path, i)); err != nil {
+					return err
+				}
+			}
+		}
+	}
+	for i, branch := range n.allOf {
+		if err := branch.validatePartial(v, path); err != nil {
+			return fmt.Errorf("%s: allOf[%d]: %w", displayPath(path), i, err)
+		}
+	}
+	if len(n.anyOf) > 0 || len(n.oneOf) > 0 {
+		return fmt.Errorf("%s: partial validation cannot evaluate alternative schema branches", displayPath(path))
+	}
+	return nil
 }
 
 func (n *schemaNode) validate(v any, path string) error {

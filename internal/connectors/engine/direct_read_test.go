@@ -687,6 +687,86 @@ func TestOperationDirectReadPOSTNoBody(t *testing.T) {
 	}
 }
 
+func TestOperationReadBodyDeepMergesStaticAndFlagObjects(t *testing.T) {
+	op := OperationSpec{ID: "acme.widgets.preview", REST: &RESTOperationSpec{
+		Method: http.MethodPost,
+		Body: &RESTOperationBody{Fields: map[string]any{
+			"config": map[string]any{
+				"mode":    "safe",
+				"options": map[string]any{"timeout": json.Number("5"), "retries": json.Number("2")},
+				"replace": "static",
+			},
+		}},
+		BodySchema: json.RawMessage(`{
+			"type":"object",
+			"additionalProperties":false,
+			"required":["config"],
+			"properties":{"config":{
+				"type":"object",
+				"additionalProperties":false,
+				"required":["mode","value","options","replace"],
+				"properties":{
+					"mode":{"type":"string"},
+					"value":{"type":"string"},
+					"options":{"type":"object","additionalProperties":false,"required":["timeout","retries"],"properties":{"timeout":{"type":"integer"},"retries":{"type":"integer"}}},
+					"replace":{"type":"object","additionalProperties":false,"required":["nested"],"properties":{"nested":{"type":"boolean"}}}
+				}
+			}}
+		}`),
+	}}
+
+	body, err := operationReadBody(op, map[string]any{
+		"config": map[string]any{
+			"value":   "dynamic",
+			"options": map[string]any{"timeout": json.Number("10")},
+			"replace": map[string]any{"nested": true},
+		},
+	})
+	if err != nil {
+		t.Fatalf("operationReadBody: %v", err)
+	}
+	config := body.(map[string]any)["config"].(map[string]any)
+	if config["mode"] != "safe" || config["value"] != "dynamic" {
+		t.Fatalf("merged config = %#v", config)
+	}
+	options := config["options"].(map[string]any)
+	if options["timeout"] != json.Number("10") || options["retries"] != json.Number("2") {
+		t.Fatalf("merged options = %#v", options)
+	}
+	if config["replace"].(map[string]any)["nested"] != true {
+		t.Fatalf("object override = %#v", config["replace"])
+	}
+	staticConfig := op.REST.Body.Fields["config"].(map[string]any)
+	if staticConfig["replace"] != "static" || staticConfig["options"].(map[string]any)["timeout"] != json.Number("5") {
+		t.Fatalf("static body mutated = %#v", staticConfig)
+	}
+}
+
+func TestOperationDirectReadAllowsBracketedQueryNames(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if got := r.URL.Query().Get("filter[status]"); got != "active" {
+			t.Fatalf("filter[status] = %q, want active", got)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer srv.Close()
+
+	b := directReadBundle(srv.URL, http.MethodGet, "/widgets")
+	b.Operations = []OperationSpec{{
+		ID: "acme.widgets.list", Kind: "rest_read", OutputPolicy: "json_redacted",
+		REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/widgets", MaxBytes: 1024, Body: &RESTOperationBody{None: true}},
+	}}
+	b.Surface.Endpoints[0].Operation = &SurfaceOperation{Model: "direct_read", Status: "blocked", Risk: "low", BlockedByDefault: true, Reason: "typed operation metadata"}
+	b.Surface.Endpoints[0].CoveredBy = nil
+	if _, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "acme.widgets.list",
+		Query:     map[string]string{"filter[status]": "active"},
+	}, nil); err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+}
+
 func TestDirectReadAvoidsDoubleVersionPrefixWhenBaseURLAlreadyContainsVersion(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/v2/calls/call-1" {

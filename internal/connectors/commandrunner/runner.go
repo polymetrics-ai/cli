@@ -348,7 +348,11 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 	if err := validateOperationDirectReadCommand(connector, cmd); err != nil {
 		return Result{}, err
 	}
-	pathParams, query, body, err := operationDirectReadOverrides(cmd, req.Flags)
+	bodySchema, err := operationRequestBodySchema(connector, cmd)
+	if err != nil {
+		return Result{}, err
+	}
+	pathParams, query, body, err := operationDirectReadOverrides(cmd, req.Flags, bodySchema)
 	if err != nil {
 		return Result{}, redactCommandError(err, cmd.RedactFields, req)
 	}
@@ -376,6 +380,36 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 		return Result{}, redactCommandError(err, cmd.RedactFields, req)
 	}
 	return Result{Connector: connector.Name(), Command: cmd.Path, DirectRead: &direct}, nil
+}
+
+type operationRequestBodySchemaProvider interface {
+	OperationRequestBodySchema(string) (*engine.Schema, error)
+}
+
+func operationRequestBodySchema(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) (*engine.Schema, error) {
+	needsSchema := false
+	for _, flag := range cmd.Flags {
+		namespace, _, err := engine.ParseRequestFieldPointer(flag.MapsTo)
+		if err == nil && namespace == "body" {
+			needsSchema = true
+			break
+		}
+	}
+	if !needsSchema {
+		return nil, nil
+	}
+	provider, ok := connector.(operationRequestBodySchemaProvider)
+	if !ok {
+		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read body mappings require the operation body schema"}
+	}
+	schema, err := provider.OperationRequestBodySchema(cmd.Operation)
+	if err != nil {
+		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct_read body schema is unavailable: %v", err)}
+	}
+	if schema == nil {
+		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read body mappings require a declared body_schema"}
+	}
+	return schema, nil
 }
 
 func validateDirectReadCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
@@ -546,7 +580,7 @@ func streamOverrides(cmd connectors.CommandSurfaceCommand, cfg connectors.Runtim
 		switch {
 		case strings.HasPrefix(flag.MapsTo, "query."):
 			target := strings.TrimPrefix(flag.MapsTo, "query.")
-			if err := safety.ValidateIdentifier(target, "query parameter"); err != nil {
+			if err := safety.ValidateQueryParameterName(target, "query parameter"); err != nil {
 				return connectors.RuntimeConfig{}, nil, err
 			}
 			query[target] = value
@@ -866,7 +900,7 @@ func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string]
 			pathParams[target] = value
 		case strings.HasPrefix(flag.MapsTo, "query."):
 			target := strings.TrimPrefix(flag.MapsTo, "query.")
-			if err := safety.ValidateIdentifier(target, "query parameter"); err != nil {
+			if err := safety.ValidateQueryParameterName(target, "query parameter"); err != nil {
 				return nil, nil, err
 			}
 			query[target] = value
@@ -882,7 +916,7 @@ func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string]
 	return pathParams, query, nil
 }
 
-func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, map[string]string, map[string]any, error) {
+func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string, bodySchema *engine.Schema) (map[string]string, map[string]string, map[string]any, error) {
 	allowed := map[string]connectors.CommandSurfaceFlag{}
 	for _, flag := range cmd.Flags {
 		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
@@ -907,7 +941,7 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 		if left == right {
 			return names[i] < names[j]
 		}
-		return left < right
+		return requestPointerLess(left, right)
 	})
 	for _, name := range names {
 		values := flags[name]
@@ -935,7 +969,7 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 		case "query":
 			query[tokens[0]] = stringifyCommandValue(value)
 		case "body":
-			if err := setRequestBodyValue(body, tokens, flag.MapsTo, value); err != nil {
+			if err := setRequestBodyValue(bodySchema, body, flag.MapsTo, value); err != nil {
 				return nil, nil, nil, err
 			}
 		}
@@ -943,9 +977,37 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 	return pathParams, query, body, nil
 }
 
-func setRequestBodyValue(body map[string]any, tokens []string, pointer string, value any) error {
-	_, err := setDottedValue(body, tokens, value, pointer)
-	return err
+func requestPointerLess(left, right string) bool {
+	leftNamespace, leftTokens, leftErr := engine.ParseRequestFieldPointer(left)
+	rightNamespace, rightTokens, rightErr := engine.ParseRequestFieldPointer(right)
+	if leftErr != nil || rightErr != nil {
+		return left < right
+	}
+	if leftNamespace != rightNamespace {
+		return leftNamespace < rightNamespace
+	}
+	limit := len(leftTokens)
+	if len(rightTokens) < limit {
+		limit = len(rightTokens)
+	}
+	for i := 0; i < limit; i++ {
+		leftIndex, leftNumeric, leftIndexErr := pathArrayIndex(leftTokens[i])
+		rightIndex, rightNumeric, rightIndexErr := pathArrayIndex(rightTokens[i])
+		if leftIndexErr == nil && rightIndexErr == nil && leftNumeric && rightNumeric && leftIndex != rightIndex {
+			return leftIndex < rightIndex
+		}
+		if leftTokens[i] != rightTokens[i] {
+			return leftTokens[i] < rightTokens[i]
+		}
+	}
+	return len(leftTokens) < len(rightTokens)
+}
+
+func setRequestBodyValue(schema *engine.Schema, body map[string]any, pointer string, value any) error {
+	if schema == nil {
+		return fmt.Errorf("body field %q requires body_schema", pointer)
+	}
+	return schema.SetRequestBodyPointer(body, pointer, value)
 }
 
 func setBodyValue(body map[string]any, path string, value any) error {

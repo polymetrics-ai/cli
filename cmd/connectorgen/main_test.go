@@ -754,7 +754,7 @@ func TestValidate_CLISurfaceRequestContractFlagsApplyToAllOperations(t *testing.
 }
 
 func TestCLISurfaceRequestContractCanonicalizesArrayIndices(t *testing.T) {
-	schema := json.RawMessage(`{
+	rawSchema := json.RawMessage(`{
 		"type":"object",
 		"additionalProperties":false,
 		"required":["items"],
@@ -774,7 +774,11 @@ func TestCLISurfaceRequestContractCanonicalizesArrayIndices(t *testing.T) {
 				{Path: "/body/items/0/name"},
 			},
 		},
-		REST: &engine.RESTOperationSpec{BodySchema: schema},
+		REST: &engine.RESTOperationSpec{BodySchema: rawSchema},
+	}
+	schema, err := engine.CompileSchema(rawSchema)
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
 	}
 	cmd := engine.CLICommand{Path: "widget preview", Flags: []engine.CLIFlag{{Name: "name", MapsTo: "/body/items/0/name", Required: true}}}
 	if findings := checkCLISurfaceRequestContractFlags(engine.Bundle{Name: "acme"}, 0, cmd, op); len(findings) != 0 {
@@ -783,11 +787,17 @@ func TestCLISurfaceRequestContractCanonicalizesArrayIndices(t *testing.T) {
 	if findings := checkCLISurfaceOperationBodyMappings(engine.Bundle{Name: "acme"}, 0, cmd, op); len(findings) != 0 {
 		t.Fatalf("array-index required-mapping findings = %+v, want none", findings)
 	}
-	if !operationStaticBodyProvidesPointer(map[string]any{"items": []any{map[string]any{"name": "first"}, map[string]any{"name": "second"}}}, "/body/items/0/name") {
+	provided, err := operationStaticBodyProvidesPointer(schema, map[string]any{"items": []any{map[string]any{"name": "first"}, map[string]any{"name": "second"}}}, "/body/items/0/name")
+	if err != nil || !provided {
 		t.Fatal("operationStaticBodyProvidesPointer did not validate every complete static array element")
 	}
-	if operationStaticBodyProvidesPointer(map[string]any{"items": []any{map[string]any{"name": "first"}, map[string]any{}}}, "/body/items/0/name") {
+	provided, err = operationStaticBodyProvidesPointer(schema, map[string]any{"items": []any{map[string]any{"name": "first"}, map[string]any{}}}, "/body/items/0/name")
+	if err != nil || provided {
 		t.Fatal("operationStaticBodyProvidesPointer accepted an incomplete later static array element")
+	}
+	provided, err = operationStaticBodyProvidesPointer(schema, map[string]any{"items": []any{map[string]any{"name": "first"}, map[string]any{"name": json.Number("7")}}}, "/body/items/0/name")
+	if err == nil || provided {
+		t.Fatal("operationStaticBodyProvidesPointer accepted a later static array element with the wrong type")
 	}
 }
 

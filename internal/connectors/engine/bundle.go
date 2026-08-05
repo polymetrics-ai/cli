@@ -12,6 +12,8 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+
+	"polymetrics.ai/internal/safety"
 )
 
 // namePattern is the shared connector/stream/action naming rule (design §A,
@@ -1425,11 +1427,11 @@ func validateWriteBodies(actions []WriteAction) error {
 			return fmt.Errorf("action %d (%q) declares base64_upload but body_type is %q", i, action.Name, bodyType)
 		}
 		for name := range action.Query {
-			if strings.TrimSpace(name) == "" {
-				return fmt.Errorf("action %d (%q) query contains an empty parameter name", i, action.Name)
-			}
 			if name != strings.TrimSpace(name) {
 				return fmt.Errorf("action %d (%q) query parameter %q contains surrounding whitespace", i, action.Name, name)
+			}
+			if err := safety.ValidateQueryParameterName(name, "query parameter"); err != nil {
+				return fmt.Errorf("action %d (%q) query parameter %q: %w", i, action.Name, name, err)
 			}
 		}
 		switch bodyType {
@@ -1934,13 +1936,18 @@ func validateRequiredQuery(i int, op OperationSpec) error {
 	if op.REST == nil {
 		return nil
 	}
+	for name := range op.REST.Query {
+		if err := safety.ValidateQueryParameterName(name, "query parameter"); err != nil {
+			return fmt.Errorf("operation %d (%q) rest.query parameter %q: %w", i, op.ID, name, err)
+		}
+	}
 	for j, group := range op.REST.RequiredQuery {
 		if len(group.AnyOf) == 0 {
 			return fmt.Errorf("operation %d (%q) required_query group %d must name at least one parameter", i, op.ID, j)
 		}
 		for _, name := range group.AnyOf {
-			if strings.TrimSpace(name) == "" {
-				return fmt.Errorf("operation %d (%q) required_query group %d has a blank parameter name", i, op.ID, j)
+			if err := safety.ValidateQueryParameterName(name, "query parameter"); err != nil {
+				return fmt.Errorf("operation %d (%q) required_query group %d parameter %q: %w", i, op.ID, j, name, err)
 			}
 		}
 	}
