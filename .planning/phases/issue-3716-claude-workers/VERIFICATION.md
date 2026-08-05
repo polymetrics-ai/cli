@@ -15,8 +15,9 @@ Status: review corrections applied; the outer executor owns remaining delivery g
   canonical name/path mismatches across every repository-local `.claude/agents` scope.
 - [x] Inventory prunes only exact root `.git` metadata; `.GIT`, `.Git`, and nested paths remain in
   the discoverable scope check.
-- [x] The Claude renderer emits LF-canonical expected bytes, checked-out CRLF normalizes to LF, and
-  sync treats either canonical-source or working-tree CRLF-only differences as current.
+- [x] The Claude renderer emits LF-canonical expected bytes, collapses repeated carriage returns
+  before LF to the same idempotent fixed point, preserves bare carriage returns, and sync treats
+  canonical-source or working-tree EOL-only differences as current.
 - [x] Mutating a generated file to grant `Agent` fails the real drift check; sync restores it.
 - [x] Installed Claude CLI smoke discovers both project workers by name in this trusted checkout.
 - [x] Prior live ambient CLI/plugin fixtures demonstrate direct `Agent` delegation is blocked for
@@ -88,6 +89,8 @@ overrides.
 - The metadata/EOL review round adds `.GIT` and `.Git` inventory cases, exact root `.git` pruning,
   canonical CRLF rendering, successful checking, and zero-update repeated sync; the same focused
   package command passes.
+- The fixed-point EOL review round adds direct repeated-run idempotence cases and canonical
+  `\r\r\r\n` render/check/sync coverage; the same focused package command passes.
 - Windows runtime execution was not performed; portability is source- and fixture-level evidence
   from slash-native contract validation, LF-canonical rendering/CRLF-normalized comparison, and
   Node-mediated adapter invocation.

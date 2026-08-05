@@ -161,14 +161,14 @@ func TestClaudeProjectionCRLFIsNotDrift(t *testing.T) {
 	}
 }
 
-func TestClaudeProjectionCanonicalCRLFIsStable(t *testing.T) {
+func TestClaudeProjectionCanonicalRepeatedCRIsStable(t *testing.T) {
 	contract := loadRepositoryContract(t, repositoryRoot(t))
 	foundPolicy := false
 	for index := range contract.HarnessPolicies {
 		if contract.HarnessPolicies[index].Harness != "claude" {
 			continue
 		}
-		contract.HarnessPolicies[index].ProjectDiscovery += "\r\nCanonical discovery continuation."
+		contract.HarnessPolicies[index].ProjectDiscovery += "\r\r\r\nCanonical discovery continuation."
 		foundPolicy = true
 	}
 	if !foundPolicy {
@@ -179,8 +179,8 @@ func TestClaudeProjectionCanonicalCRLFIsStable(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if bytes.Contains(projection, []byte("\r\n")) {
-		t.Fatal("RenderProjection retained CRLF from canonical Claude policy")
+	if bytes.Contains(projection, []byte("\r")) {
+		t.Fatal("RenderProjection retained a carriage return from canonical Claude policy")
 	}
 	if !bytes.Contains(projection, []byte("\nCanonical discovery continuation.")) {
 		t.Fatal("RenderProjection did not preserve canonical discovery text with LF")

@@ -73,6 +73,33 @@ func TestParseClaudeFrontmatterAcceptsCRLF(t *testing.T) {
 	}
 }
 
+func TestNormalizeClaudeProjectionIsIdempotent(t *testing.T) {
+	tests := []struct {
+		name  string
+		input string
+		want  string
+	}{
+		{name: "LF unchanged", input: "first\nsecond\n", want: "first\nsecond\n"},
+		{name: "CRLF", input: "first\r\nsecond\r\n", want: "first\nsecond\n"},
+		{name: "repeated carriage returns", input: "first\r\r\r\nsecond", want: "first\nsecond"},
+		{name: "multiple runs", input: "\r\r\nfirst\r\nsecond\r\r\r\n", want: "\nfirst\nsecond\n"},
+		{name: "bare carriage returns preserved", input: "first\rsecond\r\rthird", want: "first\rsecond\r\rthird"},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			once := normalizeClaudeProjection([]byte(test.input))
+			if string(once) != test.want {
+				t.Fatalf("normalizeClaudeProjection(%q) = %q, want %q", test.input, once, test.want)
+			}
+			twice := normalizeClaudeProjection(once)
+			if !bytes.Equal(twice, once) {
+				t.Fatalf("second normalization = %q, want fixed point %q", twice, once)
+			}
+		})
+	}
+}
+
 func TestClaudeProjectWorkersBlockAmbientAgentDelegation(t *testing.T) {
 	root := repositoryRoot(t)
 	contract := loadRepositoryContract(t, root)

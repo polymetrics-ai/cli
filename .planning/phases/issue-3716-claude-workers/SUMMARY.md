@@ -23,13 +23,13 @@ coverage:
         status: pass
     human_judgment: false
   - id: D3
-    description: The canonical source owns full-file generation and fails closed on nested agent or semantic drift
+    description: The canonical source owns full-file generation and fails closed on nested agent or semantic drift with idempotent EOL handling
     verification:
       - kind: unit
         ref: internal/agentcontract/claude_test.go TestRenderClaudeProjectionsIsStableAndSelfContained
         status: pass
       - kind: unit
-        ref: internal/agentcontract/check_test.go inventory and canonical/working-tree CRLF tests
+        ref: internal/agentcontract/check_test.go inventory and canonical/working-tree EOL fixed-point tests
         status: pass
       - kind: other
         ref: make agent-contract-check
@@ -74,8 +74,8 @@ coverage:
   isolation.
 - Added red/green regression coverage for missing project workers, invalid `Agent` drift, atomic
   sync repair, frontmatter requirements, repository-wide nested extra/duplicate agent inventory
-  including case-variant Git-like paths, canonical and working-tree CRLF stability, and connector
-  inheritance.
+  including case-variant Git-like paths, canonical and working-tree EOL fixed-point stability with
+  repeated carriage returns, and connector inheritance.
 - Made slash-separated contract path validation independent of the host OS and execute the
   extensionless GSD JavaScript adapter through Node.
 - Recorded the official Claude Code discovery, precedence, and tool-access rules together with an
@@ -89,9 +89,10 @@ no-`Agent` policy. Review hardening replaced collision-prone skill rules with qu
 denied runtime `Skill`, and added an `Agent`/`Task`/`Skill` denylist so unrelated
 `context: fork` skills cannot be invoked. Repository-wide inventory and EOL-normalized drift tests
 demonstrate that policy is canonical and repaired by the actual generator. Only exact root `.git`
-metadata is pruned, while the renderer and validator share LF-canonical whole-file semantics. The
-prior trusted-home Claude Code v2.1.222 smoke forced an `Agent` call against ambient fixtures and
-returned `AGENT_UNAVAILABLE` without tool use.
+metadata is pruned, while the renderer and validator share idempotent LF-canonical whole-file
+semantics even for repeated carriage-return runs. The prior trusted-home Claude Code v2.1.222
+smoke forced an `Agent` call against ambient fixtures and returned `AGENT_UNAVAILABLE` without
+tool use.
 
 ## Isolation boundary
 

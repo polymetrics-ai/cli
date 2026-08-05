@@ -114,6 +114,19 @@ Issue: #3716. Parent: #3714. Branch: `fm/cli-agents-wave-claude-r1`.
 4. Preserve canonical ownership, qualified skill preloads, runtime `Skill` denial, the full
    `Agent`/`Task`/`Skill` denylist, and the clean-home **NOT PERFORMED** wording.
 
+### Slice 7 — REVIEW FIX: fixed-point Claude EOL normalization
+
+1. Replace pairwise CRLF rewriting with a linear canonicalizer that collapses every carriage-return
+   run immediately before LF in one pass while preserving bare carriage returns.
+2. Add direct table-driven coverage for ordinary CRLF, repeated carriage-return runs, multiple
+   runs, unchanged LF, and preserved bare carriage returns; assert a second normalization is
+   byte-identical to the first.
+3. Strengthen canonical-source render/check/sync coverage with repeated carriage returns before LF
+   and prove rendering is LF-only and a second sync performs zero updates.
+4. Preserve generator-only ownership of both Claude workers, qualified skill preloads, runtime
+   `Skill` denial, the complete `Agent`/`Task`/`Skill` denylist, and the clean-home **NOT
+   PERFORMED** wording.
+
 ## Verification
 
 - RED/GREEN: `go test ./internal/agentcontract ./cmd/agentcontractgen`.
