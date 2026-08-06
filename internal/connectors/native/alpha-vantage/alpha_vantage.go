@@ -32,6 +32,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 const (
@@ -308,12 +309,14 @@ func (c Connector) requester(cfg connectors.RuntimeConfig) (*connsdk.Requester, 
 	if strings.TrimSpace(secret) == "" {
 		return nil, errors.New("alpha-vantage connector requires secret api_key")
 	}
-	return &connsdk.Requester{
+	requester := &connsdk.Requester{
 		Client:    c.Client,
 		BaseURL:   base,
 		Auth:      connsdk.APIKeyQuery("apikey", secret),
 		UserAgent: alphaVantageUserAgent,
-	}, nil
+	}
+	engine.AttachRateLimitActivityObserver(requester, cfg, c.Name())
+	return requester, nil
 }
 
 func alphaVantageSecret(cfg connectors.RuntimeConfig) string {
