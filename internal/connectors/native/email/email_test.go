@@ -111,6 +111,96 @@ func TestMailboxListHonorsRequestedLimit(t *testing.T) {
 	}
 }
 
+func TestOpenIMAPCancellationClosesOwnedConnection(t *testing.T) {
+	for _, tc := range []struct {
+		name     string
+		security transportSecurity
+	}{
+		{name: "implicit TLS handshake", security: securityTLS},
+		{name: "plaintext login", security: securityNone},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			address, accepted := startStalledTCPFixture(t)
+			connection, err := resolveConnectionConfig(testRuntimeConfig(t))
+			if err != nil {
+				t.Fatalf("resolveConnectionConfig: %v", err)
+			}
+			connection.imapSecurity = tc.security
+			connection.timeout = time.Minute
+			connector := New()
+			connector.imapAddressOverride = address
+			ctx, cancel := context.WithCancel(context.Background())
+			defer cancel()
+			result := make(chan error, 1)
+			go func() {
+				opened, openErr := connector.openIMAP(ctx, connection)
+				if opened != nil {
+					closeIMAP(opened)
+				}
+				result <- openErr
+			}()
+			select {
+			case <-accepted:
+			case <-time.After(time.Second):
+				t.Fatal("IMAP fixture did not accept a connection")
+			}
+			cancel()
+			select {
+			case err := <-result:
+				if !errors.Is(err, context.Canceled) {
+					t.Fatalf("openIMAP error = %v, want context.Canceled", err)
+				}
+			case <-time.After(time.Second):
+				t.Fatal("openIMAP did not return after cancellation")
+			}
+		})
+	}
+}
+
+func TestOpenSMTPCancellationClosesOwnedConnection(t *testing.T) {
+	for _, tc := range []struct {
+		name     string
+		security transportSecurity
+	}{
+		{name: "implicit TLS handshake", security: securityTLS},
+		{name: "plaintext greeting", security: securityNone},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			address, accepted := startStalledTCPFixture(t)
+			connection, err := resolveConnectionConfig(testRuntimeConfig(t))
+			if err != nil {
+				t.Fatalf("resolveConnectionConfig: %v", err)
+			}
+			connection.smtpSecurity = tc.security
+			connection.timeout = time.Minute
+			ctx, cancel := context.WithCancel(context.Background())
+			defer cancel()
+			result := make(chan error, 1)
+			go func() {
+				opened, openErr := openSMTP(ctx, connection, address)
+				if opened != nil {
+					closeSMTP(opened)
+				}
+				result <- openErr
+			}()
+			select {
+			case <-accepted:
+			case <-time.After(time.Second):
+				t.Fatal("SMTP fixture did not accept a connection")
+			}
+			cancel()
+			select {
+			case err := <-result:
+				if !errors.Is(err, context.Canceled) {
+					t.Fatalf("openSMTP error = %v, want context.Canceled", err)
+				}
+			case <-time.After(time.Second):
+				t.Fatal("openSMTP did not return after cancellation")
+			}
+		})
+	}
+}
+
 func TestSendPreviewIsUnmaskedAndAttachmentDriftCannotDispatch(t *testing.T) {
 	address, captured := startSMTPFixture(t)
 	projectRoot := t.TempDir()
@@ -214,6 +304,24 @@ func TestAttachmentsRequireRelativePathsWithinRuntimeStagingRoot(t *testing.T) {
 	}
 }
 
+func TestLoadAttachmentsBoundsCount(t *testing.T) {
+	runtimeRoot := t.TempDir()
+	if err := osWriteFile(filepath.Join(runtimeRoot, "empty.txt"), nil); err != nil {
+		t.Fatalf("write empty attachment: %v", err)
+	}
+	paths := make([]string, maxAttachmentCount+1)
+	for i := range paths {
+		paths[i] = "empty.txt"
+	}
+	_, err := loadAttachments(runtimeRoot, paths)
+	if err == nil {
+		t.Fatal("loadAttachments accepted more than the maximum number of empty attachments")
+	}
+	if !strings.Contains(err.Error(), "at most") || !strings.Contains(err.Error(), "attachments") {
+		t.Fatalf("loadAttachments error = %q, want attachment count bound", err)
+	}
+}
+
 func TestMessageSendCommandBuildsTypedUnmaskedPreview(t *testing.T) {
 	c := New()
 	command, err := commandrunner.BuildWriteCommand(context.Background(), c, commandrunner.Request{
@@ -241,6 +349,60 @@ func TestMessageSendCommandBuildsTypedUnmaskedPreview(t *testing.T) {
 		if !strings.Contains(previewText, want) {
 			t.Fatalf("command preview missing unmasked %q: %s", want, previewText)
 		}
+	}
+}
+
+func TestMessageSendCommandAllowsBlankBodyAndRequiresSubject(t *testing.T) {
+	command, err := commandrunner.BuildWriteCommand(context.Background(), New(), commandrunner.Request{
+		Path:    []string{"message", "send"},
+		Config:  testRuntimeConfig(t),
+		Preview: true,
+		Flags: map[string][]string{
+			"to":      {"to@example.invalid"},
+			"subject": {"command subject"},
+			"body":    {""},
+		},
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand(blank body): %v", err)
+	}
+	if command.Preview == nil {
+		t.Fatal("BuildWriteCommand(blank body) did not create a preview")
+	}
+	_, err = commandrunner.BuildWriteCommand(context.Background(), New(), commandrunner.Request{
+		Path:   []string{"message", "send"},
+		Config: testRuntimeConfig(t),
+		Flags: map[string][]string{
+			"to":      {"to@example.invalid"},
+			"subject": {""},
+			"body":    {"body"},
+		},
+	})
+	if err == nil || !strings.Contains(err.Error(), "missing required flag --subject") {
+		t.Fatalf("BuildWriteCommand(blank subject) error = %v, want required subject rejection", err)
+	}
+}
+
+func TestMessageSendCommandBoundsAttachmentCount(t *testing.T) {
+	attachments := make([]string, maxAttachmentCount+1)
+	for i := range attachments {
+		attachments[i] = "empty.txt"
+	}
+	_, err := commandrunner.BuildWriteCommand(context.Background(), New(), commandrunner.Request{
+		Path:   []string{"message", "send"},
+		Config: testRuntimeConfig(t),
+		Flags: map[string][]string{
+			"to":         {"to@example.invalid"},
+			"subject":    {"command subject"},
+			"body":       {"command body"},
+			"attachment": attachments,
+		},
+	})
+	if err == nil {
+		t.Fatal("BuildWriteCommand accepted more than the maximum number of attachments")
+	}
+	if !strings.Contains(err.Error(), "--attachment") || !strings.Contains(err.Error(), "maximum") {
+		t.Fatalf("BuildWriteCommand attachment error = %q, want flag count bound", err)
 	}
 }
 
@@ -524,6 +686,37 @@ func transientTestSecret(t *testing.T) string {
 type imapFixture struct {
 	address string
 	config  connectors.RuntimeConfig
+}
+
+func startStalledTCPFixture(t *testing.T) (string, <-chan struct{}) {
+	t.Helper()
+	listener, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatalf("listen stalled fixture: %v", err)
+	}
+	accepted := make(chan struct{})
+	release := make(chan struct{})
+	done := make(chan struct{})
+	go func() {
+		defer close(done)
+		conn, acceptErr := listener.Accept()
+		if acceptErr != nil {
+			return
+		}
+		defer func() { _ = conn.Close() }()
+		close(accepted)
+		<-release
+	}()
+	t.Cleanup(func() {
+		_ = listener.Close()
+		close(release)
+		select {
+		case <-done:
+		case <-time.After(time.Second):
+			t.Error("stalled TCP fixture did not stop")
+		}
+	})
+	return listener.Addr().String(), accepted
 }
 
 func startIMAPFixture(t *testing.T) imapFixture {

@@ -17,6 +17,12 @@ const (
 	maxMessageLimit     = 1000
 )
 
+type imapConnection struct {
+	client *imapclient.Client
+	ctx    context.Context
+	stop   func() bool
+}
+
 // Check authenticates to each configured protocol without changing mailbox
 // data or submitting a message. Authentication errors are intentionally
 // summarized rather than forwarding a server string that could contain an
@@ -34,7 +40,10 @@ func (c Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) erro
 		return err
 	}
 	defer closeIMAP(client)
-	if err := client.Noop().Wait(); err != nil {
+	if err := client.client.Noop().Wait(); err != nil {
+		if ctxErr := ctx.Err(); ctxErr != nil {
+			return ctxErr
+		}
 		return errors.New("email IMAP check failed")
 	}
 	return c.checkSMTP(ctx, connection)
@@ -59,61 +68,100 @@ func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit fu
 	}
 	defer closeIMAP(client)
 
-	return readMailboxes(ctx, client, boundedMessageLimit(req.Limit), emit)
+	return readMailboxes(ctx, client.client, boundedMessageLimit(req.Limit), emit)
 }
 
-func (c Connector) openIMAP(ctx context.Context, connection connectionConfig) (*imapclient.Client, error) {
+func (c Connector) openIMAP(ctx context.Context, connection connectionConfig) (*imapConnection, error) {
 	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
+	dialer := &net.Dialer{Timeout: connection.timeout}
+	tlsConfig := &tls.Config{ServerName: connection.imapHost, MinVersion: tls.VersionTLS12}
 	options := &imapclient.Options{
-		TLSConfig: &tls.Config{ServerName: connection.imapHost, MinVersion: tls.VersionTLS12},
-		Dialer:    &net.Dialer{Timeout: connection.timeout},
+		TLSConfig: tlsConfig,
 		// DebugWriter remains nil because the library documents that it would
 		// include LOGIN credentials in raw protocol traffic.
 	}
 	var (
-		client *imapclient.Client
-		err    error
+		conn net.Conn
+		err  error
 	)
 	switch connection.imapSecurity {
 	case securityTLS:
-		client, err = imapclient.DialTLS(c.imapAddress(connection), options)
-	case securitySTARTTLS:
-		client, err = imapclient.DialStartTLS(c.imapAddress(connection), options)
-	case securityNone:
-		client, err = imapclient.DialInsecure(c.imapAddress(connection), options)
+		tlsConfig = tlsConfig.Clone()
+		if tlsConfig.NextProtos == nil {
+			tlsConfig.NextProtos = []string{"imap"}
+		}
+		options.TLSConfig = tlsConfig
+		conn, err = (&tls.Dialer{NetDialer: dialer, Config: tlsConfig}).DialContext(ctx, "tcp", c.imapAddress(connection))
+	case securitySTARTTLS, securityNone:
+		conn, err = dialer.DialContext(ctx, "tcp", c.imapAddress(connection))
 	default:
 		return nil, errors.New("email config imap_security must satisfy its declared enum constraint")
 	}
 	if err != nil {
+		if ctxErr := ctx.Err(); ctxErr != nil {
+			return nil, ctxErr
+		}
 		return nil, fmt.Errorf("connect to IMAP server: %w", err)
 	}
+	stop := context.AfterFunc(ctx, func() { _ = conn.Close() })
+	if ctxErr := ctx.Err(); ctxErr != nil {
+		_ = stop()
+		_ = conn.Close()
+		return nil, ctxErr
+	}
+	var client *imapclient.Client
+	switch connection.imapSecurity {
+	case securityTLS, securityNone:
+		client = imapclient.New(conn, options)
+	case securitySTARTTLS:
+		client, err = imapclient.NewStartTLS(conn, options)
+	}
+	if err != nil {
+		_ = stop()
+		_ = conn.Close()
+		if ctxErr := ctx.Err(); ctxErr != nil {
+			return nil, ctxErr
+		}
+		return nil, fmt.Errorf("connect to IMAP server: %w", err)
+	}
+	opened := &imapConnection{client: client, ctx: ctx, stop: stop}
 	if err := client.Login(connection.username, connection.password).Wait(); err != nil {
-		_ = client.Close()
+		closeIMAP(opened)
+		if ctxErr := ctx.Err(); ctxErr != nil {
+			return nil, ctxErr
+		}
 		return nil, errors.New("IMAP authentication failed")
 	}
-	return client, nil
+	return opened, nil
 }
 
-func closeIMAP(client *imapclient.Client) {
-	if client == nil {
+func closeIMAP(connection *imapConnection) {
+	if connection == nil || connection.client == nil {
 		return
 	}
-	_ = client.Logout().Wait()
-	_ = client.Close()
+	if connection.ctx.Err() == nil {
+		_ = connection.client.Logout().Wait()
+	}
+	if connection.stop != nil {
+		_ = connection.stop()
+	}
+	_ = connection.client.Close()
 }
 
 func readMailboxes(ctx context.Context, client *imapclient.Client, limit int, emit func(connectors.Record) error) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
 	command := client.List("", "*", nil)
 	for emitted := 0; emitted < limit; emitted++ {
 		mailbox := command.Next()
+		if err := ctx.Err(); err != nil {
+			return err
+		}
 		if mailbox == nil {
 			break
-		}
-		if err := ctx.Err(); err != nil {
-			_ = command.Close()
-			return err
 		}
 		attributes := make([]string, 0, len(mailbox.Attrs))
 		for _, attribute := range mailbox.Attrs {
@@ -133,7 +181,13 @@ func readMailboxes(ctx context.Context, client *imapclient.Client, limit int, em
 			return err
 		}
 	}
+	if err := ctx.Err(); err != nil {
+		return err
+	}
 	if err := command.Close(); err != nil {
+		if ctxErr := ctx.Err(); ctxErr != nil {
+			return ctxErr
+		}
 		return errors.New("IMAP LIST failed")
 	}
 	return nil

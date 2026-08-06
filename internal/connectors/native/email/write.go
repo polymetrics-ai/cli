@@ -28,6 +28,7 @@ import (
 const (
 	maxAttachmentBytes      = 10 << 20
 	maxAttachmentTotalBytes = 25 << 20
+	maxAttachmentCount      = 100
 )
 
 type sendMessage struct {
@@ -51,6 +52,12 @@ type preparedSend struct {
 	connection  connectionConfig
 	message     sendMessage
 	smtpAddress string
+}
+
+type smtpConnection struct {
+	client *smtp.Client
+	ctx    context.Context
+	stop   func() bool
 }
 
 // ValidateWrite proves that only the one typed SMTP action and one typed
@@ -301,6 +308,9 @@ func loadAttachments(runtimeRoot string, paths []string) ([]attachment, error) {
 	if len(paths) == 0 {
 		return nil, nil
 	}
+	if len(paths) > maxAttachmentCount {
+		return nil, fmt.Errorf("email send_message accepts at most %d attachments", maxAttachmentCount)
+	}
 	stagingRoot, err := attachmentStagingRoot(runtimeRoot)
 	if err != nil {
 		return nil, err
@@ -488,8 +498,8 @@ func (c Connector) checkSMTP(ctx context.Context, connection connectionConfig) e
 	if err != nil {
 		return err
 	}
-	defer func() { _ = client.Quit() }()
-	return authenticateSMTP(client, connection)
+	defer closeSMTP(client)
+	return authenticateSMTP(ctx, client.client, connection)
 }
 
 func submitSMTP(ctx context.Context, connection connectionConfig, address string, message sendMessage, payload []byte) error {
@@ -500,33 +510,48 @@ func submitSMTP(ctx context.Context, connection connectionConfig, address string
 	if err != nil {
 		return err
 	}
-	defer func() { _ = client.Quit() }()
-	if err := authenticateSMTP(client, connection); err != nil {
+	defer closeSMTP(client)
+	if err := authenticateSMTP(ctx, client.client, connection); err != nil {
 		return err
 	}
-	if err := client.Mail(message.from); err != nil {
+	if err := client.client.Mail(message.from); err != nil {
+		if ctxErr := ctx.Err(); ctxErr != nil {
+			return ctxErr
+		}
 		return errors.New("SMTP MAIL command failed")
 	}
 	for _, recipient := range message.envelopeRecipients() {
-		if err := client.Rcpt(recipient); err != nil {
+		if err := client.client.Rcpt(recipient); err != nil {
+			if ctxErr := ctx.Err(); ctxErr != nil {
+				return ctxErr
+			}
 			return errors.New("SMTP RCPT command failed")
 		}
 	}
-	writer, err := client.Data()
+	writer, err := client.client.Data()
 	if err != nil {
+		if ctxErr := ctx.Err(); ctxErr != nil {
+			return ctxErr
+		}
 		return errors.New("SMTP DATA command failed")
 	}
 	if _, err := writer.Write(payload); err != nil {
+		if ctxErr := ctx.Err(); ctxErr != nil {
+			return ctxErr
+		}
 		_ = writer.Close()
 		return errors.New("SMTP DATA payload write failed")
 	}
 	if err := writer.Close(); err != nil {
+		if ctxErr := ctx.Err(); ctxErr != nil {
+			return ctxErr
+		}
 		return errors.New("SMTP server rejected the message")
 	}
 	return nil
 }
 
-func openSMTP(ctx context.Context, connection connectionConfig, address string) (*smtp.Client, error) {
+func openSMTP(ctx context.Context, connection connectionConfig, address string) (*smtpConnection, error) {
 	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
@@ -538,35 +563,79 @@ func openSMTP(ctx context.Context, connection connectionConfig, address string) 
 	)
 	switch connection.smtpSecurity {
 	case securityTLS:
-		conn, err = tls.DialWithDialer(dialer, "tcp", address, tlsConfig)
+		conn, err = (&tls.Dialer{NetDialer: dialer, Config: tlsConfig}).DialContext(ctx, "tcp", address)
 	case securitySTARTTLS, securityNone:
 		conn, err = dialer.DialContext(ctx, "tcp", address)
 	default:
 		return nil, errors.New("email config smtp_security must satisfy its declared enum constraint")
 	}
 	if err != nil {
+		if ctxErr := ctx.Err(); ctxErr != nil {
+			return nil, ctxErr
+		}
 		return nil, fmt.Errorf("connect to SMTP server: %w", err)
 	}
-	_ = conn.SetDeadline(time.Now().Add(connection.timeout))
+	stop := context.AfterFunc(ctx, func() { _ = conn.Close() })
+	if ctxErr := ctx.Err(); ctxErr != nil {
+		_ = stop()
+		_ = conn.Close()
+		return nil, ctxErr
+	}
+	if err := conn.SetDeadline(time.Now().Add(connection.timeout)); err != nil {
+		_ = stop()
+		_ = conn.Close()
+		return nil, errors.New("SMTP connection timeout setup failed")
+	}
 	client, err := smtp.NewClient(conn, connection.smtpHost)
 	if err != nil {
+		_ = stop()
 		_ = conn.Close()
+		if ctxErr := ctx.Err(); ctxErr != nil {
+			return nil, ctxErr
+		}
 		return nil, errors.New("SMTP handshake failed")
 	}
+	opened := &smtpConnection{client: client, ctx: ctx, stop: stop}
 	if connection.smtpSecurity == securitySTARTTLS {
 		if ok, _ := client.Extension("STARTTLS"); !ok {
-			_ = client.Close()
+			abortSMTP(opened)
 			return nil, errors.New("SMTP server does not support STARTTLS")
 		}
 		if err := client.StartTLS(tlsConfig); err != nil {
-			_ = client.Close()
+			abortSMTP(opened)
+			if ctxErr := ctx.Err(); ctxErr != nil {
+				return nil, ctxErr
+			}
 			return nil, errors.New("SMTP STARTTLS failed")
 		}
 	}
-	return client, nil
+	return opened, nil
 }
 
-func authenticateSMTP(client *smtp.Client, connection connectionConfig) error {
+func closeSMTP(connection *smtpConnection) {
+	if connection == nil || connection.client == nil {
+		return
+	}
+	if connection.ctx.Err() == nil {
+		_ = connection.client.Quit()
+	}
+	abortSMTP(connection)
+}
+
+func abortSMTP(connection *smtpConnection) {
+	if connection == nil || connection.client == nil {
+		return
+	}
+	if connection.stop != nil {
+		_ = connection.stop()
+	}
+	_ = connection.client.Close()
+}
+
+func authenticateSMTP(ctx context.Context, client *smtp.Client, connection connectionConfig) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
 	ok, mechanisms := client.Extension("AUTH")
 	if !ok {
 		return errors.New("SMTP server does not advertise password authentication")
@@ -585,6 +654,9 @@ func authenticateSMTP(client *smtp.Client, connection connectionConfig) error {
 		return errors.New("SMTP server does not advertise a supported password authentication mechanism")
 	}
 	if err := client.Auth(auth); err != nil {
+		if ctxErr := ctx.Err(); ctxErr != nil {
+			return ctxErr
+		}
 		return errors.New("SMTP authentication failed")
 	}
 	return nil

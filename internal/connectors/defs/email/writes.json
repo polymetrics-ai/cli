@@ -31,6 +31,7 @@
           },
           "attachments": {
             "type": "array",
+            "maxItems": 100,
             "items": { "type": "string" }
           }
         }

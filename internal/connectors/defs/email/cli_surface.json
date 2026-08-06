@@ -65,8 +65,7 @@
           "summary": "Message subject.",
           "maps_to": "record.subject",
           "control_policy": "reject",
-          "required": true,
-          "allow_empty": true
+          "required": true
         },
         {
           "name": "body",
@@ -90,7 +89,8 @@
           "type": "string_array",
           "summary": "Relative regular file paths beneath the runtime .polymetrics staging root; absolute paths, traversal, and escaping symlinks are rejected before preview.",
           "maps_to": "record.attachments",
-          "control_policy": "reject"
+          "control_policy": "reject",
+          "max_items": 100
         }
       ],
       "api_surface": [{"method": "SMTP", "path": "MAIL/RCPT/DATA"}],

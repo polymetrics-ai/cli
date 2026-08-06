@@ -2221,6 +2221,7 @@ func TestCoerceFlagValueBoundsStringArrayItems(t *testing.T) {
 }
 
 func TestValidateRequiredCommandFlagsPreservesStringArrayPresence(t *testing.T) {
+	allowEmpty := true
 	tests := []struct {
 		name    string
 		flag    connectors.CommandSurfaceFlag
@@ -2244,6 +2245,11 @@ func TestValidateRequiredCommandFlagsPreservesStringArrayPresence(t *testing.T) 
 			flag:    connectors.CommandSurfaceFlag{Name: "title", Type: "string", Required: true},
 			flags:   map[string][]string{"title": {""}},
 			wantErr: "missing required flag --title",
+		},
+		{
+			name:  "explicit allow empty scalar is supplied",
+			flag:  connectors.CommandSurfaceFlag{Name: "body", Type: "string", Required: true, AllowEmpty: &allowEmpty},
+			flags: map[string][]string{"body": {""}},
 		},
 		{
 			name:  "explicit blank zero minimum array is supplied",

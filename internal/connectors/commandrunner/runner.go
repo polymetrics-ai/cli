@@ -866,7 +866,7 @@ func validateRequiredCommandFlags(cmd connectors.CommandSurfaceCommand, flags ma
 		if err != nil {
 			return err
 		}
-		if commandValueEmpty(value) {
+		if commandValueEmpty(value) && (flag.AllowEmpty == nil || !*flag.AllowEmpty) {
 			return missingRequiredFlagError(cmd, flag.Name)
 		}
 	}
