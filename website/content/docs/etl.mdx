@@ -99,33 +99,11 @@ pm etl run --connection my-github --stream issues --runtime --json
 
 ## Rate-limit output
 
-Every ETL run and status includes one bounded rate-limit summary per connector.
-It separates `local_pacing_wait` (our declared-policy pacing),
-`provider_429_wait` (a provider pushback we honoured), and `request_latency`
-(ordinary request time), so a slow sync does not look like one undifferentiated
-delay.
-
-For a declared policy, the summary names the policy ID, subject kind, and
-structural selection reason, plus provider budget facts such as remaining
-capacity when reported. A connector without `rate_limits.json` reports
-`undeclared`; that is not a claim that provider traffic is unlimited. The
-summary contains no credentials, bindings, runtime subject values, scope
-values, or credential revisions.
-
-Failed `pm etl run` and `pm etl status` results emit a failed run ID and the
-same summary. Their JSON failed-run carrier exposes only `id`, `status`, and
-`rate_limit`; it omits error text and checkpoints.
-
-Completed-run JSON contains only run ID and type, status, counters, timing, and
-rate-limit facts. It omits connections, streams, error text, and checkpoints.
-
-If `--runtime` recording fails after ETL completes, `pm etl run` still emits the
-completed run and summary before returning a non-zero exit code. It reports
-`runtime_recorded=false` and `runtime_recording=failed` so incomplete runtime
-recording is explicit.
-
-If completed-run state persistence fails, `pm etl run` still emits the completed
-run and summary before returning a non-zero exit code with `persistence=failed`.
+ETL run results and status for stored runs include a bounded `run.rate_limit`
+summary. The [CLI ETL manual](https://github.com/polymetrics-ai/cli/blob/main/docs/cli/etl.md)
+is the authoritative contract for its human and JSON fields, safe failure
+carriers, and secret-free output boundary. Preflight errors before a run exists
+use the ordinary `Error` envelope and do not invent a run summary.
 
 ### JSON output
 

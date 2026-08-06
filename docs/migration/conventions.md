@@ -911,8 +911,10 @@ The process-local registry enforces each declared burst/sustained request/point 
 fixed-window, sliding-window, token-bucket, or leaky-bucket model. A declared actual-cost response
 header tightens a point budget when it reports a higher cost; it never credits capacity from a lower
 or absent value. A reset timestamp hard-blocks only after `Retry-After`, a 429, or an exhausted
-remaining budget; non-exhausted reset metadata only tightens state. #3755 still
-owns operator-visible output; this mechanism does not emit rate-limit events itself.
+remaining budget; non-exhausted reset metadata only tightens state. The engine
+collects typed, bounded facts but does not render output envelopes; the
+operator-visible ETL contract is owned by `docs/cli/etl.md`'s `RATE LIMIT OUTPUT`
+section.
 
 An absent declaration, `unknown`, `not_applicable`, or a non-matching selector leaves the requester
 unchanged. `streams.json` `base.rate_limit` remains the legacy page-loop limiter: it is neither

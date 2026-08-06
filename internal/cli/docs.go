@@ -513,16 +513,26 @@ DESCRIPTION
   record after the local ETL completes.
 
 RATE LIMIT OUTPUT
-  Every ETL run and status result includes a bounded rate-limit summary. Human
-  output labels local_pacing_wait, provider_429_wait, and request_latency
-  separately so a slow run does not look like one undifferentiated delay. JSON
-  places the same data at run.rate_limit.
+  Every emitted ETL run result and status for a stored run includes a bounded
+  rate-limit summary at run.rate_limit. Preflight errors that prevent creation
+  of a run use the ordinary Error output and do not invent a run summary.
+
+  Human output labels local_pacing_wait, provider_429_observed,
+  provider_429_honored, provider_429_wait, and request_latency separately so a
+  slow run does not look like one undifferentiated delay. JSON uses
+  pacing_wait_ms, provider_429_observed, provider_429_honored,
+  provider_wait_ms, request_latency_ms, and request_count.
 
   A declared connector reports selected policy IDs, subject kinds, structural
-  selection reasons, and typed provider budget facts when available. An
-  undeclared connector has no rate_limits.json; undeclared is not a claim that
-  provider traffic is unlimited. Rate-limit output never includes credentials,
-  bindings, runtime subject values, scope values, or credential revisions.
+  selection reasons, and typed provider budget facts when available. Declaration
+  is declared, unknown, not_applicable, or undeclared. An undeclared connector
+  has no rate_limits.json; it is not a claim that provider traffic is unlimited.
+  Policies are coalesced rather than emitted per request; policies_omitted
+  reports any selected policies omitted from the bounded summary.
+
+  Rate-limit output never includes credentials, token-derived or runtime subject
+  values, raw bindings, scope values, configuration, request headers, URLs,
+  bodies, or credential revisions.
 
   Failed pm etl run and pm etl status results emit a failed run ID and the same
   bounded summary. Their JSON failed-run carrier contains only id, status, and

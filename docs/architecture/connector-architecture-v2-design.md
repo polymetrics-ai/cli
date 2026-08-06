@@ -470,8 +470,9 @@ budgets are enforced together. The requester invokes its context-aware `RateLimi
 every logical send and permitted redirect hop, emits safe typed observations through
 `RateLimitObserver`, honors a valid `Retry-After` reset exactly (even above `MaxBackoff`), and uses
 bounded full jitter only for unhinted fallback retries. A terminal 429 is a
-`*connsdk.RateLimitError` that unwraps the existing `*HTTPError`. #3755 owns the remaining
-operator-visible output layer.
+`*connsdk.RateLimitError` that unwraps the existing `*HTTPError`. The engine
+supplies typed, bounded facts to the ETL output layer; `docs/cli/etl.md`'s
+`RATE LIMIT OUTPUT` section owns the public operator-output contract.
 
 ### B.5 Write path (engine/write.go)
 
