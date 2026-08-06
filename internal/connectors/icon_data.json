@@ -1058,6 +1058,16 @@
     "implemented": true
   },
   {
+    "connector": "crisp",
+    "id": "pm-sample",
+    "path": "icons/pm-sample.svg",
+    "source": "polymetrics",
+    "review_status": "polymetrics",
+    "implemented": true,
+    "review_url": "https://github.com/polymetrics-ai/cli",
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+  },
+  {
     "connector": "criteo-marketing",
     "id": "criteo",
     "path": "icons/criteo.svg",

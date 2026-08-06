@@ -1,0 +1,22 @@
+{
+  "name": "crisp",
+  "display_name": "Crisp",
+  "description": "Reads the first Wave 1 set of Crisp REST API conversation resources through HTTP Basic authentication.",
+  "integration_type": "api",
+  "docs_url": "https://docs.crisp.chat/references/rest-api/v1/",
+  "release_stage": "alpha",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Crisp REST API reads of conversation records, messages, routing, metadata, participants, browsing sessions, and call state"
+  }
+}

@@ -3,7 +3,7 @@
   "docs": "https://docs.crisp.chat/references/rest-api/v1/",
   "reviewed_at": "2026-08-05",
   "operation_ledger_version": 1,
-  "scope": "Complete provider-owned callable REST inventory from https://docs.crisp.chat/static/data/collections/rest-api-v1.postman, retrieved 2026-08-05 (234 requests: 105 reads, 129 writes). All rows are inventory metadata only; no Crisp stream, write action, operation, credential surface, or CLI command is declared yet. Query parameters are intentionally not encoded in api_surface paths.",
+  "scope": "Complete provider-owned callable REST inventory from https://docs.crisp.chat/static/data/collections/rest-api-v1.postman, retrieved 2026-08-05 (234 requests: 105 reads, 129 writes). Wave 1 covers 21 core conversation GET rows with named read streams and individually reachable CLI commands; the remaining 213 rows retain explicit blocked operation dispositions. Query parameters are intentionally not encoded in api_surface paths.",
   "endpoints": [
     {
       "method": "HEAD",
@@ -73,27 +73,15 @@
     {
       "method": "GET",
       "path": "/v1/website/{website_id}/conversations/{page_number}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "not executable: Crisp has no bundle; provider collection declares HTTP Basic authentication and a GET JSON REST request, which current declarative read transport can model after typed schema, bounds, redaction, pagination, and fixtures are authored",
-        "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-        "notes": "provider_artifact=crisp_rest_api_v1.postman; artifact_etag=6a6b6306-32de7; retrieved_at=2026-08-05; collection_group=Conversations / ⭐ List Conversations; request_title=⭐ List Conversations; postman_auth=basic; postman_body=none; scout_class=implementable_now; classification_evidence=postman_auth=basic; method=GET"
+      "covered_by": {
+        "stream": "list_conversations"
       }
     },
     {
       "method": "GET",
       "path": "/v1/website/{website_id}/conversations/suggest/segments/{page_number}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "not executable: Crisp has no bundle; provider collection declares HTTP Basic authentication and a GET JSON REST request, which current declarative read transport can model after typed schema, bounds, redaction, pagination, and fixtures are authored",
-        "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-        "notes": "provider_artifact=crisp_rest_api_v1.postman; artifact_etag=6a6b6306-32de7; retrieved_at=2026-08-05; collection_group=Conversations / List Suggested Conversation Segments; request_title=List Suggested Conversation Segments; postman_auth=basic; postman_body=none; scout_class=implementable_now; classification_evidence=postman_auth=basic; method=GET"
+      "covered_by": {
+        "stream": "suggested_conversation_segments"
       }
     },
     {
@@ -112,14 +100,8 @@
     {
       "method": "GET",
       "path": "/v1/website/{website_id}/conversations/suggest/data/{page_number}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "not executable: Crisp has no bundle; provider collection declares HTTP Basic authentication and a GET JSON REST request, which current declarative read transport can model after typed schema, bounds, redaction, pagination, and fixtures are authored",
-        "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-        "notes": "provider_artifact=crisp_rest_api_v1.postman; artifact_etag=6a6b6306-32de7; retrieved_at=2026-08-05; collection_group=Conversations / List Suggested Conversation Data Keys; request_title=List Suggested Conversation Data Keys; postman_auth=basic; postman_body=none; scout_class=implementable_now; classification_evidence=postman_auth=basic; method=GET"
+      "covered_by": {
+        "stream": "suggested_conversation_data"
       }
     },
     {
@@ -138,27 +120,15 @@
     {
       "method": "GET",
       "path": "/v1/website/{website_id}/conversations/spams/{page_number}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "not executable: Crisp has no bundle; provider collection declares HTTP Basic authentication and a GET JSON REST request, which current declarative read transport can model after typed schema, bounds, redaction, pagination, and fixtures are authored",
-        "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-        "notes": "provider_artifact=crisp_rest_api_v1.postman; artifact_etag=6a6b6306-32de7; retrieved_at=2026-08-05; collection_group=Conversations / List Spam Conversations; request_title=List Spam Conversations; postman_auth=basic; postman_body=none; scout_class=implementable_now; classification_evidence=postman_auth=basic; method=GET"
+      "covered_by": {
+        "stream": "spam_conversations"
       }
     },
     {
       "method": "GET",
       "path": "/v1/website/{website_id}/conversations/spam/{spam_id}/content",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "not executable: Crisp has no bundle; provider collection declares HTTP Basic authentication and a GET JSON REST request, which current declarative read transport can model after typed schema, bounds, redaction, pagination, and fixtures are authored",
-        "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-        "notes": "provider_artifact=crisp_rest_api_v1.postman; artifact_etag=6a6b6306-32de7; retrieved_at=2026-08-05; collection_group=Conversations / Resolve Spam Conversation Content; request_title=Resolve Spam Conversation Content; postman_auth=basic; postman_body=none; scout_class=implementable_now; classification_evidence=postman_auth=basic; method=GET"
+      "covered_by": {
+        "stream": "spam_conversation_content"
       }
     },
     {
@@ -203,14 +173,8 @@
     {
       "method": "GET",
       "path": "/v1/website/{website_id}/conversation/{session_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "not executable: Crisp has no bundle; provider collection declares HTTP Basic authentication and a GET JSON REST request, which current declarative read transport can model after typed schema, bounds, redaction, pagination, and fixtures are authored",
-        "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-        "notes": "provider_artifact=crisp_rest_api_v1.postman; artifact_etag=6a6b6306-32de7; retrieved_at=2026-08-05; collection_group=Conversation / ⭐ Get A Conversation; request_title=⭐ Get A Conversation; postman_auth=basic; postman_body=none; scout_class=implementable_now; classification_evidence=postman_auth=basic; method=GET"
+      "covered_by": {
+        "stream": "conversation"
       }
     },
     {
@@ -242,14 +206,8 @@
     {
       "method": "GET",
       "path": "/v1/website/{website_id}/conversation/{session_id}/messages",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "not executable: Crisp has no bundle; provider collection declares HTTP Basic authentication and a GET JSON REST request, which current declarative read transport can model after typed schema, bounds, redaction, pagination, and fixtures are authored",
-        "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-        "notes": "provider_artifact=crisp_rest_api_v1.postman; artifact_etag=6a6b6306-32de7; retrieved_at=2026-08-05; collection_group=Conversation / ⭐ Get Messages In Conversation; request_title=⭐ Get Messages In Conversation; postman_auth=basic; postman_body=none; scout_class=implementable_now; classification_evidence=postman_auth=basic; method=GET"
+      "covered_by": {
+        "stream": "conversation_messages"
       }
     },
     {
@@ -268,14 +226,8 @@
     {
       "method": "GET",
       "path": "/v1/website/{website_id}/conversation/{session_id}/message/{fingerprint}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "not executable: Crisp has no bundle; provider collection declares HTTP Basic authentication and a GET JSON REST request, which current declarative read transport can model after typed schema, bounds, redaction, pagination, and fixtures are authored",
-        "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-        "notes": "provider_artifact=crisp_rest_api_v1.postman; artifact_etag=6a6b6306-32de7; retrieved_at=2026-08-05; collection_group=Conversation / Get A Message In Conversation; request_title=Get A Message In Conversation; postman_auth=basic; postman_body=none; scout_class=implementable_now; classification_evidence=postman_auth=basic; method=GET"
+      "covered_by": {
+        "stream": "conversation_message"
       }
     },
     {
@@ -372,14 +324,8 @@
     {
       "method": "GET",
       "path": "/v1/website/{website_id}/conversation/{session_id}/routing",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "not executable: Crisp has no bundle; provider collection declares HTTP Basic authentication and a GET JSON REST request, which current declarative read transport can model after typed schema, bounds, redaction, pagination, and fixtures are authored",
-        "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-        "notes": "provider_artifact=crisp_rest_api_v1.postman; artifact_etag=6a6b6306-32de7; retrieved_at=2026-08-05; collection_group=Conversation / ⭐ Get Conversation Routing Assign; request_title=⭐ Get Conversation Routing Assign; postman_auth=basic; postman_body=none; scout_class=implementable_now; classification_evidence=postman_auth=basic; method=GET"
+      "covered_by": {
+        "stream": "conversation_routing"
       }
     },
     {
@@ -411,14 +357,8 @@
     {
       "method": "GET",
       "path": "/v1/website/{website_id}/conversation/{session_id}/meta",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "not executable: Crisp has no bundle; provider collection declares HTTP Basic authentication and a GET JSON REST request, which current declarative read transport can model after typed schema, bounds, redaction, pagination, and fixtures are authored",
-        "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-        "notes": "provider_artifact=crisp_rest_api_v1.postman; artifact_etag=6a6b6306-32de7; retrieved_at=2026-08-05; collection_group=Conversation / ⭐ Get Conversation Metas; request_title=⭐ Get Conversation Metas; postman_auth=basic; postman_body=none; scout_class=implementable_now; classification_evidence=postman_auth=basic; method=GET"
+      "covered_by": {
+        "stream": "conversation_meta"
       }
     },
     {
@@ -437,66 +377,36 @@
     {
       "method": "GET",
       "path": "/v1/website/{website_id}/conversation/{session_id}/original/{original_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "not executable: Crisp has no bundle; provider collection declares HTTP Basic authentication and a GET JSON REST request, which current declarative read transport can model after typed schema, bounds, redaction, pagination, and fixtures are authored",
-        "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-        "notes": "provider_artifact=crisp_rest_api_v1.postman; artifact_etag=6a6b6306-32de7; retrieved_at=2026-08-05; collection_group=Conversation / Get An Original Message In Conversation; request_title=Get An Original Message In Conversation; postman_auth=basic; postman_body=none; scout_class=implementable_now; classification_evidence=postman_auth=basic; method=GET"
+      "covered_by": {
+        "stream": "conversation_original_message"
       }
     },
     {
       "method": "GET",
       "path": "/v1/website/{website_id}/conversation/{session_id}/pages/{page_number}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "not executable: Crisp has no bundle; provider collection declares HTTP Basic authentication and a GET JSON REST request, which current declarative read transport can model after typed schema, bounds, redaction, pagination, and fixtures are authored",
-        "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-        "notes": "provider_artifact=crisp_rest_api_v1.postman; artifact_etag=6a6b6306-32de7; retrieved_at=2026-08-05; collection_group=Conversation / List Conversation Pages; request_title=List Conversation Pages; postman_auth=basic; postman_body=none; scout_class=implementable_now; classification_evidence=postman_auth=basic; method=GET"
+      "covered_by": {
+        "stream": "conversation_pages"
       }
     },
     {
       "method": "GET",
       "path": "/v1/website/{website_id}/conversation/{session_id}/events/{page_number}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "not executable: Crisp has no bundle; provider collection declares HTTP Basic authentication and a GET JSON REST request, which current declarative read transport can model after typed schema, bounds, redaction, pagination, and fixtures are authored",
-        "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-        "notes": "provider_artifact=crisp_rest_api_v1.postman; artifact_etag=6a6b6306-32de7; retrieved_at=2026-08-05; collection_group=Conversation / List Conversation Events; request_title=List Conversation Events; postman_auth=basic; postman_body=none; scout_class=implementable_now; classification_evidence=postman_auth=basic; method=GET"
+      "covered_by": {
+        "stream": "conversation_events"
       }
     },
     {
       "method": "GET",
       "path": "/v1/website/{website_id}/conversation/{session_id}/files/{page_number}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "not executable: Crisp has no bundle; provider collection declares HTTP Basic authentication and a GET JSON REST request, which current declarative read transport can model after typed schema, bounds, redaction, pagination, and fixtures are authored",
-        "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-        "notes": "provider_artifact=crisp_rest_api_v1.postman; artifact_etag=6a6b6306-32de7; retrieved_at=2026-08-05; collection_group=Conversation / List Conversation Files; request_title=List Conversation Files; postman_auth=basic; postman_body=none; scout_class=implementable_now; classification_evidence=postman_auth=basic; method=GET"
+      "covered_by": {
+        "stream": "conversation_files"
       }
     },
     {
       "method": "GET",
       "path": "/v1/website/{website_id}/conversation/{session_id}/state",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "not executable: Crisp has no bundle; provider collection declares HTTP Basic authentication and a GET JSON REST request, which current declarative read transport can model after typed schema, bounds, redaction, pagination, and fixtures are authored",
-        "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-        "notes": "provider_artifact=crisp_rest_api_v1.postman; artifact_etag=6a6b6306-32de7; retrieved_at=2026-08-05; collection_group=Conversation / Get Conversation State; request_title=Get Conversation State; postman_auth=basic; postman_body=none; scout_class=implementable_now; classification_evidence=postman_auth=basic; method=GET"
+      "covered_by": {
+        "stream": "conversation_state"
       }
     },
     {
@@ -515,27 +425,15 @@
     {
       "method": "GET",
       "path": "/v1/website/{website_id}/conversation/{session_id}/relations",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "not executable: Crisp has no bundle; provider collection declares HTTP Basic authentication and a GET JSON REST request, which current declarative read transport can model after typed schema, bounds, redaction, pagination, and fixtures are authored",
-        "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-        "notes": "provider_artifact=crisp_rest_api_v1.postman; artifact_etag=6a6b6306-32de7; retrieved_at=2026-08-05; collection_group=Conversation / Get Conversation Relations; request_title=Get Conversation Relations; postman_auth=basic; postman_body=none; scout_class=implementable_now; classification_evidence=postman_auth=basic; method=GET"
+      "covered_by": {
+        "stream": "conversation_relations"
       }
     },
     {
       "method": "GET",
       "path": "/v1/website/{website_id}/conversation/{session_id}/participants",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "not executable: Crisp has no bundle; provider collection declares HTTP Basic authentication and a GET JSON REST request, which current declarative read transport can model after typed schema, bounds, redaction, pagination, and fixtures are authored",
-        "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-        "notes": "provider_artifact=crisp_rest_api_v1.postman; artifact_etag=6a6b6306-32de7; retrieved_at=2026-08-05; collection_group=Conversation / Get Conversation Participants; request_title=Get Conversation Participants; postman_auth=basic; postman_body=none; scout_class=implementable_now; classification_evidence=postman_auth=basic; method=GET"
+      "covered_by": {
+        "stream": "conversation_participants"
       }
     },
     {
@@ -554,14 +452,8 @@
     {
       "method": "GET",
       "path": "/v1/website/{website_id}/conversation/{session_id}/block",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "not executable: Crisp has no bundle; provider collection declares HTTP Basic authentication and a GET JSON REST request, which current declarative read transport can model after typed schema, bounds, redaction, pagination, and fixtures are authored",
-        "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-        "notes": "provider_artifact=crisp_rest_api_v1.postman; artifact_etag=6a6b6306-32de7; retrieved_at=2026-08-05; collection_group=Conversation / Get Block Status For Conversation; request_title=Get Block Status For Conversation; postman_auth=basic; postman_body=none; scout_class=implementable_now; classification_evidence=postman_auth=basic; method=GET"
+      "covered_by": {
+        "stream": "conversation_block_status"
       }
     },
     {
@@ -580,14 +472,8 @@
     {
       "method": "GET",
       "path": "/v1/website/{website_id}/conversation/{session_id}/verify",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "not executable: Crisp has no bundle; provider collection declares HTTP Basic authentication and a GET JSON REST request, which current declarative read transport can model after typed schema, bounds, redaction, pagination, and fixtures are authored",
-        "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-        "notes": "provider_artifact=crisp_rest_api_v1.postman; artifact_etag=6a6b6306-32de7; retrieved_at=2026-08-05; collection_group=Conversation / Get Verify Status For Conversation; request_title=Get Verify Status For Conversation; postman_auth=basic; postman_body=none; scout_class=implementable_now; classification_evidence=postman_auth=basic; method=GET"
+      "covered_by": {
+        "stream": "conversation_verify_status"
       }
     },
     {
@@ -671,14 +557,8 @@
     {
       "method": "GET",
       "path": "/v1/website/{website_id}/conversation/{session_id}/browsing",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "not executable: Crisp has no bundle; provider collection declares HTTP Basic authentication and a GET JSON REST request, which current declarative read transport can model after typed schema, bounds, redaction, pagination, and fixtures are authored",
-        "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-        "notes": "provider_artifact=crisp_rest_api_v1.postman; artifact_etag=6a6b6306-32de7; retrieved_at=2026-08-05; collection_group=Conversation / List Browsing Sessions For Conversation; request_title=List Browsing Sessions For Conversation; postman_auth=basic; postman_body=none; scout_class=implementable_now; classification_evidence=postman_auth=basic; method=GET"
+      "covered_by": {
+        "stream": "conversation_browsing"
       }
     },
     {
@@ -736,14 +616,8 @@
     {
       "method": "GET",
       "path": "/v1/website/{website_id}/conversation/{session_id}/call",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "not executable: Crisp has no bundle; provider collection declares HTTP Basic authentication and a GET JSON REST request, which current declarative read transport can model after typed schema, bounds, redaction, pagination, and fixtures are authored",
-        "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
-        "notes": "provider_artifact=crisp_rest_api_v1.postman; artifact_etag=6a6b6306-32de7; retrieved_at=2026-08-05; collection_group=Conversation / Get Ongoing Call Session For Conversation; request_title=Get Ongoing Call Session For Conversation; postman_auth=basic; postman_body=none; scout_class=implementable_now; classification_evidence=postman_auth=basic; method=GET"
+      "covered_by": {
+        "stream": "conversation_call"
       }
     },
     {

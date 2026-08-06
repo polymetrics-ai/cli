@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Crisp REST API Connection Specification",
+  "type": "object",
+  "required": [
+    "website_id"
+  ],
+  "properties": {
+    "identifier": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Crisp token identifier, stored as a credential secret and sent as the HTTP Basic username."
+    },
+    "key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Crisp token secret key, stored as a credential secret and sent as the HTTP Basic password."
+    },
+    "website_id": {
+      "type": "string",
+      "description": "Crisp workspace/website identifier used to scope every Wave 1 request."
+    },
+    "token_tier": {
+      "type": "string",
+      "enum": [
+        "website",
+        "plugin",
+        "user"
+      ],
+      "default": "website",
+      "description": "Crisp token tier sent as X-Crisp-Tier; website is the default documented website-token tier."
+    },
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.crisp.chat",
+      "description": "Crisp API origin override for approved tests or proxies; the bundle adds the documented /v1 path."
+    },
+    "page_number": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]{0,4}$",
+      "default": "1",
+      "description": "Positive numbered provider page for page-addressed Crisp list resources; defaults to 1."
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Conversation session identifier required by conversation-scoped reads."
+    },
+    "spam_id": {
+      "type": "string",
+      "description": "Spam conversation identifier required by the spam-content read."
+    },
+    "fingerprint": {
+      "type": "string",
+      "description": "Message fingerprint required by the single-message read."
+    },
+    "original_id": {
+      "type": "string",
+      "description": "Original-message identifier required by the original-message read."
+    }
+  }
+}
