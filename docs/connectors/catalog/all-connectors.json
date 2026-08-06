@@ -64902,15 +64902,15 @@
   {
     "name": "google-calendar",
     "display_name": "Google Calendar",
-    "description": "Reads Google Calendar calendar lists, events, settings, and access control rules through the Calendar API v3 using an OAuth2 refresh token. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads and safely reverse-ETLs Google Calendar calendars, calendar-list entries, events, ACL rules, and notification channels, plus a bounded typed free/busy query, through the Calendar API v3 using an OAuth2 refresh token.",
     "integration_type": "api",
-    "docs_url": "https://developers.google.com/calendar/api/v3/reference",
+    "docs_url": "https://developers.google.com/workspace/calendar/api/v3/reference",
     "release_stage": "alpha",
     "capabilities": {
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -64918,35 +64918,56 @@
       "title": "Google Calendar Connection Specification",
       "type": "object",
       "required": [
-        "calendarid",
         "client_id",
         "client_refresh_token_2",
         "client_secret"
       ],
       "properties": {
         "calendarid": {
-          "type": "string"
-        },
-        "client_id": {
           "type": "string",
-          "x-secret": true
+          "default": "primary",
+          "description": "Default calendar identifier used by read streams; use primary for the authenticated user primary calendar."
         },
-        "client_refresh_token_2": {
+        "event_id": {
           "type": "string",
-          "x-secret": true
+          "description": "Event identifier used by the event and event_instances read streams."
         },
-        "client_secret": {
+        "rule_id": {
           "type": "string",
-          "x-secret": true
+          "description": "ACL rule identifier used by the acl_rule read stream."
         },
-        "base_url": {
+        "setting": {
           "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
+          "description": "Setting identifier used by the setting read stream."
+        },
+        "start_date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional lower bound for events.updated incremental reads; fresh reads are unfiltered when omitted."
         },
         "mode": {
           "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
+          "enum": [
+            "live",
+            "fixture"
+          ],
+          "default": "live",
+          "description": "Set to fixture for credential-free deterministic reads from bundled fixtures; fixture mode never performs provider writes."
+        },
+        "client_id": {
+          "type": "string",
+          "x-secret": true,
+          "description": "OAuth client ID; treated as secret for conservative redaction parity."
+        },
+        "client_refresh_token_2": {
+          "type": "string",
+          "x-secret": true,
+          "description": "OAuth refresh token."
+        },
+        "client_secret": {
+          "type": "string",
+          "x-secret": true,
+          "description": "OAuth client secret."
         }
       }
     },
@@ -64955,6 +64976,39 @@
         "name": "calendar_list",
         "primary_key": [
           "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "calendar_list_entry",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "calendar",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "colors",
+        "primary_key": [
+          "kind"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -64977,7 +65031,40 @@
         ]
       },
       {
+        "name": "event",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "event_instances",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
         "name": "settings",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "setting",
         "primary_key": [
           "id"
         ],
@@ -64997,12 +65084,239 @@
           "full_refresh_overwrite",
           "full_refresh_overwrite_deduped"
         ]
+      },
+      {
+        "name": "acl_rule",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      }
+    ],
+    "write_actions": [
+      {
+        "name": "delete_acl_rule",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/calendars/{{ record.calendar_id }}/acl/{{ record.rule_id }}",
+        "risk": "destructive external mutation; removes a Google Calendar ACL rule; reverse-ETL approval and typed destructive confirmation required",
+        "batchable": true,
+        "confirm": "destructive"
+      },
+      {
+        "name": "insert_acl_rule",
+        "kind": "create",
+        "method": "POST",
+        "path": "/calendars/{{ record.calendar_id }}/acl",
+        "risk": "high-impact external mutation; grants or changes calendar sharing; requires reverse-ETL plan, preview, and explicit approval",
+        "batchable": true
+      },
+      {
+        "name": "patch_acl_rule",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/calendars/{{ record.calendar_id }}/acl/{{ record.rule_id }}",
+        "risk": "high-impact external mutation; changes calendar sharing; requires reverse-ETL plan, preview, and explicit approval",
+        "batchable": true
+      },
+      {
+        "name": "update_acl_rule",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/calendars/{{ record.calendar_id }}/acl/{{ record.rule_id }}",
+        "risk": "high-impact external mutation; replaces calendar sharing settings; requires reverse-ETL plan, preview, and explicit approval",
+        "batchable": true
+      },
+      {
+        "name": "watch_acl",
+        "kind": "create",
+        "method": "POST",
+        "path": "/calendars/{{ record.calendar_id }}/acl/watch",
+        "risk": "external mutation; creates an ACL notification channel; requires reverse-ETL plan, preview, and explicit approval",
+        "batchable": false
+      },
+      {
+        "name": "delete_calendar_list_entry",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/users/me/calendarList/{{ record.calendar_id }}",
+        "risk": "destructive external mutation; removes a calendar from the authenticated user's calendar list; reverse-ETL approval and typed destructive confirmation required",
+        "batchable": true,
+        "confirm": "destructive"
+      },
+      {
+        "name": "insert_calendar_list_entry",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/me/calendarList",
+        "risk": "external mutation; adds a calendar to the authenticated user's calendar list; requires reverse-ETL plan, preview, and explicit approval",
+        "batchable": true
+      },
+      {
+        "name": "patch_calendar_list_entry",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/users/me/calendarList/{{ record.calendar_id }}",
+        "risk": "external mutation; changes a calendar-list entry; requires reverse-ETL plan, preview, and explicit approval",
+        "batchable": true
+      },
+      {
+        "name": "update_calendar_list_entry",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/users/me/calendarList/{{ record.calendar_id }}",
+        "risk": "external mutation; replaces a calendar-list entry's writable fields; requires reverse-ETL plan, preview, and explicit approval",
+        "batchable": true
+      },
+      {
+        "name": "watch_calendar_list",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/me/calendarList/watch",
+        "risk": "external mutation; creates a calendar-list notification channel; requires reverse-ETL plan, preview, and explicit approval",
+        "batchable": false
+      },
+      {
+        "name": "clear_calendar",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/calendars/{{ record.calendar_id }}/clear",
+        "risk": "critical destructive external mutation; clears every event from a primary calendar; reverse-ETL approval and typed destructive confirmation required",
+        "batchable": false,
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_calendar",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/calendars/{{ record.calendar_id }}",
+        "risk": "critical destructive external mutation; deletes a secondary calendar; reverse-ETL approval and typed destructive confirmation required",
+        "batchable": false,
+        "confirm": "destructive"
+      },
+      {
+        "name": "insert_calendar",
+        "kind": "create",
+        "method": "POST",
+        "path": "/calendars",
+        "risk": "high-impact external mutation; creates a secondary calendar owned by the authenticated user; requires reverse-ETL plan, preview, and explicit approval",
+        "batchable": true
+      },
+      {
+        "name": "patch_calendar",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/calendars/{{ record.calendar_id }}",
+        "risk": "high-impact external mutation; changes calendar metadata; requires reverse-ETL plan, preview, and explicit approval",
+        "batchable": true
+      },
+      {
+        "name": "transfer_calendar_ownership",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/calendars/{{ record.calendar_id }}/transferOwnership",
+        "risk": "critical administrative external mutation; transfers secondary-calendar data ownership; reverse-ETL approval and typed destructive confirmation required",
+        "batchable": false,
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_calendar",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/calendars/{{ record.calendar_id }}",
+        "risk": "high-impact external mutation; replaces calendar metadata; requires reverse-ETL plan, preview, and explicit approval",
+        "batchable": true
+      },
+      {
+        "name": "stop_channel",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/channels/stop",
+        "risk": "external mutation; stops a Google Calendar notification channel; requires reverse-ETL plan, preview, and explicit approval",
+        "batchable": false
+      },
+      {
+        "name": "delete_event",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/calendars/{{ record.calendar_id }}/events/{{ record.event_id }}",
+        "risk": "destructive external mutation; deletes a Google Calendar event; reverse-ETL approval and typed destructive confirmation required",
+        "batchable": true,
+        "confirm": "destructive"
+      },
+      {
+        "name": "import_event",
+        "kind": "create",
+        "method": "POST",
+        "path": "/calendars/{{ record.calendar_id }}/events/import",
+        "risk": "high-impact external mutation; imports a private event copy; requires reverse-ETL plan, preview, and explicit approval",
+        "batchable": true
+      },
+      {
+        "name": "insert_event",
+        "kind": "create",
+        "method": "POST",
+        "path": "/calendars/{{ record.calendar_id }}/events",
+        "risk": "high-impact external mutation; creates a Google Calendar event; requires reverse-ETL plan, preview, and explicit approval",
+        "batchable": true
+      },
+      {
+        "name": "move_event",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/calendars/{{ record.calendar_id }}/events/{{ record.event_id }}/move",
+        "risk": "high-impact external mutation; moves an event between calendars; requires reverse-ETL plan, preview, and explicit approval",
+        "batchable": false
+      },
+      {
+        "name": "patch_event",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/calendars/{{ record.calendar_id }}/events/{{ record.event_id }}",
+        "risk": "high-impact external mutation; patches a Google Calendar event; requires reverse-ETL plan, preview, and explicit approval",
+        "batchable": true
+      },
+      {
+        "name": "quick_add_event",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/calendars/{{ record.calendar_id }}/events/quickAdd",
+        "risk": "external mutation; creates an event from natural-language text; requires reverse-ETL plan, preview, and explicit approval",
+        "batchable": false
+      },
+      {
+        "name": "update_event",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/calendars/{{ record.calendar_id }}/events/{{ record.event_id }}",
+        "risk": "high-impact external mutation; replaces a Google Calendar event; requires reverse-ETL plan, preview, and explicit approval",
+        "batchable": true
+      },
+      {
+        "name": "watch_events",
+        "kind": "create",
+        "method": "POST",
+        "path": "/calendars/{{ record.calendar_id }}/events/watch",
+        "risk": "external mutation; creates an event notification channel; requires reverse-ETL plan, preview, and explicit approval",
+        "batchable": false
+      },
+      {
+        "name": "watch_settings",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/me/settings/watch",
+        "risk": "external mutation; creates a settings notification channel; requires reverse-ETL plan, preview, and explicit approval",
+        "batchable": false
       }
     ],
     "risk": {
-      "read": "external Google Calendar API reads performed by the legacy connector via a Tier-2 hook",
-      "write": "unsupported",
-      "approval": "none; read-only"
+      "read": "external Google Calendar API reads for the authenticated account and configured calendar; bounded direct free/busy query responses are JSON-redacted",
+      "write": "26 typed Google Calendar reverse-ETL actions mutate sharing, calendar lists, calendars, events, or notification channels; destructive deletes, calendar clearing, and ownership transfer require typed destructive confirmation",
+      "approval": "every write uses plan, preview, explicit approval, and execute; destructive actions also require --confirm destructive"
     },
     "icon": {
       "id": "simple-icons-googlecalendar",

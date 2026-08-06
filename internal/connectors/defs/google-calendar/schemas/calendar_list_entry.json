@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "calendar_list_entry",
+  "type": "object",
+  "properties": {
+    "kind": {
+      "type": "string"
+    },
+    "etag": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "location": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "timeZone": {
+      "type": "string"
+    },
+    "conferenceProperties": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "summaryOverride": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "colorId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "backgroundColor": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "foregroundColor": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "hidden": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "selected": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "accessRole": {
+      "type": "string"
+    },
+    "defaultReminders": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "notificationSettings": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "primary": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "deleted": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ]
+}

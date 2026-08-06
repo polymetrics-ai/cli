@@ -3,46 +3,59 @@
   "title": "events",
   "type": "object",
   "properties": {
-    "id": {
+    "kind": {
       "type": "string"
     },
-    "iCalUID": {
+    "etag": {
+      "type": "string"
+    },
+    "id": {
       "type": "string"
     },
     "status": {
       "type": "string"
     },
-    "summary": {
-      "type": "string"
-    },
-    "description": {
-      "type": "string"
-    },
-    "location": {
-      "type": "string"
-    },
     "htmlLink": {
-      "type": "string"
-    },
-    "created": {
       "type": [
         "string",
-        "number",
-        "integer",
-        "boolean",
-        "object",
-        "array",
         "null"
       ]
     },
+    "created": {
+      "type": "string",
+      "format": "date-time"
+    },
     "updated": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "summary": {
       "type": [
         "string",
-        "number",
-        "integer",
-        "boolean",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "location": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "creator": {
+      "type": [
         "object",
-        "array",
+        "null"
+      ]
+    },
+    "organizer": {
+      "type": [
+        "object",
         "null"
       ]
     },
@@ -52,23 +65,23 @@
     "end": {
       "type": "object"
     },
-    "creator": {
-      "type": "object"
+    "recurringEventId": {
+      "type": [
+        "string",
+        "null"
+      ]
     },
-    "organizer": {
-      "type": "object"
+    "iCalUID": {
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "attendees": {
-      "type": "array"
-    },
-    "recurringEventId": {
-      "type": "string"
-    },
-    "etag": {
-      "type": "string"
-    },
-    "kind": {
-      "type": "string"
+      "type": [
+        "array",
+        "null"
+      ]
     }
   },
   "x-primary-key": [

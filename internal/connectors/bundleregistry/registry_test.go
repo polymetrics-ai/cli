@@ -67,6 +67,36 @@ func TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides(t *testing.T) {
 	if _, ok := akeneo.(*engine.Connector); !ok {
 		t.Fatalf("akeneo registry type = %T, want engine-backed connector", akeneo)
 	}
+	googleCalendar, ok := registry.Get("google-calendar")
+	if !ok {
+		t.Fatal("registry missing google-calendar")
+	}
+	googleCalendarDefinition, ok := connectors.DefinitionOf(googleCalendar)
+	if !ok || len(googleCalendarDefinition.WriteActions) != 26 {
+		t.Fatalf("google-calendar definition = %+v, want 26 engine-backed write actions", googleCalendarDefinition)
+	}
+	foundFixtureMode := false
+	for _, field := range connectors.ManifestOf(googleCalendar).ConfigFields {
+		if field.Name == "mode" {
+			foundFixtureMode = true
+		}
+	}
+	if !foundFixtureMode {
+		t.Fatal("google-calendar manifest is missing fixture mode configuration")
+	}
+	googleCalendarSurface, ok := googleCalendar.(connectors.CommandSurfaceProvider)
+	if !ok || googleCalendarSurface.CommandSurface() == nil {
+		t.Fatalf("google-calendar has no command surface: %T", googleCalendar)
+	}
+	foundFreeBusy := false
+	for _, command := range googleCalendarSurface.CommandSurface().Commands {
+		if command.Path == "freebusy query" && command.Availability == "implemented" {
+			foundFreeBusy = true
+		}
+	}
+	if !foundFreeBusy {
+		t.Fatal("google-calendar command surface is missing implemented freebusy query")
+	}
 	if engine.HooksFor("github") == nil {
 		t.Fatal("hookset side effects were not loaded; github hook is missing")
 	}
