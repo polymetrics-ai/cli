@@ -8,6 +8,7 @@ import (
 	"testing"
 	"testing/fstest"
 
+	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/defs"
 )
 
@@ -179,6 +180,57 @@ func TestBundleLoadOptionalFilesAbsent(t *testing.T) {
 	}
 	if b.Certification != nil {
 		t.Fatalf("Certification should be nil when certification.json is absent")
+	}
+	if b.Changefeed != nil {
+		t.Fatalf("Changefeed should be nil when changefeed.json is absent")
+	}
+}
+
+func TestBundleLoadParsesUnsupportedChangefeed(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/changefeed.json"] = &fstest.MapFile{Data: []byte(`{
+		"status": "unsupported",
+		"mechanism": "logical_replication",
+		"source": {
+			"artifact_url": "https://example.test/logical-replication",
+			"artifact_version": "v1",
+			"retrieved_at": "2026-08-05"
+		},
+		"reason": "the connector has no executable replication client"
+	}`)}
+
+	bundle, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if bundle.Changefeed == nil {
+		t.Fatal("Changefeed is nil")
+	}
+	if bundle.Changefeed.Status != connectors.ChangefeedStatusUnsupported {
+		t.Fatalf("Changefeed.Status = %q, want unsupported", bundle.Changefeed.Status)
+	}
+	if bundle.Changefeed.Executor != nil {
+		t.Fatalf("unsupported changefeed executor = %+v, want nil", bundle.Changefeed.Executor)
+	}
+}
+
+func TestBundleLoadRejectsUnsupportedChangefeedWithExecutor(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/changefeed.json"] = &fstest.MapFile{Data: []byte(`{
+		"status": "unsupported",
+		"mechanism": "logical_replication",
+		"source": {
+			"artifact_url": "https://example.test/logical-replication",
+			"artifact_version": "v1",
+			"retrieved_at": "2026-08-05"
+		},
+		"reason": "the connector has no executable replication client",
+		"executor": {"kind": "native", "id": "acme-logical"}
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil || !strings.Contains(err.Error(), "unsupported changefeed cannot declare an executor") {
+		t.Fatalf("Load error = %v, want unsupported executor rejection", err)
 	}
 }
 

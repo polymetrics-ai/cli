@@ -47,6 +47,7 @@ internal/connectors/defs/
   defs.go                     // package defs; //go:embed runtime bundle files
   github/
     metadata.json             // identity, capabilities, rate limits, risk
+    changefeed.json           // optional evidence-backed changefeed declaration
     spec.json                 // connection specification (JSON Schema draft-07)
     streams.json              // declarative read config: base HTTP + streams
     writes.json               // declarative write actions
@@ -69,13 +70,13 @@ package defs
 
 import "embed"
 
-//go:embed */metadata.json */spec.json */streams.json */writes.json */schemas/* */docs.md */operations.json */cli_surface.json */certification.json
+//go:embed */metadata.json */changefeed.json */spec.json */streams.json */writes.json */schemas/* */docs.md */operations.json */cli_surface.json */certification.json
 var FS embed.FS
 ```
 
-(`writes.json`, `operations.json`, `cli_surface.json`, and `certification.json` are optional per
-connector; the loader tolerates absence. `api_surface.json` and `fixtures/` stay on disk for
-authoring/conformance validation and are not embedded in the production `defs.FS`, which keeps
+(`changefeed.json`, `writes.json`, `operations.json`, `cli_surface.json`, and `certification.json`
+are optional per connector; the loader tolerates absence. `api_surface.json` and `fixtures/` stay
+on disk for authoring/conformance validation and are not embedded in the production `defs.FS`, which keeps
 tens of megabytes of inert replay JSON out of every shipped binary. A connector whose `spec.json`
 publishes a fixture-replay `mode` as a documented connection-spec property is the one exception: it
 adds its own `defs/<name>/fixtures_embed.go` embedding only that connector's `fixtures/` tree, so
@@ -355,6 +356,7 @@ DoJSON` with retry/Retry-After, four paginators, `RecordsAt`/`StringAt`, `Cursor
 type Bundle struct {
     Name     string
     Metadata Metadata          // parsed metadata.json
+    Changefeed *connectors.ChangefeedDescriptor // optional changefeed.json
     Spec     *Schema           // compiled spec.json; SecretKeys() from x-secret
     HTTP     HTTPBase          // streams.json "base"
     Streams  []StreamSpec      // streams.json "streams"
@@ -539,7 +541,8 @@ type Writer interface {
     Write(ctx context.Context, req WriteRequest, records []Record) (WriteResult, error)
 }
 
-// Unchanged optional interfaces: Querier, CDCReader, StatefulReader, LiveConformanceProvider.
+// Optional interfaces: Querier, CDCReader, ChangefeedDescriptorProvider/ChangefeedExecutor,
+// StatefulReader, LiveConformanceProvider. CDCReader alone never advertises public CDC.
 // Deleted: ManifestProvider, SchemaMapper (unused).
 ```
 
@@ -555,6 +558,7 @@ type Definition struct {
     DocsURL         string            `json:"docs_url"`
     ReleaseStage    string            `json:"release_stage"`
     Capabilities    Capabilities      `json:"capabilities"`
+    Changefeed      *ChangefeedDescriptor `json:"changefeed,omitempty"`
     Spec            json.RawMessage   `json:"spec"`
     Streams         []StreamSummary   `json:"streams"`
     WriteActions    []WriteActionInfo `json:"write_actions,omitempty"`
@@ -562,6 +566,11 @@ type Definition struct {
     Icon            *ConnectorIcon    `json:"icon,omitempty"`
 }
 ```
+
+`Changefeed` is optional evidence metadata. Its authoring rules live in the
+[connector migration conventions](../migration/conventions.md#2-authoring-rules); its presence
+does not independently advertise `cdc`. Public CDC remains false until an implemented declaration
+matches the registered `ChangefeedExecutor`.
 
 ### C.2 Registry
 

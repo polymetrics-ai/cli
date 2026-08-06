@@ -95,13 +95,17 @@ func TestNoInitRegistration(t *testing.T) {
 
 // TestConnectorSatisfiesCoreInterfaces compile/runtime-asserts the shape
 // required by API-CONTRACT.md / design §B.7 Tier-3: Connector, CDCReader,
-// StatefulReader, DefinitionProvider. Writer interfaces are deliberately NOT
-// asserted since Write is unsupported (read-only source, wave0 parity).
+// StatefulReader, DefinitionProvider. ChangefeedExecutor and writer interfaces
+// are deliberately NOT asserted: CDC and writes are unsupported in this
+// read-only source's current migration state.
 func TestConnectorSatisfiesCoreInterfaces(t *testing.T) {
 	c := native.New()
 	var _ connectors.Connector = c
 	if _, ok := any(c).(connectors.CDCReader); !ok {
 		t.Fatal("native postgres connector must implement connectors.CDCReader (documented CDC stub)")
+	}
+	if _, ok := any(c).(connectors.ChangefeedExecutor); ok {
+		t.Fatal("native postgres connector must not implement ChangefeedExecutor while ReadCDC is an unsupported stub")
 	}
 	if _, ok := any(c).(connectors.StatefulReader); !ok {
 		t.Fatal("native postgres connector must implement connectors.StatefulReader")
