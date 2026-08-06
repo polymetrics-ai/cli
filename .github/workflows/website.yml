@@ -189,8 +189,8 @@ jobs:
 
   deploy:
     name: Website deploy
-    runs-on: [self-hosted, linux, tailscale, polymetrics-website]
-    needs: image
+    runs-on: ${{ needs.select-runner.outputs.runner }}
+    needs: [select-runner, image]
     if: github.ref_name == 'main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && vars.WEBSITE_DEPLOY_ENABLED == 'true'
     environment: website-production
     concurrency: website-production

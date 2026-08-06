@@ -71,8 +71,8 @@ if rg -n --glob '*.yml' 'runs-on: ubuntu-latest' "$root/.github/workflows" | gre
 fi
 
 selected_linux_jobs=$(rg --glob '*.yml' -c 'runs-on: \$\{\{ needs\.select-runner\.outputs\.runner \}\}' "$root/.github/workflows" | awk -F: '{ total += $NF } END { print total + 0 }')
-test "$selected_linux_jobs" -eq 19 || {
-  printf 'expected 19 Linux jobs to consume the shared selector, found %s\n' "$selected_linux_jobs" >&2
+test "$selected_linux_jobs" -eq 20 || {
+  printf 'expected 20 Linux jobs to consume the shared selector, found %s\n' "$selected_linux_jobs" >&2
   exit 1
 }
 
@@ -84,7 +84,27 @@ if grep -Fq "runner-selection.yml" "$windows"; then
 fi
 
 website="$root/.github/workflows/website.yml"
-require "runs-on: [self-hosted, linux, tailscale, polymetrics-website]" "$website"
-require "if: github.ref_name == 'main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && vars.WEBSITE_DEPLOY_ENABLED == 'true'" "$website"
+website_deploy=$(awk '
+  /^  deploy:/ { in_deploy=1 }
+  in_deploy { print }
+' "$website")
+require_website_deploy() {
+  local pattern=$1
+  grep -Fq -- "$pattern" <<<"$website_deploy" || {
+    printf 'missing website deployment routing contract: %s\n' "$pattern" >&2
+    exit 1
+  }
+}
+
+require_website_deploy 'runs-on: ${{ needs.select-runner.outputs.runner }}'
+require_website_deploy "if: github.ref_name == 'main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && vars.WEBSITE_DEPLOY_ENABLED == 'true'"
+if ! grep -Eq '^[[:space:]]+needs:.*select-runner' <<<"$website_deploy"; then
+  printf 'website deployment must depend on the shared runner selector\n' >&2
+  exit 1
+fi
+if grep -Fq 'self-hosted' <<<"$website_deploy"; then
+  printf 'website deployment must not route non-PR events to a self-hosted runner\n' >&2
+  exit 1
+fi
 
 printf 'CI runner routing contract passed\n'
