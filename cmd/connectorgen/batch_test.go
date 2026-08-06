@@ -13,6 +13,8 @@ import (
 	"strings"
 	"testing"
 	"testing/fstest"
+
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 func TestBatchPlanRejectsMissingRetrievalDate(t *testing.T) {
@@ -388,6 +390,142 @@ func TestBatchMaterializeDropsMissingExecutableCoverageWithoutMutatingBundle(t *
 	}
 }
 
+func TestBatchMaterializeRequiresExactArtifactEndpointIdentity(t *testing.T) {
+	tests := []struct {
+		name           string
+		sourceMethod   string
+		sourcePath     string
+		artifactMethod string
+		artifactPath   string
+		wantErr        bool
+	}{
+		{
+			name:           "exact method and path",
+			sourceMethod:   http.MethodGet,
+			sourcePath:     "/widgets",
+			artifactMethod: http.MethodGet,
+			artifactPath:   "/widgets",
+		},
+		{
+			name:           "trailing slash is distinct",
+			sourceMethod:   http.MethodGet,
+			sourcePath:     "/widgets",
+			artifactMethod: http.MethodGet,
+			artifactPath:   "/widgets/",
+			wantErr:        true,
+		},
+		{
+			name:           "method case is distinct",
+			sourceMethod:   "get",
+			sourcePath:     "/widgets",
+			artifactMethod: http.MethodGet,
+			artifactPath:   "/widgets",
+			wantErr:        true,
+		},
+		{
+			name:           "artifact method case is distinct",
+			sourceMethod:   http.MethodGet,
+			sourcePath:     "/widgets",
+			artifactMethod: "get",
+			artifactPath:   "/widgets",
+			wantErr:        true,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			bundle := engine.Bundle{
+				Surface: &engine.APISurface{
+					API: "Example API",
+					Endpoints: []engine.SurfaceEndpoint{{
+						Method: test.sourceMethod,
+						Path:   test.sourcePath,
+						CoveredBy: &engine.SurfaceCoverage{
+							Stream: "widgets",
+						},
+					}},
+				},
+				Streams: []engine.StreamSpec{{Name: "widgets"}},
+			}
+			surface, err := materializeAPISurface(
+				bundle,
+				BatchManifestConnector{Artifact: BatchArtifact{
+					Kind:    "openapi",
+					URL:     "https://example.test/openapi.json",
+					Version: "1.0.0",
+				}},
+				"2026-08-06",
+				"sha256",
+				[]batchArtifactEndpoint{{Method: test.artifactMethod, Path: test.artifactPath}},
+			)
+			if test.wantErr {
+				if err == nil || !strings.Contains(err.Error(), "absent from the cited artifact") {
+					t.Fatalf("materialize error = %v, want exact-identity coverage rejection", err)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("materialize exact endpoint: %v", err)
+			}
+			if len(surface.Endpoints) != 1 || surface.Endpoints[0].CoveredBy == nil || surface.Endpoints[0].CoveredBy.Stream != "widgets" {
+				t.Fatalf("materialized endpoints = %+v, want exact cited stream coverage", surface.Endpoints)
+			}
+		})
+	}
+}
+
+func TestBatchMaterializeExcludesProtocolMetadataOperations(t *testing.T) {
+	bundle := engine.Bundle{
+		Surface: &engine.APISurface{
+			API: "Example API",
+			Endpoints: []engine.SurfaceEndpoint{
+				{Method: http.MethodOptions, Path: "/diagnostics", CoveredBy: &engine.SurfaceCoverage{Stream: "diagnostics"}},
+				{Method: http.MethodTrace, Path: "/diagnostics", CoveredBy: &engine.SurfaceCoverage{Stream: "diagnostics"}},
+			},
+		},
+	}
+	artifactEndpoints := []batchArtifactEndpoint{
+		{Method: http.MethodOptions, Path: "/diagnostics"},
+		{Method: http.MethodTrace, Path: "/diagnostics"},
+	}
+
+	surface, err := materializeAPISurface(
+		bundle,
+		BatchManifestConnector{Artifact: BatchArtifact{
+			Kind:    "openapi",
+			URL:     "https://example.test/openapi.json",
+			Version: "1.0.0",
+		}},
+		"2026-08-06",
+		"sha256",
+		artifactEndpoints,
+	)
+	if err != nil {
+		t.Fatalf("materialize protocol metadata: %v", err)
+	}
+	split, err := batchSurfaceSplit(&surface)
+	if err != nil {
+		t.Fatalf("split protocol metadata: %v", err)
+	}
+	if split != (BatchOperationSplit{Excluded: 2}) || split.total() != len(artifactEndpoints) {
+		t.Fatalf("operation split = %+v, want two counted exclusions", split)
+	}
+	for _, endpoint := range surface.Endpoints {
+		if endpoint.CoveredBy != nil || endpoint.Operation == nil {
+			t.Fatalf("protocol endpoint = %+v, want excluded operation metadata only", endpoint)
+		}
+		if endpoint.Operation.Model == "disallowed" {
+			t.Fatalf("protocol operation = %+v, want non-disallowed protocol metadata", endpoint.Operation)
+		}
+		if endpoint.Operation.Model != "local_workflow" || !endpoint.Operation.BlockedByDefault {
+			t.Fatalf("protocol operation = %+v, want blocked protocol metadata", endpoint.Operation)
+		}
+		if !strings.Contains(endpoint.Operation.Reason, endpoint.Method) || !strings.Contains(endpoint.Operation.Reason, "protocol metadata") {
+			t.Fatalf("protocol operation reason = %q, want method-specific metadata rationale", endpoint.Operation.Reason)
+		}
+	}
+}
+
 func TestBatchMaterializeDropsPreexistingDestinationBundle(t *testing.T) {
 	sourceDefsRoot := t.TempDir()
 	writeBatchBundle(t, sourceDefsRoot, cliSurfaceBundleFS(validCLISurfaceJSON()))
@@ -511,6 +649,14 @@ func TestParseBatchOpenAPIArtifactFailsClosedForUnsupportedOperationContainers(t
 				"paths": {"/widgets": {"$ref": "other.yaml#/components/pathItems/widgets"}}
 			}`,
 			want: "external path-item reference",
+		},
+		{
+			name: "noncanonical operation key",
+			artifact: `{
+				"openapi": "3.1.0",
+				"paths": {"/widgets": {"GET": {"summary": "List widgets"}}}
+			}`,
+			want: "unsupported path-item field \"GET\"",
 		},
 		{
 			name: "multiple YAML documents",

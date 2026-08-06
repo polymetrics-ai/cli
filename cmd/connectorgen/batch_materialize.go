@@ -960,8 +960,8 @@ func batchArtifactPathItemEndpoints(root *yaml.Node, path string, pathItem *yaml
 	endpoints := make([]batchArtifactEndpoint, 0)
 	for _, key := range batchYAMLFieldNames(fields) {
 		value := fields[key]
-		method := strings.ToUpper(strings.TrimSpace(key))
-		if batchArtifactHTTPMethod(method) {
+		method, isHTTPMethod := batchArtifactHTTPMethodForPathItemKey(key)
+		if isHTTPMethod {
 			endpoint, err := batchArtifactEndpointFromOperation(path, method, value)
 			if err != nil {
 				return nil, err
@@ -1130,12 +1130,26 @@ func batchArtifactEndpointFromOperation(path, method string, operation *yaml.Nod
 	return batchArtifactEndpoint{Method: method, Path: path, Summary: summary}, nil
 }
 
-func batchArtifactHTTPMethod(method string) bool {
-	switch method {
-	case http.MethodGet, http.MethodHead, http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete, http.MethodOptions, http.MethodTrace:
-		return true
+func batchArtifactHTTPMethodForPathItemKey(key string) (string, bool) {
+	switch key {
+	case "get":
+		return http.MethodGet, true
+	case "head":
+		return http.MethodHead, true
+	case "post":
+		return http.MethodPost, true
+	case "put":
+		return http.MethodPut, true
+	case "patch":
+		return http.MethodPatch, true
+	case "delete":
+		return http.MethodDelete, true
+	case "options":
+		return http.MethodOptions, true
+	case "trace":
+		return http.MethodTrace, true
 	default:
-		return false
+		return "", false
 	}
 }
 
@@ -1171,22 +1185,18 @@ func materializeAPISurface(bundle engine.Bundle, candidate BatchManifestConnecto
 		artifactKeys[batchArtifactEndpointKey(endpoint.Method, endpoint.Path)] = true
 	}
 	existingExact := make(map[string]engine.SurfaceEndpoint, len(bundle.Surface.Endpoints))
-	existingCanonical := make(map[string][]engine.SurfaceEndpoint, len(bundle.Surface.Endpoints))
 	for _, endpoint := range bundle.Surface.Endpoints {
 		key := batchArtifactEndpointKey(endpoint.Method, endpoint.Path)
 		if _, duplicate := existingExact[key]; duplicate {
 			return engine.APISurface{}, fmt.Errorf("existing api surface duplicates %s %s", endpoint.Method, endpoint.Path)
 		}
 		existingExact[key] = endpoint
-		canonical := batchCanonicalEndpointKey(endpoint.Method, endpoint.Path)
-		existingCanonical[canonical] = append(existingCanonical[canonical], endpoint)
 	}
 	for _, endpoint := range bundle.Surface.Endpoints {
 		if endpoint.CoveredBy == nil {
 			continue
 		}
-		canonical := batchCanonicalEndpointKey(endpoint.Method, endpoint.Path)
-		if !artifactKeys[batchArtifactEndpointKey(endpoint.Method, endpoint.Path)] && len(existingArtifactEndpointsForKey(artifactEndpoints, canonical)) == 0 {
+		if !artifactKeys[batchArtifactEndpointKey(endpoint.Method, endpoint.Path)] {
 			return engine.APISurface{}, fmt.Errorf("executable coverage %s %s is absent from the cited artifact", endpoint.Method, endpoint.Path)
 		}
 	}
@@ -1215,15 +1225,12 @@ func materializeAPISurface(bundle engine.Bundle, candidate BatchManifestConnecto
 				SourceURL: candidate.Artifact.URL,
 			},
 		}
-		if existing, ok := existingExact[batchArtifactEndpointKey(artifactEndpoint.Method, artifactEndpoint.Path)]; ok {
+		if operation := materializedProtocolMetadataOperation(artifactEndpoint.Method); operation != nil {
+			endpoint.Operation = operation
+		} else if existing, ok := existingExact[batchArtifactEndpointKey(artifactEndpoint.Method, artifactEndpoint.Path)]; ok {
 			copyMaterializedClassifier(&endpoint, existing)
 		} else {
-			canonical := batchCanonicalEndpointKey(artifactEndpoint.Method, artifactEndpoint.Path)
-			if candidates := existingCanonical[canonical]; len(candidates) == 1 {
-				copyMaterializedClassifier(&endpoint, candidates[0])
-			} else {
-				endpoint.Operation = defaultMaterializedOperation(artifactEndpoint)
-			}
+			endpoint.Operation = defaultMaterializedOperation(artifactEndpoint)
 		}
 		if endpoint.CoveredBy == nil && endpoint.Excluded == nil && endpoint.Operation == nil {
 			endpoint.Operation = defaultMaterializedOperation(artifactEndpoint)
@@ -1236,26 +1243,8 @@ func materializeAPISurface(bundle engine.Bundle, candidate BatchManifestConnecto
 	return surface, nil
 }
 
-func existingArtifactEndpointsForKey(endpoints []batchArtifactEndpoint, canonical string) []batchArtifactEndpoint {
-	matched := make([]batchArtifactEndpoint, 0, 1)
-	for _, endpoint := range endpoints {
-		if batchCanonicalEndpointKey(endpoint.Method, endpoint.Path) == canonical {
-			matched = append(matched, endpoint)
-		}
-	}
-	return matched
-}
-
 func batchArtifactEndpointKey(method, path string) string {
-	return strings.ToUpper(strings.TrimSpace(method)) + "\x00" + strings.TrimSpace(path)
-}
-
-func batchCanonicalEndpointKey(method, path string) string {
-	cleanPath := strings.TrimSpace(path)
-	if cleanPath != "/" {
-		cleanPath = strings.TrimSuffix(cleanPath, "/")
-	}
-	return strings.ToUpper(strings.TrimSpace(method)) + "\x00" + cleanPath
+	return method + "\x00" + path
 }
 
 func copyMaterializedClassifier(dst *engine.SurfaceEndpoint, src engine.SurfaceEndpoint) {
@@ -1306,11 +1295,33 @@ func materializedLegacyExclusion(exclusion engine.SurfaceExclusion, method strin
 }
 
 func batchArtifactMutationMethod(method string) bool {
-	switch strings.ToUpper(strings.TrimSpace(method)) {
+	switch method {
 	case http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete:
 		return true
 	default:
 		return false
+	}
+}
+
+func batchProtocolMetadataMethod(method string) bool {
+	switch method {
+	case http.MethodOptions, http.MethodTrace:
+		return true
+	default:
+		return false
+	}
+}
+
+func materializedProtocolMetadataOperation(method string) *engine.SurfaceOperation {
+	if !batchProtocolMetadataMethod(method) {
+		return nil
+	}
+	return &engine.SurfaceOperation{
+		Model:            "local_workflow",
+		Status:           "blocked",
+		Risk:             "low",
+		BlockedByDefault: true,
+		Reason:           fmt.Sprintf("The documented %s operation is protocol metadata, not a record-bearing read or state-changing provider mutation.", method),
 	}
 }
 

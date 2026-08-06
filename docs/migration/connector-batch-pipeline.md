@@ -145,7 +145,14 @@ For each selected manifest record:
    concrete reason; it never yields a partial inventory count. Give every
    enumerated endpoint exactly one result: executable coverage,
    provider-blocked with a concrete reason, or justified exclusion. A generic
-   unclassified/default omission is a failure, not a temporary state.
+   unclassified/default omission is a failure, not a temporary state. An
+   executable source binding must match the artifact's exact method and path:
+   different slash spelling, method case, or any other equivalence is never
+   inferred. A future equivalence exception requires its own cited
+   provider-documentation URL and retrieval date; this materializer does not
+   create that evidence. `TRACE` and `OPTIONS` remain in the artifact total as
+   method-specific protocol-metadata exclusions, never provider-blocked or
+   provider-mutation rows.
 3. Copy the reviewed source bundle into the fresh, batch-owned destination,
    then generate its `operations.json` and `cli_surface.json` from the
    reviewed artifact inventory. In this first lane `operations.json` is an

@@ -550,9 +550,8 @@ type BatchOperationTotals struct {
 
 // BatchOperationSplit accounts for every declared api-surface row. Executable
 // means an endpoint has a real covered_by target; blocked means the provider
-// operation remains blocked by default; excluded is either a legacy exclusion
-// or a blocked operation whose model explicitly says duplicate/deprecated/
-// disallowed.
+// operation remains blocked by default; excluded is a legacy exclusion or a
+// blocked operation that the batch treats as an exclusion.
 type BatchOperationSplit struct {
 	Executable      int `json:"executable"`
 	ProviderBlocked int `json:"provider_blocked"`
@@ -933,7 +932,7 @@ func batchSurfaceSplit(surface *engine.APISurface) (BatchOperationSplit, error) 
 			if strings.TrimSpace(endpoint.Operation.Reason) == "" {
 				return BatchOperationSplit{}, fmt.Errorf("endpoint %d (%s %s) blocked operation lacks a reason", i, endpoint.Method, endpoint.Path)
 			}
-			if batchOperationIsExcluded(endpoint.Operation.Model) {
+			if batchOperationIsExcluded(endpoint.Method, endpoint.Operation.Model) {
 				split.Excluded++
 			} else {
 				split.ProviderBlocked++
@@ -945,7 +944,10 @@ func batchSurfaceSplit(surface *engine.APISurface) (BatchOperationSplit, error) 
 	return split, nil
 }
 
-func batchOperationIsExcluded(model string) bool {
+func batchOperationIsExcluded(method, model string) bool {
+	if batchProtocolMetadataMethod(method) {
+		return true
+	}
 	switch model {
 	case "duplicate", "deprecated", "disallowed":
 		return true

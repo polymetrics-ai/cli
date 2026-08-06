@@ -127,6 +127,11 @@ manifest-selected bundle directories.
    partial or ranged response as an unknown inventory before parsing it.
 6. Make a bare `connectorgen batch` invocation render its contextual usage to
    stdout and succeed, while invalid subcommands retain usage-error behavior.
+7. Retain executable coverage only for exact cited method/path identities; do
+   not infer trailing-slash, method-case, or other endpoint equivalence.
+8. Keep `TRACE` and `OPTIONS` in the inventory while reporting them as
+   method-specific protocol-metadata exclusions through the existing ledger
+   vocabulary.
 
 ## Commit checkpoints
 
