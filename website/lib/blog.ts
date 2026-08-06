@@ -664,6 +664,14 @@ pm reverse run <plan-id> --approve <token> --json`,
     tags: ['AI agents', 'code review', 'connector architecture', 'provenance'],
     summary:
       'Several agents working in parallel made shared gaps visible quickly. The useful correction came when a review gate rejected an approved claim and returned the work to its proper boundary.',
+    leadImage: {
+      src: '/blog/the-review-agent-was-right/01-review-agent-was-right.webp',
+      alt: 'A paper-diorama assembly line where one small worker figure raises a hand to stop a hollow sheet before the supervisor can stamp it approved.',
+      caption: 'The check that mattered was the one aimed back at the approval.',
+      width: 1672,
+      height: 941,
+      placement: 'full',
+    },
     sections: [
       {
         heading: 'The wrong approval',
