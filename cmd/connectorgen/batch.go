@@ -123,6 +123,8 @@ func runBatch(args []string, stdout, stderr io.Writer) int {
 	switch args[1] {
 	case "plan":
 		return runBatchPlan(args[2:], stdout, stderr)
+	case "materialize":
+		return runBatchMaterialize(args[2:], stdout, stderr)
 	case "gate":
 		return runBatchGate(args[2:], stdout, stderr)
 	case "-h", "--help", "help":
@@ -137,6 +139,7 @@ func runBatch(args []string, stdout, stderr io.Writer) int {
 func batchUsage() string {
 	return `usage:
   connectorgen batch plan --ledger <path> --out <path> [--size <1-40>] [--connector <name>] [--min-operations <n>] [--max-operations <n>]
+  connectorgen batch materialize --manifest <path> --retrieved-at <YYYY-MM-DD> --report <path> [--defs-root <path>] [--artifact-dir <path>] [--connector <name>]
   connectorgen batch gate --manifest <path> --report <path> [--defs-root <path>]`
 }
 
