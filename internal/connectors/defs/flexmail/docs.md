@@ -22,7 +22,8 @@ Connection fields:
 - `personal_access_token` (required, secret, string); Flexmail personal access token, used as the
   HTTP Basic auth password. Never logged.
 
-Secret fields are redacted in logs and write previews: `personal_access_token`.
+The `personal_access_token` credential field is encrypted at rest; this documentation never asks
+for or prints its value.
 
 Default configuration values: `base_url=https://api.flexmail.eu`, `page_size=500`.
 
@@ -58,5 +59,5 @@ data.
 
 - Batch defaults: read_page_size=500.
 - API coverage includes 5 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  destructive_admin=1, out_of_scope=4.
+- Other cited artifact endpoints are explicitly classified in `api_surface.json`; endpoints absent
+  from the cited artifact are not exposed by this bundle.

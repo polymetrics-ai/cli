@@ -70,6 +70,22 @@ SECURITY
   approval: none; read-only public analytics API
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+COMMAND SURFACE
+  Run DefiLlama's declared streams and reverse-ETL actions.
+  Usage: pm defillama <command> [flags]
+  Read streams
+  Other Commands
+    chains list - Run the chains ETL stream [intent=etl availability=implemented stream=chains]
+    dexs list - Run the dexs ETL stream [intent=etl availability=implemented stream=dexs]
+    fees list - Run the fees ETL stream [intent=etl availability=implemented stream=fees]
+    historical chain tvl list - Run the historical chain tvl ETL stream [intent=etl availability=implemented stream=historical_chain_tvl]
+    open interest list - Run the open interest ETL stream [intent=etl availability=implemented stream=open_interest]
+    options list - Run the options ETL stream [intent=etl availability=implemented stream=options]
+    pools list - Run the pools ETL stream [intent=etl availability=implemented stream=pools]
+    protocols list - Run the protocols ETL stream [intent=etl availability=implemented stream=protocols]
+    stablecoin chains list - Run the stablecoin chains ETL stream [intent=etl availability=implemented stream=stablecoin_chains]
+    stablecoins list - Run the stablecoins ETL stream [intent=etl availability=implemented stream=stablecoins]
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect defillama
