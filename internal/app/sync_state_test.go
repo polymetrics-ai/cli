@@ -34,7 +34,15 @@ func TestLegacyScalarStreamStateRequiresRebootstrapBeforeRead(t *testing.T) {
 	if legacy.Checkpoint == nil || legacy.Checkpoint.StateVersion != 0 {
 		t.Fatalf("legacy state = %#v, want version-zero envelope", legacy)
 	}
-	a.state.StreamStates[streamStateKey(connection, "records")] = legacy
+	if _, err := a.updateState(func(current state) (state, error) {
+		if current.StreamStates == nil {
+			current.StreamStates = map[string]StreamState{}
+		}
+		current.StreamStates[streamStateKey(connection, "records")] = legacy
+		return current, nil
+	}); err != nil {
+		t.Fatal(err)
+	}
 
 	_, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1})
 	var recovery *synccontract.RebootstrapRequiredError
@@ -565,11 +573,16 @@ func TestUncommittedCheckpointRequiresRebootstrapBeforeRead(t *testing.T) {
 		t.Fatal(err)
 	}
 	stateKey := streamStateKey(connection, "records")
-	state := a.state.StreamStates[stateKey]
-	checkpoint := state.Checkpoint.Clone()
-	checkpoint.CommittedAt = nil
-	state.Checkpoint = &checkpoint
-	a.state.StreamStates[stateKey] = state
+	if _, err := a.updateState(func(current state) (state, error) {
+		streamState := current.StreamStates[stateKey]
+		checkpoint := streamState.Checkpoint.Clone()
+		checkpoint.CommittedAt = nil
+		streamState.Checkpoint = &checkpoint
+		current.StreamStates[stateKey] = streamState
+		return current, nil
+	}); err != nil {
+		t.Fatal(err)
+	}
 	readCount := len(source.requests)
 
 	_, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1})
