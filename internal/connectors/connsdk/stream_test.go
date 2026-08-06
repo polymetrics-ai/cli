@@ -4,12 +4,16 @@ import (
 	"context"
 	"errors"
 	"io"
+	"net"
 	"net/http"
 	"net/http/httptest"
+	"slices"
 	"strings"
 	"sync/atomic"
 	"testing"
 	"time"
+
+	"polymetrics.ai/internal/connectors/transportpolicy"
 )
 
 // customHeaderAuth models the 71 connector definitions that authenticate with
@@ -155,6 +159,57 @@ func TestDoStreamKeepsAuthSameOrigin(t *testing.T) {
 	}
 }
 
+func TestDoStreamAdmitsPermittedRedirectHops(t *testing.T) {
+	t.Run("same origin", func(t *testing.T) {
+		mux := http.NewServeMux()
+		mux.HandleFunc("/file", func(w http.ResponseWriter, r *http.Request) {
+			http.Redirect(w, r, "/blob", http.StatusFound)
+		})
+		mux.HandleFunc("/blob", func(w http.ResponseWriter, _ *http.Request) {
+			_, _ = w.Write([]byte("same-origin-bytes"))
+		})
+		srv := httptest.NewServer(mux)
+		defer srv.Close()
+
+		assertStreamRedirectAdmissions(t, srv.URL, StreamOptions{})
+	})
+
+	t.Run("allowed host", func(t *testing.T) {
+		cdn := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+			_, _ = w.Write([]byte("cdn-bytes"))
+		}))
+		defer cdn.Close()
+		origin := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			http.Redirect(w, r, cdn.URL+"/blob", http.StatusFound)
+		}))
+		defer origin.Close()
+
+		assertStreamRedirectAdmissions(t, origin.URL, StreamOptions{AllowedHosts: []string{strings.TrimPrefix(cdn.URL, "http://")}})
+	})
+}
+
+func assertStreamRedirectAdmissions(t *testing.T, baseURL string, opts StreamOptions) {
+	t.Helper()
+	var admissions []RateLimitRequest
+	r := &Requester{
+		BaseURL:        baseURL,
+		DisableRetries: true,
+		Admission: rateLimitAdmissionFunc(func(_ context.Context, request RateLimitRequest) error {
+			admissions = append(admissions, request)
+			return nil
+		}),
+	}
+
+	resp, err := r.DoStream(context.Background(), http.MethodGet, "/file", nil, opts)
+	if err != nil {
+		t.Fatalf("DoStream: %v", err)
+	}
+	_ = drain(t, resp.Body)
+	if got, want := admissions, []RateLimitRequest{{Method: http.MethodGet, Attempt: 1}, {Method: http.MethodGet, Attempt: 2}}; !slices.Equal(got, want) {
+		t.Fatalf("admissions = %+v, want %+v", got, want)
+	}
+}
+
 // TestDoStreamAllowedHostsPermitsNamedHost: an explicit per-operation
 // allowlist entry permits exactly that host, and still sends no credentials.
 func TestDoStreamAllowedHostsPermitsNamedHost(t *testing.T) {
@@ -219,6 +274,128 @@ func TestDoStreamRetryDiscardsPartialBody(t *testing.T) {
 	}
 	if attempts.Load() != 2 {
 		t.Fatalf("attempts = %d, want 2", attempts.Load())
+	}
+}
+
+func TestDoStreamReturnsTypedRateLimitError(t *testing.T) {
+	now := time.Date(2026, time.August, 6, 12, 0, 0, 0, time.UTC)
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Retry-After", "90")
+		w.WriteHeader(http.StatusTooManyRequests)
+		_, _ = w.Write([]byte(`{"error":"limited"}`))
+	}))
+	defer srv.Close()
+
+	r := &Requester{
+		BaseURL:        srv.URL,
+		DisableRetries: true,
+		Now:            func() time.Time { return now },
+	}
+	_, err := r.DoStream(context.Background(), http.MethodGet, "/file", nil, StreamOptions{})
+	if err == nil {
+		t.Fatal("DoStream: want rate-limit error")
+	}
+	var rateLimitErr *RateLimitError
+	if !errors.As(err, &rateLimitErr) {
+		t.Fatalf("error type = %T, want *RateLimitError", err)
+	}
+	if got, want := rateLimitErr.ResetAt, now.Add(90*time.Second); !got.Equal(want) {
+		t.Fatalf("reset = %v, want %v", got, want)
+	}
+	var httpErr *HTTPError
+	if !errors.As(err, &httpErr) || httpErr.Status != http.StatusTooManyRequests {
+		t.Fatalf("wrapped HTTPError = %v, want 429", httpErr)
+	}
+}
+
+func TestDoStreamDisableRetriesPreventsMutationTransportReplay(t *testing.T) {
+	var mutationHits int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		if req.URL.Path == "/mutate" {
+			atomic.AddInt32(&mutationHits, 1)
+		}
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer srv.Close()
+
+	var injectedFailures int32
+	var idempotencyHeaders int32
+	dialer := net.Dialer{}
+	transport := &http.Transport{
+		MaxIdleConnsPerHost: 1,
+		DialContext: func(ctx context.Context, network, address string) (net.Conn, error) {
+			conn, err := dialer.DialContext(ctx, network, address)
+			if err != nil {
+				return nil, err
+			}
+			return requestWriteFailureConn{Conn: conn, fail: func(p []byte) bool {
+				if !strings.HasPrefix(string(p), "POST /mutate ") {
+					return false
+				}
+				if strings.Contains(string(p), "\r\nIdempotency-Key:") {
+					atomic.AddInt32(&idempotencyHeaders, 1)
+				}
+				return atomic.CompareAndSwapInt32(&injectedFailures, 0, 1)
+			}}, nil
+		},
+	}
+	t.Cleanup(transport.CloseIdleConnections)
+	client := &http.Client{Transport: transport}
+	primeHTTPConnection(t, client, srv.URL)
+
+	r := &Requester{
+		BaseURL:        srv.URL,
+		Client:         client,
+		DisableRetries: true,
+		DefaultHeaders: map[string]string{"Idempotency-Key": "configured-key"},
+	}
+	resp, err := r.DoStream(context.Background(), http.MethodPost, "/mutate", nil, StreamOptions{})
+	if err == nil {
+		if resp != nil {
+			_ = resp.Body.Close()
+		}
+		t.Fatal("DoStream: expected transport error")
+	}
+	if got, want := atomic.LoadInt32(&injectedFailures), int32(1); got != want {
+		t.Fatalf("injected failures = %d, want %d", got, want)
+	}
+	if got := atomic.LoadInt32(&idempotencyHeaders); got != 0 {
+		t.Fatalf("idempotency headers = %d, want none", got)
+	}
+	if got := atomic.LoadInt32(&mutationHits); got != 0 {
+		t.Fatalf("mutation hits = %d, want no transport replay", got)
+	}
+}
+
+func TestDoStreamDisableRetriesRejectsMutationRedirect(t *testing.T) {
+	var initialHits int32
+	var targetHits int32
+	mux := http.NewServeMux()
+	mux.HandleFunc("/initial", func(w http.ResponseWriter, req *http.Request) {
+		atomic.AddInt32(&initialHits, 1)
+		http.Redirect(w, req, "/target", http.StatusTemporaryRedirect)
+	})
+	mux.HandleFunc("/target", func(w http.ResponseWriter, _ *http.Request) {
+		atomic.AddInt32(&targetHits, 1)
+		w.WriteHeader(http.StatusOK)
+	})
+	srv := httptest.NewServer(mux)
+	defer srv.Close()
+
+	r := &Requester{BaseURL: srv.URL, DisableRetries: true}
+	resp, err := r.DoStream(context.Background(), http.MethodPost, "/initial", nil, StreamOptions{})
+	if resp != nil {
+		_ = resp.Body.Close()
+		t.Fatal("DoStream returned a response after refusing redirect")
+	}
+	if !errors.Is(err, transportpolicy.ErrRedirectRefused) {
+		t.Fatalf("DoStream error = %v, want redirect refusal", err)
+	}
+	if got, want := atomic.LoadInt32(&initialHits), int32(1); got != want {
+		t.Fatalf("initial hits = %d, want %d", got, want)
+	}
+	if got := atomic.LoadInt32(&targetHits); got != 0 {
+		t.Fatalf("target hits = %d, want no redirected mutation", got)
 	}
 }
 

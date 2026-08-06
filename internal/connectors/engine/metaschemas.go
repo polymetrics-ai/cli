@@ -33,3 +33,6 @@ var cliSurfaceSchemaJSON string
 
 //go:embed schema/certification.schema.json
 var certificationSchemaJSON string
+
+//go:embed schema/rate_limits.schema.json
+var rateLimitsSchemaJSON string
