@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MySQL connection config",
+  "type": "object",
+  "required": ["host", "database", "username"],
+  "properties": {
+    "host": {
+      "type": "string",
+      "description": "Bare MySQL hostname or IP address. URL-shaped values and embedded credentials are rejected."
+    },
+    "port": {
+      "type": "string",
+      "description": "TCP port, 1-65535. Defaults to 3306 when omitted."
+    },
+    "database": {
+      "type": "string",
+      "description": "MySQL database to discover and read."
+    },
+    "username": {
+      "type": "string",
+      "description": "Database account used to authenticate."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Database password. Never logged."
+    },
+    "cursor_field": {
+      "type": "string",
+      "description": "Optional safe column name used to page and filter cursor-incremental reads."
+    },
+    "page_size": {
+      "type": "string",
+      "description": "Maximum records per cursor read page. Defaults to 1000."
+    },
+    "read_limit": {
+      "type": "string",
+      "description": "Total maximum rows for a Read. Defaults to 10000; set to 0, all, or unlimited to disable this bound."
+    },
+    "replication_server_id": {
+      "type": "string",
+      "description": "Positive unique MySQL replication server ID required only for binary-log change capture."
+    }
+  }
+}

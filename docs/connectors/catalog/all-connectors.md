@@ -296,6 +296,7 @@
 | `monday` | [`icons/monday.svg`](../icons/monday.svg) | Monday | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://developer.monday.com/api-reference/docs) | bundle definition |
 | `mux` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Mux | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://docs.mux.com/api-reference) | bundle definition |
 | `my-hours` | [`icons/my-hours.svg`](../icons/my-hours.svg) | My Hours | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://myhours.com/api) | bundle definition |
+| `mysql` | [`icons/mysql.svg`](../icons/mysql.svg) | MySQL | `database` | ga | check, catalog, read | 0 | 0 | [Documentation](https://dev.mysql.com/doc/refman/8.4/en/) | bundle definition |
 | `n8n` | [`icons/n8n.svg`](../icons/n8n.svg) | n8n | `api` | ga | check, catalog, read, write | 21 | 29 | [Documentation](https://docs.n8n.io/connect/n8n-api/api-reference) | bundle definition |
 | `nasa` | [`icons/nasa.svg`](../icons/nasa.svg) | NASA | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://api.nasa.gov/) | bundle definition |
 | `navan` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Navan | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://navan.com/api-docs) | bundle definition |

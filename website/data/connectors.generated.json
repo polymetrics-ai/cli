@@ -198981,6 +198981,34 @@
     }
   },
   {
+    "slug": "mysql",
+    "name": "MySQL",
+    "description": "Reads MySQL tables through the MySQL wire protocol, discovers dynamic schemas, supports bounded cursor-incremental reads, and consumes row-based binary-log replication changes. Read-only source.",
+    "docs_url": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "integration_type": "database",
+    "release_stage": "ga",
+    "capabilities": {
+      "check": true,
+      "read": true,
+      "write": false,
+      "query": false,
+      "cdc": true,
+      "dynamic_schema": true
+    },
+    "streams": [],
+    "write_actions": [],
+    "cli_surface": null,
+    "docs_md": "# Overview\n\nReads MySQL tables through the MySQL wire protocol. It discovers tables/columns dynamically,\nperforms bounded full and cursor-incremental reads, and consumes row-based binary-log changes for a\nselected discovered table. It is a read-only source.\n\n## Auth setup\n\nConfigure a bare `host`, `database`, and `username`. `port` defaults to 3306. `password` is a\nsecret field and is never logged. Do not put credentials in a host or URL-shaped value.\n\nFor CDC, configure a positive `replication_server_id` unique among replication clients. The MySQL\nserver must enable binary logging with row format and full row images; it must also grant the\nconfigured account the narrowly appropriate replication-read privilege for the deployed server.\n\n## Streams notes\n\nThe catalog exposes every base table in the configured database as `database.table`. Set\n`cursor_field` to a stable sortable column to make reads cursor-incremental and internally paged;\n`page_size` and `read_limit` bound those reads. CDC targets one discovered stream and stores the\nlast acknowledged binary-log file and position.\n\n## Write actions & risks\n\nThis connector is read-only. It issues discovery and read queries and opens a replication stream;\nit does not create, alter, or delete database data.\n\n## Known limits\n\n- CDC guarantees source ordering and at-least-once delivery. A replay at the committed binary-log\n  boundary is possible; downstream consumers must use the file/position dedupe identity.\n- CDC requires row-based binary logging and full row images. Statement-only or minimal row-image\n  binary logs are rejected as unsuitable for complete row event projection.\n- TLS configuration, GTID checkpointing, schema-change event projection, and cross-database CDC\n  fan-out are outside this first engine slice.\n\n## Container integration proof\n\nThe tagged integration test is intentionally sequential and opt-in. It starts one MySQL\n`docker.io/library/mysql:8.4.11` container on a Docker-assigned loopback port, seeds deterministic\nmulti-page data, and asserts check, discovery, full read, incremental read, and row-binlog CDC\nagainst returned records. Run the complete proof with its required host-disk cleanup:\n\n```bash\nDOCKER_CONTEXT=colima POLYMETRICS_DATABASE_INTEGRATION=1 \\\n  POLYMETRICS_DATABASE_RESET_COLIMA=1 \\\n  go test -tags=databaseintegration -count=1 -v ./internal/connectors/native/mysql\n```\n\nEvery Docker command is scoped to the supplied context. The test refuses to run without the opt-in\nor explicit context, and never falls back to Docker's global default. Its deferred cleanup removes\nthe generated container, named volume, and an image pulled by that run; it reports free disk before\nstartup and after teardown. The reset opt-in then runs `colima delete` followed by `colima start`\nfor the disposable default profile, because Docker removal frees space inside Colima but does not\nshrink its host VM disk file. It is destructive to that profile and must not be used while it holds\nother work. `POLYMETRICS_DATABASE_KEEP_IMAGE=1` is an explicit local speed opt-in and cannot be\ncombined with the reset.\n\nPodman is not used for this harness: three task-era Podman machines on this host failed to start,\nwhereas Docker via Colima was independently verified with MySQL 8.4 and row-format binary logging.\n",
+    "icon": {
+      "id": "mysql",
+      "path": "icons/mysql.svg",
+      "publicPath": "/connectors/icons/mysql.svg",
+      "source": "upstream_registry",
+      "reviewStatus": "upstream_seeded",
+      "reviewUrl": "https://dev.mysql.com/doc/"
+    }
+  },
+  {
     "slug": "n8n",
     "name": "n8n",
     "description": "Reads n8n workflows, executions, tags, users, variables, projects, data tables, and credential metadata; writes supported n8n public REST API mutations.",

@@ -11,7 +11,7 @@
     },
     "mechanism": {
       "type": "string",
-      "enum": ["logical_replication", "incremental_cursor", "webhook", "event_stream", "polling_watermark"]
+      "enum": ["logical_replication", "binlog_replication", "incremental_cursor", "webhook", "event_stream", "polling_watermark"]
     },
     "source": {
       "type": "object",

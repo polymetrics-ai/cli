@@ -87295,6 +87295,117 @@
     }
   },
   {
+    "name": "mysql",
+    "display_name": "MySQL",
+    "description": "Reads MySQL tables through the MySQL wire protocol, discovers dynamic schemas, supports bounded cursor-incremental reads, and consumes row-based binary-log replication changes. Read-only source.",
+    "integration_type": "database",
+    "docs_url": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "release_stage": "ga",
+    "capabilities": {
+      "check": true,
+      "catalog": true,
+      "read": true,
+      "write": false,
+      "query": false
+    },
+    "changefeed": {
+      "status": "implemented",
+      "mechanism": "binlog_replication",
+      "source": {
+        "artifact_url": "https://dev.mysql.com/doc/refman/8.4/en/replication-options-binary-log.html",
+        "artifact_version": "8.4",
+        "retrieved_at": "2026-08-06"
+      },
+      "executor": {
+        "kind": "native",
+        "id": "mysql-binlog-row-v1"
+      },
+      "checkpoint": {
+        "kind": "binlog_position",
+        "keys": [
+          "binlog_file",
+          "binlog_pos"
+        ],
+        "commit_after": "downstream_ack",
+        "on_invalid": "resnapshot_required"
+      },
+      "delivery": {
+        "ordering": "source_ordered",
+        "duplicates": "at_least_once",
+        "deletes": "tombstone",
+        "dedupe_key": [
+          "binlog_file",
+          "binlog_pos"
+        ]
+      },
+      "streams": [
+        "*"
+      ]
+    },
+    "spec": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "MySQL connection config",
+      "type": "object",
+      "required": [
+        "host",
+        "database",
+        "username"
+      ],
+      "properties": {
+        "host": {
+          "type": "string",
+          "description": "Bare MySQL hostname or IP address. URL-shaped values and embedded credentials are rejected."
+        },
+        "port": {
+          "type": "string",
+          "description": "TCP port, 1-65535. Defaults to 3306 when omitted."
+        },
+        "database": {
+          "type": "string",
+          "description": "MySQL database to discover and read."
+        },
+        "username": {
+          "type": "string",
+          "description": "Database account used to authenticate."
+        },
+        "password": {
+          "type": "string",
+          "x-secret": true,
+          "description": "Database password. Never logged."
+        },
+        "cursor_field": {
+          "type": "string",
+          "description": "Optional safe column name used to page and filter cursor-incremental reads."
+        },
+        "page_size": {
+          "type": "string",
+          "description": "Maximum records per cursor read page. Defaults to 1000."
+        },
+        "read_limit": {
+          "type": "string",
+          "description": "Total maximum rows for a Read. Defaults to 10000; set to 0, all, or unlimited to disable this bound."
+        },
+        "replication_server_id": {
+          "type": "string",
+          "description": "Positive unique MySQL replication server ID required only for binary-log change capture."
+        }
+      }
+    },
+    "streams": [],
+    "risk": {
+      "read": "read-only MySQL wire-protocol queries and binary-log replication against the configured database",
+      "write": "n/a (read-only source)",
+      "approval": "none required for read-only sync"
+    },
+    "icon": {
+      "id": "mysql",
+      "path": "icons/mysql.svg",
+      "source": "upstream_registry",
+      "review_status": "upstream_seeded",
+      "review_url": "https://dev.mysql.com/doc/"
+    }
+  },
+  {
     "name": "n8n",
     "display_name": "n8n",
     "description": "Reads n8n workflows, executions, tags, users, variables, projects, data tables, and credential metadata; writes supported n8n public REST API mutations.",
