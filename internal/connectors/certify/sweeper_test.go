@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"testing"
 	"time"
@@ -27,18 +28,35 @@ func TestSweeperCleansUnledgeredAgedEntries(t *testing.T) {
 	// TestWriteStagesSelfTestAgainstOutbox. Keep this test focused on the
 	// sweeper's ledger transition and its exact cleanup orchestration, without
 	// repeatedly loading every connector bundle through the CLI.
-	var calls []string
+	expectedCalls := [][]string{
+		{"credentials", "add", "cert-outbox", "--connector", "outbox", "--config", "path=" + filepath.Join(root, ".polymetrics", "outbox"), "--json", "--root", root},
+		{"credentials", "add", "cert-sweep-warehouse", "--connector", "warehouse", "--config", "path=" + filepath.Join(root, ".polymetrics", "warehouse"), "--json", "--root", root},
+		{"credentials", "add", "cert-sweep-seed-file", "--connector", "file", "--config", "path=" + filepath.Join(root, "cert_sweep_seed.jsonl"), "--json", "--root", root},
+		{"connections", "create", "cert_sweep_seed_conn", "--source", "file:cert-sweep-seed-file", "--destination", "warehouse:cert-sweep-warehouse", "--stream", "cert_sweep_seed", "--primary-key", "tag", "--sync-mode", "full_refresh_overwrite", "--table", "cert_sweep_source", "--json", "--root", root},
+		{"etl", "run", "--connection", "cert_sweep_seed_conn", "--stream", "cert_sweep_seed", "--json", "--root", root},
+		{"reverse", "plan", "cert_write_selftest", "--source-table", "cert_sweep_source", "--destination", "outbox:cert-outbox", "--map", "tag:tag", "--action", "delete", "--root", root},
+		{"reverse", "run", "sweep-plan", "--approve", "sweep-approval", "--json", "--root", root},
+	}
+	callIndex := 0
 	certify.SetCLIRunFunc(func(args []string, stdout, _ io.Writer) int {
-		call := strings.Join(args, " ")
-		calls = append(calls, call)
+		if callIndex >= len(expectedCalls) {
+			t.Errorf("unexpected cleanup CLI call %d: %q", callIndex+1, args)
+			return 1
+		}
+		want := expectedCalls[callIndex]
+		callIndex++
+		if !slices.Equal(args, want) {
+			t.Errorf("cleanup CLI call %d args = %q, want %q", callIndex, args, want)
+			return 1
+		}
 
-		switch {
-		case strings.HasPrefix(call, "reverse plan "):
+		switch callIndex {
+		case 6:
 			if _, err := io.WriteString(stdout, "Created reverse plan sweep-plan\nApproval token: sweep-approval\n"); err != nil {
 				t.Errorf("write fake reverse plan result: %v", err)
 				return 1
 			}
-		case strings.HasPrefix(call, "reverse run "):
+		case 7:
 			if _, err := io.WriteString(stdout, `{"kind":"ReverseRun"}`); err != nil {
 				t.Errorf("write fake reverse run result: %v", err)
 				return 1
@@ -83,21 +101,8 @@ func TestSweeperCleansUnledgeredAgedEntries(t *testing.T) {
 	if !found {
 		t.Errorf("SweepResult.Cleaned = %v, want to include aged tag %q", result.Cleaned, agedTag)
 	}
-	for i, want := range []string{
-		"credentials add cert-outbox",
-		"credentials add cert-sweep-warehouse",
-		"credentials add cert-sweep-seed-file",
-		"connections create cert_sweep_seed_conn",
-		"etl run",
-		"reverse plan cert_write_selftest",
-		"reverse run sweep-plan",
-	} {
-		if i >= len(calls) || !strings.HasPrefix(calls[i], want) {
-			t.Errorf("cleanup call %d = %q, want prefix %q", i, callAt(calls, i), want)
-		}
-	}
-	if len(calls) != 7 {
-		t.Errorf("cleanup call count = %d, want 7 (%v)", len(calls), calls)
+	if callIndex != len(expectedCalls) {
+		t.Errorf("cleanup CLI call count = %d, want %d", callIndex, len(expectedCalls))
 	}
 
 	entries, err := certify.LoadLedger(root)
@@ -108,13 +113,6 @@ func TestSweeperCleansUnledgeredAgedEntries(t *testing.T) {
 	if !ok || !status.Cleaned {
 		t.Errorf("ledger StatusFor(%q) = %+v, ok=%v, want Cleaned=true after sweep", agedTag, status, ok)
 	}
-}
-
-func callAt(calls []string, index int) string {
-	if index >= len(calls) {
-		return ""
-	}
-	return calls[index]
 }
 
 // TestSweeperSkipsRecentEntries proves the --older-than threshold: a

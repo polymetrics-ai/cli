@@ -49,3 +49,19 @@ provider reason and source URL). This was a validator format requirement, not a 
 - The full repository suite and `make verify` are intentionally left to CI/no-mistakes under the
   repository timeout guidance. Per the task gate, this branch stops after the Wave 1 commit; do not
   start no-mistakes or create a PR until firstmate instructs it.
+
+## Foundation re-gate
+
+- Re-gate scope: the merged non-redacting output-policy, typed multipart, `rest_write`, destructive
+  approval, API-surface provenance, and rate-limit foundations were reviewed without changing a
+  Zoom ledger disposition or reason.
+- Tool / result: `go run ./cmd/pm connectors inspect zoom --json` reported `write=false` and the
+  three declared streams; `go run ./cmd/pm zoom --help` exposed only the Wave 1 users, meetings,
+  and webinars command groups. The executable endpoint count remains **3 → 3**, with **0 → 0**
+  operation-row promotions and three implemented CLI commands.
+- The 1,910 remaining endpoint rows have no complete Zoom-local typed operation contract plus
+  executable command surface, so they remain blocked. No `operations.json`, Zoom write action,
+  credential, live request, redaction policy, or Wave 2 route was added.
+- Focused proof: `go test ./internal/connectors/defs/zoom -run
+  'TestProviderInventoryLedgerIsComplete|TestCoveredStreamsHaveReachableCommands' -count=1`
+  passes, retaining the 1,913-row ledger and exactly the three reachable command bindings.
