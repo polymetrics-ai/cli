@@ -10,7 +10,8 @@ first evidence-quality-first batch.
 - Generated a five-candidate first manifest: DocuSeal, DefiLlama, Docker Hub,
   Flexmail, and Alpaca Broker API (190 surveyed operations).
 - Documented the complete post-foundation authoring/drop procedure and the
-  exact wait on #3869, #3870, and #3868.
+  exact remaining wait on #3869, after rebasing on the merged #3870 and #3868
+  foundations.
 
 The branch contains no authored connector bundle. That is intentional until
-shared v2 provenance and non-redacting output policies merge to `main`.
+shared v2 provenance merges to `main`.

@@ -11,14 +11,17 @@ It contains five candidates and 190 measured provider operations (113 read,
 
 ## Current external gate
 
-Do not author a bundle from this manifest until these foundations have merged
-to `main` and the branch has been rebased on `main` (never on a sibling branch):
+Do not author a bundle from this manifest until this remaining foundation has
+merged to `main` and the branch has been rebased on `main` (never on a sibling
+branch):
 
 - #3773 / PR #3869 provides `api_surface.json` operation-ledger v2 provenance:
   provider-artifact records and endpoint-local citations.
-- #3870 makes a non-redacting command output policy declarable.
-- #3868 preserves command content; observe its full verification alongside the
-  two required authoring foundations.
+
+#3870 is merged at `ee26d20fc`: direct writes can declare non-redacting `json`
+or `none`. #3868 is merged at `50deaade9`: command-runner content preservation
+is current on `main`. They are consumed by the batch gate below; #3869 is the
+only external authoring dependency.
 
 The command-runner, shared schemas, and engine are intentionally untouched by
 this pipeline. A v2 provenance writer before #3869 would compete with a shared
@@ -134,9 +137,18 @@ For each selected manifest record:
    Never introduce a generic HTTP write escape hatch.
 
 The materializer itself is deferred because its output is the shared-contract
-surface that #3869/#3870 are changing. The work now prepares its deterministic
-input, gate, output report, and no-redaction rules; the only safe next code
-slice after rebase is the contract-aware artifact-to-bundle emitter.
+surface that #3869 is changing. The work now prepares its deterministic input,
+gate, output report, and no-redaction rules; the only safe next code slice
+after #3869 merges is the contract-aware artifact-to-bundle emitter.
+
+No-redaction is an explicit batch-gate rule. `batch gate` drops a candidate
+that declares `redact_fields`, an output policy containing `redact`, or either
+legacy repository-contents policy (which redacts despite its name). #3870's
+`json` and `none` direct-write policies are acceptable. Current direct-read
+policies are redacting, so an authored batch must leave a direct-read operation
+provider-blocked or justified-excluded unless a separate, shared-owned
+non-redacting direct-read capability lands; stream and reverse-ETL executors
+remain available where their real implementation applies.
 
 ## Phase 3: individual gate and batch report
 
@@ -159,7 +171,10 @@ For every candidate, the gate:
    `commandrunner.Preflight` for every implemented command. It does not copy
    the runner's rules. This is the safeguard against commands that validate but
    fail at `pm <connector> <command>` with `connector_command_blocked`.
-4. Requires `api_surface.json` and a non-empty `cli_surface.json`, then reports
+4. Rejects redacting declarations before runtime preflight: no
+   `redact_fields`, redacting output policy, or legacy repository-content
+   policy can enter the batch.
+5. Requires `api_surface.json` and a non-empty `cli_surface.json`, then reports
    declared endpoint operations as executable, provider-blocked, or excluded.
    The shared v2 validator supplied by #3869 enforces endpoint provenance when
    the post-foundation bundle is validated.
@@ -210,8 +225,8 @@ PR. Do not merge the PR.
 `batch plan` has a hard maximum of 40 candidates and `batch gate` performs
 failure-isolated checks for each one, so the control plane can mechanically
 support 30–40 candidates per PR. The honest immediate batch size is **five
-prepared, zero authored**: the v2 provenance and non-redacting policy
-foundations have not merged, so no evidence yet supports a claim that 30–40
-fully authored connectors are merge-ready. After this five-connector proof
-passes, start at 30 and increase to 40 only if artifact materialization and the
-per-candidate report stay reviewable.
+prepared, zero authored**: #3869's v2 provenance contract remains unmerged, so
+no evidence yet supports a claim that 30–40 fully authored connectors are
+merge-ready. After this five-connector proof passes, start at 30 and increase
+to 40 only if artifact materialization and the per-candidate report stay
+reviewable.

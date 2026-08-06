@@ -35,10 +35,10 @@ connector independently.
 - #3868 preserves connector command output and was also still open with full
   verification pending.
 
-No schema, engine, or `internal/connectors/commandrunner/runner.go` change is
-authorized in this slice. No bundle is authored until #3869 and #3870 merge;
-#3868 is observed alongside them because output preservation is part of the
-same safe authoring path.
+Rechecked after the current-main rebase: #3870 merged as `ee26d20fc` and
+#3868 merged as `50deaade9`; #3869 remains open. Only #3869 now gates bundle
+authoring. No schema, engine, or `internal/connectors/commandrunner/runner.go`
+change is authorized in this slice.
 
 ## Decisions
 
