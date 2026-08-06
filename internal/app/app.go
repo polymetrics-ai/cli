@@ -28,12 +28,6 @@ const reversePlanModeConnectorCommand = "connector_command"
 
 var errStateRevisionConflict = errors.New("project state changed in another process")
 
-var errGenericETLDurabilityUnavailable = errors.New("generic ETL destination cannot provide a durable downstream acknowledgement")
-
-type durableETLDestination interface {
-	AcknowledgeETLDurability(context.Context, string) (synccontract.DownstreamAcknowledgement, error)
-}
-
 type App struct {
 	root       string
 	projectDir string
@@ -862,9 +856,9 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 	if mode.IsDeduped() {
 		return etlExecutionResult{}, fmt.Errorf("sync mode %s requires the local warehouse destination in this dependency-free implementation", mode.Name)
 	}
-	durableDestination, ok := destination.(durableETLDestination)
+	durableDestination, ok := destination.(synccontract.DurableETLDestination)
 	if !ok {
-		return etlExecutionResult{}, fmt.Errorf("%w: %q", errGenericETLDurabilityUnavailable, destination.Name())
+		return etlExecutionResult{}, &synccontract.DestinationDurabilityAdmissionError{Destination: destination.Name()}
 	}
 	stateKey := streamStateKey(conn.Name, streamName)
 	prior := a.state.StreamStates[stateKey]
