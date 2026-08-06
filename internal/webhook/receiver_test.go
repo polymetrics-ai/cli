@@ -394,6 +394,39 @@ func TestApplyExposureEvaluatesPriorHeartbeatPolicy(t *testing.T) {
 	}
 }
 
+func TestApplyExposureEvaluatesTightenedHeartbeatPolicy(t *testing.T) {
+	t.Parallel()
+
+	key := []byte("test-project-key-material")
+	now := time.Date(2026, time.August, 6, 0, 0, 0, 0, time.UTC)
+	exposure, err := ConfigureExposure(ExposureConfig{
+		Mode:         ExposureModeExternalTunnel,
+		TunnelTool:   TunnelToolTailscaleFunnel,
+		CallbackURL:  "https://node.tailnet.ts.net/receiver",
+		HeartbeatTTL: time.Hour,
+	}, key)
+	if err != nil {
+		t.Fatal(err)
+	}
+	updatedPolicy, err := ConfigureExposure(ExposureConfig{
+		Mode:         ExposureModeExternalTunnel,
+		TunnelTool:   TunnelToolTailscaleFunnel,
+		CallbackURL:  "https://node.tailnet.ts.net/receiver",
+		HeartbeatTTL: time.Minute,
+	}, key)
+	if err != nil {
+		t.Fatal(err)
+	}
+	subscription := NewSubscription("fixture", exposure, now)
+	initialEpoch := subscription.RecoveryEpoch
+	if changed := subscription.ApplyExposure(updatedPolicy, now.Add(2*time.Minute)); changed {
+		t.Fatal("same endpoint reconfiguration changed the generation")
+	}
+	if subscription.Exposure.HeartbeatTTL != time.Minute || !subscription.LastHeartbeatAt.Equal(now) || subscription.RecoveryEpoch != initialEpoch+1 || subscription.Status != SubscriptionStatusDegraded || !subscription.ReregistrationRequired || !subscription.ReconciliationRequired {
+		t.Fatalf("same endpoint reconfiguration did not apply the tightened liveness policy: %+v", subscription)
+	}
+}
+
 func TestHeartbeatExpiryStartsFencedRecoveryEpoch(t *testing.T) {
 	t.Parallel()
 

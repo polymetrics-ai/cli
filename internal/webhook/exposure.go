@@ -246,6 +246,8 @@ func (s *Subscription) ApplyExposure(next Exposure, now time.Time) bool {
 	if changed {
 		s.LastHeartbeatAt = now
 		s.beginRecovery()
+	} else {
+		s.DegradeIfHeartbeatExpired(now)
 	}
 	return changed
 }
