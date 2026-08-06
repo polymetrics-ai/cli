@@ -10,7 +10,7 @@ export GOTOOLCHAIN ?= auto
 # Packages covered by `lint` include declarative connector and canonical agent-contract tooling.
 # Paths are filtered to existing directories so optional local trees do not hard-fail
 # golangci-lint's arg parsing.
-LINT_CANDIDATE_DIRS := internal/connectors/engine internal/connectors/defs internal/connectors/hooks internal/connectors/native internal/connectors/conformance internal/connectors/certify internal/connectors/boundary internal/agentcontract cmd/connectorgen cmd/agentcontractgen
+LINT_CANDIDATE_DIRS := internal/connectors/engine internal/connectors/defs internal/connectors/hooks internal/connectors/native internal/connectors/conformance internal/connectors/certify internal/connectors/boundary internal/agentcontract cmd/connectorgen cmd/agentcontractgen cmd/certifytiming
 LINT_PKGS := $(foreach d,$(LINT_CANDIDATE_DIRS),$(if $(wildcard $(d)),./$(d)/...))
 
 fmt:
@@ -29,8 +29,9 @@ test:
 # Emits the raw cold -json streams and a compact timing summary for only the
 # certification harness and its CLI route tests. Verify invokes this target in
 # a separate step so the diagnostic is visible even when the aggregate suite
-# later fails or reaches its job limit. The final 93-call topology measured
-# a 161.236s maximum wall time plus a 13.927s observed spread, rounded to 3m.
+# later fails or reaches its job limit. The final 93/61 harness/CLI topology
+# measured a 161.236s maximum wall time plus a 13.927s observed spread,
+# rounded to 3m.
 CERTIFY_TIMING_MAX_DURATION := 3m
 
 certify-timing:
