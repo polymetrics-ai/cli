@@ -2,7 +2,7 @@
 
 ## Fixed decisions
 
-- PR code may use the self-hosted `polymetrics-website` label only when both
+- PR code may use the self-hosted `polymetrics-cli` label only when both
   `github.event.pull_request.head.repo.full_name == github.repository` and the
   author login is `karthik-sivadas` or `alfred-polymetrics-ai`.
 - Fork PRs and every non-PR event deliberately resolve to `ubuntu-latest`.
@@ -12,8 +12,8 @@
 
 ## Constraints and follow-ups
 
-- The known online self-hosted runner has `polymetrics-website`; no server or
-  deployment files are in scope.
-- Go tooling must be provisioned on that runner before this routing can serve
-  Go jobs. The shipping PR must state this dependency and the required
-  ephemeral-runner, action-SHA-pinning, and concurrency hardening follow-ups.
+- Two known online self-hosted runners carry `polymetrics-cli` with Go 1.25.12
+  installed; no server or deployment files are in scope.
+- The shipping PR must record that the runner-provisioning dependency is now
+  satisfied, along with the required ephemeral-runner, action-SHA-pinning, and
+  concurrency hardening follow-ups.

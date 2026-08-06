@@ -12,7 +12,7 @@
 ## Scope
 
 1. Add a reusable, GitHub-hosted selector setup job. It outputs the existing
-   `polymetrics-website` label only for same-repository PRs from the two
+   `polymetrics-cli` label only for same-repository PRs from the two
    explicitly trusted accounts; it outputs `ubuntu-latest` otherwise.
 2. Wire every existing Linux GitHub-hosted job to the selector output while
    preserving their current dependencies and conditions. Leave Windows and the

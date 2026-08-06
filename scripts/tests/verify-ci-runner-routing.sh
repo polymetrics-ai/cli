@@ -21,7 +21,7 @@ require "github.event_name == 'pull_request'"
 require "github.event.pull_request.head.repo.full_name == github.repository"
 require "github.event.pull_request.user.login == 'karthik-sivadas'"
 require "github.event.pull_request.user.login == 'alfred-polymetrics-ai'"
-require 'echo "runner=polymetrics-website" >> "$GITHUB_OUTPUT"'
+require 'echo "runner=polymetrics-cli" >> "$GITHUB_OUTPUT"'
 require 'echo "runner=ubuntu-latest" >> "$GITHUB_OUTPUT"'
 
 linux_workflows=(

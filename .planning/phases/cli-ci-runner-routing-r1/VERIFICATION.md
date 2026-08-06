@@ -21,8 +21,8 @@ of the later CI gate.
 ## Review
 
 Manual source review found no secret material or server/deployment paths. The
-selector job itself stays GitHub-hosted; the sole self-hosted label is the
-known online `polymetrics-website` label. It checks both same-repository and
+selector job itself stays GitHub-hosted; its self-hosted result is the known
+online `polymetrics-cli` label. It checks both same-repository and
 explicit-author conditions before returning that label. All other event types
 return `ubuntu-latest` deliberately. The Windows workflow is untouched, and
-the website deployment job retains its dedicated runner.
+the website deployment job retains its separate dedicated runner.

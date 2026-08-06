@@ -24,7 +24,7 @@ jobs:
                  github.event.pull_request.user.login == 'alfred-polymetrics-ai') }}
         run: |
           if [[ "$TRUSTED_SAME_REPOSITORY_PR" == "true" ]]; then
-            echo "runner=polymetrics-website" >> "$GITHUB_OUTPUT"
+            echo "runner=polymetrics-cli" >> "$GITHUB_OUTPUT"
           else
             # Fork PRs and all non-PR triggers fail closed to GitHub-hosted.
             echo "runner=ubuntu-latest" >> "$GITHUB_OUTPUT"

@@ -1,17 +1,16 @@
 ## Summary
 
 - Route same-repository PRs by `karthik-sivadas` and
-  `alfred-polymetrics-ai` to the existing `polymetrics-website` self-hosted
+  `alfred-polymetrics-ai` to the existing `polymetrics-cli` self-hosted
   runner label through one shared selector.
 - Route fork PRs and every non-PR trigger to GitHub-hosted `ubuntu-latest`.
 - Keep Windows on `windows-latest` and preserve the website deployment job's
   dedicated runner.
 
-## Runner provisioning dependency
+## Runner provisioning
 
-The existing online runner has the `polymetrics-website` label, but Go is not
-provisioned there. Provision the Go toolchain before relying on this change for
-Go jobs; this PR does not touch the server.
+Two online `polymetrics-cli` runners now provide Go 1.25.12, so the prior
+runner-provisioning dependency is satisfied. This PR does not touch the server.
 
 ## Required hardening follow-ups (not implemented here)
 
