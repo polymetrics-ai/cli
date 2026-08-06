@@ -242,8 +242,7 @@ func (s *Subscription) ApplyExposure(next Exposure, now time.Time) bool {
 	s.Exposure = cloneExposure(next)
 	s.LastHeartbeatAt = now
 	if changed {
-		s.RecoveryEpoch++
-		s.degradeForEndpointChange()
+		s.beginRecovery()
 	}
 	return changed
 }
@@ -261,7 +260,7 @@ func (s *Subscription) DegradeIfHeartbeatExpired(now time.Time) bool {
 	if now.Before(s.LastHeartbeatAt.Add(s.Exposure.HeartbeatTTL)) {
 		return false
 	}
-	s.degradeForEndpointChange()
+	s.beginRecovery()
 	return true
 }
 
@@ -316,7 +315,8 @@ func (s *Subscription) CompleteReconciliation(recoveryEpoch uint64) error {
 	return nil
 }
 
-func (s *Subscription) degradeForEndpointChange() {
+func (s *Subscription) beginRecovery() {
+	s.RecoveryEpoch++
 	s.Status = SubscriptionStatusDegraded
 	s.RecoveryOutcome = synccontract.RecoveryOutcomeSourceGenerationChanged
 	s.ReregistrationRequired = true

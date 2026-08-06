@@ -80,7 +80,8 @@ type Receiver struct {
 type LoopbackServer struct {
 	server   *http.Server
 	listener net.Listener
-	done     chan error
+	done     chan struct{}
+	serveErr error
 }
 
 // NewReceiver validates the provider-declared route and explicit bounds.
@@ -118,13 +119,14 @@ func (r *Receiver) StartLoopback(exposure Exposure, port int) (*LoopbackServer, 
 		WriteTimeout:      r.config.RequestTimeout,
 		IdleTimeout:       r.config.RequestTimeout,
 	}
-	running := &LoopbackServer{server: server, listener: listener, done: make(chan error, 1)}
+	running := &LoopbackServer{server: server, listener: listener, done: make(chan struct{})}
 	go func() {
 		err := server.Serve(listener)
 		if errors.Is(err, http.ErrServerClosed) {
 			err = nil
 		}
-		running.done <- err
+		running.serveErr = err
+		close(running.done)
 	}()
 	return running, nil
 }
@@ -146,7 +148,8 @@ func (s *LoopbackServer) Shutdown(ctx context.Context) error {
 	if err := s.server.Shutdown(ctx); err != nil {
 		return err
 	}
-	return <-s.done
+	<-s.done
+	return s.serveErr
 }
 
 // ServeHTTP verifies bounded raw bytes, stores a receipt durably, and only

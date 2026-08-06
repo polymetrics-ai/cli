@@ -263,3 +263,93 @@ func TestWebhookReceiverPersistsHeartbeatAndSeparateRecoveryCompletion(t *testin
 		t.Fatalf("completed recovery status = %+v", completed)
 	}
 }
+
+func TestWebhookReceiverHeartbeatExpiryPersistsFencedRecovery(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	instance, err := app.Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	configured, err := instance.ConfigureWebhookReceiver(ctx, app.ConfigureWebhookReceiverRequest{
+		Name: "expiry-funnel",
+		Exposure: webhook.ExposureConfig{
+			Mode:         webhook.ExposureModeExternalTunnel,
+			TunnelTool:   webhook.TunnelToolTailscaleFunnel,
+			CallbackURL:  "https://node.tailnet.ts.net/receiver",
+			HeartbeatTTL: time.Minute,
+		},
+		ReceiptCapacity: 2,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	observedAt := time.Now().UTC().Add(time.Minute)
+	heartbeat, err := instance.RecordWebhookReceiverHeartbeat(ctx, app.WebhookReceiverHeartbeatRequest{
+		Name:          "expiry-funnel",
+		CallbackURL:   "https://node.tailnet.ts.net/receiver",
+		ObservedAt:    observedAt,
+		RecoveryEpoch: configured.RecoveryEpoch,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	firstExpiry, err := instance.WebhookReceiverStatus("expiry-funnel", observedAt.Add(2*time.Minute))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if firstExpiry.RecoveryEpoch != heartbeat.RecoveryEpoch+1 || firstExpiry.Status != webhook.SubscriptionStatusDegraded || !firstExpiry.ReregistrationRequired || !firstExpiry.ReconciliationRequired {
+		t.Fatalf("first expiry status = %+v", firstExpiry)
+	}
+	if _, err := instance.CompleteWebhookReceiverReregistration(ctx, "expiry-funnel", firstExpiry.RecoveryEpoch); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := instance.CompleteWebhookReceiverReconciliation(ctx, "expiry-funnel", firstExpiry.RecoveryEpoch); err != nil {
+		t.Fatal(err)
+	}
+	refreshed, err := instance.RecordWebhookReceiverHeartbeat(ctx, app.WebhookReceiverHeartbeatRequest{
+		Name:          "expiry-funnel",
+		CallbackURL:   "https://node.tailnet.ts.net/receiver",
+		ObservedAt:    observedAt.Add(3 * time.Minute),
+		RecoveryEpoch: firstExpiry.RecoveryEpoch,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	secondExpiry, err := instance.WebhookReceiverStatus("expiry-funnel", observedAt.Add(5*time.Minute))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if secondExpiry.RecoveryEpoch != firstExpiry.RecoveryEpoch+1 || secondExpiry.Status != webhook.SubscriptionStatusDegraded || !secondExpiry.ReregistrationRequired || !secondExpiry.ReconciliationRequired {
+		t.Fatalf("second expiry status = %+v", secondExpiry)
+	}
+	reopened, err := app.Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	persisted, err := reopened.WebhookReceiverStatus("expiry-funnel", observedAt.Add(5*time.Minute))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if persisted.RecoveryEpoch != secondExpiry.RecoveryEpoch || persisted.Status != webhook.SubscriptionStatusDegraded || !persisted.ReregistrationRequired || !persisted.ReconciliationRequired {
+		t.Fatalf("persisted second expiry status = %+v", persisted)
+	}
+	if _, err := reopened.CompleteWebhookReceiverReregistration(ctx, "expiry-funnel", refreshed.RecoveryEpoch); !errors.Is(err, webhook.ErrStaleRecoveryEpoch) {
+		t.Fatalf("delayed first expiry re-registration error = %v, want ErrStaleRecoveryEpoch", err)
+	}
+	if _, err := reopened.CompleteWebhookReceiverReconciliation(ctx, "expiry-funnel", refreshed.RecoveryEpoch); !errors.Is(err, webhook.ErrStaleRecoveryEpoch) {
+		t.Fatalf("delayed first expiry reconciliation error = %v, want ErrStaleRecoveryEpoch", err)
+	}
+	stillDegraded, err := reopened.WebhookReceiverStatus("expiry-funnel", observedAt.Add(5*time.Minute))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if stillDegraded.RecoveryEpoch != secondExpiry.RecoveryEpoch || stillDegraded.Status != webhook.SubscriptionStatusDegraded || !stillDegraded.ReregistrationRequired || !stillDegraded.ReconciliationRequired {
+		t.Fatalf("delayed completion changed expiry recovery state: %+v", stillDegraded)
+	}
+}

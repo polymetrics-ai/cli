@@ -68,6 +68,51 @@ func TestStartLoopbackServesOnlyExternalTunnelMode(t *testing.T) {
 	}
 }
 
+func TestLoopbackServerShutdownIsIdempotent(t *testing.T) {
+	t.Parallel()
+
+	key := []byte("test-project-key-material")
+	exposure, err := ConfigureExposure(ExposureConfig{
+		Mode:         ExposureModeExternalTunnel,
+		TunnelTool:   TunnelToolTailscaleFunnel,
+		CallbackURL:  "https://node.tailnet.ts.net/receiver",
+		HeartbeatTTL: time.Minute,
+	}, key)
+	if err != nil {
+		t.Fatal(err)
+	}
+	receiver, err := NewReceiver(ReceiverConfig{
+		Method: http.MethodPost, Path: "/receiver", MaxBodyBytes: 1024, MaxInFlight: 1, RequestTimeout: time.Second,
+		Verifier: &fixtureVerifier{eventID: "evt-loopback"}, Store: &memoryReceiptStore{},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	running, err := receiver.StartLoopback(exposure, 0)
+	if err != nil {
+		t.Fatal(err)
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	if err := running.Shutdown(ctx); err != nil {
+		t.Fatalf("first Shutdown() error = %v", err)
+	}
+	retryCtx, retryCancel := context.WithTimeout(context.Background(), time.Second)
+	defer retryCancel()
+	retry := make(chan error, 1)
+	go func() {
+		retry <- running.Shutdown(retryCtx)
+	}()
+	select {
+	case err := <-retry:
+		if err != nil {
+			t.Fatalf("second Shutdown() error = %v", err)
+		}
+	case <-time.After(time.Second):
+		t.Fatal("second Shutdown() did not return")
+	}
+}
+
 func TestConfigureExposureModesRemainDistinctAndOpaque(t *testing.T) {
 	t.Parallel()
 
@@ -257,6 +302,58 @@ func TestSubscriptionLifecycleDegradesOnGenerationRotationAndHeartbeatLoss(t *te
 	}
 	if subscription.Status != SubscriptionStatusActive || subscription.ReregistrationRequired || subscription.ReconciliationRequired {
 		t.Fatalf("explicit recovery state = %+v", subscription)
+	}
+}
+
+func TestHeartbeatExpiryStartsFencedRecoveryEpoch(t *testing.T) {
+	t.Parallel()
+
+	key := []byte("test-project-key-material")
+	now := time.Date(2026, time.August, 6, 0, 0, 0, 0, time.UTC)
+	exposure, err := ConfigureExposure(ExposureConfig{
+		Mode:         ExposureModeExternalTunnel,
+		TunnelTool:   TunnelToolTailscaleFunnel,
+		CallbackURL:  "https://node.tailnet.ts.net/receiver",
+		HeartbeatTTL: time.Minute,
+	}, key)
+	if err != nil {
+		t.Fatal(err)
+	}
+	subscription := NewSubscription("fixture", exposure, now)
+	if !subscription.DegradeIfHeartbeatExpired(now.Add(2 * time.Minute)) {
+		t.Fatal("first heartbeat expiry did not start recovery")
+	}
+	firstRecoveryEpoch := subscription.RecoveryEpoch
+	if err := subscription.CompleteReregistration(firstRecoveryEpoch); err != nil {
+		t.Fatalf("first recovery re-registration error = %v", err)
+	}
+	if err := subscription.CompleteReconciliation(firstRecoveryEpoch); err != nil {
+		t.Fatalf("first recovery reconciliation error = %v", err)
+	}
+	if changed, err := subscription.Heartbeat("https://node.tailnet.ts.net/receiver", now.Add(3*time.Minute), key, firstRecoveryEpoch); err != nil || changed {
+		t.Fatalf("recovery heartbeat changed=%t err=%v", changed, err)
+	}
+	if !subscription.DegradeIfHeartbeatExpired(now.Add(5 * time.Minute)) {
+		t.Fatal("second heartbeat expiry did not start recovery")
+	}
+	secondRecoveryEpoch := subscription.RecoveryEpoch
+	if secondRecoveryEpoch != firstRecoveryEpoch+1 {
+		t.Fatalf("second recovery epoch = %d, want %d", secondRecoveryEpoch, firstRecoveryEpoch+1)
+	}
+	if subscription.DegradeIfHeartbeatExpired(now.Add(6 * time.Minute)) {
+		t.Fatal("already degraded subscription started another recovery epoch")
+	}
+	if subscription.RecoveryEpoch != secondRecoveryEpoch {
+		t.Fatalf("degraded recovery epoch = %d, want %d", subscription.RecoveryEpoch, secondRecoveryEpoch)
+	}
+	if err := subscription.CompleteReregistration(firstRecoveryEpoch); !errors.Is(err, ErrStaleRecoveryEpoch) {
+		t.Fatalf("delayed first recovery re-registration error = %v, want ErrStaleRecoveryEpoch", err)
+	}
+	if err := subscription.CompleteReconciliation(firstRecoveryEpoch); !errors.Is(err, ErrStaleRecoveryEpoch) {
+		t.Fatalf("delayed first recovery reconciliation error = %v, want ErrStaleRecoveryEpoch", err)
+	}
+	if !subscription.ReregistrationRequired || !subscription.ReconciliationRequired || subscription.Status != SubscriptionStatusDegraded {
+		t.Fatalf("delayed first recovery completion changed state: %+v", subscription)
 	}
 }
 
