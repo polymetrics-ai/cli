@@ -111,6 +111,14 @@ product-safe command paths dispatch through the connector command runner. See
 [/docs/github-cli-surface](/docs/github-cli-surface) for the current command metadata, safety labels,
 and staged parity roadmap.
 
+Email is a native protocol command surface: `pm email mailboxes list` and
+`pm email messages list` use IMAP, while `pm email message send` is an SMTP-only,
+non-batchable destructive write. It uses the same plan, unmasked preview, approval,
+typed `destructive` confirmation, and execute gate as other writes. Its IMAP
+cursor is mailbox-scoped `UIDVALIDITY+UID`; polling cannot observe hard deletions,
+and IMAP IDLE belongs to the #3614 subscription seam. Run `pm email --help` or
+`pm connectors inspect email` for the full connection fields and command contract.
+
 ## Workspace commands
 
 ### `pm init`

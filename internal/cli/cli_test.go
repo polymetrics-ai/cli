@@ -63,6 +63,10 @@ func TestDynamicConnectorHelpAndBareNamespace(t *testing.T) {
 		{name: "command help flag", args: []string{"gong", "calls", "transcript", "--help"}, want: []string{"pm gong calls transcript", "INTENT", "direct_read", "FLAGS"}},
 		{name: "flag only namespace", args: []string{"gong", "--credential", "gong-local"}, want: []string{"pm gong - Gong command surface", "COMMAND GROUPS", "calls"}},
 		{name: "false preview is passive", args: []string{"gong", "--preview=false"}, want: []string{"pm gong - Gong command surface", "COMMAND GROUPS", "calls"}},
+		{name: "email bare connector", args: []string{"email"}, want: []string{"pm email - Email (IMAP + SMTP) command surface", "COMMAND GROUPS", "mailboxes - see", "messages - see", "message - see"}},
+		{name: "email IMAP mailbox command help", args: []string{"email", "mailboxes", "list", "--help"}, want: []string{"pm email mailboxes list", "INTENT\n  etl", "List mailboxes through IMAP LIST."}},
+		{name: "email IMAP message command help", args: []string{"email", "messages", "list", "--help"}, want: []string{"pm email messages list", "INTENT\n  etl", "STREAM\n  messages"}},
+		{name: "email SMTP command help", args: []string{"email", "message", "send", "--help"}, want: []string{"pm email message send", "INTENT\n  reverse_etl", "WRITE\n  send_message", "--to (string_array) required"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

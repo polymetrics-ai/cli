@@ -1,0 +1,8 @@
+{
+  "issue": 3628,
+  "parent": 3620,
+  "subissues": [3660, 3662, 3664, 3666, 3668],
+  "state": "ready_to_commit",
+  "execution": "inline_manual_no_spawn",
+  "next": "commit_validated_connector_handoff"
+}

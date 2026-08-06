@@ -23,6 +23,7 @@ func TestFactoriesExposeDefinitions(t *testing.T) {
 		"copper":                    false,
 		"dixa":                      false,
 		"dynamodb":                  false,
+		"email":                     false,
 		"faker":                     false,
 		"fastbill":                  false,
 		"feishu":                    false,

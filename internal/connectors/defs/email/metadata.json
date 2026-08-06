@@ -1,0 +1,29 @@
+{
+  "name": "email",
+  "display_name": "Email (IMAP + SMTP)",
+  "description": "Reads mailboxes and bounded message data through IMAP4rev2, and sends one typed RFC 5322 message through SMTP submission after plan, preview, approval, and destructive confirmation.",
+  "integration_type": "email",
+  "docs_url": "https://www.rfc-editor.org/rfc/rfc9051.html",
+  "release_stage": "beta",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100,
+    "write_batch_size": 1
+  },
+  "risk": {
+    "read": "polled IMAP mailbox and message reads; messages are never changed, but polling cannot report hard-deleted messages that no longer exist in the mailbox",
+    "write": "SMTP submission sends one externally visible message to the exact envelope recipients after the server accepts DATA; this cannot be undone",
+    "approval": "SMTP submission is a non-batchable destructive write: it requires plan, an unmasked payload preview, typed destructive confirmation, and approval before execution"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "Tier-3 native IMAP/SMTP protocol connector. Local protocol test doubles cover configuration, cursor semantics, bounded IMAP fetch requests, SMTP MIME preparation, and the shared approval gate; no live mailbox is contacted by conformance."
+  }
+}

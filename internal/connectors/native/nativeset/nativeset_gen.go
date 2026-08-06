@@ -22,6 +22,7 @@ import (
 	_ "polymetrics.ai/internal/connectors/native/copper"
 	_ "polymetrics.ai/internal/connectors/native/dixa"
 	_ "polymetrics.ai/internal/connectors/native/dynamodb"
+	_ "polymetrics.ai/internal/connectors/native/email"
 	_ "polymetrics.ai/internal/connectors/native/faker"
 	_ "polymetrics.ai/internal/connectors/native/fastbill"
 	_ "polymetrics.ai/internal/connectors/native/feishu"

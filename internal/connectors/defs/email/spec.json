@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Email (IMAP + SMTP) Connection Specification",
+  "type": "object",
+  "required": [
+    "imap_host",
+    "imap_port",
+    "imap_security",
+    "smtp_host",
+    "smtp_port",
+    "smtp_security",
+    "username",
+    "password"
+  ],
+  "properties": {
+    "imap_host": {
+      "type": "string",
+      "description": "IMAP server host name or IP address, as entered in a mail client."
+    },
+    "imap_port": {
+      "type": "string",
+      "enum": ["143", "993"],
+      "description": "IMAP TCP port. Accepted before storage: 143 or 993."
+    },
+    "imap_security": {
+      "type": "string",
+      "enum": ["tls", "starttls", "none"],
+      "description": "IMAP transport security: tls (implicit TLS), starttls, or none."
+    },
+    "smtp_host": {
+      "type": "string",
+      "description": "SMTP submission server host name or IP address, as entered in a mail client."
+    },
+    "smtp_port": {
+      "type": "string",
+      "enum": ["25", "465", "587"],
+      "description": "SMTP TCP port. Accepted before storage: 25, 465, or 587."
+    },
+    "smtp_security": {
+      "type": "string",
+      "enum": ["tls", "starttls", "none"],
+      "description": "SMTP transport security: tls (implicit TLS), starttls, or none."
+    },
+    "username": {
+      "type": "string",
+      "description": "Account username used for IMAP and, unless smtp_username is set, SMTP authentication."
+    },
+    "password": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Account password or provider-issued app password. Stored as a secret and never printed."
+    },
+    "smtp_username": {
+      "type": "string",
+      "description": "Optional SMTP username when it differs from username."
+    },
+    "from_address": {
+      "type": "string",
+      "description": "Optional RFC 5322 From address. Defaults to username when username is an address."
+    },
+    "connection_timeout_seconds": {
+      "type": "string",
+      "enum": ["5", "10", "15", "30", "60"],
+      "default": "30",
+      "description": "Optional connection timeout in seconds."
+    },
+    "mailbox": {
+      "type": "string",
+      "default": "INBOX",
+      "description": "Mailbox used by the messages stream. Set a separate credential or reset its state before changing this value."
+    }
+  }
+}

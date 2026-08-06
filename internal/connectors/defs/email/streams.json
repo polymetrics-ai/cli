@@ -1,0 +1,48 @@
+{
+  "base": {
+    "url": "imap://{{ config.imap_host }}",
+    "pagination": {
+      "type": "none"
+    }
+  },
+  "streams": [
+    {
+      "name": "mailboxes",
+      "method": "IMAP",
+      "path": "LIST",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/mailboxes.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "A native IMAP LIST command supplies mailbox records; the declarative engine does not speak IMAP."
+      }
+    },
+    {
+      "name": "messages",
+      "method": "IMAP",
+      "path": "UID SEARCH + UID FETCH",
+      "records": {
+        "path": ""
+      },
+      "pagination": {
+        "type": "none",
+        "page_size": 100,
+        "max_pages": 1
+      },
+      "incremental": {
+        "cursor_field": "imap_cursor",
+        "client_filtered": true
+      },
+      "schema": "schemas/messages.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "A native IMAP SELECT, UID SEARCH, and bounded UID FETCH flow supplies message records and the UIDVALIDITY+UID cursor."
+      }
+    }
+  ]
+}

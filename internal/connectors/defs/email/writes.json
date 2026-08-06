@@ -1,0 +1,43 @@
+{
+  "actions": [
+    {
+      "name": "send_message",
+      "kind": "create",
+      "method": "SMTP",
+      "path": "MAIL/RCPT/DATA",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["to", "subject", "body"],
+        "properties": {
+          "to": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" }
+          },
+          "cc": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "bcc": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "subject": { "type": "string" },
+          "body": { "type": "string" },
+          "body_content_type": {
+            "type": "string",
+            "enum": ["text/plain", "text/html"]
+          },
+          "attachments": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+      "risk": "submits one externally visible SMTP message to the exact envelope recipients; once the SMTP server accepts DATA it cannot be undone",
+      "batchable": false,
+      "confirm": "destructive"
+    }
+  ]
+}

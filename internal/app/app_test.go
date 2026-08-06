@@ -248,6 +248,47 @@ func TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime
 	}
 }
 
+func TestAddCredentialRejectsEmailPortAndSecurityConstraintsBeforePersistence(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject() error = %v", err)
+	}
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open() error = %v", err)
+	}
+
+	for _, tc := range []struct {
+		name  string
+		field string
+		value string
+	}{
+		{name: "imap port", field: "imap_port", value: "999"},
+		{name: "smtp security", field: "smtp_security", value: "not-a-security-mode"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			_, err := a.AddCredential(ctx, app.AddCredentialRequest{
+				Name:      "email-invalid-" + strings.ReplaceAll(tc.name, " ", "-"),
+				Connector: "email",
+				Config:    map[string]string{tc.field: tc.value},
+			})
+			if err == nil {
+				t.Fatalf("AddCredential(email.%s) accepted an invalid constrained value", tc.field)
+			}
+			if !strings.Contains(err.Error(), tc.field) || !strings.Contains(err.Error(), "enum") {
+				t.Fatalf("AddCredential(email.%s) error = %q, want field and enum constraint", tc.field, err)
+			}
+			if strings.Contains(err.Error(), tc.value) {
+				t.Fatalf("AddCredential(email.%s) echoed its supplied value: %q", tc.field, err)
+			}
+			if credentials := a.ListCredentials(); len(credentials) != 0 {
+				t.Fatalf("AddCredential(email.%s) persisted %#v after a constraint failure", tc.field, credentials)
+			}
+		})
+	}
+}
+
 func TestAddCredentialLeavesConstraintFreeConnectorUnconstrained(t *testing.T) {
 	ctx := context.Background()
 	root := t.TempDir()
