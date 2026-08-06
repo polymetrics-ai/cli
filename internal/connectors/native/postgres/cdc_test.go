@@ -89,6 +89,48 @@ func TestCDCResumeRejectsDifferentSource(t *testing.T) {
 	}
 }
 
+func TestCDCResumeRejectsPublicationScopeDrift(t *testing.T) {
+	source := postgresCDCSource{
+		identity: synccontract.SourceIdentity{
+			Engine:           "postgres",
+			AccountOrCluster: "system-one:database-one",
+			ObjectScope:      "public.events",
+		},
+		generation: synccontract.OpaqueToken([]byte("timeline-one")),
+	}
+	scope := validCDCPublicationScope()
+	source = source.withPublicationScope(scope)
+	candidate := postgresCDCCheckpoint(source, pglogrepl.LSN(16), 0, &pglogrepl.CommitMessage{
+		CommitLSN:         pglogrepl.LSN(24),
+		TransactionEndLSN: pglogrepl.LSN(32),
+	})
+	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement("cdc-test-sink", time.Now().UTC())
+	if err != nil {
+		t.Fatalf("NewDurableDownstreamAcknowledgement: %v", err)
+	}
+	var checkpoint synccontract.CheckpointEnvelope
+	if err := synccontract.CommitAfterDownstreamAcknowledgement(candidate, acknowledgement, func(committed synccontract.CheckpointEnvelope) error {
+		checkpoint = committed
+		return nil
+	}); err != nil {
+		t.Fatalf("CommitAfterDownstreamAcknowledgement: %v", err)
+	}
+
+	changed := scope
+	changed.publicationVersion = "42"
+	err = validateCDCResume(&checkpoint, postgresCDCSource{
+		identity:   source.identity,
+		generation: synccontract.OpaqueToken([]byte("timeline-one")),
+	}.withPublicationScope(changed))
+	if !errors.Is(err, synccontract.ErrRebootstrapRequired) {
+		t.Fatalf("validateCDCResume(publication scope drift) = %v, want rebootstrap error", err)
+	}
+	var recovery *synccontract.RebootstrapRequiredError
+	if !errors.As(err, &recovery) || recovery.Outcome != synccontract.RecoveryOutcomeSourceGenerationChanged {
+		t.Fatalf("validateCDCResume(publication scope drift) recovery = %#v, want source generation changed", recovery)
+	}
+}
+
 func TestCDCStartLSNRejectsUnretainedCheckpoint(t *testing.T) {
 	checkpoint := &synccontract.CheckpointEnvelope{
 		Position: synccontract.CheckpointPosition{Primary: synccontract.OpaqueToken([]byte("0/10"))},
@@ -191,6 +233,36 @@ func TestCDCPublicationScopeRejectsTruncate(t *testing.T) {
 	}
 	if err := validateCDCPublicationTruncate(true); !errors.Is(err, errCDCPublicationPublishesTruncate) {
 		t.Fatalf("validateCDCPublicationTruncate(true) = %v, want truncate rejection", err)
+	}
+}
+
+func TestCDCPublicationScopeChangeRequiresRebootstrap(t *testing.T) {
+	expected := validCDCPublicationScope()
+	if err := validateCDCPublicationScopeChange(expected, expected); err != nil {
+		t.Fatalf("validateCDCPublicationScopeChange(same scope) = %v", err)
+	}
+	changed := expected
+	changed.membershipVersion = "43"
+	err := validateCDCPublicationScopeChange(expected, changed)
+	if !errors.Is(err, synccontract.ErrRebootstrapRequired) {
+		t.Fatalf("validateCDCPublicationScopeChange(changed scope) = %v, want rebootstrap error", err)
+	}
+	var recovery *synccontract.RebootstrapRequiredError
+	if !errors.As(err, &recovery) || recovery.Outcome != synccontract.RecoveryOutcomeSourceGenerationChanged {
+		t.Fatalf("validateCDCPublicationScopeChange(changed scope) recovery = %#v, want source generation changed", recovery)
+	}
+}
+
+func validCDCPublicationScope() postgresCDCPublicationScope {
+	return postgresCDCPublicationScope{
+		publicationOID:     "101",
+		publicationVersion: "102",
+		relationOID:        "103",
+		membershipVersion:  "104",
+		published:          true,
+		publishesInsert:    true,
+		publishesUpdate:    true,
+		publishesDelete:    true,
 	}
 }
 

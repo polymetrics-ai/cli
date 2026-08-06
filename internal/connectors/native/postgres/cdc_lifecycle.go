@@ -46,6 +46,19 @@ type postgresCDCSource struct {
 	system     pglogrepl.IdentifySystemResult
 }
 
+type postgresCDCPublicationScope struct {
+	publicationOID     string
+	publicationVersion string
+	relationOID        string
+	membershipVersion  string
+	hasDescendants     bool
+	published          bool
+	publishesInsert    bool
+	publishesUpdate    bool
+	publishesDelete    bool
+	publishesTruncate  bool
+}
+
 type postgresReplicationSlot struct {
 	plugin       string
 	database     string
@@ -76,6 +89,15 @@ func replicationConnection(ctx context.Context, conn connConfig) (*pgconn.PgConn
 }
 
 func closeReplicationConnection(conn *pgconn.PgConn) {
+	if conn == nil {
+		return
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), cdcSlotCleanupTimeout)
+	defer cancel()
+	_ = conn.Close(ctx)
+}
+
+func closeCDCDataConnection(conn *pgx.Conn) {
 	if conn == nil {
 		return
 	}
@@ -117,6 +139,16 @@ func identifyCDCSource(ctx context.Context, replication *pgconn.PgConn, database
 		table:      sourceTable,
 		system:     system,
 	}, nil
+}
+
+func (source postgresCDCSource) withPublicationScope(scope postgresCDCPublicationScope) postgresCDCSource {
+	fingerprint := scope.fingerprint()
+	generation := make(synccontract.OpaqueToken, 0, len(source.generation)+1+len(fingerprint))
+	generation = append(generation, source.generation...)
+	generation = append(generation, '\n')
+	generation = append(generation, fingerprint...)
+	source.generation = generation
+	return source
 }
 
 // canonicalCDCStream turns a caller stream into the fully qualified relation
@@ -218,16 +250,45 @@ func slotBarrier(slot postgresReplicationSlot, fallback pglogrepl.LSN) (pglogrep
 	return fallback, nil
 }
 
-func validateCDCRelationScope(ctx context.Context, conn connConfig, source postgresCDCSource, publication string) error {
+func openCDCRelationScopeConnection(ctx context.Context, conn connConfig) (*pgx.Conn, error) {
 	data, err := pgx.Connect(ctx, conn.dsn())
 	if err != nil {
-		return fmt.Errorf("postgres CDC: connect relation scope inspection: %w", err)
+		return nil, fmt.Errorf("postgres CDC: connect relation scope inspection: %w", err)
 	}
-	defer func() { _ = data.Close(ctx) }()
+	return data, nil
+}
 
-	var hasDescendants, published, publishesInsert, publishesUpdate, publishesDelete, publishesTruncate bool
-	err = data.QueryRow(ctx, `
+func inspectCDCRelationScope(ctx context.Context, data *pgx.Conn, source postgresCDCSource, publication string) (postgresCDCPublicationScope, error) {
+	if data == nil {
+		return postgresCDCPublicationScope{}, errors.New("postgres CDC: relation scope inspection connection is required")
+	}
+	var scope postgresCDCPublicationScope
+	err := data.QueryRow(ctx, `
 	SELECT
+		COALESCE((
+			SELECT publication.oid::text
+			FROM pg_publication publication
+			WHERE publication.pubname = $3
+		), ''),
+		COALESCE((
+			SELECT publication.xmin::text
+			FROM pg_publication publication
+			WHERE publication.pubname = $3
+		), ''),
+		COALESCE((
+			SELECT relation.oid::text
+			FROM pg_class relation
+			JOIN pg_namespace relation_schema ON relation_schema.oid = relation.relnamespace
+			WHERE relation_schema.nspname = $1 AND relation.relname = $2
+		), ''),
+		COALESCE((
+			SELECT publication_relation.xmin::text
+			FROM pg_publication_rel publication_relation
+			JOIN pg_publication publication ON publication.oid = publication_relation.prpubid
+			JOIN pg_class relation ON relation.oid = publication_relation.prrelid
+			JOIN pg_namespace relation_schema ON relation_schema.oid = relation.relnamespace
+			WHERE publication.pubname = $3 AND relation_schema.nspname = $1 AND relation.relname = $2
+		), ''),
 		EXISTS (
 			SELECT 1
 			FROM pg_inherits inheritance
@@ -259,20 +320,67 @@ func validateCDCRelationScope(ctx context.Context, conn connConfig, source postg
 			SELECT pubtruncate
 			FROM pg_publication
 			WHERE pubname = $3
-		), false)`, source.schema, source.table, publication).Scan(&hasDescendants, &published, &publishesInsert, &publishesUpdate, &publishesDelete, &publishesTruncate)
+		), false)`, source.schema, source.table, publication).Scan(
+		&scope.publicationOID,
+		&scope.publicationVersion,
+		&scope.relationOID,
+		&scope.membershipVersion,
+		&scope.hasDescendants,
+		&scope.published,
+		&scope.publishesInsert,
+		&scope.publishesUpdate,
+		&scope.publishesDelete,
+		&scope.publishesTruncate,
+	)
 	if err != nil {
-		return fmt.Errorf("postgres CDC: inspect selected relation scope: %w", err)
+		return postgresCDCPublicationScope{}, fmt.Errorf("postgres CDC: inspect selected relation scope: %w", err)
 	}
-	if err := validateCDCPublicationScope(published); err != nil {
+	return scope, nil
+}
+
+func (scope postgresCDCPublicationScope) fingerprint() string {
+	parts := []string{
+		scope.publicationOID,
+		scope.publicationVersion,
+		scope.relationOID,
+		scope.membershipVersion,
+		strconv.FormatBool(scope.hasDescendants),
+		strconv.FormatBool(scope.published),
+		strconv.FormatBool(scope.publishesInsert),
+		strconv.FormatBool(scope.publishesUpdate),
+		strconv.FormatBool(scope.publishesDelete),
+		strconv.FormatBool(scope.publishesTruncate),
+	}
+	sum := sha256.Sum256([]byte(strings.Join(parts, "\x00")))
+	return hex.EncodeToString(sum[:])
+}
+
+func (scope postgresCDCPublicationScope) validate() error {
+	if err := validateCDCPublicationScope(scope.published); err != nil {
 		return err
 	}
-	if err := validateCDCRelationHierarchy(hasDescendants); err != nil {
+	if err := validateCDCRelationHierarchy(scope.hasDescendants); err != nil {
 		return err
 	}
-	if err := validateCDCPublicationDML(publishesInsert, publishesUpdate, publishesDelete); err != nil {
+	if err := validateCDCPublicationDML(scope.publishesInsert, scope.publishesUpdate, scope.publishesDelete); err != nil {
 		return err
 	}
-	return validateCDCPublicationTruncate(publishesTruncate)
+	return validateCDCPublicationTruncate(scope.publishesTruncate)
+}
+
+func validateCDCPublicationScopeChange(expected, current postgresCDCPublicationScope) error {
+	if expected.fingerprint() != current.fingerprint() {
+		return synccontract.RequireRebootstrap(synccontract.RecoveryOutcomeSourceGenerationChanged, "PostgreSQL publication or selected relation scope changed")
+	}
+	return current.validate()
+}
+
+func validateCurrentCDCRelationScope(ctx context.Context, data *pgx.Conn, source postgresCDCSource, publication string, expected postgresCDCPublicationScope) error {
+	current, err := inspectCDCRelationScope(ctx, data, source, publication)
+	if err != nil {
+		return err
+	}
+	return validateCDCPublicationScopeChange(expected, current)
 }
 
 func validateCDCPublicationScope(published bool) error {

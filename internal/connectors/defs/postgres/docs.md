@@ -50,6 +50,8 @@ This connector is read-only. Read behavior: low.
   replication, and an existing `cdc_publication` that contains the selected table.
 - CDC requires publications to include `INSERT`, `UPDATE`, and `DELETE`, exclude `TRUNCATE`, and use
   selected relations without descendant tables.
+- CDC fingerprints the publication and selected relation; changing either requires rebootstrap before
+  another LSN can be committed.
 - CDC rejects updates that change replica-identity fields and updates from `REPLICA IDENTITY FULL`
   tables.
 - CDC slots are derived from the PostgreSQL system identity, database, and fully qualified stream;

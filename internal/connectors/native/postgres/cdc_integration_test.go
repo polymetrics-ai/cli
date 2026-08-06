@@ -127,6 +127,7 @@ func TestLogicalReplicationResumesAndCleansSlot(t *testing.T) {
 	}
 	secondEvents := make(chan connectors.CDCEvent, 4)
 	secondCtx, stopSecond := context.WithCancel(ctx)
+	defer stopSecond()
 	resumeCheckpoint := checkpoint.Clone()
 	secondDone := startCDCRead(c, secondCtx, connectors.CDCReadRequest{
 		Stream:             stream,
@@ -146,8 +147,18 @@ func TestLogicalReplicationResumesAndCleansSlot(t *testing.T) {
 	if string(resumedCheckpoint.Position.Primary) == string(checkpoint.Position.Primary) {
 		t.Fatal("CDC restart did not advance the durable LSN")
 	}
-	stopSecond()
-	assertCDCStopped(t, secondDone)
+	if _, err := data.Exec(ctx, "ALTER PUBLICATION "+quoteIdentifier(publication)+" SET (publish = 'insert, update')"); err != nil {
+		t.Fatal("could not change PostgreSQL CDC publication scope")
+	}
+	if _, err := data.Exec(ctx, "INSERT INTO "+quoteIdentifier(table)+" (id, value) VALUES (3, 'scope-drift')"); err != nil {
+		t.Fatal("could not insert PostgreSQL CDC scope-drift record")
+	}
+	assertCDCRebootstrap(t, secondDone)
+	select {
+	case unexpected := <-secondStore.committed:
+		t.Fatalf("CDC persisted a checkpoint after publication scope drift: %s", unexpected.Position.Primary)
+	default:
+	}
 	waitForCDCSlot(t, ctx, data, slot, false)
 
 	if err := c.TeardownCDC(ctx, cfg, stream); err != nil {
@@ -225,6 +236,22 @@ func assertCDCStopped(t *testing.T, done <-chan error) {
 		}
 	case <-time.After(5 * time.Second):
 		t.Fatal("PostgreSQL CDC reader did not stop promptly")
+	}
+}
+
+func assertCDCRebootstrap(t *testing.T, done <-chan error) {
+	t.Helper()
+	select {
+	case err := <-done:
+		if !errors.Is(err, synccontract.ErrRebootstrapRequired) {
+			t.Fatalf("PostgreSQL CDC reader did not reject publication scope drift: %v", err)
+		}
+		var recovery *synccontract.RebootstrapRequiredError
+		if !errors.As(err, &recovery) || recovery.Outcome != synccontract.RecoveryOutcomeSourceGenerationChanged {
+			t.Fatalf("PostgreSQL CDC publication scope drift recovery = %#v, want source generation changed", recovery)
+		}
+	case <-time.After(5 * time.Second):
+		t.Fatal("PostgreSQL CDC reader did not reject publication scope drift promptly")
 	}
 }
 

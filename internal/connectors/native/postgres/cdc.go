@@ -77,10 +77,20 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 	if err != nil {
 		return err
 	}
+	scopeConnection, err := openCDCRelationScopeConnection(ctx, conn)
+	if err != nil {
+		return err
+	}
+	defer closeCDCDataConnection(scopeConnection)
+	scope, err := inspectCDCRelationScope(ctx, scopeConnection, source, publication)
+	if err != nil {
+		return err
+	}
+	source = source.withPublicationScope(scope)
 	if err := validateCDCResume(req.Checkpoint, source); err != nil {
 		return err
 	}
-	if err := validateCDCRelationScope(ctx, conn, source, publication); err != nil {
+	if err := scope.validate(); err != nil {
 		return err
 	}
 	slotSetup, err := ensureReplicationSlot(ctx, replication, conn, source)
@@ -105,7 +115,9 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 		return classifyCDCStartError(req.Checkpoint, err)
 	}
 
-	return consumeLogicalReplication(ctx, replication, source, slotSetup.barrier, start, req, emit)
+	return consumeLogicalReplication(ctx, replication, source, slotSetup.barrier, start, func(ctx context.Context) error {
+		return validateCurrentCDCRelationScope(ctx, scopeConnection, source, publication, scope)
+	}, req, emit)
 }
 
 func cdcPublicationPluginArgument(publication string) string {
@@ -159,7 +171,10 @@ func validateCDCSlotReuse(checkpoint *synccontract.CheckpointEnvelope, slot post
 	return nil
 }
 
-func consumeLogicalReplication(ctx context.Context, replication *pgconn.PgConn, source postgresCDCSource, barrier, start pglogrepl.LSN, req connectors.CDCReadRequest, emit func(connectors.CDCEvent) error) error {
+func consumeLogicalReplication(ctx context.Context, replication *pgconn.PgConn, source postgresCDCSource, barrier, start pglogrepl.LSN, validateScope func(context.Context) error, req connectors.CDCReadRequest, emit func(connectors.CDCEvent) error) error {
+	if validateScope == nil {
+		return errors.New("postgres CDC: publication scope validator is required")
+	}
 	decoder := newPGOutputDecoder(source.schema, source.table)
 	lastDurable := start
 	inTransaction := false
@@ -191,6 +206,9 @@ func consumeLogicalReplication(ctx context.Context, replication *pgconn.PgConn, 
 				return fmt.Errorf("postgres CDC: parse primary keepalive: %w", err)
 			}
 			if keepalive.ReplyRequested {
+				if err := validateScope(ctx); err != nil {
+					return err
+				}
 				if err := sendStandbyStatus(ctx, replication, lastDurable); err != nil {
 					return err
 				}
@@ -214,6 +232,9 @@ func consumeLogicalReplication(ctx context.Context, replication *pgconn.PgConn, 
 			case *pglogrepl.CommitMessage:
 				if !inTransaction {
 					return errors.New("postgres CDC: commit without a pgoutput transaction")
+				}
+				if err := validateScope(ctx); err != nil {
+					return err
 				}
 				candidate := postgresCDCCheckpoint(source, barrier, lastDurable, message)
 				if err := req.DurableTransaction.Commit(ctx, candidate, transactionEvents, emit); err != nil {
