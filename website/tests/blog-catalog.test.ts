@@ -1,16 +1,19 @@
 import { describe, expect, it } from 'vitest';
 
-import { BLOG_POSTS, getBlogPost, sortBlogPostsByPublishedAt } from '@/lib/blog';
+import { getBlogPost, sortBlogPostsByPublishedAt } from '@/lib/blog';
 
 describe('blog catalog', () => {
   it('sorts posts by descending date and ascending slug ties', () => {
     const pointBearingPost = getBlogPost('human-harnesses');
     if (!pointBearingPost) throw new Error('Expected human-harnesses blog post');
+    const reviewedPost = getBlogPost('the-review-agent-was-right');
+    if (!reviewedPost) throw new Error('Expected reviewed blog post');
 
     const posts = [
-      ...BLOG_POSTS,
-      { ...pointBearingPost, slug: 'zeta', publishedAt: '2026-08-05' },
-      { ...pointBearingPost, slug: 'alpha', publishedAt: '2026-08-05' },
+      { ...pointBearingPost, slug: 'older', publishedAt: '2026-08-05' },
+      reviewedPost,
+      { ...pointBearingPost, slug: 'zeta', publishedAt: '2026-08-04' },
+      { ...pointBearingPost, slug: 'alpha', publishedAt: '2026-08-04' },
     ];
     const orderedPosts = sortBlogPostsByPublishedAt(posts);
 
@@ -18,7 +21,7 @@ describe('blog catalog', () => {
     expect(orderedPosts[0]?.slug).toBe('the-review-agent-was-right');
     expect(
       orderedPosts
-        .filter((post) => post.publishedAt === '2026-08-05')
+        .filter((post) => post.publishedAt === '2026-08-04')
         .map((post) => post.slug),
     ).toEqual(['alpha', 'zeta']);
   });
