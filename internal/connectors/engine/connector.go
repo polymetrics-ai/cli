@@ -259,6 +259,16 @@ func (b Base) PreflightOperationDirectRead(operation, method, path string, maxBy
 	return PreflightOperationDirectRead(b.bundle, operation, method, path, maxBytes, outputPolicy)
 }
 
+// OperationDirectReadMaxBytes returns the bounded response limit for a
+// declared operation direct read.
+func (b Base) OperationDirectReadMaxBytes(operation string, requested int) (int, error) {
+	op, err := operationDirectReadSpec(b.bundle, operation)
+	if err != nil {
+		return 0, err
+	}
+	return clampOperationDirectReadMaxBytes(requested, op.REST.MaxBytes), nil
+}
+
 // HasConfigurationConstraints exposes bundle-declared configuration
 // constraints to Tier-3 native connectors that embed Base.
 func (b Base) HasConfigurationConstraints() bool {

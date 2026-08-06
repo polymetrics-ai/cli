@@ -68,7 +68,25 @@ func TestOperationDirectReadPreflightUsesClosedSQSContract(t *testing.T) {
 }
 
 func TestOperationDirectReadPreflightFailsClosedWithoutRuntimeLedger(t *testing.T) {
-	c := native.Connector{Base: engine.NewBase(engine.Bundle{
+	c := directReadConnectorWithoutRuntimeLedger()
+
+	err := c.PreflightOperationDirectRead("list_queues", http.MethodPost, "SQS.ListQueues", 16<<20, "json_redacted")
+	if err == nil || !strings.Contains(err.Error(), "runtime operation endpoint ledger is unavailable") {
+		t.Fatalf("PreflightOperationDirectRead without runtime ledger = %v, want fail-closed ledger rejection", err)
+	}
+}
+
+func TestOperationDirectReadFailsClosedWithoutRuntimeLedger(t *testing.T) {
+	c := directReadConnectorWithoutRuntimeLedger()
+
+	_, err := c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: "list_queues"})
+	if err == nil || !strings.Contains(err.Error(), "runtime operation endpoint ledger is unavailable") {
+		t.Fatalf("OperationDirectRead without runtime ledger = %v, want fail-closed ledger rejection", err)
+	}
+}
+
+func directReadConnectorWithoutRuntimeLedger() native.Connector {
+	return native.Connector{Base: engine.NewBase(engine.Bundle{
 		Name: "amazon-sqs",
 		Operations: []engine.OperationSpec{{
 			ID:   "list_queues",
@@ -82,11 +100,6 @@ func TestOperationDirectReadPreflightFailsClosedWithoutRuntimeLedger(t *testing.
 			},
 		}},
 	})}
-
-	err := c.PreflightOperationDirectRead("list_queues", http.MethodPost, "SQS.ListQueues", 16<<20, "json_redacted")
-	if err == nil || !strings.Contains(err.Error(), "runtime operation endpoint ledger is unavailable") {
-		t.Fatalf("PreflightOperationDirectRead without runtime ledger = %v, want fail-closed ledger rejection", err)
-	}
 }
 
 // TestNoInitRegistration is the required grep-guard (mirrors
@@ -605,6 +618,22 @@ func TestOperationDirectReadListQueuesAndRedactsPolicy(t *testing.T) {
 	}
 	if strings.Join(sawActions, ",") != "ListQueues,ListDeadLetterSourceQueues,GetQueueAttributes,ListQueueTags" {
 		t.Fatalf("actions = %v", sawActions)
+	}
+}
+
+func TestOperationDirectReadClampsResponseToLedgerLimit(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(strings.Repeat("x", (1<<20)+1)))
+	}))
+	defer srv.Close()
+
+	_, err := native.New().OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
+		Operation: "list_queues",
+		Config:    testRuntimeConfig(srv.URL),
+		MaxBytes:  16 << 20,
+	})
+	if err == nil || !strings.Contains(err.Error(), "exceeds limit 1048576") {
+		t.Fatalf("OperationDirectRead response above ledger cap = %v, want 1 MiB cap rejection", err)
 	}
 }
 

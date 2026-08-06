@@ -20,13 +20,13 @@ func (c Connector) OperationDirectRead(ctx context.Context, req connectors.Opera
 	if err := ctx.Err(); err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	form, err := directReadForm(req.Operation, req.Config, req.Body)
+	maxBytes, err := c.Base.OperationDirectReadMaxBytes(req.Operation, req.MaxBytes)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	maxBytes := req.MaxBytes
-	if maxBytes <= 0 || maxBytes > 16<<20 {
-		maxBytes = 16 << 20
+	form, err := directReadForm(req.Operation, req.Config, req.Body)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
 	}
 	resp, err := c.doService(ctx, req.Config, form, maxBytes)
 	if err != nil {
