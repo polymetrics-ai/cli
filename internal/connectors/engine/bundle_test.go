@@ -515,6 +515,31 @@ func TestBundleLoadRejectsUncitedOrMalformedRateLimits(t *testing.T) {
 	}
 }
 
+func TestBundleLoadRejectsCredentialLikeRateLimitFragmentKeyVariants(t *testing.T) {
+	keys := []string{
+		"auth_token", "auth-token", "auth.token",
+		"bearer_token", "bearer-token", "bearer.token",
+		"secret_key", "secret-key", "secret.key",
+		"private_key", "private-key", "private.key",
+	}
+	for _, key := range keys {
+		t.Run(key, func(t *testing.T) {
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/rate_limits.json"] = &fstest.MapFile{Data: []byte(strings.Replace(
+				validProviderCitedRateLimits,
+				"https://docs.example.test/rate-limits",
+				"https://docs.example.test/rate-limits#"+key+"=fixture",
+				1,
+			))}
+
+			_, err := Load(fsys, "acme")
+			if err == nil || !strings.Contains(err.Error(), "credential-like fragment") {
+				t.Fatalf("Load error = %v, want credential-like fragment rejection", err)
+			}
+		})
+	}
+}
+
 func TestBundleLoadParsesHonestRateLimitStates(t *testing.T) {
 	tests := []struct {
 		name   string
