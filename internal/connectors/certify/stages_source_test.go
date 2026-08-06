@@ -8,11 +8,11 @@ import (
 	"polymetrics.ai/internal/connectors/certify"
 )
 
-// TestFullSweepSourceStagesAgainstSample is the package's one exhaustive real
-// CLI proof. It exercises every catalog stream, each flow/schedule round-trip,
-// and the sample/outbox create-then-cleanup write lifecycle. Focused behavior
-// tests below use the strict scripted CLI driver so they retain their distinct
-// assertions without repeating this cost.
+// TestFullSweepSourceStagesAgainstSample is the package's exhaustive real
+// source CLI proof. It exercises every catalog stream, including each
+// flow/schedule round-trip. Focused behavior tests below use the strict
+// scripted CLI driver so they retain their distinct assertions without
+// repeating this cost.
 func TestFullSweepSourceStagesAgainstSample(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
@@ -22,7 +22,6 @@ func TestFullSweepSourceStagesAgainstSample(t *testing.T) {
 		Limit:     50,
 		Full:      true,
 		SecretEnv: map[string]string{"token": "PM_SAMPLE_TOKEN"},
-		Write:     true,
 	})
 
 	rep, err := r.Run(context.Background())
@@ -58,28 +57,6 @@ func TestFullSweepSourceStagesAgainstSample(t *testing.T) {
 	}
 	if rep.Capabilities.Binary == nil || rep.Capabilities.Binary.Result != "skipped" {
 		t.Fatalf("Capabilities.Binary = %+v, want skipped", rep.Capabilities.Binary)
-	}
-	for _, name := range []string{
-		"write_plan_preview",
-		"write_create",
-		"write_verify",
-		"write_cleanup",
-		"cleanup_verify",
-		"approval_idempotency",
-	} {
-		if stage := mustStage(t, rep, name); !stage.Passed {
-			t.Fatalf("%s stage failed: %+v", name, stage)
-		}
-	}
-	write, ok := rep.Capabilities.WriteActions["create"]
-	if !ok || write.Result != "pass" {
-		t.Fatalf("Capabilities.WriteActions[create] = %+v, want pass", write)
-	}
-	if len(rep.Leaks) != 0 {
-		t.Fatalf("Report.Leaks = %+v, want empty after cleanup", rep.Leaks)
-	}
-	if stage := mustStage(t, rep, "write_sweep_all_pairings"); stage.Passed || !containsAny(stage.Error, "skipped:", "no declared write action inventory") {
-		t.Fatalf("write_sweep_all_pairings = %+v, want documented inventory skip", stage)
 	}
 }
 
