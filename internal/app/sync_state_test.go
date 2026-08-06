@@ -271,6 +271,38 @@ func TestSyncLocalWarehouseDirectoryReportsCommitFailure(t *testing.T) {
 	}
 }
 
+func expectedLocalWarehouseDirectorySyncChain(t *testing.T, dir string) []string {
+	t.Helper()
+	path, err := filepath.Abs(dir)
+	if err != nil {
+		t.Fatalf("resolve warehouse directory: %v", err)
+	}
+	chain := make([]string, 0, 8)
+	for {
+		chain = append(chain, filepath.Clean(path))
+		parent := filepath.Dir(path)
+		if parent == path {
+			return chain
+		}
+		path = parent
+	}
+}
+
+func setLocalWarehousePath(t *testing.T, a *App, path string) {
+	t.Helper()
+	for index := range a.state.Credentials {
+		if a.state.Credentials[index].Name != "warehouse" {
+			continue
+		}
+		a.state.Credentials[index].Config = map[string]string{
+			"path":                path,
+			"allow_external_path": "true",
+		}
+		return
+	}
+	t.Fatal("warehouse credential not found")
+}
+
 func TestRunWarehouseETLSyncsNewDirectoryParentChainBeforeAcknowledgement(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("warehouse_directory_parent_chain", []connectors.Record{{
@@ -281,18 +313,13 @@ func TestRunWarehouseETLSyncsNewDirectoryParentChainBeforeAcknowledgement(t *tes
 	if _, err := os.Stat(filepath.Dir(warehouseDir)); !errors.Is(err, os.ErrNotExist) {
 		t.Fatalf("test setup warehouse parent stat error = %v, want missing parent", err)
 	}
-	for index := range a.state.Credentials {
-		if a.state.Credentials[index].Name != "warehouse" {
-			continue
-		}
-		a.state.Credentials[index].Config = map[string]string{"path": warehouseDir}
-	}
+	setLocalWarehousePath(t, a, warehouseDir)
 
 	originalSync := syncLocalWarehouseDirectoryCommit
 	var synced []string
 	syncLocalWarehouseDirectoryCommit = func(dir string) error {
 		synced = append(synced, filepath.Clean(dir))
-		return originalSync(dir)
+		return nil
 	}
 	t.Cleanup(func() { syncLocalWarehouseDirectoryCommit = originalSync })
 
@@ -303,56 +330,118 @@ func TestRunWarehouseETLSyncsNewDirectoryParentChainBeforeAcknowledgement(t *tes
 		t.Fatal("successful run did not acknowledge a checkpoint")
 	}
 
-	// A successful run acknowledges and persists the checkpoint only after the
-	// directory calls above. This assertion proves the calls cover the entire
-	// newly created chain; it deliberately does not attempt to emulate a power
-	// loss in a unit test.
-	wantSyncs := []string{
-		filepath.Join(warehouseDir, "_pm_raw"),
-		warehouseDir,
-		filepath.Dir(warehouseDir),
-		filepath.Dir(filepath.Dir(warehouseDir)),
-		filepath.Dir(filepath.Dir(filepath.Dir(warehouseDir))),
-	}
-	for _, want := range wantSyncs {
-		found := false
-		for _, dir := range synced {
-			if dir == want {
-				found = true
-				break
-			}
-		}
-		if !found {
-			t.Fatalf("warehouse directory sync calls = %#v, want %q to be synced", synced, want)
-		}
+	wantSyncs := expectedLocalWarehouseDirectorySyncChain(t, filepath.Join(warehouseDir, "_pm_raw"))
+	if !reflect.DeepEqual(synced, wantSyncs) {
+		t.Fatalf("warehouse directory sync calls = %#v, want %#v", synced, wantSyncs)
 	}
 }
 
-func TestRunWarehouseETLDoesNotAcknowledgeWhileDirectorySetupIsLocked(t *testing.T) {
+func TestRunWarehouseETLSyncsExternalWarehouseChainForEachWriter(t *testing.T) {
 	ctx := context.Background()
-	source := newScriptedSyncSource("warehouse_directory_setup_lock", []connectors.Record{{
+	warehouseDir := filepath.Join(t.TempDir(), "shared", "warehouse")
+	sourceA := newScriptedSyncSource("warehouse_directory_chain_a", []connectors.Record{{
+		"id": "1", "updated_at": "2026-08-06T00:00:00Z",
+	}})
+	a, connectionA := setupSyncModeApp(t, sourceA, "incremental_append")
+	sourceB := newScriptedSyncSource("warehouse_directory_chain_b", []connectors.Record{{
+		"id": "1", "updated_at": "2026-08-06T00:00:00Z",
+	}})
+	b, connectionB := setupSyncModeApp(t, sourceB, "incremental_append")
+	setLocalWarehousePath(t, a, warehouseDir)
+	setLocalWarehousePath(t, b, warehouseDir)
+
+	originalSync := syncLocalWarehouseDirectoryCommit
+	var synced []string
+	syncLocalWarehouseDirectoryCommit = func(dir string) error {
+		synced = append(synced, filepath.Clean(dir))
+		return nil
+	}
+	t.Cleanup(func() {
+		syncLocalWarehouseDirectoryCommit = originalSync
+	})
+
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connectionA, Stream: "records", BatchSize: 1}); err != nil {
+		t.Fatalf("first RunETL() error = %v", err)
+	}
+	wantSyncs := expectedLocalWarehouseDirectorySyncChain(t, filepath.Join(warehouseDir, "_pm_raw"))
+	if !reflect.DeepEqual(synced, wantSyncs) {
+		t.Fatalf("first warehouse directory sync calls = %#v, want %#v", synced, wantSyncs)
+	}
+	if _, err := os.Stat(filepath.Join(warehouseDir, "_pm_raw")); err != nil {
+		t.Fatalf("first writer did not create raw directory: %v", err)
+	}
+
+	synced = nil
+	if _, err := b.RunETL(ctx, RunETLRequest{Connection: connectionB, Stream: "records", BatchSize: 1}); err != nil {
+		t.Fatalf("second RunETL() error = %v", err)
+	}
+	if !reflect.DeepEqual(synced, wantSyncs) {
+		t.Fatalf("second warehouse directory sync calls = %#v, want %#v", synced, wantSyncs)
+	}
+	if state := b.state.StreamStates[streamStateKey(connectionB, "records")]; state.Checkpoint == nil {
+		t.Fatal("second writer did not acknowledge a checkpoint")
+	}
+}
+
+func TestRunWarehouseETLResyncsDirectoryChainAfterSyncFailure(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("warehouse_directory_retry", []connectors.Record{{
 		"id": "1", "updated_at": "2026-08-06T00:00:00Z",
 	}})
 	a, connection := setupSyncModeApp(t, source, "incremental_append")
-	lock := statestore.FileLock{Path: a.statePath + ".warehouse.lock"}
-	unlock, err := lock.Lock()
-	if err != nil {
-		t.Fatalf("lock warehouse setup: %v", err)
-	}
-	t.Cleanup(func() {
-		if err := unlock(); err != nil {
-			t.Errorf("unlock warehouse setup: %v", err)
+	warehouseDir := filepath.Join(t.TempDir(), "new", "warehouse", "root")
+	setLocalWarehousePath(t, a, warehouseDir)
+	wantSyncs := expectedLocalWarehouseDirectorySyncChain(t, filepath.Join(warehouseDir, "_pm_raw"))
+	failingDir := filepath.Clean(filepath.Dir(warehouseDir))
+	failureIndex := -1
+	for index, dir := range wantSyncs {
+		if dir == failingDir {
+			failureIndex = index
+			break
 		}
-	})
+	}
+	if failureIndex < 0 {
+		t.Fatalf("sync chain %#v does not include %q", wantSyncs, failingDir)
+	}
+
+	originalSync := syncLocalWarehouseDirectoryCommit
+	var failedSyncs []string
+	syncLocalWarehouseDirectoryCommit = func(dir string) error {
+		dir = filepath.Clean(dir)
+		failedSyncs = append(failedSyncs, dir)
+		if dir == failingDir {
+			return errors.New("injected warehouse directory sync failure")
+		}
+		return nil
+	}
+	t.Cleanup(func() { syncLocalWarehouseDirectoryCommit = originalSync })
 
 	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1}); err == nil {
-		t.Fatal("RunETL() error = nil while warehouse setup is locked")
+		t.Fatal("RunETL() error = nil after directory sync failure")
 	}
-	if len(source.requests) != 0 {
-		t.Fatalf("source reads while warehouse setup is locked = %#v", source.requests)
+	if !reflect.DeepEqual(failedSyncs, wantSyncs[:failureIndex+1]) {
+		t.Fatalf("failed warehouse directory sync calls = %#v, want %#v", failedSyncs, wantSyncs[:failureIndex+1])
 	}
 	if state := a.state.StreamStates[streamStateKey(connection, "records")]; state.Checkpoint != nil {
-		t.Fatalf("checkpoint acknowledged while warehouse setup is locked: %#v", state.Checkpoint)
+		t.Fatalf("checkpoint acknowledged after directory sync failure: %#v", state.Checkpoint)
+	}
+	if _, err := os.Stat(filepath.Join(warehouseDir, "_pm_raw")); err != nil {
+		t.Fatalf("failed run did not leave directory setup for retry: %v", err)
+	}
+
+	var retriedSyncs []string
+	syncLocalWarehouseDirectoryCommit = func(dir string) error {
+		retriedSyncs = append(retriedSyncs, filepath.Clean(dir))
+		return nil
+	}
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1}); err != nil {
+		t.Fatalf("retry RunETL() error = %v", err)
+	}
+	if !reflect.DeepEqual(retriedSyncs, wantSyncs) {
+		t.Fatalf("retry warehouse directory sync calls = %#v, want %#v", retriedSyncs, wantSyncs)
+	}
+	if state := a.state.StreamStates[streamStateKey(connection, "records")]; state.Checkpoint == nil {
+		t.Fatal("retry did not acknowledge a checkpoint")
 	}
 }
 

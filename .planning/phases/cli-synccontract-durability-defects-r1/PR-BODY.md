@@ -10,9 +10,12 @@ Refs #3882
 
 - Route both `a.store.Load()` assignments through `normalizeLoadedState`, preserving all state
   compatibility migrations after every reload.
-- Track directories newly created by each local-warehouse `MkdirAll` and sync their parent chain
-  through the first pre-existing ancestor before checkpoint acknowledgement.
-- Add regression tests for the exact state-reload sequence and observed directory-sync order.
+- Before every local-warehouse checkpoint acknowledgement, sync the raw directory, warehouse root,
+  and every ancestor through the filesystem volume root, the fixed known-durable boundary.
+  The chain is idempotent and does not depend on which writer observed a directory creation, so
+  separately rooted projects sharing an allowed external warehouse each establish it themselves.
+- Add regression coverage for the state-reload sequence, full observed directory-sync chain per
+  writer, and a retry after an injected directory-sync failure.
 
 ## State-load audit
 
@@ -38,9 +41,10 @@ Ordinary happy-path runs remained green.
   `go test ./internal/cli`, `go vet ./...`, and `go build ./cmd/pm` pass.
 - Passed all separately-run non-suite verification gates: tidy, lint, docs, smoke, agent contract,
   connector generation/metadata, connector boundary, and release workflow.
-- The durability test proves the complete sync-call chain occurs before a successful checkpoint
-  acknowledgement. It cannot emulate a real filesystem power loss; the platform primitive remains
-  `durability.SyncDirectory`.
+- The durability tests prove that every writer synchronizes the complete raw-to-volume-root chain
+  once before a successful checkpoint acknowledgement, including a retry after a failed chain
+  sync. They observe sync coverage rather than emulate a real filesystem power loss; the platform
+  primitive remains `durability.SyncDirectory`.
 
 ## GSD and skills
 
