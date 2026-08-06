@@ -50,7 +50,7 @@ type localRawRecord struct {
 // sync primitive; production defaults to durable.SyncDirectory.
 var syncLocalWarehouseDirectoryCommit = durable.SyncDirectory
 
-func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
+func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destinationName string, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
 	stateKey := streamStateKey(conn.Name, streamName)
 	prior := a.streamState(stateKey)
 	if prior.Checkpoint != nil {
@@ -272,7 +272,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	if observedAt.IsZero() {
 		observedAt = time.Now().UTC()
 	}
-	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement(destination.Name(), time.Now().UTC())
+	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement(destinationName, time.Now().UTC())
 	if err != nil {
 		return result, err
 	}

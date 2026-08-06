@@ -239,6 +239,9 @@ func (s *Subscription) ApplyExposure(next Exposure, now time.Time) bool {
 	}
 	s.ensureRecoveryEpoch()
 	changed := s.Exposure.Mode != next.Mode || s.Exposure.EndpointGeneration != next.EndpointGeneration
+	if !changed {
+		s.DegradeIfHeartbeatExpired(now)
+	}
 	s.Exposure = cloneExposure(next)
 	if changed {
 		s.LastHeartbeatAt = now

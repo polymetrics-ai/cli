@@ -289,7 +289,7 @@ func TestWebhookReceiverHeartbeatExpiryPersistsFencedRecovery(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	observedAt := time.Now().UTC().Add(time.Minute)
+	observedAt := time.Now().UTC().Add(time.Second)
 	heartbeat, err := instance.RecordWebhookReceiverHeartbeat(ctx, app.WebhookReceiverHeartbeatRequest{
 		Name:          "expiry-funnel",
 		CallbackURL:   "https://node.tailnet.ts.net/receiver",
@@ -321,11 +321,14 @@ func TestWebhookReceiverHeartbeatExpiryPersistsFencedRecovery(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	if refreshed.RecoveryEpoch != firstExpiry.RecoveryEpoch+1 || refreshed.Status != webhook.SubscriptionStatusDegraded || !refreshed.ReregistrationRequired || !refreshed.ReconciliationRequired {
+		t.Fatalf("late heartbeat status = %+v", refreshed)
+	}
 	secondExpiry, err := instance.WebhookReceiverStatus("expiry-funnel", observedAt.Add(5*time.Minute))
 	if err != nil {
 		t.Fatal(err)
 	}
-	if secondExpiry.RecoveryEpoch != firstExpiry.RecoveryEpoch+1 || secondExpiry.Status != webhook.SubscriptionStatusDegraded || !secondExpiry.ReregistrationRequired || !secondExpiry.ReconciliationRequired {
+	if secondExpiry.RecoveryEpoch != refreshed.RecoveryEpoch || secondExpiry.Status != webhook.SubscriptionStatusDegraded || !secondExpiry.ReregistrationRequired || !secondExpiry.ReconciliationRequired {
 		t.Fatalf("second expiry status = %+v", secondExpiry)
 	}
 	reopened, err := app.Open(root)
@@ -339,10 +342,10 @@ func TestWebhookReceiverHeartbeatExpiryPersistsFencedRecovery(t *testing.T) {
 	if persisted.RecoveryEpoch != secondExpiry.RecoveryEpoch || persisted.Status != webhook.SubscriptionStatusDegraded || !persisted.ReregistrationRequired || !persisted.ReconciliationRequired {
 		t.Fatalf("persisted second expiry status = %+v", persisted)
 	}
-	if _, err := reopened.CompleteWebhookReceiverReregistration(ctx, "expiry-funnel", refreshed.RecoveryEpoch); !errors.Is(err, webhook.ErrStaleRecoveryEpoch) {
+	if _, err := reopened.CompleteWebhookReceiverReregistration(ctx, "expiry-funnel", firstExpiry.RecoveryEpoch); !errors.Is(err, webhook.ErrStaleRecoveryEpoch) {
 		t.Fatalf("delayed first expiry re-registration error = %v, want ErrStaleRecoveryEpoch", err)
 	}
-	if _, err := reopened.CompleteWebhookReceiverReconciliation(ctx, "expiry-funnel", refreshed.RecoveryEpoch); !errors.Is(err, webhook.ErrStaleRecoveryEpoch) {
+	if _, err := reopened.CompleteWebhookReceiverReconciliation(ctx, "expiry-funnel", firstExpiry.RecoveryEpoch); !errors.Is(err, webhook.ErrStaleRecoveryEpoch) {
 		t.Fatalf("delayed first expiry reconciliation error = %v, want ErrStaleRecoveryEpoch", err)
 	}
 	stillDegraded, err := reopened.WebhookReceiverStatus("expiry-funnel", observedAt.Add(5*time.Minute))
@@ -380,7 +383,9 @@ func TestWebhookReceiverReconfigureDoesNotMaskHeartbeatExpiry(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	reconfigured, err := instance.ConfigureWebhookReceiver(ctx, request)
+	updatedRequest := request
+	updatedRequest.Exposure.HeartbeatTTL = time.Hour
+	reconfigured, err := instance.ConfigureWebhookReceiver(ctx, updatedRequest)
 	if err != nil {
 		t.Fatal(err)
 	}

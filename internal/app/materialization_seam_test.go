@@ -30,7 +30,7 @@ func (aliasWarehouse) Write(ctx context.Context, req connectors.WriteRequest, re
 }
 func (aliasWarehouse) MaterializesLocalWarehouse() bool { return true }
 
-func TestRunETLUsesMaterializationInterfaceInsteadOfWarehouseName(t *testing.T) {
+func TestRunETLUsesCredentialDerivedMaterializerForLocalWarehouseAcknowledgement(t *testing.T) {
 	ctx := context.Background()
 	root := t.TempDir()
 	if err := app.InitProject(root); err != nil {
@@ -50,7 +50,7 @@ func TestRunETLUsesMaterializationInterfaceInsteadOfWarehouseName(t *testing.T) 
 	if _, err := a.CreateConnection(ctx, app.CreateConnectionRequest{
 		Name:        "sample_to_alias",
 		Source:      app.EndpointConfig{Connector: "sample", Credential: "sample-local"},
-		Destination: app.EndpointConfig{Connector: "warehouse-alias", Credential: "warehouse-alias-local"},
+		Destination: app.EndpointConfig{Credential: "warehouse-alias-local"},
 		Streams:     map[string]app.StreamConfig{"customers": {SyncMode: "full_refresh_overwrite", PrimaryKey: []string{"id"}, DestinationTable: "sample_customers"}},
 	}); err != nil {
 		t.Fatalf("CreateConnection() error = %v", err)

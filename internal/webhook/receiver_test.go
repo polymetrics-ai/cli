@@ -358,7 +358,7 @@ func TestSubscriptionLifecycleDegradesOnGenerationRotationAndHeartbeatLoss(t *te
 	}
 }
 
-func TestApplyExposureDoesNotMaskHeartbeatExpiry(t *testing.T) {
+func TestApplyExposureEvaluatesPriorHeartbeatPolicy(t *testing.T) {
 	t.Parallel()
 
 	key := []byte("test-project-key-material")
@@ -372,22 +372,25 @@ func TestApplyExposureDoesNotMaskHeartbeatExpiry(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	updatedPolicy, err := ConfigureExposure(ExposureConfig{
+		Mode:         ExposureModeExternalTunnel,
+		TunnelTool:   TunnelToolTailscaleFunnel,
+		CallbackURL:  "https://node.tailnet.ts.net/receiver",
+		HeartbeatTTL: time.Hour,
+	}, key)
+	if err != nil {
+		t.Fatal(err)
+	}
 	subscription := NewSubscription("fixture", exposure, now)
 	initialEpoch := subscription.RecoveryEpoch
-	if changed := subscription.ApplyExposure(exposure, now.Add(2*time.Minute)); changed {
+	if changed := subscription.ApplyExposure(updatedPolicy, now.Add(2*time.Minute)); changed {
 		t.Fatal("same endpoint reconfiguration changed the generation")
 	}
-	if !subscription.LastHeartbeatAt.Equal(now) || subscription.RecoveryEpoch != initialEpoch || subscription.Status != SubscriptionStatusActive || subscription.ReregistrationRequired || subscription.ReconciliationRequired {
-		t.Fatalf("same endpoint reconfiguration changed liveness state: %+v", subscription)
+	if subscription.Exposure.HeartbeatTTL != time.Hour || !subscription.LastHeartbeatAt.Equal(now) || subscription.RecoveryEpoch != initialEpoch+1 || subscription.Status != SubscriptionStatusDegraded || !subscription.ReregistrationRequired || !subscription.ReconciliationRequired {
+		t.Fatalf("same endpoint reconfiguration did not apply the prior liveness policy: %+v", subscription)
 	}
-	if !subscription.DegradeIfHeartbeatExpired(now.Add(2 * time.Minute)) {
-		t.Fatal("same endpoint reconfiguration masked heartbeat expiry")
-	}
-	if changed := subscription.ApplyExposure(exposure, now.Add(3*time.Minute)); changed {
-		t.Fatal("repeated same endpoint reconfiguration changed the generation")
-	}
-	if !subscription.LastHeartbeatAt.Equal(now) || subscription.RecoveryEpoch != initialEpoch+1 || subscription.Status != SubscriptionStatusDegraded || !subscription.ReregistrationRequired || !subscription.ReconciliationRequired {
-		t.Fatalf("repeated reconfiguration changed liveness state: %+v", subscription)
+	if subscription.DegradeIfHeartbeatExpired(now.Add(3 * time.Minute)) {
+		t.Fatal("already degraded reconfiguration started another recovery epoch")
 	}
 }
 
@@ -419,14 +422,14 @@ func TestHeartbeatExpiryStartsFencedRecoveryEpoch(t *testing.T) {
 	if changed, err := subscription.Heartbeat("https://node.tailnet.ts.net/receiver", now.Add(3*time.Minute), key, firstRecoveryEpoch); err != nil || changed {
 		t.Fatalf("recovery heartbeat changed=%t err=%v", changed, err)
 	}
-	if !subscription.DegradeIfHeartbeatExpired(now.Add(5 * time.Minute)) {
-		t.Fatal("second heartbeat expiry did not start recovery")
-	}
 	secondRecoveryEpoch := subscription.RecoveryEpoch
 	if secondRecoveryEpoch != firstRecoveryEpoch+1 {
-		t.Fatalf("second recovery epoch = %d, want %d", secondRecoveryEpoch, firstRecoveryEpoch+1)
+		t.Fatalf("heartbeat recovery epoch = %d, want %d", secondRecoveryEpoch, firstRecoveryEpoch+1)
 	}
-	if subscription.DegradeIfHeartbeatExpired(now.Add(6 * time.Minute)) {
+	if !subscription.LastHeartbeatAt.Equal(now.Add(3*time.Minute)) || subscription.Status != SubscriptionStatusDegraded || !subscription.ReregistrationRequired || !subscription.ReconciliationRequired {
+		t.Fatalf("late heartbeat did not start fenced recovery: %+v", subscription)
+	}
+	if subscription.DegradeIfHeartbeatExpired(now.Add(5 * time.Minute)) {
 		t.Fatal("already degraded subscription started another recovery epoch")
 	}
 	if subscription.RecoveryEpoch != secondRecoveryEpoch {
