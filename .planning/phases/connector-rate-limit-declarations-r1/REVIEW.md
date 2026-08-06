@@ -20,3 +20,5 @@ No actionable findings.
 - The remaining policies use `unknown` with a nonblank reason and no policy payload.
 - The embed test demonstrated the declaration would be absent without the `defs.FS` wildcard,
   then passed after it was added.
+- The population recheck joined every declared connector to a `done` sweep record with an
+  enumerable provider artifact; no dead or retired surface received a declaration.

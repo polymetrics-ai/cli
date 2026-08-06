@@ -21,7 +21,9 @@ coverage:
 The first production rate-limit batch adds 25 declarations and the optional `defs.FS` embed
 pattern that ships them. Harvest and CallRail carry cited, scoped policies. The other 23
 providers carry explicit `unknown` states because their published policy varies by unrepresented
-plan, auth, token, tenant, endpoint, or subject scope.
+plan, auth, token, tenant, endpoint, or subject scope. All 25 were later rechecked against the
+authoritative provider-artifact sweep ledger and are `done` records with live enumerable provider
+artifacts; no declaration is based on an unresearched, skipped, or retired surface.
 
 The gitignored resumability ledger contains every connector verdict, provider URL, retrieval date,
 and one-line rationale. `PROGRESS.md` resumes at `sendgrid` for the next batch.

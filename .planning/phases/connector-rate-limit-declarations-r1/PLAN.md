@@ -8,7 +8,10 @@ production `defs.FS` embed pattern in the same slice.
 
 ## Scope
 
-- Select roughly 20–30 connectors from the completed provider-artifact sweep.
+- Select roughly 20–30 connectors only from the authoritative completed provider-artifact sweep
+  ledger at `/Users/karthiksivadas/karthik-agent-workspace/data/cli-provider-artifact-sweep-r1/ledger.json`.
+  A declaration candidate must have `status: done` and its recorded live, enumerable provider
+  artifact; `unknown` and `skipped` sweep records are never rate-limit candidates.
 - Research each provider's current rate-limit policy from a provider-controlled HTTPS source; the
   sweep ledger URL is only a documented starting point.
 - Add one closed-schema `rate_limits.json` per selected connector. A policy must use an existing,
@@ -25,6 +28,17 @@ production `defs.FS` embed pattern in the same slice.
 - No credentials, live connector checks, new dependencies, generic request surfaces, CLI help, or
   website/docs changes.
 - This is a bounded foundation rollout, not a claim to cover every researched connector.
+
+## Population and lifecycle gate
+
+- The sweep ledger, not the 550 connector definition directories, is the authoritative population.
+  On 2026-08-06 it contained 359 records: 281 `done`, 71 `unknown`, and 7 `skipped`; this is the
+  live-file result and supersedes the earlier task snapshot that differed by one `unknown` record.
+- A dead or retired provider surface is a lifecycle/deprecation finding, not a rate-limit
+  `unknown`. Do not create a `rate_limits.json` or a rate-limit-ledger record for it. Capture it
+  separately in `POPULATION-AUDIT.md`.
+- The committed 25-connector batch was rechecked against this gate. Every member is `done`, has a
+  recorded provider artifact, and has `scope_in_current_defs: true`; none was removed.
 
 ## Scope guard and ownership
 
