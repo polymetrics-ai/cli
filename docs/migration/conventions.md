@@ -201,7 +201,8 @@ not a full override by default.
   tied timestamps and is not an allowed substitute. Declare positive `safety_lag_seconds` for a
   timestamp source whose provider can publish late/clock-skewed records; the executor rereads that
   overlap on the next run. An unfinished bounded overlap persists an internal scan tuple separately
-  from the durable high-water tuple, resumes it after restart, and clears it once the overlap is
+  from the durable high-water tuple, retaining the provider's exact tie-breaker text and numeric
+  ordering metadata when applicable; it resumes after restart and clears once the overlap is
   exhausted so later polls begin at the lag boundary again. `0` is an explicit no-lag opt-out and
   can lose such records. Non-time watermark kinds must declare `0` because a timestamp lag has no
   honest meaning for them.
@@ -211,8 +212,11 @@ not a full override by default.
   declared deletion endpoint. A deletion endpoint requires `request_budget >= 2`, and the executor
   does not start a primary read unless both its primary and deletion tokens remain. Each primary or
   deletion physical page must contain no more than `page_size` records; an overflow is a typed,
-  non-advancing refusal. Primary and deletion records are merged by watermark tuple before delivery
-  and checkpointing. Reaching `max_pages` or exhausting that budget returns a typed,
+  non-advancing refusal. Timestamp and monotonic-sequence sources merge primary and deletion
+  records through a safe shared tuple boundary while preserving independent durable frontiers, so
+  one source cannot skip the other source's page. Opaque cursor sources retain each source cursor
+  verbatim and promise only provider-local ordering; they do not claim a cross-source tuple merge.
+  Reaching `max_pages` or exhausting that budget returns a typed,
   resumable stop after only the last durably accepted position; it is never a successful silent
   truncation. The executor checks cancellation between source fetch, delivery, and checkpoint
   commit. It advances the tuple only after every emitted record in its page is durably accepted by

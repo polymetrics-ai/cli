@@ -90,6 +90,19 @@ func pollingWatermarkScanFromState(t *testing.T, state map[string]string) pollin
 	return scan
 }
 
+func pollingWatermarkFrontiersFromState(t *testing.T, state map[string]string) pollingWatermarkFrontiersCheckpoint {
+	t.Helper()
+	raw, found := state[pollingWatermarkFrontiersStateKey]
+	if !found {
+		t.Fatalf("checkpoint state = %+v, want source frontiers", state)
+	}
+	var frontiers pollingWatermarkFrontiersCheckpoint
+	if err := json.Unmarshal([]byte(raw), &frontiers); err != nil {
+		t.Fatalf("unmarshal source frontiers %q: %v", raw, err)
+	}
+	return frontiers
+}
+
 func loadPollingWatermarkTestBundle(t *testing.T) Bundle {
 	t.Helper()
 	bundle, err := Load(os.DirFS("testdata/bundles"), "polling-watermark-demo")
@@ -402,6 +415,54 @@ func TestPollingWatermarkExecutorPersistsAndResetsSafetyLagScanCursor(t *testing
 	}
 }
 
+func TestPollingWatermarkExecutorPersistsNumericScanCursorOrderingMetadata(t *testing.T) {
+	bundle := loadPollingWatermarkTestBundle(t)
+	bundle.Changefeed.PollingWatermark.MaxPages = 1
+	committer := &recordingChangefeedCheckpointCommitter{}
+	firstSource := &scriptedPollingWatermarkSource{pages: []PollingWatermarkPage{{
+		Records: []connectors.Record{{"id": json.Number("2"), "updated_at": "2026-08-06T10:00:00Z"}},
+		More:    true,
+	}}}
+	first, err := NewPollingWatermarkConnector(bundle, nil, firstSource)
+	if err != nil {
+		t.Fatalf("NewPollingWatermarkConnector: %v", err)
+	}
+	err = first.ReadCDC(context.Background(), connectors.CDCReadRequest{
+		Stream:              "widgets",
+		Config:              connectors.RuntimeConfig{Config: map[string]string{"base_url": "https://example.test"}},
+		State:               map[string]string{"updated_at": "2026-08-06T10:00:00Z", "id": "10"},
+		CheckpointCommitter: committer,
+	}, func(connectors.CDCEvent) error { return nil })
+	var stop *PollingWatermarkResumableStopError
+	if !errors.As(err, &stop) || stop.Reason != PollingWatermarkStopReasonMaxPages {
+		t.Fatalf("first ReadCDC error = %v, want max-pages resumable stop", err)
+	}
+	if len(committer.states) != 1 {
+		t.Fatalf("committed checkpoints = %+v, want active numeric scan cursor", committer.states)
+	}
+	if scan := pollingWatermarkScanFromState(t, committer.states[0]); !scan.Active || scan.TieBreaker != "2" || !scan.TieBreakerNumber {
+		t.Fatalf("scan cursor = %+v, want exact numeric provider text with ordering metadata", scan)
+	}
+
+	secondSource := &scriptedPollingWatermarkSource{pages: []PollingWatermarkPage{{}}}
+	second, err := NewPollingWatermarkConnector(bundle, nil, secondSource)
+	if err != nil {
+		t.Fatalf("NewPollingWatermarkConnector: %v", err)
+	}
+	err = second.ReadCDC(context.Background(), connectors.CDCReadRequest{
+		Stream:              "widgets",
+		Config:              connectors.RuntimeConfig{Config: map[string]string{"base_url": "https://example.test"}},
+		State:               committer.states[0],
+		CheckpointCommitter: committer,
+	}, func(connectors.CDCEvent) error { return nil })
+	if err != nil {
+		t.Fatalf("second ReadCDC: %v", err)
+	}
+	if len(secondSource.calls) != 1 || secondSource.calls[0].After == nil || secondSource.calls[0].After.TieBreaker != "2" || !secondSource.calls[0].After.tieBreakerNumber {
+		t.Fatalf("second source calls = %+v, want numeric scan cursor resumption", secondSource.calls)
+	}
+}
+
 func TestPollingWatermarkExecutorLeavesInitialSnapshotBoundaryToSource(t *testing.T) {
 	source := &scriptedPollingWatermarkSource{pages: []PollingWatermarkPage{{}}}
 	connector := newPollingWatermarkTestConnector(t, source)
@@ -534,6 +595,154 @@ func TestPollingWatermarkExecutorMergesPrimaryAndDeletionRecordsByPosition(t *te
 	}
 	if len(committer.states) != 1 || committer.states[0]["updated_at"] != "2026-08-06T10:02:00Z" || committer.states[0]["id"] != "c" {
 		t.Fatalf("checkpoints = %+v, want final merged tuple", committer.states)
+	}
+}
+
+func TestPollingWatermarkExecutorMaintainsIndependentDeletionFrontier(t *testing.T) {
+	bundle := loadPollingWatermarkTestBundle(t)
+	bundle.Changefeed.PollingWatermark.SoftDelete = nil
+	bundle.Changefeed.PollingWatermark.DeletionEndpoint = &connectors.PollingWatermarkDeletionEndpoint{
+		Path:        "/widgets/deletions",
+		RecordsPath: "data",
+	}
+	bundle.Changefeed.PollingWatermark.MaxPages = 2
+	bundle.Changefeed.PollingWatermark.RequestBudget = 4
+	var requests []PollingWatermarkPageRequest
+	call := 0
+	source := pollingWatermarkPageSourceFunc(func(ctx context.Context, req PollingWatermarkPageRequest) (PollingWatermarkPage, error) {
+		if err := req.RequestBudget.Consume(ctx); err != nil {
+			return PollingWatermarkPage{}, err
+		}
+		if err := req.RequestBudget.Consume(ctx); err != nil {
+			return PollingWatermarkPage{}, err
+		}
+		requests = append(requests, req)
+		call++
+		switch call {
+		case 1:
+			return PollingWatermarkPage{
+				Records: []connectors.Record{
+					{"id": "p10", "updated_at": "2026-08-06T10:00:00Z"},
+					{"id": "p100", "updated_at": "2026-08-06T11:30:00Z"},
+				},
+				DeletionRecords: []connectors.Record{
+					{"id": "d11", "updated_at": "2026-08-06T10:01:00Z"},
+					{"id": "d12", "updated_at": "2026-08-06T10:02:00Z"},
+				},
+				DeletionMore: true,
+			}, nil
+		case 2:
+			return PollingWatermarkPage{
+				Records: []connectors.Record{
+					{"id": "p10", "updated_at": "2026-08-06T10:00:00Z"},
+					{"id": "p100", "updated_at": "2026-08-06T11:30:00Z"},
+				},
+				DeletionRecords: []connectors.Record{
+					{"id": "d12", "updated_at": "2026-08-06T10:02:00Z"},
+					{"id": "d13", "updated_at": "2026-08-06T10:03:00Z"},
+				},
+			}, nil
+		default:
+			return PollingWatermarkPage{}, errors.New("unexpected polling request")
+		}
+	})
+	connector, err := NewPollingWatermarkConnector(bundle, nil, source)
+	if err != nil {
+		t.Fatalf("NewPollingWatermarkConnector: %v", err)
+	}
+	committer := &recordingChangefeedCheckpointCommitter{}
+	var delivered []string
+	err = connector.ReadCDC(context.Background(), connectors.CDCReadRequest{
+		Stream:              "widgets",
+		Config:              connectors.RuntimeConfig{Config: map[string]string{"base_url": "https://example.test"}},
+		CheckpointCommitter: committer,
+	}, func(event connectors.CDCEvent) error {
+		delivered = append(delivered, event.Record["id"].(string))
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("ReadCDC: %v", err)
+	}
+	if len(requests) != 2 || requests[1].After == nil || requests[1].DeletionAfter == nil || requests[1].After.TieBreaker != "p10" || requests[1].DeletionAfter.TieBreaker != "d12" {
+		t.Fatalf("source requests = %+v, want independent primary and deletion frontiers", requests)
+	}
+	if !strings.Contains(strings.Join(delivered, ","), "d13") {
+		t.Fatalf("delivered = %q, want deletion past the primary physical page", delivered)
+	}
+	if len(committer.states) != 2 || committer.states[1]["id"] != "p100" {
+		t.Fatalf("committed checkpoints = %+v, want primary frontier through p100", committer.states)
+	}
+	if frontiers := pollingWatermarkFrontiersFromState(t, committer.states[1]); frontiers.Deletion == nil || frontiers.Deletion.TieBreaker != "d13" {
+		t.Fatalf("source frontiers = %+v, want deletion frontier through d13", frontiers)
+	}
+}
+
+func TestPollingWatermarkExecutorKeepsOpaqueDeletionCursorIndependent(t *testing.T) {
+	bundle := loadPollingWatermarkTestBundle(t)
+	bundle.Changefeed.Checkpoint.Keys = []string{"cursor", "id"}
+	bundle.Changefeed.PollingWatermark.Watermark = connectors.PollingWatermarkValue{Kind: "opaque_cursor", Path: "cursor"}
+	bundle.Changefeed.PollingWatermark.SafetyLagSeconds = 0
+	bundle.Changefeed.PollingWatermark.SoftDelete = nil
+	bundle.Changefeed.PollingWatermark.DeletionEndpoint = &connectors.PollingWatermarkDeletionEndpoint{
+		Path:        "/widgets/deletions",
+		RecordsPath: "data",
+	}
+	bundle.Changefeed.PollingWatermark.RequestBudget = 2
+	firstSource := &scriptedPollingWatermarkSource{pages: []PollingWatermarkPage{{
+		Records:         []connectors.Record{{"id": "primary", "cursor": "z-primary"}},
+		DeletionRecords: []connectors.Record{{"id": "deletion", "cursor": "a-deletion"}},
+	}}}
+	first, err := NewPollingWatermarkConnector(bundle, nil, firstSource)
+	if err != nil {
+		t.Fatalf("NewPollingWatermarkConnector: %v", err)
+	}
+	committer := &recordingChangefeedCheckpointCommitter{}
+	var delivered []string
+	err = first.ReadCDC(context.Background(), connectors.CDCReadRequest{
+		Stream:              "widgets",
+		Config:              connectors.RuntimeConfig{Config: map[string]string{"base_url": "https://example.test"}},
+		CheckpointCommitter: committer,
+	}, func(event connectors.CDCEvent) error {
+		delivered = append(delivered, event.Operation+":"+event.Record["id"].(string))
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("first ReadCDC: %v", err)
+	}
+	if got := strings.Join(delivered, ","); got != "upsert:primary,delete:deletion" {
+		t.Fatalf("delivery = %q, want source-local opaque delivery", got)
+	}
+	if len(committer.states) != 1 {
+		t.Fatalf("committed checkpoints = %+v, want independent opaque frontiers", committer.states)
+	}
+	if frontiers := pollingWatermarkFrontiersFromState(t, committer.states[0]); frontiers.Deletion == nil || frontiers.Deletion.Watermark != "a-deletion" || frontiers.Deletion.TieBreaker != "deletion" {
+		t.Fatalf("source frontiers = %+v, want verbatim opaque deletion cursor", frontiers)
+	}
+
+	secondSource := pollingWatermarkPageSourceFunc(func(ctx context.Context, req PollingWatermarkPageRequest) (PollingWatermarkPage, error) {
+		if err := req.RequestBudget.Consume(ctx); err != nil {
+			return PollingWatermarkPage{}, err
+		}
+		if err := req.RequestBudget.Consume(ctx); err != nil {
+			return PollingWatermarkPage{}, err
+		}
+		if req.After == nil || req.After.Watermark != "z-primary" || req.DeletionAfter == nil || req.DeletionAfter.Watermark != "a-deletion" {
+			return PollingWatermarkPage{}, errors.New("opaque source frontier was not restored verbatim")
+		}
+		return PollingWatermarkPage{}, nil
+	})
+	second, err := NewPollingWatermarkConnector(bundle, nil, secondSource)
+	if err != nil {
+		t.Fatalf("NewPollingWatermarkConnector: %v", err)
+	}
+	err = second.ReadCDC(context.Background(), connectors.CDCReadRequest{
+		Stream:              "widgets",
+		Config:              connectors.RuntimeConfig{Config: map[string]string{"base_url": "https://example.test"}},
+		State:               committer.states[0],
+		CheckpointCommitter: &recordingChangefeedCheckpointCommitter{},
+	}, func(connectors.CDCEvent) error { return nil })
+	if err != nil {
+		t.Fatalf("second ReadCDC: %v", err)
 	}
 }
 
@@ -825,7 +1034,7 @@ func TestPollingWatermarkExecutorHonorsRequestBudgetAndCancellation(t *testing.T
 		bundle.Changefeed.PollingWatermark.SoftDelete = nil
 		bundle.Changefeed.PollingWatermark.DeletionEndpoint = &connectors.PollingWatermarkDeletionEndpoint{Path: "/widgets/deletions", RecordsPath: "data"}
 		source := &scriptedPollingWatermarkSource{pages: []PollingWatermarkPage{
-			{Records: []connectors.Record{{"id": "a", "updated_at": "2026-08-06T10:00:00Z"}}, DeletionRecords: []connectors.Record{{"id": "gone", "updated_at": "2026-08-06T10:01:00Z"}}, More: true},
+			{Records: []connectors.Record{{"id": "later", "updated_at": "2026-08-06T10:02:00Z"}}, DeletionRecords: []connectors.Record{{"id": "gone", "updated_at": "2026-08-06T10:01:00Z"}}, PrimaryMore: true},
 			{Records: []connectors.Record{{"id": "later", "updated_at": "2026-08-06T10:02:00Z"}}, More: true},
 		}}
 		connector, err := NewPollingWatermarkConnector(bundle, nil, source)
@@ -842,13 +1051,13 @@ func TestPollingWatermarkExecutorHonorsRequestBudgetAndCancellation(t *testing.T
 		if !errors.As(err, &stop) {
 			t.Fatalf("ReadCDC error = %v, want typed resumable request-budget stop", err)
 		}
-		if stop.Reason != PollingWatermarkStopReasonRequestBudget || stop.LastDurablePosition == nil || stop.LastDurablePosition.TieBreaker != "gone" {
+		if stop.Reason != PollingWatermarkStopReasonRequestBudget || stop.LastDurablePosition == nil || stop.LastDurablePosition.TieBreaker != "later" {
 			t.Fatalf("resumable stop = %+v, want only the first fully accepted page durable", stop)
 		}
 		if source.dataRequests+source.deletionRequests != 2 || source.dataRequests != 1 || source.deletionRequests != 1 || len(source.calls) != 1 {
 			t.Fatalf("physical requests = data:%d deletions:%d calls:%d, want no partial second page", source.dataRequests, source.deletionRequests, len(source.calls))
 		}
-		if len(committer.states) != 1 || committer.states[0]["id"] != "gone" {
+		if len(committer.states) != 1 || committer.states[0]["id"] != "later" {
 			t.Fatalf("committed checkpoints = %+v, want only the first accepted page", committer.states)
 		}
 	})
