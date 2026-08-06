@@ -30,10 +30,12 @@ DESCRIPTION
   The connector command runner does not mask ETL or reverse-ETL command records
   from declared redact_fields. Those declarations remain load-compatible metadata.
   This runner policy does not change source-table output or other execution paths.
-  Connector-engine request previews and failure text preserve complete content.
+  DryRunWrite engine preview warnings preserve the resolved execution request.
+  Engine direct-read, operation-direct-read, and binary-download executors
+  preserve bounded HTTP URL/query/body diagnostics before downstream rendering.
   Declared redact_fields remain compatible metadata, but do not replace values
-  in those runtime surfaces. A stored source-table sample is an app-level
-  summary; the engine preview is the authoritative content for approval.
+  in DryRunWrite preview warnings. A stored source-table sample is an app-level
+  summary; the engine preview is authoritative for approval.
 
   Destructive plans do not receive an approval token during planning. Preview
   performs the connector's no-network dry run, persists a digest of the complete
@@ -67,9 +69,9 @@ COMMANDS
     Show a stored plan's mapped sample rows, action, and count. For a destructive
     plan, also materialize the request through the destination's no-network dry
     run, persist its digest, and issue the approval token in human-readable
-    output. JSON omits the token. The connector engine's resolved warnings
-    preserve complete content, including fields declared in redact_fields; that
-    preview is what the digest binds before dispatch.
+    output. JSON omits the token. DryRunWrite engine preview warnings preserve
+    the resolved execution request, including fields declared in redact_fields;
+    that preview is what the digest binds before dispatch.
 
   run
     Execute a stored plan only when --approve is supplied with the approval
@@ -134,10 +136,12 @@ SECURITY
   Execution requires a time-bounded, single-use approval token. Destructive
   tokens are created only after preview; execution revalidates the preview
   digest before dispatch. JSON plan and preview output omit tokens so agents
-  cannot silently self-approve external writes. Connector-engine request
-  previews and direct-read/binary failure text preserve complete content;
-  redact_fields declarations do not mask those runtime surfaces. Credential
-  storage remains encrypted at rest.
+  cannot silently self-approve external writes. DryRunWrite engine preview
+  warnings preserve the resolved execution request, including fields declared
+  in redact_fields. Engine direct-read, operation-direct-read, and binary-
+  download executors preserve bounded HTTP URL/query/body diagnostics before
+  downstream rendering. These engine-level guarantees do not establish
+  complete pm CLI output. Credential storage remains encrypted at rest.
 
 LEARN MORE
   Run pm reverse --help for this manual.
