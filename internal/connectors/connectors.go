@@ -17,6 +17,7 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/warehouse"
+	"polymetrics.ai/internal/synccontract"
 )
 
 var ErrUnsupportedOperation = errors.New("unsupported connector operation")
@@ -621,12 +622,17 @@ type WritePreview struct {
 }
 
 type CDCReadRequest struct {
-	Stream string
-	Config RuntimeConfig
-	State  map[string]string
+	Stream     string
+	Config     RuntimeConfig
+	State      map[string]string
+	Checkpoint *synccontract.CheckpointEnvelope
 	// CheckpointCommitter receives the next source state only after its page's
 	// emitted events have been durably accepted by the caller.
 	CheckpointCommitter ChangefeedCheckpointCommitter
+	// DurableCheckpointCommitter persists the product-wide opaque checkpoint
+	// envelope. Native sources that need source identity and protocol positions
+	// use this port instead of serializing a parallel scalar state map.
+	DurableCheckpointCommitter DurableChangefeedCheckpointCommitter
 }
 
 type CDCEvent struct {
@@ -658,6 +664,15 @@ type CDCReader interface {
 // without changing transport or delivery logic.
 type ChangefeedCheckpointCommitter interface {
 	CommitChangefeedCheckpoint(ctx context.Context, state map[string]string) error
+}
+
+// DurableChangefeedCheckpointCommitter receives a fully structured
+// synccontract envelope after the caller has durably accepted the emitted
+// source transaction. Implementations commit through
+// synccontract.CommitAfterDownstreamAcknowledgement; the connector never
+// treats a received record or an unacknowledged candidate as resumable state.
+type DurableChangefeedCheckpointCommitter interface {
+	CommitDurableChangefeedCheckpoint(context.Context, synccontract.CheckpointEnvelope) error
 }
 
 // ChangefeedStatus is the closed lifecycle vocabulary for a declared

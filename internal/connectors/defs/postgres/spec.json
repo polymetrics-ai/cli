@@ -42,6 +42,10 @@
       "type": "string",
       "description": "PostgreSQL schema to discover tables from. Defaults to public."
     },
+    "cdc_publication": {
+      "type": "string",
+      "description": "Existing PostgreSQL publication used for logical-replication CDC. Required only for CDC; it must include the selected table."
+    },
     "cursor_field": {
       "type": "string",
       "description": "Optional column name used for incremental reads (rows with cursor_field greater than the stored cursor are read, ordered by cursor_field ascending)."
