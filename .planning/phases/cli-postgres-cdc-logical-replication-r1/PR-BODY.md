@@ -3,14 +3,15 @@
 ## Intent
 
 Implement real PostgreSQL logical-replication CDC on top of the durable database
-sync contract and the polling-watermark executor shape. This is a stacked child
-of PR #3880 and references the fail-closed CDC discovery work in #2986.
+sync contract and the polling-watermark executor shape now merged to `main`.
+This PR references the fail-closed CDC discovery work in #2986.
 
 ## Linked work
 
 Refs #2986
 
-Base: `fm/cli-found-polling-watermark-executor-r1` (PR #3880).
+Built on merged PRs #3880 (polling-watermark executor) and #3882 (durable
+database sync contract).
 
 ## Conditional dependency evidence — `github.com/jackc/pglogrepl`
 
