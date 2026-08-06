@@ -143,11 +143,13 @@ not a full override by default.
   `merge_pull_request` — never `customer_create` or bare nouns.
 - **`spec.json` x-secret discipline**: every credential-shaped field (API keys, tokens, passwords,
   client secrets) is `x-secret: true` in `spec.json`, never a plain `properties` entry. Only
-  `x-secret` fields end up in `Schema.SecretKeys()`, which governs secret/config partitioning,
-  secret redaction from write previews, and log redaction. Write actions that place sensitive
-  non-secret identifiers or clinical values into templated paths must also declare `redact_fields`
-  for those record paths so reverse-plan samples, previews, and write errors do not expose them. A
-  field that merely *looks* sensitive but is documentation-only (an optional Bearer-proxy key never
+  `x-secret` fields end up in `Schema.SecretKeys()`, which governs secret/config partitioning.
+  `DryRunWrite` preview warnings intentionally preserve their resolved request line rather than
+  substitute secret values. Write actions that place sensitive non-secret identifiers or clinical
+  values into templated paths must also declare `redact_fields` for those record paths so
+  reverse-plan source-table samples and write errors remain redacted; those declarations likewise
+  do not substitute values in the resolved dry-run request line. A field that merely *looks*
+  sensitive but is documentation-only (an optional Bearer-proxy key never
   wired into `auth`, e.g. searxng's `api_key`) is still marked `x-secret: true` — the marker is
   about the field's nature, not whether this bundle currently exercises it.
 - **Schema-as-projection**: a stream's `schemas/<stream>.json` `properties` set is derived
@@ -893,13 +895,14 @@ All multipart mutations retain the plan → preview → approval → execute lif
 
 This is separate from the already executable reverse-ETL `writes.json` `body_type: "multipart"` path. Gong's `upload_call_media` action and `pm gong calls upload-media` command are its existing proof; no operation-level connector adoption is implied here. The legacy `operations.json` `kind: "file_upload"` remains planned/non-executable until a connector moves each endpoint to a complete declared contract and proves it. This shared-runtime documentation makes **no** GitLab, Freshchat, Gong, or other provider operation newly available. CLI/help/manual/website parity is therefore not applicable to this foundation: each adoption lane must update its own runtime help, `docs/cli/**`, website docs, generated manuals, command surface, and executable evidence before claiming `availability: implemented`.
 
-`redact_fields` on a `writes.json` action applies to source-table reverse-ETL and engine write
-surfaces. It is for non-secret identifiers or clinical values that can appear in templated paths or
-upstream error text; source-table reverse-plan creation persists the list and masks matching sample
-fields, `DryRunWrite` replaces those path values in the resolved request preview, and `Write`
-redacts raw and URL-encoded literal forms from returned write errors while preserving typed error
-wrapping. `cli_surface.json` declarations remain load-compatible metadata, but `commandrunner` does
-not use them to mutate connector-command records or errors, or to forward them to executors.
+`redact_fields` is an action-local list of record paths whose values remain masked in generic
+source-table plan samples and returned write errors. It is for non-secret identifiers or clinical
+values that can appear in templated paths or upstream error text; reverse-plan creation persists the
+list and masks matching sample fields. `DryRunWrite` deliberately does not apply that masking to its
+resolved request line, so approval sees the method and URL that execution will use. `Write` redacts
+raw and URL-encoded literal forms from returned write errors while preserving typed error wrapping.
+`cli_surface.json` declarations remain load-compatible metadata, but `commandrunner` does not use
+them to mutate connector-command records or errors, or to forward them to executors.
 
 `confirmation` is the closed confirmation declaration for new actions:
 `"confirmation": {"kind": "destructive"}`. The writes and operations schemas are authoritative;

@@ -37,7 +37,7 @@ func TestWriteStagesSelfTestAgainstOutbox(t *testing.T) {
 		t.Fatalf("Report.Passed = false, want true; stages=%+v", rep.Stages)
 	}
 
-	// --- stage 12: write_plan_preview (redaction gate) ---
+	// --- stage 12: write_plan_preview (JSON token-omission gate) ---
 	planPreview := mustStage(t, rep, "write_plan_preview")
 	if !planPreview.Passed {
 		t.Fatalf("write_plan_preview stage failed: %+v", planPreview)
@@ -107,7 +107,7 @@ func TestWriteStagesSelfTestAgainstOutbox(t *testing.T) {
 	}
 }
 
-// TestWritePlanPreviewJSONHasNoApprovalToken is the redaction-gate assertion
+// TestWritePlanPreviewJSONHasNoApprovalToken is the JSON token-omission assertion
 // (design §A stage 12 "assert --json output has NO approval token"): the
 // harness's own write_plan_preview stage must positively assert this on
 // every run with Write enabled, not merely happen to pass.

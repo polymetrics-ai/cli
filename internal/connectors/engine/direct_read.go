@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -14,6 +15,7 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/safety"
 )
 
@@ -28,6 +30,23 @@ const (
 )
 
 var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
+
+// completeEngineErrorText preserves the bounded diagnostic content captured by
+// connsdk for direct-read callers. HTTPError.Error deliberately applies its
+// own presentation policy, so the engine reads the typed fields here to retain
+// the request URL and provider body that the operator needs to diagnose a
+// declared connector action.
+func completeEngineErrorText(err error) string {
+	var httpErr *connsdk.HTTPError
+	if !errors.As(err, &httpErr) {
+		return err.Error()
+	}
+	message := strings.TrimSpace(httpErr.Body)
+	if message == "" {
+		message = http.StatusText(httpErr.Status)
+	}
+	return fmt.Sprintf("http %d for %s: %s", httpErr.Status, httpErr.URL, message)
+}
 
 func OperationDirectRead(ctx context.Context, b Bundle, req connectors.OperationDirectReadRequest, h Hooks) (connectors.DirectReadResult, error) {
 	if err := ctx.Err(); err != nil {
@@ -108,7 +127,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	resp, err := rt.Requester.DoLimited(ctx, method, requestPath, query, body, maxBytes)
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
-		msg := safety.RedactErrorText(err.Error())
+		msg := completeEngineErrorText(err)
 		if hint != "" {
 			msg = msg + ": " + hint
 		}
@@ -178,7 +197,7 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 	resp, err := rt.Requester.DoLimited(ctx, method, requestPath, query, nil, maxBytes)
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
-		msg := safety.RedactErrorText(err.Error())
+		msg := completeEngineErrorText(err)
 		if hint != "" {
 			msg = msg + ": " + hint
 		}
