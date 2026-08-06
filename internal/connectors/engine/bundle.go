@@ -6,6 +6,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/fs"
 	"mime"
 	"regexp"
@@ -625,24 +626,44 @@ type DeleteSpec struct {
 	MissingOkStatus []int `json:"missing_ok_status,omitempty"`
 }
 
-// APISurface is the parsed api_surface.json. When present, it supports
-// conformance and disk-backed direct-write endpoint cross-checks.
+// APISurface is the parsed api_surface.json used by authoring validation,
+// conformance, full certification, and disk-backed direct-write endpoint cross-checks.
 type APISurface struct {
 	API                    string            `json:"api"`
 	Docs                   string            `json:"docs,omitempty"`
 	ReviewedAt             string            `json:"reviewed_at,omitempty"`
 	OperationLedgerVersion int               `json:"operation_ledger_version,omitempty"`
 	Scope                  string            `json:"scope,omitempty"`
+	Artifacts              []SurfaceArtifact `json:"artifacts,omitempty"`
 	Endpoints              []SurfaceEndpoint `json:"endpoints"`
+}
+
+// SurfaceArtifact is a provider artifact cited by v2 endpoint provenance.
+// Semantic validation resolves its ID and checks its URL, retrieval date, and
+// optional digest.
+type SurfaceArtifact struct {
+	ID          string `json:"id"`
+	URL         string `json:"url"`
+	RetrievedAt string `json:"retrieved_at"`
+	SHA256      string `json:"sha256,omitempty"`
 }
 
 // SurfaceEndpoint is one api_surface.json endpoint entry.
 type SurfaceEndpoint struct {
-	Method    string            `json:"method,omitempty"`
-	Path      string            `json:"path,omitempty"`
-	CoveredBy *SurfaceCoverage  `json:"covered_by,omitempty"`
-	Excluded  *SurfaceExclusion `json:"excluded,omitempty"`
-	Operation *SurfaceOperation `json:"operation,omitempty"`
+	Method     string             `json:"method,omitempty"`
+	Path       string             `json:"path,omitempty"`
+	Provenance *SurfaceProvenance `json:"provenance,omitempty"`
+	CoveredBy  *SurfaceCoverage   `json:"covered_by,omitempty"`
+	Excluded   *SurfaceExclusion  `json:"excluded,omitempty"`
+	Operation  *SurfaceOperation  `json:"operation,omitempty"`
+}
+
+// SurfaceProvenance cites one operation-specific provider source in a v2
+// ledger. It is evidence metadata only: CoveredBy remains the sole binding to
+// an executable connector surface.
+type SurfaceProvenance struct {
+	Artifact  string `json:"artifact"`
+	SourceURL string `json:"source_url"`
 }
 
 // SurfaceCoverage names the executable connector surface that covers an endpoint.
@@ -2284,6 +2305,17 @@ func loadStreamSchemas(sub fs.FS, dirName string, streams []StreamSpec) (map[str
 	return out, nil
 }
 
+func ParseAPISurface(raw []byte) (APISurface, error) {
+	if err := metaSchemas.apiSurface.Validate(mustDecodeAny(raw)); err != nil {
+		return APISurface{}, err
+	}
+	var surface APISurface
+	if err := strictDecode(raw, &surface); err != nil {
+		return APISurface{}, err
+	}
+	return surface, nil
+}
+
 func loadAPISurface(sub fs.FS, dirName string) (*APISurface, error) {
 	if !fileExists(sub, "api_surface.json") {
 		return nil, nil
@@ -2292,11 +2324,8 @@ func loadAPISurface(sub fs.FS, dirName string) (*APISurface, error) {
 	if err != nil {
 		return nil, fmt.Errorf("load bundle %s: %w", dirName, err)
 	}
-	if err := metaSchemas.apiSurface.Validate(mustDecodeAny(raw)); err != nil {
-		return nil, fmt.Errorf("load bundle %s: api_surface.json: %w", dirName, err)
-	}
-	var surface APISurface
-	if err := strictDecode(raw, &surface); err != nil {
+	surface, err := ParseAPISurface(raw)
+	if err != nil {
 		return nil, fmt.Errorf("load bundle %s: api_surface.json: %w", dirName, err)
 	}
 	return &surface, nil
@@ -2492,6 +2521,13 @@ func strictDecode(raw []byte, dst any) error {
 	dec := json.NewDecoder(strings.NewReader(string(raw)))
 	dec.DisallowUnknownFields()
 	if err := dec.Decode(dst); err != nil {
+		return fmt.Errorf("%w", err)
+	}
+	var extra any
+	if err := dec.Decode(&extra); err != io.EOF {
+		if err == nil {
+			return fmt.Errorf("invalid JSON: multiple top-level values")
+		}
 		return fmt.Errorf("%w", err)
 	}
 	return nil

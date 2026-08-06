@@ -190,6 +190,10 @@ not a full override by default.
   delivery contract. An absent descriptor is unknown and non-capable. The structural schema is
   `internal/connectors/engine/schema/changefeed.schema.json`; runtime semantic checks live on
   `connectors.ChangefeedDescriptor`.
+- **`api_surface.json` v2 provenance**: follow the authoritative
+  [provider-artifact contract](../architecture/connector-architecture-v2-design.md#version-2-provider-artifact-provenance).
+  Upgrade only bundles in the dedicated provider-artifact sweep; do not bulk-edit unrelated bundles
+  or infer v2 evidence from a bare URL.
 - **`docs.md` required headings** (exact text, `#`/`##` either level; `conformance`'s
   `docs_present` and `connectorgen validate`'s `docs_heading` rule both check presence by trimmed
   text only): `Overview`, `Auth setup`, `Streams notes`, `Write actions & risks`, `Known limits`.
