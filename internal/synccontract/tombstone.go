@@ -10,18 +10,20 @@ import (
 type Operation string
 
 const (
-	OperationInsert Operation = "insert"
-	OperationUpdate Operation = "update"
-	OperationDelete Operation = "delete"
+	OperationInsert     Operation = "insert"
+	OperationUpdate     Operation = "update"
+	OperationDelete     Operation = "delete"
+	OperationTruncate   Operation = "truncate"
+	OperationInvalidate Operation = "invalidate"
 )
 
-// DeleteImage identifies whether a delete contains only its key or a provider
-// before-image. Consumers must not infer one from the other.
+// DeleteImage identifies the source image available for a row delete.
 type DeleteImage string
 
 const (
-	DeleteImageKeyOnly DeleteImage = "key_only"
-	DeleteImageBefore  DeleteImage = "before_image"
+	DeleteImageKeyOnly     DeleteImage = "key_only"
+	DeleteImageBefore      DeleteImage = "before_image"
+	DeleteImageUnavailable DeleteImage = "unavailable"
 )
 
 // Tombstone is the delete/change envelope shared by all sync mechanisms.
@@ -49,29 +51,39 @@ func (t Tombstone) Clone() Tombstone {
 // Validate requires enough information for deterministic, idempotent delete
 // handling without imposing a provider-specific record schema.
 func (t Tombstone) Validate() error {
-	if t.Operation != OperationDelete {
-		return fmt.Errorf("tombstone operation must be %q", OperationDelete)
-	}
 	if len(t.EventID) == 0 {
 		return fmt.Errorf("tombstone event identity is required")
-	}
-	if len(t.Key) == 0 || !json.Valid(t.Key) {
-		return fmt.Errorf("tombstone key must be valid JSON")
 	}
 	if err := t.Position.validateOrdered("tombstone"); err != nil {
 		return err
 	}
-	switch t.DeleteImage {
-	case DeleteImageKeyOnly:
-		if len(t.Before) != 0 {
-			return fmt.Errorf("key-only tombstone cannot include a before image")
+	switch t.Operation {
+	case OperationDelete:
+		if len(t.Key) == 0 || !json.Valid(t.Key) {
+			return fmt.Errorf("tombstone key must be valid JSON")
 		}
-	case DeleteImageBefore:
-		if len(t.Before) == 0 || !json.Valid(t.Before) {
-			return fmt.Errorf("before-image tombstone requires valid before JSON")
+		switch t.DeleteImage {
+		case DeleteImageKeyOnly:
+			if len(t.Before) != 0 {
+				return fmt.Errorf("key-only tombstone cannot include a before image")
+			}
+		case DeleteImageBefore:
+			if len(t.Before) == 0 || !json.Valid(t.Before) {
+				return fmt.Errorf("before-image tombstone requires valid before JSON")
+			}
+		case DeleteImageUnavailable:
+			if len(t.Before) != 0 {
+				return fmt.Errorf("unavailable-image tombstone cannot include a before image")
+			}
+		default:
+			return fmt.Errorf("unsupported tombstone delete image %q", t.DeleteImage)
+		}
+	case OperationTruncate, OperationInvalidate:
+		if len(t.Key) != 0 || t.DeleteImage != "" || len(t.Before) != 0 {
+			return fmt.Errorf("%s tombstone cannot carry row-delete fields", t.Operation)
 		}
 	default:
-		return fmt.Errorf("unsupported tombstone delete image %q", t.DeleteImage)
+		return fmt.Errorf("unsupported tombstone operation %q", t.Operation)
 	}
 	return nil
 }
@@ -119,6 +131,9 @@ type HistoryWindowClose struct {
 // CloseHistoryWindow converts a valid tombstone into its history-target
 // mutation. It does not expose an option that performs a physical delete.
 func CloseHistoryWindow(tombstone Tombstone, validTo time.Time) (HistoryWindowClose, error) {
+	if tombstone.Operation != OperationDelete {
+		return HistoryWindowClose{}, fmt.Errorf("history window close requires a row delete")
+	}
 	if err := tombstone.Validate(); err != nil {
 		return HistoryWindowClose{}, err
 	}

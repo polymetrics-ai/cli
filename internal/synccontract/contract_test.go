@@ -284,6 +284,44 @@ func TestTombstoneClosesHistoryWindowInsteadOfPhysicalDelete(t *testing.T) {
 	}
 }
 
+func TestTombstoneSeparatesUnavailableImagesAndSourceStateEvents(t *testing.T) {
+	position := CheckpointPosition{Primary: OpaqueToken("00000010"), TieBreaker: OpaqueToken{0x00, 0xfe}}
+	unavailable := Tombstone{
+		Operation:   OperationDelete,
+		EventID:     OpaqueToken{0xff, 0x02, 0x00},
+		Key:         json.RawMessage(`{"id":"42"}`),
+		DeleteImage: DeleteImageUnavailable,
+		Position:    position,
+	}
+	if err := unavailable.Validate(); err != nil {
+		t.Fatalf("unavailable-image tombstone rejected: %v", err)
+	}
+	if _, err := CloseHistoryWindow(unavailable, time.Date(2026, time.August, 6, 1, 2, 3, 0, time.UTC)); err != nil {
+		t.Fatalf("history close rejected an unavailable-image row delete: %v", err)
+	}
+
+	for _, tombstone := range []Tombstone{
+		{Operation: OperationTruncate, EventID: OpaqueToken("truncate-event"), Position: position},
+		{Operation: OperationInvalidate, EventID: OpaqueToken("invalidate-event"), Position: position},
+	} {
+		if err := tombstone.Validate(); err != nil {
+			t.Fatalf("%s tombstone rejected: %v", tombstone.Operation, err)
+		}
+		if _, err := CloseHistoryWindow(tombstone, time.Date(2026, time.August, 6, 1, 2, 3, 0, time.UTC)); err == nil {
+			t.Fatalf("history close accepted source-level %s", tombstone.Operation)
+		}
+	}
+
+	invalid := Tombstone{Operation: OperationTruncate, EventID: OpaqueToken("truncate-event"), Key: json.RawMessage(`{"id":"42"}`), Position: position}
+	if err := invalid.Validate(); err == nil {
+		t.Fatal("truncate tombstone accepted row-delete fields")
+	}
+	unavailable.Before = json.RawMessage(`{"id":"42"}`)
+	if err := unavailable.Validate(); err == nil {
+		t.Fatal("unavailable-image tombstone accepted a before image")
+	}
+}
+
 func TestNativeContractNeedsRegisteredRunnableExecutorAndFixtureEvidence(t *testing.T) {
 	contract := NativeCommandContract{
 		ContractVersion: NativeCommandContractVersion,
@@ -402,7 +440,9 @@ func TestConformanceFixturesAreVersionedAndDefensivelyCopied(t *testing.T) {
 		"history-delete-closes-window",
 		"tombstone-key-only",
 		"tombstone-before-image",
-		"truncate-or-invalidate",
+		"tombstone-unavailable-image",
+		"source-truncate",
+		"source-invalidate",
 		"duplicate-replay-deduped",
 		"snapshot-to-stream-handoff",
 	} {

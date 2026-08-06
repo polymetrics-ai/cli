@@ -24,6 +24,12 @@ type etlExecutionResult struct {
 	RecordsFailed      int
 	BatchCount         int
 	Checkpoint         map[string]string
+	PendingStreamState *pendingStreamState
+}
+
+type pendingStreamState struct {
+	Key   string
+	State StreamState
 }
 
 type localRawRecord struct {
@@ -40,9 +46,6 @@ type localRawRecord struct {
 }
 
 func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
-	if a.state.StreamStates == nil {
-		a.state.StreamStates = map[string]StreamState{}
-	}
 	stateKey := streamStateKey(conn.Name, streamName)
 	prior := a.state.StreamStates[stateKey]
 	if prior.Checkpoint != nil {
@@ -274,8 +277,8 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	if err != nil {
 		return result, err
 	}
-	a.state.StreamStates[stateKey] = updated
 	result.Checkpoint = checkpointForResult(result, mode, stateKey, updated)
+	result.PendingStreamState = &pendingStreamState{Key: stateKey, State: updated}
 	success = true
 	return result, nil
 }

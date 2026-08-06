@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"os"
 	"reflect"
 	"testing"
 	"time"
@@ -91,6 +92,123 @@ func TestIncrementalRunStoresCommittedStateEnvelopeAfterDownstreamSuccess(t *tes
 	}
 }
 
+func TestRunETLStopsWhenInitialRunStateCannotPersist(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("initial_run_state_failure", []connectors.Record{{
+		"id": "1", "updated_at": "2026-08-06T00:00:00Z",
+	}})
+	a, connection := setupSyncModeApp(t, source, "incremental_append")
+	beforeMemory, err := json.Marshal(a.state)
+	if err != nil {
+		t.Fatal(err)
+	}
+	beforeDisk, err := os.ReadFile(a.statePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	originalStore := a.store
+	a.store.Path = t.TempDir()
+	t.Cleanup(func() { a.store = originalStore })
+
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1}); err == nil {
+		t.Fatal("RunETL() error = nil when initial run state cannot persist")
+	}
+	if len(source.requests) != 0 {
+		t.Fatalf("source read despite initial run-state failure: %#v", source.requests)
+	}
+	afterMemory, err := json.Marshal(a.state)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Equal(afterMemory, beforeMemory) {
+		t.Fatalf("in-memory state changed after initial save failure: got %s want %s", afterMemory, beforeMemory)
+	}
+	afterDisk, err := os.ReadFile(a.statePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Equal(afterDisk, beforeDisk) {
+		t.Fatalf("persisted state changed after initial save failure: got %s want %s", afterDisk, beforeDisk)
+	}
+}
+
+func TestCompleteRunPublishesPendingStreamStateOnlyAfterStateSave(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("pending_stream_state", []connectors.Record{{
+		"id": "1", "updated_at": "2026-08-06T00:00:00Z",
+	}})
+	a, connection := setupSyncModeApp(t, source, "incremental_append")
+	conn, ok := a.findConnection(connection)
+	if !ok {
+		t.Fatal("connection missing")
+	}
+	mode, err := ParseStreamSyncMode(conn.Streams["records"])
+	if err != nil {
+		t.Fatal(err)
+	}
+	sourceConnector, sourceCredential, sourceRuntime, err := a.resolveEndpointWithCredential(ctx, conn.Source)
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, destinationRuntime, err := a.resolveEndpoint(ctx, conn.Destination)
+	if err != nil {
+		t.Fatal(err)
+	}
+	run, err := a.beginRun(Run{ID: "run_pending_state", Type: "etl", Connection: connection, Stream: "records", Status: "running", StartedAt: time.Now().UTC()})
+	if err != nil {
+		t.Fatal(err)
+	}
+	beforeMemory, err := json.Marshal(a.state)
+	if err != nil {
+		t.Fatal(err)
+	}
+	beforeDisk, err := os.ReadFile(a.statePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	expectation := streamResumeExpectation(sourceConnector, sourceCredential, sourceRuntime, "records")
+	result, err := a.runWarehouseETL(ctx, run.ID, conn, sourceConnector, sourceRuntime, destinationRuntime, expectation, "records", conn.Streams["records"], mode, 1)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if result.PendingStreamState == nil {
+		t.Fatal("runWarehouseETL() returned no pending stream state")
+	}
+	afterRunnerMemory, err := json.Marshal(a.state)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Equal(afterRunnerMemory, beforeMemory) {
+		t.Fatalf("runner published pending state before persistence: got %s want %s", afterRunnerMemory, beforeMemory)
+	}
+	originalStore := a.store
+	a.store.Path = t.TempDir()
+	if _, err := a.completeRun(run.ID, result); err == nil {
+		t.Fatal("completeRun() error = nil when state save fails")
+	}
+	afterMemory, err := json.Marshal(a.state)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Equal(afterMemory, beforeMemory) {
+		t.Fatalf("in-memory state changed after completion save failure: got %s want %s", afterMemory, beforeMemory)
+	}
+	afterDisk, err := os.ReadFile(a.statePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Equal(afterDisk, beforeDisk) {
+		t.Fatalf("persisted state changed after completion save failure: got %s want %s", afterDisk, beforeDisk)
+	}
+	a.store = originalStore
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1}); err != nil {
+		t.Fatal(err)
+	}
+	if got := source.requests[len(source.requests)-1].State["cursor"]; got != "" {
+		t.Fatalf("later run resumed from unpublished checkpoint %q", got)
+	}
+}
+
 func TestContractModeCannotReadWithoutNativeExecutor(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("contract_mode_without_executor", []connectors.Record{{
@@ -116,7 +234,15 @@ func TestNewIncrementalAppendCannotReadWithoutNativeExecutor(t *testing.T) {
 	source := newScriptedSyncSource("new_incremental_without_executor", []connectors.Record{{
 		"id": "1", "updated_at": "2026-08-06T00:00:00Z",
 	}})
-	a, connection := setupSyncModeAppWithCompatibility(t, source, "incremental_append", false)
+	a, connection := setupSyncModeApp(t, source, "incremental_append")
+	for i := range a.state.Connections {
+		if a.state.Connections[i].Name != connection {
+			continue
+		}
+		stream := a.state.Connections[i].Streams["records"]
+		stream.LegacyCompatibility = false
+		a.state.Connections[i].Streams["records"] = stream
+	}
 
 	_, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1})
 	var unavailable *synccontract.ModeNotExecutableError
