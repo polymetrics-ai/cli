@@ -517,6 +517,10 @@ func validateOperationDirectReadCommand(connector connectors.Connector, cmd conn
 	if _, ok := connector.(connectors.OperationDirectReader); !ok {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not support operation direct reads"}
 	}
+	preflighter, ok := connector.(connectors.OperationDirectReadPreflighter)
+	if !ok {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose operation direct-read metadata"}
+	}
 	if strings.TrimSpace(cmd.Operation) == "" {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands require operation"}
 	}
@@ -532,6 +536,9 @@ func validateOperationDirectReadCommand(connector connectors.Connector, cmd conn
 	}
 	if !isSupportedDirectReadOutputPolicy(cmd.OutputPolicy) {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands require an explicit supported output_policy"}
+	}
+	if err := preflighter.PreflightOperationDirectRead(cmd.Operation, method, cmd.APISurface[0].Path, MaxOperationDirectReadBytes, cmd.OutputPolicy); err != nil {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct read metadata is not executable: %v", err)}
 	}
 	return nil
 }

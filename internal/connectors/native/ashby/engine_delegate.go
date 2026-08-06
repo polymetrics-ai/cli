@@ -47,6 +47,14 @@ func (c Connector) CommandSurface() *connectors.CommandSurface {
 	return ashbyEngineConnector().CommandSurface()
 }
 
+// PreflightOperationDirectRead delegates the exact command binding to Ashby's
+// declarative operation contract. Ashby owns its stream loop natively, but its
+// fixed direct reads execute through the engine and must use the same
+// no-network admission check as every engine-backed connector.
+func (c Connector) PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error {
+	return engine.PreflightOperationDirectRead(ashbyBundle(), operation, method, path, maxBytes, outputPolicy)
+}
+
 // ValidateWrite delegates typed Ashby reverse-ETL validation to the generated
 // bundle. The bundle contains closed top-level JSON schemas and fixed endpoint
 // paths; no generic HTTP passthrough is exposed by the native connector.

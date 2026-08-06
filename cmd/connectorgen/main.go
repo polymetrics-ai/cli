@@ -16,6 +16,9 @@
 //	                           binary_download command metadata (api_surface,
 //	                           output_policy, flag maps_to, rest.max_bytes)
 //	                           from operations.json
+//	surface-reconcile [dir] [--check] [--json] [--reason-contains text]
+//	                           derives direct-read api_surface coverage and
+//	                           blocked reasons from runtime preflight
 //	batch plan --ledger <path> --out <path>
 //	                           turns provider-artifact ledger evidence into a
 //	                           deterministic, reviewable connector batch
@@ -62,6 +65,8 @@ func run(args []string, stdout, stderr io.Writer) int {
 		return runGen(args, stdout, stderr)
 	case "surface-sync":
 		return runSurfaceSync(args, stdout, stderr)
+	case "surface-reconcile":
+		return runSurfaceReconcile(args, stdout, stderr)
 	case "batch":
 		return runBatch(args, stdout, stderr)
 	case "new":
@@ -94,9 +99,10 @@ func usage() string {
   connectorgen validate [dir] [--json]   (default dir: internal/connectors/defs)
   connectorgen boundary [repo-root] [--json] [--base <ref>]
   connectorgen ownership [repo-root] [--json] [--base <ref>] [--scope-file <path>]
-  connectorgen gen
-  connectorgen surface-sync [dir] [--check]  (default dir: internal/connectors/defs)
-  connectorgen batch plan --ledger <path> --out <path> [--size <1-40>] [--connector <name>] [--min-operations <n>] [--max-operations <n>]
+	connectorgen gen
+	connectorgen surface-sync [dir] [--check]  (default dir: internal/connectors/defs)
+	connectorgen surface-reconcile [dir] [--check] [--json] [--reason-contains text]  (default dir: internal/connectors/defs)
+	connectorgen batch plan --ledger <path> --out <path> [--size <1-40>] [--connector <name>] [--min-operations <n>] [--max-operations <n>]
   connectorgen batch materialize --manifest <path> --source-defs-root <path> --retrieved-at <YYYY-MM-DD> --report <path> [--defs-root <path>] [--artifact-dir <path>] [--connector <name>]
   connectorgen batch gate --manifest <path> --report <path> [--defs-root <path>] [--connector <name>]
   connectorgen new <name>`

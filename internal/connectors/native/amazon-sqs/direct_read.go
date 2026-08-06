@@ -44,6 +44,31 @@ func (c Connector) OperationDirectRead(ctx context.Context, req connectors.Opera
 	return connectors.DirectReadResult{Connector: c.Name(), Method: "POST", Path: "SQS." + directReadAction(req.Operation), Status: resp.status, Body: body}, nil
 }
 
+// PreflightOperationDirectRead proves a command can reach one of the closed
+// SQS Query API read operations without resolving config, signing a request,
+// or issuing network I/O. The executor itself uses the same operation table,
+// fixed POST method, action path, 16 MiB response ceiling, and redacted JSON
+// output contract.
+func (c Connector) PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error {
+	if _, ok := sqsDirectReadOperations[operation]; !ok {
+		return fmt.Errorf("amazon-sqs direct read operation %q not found", operation)
+	}
+	if !strings.EqualFold(strings.TrimSpace(method), "POST") {
+		return fmt.Errorf("amazon-sqs direct read method %q must be POST", method)
+	}
+	wantPath := "SQS." + directReadAction(operation)
+	if path != wantPath {
+		return fmt.Errorf("amazon-sqs direct read path %q does not match operation path %q", path, wantPath)
+	}
+	if maxBytes <= 0 {
+		return fmt.Errorf("amazon-sqs direct read requires positive max_bytes")
+	}
+	if outputPolicy != "json_redacted" {
+		return fmt.Errorf("amazon-sqs direct read output policy %q is not supported", outputPolicy)
+	}
+	return nil
+}
+
 func directReadAction(operation string) string {
 	switch operation {
 	case "get_queue_attributes":

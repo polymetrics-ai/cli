@@ -245,6 +245,106 @@ func TestOperationDirectReadExecutesProviderSearch(t *testing.T) {
 	}
 }
 
+func TestPreflightOperationDirectReadValidatesDeclaredContract(t *testing.T) {
+	base := providerSearchBundle("https://api.widget.test")
+	tests := []struct {
+		name     string
+		mutate   func(*Bundle)
+		method   string
+		path     string
+		maxBytes int
+		policy   string
+		wantErr  string
+	}{
+		{
+			name:     "provider search",
+			method:   http.MethodPost,
+			path:     "/users/fetch",
+			maxBytes: 16 << 20,
+			policy:   "json_redacted",
+		},
+		{
+			name: "rest read",
+			mutate: func(b *Bundle) {
+				b.Operations[0].Kind = "rest_read"
+				b.Operations[0].REST.Method = http.MethodGet
+				b.Surface.Endpoints[0].Method = http.MethodGet
+			},
+			method:   http.MethodGet,
+			path:     "/users/fetch",
+			maxBytes: 16 << 20,
+			policy:   "json_redacted",
+		},
+		{
+			name: "unsupported operation kind",
+			mutate: func(b *Bundle) {
+				b.Operations[0].Kind = "graphql_query"
+			},
+			method:   http.MethodPost,
+			path:     "/users/fetch",
+			maxBytes: 16 << 20,
+			policy:   "json_redacted",
+			wantErr:  "rest_read or provider_search",
+		},
+		{
+			name:     "method mismatch",
+			method:   http.MethodGet,
+			path:     "/users/fetch",
+			maxBytes: 16 << 20,
+			policy:   "json_redacted",
+			wantErr:  "does not match declared operation method",
+		},
+		{
+			name:     "path mismatch",
+			method:   http.MethodPost,
+			path:     "/other",
+			maxBytes: 16 << 20,
+			policy:   "json_redacted",
+			wantErr:  "does not match declared operation path",
+		},
+		{
+			name:     "missing command cap",
+			method:   http.MethodPost,
+			path:     "/users/fetch",
+			maxBytes: 0,
+			policy:   "json_redacted",
+			wantErr:  "requires positive max_bytes",
+		},
+		{
+			name:     "unsupported output policy",
+			method:   http.MethodPost,
+			path:     "/users/fetch",
+			maxBytes: 16 << 20,
+			policy:   "json",
+			wantErr:  "not supported",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			bundle := base
+			op := base.Operations[0]
+			rest := *op.REST
+			op.REST = &rest
+			bundle.Operations = []OperationSpec{op}
+			bundle.Surface = &APISurface{Endpoints: append([]SurfaceEndpoint(nil), base.Surface.Endpoints...)}
+			if tt.mutate != nil {
+				tt.mutate(&bundle)
+			}
+			err := PreflightOperationDirectRead(bundle, "search_users", tt.method, tt.path, tt.maxBytes, tt.policy)
+			if tt.wantErr == "" {
+				if err != nil {
+					t.Fatalf("PreflightOperationDirectRead error = %v, want nil", err)
+				}
+				return
+			}
+			if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+				t.Fatalf("PreflightOperationDirectRead error = %v, want %q", err, tt.wantErr)
+			}
+		})
+	}
+}
+
 func TestOperationDirectReadRejectsOverlongProviderSearchList(t *testing.T) {
 	var calls int
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
