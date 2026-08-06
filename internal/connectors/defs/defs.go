@@ -16,5 +16,5 @@ package defs
 
 import "embed"
 
-//go:embed */metadata.json */changefeed.json */spec.json */streams.json */writes.json */schemas/* */docs.md */operations.json */cli_surface.json */certification.json
+//go:embed */metadata.json */changefeed.json */spec.json */streams.json */writes.json */schemas/* */docs.md */operations.json */cli_surface.json */certification.json */rate_limits.json
 var FS embed.FS

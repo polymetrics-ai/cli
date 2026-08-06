@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Airtable's documented request budget is per base, but the declaration scope vocabulary has no base subject class."
+}

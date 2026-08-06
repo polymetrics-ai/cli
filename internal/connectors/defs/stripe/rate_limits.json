@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Stripe publishes different live-mode and sandbox limits, but this bundle has no non-secret selector for the active mode."
+}

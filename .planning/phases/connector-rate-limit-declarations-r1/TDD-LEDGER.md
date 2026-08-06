@@ -4,7 +4,7 @@
 
 | Slice | Red evidence | Green evidence | Status |
 | --- | --- | --- | --- |
-| First declaration embed | `TestEveryProductionRateLimitDeclarationIsEmbedded` fails after a real declaration is present and before the optional wildcard is added | The same test passes after adding `*/rate_limits.json` to `defs.FS` | planned |
+| First declaration embed | `TestProductionDefinitionsEmbedEveryRateLimitDeclaration` failed for `harvest/rate_limits.json` before the optional wildcard was added | The same test passed after adding `*/rate_limits.json` to `defs.FS` | green |
 | Closed declaration validation | Invalid source/scope/shape is rejected by existing engine tests and loader rules | All authored files parse and the engine package passes | planned |
 | Batch conformance | Surface and command metadata remain unchanged | `connectorgen validate` and `surface-sync --check` pass | planned |
 

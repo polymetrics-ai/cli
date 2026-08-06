@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "GitHub publishes different REST limits for unauthenticated, user, OAuth, GitHub App, and installation traffic; this bundle cannot select the active auth flow with a non-secret scope."
+}

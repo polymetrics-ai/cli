@@ -38,7 +38,7 @@ ledger is required resumability state. No unrelated connector migration files ma
 1. Research a provider policy and verify its source URL, retrieval date, rate shape, and matching
    non-secret scope property before writing its declaration.
 2. Write the first declaration **before** changing `defs.go`; run
-   `go test ./internal/connectors/engine -run TestEveryProductionRateLimitDeclarationIsEmbedded`
+   `go test ./internal/connectors/engine -run TestProductionDefinitionsEmbedEveryRateLimitDeclaration`
    as the expected red evidence. The test proves a source-tree declaration is not shipped until
    the optional wildcard is present.
 3. Add the `*/rate_limits.json` embed pattern, then re-run the same test as green evidence.

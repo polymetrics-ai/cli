@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "HubSpot publishes limits that vary by private-app versus OAuth traffic, marketplace status, and subscription tier; this bundle has no matching non-secret selector."
+}
