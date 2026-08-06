@@ -33,6 +33,7 @@ type scriptedCLI struct {
 	scheduleFlow          string
 	installedScheduleCron string
 	installedScheduleFlow string
+	installedScheduleGap  string
 	installed             bool
 	flowRunSteps          []any
 	flowStatusSteps       []any
@@ -69,6 +70,7 @@ func newScriptedCLI(t *testing.T, protocols ...string) *scriptedCLI {
 		scheduleFlow:          scriptedFlowName,
 		installedScheduleCron: scriptedScheduleCron,
 		installedScheduleFlow: scriptedFlowName,
+		installedScheduleGap:  "  ",
 		flowRunSteps: []any{
 			map[string]any{"id": "cert_sync", "status": "ok"},
 			map[string]any{"id": "cert_query", "status": "ok"},
@@ -380,7 +382,7 @@ func (s *scriptedCLI) writeCrontabSentinel() error {
 	if path == "" || s.schedule == "" {
 		return fmt.Errorf("scripted schedule install missing crontab path or schedule name")
 	}
-	line := fmt.Sprintf("%s  pm --root /tmp/scripted-root flow run %s --json  # pm-schedule-%s\n", s.installedScheduleCron, s.installedScheduleFlow, s.schedule)
+	line := fmt.Sprintf("%s  pm --root /tmp/scripted-root flow run %s --json%s# pm-schedule-%s\n", s.installedScheduleCron, s.installedScheduleFlow, s.installedScheduleGap, s.schedule)
 	return os.WriteFile(path, []byte(line), 0o600)
 }
 
