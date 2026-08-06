@@ -1090,15 +1090,21 @@ func expandRepeatableRecordTarget(path string, valueIndex, valueCount, parentCou
 	if parentCount > valueCount {
 		parentCount = valueCount
 	}
-	childrenPerParent := 1
-	if valueCount > parentCount {
-		if valueCount%parentCount != 0 {
-			return "", fmt.Errorf("record field %q has %d nested values that cannot be paired with %d parent records", path, valueCount, parentCount)
+	childrenPerParent := valueCount / parentCount
+	extraChildren := valueCount % parentCount
+	parentIndex := 0
+	childIndex := valueIndex
+	for parentIndex < parentCount {
+		childCount := childrenPerParent
+		if parentIndex < extraChildren {
+			childCount++
 		}
-		childrenPerParent = valueCount / parentCount
+		if childIndex < childCount {
+			break
+		}
+		childIndex -= childCount
+		parentIndex++
 	}
-	parentIndex := valueIndex / childrenPerParent
-	childIndex := valueIndex % childrenPerParent
 	arraySegment := 0
 	for index, part := range parts {
 		if part != "[]" {

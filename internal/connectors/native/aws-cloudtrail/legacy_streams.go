@@ -43,14 +43,18 @@ func (c Connector) readLegacyEventStream(ctx context.Context, stream string, spe
 	if err != nil {
 		return err
 	}
+	responseLimit, err := operationReadMaxBytes("lookup_events", 0)
+	if err != nil {
+		return err
+	}
 	startTime, err := legacyEventStartTime(req)
 	if err != nil {
 		return err
 	}
-	return c.harvestLegacyEventStream(ctx, r, spec, maxItems, startTime, req.Config, emit)
+	return c.harvestLegacyEventStream(ctx, r, spec, maxItems, responseLimit, startTime, req.Config, emit)
 }
 
-func (c Connector) harvestLegacyEventStream(ctx context.Context, r *connsdk.Requester, spec legacyEventStreamSpec, maxItems int, startTime *time.Time, cfg connectors.RuntimeConfig, emit func(connectors.Record) error) error {
+func (c Connector) harvestLegacyEventStream(ctx context.Context, r *connsdk.Requester, spec legacyEventStreamSpec, maxItems, responseLimit int, startTime *time.Time, cfg connectors.RuntimeConfig, emit func(connectors.Record) error) error {
 	lookupAttributes := legacyLookupAttributes(spec, cfg)
 	maxPageLimit, err := maxPages(cfg)
 	if err != nil {
@@ -72,9 +76,12 @@ func (c Connector) harvestLegacyEventStream(ctx context.Context, r *connsdk.Requ
 		if nextToken != "" {
 			body["NextToken"] = nextToken
 		}
-		resp, err := r.Do(ctx, http.MethodPost, "/", nil, body)
+		resp, err := r.DoLimited(ctx, http.MethodPost, "/", nil, body, responseLimit)
 		if err != nil {
 			return fmt.Errorf("read aws-cloudtrail LookupEvents: %w", err)
+		}
+		if len(resp.Body) > responseLimit {
+			return connectors.ErrReadLimitReached
 		}
 		records, err := connsdk.RecordsAt(resp.Body, "Events")
 		if err != nil {

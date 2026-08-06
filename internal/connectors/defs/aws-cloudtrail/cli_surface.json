@@ -1738,7 +1738,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail resource-policy set --credential ct-prod --resource-arn arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example --resource-policy '{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"EDSPolicy\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"cloudtrail.amazonaws.com\"},\"Action\":\"cloudtrail:StartQuery\",\"Condition\":{\"StringEquals\":{\"AWS:SourceArn\":\"arn:aws:cloudtrail:us-east-1:123456789012:dashboard/example-dashboard\",\"AWS:SourceAccount\":\"123456789012\"}}}]}' --preview"
+        "pm aws-cloudtrail resource-policy set --credential ct-prod --resource-arn arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example --resource-policy '{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"EDSPolicy\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"cloudtrail.amazonaws.com\"},\"Action\":\"cloudtrail:StartQuery\",\"Resource\":\"arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example\",\"Condition\":{\"StringEquals\":{\"AWS:SourceArn\":\"arn:aws:cloudtrail:us-east-1:123456789012:dashboard/example-dashboard\",\"AWS:SourceAccount\":\"123456789012\"}}}]}' --preview"
       ],
       "risk": "attaches a resource-based IAM policy document to a CloudTrail channel or event data store",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",

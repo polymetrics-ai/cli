@@ -59,7 +59,7 @@ func TestCommandSurfaceExposesDocumentedOperations(t *testing.T) {
 		t.Fatalf("query cancel command = %+v, want approval-gated cancel_query write", cancel)
 	}
 	resourcePolicy := commands["resource-policy set"]
-	if len(resourcePolicy.Examples) != 1 || !strings.Contains(resourcePolicy.Examples[0], "\"Action\":\"cloudtrail:StartQuery\"") {
+	if len(resourcePolicy.Examples) != 1 || !strings.Contains(resourcePolicy.Examples[0], "\"Action\":\"cloudtrail:StartQuery\"") || !strings.Contains(resourcePolicy.Examples[0], "\"Resource\":\"arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example\"") {
 		t.Fatalf("resource-policy set examples = %q, want event-data-store StartQuery policy", resourcePolicy.Examples)
 	}
 	channelCreate := commands["channel create"]

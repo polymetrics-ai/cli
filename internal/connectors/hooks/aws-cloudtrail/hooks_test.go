@@ -52,17 +52,27 @@ func TestHooksDelegateFixtureCheckAndRead(t *testing.T) {
 	}
 }
 
-func TestHooksRejectLegacyLookupAlias(t *testing.T) {
+func TestHooksReadLegacyLookupAlias(t *testing.T) {
 	h := Hooks{Connector: native.New()}
 	cfg := connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture"}}
-	handled, err := h.ReadStream(context.Background(), engine.StreamSpec{Name: "management_events"}, connectors.ReadRequest{Stream: "management_events", Config: cfg}, nil, func(connectors.Record) error {
-		t.Fatal("ReadStream emitted a record for legacy lookup alias")
+	var records []connectors.Record
+	handled, err := h.ReadStream(context.Background(), engine.StreamSpec{Name: "management_events"}, connectors.ReadRequest{Stream: "management_events", Config: cfg, State: map[string]string{"cursor": "1704067200"}}, nil, func(record connectors.Record) error {
+		records = append(records, record)
 		return nil
 	})
-	if err == nil {
-		t.Fatal("ReadStream unexpectedly accepted legacy lookup alias")
+	if err != nil {
+		t.Fatalf("ReadStream: %v", err)
 	}
 	if !handled {
 		t.Fatal("ReadStream handled = false")
+	}
+	if len(records) != 2 {
+		t.Fatalf("ReadStream records = %#v, want two compatibility records", records)
+	}
+	if records[0]["EventId"] != "management_events_fixture_1" || records[1]["EventId"] != "management_events_fixture_2" {
+		t.Fatalf("ReadStream records = %#v, want management event compatibility records", records)
+	}
+	if records[0]["previous_cursor"] != "1704067200" || records[1]["previous_cursor"] != "1704067200" {
+		t.Fatalf("ReadStream records = %#v, want preserved compatibility cursors", records)
 	}
 }

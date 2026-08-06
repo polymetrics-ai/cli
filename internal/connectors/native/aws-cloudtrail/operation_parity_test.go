@@ -833,6 +833,27 @@ func TestNativeCloudTrailLegacyEventStreamUsesLookupFilterAndCursor(t *testing.T
 	}
 }
 
+func TestNativeCloudTrailLegacyEventStreamUsesOperationResponseLimit(t *testing.T) {
+	payload := `{"payload":"` + strings.Repeat("x", 1<<20) + `"}`
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(payload))
+	}))
+	defer srv.Close()
+
+	c := Connector{Client: srv.Client()}
+	err := c.Read(context.Background(), connectors.ReadRequest{
+		Stream: "management_events",
+		Config: fixtureRuntimeConfig(srv.URL),
+	}, func(connectors.Record) error {
+		t.Fatal("Read emitted a record after exceeding the LookupEvents response limit")
+		return nil
+	})
+	if !errors.Is(err, connectors.ErrReadLimitReached) {
+		t.Fatalf("Read error = %v, want ErrReadLimitReached", err)
+	}
+}
+
 // TestNativeCloudTrailDirectReadDispatchesOperationTarget verifies a
 // representative direct-read operation (lookup_events) dispatches through
 // the real signed JSON-RPC requester, closing the gap flagged in captain
