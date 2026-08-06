@@ -29,9 +29,10 @@ type ConfigureWebhookReceiverRequest struct {
 
 // WebhookReceiverHeartbeatRequest records an operator-observed tunnel heartbeat.
 type WebhookReceiverHeartbeatRequest struct {
-	Name        string    `json:"name"`
-	CallbackURL string    `json:"-"`
-	ObservedAt  time.Time `json:"observed_at"`
+	Name          string    `json:"name"`
+	CallbackURL   string    `json:"-"`
+	ObservedAt    time.Time `json:"observed_at"`
+	RecoveryEpoch uint64    `json:"recovery_epoch"`
 }
 
 // WebhookReceiverStatus is safe to render in CLI text or JSON. It excludes
@@ -46,6 +47,7 @@ type WebhookReceiverStatus struct {
 	AllowedPublicPorts     []int                        `json:"allowed_public_ports,omitempty"`
 	Status                 webhook.SubscriptionStatus   `json:"status"`
 	LastHeartbeatAt        time.Time                    `json:"last_heartbeat_at,omitempty"`
+	RecoveryEpoch          uint64                       `json:"recovery_epoch"`
 	RecoveryOutcome        synccontract.RecoveryOutcome `json:"recovery_outcome,omitempty"`
 	ReregistrationRequired bool                         `json:"reregistration_required"`
 	ReconciliationRequired bool                         `json:"reconciliation_required"`
@@ -145,7 +147,7 @@ func (a *App) RecordWebhookReceiverHeartbeat(ctx context.Context, req WebhookRec
 		return WebhookReceiverStatus{}, errors.New("webhook receiver heartbeat time is required")
 	}
 	return a.updateWebhookSubscription(ctx, req.Name, func(subscription *webhook.Subscription, current state) error {
-		if _, err := subscription.Heartbeat(req.CallbackURL, req.ObservedAt.UTC(), []byte(current.CoordinationSalt)); err != nil {
+		if _, err := subscription.Heartbeat(req.CallbackURL, req.ObservedAt.UTC(), []byte(current.CoordinationSalt), req.RecoveryEpoch); err != nil {
 			return fmt.Errorf("webhook receiver heartbeat: %w", err)
 		}
 		return nil
@@ -154,17 +156,17 @@ func (a *App) RecordWebhookReceiverHeartbeat(ctx context.Context, req WebhookRec
 
 // CompleteWebhookReceiverReregistration persists a provider lane's completed
 // re-registration declaration without invoking a provider API.
-func (a *App) CompleteWebhookReceiverReregistration(ctx context.Context, name string) (WebhookReceiverStatus, error) {
+func (a *App) CompleteWebhookReceiverReregistration(ctx context.Context, name string, recoveryEpoch uint64) (WebhookReceiverStatus, error) {
 	return a.updateWebhookSubscription(ctx, name, func(subscription *webhook.Subscription, _ state) error {
-		return subscription.CompleteReregistration()
+		return subscription.CompleteReregistration(recoveryEpoch)
 	})
 }
 
 // CompleteWebhookReceiverReconciliation persists a provider lane's completed
 // reconciliation declaration without invoking a provider API.
-func (a *App) CompleteWebhookReceiverReconciliation(ctx context.Context, name string) (WebhookReceiverStatus, error) {
+func (a *App) CompleteWebhookReceiverReconciliation(ctx context.Context, name string, recoveryEpoch uint64) (WebhookReceiverStatus, error) {
 	return a.updateWebhookSubscription(ctx, name, func(subscription *webhook.Subscription, _ state) error {
-		return subscription.CompleteReconciliation()
+		return subscription.CompleteReconciliation(recoveryEpoch)
 	})
 }
 
@@ -248,6 +250,7 @@ func webhookStatus(name string, entry webhookSubscriptionState) WebhookReceiverS
 		AllowedPublicPorts:     append([]int(nil), entry.Subscription.Exposure.ExternalTunnel.AllowedPublicPorts...),
 		Status:                 entry.Subscription.Status,
 		LastHeartbeatAt:        entry.Subscription.LastHeartbeatAt,
+		RecoveryEpoch:          entry.Subscription.RecoveryEpoch,
 		RecoveryOutcome:        entry.Subscription.RecoveryOutcome,
 		ReregistrationRequired: entry.Subscription.ReregistrationRequired,
 		ReconciliationRequired: entry.Subscription.ReconciliationRequired,

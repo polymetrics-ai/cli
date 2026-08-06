@@ -151,7 +151,7 @@ func TestWebhookReceiverPersistsHeartbeatAndSeparateRecoveryCompletion(t *testin
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, err := instance.ConfigureWebhookReceiver(ctx, app.ConfigureWebhookReceiverRequest{
+	configured, err := instance.ConfigureWebhookReceiver(ctx, app.ConfigureWebhookReceiverRequest{
 		Name: "durable-funnel",
 		Exposure: webhook.ExposureConfig{
 			Mode:         webhook.ExposureModeExternalTunnel,
@@ -160,19 +160,21 @@ func TestWebhookReceiverPersistsHeartbeatAndSeparateRecoveryCompletion(t *testin
 			HeartbeatTTL: time.Hour,
 		},
 		ReceiptCapacity: 2,
-	}); err != nil {
+	})
+	if err != nil {
 		t.Fatal(err)
 	}
-	observedAt := time.Date(2026, time.August, 6, 12, 0, 0, 0, time.UTC)
+	observedAt := time.Now().UTC().Add(time.Minute)
 	heartbeat, err := instance.RecordWebhookReceiverHeartbeat(ctx, app.WebhookReceiverHeartbeatRequest{
-		Name:        "durable-funnel",
-		CallbackURL: "https://node.tailnet.ts.net/receiver",
-		ObservedAt:  observedAt,
+		Name:          "durable-funnel",
+		CallbackURL:   "https://node.tailnet.ts.net/receiver",
+		ObservedAt:    observedAt,
+		RecoveryEpoch: configured.RecoveryEpoch,
 	})
 	if err != nil {
 		t.Fatalf("RecordWebhookReceiverHeartbeat() error = %v", err)
 	}
-	if !heartbeat.LastHeartbeatAt.Equal(observedAt) || len(heartbeat.AllowedPublicPorts) != 3 || heartbeat.AllowedPublicPorts[0] != 443 || heartbeat.AllowedPublicPorts[1] != 8443 || heartbeat.AllowedPublicPorts[2] != 10000 {
+	if !heartbeat.LastHeartbeatAt.Equal(observedAt) || heartbeat.RecoveryEpoch != configured.RecoveryEpoch || len(heartbeat.AllowedPublicPorts) != 3 || heartbeat.AllowedPublicPorts[0] != 443 || heartbeat.AllowedPublicPorts[1] != 8443 || heartbeat.AllowedPublicPorts[2] != 10000 {
 		t.Fatalf("heartbeat status = %+v", heartbeat)
 	}
 	if _, err := instance.ConfigureWebhookReceiver(ctx, app.ConfigureWebhookReceiverRequest{
@@ -196,21 +198,52 @@ func TestWebhookReceiverPersistsHeartbeatAndSeparateRecoveryCompletion(t *testin
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !persisted.LastHeartbeatAt.Equal(observedAt) {
-		t.Fatalf("persisted heartbeat = %s, want %s", persisted.LastHeartbeatAt, observedAt)
+	if !persisted.LastHeartbeatAt.Equal(observedAt) || persisted.RecoveryEpoch != heartbeat.RecoveryEpoch {
+		t.Fatalf("persisted status = %+v, want heartbeat epoch %d", persisted, heartbeat.RecoveryEpoch)
 	}
-	rotated, err := reopened.RecordWebhookReceiverHeartbeat(ctx, app.WebhookReceiverHeartbeatRequest{
-		Name:        "durable-funnel",
-		CallbackURL: "https://node.tailnet.ts.net/rotated",
-		ObservedAt:  observedAt.Add(time.Minute),
+	firstRotation, err := reopened.RecordWebhookReceiverHeartbeat(ctx, app.WebhookReceiverHeartbeatRequest{
+		Name:          "durable-funnel",
+		CallbackURL:   "https://node.tailnet.ts.net/rotated",
+		ObservedAt:    observedAt.Add(time.Minute),
+		RecoveryEpoch: persisted.RecoveryEpoch,
 	})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if rotated.Status != webhook.SubscriptionStatusDegraded || !rotated.ReregistrationRequired || !rotated.ReconciliationRequired {
-		t.Fatalf("rotated heartbeat status = %+v", rotated)
+	if firstRotation.Status != webhook.SubscriptionStatusDegraded || !firstRotation.ReregistrationRequired || !firstRotation.ReconciliationRequired {
+		t.Fatalf("first rotation status = %+v", firstRotation)
 	}
-	partial, err := reopened.CompleteWebhookReceiverReregistration(ctx, "durable-funnel")
+	secondRotation, err := reopened.RecordWebhookReceiverHeartbeat(ctx, app.WebhookReceiverHeartbeatRequest{
+		Name:          "durable-funnel",
+		CallbackURL:   "https://node.tailnet.ts.net/rotated-again",
+		ObservedAt:    observedAt.Add(2 * time.Minute),
+		RecoveryEpoch: firstRotation.RecoveryEpoch,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if secondRotation.RecoveryEpoch != firstRotation.RecoveryEpoch+1 || secondRotation.Status != webhook.SubscriptionStatusDegraded || !secondRotation.ReregistrationRequired || !secondRotation.ReconciliationRequired {
+		t.Fatalf("second rotation status = %+v", secondRotation)
+	}
+	if _, err := reopened.CompleteWebhookReceiverReregistration(ctx, "durable-funnel", firstRotation.RecoveryEpoch); !errors.Is(err, webhook.ErrStaleRecoveryEpoch) {
+		t.Fatalf("delayed re-registration error = %v, want ErrStaleRecoveryEpoch", err)
+	}
+	if _, err := reopened.RecordWebhookReceiverHeartbeat(ctx, app.WebhookReceiverHeartbeatRequest{
+		Name:          "durable-funnel",
+		CallbackURL:   "https://node.tailnet.ts.net/rotated",
+		ObservedAt:    observedAt.Add(3 * time.Minute),
+		RecoveryEpoch: firstRotation.RecoveryEpoch,
+	}); !errors.Is(err, webhook.ErrStaleRecoveryEpoch) {
+		t.Fatalf("delayed heartbeat error = %v, want ErrStaleRecoveryEpoch", err)
+	}
+	afterDelayed, err := reopened.WebhookReceiverStatus("durable-funnel", observedAt.Add(3*time.Minute))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if afterDelayed.RecoveryEpoch != secondRotation.RecoveryEpoch || afterDelayed.EndpointGeneration != secondRotation.EndpointGeneration || afterDelayed.Status != webhook.SubscriptionStatusDegraded || !afterDelayed.ReregistrationRequired || !afterDelayed.ReconciliationRequired {
+		t.Fatalf("delayed generation changed persisted state: %+v", afterDelayed)
+	}
+	partial, err := reopened.CompleteWebhookReceiverReregistration(ctx, "durable-funnel", secondRotation.RecoveryEpoch)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -222,7 +255,7 @@ func TestWebhookReceiverPersistsHeartbeatAndSeparateRecoveryCompletion(t *testin
 	if err != nil {
 		t.Fatal(err)
 	}
-	completed, err := afterPartial.CompleteWebhookReceiverReconciliation(ctx, "durable-funnel")
+	completed, err := afterPartial.CompleteWebhookReceiverReconciliation(ctx, "durable-funnel", secondRotation.RecoveryEpoch)
 	if err != nil {
 		t.Fatal(err)
 	}

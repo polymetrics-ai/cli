@@ -102,6 +102,12 @@ const (
 	SubscriptionStatusDegraded SubscriptionStatus = "degraded"
 )
 
+var (
+	ErrStaleRecoveryEpoch    = errors.New("webhook recovery epoch is stale")
+	ErrRecoveryEpochMismatch = errors.New("webhook recovery epoch does not match current generation")
+	ErrStaleHeartbeat        = errors.New("webhook heartbeat observation is stale")
+)
+
 // Subscription holds provider-neutral lifecycle state. Its recovery field is
 // deliberately the #3810 outcome type rather than a webhook-local duplicate.
 type Subscription struct {
@@ -109,6 +115,7 @@ type Subscription struct {
 	Exposure               Exposure
 	Status                 SubscriptionStatus
 	LastHeartbeatAt        time.Time
+	RecoveryEpoch          uint64 `json:"recovery_epoch"`
 	RecoveryOutcome        synccontract.RecoveryOutcome
 	ReregistrationRequired bool
 	ReconciliationRequired bool
@@ -189,6 +196,7 @@ func NewSubscription(name string, exposure Exposure, now time.Time) Subscription
 		Exposure:        cloneExposure(exposure),
 		Status:          SubscriptionStatusActive,
 		LastHeartbeatAt: now,
+		RecoveryEpoch:   1,
 	}
 }
 
@@ -196,9 +204,15 @@ func NewSubscription(name string, exposure Exposure, now time.Time) Subscription
 // executes or probes a tunnel. A changed callback URL is a new generation and
 // therefore degrades the subscription until the provider lane confirms both
 // re-registration and reconciliation.
-func (s *Subscription) Heartbeat(callbackURL string, now time.Time, endpointKey []byte) (bool, error) {
+func (s *Subscription) Heartbeat(callbackURL string, now time.Time, endpointKey []byte, recoveryEpoch uint64) (bool, error) {
 	if s == nil || s.Exposure.Mode != ExposureModeExternalTunnel {
 		return false, errors.New("subscription does not use an external tunnel")
+	}
+	if err := s.requireRecoveryEpoch(recoveryEpoch); err != nil {
+		return false, err
+	}
+	if !s.LastHeartbeatAt.IsZero() && now.Before(s.LastHeartbeatAt) {
+		return false, fmt.Errorf("%w: observed %s before %s", ErrStaleHeartbeat, now.UTC().Format(time.RFC3339Nano), s.LastHeartbeatAt.UTC().Format(time.RFC3339Nano))
 	}
 	next, err := ConfigureExposure(ExposureConfig{
 		Mode:           ExposureModeExternalTunnel,
@@ -223,10 +237,12 @@ func (s *Subscription) ApplyExposure(next Exposure, now time.Time) bool {
 	if s == nil {
 		return false
 	}
+	s.ensureRecoveryEpoch()
 	changed := s.Exposure.Mode != next.Mode || s.Exposure.EndpointGeneration != next.EndpointGeneration
 	s.Exposure = cloneExposure(next)
 	s.LastHeartbeatAt = now
 	if changed {
+		s.RecoveryEpoch++
 		s.degradeForEndpointChange()
 	}
 	return changed
@@ -235,7 +251,11 @@ func (s *Subscription) ApplyExposure(next Exposure, now time.Time) bool {
 // DegradeIfHeartbeatExpired makes an unobserved tunnel outage visible. It is
 // meaningful only for external_tunnel and is intentionally idempotent.
 func (s *Subscription) DegradeIfHeartbeatExpired(now time.Time) bool {
-	if s == nil || s.Exposure.Mode != ExposureModeExternalTunnel || s.Status == SubscriptionStatusDegraded {
+	if s == nil || s.Exposure.Mode != ExposureModeExternalTunnel {
+		return false
+	}
+	s.ensureRecoveryEpoch()
+	if s.Status == SubscriptionStatusDegraded {
 		return false
 	}
 	if now.Before(s.LastHeartbeatAt.Add(s.Exposure.HeartbeatTTL)) {
@@ -248,9 +268,12 @@ func (s *Subscription) DegradeIfHeartbeatExpired(now time.Time) bool {
 // CompleteReregistrationAndReconciliation records that a provider lane has
 // explicitly completed both required actions. Calling it cannot itself perform
 // provider registration, replay, or polling.
-func (s *Subscription) CompleteReregistrationAndReconciliation() error {
+func (s *Subscription) CompleteReregistrationAndReconciliation(recoveryEpoch uint64) error {
 	if s == nil {
 		return errors.New("subscription is required")
+	}
+	if err := s.requireRecoveryEpoch(recoveryEpoch); err != nil {
+		return err
 	}
 	if !s.ReregistrationRequired || !s.ReconciliationRequired {
 		return errors.New("subscription does not require recovery")
@@ -262,9 +285,12 @@ func (s *Subscription) CompleteReregistrationAndReconciliation() error {
 }
 
 // CompleteReregistration records one completed provider re-registration action.
-func (s *Subscription) CompleteReregistration() error {
+func (s *Subscription) CompleteReregistration(recoveryEpoch uint64) error {
 	if s == nil {
 		return errors.New("subscription is required")
+	}
+	if err := s.requireRecoveryEpoch(recoveryEpoch); err != nil {
+		return err
 	}
 	if !s.ReregistrationRequired {
 		return errors.New("subscription does not require re-registration")
@@ -275,9 +301,12 @@ func (s *Subscription) CompleteReregistration() error {
 }
 
 // CompleteReconciliation records one completed provider reconciliation action.
-func (s *Subscription) CompleteReconciliation() error {
+func (s *Subscription) CompleteReconciliation(recoveryEpoch uint64) error {
 	if s == nil {
 		return errors.New("subscription is required")
+	}
+	if err := s.requireRecoveryEpoch(recoveryEpoch); err != nil {
+		return err
 	}
 	if !s.ReconciliationRequired {
 		return errors.New("subscription does not require reconciliation")
@@ -300,6 +329,23 @@ func (s *Subscription) completeRecoveryIfReady() {
 	}
 	s.Status = SubscriptionStatusActive
 	s.RecoveryOutcome = ""
+}
+
+func (s *Subscription) ensureRecoveryEpoch() {
+	if s.RecoveryEpoch == 0 {
+		s.RecoveryEpoch = 1
+	}
+}
+
+func (s *Subscription) requireRecoveryEpoch(recoveryEpoch uint64) error {
+	s.ensureRecoveryEpoch()
+	if recoveryEpoch < s.RecoveryEpoch {
+		return fmt.Errorf("%w: observed %d, current %d", ErrStaleRecoveryEpoch, recoveryEpoch, s.RecoveryEpoch)
+	}
+	if recoveryEpoch > s.RecoveryEpoch {
+		return fmt.Errorf("%w: observed %d, current %d", ErrRecoveryEpochMismatch, recoveryEpoch, s.RecoveryEpoch)
+	}
+	return nil
 }
 
 func parseHTTPSCallback(raw string) (*url.URL, error) {

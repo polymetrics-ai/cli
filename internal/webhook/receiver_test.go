@@ -190,8 +190,9 @@ func TestExternalTunnelValidatesDeclaredPublicPorts(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ConfigureExposure(custom allowed port) error = %v", err)
 	}
-	subscription := NewSubscription("fixture", customExposure, time.Now().UTC())
-	if changed, err := subscription.Heartbeat(custom.CallbackURL, time.Now().UTC(), key); err != nil || changed {
+	now := time.Now().UTC()
+	subscription := NewSubscription("fixture", customExposure, now)
+	if changed, err := subscription.Heartbeat(custom.CallbackURL, now, key, subscription.RecoveryEpoch); err != nil || changed {
 		t.Fatalf("Heartbeat(custom allowed port) changed=%t err=%v", changed, err)
 	}
 	custom.CallbackURL = "https://node.tailnet.ts.net/receiver"
@@ -216,7 +217,7 @@ func TestSubscriptionLifecycleDegradesOnGenerationRotationAndHeartbeatLoss(t *te
 	now := time.Date(2026, time.August, 6, 0, 0, 0, 0, time.UTC)
 	subscription := NewSubscription("fixture", initial, now)
 
-	if changed, err := subscription.Heartbeat("https://node.tailnet.ts.net/receiver", now.Add(30*time.Second), key); err != nil || changed {
+	if changed, err := subscription.Heartbeat("https://node.tailnet.ts.net/receiver", now.Add(30*time.Second), key, subscription.RecoveryEpoch); err != nil || changed {
 		t.Fatalf("same endpoint Heartbeat() changed=%t, err=%v", changed, err)
 	}
 	if subscription.DegradeIfHeartbeatExpired(now.Add(2*time.Minute)) != true {
@@ -245,17 +246,92 @@ func TestSubscriptionLifecycleDegradesOnGenerationRotationAndHeartbeatLoss(t *te
 	if subscription.Status != SubscriptionStatusDegraded || subscription.RecoveryOutcome != synccontract.RecoveryOutcomeSourceGenerationChanged {
 		t.Fatalf("rotated endpoint state = %+v", subscription)
 	}
-	if subscription.CompleteReregistration() != nil {
+	if subscription.CompleteReregistration(subscription.RecoveryEpoch) != nil {
 		t.Fatal("explicit re-registration completion failed")
 	}
 	if subscription.Status != SubscriptionStatusDegraded || subscription.ReregistrationRequired || !subscription.ReconciliationRequired {
 		t.Fatalf("partial recovery state = %+v", subscription)
 	}
-	if subscription.CompleteReconciliation() != nil {
+	if subscription.CompleteReconciliation(subscription.RecoveryEpoch) != nil {
 		t.Fatal("explicit reconciliation completion failed")
 	}
 	if subscription.Status != SubscriptionStatusActive || subscription.ReregistrationRequired || subscription.ReconciliationRequired {
 		t.Fatalf("explicit recovery state = %+v", subscription)
+	}
+}
+
+func TestSubscriptionFencesDelayedRecoveryGenerations(t *testing.T) {
+	t.Parallel()
+
+	key := []byte("test-project-key-material")
+	now := time.Date(2026, time.August, 6, 0, 0, 0, 0, time.UTC)
+	initial, err := ConfigureExposure(ExposureConfig{
+		Mode:         ExposureModeExternalTunnel,
+		TunnelTool:   TunnelToolTailscaleFunnel,
+		CallbackURL:  "https://node.tailnet.ts.net/receiver",
+		HeartbeatTTL: time.Minute,
+	}, key)
+	if err != nil {
+		t.Fatal(err)
+	}
+	subscription := NewSubscription("fixture", initial, now)
+	first, err := ConfigureExposure(ExposureConfig{
+		Mode:         ExposureModeExternalTunnel,
+		TunnelTool:   TunnelToolTailscaleFunnel,
+		CallbackURL:  "https://node.tailnet.ts.net/first-rotation",
+		HeartbeatTTL: time.Minute,
+	}, key)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !subscription.ApplyExposure(first, now.Add(time.Second)) {
+		t.Fatal("first rotation did not change the exposure")
+	}
+	firstEpoch := subscription.RecoveryEpoch
+	second, err := ConfigureExposure(ExposureConfig{
+		Mode:         ExposureModeExternalTunnel,
+		TunnelTool:   TunnelToolTailscaleFunnel,
+		CallbackURL:  "https://node.tailnet.ts.net/second-rotation",
+		HeartbeatTTL: time.Minute,
+	}, key)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !subscription.ApplyExposure(second, now.Add(2*time.Second)) {
+		t.Fatal("second rotation did not change the exposure")
+	}
+	secondEpoch := subscription.RecoveryEpoch
+	if secondEpoch != firstEpoch+1 {
+		t.Fatalf("second recovery epoch = %d, want %d", secondEpoch, firstEpoch+1)
+	}
+	secondGeneration := subscription.Exposure.EndpointGeneration
+
+	if _, err := subscription.Heartbeat("https://node.tailnet.ts.net/first-rotation", now.Add(3*time.Second), key, firstEpoch); !errors.Is(err, ErrStaleRecoveryEpoch) {
+		t.Fatalf("delayed first-generation heartbeat error = %v, want ErrStaleRecoveryEpoch", err)
+	}
+	if subscription.Exposure.EndpointGeneration != secondGeneration || subscription.RecoveryEpoch != secondEpoch {
+		t.Fatalf("delayed heartbeat changed state: %+v", subscription)
+	}
+	if err := subscription.CompleteReregistration(firstEpoch); !errors.Is(err, ErrStaleRecoveryEpoch) {
+		t.Fatalf("delayed first-generation re-registration error = %v, want ErrStaleRecoveryEpoch", err)
+	}
+	if err := subscription.CompleteReconciliation(firstEpoch); !errors.Is(err, ErrStaleRecoveryEpoch) {
+		t.Fatalf("delayed first-generation reconciliation error = %v, want ErrStaleRecoveryEpoch", err)
+	}
+	if !subscription.ReregistrationRequired || !subscription.ReconciliationRequired {
+		t.Fatalf("delayed completions changed recovery state: %+v", subscription)
+	}
+	if err := subscription.CompleteReregistration(secondEpoch); err != nil {
+		t.Fatalf("current-generation re-registration error = %v", err)
+	}
+	if err := subscription.CompleteReconciliation(secondEpoch); err != nil {
+		t.Fatalf("current-generation reconciliation error = %v", err)
+	}
+	if subscription.Status != SubscriptionStatusActive {
+		t.Fatalf("current-generation completion state = %+v", subscription)
+	}
+	if _, err := subscription.Heartbeat("https://node.tailnet.ts.net/second-rotation", now.Add(time.Second), key, secondEpoch); !errors.Is(err, ErrStaleHeartbeat) {
+		t.Fatalf("out-of-order heartbeat error = %v, want ErrStaleHeartbeat", err)
 	}
 }
 

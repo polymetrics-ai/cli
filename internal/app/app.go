@@ -219,6 +219,7 @@ func (a *App) normalizeLoadedState(loaded state) error {
 		changed = true
 	}
 	changed = a.migrateLegacySyncModeCompatibility() || changed
+	changed = a.migrateWebhookRecoveryEpochs() || changed
 	coordinationChanged, err := a.migrateCredentialCoordination()
 	if err != nil {
 		return err
@@ -376,6 +377,19 @@ func credentialBindingForCredential(current state, credential CredentialMeta) (c
 		return credentialBindingState{}, errors.New("credential coordination metadata is unavailable")
 	}
 	return binding, nil
+}
+
+func (a *App) migrateWebhookRecoveryEpochs() bool {
+	changed := false
+	for name, entry := range a.state.WebhookSubscriptions {
+		if entry.Subscription.RecoveryEpoch != 0 {
+			continue
+		}
+		entry.Subscription.RecoveryEpoch = 1
+		a.state.WebhookSubscriptions[name] = entry
+		changed = true
+	}
+	return changed
 }
 
 func (a *App) migrateLegacySyncModeCompatibility() bool {
