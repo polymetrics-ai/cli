@@ -204,6 +204,133 @@ func TestGlueStagesScheduleListRejectsMismatchedDefinition(t *testing.T) {
 	}
 }
 
+func TestGlueStagesScheduleInstallRejectsMismatchedCommand(t *testing.T) {
+	for _, tt := range []struct {
+		name   string
+		mutate func(*scriptedCLI)
+		want   string
+	}{
+		{
+			name: "cron",
+			mutate: func(driver *scriptedCLI) {
+				driver.installedScheduleCron = "0 4 * * *"
+			},
+			want: "cron",
+		},
+		{
+			name: "flow",
+			mutate: func(driver *scriptedCLI) {
+				driver.installedScheduleFlow = "cert_flow_other"
+			},
+			want: "expected flow run payload",
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
+
+			r, driver := scriptedSampleRunner(t, certify.Options{
+				Connector: "sample",
+				Stream:    "customers",
+				Limit:     50,
+				SecretEnv: map[string]string{"token": "PM_SAMPLE_TOKEN"},
+			})
+			tt.mutate(driver)
+
+			rep, err := r.Run(context.Background())
+			if err != nil {
+				t.Fatalf("Run() error = %v", err)
+			}
+			driver.assertProtocol(t)
+			if rep.Passed {
+				t.Fatal("Report.Passed = true, want false after mismatched schedule command")
+			}
+			install := mustStage(t, rep, "schedule_install")
+			if install.Passed {
+				t.Fatalf("schedule_install stage Passed = true, want false: %+v", install)
+			}
+			if !strings.Contains(install.Error, tt.want) {
+				t.Errorf("schedule_install error = %q, want mismatched %s", install.Error, tt.name)
+			}
+		})
+	}
+}
+
+func TestGlueStagesFlowStepsRejectInvalidResults(t *testing.T) {
+	for _, tt := range []struct {
+		name   string
+		stage  string
+		mutate func(*scriptedCLI)
+		want   string
+	}{
+		{
+			name:  "run non-object entries",
+			stage: "flow_run",
+			mutate: func(driver *scriptedCLI) {
+				driver.flowRunSteps = []any{nil, nil}
+			},
+			want: "step is not an object",
+		},
+		{
+			name:  "run duplicate step",
+			stage: "flow_run",
+			mutate: func(driver *scriptedCLI) {
+				driver.flowRunSteps = []any{
+					map[string]any{"id": "cert_sync", "status": "ok"},
+					map[string]any{"id": "cert_sync", "status": "ok"},
+				}
+			},
+			want: "appears more than once",
+		},
+		{
+			name:  "status non-object entries",
+			stage: "flow_status",
+			mutate: func(driver *scriptedCLI) {
+				driver.flowStatusSteps = []any{nil, nil}
+			},
+			want: "step is not an object",
+		},
+		{
+			name:  "status duplicate step",
+			stage: "flow_status",
+			mutate: func(driver *scriptedCLI) {
+				driver.flowStatusSteps = []any{
+					map[string]any{"id": "cert_sync", "status": "success"},
+					map[string]any{"id": "cert_sync", "status": "success"},
+				}
+			},
+			want: "appears more than once",
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
+
+			r, driver := scriptedSampleRunner(t, certify.Options{
+				Connector: "sample",
+				Stream:    "customers",
+				Limit:     50,
+				SecretEnv: map[string]string{"token": "PM_SAMPLE_TOKEN"},
+			})
+			tt.mutate(driver)
+
+			rep, err := r.Run(context.Background())
+			if err != nil {
+				t.Fatalf("Run() error = %v", err)
+			}
+			driver.assertProtocol(t)
+			if rep.Passed {
+				t.Fatal("Report.Passed = true, want false after invalid flow step results")
+			}
+			stage := mustStage(t, rep, tt.stage)
+			if stage.Passed {
+				t.Fatalf("%s stage Passed = true, want false: %+v", tt.stage, stage)
+			}
+			if !strings.Contains(stage.Error, tt.want) {
+				t.Errorf("%s error = %q, want %s", tt.stage, stage.Error, tt.want)
+			}
+		})
+	}
+}
+
 // TestGlueStagesScheduleRoundtripLeavesNoResidue proves the harness snapshots
 // the (redirected, ephemeral) crontab before create/install and asserts it is
 // byte-identical after remove, per design §D "remove -> assert sentinel

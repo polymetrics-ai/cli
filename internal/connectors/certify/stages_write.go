@@ -144,10 +144,9 @@ func stageWritePlanPreviewSelfTest(rc *runContext, rep *Report, wc *writeContext
 		if planRes.ExitCode != 0 {
 			return false, cliInfoFrom(planRes), fmt.Sprintf("write_plan_preview: reverse plan exit=%d stderr=%s", planRes.ExitCode, planRes.Stderr)
 		}
-		planID := firstMatch(planIDLinePattern, planRes.Stdout)
-		token := firstMatch(approvalTokenLinePattern, planRes.Stdout)
-		if planID == "" || token == "" {
-			return false, cliInfoFrom(planRes), fmt.Sprintf("write_plan_preview: could not parse plan id/approval token from output: %q", planRes.Stdout)
+		planID, token, errMsg := parseReversePlanOutput(planRes.Stdout)
+		if errMsg != "" {
+			return false, cliInfoFrom(planRes), "write_plan_preview: " + errMsg
 		}
 		wc.planID = planID
 		wc.approvalToken = token
@@ -220,10 +219,9 @@ func stageWritePlanPreviewLive(rc *runContext, rep *Report, wc *writeContext) {
 		if planRes.ExitCode != 0 {
 			return false, cliInfoFrom(planRes), fmt.Sprintf("write_plan_preview: reverse plan exit=%d stderr=%s", planRes.ExitCode, planRes.Stderr)
 		}
-		planID := firstMatch(planIDLinePattern, planRes.Stdout)
-		token := firstMatch(approvalTokenLinePattern, planRes.Stdout)
-		if planID == "" || token == "" {
-			return false, cliInfoFrom(planRes), fmt.Sprintf("write_plan_preview: could not parse plan id/approval token: %q", planRes.Stdout)
+		planID, token, errMsg := parseReversePlanOutput(planRes.Stdout)
+		if errMsg != "" {
+			return false, cliInfoFrom(planRes), "write_plan_preview: " + errMsg
 		}
 		wc.planID = planID
 		wc.approvalToken = token
@@ -262,10 +260,25 @@ func checkPlanPreviewRedaction(res CLIResult, token string) (bool, CLIStageInfo,
 			}
 		}
 	}
-	if hits := ScanForSecrets(res.Stdout, []string{token}); len(hits) != 0 {
-		return false, cliInfoFrom(res), fmt.Sprintf("write_plan_preview: --json preview output contains the approval token value: %v", hits)
+	if len(ScanForSecrets(res.Stdout, []string{token})) != 0 {
+		return false, cliInfoFrom(res), "write_plan_preview: --json preview output contains an approval token"
 	}
 	return true, cliInfoFrom(res), ""
+}
+
+func parseReversePlanOutput(stdout string) (string, string, string) {
+	planID := firstMatch(planIDLinePattern, stdout)
+	approvalToken := firstMatch(approvalTokenLinePattern, stdout)
+	switch {
+	case planID == "" && approvalToken == "":
+		return "", "", "reverse plan output missing plan id and approval token"
+	case planID == "":
+		return "", "", "reverse plan output missing plan id"
+	case approvalToken == "":
+		return "", "", "reverse plan output missing approval token"
+	default:
+		return planID, approvalToken, ""
+	}
 }
 
 func firstMatch(re *regexp.Regexp, s string) string {

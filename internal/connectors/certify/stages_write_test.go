@@ -141,6 +141,51 @@ func TestWritePlanPreviewJSONHasNoApprovalToken(t *testing.T) {
 	}
 }
 
+func TestWritePlanPreviewErrorsExcludeApprovalToken(t *testing.T) {
+	for _, tt := range []struct {
+		name   string
+		mutate func(*scriptedCLI)
+	}{
+		{
+			name: "missing plan id",
+			mutate: func(driver *scriptedCLI) {
+				driver.reversePlanOutput = "Approval token: scripted-approval-1\n"
+			},
+		},
+		{
+			name: "preview output",
+			mutate: func(driver *scriptedCLI) {
+				driver.previewOutputLeak = "scripted-approval-1"
+			},
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
+
+			r, driver := scriptedSampleRunner(t, certify.Options{
+				Connector: "sample",
+				Stream:    "customers",
+				Limit:     50,
+				SecretEnv: map[string]string{"token": "PM_SAMPLE_TOKEN"},
+				Write:     true,
+			})
+			tt.mutate(driver)
+
+			rep, err := r.Run(context.Background())
+			if err != nil {
+				t.Fatalf("Run() error = %v", err)
+			}
+			stage := mustStage(t, rep, "write_plan_preview")
+			if stage.Passed {
+				t.Fatal("write_plan_preview stage Passed = true, want false")
+			}
+			if strings.Contains(stage.Error, "scripted-approval-1") {
+				t.Error("write_plan_preview error exposed an approval token")
+			}
+		})
+	}
+}
+
 // TestWriteStagesSkipWhenDisabled proves that a Runner with Options.Write
 // false (or a connector with no available write pairing) never attempts a
 // live write, and does not fail the overall report: the write stages must

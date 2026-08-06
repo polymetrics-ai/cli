@@ -259,18 +259,8 @@ func stageFlowRoundtrip(rc *runContext, rep *Report) error {
 			return false, cliInfoFrom(res), fmt.Sprintf("flow_run: status=%q, want ok (run must complete)", status)
 		}
 		steps, _ := res.Envelope["steps"].([]any)
-		if len(steps) != 2 {
-			return false, cliInfoFrom(res), fmt.Sprintf("flow_run: steps has %d entries, want 2: %v", len(steps), steps)
-		}
-		for _, raw := range steps {
-			step, ok := raw.(map[string]any)
-			if !ok {
-				continue
-			}
-			if st, _ := step["status"].(string); st != "ok" {
-				id, _ := step["id"].(string)
-				return false, cliInfoFrom(res), fmt.Sprintf("flow_run: step %q status=%q, want ok", id, st)
-			}
+		if errMsg := validateFlowSteps("flow_run", steps, "ok"); errMsg != "" {
+			return false, cliInfoFrom(res), errMsg
 		}
 		return true, cliInfoFrom(res), ""
 	})
@@ -285,18 +275,8 @@ func stageFlowRoundtrip(rc *runContext, rep *Report) error {
 			return false, cliInfoFrom(res), fmt.Sprintf("flow_status: flow=%q, want %q", flow, name)
 		}
 		steps, _ := res.Envelope["steps"].([]any)
-		if len(steps) != 2 {
-			return false, cliInfoFrom(res), fmt.Sprintf("flow_status: steps has %d entries, want 2: %v", len(steps), steps)
-		}
-		for _, raw := range steps {
-			step, ok := raw.(map[string]any)
-			if !ok {
-				continue
-			}
-			if st, _ := step["status"].(string); st != "success" {
-				id, _ := step["id"].(string)
-				return false, cliInfoFrom(res), fmt.Sprintf("flow_status: step %q status=%q, want success", id, st)
-			}
+		if errMsg := validateFlowSteps("flow_status", steps, "success"); errMsg != "" {
+			return false, cliInfoFrom(res), errMsg
 		}
 		return true, cliInfoFrom(res), ""
 	})
@@ -324,6 +304,36 @@ func stageFlowRoundtrip(rc *runContext, rep *Report) error {
 func queryTableExists(rc *runContext, table string) bool {
 	res := rc.run("query", "run", "--table", table, "--json")
 	return res.ExitCode == 0 && res.Kind == "QueryResult"
+}
+
+func validateFlowSteps(stage string, steps []any, wantStatus string) string {
+	if len(steps) != 2 {
+		return fmt.Sprintf("%s: steps has %d entries, want 2", stage, len(steps))
+	}
+	seen := make(map[string]bool, 2)
+	for _, raw := range steps {
+		step, ok := raw.(map[string]any)
+		if !ok {
+			return fmt.Sprintf("%s: step is not an object", stage)
+		}
+		id, _ := step["id"].(string)
+		if id != flowSyncStepID && id != flowQueryStepID {
+			return fmt.Sprintf("%s: step does not name a required flow step", stage)
+		}
+		if seen[id] {
+			return fmt.Sprintf("%s: step %q appears more than once", stage, id)
+		}
+		if status, _ := step["status"].(string); status != wantStatus {
+			return fmt.Sprintf("%s: step %q does not have status %q", stage, id, wantStatus)
+		}
+		seen[id] = true
+	}
+	for _, id := range []string{flowSyncStepID, flowQueryStepID} {
+		if !seen[id] {
+			return fmt.Sprintf("%s: missing required step %q", stage, id)
+		}
+	}
+	return ""
 }
 
 // --- stage 19: schedule_roundtrip ---
@@ -429,8 +439,8 @@ func stageScheduleRoundtrip(rc *runContext, rep *Report) error {
 		if err != nil {
 			return false, cliInfoFrom(res), fmt.Sprintf("schedule_install: read crontab file: %v", err)
 		}
-		if !strings.Contains(string(content), sentinel) {
-			return false, cliInfoFrom(res), fmt.Sprintf("schedule_install: sentinel %q not present in crontab after install", sentinel)
+		if errMsg := validateInstalledScheduleLine(string(content), sentinel, scheduleCron, flow); errMsg != "" {
+			return false, cliInfoFrom(res), errMsg
 		}
 		return true, cliInfoFrom(res), ""
 	})
@@ -482,6 +492,32 @@ func stageScheduleRoundtrip(rc *runContext, rep *Report) error {
 		Reason:  reason,
 	}
 	return nil
+}
+
+func validateInstalledScheduleLine(content, sentinel, cron, flow string) string {
+	var line string
+	for _, candidate := range strings.Split(content, "\n") {
+		candidate = strings.TrimSpace(candidate)
+		if !strings.HasSuffix(candidate, sentinel) {
+			continue
+		}
+		if line != "" {
+			return "schedule_install: multiple sentinel-bearing schedule lines found"
+		}
+		line = candidate
+	}
+	if line == "" {
+		return fmt.Sprintf("schedule_install: sentinel %q not present in crontab after install", sentinel)
+	}
+	command := strings.TrimSpace(strings.TrimSuffix(line, sentinel))
+	if !strings.HasPrefix(command, cron+"  ") {
+		return fmt.Sprintf("schedule_install: sentinel-bearing line does not begin with cron %q", cron)
+	}
+	payload := "flow run " + flow + " --json"
+	if !strings.HasSuffix(command, " "+payload) {
+		return "schedule_install: sentinel-bearing line does not end with the expected flow run payload"
+	}
+	return ""
 }
 
 // forceRemoveCrontabSentinel strips any line containing sentinel from the
