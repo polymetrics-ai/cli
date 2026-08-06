@@ -429,6 +429,16 @@ func TestBundleLoadRejectsUncitedOrMalformedRateLimits(t *testing.T) {
 			want: "query parameters",
 		},
 		{
+			name: "provider source cannot carry credential-like fragment parameters",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits#access_token=fixture", 1),
+			want: "credential-like fragment",
+		},
+		{
+			name: "provider source cannot hide credential-like fragment parameters",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits#api%5Fkey%3Dfixture", 1),
+			want: "credential-like fragment",
+		},
+		{
 			name: "unknown cannot publish a policy",
 			data: strings.Replace(validProviderCitedRateLimits, `"state": "declared"`, `"state": "unknown"`, 1),
 			want: "unknown",

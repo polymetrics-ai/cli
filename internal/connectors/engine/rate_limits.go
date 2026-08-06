@@ -103,14 +103,60 @@ func validateRateLimitPolicy(policy connsdk.RateLimitPolicy) error {
 }
 
 func validateRateLimitSource(source connsdk.RateLimitSource) error {
-	parsed, err := url.ParseRequestURI(strings.TrimSpace(source.URL))
+	rawURL := strings.TrimSpace(source.URL)
+	parsed, err := url.ParseRequestURI(rawURL)
 	if err != nil || parsed.Scheme != "https" || parsed.Host == "" || parsed.User != nil || parsed.ForceQuery || parsed.RawQuery != "" {
 		return fmt.Errorf("url must be an absolute https provider artifact URL without userinfo or query parameters")
+	}
+	_, rawFragment, hasFragment := strings.Cut(rawURL, "#")
+	if hasFragment && hasCredentialLikeRateLimitFragment(rawFragment) {
+		return fmt.Errorf("url must not carry credential-like fragment parameters")
 	}
 	if _, err := time.Parse(time.DateOnly, strings.TrimSpace(source.RetrievedAt)); err != nil {
 		return fmt.Errorf("retrieved_at must be an ISO date: %w", err)
 	}
 	return nil
+}
+
+var credentialLikeRateLimitFragmentKeys = map[string]struct{}{
+	"accesstoken":   {},
+	"apikey":        {},
+	"authorization": {},
+	"clientsecret":  {},
+	"credential":    {},
+	"credentials":   {},
+	"idtoken":       {},
+	"key":           {},
+	"password":      {},
+	"refreshtoken":  {},
+	"secret":        {},
+	"sig":           {},
+	"signature":     {},
+	"token":         {},
+}
+
+func hasCredentialLikeRateLimitFragment(rawFragment string) bool {
+	fragment, err := url.PathUnescape(rawFragment)
+	if err != nil {
+		return true
+	}
+	for _, part := range strings.FieldsFunc(fragment, func(r rune) bool {
+		return r == '&' || r == ';' || r == '?'
+	}) {
+		key, _, hasValue := strings.Cut(part, "=")
+		if !hasValue {
+			continue
+		}
+		key, err = url.PathUnescape(key)
+		if err != nil {
+			return true
+		}
+		key = strings.NewReplacer("_", "", "-", "", ".", "").Replace(strings.ToLower(strings.TrimSpace(key)))
+		if _, ok := credentialLikeRateLimitFragmentKeys[key]; ok {
+			return true
+		}
+	}
+	return false
 }
 
 func validateRateLimitSelector(selector connsdk.RateLimitSelector) error {

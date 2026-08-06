@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -24,6 +25,46 @@ type roundTripperFunc func(*http.Request) (*http.Response, error)
 
 func (f roundTripperFunc) RoundTrip(req *http.Request) (*http.Response, error) {
 	return f(req)
+}
+
+type requestWriteFailureConn struct {
+	net.Conn
+	fail func([]byte) bool
+}
+
+func (c requestWriteFailureConn) Write(p []byte) (int, error) {
+	if c.fail(p) {
+		return 0, errors.New("injected request write failure")
+	}
+	return c.Conn.Write(p)
+}
+
+type advancingReadCloser struct {
+	io.ReadCloser
+	advance func()
+}
+
+func (r *advancingReadCloser) Read(p []byte) (int, error) {
+	if r.advance != nil {
+		r.advance()
+		r.advance = nil
+	}
+	return r.ReadCloser.Read(p)
+}
+
+func primeHTTPConnection(t *testing.T, client *http.Client, baseURL string) {
+	t.Helper()
+	resp, err := client.Get(baseURL + "/prime")
+	if err != nil {
+		t.Fatalf("prime connection: %v", err)
+	}
+	if _, err := io.Copy(io.Discard, resp.Body); err != nil {
+		resp.Body.Close()
+		t.Fatalf("drain prime response: %v", err)
+	}
+	if err := resp.Body.Close(); err != nil {
+		t.Fatalf("close prime response: %v", err)
+	}
 }
 
 func TestRequesterDoJSONDecodesSuccess(t *testing.T) {
@@ -427,6 +468,62 @@ func TestRequesterReturnsTypedRateLimitErrorAndObservation(t *testing.T) {
 	}
 }
 
+func TestRequesterSnapshotsRateLimitTimingBeforeDrainingBody(t *testing.T) {
+	receivedAt := time.Date(2026, time.August, 6, 12, 0, 0, 0, time.UTC)
+	now := receivedAt
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Retry-After", "90")
+		w.WriteHeader(http.StatusTooManyRequests)
+		_, _ = w.Write([]byte(`{"error":"limited"}`))
+	}))
+	defer srv.Close()
+
+	baseTransport := http.DefaultTransport.(*http.Transport).Clone()
+	t.Cleanup(baseTransport.CloseIdleConnections)
+	client := &http.Client{Transport: roundTripperFunc(func(req *http.Request) (*http.Response, error) {
+		resp, err := baseTransport.RoundTrip(req)
+		if err != nil {
+			return nil, err
+		}
+		resp.Body = &advancingReadCloser{
+			ReadCloser: resp.Body,
+			advance: func() {
+				now = now.Add(60 * time.Second)
+			},
+		}
+		return resp, nil
+	})}
+
+	var observations []RateLimitObservation
+	r := &Requester{
+		BaseURL:        srv.URL,
+		Client:         client,
+		DisableRetries: true,
+		Now:            func() time.Time { return now },
+		Observer: rateLimitObserverFunc(func(_ context.Context, observation RateLimitObservation) {
+			observations = append(observations, observation)
+		}),
+	}
+	_, err := r.Do(context.Background(), http.MethodGet, "/limited", nil, nil)
+	var rateLimitErr *RateLimitError
+	if !errors.As(err, &rateLimitErr) {
+		t.Fatalf("error type = %T, want *RateLimitError", err)
+	}
+	wantReset := receivedAt.Add(90 * time.Second)
+	if got := rateLimitErr.ResetAt; !got.Equal(wantReset) {
+		t.Fatalf("RateLimitError reset = %v, want %v", got, wantReset)
+	}
+	if got, want := now, receivedAt.Add(60*time.Second); !got.Equal(want) {
+		t.Fatalf("clock after body read = %v, want %v", got, want)
+	}
+	if got, want := len(observations), 1; got != want {
+		t.Fatalf("observations = %d, want %d", got, want)
+	}
+	if got := observations[0].ResetAt; !got.Equal(wantReset) {
+		t.Fatalf("observation reset = %v, want %v", got, wantReset)
+	}
+}
+
 // net/http treats a request carrying Idempotency-Key as replayable after some
 // transport failures. DisableRetries is the no-retry contract used by
 // rest_write, so it must remove that implicit retry signal as well as its own
@@ -434,6 +531,7 @@ func TestRequesterReturnsTypedRateLimitErrorAndObservation(t *testing.T) {
 func TestRequesterDisableRetriesMakesMutationNonReplayable(t *testing.T) {
 	var sawGetBody bool
 	var sawIdempotencyKey string
+	var sawClose bool
 	r := &Requester{
 		BaseURL:        "https://example.invalid",
 		DisableRetries: true,
@@ -441,6 +539,7 @@ func TestRequesterDisableRetriesMakesMutationNonReplayable(t *testing.T) {
 		Client: &http.Client{Transport: roundTripperFunc(func(req *http.Request) (*http.Response, error) {
 			sawGetBody = req.GetBody != nil
 			sawIdempotencyKey = req.Header.Get("Idempotency-Key")
+			sawClose = req.Close
 			return &http.Response{
 				StatusCode: http.StatusOK,
 				Header:     make(http.Header),
@@ -457,6 +556,109 @@ func TestRequesterDisableRetriesMakesMutationNonReplayable(t *testing.T) {
 	}
 	if sawIdempotencyKey != "" {
 		t.Fatalf("DisableRetries left Idempotency-Key=%q on a no-retry request", sawIdempotencyKey)
+	}
+	if !sawClose {
+		t.Fatal("DisableRetries did not require a fresh connection for a mutation")
+	}
+}
+
+func TestRequesterDisableRetriesPreventsBodylessMutationTransportReplay(t *testing.T) {
+	var mutationHits int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		if req.URL.Path == "/mutate" {
+			atomic.AddInt32(&mutationHits, 1)
+		}
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer srv.Close()
+
+	var injectedFailures int32
+	dialer := net.Dialer{}
+	transport := &http.Transport{
+		MaxIdleConnsPerHost: 1,
+		DialContext: func(ctx context.Context, network, address string) (net.Conn, error) {
+			conn, err := dialer.DialContext(ctx, network, address)
+			if err != nil {
+				return nil, err
+			}
+			return requestWriteFailureConn{Conn: conn, fail: func(p []byte) bool {
+				return strings.HasPrefix(string(p), "DELETE /mutate ") && atomic.CompareAndSwapInt32(&injectedFailures, 0, 1)
+			}}, nil
+		},
+	}
+	t.Cleanup(transport.CloseIdleConnections)
+	client := &http.Client{Transport: transport}
+	primeHTTPConnection(t, client, srv.URL)
+
+	r := &Requester{BaseURL: srv.URL, Client: client, DisableRetries: true}
+	if _, err := r.Do(context.Background(), http.MethodDelete, "/mutate", nil, nil); err == nil {
+		t.Fatal("Do: expected transport error")
+	}
+	if got, want := atomic.LoadInt32(&injectedFailures), int32(1); got != want {
+		t.Fatalf("injected failures = %d, want %d", got, want)
+	}
+	if got := atomic.LoadInt32(&mutationHits); got != 0 {
+		t.Fatalf("mutation hits = %d, want no transport replay", got)
+	}
+}
+
+func TestRequesterCountsReplayableReadAdmissionLogically(t *testing.T) {
+	var readHits int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		if req.URL.Path == "/read" {
+			atomic.AddInt32(&readHits, 1)
+		}
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer srv.Close()
+
+	var readWrites int32
+	var injectedFailures int32
+	dialer := net.Dialer{}
+	transport := &http.Transport{
+		MaxIdleConnsPerHost: 1,
+		DialContext: func(ctx context.Context, network, address string) (net.Conn, error) {
+			conn, err := dialer.DialContext(ctx, network, address)
+			if err != nil {
+				return nil, err
+			}
+			return requestWriteFailureConn{Conn: conn, fail: func(p []byte) bool {
+				if !strings.HasPrefix(string(p), "GET /read ") {
+					return false
+				}
+				atomic.AddInt32(&readWrites, 1)
+				return atomic.CompareAndSwapInt32(&injectedFailures, 0, 1)
+			}}, nil
+		},
+	}
+	t.Cleanup(transport.CloseIdleConnections)
+	client := &http.Client{Transport: transport}
+	primeHTTPConnection(t, client, srv.URL)
+
+	var admissions []RateLimitRequest
+	r := &Requester{
+		BaseURL: srv.URL,
+		Client:  client,
+		Sleep:   noSleep,
+		Admission: rateLimitAdmissionFunc(func(_ context.Context, request RateLimitRequest) error {
+			admissions = append(admissions, request)
+			return nil
+		}),
+	}
+	if _, err := r.Do(context.Background(), http.MethodGet, "/read", nil, nil); err != nil {
+		t.Fatalf("Do: %v", err)
+	}
+	if got, want := admissions, []RateLimitRequest{{Method: http.MethodGet, Attempt: 1}}; !slices.Equal(got, want) {
+		t.Fatalf("admissions = %+v, want %+v", got, want)
+	}
+	if got, want := atomic.LoadInt32(&injectedFailures), int32(1); got != want {
+		t.Fatalf("injected failures = %d, want %d", got, want)
+	}
+	if got, want := atomic.LoadInt32(&readWrites), int32(2); got != want {
+		t.Fatalf("read writes = %d, want %d after replay", got, want)
+	}
+	if got, want := atomic.LoadInt32(&readHits), int32(1); got != want {
+		t.Fatalf("read hits = %d, want %d", got, want)
 	}
 }
 

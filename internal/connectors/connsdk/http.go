@@ -150,10 +150,11 @@ type Requester struct {
 
 	// MaxRetries is the number of additional attempts after the first (default 4).
 	MaxRetries int
-	// DisableRetries prevents every automatic replay, including transient-status,
-	// transport-error, and 401 reauthentication retries. The first attempt still
-	// runs. The strict rest_write executor sets this explicitly; ordinary reads
-	// retain the default policy.
+	// DisableRetries disables Requester-managed transient-status, transport-error,
+	// and 401 reauthentication retries. Strict non-idempotent writes set it. With
+	// the standard net/http transport, those writes use a one-use HTTP/1
+	// connection so the transport cannot replay them after a reused-connection
+	// failure. Safe replayable reads can still be replayed inside net/http.
 	DisableRetries bool
 	// BaseBackoff and MaxBackoff bound exponential backoff (defaults 500ms / 30s).
 	BaseBackoff time.Duration
@@ -170,9 +171,11 @@ type Requester struct {
 	// called for a valid provider Retry-After reset. Returned values are clamped
 	// to the fallback cap so an implementation cannot lengthen a retry.
 	Jitter func(cap time.Duration) time.Duration
-	// Admission runs immediately before every HTTP transport send. It must
-	// honor the request context; an error prevents that attempt from reaching
-	// the provider. #3753 owns attaching a declaration-aware implementation.
+	// Admission runs immediately before each logical Requester send and permitted
+	// redirect hop. It must honor the request context; an error prevents that
+	// attempt from reaching the provider. A safe replayable read can be replayed
+	// inside net/http without another admission. #3753 owns attaching a
+	// declaration-aware implementation.
 	Admission RateLimitAdmission
 	// Observer receives parsed response rate-limit facts synchronously. It is
 	// deliberately not an output hook; #3755 owns operator-visible events.
@@ -188,6 +191,33 @@ func (r *Requester) client() *http.Client {
 
 func (r *Requester) clientFor(ctx context.Context) *http.Client {
 	return transportpolicy.HTTPClient(ctx, r.client())
+}
+
+func isSafeReplayableRead(method string) bool {
+	switch strings.ToUpper(strings.TrimSpace(method)) {
+	case http.MethodGet, http.MethodHead, http.MethodOptions, http.MethodTrace:
+		return true
+	default:
+		return false
+	}
+}
+
+func noReplayClient(client *http.Client) *http.Client {
+	clone := *client
+	transport, ok := client.Transport.(*http.Transport)
+	if client.Transport == nil {
+		transport, ok = http.DefaultTransport.(*http.Transport)
+	}
+	if !ok {
+		return &clone
+	}
+	strictTransport := transport.Clone()
+	strictTransport.DisableKeepAlives = true
+	protocols := http.Protocols{}
+	protocols.SetHTTP1(true)
+	strictTransport.Protocols = &protocols
+	clone.Transport = strictTransport
+	return &clone
 }
 
 func (r *Requester) maxRetries() int {
@@ -271,16 +301,16 @@ func (e *rateLimitAdmissionError) Unwrap() error {
 	return e.err
 }
 
-func (r *Requester) admitTransport(ctx context.Context, method string, transportAttempt *int) error {
-	nextAttempt := *transportAttempt + 1
+func (r *Requester) admitRequesterSend(ctx context.Context, method string, requesterAttempt *int) error {
+	nextAttempt := *requesterAttempt + 1
 	if err := r.admit(ctx, method, nextAttempt); err != nil {
 		return &rateLimitAdmissionError{err: err}
 	}
-	*transportAttempt = nextAttempt
+	*requesterAttempt = nextAttempt
 	return nil
 }
 
-func (r *Requester) clientWithRateLimitAdmission(client *http.Client, transportAttempt *int) *http.Client {
+func (r *Requester) clientWithRateLimitAdmission(client *http.Client, requesterAttempt *int) *http.Client {
 	if r.Admission == nil && r.Observer == nil {
 		return client
 	}
@@ -294,7 +324,7 @@ func (r *Requester) clientWithRateLimitAdmission(client *http.Client, transportA
 		} else if len(via) >= maxRedirects {
 			return fmt.Errorf("stopped after %d redirects", maxRedirects)
 		}
-		return r.admitTransport(req.Context(), req.Method, transportAttempt)
+		return r.admitRequesterSend(req.Context(), req.Method, requesterAttempt)
 	}
 	return &clone
 }
@@ -785,8 +815,13 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 	// set before the refresh is attempted (see below), so a provider that keeps
 	// returning 401 terminates with that 401 instead of being hammered.
 	reauthAttempted := false
-	transportAttempt := 0
-	client := r.clientWithRateLimitAdmission(r.clientFor(ctx), &transportAttempt)
+	requesterAttempt := 0
+	strictWrite := r.DisableRetries && !isSafeReplayableRead(method)
+	baseClient := r.clientFor(ctx)
+	if strictWrite {
+		baseClient = noReplayClient(baseClient)
+	}
+	client := r.clientWithRateLimitAdmission(baseClient, &requesterAttempt)
 	for attempt := 0; attempt < attempts; attempt++ {
 		if err := ctx.Err(); err != nil {
 			return nil, err
@@ -823,15 +858,18 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 			req.GetBody = nil
 			req.Header.Del("Idempotency-Key")
 			req.Header.Del("X-Idempotency-Key")
+			if strictWrite {
+				req.Close = true
+			}
 		}
-		if err := r.admitTransport(ctx, method, &transportAttempt); err != nil {
+		if err := r.admitRequesterSend(ctx, method, &requesterAttempt); err != nil {
 			cleanupRequestBody(body)
 			return nil, err
 		}
 
 		resp, err := client.Do(req)
-		bodyErr := cleanupRequestBody(body)
 		if err != nil {
+			bodyErr := cleanupRequestBody(body)
 			lastErr = fmt.Errorf("send request: %w", err)
 			if bodyErr != nil {
 				lastErr = fmt.Errorf("send request: %w", bodyErr)
@@ -850,6 +888,8 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 			}
 			return nil, lastErr
 		}
+		observation := r.observeRateLimit(ctx, resp.StatusCode, resp.Header, requesterAttempt)
+		bodyErr := cleanupRequestBody(body)
 		if bodyErr != nil {
 			resp.Body.Close()
 			return nil, fmt.Errorf("send request body: %w", bodyErr)
@@ -857,7 +897,6 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 
 		respBody, _ := io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
 		resp.Body.Close()
-		observation := r.observeRateLimit(ctx, resp.StatusCode, resp.Header, transportAttempt)
 
 		// A 401 can mean the credential was invalidated out of band (revoked
 		// grant, password change, scope change) rather than that it was never

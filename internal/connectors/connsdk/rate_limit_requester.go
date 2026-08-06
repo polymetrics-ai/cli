@@ -13,14 +13,18 @@ import (
 // credentials, or scope identity. #3753 selects a declared policy and #3754
 // constructs any opaque scope key from a credential binding, policy, and
 // declared non-secret subject; neither may derive a key from this request.
+// Logical sends include outer Client.Do calls and permitted redirect hops. A
+// safe replayable read can be replayed inside net/http without another
+// admission and does not increment Attempt.
 type RateLimitRequest struct {
 	Method  string
-	Attempt int // one-based HTTP transport attempt
+	Attempt int // one-based logical Requester send
 }
 
-// RateLimitAdmission gates an HTTP transport attempt. Implementations must
-// honor ctx so a rate-limit wait cannot outlive the caller. An admission error
-// prevents the requester from sending that attempt.
+// RateLimitAdmission gates a logical Requester send. Implementations must honor
+// ctx so a rate-limit wait cannot outlive the caller. An admission error
+// prevents the requester from sending that attempt. A successful call permits
+// one logical send, not every physical transport write.
 type RateLimitAdmission interface {
 	Admit(ctx context.Context, request RateLimitRequest) error
 }
@@ -51,7 +55,7 @@ const (
 type RateLimitObservation struct {
 	Source    RateLimitObservationSource
 	Status    int
-	Attempt   int
+	Attempt   int // same logical-send count as RateLimitRequest.Attempt
 	Attempted bool
 
 	RetryAfter    time.Duration

@@ -78,8 +78,8 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 	// call has its own client clone and its own variable, and redirects run
 	// synchronously inside client.Do, so there is no sharing across calls.
 	var credKeys []string
-	transportAttempt := 0
-	client := r.clientWithRateLimitAdmission(r.streamClient(base, opts, &credKeys), &transportAttempt)
+	requesterAttempt := 0
+	client := r.clientWithRateLimitAdmission(r.streamClient(base, opts, &credKeys), &requesterAttempt)
 
 	attempts := r.maxRetries() + 1
 	var lastErr error
@@ -103,7 +103,7 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 			}
 		}
 		credKeys = credentialHeaderKeys(before, req.Header, r.DefaultHeaders)
-		if err := r.admitTransport(ctx, method, &transportAttempt); err != nil {
+		if err := r.admitRequesterSend(ctx, method, &requesterAttempt); err != nil {
 			return nil, err
 		}
 
@@ -121,7 +121,7 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 			}
 			return nil, lastErr
 		}
-		observation := r.observeRateLimit(ctx, resp.StatusCode, resp.Header, transportAttempt)
+		observation := r.observeRateLimit(ctx, resp.StatusCode, resp.Header, requesterAttempt)
 
 		if r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {
 			// Discard this attempt's body entirely; nothing from a failed
