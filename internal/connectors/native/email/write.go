@@ -8,6 +8,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"io"
 	"mime"
 	"mime/quotedprintable"
 	"net"
@@ -297,53 +298,85 @@ func loadAttachments(projectDir string, paths []string) ([]attachment, error) {
 	if strings.TrimSpace(projectDir) == "" {
 		projectDir = "."
 	}
-	root, err := filepath.Abs(projectDir)
+	rootPath, err := filepath.Abs(projectDir)
 	if err != nil {
 		return nil, fmt.Errorf("resolve project root for email attachments: %w", err)
 	}
-	if resolved, err := filepath.EvalSymlinks(root); err == nil {
-		root = resolved
+	root, err := os.OpenRoot(rootPath)
+	if err != nil {
+		return nil, fmt.Errorf("open project root for email attachments: %w", err)
 	}
+	defer func() { _ = root.Close() }()
 	attachments := make([]attachment, 0, len(paths))
 	total := int64(0)
 	for _, path := range paths {
-		if err := safety.ValidateLocalWritePath(root, path, "email attachment path", false); err != nil {
+		if err := safety.ValidateLocalWritePath(rootPath, path, "email attachment path", false); err != nil {
 			return nil, err
 		}
-		candidate := filepath.Join(root, filepath.Clean(path))
-		resolved, err := filepath.EvalSymlinks(candidate)
+		relative, err := attachmentRootRelativePath(rootPath, path)
+		if err != nil {
+			return nil, err
+		}
+		file, err := root.Open(relative)
 		if err != nil {
 			return nil, errors.New("email attachment path cannot be resolved")
 		}
-		if !isWithinRoot(root, resolved) {
-			return nil, errors.New("email attachment path outside the project root is not allowed")
-		}
-		info, err := os.Stat(resolved)
+		info, err := file.Stat()
 		if err != nil || !info.Mode().IsRegular() {
+			_ = file.Close()
 			return nil, errors.New("email attachment path must be a readable regular file")
 		}
 		if info.Size() > maxAttachmentBytes {
+			_ = file.Close()
 			return nil, fmt.Errorf("email attachment exceeds the %d-byte per-file limit", maxAttachmentBytes)
 		}
 		if total+info.Size() > maxAttachmentTotalBytes {
+			_ = file.Close()
 			return nil, fmt.Errorf("email attachments exceed the %d-byte total limit", maxAttachmentTotalBytes)
 		}
-		content, err := os.ReadFile(resolved)
-		if err != nil {
+		content, readErr := io.ReadAll(io.LimitReader(file, maxAttachmentBytes+1))
+		closeErr := file.Close()
+		if readErr != nil || closeErr != nil {
 			return nil, errors.New("email attachment could not be read")
+		}
+		if len(content) > maxAttachmentBytes {
+			return nil, fmt.Errorf("email attachment exceeds the %d-byte per-file limit", maxAttachmentBytes)
 		}
 		if int64(len(content)) != info.Size() {
 			return nil, errors.New("email attachment changed while preparing the preview")
 		}
 		total += int64(len(content))
-		attachments = append(attachments, attachment{filename: filepath.Base(resolved), content: content})
+		attachments = append(attachments, attachment{filename: filepath.Base(relative), content: content})
 	}
 	return attachments, nil
 }
 
-func isWithinRoot(root, candidate string) bool {
-	rel, err := filepath.Rel(root, candidate)
-	return err == nil && (rel == "." || (rel != ".." && !strings.HasPrefix(rel, ".."+string(filepath.Separator)) && !filepath.IsAbs(rel)))
+func attachmentRootRelativePath(projectDir, raw string) (string, error) {
+	clean := filepath.Clean(filepath.FromSlash(raw))
+	if !filepath.IsAbs(clean) {
+		if !filepath.IsLocal(clean) {
+			return "", errors.New("email attachment path outside the project root is not allowed")
+		}
+		return clean, nil
+	}
+	rootAbs, err := filepath.Abs(projectDir)
+	if err != nil {
+		return "", fmt.Errorf("resolve project root for email attachments: %w", err)
+	}
+	candidates := []string{rootAbs}
+	if resolvedRoot, err := filepath.EvalSymlinks(rootAbs); err == nil && resolvedRoot != rootAbs {
+		candidates = append(candidates, resolvedRoot)
+	}
+	for _, candidate := range candidates {
+		relative, err := filepath.Rel(candidate, clean)
+		if err != nil {
+			continue
+		}
+		if relative == "." || filepath.IsLocal(relative) {
+			return relative, nil
+		}
+	}
+	return "", errors.New("email attachment path outside the project root is not allowed")
 }
 
 func buildMIME(message sendMessage, attachments []attachment) ([]byte, error) {

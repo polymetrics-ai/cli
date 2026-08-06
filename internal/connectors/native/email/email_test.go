@@ -3,12 +3,15 @@ package email
 import (
 	"bufio"
 	"context"
+	cryptorand "crypto/rand"
 	"encoding/base64"
+	"encoding/hex"
 	"fmt"
 	"net"
 	"net/textproto"
 	"os"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 
@@ -39,12 +42,12 @@ func TestConnectorDeclaresExecutableProtocolCommandSurface(t *testing.T) {
 }
 
 func TestMessagesReadUsesUIDValidityCursorAndBoundedBodyParts(t *testing.T) {
-	address, appendMessage := startIMAPFixture(t)
-	appendMessage(t, "From: sender@example.invalid\r\nTo: reader@example.invalid\r\nSubject: first\r\nContent-Type: text/plain\r\n\r\n"+strings.Repeat("x", maxBodyPartBytes+128))
+	fixture := startIMAPFixture(t)
+	fixture.appendMessage(t, "From: sender@example.invalid\r\nTo: reader@example.invalid\r\nSubject: first\r\nContent-Type: text/plain\r\n\r\n"+strings.Repeat("x", maxBodyPartBytes+128))
 
 	c := New()
-	c.imapAddressOverride = address
-	records := readRecords(t, c, connectors.ReadRequest{Stream: messagesStream, Config: testRuntimeConfig(), Limit: 1})
+	c.imapAddressOverride = fixture.address
+	records := readRecords(t, c, connectors.ReadRequest{Stream: messagesStream, Config: fixture.config, Limit: 1})
 	if len(records) != 1 {
 		t.Fatalf("first messages Read emitted %d records, want 1", len(records))
 	}
@@ -68,10 +71,10 @@ func TestMessagesReadUsesUIDValidityCursorAndBoundedBodyParts(t *testing.T) {
 		t.Fatalf("bounded body part = len %d truncated=%v, want %d/true", len(content), parts[0]["truncated"], maxBodyPartBytes)
 	}
 
-	appendMessage(t, "From: sender@example.invalid\r\nTo: reader@example.invalid\r\nSubject: second\r\nContent-Type: text/plain\r\n\r\nsecond body")
+	fixture.appendMessage(t, "From: sender@example.invalid\r\nTo: reader@example.invalid\r\nSubject: second\r\nContent-Type: text/plain\r\n\r\nsecond body")
 	records = readRecords(t, c, connectors.ReadRequest{
 		Stream: messagesStream,
-		Config: testRuntimeConfig(),
+		Config: fixture.config,
 		State:  map[string]string{"cursor": cursor},
 		Limit:  1,
 	})
@@ -80,14 +83,34 @@ func TestMessagesReadUsesUIDValidityCursorAndBoundedBodyParts(t *testing.T) {
 	}
 }
 
-func TestMailboxesAreReachableThroughCommandRunner(t *testing.T) {
-	address, _ := startIMAPFixture(t)
+func TestMessagesSearchUsesFiniteUIDRanges(t *testing.T) {
+	recorder := &uidSearchRecorder{}
+	fixture := startIMAPFixtureWithSearchRecorder(t, recorder)
+	fixture.appendMessage(t, "From: sender@example.invalid\r\nTo: reader@example.invalid\r\nSubject: finite range\r\n\r\nbody")
 	c := New()
-	c.imapAddressOverride = address
+	c.imapAddressOverride = fixture.address
+	if records := readRecords(t, c, connectors.ReadRequest{Stream: messagesStream, Config: fixture.config, Limit: 1}); len(records) != 1 {
+		t.Fatalf("messages Read emitted %d records, want 1", len(records))
+	}
+	ranges := recorder.ranges()
+	if len(ranges) == 0 {
+		t.Fatal("messages Read did not issue a UID SEARCH")
+	}
+	for _, uidRange := range ranges {
+		if uidRange.dynamic {
+			t.Fatalf("UID SEARCH used dynamic range %q", uidRange.value)
+		}
+	}
+}
+
+func TestMailboxesAreReachableThroughCommandRunner(t *testing.T) {
+	fixture := startIMAPFixture(t)
+	c := New()
+	c.imapAddressOverride = fixture.address
 	var records []connectors.Record
 	result, err := commandrunner.Run(context.Background(), c, commandrunner.Request{
 		Path:   []string{"mailboxes", "list"},
-		Config: testRuntimeConfig(),
+		Config: fixture.config,
 		Limit:  10,
 	}, func(record connectors.Record) error {
 		records = append(records, record)
@@ -102,12 +125,12 @@ func TestMailboxesAreReachableThroughCommandRunner(t *testing.T) {
 }
 
 func TestMailboxListHonorsRequestedLimit(t *testing.T) {
-	address, _ := startIMAPFixture(t)
+	fixture := startIMAPFixture(t)
 	c := New()
-	c.imapAddressOverride = address
+	c.imapAddressOverride = fixture.address
 	records := readRecords(t, c, connectors.ReadRequest{
 		Stream: mailboxesStream,
-		Config: testRuntimeConfig(),
+		Config: fixture.config,
 		Limit:  1,
 	})
 	if len(records) != 1 {
@@ -123,7 +146,7 @@ func TestSendPreviewIsUnmaskedAndAttachmentDriftCannotDispatch(t *testing.T) {
 		t.Fatalf("write attachment: %v", err)
 	}
 	c := New()
-	cfg := testRuntimeConfig()
+	cfg := testRuntimeConfig(t)
 	cfg.ProjectDir = root
 	c.smtpAddressOverride = address
 	request := connectors.WriteRequest{Action: sendAction, Config: cfg}
@@ -170,7 +193,7 @@ func TestMessageSendCommandBuildsTypedUnmaskedPreview(t *testing.T) {
 	c := New()
 	command, err := commandrunner.BuildWriteCommand(context.Background(), c, commandrunner.Request{
 		Path:    []string{"message", "send"},
-		Config:  testRuntimeConfig(),
+		Config:  testRuntimeConfig(t),
 		Preview: true,
 		Flags: map[string][]string{
 			"to":      {"to@example.invalid"},
@@ -199,7 +222,7 @@ func TestMessageSendCommandBuildsTypedUnmaskedPreview(t *testing.T) {
 func TestSendRequiresTypedApprovalBeforeSMTPDispatch(t *testing.T) {
 	address, captured := startSMTPFixture(t)
 	c := New()
-	cfg := testRuntimeConfig()
+	cfg := testRuntimeConfig(t)
 	c.smtpAddressOverride = address
 	request := connectors.WriteRequest{Action: sendAction, Config: cfg}
 	records := []connectors.Record{{"to": []string{"to@example.invalid"}, "subject": "subject", "body": "body"}}
@@ -235,7 +258,7 @@ func TestSendMessageAcceptsPersistedJSONArrays(t *testing.T) {
 	c := New()
 	_, err := c.DryRunWrite(context.Background(), connectors.WriteRequest{
 		Action: sendAction,
-		Config: testRuntimeConfig(),
+		Config: testRuntimeConfig(t),
 	}, []connectors.Record{{
 		"to":          []any{"to@example.invalid"},
 		"cc":          []any{"cc@example.invalid"},
@@ -254,14 +277,17 @@ func TestCursorRejectsDifferentMailboxAndPortErrorsDoNotEchoValues(t *testing.T)
 	if _, err := decodeCursor(encoded, "Archive"); err == nil || !strings.Contains(err.Error(), "different mailbox") {
 		t.Fatalf("decodeCursor for another mailbox error = %v, want explicit mailbox-state rejection", err)
 	}
-	cfg := testRuntimeConfig()
+	cfg := testRuntimeConfig(t)
 	cfg.Config["imap_port"] = "999"
 	_, err := resolveConnectionConfig(cfg)
-	if err == nil || !strings.Contains(err.Error(), "imap_port") {
-		t.Fatalf("resolveConnectionConfig invalid port error = %v, want imap_port constraint", err)
+	if err == nil {
+		t.Fatal("resolveConnectionConfig accepted an invalid IMAP port")
+	}
+	if !strings.Contains(err.Error(), "imap_port") {
+		t.Fatal("resolveConnectionConfig invalid-port error did not identify imap_port")
 	}
 	if strings.Contains(err.Error(), "999") || strings.Contains(err.Error(), cfg.Secrets["password"]) {
-		t.Fatalf("configuration error exposed supplied value or secret: %q", err)
+		t.Fatal("configuration error exposed a supplied value or secret")
 	}
 }
 
@@ -277,7 +303,13 @@ func readRecords(t *testing.T, connector Connector, request connectors.ReadReque
 	return records
 }
 
-func testRuntimeConfig() connectors.RuntimeConfig {
+func testRuntimeConfig(t *testing.T) connectors.RuntimeConfig {
+	t.Helper()
+	return testRuntimeConfigWithSecret(t, transientTestSecret(t))
+}
+
+func testRuntimeConfigWithSecret(t *testing.T, secret string) connectors.RuntimeConfig {
+	t.Helper()
 	return connectors.RuntimeConfig{
 		Config: map[string]string{
 			"imap_host":                  "127.0.0.1",
@@ -290,17 +322,71 @@ func testRuntimeConfig() connectors.RuntimeConfig {
 			"from_address":               "reader@example.invalid",
 			"connection_timeout_seconds": "5",
 		},
-		Secrets:             map[string]string{"password": "fixture-only-not-a-password"},
+		Secrets:             map[string]string{"password": secret},
 		CredentialRevision:  "fixture-email-credential-revision",
 		ConfigurationDigest: "fixture-email-configuration-digest",
 		WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
 	}
 }
 
-func startIMAPFixture(t *testing.T) (string, func(*testing.T, string)) {
+func transientTestSecret(t *testing.T) string {
+	t.Helper()
+	bytes := make([]byte, 32)
+	if _, err := cryptorand.Read(bytes); err != nil {
+		t.Fatalf("generate test secret: %v", err)
+	}
+	return hex.EncodeToString(bytes)
+}
+
+type imapFixture struct {
+	address       string
+	config        connectors.RuntimeConfig
+	appendMessage func(*testing.T, string)
+}
+
+func startIMAPFixture(t *testing.T) imapFixture {
+	return startIMAPFixtureWithSearchRecorder(t, nil)
+}
+
+type uidSearchRange struct {
+	value   string
+	dynamic bool
+}
+
+type uidSearchRecorder struct {
+	mu     sync.Mutex
+	values []uidSearchRange
+}
+
+func (r *uidSearchRecorder) record(criteria *imap.SearchCriteria) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	for _, set := range criteria.UID {
+		r.values = append(r.values, uidSearchRange{value: set.String(), dynamic: set.Dynamic()})
+	}
+}
+
+func (r *uidSearchRecorder) ranges() []uidSearchRange {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	return append([]uidSearchRange(nil), r.values...)
+}
+
+type recordingIMAPSession struct {
+	imapserver.SessionIMAP4rev2
+	recorder *uidSearchRecorder
+}
+
+func (s *recordingIMAPSession) Search(kind imapserver.NumKind, criteria *imap.SearchCriteria, options *imap.SearchOptions) (*imap.SearchData, error) {
+	s.recorder.record(criteria)
+	return s.SessionIMAP4rev2.Search(kind, criteria, options)
+}
+
+func startIMAPFixtureWithSearchRecorder(t *testing.T, recorder *uidSearchRecorder) imapFixture {
 	t.Helper()
 	mem := imapmemserver.New()
-	user := imapmemserver.NewUser("reader@example.invalid", "fixture-only-not-a-password")
+	secret := transientTestSecret(t)
+	user := imapmemserver.NewUser("reader@example.invalid", secret)
 	for _, mailbox := range []string{"INBOX", "Archive"} {
 		if err := user.Create(mailbox, nil); err != nil {
 			t.Fatalf("create local IMAP mailbox %s: %v", mailbox, err)
@@ -313,7 +399,15 @@ func startIMAPFixture(t *testing.T) (string, func(*testing.T, string)) {
 	}
 	server := imapserver.New(&imapserver.Options{
 		NewSession: func(*imapserver.Conn) (imapserver.Session, *imapserver.GreetingData, error) {
-			return mem.NewSession(), nil, nil
+			session := mem.NewSession()
+			if recorder != nil {
+				rev2Session, ok := session.(imapserver.SessionIMAP4rev2)
+				if !ok {
+					return nil, nil, fmt.Errorf("local IMAP fixture does not support IMAP4rev2")
+				}
+				session = &recordingIMAPSession{SessionIMAP4rev2: rev2Session, recorder: recorder}
+			}
+			return session, nil, nil
 		},
 		Caps:         imap.CapSet{imap.CapIMAP4rev1: {}, imap.CapIMAP4rev2: {}},
 		InsecureAuth: true,
@@ -327,7 +421,7 @@ func startIMAPFixture(t *testing.T) (string, func(*testing.T, string)) {
 			t.Fatalf("dial local IMAP fixture: %v", err)
 		}
 		defer func() { _ = client.Close() }()
-		if err := client.Login("reader@example.invalid", "fixture-only-not-a-password").Wait(); err != nil {
+		if err := client.Login("reader@example.invalid", secret).Wait(); err != nil {
 			t.Fatalf("login local IMAP fixture: %v", err)
 		}
 		appendCommand := client.Append("INBOX", int64(len(message)), nil)
@@ -341,7 +435,11 @@ func startIMAPFixture(t *testing.T) (string, func(*testing.T, string)) {
 			t.Fatalf("wait local IMAP append: %v", err)
 		}
 	}
-	return listener.Addr().String(), appendMessage
+	return imapFixture{
+		address:       listener.Addr().String(),
+		config:        testRuntimeConfigWithSecret(t, secret),
+		appendMessage: appendMessage,
+	}
 }
 
 type smtpCapture struct {

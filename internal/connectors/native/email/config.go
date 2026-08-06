@@ -80,12 +80,13 @@ func resolveConnectionConfig(cfg connectors.RuntimeConfig) (connectionConfig, er
 	if strings.TrimSpace(password) == "" {
 		return connectionConfig{}, errors.New("email connector requires secret password")
 	}
-	smtpUsername := strings.TrimSpace(cfg.Config["smtp_username"])
+	smtpUsernameRaw := cfg.Config["smtp_username"]
+	if containsControl(smtpUsernameRaw) {
+		return connectionConfig{}, errors.New("email config smtp_username must not contain control characters")
+	}
+	smtpUsername := strings.TrimSpace(smtpUsernameRaw)
 	if smtpUsername == "" {
 		smtpUsername = username
-	}
-	if containsControl(smtpUsername) {
-		return connectionConfig{}, errors.New("email config smtp_username must not contain control characters")
 	}
 	fromAddress, err := resolveFromAddress(cfg.Config["from_address"], username)
 	if err != nil {
@@ -100,10 +101,10 @@ func resolveConnectionConfig(cfg connectors.RuntimeConfig) (connectionConfig, er
 		return connectionConfig{}, err
 	}
 	if imapSecurity == securityNone && !isLoopbackHost(imapHost) {
-		return connectionConfig{}, errors.New("email config imap_security=none is allowed only for a loopback host")
+		return connectionConfig{}, errors.New("email config imap_security without transport encryption is allowed only for a loopback host")
 	}
 	if smtpSecurity == securityNone && !isLoopbackHost(smtpHost) {
-		return connectionConfig{}, errors.New("email config smtp_security=none is allowed only for a loopback host")
+		return connectionConfig{}, errors.New("email config smtp_security without transport encryption is allowed only for a loopback host")
 	}
 	return connectionConfig{
 		imapHost: imapHost, imapPort: imapPort, imapSecurity: imapSecurity,
@@ -113,18 +114,45 @@ func resolveConnectionConfig(cfg connectors.RuntimeConfig) (connectionConfig, er
 	}, nil
 }
 
+func (Connector) ValidateCredential(cfg connectors.RuntimeConfig) error {
+	_, err := resolveConnectionConfig(cfg)
+	return err
+}
+
 func normalizeHost(raw, field string) (string, error) {
 	host := strings.TrimSpace(raw)
+	host = strings.TrimSuffix(host, ".")
 	if host == "" {
 		return "", fmt.Errorf("email connector requires config %s", field)
 	}
-	if containsControl(host) || strings.ContainsAny(host, "@/\\?#") {
+	if containsControl(host) || strings.ContainsAny(host, " @/\\?#[]'\"") {
 		return "", fmt.Errorf("email config %s must be a host name or IP address", field)
 	}
-	if strings.Contains(host, ":") && net.ParseIP(host) == nil {
+	if net.ParseIP(host) != nil {
+		return host, nil
+	}
+	if strings.Contains(host, ":") || !validHostname(host) {
 		return "", fmt.Errorf("email config %s must be a host name or IP address", field)
 	}
-	return strings.TrimSuffix(host, "."), nil
+	return host, nil
+}
+
+func validHostname(host string) bool {
+	if len(host) > 253 {
+		return false
+	}
+	for _, label := range strings.Split(host, ".") {
+		if len(label) == 0 || len(label) > 63 || label[0] == '-' || label[len(label)-1] == '-' {
+			return false
+		}
+		for i := range len(label) {
+			character := label[i]
+			if !((character >= 'a' && character <= 'z') || (character >= 'A' && character <= 'Z') || (character >= '0' && character <= '9') || character == '-') {
+				return false
+			}
+		}
+	}
+	return true
 }
 
 func allowedPort(raw, field string, allowed ...string) (string, error) {
@@ -148,6 +176,9 @@ func allowedSecurity(raw, field string) (transportSecurity, error) {
 }
 
 func resolveFromAddress(raw, username string) (string, error) {
+	if containsControl(raw) {
+		return "", errors.New("email config from_address must be an email address (or username must be an email address)")
+	}
 	from := strings.TrimSpace(raw)
 	if from == "" {
 		from = username
@@ -160,17 +191,21 @@ func resolveFromAddress(raw, username string) (string, error) {
 }
 
 func mailboxFromConfig(values map[string]string) (string, error) {
-	mailbox := strings.TrimSpace(values["mailbox"])
+	raw := values["mailbox"]
+	if containsControl(raw) {
+		return "", errors.New("email config mailbox must not contain control characters")
+	}
+	mailbox := strings.TrimSpace(raw)
 	if mailbox == "" {
 		mailbox = defaultMailbox
-	}
-	if containsControl(mailbox) {
-		return "", errors.New("email config mailbox must not contain control characters")
 	}
 	return mailbox, nil
 }
 
 func connectionTimeout(raw string) (time.Duration, error) {
+	if containsControl(raw) {
+		return 0, errors.New("email config connection_timeout_seconds must satisfy its declared enum constraint")
+	}
 	raw = strings.TrimSpace(raw)
 	if raw == "" {
 		return defaultTimeout, nil
