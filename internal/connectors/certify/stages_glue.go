@@ -281,6 +281,9 @@ func stageFlowRoundtrip(rc *runContext, rep *Report) error {
 		if !passed {
 			return false, cliInfoFrom(res), errMsg
 		}
+		if flow, _ := res.Envelope["flow"].(string); flow != name {
+			return false, cliInfoFrom(res), fmt.Sprintf("flow_status: flow=%q, want %q", flow, name)
+		}
 		steps, _ := res.Envelope["steps"].([]any)
 		if len(steps) != 2 {
 			return false, cliInfoFrom(res), fmt.Sprintf("flow_status: steps has %d entries, want 2: %v", len(steps), steps)
