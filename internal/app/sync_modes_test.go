@@ -67,7 +67,7 @@ func (s *scriptedSyncSource) Write(ctx context.Context, req connectors.WriteRequ
 }
 
 func setupSyncModeApp(t *testing.T, source *scriptedSyncSource, mode string) (*App, string) {
-	return setupSyncModeAppWithCompatibility(t, source, mode, mode == "incremental_append")
+	return setupSyncModeAppWithCompatibility(t, source, mode, false)
 }
 
 func setupSyncModeAppWithCompatibility(t *testing.T, source *scriptedSyncSource, mode string, legacyCompatibility bool) (*App, string) {
@@ -181,6 +181,30 @@ func TestParseSyncModeSeparatesLegacyCompatibilityFromNewNativeAdmission(t *test
 	}
 	if contract.ContractMode != "incremental_append" || contract.LegacyCompatibility || !contract.IsContractMode() {
 		t.Fatalf("incremental_append mode = %+v, want native contract admission", contract)
+	}
+}
+
+func TestCreateConnectionMarksPublicLegacyModesAsCompatibilityAdapters(t *testing.T) {
+	for _, modeName := range MustSyncModeNames() {
+		t.Run(modeName, func(t *testing.T) {
+			source := newScriptedSyncSource("legacy_creation_"+modeName, nil)
+			a, connection := setupSyncModeAppWithCompatibility(t, source, modeName, false)
+			conn, ok := a.findConnection(connection)
+			if !ok {
+				t.Fatal("connection missing")
+			}
+			stream := conn.Streams["records"]
+			if !stream.LegacyCompatibility {
+				t.Fatalf("fresh legacy stream %q was not marked as a compatibility adapter", modeName)
+			}
+			parsed, err := ParseStreamSyncMode(stream)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if parsed.IsContractMode() {
+				t.Fatalf("fresh legacy stream %q became a native contract mode", modeName)
+			}
+		})
 	}
 }
 
