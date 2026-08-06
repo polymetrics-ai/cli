@@ -86,3 +86,65 @@ func TestWebhookCommandsDeclareModesWithoutLeakingCallbacks(t *testing.T) {
 		}
 	}
 }
+
+func TestWebhookConfigureRejectsCredentialFlagWithoutPersistingReceiver(t *testing.T) {
+	root := t.TempDir()
+	var stdout, stderr bytes.Buffer
+	if code := cli.Run([]string{"init", "--root", root, "--json"}, &stdout, &stderr); code != 0 {
+		t.Fatalf("init exit=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+
+	stdout.Reset()
+	stderr.Reset()
+	if code := cli.Run([]string{"credentials", "add", "sample-local", "--connector", "sample", "--root", root, "--json"}, &stdout, &stderr); code != 0 {
+		t.Fatalf("add credential exit=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+
+	stdout.Reset()
+	stderr.Reset()
+	args := []string{
+		"webhooks", "configure", "operator", "--mode", "operator_endpoint",
+		"--callback-url", "https://operator.example.test/receiver", "--receipt-capacity", "2",
+		"--credential", "sample-local", "--root", root, "--json",
+	}
+	if code := cli.Run(args, &stdout, &stderr); code != 2 {
+		t.Fatalf("credential-bearing configure exit=%d, want 2; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if output := stdout.String() + stderr.String(); !strings.Contains(output, "--credential is not supported for webhooks") {
+		t.Fatalf("credential rejection output=%s", output)
+	}
+
+	stdout.Reset()
+	stderr.Reset()
+	if code := cli.Run([]string{"webhooks", "status", "operator", "--root", root, "--json"}, &stdout, &stderr); code == 0 {
+		t.Fatalf("credential-rejected receiver was persisted: stdout=%s stderr=%s", stdout.String(), stderr.String())
+	}
+}
+
+func TestWebhookInvalidPortReportsDocumentedValidationError(t *testing.T) {
+	root := t.TempDir()
+	var stdout, stderr bytes.Buffer
+	if code := cli.Run([]string{"init", "--root", root, "--json"}, &stdout, &stderr); code != 0 {
+		t.Fatalf("init exit=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+
+	stdout.Reset()
+	stderr.Reset()
+	args := []string{
+		"webhooks", "configure", "funnel", "--mode", "external_tunnel",
+		"--tunnel-tool", "tailscale_funnel", "--callback-url", "https://node.tailnet.ts.net:4444/receiver",
+		"--heartbeat-ttl", "1m", "--receipt-capacity", "2", "--root", root, "--json",
+	}
+	if code := cli.Run(args, &stdout, &stderr); code != 3 {
+		t.Fatalf("disallowed public-port exit=%d, want 3; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+
+	stdout.Reset()
+	stderr.Reset()
+	if code := cli.Run([]string{"help", "webhooks", "--root", root}, &stdout, &stderr); code != 0 {
+		t.Fatalf("webhooks help exit=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if !strings.Contains(stdout.String(), "3 validation error") {
+		t.Fatalf("webhooks help does not document validation exit: %s", stdout.String())
+	}
+}

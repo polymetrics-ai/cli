@@ -12,7 +12,6 @@ import (
 	"os"
 	"time"
 
-	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/safety"
 	"polymetrics.ai/internal/synccontract"
 	"polymetrics.ai/internal/webhook"
@@ -23,7 +22,6 @@ import (
 // route secret and is never persisted in ordinary project state.
 type ConfigureWebhookReceiverRequest struct {
 	Name            string                 `json:"name"`
-	Credential      string                 `json:"-"`
 	Exposure        webhook.ExposureConfig `json:"-"`
 	ReceiptCapacity int                    `json:"receipt_capacity"`
 }
@@ -75,9 +73,8 @@ func (status WebhookReceiverStatus) IngressAdapterStatus() IngressAdapterStatus 
 }
 
 type webhookSubscriptionState struct {
-	Subscription     webhook.Subscription     `json:"subscription"`
-	CredentialCohort connectors.AuthCohortKey `json:"credential_cohort,omitempty"`
-	ReceiptCapacity  int                      `json:"receipt_capacity"`
+	Subscription    webhook.Subscription `json:"subscription"`
+	ReceiptCapacity int                  `json:"receipt_capacity"`
 }
 
 type webhookReceiptState struct {
@@ -102,20 +99,6 @@ func (a *App) ConfigureWebhookReceiver(ctx context.Context, req ConfigureWebhook
 		return WebhookReceiverStatus{}, errors.New("webhook receiver configuration is invalid")
 	}
 
-	var cohort connectors.AuthCohortKey
-	if req.Credential != "" {
-		current := a.snapshotState()
-		credential, ok := findCredentialInState(current, req.Credential)
-		if !ok {
-			return WebhookReceiverStatus{}, errors.New("webhook receiver credential is unavailable")
-		}
-		identity, err := coordinationIdentityForCredential(current, credential)
-		if err != nil {
-			return WebhookReceiverStatus{}, errors.New("webhook receiver credential coordination is unavailable")
-		}
-		cohort = identity.AuthCohortKey()
-	}
-
 	now := time.Now().UTC()
 	updated, err := a.updateState(func(current state) (state, error) {
 		if current.WebhookSubscriptions == nil {
@@ -131,7 +114,6 @@ func (a *App) ConfigureWebhookReceiver(ctx context.Context, req ConfigureWebhook
 		} else {
 			entry.Subscription.ApplyExposure(exposure, now)
 		}
-		entry.CredentialCohort = cohort
 		entry.ReceiptCapacity = req.ReceiptCapacity
 		current.WebhookSubscriptions[req.Name] = entry
 		return current, nil

@@ -469,7 +469,10 @@ func runWebhooks(ctx context.Context, a *app.App, args []string, stdout io.Write
 			return validationErrorf("%v", err)
 		}
 		flags := parseFlags(args[2:])
-		for _, name := range []string{"mode", "callback-url", "tunnel-tool", "adapter", "heartbeat-ttl", "receipt-capacity", "allowed-public-port", "credential"} {
+		if len(flags.values["credential"]) > 0 {
+			return usageErrorf("--credential is not supported for webhooks")
+		}
+		for _, name := range []string{"mode", "callback-url", "tunnel-tool", "adapter", "heartbeat-ttl", "receipt-capacity", "allowed-public-port"} {
 			if flags.isBare(name) {
 				return usageErrorf("--%s requires a value", name)
 			}
@@ -490,8 +493,7 @@ func runWebhooks(ctx context.Context, a *app.App, args []string, stdout io.Write
 			return err
 		}
 		status, err := a.ConfigureWebhookReceiver(ctx, app.ConfigureWebhookReceiverRequest{
-			Name:       args[1],
-			Credential: flags.first("credential"),
+			Name: args[1],
 			Exposure: webhook.ExposureConfig{
 				Mode:             webhook.ExposureMode(flags.first("mode")),
 				TunnelTool:       webhook.TunnelTool(flags.first("tunnel-tool")),

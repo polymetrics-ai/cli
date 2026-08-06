@@ -206,7 +206,7 @@ The modes are distinct contracts:
 | `external_tunnel` | `127.0.0.1` only | Supplied by an already-running named tunnel | A URL rotation or missed heartbeat is `degraded`; provider re-registration and reconciliation are both required. |
 | `provider_pull_or_stream` | None | None | Describes polling or an outbound stream; it is never presented as a webhook. |
 
-`pm` does not install, start, probe, or shell out to Tailscale, and it does not register, edit, or remove provider subscriptions. It has no Tailscale dependency. Callback URLs, signing secrets, raw bodies, credentials, and credential revisions are omitted from ordinary state and command output; only opaque endpoint and credential-cohort projections are retained.
+`pm` does not install, start, probe, or shell out to Tailscale, and it does not register, edit, or remove provider subscriptions. It has no Tailscale dependency. Webhook configuration does not accept, resolve, or persist credentials; callback URLs, signing secrets, and raw bodies are omitted from ordinary state and command output, which retains only opaque endpoint projections.
 
 For `external_tunnel`, allowed public ports are declared as configuration. The default policy is `443`, `8443`, and `10000`; an omitted HTTPS port is interpreted as `443`. Repeat `--allowed-public-port <port>` to replace the default policy, and configuration rejects a callback URL whose effective port is not in that declared set. `provider_pull_or_stream --json` emits an `IngressAdapter` envelope with only adapter-safe fields, never a `WebhookReceiver` or `receiver` envelope.
 

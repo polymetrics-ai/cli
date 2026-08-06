@@ -3,9 +3,9 @@ NAME
   pm webhooks - declare ingress exposure modes
 
 SYNOPSIS
-  pm webhooks configure <name> --mode operator_endpoint --callback-url https://operator.example/receiver --receipt-capacity N [--credential credential]
-  pm webhooks configure <name> --mode external_tunnel --tunnel-tool tailscale_funnel --callback-url https://node.tailnet.ts.net/receiver --heartbeat-ttl duration --receipt-capacity N [--allowed-public-port port] [--credential credential]
-  pm webhooks configure <name> --mode provider_pull_or_stream --adapter documented-adapter --receipt-capacity N [--credential credential]
+  pm webhooks configure <name> --mode operator_endpoint --callback-url https://operator.example/receiver --receipt-capacity N
+  pm webhooks configure <name> --mode external_tunnel --tunnel-tool tailscale_funnel --callback-url https://node.tailnet.ts.net/receiver --heartbeat-ttl duration --receipt-capacity N [--allowed-public-port port]
+  pm webhooks configure <name> --mode provider_pull_or_stream --adapter documented-adapter --receipt-capacity N
   pm webhooks status <name> [--json]
 
 DESCRIPTION
@@ -43,12 +43,13 @@ DESCRIPTION
 
 SECURITY
   Callback URLs, signing secrets, signature headers, raw event bodies,
-  credentials, and credential revisions are never rendered in status output.
-  Supplying --credential creates only an opaque credential-cohort association.
+  and credential values are never rendered in status output. Webhook
+  configuration does not accept, resolve, or persist credentials.
 
 EXIT STATUS
   0 success
   1 runtime error
   2 usage error
+  3 validation error
 
 ```
