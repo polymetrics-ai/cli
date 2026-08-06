@@ -415,6 +415,111 @@ func TestPollingWatermarkExecutorPersistsAndResetsSafetyLagScanCursor(t *testing
 	}
 }
 
+func TestPollingWatermarkExecutorPreservesDeletionSafetyLagStartBeforeFirstTombstone(t *testing.T) {
+	bundle := loadPollingWatermarkTestBundle(t)
+	bundle.Changefeed.PollingWatermark.SoftDelete = nil
+	bundle.Changefeed.PollingWatermark.DeletionEndpoint = &connectors.PollingWatermarkDeletionEndpoint{
+		Path:        "/widgets/deletions",
+		RecordsPath: "data",
+	}
+	bundle.Changefeed.PollingWatermark.MaxPages = 1
+	bundle.Changefeed.PollingWatermark.RequestBudget = 2
+	state := map[string]string{"updated_at": "2026-08-06T10:00:00Z", "id": "committed"}
+	committer := &recordingChangefeedCheckpointCommitter{}
+
+	firstSource := &scriptedPollingWatermarkSource{pages: []PollingWatermarkPage{{
+		Records:     []connectors.Record{{"id": "primary", "updated_at": "2026-08-06T09:59:00Z"}},
+		PrimaryMore: true,
+	}}}
+	first, err := NewPollingWatermarkConnector(bundle, nil, firstSource)
+	if err != nil {
+		t.Fatalf("NewPollingWatermarkConnector: %v", err)
+	}
+	err = first.ReadCDC(context.Background(), connectors.CDCReadRequest{
+		Stream:              "widgets",
+		Config:              connectors.RuntimeConfig{Config: map[string]string{"base_url": "https://example.test"}},
+		State:               state,
+		CheckpointCommitter: committer,
+	}, func(connectors.CDCEvent) error { return nil })
+	var stop *PollingWatermarkResumableStopError
+	if !errors.As(err, &stop) || stop.Reason != PollingWatermarkStopReasonMaxPages {
+		t.Fatalf("first ReadCDC error = %v, want max-pages resumable stop", err)
+	}
+	if len(committer.states) != 1 {
+		t.Fatalf("committed checkpoints = %+v, want primary-only checkpoint", committer.states)
+	}
+	frontiers := pollingWatermarkFrontiersFromState(t, committer.states[0])
+	if frontiers.Deletion == nil || !frontiers.Deletion.QuerySet || frontiers.Deletion.Query == nil || frontiers.Deletion.Query.Watermark != "2026-08-06T09:58:00Z" || frontiers.Deletion.Query.TieBreaker != "" {
+		t.Fatalf("source frontiers = %+v, want persisted deletion safety-lag start", frontiers)
+	}
+	if frontiers.Deletion.Watermark != "" || frontiers.Deletion.TieBreaker != "" {
+		t.Fatalf("source frontiers = %+v, want no durable deletion frontier", frontiers)
+	}
+
+	rejectedSource := &scriptedPollingWatermarkSource{pages: []PollingWatermarkPage{{
+		DeletionRecords: []connectors.Record{{"id": "late", "updated_at": "2026-08-06T09:58:30Z"}},
+	}}}
+	rejected, err := NewPollingWatermarkConnector(bundle, nil, rejectedSource)
+	if err != nil {
+		t.Fatalf("NewPollingWatermarkConnector: %v", err)
+	}
+	var rejectedEvents []string
+	err = rejected.ReadCDC(context.Background(), connectors.CDCReadRequest{
+		Stream:              "widgets",
+		Config:              connectors.RuntimeConfig{Config: map[string]string{"base_url": "https://example.test"}},
+		State:               committer.states[0],
+		CheckpointCommitter: committer,
+	}, func(event connectors.CDCEvent) error {
+		rejectedEvents = append(rejectedEvents, event.Operation+":"+event.Record["id"].(string))
+		return errors.New("destination rejected late deletion")
+	})
+	if err == nil || !strings.Contains(err.Error(), "durably accept") {
+		t.Fatalf("restart ReadCDC error = %v, want destination acknowledgement failure", err)
+	}
+	if strings.Join(rejectedEvents, ",") != "delete:late" {
+		t.Fatalf("rejected events = %q, want late deletion inside the safety lag", rejectedEvents)
+	}
+	if len(committer.states) != 1 {
+		t.Fatalf("committed checkpoints = %+v, want no checkpoint before late deletion acknowledgement", committer.states)
+	}
+	if len(rejectedSource.calls) != 1 || rejectedSource.calls[0].After == nil || rejectedSource.calls[0].After.Watermark != "2026-08-06T09:59:00Z" || rejectedSource.calls[0].DeletionAfter == nil || rejectedSource.calls[0].DeletionAfter.Watermark != "2026-08-06T09:58:00Z" || rejectedSource.calls[0].DeletionAfter.TieBreaker != "" {
+		t.Fatalf("restart source calls = %+v, want independent primary and deletion queries", rejectedSource.calls)
+	}
+
+	retrySource := &scriptedPollingWatermarkSource{pages: []PollingWatermarkPage{{
+		DeletionRecords: []connectors.Record{{"id": "late", "updated_at": "2026-08-06T09:58:30Z"}},
+	}}}
+	retry, err := NewPollingWatermarkConnector(bundle, nil, retrySource)
+	if err != nil {
+		t.Fatalf("NewPollingWatermarkConnector: %v", err)
+	}
+	var delivered []string
+	err = retry.ReadCDC(context.Background(), connectors.CDCReadRequest{
+		Stream:              "widgets",
+		Config:              connectors.RuntimeConfig{Config: map[string]string{"base_url": "https://example.test"}},
+		State:               committer.states[0],
+		CheckpointCommitter: committer,
+	}, func(event connectors.CDCEvent) error {
+		delivered = append(delivered, event.Operation+":"+event.Record["id"].(string))
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("retry ReadCDC: %v", err)
+	}
+	if strings.Join(delivered, ",") != "delete:late" {
+		t.Fatalf("delivered = %q, want replayed late deletion", delivered)
+	}
+	if len(retrySource.calls) != 1 || retrySource.calls[0].DeletionAfter == nil || retrySource.calls[0].DeletionAfter.Watermark != "2026-08-06T09:58:00Z" || retrySource.calls[0].DeletionAfter.TieBreaker != "" {
+		t.Fatalf("retry source calls = %+v, want replay-safe deletion start", retrySource.calls)
+	}
+	if len(committer.states) != 2 {
+		t.Fatalf("committed checkpoints = %+v, want accepted late deletion checkpoint", committer.states)
+	}
+	if frontiers := pollingWatermarkFrontiersFromState(t, committer.states[1]); frontiers.Deletion == nil || frontiers.Deletion.Watermark != "2026-08-06T09:58:30Z" || frontiers.Deletion.TieBreaker != "late" {
+		t.Fatalf("source frontiers = %+v, want durable late deletion frontier", frontiers)
+	}
+}
+
 func TestPollingWatermarkExecutorPersistsNumericScanCursorOrderingMetadata(t *testing.T) {
 	bundle := loadPollingWatermarkTestBundle(t)
 	bundle.Changefeed.PollingWatermark.MaxPages = 1

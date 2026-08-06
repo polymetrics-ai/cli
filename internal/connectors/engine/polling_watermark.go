@@ -34,11 +34,19 @@ type pollingWatermarkScanCheckpoint struct {
 	Active           bool   `json:"active"`
 }
 
+type pollingWatermarkPositionCheckpoint struct {
+	Watermark        string `json:"watermark"`
+	TieBreaker       string `json:"tie_breaker"`
+	TieBreakerNumber bool   `json:"tie_breaker_numeric"`
+}
+
 type pollingWatermarkSourceCheckpoint struct {
-	Watermark        string                          `json:"watermark"`
-	TieBreaker       string                          `json:"tie_breaker"`
-	TieBreakerNumber bool                            `json:"tie_breaker_numeric"`
-	Scan             *pollingWatermarkScanCheckpoint `json:"scan,omitempty"`
+	Watermark        string                              `json:"watermark"`
+	TieBreaker       string                              `json:"tie_breaker"`
+	TieBreakerNumber bool                                `json:"tie_breaker_numeric"`
+	QuerySet         bool                                `json:"query_set,omitempty"`
+	Query            *pollingWatermarkPositionCheckpoint `json:"query,omitempty"`
+	Scan             *pollingWatermarkScanCheckpoint     `json:"scan,omitempty"`
 }
 
 type pollingWatermarkFrontiersCheckpoint struct {
@@ -48,9 +56,10 @@ type pollingWatermarkFrontiersCheckpoint struct {
 }
 
 type pollingWatermarkSourceFrontier struct {
-	durable *PollingWatermarkPosition
-	query   *PollingWatermarkPosition
-	scan    *pollingWatermarkScanCheckpoint
+	durable  *PollingWatermarkPosition
+	query    *PollingWatermarkPosition
+	querySet bool
+	scan     *pollingWatermarkScanCheckpoint
 }
 
 type pollingWatermarkFrontiers struct {
@@ -421,21 +430,29 @@ func (e *PollingWatermarkExecutor) initialFrontiers(state map[string]string) (po
 		return frontiers, nil
 	}
 	if persisted.Deletion == nil {
-		frontiers.deletion.query = clonePollingWatermarkPosition(primaryQuery)
+		deletionQuery, err := e.initialPollingWatermarkSourceQuery(primaryDurable, nil)
+		if err != nil {
+			return pollingWatermarkFrontiers{}, fmt.Errorf("initialize polling watermark deletion frontier: %w", err)
+		}
+		frontiers.deletion = pollingWatermarkSourceFrontier{
+			query:    deletionQuery,
+			querySet: true,
+		}
 		return frontiers, nil
 	}
 	deletionDurable := pollingWatermarkPositionFromSourceCheckpoint(persisted.Deletion)
-	if err := e.validatePollingWatermarkPosition(*deletionDurable, "deletion checkpoint"); err != nil {
-		return pollingWatermarkFrontiers{}, err
-	}
-	deletionQuery, err := e.initialPollingWatermarkSourceQuery(deletionDurable, persisted.Deletion.Scan)
-	if err != nil {
-		return pollingWatermarkFrontiers{}, fmt.Errorf("polling watermark deletion checkpoint: %w", err)
+	deletionQuery := pollingWatermarkPositionFromCheckpoint(persisted.Deletion.Query)
+	if !persisted.Deletion.QuerySet {
+		deletionQuery, err = e.initialPollingWatermarkSourceQuery(deletionDurable, persisted.Deletion.Scan)
+		if err != nil {
+			return pollingWatermarkFrontiers{}, fmt.Errorf("polling watermark deletion checkpoint: %w", err)
+		}
 	}
 	frontiers.deletion = pollingWatermarkSourceFrontier{
-		durable: deletionDurable,
-		query:   deletionQuery,
-		scan:    clonePollingWatermarkScanCheckpoint(persisted.Deletion.Scan),
+		durable:  deletionDurable,
+		query:    deletionQuery,
+		querySet: true,
+		scan:     clonePollingWatermarkScanCheckpoint(persisted.Deletion.Scan),
 	}
 	return frontiers, nil
 }
@@ -520,10 +537,42 @@ func (e *PollingWatermarkExecutor) validatePollingWatermarkSourceCheckpoint(chec
 	if checkpoint == nil {
 		return nil
 	}
-	if err := e.validatePollingWatermarkPosition(*pollingWatermarkPositionFromSourceCheckpoint(checkpoint), "deletion checkpoint"); err != nil {
-		return err
+	durable := pollingWatermarkPositionFromSourceCheckpoint(checkpoint)
+	if durable != nil {
+		if err := e.validatePollingWatermarkPosition(*durable, "deletion checkpoint"); err != nil {
+			return err
+		}
+	} else if checkpoint.TieBreakerNumber {
+		return errors.New("polling watermark deletion ordering metadata requires a durable checkpoint")
+	}
+	if checkpoint.Query != nil {
+		if !checkpoint.QuerySet {
+			return errors.New("polling watermark deletion query requires query metadata")
+		}
+		query := pollingWatermarkPositionFromCheckpoint(checkpoint.Query)
+		if err := e.validatePollingWatermarkQueryPosition(*query, "deletion query"); err != nil {
+			return err
+		}
+		if durable != nil && e.descriptor.PollingWatermark.Watermark.Kind != "opaque_cursor" {
+			comparison, err := comparePollingWatermarkPositions(e.descriptor.PollingWatermark.Watermark.Kind, *query, *durable)
+			if err != nil {
+				return fmt.Errorf("compare polling watermark deletion query: %w", err)
+			}
+			if comparison > 0 {
+				return errors.New("polling watermark deletion query exceeds its durable checkpoint")
+			}
+		}
+	}
+	if !checkpoint.QuerySet && durable == nil {
+		return errors.New("polling watermark deletion checkpoint requires a query frontier")
+	}
+	if checkpoint.QuerySet && checkpoint.Query == nil && durable != nil {
+		return errors.New("polling watermark deletion query metadata requires a query frontier")
 	}
 	if checkpoint.Scan != nil {
+		if durable == nil {
+			return errors.New("polling watermark deletion scan cursor requires a durable checkpoint")
+		}
 		if err := e.validatePollingWatermarkScanCheckpoint(checkpoint.Scan); err != nil {
 			return fmt.Errorf("invalid polling watermark deletion scan cursor: %w", err)
 		}
@@ -557,6 +606,22 @@ func (e *PollingWatermarkExecutor) validatePollingWatermarkPosition(position Pol
 		}
 	}
 	return nil
+}
+
+func (e *PollingWatermarkExecutor) validatePollingWatermarkQueryPosition(position PollingWatermarkPosition, name string) error {
+	if position.TieBreaker == "" {
+		if !e.usesPollingWatermarkScanCursor() {
+			return fmt.Errorf("polling watermark %s has an empty tie breaker", name)
+		}
+		if position.tieBreakerNumber {
+			return fmt.Errorf("polling watermark %s has numeric metadata without a tie breaker", name)
+		}
+		if err := validatePollingWatermarkValue(e.descriptor.PollingWatermark.Watermark.Kind, position.Watermark); err != nil {
+			return fmt.Errorf("invalid polling watermark %s: %w", name, err)
+		}
+		return nil
+	}
+	return e.validatePollingWatermarkPosition(position, name)
 }
 
 func (e *PollingWatermarkExecutor) nextPollingWatermarkScanCheckpoint(position PollingWatermarkPosition, active bool) *pollingWatermarkScanCheckpoint {
@@ -902,6 +967,17 @@ func pollingWatermarkPositionFromScanCheckpoint(checkpoint *pollingWatermarkScan
 }
 
 func pollingWatermarkPositionFromSourceCheckpoint(checkpoint *pollingWatermarkSourceCheckpoint) *PollingWatermarkPosition {
+	if checkpoint == nil || (checkpoint.Watermark == "" && checkpoint.TieBreaker == "") {
+		return nil
+	}
+	return &PollingWatermarkPosition{
+		Watermark:        checkpoint.Watermark,
+		TieBreaker:       checkpoint.TieBreaker,
+		tieBreakerNumber: checkpoint.TieBreakerNumber,
+	}
+}
+
+func pollingWatermarkPositionFromCheckpoint(checkpoint *pollingWatermarkPositionCheckpoint) *PollingWatermarkPosition {
 	if checkpoint == nil {
 		return nil
 	}
@@ -912,23 +988,40 @@ func pollingWatermarkPositionFromSourceCheckpoint(checkpoint *pollingWatermarkSo
 	}
 }
 
-func pollingWatermarkSourceCheckpointFromFrontier(frontier pollingWatermarkSourceFrontier) *pollingWatermarkSourceCheckpoint {
-	if frontier.durable == nil {
+func pollingWatermarkPositionCheckpointFromPosition(position *PollingWatermarkPosition) *pollingWatermarkPositionCheckpoint {
+	if position == nil {
 		return nil
 	}
-	return &pollingWatermarkSourceCheckpoint{
-		Watermark:        frontier.durable.Watermark,
-		TieBreaker:       frontier.durable.TieBreaker,
-		TieBreakerNumber: frontier.durable.tieBreakerNumber,
-		Scan:             clonePollingWatermarkScanCheckpoint(frontier.scan),
+	return &pollingWatermarkPositionCheckpoint{
+		Watermark:        position.Watermark,
+		TieBreaker:       position.TieBreaker,
+		TieBreakerNumber: position.tieBreakerNumber,
 	}
+}
+
+func pollingWatermarkSourceCheckpointFromFrontier(frontier pollingWatermarkSourceFrontier) *pollingWatermarkSourceCheckpoint {
+	if !frontier.querySet && frontier.durable == nil && frontier.scan == nil {
+		return nil
+	}
+	checkpoint := &pollingWatermarkSourceCheckpoint{
+		QuerySet: frontier.querySet,
+		Query:    pollingWatermarkPositionCheckpointFromPosition(frontier.query),
+		Scan:     clonePollingWatermarkScanCheckpoint(frontier.scan),
+	}
+	if frontier.durable != nil {
+		checkpoint.Watermark = frontier.durable.Watermark
+		checkpoint.TieBreaker = frontier.durable.TieBreaker
+		checkpoint.TieBreakerNumber = frontier.durable.tieBreakerNumber
+	}
+	return checkpoint
 }
 
 func clonePollingWatermarkSourceFrontier(frontier pollingWatermarkSourceFrontier) pollingWatermarkSourceFrontier {
 	return pollingWatermarkSourceFrontier{
-		durable: clonePollingWatermarkPosition(frontier.durable),
-		query:   clonePollingWatermarkPosition(frontier.query),
-		scan:    clonePollingWatermarkScanCheckpoint(frontier.scan),
+		durable:  clonePollingWatermarkPosition(frontier.durable),
+		query:    clonePollingWatermarkPosition(frontier.query),
+		querySet: frontier.querySet,
+		scan:     clonePollingWatermarkScanCheckpoint(frontier.scan),
 	}
 }
 
