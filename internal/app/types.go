@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/synccontract"
 )
 
 type AddCredentialRequest struct {
@@ -38,13 +39,13 @@ type StreamConfig struct {
 }
 
 type StreamState struct {
-	Connection          string    `json:"connection"`
-	Stream              string    `json:"stream"`
-	Cursor              string    `json:"cursor,omitempty"`
-	GenerationID        int64     `json:"generation_id"`
-	LastSuccessfulRunID string    `json:"last_successful_run_id,omitempty"`
-	RecordsLoaded       int       `json:"records_loaded,omitempty"`
-	UpdatedAt           time.Time `json:"updated_at"`
+	Connection          string                           `json:"connection"`
+	Stream              string                           `json:"stream"`
+	Checkpoint          *synccontract.CheckpointEnvelope `json:"checkpoint,omitempty"`
+	GenerationID        int64                            `json:"generation_id"`
+	LastSuccessfulRunID string                           `json:"last_successful_run_id,omitempty"`
+	RecordsLoaded       int                              `json:"records_loaded,omitempty"`
+	UpdatedAt           time.Time                        `json:"updated_at"`
 }
 
 type CreateConnectionRequest struct {
