@@ -3,7 +3,11 @@ package engine
 import (
 	"errors"
 	"fmt"
+	"io/fs"
 	"os"
+	"path"
+	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -296,6 +300,273 @@ func TestBundleLoadRejectsCertificationUnknownStream(t *testing.T) {
 	}
 	if !strings.Contains(err.Error(), "certification.json") || !strings.Contains(err.Error(), "default_stream") {
 		t.Fatalf("Load error = %q, want default_stream rejection", err.Error())
+	}
+}
+
+const validProviderCitedRateLimits = `{
+	"schema_version": 1,
+	"state": "declared",
+	"policies": [{
+		"id": "graphql-points",
+		"source": {
+			"url": "https://docs.example.test/rate-limits",
+			"retrieved_at": "2026-08-05",
+			"version": "2026-08"
+		},
+		"selector": {
+			"endpoints": [{"method": "POST", "path": "/graphql"}],
+			"tiers": ["enterprise"],
+			"auth_types": ["oauth_app"]
+		},
+		"scope": {"subject_kind": "installation"},
+		"budgets": [
+			{
+				"model": "fixed_window",
+				"dimension": "sustained",
+				"unit": "points",
+				"limit": 5000,
+				"window_seconds": 3600,
+				"cost": {"default_cost": 1, "response_header": "X-RateLimit-Cost"}
+			},
+			{
+				"model": "leaky_bucket",
+				"dimension": "burst",
+				"unit": "points",
+				"capacity": 40,
+				"restore_per_second": 2
+			}
+		]
+	}]
+}`
+
+func TestBundleLoadParsesProviderCitedRateLimits(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/rate_limits.json"] = &fstest.MapFile{Data: []byte(validProviderCitedRateLimits)}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if b.RateLimits == nil {
+		t.Fatal("RateLimits is nil")
+	}
+	if got, want := b.RateLimits.Policies[0].Source.RetrievedAt, "2026-08-05"; got != want {
+		t.Fatalf("retrieved_at = %q, want %q", got, want)
+	}
+	if got, want := len(b.RateLimits.Policies[0].Budgets), 2; got != want {
+		t.Fatalf("budget count = %d, want %d", got, want)
+	}
+}
+
+func TestBundleLoadAcceptsProviderArtifactURLWithAnchor(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/rate_limits.json"] = &fstest.MapFile{Data: []byte(strings.Replace(
+		validProviderCitedRateLimits,
+		"https://docs.example.test/rate-limits",
+		"https://docs.example.test/rate-limits#provider-policy",
+		1,
+	))}
+
+	if _, err := Load(fsys, "acme"); err != nil {
+		t.Fatalf("Load: provider documentation anchor must be a valid artifact URL: %v", err)
+	}
+}
+
+func TestProductionDefinitionsEmbedEveryRateLimitDeclaration(t *testing.T) {
+	_, thisFile, _, ok := runtime.Caller(0)
+	if !ok {
+		t.Fatal("runtime.Caller: locate bundle test source")
+	}
+	defsDir := filepath.Clean(filepath.Join(filepath.Dir(thisFile), "..", "defs"))
+	entries, err := os.ReadDir(defsDir)
+	if err != nil {
+		t.Fatalf("ReadDir(%s): %v", defsDir, err)
+	}
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+		name := path.Join(entry.Name(), "rate_limits.json")
+		if _, err := os.Stat(filepath.Join(defsDir, filepath.FromSlash(name))); errors.Is(err, os.ErrNotExist) {
+			continue
+		} else if err != nil {
+			t.Fatalf("Stat(%s): %v", name, err)
+		}
+		if _, err := fs.ReadFile(defs.FS, name); err != nil {
+			t.Errorf("production defs.FS omits %s: add it to defs.go's embed pattern with this declaration: %v", name, err)
+		}
+	}
+}
+
+func TestBundleLoadRejectsUncitedOrMalformedRateLimits(t *testing.T) {
+	tests := []struct {
+		name string
+		data string
+		want string
+	}{
+		{
+			name: "policy lacks provider source",
+			data: strings.Replace(validProviderCitedRateLimits, `"source": {
+			"url": "https://docs.example.test/rate-limits",
+			"retrieved_at": "2026-08-05",
+			"version": "2026-08"
+		},`, "", 1),
+			want: "source",
+		},
+		{
+			name: "retrieval date is not a date",
+			data: strings.Replace(validProviderCitedRateLimits, "2026-08-05", "not-a-date", 1),
+			want: "retrieved_at",
+		},
+		{
+			name: "provider source cannot carry credentials",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://user:token@docs.example.test/rate-limits", 1),
+			want: "provider artifact URL",
+		},
+		{
+			name: "provider source cannot carry credential-like query parameters",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits?access_token=fixture", 1),
+			want: "query parameters",
+		},
+		{
+			name: "provider source cannot carry credential-like fragment parameters",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits#access_token=fixture", 1),
+			want: "credential-like fragment",
+		},
+		{
+			name: "provider source cannot carry access key fragment parameters",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits#access_key=fixture", 1),
+			want: "credential-like fragment",
+		},
+		{
+			name: "provider source cannot carry hyphenated access key fragment parameters",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits#access-key=fixture", 1),
+			want: "credential-like fragment",
+		},
+		{
+			name: "provider source cannot carry dotted access key fragment parameters",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits#access.key=fixture", 1),
+			want: "credential-like fragment",
+		},
+		{
+			name: "provider source cannot carry api token fragment parameters",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits#api_token=fixture", 1),
+			want: "credential-like fragment",
+		},
+		{
+			name: "provider source cannot carry hyphenated api token fragment parameters",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits#api-token=fixture", 1),
+			want: "credential-like fragment",
+		},
+		{
+			name: "provider source cannot carry dotted api token fragment parameters",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits#api.token=fixture", 1),
+			want: "credential-like fragment",
+		},
+		{
+			name: "provider source cannot hide credential-like fragment parameters",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits#api%5Fkey%3Dfixture", 1),
+			want: "credential-like fragment",
+		},
+		{
+			name: "unknown cannot publish a policy",
+			data: strings.Replace(validProviderCitedRateLimits, `"state": "declared"`, `"state": "unknown"`, 1),
+			want: "unknown",
+		},
+		{
+			name: "not applicable requires a reason",
+			data: `{"schema_version": 1, "state": "not_applicable"}`,
+			want: "reason",
+		},
+		{
+			name: "endpoint must be connector relative",
+			data: strings.Replace(validProviderCitedRateLimits, `"path": "/graphql"`, `"path": "graphql"`, 1),
+			want: "endpoints[0].path",
+		},
+		{
+			name: "endpoint path cannot carry outer whitespace",
+			data: strings.Replace(validProviderCitedRateLimits, `"path": "/graphql"`, `"path": " /graphql"`, 1),
+			want: "endpoints[0].path",
+		},
+		{
+			name: "leaky bucket needs a positive restore rate",
+			data: strings.Replace(validProviderCitedRateLimits, `"restore_per_second": 2`, `"restore_per_second": 0`, 1),
+			want: "restore_per_second",
+		},
+		{
+			name: "cost header must be an HTTP field name",
+			data: strings.Replace(validProviderCitedRateLimits, "X-RateLimit-Cost", "X Rate Limit Cost", 1),
+			want: "cost.response_header",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/rate_limits.json"] = &fstest.MapFile{Data: []byte(tt.data)}
+			_, err := Load(fsys, "acme")
+			if err == nil {
+				t.Fatal("Load: expected error")
+			}
+			if !strings.Contains(err.Error(), "rate_limits.json") || !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("Load error = %q, want rate_limits.json and %q", err, tt.want)
+			}
+		})
+	}
+}
+
+func TestBundleLoadRejectsCredentialLikeRateLimitFragmentKeyVariants(t *testing.T) {
+	keys := []string{
+		"auth_token", "auth-token", "auth.token",
+		"bearer_token", "bearer-token", "bearer.token",
+		"secret_key", "secret-key", "secret.key",
+		"private_key", "private-key", "private.key",
+	}
+	for _, key := range keys {
+		t.Run(key, func(t *testing.T) {
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/rate_limits.json"] = &fstest.MapFile{Data: []byte(strings.Replace(
+				validProviderCitedRateLimits,
+				"https://docs.example.test/rate-limits",
+				"https://docs.example.test/rate-limits#"+key+"=fixture",
+				1,
+			))}
+
+			_, err := Load(fsys, "acme")
+			if err == nil || !strings.Contains(err.Error(), "credential-like fragment") {
+				t.Fatalf("Load error = %v, want credential-like fragment rejection", err)
+			}
+		})
+	}
+}
+
+func TestBundleLoadParsesHonestRateLimitStates(t *testing.T) {
+	tests := []struct {
+		name   string
+		state  string
+		reason string
+	}{
+		{name: "unknown", state: "unknown", reason: "provider does not publish an enforceable limit"},
+		{name: "not applicable", state: "not_applicable", reason: "connector uses no provider HTTP API"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/rate_limits.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{
+				"schema_version": 1,
+				"state": %q,
+				"reason": %q
+			}`, tt.state, tt.reason))}
+
+			b, err := Load(fsys, "acme")
+			if err != nil {
+				t.Fatalf("Load: %v", err)
+			}
+			if b.RateLimits == nil || string(b.RateLimits.State) != tt.state {
+				t.Fatalf("RateLimits state = %#v, want %q", b.RateLimits, tt.state)
+			}
+		})
 	}
 }
 

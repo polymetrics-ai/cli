@@ -14,6 +14,7 @@ import (
 	"strings"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 )
 
 // namePattern is the shared connector/stream/action naming rule (design §A,
@@ -41,6 +42,7 @@ type Bundle struct {
 	RawCLISurface      json.RawMessage                  // verbatim cli_surface.json bytes; nil when absent
 	Certification      *CertificationSpec               // certification.json; nil when absent
 	RawCertification   json.RawMessage                  // verbatim certification.json bytes; nil when absent
+	RateLimits         *connsdk.RateLimits              // rate_limits.json; nil when absent
 	Docs               string                           // docs.md
 	Fixtures           fs.FS                            // fixtures/ subtree; nil when absent
 }
@@ -451,9 +453,12 @@ type WriteAction struct {
 	// existed (executeWriteRecord passed a nil url.Values in all six
 	// body_type branches). The field is strictly additive and opt-in: no
 	// existing bundle changes behavior by its introduction.
-	Query        map[string]QueryParam `json:"query,omitempty"`
-	RedactFields []string              `json:"redact_fields,omitempty"` // record fields redacted from source-table plan samples and engine previews/errors
-	BodyType     string                `json:"body_type,omitempty"`     // json (default) | form | none | graphql | json_array | multipart | base64_upload
+	Query map[string]QueryParam `json:"query,omitempty"`
+	// RedactFields identifies record fields redacted in generic source-table plan
+	// samples and returned write errors. DryRunWrite preview warnings preserve
+	// their resolved values.
+	RedactFields []string `json:"redact_fields,omitempty"`
+	BodyType     string   `json:"body_type,omitempty"` // json (default) | form | none | graphql | json_array | multipart | base64_upload
 	// BodyRequired forces an empty JSON object onto the wire when body construction
 	// resolves no fields. It is valid only for the default json body type.
 	BodyRequired bool                `json:"body_required,omitempty"`
@@ -982,8 +987,8 @@ type CertificationWritePairing struct {
 // metaSchemas holds the compiled meta-schemas used to validate the bundle
 // files themselves, lazily compiled once from the embedded schema/ dir.
 var metaSchemas = struct {
-	metadata, changefeed, spec, streams, writes, apiSurface, operations, cliSurface, certification *Schema
-	err                                                                                            error
+	metadata, changefeed, spec, streams, writes, apiSurface, operations, cliSurface, certification, rateLimits *Schema
+	err                                                                                                        error
 }{}
 
 func init() {
@@ -1007,6 +1012,7 @@ func init() {
 	metaSchemas.operations = compileMeta(operationsSchemaJSON)
 	metaSchemas.cliSurface = compileMeta(cliSurfaceSchemaJSON)
 	metaSchemas.certification = compileMeta(certificationSchemaJSON)
+	metaSchemas.rateLimits = compileMeta(rateLimitsSchemaJSON)
 }
 
 // requiredFiles lists the bundle files that must always exist relative to a
@@ -1181,6 +1187,11 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 		return Bundle{}, err
 	}
 
+	rateLimits, err := loadRateLimits(sub, dirName)
+	if err != nil {
+		return Bundle{}, err
+	}
+
 	docs, err := readFileString(sub, "docs.md")
 	if err != nil {
 		return Bundle{}, fmt.Errorf("load bundle %s: %w", dirName, err)
@@ -1206,6 +1217,7 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 		RawCLISurface:      rawCLISurface,
 		Certification:      certification,
 		RawCertification:   rawCertification,
+		RateLimits:         rateLimits,
 		Docs:               docs,
 		Fixtures:           fixtures,
 	}, nil

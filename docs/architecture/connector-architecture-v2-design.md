@@ -47,13 +47,14 @@ engine.
 internal/connectors/defs/
   defs.go                     // package defs; //go:embed runtime bundle files
   github/
-    metadata.json             // identity, capabilities, rate limits, risk
+    metadata.json             // identity, capabilities, informational rate-limit metadata, risk
     changefeed.json           // optional evidence-backed changefeed declaration
     spec.json                 // connection specification (JSON Schema draft-07)
     streams.json              // declarative read config: base HTTP + streams
     writes.json               // declarative write actions
     api_surface.json          // API coverage + disk-backed direct-write endpoint cross-check manifest
     certification.json        // optional certify defaults, candidates, pairings
+    rate_limits.json          // optional provider-cited declaration; no traffic policy yet
     schemas/
       issues.json             // per-stream record schema (draft-07 + x- extensions)
       pull_requests.json
@@ -85,6 +86,11 @@ the documented mode also resolves from an installed binary rather than only from
 (`defs/ashby/fixtures_embed.go`). `defs.FS` itself never grows a `fixtures/**` pattern.
 Directory name = connector name = the one true identifier: `github`, not `source-github`.)
 
+`rate_limits.json` is also optional. Its `go:embed` pattern is added only with the first production
+declaration, because an unmatched optional pattern fails compilation; disk-backed bundle validation
+can load it before then. Its exact authoring contract lives in the
+[migration conventions](../migration/conventions.md#3-the-engine-dialect-reference).
+
 ### `metadata.json` (github example)
 
 ```json
@@ -97,7 +103,6 @@ Directory name = connector name = the one true identifier: `github`, not `source
   "release_stage": "ga",
   "capabilities": { "check": true, "read": true, "write": true, "query": false, "cdc": false, "dynamic_schema": false },
   "batch": { "read_page_size": 100, "write_batch_size": 1 },
-  "rate_limit": { "strategy": "retry_after_header", "requests_per_hour": 5000 },
   "risk": {
     "read": "read-only REST calls against the configured repository",
     "write": "creates and mutates issues, PRs, labels, milestones, releases, files, workflow runs",
@@ -133,6 +138,9 @@ schemas dir). Sync modes are **not** listed here; they are derived per stream (Â
 `x-secret: true` is the single source of truth for the config/secret split (replaces
 `ConfigField`/`SecretField` Go structs and the catalog's `secret_fields`). The loader partitions
 properties into config vs secrets from this flag.
+
+`metadata.json.rate_limit.requests_per_minute`, when present, is informational only. Provider-cited
+policy declarations belong in the optional `rate_limits.json` file above.
 
 ### `schemas/issues.json` â€” per-stream record schema
 
@@ -326,7 +334,7 @@ Write semantics baked into the format:
 ```
 internal/connectors/
   connectors.go          // core interfaces, Registry (heavily slimmed)
-  connsdk/               // UNCHANGED low-level toolkit: Requester, Authenticator, Paginator, extract, state
+  connsdk/               // low-level toolkit: requester admission/observations, auth, pagination, extract, state
   engine/                // NEW: interprets defs bundles
     bundle.go            // Bundle types + loader + validation
     interpolate.go       // {{ ... }} resolver
@@ -336,6 +344,7 @@ internal/connectors/
     auth.go              // AuthSpec -> connsdk.Authenticator selection
     hooks.go             // hook interfaces + hook registry
     schema.go            // draft-07 compiler (minimal internal impl; no new deps) + x- extensions
+    rate_limits.go       // optional provider-cited declaration loader + semantic validation
     errors.go            // error_map application, typed engine errors
   defs/                  // NEW: embedded JSON bundles (556 dirs)
   hooks/                 // NEW: per-connector Go hooks, only where needed (~15 dirs)
@@ -358,6 +367,7 @@ type Bundle struct {
     Name     string
     Metadata Metadata          // parsed metadata.json
     Changefeed *connectors.ChangefeedDescriptor // optional changefeed.json
+    RateLimits *connsdk.RateLimits // optional rate_limits.json; declaration only
     Spec     *Schema           // compiled spec.json; SecretKeys() from x-secret
     HTTP     HTTPBase          // streams.json "base"
     Streams  []StreamSpec      // streams.json "streams"
@@ -452,17 +462,24 @@ func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit f
 4. On completion the app layer persists the advanced cursor exactly as today (`internal/app`
    streaming ETL unchanged; `StatefulReader.InitialState` implemented generically by the engine).
 
-Rate limiting: `RateLimitSpec{requests_per_minute}` adds a token-bucket wait inside the requester
-loop; Retry-After handling already exists in connsdk.
+Rate limiting: `streams.json`'s `RateLimitSpec{requests_per_minute}` remains an explicit
+token-bucket wait, while `metadata.json.rate_limit` is informational. An optional
+`rate_limits.json` records a cited provider policy but does not yet select or enforce one. The
+requester foundation invokes an optional context-aware `RateLimitAdmission` for every logical send
+and permitted redirect hop, emits safe typed observations through `RateLimitObserver`, honors a
+valid `Retry-After` reset exactly (even above `MaxBackoff`), and uses bounded full jitter only for
+unhinted fallback retries. A terminal 429 is a `*connsdk.RateLimitError` that unwraps the existing
+`*HTTPError`; later phases attach declaration resolution and operator output.
 
 ### B.5 Write path (engine/write.go)
 
 `ValidateWrite` = compile-once `record_schema` validation per record (structural errors carry
 record index, matching current behavior). Reverse-plan creation persists action `redact_fields` and
-masks matching sample fields. `DryRunWrite` validates and prepares every request without network
-access; `WritePreview.Warnings` shows the first resolved method/path as a redacted representative,
-while the preview digest binds the complete request set, connector/action target, credential and
-configuration identity, batchability, definition, and hook identity. Destructive execution
+masks matching source-table sample fields. `DryRunWrite` validates and prepares every request
+without network access; `WritePreview.Warnings` shows the first fully resolved method/path that
+execution will send, without substitute redactions for secret or `redact_fields` values, while the
+preview digest binds the complete request set, connector/action target, credential and configuration
+identity, batchability, definition, and hook identity. Destructive execution
 re-prepares and compares that digest, then consumes authenticated single-use approval evidence
 through the provider-neutral gate before dispatch. `Write` returns redacted, typed errors.
 `kind: delete` honors `missing_ok_status` (a 404 on an idempotent delete counts as written, not

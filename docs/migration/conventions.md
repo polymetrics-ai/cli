@@ -5,7 +5,7 @@ agent and reviewer follows; deviations are defects, not judgment calls. Goldens 
 blindly — port the *pattern*): `internal/connectors/defs/stripe/**` (declarative HTTP + writes),
 `internal/connectors/defs/searxng/**` (read-only, no-auth), `internal/connectors/defs/postgres/**`
 + `internal/connectors/native/postgres/**` (Tier-3 split). Engine source of truth:
-`internal/connectors/engine/{bundle,interpolate,paginate,read,write,hooks,schema}.go`.
+`internal/connectors/engine/{bundle,interpolate,paginate,read,write,hooks,rate_limits,schema}.go`.
 
 ## 1. Target layouts
 
@@ -22,6 +22,7 @@ writes.json          # actions[] (omit entirely when capabilities.write is false
 api_surface.json     # coverage manifest (always required)
 cli_surface.json     # optional provider-style CLI/help metadata
 certification.json   # optional certify metadata: defaults, safe candidates, pairings
+rate_limits.json     # optional provider-cited rate-limit declaration (staged; see §3)
 schemas/<stream>.json  # one draft-07 schema per stream, x-primary-key/x-cursor-field
 fixtures/
   check.json
@@ -143,11 +144,13 @@ not a full override by default.
   `merge_pull_request` — never `customer_create` or bare nouns.
 - **`spec.json` x-secret discipline**: every credential-shaped field (API keys, tokens, passwords,
   client secrets) is `x-secret: true` in `spec.json`, never a plain `properties` entry. Only
-  `x-secret` fields end up in `Schema.SecretKeys()`, which governs secret/config partitioning,
-  secret redaction from write previews, and log redaction. Write actions that place sensitive
-  non-secret identifiers or clinical values into templated paths must also declare `redact_fields`
-  for those record paths so reverse-plan samples, previews, and write errors do not expose them. A
-  field that merely *looks* sensitive but is documentation-only (an optional Bearer-proxy key never
+  `x-secret` fields end up in `Schema.SecretKeys()`, which governs secret/config partitioning.
+  `DryRunWrite` preview warnings intentionally preserve their resolved request line rather than
+  substitute secret values. Write actions that place sensitive non-secret identifiers or clinical
+  values into templated paths must also declare `redact_fields` for those record paths so
+  reverse-plan source-table samples and write errors remain redacted; those declarations likewise
+  do not substitute values in the resolved dry-run request line. A field that merely *looks*
+  sensitive but is documentation-only (an optional Bearer-proxy key never
   wired into `auth`, e.g. searxng's `api_key`) is still marked `x-secret: true` — the marker is
   about the field's nature, not whether this bundle currently exercises it.
 - **Schema-as-projection**: a stream's `schemas/<stream>.json` `properties` set is derived
@@ -816,6 +819,32 @@ client-side" (see stripe's `docs.md`). Any key on `metadata.json.rate_limit` bey
 `requests_per_minute` (e.g. a `strategy` field) is not even a field on the Go type and is silently
 dropped — don't declare one.
 
+**Provider-cited `rate_limits.json` is a staged declaration, not an automatic throttle**: this
+optional, closed-schema file records a provider policy only when it can be cited. A declared policy
+must carry an HTTPS provider artifact URL without userinfo, query parameters, or credential-like
+query-style fragment parameters (an ordinary documentation anchor fragment is allowed) and an ISO
+`retrieved_at` date. Every file starts with `schema_version: 1`; `version` is optional
+context, not a substitute for a retrieval date. Model the provider shape rather than flattening it
+to requests per minute: selectors can target an endpoint, tier, and auth type; budgets label their
+`burst` or `sustained` dimension, `requests` or `points` unit, and fixed/sliding-window or
+token/leaky-bucket replenishment model. Cost-weighted APIs can declare a default cost and the
+provider response header that reports cost.
+
+The root state is deliberately explicit: `declared` requires one or more cited policies, while
+`unknown` and `not_applicable` require a nonblank reason and cannot carry a policy. A policy's
+`scope.subject_kind` is one of `account`, `installation`, `application`, `endpoint`, or `ip`; it
+names a non-secret subject class only. Never put a credential, token-derived value, or runtime
+subject value in the declaration. The future registry's scope key is the credential binding plus
+policy ID plus this non-secret subject, not a raw credential (#3754).
+
+This file is parsed and validated by the bundle loader, but it does not yet select, pace, or
+observe traffic. #3753 owns attaching a resolved policy to every requester path; #3754 owns scope
+registries; #3755 owns operator output. Do not use this declaration to add a `streams.json`
+`base.rate_limit` throttle or change legacy behavior. Because Go's `embed` directives reject an
+unmatched optional wildcard, `internal/connectors/defs/defs.go` intentionally adds
+`*/rate_limits.json` only with the first production declaration; include that embed update in the
+same migration so the shipped CLI can read the file.
+
 **Write body construction** (`write.go`): `body_type` is one of `"json"` (default), `"form"`, `"none"`, `"graphql"`, `"json_array"`, `"multipart"`, or `"base64_upload"` (the `body_type` enum in `internal/connectors/engine/schema/writes.schema.json` is the authority). Default body = every record field **except** those named in `path_fields` (the path already carries them, e.g. `{{ record.id }}` for an update). `body_fields` (if set) restricts the body to an explicit allow-list instead (used for delete-with-body actions). `"form"` builds a `url.Values` body (Stripe-shape — compare `stripe/write.go`'s `customerForm`), sorted keys for deterministic encoding, empty-string values omitted. `"none"` with no `body_fields` sends no body at all (pure path-parameterized mutation/delete). For a JSON endpoint whose provider contract requires a body even when no body fields resolve, set `body_required: true`; it sends `{}` and is rejected on every non-JSON body type.
 
 **Write retries require operation-scoped evidence** (`write.go`'s `writeRequester`): an action may
@@ -893,13 +922,14 @@ All multipart mutations retain the plan → preview → approval → execute lif
 
 This is separate from the already executable reverse-ETL `writes.json` `body_type: "multipart"` path. Gong's `upload_call_media` action and `pm gong calls upload-media` command are its existing proof; no operation-level connector adoption is implied here. The legacy `operations.json` `kind: "file_upload"` remains planned/non-executable until a connector moves each endpoint to a complete declared contract and proves it. This shared-runtime documentation makes **no** GitLab, Freshchat, Gong, or other provider operation newly available. CLI/help/manual/website parity is therefore not applicable to this foundation: each adoption lane must update its own runtime help, `docs/cli/**`, website docs, generated manuals, command surface, and executable evidence before claiming `availability: implemented`.
 
-`redact_fields` on a `writes.json` action applies to source-table reverse-ETL and engine write
-surfaces. It is for non-secret identifiers or clinical values that can appear in templated paths or
-upstream error text; source-table reverse-plan creation persists the list and masks matching sample
-fields, `DryRunWrite` replaces those path values in the resolved request preview, and `Write`
-redacts raw and URL-encoded literal forms from returned write errors while preserving typed error
-wrapping. `cli_surface.json` declarations remain load-compatible metadata, but `commandrunner` does
-not use them to mutate connector-command records or errors, or to forward them to executors.
+`redact_fields` is an action-local list of record paths whose values remain masked in generic
+source-table plan samples and returned write errors. It is for non-secret identifiers or clinical
+values that can appear in templated paths or upstream error text; reverse-plan creation persists the
+list and masks matching sample fields. `DryRunWrite` deliberately does not apply that masking to its
+resolved request line, so approval sees the method and URL that execution will use. `Write` redacts
+raw and URL-encoded literal forms from returned write errors while preserving typed error wrapping.
+`cli_surface.json` declarations remain load-compatible metadata, but `commandrunner` does not use
+them to mutate connector-command records or errors, or to forward them to executors.
 
 `confirmation` is the closed confirmation declaration for new actions:
 `"confirmation": {"kind": "destructive"}`. The writes and operations schemas are authoritative;

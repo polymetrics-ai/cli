@@ -470,17 +470,28 @@ func TestBinaryDownloadRequiresDestRoot(t *testing.T) {
 	}
 }
 
-// TestBinaryDownloadHTTPErrorLeavesNoFile.
-func TestBinaryDownloadHTTPErrorLeavesNoFile(t *testing.T) {
+// TestBinaryDownloadPreservesHTTPErrorTextAndLeavesNoFile.
+func TestBinaryDownloadPreservesHTTPErrorTextAndLeavesNoFile(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if got, want := r.URL.Query().Get("trace"), "binary-download-fixture"; got != want {
+			t.Fatalf("trace = %q, want %q", got, want)
+		}
 		w.WriteHeader(http.StatusForbidden)
-		_, _ = w.Write([]byte(`{"error":"denied"}`))
+		_, _ = w.Write([]byte(`{"diagnostic":"binary-download-fixture-body"}`))
 	}))
 	t.Cleanup(srv.Close)
 	dest := t.TempDir()
 	b := binaryBundle(srv, &BinaryOperationSpec{})
-	if _, err := OperationBinaryDownload(context.Background(), b, downloadReq(dest), nil); err == nil {
+	req := downloadReq(dest)
+	req.Query = map[string]string{"trace": "binary-download-fixture"}
+	_, err := OperationBinaryDownload(context.Background(), b, req, nil)
+	if err == nil {
 		t.Fatal("want error for 403")
+	}
+	for _, want := range []string{"trace=binary-download-fixture", `{"diagnostic":"binary-download-fixture-body"}`} {
+		if !strings.Contains(err.Error(), want) {
+			t.Fatalf("OperationBinaryDownload error = %q, want complete diagnostic %q", err.Error(), want)
+		}
 	}
 	entries, _ := os.ReadDir(dest)
 	if len(entries) != 0 {
