@@ -2,11 +2,11 @@
 
 | ID | Enforcement | RED evidence | GREEN evidence | Refactor / verification |
 | --- | --- | --- | --- | --- |
-| B1 | A candidate cannot enter a batch without complete measured evidence | Pending: focused `TestBatchPlanRejectsMissingRetrievalDate` before implementation | Pending | Pending |
-| B2 | Manifest output is deterministic and preserves ledger counts/citations | Pending: focused `TestBatchPlanWritesDeterministicEvidenceManifest` before implementation | Pending | Pending |
-| B3 | A failed connector is a named drop, not a batch abort or silent omission | Pending: focused `TestBatchGateContinuesAfterConnectorFailure` before implementation | Pending | Pending |
-| B4 | Executable claims pass the real runtime preflight rather than a generator copy | Pending: focused `TestBatchGateUsesRuntimePreflight` before implementation | Pending | Pending |
-| B5 | Surface metadata remains derived from `operations.json` | Pending: focused `TestBatchGateDropsSurfaceSyncDrift` before implementation | Pending | Pending |
+| B1 | A candidate cannot enter a batch without complete measured evidence | `go test ./cmd/connectorgen -run '^TestBatchPlan' -count=1` failed on the baseline: `batch` was an unknown subcommand, so no retrieval-date validation existed | `TestBatchPlanRejectsMissingRetrievalDate` now rejects the selected record with a `retrieved_at` evidence error | Included in focused package run (passed) |
+| B2 | Manifest output is deterministic and preserves ledger counts/citations | The same baseline run failed because `connectorgen batch plan` did not exist | `TestBatchPlanWritesDeterministicEvidenceManifest` proves byte-identical manifests preserve operation total and artifact URL/version/retrieval date | Included in focused package run (passed) |
+| B3 | A failed connector is a named drop, not a batch abort or silent omission | `go test ./cmd/connectorgen -run '^TestBatchGate' -count=1` failed because `batch gate` did not exist and no report was written | `TestBatchGateContinuesAfterConnectorFailure` reports the malformed sibling as a `validate` drop while the valid connector remains included | Included in focused package run (passed) |
+| B4 | Executable claims pass the real runtime preflight rather than a generator copy | The same baseline run reported `connectorgen batch: unknown subcommand "gate"`; no runtime-preflight count existed | `TestBatchGateUsesRuntimePreflightForEveryImplementedCommand` proves the gate records both executable paths after calling the runtime preflight entry point | Included in focused package run (passed) |
+| B5 | Surface metadata remains derived from `operations.json` | The same baseline run did not produce a surface-sync drop report | `TestBatchGateDropsSurfaceSyncDrift` proves a path-flag mapping that only `surface-sync` can derive becomes a named `surface_sync` drop; it uses a binary download fixture and no redaction policy | Included in focused package run (passed) |
 
 ## Test-first rule
 
