@@ -262,7 +262,12 @@ not a full override by default.
   `flags[].allow_empty:false` to reject present blank string flags, `flags[].required:true` for
   command inputs that must be present before execution, `flags[].max_items`/`flags[].min_items`
   to bound a `string_array` flag's item count against the flag the user typed (before the
-  assembled body is validated), and `constraints[]` `kind:"order"` /
+  assembled body is validated), and optional `flags[].minimum` on `integer` or `number` flags to
+  enforce a provider-cited numeric lower bound. A declared minimum rejects a supplied value below
+  the bound; for an ETL flag mapped to `config.*`, it also checks the effective configured value
+  when the command flag is absent. Omit `minimum` rather than inferring a bound from a parameter
+  name or schema default, so existing command behavior stays unchanged. Use
+  `constraints[]` `kind:"order"` /
   `op:"lt"` / `value_type:"date-time"` over mapped `query.*` or `body.*` targets for provider
   date-range rules. Optional `config.*` fallbacks preserve connection-level defaults when the
   command flag is absent. For implemented direct-read POST operations, every required
