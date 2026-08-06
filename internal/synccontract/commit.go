@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"reflect"
 	"strings"
 	"time"
 )
@@ -23,13 +22,6 @@ type DownstreamAcknowledgement struct {
 	Sink           string    `json:"sink"`
 	AcknowledgedAt time.Time `json:"acknowledged_at"`
 	durable        bool
-}
-
-// DurableCheckpointCommitment proves that a checkpoint candidate was committed
-// after a validated durable downstream acknowledgement.
-type DurableCheckpointCommitment struct {
-	checkpoint CheckpointEnvelope
-	valid      bool
 }
 
 // DurableETLDestination supplies an acknowledgement only after its writes are
@@ -102,51 +94,4 @@ func CommitAfterDownstreamAcknowledgement(candidate CheckpointEnvelope, acknowle
 	acknowledgedAt := acknowledgement.AcknowledgedAt
 	committed.CommittedAt = &acknowledgedAt
 	return commit(committed)
-}
-
-// CommitDurableCheckpointAfterDownstreamAcknowledgement returns a commitment
-// only after the checkpoint persistence callback has succeeded.
-func CommitDurableCheckpointAfterDownstreamAcknowledgement(candidate CheckpointEnvelope, acknowledgement DownstreamAcknowledgement, commit func(CheckpointEnvelope) error) (DurableCheckpointCommitment, error) {
-	var commitment DurableCheckpointCommitment
-	if err := CommitAfterDownstreamAcknowledgement(candidate, acknowledgement, func(committed CheckpointEnvelope) error {
-		if err := commit(committed); err != nil {
-			return err
-		}
-		commitment = DurableCheckpointCommitment{
-			checkpoint: committed.Clone(),
-			valid:      true,
-		}
-		return nil
-	}); err != nil {
-		return DurableCheckpointCommitment{}, err
-	}
-	return commitment, nil
-}
-
-// ValidateCandidate verifies that the commitment is bound to candidate.
-func (c DurableCheckpointCommitment) ValidateCandidate(candidate CheckpointEnvelope) error {
-	if !c.valid {
-		return fmt.Errorf("%w: durable checkpoint commitment is required", ErrDownstreamAcknowledgementRequired)
-	}
-	if candidate.CommittedAt != nil {
-		return fmt.Errorf("%w: checkpoint candidate must be uncommitted", ErrDownstreamAcknowledgementRequired)
-	}
-	if err := candidate.Validate(); err != nil {
-		return fmt.Errorf("%w: checkpoint candidate is invalid: %v", ErrDownstreamAcknowledgementRequired, err)
-	}
-	if err := c.checkpoint.Validate(); err != nil {
-		return fmt.Errorf("%w: committed checkpoint is invalid: %v", ErrDownstreamAcknowledgementRequired, err)
-	}
-	if c.checkpoint.CommittedAt == nil {
-		return fmt.Errorf("%w: committed checkpoint timestamp is required", ErrDownstreamAcknowledgementRequired)
-	}
-
-	expected := candidate.Clone()
-	actual := c.checkpoint.Clone()
-	expected.CommittedAt = nil
-	actual.CommittedAt = nil
-	if !reflect.DeepEqual(actual, expected) {
-		return fmt.Errorf("%w: commitment does not match checkpoint candidate", ErrDownstreamAcknowledgementRequired)
-	}
-	return nil
 }

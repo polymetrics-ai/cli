@@ -2,8 +2,11 @@ package postgres
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"fmt"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"testing"
@@ -12,6 +15,7 @@ import (
 	"github.com/jackc/pgx/v5"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/durability"
 	"polymetrics.ai/internal/synccontract"
 )
 
@@ -76,13 +80,17 @@ func TestLogicalReplicationResumesAndCleansSlot(t *testing.T) {
 		_ = c.TeardownCDC(teardownCtx, cfg, stream)
 	}()
 
-	firstCommitter := newIntegrationCheckpointCommitter()
+	firstStore := newIntegrationChangefeedStore(t)
+	firstTransaction, err := connectors.NewDurableChangefeedTransaction(firstStore, firstStore)
+	if err != nil {
+		t.Fatal("could not create PostgreSQL CDC durable transaction")
+	}
 	firstEvents := make(chan connectors.CDCEvent, 8)
 	firstCtx, stopFirst := context.WithCancel(ctx)
 	firstDone := startCDCRead(c, firstCtx, connectors.CDCReadRequest{
-		Stream:                     stream,
-		Config:                     cfg,
-		DurableCheckpointCommitter: firstCommitter,
+		Stream:             stream,
+		Config:             cfg,
+		DurableTransaction: firstTransaction,
 	}, firstEvents)
 	waitForCDCSlot(t, ctx, data, slot, true)
 
@@ -104,7 +112,7 @@ func TestLogicalReplicationResumesAndCleansSlot(t *testing.T) {
 	}
 
 	assertCDCOperations(t, ctx, firstEvents, []string{"insert", "update", "delete"})
-	checkpoint := firstCommitter.wait(t, ctx)
+	checkpoint := firstStore.wait(t, ctx)
 	if err := checkpoint.Validate(); err != nil || checkpoint.CommittedAt == nil {
 		t.Fatal("first PostgreSQL CDC checkpoint was not durably committed")
 	}
@@ -112,15 +120,19 @@ func TestLogicalReplicationResumesAndCleansSlot(t *testing.T) {
 	assertCDCStopped(t, firstDone)
 	waitForCDCSlot(t, ctx, data, slot, false)
 
-	secondCommitter := newIntegrationCheckpointCommitter()
+	secondStore := newIntegrationChangefeedStore(t)
+	secondTransaction, err := connectors.NewDurableChangefeedTransaction(secondStore, secondStore)
+	if err != nil {
+		t.Fatal("could not create PostgreSQL CDC resume durable transaction")
+	}
 	secondEvents := make(chan connectors.CDCEvent, 4)
 	secondCtx, stopSecond := context.WithCancel(ctx)
 	resumeCheckpoint := checkpoint.Clone()
 	secondDone := startCDCRead(c, secondCtx, connectors.CDCReadRequest{
-		Stream:                     stream,
-		Config:                     cfg,
-		Checkpoint:                 &resumeCheckpoint,
-		DurableCheckpointCommitter: secondCommitter,
+		Stream:             stream,
+		Config:             cfg,
+		Checkpoint:         &resumeCheckpoint,
+		DurableTransaction: secondTransaction,
 	}, secondEvents)
 	waitForCDCSlot(t, ctx, data, slot, true)
 	if _, err := data.Exec(ctx, "INSERT INTO "+quoteIdentifier(table)+" (id, value) VALUES (2, 'resumed')"); err != nil {
@@ -130,7 +142,7 @@ func TestLogicalReplicationResumesAndCleansSlot(t *testing.T) {
 	if resumed.Operation != "insert" || resumed.Record["id"] != 2 {
 		t.Fatal("CDC restart did not resume at the next source transaction")
 	}
-	resumedCheckpoint := secondCommitter.wait(t, ctx)
+	resumedCheckpoint := secondStore.wait(t, ctx)
 	if string(resumedCheckpoint.Position.Primary) == string(checkpoint.Position.Primary) {
 		t.Fatal("CDC restart did not advance the durable LSN")
 	}
@@ -244,33 +256,101 @@ func assertCDCSlotRemoved(t *testing.T, ctx context.Context, data *pgx.Conn, slo
 	}
 }
 
-type integrationCheckpointCommitter struct {
-	committed chan synccontract.CheckpointEnvelope
+type integrationChangefeedStore struct {
+	directory      string
+	eventsPath     string
+	checkpointPath string
+	committed      chan synccontract.CheckpointEnvelope
 }
 
-func newIntegrationCheckpointCommitter() *integrationCheckpointCommitter {
-	return &integrationCheckpointCommitter{committed: make(chan synccontract.CheckpointEnvelope, 1)}
-}
-
-func (c *integrationCheckpointCommitter) CommitDurableChangefeedCheckpoint(_ context.Context, candidate synccontract.CheckpointEnvelope) (synccontract.DurableCheckpointCommitment, error) {
-	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement("postgres_cdc_conformance", time.Now().UTC())
-	if err != nil {
-		return synccontract.DurableCheckpointCommitment{}, err
+func newIntegrationChangefeedStore(t *testing.T) *integrationChangefeedStore {
+	t.Helper()
+	directory := t.TempDir()
+	return &integrationChangefeedStore{
+		directory:      directory,
+		eventsPath:     filepath.Join(directory, "events.jsonl"),
+		checkpointPath: filepath.Join(directory, "checkpoint.json"),
+		committed:      make(chan synccontract.CheckpointEnvelope, 1),
 	}
-	return synccontract.CommitDurableCheckpointAfterDownstreamAcknowledgement(candidate, acknowledgement, func(committed synccontract.CheckpointEnvelope) error {
-		clone := committed.Clone()
-		select {
-		case c.committed <- clone:
-		default:
-		}
-		return nil
-	})
 }
 
-func (c *integrationCheckpointCommitter) wait(t *testing.T, ctx context.Context) synccontract.CheckpointEnvelope {
+func (s *integrationChangefeedStore) Name() string { return "postgres_cdc_conformance" }
+
+func (s *integrationChangefeedStore) CommitChangefeedTransaction(ctx context.Context, checkpoint synccontract.CheckpointEnvelope, events []connectors.CDCEvent) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	payload, err := json.Marshal(struct {
+		Checkpoint synccontract.CheckpointEnvelope `json:"checkpoint"`
+		Events     []connectors.CDCEvent           `json:"events"`
+	}{Checkpoint: checkpoint, Events: events})
+	if err != nil {
+		return fmt.Errorf("encode downstream transaction: %w", err)
+	}
+	file, err := os.OpenFile(s.eventsPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o600)
+	if err != nil {
+		return fmt.Errorf("open downstream transaction log: %w", err)
+	}
+	defer func() { _ = file.Close() }()
+	if _, err := file.Write(append(payload, '\n')); err != nil {
+		return fmt.Errorf("write downstream transaction log: %w", err)
+	}
+	if err := file.Sync(); err != nil {
+		return fmt.Errorf("sync downstream transaction log: %w", err)
+	}
+	return nil
+}
+
+func (s *integrationChangefeedStore) PersistDurableChangefeedCheckpoint(ctx context.Context, checkpoint synccontract.CheckpointEnvelope) (err error) {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	payload, err := json.Marshal(checkpoint)
+	if err != nil {
+		return fmt.Errorf("encode durable checkpoint: %w", err)
+	}
+	payload = append(payload, '\n')
+	temporary, err := os.CreateTemp(s.directory, ".checkpoint-*")
+	if err != nil {
+		return fmt.Errorf("create checkpoint temporary file: %w", err)
+	}
+	temporaryPath := temporary.Name()
+	defer func() {
+		if temporary != nil {
+			_ = temporary.Close()
+		}
+		if err != nil {
+			_ = os.Remove(temporaryPath)
+		}
+	}()
+	if _, err := temporary.Write(payload); err != nil {
+		return fmt.Errorf("write durable checkpoint: %w", err)
+	}
+	if err := temporary.Sync(); err != nil {
+		return fmt.Errorf("sync durable checkpoint: %w", err)
+	}
+	if err := temporary.Close(); err != nil {
+		return fmt.Errorf("close durable checkpoint: %w", err)
+	}
+	temporary = nil
+	if err := os.Rename(temporaryPath, s.checkpointPath); err != nil {
+		return fmt.Errorf("replace durable checkpoint: %w", err)
+	}
+	if err := durability.SyncDirectory(s.directory); err != nil {
+		return fmt.Errorf("sync durable checkpoint directory: %w", err)
+	}
+	clone := checkpoint.Clone()
+	select {
+	case s.committed <- clone:
+	default:
+	}
+	return nil
+}
+
+func (s *integrationChangefeedStore) wait(t *testing.T, ctx context.Context) synccontract.CheckpointEnvelope {
 	t.Helper()
 	select {
-	case checkpoint := <-c.committed:
+	case checkpoint := <-s.committed:
 		return checkpoint
 	case <-ctx.Done():
 		t.Fatal("timed out waiting for a durably committed PostgreSQL CDC LSN")

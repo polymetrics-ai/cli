@@ -437,8 +437,12 @@ func guideFromManifest(manifest Manifest) ConnectorGuide {
 }
 
 func capabilitySection(manifest Manifest) GuideSection {
+	capabilities := fmt.Sprintf("check=%t catalog=%t read=%t write=%t query=%t", manifest.Metadata.Capabilities.Check, manifest.Metadata.Capabilities.Catalog, manifest.Metadata.Capabilities.Read, manifest.Metadata.Capabilities.Write, manifest.Metadata.Capabilities.Query)
+	if manifest.Metadata.Capabilities.CDC {
+		capabilities += " cdc=true"
+	}
 	lines := []string{
-		fmt.Sprintf("check=%t catalog=%t read=%t write=%t query=%t", manifest.Metadata.Capabilities.Check, manifest.Metadata.Capabilities.Catalog, manifest.Metadata.Capabilities.Read, manifest.Metadata.Capabilities.Write, manifest.Metadata.Capabilities.Query),
+		capabilities,
 		"Integration type: " + manifest.Metadata.IntegrationType,
 	}
 	return GuideSection{Title: "Capabilities", Lines: lines}

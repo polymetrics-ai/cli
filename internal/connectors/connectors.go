@@ -381,10 +381,9 @@ type CDCReadRequest struct {
 	// CheckpointCommitter receives the next source state only after its page's
 	// emitted events have been durably accepted by the caller.
 	CheckpointCommitter ChangefeedCheckpointCommitter
-	// DurableCheckpointCommitter persists the product-wide opaque checkpoint
-	// envelope. Native sources that need source identity and protocol positions
-	// use this port instead of serializing a parallel scalar state map.
-	DurableCheckpointCommitter DurableChangefeedCheckpointCommitter
+	// DurableTransaction owns downstream delivery, durability acknowledgement,
+	// and checkpoint persistence for a native CDC source transaction.
+	DurableTransaction *DurableChangefeedTransaction
 }
 
 type CDCEvent struct {
@@ -416,14 +415,6 @@ type CDCReader interface {
 // without changing transport or delivery logic.
 type ChangefeedCheckpointCommitter interface {
 	CommitChangefeedCheckpoint(ctx context.Context, state map[string]string) error
-}
-
-// DurableChangefeedCheckpointCommitter receives a fully structured
-// synccontract envelope after the caller has durably accepted the emitted
-// source transaction and returns the shared evidence that the exact candidate
-// is durably committed.
-type DurableChangefeedCheckpointCommitter interface {
-	CommitDurableChangefeedCheckpoint(context.Context, synccontract.CheckpointEnvelope) (synccontract.DurableCheckpointCommitment, error)
 }
 
 // ChangefeedStatus is the closed lifecycle vocabulary for a declared

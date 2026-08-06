@@ -30,6 +30,10 @@ const (
 
 var ErrCDCSlotActive = errors.New("postgres CDC replication slot is active")
 
+var errCDCRelationHasDescendants = errors.New("postgres CDC does not support a selected relation with descendant tables")
+
+var errCDCRelationNotPublished = errors.New("postgres CDC selected relation is not included in the configured publication")
+
 type postgresCDCSource struct {
 	identity   synccontract.SourceIdentity
 	generation synccontract.OpaqueToken
@@ -45,6 +49,11 @@ type postgresReplicationSlot struct {
 	active       bool
 	confirmedLSN string
 	restartLSN   string
+}
+
+type postgresCDCSlotSetup struct {
+	barrier pglogrepl.LSN
+	created bool
 }
 
 func replicationConnection(ctx context.Context, conn connConfig) (*pgconn.PgConn, error) {
@@ -199,16 +208,62 @@ func slotBarrier(slot postgresReplicationSlot, fallback pglogrepl.LSN) (pglogrep
 	return fallback, nil
 }
 
-func ensureReplicationSlot(ctx context.Context, replication *pgconn.PgConn, conn connConfig, source postgresCDCSource) (pglogrepl.LSN, error) {
+func validateCDCRelationScope(ctx context.Context, conn connConfig, source postgresCDCSource, publication string) error {
+	data, err := pgx.Connect(ctx, conn.dsn())
+	if err != nil {
+		return fmt.Errorf("postgres CDC: connect relation scope inspection: %w", err)
+	}
+	defer func() { _ = data.Close(ctx) }()
+
+	var hasDescendants, published bool
+	err = data.QueryRow(ctx, `
+	SELECT
+		EXISTS (
+			SELECT 1
+			FROM pg_inherits inheritance
+			JOIN pg_class parent ON parent.oid = inheritance.inhparent
+			JOIN pg_namespace parent_schema ON parent_schema.oid = parent.relnamespace
+			WHERE parent_schema.nspname = $1 AND parent.relname = $2
+		),
+		EXISTS (
+			SELECT 1
+			FROM pg_publication_tables
+			WHERE pubname = $3 AND schemaname = $1 AND tablename = $2
+		)`, source.schema, source.table, publication).Scan(&hasDescendants, &published)
+	if err != nil {
+		return fmt.Errorf("postgres CDC: inspect selected relation scope: %w", err)
+	}
+	if err := validateCDCPublicationScope(published); err != nil {
+		return err
+	}
+	return validateCDCRelationHierarchy(hasDescendants)
+}
+
+func validateCDCPublicationScope(published bool) error {
+	if !published {
+		return errCDCRelationNotPublished
+	}
+	return nil
+}
+
+func validateCDCRelationHierarchy(hasDescendants bool) error {
+	if hasDescendants {
+		return errCDCRelationHasDescendants
+	}
+	return nil
+}
+
+func ensureReplicationSlot(ctx context.Context, replication *pgconn.PgConn, conn connConfig, source postgresCDCSource) (postgresCDCSlotSetup, error) {
 	slot, found, err := replicationSlotStatus(ctx, conn, source.slotName)
 	if err != nil {
-		return 0, err
+		return postgresCDCSlotSetup{}, err
 	}
 	if found {
 		if err := validateReplicationSlot(slot, conn.database); err != nil {
-			return 0, err
+			return postgresCDCSlotSetup{}, err
 		}
-		return slotBarrier(slot, source.system.XLogPos)
+		barrier, err := slotBarrier(slot, source.system.XLogPos)
+		return postgresCDCSlotSetup{barrier: barrier}, err
 	}
 
 	// NOEXPORT_SNAPSHOT is accepted by PostgreSQL 12+ and avoids leaving an
@@ -220,21 +275,22 @@ func ensureReplicationSlot(ctx context.Context, replication *pgconn.PgConn, conn
 		// inspection. Re-read it and accept only the same safe shape.
 		slot, found, err = replicationSlotStatus(ctx, conn, source.slotName)
 		if err != nil || !found {
-			return 0, fmt.Errorf("postgres CDC: create replication slot: %w", createErr)
+			return postgresCDCSlotSetup{}, fmt.Errorf("postgres CDC: create replication slot: %w", createErr)
 		}
 		if err := validateReplicationSlot(slot, conn.database); err != nil {
-			return 0, err
+			return postgresCDCSlotSetup{}, err
 		}
-		return slotBarrier(slot, source.system.XLogPos)
+		barrier, err := slotBarrier(slot, source.system.XLogPos)
+		return postgresCDCSlotSetup{barrier: barrier}, err
 	}
 	if created.OutputPlugin != "pgoutput" {
-		return 0, errors.New("postgres CDC: created replication slot did not select pgoutput")
+		return postgresCDCSlotSetup{}, errors.New("postgres CDC: created replication slot did not select pgoutput")
 	}
 	barrier, err := pglogrepl.ParseLSN(created.ConsistentPoint)
 	if err != nil {
-		return 0, errors.New("postgres CDC: created replication slot returned an invalid consistent point")
+		return postgresCDCSlotSetup{}, errors.New("postgres CDC: created replication slot returned an invalid consistent point")
 	}
-	return barrier, nil
+	return postgresCDCSlotSetup{barrier: barrier, created: true}, nil
 }
 
 // CDCSlotName returns the source-bound, connector-owned replication slot name

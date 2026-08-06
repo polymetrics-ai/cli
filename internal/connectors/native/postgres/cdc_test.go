@@ -1,7 +1,6 @@
 package postgres
 
 import (
-	"context"
 	"errors"
 	"testing"
 	"time"
@@ -109,22 +108,35 @@ func TestClassifyCDCStartErrorRequiresRebootstrapForLostWAL(t *testing.T) {
 	}
 }
 
-func TestCommitDurableCDCCheckpointRejectsUnprovenCommitment(t *testing.T) {
-	source := postgresCDCSource{
-		identity: synccontract.SourceIdentity{
-			Engine:           "postgres",
-			AccountOrCluster: "system-one:database-one",
-			ObjectScope:      "public.events",
-		},
-		generation: synccontract.OpaqueToken("timeline-one"),
+func TestCDCSlotReuseRequiresDurableCheckpoint(t *testing.T) {
+	if err := validateCDCSlotReuse(nil, postgresCDCSlotSetup{created: true}); err != nil {
+		t.Fatalf("validateCDCSlotReuse(new slot) = %v", err)
 	}
-	candidate := postgresCDCCheckpoint(source, pglogrepl.LSN(16), 0, &pglogrepl.CommitMessage{
-		CommitLSN:         pglogrepl.LSN(24),
-		TransactionEndLSN: pglogrepl.LSN(32),
-	})
-	err := commitDurableCDCCheckpoint(context.Background(), unprovenCheckpointCommitter{}, candidate)
-	if !errors.Is(err, synccontract.ErrDownstreamAcknowledgementRequired) {
-		t.Fatalf("commitDurableCDCCheckpoint = %v, want durable acknowledgement rejection", err)
+	err := validateCDCSlotReuse(nil, postgresCDCSlotSetup{barrier: pglogrepl.LSN(16)})
+	if !errors.Is(err, synccontract.ErrRebootstrapRequired) {
+		t.Fatalf("validateCDCSlotReuse(existing slot) = %v, want rebootstrap error", err)
+	}
+	var recovery *synccontract.RebootstrapRequiredError
+	if !errors.As(err, &recovery) || recovery.Outcome != synccontract.RecoveryOutcomeInvalidCheckpoint {
+		t.Fatalf("validateCDCSlotReuse(existing slot) recovery = %#v, want invalid checkpoint", recovery)
+	}
+}
+
+func TestCDCRelationHierarchyRejectsDescendants(t *testing.T) {
+	if err := validateCDCRelationHierarchy(false); err != nil {
+		t.Fatalf("validateCDCRelationHierarchy(no descendants) = %v", err)
+	}
+	if err := validateCDCRelationHierarchy(true); !errors.Is(err, errCDCRelationHasDescendants) {
+		t.Fatalf("validateCDCRelationHierarchy(descendants) = %v, want descendant rejection", err)
+	}
+}
+
+func TestCDCPublicationScopeRequiresSelectedRelation(t *testing.T) {
+	if err := validateCDCPublicationScope(true); err != nil {
+		t.Fatalf("validateCDCPublicationScope(published) = %v", err)
+	}
+	if err := validateCDCPublicationScope(false); !errors.Is(err, errCDCRelationNotPublished) {
+		t.Fatalf("validateCDCPublicationScope(unpublished) = %v, want publication rejection", err)
 	}
 }
 
@@ -133,10 +145,4 @@ func TestClassifyCDCSlotDropErrorRefusesActiveSlot(t *testing.T) {
 	if !errors.Is(err, ErrCDCSlotActive) {
 		t.Fatalf("classifyCDCSlotDropError = %v, want active slot refusal", err)
 	}
-}
-
-type unprovenCheckpointCommitter struct{}
-
-func (unprovenCheckpointCommitter) CommitDurableChangefeedCheckpoint(context.Context, synccontract.CheckpointEnvelope) (synccontract.DurableCheckpointCommitment, error) {
-	return synccontract.DurableCheckpointCommitment{}, nil
 }

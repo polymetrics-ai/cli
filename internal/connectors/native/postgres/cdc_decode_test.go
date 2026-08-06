@@ -49,7 +49,7 @@ func TestPGOutputDecoderDML(t *testing.T) {
 					"id":     7,
 					"email":  "ada@example.invalid",
 					"active": true,
-					"score":  98.5,
+					"score":  "98.5",
 				},
 				State: connectors.Record{"lsn": "0/16B6C50"},
 			},
@@ -63,7 +63,7 @@ func TestPGOutputDecoderDML(t *testing.T) {
 					"id":     7,
 					"email":  "grace@example.invalid",
 					"active": false,
-					"score":  99.25,
+					"score":  "99.25",
 				},
 			},
 		},
@@ -88,7 +88,7 @@ func TestPGOutputDecoderDML(t *testing.T) {
 				Record: connectors.Record{
 					"id":    8,
 					"email": nil,
-					"score": 12.75,
+					"score": "12.75",
 				},
 			},
 		},
@@ -114,6 +114,12 @@ func TestPGOutputDecoderDML(t *testing.T) {
 				t.Fatalf("event mismatch\n got: %#v\nwant: %#v", events[0], tc.want)
 			}
 		})
+	}
+}
+
+func TestDecodeTextValuePreservesNumericPrecision(t *testing.T) {
+	if got := decodeTextValue(1700, "9007199254740993"); got != "9007199254740993" {
+		t.Fatalf("decodeTextValue(numeric) = %#v, want exact decimal text", got)
 	}
 }
 

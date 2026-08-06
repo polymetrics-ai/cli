@@ -256,6 +256,27 @@ func TestCDCIsNotAnUnsupportedStub(t *testing.T) {
 	}
 }
 
+func TestCDCGuideProjectsCapabilitiesAndConnectionFields(t *testing.T) {
+	manual := connectors.RenderConnectorManual(native.New())
+	for _, want := range []string{
+		"check=true catalog=true read=true write=false query=false cdc=true",
+		"password (secret)",
+		"cdc_publication",
+	} {
+		if !strings.Contains(manual, want) {
+			t.Fatalf("PostgreSQL manual missing %q:\n%s", want, manual)
+		}
+	}
+	for _, unwanted := range []string{
+		"No secret authentication is required for this connector.",
+		"No connector-specific config fields.",
+	} {
+		if strings.Contains(manual, unwanted) {
+			t.Fatalf("PostgreSQL manual contains stale projection %q:\n%s", unwanted, manual)
+		}
+	}
+}
+
 func TestWriteUnsupported(t *testing.T) {
 	c := native.New()
 	_, err := c.Write(context.Background(), connectors.WriteRequest{Stream: "public.users", Config: fixtureConfig()}, []connectors.Record{{"id": 1}})

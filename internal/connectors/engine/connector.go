@@ -242,6 +242,11 @@ func (b Base) Definition() connectors.Definition {
 	return synthesizeDefinition(b.bundle)
 }
 
+// BundleManifest synthesizes the bundle-backed manifest for a native connector.
+func (b Base) BundleManifest() connectors.Manifest {
+	return synthesizeManifest(b.bundle)
+}
+
 func (b Base) CommandSurface() *connectors.CommandSurface {
 	return synthesizeCommandSurface(b.bundle)
 }

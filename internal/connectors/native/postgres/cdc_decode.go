@@ -319,10 +319,12 @@ func decodeTextValue(typeID uint32, raw string) any {
 			}
 			return v
 		}
-	case 700, 701, 1700: // float4, float8, numeric
+	case 700, 701: // float4, float8
 		if v, err := strconv.ParseFloat(raw, 64); err == nil {
 			return v
 		}
+	case 1700: // numeric
+		return raw
 	}
 	return raw
 }

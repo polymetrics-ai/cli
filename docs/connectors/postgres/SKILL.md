@@ -19,22 +19,32 @@ Reads PostgreSQL tables: discovers schemas/columns from information_schema, snap
 
 ## Capabilities
 
-- check=true catalog=true read=true write=false query=false
+- check=true catalog=true read=true write=false query=false cdc=true
 - Integration type: database
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- No connector-specific config fields.
+- cdc_publication
+- cursor_field
+- database
+- host
+- mode
+- port
+- read_limit
+- schema
+- sslmode
+- username
+- password (secret)
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: low
+- write risk: n/a (read-only source)
+- approval: none required for read-only sync
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands
