@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/durable"
 )
 
 const (
@@ -332,9 +333,8 @@ func (a *projectWriteApprovalAuthority) consume(approvalID, nonce, grantMAC stri
 	if closeErr != nil {
 		return fmt.Errorf("close write approval consumption marker: %w", closeErr)
 	}
-	if dirHandle, openErr := os.Open(dir); openErr == nil {
-		_ = dirHandle.Sync()
-		_ = dirHandle.Close()
+	if err := durable.SyncDirectory(dir); err != nil {
+		return fmt.Errorf("sync write approval consumption directory: %w", err)
 	}
 	return nil
 }

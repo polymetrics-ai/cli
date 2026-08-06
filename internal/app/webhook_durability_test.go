@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"encoding/base64"
+	"fmt"
 	"testing"
 	"time"
 
@@ -106,5 +107,61 @@ func TestWebhookReceiptCommitDeduplicatesAcrossIndependentStores(t *testing.T) {
 		if string(body) != newBody {
 			t.Fatal("duplicate receipt replaced the committed payload")
 		}
+	}
+}
+
+func TestWebhookReceiptCommitKeepsLiveStateCurrent(t *testing.T) {
+	t.Parallel()
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	instance, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	const receiptCount = 8
+	if _, err := instance.ConfigureWebhookReceiver(context.Background(), ConfigureWebhookReceiverRequest{
+		Name: "live-state",
+		Exposure: webhook.ExposureConfig{
+			Mode:        webhook.ExposureModeOperatorEndpoint,
+			CallbackURL: "https://operator.example.test/receiver",
+		},
+		ReceiptCapacity: receiptCount,
+	}); err != nil {
+		t.Fatal(err)
+	}
+	store, err := instance.WebhookReceiptStore("live-state")
+	if err != nil {
+		t.Fatal(err)
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	start := make(chan struct{})
+	results := make(chan error, receiptCount)
+	for index := range receiptCount {
+		go func(index int) {
+			<-start
+			result, err := store.Insert(ctx, webhook.Receipt{
+				Event:      webhook.VerifiedEvent{ID: fmt.Sprintf("event-%d", index)},
+				RawBody:    []byte(fmt.Sprintf(`{"event":%d}`, index)),
+				ReceivedAt: time.Now().UTC(),
+			})
+			if err == nil && result != webhook.ReceiptInsertNew {
+				err = fmt.Errorf("Insert() result = %q", result)
+			}
+			results <- err
+		}(index)
+	}
+	close(start)
+	for range receiptCount {
+		if err := <-results; err != nil {
+			t.Fatal(err)
+		}
+	}
+	instance.stateMu.RLock()
+	defer instance.stateMu.RUnlock()
+	if got := len(instance.state.WebhookReceipts); got != receiptCount {
+		t.Fatalf("live receipt count = %d, want %d", got, receiptCount)
 	}
 }

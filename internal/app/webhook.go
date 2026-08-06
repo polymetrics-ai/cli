@@ -227,7 +227,10 @@ func (a *App) WebhookReceiptStore(name string) (webhook.ReceiptStore, error) {
 	if err := safety.ValidateIdentifier(name, "webhook receiver"); err != nil {
 		return nil, errors.New("webhook receiver is invalid")
 	}
-	if _, ok := a.state.WebhookSubscriptions[name]; !ok {
+	a.stateMu.RLock()
+	_, ok := a.state.WebhookSubscriptions[name]
+	a.stateMu.RUnlock()
+	if !ok {
 		return nil, errors.New("webhook receiver not found")
 	}
 	return &appWebhookReceiptStore{app: a, subscription: name}, nil

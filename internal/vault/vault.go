@@ -12,6 +12,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"polymetrics.ai/internal/durable"
 )
 
 type Vault struct {
@@ -83,7 +85,7 @@ func writeDurableVaultKey(dir, keyPath string, key []byte) (created bool, err er
 		if err := os.Remove(tmpPath); err != nil && !errors.Is(err, os.ErrNotExist) {
 			return false, fmt.Errorf("remove temporary vault key: %w", err)
 		}
-		if err := syncDirectory(dir); err != nil {
+		if err := durable.SyncDirectory(dir); err != nil {
 			return false, fmt.Errorf("sync vault directory: %w", err)
 		}
 		return false, nil
@@ -91,7 +93,7 @@ func writeDurableVaultKey(dir, keyPath string, key []byte) (created bool, err er
 	if err := os.Remove(tmpPath); err != nil && !errors.Is(err, os.ErrNotExist) {
 		return false, fmt.Errorf("remove temporary vault key: %w", err)
 	}
-	if err := syncDirectory(dir); err != nil {
+	if err := durable.SyncDirectory(dir); err != nil {
 		return false, fmt.Errorf("sync vault directory: %w", err)
 	}
 	return true, nil
@@ -120,7 +122,7 @@ func (v *Vault) Put(ctx context.Context, id string, secret map[string]string) er
 	if err := os.Rename(tmpPath, v.path(id)); err != nil {
 		return fmt.Errorf("replace encrypted credential %s: %w", id, err)
 	}
-	if err := v.syncDirectory(); err != nil {
+	if err := durable.SyncDirectory(v.dir); err != nil {
 		return fmt.Errorf("sync vault directory: %w", err)
 	}
 	return nil
@@ -151,7 +153,7 @@ func (v *Vault) PutDurableIfAbsent(ctx context.Context, id string, secret map[st
 		if err := os.Remove(tmpPath); err != nil && !errors.Is(err, os.ErrNotExist) {
 			return false, fmt.Errorf("remove temporary encrypted credential %s: %w", id, err)
 		}
-		if err := v.syncDirectory(); err != nil {
+		if err := durable.SyncDirectory(v.dir); err != nil {
 			return false, fmt.Errorf("sync vault directory: %w", err)
 		}
 		return false, nil
@@ -159,7 +161,7 @@ func (v *Vault) PutDurableIfAbsent(ctx context.Context, id string, secret map[st
 	if err := os.Remove(tmpPath); err != nil && !errors.Is(err, os.ErrNotExist) {
 		return false, fmt.Errorf("remove temporary encrypted credential %s: %w", id, err)
 	}
-	if err := v.syncDirectory(); err != nil {
+	if err := durable.SyncDirectory(v.dir); err != nil {
 		return false, fmt.Errorf("sync vault directory: %w", err)
 	}
 	return true, nil
@@ -210,19 +212,6 @@ func (v *Vault) writeTemporaryCiphertext(id string, ciphertext []byte) (path str
 	}
 	file = nil
 	return path, nil
-}
-
-func (v *Vault) syncDirectory() error {
-	return syncDirectory(v.dir)
-}
-
-func syncDirectory(path string) error {
-	dir, err := os.Open(path)
-	if err != nil {
-		return err
-	}
-	defer func() { _ = dir.Close() }()
-	return dir.Sync()
 }
 
 func (v *Vault) Get(ctx context.Context, id string) (map[string]string, error) {

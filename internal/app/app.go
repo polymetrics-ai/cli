@@ -5,7 +5,6 @@ import (
 	"crypto/rand"
 	"crypto/subtle"
 	"encoding/hex"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
@@ -13,6 +12,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"polymetrics.ai/internal/connectors"
@@ -36,6 +36,7 @@ type App struct {
 	projectDir string
 	statePath  string
 	store      statestore.JSONStore[state]
+	stateMu    sync.RWMutex
 	state      state
 	vault      *vault.Vault
 	approval   *projectWriteApprovalAuthority
@@ -123,7 +124,7 @@ func InitProject(root string) error {
 			WebhookSubscriptions:         map[string]webhookSubscriptionState{},
 			WebhookReceipts:              map[string]webhookReceiptState{},
 		}
-		if err := writeJSONAtomic(statePath, initial); err != nil {
+		if err := newStateStore(statePath).Save(initial); err != nil {
 			return err
 		}
 	}
@@ -390,6 +391,12 @@ func (a *App) migrateLegacySyncModeCompatibility() bool {
 }
 
 func (a *App) save() error {
+	a.stateMu.Lock()
+	defer a.stateMu.Unlock()
+	return a.saveLocked()
+}
+
+func (a *App) saveLocked() error {
 	expectedRevision := a.state.Revision
 	next := a.state
 	updated, err := a.store.Update(func(current state) (state, error) {
@@ -406,6 +413,8 @@ func (a *App) save() error {
 }
 
 func (a *App) updateState(update func(state) (state, error)) (state, error) {
+	a.stateMu.Lock()
+	defer a.stateMu.Unlock()
 	updated, err := a.store.Update(func(current state) (state, error) {
 		next, updateErr := update(current)
 		if updateErr != nil {
@@ -1582,7 +1591,7 @@ func (a *App) persistDestructivePreview(plan ReversePlan, preview connectors.Wri
 	}
 	now := time.Now().UTC()
 	var issued ReversePlan
-	updated, err := a.updateState(func(current state) (state, error) {
+	_, err = a.updateState(func(current state) (state, error) {
 		for i := range current.ReversePlans {
 			stored := current.ReversePlans[i]
 			if stored.ID != plan.ID {
@@ -1629,7 +1638,6 @@ func (a *App) persistDestructivePreview(plan ReversePlan, preview connectors.Wri
 	if err != nil {
 		return ReversePlan{}, err
 	}
-	a.state = updated
 	return issued, nil
 }
 
@@ -1658,7 +1666,7 @@ func (a *App) persistOperationDirectWritePreview(plan ReversePlan, preview conne
 	}
 	now := time.Now().UTC()
 	var issued ReversePlan
-	updated, err := a.updateState(func(current state) (state, error) {
+	_, err = a.updateState(func(current state) (state, error) {
 		for i := range current.ReversePlans {
 			stored := current.ReversePlans[i]
 			if stored.ID != plan.ID {
@@ -1689,7 +1697,6 @@ func (a *App) persistOperationDirectWritePreview(plan ReversePlan, preview conne
 	if err != nil {
 		return ReversePlan{}, err
 	}
-	a.state = updated
 	return issued, nil
 }
 
@@ -2054,6 +2061,8 @@ func validateOperationDirectWritePreview(ctx context.Context, writer connectors.
 }
 
 func (a *App) loadReversePlan(id string) (ReversePlan, error) {
+	a.stateMu.Lock()
+	defer a.stateMu.Unlock()
 	loaded, err := a.store.Load()
 	if err != nil {
 		return ReversePlan{}, err
@@ -2073,7 +2082,7 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 	now := time.Now().UTC()
 	var consumed ReversePlan
 	var evidence *connectors.WriteApprovalEvidence
-	updated, err := a.updateState(func(current state) (state, error) {
+	_, err := a.updateState(func(current state) (state, error) {
 		for i := range current.ReversePlans {
 			stored := current.ReversePlans[i]
 			if stored.ID != expected.ID {
@@ -2140,7 +2149,6 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 		}
 		return nil, ReversePlan{}, err
 	}
-	a.state = updated
 	return evidence, consumed, nil
 }
 
@@ -2186,7 +2194,7 @@ func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, res
 	} else {
 		run.Status = "completed"
 	}
-	updated, persistErr := a.updateState(func(current state) (state, error) {
+	_, persistErr := a.updateState(func(current state) (state, error) {
 		current.ReverseRuns = append(current.ReverseRuns, run)
 		for i := range current.ReversePlans {
 			if current.ReversePlans[i].ID == planID && (current.ReversePlans[i].Status == "executing" || current.ReversePlans[i].Status == reversePlanStatusApprovalConsumptionUncertain) {
@@ -2197,9 +2205,6 @@ func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, res
 		}
 		return current, nil
 	})
-	if persistErr == nil {
-		a.state = updated
-	}
 	if writeErr != nil {
 		return run, writeErr
 	}
@@ -2211,7 +2216,7 @@ func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, res
 
 func (a *App) invalidateReversePlan(planID string) {
 	now := time.Now().UTC()
-	updated, err := a.updateState(func(current state) (state, error) {
+	_, _ = a.updateState(func(current state) (state, error) {
 		for i := range current.ReversePlans {
 			if current.ReversePlans[i].ID != planID {
 				continue
@@ -2224,9 +2229,6 @@ func (a *App) invalidateReversePlan(planID string) {
 		}
 		return current, nil
 	})
-	if err == nil {
-		a.state = updated
-	}
 }
 
 func constantTimeStringEqual(left, right string) bool {
@@ -2355,25 +2357,6 @@ func (a *App) failRun(runID string, runErr error) (Run, error) {
 		}
 	}
 	return Run{}, errors.Join(runErr, fmt.Errorf("failed run %q was not stored", runID))
-}
-
-func writeJSONAtomic(path string, v any) error {
-	if err := os.MkdirAll(filepath.Dir(path), 0o700); err != nil {
-		return err
-	}
-	tmp := path + ".tmp"
-	b, err := json.MarshalIndent(v, "", "  ")
-	if err != nil {
-		return fmt.Errorf("marshal json: %w", err)
-	}
-	b = append(b, '\n')
-	if err := os.WriteFile(tmp, b, 0o600); err != nil {
-		return fmt.Errorf("write temp json: %w", err)
-	}
-	if err := os.Rename(tmp, path); err != nil {
-		return fmt.Errorf("rename temp json: %w", err)
-	}
-	return nil
 }
 
 func prefixedID(prefix string) (string, error) {

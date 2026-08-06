@@ -3,9 +3,11 @@ package state_test
 import (
 	"errors"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"sync"
 	"testing"
+	"time"
 
 	"polymetrics.ai/internal/state"
 )
@@ -287,6 +289,71 @@ func TestFileLockUsesExclusiveLockFile(t *testing.T) {
 	}
 	if err := unlock(); err != nil {
 		t.Fatalf("second unlock() error = %v", err)
+	}
+}
+
+func TestFileLockRecoversAfterAbruptProcessExit(t *testing.T) {
+	const (
+		childEnv = "POLYMETRICS_STATE_LOCK_CHILD"
+		pathEnv  = "POLYMETRICS_STATE_LOCK_PATH"
+		readyEnv = "POLYMETRICS_STATE_LOCK_READY"
+	)
+	if os.Getenv(childEnv) == "1" {
+		lock := state.FileLock{Path: os.Getenv(pathEnv)}
+		unlock, err := lock.Lock()
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer func() { _ = unlock() }()
+		if err := os.WriteFile(os.Getenv(readyEnv), []byte("ready"), 0o600); err != nil {
+			t.Fatal(err)
+		}
+		select {}
+	}
+
+	path := filepath.Join(t.TempDir(), "state.lock")
+	if err := os.WriteFile(path, []byte("stale sentinel\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	ready := path + ".ready"
+	cmd := exec.Command(os.Args[0], "-test.run=^TestFileLockRecoversAfterAbruptProcessExit$")
+	cmd.Env = append(os.Environ(), childEnv+"=1", pathEnv+"="+path, readyEnv+"="+ready)
+	if err := cmd.Start(); err != nil {
+		t.Fatal(err)
+	}
+	childRunning := true
+	defer func() {
+		if childRunning {
+			_ = cmd.Process.Kill()
+			_ = cmd.Wait()
+		}
+	}()
+	deadline := time.Now().Add(2 * time.Second)
+	for {
+		if _, err := os.Stat(ready); err == nil {
+			break
+		} else if !errors.Is(err, os.ErrNotExist) {
+			t.Fatal(err)
+		}
+		if time.Now().After(deadline) {
+			t.Fatal("child did not acquire the state lock")
+		}
+		time.Sleep(5 * time.Millisecond)
+	}
+	if err := cmd.Process.Kill(); err != nil {
+		t.Fatal(err)
+	}
+	if err := cmd.Wait(); err == nil {
+		t.Fatal("child exited without being terminated")
+	}
+	childRunning = false
+
+	unlock, err := (state.FileLock{Path: path}).Lock()
+	if err != nil {
+		t.Fatalf("Lock() after child termination error = %v", err)
+	}
+	if err := unlock(); err != nil {
+		t.Fatal(err)
 	}
 }
 

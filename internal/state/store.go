@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"polymetrics.ai/internal/durability"
+	"polymetrics.ai/internal/durable"
 )
 
 type Locker interface {
@@ -222,7 +222,7 @@ func (s JSONStore[T]) saveNoLock(value T) (err error) {
 	}
 	syncDirectory := s.SyncDirectory
 	if syncDirectory == nil {
-		syncDirectory = durability.SyncDirectory
+		syncDirectory = durable.SyncDirectory
 	}
 	if err := syncDirectory(dir); err != nil {
 		return &CommitOutcomeError{

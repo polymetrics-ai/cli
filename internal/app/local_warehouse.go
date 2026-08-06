@@ -14,7 +14,7 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
-	"polymetrics.ai/internal/durability"
+	"polymetrics.ai/internal/durable"
 	"polymetrics.ai/internal/synccontract"
 )
 
@@ -47,8 +47,8 @@ type localRawRecord struct {
 }
 
 // syncLocalWarehouseDirectoryCommit is a test seam for the platform directory
-// sync primitive; production defaults to durability.SyncDirectory.
-var syncLocalWarehouseDirectoryCommit = durability.SyncDirectory
+// sync primitive; production defaults to durable.SyncDirectory.
+var syncLocalWarehouseDirectoryCommit = durable.SyncDirectory
 
 func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
 	stateKey := streamStateKey(conn.Name, streamName)
