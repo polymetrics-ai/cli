@@ -2020,7 +2020,6 @@ func validateCallerSuppliedIdentifierSets(i int, op OperationSpec) error {
 	if op.Kind != "rest_read" {
 		return fmt.Errorf("operation %d (%q) caller_supplied_identifier_sets are only supported for rest_read operations", i, op.ID)
 	}
-
 	seen := make(map[string]struct{}, len(op.REST.CallerSuppliedIdentifierSets))
 	for j, set := range op.REST.CallerSuppliedIdentifierSets {
 		if !surfacePathVariableName(set.Name) {
@@ -2064,6 +2063,9 @@ func validateCallerSuppliedIdentifierSets(i int, op OperationSpec) error {
 		default:
 			return fmt.Errorf("operation %d (%q) caller_supplied_identifier_sets[%d] has unsupported wire %q", i, op.ID, j, set.Wire)
 		}
+	}
+	if !hasOnlyWellFormedEndpointVariables(op.REST.Path) {
+		return fmt.Errorf("operation %d (%q) caller_supplied_identifier_sets require well-formed endpoint variables", i, op.ID)
 	}
 	return nil
 }

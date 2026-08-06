@@ -305,7 +305,7 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			stats.Corrected.OutputPolicy++
 		}
 
-		identifierSets := map[string]bool{}
+		identifierSets := map[string]string{}
 		if intent == "direct_read" {
 			for _, setRaw := range arrayField(block, "caller_supplied_identifier_sets") {
 				set, ok := setRaw.(*orderedObject)
@@ -313,13 +313,24 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 					continue
 				}
 				if name := stringField(set, "name"); name != "" {
-					identifierSets[name] = true
+					identifierSets[name] = stringField(set, "wire")
 				}
 			}
 		}
 		pathVars := map[string]bool{}
 		for _, match := range surfacePathVarRE.FindAllStringSubmatch(endpointPath, -1) {
 			pathVars[match[1]] = true
+		}
+		var collidingNames []string
+		for name, wire := range identifierSets {
+			if wire != "path_segment" && pathVars[name] && !hasIndependentSurfacePathBinding(cmd, name) {
+				collidingNames = append(collidingNames, name)
+			}
+		}
+		sort.Strings(collidingNames)
+		if len(collidingNames) > 0 {
+			name := collidingNames[0]
+			return stats, fmt.Errorf("caller-supplied identifier set %q conflicts with endpoint path variable {%s} without an independent flag mapped to path.%s", name, name, name)
 		}
 		for _, flagRaw := range arrayField(cmd, "flags") {
 			flag, ok := flagRaw.(*orderedObject)
@@ -328,7 +339,7 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			}
 			flagName := stringField(flag, "name")
 			want := ""
-			if identifierSets[flagName] {
+			if _, declared := identifierSets[flagName]; declared {
 				want = "identifier_set." + flagName
 			} else if name := strings.ReplaceAll(flagName, "-", "_"); pathVars[name] {
 				want = "path." + name
@@ -383,6 +394,20 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 		}
 	}
 	return stats, nil
+}
+
+func hasIndependentSurfacePathBinding(cmd *orderedObject, name string) bool {
+	target := "path." + name
+	for _, raw := range arrayField(cmd, "flags") {
+		flag, ok := raw.(*orderedObject)
+		if !ok {
+			continue
+		}
+		if stringField(flag, "name") != name && stringField(flag, "maps_to") == target {
+			return true
+		}
+	}
+	return false
 }
 
 // derivedAPISurface builds the single-endpoint api_surface an operation-backed

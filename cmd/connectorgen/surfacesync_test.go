@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -207,6 +208,33 @@ func TestSyncBundleDerivesCallerSuppliedIdentifierSetMapping(t *testing.T) {
 				t.Fatalf("flags = %v, want identifier_set.coins", got)
 			}
 		})
+	}
+}
+
+func TestSyncBundleRejectsIdentifierSetPathVariableCollision(t *testing.T) {
+	cli := map[string]any{"usage": "pm acme <command>", "commands": []any{map[string]any{
+		"path":          "ids lookup",
+		"intent":        "direct_read",
+		"availability":  "implemented",
+		"operation":     "acme.ids.lookup",
+		"output_policy": "json_redacted",
+		"flags":         []any{map[string]any{"name": "ids", "type": "string_array", "required": true}},
+	}}}
+	ops := map[string]any{"operations": []any{map[string]any{
+		"id":   "acme.ids.lookup",
+		"kind": "rest_read",
+		"rest": map[string]any{
+			"method": "GET", "path": "/lookups/{ids}", "max_bytes": 1024,
+			"caller_supplied_identifier_sets": []any{map[string]any{
+				"name": "ids", "element_shape": "opaque_string", "wire": "query_comma_separated", "min_items": 1, "max_items": 2,
+			}},
+		},
+	}}}
+	dir := writeSyncBundle(t, cli, ops)
+
+	_, err := syncBundle(dir, true)
+	if err == nil || !strings.Contains(err.Error(), "independent flag mapped to path.ids") {
+		t.Fatalf("syncBundle error = %v, want independent path binding rejection", err)
 	}
 }
 

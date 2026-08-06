@@ -777,6 +777,16 @@ func TestCallerSuppliedIdentifierSetDeclarationsRejectUnsafeContracts(t *testing
 			want: `path_segment requires exactly one well-formed {id} path variable in the pathname`,
 		},
 		{
+			name: "query identifier set endpoint template must be well formed",
+			rest: `{"method":"GET","path":"/lookups?fixed={{bad}}","caller_supplied_identifier_sets":[{"name":"ids","element_shape":"opaque_string","wire":"query_comma_separated","min_items":0,"max_items":2}]}`,
+			want: `caller_supplied_identifier_sets require well-formed endpoint variables`,
+		},
+		{
+			name: "body identifier set endpoint template must be well formed",
+			rest: `{"method":"POST","path":"/lookups?fixed={{bad}}","content_type":"application/json","body_schema":{"type":"object","required":["ids"],"properties":{"ids":{"type":"array","minItems":1,"maxItems":2,"items":{"type":"string"}}}},"caller_supplied_identifier_sets":[{"name":"ids","element_shape":"opaque_string","wire":"body_json_array","min_items":1,"max_items":2}]}`,
+			want: `caller_supplied_identifier_sets require well-formed endpoint variables`,
+		},
+		{
 			name: "body schema repeats the exact bounds",
 			rest: `{"method":"POST","path":"/lookups","content_type":"application/json","body_schema":{"type":"object","required":["ids"],"properties":{"ids":{"type":"array","minItems":0,"maxItems":3,"items":{"type":"string"}}}},"caller_supplied_identifier_sets":[{"name":"ids","element_shape":"opaque_string","wire":"body_json_array","min_items":0,"max_items":2}]}`,
 			want: `matching minItems and maxItems`,

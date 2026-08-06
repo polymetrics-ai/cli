@@ -663,6 +663,56 @@ func TestValidate_CallerSuppliedIdentifierSetRequiresExactCLIBinding(t *testing.
 	}
 }
 
+func TestValidate_CallerSuppliedIdentifierSetRequiresIndependentPathBinding(t *testing.T) {
+	op := engine.OperationSpec{
+		ID: "acme.ids.lookup",
+		REST: &engine.RESTOperationSpec{
+			Path: "/lookups/{ids}",
+			CallerSuppliedIdentifierSets: []engine.CallerSuppliedIdentifierSetSpec{{
+				Name: "ids", ElementShape: "opaque_string", Wire: "query_comma_separated", MinItems: 1, MaxItems: 2,
+			}},
+		},
+	}
+	tests := []struct {
+		name     string
+		flags    []engine.CLIFlag
+		want     string
+		wantPass bool
+	}{
+		{
+			name:  "same named identifier set starves path variable",
+			flags: []engine.CLIFlag{{Name: "ids", Type: "string_array", Required: true, MapsTo: "identifier_set.ids"}},
+			want:  "requires an independent flag mapped to path.ids",
+		},
+		{
+			name: "independent path binding",
+			flags: []engine.CLIFlag{
+				{Name: "ids", Type: "string_array", Required: true, MapsTo: "identifier_set.ids"},
+				{Name: "lookup-id", Type: "string", MapsTo: "path.ids"},
+			},
+			wantPass: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			findings := checkCLISurfaceCallerSuppliedIdentifierSets(engine.Bundle{Name: "acme"}, 0, engine.CLICommand{Path: "ids lookup", Flags: tt.flags}, op)
+			if tt.wantPass {
+				if len(findings) != 0 {
+					t.Fatalf("findings = %+v, want none", findings)
+				}
+				return
+			}
+			for _, finding := range findings {
+				if strings.Contains(finding.Message, tt.want) {
+					return
+				}
+			}
+			t.Fatalf("findings = %+v, want %q", findings, tt.want)
+		})
+	}
+}
+
 func TestValidate_CallerSuppliedIdentifierSetRejectsWireTargetShadow(t *testing.T) {
 	for _, tt := range []struct {
 		name   string
@@ -670,6 +720,7 @@ func TestValidate_CallerSuppliedIdentifierSetRejectsWireTargetShadow(t *testing.
 		mapsTo string
 	}{
 		{name: "body", wire: "body_json_array", mapsTo: "body.ids"},
+		{name: "body descendant", wire: "body_json_array", mapsTo: "body.ids.item"},
 		{name: "path", wire: "path_segment", mapsTo: "path.ids"},
 	} {
 		t.Run(tt.name, func(t *testing.T) {

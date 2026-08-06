@@ -1095,9 +1095,14 @@ func checkCLISurfaceCallerSuppliedIdentifierSets(b engine.Bundle, i int, cmd eng
 	add := func(message string) {
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q %s", i, cmd.Path, op.ID, message)})
 	}
+	for _, set := range op.REST.CallerSuppliedIdentifierSets {
+		if set.Wire != "path_segment" && endpointPathHasVariable(op.REST.Path, set.Name) && !hasIndependentCLISurfacePathBinding(cmd, set.Name) {
+			add(fmt.Sprintf("caller-supplied identifier_set.%s conflicts with endpoint path variable {%s} and requires an independent flag mapped to path.%s", set.Name, set.Name, set.Name))
+		}
+	}
 	for _, flag := range cmd.Flags {
 		mapsTo := strings.TrimSpace(flag.MapsTo)
-		if identifierSet, reserved := reservedTargets[mapsTo]; reserved {
+		if identifierSet, reserved := callerSuppliedIdentifierSetReservedTarget(mapsTo, reservedTargets); reserved {
 			add(fmt.Sprintf("flag --%s must not map to %s because %s owns that target", flag.Name, mapsTo, identifierSet))
 			continue
 		}
@@ -1133,6 +1138,28 @@ func checkCLISurfaceCallerSuppliedIdentifierSets(b engine.Bundle, i int, cmd eng
 		}
 	}
 	return findings
+}
+
+func callerSuppliedIdentifierSetReservedTarget(mapsTo string, reservedTargets map[string]string) (string, bool) {
+	if identifierSet, reserved := reservedTargets[mapsTo]; reserved {
+		return identifierSet, true
+	}
+	for target, identifierSet := range reservedTargets {
+		if strings.HasPrefix(target, "body.") && strings.HasPrefix(mapsTo, target+".") {
+			return identifierSet, true
+		}
+	}
+	return "", false
+}
+
+func hasIndependentCLISurfacePathBinding(cmd engine.CLICommand, name string) bool {
+	target := "path." + name
+	for _, flag := range cmd.Flags {
+		if flag.Name != name && flag.MapsTo == target {
+			return true
+		}
+	}
+	return false
 }
 
 // checkCLISurfaceDirectWriteOperationSafety validates the operation-specific

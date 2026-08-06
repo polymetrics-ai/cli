@@ -2410,6 +2410,29 @@ func TestOperationDirectReadOverridesCoercesIdentifierSetsByWire(t *testing.T) {
 	}
 }
 
+func TestOperationDirectReadOverridesKeepsIdentifierSetAndPathBindingsSeparate(t *testing.T) {
+	cmd := connectors.CommandSurfaceCommand{
+		Path: "lookup identifiers", Intent: "direct_read", Availability: "implemented",
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "ids", Type: "string_array", Required: true, MapsTo: "identifier_set.ids"},
+			{Name: "lookup-id", Type: "string", MapsTo: "path.ids"},
+		},
+	}
+	pathParams, _, _, identifierSets, err := operationDirectReadOverrides(cmd, map[string][]string{
+		"ids":       {"query-identifier"},
+		"lookup-id": {"path-identifier"},
+	}, map[string]string{"ids": "query_comma_separated"})
+	if err != nil {
+		t.Fatalf("operationDirectReadOverrides: %v", err)
+	}
+	if got := pathParams["ids"]; got != "path-identifier" {
+		t.Fatalf("path parameter = %q, want independent path value", got)
+	}
+	if got := identifierSets["ids"]; !slices.Equal(got, []string{"query-identifier"}) {
+		t.Fatalf("identifier set = %#v, want independent identifier set", got)
+	}
+}
+
 func TestRunCallerSuppliedIdentifierSetCommandsEndToEnd(t *testing.T) {
 	bundle, err := engine.Load(os.DirFS(filepath.Join("..", "engine", "testdata")), "caller-supplied-identifiers")
 	if err != nil {
