@@ -1,7 +1,7 @@
 {
   "name": "gitlab",
   "display_name": "GitLab",
-  "description": "Reads GitLab projects, groups, users, and issues through the GitLab REST API v4.",
+  "description": "Reads GitLab projects, groups, users, and issues through existing GitLab REST API v4 ETL streams; its provider-owned ledger records the full published surface, but G1 declares no write command.",
   "integration_type": "api",
   "docs_url": "https://docs.gitlab.com/ee/api/rest/",
   "release_stage": "ga",
@@ -17,6 +17,8 @@
     "read_page_size": 50
   },
   "risk": {
-    "read": "external GitLab API read of projects, groups, users, and issues"
+    "read": "external GitLab API read of projects, groups, users, and issues",
+    "write": "GitLab publishes mutation endpoints, but this G1 bundle declares no executable write actions.",
+    "approval": "Any future GitLab write must use the standard plan, preview, explicit approval, and execute flow; no GitLab writes are executable in this wave."
   }
 }
