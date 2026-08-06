@@ -9,10 +9,10 @@ import (
 )
 
 func EnsureDirectoryTree(path, root string, mode os.FileMode) error {
-	return ensureDirectoryTree(path, root, mode, SyncDirectory)
+	return ensureDirectoryTree(path, root, mode, ensureDirectory, SyncDirectory)
 }
 
-func ensureDirectoryTree(path, root string, mode os.FileMode, syncDirectory func(string) error) error {
+func ensureDirectoryTree(path, root string, mode os.FileMode, ensure func(string, os.FileMode) error, syncDirectory func(string) error) error {
 	if path == "" || root == "" {
 		return errors.New("durable directory path and root are required")
 	}
@@ -34,11 +34,11 @@ func ensureDirectoryTree(path, root string, mode os.FileMode, syncDirectory func
 
 	directories := directoryAncestors(absolutePath)
 	for _, directory := range directories {
-		if err := ensureDirectory(directory, mode); err != nil {
+		if err := ensure(directory, mode); err != nil {
 			return err
 		}
 	}
-	for _, directory := range directories {
+	for _, directory := range syncDirectoryAncestors(absolutePath) {
 		if err := syncDirectory(directory); err != nil {
 			return fmt.Errorf("sync durable directory %s: %w", directory, err)
 		}
@@ -59,6 +59,23 @@ func directoryAncestors(path string) []string {
 		directories[left], directories[right] = directories[right], directories[left]
 	}
 	return directories
+}
+
+func syncDirectoryAncestors(path string) []string {
+	directories := directoryAncestors(path)
+	if !shouldSyncFilesystemRoot() {
+		return directories
+	}
+	return append([]string{filesystemRoot(path)}, directories...)
+}
+
+func filesystemRoot(path string) string {
+	for current := path; ; current = filepath.Dir(current) {
+		parent := filepath.Dir(current)
+		if parent == current {
+			return current
+		}
+	}
 }
 
 func ensureDirectory(path string, mode os.FileMode) error {

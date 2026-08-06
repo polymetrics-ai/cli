@@ -18,3 +18,5 @@ func SyncDirectory(path string) error {
 	}
 	return nil
 }
+
+func shouldSyncFilesystemRoot() bool { return true }
