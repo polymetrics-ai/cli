@@ -37,86 +37,71 @@
     "cliCommand": "go test -count=1 -v -run '^TestCertifyCLI' ./internal/cli"
   },
   "greenEvidence": {
-    "certifyRealCLIInvocations": 85,
-    "certifyInvocationBudget": 85,
-    "certifyPackageElapsedSeconds": 58.972,
+    "certifyRealCLIInvocations": 93,
+    "certifyInvocationBudget": 93,
+    "certifyPackageElapsedSeconds": 81.733,
+    "certifyPackageWallElapsedSeconds": 86.645,
     "certifyCommand": "go test -count=1 ./internal/connectors/certify",
     "cliRealCLIInvocations": 61,
     "cliInvocationBudget": 61,
-    "cliPackageElapsedSeconds": 43.128,
+    "cliPackageElapsedSeconds": 54.825,
+    "cliPackageWallElapsedSeconds": 60.665,
     "cliCommand": "go test -count=1 -run '^TestCertifyCLI' ./internal/cli",
-    "localTimingSample": {
-      "command": "make certify-timing",
-      "certifyElapsedSeconds": 57.745,
-      "cliElapsedSeconds": 42.359,
-      "totalElapsedSeconds": 100.104,
-      "slowestCertifyTest": "TestFullSweepSourceStagesAgainstSample (49.160s)",
-      "slowestCLITest": "TestCertifyCLISingleConnectorPassExitsZero (27.150s)"
-    },
-    "hostedTimingSamples": [
+    "finalTimingMeasurements": [
       {
-        "run": "https://github.com/polymetrics-ai/cli/actions/runs/31053373131/job/92465443313",
-        "retrieved": "2026-08-06",
-        "runner": "GitHub-hosted Ubuntu 24.04.4 (ubuntu-24.04 image 20260720.247.2)",
-        "certifyElapsedSeconds": 87.621,
-        "certifyWallElapsedSeconds": 124.466,
-        "cliElapsedSeconds": 66.064,
-        "cliWallElapsedSeconds": 68.747,
-        "totalElapsedSeconds": 153.685,
-        "totalWallElapsedSeconds": 193.213,
-        "slowestCertifyTest": "TestFullSweepSourceStagesAgainstSample",
-        "slowestCLITest": "TestCertifyCLISingleConnectorPassExitsZero"
+        "command": "make certify-timing",
+        "topology": "one real sample/outbox write lifecycle proof plus the full source sweep",
+        "certifyElapsedSeconds": 79.229,
+        "certifyWallElapsedSeconds": 84.769,
+        "cliElapsedSeconds": 70,
+        "cliWallElapsedSeconds": 76.467,
+        "totalElapsedSeconds": 149.229,
+        "totalWallElapsedSeconds": 161.236,
+        "slowestCertifyTest": "TestFullSweepSourceStagesAgainstSample (62.050s)",
+        "writeLifecycleTest": "TestSampleOutboxWriteLifecycleAgainstRealCLI (7.280s)",
+        "slowestCLITest": "TestCertifyCLISingleConnectorPassExitsZero (49.950s)"
       },
       {
-        "run": "https://github.com/polymetrics-ai/cli/actions/runs/31054516637/job/92468986349",
-        "retrieved": "2026-08-06",
-        "runner": "GitHub-hosted Ubuntu 24.04.4 (ubuntu-24.04 image 20260720.247.2)",
-        "certifyElapsedSeconds": 63.34,
-        "certifyWallElapsedSeconds": 91.407,
-        "cliElapsedSeconds": 47.563,
-        "cliWallElapsedSeconds": 49.525,
-        "totalElapsedSeconds": 110.903,
-        "totalWallElapsedSeconds": 140.932,
-        "slowestCertifyTest": "TestFullSweepSourceStagesAgainstSample",
-        "slowestCLITest": "TestCertifyCLISingleConnectorPassExitsZero"
+        "command": "make certify-timing",
+        "purpose": "focused review verification",
+        "topology": "one real sample/outbox write lifecycle proof plus the full source sweep",
+        "certifyElapsedSeconds": 81.733,
+        "certifyWallElapsedSeconds": 86.645,
+        "cliElapsedSeconds": 54.825,
+        "cliWallElapsedSeconds": 60.665,
+        "totalElapsedSeconds": 136.558,
+        "totalWallElapsedSeconds": 147.309,
+        "slowestCertifyTest": "TestFullSweepSourceStagesAgainstSample (59.260s)",
+        "writeLifecycleTest": "TestSampleOutboxWriteLifecycleAgainstRealCLI (8.480s)",
+        "slowestCLITest": "TestCertifyCLISingleConnectorPassExitsZero (34.630s)"
       }
     ],
     "measuredWallTimeBudget": {
-      "formula": "max(193.213, 140.932) + (193.213 - 140.932), rounded up to the next 15 seconds",
-      "unroundedSeconds": 245.494,
-      "budget": "4m15s",
-      "budgetSeconds": 255
+      "formula": "max(161.236, 147.309) + (161.236 - 147.309), rounded up to the next 15 seconds",
+      "maximumWallElapsedSeconds": 161.236,
+      "observedSpreadSeconds": 13.927,
+      "unroundedSeconds": 175.163,
+      "budget": "3m",
+      "budgetSeconds": 180
     },
     "enforcementEvidence": {
-      "run": "https://github.com/polymetrics-ai/cli/actions/runs/31055574285/job/92472218411",
-      "retrieved": "2026-08-06",
-      "certifyWallElapsedSeconds": 101.291,
-      "cliWallElapsedSeconds": 55.114,
-      "totalWallElapsedSeconds": 156.405,
-      "certifyRealCLIInvocations": 85,
+      "command": "make certify-timing",
+      "certifyWallElapsedSeconds": 86.645,
+      "cliWallElapsedSeconds": 60.665,
+      "totalWallElapsedSeconds": 147.309,
+      "certifyRealCLIInvocations": 93,
       "cliRealCLIInvocations": 61,
-      "allowedDuration": "4m15s",
-      "aggregateVerify": "success"
+      "allowedDuration": "3m",
+      "status": "passed"
     },
     "rebaseValidation": {
       "base": "origin/main d215d9636",
-      "timingWallElapsedSeconds": 121.617,
-      "certifyRealCLIInvocations": 85,
+      "finalTopology": "one real sample/outbox write lifecycle proof with loud missing-inventory failure",
+      "maximumFinalTimingWallElapsedSeconds": 161.236,
+      "latestFinalTimingWallElapsedSeconds": 147.309,
+      "certifyRealCLIInvocations": 93,
       "cliRealCLIInvocations": 61,
-      "cliPackageElapsedSeconds": 364.625,
-      "nonSuiteGates": [
-        "go vet ./...",
-        "go build ./cmd/pm",
-        "make tidy-check",
-        "make lint",
-        "make docs-check",
-        "make smoke-no-build",
-        "make agent-contract-check",
-        "make connectorgen-validate",
-        "make connectorgen-surface-sync",
-        "make connector-boundary",
-        "make release-workflow-check"
-      ]
+      "followUp": "fresh hosted Verify required for the final commit range"
     }
   },
   "verificationPassed": false

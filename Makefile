@@ -29,10 +29,9 @@ test:
 # Emits the raw cold -json streams and a compact timing summary for only the
 # certification harness and its CLI route tests. Verify invokes this target in
 # a separate step so the diagnostic is visible even when the aggregate suite
-# later fails or reaches its job limit. The fixed wall-time bound is derived
-# from cold hosted samples: max 193.213s + observed spread 52.281s = 245.494s,
-# rounded up to the next 15 seconds.
-CERTIFY_TIMING_MAX_DURATION := 4m15s
+# later fails or reaches its job limit. The final 93-call topology measured
+# a 161.236s maximum wall time plus a 13.927s observed spread, rounded to 3m.
+CERTIFY_TIMING_MAX_DURATION := 3m
 
 certify-timing:
 	go run ./cmd/certifytiming --max-duration $(CERTIFY_TIMING_MAX_DURATION)
