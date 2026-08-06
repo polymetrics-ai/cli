@@ -55,3 +55,35 @@ was rerun during documentation and lint housekeeping. The scoped production clos
 `errcheck` findings remain in `internal/app/query_engine_helpers_test.go` and
 `internal/app/reverse_approval_test.go`; test changes are outside this phase.
 `make lint` itself passes.
+
+## CI remediation — PR #3879
+
+The hosted `verify` run reached its 20-minute per-package test deadline in
+`internal/connectors/certify`. This branch was based before
+`2afd1a529` (`fix(certify): bound certification harness cost`), so it ran
+the old repeated real-CLI test topology. The same upstream test-only
+optimization is included here: it retains the real full-route and
+sample/outbox lifecycle proofs while scripting duplicate stage coverage behind
+a protocol-validating driver.
+
+Local remediation evidence:
+
+- `go test -count=1 -timeout 5m ./internal/connectors/certify` — pass in
+  22.069s.
+- `go test -count=1 -timeout 5m -run '^TestCertifyCLI' ./internal/cli` —
+  pass in 87.119s.
+
+The `require-linked-issue` workflow reads the live GitHub PR body, not a file
+in this checkout. The outer executor must prepend this completed-work link
+before rerunning CI:
+
+```text
+Closes #3810
+```
+
+The CI phase deliberately did not edit the live PR or trigger a rerun.
+Required remediation skills: `golang-how-to`, `golang-troubleshooting`,
+`golang-performance`, `golang-benchmark`, `golang-testing`,
+`golang-cli`, `golang-error-handling`, `golang-security`,
+`golang-safety`, `golang-lint`, `golang-continuous-integration`, and
+`github-issue-first-delivery`.
