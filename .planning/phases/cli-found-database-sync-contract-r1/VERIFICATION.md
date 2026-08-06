@@ -56,17 +56,19 @@ was rerun during documentation and lint housekeeping. The scoped production clos
 `internal/app/reverse_approval_test.go`; test changes are outside this phase.
 `make lint` itself passes.
 
-## CI remediation — PR #3879
+## CI remediation — rebased continuation
 
-The hosted `verify` run reached its 20-minute per-package test deadline in
-`internal/connectors/certify`. This branch was based before
-`2afd1a529` (`fix(certify): bound certification harness cost`), so it ran
-the old repeated real-CLI test topology. The same upstream test-only
-optimization is included here: it retains the real full-route and
-sample/outbox lifecycle proofs while scripting duplicate stage coverage behind
-a protocol-validating driver.
+The original PR #3879 branch predated `2afd1a529`
+(`fix(certify): bound certification harness cost`, #3878), so its hosted
+`verify` run reached the old 20-minute certification deadline. This continuation
+is rebased on current `origin/main`, which already contains #3878. It deliberately
+does not vendor its test-only optimization: `git diff --name-only
+origin/main...HEAD` contains no certification harness, certification CLI, workflow,
+or timing-gate paths.
 
-Local remediation evidence:
+The upstream remediation retains real full-route and sample/outbox lifecycle
+proofs while scripting duplicate stage coverage behind a protocol-validating
+driver. Its recorded checks were:
 
 - `go test -count=1 -timeout 5m ./internal/connectors/certify` — pass in
   22.069s.
@@ -80,10 +82,11 @@ completed-work link `Closes #3810`.
 
 - [x] `go run ./cmd/prissueguard --title 'feat(synccontract): add durable database sync contract' --body-file .planning/phases/cli-found-database-sync-contract-r1/PR-BODY.md`
       returns `issueguard: ok (1 linked issue)`.
-- [ ] Outer PR phase replaces PR #3879's live body with `PR-BODY.md` and
-      reruns `require-linked-issue`.
-
-The CI phase deliberately did not edit the live PR or trigger a rerun.
+- [x] PR #3879's live body was replaced with `PR-BODY.md`, including `## Intent`
+      and `Closes #3810`; the completed no-mistakes run accepted the repaired
+      linked-issue gate.
+- [ ] The rebased successor PR must use the same issue-linked body and complete
+      fresh CI against current `main` before human review.
 Required remediation skills: `golang-how-to`, `golang-troubleshooting`,
 `golang-performance`, `golang-benchmark`, `golang-testing`,
 `golang-cli`, `golang-error-handling`, `golang-security`,
