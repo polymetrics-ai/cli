@@ -95,7 +95,7 @@
   "help_topics": [
     {
       "name": "messages-availability",
-      "summary": "Email message reads, full-refresh enforcement, and sparse UID scan continuation are blocked pending #3810. Full-refresh enforcement needs catalog sync-mode validation at internal/app/app.go:350-376 and cursor-mode handling at internal/app/app.go:543-551. Sparse UID scan continuation needs scan-continuation state at internal/app/types.go:40-47 and persistence at internal/app/local_warehouse.go:246-256. Both become available when #3810 lands."
+      "summary": "Email message reads, full-refresh enforcement, and sparse UID scan continuation are blocked pending #3810. Full-refresh enforcement needs catalog sync-mode validation at internal/app/app.go:350-376 and a mode-aware change to persisted-cursor forwarding at internal/app/app.go:555-563. Sparse UID scan continuation needs scan-continuation state at internal/app/types.go:40-47 and persistence at internal/app/local_warehouse.go:246-256. Both become available when #3810 lands."
     },
     {
       "name": "submission-safety",

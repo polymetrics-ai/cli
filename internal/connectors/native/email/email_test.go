@@ -312,6 +312,96 @@ func TestInvalidPortErrorsDoNotEchoValues(t *testing.T) {
 	}
 }
 
+func TestResolveConnectionConfigRejectsRawCredentialControls(t *testing.T) {
+	const marker = "email-control-probe"
+	cases := []struct {
+		name   string
+		field  string
+		mutate func(connectors.RuntimeConfig)
+	}{
+		{name: "IMAP host", field: "imap_host", mutate: func(cfg connectors.RuntimeConfig) { cfg.Config["imap_host"] = "\r\n" + marker }},
+		{name: "IMAP port", field: "imap_port", mutate: func(cfg connectors.RuntimeConfig) { cfg.Config["imap_port"] = "\r\n" + marker }},
+		{name: "IMAP security", field: "imap_security", mutate: func(cfg connectors.RuntimeConfig) { cfg.Config["imap_security"] = "\r\n" + marker }},
+		{name: "SMTP host", field: "smtp_host", mutate: func(cfg connectors.RuntimeConfig) { cfg.Config["smtp_host"] = "\r\n" + marker }},
+		{name: "SMTP port", field: "smtp_port", mutate: func(cfg connectors.RuntimeConfig) { cfg.Config["smtp_port"] = "\r\n" + marker }},
+		{name: "SMTP security", field: "smtp_security", mutate: func(cfg connectors.RuntimeConfig) { cfg.Config["smtp_security"] = "\r\n" + marker }},
+		{name: "username", field: "username", mutate: func(cfg connectors.RuntimeConfig) { cfg.Config["username"] = "\r\n" + marker }},
+		{name: "SMTP username", field: "smtp_username", mutate: func(cfg connectors.RuntimeConfig) { cfg.Config["smtp_username"] = "\r\n" + marker }},
+		{name: "from address", field: "from_address", mutate: func(cfg connectors.RuntimeConfig) { cfg.Config["from_address"] = "\r\n" + marker }},
+		{name: "connection timeout", field: "connection_timeout_seconds", mutate: func(cfg connectors.RuntimeConfig) { cfg.Config["connection_timeout_seconds"] = "\r\n" + marker }},
+		{name: "password", field: "password", mutate: func(cfg connectors.RuntimeConfig) {
+			cfg.Secrets["password"] = "\r\n" + marker + cfg.Secrets["password"]
+		}},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			cfg := testRuntimeConfig(t)
+			secret := cfg.Secrets["password"]
+			tc.mutate(cfg)
+			_, err := resolveConnectionConfig(cfg)
+			if err == nil {
+				t.Fatalf("resolveConnectionConfig accepted a control character in %s", tc.field)
+			}
+			if !strings.Contains(err.Error(), tc.field) || !strings.Contains(strings.ToLower(err.Error()), "control") {
+				t.Fatalf("resolveConnectionConfig(%s) error = %q, want field and control constraint", tc.field, err)
+			}
+			if strings.Contains(err.Error(), marker) || strings.Contains(err.Error(), secret) || strings.Contains(err.Error(), "\r") || strings.Contains(err.Error(), "\n") {
+				t.Fatal("resolveConnectionConfig error exposed a supplied value or secret")
+			}
+		})
+	}
+}
+
+func TestSendMessageRejectsRawControlsBeforeSMTPConstruction(t *testing.T) {
+	const marker = "email-control-probe"
+	cases := []struct {
+		name   string
+		field  string
+		mutate func(connectors.RuntimeConfig, connectors.Record)
+	}{
+		{name: "primary recipient", field: "to", mutate: func(_ connectors.RuntimeConfig, record connectors.Record) {
+			record["to"] = []string{"to@example.invalid\r\n" + marker}
+		}},
+		{name: "carbon-copy recipient", field: "cc", mutate: func(_ connectors.RuntimeConfig, record connectors.Record) {
+			record["cc"] = []string{"cc@example.invalid\r\n" + marker}
+		}},
+		{name: "blind-copy recipient", field: "bcc", mutate: func(_ connectors.RuntimeConfig, record connectors.Record) {
+			record["bcc"] = []string{"bcc@example.invalid\r\n" + marker}
+		}},
+		{name: "subject", field: "subject", mutate: func(_ connectors.RuntimeConfig, record connectors.Record) { record["subject"] = "subject\r\n" + marker }},
+		{name: "body content type", field: "body_content_type", mutate: func(_ connectors.RuntimeConfig, record connectors.Record) {
+			record["body_content_type"] = "text/plain\r\n" + marker
+		}},
+		{name: "attachment", field: "attachments", mutate: func(_ connectors.RuntimeConfig, record connectors.Record) {
+			record["attachments"] = []string{"attachment\r\n" + marker}
+		}},
+		{name: "from address", field: "from_address", mutate: func(cfg connectors.RuntimeConfig, _ connectors.Record) {
+			cfg.Config["from_address"] = "from@example.invalid\r\n" + marker
+		}},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			cfg := testRuntimeConfig(t)
+			record := connectors.Record{
+				"to":      []string{"to@example.invalid"},
+				"subject": "subject",
+				"body":    "body",
+			}
+			tc.mutate(cfg, record)
+			_, err := New().DryRunWrite(context.Background(), connectors.WriteRequest{Action: sendAction, Config: cfg}, []connectors.Record{record})
+			if err == nil {
+				t.Fatalf("DryRunWrite accepted a control character in %s", tc.field)
+			}
+			if !strings.Contains(err.Error(), tc.field) || !strings.Contains(strings.ToLower(err.Error()), "control") {
+				t.Fatalf("DryRunWrite(%s) error = %q, want field and control constraint", tc.field, err)
+			}
+			if strings.Contains(err.Error(), marker) || strings.Contains(err.Error(), "\r") || strings.Contains(err.Error(), "\n") {
+				t.Fatal("DryRunWrite error exposed a supplied value")
+			}
+		})
+	}
+}
+
 func readRecords(t *testing.T, connector Connector, request connectors.ReadRequest) []connectors.Record {
 	t.Helper()
 	var records []connectors.Record

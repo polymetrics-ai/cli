@@ -213,6 +213,9 @@ func decodeSendMessage(record connectors.Record, defaultFrom string) (sendMessag
 	if raw, present := record["body_content_type"]; present {
 		var ok bool
 		bodyContentType, ok = raw.(string)
+		if ok && containsControl(bodyContentType) {
+			return sendMessage{}, errors.New("email send_message body_content_type must not contain control characters")
+		}
 		if !ok || (bodyContentType != "text/plain" && bodyContentType != "text/html") {
 			return sendMessage{}, errors.New("email send_message body_content_type must be text/plain or text/html")
 		}
@@ -274,6 +277,9 @@ func recordStringArray(record connectors.Record, field string, required bool) ([
 		return nil, fmt.Errorf("email send_message requires at least one %s recipient", field)
 	}
 	for _, value := range values {
+		if containsControl(value) {
+			return nil, fmt.Errorf("email send_message %s must not contain control characters", field)
+		}
 		if strings.TrimSpace(value) == "" {
 			return nil, fmt.Errorf("email send_message %s must not contain an empty value", field)
 		}
