@@ -32,7 +32,8 @@ adding a competing provenance shape.
 | `new` | Scaffold a minimal bundle | Start a post-foundation connector directory; it does not certify an executable surface. |
 | `gen` | Regenerate hook/native import sets | Run only when the authored bundle actually introduces an applicable hook/native import. |
 | `validate` | Load a bundle and apply structural/semantic checks | Runs once per candidate inside `batch gate`. |
-| `surface-sync` | Derive operation-backed command metadata from `operations.json` | Runs in check mode once per candidate inside `batch gate`; it detects drift without rewriting it. |
+| `surface-sync` | Derive operation-backed command metadata and the shared direct-read endpoint ledger | Its per-bundle metadata check runs inside `batch gate`; run the full branch gate to check the shared ledger without rewriting it. |
+| `surface-reconcile` | Derive direct-read `api_surface` coverage and blocked reasons from runtime preflight | Use `--check` to review a stale-reason cohort separately from `batch gate`; it never promotes a command. |
 | `boundary` | Detect connector-specific policy outside definition ownership | Run against the final branch as a repository gate. |
 | `ownership` | Check changed paths for an owned connector scope | Run for each authored connector slice. |
 | `batch plan` | New: turn live ledger evidence into a deterministic manifest | Prepare a 1–40 connector batch without mutating a bundle or calling a provider. |
@@ -176,10 +177,11 @@ For each selected manifest record:
    require typed confirmation; non-idempotent writes remain non-retriable.
    Never introduce a generic HTTP write escape hatch.
 
-`surface-sync --check` remains a separate derivation gate for implemented
-operation-backed direct commands. It deliberately leaves stream and
-reverse-ETL command bindings intact, because their executor truth is
-`streams.json` or `writes.json`, not an invented direct operation.
+The full `surface-sync --check` remains a separate branch derivation gate for
+implemented operation-backed direct commands and the shared direct-read endpoint
+ledger. It deliberately leaves stream and reverse-ETL command bindings intact,
+because their executor truth is `streams.json` or `writes.json`, not an invented
+direct operation.
 
 No-redaction is an explicit batch-gate rule. `batch gate` drops a candidate
 that declares `redact_fields`, an output policy containing `redact`, or either
@@ -253,9 +255,9 @@ go run ./cmd/connectorgen batch gate \
 For every candidate, the gate:
 
 1. Runs the existing bundle validator.
-2. Runs `syncBundle(..., true)`, the same non-mutating check behind
+2. Runs `syncBundle(..., true)`, the per-bundle metadata portion of
    `surface-sync --check`, and drops metadata drift rather than silently fixing
-   it during validation.
+   it during validation. The full branch gate checks the shared runtime ledger.
 3. Loads that one bundle and requires exactly one complete v2 provenance
    artifact whose URL and every endpoint-local source URL exactly match the
    manifest's cited artifact URL. Legacy, incomplete, missing, or

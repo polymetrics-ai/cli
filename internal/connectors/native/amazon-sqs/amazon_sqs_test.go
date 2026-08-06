@@ -15,6 +15,7 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/engine"
 	native "polymetrics.ai/internal/connectors/native/amazon-sqs"
 )
 
@@ -30,6 +31,75 @@ func TestNameAndMetadata(t *testing.T) {
 	if !caps.Write {
 		t.Fatalf("amazon-sqs parity connector must expose typed write/admin actions, got Write=false")
 	}
+}
+
+func TestOperationDirectReadPreflightUsesClosedSQSContract(t *testing.T) {
+	c := native.New()
+	tests := []struct {
+		name    string
+		op      string
+		method  string
+		path    string
+		cap     int
+		policy  string
+		wantErr string
+	}{
+		{name: "valid", op: "list_queues", method: http.MethodPost, path: "SQS.ListQueues", cap: 16 << 20, policy: "json_redacted"},
+		{name: "unknown operation", op: "raw_action", method: http.MethodPost, path: "SQS.RawAction", cap: 16 << 20, policy: "json_redacted", wantErr: "operation \"raw_action\" not found"},
+		{name: "method mismatch", op: "list_queues", method: http.MethodGet, path: "SQS.ListQueues", cap: 16 << 20, policy: "json_redacted", wantErr: "does not match declared operation method"},
+		{name: "path mismatch", op: "list_queues", method: http.MethodPost, path: "SQS.RawAction", cap: 16 << 20, policy: "json_redacted", wantErr: "does not match declared operation path"},
+		{name: "missing cap", op: "list_queues", method: http.MethodPost, path: "SQS.ListQueues", cap: 0, policy: "json_redacted", wantErr: "requires positive max_bytes"},
+		{name: "policy mismatch", op: "list_queues", method: http.MethodPost, path: "SQS.ListQueues", cap: 16 << 20, policy: "json", wantErr: "not supported"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := c.PreflightOperationDirectRead(tt.op, tt.method, tt.path, tt.cap, tt.policy)
+			if tt.wantErr == "" {
+				if err != nil {
+					t.Fatalf("PreflightOperationDirectRead error = %v, want nil", err)
+				}
+				return
+			}
+			if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+				t.Fatalf("PreflightOperationDirectRead error = %v, want %q", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestOperationDirectReadPreflightFailsClosedWithoutRuntimeLedger(t *testing.T) {
+	c := directReadConnectorWithoutRuntimeLedger()
+
+	err := c.PreflightOperationDirectRead("list_queues", http.MethodPost, "SQS.ListQueues", 16<<20, "json_redacted")
+	if err == nil || !strings.Contains(err.Error(), "runtime operation endpoint ledger is unavailable") {
+		t.Fatalf("PreflightOperationDirectRead without runtime ledger = %v, want fail-closed ledger rejection", err)
+	}
+}
+
+func TestOperationDirectReadFailsClosedWithoutRuntimeLedger(t *testing.T) {
+	c := directReadConnectorWithoutRuntimeLedger()
+
+	_, err := c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: "list_queues"})
+	if err == nil || !strings.Contains(err.Error(), "runtime operation endpoint ledger is unavailable") {
+		t.Fatalf("OperationDirectRead without runtime ledger = %v, want fail-closed ledger rejection", err)
+	}
+}
+
+func directReadConnectorWithoutRuntimeLedger() native.Connector {
+	return native.Connector{Base: engine.NewBase(engine.Bundle{
+		Name: "amazon-sqs",
+		Operations: []engine.OperationSpec{{
+			ID:   "list_queues",
+			Kind: "rest_read",
+			REST: &engine.RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "SQS.ListQueues",
+				ContentType: "application/json",
+				MaxBytes:    1 << 20,
+				BodySchema:  json.RawMessage(`{"type":"object","additionalProperties":false}`),
+			},
+		}},
+	})}
 }
 
 // TestNoInitRegistration is the required grep-guard (mirrors
@@ -548,6 +618,22 @@ func TestOperationDirectReadListQueuesAndRedactsPolicy(t *testing.T) {
 	}
 	if strings.Join(sawActions, ",") != "ListQueues,ListDeadLetterSourceQueues,GetQueueAttributes,ListQueueTags" {
 		t.Fatalf("actions = %v", sawActions)
+	}
+}
+
+func TestOperationDirectReadClampsResponseToLedgerLimit(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(strings.Repeat("x", (1<<20)+1)))
+	}))
+	defer srv.Close()
+
+	_, err := native.New().OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
+		Operation: "list_queues",
+		Config:    testRuntimeConfig(srv.URL),
+		MaxBytes:  16 << 20,
+	})
+	if err == nil || !strings.Contains(err.Error(), "exceeds limit 1048576") {
+		t.Fatalf("OperationDirectRead response above ledger cap = %v, want 1 MiB cap rejection", err)
 	}
 }
 

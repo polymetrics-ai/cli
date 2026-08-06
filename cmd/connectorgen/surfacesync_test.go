@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"sort"
+	"strings"
 	"testing"
 )
 
@@ -321,6 +323,81 @@ func TestSyncBundleConsistentBundleIsClean(t *testing.T) {
 	}
 	if stats.total() != 0 {
 		t.Fatalf("stats = %+v, want a clean bundle", stats)
+	}
+}
+
+func TestSyncRuntimeOperationEndpointLedgerCreatesCompactProjection(t *testing.T) {
+	root := t.TempDir()
+	for path, file := range operationCLISurfaceBundleFS(validOperationCLISurfaceJSON(), validOperationsJSON()) {
+		target := filepath.Join(root, filepath.FromSlash(path))
+		if err := os.MkdirAll(filepath.Dir(target), 0o755); err != nil {
+			t.Fatalf("mkdir %s: %v", target, err)
+		}
+		if err := os.WriteFile(target, file.Data, 0o644); err != nil {
+			t.Fatalf("write %s: %v", target, err)
+		}
+	}
+
+	stats, err := syncRuntimeOperationEndpointLedger(root, false)
+	if err != nil {
+		t.Fatalf("syncRuntimeOperationEndpointLedger: %v", err)
+	}
+	if !stats.Changed || stats.Entries != 1 {
+		t.Fatalf("stats = %+v, want one written endpoint", stats)
+	}
+
+	path := filepath.Join(root, "operation_endpoint_ledger.json")
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("read runtime endpoint ledger: %v", err)
+	}
+	var ledger map[string][]map[string]any
+	if err := json.Unmarshal(raw, &ledger); err != nil {
+		t.Fatalf("decode runtime endpoint ledger: %v", err)
+	}
+	entries := ledger["cli-surface"]
+	if len(entries) != 1 {
+		t.Fatalf("ledger entries = %#v, want one", entries)
+	}
+	entry := entries[0]
+	keys := make([]string, 0, len(entry))
+	for key := range entry {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	if got, want := strings.Join(keys, ","), "kind,max_bytes,method,path"; got != want {
+		t.Fatalf("ledger fields = %q, want %q", got, want)
+	}
+	if entry["method"] != "GET" || entry["path"] != "/widgets/{id}" || entry["kind"] != "rest_read" || entry["max_bytes"] != float64(1024) {
+		t.Fatalf("ledger entry = %#v, want direct-read operation contract", entry)
+	}
+
+	stats, err = syncRuntimeOperationEndpointLedger(root, true)
+	if err != nil {
+		t.Fatalf("syncRuntimeOperationEndpointLedger --check: %v", err)
+	}
+	if stats.Changed {
+		t.Fatalf("clean runtime endpoint ledger reported drift: %+v", stats)
+	}
+	if err := os.Remove(path); err != nil {
+		t.Fatalf("remove runtime endpoint ledger: %v", err)
+	}
+	stats, err = syncRuntimeOperationEndpointLedger(root, true)
+	if err != nil {
+		t.Fatalf("syncRuntimeOperationEndpointLedger missing projection --check: %v", err)
+	}
+	if !stats.Changed {
+		t.Fatalf("missing runtime endpoint ledger did not report drift: %+v", stats)
+	}
+	if err := os.WriteFile(path, []byte(`{"cli-surface":[{"unexpected":true}]}`), 0o644); err != nil {
+		t.Fatalf("write malformed runtime endpoint ledger: %v", err)
+	}
+	stats, err = syncRuntimeOperationEndpointLedger(root, false)
+	if err != nil {
+		t.Fatalf("syncRuntimeOperationEndpointLedger malformed projection: %v", err)
+	}
+	if !stats.Changed {
+		t.Fatalf("malformed runtime endpoint ledger did not report replacement: %+v", stats)
 	}
 }
 

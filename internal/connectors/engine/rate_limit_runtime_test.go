@@ -386,7 +386,7 @@ func TestRateLimitAdmissionCoversDirectReadsAndBinaryDownload(t *testing.T) {
 		{
 			name: "operation direct read",
 			make: func() Bundle {
-				return withAllRateLimit(Bundle{Name: "acme", HTTP: HTTPBase{URL: server.URL}, Operations: []OperationSpec{{ID: "acme.lookup", Kind: "rest_read", Summary: "lookup", Risk: "low", Approval: "none", OutputPolicy: "json_redacted", REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/lookup", MaxBytes: 1024}}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/lookup", Operation: &SurfaceOperation{}}}}})
+				return withAllRateLimit(Bundle{Name: "acme", HTTP: HTTPBase{URL: server.URL}, Operations: []OperationSpec{{ID: "acme.lookup", Kind: "rest_read", Summary: "lookup", Risk: "low", Approval: "none", OutputPolicy: "json_redacted", REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/lookup", MaxBytes: 1024}}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/lookup", Operation: &SurfaceOperation{Model: "direct_read"}}}}})
 			},
 			run: func(bundle Bundle) error {
 				_, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{Operation: "acme.lookup", Config: config}, nil)

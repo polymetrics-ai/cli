@@ -23,13 +23,15 @@ var (
 )
 
 // Base itself is NOT asserted against connectors.Connector or
-// connectors.ManifestProvider: per API-CONTRACT.md §2 it only serves
-// Name/Metadata/Definition (identity, catalog-adjacent metadata, and docs) —
-// Tier-3 natives that embed it supply Check/Catalog/Read/Write themselves,
-// and are not required to also provide a legacy Manifest(). tier3FakeConnector
-// below is the compile-time proof that Base + those four methods together
-// satisfy connectors.Connector.
-var _ connectors.DefinitionProvider = Base{}
+// connectors.ManifestProvider: per API-CONTRACT.md §2, Tier-3 natives that
+// embed it supply Check/Catalog/Read/Write themselves and are not required to
+// also provide a legacy Manifest(). tier3FakeConnector below is the
+// compile-time proof that Base + those four methods together satisfy
+// connectors.Connector.
+var (
+	_ connectors.DefinitionProvider             = Base{}
+	_ connectors.OperationDirectReadPreflighter = Base{}
+)
 
 // --- test fixtures ---
 
