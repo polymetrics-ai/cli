@@ -1,0 +1,17 @@
+# TDD ledger — provider-cited rate-limit declarations R1
+
+## Required red / green evidence
+
+| Slice | Red evidence | Green evidence | Status |
+| --- | --- | --- | --- |
+| First declaration embed | `TestEveryProductionRateLimitDeclarationIsEmbedded` fails after a real declaration is present and before the optional wildcard is added | The same test passes after adding `*/rate_limits.json` to `defs.FS` | planned |
+| Closed declaration validation | Invalid source/scope/shape is rejected by existing engine tests and loader rules | All authored files parse and the engine package passes | planned |
+| Batch conformance | Surface and command metadata remain unchanged | `connectorgen validate` and `surface-sync --check` pass | planned |
+
+## Evidence rules
+
+- Existing generic engine tests are the executable specification; no new runtime behavior is
+  introduced by this declarative rollout.
+- The declaration review is fail-closed: no source citation, exact policy shape, or compatible
+  non-secret scope property means `unknown`, never a numeric estimate.
+- `streams.json` is inspected for accidental changes but is not edited.
