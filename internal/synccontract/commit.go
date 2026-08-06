@@ -1,6 +1,7 @@
 package synccontract
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"strings"
@@ -11,12 +12,40 @@ import (
 // read or a merely attempted downstream write.
 var ErrDownstreamAcknowledgementRequired = errors.New("durable downstream acknowledgement is required before checkpoint commit")
 
+// ErrDurableETLDestinationRequired identifies an ETL admission failure before
+// a generic destination can produce a checkpointed write.
+var ErrDurableETLDestinationRequired = errors.New("checkpointed sync requires a durable destination acknowledgement")
+
 // DownstreamAcknowledgement is supplied only after the destination has made
 // the batch durable according to its own native protocol.
 type DownstreamAcknowledgement struct {
 	Sink           string    `json:"sink"`
 	AcknowledgedAt time.Time `json:"acknowledged_at"`
 	durable        bool
+}
+
+// DurableETLDestination supplies an acknowledgement only after its writes are
+// durable enough for a checkpoint to advance.
+type DurableETLDestination interface {
+	AcknowledgeETLDurability(context.Context, string) (DownstreamAcknowledgement, error)
+}
+
+// DestinationDurabilityAdmissionError reports a destination that cannot
+// truthfully acknowledge a checkpointed ETL write.
+type DestinationDurabilityAdmissionError struct {
+	Destination string
+}
+
+func (e *DestinationDurabilityAdmissionError) Error() string {
+	guidance := "migrate this connection to a destination with durable checkpoint acknowledgement"
+	if e == nil || strings.TrimSpace(e.Destination) == "" {
+		return "checkpointed sync cannot start because the destination cannot report durable writes; " + guidance
+	}
+	return fmt.Sprintf("destination %q cannot run checkpointed sync because it cannot report durable writes; %s", e.Destination, guidance)
+}
+
+func (e *DestinationDurabilityAdmissionError) Unwrap() error {
+	return ErrDurableETLDestinationRequired
 }
 
 func NewDurableDownstreamAcknowledgement(sink string, acknowledgedAt time.Time) (DownstreamAcknowledgement, error) {
