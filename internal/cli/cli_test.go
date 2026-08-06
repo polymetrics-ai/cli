@@ -53,9 +53,11 @@ func TestRootHelpAliasesShowManual(t *testing.T) {
 
 func TestDynamicConnectorHelpAndBareNamespace(t *testing.T) {
 	tests := []struct {
-		name string
-		args []string
-		want []string
+		name     string
+		args     []string
+		want     []string
+		wantCode int
+		wantErr  []string
 	}{
 		{name: "help topic", args: []string{"help", "gong"}, want: []string{"pm connectors inspect gong", "calls transcript", "Gong"}},
 		{name: "bare connector", args: []string{"gong"}, want: []string{"pm gong - Gong command surface", "COMMAND GROUPS", "calls"}},
@@ -63,22 +65,27 @@ func TestDynamicConnectorHelpAndBareNamespace(t *testing.T) {
 		{name: "command help flag", args: []string{"gong", "calls", "transcript", "--help"}, want: []string{"pm gong calls transcript", "INTENT", "direct_read", "FLAGS"}},
 		{name: "flag only namespace", args: []string{"gong", "--credential", "gong-local"}, want: []string{"pm gong - Gong command surface", "COMMAND GROUPS", "calls"}},
 		{name: "false preview is passive", args: []string{"gong", "--preview=false"}, want: []string{"pm gong - Gong command surface", "COMMAND GROUPS", "calls"}},
-		{name: "email bare connector", args: []string{"email"}, want: []string{"pm email - Email (IMAP + SMTP) command surface", "COMMAND GROUPS", "mailboxes - see", "messages - see", "message - see"}},
+		{name: "email bare connector", args: []string{"email"}, want: []string{"pm email - Email (IMAP + SMTP) command surface", "COMMAND GROUPS", "mailboxes - see", "message - see"}},
 		{name: "email IMAP mailbox command help", args: []string{"email", "mailboxes", "list", "--help"}, want: []string{"pm email mailboxes list", "INTENT\n  etl", "List mailboxes through IMAP LIST."}},
-		{name: "email IMAP message command help", args: []string{"email", "messages", "list", "--help"}, want: []string{"pm email messages list", "INTENT\n  etl", "STREAM\n  messages"}},
+		{name: "email message command is blocked before IMAP", args: []string{"email", "messages", "list"}, wantCode: 2, wantErr: []string{`unknown command "messages list"`}},
 		{name: "email SMTP command help", args: []string{"email", "message", "send", "--help"}, want: []string{"pm email message send", "INTENT\n  reverse_etl", "WRITE\n  send_message", "--to (string_array) required"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			var stdout, stderr bytes.Buffer
 			code := cli.Run(tt.args, &stdout, &stderr)
-			if code != 0 {
-				t.Fatalf("Run(%v) code = %d stderr = %s", tt.args, code, stderr.String())
+			if code != tt.wantCode {
+				t.Fatalf("Run(%v) code = %d, want %d; stdout=%s stderr=%s", tt.args, code, tt.wantCode, stdout.String(), stderr.String())
 			}
 			out := stdout.String()
 			for _, want := range tt.want {
 				if !strings.Contains(out, want) {
 					t.Fatalf("Run(%v) help missing %q:\n%s", tt.args, want, out)
+				}
+			}
+			for _, want := range tt.wantErr {
+				if !strings.Contains(stderr.String(), want) {
+					t.Fatalf("Run(%v) stderr missing %q:\n%s", tt.args, want, stderr.String())
 				}
 			}
 		})

@@ -28,12 +28,13 @@ rejected.
 `pm email mailboxes list` issues IMAP `LIST`. Message reads are not exposed while their full-refresh
 and sparse-UID continuation semantics cannot be enforced by the shared ETL boundary.
 
-Message reads, including full refresh, are blocked pending #3810. Full refresh needs catalog sync
-mode validation at `internal/app/app.go:350-376` and cursor-mode handling at
-`internal/app/app.go:543-551`; until then, a default full refresh could silently become incremental.
-Sparse UID continuation needs scan-continuation state at `internal/app/types.go:40-47` and
-non-emitted checkpoint persistence at `internal/app/local_warehouse.go:246-256`; until then, an
-empty sparse range could be scanned repeatedly. Both become available when #3810 lands.
+Email message reads, full-refresh enforcement, and sparse UID scan continuation are blocked pending
+#3810. Full-refresh enforcement needs catalog sync-mode validation at
+`internal/app/app.go:350-376` and cursor-mode handling at `internal/app/app.go:543-551`; until
+then, a default full refresh could silently become incremental. Sparse UID scan continuation needs
+scan-continuation state at `internal/app/types.go:40-47` and non-emitted checkpoint persistence at
+`internal/app/local_warehouse.go:246-256`; until then, an empty sparse range could be scanned
+repeatedly. Both become available when #3810 lands.
 
 When #3810 enables message polling, its RFC 9051 UIDVALIDITY plus UID cursor will not observe hard
 deletes: a removed message simply stops appearing and no tombstone is emitted. IMAP IDLE/push
@@ -54,11 +55,11 @@ recipients appear in the envelope preview but not the RFC 5322 headers.
 
 ## Known limits
 
-- Message reads, full refresh, and sparse UID continuation are blocked pending #3810. Full refresh
-  needs `internal/app/app.go:350-376` catalog sync-mode validation and
-  `internal/app/app.go:543-551` cursor-mode handling. Sparse UID continuation needs scan state at
-  `internal/app/types.go:40-47` and persistence at `internal/app/local_warehouse.go:246-256`.
-  Both become available when #3810 lands.
+- Email message reads, full-refresh enforcement, and sparse UID scan continuation are blocked
+  pending #3810. Full-refresh enforcement needs `internal/app/app.go:350-376` catalog sync-mode
+  validation and `internal/app/app.go:543-551` cursor-mode handling. Sparse UID scan continuation
+  needs scan-continuation state at `internal/app/types.go:40-47` and persistence at
+  `internal/app/local_warehouse.go:246-256`. Both become available when #3810 lands.
 - When message polling becomes available, hard deletions will not be observable and no deletion
   tombstone will be produced. IMAP IDLE, webhooks, and subscriptions remain #3614's seam.
 - SMTP is send-only. It does not and will not back mailbox, message, search, or stream reads.
