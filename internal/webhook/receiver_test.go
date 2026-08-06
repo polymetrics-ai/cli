@@ -55,7 +55,11 @@ func TestStartLoopbackServesOnlyExternalTunnelMode(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer response.Body.Close()
+	defer func() {
+		if err := response.Body.Close(); err != nil {
+			t.Errorf("response body Close() error = %v", err)
+		}
+	}()
 	if response.StatusCode != http.StatusOK {
 		t.Fatalf("loopback response status = %d", response.StatusCode)
 	}
