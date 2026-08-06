@@ -976,6 +976,46 @@ func TestRequesterDoMultipartLimitedBoundsCapturedResponse(t *testing.T) {
 	}
 }
 
+func TestRequesterDoMultipartPreservesEarlyTerminalResponse(t *testing.T) {
+	now := time.Date(2026, time.August, 6, 12, 0, 0, 0, time.UTC)
+	r := &Requester{
+		BaseURL:        "https://example.invalid",
+		DisableRetries: true,
+		Now:            func() time.Time { return now },
+		Client: &http.Client{Transport: roundTripperFunc(func(req *http.Request) (*http.Response, error) {
+			// An HTTP server may reject an upload before consuming its complete
+			// streamed body. Closing it here models that transport outcome without
+			// relying on scheduling between an httptest server and the pipe writer.
+			if err := req.Body.Close(); err != nil {
+				t.Fatalf("close streamed request body: %v", err)
+			}
+			return &http.Response{
+				StatusCode: http.StatusTooManyRequests,
+				Header:     http.Header{"Retry-After": {"90"}},
+				Body:       io.NopCloser(strings.NewReader(`{"error":"provider rejected upload"}`)),
+				Request:    req,
+			}, nil
+		})},
+	}
+
+	_, err := r.DoMultipart(context.Background(), http.MethodPost, "/upload", nil, MultipartForm{
+		Fields: map[string]string{"message": "fixture upload"},
+	})
+	if err == nil {
+		t.Fatal("DoMultipart error = nil, want the early provider response")
+	}
+	var rateLimitErr *RateLimitError
+	if !errors.As(err, &rateLimitErr) {
+		t.Fatalf("DoMultipart error = %T %v, want *RateLimitError", err, err)
+	}
+	if rateLimitErr.HTTPError == nil || rateLimitErr.HTTPError.Body != `{"error":"provider rejected upload"}` {
+		t.Fatalf("HTTP error = %#v, want the complete provider response", rateLimitErr.HTTPError)
+	}
+	if !rateLimitErr.HasRetryAfter || !rateLimitErr.ResetAt.Equal(now.Add(90*time.Second)) {
+		t.Fatalf("rate-limit error = %#v, want parsed Retry-After reset", rateLimitErr)
+	}
+}
+
 func TestRequesterDoMultipartRetriesWithReopenedFile(t *testing.T) {
 	dir := t.TempDir()
 	filePath := dir + "/payload.txt"

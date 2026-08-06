@@ -719,7 +719,15 @@ func multipartBody(form MultipartForm) (*requestBody, error) {
 		ContentType: mw.FormDataContentType(),
 		Cleanup: func() error {
 			_ = pr.Close()
-			return <-done
+			err := <-done
+			// A server can send a final response before it consumes the
+			// complete streamed upload. Closing the reader then unblocks the
+			// producer with io.ErrClosedPipe; that expected cleanup result must
+			// not hide the provider response.
+			if errors.Is(err, io.ErrClosedPipe) {
+				return nil
+			}
+			return err
 		},
 	}, nil
 }
