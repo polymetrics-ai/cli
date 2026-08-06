@@ -200,12 +200,19 @@ not a full override by default.
   replays the edge record. Set `delivery.duplicates` to `at_least_once`; `>` would silently lose
   tied timestamps and is not an allowed substitute. Declare positive `safety_lag_seconds` for a
   timestamp source whose provider can publish late/clock-skewed records; the executor rereads that
-  overlap on the next run. `0` is an explicit no-lag opt-out and can lose such records. Non-time
-  watermark kinds must declare `0` because a timestamp lag has no honest meaning for them.
+  overlap on the next run. An unfinished bounded overlap persists an internal scan tuple separately
+  from the durable high-water tuple, resumes it after restart, and clears it once the overlap is
+  exhausted so later polls begin at the lag boundary again. `0` is an explicit no-lag opt-out and
+  can lose such records. Non-time watermark kinds must declare `0` because a timestamp lag has no
+  honest meaning for them.
   `page_size`, `max_pages`, and `request_budget` are all positive required bounds. Each physical
   declared-source request consumes the one shared request budget: the source adapter must consume
   a budget token before its primary read and before every additional fixed read, including a
-  declared deletion endpoint. Reaching `max_pages` or exhausting that budget returns a typed,
+  declared deletion endpoint. A deletion endpoint requires `request_budget >= 2`, and the executor
+  does not start a primary read unless both its primary and deletion tokens remain. Each primary or
+  deletion physical page must contain no more than `page_size` records; an overflow is a typed,
+  non-advancing refusal. Primary and deletion records are merged by watermark tuple before delivery
+  and checkpointing. Reaching `max_pages` or exhausting that budget returns a typed,
   resumable stop after only the last durably accepted position; it is never a successful silent
   truncation. The executor checks cancellation between source fetch, delivery, and checkpoint
   commit. It advances the tuple only after every emitted record in its page is durably accepted by

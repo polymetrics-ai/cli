@@ -753,6 +753,9 @@ func validatePollingWatermark(d ChangefeedDescriptor) error {
 	if polling.PageSize <= 0 || polling.MaxPages <= 0 || polling.RequestBudget <= 0 {
 		return errors.New("polling watermark requires positive page_size, max_pages, and request_budget")
 	}
+	if polling.DeletionEndpoint != nil && polling.RequestBudget < 2 {
+		return errors.New("polling watermark deletion_endpoint requires request_budget of at least 2")
+	}
 	if d.Checkpoint == nil || !sameStrings(d.Checkpoint.Keys, []string{polling.Watermark.Path, polling.TieBreaker.Path}) {
 		return errors.New("polling watermark checkpoint keys must be watermark path then tie_breaker path")
 	}

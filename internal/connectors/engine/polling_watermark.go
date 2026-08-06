@@ -14,17 +14,6 @@ import (
 	"polymetrics.ai/internal/connectors"
 )
 
-// PollingWatermarkClock supplies time for timestamp-watermark safety lag. It
-// is an explicit dependency so polling behavior has no hidden wall-clock or
-// sleep dependency in tests.
-type PollingWatermarkClock interface {
-	Now() time.Time
-}
-
-type wallPollingWatermarkClock struct{}
-
-func (wallPollingWatermarkClock) Now() time.Time { return time.Now().UTC() }
-
 // PollingWatermarkPosition is the complete provider ordering tuple persisted
 // after a page is durably accepted. Watermark and TieBreaker retain the
 // provider's lossless textual representation; they are not float-coerced.
@@ -32,6 +21,15 @@ type PollingWatermarkPosition struct {
 	Watermark        string
 	TieBreaker       string
 	tieBreakerNumber bool
+}
+
+const pollingWatermarkScanStateKey = "$polymetrics.polling_watermark.scan.v1"
+
+type pollingWatermarkScanCheckpoint struct {
+	Version    int    `json:"version"`
+	Watermark  string `json:"watermark"`
+	TieBreaker string `json:"tie_breaker"`
+	Active     bool   `json:"active"`
 }
 
 // PollingWatermarkPageRequest is the closed request passed to a connector
@@ -129,6 +127,32 @@ func (*PollingWatermarkResumableStopError) Resumable() bool {
 	return true
 }
 
+type PollingWatermarkNonAdvancingReason string
+
+const (
+	PollingWatermarkNonAdvancingReasonPageSize PollingWatermarkNonAdvancingReason = "page_size"
+	PollingWatermarkNonAdvancingReasonCursor   PollingWatermarkNonAdvancingReason = "cursor"
+)
+
+type PollingWatermarkNonAdvancingError struct {
+	Reason   PollingWatermarkNonAdvancingReason
+	Page     int
+	Source   string
+	Limit    int
+	Returned int
+}
+
+func (e *PollingWatermarkNonAdvancingError) Error() string {
+	if e.Reason == PollingWatermarkNonAdvancingReasonPageSize {
+		return fmt.Sprintf("polling watermark %s page %d returned %d records exceeding declared page size %d without advancing state", e.Source, e.Page, e.Returned, e.Limit)
+	}
+	return fmt.Sprintf("polling watermark page %d did not advance the source cursor", e.Page)
+}
+
+func (*PollingWatermarkNonAdvancingError) NonAdvancing() bool {
+	return true
+}
+
 // PollingWatermarkPageSource is the transport seam for the shared executor.
 // It must implement only declaration-selected read operations; it never
 // receives raw SQL, arbitrary HTTP, shell, or caller-selected paths. It must
@@ -145,14 +169,13 @@ type PollingWatermarkPageSource interface {
 type PollingWatermarkExecutor struct {
 	descriptor *connectors.ChangefeedDescriptor
 	source     PollingWatermarkPageSource
-	clock      PollingWatermarkClock
 }
 
 var _ connectors.ChangefeedExecutor = (*PollingWatermarkExecutor)(nil)
 
 // NewPollingWatermarkExecutor constructs the shared executor only for a fully
 // validated polling-watermark declaration and a closed source adapter.
-func NewPollingWatermarkExecutor(descriptor *connectors.ChangefeedDescriptor, source PollingWatermarkPageSource, clock PollingWatermarkClock) (*PollingWatermarkExecutor, error) {
+func NewPollingWatermarkExecutor(descriptor *connectors.ChangefeedDescriptor, source PollingWatermarkPageSource) (*PollingWatermarkExecutor, error) {
 	if descriptor == nil {
 		return nil, errors.New("polling watermark executor requires a changefeed declaration")
 	}
@@ -165,10 +188,7 @@ func NewPollingWatermarkExecutor(descriptor *connectors.ChangefeedDescriptor, so
 	if source == nil {
 		return nil, errors.New("polling watermark executor requires a page source")
 	}
-	if clock == nil {
-		clock = wallPollingWatermarkClock{}
-	}
-	return &PollingWatermarkExecutor{descriptor: descriptor.Clone(), source: source, clock: clock}, nil
+	return &PollingWatermarkExecutor{descriptor: descriptor.Clone(), source: source}, nil
 }
 
 // ChangefeedExecutorDescriptor supplies the runtime half of the existing
@@ -210,17 +230,22 @@ func (e *PollingWatermarkExecutor) ReadCDC(ctx context.Context, req connectors.C
 	}
 
 	polling := e.descriptor.PollingWatermark
-	queryAfter, durableAfter, err := e.initialPositions(req.State)
+	queryAfter, durableAfter, scanCheckpoint, err := e.initialPositions(req.State)
 	if err != nil {
 		return err
 	}
 	requestBudget := newPollingWatermarkRequestBudget(polling.RequestBudget)
+	checkpointState := clonePollingWatermarkState(req.State)
+	requestsPerPage := 1
+	if polling.DeletionEndpoint != nil {
+		requestsPerPage++
+	}
 
 	for pageNumber := 0; pageNumber < polling.MaxPages; pageNumber++ {
 		if err := ctx.Err(); err != nil {
 			return err
 		}
-		if requestBudget.Remaining() == 0 {
+		if requestBudget.Remaining() < requestsPerPage {
 			return newPollingWatermarkResumableStop(PollingWatermarkStopReasonRequestBudget, durableAfter, pageNumber, requestBudget.Used())
 		}
 		requestsBefore := requestBudget.Used()
@@ -243,70 +268,81 @@ func (e *PollingWatermarkExecutor) ReadCDC(ctx context.Context, req connectors.C
 		if err := ctx.Err(); err != nil {
 			return err
 		}
-		requiredRequests := 1
-		if polling.DeletionEndpoint != nil {
-			requiredRequests++
-		}
-		if requestBudget.Used()-requestsBefore < requiredRequests {
-			return errors.New("polling watermark source returned without consuming the request budget for every declared-source request")
-		}
-		if len(page.Records) == 0 && len(page.DeletionRecords) == 0 {
-			if page.More {
-				return errors.New("polling watermark source returned an empty page with more=true")
-			}
-			return nil
+		if err := e.validatePhysicalPage(pageNumber+1, page); err != nil {
+			return err
 		}
 		if len(page.DeletionRecords) > 0 && polling.DeletionEndpoint == nil {
 			return errors.New("polling watermark source returned deletion records without a declared deletion_endpoint")
 		}
-
-		var last *PollingWatermarkPosition
-		var previous *PollingWatermarkPosition
-		for _, record := range page.Records {
-			position, err := e.positionFromRecord(record)
-			if err != nil {
-				return err
-			}
-			if err := e.requireOrderedPosition(previous, position); err != nil {
-				return fmt.Errorf("polling watermark page %d: %w", pageNumber+1, err)
-			}
-			if err := e.emitPollingRecord(ctx, record, false, emit); err != nil {
-				return err
-			}
-			previous = &position
-			last = &position
+		if requestBudget.Used()-requestsBefore < requestsPerPage {
+			return errors.New("polling watermark source returned without consuming the request budget for every declared-source request")
 		}
-		for _, record := range page.DeletionRecords {
-			position, err := e.positionFromRecord(record)
-			if err != nil {
-				return err
-			}
-			if err := e.requireOrderedPosition(previous, position); err != nil {
-				return fmt.Errorf("polling watermark page %d: %w", pageNumber+1, err)
-			}
-			if err := e.emitPollingRecord(ctx, record, true, emit); err != nil {
-				return err
-			}
-			previous = &position
-			last = &position
+		positioned, err := e.mergePollingWatermarkPageRecords(page)
+		if err != nil {
+			return fmt.Errorf("polling watermark page %d: %w", pageNumber+1, err)
 		}
-		if last == nil {
+		if len(positioned) == 0 {
+			if page.More {
+				return &PollingWatermarkNonAdvancingError{Reason: PollingWatermarkNonAdvancingReasonCursor, Page: pageNumber + 1}
+			}
+			if e.usesPollingWatermarkScanCursor() && scanCheckpoint != nil && scanCheckpoint.Active {
+				inactiveScan := *scanCheckpoint
+				inactiveScan.Active = false
+				nextState, err := e.checkpointState(checkpointState, durableAfter, &inactiveScan)
+				if err != nil {
+					return fmt.Errorf("polling watermark page %d checkpoint: %w", pageNumber+1, err)
+				}
+				if err := req.CheckpointCommitter.CommitChangefeedCheckpoint(ctx, nextState); err != nil {
+					return fmt.Errorf("polling watermark commit checkpoint after destination acknowledgement: %w", err)
+				}
+				checkpointState = nextState
+				scanCheckpoint = &inactiveScan
+			}
 			return nil
+		}
+		if err := e.requireOrderedPosition(queryAfter, positioned[0].position); err != nil {
+			return fmt.Errorf("polling watermark page %d: %w", pageNumber+1, err)
+		}
+		last := positioned[len(positioned)-1].position
+		if page.More && queryAfter != nil {
+			comparison, err := comparePollingWatermarkPositions(polling.Watermark.Kind, *queryAfter, last)
+			if err != nil {
+				return fmt.Errorf("polling watermark page %d: %w", pageNumber+1, err)
+			}
+			if comparison >= 0 {
+				return &PollingWatermarkNonAdvancingError{Reason: PollingWatermarkNonAdvancingReasonCursor, Page: pageNumber + 1}
+			}
+		}
+		for _, record := range positioned {
+			if err := e.emitPollingRecord(ctx, record.record, record.deletionRecord, emit); err != nil {
+				return err
+			}
 		}
 		if err := ctx.Err(); err != nil {
 			return err
 		}
-		checkpoint, advanced, err := e.nextDurablePosition(durableAfter, *last)
+		checkpoint, advanced, err := e.nextDurablePosition(durableAfter, last)
 		if err != nil {
 			return fmt.Errorf("polling watermark page %d checkpoint: %w", pageNumber+1, err)
 		}
-		if advanced {
-			if err := req.CheckpointCommitter.CommitChangefeedCheckpoint(ctx, e.checkpointState(checkpoint)); err != nil {
+		nextScan := e.nextPollingWatermarkScanCheckpoint(last, page.More)
+		shouldCommit := advanced
+		if nextScan != nil && (nextScan.Active || (scanCheckpoint != nil && scanCheckpoint.Active)) {
+			shouldCommit = true
+		}
+		if shouldCommit {
+			nextState, err := e.checkpointState(checkpointState, &checkpoint, nextScan)
+			if err != nil {
+				return fmt.Errorf("polling watermark page %d checkpoint: %w", pageNumber+1, err)
+			}
+			if err := req.CheckpointCommitter.CommitChangefeedCheckpoint(ctx, nextState); err != nil {
 				return fmt.Errorf("polling watermark commit checkpoint after destination acknowledgement: %w", err)
 			}
 			durableAfter = &checkpoint
+			checkpointState = nextState
+			scanCheckpoint = nextScan
 		}
-		queryAfter = last
+		queryAfter = clonePollingWatermarkPosition(&last)
 		if !page.More {
 			return nil
 		}
@@ -323,39 +359,101 @@ func newPollingWatermarkResumableStop(reason PollingWatermarkStopReason, durable
 	}
 }
 
-func (e *PollingWatermarkExecutor) initialPositions(state map[string]string) (*PollingWatermarkPosition, *PollingWatermarkPosition, error) {
+func (e *PollingWatermarkExecutor) initialPositions(state map[string]string) (*PollingWatermarkPosition, *PollingWatermarkPosition, *pollingWatermarkScanCheckpoint, error) {
 	polling := e.descriptor.PollingWatermark
 	keys := e.descriptor.Checkpoint.Keys
 	if len(keys) != 2 {
-		return nil, nil, errors.New("polling watermark executor requires exactly two checkpoint keys")
+		return nil, nil, nil, errors.New("polling watermark executor requires exactly two checkpoint keys")
+	}
+	scanCheckpoint, err := e.scanCheckpointFromState(state)
+	if err != nil {
+		return nil, nil, nil, err
 	}
 	watermark, hasWatermark := state[keys[0]]
 	tieBreaker, hasTieBreaker := state[keys[1]]
 	if hasWatermark != hasTieBreaker {
-		return nil, nil, errors.New("polling watermark checkpoint is incomplete")
+		return nil, nil, nil, errors.New("polling watermark checkpoint is incomplete")
 	}
 	if !hasWatermark {
+		if scanCheckpoint != nil && scanCheckpoint.Active {
+			return nil, nil, nil, errors.New("polling watermark scan cursor requires a durable checkpoint")
+		}
 		// A new changefeed has no safe implicit timestamp boundary. Leave the
 		// initial snapshot/barrier choice to the closed source adapter rather
 		// than silently starting at the local wall clock and skipping history.
-		return nil, nil, nil
+		return nil, nil, scanCheckpoint, nil
 	}
 	committed := PollingWatermarkPosition{Watermark: watermark, TieBreaker: tieBreaker}
 	if err := validatePollingWatermarkValue(polling.Watermark.Kind, committed.Watermark); err != nil {
-		return nil, nil, fmt.Errorf("invalid polling watermark checkpoint: %w", err)
+		return nil, nil, nil, fmt.Errorf("invalid polling watermark checkpoint: %w", err)
 	}
 	if strings.TrimSpace(committed.TieBreaker) == "" {
-		return nil, nil, errors.New("polling watermark checkpoint has an empty tie breaker")
+		return nil, nil, nil, errors.New("polling watermark checkpoint has an empty tie breaker")
 	}
-	if polling.Watermark.Kind != "timestamp" || polling.SafetyLagSeconds == 0 {
-		return clonePollingWatermarkPosition(&committed), clonePollingWatermarkPosition(&committed), nil
+	if !e.usesPollingWatermarkScanCursor() {
+		return clonePollingWatermarkPosition(&committed), clonePollingWatermarkPosition(&committed), scanCheckpoint, nil
 	}
 	parsed, err := time.Parse(time.RFC3339Nano, committed.Watermark)
 	if err != nil {
-		return nil, nil, fmt.Errorf("parse timestamp polling checkpoint: %w", err)
+		return nil, nil, nil, fmt.Errorf("parse timestamp polling checkpoint: %w", err)
 	}
 	queryAfter := &PollingWatermarkPosition{Watermark: parsed.UTC().Add(-time.Duration(polling.SafetyLagSeconds) * time.Second).Format(time.RFC3339Nano)}
-	return queryAfter, clonePollingWatermarkPosition(&committed), nil
+	if scanCheckpoint != nil && scanCheckpoint.Active {
+		scanPosition := PollingWatermarkPosition{Watermark: scanCheckpoint.Watermark, TieBreaker: scanCheckpoint.TieBreaker}
+		comparison, err := comparePollingWatermarkPositions(polling.Watermark.Kind, scanPosition, committed)
+		if err != nil {
+			return nil, nil, nil, fmt.Errorf("compare polling watermark scan cursor: %w", err)
+		}
+		if comparison > 0 {
+			return nil, nil, nil, errors.New("polling watermark scan cursor exceeds the durable checkpoint")
+		}
+		comparison, err = comparePollingWatermarkPositions(polling.Watermark.Kind, scanPosition, *queryAfter)
+		if err != nil {
+			return nil, nil, nil, fmt.Errorf("compare polling watermark scan cursor: %w", err)
+		}
+		if comparison >= 0 {
+			queryAfter = &scanPosition
+		}
+	}
+	return queryAfter, clonePollingWatermarkPosition(&committed), scanCheckpoint, nil
+}
+
+func (e *PollingWatermarkExecutor) usesPollingWatermarkScanCursor() bool {
+	polling := e.descriptor.PollingWatermark
+	return polling.Watermark.Kind == "timestamp" && polling.SafetyLagSeconds > 0
+}
+
+func (e *PollingWatermarkExecutor) scanCheckpointFromState(state map[string]string) (*pollingWatermarkScanCheckpoint, error) {
+	raw, found := state[pollingWatermarkScanStateKey]
+	if !found {
+		return nil, nil
+	}
+	var scan pollingWatermarkScanCheckpoint
+	if err := json.Unmarshal([]byte(raw), &scan); err != nil {
+		return nil, fmt.Errorf("invalid polling watermark scan cursor: %w", err)
+	}
+	if scan.Version != 1 {
+		return nil, fmt.Errorf("unsupported polling watermark scan cursor version %d", scan.Version)
+	}
+	if err := validatePollingWatermarkValue(e.descriptor.PollingWatermark.Watermark.Kind, scan.Watermark); err != nil {
+		return nil, fmt.Errorf("invalid polling watermark scan cursor: %w", err)
+	}
+	if strings.TrimSpace(scan.TieBreaker) == "" {
+		return nil, errors.New("polling watermark scan cursor has an empty tie breaker")
+	}
+	return &scan, nil
+}
+
+func (e *PollingWatermarkExecutor) nextPollingWatermarkScanCheckpoint(position PollingWatermarkPosition, active bool) *pollingWatermarkScanCheckpoint {
+	if !e.usesPollingWatermarkScanCursor() {
+		return nil
+	}
+	return &pollingWatermarkScanCheckpoint{
+		Version:    1,
+		Watermark:  position.Watermark,
+		TieBreaker: position.TieBreaker,
+		Active:     active,
+	}
 }
 
 func (e *PollingWatermarkExecutor) nextDurablePosition(durable *PollingWatermarkPosition, last PollingWatermarkPosition) (PollingWatermarkPosition, bool, error) {
@@ -427,11 +525,104 @@ func (e *PollingWatermarkExecutor) requireOrderedPosition(previous *PollingWater
 	return nil
 }
 
-func (e *PollingWatermarkExecutor) checkpointState(position PollingWatermarkPosition) map[string]string {
-	return map[string]string{
-		e.descriptor.Checkpoint.Keys[0]: position.Watermark,
-		e.descriptor.Checkpoint.Keys[1]: position.TieBreaker,
+type positionedPollingWatermarkRecord struct {
+	record         connectors.Record
+	deletionRecord bool
+	position       PollingWatermarkPosition
+}
+
+func (e *PollingWatermarkExecutor) validatePhysicalPage(pageNumber int, page PollingWatermarkPage) error {
+	limit := e.descriptor.PollingWatermark.PageSize
+	if len(page.Records) > limit {
+		return &PollingWatermarkNonAdvancingError{
+			Reason:   PollingWatermarkNonAdvancingReasonPageSize,
+			Page:     pageNumber,
+			Source:   "primary",
+			Limit:    limit,
+			Returned: len(page.Records),
+		}
 	}
+	if e.descriptor.PollingWatermark.DeletionEndpoint != nil && len(page.DeletionRecords) > limit {
+		return &PollingWatermarkNonAdvancingError{
+			Reason:   PollingWatermarkNonAdvancingReasonPageSize,
+			Page:     pageNumber,
+			Source:   "deletion",
+			Limit:    limit,
+			Returned: len(page.DeletionRecords),
+		}
+	}
+	return nil
+}
+
+func (e *PollingWatermarkExecutor) mergePollingWatermarkPageRecords(page PollingWatermarkPage) ([]positionedPollingWatermarkRecord, error) {
+	primary, err := e.positionedPollingWatermarkRecords(page.Records, false)
+	if err != nil {
+		return nil, err
+	}
+	deletions, err := e.positionedPollingWatermarkRecords(page.DeletionRecords, true)
+	if err != nil {
+		return nil, err
+	}
+	merged := make([]positionedPollingWatermarkRecord, 0, len(primary)+len(deletions))
+	for len(primary) > 0 && len(deletions) > 0 {
+		comparison, err := comparePollingWatermarkPositions(e.descriptor.PollingWatermark.Watermark.Kind, primary[0].position, deletions[0].position)
+		if err != nil {
+			return nil, err
+		}
+		if comparison <= 0 {
+			merged = append(merged, primary[0])
+			primary = primary[1:]
+			continue
+		}
+		merged = append(merged, deletions[0])
+		deletions = deletions[1:]
+	}
+	merged = append(merged, primary...)
+	return append(merged, deletions...), nil
+}
+
+func (e *PollingWatermarkExecutor) positionedPollingWatermarkRecords(records []connectors.Record, deletionRecord bool) ([]positionedPollingWatermarkRecord, error) {
+	positioned := make([]positionedPollingWatermarkRecord, 0, len(records))
+	var previous *PollingWatermarkPosition
+	for _, record := range records {
+		position, err := e.positionFromRecord(record)
+		if err != nil {
+			return nil, err
+		}
+		if err := e.requireOrderedPosition(previous, position); err != nil {
+			return nil, err
+		}
+		positioned = append(positioned, positionedPollingWatermarkRecord{record: record, deletionRecord: deletionRecord, position: position})
+		previous = &positioned[len(positioned)-1].position
+	}
+	return positioned, nil
+}
+
+func (e *PollingWatermarkExecutor) checkpointState(current map[string]string, durable *PollingWatermarkPosition, scan *pollingWatermarkScanCheckpoint) (map[string]string, error) {
+	if durable == nil {
+		return nil, errors.New("polling watermark checkpoint requires a durable position")
+	}
+	state := clonePollingWatermarkState(current)
+	state[e.descriptor.Checkpoint.Keys[0]] = durable.Watermark
+	state[e.descriptor.Checkpoint.Keys[1]] = durable.TieBreaker
+	if scan == nil {
+		delete(state, pollingWatermarkScanStateKey)
+		return state, nil
+	}
+	raw, err := json.Marshal(scan)
+	if err != nil {
+		return nil, fmt.Errorf("encode polling watermark scan cursor: %w", err)
+	}
+	state[pollingWatermarkScanStateKey] = string(raw)
+	return state, nil
+}
+
+func clonePollingWatermarkState(state map[string]string) map[string]string {
+	copy := make(map[string]string, len(state)+1)
+	for key, value := range state {
+		copy[key] = value
+	}
+	return copy
 }
 
 // PollingWatermarkConnector joins the standard declarative connector view to
@@ -446,8 +637,8 @@ var _ connectors.ChangefeedExecutor = (*PollingWatermarkConnector)(nil)
 
 // NewPollingWatermarkConnector creates a connector whose changefeed behavior
 // is entirely selected by bundle.Changefeed and the closed page-source port.
-func NewPollingWatermarkConnector(bundle Bundle, hooks Hooks, source PollingWatermarkPageSource, clock PollingWatermarkClock) (*PollingWatermarkConnector, error) {
-	executor, err := NewPollingWatermarkExecutor(bundle.Changefeed, source, clock)
+func NewPollingWatermarkConnector(bundle Bundle, hooks Hooks, source PollingWatermarkPageSource) (*PollingWatermarkConnector, error) {
+	executor, err := NewPollingWatermarkExecutor(bundle.Changefeed, source)
 	if err != nil {
 		return nil, err
 	}
