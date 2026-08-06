@@ -40190,6 +40190,1219 @@
     }
   },
   {
+    "slug": "crisp",
+    "name": "Crisp",
+    "description": "Reads the first Wave 1 set of Crisp REST API conversation resources through HTTP Basic authentication.",
+    "docs_url": "https://docs.crisp.chat/references/rest-api/v1/",
+    "integration_type": "api",
+    "release_stage": "alpha",
+    "capabilities": {
+      "check": true,
+      "read": true,
+      "write": false,
+      "query": false,
+      "cdc": false,
+      "dynamic_schema": false
+    },
+    "streams": [
+      {
+        "name": "list_conversations",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "suggested_conversation_segments",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "suggested_conversation_data",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "spam_conversations",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "spam_conversation_content",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "conversation",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "conversation_messages",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "conversation_message",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "conversation_routing",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "conversation_meta",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "conversation_original_message",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "conversation_pages",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "conversation_events",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "conversation_files",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "conversation_state",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "conversation_relations",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "conversation_participants",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "conversation_block_status",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "conversation_verify_status",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "conversation_browsing",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "conversation_call",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      }
+    ],
+    "write_actions": [],
+    "cli_surface": {
+      "tagline": "Read Crisp conversation resources through bounded, typed Wave 1 REST commands.",
+      "usage": "pm crisp <conversations|conversation> <command> [flags]",
+      "source_cli": {
+        "name": "Crisp REST API Reference (V1)",
+        "docs": "https://docs.crisp.chat/references/rest-api/v1/",
+        "reference": "Official Postman Collection v2.1.0, retrieved 2026-08-05; ETag 6a6b6306-32de7",
+        "source": "provider_api"
+      },
+      "groups": [
+        {
+          "id": "conversations",
+          "title": "Crisp conversation-list read commands",
+          "commands": [
+            "conversations list",
+            "conversations suggested-segments",
+            "conversations suggested-data",
+            "conversations spam-list",
+            "conversations spam-content"
+          ]
+        },
+        {
+          "id": "conversation",
+          "title": "Crisp conversation-scoped read commands",
+          "commands": [
+            "conversation get",
+            "conversation messages",
+            "conversation message",
+            "conversation routing",
+            "conversation meta",
+            "conversation original-message",
+            "conversation pages",
+            "conversation events",
+            "conversation files",
+            "conversation state",
+            "conversation relations",
+            "conversation participants",
+            "conversation block-status",
+            "conversation verify-status",
+            "conversation browsing",
+            "conversation call"
+          ]
+        }
+      ],
+      "global_flags": [
+        {
+          "name": "credential",
+          "type": "string",
+          "summary": "Credential profile name; never pass Crisp token values as flags.",
+          "values": [],
+          "maps_to": "config.credential",
+          "allow_empty": false
+        },
+        {
+          "name": "config",
+          "type": "string_array",
+          "summary": "Connector config override as key=value; never pass secret values here.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "json",
+          "type": "boolean",
+          "summary": "Render machine-readable JSON output.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to emit from a read command.",
+          "values": [],
+          "maps_to": ""
+        }
+      ],
+      "commands": [
+        {
+          "path": "conversations list",
+          "summary": "List one bounded Crisp conversation page with named provider filters.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_conversations",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
+          "flags": [
+            {
+              "name": "website-id",
+              "type": "string",
+              "summary": "Crisp website identifier; overrides the credential profile config.",
+              "values": [],
+              "maps_to": "config.website_id",
+              "allow_empty": false
+            },
+            {
+              "name": "page-number",
+              "type": "string",
+              "summary": "Positive Crisp conversation page number; defaults to 1 from config.",
+              "values": [],
+              "maps_to": "config.page_number",
+              "allow_empty": false
+            },
+            {
+              "name": "per-page",
+              "type": "enum",
+              "summary": "Crisp conversation page size, bounded by the provider to 20 through 50.",
+              "values": [
+                "20",
+                "21",
+                "22",
+                "23",
+                "24",
+                "25",
+                "26",
+                "27",
+                "28",
+                "29",
+                "30",
+                "31",
+                "32",
+                "33",
+                "34",
+                "35",
+                "36",
+                "37",
+                "38",
+                "39",
+                "40",
+                "41",
+                "42",
+                "43",
+                "44",
+                "45",
+                "46",
+                "47",
+                "48",
+                "49",
+                "50"
+              ],
+              "maps_to": "query.per_page"
+            },
+            {
+              "name": "search-query",
+              "type": "string",
+              "summary": "Crisp conversation text, segment, or filter search query.",
+              "values": [],
+              "maps_to": "query.search_query",
+              "allow_empty": false
+            },
+            {
+              "name": "search-type",
+              "type": "enum",
+              "summary": "Crisp search interpretation.",
+              "values": [
+                "text",
+                "segment",
+                "filter"
+              ],
+              "maps_to": "query.search_type"
+            },
+            {
+              "name": "search-operator",
+              "type": "enum",
+              "summary": "Boolean operator for filter search.",
+              "values": [
+                "and",
+                "or"
+              ],
+              "maps_to": "query.search_operator"
+            },
+            {
+              "name": "include-empty",
+              "type": "enum",
+              "summary": "Include conversations without messages (1) or not (0).",
+              "values": [
+                "0",
+                "1"
+              ],
+              "maps_to": "query.include_empty"
+            },
+            {
+              "name": "filter-inbox-id",
+              "type": "string",
+              "summary": "Limit conversations to a Crisp inbox identifier, or all for every inbox.",
+              "values": [],
+              "maps_to": "query.filter_inbox_id",
+              "allow_empty": false
+            },
+            {
+              "name": "filter-unread",
+              "type": "enum",
+              "summary": "Filter unread conversations (1) or leave disabled (0).",
+              "values": [
+                "0",
+                "1"
+              ],
+              "maps_to": "query.filter_unread"
+            },
+            {
+              "name": "filter-resolved",
+              "type": "enum",
+              "summary": "Filter resolved conversations (1) or leave disabled (0).",
+              "values": [
+                "0",
+                "1"
+              ],
+              "maps_to": "query.filter_resolved"
+            },
+            {
+              "name": "filter-not-resolved",
+              "type": "enum",
+              "summary": "Filter unresolved conversations (1) or leave disabled (0).",
+              "values": [
+                "0",
+                "1"
+              ],
+              "maps_to": "query.filter_not_resolved"
+            },
+            {
+              "name": "filter-mention",
+              "type": "enum",
+              "summary": "Filter conversations mentioning the token user (1) or leave disabled (0).",
+              "values": [
+                "0",
+                "1"
+              ],
+              "maps_to": "query.filter_mention"
+            },
+            {
+              "name": "filter-assigned",
+              "type": "string",
+              "summary": "Limit conversations to the specified Crisp user identifier.",
+              "values": [],
+              "maps_to": "query.filter_assigned",
+              "allow_empty": false
+            },
+            {
+              "name": "filter-unassigned",
+              "type": "enum",
+              "summary": "Filter conversations without an assigned user (1) or leave disabled (0).",
+              "values": [
+                "0",
+                "1"
+              ],
+              "maps_to": "query.filter_unassigned"
+            },
+            {
+              "name": "filter-date-start",
+              "type": "string",
+              "summary": "Inclusive ISO-8601 lower bound for conversation update date.",
+              "values": [],
+              "maps_to": "query.filter_date_start",
+              "format": "date-time",
+              "allow_empty": false
+            },
+            {
+              "name": "filter-date-end",
+              "type": "string",
+              "summary": "Inclusive ISO-8601 upper bound for conversation update date.",
+              "values": [],
+              "maps_to": "query.filter_date_end",
+              "format": "date-time",
+              "allow_empty": false
+            },
+            {
+              "name": "order-date-created",
+              "type": "enum",
+              "summary": "Order by creation date (1) or retain the provider default (0).",
+              "values": [
+                "0",
+                "1"
+              ],
+              "maps_to": "query.order_date_created"
+            },
+            {
+              "name": "order-date-updated",
+              "type": "enum",
+              "summary": "Order by update date (1) or retain the provider default (0).",
+              "values": [
+                "0",
+                "1"
+              ],
+              "maps_to": "query.order_date_updated"
+            },
+            {
+              "name": "order-date-waiting",
+              "type": "enum",
+              "summary": "Order/filter by longest waiting date (1) or retain the provider default (0).",
+              "values": [
+                "0",
+                "1"
+              ],
+              "maps_to": "query.order_date_waiting"
+            }
+          ],
+          "examples": [
+            "pm crisp conversations list --credential crisp-prod --page-number 1 --per-page 50 --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "",
+          "constraints": [
+            {
+              "kind": "order",
+              "left": "query.filter_date_start",
+              "right": "query.filter_date_end",
+              "op": "lt",
+              "value_type": "date-time",
+              "left_fallback": "",
+              "right_fallback": "",
+              "message": "--filter-date-start must be before --filter-date-end"
+            }
+          ]
+        },
+        {
+          "path": "conversations suggested-segments",
+          "summary": "List one Crisp suggested-conversation-segments page.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "suggested_conversation_segments",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
+          "flags": [
+            {
+              "name": "website-id",
+              "type": "string",
+              "summary": "Crisp website identifier.",
+              "values": [],
+              "maps_to": "config.website_id",
+              "allow_empty": false
+            },
+            {
+              "name": "page-number",
+              "type": "string",
+              "summary": "Positive Crisp page number; defaults to 1 from config.",
+              "values": [],
+              "maps_to": "config.page_number",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "conversations suggested-data",
+          "summary": "List one Crisp suggested-conversation-data-keys page.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "suggested_conversation_data",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
+          "flags": [
+            {
+              "name": "website-id",
+              "type": "string",
+              "summary": "Crisp website identifier.",
+              "values": [],
+              "maps_to": "config.website_id",
+              "allow_empty": false
+            },
+            {
+              "name": "page-number",
+              "type": "string",
+              "summary": "Positive Crisp page number; defaults to 1 from config.",
+              "values": [],
+              "maps_to": "config.page_number",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "conversations spam-list",
+          "summary": "List one Crisp spam-conversations page.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "spam_conversations",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
+          "flags": [
+            {
+              "name": "website-id",
+              "type": "string",
+              "summary": "Crisp website identifier.",
+              "values": [],
+              "maps_to": "config.website_id",
+              "allow_empty": false
+            },
+            {
+              "name": "page-number",
+              "type": "string",
+              "summary": "Positive Crisp page number; defaults to 1 from config.",
+              "values": [],
+              "maps_to": "config.page_number",
+              "allow_empty": false
+            },
+            {
+              "name": "filter-type",
+              "type": "string",
+              "summary": "Optional Crisp spam type filter, such as email.",
+              "values": [],
+              "maps_to": "query.filter_type",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "conversations spam-content",
+          "summary": "Resolve one Crisp spam conversation's content.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "spam_conversation_content",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
+          "flags": [
+            {
+              "name": "website-id",
+              "type": "string",
+              "summary": "Crisp website identifier.",
+              "values": [],
+              "maps_to": "config.website_id",
+              "allow_empty": false
+            },
+            {
+              "name": "spam-id",
+              "type": "string",
+              "summary": "Crisp spam conversation identifier.",
+              "values": [],
+              "maps_to": "config.spam_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "conversation get",
+          "summary": "Resolve one Crisp conversation.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "conversation",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
+          "flags": [
+            {
+              "name": "website-id",
+              "type": "string",
+              "summary": "Crisp website identifier.",
+              "values": [],
+              "maps_to": "config.website_id",
+              "allow_empty": false
+            },
+            {
+              "name": "session-id",
+              "type": "string",
+              "summary": "Crisp conversation session identifier.",
+              "values": [],
+              "maps_to": "config.session_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "conversation messages",
+          "summary": "Resolve a Crisp conversation message batch and page it with a named timestamp selector.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "conversation_messages",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
+          "flags": [
+            {
+              "name": "website-id",
+              "type": "string",
+              "summary": "Crisp website identifier.",
+              "values": [],
+              "maps_to": "config.website_id",
+              "allow_empty": false
+            },
+            {
+              "name": "session-id",
+              "type": "string",
+              "summary": "Crisp conversation session identifier.",
+              "values": [],
+              "maps_to": "config.session_id",
+              "allow_empty": false
+            },
+            {
+              "name": "timestamp-before",
+              "type": "string",
+              "summary": "Return a message batch ending before this Crisp timestamp.",
+              "values": [],
+              "maps_to": "query.timestamp_before",
+              "allow_empty": false
+            },
+            {
+              "name": "timestamp-after",
+              "type": "string",
+              "summary": "Return a message batch starting after this Crisp timestamp.",
+              "values": [],
+              "maps_to": "query.timestamp_after",
+              "allow_empty": false
+            },
+            {
+              "name": "timestamp-around",
+              "type": "string",
+              "summary": "Return a message batch centered around this Crisp timestamp.",
+              "values": [],
+              "maps_to": "query.timestamp_around",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "conversation message",
+          "summary": "Resolve one Crisp conversation message by fingerprint.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "conversation_message",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
+          "flags": [
+            {
+              "name": "website-id",
+              "type": "string",
+              "summary": "Crisp website identifier.",
+              "values": [],
+              "maps_to": "config.website_id",
+              "allow_empty": false
+            },
+            {
+              "name": "session-id",
+              "type": "string",
+              "summary": "Crisp conversation session identifier.",
+              "values": [],
+              "maps_to": "config.session_id",
+              "allow_empty": false
+            },
+            {
+              "name": "fingerprint",
+              "type": "string",
+              "summary": "Crisp message fingerprint.",
+              "values": [],
+              "maps_to": "config.fingerprint",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "conversation routing",
+          "summary": "Resolve Crisp routing assignment for one conversation.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "conversation_routing",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
+          "flags": [
+            {
+              "name": "website-id",
+              "type": "string",
+              "summary": "Crisp website identifier.",
+              "values": [],
+              "maps_to": "config.website_id",
+              "allow_empty": false
+            },
+            {
+              "name": "session-id",
+              "type": "string",
+              "summary": "Crisp conversation session identifier.",
+              "values": [],
+              "maps_to": "config.session_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "conversation meta",
+          "summary": "Resolve Crisp metadata for one conversation.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "conversation_meta",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
+          "flags": [
+            {
+              "name": "website-id",
+              "type": "string",
+              "summary": "Crisp website identifier.",
+              "values": [],
+              "maps_to": "config.website_id",
+              "allow_empty": false
+            },
+            {
+              "name": "session-id",
+              "type": "string",
+              "summary": "Crisp conversation session identifier.",
+              "values": [],
+              "maps_to": "config.session_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "conversation original-message",
+          "summary": "Resolve one original Crisp conversation message.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "conversation_original_message",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
+          "flags": [
+            {
+              "name": "website-id",
+              "type": "string",
+              "summary": "Crisp website identifier.",
+              "values": [],
+              "maps_to": "config.website_id",
+              "allow_empty": false
+            },
+            {
+              "name": "session-id",
+              "type": "string",
+              "summary": "Crisp conversation session identifier.",
+              "values": [],
+              "maps_to": "config.session_id",
+              "allow_empty": false
+            },
+            {
+              "name": "original-id",
+              "type": "string",
+              "summary": "Crisp original-message identifier.",
+              "values": [],
+              "maps_to": "config.original_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "conversation pages",
+          "summary": "List one Crisp conversation browser-pages page.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "conversation_pages",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
+          "flags": [
+            {
+              "name": "website-id",
+              "type": "string",
+              "summary": "Crisp website identifier.",
+              "values": [],
+              "maps_to": "config.website_id",
+              "allow_empty": false
+            },
+            {
+              "name": "session-id",
+              "type": "string",
+              "summary": "Crisp conversation session identifier.",
+              "values": [],
+              "maps_to": "config.session_id",
+              "allow_empty": false
+            },
+            {
+              "name": "page-number",
+              "type": "string",
+              "summary": "Positive Crisp page number; defaults to 1 from config.",
+              "values": [],
+              "maps_to": "config.page_number",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "conversation events",
+          "summary": "List one Crisp conversation events page.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "conversation_events",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
+          "flags": [
+            {
+              "name": "website-id",
+              "type": "string",
+              "summary": "Crisp website identifier.",
+              "values": [],
+              "maps_to": "config.website_id",
+              "allow_empty": false
+            },
+            {
+              "name": "session-id",
+              "type": "string",
+              "summary": "Crisp conversation session identifier.",
+              "values": [],
+              "maps_to": "config.session_id",
+              "allow_empty": false
+            },
+            {
+              "name": "page-number",
+              "type": "string",
+              "summary": "Positive Crisp page number; defaults to 1 from config.",
+              "values": [],
+              "maps_to": "config.page_number",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "conversation files",
+          "summary": "List one Crisp conversation files page without downloading file contents.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "conversation_files",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
+          "flags": [
+            {
+              "name": "website-id",
+              "type": "string",
+              "summary": "Crisp website identifier.",
+              "values": [],
+              "maps_to": "config.website_id",
+              "allow_empty": false
+            },
+            {
+              "name": "session-id",
+              "type": "string",
+              "summary": "Crisp conversation session identifier.",
+              "values": [],
+              "maps_to": "config.session_id",
+              "allow_empty": false
+            },
+            {
+              "name": "page-number",
+              "type": "string",
+              "summary": "Positive Crisp page number; defaults to 1 from config.",
+              "values": [],
+              "maps_to": "config.page_number",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "conversation state",
+          "summary": "Resolve Crisp state for one conversation.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "conversation_state",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
+          "flags": [
+            {
+              "name": "website-id",
+              "type": "string",
+              "summary": "Crisp website identifier.",
+              "values": [],
+              "maps_to": "config.website_id",
+              "allow_empty": false
+            },
+            {
+              "name": "session-id",
+              "type": "string",
+              "summary": "Crisp conversation session identifier.",
+              "values": [],
+              "maps_to": "config.session_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "conversation relations",
+          "summary": "Resolve Crisp related conversations for one conversation.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "conversation_relations",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
+          "flags": [
+            {
+              "name": "website-id",
+              "type": "string",
+              "summary": "Crisp website identifier.",
+              "values": [],
+              "maps_to": "config.website_id",
+              "allow_empty": false
+            },
+            {
+              "name": "session-id",
+              "type": "string",
+              "summary": "Crisp conversation session identifier.",
+              "values": [],
+              "maps_to": "config.session_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "conversation participants",
+          "summary": "Resolve Crisp participants for one conversation.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "conversation_participants",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
+          "flags": [
+            {
+              "name": "website-id",
+              "type": "string",
+              "summary": "Crisp website identifier.",
+              "values": [],
+              "maps_to": "config.website_id",
+              "allow_empty": false
+            },
+            {
+              "name": "session-id",
+              "type": "string",
+              "summary": "Crisp conversation session identifier.",
+              "values": [],
+              "maps_to": "config.session_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "conversation block-status",
+          "summary": "Resolve whether a Crisp conversation is blocked.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "conversation_block_status",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
+          "flags": [
+            {
+              "name": "website-id",
+              "type": "string",
+              "summary": "Crisp website identifier.",
+              "values": [],
+              "maps_to": "config.website_id",
+              "allow_empty": false
+            },
+            {
+              "name": "session-id",
+              "type": "string",
+              "summary": "Crisp conversation session identifier.",
+              "values": [],
+              "maps_to": "config.session_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "conversation verify-status",
+          "summary": "Resolve Crisp identity-verification status for one conversation.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "conversation_verify_status",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
+          "flags": [
+            {
+              "name": "website-id",
+              "type": "string",
+              "summary": "Crisp website identifier.",
+              "values": [],
+              "maps_to": "config.website_id",
+              "allow_empty": false
+            },
+            {
+              "name": "session-id",
+              "type": "string",
+              "summary": "Crisp conversation session identifier.",
+              "values": [],
+              "maps_to": "config.session_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "conversation browsing",
+          "summary": "List browsing sessions for one Crisp conversation.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "conversation_browsing",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
+          "flags": [
+            {
+              "name": "website-id",
+              "type": "string",
+              "summary": "Crisp website identifier.",
+              "values": [],
+              "maps_to": "config.website_id",
+              "allow_empty": false
+            },
+            {
+              "name": "session-id",
+              "type": "string",
+              "summary": "Crisp conversation session identifier.",
+              "values": [],
+              "maps_to": "config.session_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "conversation call",
+          "summary": "Resolve an ongoing Crisp call session for one conversation.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "conversation_call",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://docs.crisp.chat/static/data/collections/rest-api-v1.postman",
+          "flags": [
+            {
+              "name": "website-id",
+              "type": "string",
+              "summary": "Crisp website identifier.",
+              "values": [],
+              "maps_to": "config.website_id",
+              "allow_empty": false
+            },
+            {
+              "name": "session-id",
+              "type": "string",
+              "summary": "Crisp conversation session identifier.",
+              "values": [],
+              "maps_to": "config.session_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        }
+      ],
+      "help_topics": [
+        {
+          "name": "auth",
+          "summary": "Crisp uses HTTP Basic identifier/key credentials plus X-Crisp-Tier; add secrets from environment variables or stdin only."
+        },
+        {
+          "name": "wave-1",
+          "summary": "Wave 1 exposes 21 read-only conversation GET operations; later provider operations remain explicitly blocked in api_surface.json."
+        }
+      ]
+    },
+    "docs_md": "# Overview\n\nReads bounded pages and individual resources from Crisp conversations through the Crisp REST API\nV1. Wave 1 exposes 21 provider-owned conversation read operations through individually reachable\ncommands. It does not make provider write operations executable.\n\nThe provider inventory is based on Crisp's [official REST API reference](https://docs.crisp.chat/references/rest-api/v1/)\nand its [official Postman Collection v2.1.0](https://docs.crisp.chat/static/data/collections/rest-api-v1.postman),\nretrieved 2026-08-05 (ETag `6a6b6306-32de7`). The ledger contains all 234 documented\noperations: 21 Wave 1 reads are stream-backed; 213 retain an explicit blocked disposition.\n\n## Auth setup\n\nConfigure a Crisp identifier and key through an environment-backed credential profile or standard\ninput. Both fields are secret values and must not be passed as command flags or configuration\noverrides.\n\nRequired connection configuration:\n\n- `website_id` (string): target Crisp website identifier.\n- `identifier` (secret string): Crisp token identifier for HTTP Basic authentication.\n- `key` (secret string): Crisp token key for HTTP Basic authentication.\n- `token_tier` (string): Crisp token tier sent as `X-Crisp-Tier`; defaults to `website` and also\n  accepts `plugin` or `user` when the configured credential is issued for that tier.\n- `page_number` (string): positive page number for page-addressed provider resources; defaults to\n  `1`.\n- `base_url` (URI): Crisp API base URL; defaults to `https://api.crisp.chat` and can be overridden\n  only for test fixtures or an approved proxy.\n\n## Streams notes\n\nEach command performs one bounded provider request. Page-addressed resources use `page_number`;\nthe `conversations list` command additionally accepts Crisp's named filter and ordering flags and\nenforces the provider's `per_page` range of 20 through 50.\n\nWave 1 streams are:\n\n- `list_conversations`, `suggested_conversation_segments`, `suggested_conversation_data`,\n  `spam_conversations`, and `spam_conversation_content`.\n- `conversation`, `conversation_messages`, `conversation_message`, `conversation_routing`,\n  `conversation_meta`, and `conversation_original_message`.\n- `conversation_pages`, `conversation_events`, `conversation_files`, `conversation_state`,\n  `conversation_relations`, `conversation_participants`, `conversation_block_status`,\n  `conversation_verify_status`, `conversation_browsing`, and `conversation_call`.\n\nProvider responses are projected from their `data` envelope without connector-defined field\nredaction. No generic raw API or arbitrary query escape hatch is exposed.\n\n## Write actions & risks\n\nNo Crisp write action is declared executable in this wave. All 129 documented provider writes\nremain explicitly blocked on later connector-local implementation waves; destructive write paths\nmust use the shared plan, preview, explicit approval, and confirm-gate flow when they are added.\n\n## Known limits\n\n- The provider ledger contains 234 operations. This wave makes 21 reads executable; the remaining\n  213 operations are individually dispositioned in `api_surface.json`.\n- Fourteen provider HEAD checks are blocked on a shared typed HEAD direct-read/check executor.\n- `GET /v1/media/animation/list/{page_number}` is blocked on provider RTM result correlation.\n- `POST /v1/bucket/url/generate` is blocked on provider RTM correlation plus a bounded signed-upload\n  workflow.\n- Other read and write operations are deferred to later Crisp connector waves; they are not exposed\n  as commands in this release.\n",
+    "icon": {
+      "id": "pm-sample",
+      "path": "icons/pm-sample.svg",
+      "publicPath": "/connectors/icons/pm-sample.svg",
+      "source": "polymetrics",
+      "reviewStatus": "polymetrics",
+      "reviewUrl": "https://github.com/polymetrics-ai/cli"
+    }
+  },
+  {
     "slug": "criteo-marketing",
     "name": "Criteo Marketing",
     "description": "Reads Criteo Marketing Solutions ad sets, advertisers, campaigns, audiences, ad spend statistics, and Marketplace Performance Outcomes (MPO) advertisers/sellers/budgets/seller-campaigns through the Criteo REST API using OAuth2 client-credentials auth.",
