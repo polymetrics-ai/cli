@@ -72,7 +72,16 @@ type scriptedConnection struct {
 	destination scriptedEndpoint
 	stream      string
 	syncMode    string
+	primaryKey  string
+	cursor      string
 	table       string
+}
+
+type scriptedConnectionContract struct {
+	syncMode          string
+	primaryKey        string
+	cursor            string
+	requirePrimaryKey bool
 }
 
 type scriptedTable struct {
@@ -442,16 +451,11 @@ func (s *scriptedCLI) createConnection(args []string) error {
 	destinationValue := flagValue(args, "--destination")
 	stream := flagValue(args, "--stream")
 	syncMode := flagValue(args, "--sync-mode")
+	primaryKey := flagValue(args, "--primary-key")
+	cursor := flagValue(args, "--cursor")
 	table := flagValue(args, "--table")
 	if sourceValue == "" || destinationValue == "" || stream == "" || syncMode == "" || table == "" {
 		return fmt.Errorf("connections create requires source, destination, stream, table, and sync mode")
-	}
-	expectedMode, ok := expectedScriptedConnectionMode(args[2])
-	if !ok {
-		return fmt.Errorf("scripted connection %q is not a certification connection", args[2])
-	}
-	if syncMode != expectedMode {
-		return fmt.Errorf("scripted connection %q has sync mode %q, want %q", args[2], syncMode, expectedMode)
 	}
 	source, err := parseScriptedEndpoint(sourceValue)
 	if err != nil {
@@ -467,35 +471,63 @@ func (s *scriptedCLI) createConnection(args []string) error {
 	if err := s.validateEndpoint(destination); err != nil {
 		return fmt.Errorf("connections create destination: %w", err)
 	}
-	s.connections[args[2]] = scriptedConnection{
+	connection := scriptedConnection{
 		source:      source,
 		destination: destination,
 		stream:      stream,
 		syncMode:    syncMode,
+		primaryKey:  primaryKey,
+		cursor:      cursor,
 		table:       table,
 	}
+	if err := validateScriptedConnectionContract(args[2], connection); err != nil {
+		return err
+	}
+	s.connections[args[2]] = connection
 	return nil
 }
 
-func expectedScriptedConnectionMode(name string) (string, bool) {
+func expectedScriptedConnectionContract(name string) (scriptedConnectionContract, bool) {
 	switch {
 	case name == "cert_live" || strings.HasPrefix(name, "cert_live_"):
-		return "full_refresh_append", true
+		return scriptedConnectionContract{syncMode: "full_refresh_append", primaryKey: "id", cursor: "updated_at"}, true
 	case name == "cert_incremental" || strings.HasPrefix(name, "cert_incremental_"):
-		return "incremental_append", true
+		return scriptedConnectionContract{syncMode: "incremental_append", primaryKey: "id", cursor: "updated_at"}, true
 	case name == "cert_capture_full_refresh_overwrite_deduped" || strings.HasPrefix(name, "cert_capture_full_refresh_overwrite_deduped_"):
-		return "full_refresh_overwrite_deduped", true
+		return scriptedConnectionContract{syncMode: "full_refresh_overwrite_deduped", primaryKey: "id", cursor: "updated_at"}, true
 	case name == "cert_capture_full_refresh_overwrite" || strings.HasPrefix(name, "cert_capture_full_refresh_overwrite_"):
-		return "full_refresh_overwrite", true
+		return scriptedConnectionContract{syncMode: "full_refresh_overwrite", primaryKey: "id", cursor: "updated_at"}, true
 	case name == "cert_capture_incremental_append_deduped" || strings.HasPrefix(name, "cert_capture_incremental_append_deduped_"):
-		return "incremental_append_deduped", true
+		return scriptedConnectionContract{syncMode: "incremental_append_deduped", primaryKey: "id", cursor: "updated_at"}, true
 	case strings.HasPrefix(name, "cert_flow_conn_"):
-		return "full_refresh_append", true
-	case name == "cert_write_verify" || strings.HasPrefix(name, "cert_write_seed_conn_") || name == "cert_sweep_seed_conn":
-		return "full_refresh_overwrite", true
+		return scriptedConnectionContract{syncMode: "full_refresh_append", primaryKey: "id", cursor: "updated_at"}, true
+	case name == "cert_write_verify" || strings.HasPrefix(name, "cert_write_seed_conn_"):
+		return scriptedConnectionContract{syncMode: "full_refresh_overwrite", requirePrimaryKey: true}, true
+	case name == "cert_sweep_seed_conn":
+		return scriptedConnectionContract{syncMode: "full_refresh_overwrite", primaryKey: "tag"}, true
 	default:
-		return "", false
+		return scriptedConnectionContract{}, false
 	}
+}
+
+func validateScriptedConnectionContract(name string, connection scriptedConnection) error {
+	contract, ok := expectedScriptedConnectionContract(name)
+	if !ok {
+		return fmt.Errorf("scripted connection %q is not a certification connection", name)
+	}
+	if connection.syncMode != contract.syncMode {
+		return fmt.Errorf("scripted connection %q has sync mode %q, want %q", name, connection.syncMode, contract.syncMode)
+	}
+	if contract.primaryKey != "" && connection.primaryKey != contract.primaryKey {
+		return fmt.Errorf("scripted connection %q has primary key %q, want %q", name, connection.primaryKey, contract.primaryKey)
+	}
+	if contract.requirePrimaryKey && connection.primaryKey == "" {
+		return fmt.Errorf("scripted connection %q requires a primary key", name)
+	}
+	if connection.cursor != contract.cursor {
+		return fmt.Errorf("scripted connection %q has cursor %q, want %q", name, connection.cursor, contract.cursor)
+	}
+	return nil
 }
 
 func (s *scriptedCLI) refreshCatalog(args []string) error {
@@ -523,9 +555,8 @@ func (s *scriptedCLI) runETL(args []string) error {
 	if connection.stream != stream {
 		return fmt.Errorf("scripted etl stream %q is not configured on connection %q", stream, connectionName)
 	}
-	expectedMode, ok := expectedScriptedConnectionMode(connectionName)
-	if !ok || connection.syncMode != expectedMode {
-		return fmt.Errorf("scripted etl connection %q has an invalid sync mode", connectionName)
+	if err := validateScriptedConnectionContract(connectionName, connection); err != nil {
+		return fmt.Errorf("scripted etl connection %q: %w", connectionName, err)
 	}
 	if err := s.validateConnection(connection); err != nil {
 		return fmt.Errorf("scripted etl connection %q: %w", connectionName, err)
@@ -537,7 +568,30 @@ func (s *scriptedCLI) runETL(args []string) error {
 	if err != nil {
 		return fmt.Errorf("scripted etl source: %w", err)
 	}
+	if err := validateScriptedConnectionRows(rows, connection); err != nil {
+		return fmt.Errorf("scripted etl source: %w", err)
+	}
 	s.tables[connection.table] = scriptedTable{rows: rows}
+	return nil
+}
+
+func validateScriptedConnectionRows(rows []map[string]any, connection scriptedConnection) error {
+	for index, row := range rows {
+		if connection.primaryKey != "" {
+			if value, ok := row[connection.primaryKey]; !ok || value == nil {
+				return fmt.Errorf("record %d is missing primary key field %q", index+1, connection.primaryKey)
+			}
+		}
+		if connection.cursor != "" {
+			value, ok := row[connection.cursor]
+			if !ok || value == nil {
+				return fmt.Errorf("record %d is missing cursor field %q", index+1, connection.cursor)
+			}
+			if strings.TrimSpace(fmt.Sprint(value)) == "" {
+				return fmt.Errorf("record %d has empty cursor field %q", index+1, connection.cursor)
+			}
+		}
+	}
 	return nil
 }
 
@@ -953,30 +1007,33 @@ func prepareScriptedWriteDependencies(t *testing.T, driver *scriptedCLI, root st
 		"--config", "path="+filepath.Join(root, ".polymetrics", "outbox"), "--json")
 }
 
-func TestExpectedScriptedConnectionMode(t *testing.T) {
+func TestExpectedScriptedConnectionContract(t *testing.T) {
 	for _, tt := range []struct {
-		name string
-		mode string
-		ok   bool
+		name              string
+		mode              string
+		primaryKey        string
+		cursor            string
+		requirePrimaryKey bool
+		ok                bool
 	}{
-		{name: "cert_live", mode: "full_refresh_append", ok: true},
-		{name: "cert_live_events", mode: "full_refresh_append", ok: true},
-		{name: "cert_capture_full_refresh_overwrite", mode: "full_refresh_overwrite", ok: true},
-		{name: "cert_capture_full_refresh_overwrite_deduped_events", mode: "full_refresh_overwrite_deduped", ok: true},
-		{name: "cert_capture_incremental_append_deduped", mode: "incremental_append_deduped", ok: true},
-		{name: "cert_incremental", mode: "incremental_append", ok: true},
-		{name: "cert_incremental_events", mode: "incremental_append", ok: true},
-		{name: "cert_flow_conn_sample", mode: "full_refresh_append", ok: true},
-		{name: "cert_flow_conn_sample_events", mode: "full_refresh_append", ok: true},
-		{name: "cert_write_seed_conn_cert_write_seed_sample", mode: "full_refresh_overwrite", ok: true},
-		{name: "cert_write_verify", mode: "full_refresh_overwrite", ok: true},
-		{name: "cert_sweep_seed_conn", mode: "full_refresh_overwrite", ok: true},
+		{name: "cert_live", mode: "full_refresh_append", primaryKey: "id", cursor: "updated_at", ok: true},
+		{name: "cert_live_events", mode: "full_refresh_append", primaryKey: "id", cursor: "updated_at", ok: true},
+		{name: "cert_capture_full_refresh_overwrite", mode: "full_refresh_overwrite", primaryKey: "id", cursor: "updated_at", ok: true},
+		{name: "cert_capture_full_refresh_overwrite_deduped_events", mode: "full_refresh_overwrite_deduped", primaryKey: "id", cursor: "updated_at", ok: true},
+		{name: "cert_capture_incremental_append_deduped", mode: "incremental_append_deduped", primaryKey: "id", cursor: "updated_at", ok: true},
+		{name: "cert_incremental", mode: "incremental_append", primaryKey: "id", cursor: "updated_at", ok: true},
+		{name: "cert_incremental_events", mode: "incremental_append", primaryKey: "id", cursor: "updated_at", ok: true},
+		{name: "cert_flow_conn_sample", mode: "full_refresh_append", primaryKey: "id", cursor: "updated_at", ok: true},
+		{name: "cert_flow_conn_sample_events", mode: "full_refresh_append", primaryKey: "id", cursor: "updated_at", ok: true},
+		{name: "cert_write_seed_conn_cert_write_seed_sample", mode: "full_refresh_overwrite", requirePrimaryKey: true, ok: true},
+		{name: "cert_write_verify", mode: "full_refresh_overwrite", requirePrimaryKey: true, ok: true},
+		{name: "cert_sweep_seed_conn", mode: "full_refresh_overwrite", primaryKey: "tag", ok: true},
 		{name: "not-a-certification-connection", ok: false},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			got, ok := expectedScriptedConnectionMode(tt.name)
-			if got != tt.mode || ok != tt.ok {
-				t.Fatalf("expectedScriptedConnectionMode(%q) = (%q, %t), want (%q, %t)", tt.name, got, ok, tt.mode, tt.ok)
+			got, ok := expectedScriptedConnectionContract(tt.name)
+			if got.syncMode != tt.mode || got.primaryKey != tt.primaryKey || got.cursor != tt.cursor || got.requirePrimaryKey != tt.requirePrimaryKey || ok != tt.ok {
+				t.Fatalf("expectedScriptedConnectionContract(%q) = (%+v, %t), want mode=%q primary_key=%q cursor=%q require_primary_key=%t ok=%t", tt.name, got, ok, tt.mode, tt.primaryKey, tt.cursor, tt.requirePrimaryKey, tt.ok)
 			}
 		})
 	}
@@ -1013,6 +1070,31 @@ func TestScriptedCLIDriverRejectsProtocolDrift(t *testing.T) {
 		}, &stdout, &stderr); code == 0 {
 			t.Fatal("scripted driver accepted a live connection with the wrong sync mode")
 		}
+		for _, tt := range []struct {
+			name  string
+			flags []string
+		}{
+			{name: "primary key", flags: []string{"--primary-key", "not_id", "--cursor", "updated_at"}},
+			{name: "cursor", flags: []string{"--primary-key", "id", "--cursor", "not_updated_at"}},
+		} {
+			t.Run(tt.name, func(t *testing.T) {
+				command := []string{
+					"connections", "create", "cert_live_" + strings.ReplaceAll(tt.name, " ", "_"),
+					"--source", "sample:cert-source",
+					"--destination", "warehouse:cert-warehouse",
+					"--stream", "events",
+					"--sync-mode", "full_refresh_append",
+					"--table", "cert_live_events",
+				}
+				command = append(command, tt.flags...)
+				command = append(command, "--json", "--root", root)
+				if code := driver.run(command, &stdout, &stderr); code == 0 {
+					t.Fatalf("scripted driver accepted a live connection with the wrong %s", tt.name)
+				}
+				stdout.Reset()
+				stderr.Reset()
+			})
+		}
 		stdout.Reset()
 		stderr.Reset()
 		mustRunScriptedCommand(t, driver, root,
@@ -1021,6 +1103,8 @@ func TestScriptedCLIDriverRejectsProtocolDrift(t *testing.T) {
 			"--destination", "warehouse:cert-warehouse",
 			"--stream", "events",
 			"--sync-mode", "full_refresh_append",
+			"--primary-key", "id",
+			"--cursor", "updated_at",
 			"--table", "cert_live_events",
 			"--json")
 

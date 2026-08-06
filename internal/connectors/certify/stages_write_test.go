@@ -35,11 +35,11 @@ func TestSampleOutboxWriteLifecycleAgainstRealCLI(t *testing.T) {
 	createPlan, createApproval := planOutboxLifecycle(t, h, "create")
 	preview := mustHarnessKind(t, h, "ReversePlanPreview", "reverse", "preview", createPlan, "--json")
 	if hits := certify.ScanForSecrets(preview.Stdout, []string{createApproval}); len(hits) != 0 {
-		t.Fatalf("reverse preview leaked approval token: %v", hits)
+		t.Fatal("reverse preview disclosed an approval token")
 	}
 	if plan, _ := preview.Envelope["plan"].(map[string]any); plan != nil {
 		if approval, _ := plan["approval_token"].(string); approval != "" {
-			t.Fatalf("reverse preview approval_token = %q, want redacted", approval)
+			t.Fatal("reverse preview contains a non-empty approval_token field")
 		}
 	}
 
@@ -66,8 +66,8 @@ func TestSampleOutboxWriteLifecycleAgainstRealCLI(t *testing.T) {
 func mustHarnessKind(t *testing.T, h *certify.Harness, kind string, args ...string) certify.CLIResult {
 	t.Helper()
 	res := h.Run(args...)
-	if err := h.MustKind(res, kind, 0); err != nil {
-		t.Fatalf("%s: stdout=%s stderr=%s", err, res.Stdout, res.Stderr)
+	if res.Kind != kind || res.ExitCode != 0 {
+		t.Fatalf("CLI result kind=%q exit=%d, want kind=%q exit=0", res.Kind, res.ExitCode, kind)
 	}
 	return res
 }
