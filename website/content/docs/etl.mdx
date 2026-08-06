@@ -116,6 +116,9 @@ Failed `pm etl run` and `pm etl status` results emit a failed run ID and the
 same summary. Their JSON failed-run carrier exposes only `id`, `status`, and
 `rate_limit`; it omits error text and checkpoints.
 
+Completed-run JSON contains only run ID and type, status, counters, timing, and
+rate-limit facts. It omits connections, streams, error text, and checkpoints.
+
 If `--runtime` recording fails after ETL completes, `pm etl run` still emits the
 completed run and summary before returning a non-zero exit code. It reports
 `runtime_recorded=false` and `runtime_recording=failed` so incomplete runtime
@@ -150,8 +153,6 @@ recording is explicit.
         "request_count": 3
       }]
     },
-    "stream": "issues",
-    "connection": "my-github",
     "started_at": "2026-01-15T10:00:00Z",
     "completed_at": "2026-01-15T10:00:03Z"
   },

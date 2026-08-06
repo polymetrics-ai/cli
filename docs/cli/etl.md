@@ -51,6 +51,10 @@ RATE LIMIT OUTPUT
   bounded summary. Their JSON failed-run carrier contains only id, status, and
   rate_limit; it omits error text and checkpoints.
 
+  Completed-run JSON contains only run ID and type, status, counters, timing,
+  and rate-limit facts. It omits connections, streams, error text, and
+  checkpoints.
+
   If --runtime recording fails after ETL completes, pm still emits the completed
   run and summary, then exits non-zero. It reports runtime_recorded=false and
   runtime_recording=failed so incomplete runtime recording is explicit.

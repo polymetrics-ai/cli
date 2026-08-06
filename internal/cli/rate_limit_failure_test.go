@@ -303,6 +303,15 @@ func TestETLRuntimeRecordingFailureReportsCompletedRun(t *testing.T) {
 		if _, ok := payload["error"]; ok {
 			t.Fatal("runtime recording failure envelope included error")
 		}
+		var carrier map[string]json.RawMessage
+		if err := json.Unmarshal(payload["run"], &carrier); err != nil {
+			t.Fatalf("unmarshal completed run carrier: %v", err)
+		}
+		for _, omitted := range []string{"checkpoint", "error", "connection", "stream"} {
+			if _, ok := carrier[omitted]; ok {
+				t.Fatalf("runtime recording failure carrier included %q", omitted)
+			}
+		}
 		var run struct {
 			ID        string                      `json:"id"`
 			Status    string                      `json:"status"`
@@ -313,6 +322,63 @@ func TestETLRuntimeRecordingFailureReportsCompletedRun(t *testing.T) {
 		}
 		if run.ID == "" || run.Status != "completed" || len(run.RateLimit.Connectors) != 2 {
 			t.Fatalf("runtime recording failure run = %+v", run)
+		}
+	}
+}
+
+func TestCompletedETLRunCarrierOmitsUnboundedFields(t *testing.T) {
+	run := app.Run{
+		ID:                 "run_safe_carrier",
+		Type:               "etl",
+		Connection:         "https://connection.example.test/body-must-not-escape",
+		Stream:             "https://stream.example.test/body-must-not-escape",
+		Status:             "completed",
+		RecordsRead:        1,
+		RecordsTransformed: 1,
+		RecordsLoaded:      1,
+		Checkpoint: map[string]string{
+			"cursor": "https://provider.example.test/body-must-not-escape",
+		},
+		Error: "runtime-password-must-not-escape",
+		RateLimit: connectors.RateLimitSummary{Connectors: []connectors.RateLimitConnectorSummary{{
+			Connector:   "sample",
+			Declaration: connectors.RateLimitDeclarationUndeclared,
+		}}},
+		StartedAt:   time.Date(2026, time.August, 6, 12, 0, 0, 0, time.UTC),
+		CompletedAt: time.Date(2026, time.August, 6, 12, 0, 1, 0, time.UTC),
+	}
+	var stdout bytes.Buffer
+	if err := writeCompletedETLRun(&stdout, run, true, false, true); err != nil {
+		t.Fatalf("writeCompletedETLRun: %v", err)
+	}
+	output := stdout.String()
+	for _, forbidden := range []string{
+		"connection.example.test",
+		"stream.example.test",
+		"provider.example.test",
+		"body-must-not-escape",
+		"runtime-password-must-not-escape",
+	} {
+		if strings.Contains(output, forbidden) {
+			t.Fatalf("completed ETL carrier leaked %q", forbidden)
+		}
+	}
+	var payload map[string]json.RawMessage
+	if err := json.Unmarshal([]byte(output), &payload); err != nil {
+		t.Fatalf("unmarshal completed ETL carrier: %v\n%s", err, output)
+	}
+	var carrier map[string]json.RawMessage
+	if err := json.Unmarshal(payload["run"], &carrier); err != nil {
+		t.Fatalf("unmarshal completed ETL run: %v", err)
+	}
+	for _, omitted := range []string{"checkpoint", "error", "connection", "stream"} {
+		if _, ok := carrier[omitted]; ok {
+			t.Fatalf("completed ETL carrier included %q", omitted)
+		}
+	}
+	for _, want := range []string{"id", "type", "status", "records_read", "records_transformed", "records_loaded", "records_failed", "rate_limit", "started_at", "completed_at"} {
+		if _, ok := carrier[want]; !ok {
+			t.Fatalf("completed ETL carrier missing %q", want)
 		}
 	}
 }

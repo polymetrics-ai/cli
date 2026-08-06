@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"polymetrics.ai/internal/agentmode"
 	"polymetrics.ai/internal/app"
@@ -27,6 +28,20 @@ type failedETLRun struct {
 	ID        string                      `json:"id"`
 	Status    string                      `json:"status"`
 	RateLimit connectors.RateLimitSummary `json:"rate_limit"`
+}
+
+type completedETLRun struct {
+	ID                 string                      `json:"id"`
+	Type               string                      `json:"type"`
+	Status             string                      `json:"status"`
+	RecordsRead        int                         `json:"records_read"`
+	RecordsTransformed int                         `json:"records_transformed"`
+	RecordsLoaded      int                         `json:"records_loaded"`
+	RecordsFailed      int                         `json:"records_failed"`
+	BatchCount         int                         `json:"batch_count,omitempty"`
+	RateLimit          connectors.RateLimitSummary `json:"rate_limit"`
+	StartedAt          time.Time                   `json:"started_at"`
+	CompletedAt        time.Time                   `json:"completed_at,omitempty"`
 }
 
 const maxConnectorCommandLimit = 10000
@@ -676,7 +691,7 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 			return writeFailedETLRun(stdout, run, jsonOut)
 		}
 		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ETLRun", "run": run})
+			return writeJSON(stdout, envelope{"kind": "ETLRun", "run": completedETLRunCarrier(run)})
 		}
 		_, _ = fmt.Fprintf(stdout, "%s\t%s\tread=%d loaded=%d failed=%d\n", run.ID, run.Status, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)
 		writeRateLimitSummary(stdout, run.RateLimit)
@@ -704,7 +719,7 @@ func writeFailedETLRun(stdout io.Writer, run app.Run, jsonOut bool) error {
 
 func writeCompletedETLRun(stdout io.Writer, run app.Run, jsonOut, runtimeRecorded, runtimeRecordingFailed bool) error {
 	if jsonOut {
-		result := envelope{"kind": "ETLRun", "run": run, "runtime_recorded": runtimeRecorded}
+		result := envelope{"kind": "ETLRun", "run": completedETLRunCarrier(run), "runtime_recorded": runtimeRecorded}
 		if runtimeRecordingFailed {
 			result["runtime_recording"] = "failed"
 		}
@@ -719,6 +734,22 @@ func writeCompletedETLRun(stdout io.Writer, run app.Run, jsonOut, runtimeRecorde
 	_, _ = fmt.Fprintf(stdout, "ETL run %s completed: read=%d loaded=%d failed=%d%s\n", run.ID, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed, suffix)
 	writeRateLimitSummary(stdout, run.RateLimit)
 	return nil
+}
+
+func completedETLRunCarrier(run app.Run) completedETLRun {
+	return completedETLRun{
+		ID:                 run.ID,
+		Type:               run.Type,
+		Status:             run.Status,
+		RecordsRead:        run.RecordsRead,
+		RecordsTransformed: run.RecordsTransformed,
+		RecordsLoaded:      run.RecordsLoaded,
+		RecordsFailed:      run.RecordsFailed,
+		BatchCount:         run.BatchCount,
+		RateLimit:          run.RateLimit,
+		StartedAt:          run.StartedAt,
+		CompletedAt:        run.CompletedAt,
+	}
 }
 
 func reportedETLRunError(code, message string, err error) error {
