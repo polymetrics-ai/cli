@@ -22,7 +22,7 @@ writes.json          # actions[] (omit entirely when capabilities.write is false
 api_surface.json     # coverage manifest (always required)
 cli_surface.json     # optional provider-style CLI/help metadata
 certification.json   # optional certify metadata: defaults, safe candidates, pairings
-rate_limits.json     # optional provider-cited rate-limit declaration (staged; see §3)
+rate_limits.json     # optional provider-cited HTTP pacing policy (see §3)
 schemas/<stream>.json  # one draft-07 schema per stream, x-primary-key/x-cursor-field
 fixtures/
   check.json
@@ -153,6 +153,12 @@ not a full override by default.
   sensitive but is documentation-only (an optional Bearer-proxy key never
   wired into `auth`, e.g. searxng's `api_key`) is still marked `x-secret: true` — the marker is
   about the field's nature, not whether this bundle currently exercises it.
+- **JSON Schema `format` enforcement is intentionally narrow**: the engine validates string
+  instances declared with `format: "uri"` as absolute URIs and rejects whitespace, control
+  characters, backslashes, and malformed escaping. Other schema formats remain annotations unless
+  a surface-specific validator enforces them. Pair `format: "uri"` with `pattern` when the contract
+  is narrower than an absolute URI; Google Calendar watch actions use that combination to require
+  HTTPS callback URLs.
 - **Schema-as-projection**: a stream's `schemas/<stream>.json` `properties` set is derived
   **field-for-field** from what the legacy connector's own `mapRecord`/record-shaping function
   actually emits — not from guessing the raw API shape. In `"schema"` projection mode (the
@@ -871,8 +877,8 @@ client-side" (see stripe's `docs.md`). Any key on `metadata.json.rate_limit` bey
 `requests_per_minute` (e.g. a `strategy` field) is not even a field on the Go type and is silently
 dropped — don't declare one.
 
-**Provider-cited `rate_limits.json` is a staged declaration, not an automatic throttle**: this
-optional, closed-schema file records a provider policy only when it can be cited. A declared policy
+**Provider-cited `rate_limits.json` is an enforced HTTP policy declaration**: this optional,
+closed-schema file records a provider policy only when it can be cited. A declared policy
 must carry an HTTPS provider artifact URL without userinfo, query parameters, or credential-like
 query-style fragment parameters (an ordinary documentation anchor fragment is allowed) and an ISO
 `retrieved_at` date. Every file starts with `schema_version: 1`; `version` is optional
@@ -880,18 +886,38 @@ context, not a substitute for a retrieval date. Model the provider shape rather 
 to requests per minute: selectors can target an endpoint, tier, and auth type; budgets label their
 `burst` or `sustained` dimension, `requests` or `points` unit, and fixed/sliding-window or
 token/leaky-bucket replenishment model. Cost-weighted APIs can declare a default cost and the
-provider response header that reports cost.
+provider response header that reports cost. A policy may name at most one actual-cost header;
+when two policies can match one request, they must use the same header when both declare one.
 
 The root state is deliberately explicit: `declared` requires one or more cited policies, while
 `unknown` and `not_applicable` require a nonblank reason and cannot carry a policy. A policy's
-`scope.subject_kind` is one of `account`, `installation`, `application`, `endpoint`, or `ip`; it
-names a non-secret subject class only. Never put a credential, token-derived value, or runtime
-subject value in the declaration. The future registry's scope key is the credential binding plus
-policy ID plus this non-secret subject, not a raw credential (#3754).
+`scope.subject_kind` is one of `account`, `installation`, `application`, `endpoint`, or `ip`, and
+`scope.subject_config` names the corresponding **non-secret** `spec.json` configuration property.
+The loader rejects a missing or `x-secret` property. The declaration records only that property
+name; it never carries a runtime subject. At runtime the
+engine gives the transient config value to `connectors.CoordinationIdentity.RateScopeKey`, so the
+registry key is the credential binding plus policy ID plus the non-secret subject as an opaque salted
+projection. Never put a credential, token-derived value, or runtime subject value in the declaration,
+logs, events, or persisted state. A subject kind outside this vocabulary is refused.
 
-This file is parsed and validated by the bundle loader, but it does not yet select, pace, or
-observe traffic. #3753 owns attaching a resolved policy to every requester path; #3754 owns scope
-registries; #3755 owns operator output. Do not use this declaration to add a `streams.json`
+For each outbound engine request, the runtime resolves every matching declared policy and admits all
+of their budgets before the logical requester send. `all` matches the whole HTTP connector; an
+endpoint selector matches its declared method/path pair; optional `tiers` and `auth_types` match the
+non-secret `config.tier` and `config.auth_type` values as additional AND conditions. Check requests,
+stream pages (including pagination), direct and operation direct reads, declarative and operation
+writes (form, JSON, and multipart), binary downloads, and whole-connector hook requester access all
+use this same requester admission path.
+The process-local registry enforces each declared burst/sustained request/point budget with its
+fixed-window, sliding-window, token-bucket, or leaky-bucket model. A declared actual-cost response
+header tightens a point budget when it reports a higher cost; it never credits capacity from a lower
+or absent value. A reset timestamp hard-blocks only after `Retry-After`, a 429, or an exhausted
+remaining budget; non-exhausted reset metadata only tightens state. #3755 still
+owns operator-visible output; this mechanism does not emit rate-limit events itself.
+
+An absent declaration, `unknown`, `not_applicable`, or a non-matching selector leaves the requester
+unchanged. `streams.json` `base.rate_limit` remains the legacy page-loop limiter: it is neither
+created nor replaced by `rate_limits.json`, and when both apply its old wait runs independently of
+the declared requester admission. Do not use this declaration to add a `streams.json`
 `base.rate_limit` throttle or change legacy behavior. Because Go's `embed` directives reject an
 unmatched optional wildcard, `internal/connectors/defs/defs.go` intentionally adds
 `*/rate_limits.json` only with the first production declaration; include that embed update in the

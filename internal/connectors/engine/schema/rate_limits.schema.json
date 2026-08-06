@@ -52,13 +52,14 @@
           },
           "scope": {
             "type": "object",
-            "required": ["subject_kind"],
+            "required": ["subject_kind", "subject_config"],
             "additionalProperties": false,
             "properties": {
               "subject_kind": {
                 "type": "string",
-                "enum": ["account", "installation", "application", "endpoint", "ip"]
-              }
+                  "enum": ["account", "installation", "application", "endpoint", "ip"]
+              },
+              "subject_config": { "type": "string" }
             }
           },
           "budgets": {

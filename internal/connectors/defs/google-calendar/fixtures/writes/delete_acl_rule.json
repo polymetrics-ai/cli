@@ -1,0 +1,4 @@
+{
+  "record": {"calendar_id": "calendar_fixture_1", "rule_id": "rule_fixture_1"},
+  "expect": {"method": "DELETE", "path": "/calendars/calendar_fixture_1/acl/rule_fixture_1"}
+}

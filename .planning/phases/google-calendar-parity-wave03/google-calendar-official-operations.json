@@ -1,0 +1,512 @@
+{
+  "accessed_at": "2026-08-05",
+  "discovery_revision": "20260731",
+  "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+  "operation_count": 38,
+  "operations": [
+    {
+      "id": "calendar.acl.delete",
+      "method": "DELETE",
+      "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}",
+      "description": "Deletes an access control rule.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.acls"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.acl.get",
+      "method": "GET",
+      "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}",
+      "description": "Returns an access control rule.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.acls",
+        "https://www.googleapis.com/auth/calendar.acls.readonly",
+        "https://www.googleapis.com/auth/calendar.readonly"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.acl.insert",
+      "method": "POST",
+      "path": "/calendar/v3/calendars/{calendarId}/acl",
+      "description": "Creates an access control rule.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.acls"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.acl.list",
+      "method": "GET",
+      "path": "/calendar/v3/calendars/{calendarId}/acl",
+      "description": "Returns the rules in the access control list for the calendar.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.acls",
+        "https://www.googleapis.com/auth/calendar.acls.readonly"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.acl.patch",
+      "method": "PATCH",
+      "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}",
+      "description": "Updates an access control rule. This method supports patch semantics.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.acls"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.acl.update",
+      "method": "PUT",
+      "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}",
+      "description": "Updates an access control rule.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.acls"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.acl.watch",
+      "method": "POST",
+      "path": "/calendar/v3/calendars/{calendarId}/acl/watch",
+      "description": "Watch for changes to ACL resources.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.acls",
+        "https://www.googleapis.com/auth/calendar.acls.readonly"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.calendarList.delete",
+      "method": "DELETE",
+      "path": "/calendar/v3/users/me/calendarList/{calendarId}",
+      "description": "Removes a calendar from the user's calendar list.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.app.created",
+        "https://www.googleapis.com/auth/calendar.calendarlist"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.calendarList.get",
+      "method": "GET",
+      "path": "/calendar/v3/users/me/calendarList/{calendarId}",
+      "description": "Returns a calendar from the user's calendar list.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.app.created",
+        "https://www.googleapis.com/auth/calendar.calendarlist",
+        "https://www.googleapis.com/auth/calendar.calendarlist.readonly",
+        "https://www.googleapis.com/auth/calendar.readonly"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.calendarList.insert",
+      "method": "POST",
+      "path": "/calendar/v3/users/me/calendarList",
+      "description": "Inserts an existing calendar into the user's calendar list.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.calendarlist"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.calendarList.list",
+      "method": "GET",
+      "path": "/calendar/v3/users/me/calendarList",
+      "description": "Returns the calendars on the user's calendar list.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.calendarlist",
+        "https://www.googleapis.com/auth/calendar.calendarlist.readonly",
+        "https://www.googleapis.com/auth/calendar.readonly"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.calendarList.patch",
+      "method": "PATCH",
+      "path": "/calendar/v3/users/me/calendarList/{calendarId}",
+      "description": "Updates an existing calendar on the user's calendar list. This method supports patch semantics.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.app.created",
+        "https://www.googleapis.com/auth/calendar.calendarlist"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.calendarList.update",
+      "method": "PUT",
+      "path": "/calendar/v3/users/me/calendarList/{calendarId}",
+      "description": "Updates an existing calendar on the user's calendar list.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.app.created",
+        "https://www.googleapis.com/auth/calendar.calendarlist"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.calendarList.watch",
+      "method": "POST",
+      "path": "/calendar/v3/users/me/calendarList/watch",
+      "description": "Watch for changes to CalendarList resources.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.calendarlist",
+        "https://www.googleapis.com/auth/calendar.calendarlist.readonly",
+        "https://www.googleapis.com/auth/calendar.readonly"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.calendars.clear",
+      "method": "POST",
+      "path": "/calendar/v3/calendars/{calendarId}/clear",
+      "description": "Clears a primary calendar. This operation deletes all events associated with the primary calendar of an account.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.calendars"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.calendars.delete",
+      "method": "DELETE",
+      "path": "/calendar/v3/calendars/{calendarId}",
+      "description": "Deletes a secondary calendar. Use calendars.clear for clearing all events on primary calendars.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.app.created",
+        "https://www.googleapis.com/auth/calendar.calendars"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.calendars.get",
+      "method": "GET",
+      "path": "/calendar/v3/calendars/{calendarId}",
+      "description": "Returns metadata for a calendar.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.app.created",
+        "https://www.googleapis.com/auth/calendar.calendars",
+        "https://www.googleapis.com/auth/calendar.calendars.readonly",
+        "https://www.googleapis.com/auth/calendar.readonly"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.calendars.insert",
+      "method": "POST",
+      "path": "/calendar/v3/calendars",
+      "description": "Creates a secondary calendar.\nThe authenticated user for the request is made the data owner of the new calendar.\n\nNote: We recommend to authenticate as the intended data owner of the calendar. You can use domain-wide delegation of authority to allow applications to act on behalf of a specific user. Don't use a service account for authentication. If you use a service account for authentication, the service account is the data owner, which can lead to unexpected behavior. For example, if a service account is the data owner, data ownership cannot be transferred.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.app.created",
+        "https://www.googleapis.com/auth/calendar.calendars"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.calendars.patch",
+      "method": "PATCH",
+      "path": "/calendar/v3/calendars/{calendarId}",
+      "description": "Updates metadata for a calendar. This method supports patch semantics.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.app.created",
+        "https://www.googleapis.com/auth/calendar.calendars"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.calendars.transferOwnership",
+      "method": "POST",
+      "path": "/calendar/v3/calendars/{calendarId}/transferOwnership",
+      "description": "Transfers a secondary calendar between users within a Google Workspace organization. Requires user authentication with Manage Calendars administrator privilege, and one of the following authorization scopes: \n- https://www.googleapis.com/auth/calendar \n- https://www.googleapis.com/auth/calendar.calendars In the request, set useAdminAccess to true. The secondary calendar must be active to be transferred. Transferring disabled or deleted calendars isn't supported.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.calendars"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.calendars.update",
+      "method": "PUT",
+      "path": "/calendar/v3/calendars/{calendarId}",
+      "description": "Updates metadata for a calendar.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.app.created",
+        "https://www.googleapis.com/auth/calendar.calendars"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.channels.stop",
+      "method": "POST",
+      "path": "/calendar/v3/channels/stop",
+      "description": "Stop watching resources through this channel",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.acls",
+        "https://www.googleapis.com/auth/calendar.acls.readonly",
+        "https://www.googleapis.com/auth/calendar.app.created",
+        "https://www.googleapis.com/auth/calendar.calendarlist",
+        "https://www.googleapis.com/auth/calendar.calendarlist.readonly",
+        "https://www.googleapis.com/auth/calendar.events",
+        "https://www.googleapis.com/auth/calendar.events.freebusy",
+        "https://www.googleapis.com/auth/calendar.events.owned",
+        "https://www.googleapis.com/auth/calendar.events.owned.readonly",
+        "https://www.googleapis.com/auth/calendar.events.public.readonly",
+        "https://www.googleapis.com/auth/calendar.events.readonly",
+        "https://www.googleapis.com/auth/calendar.readonly",
+        "https://www.googleapis.com/auth/calendar.settings.readonly"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.colors.get",
+      "method": "GET",
+      "path": "/calendar/v3/colors",
+      "description": "Returns the color definitions for calendars and events.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.app.created",
+        "https://www.googleapis.com/auth/calendar.calendarlist",
+        "https://www.googleapis.com/auth/calendar.calendarlist.readonly",
+        "https://www.googleapis.com/auth/calendar.events.freebusy",
+        "https://www.googleapis.com/auth/calendar.events.owned",
+        "https://www.googleapis.com/auth/calendar.events.owned.readonly",
+        "https://www.googleapis.com/auth/calendar.events.public.readonly",
+        "https://www.googleapis.com/auth/calendar.readonly"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.events.delete",
+      "method": "DELETE",
+      "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}",
+      "description": "Deletes an event.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.app.created",
+        "https://www.googleapis.com/auth/calendar.events",
+        "https://www.googleapis.com/auth/calendar.events.owned"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.events.get",
+      "method": "GET",
+      "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}",
+      "description": "Returns an event based on its Google Calendar ID. To retrieve an event using its iCalendar ID, call the events.list method using the iCalUID parameter.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.app.created",
+        "https://www.googleapis.com/auth/calendar.events",
+        "https://www.googleapis.com/auth/calendar.events.freebusy",
+        "https://www.googleapis.com/auth/calendar.events.owned",
+        "https://www.googleapis.com/auth/calendar.events.owned.readonly",
+        "https://www.googleapis.com/auth/calendar.events.public.readonly",
+        "https://www.googleapis.com/auth/calendar.events.readonly",
+        "https://www.googleapis.com/auth/calendar.readonly"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.events.import",
+      "method": "POST",
+      "path": "/calendar/v3/calendars/{calendarId}/events/import",
+      "description": "Imports an event. This operation is used to add a private copy of an existing event to a calendar. Only events with an eventType of default may be imported.\nDeprecated behavior: If a non-default event is imported, its type will be changed to default and any event-type-specific properties it may have will be dropped.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.app.created",
+        "https://www.googleapis.com/auth/calendar.events",
+        "https://www.googleapis.com/auth/calendar.events.owned"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.events.insert",
+      "method": "POST",
+      "path": "/calendar/v3/calendars/{calendarId}/events",
+      "description": "Creates an event.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.app.created",
+        "https://www.googleapis.com/auth/calendar.events",
+        "https://www.googleapis.com/auth/calendar.events.owned"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.events.instances",
+      "method": "GET",
+      "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}/instances",
+      "description": "Returns instances of the specified recurring event.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.app.created",
+        "https://www.googleapis.com/auth/calendar.events",
+        "https://www.googleapis.com/auth/calendar.events.freebusy",
+        "https://www.googleapis.com/auth/calendar.events.owned",
+        "https://www.googleapis.com/auth/calendar.events.owned.readonly",
+        "https://www.googleapis.com/auth/calendar.events.public.readonly",
+        "https://www.googleapis.com/auth/calendar.events.readonly",
+        "https://www.googleapis.com/auth/calendar.readonly"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.events.list",
+      "method": "GET",
+      "path": "/calendar/v3/calendars/{calendarId}/events",
+      "description": "Returns events on the specified calendar.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.app.created",
+        "https://www.googleapis.com/auth/calendar.events",
+        "https://www.googleapis.com/auth/calendar.events.freebusy",
+        "https://www.googleapis.com/auth/calendar.events.owned",
+        "https://www.googleapis.com/auth/calendar.events.owned.readonly",
+        "https://www.googleapis.com/auth/calendar.events.public.readonly",
+        "https://www.googleapis.com/auth/calendar.events.readonly",
+        "https://www.googleapis.com/auth/calendar.readonly"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.events.move",
+      "method": "POST",
+      "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}/move",
+      "description": "Moves an event to another calendar, i.e. changes an event's organizer. Note that only default events can be moved; birthday, focusTime, fromGmail, outOfOffice and workingLocation events cannot be moved.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.events",
+        "https://www.googleapis.com/auth/calendar.events.owned"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.events.patch",
+      "method": "PATCH",
+      "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}",
+      "description": "Updates an event. This method supports patch semantics.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.app.created",
+        "https://www.googleapis.com/auth/calendar.events",
+        "https://www.googleapis.com/auth/calendar.events.owned"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.events.quickAdd",
+      "method": "POST",
+      "path": "/calendar/v3/calendars/{calendarId}/events/quickAdd",
+      "description": "Creates an event based on a simple text string.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.app.created",
+        "https://www.googleapis.com/auth/calendar.events",
+        "https://www.googleapis.com/auth/calendar.events.owned"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.events.update",
+      "method": "PUT",
+      "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}",
+      "description": "Updates an event.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.app.created",
+        "https://www.googleapis.com/auth/calendar.events",
+        "https://www.googleapis.com/auth/calendar.events.owned"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.events.watch",
+      "method": "POST",
+      "path": "/calendar/v3/calendars/{calendarId}/events/watch",
+      "description": "Watch for changes to Events resources.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.app.created",
+        "https://www.googleapis.com/auth/calendar.events",
+        "https://www.googleapis.com/auth/calendar.events.freebusy",
+        "https://www.googleapis.com/auth/calendar.events.owned",
+        "https://www.googleapis.com/auth/calendar.events.owned.readonly",
+        "https://www.googleapis.com/auth/calendar.events.public.readonly",
+        "https://www.googleapis.com/auth/calendar.events.readonly",
+        "https://www.googleapis.com/auth/calendar.readonly"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.freebusy.query",
+      "method": "POST",
+      "path": "/calendar/v3/freeBusy",
+      "description": "Returns free/busy information for a set of calendars.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.events.freebusy",
+        "https://www.googleapis.com/auth/calendar.freebusy",
+        "https://www.googleapis.com/auth/calendar.readonly"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.settings.get",
+      "method": "GET",
+      "path": "/calendar/v3/users/me/settings/{setting}",
+      "description": "Returns a single user setting.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.readonly",
+        "https://www.googleapis.com/auth/calendar.settings.readonly"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.settings.list",
+      "method": "GET",
+      "path": "/calendar/v3/users/me/settings",
+      "description": "Returns all user settings for the authenticated user.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.readonly",
+        "https://www.googleapis.com/auth/calendar.settings.readonly"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    },
+    {
+      "id": "calendar.settings.watch",
+      "method": "POST",
+      "path": "/calendar/v3/users/me/settings/watch",
+      "description": "Watch for changes to Settings resources.",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.readonly",
+        "https://www.googleapis.com/auth/calendar.settings.readonly"
+      ],
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    }
+  ]
+}

@@ -15,9 +15,11 @@ import (
 // fields below are the minimal shape those fakes and future wave callers
 // need.
 type Runtime struct {
-	Requester *connsdk.Requester
-	Bundle    *Bundle
-	Config    connectors.RuntimeConfig
+	Requester     *connsdk.Requester
+	baseRequester *connsdk.Requester
+	Bundle        *Bundle
+	Config        connectors.RuntimeConfig
+	rateLimits    *rateLimitResolver
 }
 
 // Hooks is the base interface every hook set implements. A concrete hook set

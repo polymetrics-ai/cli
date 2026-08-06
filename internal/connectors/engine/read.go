@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
 	"net/url"
 	"sort"
 	"strconv"
@@ -204,7 +205,11 @@ func fanOutIDsFromRequest(ctx context.Context, b Bundle, stream StreamSpec, req 
 			reqPath = resolved
 		}
 
-		resp, err := rt.Requester.Do(ctx, "GET", reqPath, page.Query, nil)
+		requester, err := rt.requesterFor(http.MethodGet, spec.Path)
+		if err != nil {
+			return nil, fmt.Errorf("fan_out: ids_from.request: %w", err)
+		}
+		resp, err := requester.Do(ctx, http.MethodGet, reqPath, page.Query, nil)
 		if err != nil {
 			return nil, fmt.Errorf("fan_out: ids_from.request: %w", err)
 		}
@@ -335,7 +340,12 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
 		}
 
-		resp, err := rt.Requester.Do(ctx, methodOrDefault(stream.Method), reqPath, query, body)
+		method := methodOrDefault(stream.Method)
+		requester, err := rt.requesterFor(method, stream.Path)
+		if err != nil {
+			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
+		}
+		resp, err := requester.Do(ctx, method, reqPath, query, body)
 		if err != nil {
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Class: class, Hint: hint, Err: err}
@@ -525,7 +535,12 @@ func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 		DefaultHeaders: headers,
 	}
 
-	return &Runtime{Requester: requester, Bundle: &b, Config: cfg}, nil
+	resolver := newRateLimitResolver(b, cfg)
+	defaultRequester, err := resolver.defaultRequester(requester)
+	if err != nil {
+		return nil, err
+	}
+	return &Runtime{Requester: defaultRequester, baseRequester: requester, Bundle: &b, Config: cfg, rateLimits: resolver}, nil
 }
 
 // resolveHeaders interpolates every declared header value, omitting a
@@ -1414,7 +1429,12 @@ func Check(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks)
 	if err != nil {
 		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: err}
 	}
-	_, err = rt.Requester.Do(ctx, methodOrDefault(b.HTTP.Check.Method), checkPath, checkQuery, nil)
+	method := methodOrDefault(b.HTTP.Check.Method)
+	requester, err := rt.requesterFor(method, b.HTTP.Check.Path)
+	if err != nil {
+		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: err}
+	}
+	_, err = requester.Do(ctx, method, checkPath, checkQuery, nil)
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Class: class, Hint: hint, Err: err}

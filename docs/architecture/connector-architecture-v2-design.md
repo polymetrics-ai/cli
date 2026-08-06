@@ -54,7 +54,7 @@ internal/connectors/defs/
     writes.json               // declarative write actions
     api_surface.json          // API coverage/provenance manifest (authoring validation, conformance, certification, direct-write cross-checks)
     certification.json        // optional certify defaults, candidates, pairings
-    rate_limits.json          // optional provider-cited declaration; no traffic policy yet
+    rate_limits.json          // optional provider-cited HTTP pacing policy
     schemas/
       issues.json             // per-stream record schema (draft-07 + x- extensions)
       pull_requests.json
@@ -367,7 +367,7 @@ type Bundle struct {
     Name     string
     Metadata Metadata          // parsed metadata.json
     Changefeed *connectors.ChangefeedDescriptor // optional changefeed.json
-    RateLimits *connsdk.RateLimits // optional rate_limits.json; declaration only
+    RateLimits *connsdk.RateLimits // optional rate_limits.json HTTP pacing policy
     Spec     *Schema           // compiled spec.json; SecretKeys() from x-secret
     HTTP     HTTPBase          // streams.json "base"
     Streams  []StreamSpec      // streams.json "streams"
@@ -462,14 +462,16 @@ func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit f
 4. On completion the app layer persists the advanced cursor exactly as today (`internal/app`
    streaming ETL unchanged; `StatefulReader.InitialState` implemented generically by the engine).
 
-Rate limiting: `streams.json`'s `RateLimitSpec{requests_per_minute}` remains an explicit
-token-bucket wait, while `metadata.json.rate_limit` is informational. An optional
-`rate_limits.json` records a cited provider policy but does not yet select or enforce one. The
-requester foundation invokes an optional context-aware `RateLimitAdmission` for every logical send
-and permitted redirect hop, emits safe typed observations through `RateLimitObserver`, honors a
-valid `Retry-After` reset exactly (even above `MaxBackoff`), and uses bounded full jitter only for
-unhinted fallback retries. A terminal 429 is a `*connsdk.RateLimitError` that unwraps the existing
-`*HTTPError`; later phases attach declaration resolution and operator output.
+Rate limiting: `streams.json`'s `RateLimitSpec{requests_per_minute}` remains the explicit legacy
+page-loop wait, while `metadata.json.rate_limit` is informational. A matching cited
+`rate_limits.json` policy resolves to an opaque credential-binding/policy/subject scope and admits
+every engine requester path before its logical send; its fixed/sliding-window and token/leaky-bucket
+budgets are enforced together. The requester invokes its context-aware `RateLimitAdmission` for
+every logical send and permitted redirect hop, emits safe typed observations through
+`RateLimitObserver`, honors a valid `Retry-After` reset exactly (even above `MaxBackoff`), and uses
+bounded full jitter only for unhinted fallback retries. A terminal 429 is a
+`*connsdk.RateLimitError` that unwraps the existing `*HTTPError`. #3755 owns the remaining
+operator-visible output layer.
 
 ### B.5 Write path (engine/write.go)
 

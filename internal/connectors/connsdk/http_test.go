@@ -1188,7 +1188,7 @@ func TestRateLimitObservationParsesStandardBudgetHeaders(t *testing.T) {
 	header.Set("RateLimit-Limit", "100")
 	header.Set("RateLimit-Remaining", "0")
 	header.Set("RateLimit-Reset", "90")
-	observation, ok := rateLimitObservation(http.StatusOK, header, 1, now)
+	observation, ok := rateLimitObservation(http.StatusOK, header, 1, now, "")
 	if !ok {
 		t.Fatal("rateLimitObservation: want standard headers to be observed")
 	}
@@ -1200,5 +1200,18 @@ func TestRateLimitObservationParsesStandardBudgetHeaders(t *testing.T) {
 	}
 	if !observation.HasReset || !observation.ResetAt.Equal(now.Add(90*time.Second)) {
 		t.Fatalf("reset observation = %+v, want %v", observation, now.Add(90*time.Second))
+	}
+}
+
+func TestRateLimitObservationParsesDeclaredActualCost(t *testing.T) {
+	now := time.Date(2026, time.August, 6, 12, 0, 0, 0, time.UTC)
+	header := make(http.Header)
+	header.Set("X-Actual-Cost", "2.5")
+	observation, ok := rateLimitObservation(http.StatusOK, header, 1, now, "X-Actual-Cost")
+	if !ok || !observation.HasCost || observation.Cost != 2.5 {
+		t.Fatalf("actual-cost observation = %+v, want typed cost 2.5", observation)
+	}
+	if _, ok := rateLimitObservation(http.StatusOK, header, 1, now, "X-Other-Cost"); ok {
+		t.Fatal("undeclared response header produced a rate-limit observation")
 	}
 }

@@ -371,7 +371,11 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 	if err != nil {
 		return err
 	}
-	requester, err := writeRequester(rt.Requester, action)
+	requesterForAction, err := rt.requesterFor(method, action.Path)
+	if err != nil {
+		return err
+	}
+	requester, err := writeRequester(requesterForAction, action)
 	if err != nil {
 		return err
 	}

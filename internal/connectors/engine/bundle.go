@@ -1208,7 +1208,7 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 		return Bundle{}, err
 	}
 
-	rateLimits, err := loadRateLimits(sub, dirName)
+	rateLimits, err := loadRateLimits(sub, dirName, spec)
 	if err != nil {
 		return Bundle{}, err
 	}
