@@ -45,7 +45,7 @@ type localRawRecord struct {
 	Record       connectors.Record `json:"record"`
 }
 
-func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
+func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
 	stateKey := streamStateKey(conn.Name, streamName)
 	prior := a.state.StreamStates[stateKey]
 	if prior.Checkpoint != nil {
@@ -269,7 +269,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	if observedAt.IsZero() {
 		observedAt = time.Now().UTC()
 	}
-	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement(conn.Destination.Connector, time.Now().UTC())
+	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement(destination.Name(), time.Now().UTC())
 	if err != nil {
 		return result, err
 	}

@@ -370,7 +370,7 @@ func (a *App) save() error {
 		next.Revision = current.Revision + 1
 		return next, nil
 	})
-	if err == nil || errors.Is(err, errStateRevisionConflict) {
+	if err == nil || errors.Is(err, errStateRevisionConflict) || stateStoreCommitMayHaveSucceeded(err) {
 		a.state = updated
 	}
 	return err
@@ -385,10 +385,14 @@ func (a *App) updateState(update func(state) (state, error)) (state, error) {
 		next.Revision = current.Revision + 1
 		return next, nil
 	})
-	if err == nil {
+	if err == nil || stateStoreCommitMayHaveSucceeded(err) {
 		a.state = updated
 	}
 	return updated, err
+}
+
+func stateStoreCommitMayHaveSucceeded(err error) bool {
+	return statestore.CommitOutcomeForError(err).MayHaveCommitted()
 }
 
 func newStateStore(path string) statestore.JSONStore[state] {
@@ -842,7 +846,7 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	}
 	var result etlExecutionResult
 	if materializer, ok := destination.(connectors.LocalWarehouseMaterializer); ok && materializer.MaterializesLocalWarehouse() {
-		result, err = a.runWarehouseETL(ctx, runID, conn, source, sourceRuntime, destRuntime, sourceExpectation, req.Stream, stream, mode, batchSize)
+		result, err = a.runWarehouseETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, stream, mode, batchSize)
 	} else {
 		result, err = a.runConnectorETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, stream, mode, batchSize)
 	}
@@ -986,7 +990,7 @@ func (a *App) beginRun(run Run) (Run, error) {
 	previousRuns := a.state.Runs
 	a.state.Runs = append(append([]Run(nil), a.state.Runs...), run)
 	if err := a.save(); err != nil {
-		if !errors.Is(err, errStateRevisionConflict) {
+		if !errors.Is(err, errStateRevisionConflict) && !stateStoreCommitMayHaveSucceeded(err) {
 			a.state.Runs = previousRuns
 		}
 		return Run{}, err
