@@ -196,6 +196,54 @@ not a full override by default.
   delivery contract. An absent descriptor is unknown and non-capable. The structural schema is
   `internal/connectors/engine/schema/changefeed.schema.json`; runtime semantic checks live on
   `connectors.ChangefeedDescriptor`.
+- **`polling_watermark` is bounded replay, not a hard-delete feed**: an implemented polling
+  declaration uses the fixed executor `{"kind":"engine","id":"polling_watermark"}` and must
+  supply `polling_watermark` beside the normal evidence/checkpoint/delivery fields. Its
+  `watermark` declares `{kind, path}` where kind is exactly `timestamp`,
+  `monotonic_sequence`, or `opaque_cursor`; `tie_breaker.path` names the stable secondary order
+  value. Each timestamp or monotonic-sequence source page must be ordered ascending by that tuple;
+  an unordered page is refused before delivery or checkpoint advancement. `checkpoint.keys` must
+  list those paths in that order. The only supported `boundary` is
+  `inclusive`: the next read starts at `>=` the committed boundary and therefore deliberately
+  replays the edge record. Set `delivery.duplicates` to `at_least_once`; `>` would silently lose
+  tied timestamps and is not an allowed substitute. Declare positive `safety_lag_seconds` for a
+  timestamp source whose provider can publish late/clock-skewed records; the executor rereads that
+  overlap on the next run. An unfinished bounded overlap persists an internal scan tuple separately
+  from the durable high-water tuple, retaining the provider's exact tie-breaker text and numeric
+  ordering metadata when applicable; it resumes after restart and clears once the overlap is
+  exhausted so later polls begin at the lag boundary again. `0` is an explicit no-lag opt-out and
+  can lose such records. Non-time watermark kinds must declare `0` because a timestamp lag has no
+  honest meaning for them.
+  `page_size`, `max_pages`, and `request_budget` are all positive required bounds. Each physical
+  declared-source request consumes the one shared request budget: the source adapter must consume
+  a budget token before its primary read and before every additional fixed read, including a
+  declared deletion endpoint. A deletion endpoint requires `request_budget >= 2`, and the executor
+  does not start a primary read unless both its primary and deletion tokens remain. Each primary or
+  deletion physical page must contain no more than `page_size` records; an overflow is a typed,
+  non-advancing refusal. Timestamp and monotonic-sequence sources merge primary and deletion
+  records through a safe shared tuple boundary while preserving independent durable frontiers, so
+  one source cannot skip the other source's page. A declared deletion endpoint also persists its
+  own query/start frontier from the first checkpoint, before any tombstone is accepted. Once a
+  deletion source has a durable timestamp tuple, restart derives that source's cursor and safety
+  overlap from the tuple and scan, never from primary progress. An uninitialized opaque deletion
+  source starts without a primary cursor. Opaque cursor sources retain each source cursor
+  verbatim and promise only provider-local ordering; they do not claim a cross-source tuple merge.
+  Reaching `max_pages` or exhausting that budget returns a typed,
+  resumable stop after only the last durably accepted position; it is never a successful silent
+  truncation. The executor checks cancellation between source fetch, delivery, and checkpoint
+  commit. It advances the tuple only after every emitted record in its page is durably accepted by
+  the destination and the checkpoint committer succeeds; a failure in either step replays the
+  page. The committer is a consumer-facing adapter for the durable database sync contract rather
+  than a second checkpoint store.
+
+  A polling scan cannot see a hard delete after the record disappears. With no delete source,
+  declare `delivery.deletes: "not_available"`; inspect/catalog output carries that exact truth and
+  must not describe the stream as delete-aware. To advertise `"tombstone"`, declare exactly one
+  of `soft_delete: {"path":"..."}` (a truthy provider field becomes a delete event) or
+  `deletion_endpoint: {"path":"/fixed/provider/path","records_path":"..."}` (the closed
+  source adapter returns its records as delete events). A soft-delete field or deletion endpoint
+  must itself carry the declared watermark and tie-breaker values so it participates in the same
+  ordered, replay-safe checkpoint. Do not use a generic endpoint, SQL, or caller-provided path.
 - **`api_surface.json` v2 provenance**: follow the authoritative
   [provider-artifact contract](../architecture/connector-architecture-v2-design.md#version-2-provider-artifact-provenance).
   Upgrade only bundles in the dedicated provider-artifact sweep; do not bulk-edit unrelated bundles

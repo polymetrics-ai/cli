@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "manifest": "docs/migration/batches/cli-provider-artifact-sweep-r1-batch-001.json",
+  "candidates": 5,
+  "included": [
+    {
+      "connector": "docuseal",
+      "artifact": {
+        "url": "https://console.docuseal.com/openapi.yml",
+        "version": "DocuSeal API 1.0.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-06",
+        "sha256": "7ac10d1c39b335bce962b6de277d88aded8ce476518b83835c76ad80157e0e4b"
+      },
+      "artifact_operations": 23,
+      "declared_operations": 23,
+      "operation_split": {
+        "executable": 10,
+        "provider_blocked": 0,
+        "excluded": 13
+      },
+      "cli_commands": 9,
+      "operation_executors": 0
+    },
+    {
+      "connector": "defillama",
+      "artifact": {
+        "url": "https://raw.githubusercontent.com/DefiLlama/api-docs/main/defillama-openapi-free.json",
+        "version": "DefiLlama API 1.0.0-oas3; OpenAPI 3.0.0; current provider-published free-tier artifact",
+        "retrieved_at": "2026-08-06",
+        "sha256": "fb4bd72cea397a05f127ce7edde5d45d30acf4f865dcbbf27cfbb83993682cff"
+      },
+      "artifact_operations": 31,
+      "declared_operations": 31,
+      "operation_split": {
+        "executable": 10,
+        "provider_blocked": 0,
+        "excluded": 21
+      },
+      "cli_commands": 10,
+      "operation_executors": 0
+    },
+    {
+      "connector": "dockerhub",
+      "artifact": {
+        "url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+        "version": "Docker Hub API 2-beta; OpenAPI 3.0.3",
+        "retrieved_at": "2026-08-06",
+        "sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756"
+      },
+      "artifact_operations": 54,
+      "declared_operations": 54,
+      "operation_split": {
+        "executable": 4,
+        "provider_blocked": 0,
+        "excluded": 50
+      },
+      "cli_commands": 4,
+      "operation_executors": 0
+    },
+    {
+      "connector": "flexmail",
+      "artifact": {
+        "url": "https://api.flexmail.eu/documentation/openapi.php",
+        "version": "Flexmail email marketing API 1.2.0 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-06",
+        "sha256": "f7280a3b90cf5efba92bf6c048a2621f923d5652d076d765b7a3f67efd39e1f6"
+      },
+      "artifact_operations": 43,
+      "declared_operations": 43,
+      "operation_split": {
+        "executable": 5,
+        "provider_blocked": 22,
+        "excluded": 16
+      },
+      "cli_commands": 5,
+      "operation_executors": 0
+    },
+    {
+      "connector": "alpaca-broker-api",
+      "artifact": {
+        "url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml",
+        "version": "1.0.0",
+        "retrieved_at": "2026-08-06",
+        "sha256": "9c557d2ea72d93992bfdb689847539a4b9474f99858a80cee955484b8a8c3ae1"
+      },
+      "artifact_operations": 52,
+      "declared_operations": 52,
+      "operation_split": {
+        "executable": 10,
+        "provider_blocked": 5,
+        "excluded": 37
+      },
+      "cli_commands": 10,
+      "operation_executors": 0
+    }
+  ],
+  "dropped": []
+}

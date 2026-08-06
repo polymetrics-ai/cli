@@ -1,0 +1,194 @@
+{
+  "tagline": "Run Alpaca Broker API's declared streams and reverse-ETL actions.",
+  "usage": "pm alpaca-broker-api \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "account activities list",
+        "accounts list",
+        "assets list",
+        "calendar list",
+        "clock list",
+        "documents list",
+        "journals list",
+        "orders list",
+        "positions list",
+        "watchlists list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "account activities list",
+      "summary": "Run the account activities ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account_activities",
+      "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml",
+      "examples": [
+        "pm alpaca-broker-api account activities list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/accounts/activities"
+        }
+      ]
+    },
+    {
+      "path": "accounts list",
+      "summary": "Run the accounts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "accounts",
+      "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml",
+      "examples": [
+        "pm alpaca-broker-api accounts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/accounts"
+        }
+      ]
+    },
+    {
+      "path": "assets list",
+      "summary": "Run the assets ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "assets",
+      "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml",
+      "examples": [
+        "pm alpaca-broker-api assets list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/assets"
+        }
+      ]
+    },
+    {
+      "path": "calendar list",
+      "summary": "Run the calendar ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "calendar",
+      "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml",
+      "examples": [
+        "pm alpaca-broker-api calendar list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/calendar"
+        }
+      ]
+    },
+    {
+      "path": "clock list",
+      "summary": "Run the clock ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "clock",
+      "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml",
+      "examples": [
+        "pm alpaca-broker-api clock list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/clock"
+        }
+      ]
+    },
+    {
+      "path": "documents list",
+      "summary": "Run the documents ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents",
+      "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml",
+      "examples": [
+        "pm alpaca-broker-api documents list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/accounts/{account_id}/documents"
+        }
+      ]
+    },
+    {
+      "path": "journals list",
+      "summary": "Run the journals ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "journals",
+      "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml",
+      "examples": [
+        "pm alpaca-broker-api journals list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/journals"
+        }
+      ]
+    },
+    {
+      "path": "orders list",
+      "summary": "Run the orders ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "orders",
+      "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml",
+      "examples": [
+        "pm alpaca-broker-api orders list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/trading/accounts/{account_id}/orders"
+        }
+      ]
+    },
+    {
+      "path": "positions list",
+      "summary": "Run the positions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "positions",
+      "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml",
+      "examples": [
+        "pm alpaca-broker-api positions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/trading/accounts/{account_id}/positions"
+        }
+      ]
+    },
+    {
+      "path": "watchlists list",
+      "summary": "Run the watchlists ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "watchlists",
+      "source_url": "https://raw.githubusercontent.com/alpacahq/alpaca-docs/master/oas/broker/openapi.yaml",
+      "examples": [
+        "pm alpaca-broker-api watchlists list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/trading/accounts/{account_id}/watchlists"
+        }
+      ]
+    }
+  ]
+}

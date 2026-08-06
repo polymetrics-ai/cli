@@ -1,9 +1,9 @@
 # Overview
 
-Reads public Docker Hub repositories, image tags, and namespace profiles for a configured username
-or organization via the Docker Hub registry API.
+Reads public Docker Hub repositories and image tags for a configured username or organization via
+the Docker Hub registry API.
 
-Readable streams: `repositories`, `tags`, `namespace`, `repository_detail`, `tag_detail`.
+Readable streams: `repositories`, `tags`, `repository_detail`, `tag_detail`.
 
 This connector is read-only; no write actions are declared.
 
@@ -15,9 +15,8 @@ Connection fields:
 
 - `base_url` (optional, string); default `https://hub.docker.com/v2`; format `uri`; Docker Hub
   registry API base URL override for tests or self-hosted proxies.
-- `docker_username` (required, string); Docker Hub username or organization namespace to read
-  repositories, tags, and the namespace profile for. Lowercase alphanumerics, underscores, and
-  hyphens only.
+- `docker_username` (required, string); Docker Hub username or organization namespace whose
+  repositories and tags to read. Lowercase alphanumerics, underscores, and hyphens only.
 - `page_size` (optional, integer); default `100`; Page size (1-100) for the initial request of each
   paginated stream (Docker Hub's page_size query param); subsequent pages follow the API's own
   absolute next URL verbatim.
@@ -35,37 +34,32 @@ Authentication behavior:
 
 Requests use the configured `base_url` value after applying defaults.
 
-Connection checks call GET `/repositories/{{ config.docker_username }}/`.
+Connection checks call GET `/namespaces/{{ config.docker_username }}/repositories`.
 
 ## Streams notes
 
 Default pagination: follows a next-page URL from the response body; URL path `next`; next URLs stay
 on the configured API host.
 
-Pagination by stream: next_url: `repositories`, `tags`; none: `namespace`, `repository_detail`,
-`tag_detail`.
+Pagination by stream: next_url: `repositories`, `tags`; none: `repository_detail`, `tag_detail`.
 
-- `repositories`: GET `/repositories/{{ config.docker_username }}/` - records path `results`; query
-  `page`=`1`; `page_size`=`{{ config.page_size }}`; follows a next-page URL from the response body;
-  URL path `next`; next URLs stay on the configured API host.
-- `tags`: GET `/repositories/{{ config.docker_username }}/{{ config.repository }}/tags` - records
-  path `results`; query `page`=`1`; `page_size`=`{{ config.page_size }}`; follows a next-page URL
-  from the response body; URL path `next`; next URLs stay on the configured API host.
-- `namespace`: GET `/users/{{ config.docker_username }}/` - single-object response; records at
-  response root.
-- `repository_detail`: GET `/repositories/{{ config.docker_username }}/{{ config.repository }}/` -
-  single-object response; records at response root.
-- `tag_detail`: GET `/repositories/{{ config.docker_username }}/{{ config.repository }}/tags/{{
-  config.tag }}/` - single-object response; records at response root.
+- `repositories`: GET `/namespaces/{{ config.docker_username }}/repositories` - records path
+  `results`; query `page`=`1`; `page_size`=`{{ config.page_size }}`; follows a next-page URL from
+  the response body; URL path `next`; next URLs stay on the configured API host.
+- `tags`: GET `/namespaces/{{ config.docker_username }}/repositories/{{ config.repository }}/tags`
+  - records path `results`; query `page`=`1`; `page_size`=`{{ config.page_size }}`; follows a
+  next-page URL from the response body; URL path `next`; next URLs stay on the configured API host.
+- `repository_detail`: GET `/namespaces/{{ config.docker_username }}/repositories/{{ config.repository }}` - single-object response; records at response root.
+- `tag_detail`: GET `/namespaces/{{ config.docker_username }}/repositories/{{ config.repository }}/tags/{{ config.tag }}` - single-object response; records at response root.
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: external Docker Hub API read of public repository, tag,
-and namespace data.
+This connector is read-only. Read behavior: external Docker Hub API read of public repository and
+tag data.
 
 ## Known limits
 
 - Batch defaults: read_page_size=100.
-- API coverage includes 5 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  destructive_admin=7, duplicate_of=2, non_data_endpoint=3, requires_elevated_scope=41.
+- API coverage includes 4 stream-backed endpoint group(s).
+- Other cited artifact endpoints are explicitly classified in `api_surface.json`; no undocumented
+  legacy endpoint is exposed by this bundle.

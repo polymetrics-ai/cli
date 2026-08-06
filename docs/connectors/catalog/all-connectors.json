@@ -3615,7 +3615,7 @@
   {
     "name": "alpaca-broker-api",
     "display_name": "Alpaca Broker API",
-    "description": "Reads Alpaca Broker API accounts, assets, market calendar, clock, country info, account activities, journals, and per-account positions/watchlists/orders/documents over the Broker REST API (read-only).",
+    "description": "Reads Alpaca Broker API accounts, assets, market calendar, clock, account activities, journals, and per-account positions/watchlists/orders/documents over the Broker REST API (read-only).",
     "integration_type": "api",
     "docs_url": "https://docs.alpaca.markets/docs/broker-api",
     "release_stage": "ga",
@@ -3695,17 +3695,6 @@
         "name": "clock",
         "primary_key": [
           "timestamp"
-        ],
-        "sync_modes": [
-          "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
-        ]
-      },
-      {
-        "name": "country_info",
-        "primary_key": [
-          "country_code"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -36136,7 +36125,7 @@
   {
     "name": "dockerhub",
     "display_name": "Docker Hub",
-    "description": "Reads public Docker Hub repositories, image tags, and namespace profiles for a configured username or organization via the Docker Hub registry API.",
+    "description": "Reads public Docker Hub repositories and image tags for a configured username or organization via the Docker Hub registry API.",
     "integration_type": "api",
     "docs_url": "https://docs.docker.com/docker-hub/api/latest/",
     "release_stage": "ga",
@@ -36207,17 +36196,6 @@
         ]
       },
       {
-        "name": "namespace",
-        "primary_key": [
-          "id"
-        ],
-        "sync_modes": [
-          "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
-        ]
-      },
-      {
         "name": "repository_detail",
         "primary_key": [
           "name"
@@ -36241,7 +36219,7 @@
       }
     ],
     "risk": {
-      "read": "external Docker Hub API read of public repository, tag, and namespace data",
+      "read": "external Docker Hub API read of public repository and tag data",
       "approval": "none; read-only, no obviously-safe reverse-ETL writes"
     },
     "icon": {

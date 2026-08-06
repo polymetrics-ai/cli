@@ -16,7 +16,7 @@
 | `airtable` | [`icons/airtable.svg`](../icons/airtable.svg) | Airtable | `api` | ga | check, catalog, read, write | 5 | 12 | [Documentation](https://airtable.com/developers/web/api/introduction) | bundle definition |
 | `akeneo` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Akeneo | `api` | ga | check, catalog, read, write | 12 | 9 | [Documentation](https://api.akeneo.com/api-reference.html) | bundle definition |
 | `algolia` | [`icons/simple-icons/algolia.svg`](../icons/simple-icons/algolia.svg) | Algolia | `api` | ga | check, catalog, read, write | 7 | 2 | [Documentation](https://www.algolia.com/doc/rest-api/search/) | bundle definition |
-| `alpaca-broker-api` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Alpaca Broker API | `api` | ga | check, catalog, read | 11 | 0 | [Documentation](https://docs.alpaca.markets/docs/broker-api) | bundle definition |
+| `alpaca-broker-api` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Alpaca Broker API | `api` | ga | check, catalog, read | 10 | 0 | [Documentation](https://docs.alpaca.markets/docs/broker-api) | bundle definition |
 | `alpha-vantage` | [`icons/alpha-vantage.svg`](../icons/alpha-vantage.svg) | Alpha Vantage | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://www.alphavantage.co/documentation/) | bundle definition |
 | `amazon-ads` | [`icons/amazonads.svg`](../icons/amazonads.svg) | Amazon Ads | `api` | ga | check, catalog, read | 7 | 0 | [Documentation](https://advertising.amazon.com/API/docs/en-us/) | bundle definition |
 | `amazon-seller-partner` | [`icons/amazonsellerpartner.svg`](../icons/amazonsellerpartner.svg) | Amazon Seller Partner | `api` | ga | check, catalog, read, write | 147 | 98 | [Documentation](https://developer-docs.amazon.com/sp-api/) | bundle definition |
@@ -120,7 +120,7 @@
 | `ding-connect` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Ding Connect | `api` | ga | check, catalog, read, write | 10 | 1 | [Documentation](https://docs.ding.com/) | bundle definition |
 | `discord` | [`icons/simple-icons/discord.svg`](../icons/simple-icons/discord.svg) | Discord | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://discord.com/developers/docs/reference) | bundle definition |
 | `dixa` | [`icons/dixa.svg`](../icons/dixa.svg) | Dixa | `api` | alpha | check, catalog, read | 4 | 0 | [Documentation](https://docs.dixa.io/openapi/) | bundle definition |
-| `dockerhub` | [`icons/dockerhub.svg`](../icons/dockerhub.svg) | Docker Hub | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://docs.docker.com/docker-hub/api/latest/) | bundle definition |
+| `dockerhub` | [`icons/dockerhub.svg`](../icons/dockerhub.svg) | Docker Hub | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://docs.docker.com/docker-hub/api/latest/) | bundle definition |
 | `docuseal` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | DocuSeal | `api` | ga | check, catalog, read, write | 4 | 6 | [Documentation](https://www.docuseal.co/docs/api) | bundle definition |
 | `dolibarr` | [`icons/simple-icons/dolibarr.svg`](../icons/simple-icons/dolibarr.svg) | Dolibarr | `api` | ga | check, catalog, read, write | 10 | 17 | [Documentation](https://www.dolibarr.org/webservices.html) | bundle definition |
 | `dremio` | [`icons/dremio.svg`](../icons/dremio.svg) | Dremio | `api` | ga | check, catalog, read, write | 5 | 11 | [Documentation](https://docs.dremio.com/software/rest-api/) | bundle definition |

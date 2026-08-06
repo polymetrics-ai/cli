@@ -58,6 +58,17 @@ SECURITY
   approval: none; read-only, no obviously-safe reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+COMMAND SURFACE
+  Run Flexmail's declared streams and reverse-ETL actions.
+  Usage: pm flexmail <command> [flags]
+  Read streams
+  Other Commands
+    contacts list - Run the contacts ETL stream [intent=etl availability=implemented stream=contacts]
+    custom fields list - Run the custom fields ETL stream [intent=etl availability=implemented stream=custom_fields]
+    interests list - Run the interests ETL stream [intent=etl availability=implemented stream=interests]
+    segments list - Run the segments ETL stream [intent=etl availability=implemented stream=segments]
+    sources list - Run the sources ETL stream [intent=etl availability=implemented stream=sources]
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect flexmail
