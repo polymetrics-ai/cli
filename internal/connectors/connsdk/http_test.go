@@ -17,6 +17,8 @@ import (
 	"sync/atomic"
 	"testing"
 	"time"
+
+	"polymetrics.ai/internal/connectors/transportpolicy"
 )
 
 func noSleep(_ context.Context, _ time.Duration) error { return nil }
@@ -426,7 +428,8 @@ func TestRequesterAdmitsRedirectTransportHop(t *testing.T) {
 	var admissions []RateLimitRequest
 	var observations []RateLimitObservation
 	r := &Requester{
-		BaseURL: srv.URL,
+		BaseURL:        srv.URL,
+		DisableRetries: true,
 		Admission: rateLimitAdmissionFunc(func(_ context.Context, request RateLimitRequest) error {
 			admissions = append(admissions, request)
 			return nil
@@ -656,6 +659,38 @@ func TestRequesterDisableRetriesPreventsBodylessMutationTransportReplay(t *testi
 	}
 	if got := atomic.LoadInt32(&mutationHits); got != 0 {
 		t.Fatalf("mutation hits = %d, want no transport replay", got)
+	}
+}
+
+func TestRequesterDisableRetriesRejectsMutationRedirect(t *testing.T) {
+	for _, status := range []int{http.StatusTemporaryRedirect, http.StatusPermanentRedirect} {
+		t.Run(http.StatusText(status), func(t *testing.T) {
+			var initialHits int32
+			var targetHits int32
+			mux := http.NewServeMux()
+			mux.HandleFunc("/initial", func(w http.ResponseWriter, req *http.Request) {
+				atomic.AddInt32(&initialHits, 1)
+				http.Redirect(w, req, "/target", status)
+			})
+			mux.HandleFunc("/target", func(w http.ResponseWriter, _ *http.Request) {
+				atomic.AddInt32(&targetHits, 1)
+				w.WriteHeader(http.StatusOK)
+			})
+			srv := httptest.NewServer(mux)
+			defer srv.Close()
+
+			r := &Requester{BaseURL: srv.URL, DisableRetries: true}
+			_, err := r.Do(context.Background(), http.MethodPost, "/initial", nil, nil)
+			if !errors.Is(err, transportpolicy.ErrRedirectRefused) {
+				t.Fatalf("Do error = %v, want redirect refusal", err)
+			}
+			if got, want := atomic.LoadInt32(&initialHits), int32(1); got != want {
+				t.Fatalf("initial hits = %d, want %d", got, want)
+			}
+			if got := atomic.LoadInt32(&targetHits); got != 0 {
+				t.Fatalf("target hits = %d, want no redirected mutation", got)
+			}
+		})
 	}
 }
 

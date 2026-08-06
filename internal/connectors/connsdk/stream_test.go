@@ -12,6 +12,8 @@ import (
 	"sync/atomic"
 	"testing"
 	"time"
+
+	"polymetrics.ai/internal/connectors/transportpolicy"
 )
 
 // customHeaderAuth models the 71 connector definitions that authenticate with
@@ -190,7 +192,8 @@ func assertStreamRedirectAdmissions(t *testing.T, baseURL string, opts StreamOpt
 	t.Helper()
 	var admissions []RateLimitRequest
 	r := &Requester{
-		BaseURL: baseURL,
+		BaseURL:        baseURL,
+		DisableRetries: true,
 		Admission: rateLimitAdmissionFunc(func(_ context.Context, request RateLimitRequest) error {
 			admissions = append(admissions, request)
 			return nil
@@ -361,6 +364,38 @@ func TestDoStreamDisableRetriesPreventsMutationTransportReplay(t *testing.T) {
 	}
 	if got := atomic.LoadInt32(&mutationHits); got != 0 {
 		t.Fatalf("mutation hits = %d, want no transport replay", got)
+	}
+}
+
+func TestDoStreamDisableRetriesRejectsMutationRedirect(t *testing.T) {
+	var initialHits int32
+	var targetHits int32
+	mux := http.NewServeMux()
+	mux.HandleFunc("/initial", func(w http.ResponseWriter, req *http.Request) {
+		atomic.AddInt32(&initialHits, 1)
+		http.Redirect(w, req, "/target", http.StatusTemporaryRedirect)
+	})
+	mux.HandleFunc("/target", func(w http.ResponseWriter, _ *http.Request) {
+		atomic.AddInt32(&targetHits, 1)
+		w.WriteHeader(http.StatusOK)
+	})
+	srv := httptest.NewServer(mux)
+	defer srv.Close()
+
+	r := &Requester{BaseURL: srv.URL, DisableRetries: true}
+	resp, err := r.DoStream(context.Background(), http.MethodPost, "/initial", nil, StreamOptions{})
+	if resp != nil {
+		resp.Body.Close()
+		t.Fatal("DoStream returned a response after refusing redirect")
+	}
+	if !errors.Is(err, transportpolicy.ErrRedirectRefused) {
+		t.Fatalf("DoStream error = %v, want redirect refusal", err)
+	}
+	if got, want := atomic.LoadInt32(&initialHits), int32(1); got != want {
+		t.Fatalf("initial hits = %d, want %d", got, want)
+	}
+	if got := atomic.LoadInt32(&targetHits); got != 0 {
+		t.Fatalf("target hits = %d, want no redirected mutation", got)
 	}
 }
 

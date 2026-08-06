@@ -204,6 +204,9 @@ func isSafeReplayableRead(method string) bool {
 
 func noReplayClient(client *http.Client) *http.Client {
 	clone := *client
+	clone.CheckRedirect = func(*http.Request, []*http.Request) error {
+		return transportpolicy.ErrRedirectRefused
+	}
 	transport, ok := client.Transport.(*http.Transport)
 	if client.Transport == nil {
 		transport, ok = http.DefaultTransport.(*http.Transport)
