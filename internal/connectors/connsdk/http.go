@@ -28,6 +28,7 @@ import (
 // maxErrorBody bounds how much of an error response body is captured in HTTPError.
 const maxErrorBody = 8 << 10 // 8 KiB
 const defaultMaxResponseBody = 64 << 20
+const maxRedirects = 10
 
 // Response is a captured HTTP response with its body already read.
 type Response struct {
@@ -247,15 +248,60 @@ func (r *Requester) admit(ctx context.Context, method string, attempt int) error
 	if r.Admission == nil {
 		return nil
 	}
-	return r.Admission.Admit(ctx, RateLimitRequest{Method: method, Attempt: attempt + 1})
+	return r.Admission.Admit(ctx, RateLimitRequest{Method: method, Attempt: attempt})
 }
 
 func (r *Requester) observeRateLimit(ctx context.Context, status int, header http.Header, attempt int) RateLimitObservation {
-	observation, ok := rateLimitObservation(status, header, attempt+1, r.now())
+	observation, ok := rateLimitObservation(status, header, attempt, r.now())
 	if ok && r.Observer != nil {
 		r.Observer.Observe(ctx, observation)
 	}
 	return observation
+}
+
+type rateLimitAdmissionError struct {
+	err error
+}
+
+func (e *rateLimitAdmissionError) Error() string {
+	return fmt.Sprintf("rate-limit admission: %v", e.err)
+}
+
+func (e *rateLimitAdmissionError) Unwrap() error {
+	return e.err
+}
+
+func (r *Requester) admitTransport(ctx context.Context, method string, transportAttempt *int) error {
+	nextAttempt := *transportAttempt + 1
+	if err := r.admit(ctx, method, nextAttempt); err != nil {
+		return &rateLimitAdmissionError{err: err}
+	}
+	*transportAttempt = nextAttempt
+	return nil
+}
+
+func (r *Requester) clientWithRateLimitAdmission(client *http.Client, transportAttempt *int) *http.Client {
+	if r.Admission == nil && r.Observer == nil {
+		return client
+	}
+	clone := *client
+	checkRedirect := clone.CheckRedirect
+	clone.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+		if checkRedirect != nil {
+			if err := checkRedirect(req, via); err != nil {
+				return err
+			}
+		} else if len(via) >= maxRedirects {
+			return fmt.Errorf("stopped after %d redirects", maxRedirects)
+		}
+		return r.admitTransport(req.Context(), req.Method, transportAttempt)
+	}
+	return &clone
+}
+
+func isRateLimitAdmissionError(err error) bool {
+	var admissionErr *rateLimitAdmissionError
+	return errors.As(err, &admissionErr)
 }
 
 // ctxSleep waits for d or returns early if ctx is cancelled.
@@ -739,6 +785,8 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 	// set before the refresh is attempted (see below), so a provider that keeps
 	// returning 401 terminates with that 401 instead of being hammered.
 	reauthAttempted := false
+	transportAttempt := 0
+	client := r.clientWithRateLimitAdmission(r.clientFor(ctx), &transportAttempt)
 	for attempt := 0; attempt < attempts; attempt++ {
 		if err := ctx.Err(); err != nil {
 			return nil, err
@@ -776,12 +824,12 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 			req.Header.Del("Idempotency-Key")
 			req.Header.Del("X-Idempotency-Key")
 		}
-		if err := r.admit(ctx, method, attempt); err != nil {
+		if err := r.admitTransport(ctx, method, &transportAttempt); err != nil {
 			cleanupRequestBody(body)
-			return nil, fmt.Errorf("rate-limit admission: %w", err)
+			return nil, err
 		}
 
-		resp, err := r.clientFor(ctx).Do(req)
+		resp, err := client.Do(req)
 		bodyErr := cleanupRequestBody(body)
 		if err != nil {
 			lastErr = fmt.Errorf("send request: %w", err)
@@ -789,6 +837,9 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 				lastErr = fmt.Errorf("send request: %w", bodyErr)
 			}
 			if errors.Is(err, transportpolicy.ErrRedirectRefused) {
+				return nil, lastErr
+			}
+			if isRateLimitAdmissionError(err) {
 				return nil, lastErr
 			}
 			if attempt < attempts-1 {
@@ -806,7 +857,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 
 		respBody, _ := io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
 		resp.Body.Close()
-		observation := r.observeRateLimit(ctx, resp.StatusCode, resp.Header, attempt)
+		observation := r.observeRateLimit(ctx, resp.StatusCode, resp.Header, transportAttempt)
 
 		// A 401 can mean the credential was invalidated out of band (revoked
 		// grant, password change, scope change) rather than that it was never

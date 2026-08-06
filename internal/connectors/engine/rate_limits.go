@@ -104,8 +104,8 @@ func validateRateLimitPolicy(policy connsdk.RateLimitPolicy) error {
 
 func validateRateLimitSource(source connsdk.RateLimitSource) error {
 	parsed, err := url.ParseRequestURI(strings.TrimSpace(source.URL))
-	if err != nil || parsed.Scheme != "https" || parsed.Host == "" || parsed.User != nil {
-		return fmt.Errorf("url must be an absolute https provider artifact URL")
+	if err != nil || parsed.Scheme != "https" || parsed.Host == "" || parsed.User != nil || parsed.ForceQuery || parsed.RawQuery != "" {
+		return fmt.Errorf("url must be an absolute https provider artifact URL without userinfo or query parameters")
 	}
 	if _, err := time.Parse(time.DateOnly, strings.TrimSpace(source.RetrievedAt)); err != nil {
 		return fmt.Errorf("retrieved_at must be an ISO date: %w", err)

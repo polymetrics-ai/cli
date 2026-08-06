@@ -424,6 +424,11 @@ func TestBundleLoadRejectsUncitedOrMalformedRateLimits(t *testing.T) {
 			want: "provider artifact URL",
 		},
 		{
+			name: "provider source cannot carry credential-like query parameters",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits?access_token=fixture", 1),
+			want: "query parameters",
+		},
+		{
 			name: "unknown cannot publish a policy",
 			data: strings.Replace(validProviderCitedRateLimits, `"state": "declared"`, `"state": "unknown"`, 1),
 			want: "unknown",

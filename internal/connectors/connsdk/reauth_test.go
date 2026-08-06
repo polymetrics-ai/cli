@@ -80,6 +80,50 @@ func TestRequesterRefreshesAuthOnceOn401AndRetries(t *testing.T) {
 	}
 }
 
+func TestRequesterReauthKeepsTransportAttemptsMonotonic(t *testing.T) {
+	var calls int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		if atomic.AddInt32(&calls, 1) == 1 {
+			w.Header().Set("RateLimit-Remaining", "0")
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+		w.Header().Set("RateLimit-Remaining", "99")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer srv.Close()
+
+	var admissions []RateLimitRequest
+	var observations []RateLimitObservation
+	r := &Requester{
+		BaseURL: srv.URL,
+		Auth:    &countingRefresher{},
+		Admission: rateLimitAdmissionFunc(func(_ context.Context, request RateLimitRequest) error {
+			admissions = append(admissions, request)
+			return nil
+		}),
+		Observer: rateLimitObserverFunc(func(_ context.Context, observation RateLimitObservation) {
+			observations = append(observations, observation)
+		}),
+	}
+
+	if _, err := r.Do(context.Background(), http.MethodGet, "/thing", nil, nil); err != nil {
+		t.Fatalf("Do: %v", err)
+	}
+	if got, want := len(admissions), 2; got != want {
+		t.Fatalf("admissions = %d, want %d", got, want)
+	}
+	if admissions[0].Attempt != 1 || admissions[1].Attempt != 2 {
+		t.Fatalf("admission attempts = [%d %d], want [1 2]", admissions[0].Attempt, admissions[1].Attempt)
+	}
+	if got, want := len(observations), 2; got != want {
+		t.Fatalf("observations = %d, want %d", got, want)
+	}
+	if observations[0].Attempt != 1 || observations[1].Attempt != 2 {
+		t.Fatalf("observation attempts = [%d %d], want [1 2]", observations[0].Attempt, observations[1].Attempt)
+	}
+}
+
 func TestRequesterDisableRetriesSuppressesAuthReplay(t *testing.T) {
 	var attempts int32
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {

@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"slices"
 	"strings"
 	"sync/atomic"
 	"testing"
@@ -152,6 +153,56 @@ func TestDoStreamKeepsAuthSameOrigin(t *testing.T) {
 	}
 	if v := sawKey.Load().(string); v != "supersecret" {
 		t.Fatalf("same-origin redirect must keep credentials, got %q", v)
+	}
+}
+
+func TestDoStreamAdmitsPermittedRedirectTransportHops(t *testing.T) {
+	t.Run("same origin", func(t *testing.T) {
+		mux := http.NewServeMux()
+		mux.HandleFunc("/file", func(w http.ResponseWriter, r *http.Request) {
+			http.Redirect(w, r, "/blob", http.StatusFound)
+		})
+		mux.HandleFunc("/blob", func(w http.ResponseWriter, _ *http.Request) {
+			_, _ = w.Write([]byte("same-origin-bytes"))
+		})
+		srv := httptest.NewServer(mux)
+		defer srv.Close()
+
+		assertStreamRedirectAdmissions(t, srv.URL, StreamOptions{})
+	})
+
+	t.Run("allowed host", func(t *testing.T) {
+		cdn := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+			_, _ = w.Write([]byte("cdn-bytes"))
+		}))
+		defer cdn.Close()
+		origin := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			http.Redirect(w, r, cdn.URL+"/blob", http.StatusFound)
+		}))
+		defer origin.Close()
+
+		assertStreamRedirectAdmissions(t, origin.URL, StreamOptions{AllowedHosts: []string{strings.TrimPrefix(cdn.URL, "http://")}})
+	})
+}
+
+func assertStreamRedirectAdmissions(t *testing.T, baseURL string, opts StreamOptions) {
+	t.Helper()
+	var admissions []RateLimitRequest
+	r := &Requester{
+		BaseURL: baseURL,
+		Admission: rateLimitAdmissionFunc(func(_ context.Context, request RateLimitRequest) error {
+			admissions = append(admissions, request)
+			return nil
+		}),
+	}
+
+	resp, err := r.DoStream(context.Background(), http.MethodGet, "/file", nil, opts)
+	if err != nil {
+		t.Fatalf("DoStream: %v", err)
+	}
+	_ = drain(t, resp.Body)
+	if got, want := admissions, []RateLimitRequest{{Method: http.MethodGet, Attempt: 1}, {Method: http.MethodGet, Attempt: 2}}; !slices.Equal(got, want) {
+		t.Fatalf("admissions = %+v, want %+v", got, want)
 	}
 }
 

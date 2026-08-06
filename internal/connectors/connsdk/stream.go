@@ -9,11 +9,9 @@ import (
 	"strings"
 )
 
-// maxStreamRedirects bounds redirect hops. Go's default client stops at 10;
+// maxRedirects bounds redirect hops. Go's default client stops at 10;
 // installing a CheckRedirect replaces that policy, so the cap is re-stated
 // here rather than silently lost.
-const maxStreamRedirects = 10
-
 // StreamOptions is the per-request redirect/credential policy for DoStream.
 //
 // The zero value is the safe default: same-origin only, credentials attached.
@@ -80,7 +78,8 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 	// call has its own client clone and its own variable, and redirects run
 	// synchronously inside client.Do, so there is no sharing across calls.
 	var credKeys []string
-	client := r.streamClient(base, opts, &credKeys)
+	transportAttempt := 0
+	client := r.clientWithRateLimitAdmission(r.streamClient(base, opts, &credKeys), &transportAttempt)
 
 	attempts := r.maxRetries() + 1
 	var lastErr error
@@ -104,13 +103,16 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 			}
 		}
 		credKeys = credentialHeaderKeys(before, req.Header, r.DefaultHeaders)
-		if err := r.admit(ctx, method, attempt); err != nil {
-			return nil, fmt.Errorf("rate-limit admission: %w", err)
+		if err := r.admitTransport(ctx, method, &transportAttempt); err != nil {
+			return nil, err
 		}
 
 		resp, err := client.Do(req)
 		if err != nil {
 			lastErr = fmt.Errorf("send request: %w", err)
+			if isRateLimitAdmissionError(err) {
+				return nil, lastErr
+			}
 			if attempt < attempts-1 && !isRedirectPolicyError(err) {
 				if werr := r.sleep(ctx, r.backoff(attempt, RateLimitObservation{})); werr != nil {
 					return nil, werr
@@ -119,7 +121,7 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 			}
 			return nil, lastErr
 		}
-		observation := r.observeRateLimit(ctx, resp.StatusCode, resp.Header, attempt)
+		observation := r.observeRateLimit(ctx, resp.StatusCode, resp.Header, transportAttempt)
 
 		if r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {
 			// Discard this attempt's body entirely; nothing from a failed
@@ -158,8 +160,8 @@ func (r *Requester) streamClient(base *url.URL, opts StreamOptions, credKeys *[]
 	clone := *r.client()
 	clone.Timeout = 0
 	clone.CheckRedirect = func(req *http.Request, via []*http.Request) error {
-		if len(via) >= maxStreamRedirects {
-			return fmt.Errorf("stopped after %d redirects", maxStreamRedirects)
+		if len(via) >= maxRedirects {
+			return fmt.Errorf("stopped after %d redirects", maxRedirects)
 		}
 		sameOrigin := req.URL.Host == base.Host && req.URL.Scheme == base.Scheme
 		if sameOrigin {

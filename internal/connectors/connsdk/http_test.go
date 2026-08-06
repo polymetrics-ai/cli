@@ -311,6 +311,50 @@ func TestRequesterAdmitsEveryRetryAttempt(t *testing.T) {
 	}
 }
 
+func TestRequesterAdmitsRedirectTransportHop(t *testing.T) {
+	var finalHits int32
+	mux := http.NewServeMux()
+	mux.HandleFunc("/redirect", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "/final", http.StatusFound)
+	})
+	mux.HandleFunc("/final", func(w http.ResponseWriter, _ *http.Request) {
+		atomic.AddInt32(&finalHits, 1)
+		w.Header().Set("RateLimit-Remaining", "99")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	})
+	srv := httptest.NewServer(mux)
+	defer srv.Close()
+
+	var admissions []RateLimitRequest
+	var observations []RateLimitObservation
+	r := &Requester{
+		BaseURL: srv.URL,
+		Admission: rateLimitAdmissionFunc(func(_ context.Context, request RateLimitRequest) error {
+			admissions = append(admissions, request)
+			return nil
+		}),
+		Observer: rateLimitObserverFunc(func(_ context.Context, observation RateLimitObservation) {
+			observations = append(observations, observation)
+		}),
+	}
+
+	if _, err := r.Do(context.Background(), http.MethodGet, "/redirect", nil, nil); err != nil {
+		t.Fatalf("Do: %v", err)
+	}
+	if got, want := admissions, []RateLimitRequest{{Method: http.MethodGet, Attempt: 1}, {Method: http.MethodGet, Attempt: 2}}; !slices.Equal(got, want) {
+		t.Fatalf("admissions = %+v, want %+v", got, want)
+	}
+	if got, want := atomic.LoadInt32(&finalHits), int32(1); got != want {
+		t.Fatalf("final hits = %d, want %d", got, want)
+	}
+	if got, want := len(observations), 1; got != want {
+		t.Fatalf("observations = %d, want %d", got, want)
+	}
+	if got, want := observations[0].Attempt, 2; got != want {
+		t.Fatalf("observation attempt = %d, want %d", got, want)
+	}
+}
+
 func TestRequesterReturnsTypedRateLimitErrorAndObservation(t *testing.T) {
 	const fixtureSecret = "fixture-rate-limit-secret"
 	now := time.Date(2026, time.August, 6, 12, 0, 0, 0, time.UTC)

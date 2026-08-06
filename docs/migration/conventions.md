@@ -819,7 +819,8 @@ dropped — don't declare one.
 
 **Provider-cited `rate_limits.json` is a staged declaration, not an automatic throttle**: this
 optional, closed-schema file records a provider policy only when it can be cited. A declared policy
-must carry an HTTPS provider artifact URL and an ISO `retrieved_at` date; `version` is optional
+must carry an HTTPS provider artifact URL without userinfo or query parameters (a documentation
+anchor fragment is allowed) and an ISO `retrieved_at` date; `version` is optional
 context, not a substitute for a retrieval date. Model the provider shape rather than flattening it
 to requests per minute: selectors can target an endpoint, tier, and auth type; budgets label their
 `burst` or `sustained` dimension, `requests` or `points` unit, and fixed/sliding-window or
