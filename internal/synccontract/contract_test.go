@@ -64,12 +64,19 @@ func TestCheckpointEnvelopePreservesOpaqueTokensAndPartitionState(t *testing.T) 
 	if !bytes.Equal(decoded.Dedupe.Value, checkpoint.Dedupe.Value) {
 		t.Fatalf("dedupe token changed: got %x want %x", decoded.Dedupe.Value, checkpoint.Dedupe.Value)
 	}
+	if !bytes.Equal(decoded.DedupeWindow.Start, checkpoint.DedupeWindow.Start) || !bytes.Equal(decoded.DedupeWindow.End, checkpoint.DedupeWindow.End) {
+		t.Fatalf("dedupe window changed: got %#v want %#v", decoded.DedupeWindow, checkpoint.DedupeWindow)
+	}
 
 	clone := checkpoint.Clone()
 	clone.Position.Primary[0] ^= 0xff
 	clone.Partitions[0].Position.Primary[0] ^= 0xff
 	clone.SnapshotBarrier.Token[0] ^= 0xff
-	if bytes.Equal(clone.Position.Primary, checkpoint.Position.Primary) || bytes.Equal(clone.Partitions[0].Position.Primary, checkpoint.Partitions[0].Position.Primary) || bytes.Equal(clone.SnapshotBarrier.Token, checkpoint.SnapshotBarrier.Token) {
+	clone.SourceGeneration[0] ^= 0xff
+	clone.Dedupe.Value[0] ^= 0xff
+	clone.DedupeWindow.Start[0] ^= 0xff
+	clone.DedupeWindow.End[0] ^= 0xff
+	if bytes.Equal(clone.Position.Primary, checkpoint.Position.Primary) || bytes.Equal(clone.Partitions[0].Position.Primary, checkpoint.Partitions[0].Position.Primary) || bytes.Equal(clone.SnapshotBarrier.Token, checkpoint.SnapshotBarrier.Token) || bytes.Equal(clone.SourceGeneration, checkpoint.SourceGeneration) || bytes.Equal(clone.Dedupe.Value, checkpoint.Dedupe.Value) || bytes.Equal(clone.DedupeWindow.Start, checkpoint.DedupeWindow.Start) || bytes.Equal(clone.DedupeWindow.End, checkpoint.DedupeWindow.End) {
 		t.Fatal("CheckpointEnvelope.Clone() aliases opaque token storage")
 	}
 }
@@ -79,6 +86,14 @@ func TestCheckpointEnvelopeRejectsDuplicatePartitionSlots(t *testing.T) {
 	checkpoint.Partitions = append(checkpoint.Partitions, checkpoint.Partitions[0].Clone())
 	if err := checkpoint.Validate(); err == nil || !strings.Contains(err.Error(), "duplicate") {
 		t.Fatalf("duplicate partition state error = %v, want duplicate rejection", err)
+	}
+}
+
+func TestCheckpointEnvelopeRequiresExplicitDedupeWindow(t *testing.T) {
+	checkpoint := validCheckpoint()
+	checkpoint.DedupeWindow = DedupeWindow{}
+	if err := checkpoint.Validate(); err == nil || !strings.Contains(err.Error(), "dedupe window") {
+		t.Fatalf("missing dedupe window error = %v, want explicit-window rejection", err)
 	}
 }
 
@@ -101,28 +116,28 @@ func TestResumeOutcomesRequireExplicitRebootstrap(t *testing.T) {
 			outcome: RecoveryOutcomeInvalidCheckpoint,
 		},
 		{
-			name: "retention gap",
-			err: RequireRebootstrap(RecoveryOutcomeRetentionGap, "provider retained no requested position"),
+			name:    "retention gap",
+			err:     RequireRebootstrap(RecoveryOutcomeRetentionGap, "provider retained no requested position"),
 			outcome: RecoveryOutcomeRetentionGap,
 		},
 		{
-			name: "invalidated slot",
-			err: RequireRebootstrap(RecoveryOutcomeInvalidatedSlot, "slot dropped"),
+			name:    "invalidated slot",
+			err:     RequireRebootstrap(RecoveryOutcomeInvalidatedSlot, "slot dropped"),
 			outcome: RecoveryOutcomeInvalidatedSlot,
 		},
 		{
-			name: "expired token",
-			err: RequireRebootstrap(RecoveryOutcomeExpiredToken, "resume token expired"),
+			name:    "expired token",
+			err:     RequireRebootstrap(RecoveryOutcomeExpiredToken, "resume token expired"),
 			outcome: RecoveryOutcomeExpiredToken,
 		},
 		{
-			name: "source generation changed",
-			err: checkpoint.ValidateResume(ResumeExpectation{Source: checkpoint.Source, SourceGeneration: OpaqueToken("new-generation")}),
+			name:    "source generation changed",
+			err:     checkpoint.ValidateResume(ResumeExpectation{Source: checkpoint.Source, SourceGeneration: OpaqueToken("new-generation")}),
 			outcome: RecoveryOutcomeSourceGenerationChanged,
 		},
 		{
-			name: "source identity incompatible",
-			err: checkpoint.ValidateResume(ResumeExpectation{Source: SourceIdentity{Engine: "postgres", AccountOrCluster: "other-cluster", ObjectScope: checkpoint.Source.ObjectScope}, SourceGeneration: checkpoint.SourceGeneration}),
+			name:    "source identity incompatible",
+			err:     checkpoint.ValidateResume(ResumeExpectation{Source: SourceIdentity{Engine: "postgres", AccountOrCluster: "other-cluster", ObjectScope: checkpoint.Source.ObjectScope}, SourceGeneration: checkpoint.SourceGeneration}),
 			outcome: RecoveryOutcomeSourceIdentityIncompatible,
 		},
 	}
@@ -214,6 +229,9 @@ func TestTombstoneClosesHistoryWindowInsteadOfPhysicalDelete(t *testing.T) {
 	if mutation.Action != HistoryDeleteCloseValidityWindow || mutation.IsCurrent || !mutation.ValidTo.Equal(closedAt) {
 		t.Fatalf("history mutation = %#v, want validity close", mutation)
 	}
+	if HistoryValidFromColumn != "_valid_from" || HistoryValidToColumn != "_valid_to" || HistoryIsCurrentColumn != "_is_current" {
+		t.Fatalf("history columns = %q, %q, %q", HistoryValidFromColumn, HistoryValidToColumn, HistoryIsCurrentColumn)
+	}
 	if err := HistoryDeletePhysicalTargetDelete.Validate(); err == nil {
 		t.Fatal("physical target delete accepted for history mode")
 	}
@@ -268,6 +286,17 @@ func TestNativeContractNeedsMatchingExecutorAndFixtureEvidence(t *testing.T) {
 	if !contract.IsExecutable(matching) {
 		t.Fatal("contract not executable with matching executor and evidence")
 	}
+	for field, value := range map[string]string{"protocol": "sql", "command": "query"} {
+		invalid := contract
+		if field == "protocol" {
+			invalid.Protocol = value
+		} else {
+			invalid.Command = value
+		}
+		if err := invalid.Validate(); err == nil {
+			t.Fatalf("generic %s %q was accepted", field, value)
+		}
+	}
 
 	encoded, err := json.Marshal(contract)
 	if err != nil {
@@ -288,6 +317,29 @@ func TestConformanceFixturesAreVersionedAndDefensivelyCopied(t *testing.T) {
 	ids := RequiredConformanceEvidence().FixtureIDs
 	if len(ids) != len(fixtures) {
 		t.Fatalf("evidence IDs = %d, fixtures = %d", len(ids), len(fixtures))
+	}
+	for _, expected := range []string{
+		"change-insert",
+		"change-update",
+		"checkpoint-opaque-bytes",
+		"partition-state-not-collapsed",
+		"invalid-checkpoint-rebootstrap",
+		"commit-after-durable-ack",
+		"retention-gap-rebootstrap",
+		"invalidated-slot-rebootstrap",
+		"expired-token-rebootstrap",
+		"generation-change-rebootstrap",
+		"source-identity-rebootstrap",
+		"history-delete-closes-window",
+		"tombstone-key-only",
+		"tombstone-before-image",
+		"truncate-or-invalidate",
+		"duplicate-replay-deduped",
+		"snapshot-to-stream-handoff",
+	} {
+		if !containsFixtureID(ids, expected) {
+			t.Fatalf("shared fixture corpus is missing %q", expected)
+		}
 	}
 	fixtures[0].ID = "mutated"
 	if ConformanceFixtures()[0].ID == "mutated" {
@@ -326,8 +378,22 @@ func validCheckpoint() CheckpointEnvelope {
 			Kind:  "event_id",
 			Value: OpaqueToken{0xff, 0x09, 0x00},
 		},
+		DedupeWindow: DedupeWindow{
+			Kind:  "overlap",
+			Start: OpaqueToken{0x01, 0x00, 0xff},
+			End:   OpaqueToken{0x02, 0x00, 0xfe},
+		},
 		ObservedAt: time.Date(2026, time.August, 6, 0, 0, 0, 0, time.UTC),
 	}
+}
+
+func containsFixtureID(ids []string, expected string) bool {
+	for _, id := range ids {
+		if id == expected {
+			return true
+		}
+	}
+	return false
 }
 
 type fakeNativeExecutor struct {
@@ -335,6 +401,8 @@ type fakeNativeExecutor struct {
 	evidence   ConformanceEvidence
 }
 
-func (f fakeNativeExecutor) NativeSyncExecutorDescriptor() NativeSyncExecutorDescriptor { return f.descriptor }
+func (f fakeNativeExecutor) NativeSyncExecutorDescriptor() NativeSyncExecutorDescriptor {
+	return f.descriptor
+}
 
 func (f fakeNativeExecutor) NativeSyncConformanceEvidence() ConformanceEvidence { return f.evidence }

@@ -1,6 +1,7 @@
 package app
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -16,7 +17,10 @@ func TestLegacyScalarStreamStateRequiresRebootstrapBeforeRead(t *testing.T) {
 	source := newScriptedSyncSource("legacy_scalar_state", []connectors.Record{{
 		"id": "1", "updated_at": "2026-08-06T00:00:00Z",
 	}})
-	a, connection := setupSyncModeApp(t, source, "incremental_append")
+	// A full refresh is the dangerous case: invalid legacy state must not be
+	// cleared and converted into an unrequested scan just because this run's
+	// selected mode would otherwise read a fresh snapshot.
+	a, connection := setupSyncModeApp(t, source, "full_refresh_overwrite")
 
 	var legacy StreamState
 	if err := json.Unmarshal([]byte(`{"connection":"records_to_warehouse","stream":"records","cursor":"opaque-legacy-cursor","generation_id":3}`), &legacy); err != nil {
@@ -63,6 +67,16 @@ func TestIncrementalRunStoresCommittedStateEnvelopeAfterDownstreamSuccess(t *tes
 	if state.Checkpoint.CommittedAt == nil || state.Checkpoint.ObservedAt.IsZero() {
 		t.Fatalf("checkpoint timestamps = %#v, want observed and committed", state.Checkpoint)
 	}
+	if state.Checkpoint.CommittedAt.Before(state.Checkpoint.ObservedAt) {
+		t.Fatalf("checkpoint committed before observation: %#v", state.Checkpoint)
+	}
+	encoded, err := json.Marshal(state)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if bytes.Contains(encoded, []byte(`"cursor"`)) {
+		t.Fatalf("stream state still persisted a scalar cursor: %s", encoded)
+	}
 	before := state.Checkpoint.Clone()
 
 	source.records = []connectors.Record{{"id": "2", "updated_at": "2026-08-07T00:00:00Z"}}
@@ -71,7 +85,7 @@ func TestIncrementalRunStoresCommittedStateEnvelopeAfterDownstreamSuccess(t *tes
 		t.Fatal("RunETL(failing incremental) error = nil")
 	}
 	after := a.state.StreamStates[streamStateKey(connection, "records")].Checkpoint
-	if !reflect.DeepEqual(after, before) {
+	if after == nil || !reflect.DeepEqual(*after, before) {
 		t.Fatalf("checkpoint advanced after unsuccessful downstream work: got %#v want %#v", after, before)
 	}
 }
@@ -94,4 +108,36 @@ func TestContractModeCannotReadWithoutNativeExecutor(t *testing.T) {
 	if len(source.requests) != 0 {
 		t.Fatalf("source read despite unavailable mode: %#v", source.requests)
 	}
+}
+
+func TestConnectorETLDoesNotCommitAfterPartialDestinationResult(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("partial_write_source", []connectors.Record{{
+		"id": "1", "updated_at": "2026-08-06T00:00:00Z",
+	}})
+	a, connection := setupSyncModeApp(t, source, "incremental_append")
+	conn, ok := a.findConnection(connection)
+	if !ok {
+		t.Fatal("connection missing")
+	}
+	mode, err := ParseSyncMode("incremental_append")
+	if err != nil {
+		t.Fatal(err)
+	}
+	destination := partialWriteDestination{scriptedSyncSource: newScriptedSyncSource("partial_write_destination", nil)}
+	_, err = a.runConnectorETL(ctx, "run_partial", conn, source, connectors.RuntimeConfig{}, &destination, connectors.RuntimeConfig{}, "records", conn.Streams["records"], mode, 1)
+	if err == nil {
+		t.Fatal("runConnectorETL() error = nil after partial destination result")
+	}
+	if state := a.state.StreamStates[streamStateKey(connection, "records")]; state.Checkpoint != nil {
+		t.Fatalf("checkpoint committed after partial destination result: %#v", state.Checkpoint)
+	}
+}
+
+type partialWriteDestination struct {
+	*scriptedSyncSource
+}
+
+func (d *partialWriteDestination) Write(_ context.Context, _ connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
+	return connectors.WriteResult{RecordsWritten: len(records) - 1, RecordsFailed: 1}, nil
 }
