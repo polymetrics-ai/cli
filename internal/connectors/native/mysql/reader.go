@@ -13,13 +13,23 @@ import (
 	"polymetrics.ai/internal/connectors/connsdk"
 )
 
-// InitialState returns the conventional opaque cursor state. The connector
-// writes no state itself; the caller advances it only after downstream work.
+const mysqlBinaryCharsetID = 63
+
+// InitialState returns the stream state without a cursor. The connector writes
+// no state itself; the caller advances it only after downstream work.
 func (c Connector) InitialState(ctx context.Context, stream string, _ connectors.RuntimeConfig) (map[string]string, error) {
 	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
-	return connsdk.WithCursor(map[string]string{"stream": stream}, ""), nil
+	return map[string]string{"stream": stream}, nil
+}
+
+func rawCursorState(state map[string]string) (string, bool) {
+	if state == nil {
+		return "", false
+	}
+	value, present := state[connsdk.CursorStateKey]
+	return value, present
 }
 
 // Read runs a bounded snapshot or incremental read. Snapshot pages use a
@@ -78,10 +88,10 @@ func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit fu
 		}
 	}
 
-	initialCursor := connsdk.Cursor(req.State)
+	initialCursor, hasCursorState := rawCursorState(req.State)
 	lastCursor := any(initialCursor)
 	var lastPrimaryKey any
-	resume := cursorField != "" && initialCursor != ""
+	resume := cursorField != "" && hasCursorState
 	hasPageBoundary := false
 	emitted := 0
 	for {
@@ -242,11 +252,54 @@ func resultRecords(result *gomysql.Result) ([]connectors.Record, error) {
 			if field == nil || len(field.Name) == 0 {
 				return nil, errors.New("mysql read returned unnamed column")
 			}
-			record[string(field.Name)] = row[idx].Value()
+			record[string(field.Name)] = projectReadValue(field, row[idx].Value())
 		}
 		records = append(records, record)
 	}
 	return records, nil
+}
+
+func projectReadValue(field *gomysql.Field, value any) any {
+	bytes, ok := value.([]byte)
+	if !ok {
+		return value
+	}
+	if isTextReadField(field) {
+		return string(bytes)
+	}
+	return append([]byte(nil), bytes...)
+}
+
+func isTextReadField(field *gomysql.Field) bool {
+	if field == nil {
+		return false
+	}
+	switch field.Type {
+	case gomysql.MYSQL_TYPE_JSON,
+		gomysql.MYSQL_TYPE_DECIMAL,
+		gomysql.MYSQL_TYPE_NEWDECIMAL,
+		gomysql.MYSQL_TYPE_ENUM,
+		gomysql.MYSQL_TYPE_SET,
+		gomysql.MYSQL_TYPE_DATE,
+		gomysql.MYSQL_TYPE_NEWDATE,
+		gomysql.MYSQL_TYPE_TIME,
+		gomysql.MYSQL_TYPE_TIME2,
+		gomysql.MYSQL_TYPE_DATETIME,
+		gomysql.MYSQL_TYPE_DATETIME2,
+		gomysql.MYSQL_TYPE_TIMESTAMP,
+		gomysql.MYSQL_TYPE_TIMESTAMP2:
+		return true
+	case gomysql.MYSQL_TYPE_VARCHAR,
+		gomysql.MYSQL_TYPE_VAR_STRING,
+		gomysql.MYSQL_TYPE_STRING,
+		gomysql.MYSQL_TYPE_TINY_BLOB,
+		gomysql.MYSQL_TYPE_MEDIUM_BLOB,
+		gomysql.MYSQL_TYPE_LONG_BLOB,
+		gomysql.MYSQL_TYPE_BLOB:
+		return field.Flag&gomysql.BINARY_FLAG == 0 && field.Charset != mysqlBinaryCharsetID
+	default:
+		return false
+	}
 }
 
 func recordCursor(value any) string {

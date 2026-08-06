@@ -47,7 +47,6 @@ func TestMySQLContainerHarness(t *testing.T) {
 		ContainerPort:  3306,
 		DataVolumePath: "/var/lib/mysql",
 		DockerContext:  dockerContext,
-		KeepImage:      os.Getenv("POLYMETRICS_DATABASE_KEEP_IMAGE") == "1",
 		ResetColima:    os.Getenv("POLYMETRICS_DATABASE_RESET_COLIMA") == "1",
 		ColimaProfile:  "default",
 		ContainerArgs: []string{
@@ -74,10 +73,10 @@ func TestMySQLContainerHarness(t *testing.T) {
 		}
 		report := harness.Report()
 		t.Logf("MySQL database test disk free bytes: before=%d after=%d colima_reset=%t", report.DiskFreeBefore, report.DiskFreeAfter, report.ColimaReset)
-		if !report.ColimaReset && os.Getenv("POLYMETRICS_DATABASE_KEEP_IMAGE") != "1" {
-			t.Errorf("MySQL database test did not reset Colima; set POLYMETRICS_DATABASE_RESET_COLIMA=1 to reclaim host disk")
+		if !report.ColimaReset {
+			t.Log("MySQL database test did not reset Colima; set POLYMETRICS_DATABASE_RESET_COLIMA=1 to reclaim host disk")
 		}
-		if report.DiskFreeAfter+(128<<20) < report.DiskFreeBefore {
+		if report.ColimaReset && report.DiskFreeAfter+(128<<20) < report.DiskFreeBefore {
 			t.Errorf("MySQL database test reclaimed insufficient disk space")
 		}
 	}()

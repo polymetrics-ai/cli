@@ -62,7 +62,6 @@ type Config struct {
 	DockerContext  string
 	ContainerArgs  []string
 	EngineArgs     []string
-	KeepImage      bool
 	ResetColima    bool
 	ColimaProfile  string
 	Run            CommandRunner
@@ -117,9 +116,6 @@ func New(config Config) (*Harness, error) {
 	}
 	if strings.TrimSpace(config.DockerContext) == "" || strings.ContainsAny(config.DockerContext, "\r\n") {
 		return nil, errors.New("database test harness requires explicit DOCKER_CONTEXT")
-	}
-	if config.ResetColima && config.KeepImage {
-		return nil, errors.New("database test harness cannot keep an image while resetting Colima")
 	}
 	if config.ColimaProfile == "" {
 		config.ColimaProfile = defaultColimaProfile
@@ -259,7 +255,7 @@ func (h *Harness) Close(ctx context.Context) error {
 				errs = append(errs, fmt.Errorf("remove %s test volume: %w", h.config.Engine, err))
 			}
 		}
-		if h.imageWasPulled() && !h.config.KeepImage {
+		if h.imageWasPulled() {
 			if _, err := h.config.Run.Run(ctx, h.config.DockerContext, "image", "rm", h.config.Image); err != nil && !errors.Is(err, errDockerResourceNotFound) {
 				errs = append(errs, fmt.Errorf("remove %s test image: %w", h.config.Engine, err))
 			}

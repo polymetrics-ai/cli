@@ -114,14 +114,13 @@ func TestNewRejectsUnscopedDockerContext(t *testing.T) {
 	}
 }
 
-func TestNewRejectsLatestImageAndConflictingColimaReset(t *testing.T) {
+func TestNewRejectsUnpinnedImages(t *testing.T) {
 	for _, tc := range []struct {
 		name   string
 		mutate func(*Config)
 	}{
 		{name: "latest image", mutate: func(c *Config) { c.Image = "example.invalid/mysql:latest" }},
 		{name: "unversioned image", mutate: func(c *Config) { c.Image = "example.invalid/mysql" }},
-		{name: "keep image while reset", mutate: func(c *Config) { c.KeepImage, c.ResetColima = true, true }},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			config := testConfig(&scriptedRunner{})
@@ -296,21 +295,18 @@ func TestStartPreservesPreexistingGeneratedVolume(t *testing.T) {
 	}
 }
 
-func TestCleanupPreservesPreexistingImageAndKeepImageOptIn(t *testing.T) {
+func TestCleanupPreservesOnlyPreexistingImages(t *testing.T) {
 	for _, tc := range []struct {
 		name         string
 		imagePresent bool
-		keepImage    bool
 		wantImageRM  bool
 	}{
 		{name: "preexisting image", imagePresent: true},
-		{name: "keep image opt-in", keepImage: true},
 		{name: "run-owned image", wantImageRM: true},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			runner := &scriptedRunner{imagePresent: tc.imagePresent}
 			config := testConfig(runner)
-			config.KeepImage = tc.keepImage
 			h, err := New(config)
 			if err != nil {
 				t.Fatalf("New(): %v", err)

@@ -19,19 +19,18 @@ exit path.
 - A host port is dynamically assigned by Docker and refused if it resolves to the database default.
   The connector receives host and port as separate configuration fields; no endpoint is logged.
 - The MySQL image is `docker.io/library/mysql:8.4.11`, pinned by tag. A preexisting image is never
-  removed. An image first pulled by this run is removed during teardown unless
-  `POLYMETRICS_DATABASE_KEEP_IMAGE=1` is set.
+  removed. An image first pulled by this run is always removed during teardown.
 - Podman is deliberately not used: three independent Podman machines on this host, including the
   task-owned one, failed to start. Docker on Colima was independently proven usable with MySQL 8.4
   and a row-format binary log. Ordinary cleanup removes Docker resources but cannot shrink the
   Colima VM disk file, so `POLYMETRICS_DATABASE_RESET_COLIMA=1` resets Colima *after* Docker
-  teardown and before the after-disk measurement. That destructive reset is opt-in, rejects the
-  image-keep opt-in, and is intended only for the disposable default profile used by this test.
+  teardown and before the after-disk measurement. That destructive reset is opt-in and is intended
+  only for the disposable default profile used by this test.
 - The MySQL test database uses its isolated ephemeral server configuration. No credential or
   connection string is emitted, recorded, or placed in fixture data.
-- The connector is Tier-3/dynamic-schema like PostgreSQL. It remains unregistered until the
-  architecture-v2 human-gated registry cutover; its package is nevertheless compiled and tested
-  directly.
+- The connector is Tier-3/dynamic-schema like PostgreSQL and is registered through the native
+  MySQL factory, so production registry calls reach its wire-protocol check, catalog, read, and CDC
+  implementation.
 - MySQL binary logs are a distinct source mechanism, so the shared closed changefeed vocabulary
   gains `binlog_replication` in lockstep in Go validation and JSON Schema. This is the minimum
   shared declaration change necessary for an honest MySQL declaration, not a generic transport.

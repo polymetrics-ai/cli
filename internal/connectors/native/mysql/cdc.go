@@ -116,6 +116,12 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 			currentFile = string(rotate.NextLogName)
 			continue
 		}
+		if query, ok := event.Event.(*replication.QueryEvent); ok {
+			if err := validateCDCQueryEvent(query); err != nil {
+				return err
+			}
+			continue
+		}
 		rows, ok := event.Event.(*replication.RowsEvent)
 		if !ok || rows.Table == nil {
 			continue
@@ -146,6 +152,26 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 			}
 		}
 	}
+}
+
+func validateCDCQueryEvent(event *replication.QueryEvent) error {
+	if event == nil {
+		return errors.New("mysql CDC received an invalid statement event")
+	}
+	fields := strings.Fields(strings.TrimSpace(strings.TrimSuffix(string(event.Query), ";")))
+	if len(fields) == 0 {
+		return errors.New("mysql CDC encountered a statement event; resnapshot required")
+	}
+	switch strings.ToUpper(fields[0]) {
+	case "BEGIN", "COMMIT", "ROLLBACK":
+		return nil
+	case "SET":
+		statement := strings.ToUpper(strings.Join(fields, " "))
+		if !strings.Contains(statement, "BINLOG_FORMAT") && !strings.Contains(statement, "BINLOG_ROW_IMAGE") {
+			return nil
+		}
+	}
+	return errors.New("mysql CDC encountered a statement event; resnapshot required")
 }
 
 func binlogPositionFromState(state map[string]string) (gomysql.Position, error) {

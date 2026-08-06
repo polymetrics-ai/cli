@@ -10,8 +10,7 @@ review was completed inline over the changed Go, bundle, test, generated-doc, an
   command remains in the harness.
 - Generated resource names are owned by the run; cleanup is idempotent, continues after an error,
   and removes an image only when this run pulled it.
-- Colima reset follows Docker cleanup and remains an explicit destructive opt-in incompatible with
-  keeping the image.
+- Colima reset follows Docker cleanup and remains an explicit destructive opt-in.
 - The native MySQL path validates identifiers, uses parameters for cursor values, never exposes
   caller configuration in identifier/connection errors, and has no write operation.
 - The binlog declaration, Go closed vocabulary, executor descriptor, checkpoint timing, and live
@@ -22,7 +21,8 @@ review was completed inline over the changed Go, bundle, test, generated-doc, an
 ## Findings
 
 The follow-up review repaired native registry installation, ambiguous Docker resource ownership,
-complete primary-key-tiebroken read paging, binlog row-format fail-closure, per-row CDC dedupe
+unconditional run-owned-image cleanup, complete primary-key-tiebroken read paging, lossless cursor
+state and value projection, binlog row-format and statement-event fail-closure, per-row CDC dedupe
 state, and CDC readiness synchronization. The focused repair test is recorded by this gate; the
 outer pipeline owns the remaining test, lint, build, and review phases.
 
