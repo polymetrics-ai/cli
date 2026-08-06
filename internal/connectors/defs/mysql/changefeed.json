@@ -1,0 +1,26 @@
+{
+  "status": "implemented",
+  "mechanism": "binlog_replication",
+  "source": {
+    "artifact_url": "https://dev.mysql.com/doc/refman/8.4/en/replication-options-binary-log.html",
+    "artifact_version": "8.4",
+    "retrieved_at": "2026-08-06"
+  },
+  "executor": {
+    "kind": "native",
+    "id": "mysql-binlog-row-v1"
+  },
+  "checkpoint": {
+    "kind": "binlog_position",
+    "keys": ["binlog_file", "binlog_pos"],
+    "commit_after": "downstream_ack",
+    "on_invalid": "resnapshot_required"
+  },
+  "delivery": {
+    "ordering": "source_ordered",
+    "duplicates": "at_least_once",
+    "deletes": "tombstone",
+    "dedupe_key": ["binlog_file", "binlog_pos"]
+  },
+  "streams": ["*"]
+}

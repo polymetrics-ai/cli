@@ -2982,6 +2982,15 @@
     "implemented": true
   },
   {
+    "connector": "mysql",
+    "id": "mysql",
+    "path": "icons/mysql.svg",
+    "source": "upstream_registry",
+    "review_status": "upstream_seeded",
+    "review_url": "https://dev.mysql.com/doc/",
+    "implemented": true
+  },
+  {
     "connector": "n8n",
     "id": "n8n",
     "path": "icons/n8n.svg",

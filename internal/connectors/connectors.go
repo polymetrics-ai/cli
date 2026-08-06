@@ -666,10 +666,15 @@ type ChangefeedMechanism string
 
 const (
 	ChangefeedMechanismLogicalReplication ChangefeedMechanism = "logical_replication"
-	ChangefeedMechanismIncrementalCursor  ChangefeedMechanism = "incremental_cursor"
-	ChangefeedMechanismWebhook            ChangefeedMechanism = "webhook"
-	ChangefeedMechanismEventStream        ChangefeedMechanism = "event_stream"
-	ChangefeedMechanismPollingWatermark   ChangefeedMechanism = "polling_watermark"
+	// ChangefeedMechanismBinlogReplication identifies MySQL/MariaDB's binary
+	// log replication protocol. It is distinct from PostgreSQL logical
+	// replication: each mechanism has different server prerequisites,
+	// checkpoint positions, and decoders.
+	ChangefeedMechanismBinlogReplication ChangefeedMechanism = "binlog_replication"
+	ChangefeedMechanismIncrementalCursor ChangefeedMechanism = "incremental_cursor"
+	ChangefeedMechanismWebhook           ChangefeedMechanism = "webhook"
+	ChangefeedMechanismEventStream       ChangefeedMechanism = "event_stream"
+	ChangefeedMechanismPollingWatermark  ChangefeedMechanism = "polling_watermark"
 )
 
 // ChangefeedSource records the provider artifact that supports a declared
@@ -922,7 +927,7 @@ func (s ChangefeedStatus) valid() bool {
 
 func (m ChangefeedMechanism) valid() bool {
 	switch m {
-	case ChangefeedMechanismLogicalReplication, ChangefeedMechanismIncrementalCursor, ChangefeedMechanismWebhook, ChangefeedMechanismEventStream, ChangefeedMechanismPollingWatermark:
+	case ChangefeedMechanismLogicalReplication, ChangefeedMechanismBinlogReplication, ChangefeedMechanismIncrementalCursor, ChangefeedMechanismWebhook, ChangefeedMechanismEventStream, ChangefeedMechanismPollingWatermark:
 		return true
 	default:
 		return false

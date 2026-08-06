@@ -301,6 +301,7 @@
 - [monday](monday/MANUAL.md): Reads monday.com boards, items, users, teams, and tags through the monday.com GraphQL API. Read-only.
 - [mux](mux/MANUAL.md): Reads Mux Video assets, live streams, direct uploads, and system signing keys through the Mux REST API using HTTP Basic authentication.
 - [my-hours](my-hours/MANUAL.md): Reads My Hours clients, projects, team members, tags, and time log activity through the My Hours REST API.
+- [mysql](mysql/MANUAL.md): Reads MySQL tables through the MySQL wire protocol, discovers dynamic schemas, supports bounded cursor-incremental reads, and consumes row-based binary-log replication changes. Read-only source.
 - [n8n](n8n/MANUAL.md): Reads n8n workflows, executions, tags, users, variables, projects, data tables, and credential metadata; writes supported n8n public REST API mutations.
 - [nasa](nasa/MANUAL.md): Reads NASA Open API data: Astronomy Picture of the Day, Near-Earth Objects (NeoWs feed and browse), EPIC Earth imagery, and Mars rover photos. Read-only.
 - [navan](navan/MANUAL.md): Reads Navan flight, hotel, car, and rail travel bookings through the Navan REST API using OAuth2 client-credentials authentication.

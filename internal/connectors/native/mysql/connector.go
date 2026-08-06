@@ -1,0 +1,44 @@
+// Package mysql implements the Tier-3 native MySQL source connector. It uses
+// the MySQL wire protocol for connection checks, dynamic catalog discovery,
+// bounded snapshot/incremental reads, and binary-log replication CDC. The
+// connector is deliberately unregistered pending the architecture-v2 registry
+// cutover; callers and the Docker/Colima integration test exercise it directly.
+package mysql
+
+import (
+	"context"
+
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/defs"
+	"polymetrics.ai/internal/connectors/engine"
+)
+
+// Connector is a dynamic-schema, read-only MySQL source. engine.Base supplies
+// bundle-backed identity/definition metadata; all database operations remain
+// explicit native code because SQL and binlog replication are not HTTP streams.
+type Connector struct {
+	engine.Base
+}
+
+// New creates a connector from the embedded MySQL definition. A malformed
+// embedded bundle is a build invariant violation, so it panics rather than
+// presenting a runtime configuration error.
+func New() Connector {
+	bundle, err := engine.Load(defs.FS, "mysql")
+	if err != nil {
+		panic("native/mysql: failed to load defs/mysql bundle: " + err.Error())
+	}
+	return Connector{Base: engine.NewBase(bundle)}
+}
+
+// Metadata keeps capability fields sourced exclusively from metadata.json.
+func (c Connector) Metadata() connectors.Metadata {
+	m := c.Base.Metadata()
+	m.Description = "Reads MySQL tables through the MySQL wire protocol, discovers dynamic schemas, supports bounded cursor-incremental reads, and consumes row-based binary-log replication changes. Read-only source."
+	return m
+}
+
+// Write is unsupported because this connector is a read-only source.
+func (c Connector) Write(context.Context, connectors.WriteRequest, []connectors.Record) (connectors.WriteResult, error) {
+	return connectors.WriteResult{}, connectors.ErrUnsupportedOperation
+}

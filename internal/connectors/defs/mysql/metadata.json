@@ -1,0 +1,28 @@
+{
+  "name": "mysql",
+  "display_name": "MySQL",
+  "description": "Reads MySQL tables through the MySQL wire protocol, discovers dynamic schemas, supports bounded cursor-incremental reads, and consumes row-based binary-log replication changes. Read-only source.",
+  "integration_type": "database",
+  "docs_url": "https://dev.mysql.com/doc/refman/8.4/en/",
+  "release_stage": "ga",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": true,
+    "dynamic_schema": true
+  },
+  "batch": {
+    "read_page_size": 1000
+  },
+  "risk": {
+    "read": "read-only MySQL wire-protocol queries and binary-log replication against the configured database",
+    "write": "n/a (read-only source)",
+    "approval": "none required for read-only sync"
+  },
+  "conformance": {
+    "skip_dynamic": true,
+    "reason": "native MySQL wire-protocol and Docker/Colima-backed integration tests prove dynamic catalog, reads, and binary-log CDC; fixture replay cannot exercise the protocol."
+  }
+}

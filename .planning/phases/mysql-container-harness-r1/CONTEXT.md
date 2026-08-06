@@ -1,0 +1,52 @@
+# Context — MySQL container harness R1
+
+## Intent
+
+Deliver one reusable, opt-in Docker/Colima integration-test harness and prove it with exactly one new
+Tier-3 native database connector: MySQL. The harness must start one isolated, pinned-image
+container; seed deterministic multi-page data; exercise check, catalog, snapshot, incremental, and
+binary-log CDC paths; and reclaim its container, named volume, and any image it pulled on every
+exit path.
+
+## Constraints selected from the task
+
+- The test is sequential and opt-in (`POLYMETRICS_DATABASE_INTEGRATION=1`). Its visible skip when
+  that opt-in or an explicit `DOCKER_CONTEXT` is absent is intentional. The documented
+  command always supplies both, so it cannot report a false live pass.
+- The harness never invokes an unscoped Docker command. It passes only a caller-supplied
+  `DOCKER_CONTEXT` on every child command; it neither changes a global default nor refers to a
+  shared runtime.
+- A host port is dynamically assigned by Docker and refused if it resolves to the database default.
+  The connector receives host and port as separate configuration fields; no endpoint is logged.
+- The MySQL image is `docker.io/library/mysql:8.4.11`, pinned by tag. A preexisting image is never
+  removed. An image first pulled by this run is removed during teardown unless
+  `POLYMETRICS_DATABASE_KEEP_IMAGE=1` is set.
+- Podman is deliberately not used: three independent Podman machines on this host, including the
+  task-owned one, failed to start. Docker on Colima was independently proven usable with MySQL 8.4
+  and a row-format binary log. Ordinary cleanup removes Docker resources but cannot shrink the
+  Colima VM disk file, so `POLYMETRICS_DATABASE_RESET_COLIMA=1` resets Colima *after* Docker
+  teardown and before the after-disk measurement. That destructive reset is opt-in, rejects the
+  image-keep opt-in, and is intended only for the disposable default profile used by this test.
+- The MySQL test database uses its isolated ephemeral server configuration. No credential or
+  connection string is emitted, recorded, or placed in fixture data.
+- The connector is Tier-3/dynamic-schema like PostgreSQL. It remains unregistered until the
+  architecture-v2 human-gated registry cutover; its package is nevertheless compiled and tested
+  directly.
+- MySQL binary logs are a distinct source mechanism, so the shared closed changefeed vocabulary
+  gains `binlog_replication` in lockstep in Go validation and JSON Schema. This is the minimum
+  shared declaration change necessary for an honest MySQL declaration, not a generic transport.
+
+## Inline GSD fallback
+
+`scripts/gsd doctor`, all five required source resolutions/prompts, and
+`go run ./cmd/agentcontractgen check` succeeded. This work is an issue-shaped firstmate task rather
+than a numbered roadmap phase, and compatible isolated GSD workers are unavailable/forbidden by the
+single-worker delivery contract. Discussion, planning, execution, verification, and review are
+therefore recorded inline in this phase directory.
+
+## Required skills loaded
+
+`golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`,
+`golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, `golang-context`,
+`golang-concurrency`, `golang-database`, `golang-documentation`,
+`golang-dependency-management`, and `golang-pkg-go-dev`.
