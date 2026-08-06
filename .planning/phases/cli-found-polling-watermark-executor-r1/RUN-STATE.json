@@ -1,7 +1,7 @@
 {
   "phase": "cli-found-polling-watermark-executor-r1",
   "branch": "fm/cli-found-polling-watermark-executor-r1",
-  "status": "planned",
+  "status": "implemented-awaiting-full-verification",
   "adapter": "pi-project-local",
   "runtime_fallback": "manual inline execution of generated GSD prompts; no compatible isolated Pi role runtime",
   "issue": 3855,

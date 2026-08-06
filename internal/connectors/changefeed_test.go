@@ -263,7 +263,7 @@ func TestDefinitionOfDerivesCDCFromMatchingChangefeedExecutor(t *testing.T) {
 			ArtifactVersion: "v1",
 			RetrievedAt:     "2026-08-05",
 		},
-		Executor: &ChangefeedExecutorRef{Kind: "native", ID: "acme-poll"},
+		Executor: &ChangefeedExecutorRef{Kind: "engine", ID: "polling_watermark"},
 		Checkpoint: &ChangefeedCheckpoint{
 			Kind:        "watermark",
 			Keys:        []string{"updated_at", "id"},
@@ -277,12 +277,21 @@ func TestDefinitionOfDerivesCDCFromMatchingChangefeedExecutor(t *testing.T) {
 			DedupeKey:  []string{"id", "updated_at"},
 		},
 		Streams: []string{"widgets"},
+		PollingWatermark: &PollingWatermarkSpec{
+			Watermark:        PollingWatermarkValue{Kind: "timestamp", Path: "updated_at"},
+			TieBreaker:       PollingWatermarkField{Path: "id"},
+			Boundary:         "inclusive",
+			SafetyLagSeconds: 0,
+			PageSize:         2,
+			MaxPages:         1,
+			RequestBudget:    1,
+		},
 	}
 	connector := changefeedDefinitionExecutor{
 		changefeedTestExecutor: changefeedTestExecutor{descriptor: ChangefeedExecutorDescriptor{
 			Status:    ChangefeedStatusImplemented,
 			Mechanism: ChangefeedMechanismPollingWatermark,
-			Executor:  ChangefeedExecutorRef{Kind: "native", ID: "acme-poll"},
+			Executor:  ChangefeedExecutorRef{Kind: "engine", ID: "polling_watermark"},
 			Checkpoint: ChangefeedCheckpoint{
 				Kind:        "watermark",
 				Keys:        []string{"updated_at", "id"},

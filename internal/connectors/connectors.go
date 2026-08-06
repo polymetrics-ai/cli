@@ -372,9 +372,10 @@ type WritePreview struct {
 }
 
 type CDCReadRequest struct {
-	Stream string
-	Config RuntimeConfig
-	State  map[string]string
+	Stream              string
+	Config              RuntimeConfig
+	State               map[string]string
+	CheckpointCommitter ChangefeedCheckpointCommitter
 }
 
 type CDCEvent struct {
@@ -397,6 +398,15 @@ type Querier interface {
 
 type CDCReader interface {
 	ReadCDC(ctx context.Context, req CDCReadRequest, emit func(CDCEvent) error) error
+}
+
+// ChangefeedCheckpointCommitter persists a source position only after the
+// caller's CDC event callback has durably accepted that position's records.
+// The polling-watermark executor treats the state as opaque key/value data so
+// the durable, versioned #3810 sync envelope can replace this narrow adapter
+// without changing transport or delivery logic.
+type ChangefeedCheckpointCommitter interface {
+	CommitChangefeedCheckpoint(ctx context.Context, state map[string]string) error
 }
 
 // ChangefeedStatus is the closed lifecycle vocabulary for a declared
@@ -458,18 +468,59 @@ type ChangefeedDelivery struct {
 	DedupeKey  []string `json:"dedupe_key,omitempty"`
 }
 
+// PollingWatermarkField identifies a provider record value using a dotted
+// object path. The value is never supplied by a CLI caller.
+type PollingWatermarkField struct {
+	Path string `json:"path"`
+}
+
+// PollingWatermarkValue identifies the provider ordering value and its
+// lossless representation. Timestamp, monotonic sequence, and opaque cursor
+// values intentionally have different validation and safety-lag semantics.
+type PollingWatermarkValue struct {
+	Kind string `json:"kind"`
+	Path string `json:"path"`
+}
+
+// PollingWatermarkDeletionEndpoint declares a provider deletion feed that a
+// polling source adapter must fetch in addition to ordinary records. It is
+// deliberately descriptive: the shared executor owns event/checkpoint
+// semantics while a closed connector transport owns the provider request.
+type PollingWatermarkDeletionEndpoint struct {
+	Path        string `json:"path"`
+	RecordsPath string `json:"records_path"`
+}
+
+// PollingWatermarkSpec is the complete declaration consumed by the shared
+// polling-watermark executor. Inclusive boundaries deliberately replay the
+// page edge, so delivery is at-least-once rather than falsely exactly-once.
+// A timestamp safety lag of zero is an explicit opt-out and can lose late
+// arrivals whose provider clock is behind the committed watermark.
+type PollingWatermarkSpec struct {
+	Watermark        PollingWatermarkValue             `json:"watermark"`
+	TieBreaker       PollingWatermarkField             `json:"tie_breaker"`
+	Boundary         string                            `json:"boundary"`
+	SafetyLagSeconds int                               `json:"safety_lag_seconds"`
+	PageSize         int                               `json:"page_size"`
+	MaxPages         int                               `json:"max_pages"`
+	RequestBudget    int                               `json:"request_budget"`
+	SoftDelete       *PollingWatermarkField            `json:"soft_delete,omitempty"`
+	DeletionEndpoint *PollingWatermarkDeletionEndpoint `json:"deletion_endpoint,omitempty"`
+}
+
 // ChangefeedDescriptor is the evidence-backed, declarative contract for a
 // connector changefeed. It is distinct from CDCReader because a reader method
 // can be an unsupported migration stub.
 type ChangefeedDescriptor struct {
-	Status     ChangefeedStatus       `json:"status"`
-	Mechanism  ChangefeedMechanism    `json:"mechanism"`
-	Source     ChangefeedSource       `json:"source"`
-	Reason     string                 `json:"reason,omitempty"`
-	Executor   *ChangefeedExecutorRef `json:"executor,omitempty"`
-	Checkpoint *ChangefeedCheckpoint  `json:"checkpoint,omitempty"`
-	Delivery   *ChangefeedDelivery    `json:"delivery,omitempty"`
-	Streams    []string               `json:"streams,omitempty"`
+	Status           ChangefeedStatus       `json:"status"`
+	Mechanism        ChangefeedMechanism    `json:"mechanism"`
+	Source           ChangefeedSource       `json:"source"`
+	Reason           string                 `json:"reason,omitempty"`
+	Executor         *ChangefeedExecutorRef `json:"executor,omitempty"`
+	Checkpoint       *ChangefeedCheckpoint  `json:"checkpoint,omitempty"`
+	Delivery         *ChangefeedDelivery    `json:"delivery,omitempty"`
+	Streams          []string               `json:"streams,omitempty"`
+	PollingWatermark *PollingWatermarkSpec  `json:"polling_watermark,omitempty"`
 }
 
 // ChangefeedExecutorDescriptor is the runtime half of an implemented
@@ -533,12 +584,19 @@ func (d ChangefeedDescriptor) Validate() error {
 		if err := validateChangefeedKeys("streams", d.Streams); err != nil {
 			return err
 		}
+		if d.Mechanism == ChangefeedMechanismPollingWatermark {
+			if err := validatePollingWatermark(d); err != nil {
+				return err
+			}
+		} else if d.PollingWatermark != nil {
+			return errors.New("polling_watermark declaration requires polling_watermark mechanism")
+		}
 	case ChangefeedStatusUnsupported:
 		if strings.TrimSpace(d.Reason) == "" {
 			return errors.New("unsupported changefeed requires a reason")
 		}
-		if d.Executor != nil || d.Checkpoint != nil || d.Delivery != nil {
-			return errors.New("unsupported changefeed cannot declare an executor, checkpoint, or delivery")
+		if d.Executor != nil || d.Checkpoint != nil || d.Delivery != nil || d.PollingWatermark != nil {
+			return errors.New("unsupported changefeed cannot declare an executor, checkpoint, delivery, or polling watermark")
 		}
 	}
 	return nil
@@ -583,6 +641,18 @@ func (d ChangefeedDescriptor) Clone() *ChangefeedDescriptor {
 		delivery := *d.Delivery
 		delivery.DedupeKey = append([]string(nil), d.Delivery.DedupeKey...)
 		clone.Delivery = &delivery
+	}
+	if d.PollingWatermark != nil {
+		polling := *d.PollingWatermark
+		if d.PollingWatermark.SoftDelete != nil {
+			softDelete := *d.PollingWatermark.SoftDelete
+			polling.SoftDelete = &softDelete
+		}
+		if d.PollingWatermark.DeletionEndpoint != nil {
+			deletionEndpoint := *d.PollingWatermark.DeletionEndpoint
+			polling.DeletionEndpoint = &deletionEndpoint
+		}
+		clone.PollingWatermark = &polling
 	}
 	return &clone
 }
@@ -643,6 +713,93 @@ func validateChangefeedDelivery(delivery *ChangefeedDelivery) error {
 	}
 	if err := validateChangefeedKeys("delivery dedupe_key", delivery.DedupeKey); err != nil {
 		return err
+	}
+	return nil
+}
+
+func validatePollingWatermark(d ChangefeedDescriptor) error {
+	polling := d.PollingWatermark
+	if polling == nil {
+		return errors.New("implemented polling_watermark changefeed requires polling_watermark declaration")
+	}
+	if d.Executor == nil || d.Executor.Kind != "engine" || d.Executor.ID != "polling_watermark" {
+		return errors.New("implemented polling_watermark changefeed requires executor engine/polling_watermark")
+	}
+	if err := validatePollingWatermarkPath("watermark path", polling.Watermark.Path); err != nil {
+		return err
+	}
+	if err := validatePollingWatermarkPath("tie_breaker path", polling.TieBreaker.Path); err != nil {
+		return err
+	}
+	switch polling.Watermark.Kind {
+	case "timestamp", "monotonic_sequence", "opaque_cursor":
+	default:
+		return fmt.Errorf("unsupported polling watermark kind %q", polling.Watermark.Kind)
+	}
+	if polling.Boundary != "inclusive" {
+		return errors.New("polling watermark boundary must be inclusive to prevent tie loss")
+	}
+	if polling.SafetyLagSeconds < 0 {
+		return errors.New("polling watermark safety_lag_seconds cannot be negative")
+	}
+	if polling.Watermark.Kind != "timestamp" && polling.SafetyLagSeconds != 0 {
+		return errors.New("polling watermark safety_lag_seconds is only valid for timestamp watermarks")
+	}
+	if polling.PageSize <= 0 || polling.MaxPages <= 0 || polling.RequestBudget <= 0 {
+		return errors.New("polling watermark requires positive page_size, max_pages, and request_budget")
+	}
+	if d.Checkpoint == nil || !sameStrings(d.Checkpoint.Keys, []string{polling.Watermark.Path, polling.TieBreaker.Path}) {
+		return errors.New("polling watermark checkpoint keys must be watermark path then tie_breaker path")
+	}
+	if d.Delivery == nil || d.Delivery.Duplicates != "at_least_once" {
+		return errors.New("polling watermark delivery must declare duplicates at_least_once")
+	}
+	if polling.SoftDelete != nil && polling.DeletionEndpoint != nil {
+		return errors.New("polling watermark may declare either soft_delete or deletion_endpoint, not both")
+	}
+	if polling.SoftDelete != nil {
+		if err := validatePollingWatermarkPath("soft_delete path", polling.SoftDelete.Path); err != nil {
+			return err
+		}
+	}
+	if polling.DeletionEndpoint != nil {
+		if err := validatePollingWatermarkEndpointPath(polling.DeletionEndpoint.Path); err != nil {
+			return err
+		}
+		if err := validatePollingWatermarkPath("deletion_endpoint records_path", polling.DeletionEndpoint.RecordsPath); err != nil {
+			return err
+		}
+	}
+	if polling.SoftDelete == nil && polling.DeletionEndpoint == nil && d.Delivery.Deletes != "not_available" {
+		return errors.New("polling watermark hard deletes are not observable; delivery deletes must be not_available")
+	}
+	if (polling.SoftDelete != nil || polling.DeletionEndpoint != nil) && d.Delivery.Deletes != "tombstone" {
+		return errors.New("polling watermark observable deletes must declare tombstone delivery")
+	}
+	return nil
+}
+
+func validatePollingWatermarkEndpointPath(path string) error {
+	if !strings.HasPrefix(path, "/") || strings.Contains(path, "//") || strings.Contains(path, "..") || strings.ContainsAny(path, "\r\n?#") {
+		return fmt.Errorf("polling watermark deletion_endpoint path %q is not a safe connector-relative path", path)
+	}
+	return nil
+}
+
+func validatePollingWatermarkPath(name, path string) error {
+	if strings.TrimSpace(path) == "" {
+		return fmt.Errorf("polling watermark %s is required", name)
+	}
+	for _, segment := range strings.Split(path, ".") {
+		if segment == "" {
+			return fmt.Errorf("polling watermark %s contains an empty path segment", name)
+		}
+		for index, runeValue := range segment {
+			if (runeValue >= 'a' && runeValue <= 'z') || (runeValue >= 'A' && runeValue <= 'Z') || runeValue == '_' || runeValue == '-' || (index > 0 && runeValue >= '0' && runeValue <= '9') {
+				continue
+			}
+			return fmt.Errorf("polling watermark %s contains unsafe path segment %q", name, segment)
+		}
 	}
 	return nil
 }

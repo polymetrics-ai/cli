@@ -4,9 +4,9 @@
 
 | Area | Command/check | Status |
 | --- | --- | --- |
-| Red/green ledger | focused test output before/after production edits | pending |
-| Connector contracts | `go test ./internal/connectors -count=1` | pending |
-| Engine executor and bundle tests | `go test ./internal/connectors/engine -count=1` | pending |
+| Red/green ledger | focused test output before/after production edits | passed — `TDD-LEDGER.md` |
+| Connector contracts | `go test ./internal/connectors -count=1` | passed |
+| Engine executor and bundle tests | `go test ./internal/connectors/engine -count=1` | passed |
 | CLI regression package | `go test ./internal/cli -count=1` | pending |
 | Formatting | `gofmt -w` changed Go files; `gofmt -l cmd internal` | pending |
 | Vet/build | `go vet ./...`; `go build ./cmd/pm` | pending |

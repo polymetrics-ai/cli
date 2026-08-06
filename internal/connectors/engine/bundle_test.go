@@ -1718,9 +1718,9 @@ func TestBundleLoadAllDefsFS(t *testing.T) {
 	}
 }
 
-// TestBundleLoadFromOnDiskTestdata exercises the loader against a real
-// os.DirFS-backed fixture bundle (testdata/bundles/widget-demo), rather than
-// only the in-memory fstest.MapFS cases above.
+// TestBundleLoadFromOnDiskTestdata exercises the loader against real
+// os.DirFS-backed fixture bundles, rather than only the in-memory fstest.MapFS
+// cases above.
 func TestBundleLoadFromOnDiskTestdata(t *testing.T) {
 	fsys := os.DirFS("testdata/bundles")
 
@@ -1742,8 +1742,15 @@ func TestBundleLoadFromOnDiskTestdata(t *testing.T) {
 	if err != nil {
 		t.Fatalf("LoadAll(testdata/bundles): %v", err)
 	}
-	if len(bundles) != 1 {
-		t.Fatalf("LoadAll(testdata/bundles) returned %d bundles, want 1", len(bundles))
+	if len(bundles) != 2 {
+		t.Fatalf("LoadAll(testdata/bundles) returned %d bundles, want 2", len(bundles))
+	}
+	byName := make(map[string]Bundle, len(bundles))
+	for _, bundle := range bundles {
+		byName[bundle.Name] = bundle
+	}
+	if byName["polling-watermark-demo"].Changefeed == nil {
+		t.Fatalf("LoadAll(testdata/bundles) omitted polling-watermark-demo changefeed: %+v", byName)
 	}
 }
 

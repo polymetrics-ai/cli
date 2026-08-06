@@ -38,3 +38,37 @@ No production code had been edited at this point. The new fixture also carries
 the intentionally unsupported `polling_watermark` JSON fields, so after the
 missing executor API is supplied the loader test will remain red until the
 declaration schema and semantic validation are extended.
+
+### R1–R7 — green transition
+
+The shared executor now consumes only the declaration, an injected page source,
+an injected clock, the destination-acknowledging event callback, and the narrow
+checkpoint committer. Its tests prove all required paths without a provider,
+credential, database, or sleep:
+
+```text
+$ go test ./internal/connectors/engine -run '^TestPollingWatermark' -count=1
+ok      polymetrics.ai/internal/connectors/engine
+
+$ go test ./internal/connectors/engine -count=1
+ok      polymetrics.ai/internal/connectors/engine
+
+$ go test ./internal/connectors -count=1
+ok      polymetrics.ai/internal/connectors
+```
+
+- R1 proves the test-only bundle has no CDC capability as a plain declarative
+  connector and gains it only from the matching shared executor; definition,
+  registry list/catalog, and manifest use the existing single projection gate.
+- R2 loads a declaration with every checkpoint field omitted in turn and proves
+  rejection through the real loader schema/semantic path.
+- R3 records `a,b,b,c` across the inclusive timestamp boundary, requires the
+  tuple on the second source request, and advertises `at_least_once`.
+- R4 uses a fixed clock and a committed `09:59` timestamp to request `09:57`
+  for its two-minute safety lag, with no wall-clock test dependency.
+- R5 proves both soft-delete and fixed declared deletion-endpoint tombstones;
+  a hard-delete-only descriptor claiming tombstones is rejected.
+- R6 proves no commit on destination rejection and a checkpoint persistence
+  failure replays its already accepted page on the next run.
+- R7 proves the declaration's page size, request budget, maximum pages, and
+  cancellation checks are honoured.

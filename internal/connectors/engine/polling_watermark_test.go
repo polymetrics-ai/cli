@@ -2,6 +2,7 @@ package engine
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"os"
 	"strings"
@@ -96,17 +97,47 @@ func TestPollingWatermarkTestBundlePromotesCDCOnlyWithRegisteredExecutor(t *test
 	if !ok || !definition.Capabilities.CDC {
 		t.Fatalf("DefinitionOf() = %+v, %t; want CDC capability", definition, ok)
 	}
+	registry := connectors.NewEmptyRegistry()
+	registry.Register(connector)
+	if got := registry.List()[0].Capabilities.CDC; !got {
+		t.Fatal("registry list did not derive CDC from the matching executor")
+	}
+	if got := registry.CatalogEntries()[0].Capabilities.CDC; !got {
+		t.Fatal("registry catalog did not derive CDC from the matching executor")
+	}
+	if got := connectors.ManifestOf(connector).Metadata.Capabilities.CDC; !got {
+		t.Fatal("manifest did not derive CDC from the matching executor")
+	}
 }
 
 func TestPollingWatermarkBundleRejectsEveryMissingCheckpointField(t *testing.T) {
 	for _, missing := range []string{"kind", "keys", "commit_after", "on_invalid"} {
 		t.Run(missing, func(t *testing.T) {
 			bundle := fullValidBundleFS("acme")
-			bundle["acme/changefeed.json"] = &fstest.MapFile{Data: []byte(strings.Replace(pollingWatermarkChangefeedJSON, `"`+missing+`": `, `"removed_`+missing+`": `, 1))}
+			var declaration map[string]any
+			if err := json.Unmarshal([]byte(pollingWatermarkChangefeedJSON), &declaration); err != nil {
+				t.Fatalf("unmarshal declaration: %v", err)
+			}
+			checkpoint := declaration["checkpoint"].(map[string]any)
+			delete(checkpoint, missing)
+			raw, err := json.Marshal(declaration)
+			if err != nil {
+				t.Fatalf("marshal declaration: %v", err)
+			}
+			bundle["acme/changefeed.json"] = &fstest.MapFile{Data: raw}
 			if _, err := Load(bundle, "acme"); err == nil {
 				t.Fatalf("Load accepted polling changefeed missing checkpoint %s", missing)
 			}
 		})
+	}
+}
+
+func TestPollingWatermarkConnectorRejectsUndeclaredStream(t *testing.T) {
+	bundle := loadPollingWatermarkTestBundle(t)
+	bundle.Changefeed.Streams = []string{"missing"}
+	_, err := NewPollingWatermarkConnector(bundle, nil, &scriptedPollingWatermarkSource{}, fixedPollingWatermarkClock{now: time.Date(2026, 8, 6, 12, 0, 0, 0, time.UTC)})
+	if err == nil || !strings.Contains(err.Error(), "stream \"missing\" not found") {
+		t.Fatalf("NewPollingWatermarkConnector error = %v, want missing declared stream rejection", err)
 	}
 }
 
@@ -140,6 +171,9 @@ func TestPollingWatermarkExecutorReplaysTieAtPageBoundary(t *testing.T) {
 	}
 	if len(source.calls) != 2 || !source.calls[1].Inclusive || source.calls[1].After == nil || source.calls[1].After.TieBreaker != "b" {
 		t.Fatalf("second source request = %+v, want inclusive tuple checkpoint after b", source.calls)
+	}
+	if source.calls[0].PageSize != 2 {
+		t.Fatalf("declared page size = %d, want 2", source.calls[0].PageSize)
 	}
 	if len(committer.states) != 2 || committer.states[1]["updated_at"] != "2026-08-06T10:00:00Z" || committer.states[1]["id"] != "c" {
 		t.Fatalf("committed checkpoints = %+v, want final tuple", committer.states)
@@ -193,6 +227,40 @@ func TestPollingWatermarkExecutorOnlyEmitsDeclaredSoftDeletes(t *testing.T) {
 	}
 }
 
+func TestPollingWatermarkExecutorUsesDeclaredDeletionEndpoint(t *testing.T) {
+	bundle := loadPollingWatermarkTestBundle(t)
+	bundle.Changefeed.PollingWatermark.SoftDelete = nil
+	bundle.Changefeed.PollingWatermark.DeletionEndpoint = &connectors.PollingWatermarkDeletionEndpoint{
+		Path:        "/widgets/deletions",
+		RecordsPath: "data",
+	}
+	source := &scriptedPollingWatermarkSource{pages: []PollingWatermarkPage{{DeletionRecords: []connectors.Record{
+		{"id": "gone", "updated_at": "2026-08-06T10:01:00Z"},
+	}}}}
+	connector, err := NewPollingWatermarkConnector(bundle, nil, source, fixedPollingWatermarkClock{now: time.Date(2026, 8, 6, 10, 2, 0, 0, time.UTC)})
+	if err != nil {
+		t.Fatalf("NewPollingWatermarkConnector: %v", err)
+	}
+	var operation string
+	err = connector.ReadCDC(context.Background(), connectors.CDCReadRequest{
+		Stream:              "widgets",
+		Config:              connectors.RuntimeConfig{Config: map[string]string{"base_url": "https://example.test"}},
+		CheckpointCommitter: &recordingChangefeedCheckpointCommitter{},
+	}, func(event connectors.CDCEvent) error {
+		operation = event.Operation
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("ReadCDC: %v", err)
+	}
+	if operation != "delete" {
+		t.Fatalf("operation = %q, want delete from declared deletion endpoint", operation)
+	}
+	if len(source.calls) != 1 || source.calls[0].DeletionEndpoint == nil || source.calls[0].DeletionEndpoint.Path != "/widgets/deletions" {
+		t.Fatalf("source request = %+v, want declared deletion endpoint", source.calls)
+	}
+}
+
 func TestPollingWatermarkDeclarationRejectsHardDeleteTombstoneClaim(t *testing.T) {
 	bundle := fullValidBundleFS("acme")
 	withoutSoftDelete := strings.Replace(pollingWatermarkChangefeedJSON, `,"soft_delete":{"path":"deleted"}`, "", 1)
@@ -233,6 +301,25 @@ func TestPollingWatermarkExecutorReplaysAfterCheckpointPersistenceCrash(t *testi
 	}
 }
 
+func TestPollingWatermarkExecutorDoesNotCommitWhenDestinationRejectsPage(t *testing.T) {
+	source := &scriptedPollingWatermarkSource{pages: []PollingWatermarkPage{{Records: []connectors.Record{{"id": "a", "updated_at": "2026-08-06T10:00:00Z"}}}}}
+	connector := newPollingWatermarkTestConnector(t, source, fixedPollingWatermarkClock{now: time.Date(2026, 8, 6, 10, 2, 0, 0, time.UTC)})
+	committer := &recordingChangefeedCheckpointCommitter{}
+	err := connector.ReadCDC(context.Background(), connectors.CDCReadRequest{
+		Stream:              "widgets",
+		Config:              connectors.RuntimeConfig{Config: map[string]string{"base_url": "https://example.test"}},
+		CheckpointCommitter: committer,
+	}, func(connectors.CDCEvent) error {
+		return errors.New("destination durability acknowledgement failed")
+	})
+	if err == nil || !strings.Contains(err.Error(), "durably accept") {
+		t.Fatalf("ReadCDC error = %v, want destination acknowledgement failure", err)
+	}
+	if len(committer.states) != 0 {
+		t.Fatalf("committed states = %+v, want none after destination rejection", committer.states)
+	}
+}
+
 func TestPollingWatermarkExecutorHonorsRequestBudgetAndCancellation(t *testing.T) {
 	t.Run("request budget", func(t *testing.T) {
 		source := &scriptedPollingWatermarkSource{pages: []PollingWatermarkPage{
@@ -252,6 +339,32 @@ func TestPollingWatermarkExecutorHonorsRequestBudgetAndCancellation(t *testing.T
 		}
 		if got := len(source.calls); got != 3 {
 			t.Fatalf("source calls = %d, want declared request budget 3", got)
+		}
+	})
+
+	t.Run("maximum pages", func(t *testing.T) {
+		source := &scriptedPollingWatermarkSource{pages: []PollingWatermarkPage{
+			{Records: []connectors.Record{{"id": "a", "updated_at": "2026-08-06T10:00:00Z"}}, More: true},
+			{Records: []connectors.Record{{"id": "b", "updated_at": "2026-08-06T10:01:00Z"}}, More: true},
+			{Records: []connectors.Record{{"id": "c", "updated_at": "2026-08-06T10:02:00Z"}}, More: true},
+			{Records: []connectors.Record{{"id": "d", "updated_at": "2026-08-06T10:03:00Z"}}, More: true},
+		}}
+		bundle := loadPollingWatermarkTestBundle(t)
+		bundle.Changefeed.PollingWatermark.RequestBudget = 4
+		connector, err := NewPollingWatermarkConnector(bundle, nil, source, fixedPollingWatermarkClock{now: time.Date(2026, 8, 6, 10, 4, 0, 0, time.UTC)})
+		if err != nil {
+			t.Fatalf("NewPollingWatermarkConnector: %v", err)
+		}
+		err = connector.ReadCDC(context.Background(), connectors.CDCReadRequest{
+			Stream:              "widgets",
+			Config:              connectors.RuntimeConfig{Config: map[string]string{"base_url": "https://example.test"}},
+			CheckpointCommitter: &recordingChangefeedCheckpointCommitter{},
+		}, func(connectors.CDCEvent) error { return nil })
+		if err != nil {
+			t.Fatalf("ReadCDC: %v", err)
+		}
+		if got := len(source.calls); got != 3 {
+			t.Fatalf("source calls = %d, want declared maximum pages 3", got)
 		}
 	})
 
