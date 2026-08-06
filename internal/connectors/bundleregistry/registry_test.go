@@ -35,6 +35,28 @@ func TestRegistryDirectWriteMetadataUsesEmbeddedOperationSurface(t *testing.T) {
 	}
 }
 
+func TestCacheBundleLoadRunsLoaderOnce(t *testing.T) {
+	wantErr := errors.New("bundle load failed")
+	var calls int
+	load := cacheBundleLoad(func() ([]engine.Bundle, error) {
+		calls++
+		return []engine.Bundle{{Name: "fixture"}}, wantErr
+	})
+
+	for range 2 {
+		bundles, err := load()
+		if !errors.Is(err, wantErr) {
+			t.Fatalf("load error = %v, want %v", err, wantErr)
+		}
+		if len(bundles) != 1 || bundles[0].Name != "fixture" {
+			t.Fatalf("load bundles = %+v, want fixture bundle", bundles)
+		}
+	}
+	if calls != 1 {
+		t.Fatalf("loader calls = %d, want 1", calls)
+	}
+}
+
 func TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides(t *testing.T) {
 	bundles, err := engine.LoadAll(defs.FS)
 	if err != nil {
