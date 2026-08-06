@@ -9,6 +9,10 @@
 - `windows-latest` remains GitHub-hosted. The existing website deployment job
   retains its dedicated self-hosted label and is not part of general routing.
 - The decision lives in one reusable workflow; callers only consume its output.
+- The workflow condition is routing policy rather than a durable fork-security
+  boundary. The required GitHub approval and runner-group controls are in
+  `docs/security/self-hosted-ci-runner-policy.md`; routing is unsafe until an
+  organization owner applies them.
 
 ## Constraints and follow-ups
 

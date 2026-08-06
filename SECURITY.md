@@ -21,6 +21,12 @@ Security-sensitive areas include credential storage, connector auth handling, lo
 
 The public Windows code-signing and privacy policy is documented in [docs/security/code-signing-policy.md](docs/security/code-signing-policy.md). It describes the planned SignPath Foundation route, publisher display implications, release-only approval rules, timestamping, no unsigned fallback, and incident response.
 
+## Self-hosted CI runners
+
+The required GitHub-side controls for self-hosted CI runners, including fork
+workflow approval and runner-group scoping, are documented in
+[docs/security/self-hosted-ci-runner-policy.md](docs/security/self-hosted-ci-runner-policy.md).
+
 ## Supported Versions
 
 Until the first stable release, security fixes target the `main` branch. After tagged releases begin, this file will list supported release lines.

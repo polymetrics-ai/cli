@@ -3,9 +3,17 @@
 - Route same-repository PRs by `karthik-sivadas` and
   `alfred-polymetrics-ai` to the existing `polymetrics-cli` self-hosted
   runner label through one shared selector.
-- Route fork PRs and every non-PR trigger to GitHub-hosted `ubuntu-latest`.
+- Route fork PRs and non-PR triggers to GitHub-hosted `ubuntu-latest`, except
+  for the documented trusted-ref website deployment runner.
 - Keep Windows on `windows-latest` and preserve the website deployment job's
-  dedicated runner.
+  dedicated runner without changing it.
+
+## Required GitHub configuration before enabling routing
+
+The selector alone is not a security boundary against a fork-controlled
+workflow. CI routing is unsafe until an organization owner applies and verifies
+the fork-approval and runner-group controls in
+[`docs/security/self-hosted-ci-runner-policy.md`](../../../docs/security/self-hosted-ci-runner-policy.md).
 
 ## Runner provisioning
 

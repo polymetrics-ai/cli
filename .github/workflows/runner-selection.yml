@@ -9,8 +9,6 @@ on:
 
 jobs:
   select-runner:
-    # This job is intentionally GitHub-hosted. It evaluates untrusted PR event
-    # metadata before any caller job can request the self-hosted runner.
     runs-on: ubuntu-latest
     outputs:
       runner: ${{ steps.select.outputs.runner }}
