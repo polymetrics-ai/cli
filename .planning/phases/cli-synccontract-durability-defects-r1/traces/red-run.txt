@@ -1,0 +1,30 @@
+Red-run evidence — 2026-08-06
+
+The state-reload test was run before any state-normalization production change:
+
+    go test ./internal/app -run '^TestLegacyStateReloadRetainsSyncModeCompatibilityAfterReversePlanLookup$' -count=1
+
+It failed with:
+
+    RunETL() after unknown reverse plan error = sync mode "incremental_append" is not executable: no matching native executor has completed the shared conformance corpus
+
+The durability test was run before any directory-chain production change. The only preceding change
+was the behavior-preserving `syncLocalWarehouseDirectoryCommit` observation seam, required to make
+the existing durability calls observable; the implementation still synced only the two leaf
+directories.
+
+    go test ./internal/app -run '^TestRunWarehouseETLSyncsNewDirectoryParentChainBeforeAcknowledgement$' -count=1
+
+It failed with observed sync calls for only:
+
+    <warehouse-root>/_pm_raw
+    <warehouse-root>
+
+and the assertion required, in order, those two directories plus:
+
+    <warehouse-root-parent>
+    <warehouse-root-grandparent>
+    <first-pre-existing-ancestor>
+
+This proves the missing parent-chain durability calls while avoiding a test that would print a
+warehouse record or attempt to emulate a real filesystem power loss.

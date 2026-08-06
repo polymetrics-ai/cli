@@ -46,6 +46,10 @@ type localRawRecord struct {
 	Record       connectors.Record `json:"record"`
 }
 
+// syncLocalWarehouseDirectoryCommit is a test seam for the platform directory
+// sync primitive; production defaults to durability.SyncDirectory.
+var syncLocalWarehouseDirectoryCommit = durability.SyncDirectory
+
 func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
 	stateKey := streamStateKey(conn.Name, streamName)
 	prior := a.state.StreamStates[stateKey]
@@ -261,10 +265,8 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 			return result, fmt.Errorf("replace final table: %w", err)
 		}
 	}
-	for _, outputDir := range []string{filepath.Dir(rawPath), filepath.Dir(finalPath)} {
-		if err := syncLocalWarehouseDirectory(outputDir); err != nil {
-			return result, err
-		}
+	if err := syncLocalWarehouseDirectoryChain(filepath.Dir(rawPath)); err != nil {
+		return result, err
 	}
 
 	if observedAt.IsZero() {
@@ -285,10 +287,31 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 }
 
 func syncLocalWarehouseDirectory(dir string) error {
-	if err := durability.SyncDirectory(dir); err != nil {
+	if err := syncLocalWarehouseDirectoryCommit(dir); err != nil {
 		return fmt.Errorf("sync warehouse directory: %w", err)
 	}
 	return nil
+}
+
+// syncLocalWarehouseDirectoryChain synchronizes dir and every ancestor through
+// the filesystem root. This establishes a known durable parent boundary after
+// MkdirAll without inferring which components were new, and it must complete
+// before a downstream checkpoint is acknowledged.
+func syncLocalWarehouseDirectoryChain(dir string) error {
+	path, err := filepath.Abs(dir)
+	if err != nil {
+		return fmt.Errorf("resolve warehouse directory: %w", err)
+	}
+	for {
+		if err := syncLocalWarehouseDirectory(path); err != nil {
+			return err
+		}
+		parent := filepath.Dir(path)
+		if parent == path {
+			return nil
+		}
+		path = parent
+	}
 }
 
 func checkpointForResult(result etlExecutionResult, mode SyncMode, stateKey string, state StreamState) map[string]string {
