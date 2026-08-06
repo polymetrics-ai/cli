@@ -530,6 +530,7 @@ func commandSurfaceFlag(flag CLIFlag) connectors.CommandSurfaceFlag {
 		MapsTo:     flag.MapsTo,
 		Format:     flag.Format,
 		AllowEmpty: cloneBoolPtr(flag.AllowEmpty),
+		Minimum:    cloneFloat64Ptr(flag.Minimum),
 		Required:   flag.Required,
 		MaxItems:   flag.MaxItems,
 		MinItems:   flag.MinItems,
@@ -554,6 +555,14 @@ func commandSurfaceConstraints(constraints []CLIConstraint) []connectors.Command
 }
 
 func cloneBoolPtr(value *bool) *bool {
+	if value == nil {
+		return nil
+	}
+	out := *value
+	return &out
+}
+
+func cloneFloat64Ptr(value *float64) *float64 {
 	if value == nil {
 		return nil
 	}

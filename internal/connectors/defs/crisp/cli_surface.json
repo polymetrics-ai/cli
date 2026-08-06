@@ -12,33 +12,14 @@
       "id": "conversations",
       "title": "Crisp conversation-list read commands",
       "commands": [
-        "conversations list",
-        "conversations suggested-segments",
-        "conversations suggested-data",
-        "conversations spam-list",
-        "conversations spam-content"
+        "conversations"
       ]
     },
     {
       "id": "conversation",
       "title": "Crisp conversation-scoped read commands",
       "commands": [
-        "conversation get",
-        "conversation messages",
-        "conversation message",
-        "conversation routing",
-        "conversation meta",
-        "conversation original-message",
-        "conversation pages",
-        "conversation events",
-        "conversation files",
-        "conversation state",
-        "conversation relations",
-        "conversation participants",
-        "conversation block-status",
-        "conversation verify-status",
-        "conversation browsing",
-        "conversation call"
+        "conversation"
       ]
     }
   ],
@@ -90,9 +71,10 @@
         },
         {
           "name": "page-number",
-          "type": "string",
+          "type": "integer",
           "summary": "Positive Crisp conversation page number; defaults to 1 from config.",
           "maps_to": "config.page_number",
+          "minimum": 1,
           "allow_empty": false
         },
         {
@@ -245,7 +227,7 @@
       "api_surface": [{"method": "GET", "path": "/v1/website/{website_id}/conversations/suggest/segments/{page_number}"}],
       "flags": [
         {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
-        {"name": "page-number", "type": "string", "summary": "Positive Crisp page number; defaults to 1 from config.", "maps_to": "config.page_number", "allow_empty": false}
+        {"name": "page-number", "type": "integer", "summary": "Positive Crisp page number; defaults to 1 from config.", "maps_to": "config.page_number", "minimum": 1, "allow_empty": false}
       ]
     },
     {
@@ -258,7 +240,7 @@
       "api_surface": [{"method": "GET", "path": "/v1/website/{website_id}/conversations/suggest/data/{page_number}"}],
       "flags": [
         {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
-        {"name": "page-number", "type": "string", "summary": "Positive Crisp page number; defaults to 1 from config.", "maps_to": "config.page_number", "allow_empty": false}
+        {"name": "page-number", "type": "integer", "summary": "Positive Crisp page number; defaults to 1 from config.", "maps_to": "config.page_number", "minimum": 1, "allow_empty": false}
       ]
     },
     {
@@ -271,7 +253,7 @@
       "api_surface": [{"method": "GET", "path": "/v1/website/{website_id}/conversations/spams/{page_number}"}],
       "flags": [
         {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
-        {"name": "page-number", "type": "string", "summary": "Positive Crisp page number; defaults to 1 from config.", "maps_to": "config.page_number", "allow_empty": false},
+        {"name": "page-number", "type": "integer", "summary": "Positive Crisp page number; defaults to 1 from config.", "maps_to": "config.page_number", "minimum": 1, "allow_empty": false},
         {"name": "filter-type", "type": "string", "summary": "Optional Crisp spam type filter, such as email.", "maps_to": "query.filter_type", "allow_empty": false}
       ]
     },
@@ -382,7 +364,7 @@
       "flags": [
         {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
         {"name": "session-id", "type": "string", "summary": "Crisp conversation session identifier.", "maps_to": "config.session_id", "allow_empty": false},
-        {"name": "page-number", "type": "string", "summary": "Positive Crisp page number; defaults to 1 from config.", "maps_to": "config.page_number", "allow_empty": false}
+        {"name": "page-number", "type": "integer", "summary": "Positive Crisp page number; defaults to 1 from config.", "maps_to": "config.page_number", "minimum": 1, "allow_empty": false}
       ]
     },
     {
@@ -396,7 +378,7 @@
       "flags": [
         {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
         {"name": "session-id", "type": "string", "summary": "Crisp conversation session identifier.", "maps_to": "config.session_id", "allow_empty": false},
-        {"name": "page-number", "type": "string", "summary": "Positive Crisp page number; defaults to 1 from config.", "maps_to": "config.page_number", "allow_empty": false}
+        {"name": "page-number", "type": "integer", "summary": "Positive Crisp page number; defaults to 1 from config.", "maps_to": "config.page_number", "minimum": 1, "allow_empty": false}
       ]
     },
     {
@@ -410,7 +392,7 @@
       "flags": [
         {"name": "website-id", "type": "string", "summary": "Crisp website identifier.", "maps_to": "config.website_id", "allow_empty": false},
         {"name": "session-id", "type": "string", "summary": "Crisp conversation session identifier.", "maps_to": "config.session_id", "allow_empty": false},
-        {"name": "page-number", "type": "string", "summary": "Positive Crisp page number; defaults to 1 from config.", "maps_to": "config.page_number", "allow_empty": false}
+        {"name": "page-number", "type": "integer", "summary": "Positive Crisp page number; defaults to 1 from config.", "maps_to": "config.page_number", "minimum": 1, "allow_empty": false}
       ]
     },
     {

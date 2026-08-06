@@ -78,13 +78,12 @@ COMMAND SURFACE
     --json (boolean): Render machine-readable JSON output.
     --limit (integer): Maximum records to emit from a read command.
   Crisp conversation-list read commands
-  Crisp conversation-scoped read commands
-  Other Commands
     conversations list - List one bounded Crisp conversation page with named provider filters. [intent=etl availability=implemented stream=list_conversations]; flags: --website-id, --page-number, --per-page, --search-query, --search-type, --search-operator, --include-empty, --filter-inbox-id, --filter-unread, --filter-resolved, --filter-not-resolved, --filter-mention, --filter-assigned, --filter-unassigned, --filter-date-start, --filter-date-end, --order-date-created, --order-date-updated, --order-date-waiting
     conversations suggested-segments - List one Crisp suggested-conversation-segments page. [intent=etl availability=implemented stream=suggested_conversation_segments]; flags: --website-id, --page-number
     conversations suggested-data - List one Crisp suggested-conversation-data-keys page. [intent=etl availability=implemented stream=suggested_conversation_data]; flags: --website-id, --page-number
     conversations spam-list - List one Crisp spam-conversations page. [intent=etl availability=implemented stream=spam_conversations]; flags: --website-id, --page-number, --filter-type
     conversations spam-content - Resolve one Crisp spam conversation's content. [intent=etl availability=implemented stream=spam_conversation_content]; flags: --website-id, --spam-id
+  Crisp conversation-scoped read commands
     conversation get - Resolve one Crisp conversation. [intent=etl availability=implemented stream=conversation]; flags: --website-id, --session-id
     conversation messages - Resolve a Crisp conversation message batch and page it with a named timestamp selector. [intent=etl availability=implemented stream=conversation_messages]; flags: --website-id, --session-id, --timestamp-before, --timestamp-after, --timestamp-around
     conversation message - Resolve one Crisp conversation message by fingerprint. [intent=etl availability=implemented stream=conversation_message]; flags: --website-id, --session-id, --fingerprint
