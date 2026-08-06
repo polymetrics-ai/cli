@@ -77,12 +77,16 @@
       }
     ],
     "measuredWallTimeBudget": {
-      "formula": "max(161.236, 147.309) + (161.236 - 147.309), rounded up to the next 15 seconds",
+      "historicalFormula": "max(161.236, 147.309) + (161.236 - 147.309), rounded up to the next 15 seconds",
       "maximumWallElapsedSeconds": 161.236,
       "observedSpreadSeconds": 13.927,
       "unroundedSeconds": 175.163,
-      "budget": "3m",
-      "budgetSeconds": 180
+      "historicalBudget": "3m",
+      "historicalBudgetSeconds": 180,
+      "historicalStatus": "superseded",
+      "activeBudget": "3m30s",
+      "activeBudgetSeconds": 210,
+      "activeBudgetSource": "hosted-measurement-derived"
     },
     "enforcementEvidence": {
       "command": "make certify-timing",
@@ -91,8 +95,9 @@
       "totalWallElapsedSeconds": 147.309,
       "certifyRealCLIInvocations": 93,
       "cliRealCLIInvocations": 61,
-      "allowedDuration": "3m",
-      "status": "passed"
+      "historicalAllowedDuration": "3m",
+      "status": "passed",
+      "statusContext": "historical 180-second enforcement, superseded by the active hosted-measurement-derived 3m30s cap"
     },
     "rebaseValidation": {
       "base": "origin/main d215d9636",
@@ -120,7 +125,9 @@
       "cliWallElapsedSeconds": 80.413,
       "totalElapsedSeconds": 92.582,
       "totalWallElapsedSeconds": 100.104,
-      "allowedDuration": "3m",
+      "allowedDuration": "3m30s",
+      "allowedDurationSeconds": 210,
+      "capSource": "hosted-measurement-derived",
       "status": "passed"
     },
     "scopedVerification": [

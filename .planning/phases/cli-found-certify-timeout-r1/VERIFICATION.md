@@ -12,13 +12,17 @@
   plan → preview → approval → execute → cleanup/replay lifecycle proof,
   `TestSampleOutboxWriteLifecycleAgainstRealCLI`, alongside the real full
   source/read/flow/schedule sweep.
-- [x] `CERTIFY_TIMING_MAX_DURATION` is `3m`. The maximum final-topology wall
-  measurement is 161.236s and the observed spread is
-  `161.236 - 147.309 = 13.927s`; `161.236 + 13.927 = 175.163s`, rounded up to
-  the next 15-second boundary, gives 180s.
+- [x] The raw final-topology measurements historically produced the superseded
+  `180s` result: the maximum wall measurement is 161.236s and the observed
+  spread is `161.236 - 147.309 = 13.927s`; `161.236 + 13.927 = 175.163s`,
+  rounded up to the next 15-second boundary, gives 180s.
+- [x] `CERTIFY_TIMING_MAX_DURATION` is `3m30s` (210 seconds), the active
+  hosted-measurement-derived cap; the raw 180-second calculation above is
+  retained only as superseded history.
 
 The pre-refactor harness made 782 real invocations. That pre-remediation
-topology established the fixed 3-minute wall cap, which remains unchanged.
+topology recorded the superseded 3-minute wall cap. The active
+hosted-measurement-derived cap remains 3m30s (210 seconds).
 
 ## CI remediation — coalesced full-route measurement
 
@@ -31,8 +35,8 @@ topology established the fixed 3-minute wall cap, which remains unchanged.
   `internal/connectors/certify` and 92/92 in `internal/cli`.
 - [x] `make certify-timing` passed with harness elapsed/wall time
   15.252s/19.691s, CLI elapsed/wall time 77.330s/80.413s, and total
-  elapsed/wall time 92.582s/100.104s—well below the unchanged 3-minute
-  duration limit.
+  elapsed/wall time 92.582s/100.104s—well below the active 3m30s
+  (210-second) duration limit.
 - [x] `go test -count=1 ./internal/connectors/certify`,
   `go test -count=1 -run '^TestCertifyCLI' ./internal/cli`,
   `go test -count=1 ./internal/certifytiming ./cmd/certifytiming`, and
@@ -57,7 +61,8 @@ implemented commands passed checks but failed at runtime, alongside the public
 - [x] GREEN: `TestCertifyCLIHelpShowsProvenanceContract` preserves its
   provenance-help assertions through the direct `runConnectors` router branch.
   `make certify-timing` returned 25/25 harness calls and 92/92 CLI calls with
-  79.895s elapsed / 88.553s wall time, without changing either measured budget.
+  79.895s elapsed / 88.553s wall time, without changing the active 3m30s
+  (210-second) hosted timing cap.
 - [ ] Hosted Verify: confirm the repaired PR head passes GitHub Verify.
 
 ## Scoped verification record

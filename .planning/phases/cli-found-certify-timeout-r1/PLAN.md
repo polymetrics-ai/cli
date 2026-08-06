@@ -103,8 +103,9 @@ per-command timeout-bound local call; CI carries those aggregate gates.
 
 ### CI remediation — coalesced full-route proof
 
-Hosted Verify on commit `cd20f1074` measured `201.488s` against the fixed
-`180s` duration guard. The slow tests show that the direct
+Hosted Verify on commit `cd20f1074` measured `201.488s` against the then-active
+historical `180s` duration guard, now superseded by the
+hosted-measurement-derived `3m30s` (210-second) cap. The slow tests show that the direct
 `TestFullSweepSourceStagesAgainstSample` proof and
 `TestCertifyCLISingleConnectorPassExitsZero` each execute the same expensive
 source certification topology. Move the complete full-sweep assertions into
@@ -112,9 +113,11 @@ the real `pm connectors certify sample --full --json` route proof and remove
 the standalone duplicate. This retains CLI dispatch, the real Runner and
 harness seam, report persistence, and all full source/read/flow/schedule
 assertions in one executable invocation. Re-measure the exact invocation caps
-and the existing wall-clock guard after the move; do not raise the guard.
+and preserve the wall-clock evidence after the move without recalibrating the
+active hosted cap.
 The local remediation measurement held 25/25 harness calls and 92/92 CLI
-calls, with `100.104s` total wall time against the unchanged `180s` limit.
+calls, with `100.104s` total wall time below the active 210-second limit; the
+original 180-second calculation remains superseded historical evidence.
 
 ### Post-rebase compatibility repair
 

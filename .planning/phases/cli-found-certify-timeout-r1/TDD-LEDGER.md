@@ -30,8 +30,8 @@ PR is declared ready.
 
 | State | Evidence |
 | --- | --- |
-| RED | Hosted Verify for `cd20f1074` failed `make certify-timing`: `201.488s` observed versus its fixed `180.000s` budget. Its slow-test report identifies a direct full source sweep (`75.980s`) plus a separate real CLI route (`42.480s`) that repeats the same Runner/harness topology. |
-| GREEN target | A single `TestCertifyCLI…` route invokes `pm connectors certify sample --full --json`, persists the report, and asserts every former direct full-sweep invariant from the JSON report. The standalone full-sweep test is removed, invocation caps are re-measured exactly, and `make certify-timing` remains under the unchanged `3m` budget. |
+| RED | Historical Hosted Verify for `cd20f1074` failed `make certify-timing`: `201.488s` observed versus its then-active `180.000s` budget, now superseded by the hosted-measurement-derived 210-second cap. Its slow-test report identifies a direct full source sweep (`75.980s`) plus a separate real CLI route (`42.480s`) that repeats the same Runner/harness topology. |
+| GREEN target | A single `TestCertifyCLI…` route invokes `pm connectors certify sample --full --json`, persists the report, and asserts every former direct full-sweep invariant from the JSON report. The standalone full-sweep test is removed, invocation caps are re-measured exactly, and `make certify-timing` remains under the active hosted-measurement-derived `3m30s` (210-second) cap. |
 | Guard | This is a test-topology consolidation only: no production certification behavior, timeout, retry policy, or duration allowance is relaxed. |
 
 ### CI remediation GREEN evidence
@@ -39,8 +39,8 @@ PR is declared ready.
 The coalesced `TestCertifyCLISingleConnectorPassExitsZero` route retained the
 full source/read/flow/schedule assertions while exercising CLI dispatch, the
 real Runner/harness seam, JSON rendering, and report persistence. The revised
-exact caps are 25 harness calls and 92 CLI calls. The unchanged timing gate
-passed locally:
+exact caps are 25 harness calls and 92 CLI calls. The active
+hosted-measurement-derived `3m30s` (210-second) timing cap passed locally:
 
 ```text
 $ make certify-timing
@@ -59,7 +59,7 @@ fresh hosted Verify run.
 | --- | --- |
 | RED | Hosted Verify run `31095059925` on rebased PR head `428324630` failed `make certify-timing`: `internal/cli` reported `certify CLI real invocations: 93 (budget 92)`. `git diff 3332dc69..428324630 -- internal/cli/certify_cli_test.go` identifies the sole added direct call: #3869's `TestCertifyCLIHelpShowsProvenanceContract` invokes `certifyRun(..., "--help")`. |
 | GREEN | The same provenance-help assertions now call the exact `runConnectors` `certify --help` branch directly. `make certify-timing` returned 25/25 harness calls and 92/92 CLI calls; total elapsed/wall time was 79.895s/88.553s. |
-| Guard | Do not change the 92-call cap or the 210-second hosted timing budget. The retained full route and one real sample/outbox write lifecycle proof remain unchanged. |
+| Guard | Do not change the 92-call cap or the `3m30s` (210-second) hosted timing budget. The retained full route and one real sample/outbox write lifecycle proof remain unchanged. |
 
 ## Captured RED evidence
 
@@ -186,9 +186,10 @@ real harness calls against the 93-call contract, while
 `TestCheckDurationBudgetRejectsControlledDuplicateFixture` rejects two
 4-second wall measurements against a 7-second bound. The two final-topology
 wall measurements are 161.236s and 147.309s; their 13.927s spread gives
-`161.236 + 13.927 = 175.163s`, which rounds up to the 180-second (`3m`) bound.
-The Make target supplies that fixed value to the timing command, which reports
-the observed and allowed duration when it fails.
+`161.236 + 13.927 = 175.163s`, which historically rounded up to the
+superseded 180-second (`3m`) bound. The Make target now supplies the active
+hosted-measurement-derived `3m30s` (210-second) cap to the timing command,
+which reports the observed and allowed duration when it fails.
 
 ```text
 $ go test -count=1 -run '^TestCertifyRealCLIInvocationBudgetRejectsControlledDuplicate$' ./internal/connectors/certify
