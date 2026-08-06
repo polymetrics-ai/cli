@@ -44,17 +44,17 @@ ETL STREAMS
   mailboxes: Mailboxes returned by IMAP LIST.
     primary key: name
     fields: name(string), delimiter(string), attributes(array)
-  messages: Messages from one IMAP mailbox, keyed and incremented by mailbox UIDVALIDITY plus UID. Hard deletions are not observable by polling.
+  messages: Messages from one IMAP mailbox, keyed and incremented by mailbox UIDVALIDITY plus UID. Hard deletions are not observable by polling. Full refresh is unavailable pending #3810.
     primary key: mailbox, uid_validity, uid
     cursor: imap_cursor
     fields: mailbox(string), uid_validity(string), uid(string), imap_cursor(string), envelope(object), flags(array), internal_date(string), size(integer), body_parts(array)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, incremental_append
-  Source modes: full_refresh, incremental
+  ETL sync modes: incremental_append
+  Source modes: incremental
 
 REVERSE ETL ACTIONS
-  send_message: Submit one RFC 5322/MIME message through SMTP.
+  send_message: Submit one RFC 5322/MIME message through SMTP; attachment paths are relative to the runtime .polymetrics staging root.
     endpoint: SMTP MAIL/RCPT/DATA
     required fields: to, subject, body
     optional fields: cc, bcc, body_content_type, attachments
@@ -78,7 +78,7 @@ COMMAND SURFACE
     messages list - Read bounded message envelopes, flags, dates, sizes, and bounded body parts from one IMAP mailbox. [intent=etl availability=implemented stream=messages]; flags: --mailbox
     message send - Plan, preview, approve, and submit one typed SMTP message; the preview includes the exact unmasked MIME payload. [intent=reverse_etl availability=implemented write=send_message]; approval: Requires plan, unmasked preview, approval evidence, and typed destructive confirmation.; risk: SMTP submission is externally visible and irreversible after the server accepts it.; flags: --to (required), --cc, --bcc, --subject (required), --body (required), --body-content-type, --attachment
   Help topics:
-    incremental - Messages use a mailbox-specific UIDVALIDITY+UID cursor; hard deletions are not observable by polling.
+    incremental - Messages use a mailbox-specific UIDVALIDITY+UID cursor; hard deletions are not observable by polling; full message refresh is unavailable pending #3810.
     submission-safety - SMTP is send-only; message send is non-batchable, destructive, approval-gated, and previewed without masking.
 
 EXAMPLES
