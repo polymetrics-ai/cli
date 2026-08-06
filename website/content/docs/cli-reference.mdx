@@ -86,7 +86,7 @@ schedule:
 |---|---|---|
 | `pm init` | workspace creation | [/docs/quickstart](/docs/quickstart) |
 | `pm connectors` | `pm connectors list`, `pm connectors catalog`, `pm connectors port-plan`, `pm connectors inspect`, `pm connectors help` | [/docs/connectors](/docs/connectors) |
-| `pm credentials` | `pm credentials add`, `pm credentials list`, `pm credentials inspect`, `pm credentials test`, `pm credentials remove` | this page |
+| `pm credentials` | `pm credentials add`, `pm credentials link`, `pm credentials list`, `pm credentials inspect`, `pm credentials test`, `pm credentials remove` | this page |
 | `pm connections` | `pm connections create`, `pm connections list` | this page |
 | `pm catalog` | `pm catalog refresh`, `pm catalog show` | this page |
 | `pm etl` | `pm etl check`, `pm etl catalog`, `pm etl read`, `pm etl run`, `pm etl status` | [/docs/etl](/docs/etl) |
@@ -126,9 +126,19 @@ Creates `.polymetrics/` under the selected root. The workspace stores state, enc
 ```bash
 pm credentials add github-local \
   --connector github \
+  --provider-family provider-family \
+  --auth-profile service-profile \
   --config repository=OWNER/REPO \
   --from-env token=GITHUB_TOKEN \
   --json
+
+# Explicitly join only credentials that declare the same non-secret provider
+# family and compatible authentication profile.
+pm credentials add provider-secondary \
+  --connector github \
+  --provider-family provider-family \
+  --auth-profile service-profile
+pm credentials link provider-secondary --to github-local --json
 
 pm credentials list --json
 pm credentials inspect github-local --json
@@ -137,6 +147,13 @@ pm credentials remove github-local
 ```
 
 Secrets must come from environment variables or stdin. Do not pass raw token values in chat, shell history, or docs.
+
+Each credential is isolated unless it is explicitly linked. A link requires
+matching declared `--provider-family` and `--auth-profile` values, and only
+creates protected local binding metadata. Credential inspection and runtime
+coordination output never reveal that binding; later coordination consumers use
+an opaque projection instead. A provider rate policy must separately declare
+its documented non-secret scope subject; no token-based default is assumed.
 
 Before saving a credential, `pm` checks non-secret `--config` fields against
 only the selected connector's declared string `enum`, `pattern`, and `uri`,

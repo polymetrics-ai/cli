@@ -89,6 +89,22 @@ func TestCredentialCoordination_ExplicitLinkSharesOnlyOpaqueIdentity(t *testing.
 	if linkedRate == differentSubject {
 		t.Fatal("different declared rate subject shared a budget")
 	}
+	if _, err := instance.AddCredential(ctx, app.AddCredentialRequest{
+		Name:           "faker-linked-on-create",
+		Connector:      "faker",
+		ProviderFamily: "provider-fixture",
+		AuthProfile:    "service-profile",
+		LinkCredential: "sample-shared",
+	}); err != nil {
+		t.Fatalf("AddCredential(linked on create) error = %v", err)
+	}
+	_, createdLinkedRuntime, err := instance.ResolveConnectorCredential(ctx, "faker", "faker-linked-on-create", nil)
+	if err != nil {
+		t.Fatalf("ResolveConnectorCredential(linked on create) error = %v", err)
+	}
+	if createdLinkedRuntime.CoordinationIdentity.AuthCohortKey() != firstRuntime.CoordinationIdentity.AuthCohortKey() {
+		t.Fatal("credential explicitly linked during creation does not share the auth cohort")
+	}
 
 	if _, err := instance.AddCredential(ctx, app.AddCredentialRequest{
 		Name:           "faker-unlinked",
@@ -133,7 +149,23 @@ func TestCredentialCoordination_ExplicitLinkSharesOnlyOpaqueIdentity(t *testing.
 	if err != nil {
 		t.Fatalf("marshal inspected credential: %v", err)
 	}
-	if strings.Contains(string(encoded), "binding") || strings.Contains(string(encoded), firstRuntime.CoordinationIdentity.AuthCohortKey()) {
+	stateBytes, err := os.ReadFile(filepath.Join(root, ".polymetrics", "state", "state.json"))
+	if err != nil {
+		t.Fatalf("read protected coordination state: %v", err)
+	}
+	var protectedState struct {
+		CredentialBindings map[string]struct {
+			BindingID string `json:"binding_id"`
+		} `json:"credential_bindings"`
+	}
+	if err := json.Unmarshal(stateBytes, &protectedState); err != nil {
+		t.Fatalf("decode protected coordination state: %v", err)
+	}
+	bindingID := protectedState.CredentialBindings[first.ID].BindingID
+	if bindingID == "" {
+		t.Fatal("test setup did not persist a protected binding")
+	}
+	if strings.Contains(string(encoded), bindingID) || strings.Contains(string(encoded), string(firstRuntime.CoordinationIdentity.AuthCohortKey())) {
 		t.Fatal("ordinary credential inspection exposed protected coordination identity material")
 	}
 }
@@ -162,6 +194,7 @@ func TestCredentialCoordination_MigratesLegacyMetadataWithoutChangingApprovalLif
 		t.Fatalf("decode state: %v", err)
 	}
 	delete(legacy, "credential_bindings")
+	delete(legacy, "coordination_salt")
 	credentials, ok := legacy["credentials"].([]any)
 	if !ok || len(credentials) != 1 {
 		t.Fatal("test setup did not contain one credential")
@@ -198,7 +231,63 @@ func TestCredentialCoordination_MigratesLegacyMetadataWithoutChangingApprovalLif
 	if runtime.CoordinationIdentity.AuthCohortKey() == "" {
 		t.Fatal("migrated credential has no opaque coordination identity")
 	}
-	if runtime.CredentialRevision == runtime.CoordinationIdentity.AuthCohortKey() {
+	if runtime.CredentialRevision == string(runtime.CoordinationIdentity.AuthCohortKey()) {
 		t.Fatal("approval revision was reused as coordination identity")
+	}
+}
+
+func TestCredentialCoordination_RejectsInvalidDeclarationsBeforePersistence(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject() error = %v", err)
+	}
+	instance, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open() error = %v", err)
+	}
+
+	for _, test := range []struct {
+		name      string
+		request   app.AddCredentialRequest
+		fieldName string
+		input     string
+	}{
+		{
+			name: "provider family",
+			request: app.AddCredentialRequest{
+				Name:           "sample-invalid-family",
+				Connector:      "sample",
+				ProviderFamily: "invalid family",
+			},
+			fieldName: "provider family",
+			input:     "invalid family",
+		},
+		{
+			name: "auth profile",
+			request: app.AddCredentialRequest{
+				Name:        "sample-invalid-profile",
+				Connector:   "sample",
+				AuthProfile: "invalid profile",
+			},
+			fieldName: "auth profile",
+			input:     "invalid profile",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			if _, err := instance.AddCredential(ctx, test.request); err == nil {
+				t.Fatal("AddCredential() accepted invalid coordination declaration")
+			} else {
+				if !strings.Contains(err.Error(), test.fieldName) || !strings.Contains(err.Error(), "constraint") {
+					t.Fatalf("AddCredential() error did not name the field and constraint: %v", err)
+				}
+				if strings.Contains(err.Error(), test.input) {
+					t.Fatal("AddCredential() error echoed the rejected declaration")
+				}
+			}
+		})
+	}
+	if credentials := instance.ListCredentials(); len(credentials) != 0 {
+		t.Fatalf("invalid declarations persisted credentials: %v", credentials)
 	}
 }

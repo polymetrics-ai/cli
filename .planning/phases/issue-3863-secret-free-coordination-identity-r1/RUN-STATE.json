@@ -1,7 +1,7 @@
 {
   "issue": 3863,
   "parent": 3862,
-  "state": "red_tests_recorded",
+  "state": "verification_complete",
   "execution": "inline_manual_no_spawn",
-  "next": "implementation"
+  "next": "commit"
 }

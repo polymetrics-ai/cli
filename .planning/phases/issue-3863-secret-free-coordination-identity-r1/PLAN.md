@@ -10,8 +10,10 @@ Issue: #3863. Parent: #3862. Branch: `fm/cli-found-credential-coordination-ident
 - Discuss prompt: `scripts/gsd prompt discuss-phase 3863`; executed inline and recorded in
   `CONTEXT.md` / `DISCUSSION-LOG.md`.
 - Plan prompt: `scripts/gsd prompt plan-phase 3863 --tdd`; executed inline in this plan.
-- Execute, verify, and review prompts will be generated and executed inline at their respective
-  gates. If verification finds a real gap, use `plan-phase 3863 --gaps` followed by
+- Execute prompt: `scripts/gsd prompt execute-phase 3863`; executed inline under this plan.
+  Verify prompt: `scripts/gsd prompt verify-work 3863`; executed inline with automated coverage.
+  Review prompt: `scripts/gsd prompt code-review 3863 --files=...`; executed inline at standard
+  depth and recorded in `REVIEW.md`. If verification finds a real gap, use `plan-phase 3863 --gaps` followed by
   `execute-phase 3863 --gaps-only` before rerunning verification.
 - Inline/manual fallback: compatible isolated GSD roles are unavailable and the canonical
   single-worker contract forbids role spawning. No TDD, verification, review, or human gate is
@@ -100,8 +102,9 @@ Issue: #3863. Parent: #3862. Branch: `fm/cli-found-credential-coordination-ident
 
 ## Safety and non-goals
 
-- No secret value, secret-derived equality, binding preimage, credential revision, raw policy
-  subject, generic HTTP/SQL/shell surface, provider call, registry, fence, parking state,
+- No secret value, secret-derived equality, binding preimage, credential revision, or raw policy
+  subject is emitted to ordinary output, logs, or coordination state. No generic HTTP/SQL/shell
+  surface, provider call, registry, fence, parking state,
   scheduler, or capability declaration is added.
 - A rate-scope projection is impossible without an explicit supported scope declaration. Rotation
   invalidates approval evidence only; it cannot reset an account rate budget or join/leave a cohort.

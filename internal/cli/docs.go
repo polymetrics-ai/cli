@@ -24,7 +24,7 @@ DESCRIPTION
 COMMANDS
   init              create a .polymetrics project
   connectors        list and inspect connector streams and write actions
-  credentials       add, test, inspect, list, and remove credentials
+  credentials       add, link, test, inspect, list, and remove credentials
   connections       create and list source-to-destination connections
   catalog           refresh or show source catalogs
   etl               run ETL stream reads and inspect run status
@@ -248,7 +248,8 @@ const credentialsHelp = `NAME
   pm credentials - manage encrypted connector credentials
 
 SYNOPSIS
-  pm credentials add <name> --connector <connector> [--from-env field=ENV] [--value-stdin field] [--config key=value]
+  pm credentials add <name> --connector <connector> [--provider-family family] [--auth-profile profile] [--link-credential credential] [--from-env field=ENV] [--value-stdin field] [--config key=value]
+  pm credentials link <name> --to <credential> [--json]
   pm credentials list [--json]
   pm credentials inspect <name> [--json]
   pm credentials test <name> [--json]
@@ -262,6 +263,10 @@ DESCRIPTION
 
 OPTIONS
   --connector name       connector that owns the credential
+  --provider-family id   non-secret provider family for an explicit binding
+  --auth-profile id      non-secret compatible authentication profile
+  --link-credential id   explicitly share a compatible credential binding on add
+  --to credential        explicitly share a compatible credential binding
   --from-env field=ENV   read one secret field from an environment variable
   --value-stdin field    read one secret field from standard input
   --config key=value     store non-secret connector config
@@ -271,6 +276,8 @@ OPTIONS
 SECURITY
   Secret values are encrypted with AES-GCM in .polymetrics/vault and are not
   stored in state.json. Inspection output shows only secret field names.
+  Credential bindings are protected project state and are never shown in
+  credential output; runtime coordination receives only opaque projections.
 
 EXIT STATUS
   0 success

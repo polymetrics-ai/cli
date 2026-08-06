@@ -28,8 +28,8 @@ func TestCredentialsCoordinationLinkCLIAndHelp(t *testing.T) {
 	if code != 0 {
 		t.Fatalf("credentials add code = %d stdout = %s stderr = %s", code, stdout.String(), stderr.String())
 	}
-	if !strings.Contains(stdout.String(), `"provider_family":"provider-fixture"`) || !strings.Contains(stdout.String(), `"auth_profile":"service-profile"`) {
-		t.Fatal("credential JSON did not expose safe declared coordination metadata")
+	if !strings.Contains(stdout.String(), `"provider_family": "provider-fixture"`) || !strings.Contains(stdout.String(), `"auth_profile": "service-profile"`) {
+		t.Fatalf("credential JSON did not expose safe declared coordination metadata: %s", stdout.String())
 	}
 	if strings.Contains(stdout.String(), "binding") || strings.Contains(stdout.String(), "auth_cohort") || strings.Contains(stdout.String(), "rate_scope") {
 		t.Fatal("credential JSON exposed protected coordination identity material")

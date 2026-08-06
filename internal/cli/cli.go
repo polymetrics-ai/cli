@@ -349,10 +349,13 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 			return err
 		}
 		cred, err := a.AddCredential(ctx, app.AddCredentialRequest{
-			Name:      args[1],
-			Connector: connector,
-			Config:    config,
-			Secrets:   secrets,
+			Name:           args[1],
+			Connector:      connector,
+			Config:         config,
+			Secrets:        secrets,
+			ProviderFamily: flags.first("provider-family"),
+			AuthProfile:    flags.first("auth-profile"),
+			LinkCredential: flags.first("link-credential"),
 		})
 		if err != nil {
 			return err
@@ -361,6 +364,30 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 			return writeJSON(stdout, envelope{"kind": "Credential", "credential": cred})
 		}
 		_, _ = fmt.Fprintf(stdout, "Saved credential %s for connector %s\n", cred.Name, cred.Connector)
+		return nil
+	case "link":
+		if len(args) < 2 {
+			return errUsage
+		}
+		if err := safety.ValidateIdentifier(args[1], "credential"); err != nil {
+			return validationErrorf("%v", err)
+		}
+		flags := parseFlags(args[2:])
+		target := flags.first("to")
+		if target == "" {
+			return errors.New("missing --to")
+		}
+		if err := safety.ValidateIdentifier(target, "credential"); err != nil {
+			return validationErrorf("%v", err)
+		}
+		cred, err := a.LinkCredential(args[1], target)
+		if err != nil {
+			return err
+		}
+		if jsonOut {
+			return writeJSON(stdout, envelope{"kind": "Credential", "credential": cred})
+		}
+		_, _ = fmt.Fprintf(stdout, "Linked credential %s to compatible credential %s\n", cred.Name, target)
 		return nil
 	case "list":
 		creds := a.ListCredentials()

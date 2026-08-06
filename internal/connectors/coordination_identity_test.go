@@ -48,6 +48,15 @@ func TestCoordinationIdentity_DerivesDistinctOpaqueScopes(t *testing.T) {
 	if firstRateKey != linkedRateKey {
 		t.Fatal("compatible linked credentials received different rate scope projections")
 	}
+	if string(firstRateKey) == string(identity.AuthCohortKey()) {
+		t.Fatal("rate scope projection reused the authentication cohort key")
+	}
+	if reflect.TypeOf(firstRateKey) == reflect.TypeOf(identity.AuthCohortKey()) {
+		t.Fatal("rate scope and auth cohort projections have the same Go type")
+	}
+	if strings.Contains(string(firstRateKey), accountScope.Subject) {
+		t.Fatal("rate scope projection contains its subject preimage")
+	}
 
 	differentSubject, err := identity.RateScopeKey(RateLimitScope{
 		PolicyID: "core-rest-v1",
@@ -59,6 +68,17 @@ func TestCoordinationIdentity_DerivesDistinctOpaqueScopes(t *testing.T) {
 	}
 	if firstRateKey == differentSubject {
 		t.Fatal("different declared rate subjects shared a budget")
+	}
+	differentKind, err := identity.RateScopeKey(RateLimitScope{
+		PolicyID: "core-rest-v1",
+		Kind:     RateScopeKindApplication,
+		Subject:  "account-fixture-001",
+	})
+	if err != nil {
+		t.Fatalf("RateScopeKey(different kind) error = %v", err)
+	}
+	if firstRateKey == differentKind {
+		t.Fatal("different declared rate scope kinds shared a budget")
 	}
 
 	if _, err := identity.RateScopeKey(RateLimitScope{}); err == nil {
@@ -83,14 +103,18 @@ func TestCoordinationIdentity_ContainsNoBindingOrSecretInput(t *testing.T) {
 	if err != nil {
 		t.Fatalf("NewCoordinationIdentity() error = %v", err)
 	}
-	encoded, err := json.Marshal(identity)
+	encoded, err := json.Marshal(struct {
+		Identity any `json:"identity"`
+	}{Identity: identity})
 	if err != nil {
 		t.Fatalf("marshal identity: %v", err)
 	}
-	if strings.Contains(string(encoded), binding.BindingID) {
-		t.Fatal("identity JSON contains the protected binding preimage")
+	for _, preimage := range []string{binding.BindingID, binding.ProviderFamily, binding.AuthProfile} {
+		if strings.Contains(string(encoded), preimage) {
+			t.Fatal("identity JSON contains a protected coordination preimage")
+		}
 	}
-	if strings.Contains(identity.AuthCohortKey(), binding.BindingID) {
+	if strings.Contains(string(identity.AuthCohortKey()), binding.BindingID) {
 		t.Fatal("auth cohort projection contains the protected binding preimage")
 	}
 
