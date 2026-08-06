@@ -153,6 +153,57 @@ func TestGlueStagesFlowStatusRejectsMismatchedIdentity(t *testing.T) {
 	}
 }
 
+func TestGlueStagesFlowPlanPreviewRejectMismatchedIdentity(t *testing.T) {
+	for _, tt := range []struct {
+		name   string
+		stage  string
+		mutate func(*scriptedCLI)
+	}{
+		{
+			name:  "plan",
+			stage: "flow_plan",
+			mutate: func(driver *scriptedCLI) {
+				driver.planFlow = "cert_flow_other"
+			},
+		},
+		{
+			name:  "preview",
+			stage: "flow_preview",
+			mutate: func(driver *scriptedCLI) {
+				driver.previewFlow = "cert_flow_other"
+			},
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
+
+			r, driver := scriptedSampleRunner(t, certify.Options{
+				Connector: "sample",
+				Stream:    "customers",
+				Limit:     50,
+				SecretEnv: map[string]string{"token": "PM_SAMPLE_TOKEN"},
+			})
+			tt.mutate(driver)
+
+			rep, err := r.Run(context.Background())
+			if err != nil {
+				t.Fatalf("Run() error = %v", err)
+			}
+			driver.assertProtocol(t)
+			if rep.Passed {
+				t.Fatalf("Report.Passed = true, want false after mismatched flow %s identity", tt.name)
+			}
+			stage := mustStage(t, rep, tt.stage)
+			if stage.Passed {
+				t.Fatalf("%s stage Passed = true, want false: %+v", tt.stage, stage)
+			}
+			if !strings.Contains(stage.Error, `flow="cert_flow_other"`) {
+				t.Errorf("%s error = %q, want mismatched flow identity", tt.stage, stage.Error)
+			}
+		})
+	}
+}
+
 func TestGlueStagesScheduleListRejectsMismatchedDefinition(t *testing.T) {
 	for _, tt := range []struct {
 		name   string

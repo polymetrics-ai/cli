@@ -35,6 +35,8 @@ type scriptedCLI struct {
 	installedScheduleFlow string
 	installedScheduleGap  string
 	installed             bool
+	planFlow              string
+	previewFlow           string
 	flowRunSteps          []any
 	flowStatusSteps       []any
 	statusFlow            string
@@ -71,6 +73,8 @@ func newScriptedCLI(t *testing.T, protocols ...string) *scriptedCLI {
 		installedScheduleCron: scriptedScheduleCron,
 		installedScheduleFlow: scriptedFlowName,
 		installedScheduleGap:  "  ",
+		planFlow:              scriptedFlowName,
+		previewFlow:           scriptedFlowName,
 		flowRunSteps: []any{
 			map[string]any{"id": "cert_sync", "status": "ok"},
 			map[string]any{"id": "cert_query", "status": "ok"},
@@ -198,12 +202,18 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 			"count": 2,
 			"rows":  []map[string]any{{"id": "synthetic-1"}, {"id": "synthetic-2"}},
 		})
-	case prefix(args, "flow", "plan") && hasJSON(args) && hasFlag(args, "--file"):
+	case prefix(args, "flow", "plan"):
+		if err := validateScriptedFlowManifest(args, root, "plan"); err != nil {
+			return s.protocolError(stderr, err.Error())
+		}
 		s.seen["flow_plan"]++
-		return writeScriptedEnvelopeWithoutKind(stdout, map[string]any{"status": "ok", "order": []string{"cert_sync", "cert_query"}})
-	case prefix(args, "flow", "preview") && hasJSON(args) && hasFlag(args, "--file"):
+		return writeScriptedEnvelopeWithoutKind(stdout, map[string]any{"status": "ok", "flow": s.planFlow, "order": []string{"cert_sync", "cert_query"}})
+	case prefix(args, "flow", "preview"):
+		if err := validateScriptedFlowManifest(args, root, "preview"); err != nil {
+			return s.protocolError(stderr, err.Error())
+		}
 		s.seen["flow_preview"]++
-		return writeScriptedEnvelopeWithoutKind(stdout, map[string]any{"status": "dry_run"})
+		return writeScriptedEnvelopeWithoutKind(stdout, map[string]any{"status": "dry_run", "flow": s.previewFlow})
 	case prefix(args, "flow", "run") && hasJSON(args) && hasFlag(args, "--file") && hasFlag(args, "--flows-dir"):
 		s.seen["flow_run"]++
 		return writeScriptedEnvelopeWithoutKind(stdout, map[string]any{"status": "ok", "steps": s.flowRunSteps})
@@ -491,6 +501,18 @@ func hasArg(args []string, want string) bool {
 
 func hasFlag(args []string, want string) bool { return flagValue(args, want) != "" }
 
+func validateScriptedFlowManifest(args []string, root, action string) error {
+	want := []string{
+		"flow", action,
+		"--file", filepath.Join(root, ".polymetrics", "flows", scriptedFlowName+".json"),
+		"--json",
+	}
+	if !exact(args, want...) {
+		return fmt.Errorf("flow %s requires the sample manifest and --json", action)
+	}
+	return nil
+}
+
 func flagValue(args []string, want string) string {
 	for i := 0; i+1 < len(args); i++ {
 		if args[i] == want {
@@ -608,6 +630,20 @@ func TestScriptedCLIDriverRejectsProtocolDrift(t *testing.T) {
 		var stdout, stderr strings.Builder
 		if code := driver.run([]string{"flow", "status", "wrong-flow", "--flows-dir", root, "--json", "--root", root}, &stdout, &stderr); code == 0 {
 			t.Fatal("scripted driver accepted flow status for the wrong flow")
+		}
+	})
+
+	t.Run("flow plan and preview manifests", func(t *testing.T) {
+		for _, action := range []string{"plan", "preview"} {
+			t.Run(action, func(t *testing.T) {
+				driver := newScriptedCLI(t)
+				root := t.TempDir()
+				var stdout, stderr strings.Builder
+				args := []string{"flow", action, "--file", filepath.Join(root, "wrong-flow.json"), "--json", "--root", root}
+				if code := driver.run(args, &stdout, &stderr); code == 0 {
+					t.Fatalf("scripted driver accepted %s with the wrong manifest", action)
+				}
+			})
 		}
 	})
 
