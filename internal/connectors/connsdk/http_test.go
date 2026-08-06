@@ -118,6 +118,7 @@ func TestRequesterRetriesOn429ThenSucceeds(t *testing.T) {
 
 func TestRequesterHonorsProviderRetryAfterBeyondFallbackCap(t *testing.T) {
 	var calls int32
+	now := time.Date(2026, time.August, 6, 12, 0, 0, 0, time.UTC)
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if atomic.AddInt32(&calls, 1) == 1 {
 			w.Header().Set("Retry-After", "90")
@@ -134,6 +135,7 @@ func TestRequesterHonorsProviderRetryAfterBeyondFallbackCap(t *testing.T) {
 		BaseURL:    srv.URL,
 		MaxRetries: 1,
 		MaxBackoff: 30 * time.Second,
+		Now:        func() time.Time { return now },
 		Jitter: func(time.Duration) time.Duration {
 			jitterCalls++
 			return 0
@@ -157,6 +159,61 @@ func TestRequesterHonorsProviderRetryAfterBeyondFallbackCap(t *testing.T) {
 	}
 	if got, want := atomic.LoadInt32(&calls), int32(2); got != want {
 		t.Fatalf("HTTP calls = %d, want retry cap of %d", got, want)
+	}
+}
+
+func TestRequesterWaitsOnlyUntilProviderResetAfterBodyDrain(t *testing.T) {
+	receivedAt := time.Date(2026, time.August, 6, 12, 0, 0, 0, time.UTC)
+	now := receivedAt
+	var calls int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		if atomic.AddInt32(&calls, 1) == 1 {
+			w.Header().Set("Retry-After", "90")
+			w.WriteHeader(http.StatusTooManyRequests)
+			_, _ = w.Write([]byte(`{"error":"limited"}`))
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer srv.Close()
+
+	baseTransport := http.DefaultTransport.(*http.Transport).Clone()
+	t.Cleanup(baseTransport.CloseIdleConnections)
+	client := &http.Client{Transport: roundTripperFunc(func(req *http.Request) (*http.Response, error) {
+		resp, err := baseTransport.RoundTrip(req)
+		if err != nil {
+			return nil, err
+		}
+		if resp.StatusCode == http.StatusTooManyRequests {
+			resp.Body = &advancingReadCloser{
+				ReadCloser: resp.Body,
+				advance: func() {
+					now = now.Add(60 * time.Second)
+				},
+			}
+		}
+		return resp, nil
+	})}
+
+	var waits []time.Duration
+	r := &Requester{
+		BaseURL:    srv.URL,
+		Client:     client,
+		MaxRetries: 1,
+		Now:        func() time.Time { return now },
+		Sleep: func(_ context.Context, d time.Duration) error {
+			waits = append(waits, d)
+			return nil
+		},
+	}
+	if _, err := r.Do(context.Background(), http.MethodGet, "/limited", nil, nil); err != nil {
+		t.Fatalf("Do: %v", err)
+	}
+	if got, want := waits, []time.Duration{30 * time.Second}; !slices.Equal(got, want) {
+		t.Fatalf("waits = %v, want %v", got, want)
+	}
+	if got, want := atomic.LoadInt32(&calls), int32(2); got != want {
+		t.Fatalf("HTTP calls = %d, want %d", got, want)
 	}
 }
 

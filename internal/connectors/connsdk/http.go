@@ -220,6 +220,15 @@ func noReplayClient(client *http.Client) *http.Client {
 	return &clone
 }
 
+func disableTransportReplay(req *http.Request, strictWrite bool) {
+	req.GetBody = nil
+	req.Header.Del("Idempotency-Key")
+	req.Header.Del("X-Idempotency-Key")
+	if strictWrite {
+		req.Close = true
+	}
+}
+
 func (r *Requester) maxRetries() int {
 	if r.DisableRetries {
 		return 0
@@ -850,17 +859,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 			}
 		}
 		if r.DisableRetries {
-			// net/http's transport may replay a request with GetBody or an
-			// Idempotency-Key after a reused-connection failure. This mode is
-			// the executor's strict single-attempt contract, not an opt-in
-			// idempotent retry policy, so remove both replay signals before the
-			// transport sees the request.
-			req.GetBody = nil
-			req.Header.Del("Idempotency-Key")
-			req.Header.Del("X-Idempotency-Key")
-			if strictWrite {
-				req.Close = true
-			}
+			disableTransportReplay(req, strictWrite)
 		}
 		if err := r.admitRequesterSend(ctx, method, &requesterAttempt); err != nil {
 			cleanupRequestBody(body)
@@ -996,6 +995,13 @@ func (r *Requester) applyHeaders(req *http.Request, hasBody bool, contentType st
 // MaxBackoff. Only unhinted fallback retries use bounded full jitter.
 func (r *Requester) backoff(attempt int, observation RateLimitObservation) time.Duration {
 	if observation.HasRetryAfter {
+		if observation.HasReset {
+			remaining := observation.ResetAt.Sub(r.now())
+			if remaining <= 0 {
+				return 0
+			}
+			return remaining
+		}
 		return observation.RetryAfter
 	}
 	return r.fullJitter(r.fallbackBackoff(attempt))

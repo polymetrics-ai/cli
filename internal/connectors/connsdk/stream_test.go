@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"io"
+	"net"
 	"net/http"
 	"net/http/httptest"
 	"slices"
@@ -301,6 +302,65 @@ func TestDoStreamReturnsTypedRateLimitError(t *testing.T) {
 	var httpErr *HTTPError
 	if !errors.As(err, &httpErr) || httpErr.Status != http.StatusTooManyRequests {
 		t.Fatalf("wrapped HTTPError = %v, want 429", httpErr)
+	}
+}
+
+func TestDoStreamDisableRetriesPreventsMutationTransportReplay(t *testing.T) {
+	var mutationHits int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		if req.URL.Path == "/mutate" {
+			atomic.AddInt32(&mutationHits, 1)
+		}
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer srv.Close()
+
+	var injectedFailures int32
+	var idempotencyHeaders int32
+	dialer := net.Dialer{}
+	transport := &http.Transport{
+		MaxIdleConnsPerHost: 1,
+		DialContext: func(ctx context.Context, network, address string) (net.Conn, error) {
+			conn, err := dialer.DialContext(ctx, network, address)
+			if err != nil {
+				return nil, err
+			}
+			return requestWriteFailureConn{Conn: conn, fail: func(p []byte) bool {
+				if !strings.HasPrefix(string(p), "POST /mutate ") {
+					return false
+				}
+				if strings.Contains(string(p), "\r\nIdempotency-Key:") {
+					atomic.AddInt32(&idempotencyHeaders, 1)
+				}
+				return atomic.CompareAndSwapInt32(&injectedFailures, 0, 1)
+			}}, nil
+		},
+	}
+	t.Cleanup(transport.CloseIdleConnections)
+	client := &http.Client{Transport: transport}
+	primeHTTPConnection(t, client, srv.URL)
+
+	r := &Requester{
+		BaseURL:        srv.URL,
+		Client:         client,
+		DisableRetries: true,
+		DefaultHeaders: map[string]string{"Idempotency-Key": "configured-key"},
+	}
+	resp, err := r.DoStream(context.Background(), http.MethodPost, "/mutate", nil, StreamOptions{})
+	if err == nil {
+		if resp != nil {
+			resp.Body.Close()
+		}
+		t.Fatal("DoStream: expected transport error")
+	}
+	if got, want := atomic.LoadInt32(&injectedFailures), int32(1); got != want {
+		t.Fatalf("injected failures = %d, want %d", got, want)
+	}
+	if got := atomic.LoadInt32(&idempotencyHeaders); got != 0 {
+		t.Fatalf("idempotency headers = %d, want none", got)
+	}
+	if got := atomic.LoadInt32(&mutationHits); got != 0 {
+		t.Fatalf("mutation hits = %d, want no transport replay", got)
 	}
 }
 

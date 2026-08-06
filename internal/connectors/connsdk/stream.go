@@ -79,7 +79,12 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 	// synchronously inside client.Do, so there is no sharing across calls.
 	var credKeys []string
 	requesterAttempt := 0
-	client := r.clientWithRateLimitAdmission(r.streamClient(base, opts, &credKeys), &requesterAttempt)
+	strictWrite := r.DisableRetries && !isSafeReplayableRead(method)
+	baseClient := r.streamClient(base, opts, &credKeys)
+	if strictWrite {
+		baseClient = noReplayClient(baseClient)
+	}
+	client := r.clientWithRateLimitAdmission(baseClient, &requesterAttempt)
 
 	attempts := r.maxRetries() + 1
 	var lastErr error
@@ -103,6 +108,9 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 			}
 		}
 		credKeys = credentialHeaderKeys(before, req.Header, r.DefaultHeaders)
+		if r.DisableRetries {
+			disableTransportReplay(req, strictWrite)
+		}
 		if err := r.admitRequesterSend(ctx, method, &requesterAttempt); err != nil {
 			return nil, err
 		}
