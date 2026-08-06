@@ -16,6 +16,14 @@ type AddCredentialRequest struct {
 	LinkCredential string            `json:"-"`
 }
 
+type CredentialCoordinationDeclarationError struct {
+	err error
+}
+
+func (e *CredentialCoordinationDeclarationError) Error() string { return e.err.Error() }
+
+func (e *CredentialCoordinationDeclarationError) Unwrap() error { return e.err }
+
 type CredentialMeta struct {
 	ID              string            `json:"id"`
 	Name            string            `json:"name"`

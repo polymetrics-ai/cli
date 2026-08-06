@@ -358,6 +358,10 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 			LinkCredential: flags.first("link-credential"),
 		})
 		if err != nil {
+			var declarationErr *app.CredentialCoordinationDeclarationError
+			if errors.As(err, &declarationErr) {
+				return validationErrorf("%v", err)
+			}
 			return err
 		}
 		if jsonOut {
@@ -375,7 +379,7 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 		flags := parseFlags(args[2:])
 		target := flags.first("to")
 		if target == "" {
-			return errors.New("missing --to")
+			return usageErrorf("missing --to")
 		}
 		if err := safety.ValidateIdentifier(target, "credential"); err != nil {
 			return validationErrorf("%v", err)

@@ -291,3 +291,157 @@ func TestCredentialCoordination_RejectsInvalidDeclarationsBeforePersistence(t *t
 		t.Fatalf("invalid declarations persisted credentials: %v", credentials)
 	}
 }
+
+func TestCredentialCoordination_CrossConnectorLinksRequireExplicitDeclarations(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject() error = %v", err)
+	}
+	instance, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open() error = %v", err)
+	}
+
+	if _, err := instance.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "sample-undeclared",
+		Connector: "sample",
+	}); err != nil {
+		t.Fatalf("AddCredential(undeclared) error = %v", err)
+	}
+	if _, err := instance.AddCredential(ctx, app.AddCredentialRequest{
+		Name:           "sample-declared",
+		Connector:      "sample",
+		ProviderFamily: "sample",
+		AuthProfile:    "default",
+	}); err != nil {
+		t.Fatalf("AddCredential(declared) error = %v", err)
+	}
+	if _, err := instance.LinkCredential("sample-undeclared", "sample-declared"); err != nil {
+		t.Fatalf("LinkCredential(same connector) error = %v", err)
+	}
+	if _, err := instance.AddCredential(ctx, app.AddCredentialRequest{
+		Name:           "faker-explicit",
+		Connector:      "faker",
+		ProviderFamily: "sample",
+		AuthProfile:    "default",
+	}); err != nil {
+		t.Fatalf("AddCredential(cross connector) error = %v", err)
+	}
+
+	requireExplicitDeclarations := func(err error) {
+		t.Helper()
+		if err == nil {
+			t.Fatal("cross-connector link accepted an undeclared credential")
+		}
+		if !strings.Contains(err.Error(), "explicitly declared") {
+			t.Fatalf("cross-connector link error = %v, want explicit declaration failure", err)
+		}
+	}
+	_, err = instance.LinkCredential("faker-explicit", "sample-undeclared")
+	requireExplicitDeclarations(err)
+	_, err = instance.LinkCredential("sample-undeclared", "faker-explicit")
+	requireExplicitDeclarations(err)
+	_, err = instance.AddCredential(ctx, app.AddCredentialRequest{
+		Name:           "faker-linked-on-create",
+		Connector:      "faker",
+		ProviderFamily: "sample",
+		AuthProfile:    "default",
+		LinkCredential: "sample-undeclared",
+	})
+	requireExplicitDeclarations(err)
+
+	_, undeclaredRuntime, err := instance.ResolveConnectorCredential(ctx, "sample", "sample-undeclared", nil)
+	if err != nil {
+		t.Fatalf("ResolveConnectorCredential(undeclared) error = %v", err)
+	}
+	_, explicitRuntime, err := instance.ResolveConnectorCredential(ctx, "faker", "faker-explicit", nil)
+	if err != nil {
+		t.Fatalf("ResolveConnectorCredential(explicit) error = %v", err)
+	}
+	if undeclaredRuntime.CoordinationIdentity.AuthCohortKey() == explicitRuntime.CoordinationIdentity.AuthCohortKey() {
+		t.Fatal("undeclared credential shared a cross-connector auth cohort")
+	}
+}
+
+func TestCredentialCoordination_MigrationIsolatesUnverifiedCrossConnectorBindings(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject() error = %v", err)
+	}
+	instance, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open() error = %v", err)
+	}
+	for _, request := range []app.AddCredentialRequest{
+		{
+			Name:           "sample-shared",
+			Connector:      "sample",
+			ProviderFamily: "provider-fixture",
+			AuthProfile:    "service-profile",
+		},
+		{
+			Name:           "faker-shared",
+			Connector:      "faker",
+			ProviderFamily: "provider-fixture",
+			AuthProfile:    "service-profile",
+		},
+	} {
+		if _, err := instance.AddCredential(ctx, request); err != nil {
+			t.Fatalf("AddCredential(%s) error = %v", request.Name, err)
+		}
+	}
+	if _, err := instance.LinkCredential("faker-shared", "sample-shared"); err != nil {
+		t.Fatalf("LinkCredential() error = %v", err)
+	}
+
+	statePath := filepath.Join(root, ".polymetrics", "state", "state.json")
+	stateBytes, err := os.ReadFile(statePath)
+	if err != nil {
+		t.Fatalf("read state: %v", err)
+	}
+	var persisted map[string]any
+	if err := json.Unmarshal(stateBytes, &persisted); err != nil {
+		t.Fatalf("decode state: %v", err)
+	}
+	bindings, ok := persisted["credential_bindings"].(map[string]any)
+	if !ok {
+		t.Fatal("test setup did not persist credential bindings")
+	}
+	for _, rawBinding := range bindings {
+		binding, ok := rawBinding.(map[string]any)
+		if !ok {
+			t.Fatal("test setup binding has unexpected representation")
+		}
+		delete(binding, "provider_family_declared")
+		delete(binding, "auth_profile_declared")
+		delete(binding, "declaration_provenance_recorded")
+	}
+	legacyBytes, err := json.Marshal(persisted)
+	if err != nil {
+		t.Fatalf("encode unverified state: %v", err)
+	}
+	if err := os.WriteFile(statePath, legacyBytes, 0o600); err != nil {
+		t.Fatalf("write unverified state: %v", err)
+	}
+
+	migrated, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open(unverified state) error = %v", err)
+	}
+	_, sampleRuntime, err := migrated.ResolveConnectorCredential(ctx, "sample", "sample-shared", nil)
+	if err != nil {
+		t.Fatalf("ResolveConnectorCredential(sample) error = %v", err)
+	}
+	_, fakerRuntime, err := migrated.ResolveConnectorCredential(ctx, "faker", "faker-shared", nil)
+	if err != nil {
+		t.Fatalf("ResolveConnectorCredential(faker) error = %v", err)
+	}
+	if sampleRuntime.CoordinationIdentity.AuthCohortKey() == fakerRuntime.CoordinationIdentity.AuthCohortKey() {
+		t.Fatal("migration retained an unverified cross-connector auth cohort")
+	}
+	if _, err := migrated.LinkCredential("faker-shared", "sample-shared"); err == nil {
+		t.Fatal("migration accepted a cross-connector link without declaration provenance")
+	}
+}

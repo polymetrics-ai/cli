@@ -108,3 +108,49 @@ func TestCredentialsCoordinationLinkRejectsIncompatibleProfileWithoutEchoingValu
 		t.Fatal("incompatible link error echoed a declared metadata value")
 	}
 }
+
+func TestCredentialsCoordinationInputErrorsUseDocumentedCategories(t *testing.T) {
+	root := t.TempDir()
+	var stdout, stderr bytes.Buffer
+	if code := cli.Run([]string{"init", "--root", root}, &stdout, &stderr); code != 0 {
+		t.Fatalf("init code = %d stderr = %s", code, stderr.String())
+	}
+
+	for _, test := range []struct {
+		name     string
+		args     []string
+		wantCode int
+		category string
+	}{
+		{
+			name:     "invalid provider family",
+			args:     []string{"credentials", "add", "invalid-provider-family", "--connector", "sample", "--provider-family", "invalid family", "--root", root, "--json"},
+			wantCode: 3,
+			category: "validation",
+		},
+		{
+			name:     "invalid auth profile",
+			args:     []string{"credentials", "add", "invalid-auth-profile", "--connector", "sample", "--auth-profile", "invalid profile", "--root", root, "--json"},
+			wantCode: 3,
+			category: "validation",
+		},
+		{
+			name:     "missing link target",
+			args:     []string{"credentials", "link", "sample-local", "--root", root, "--json"},
+			wantCode: 2,
+			category: "usage",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			stdout.Reset()
+			stderr.Reset()
+			code := cli.Run(test.args, &stdout, &stderr)
+			if code != test.wantCode {
+				t.Fatalf("Run(%v) code = %d, want %d; stdout = %s stderr = %s", test.args, code, test.wantCode, stdout.String(), stderr.String())
+			}
+			if !strings.Contains(stdout.String(), `"category": "`+test.category+`"`) {
+				t.Fatalf("Run(%v) did not return %s error category: %s", test.args, test.category, stdout.String())
+			}
+		})
+	}
+}
