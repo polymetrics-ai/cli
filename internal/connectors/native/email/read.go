@@ -23,6 +23,7 @@ import (
 const (
 	defaultMessageLimit = 100
 	maxMessageLimit     = 1000
+	uidSearchWindowSize = 1000
 	maxBodyPartBytes    = 1 << 20
 	maxBodyParts        = 32
 )
@@ -169,7 +170,7 @@ func readMessages(ctx context.Context, client *imapclient.Client, mailbox string
 	if prior.uidValidity != 0 && prior.uidValidity != selected.UIDValidity {
 		lowerUID = 0
 	}
-	uids, err := searchUIDsAfter(client, lowerUID, boundedMessageLimit(requestedLimit))
+	uids, err := searchUIDsAfter(client, lowerUID, selected.UIDNext, boundedMessageLimit(requestedLimit))
 	if err != nil {
 		return err
 	}
@@ -234,28 +235,51 @@ func boundedMessageLimit(limit int) int {
 	return limit
 }
 
-func searchUIDsAfter(client *imapclient.Client, lowerUID uint32, limit int) ([]imap.UID, error) {
-	if lowerUID == math.MaxUint32 {
+func searchUIDsAfter(client *imapclient.Client, lowerUID uint32, uidNext imap.UID, limit int) ([]imap.UID, error) {
+	if lowerUID == math.MaxUint32 || limit <= 0 {
 		return nil, nil
 	}
-	var set imap.UIDSet
-	set.AddRange(imap.UID(lowerUID+1), 0) // 0 is IMAP's dynamic "*" upper bound.
-	data, err := client.UIDSearch(&imap.SearchCriteria{UID: []imap.UIDSet{set}}, nil).Wait()
-	if err != nil {
-		return nil, errors.New("IMAP UID SEARCH failed")
+	if uidNext == 0 {
+		return nil, errors.New("IMAP mailbox did not provide UIDNEXT")
 	}
-	uids := append([]imap.UID(nil), data.AllUIDs()...)
-	sort.Slice(uids, func(i, j int) bool { return uids[i] < uids[j] })
-	filtered := uids[:0]
-	for _, uid := range uids {
-		if uint32(uid) > lowerUID {
-			filtered = append(filtered, uid)
+	highestUID := uint32(uidNext) - 1
+	if lowerUID >= highestUID {
+		return nil, nil
+	}
+	start := lowerUID + 1
+	filtered := make([]imap.UID, 0, limit)
+	for start <= highestUID && len(filtered) < limit {
+		stop := uidSearchWindowEnd(start, highestUID)
+		var set imap.UIDSet
+		set.AddRange(imap.UID(start), imap.UID(stop))
+		data, err := client.UIDSearch(&imap.SearchCriteria{UID: []imap.UIDSet{set}}, nil).Wait()
+		if err != nil {
+			return nil, errors.New("IMAP UID SEARCH failed")
 		}
-		if len(filtered) == limit {
+		uids := append([]imap.UID(nil), data.AllUIDs()...)
+		sort.Slice(uids, func(i, j int) bool { return uids[i] < uids[j] })
+		for _, uid := range uids {
+			if uint32(uid) < start || uint32(uid) > stop {
+				continue
+			}
+			filtered = append(filtered, uid)
+			if len(filtered) == limit {
+				break
+			}
+		}
+		if stop == highestUID {
 			break
 		}
+		start = stop + 1
 	}
 	return filtered, nil
+}
+
+func uidSearchWindowEnd(start, highest uint32) uint32 {
+	if highest-start < uidSearchWindowSize-1 {
+		return highest
+	}
+	return start + uidSearchWindowSize - 1
 }
 
 func fetchMessageMetadata(client *imapclient.Client, uids []imap.UID) ([]*imapclient.FetchMessageBuffer, error) {

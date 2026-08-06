@@ -39,6 +39,10 @@ type App struct {
 	sqlEngine  sqlQueryEngine
 }
 
+type credentialValidator interface {
+	ValidateCredential(connectors.RuntimeConfig) error
+}
+
 // sqlQueryEngine is the pluggable backend for App.QuerySQL. The default build
 // uses a JSONL engine that reproduces the historical SELECT * behavior; the
 // duckdb-tagged build swaps in an analytical DuckDB engine.
@@ -450,6 +454,14 @@ func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (Cred
 	}
 	if err := connectors.ValidateConfiguration(connector, req.Config); err != nil {
 		return CredentialMeta{}, fmt.Errorf("credential configuration: %w", err)
+	}
+	if validator, ok := connector.(credentialValidator); ok {
+		if err := validator.ValidateCredential(connectors.RuntimeConfig{
+			Config:  cloneStringMap(req.Config),
+			Secrets: cloneStringMap(req.Secrets),
+		}); err != nil {
+			return CredentialMeta{}, fmt.Errorf("credential validation: %w", err)
+		}
 	}
 	if err := a.vault.Put(ctx, id, req.Secrets); err != nil {
 		return CredentialMeta{}, err
