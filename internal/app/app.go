@@ -24,7 +24,10 @@ import (
 	"polymetrics.ai/internal/vault"
 )
 
-const reversePlanModeConnectorCommand = "connector_command"
+const (
+	reversePlanModeConnectorCommand               = "connector_command"
+	reversePlanStatusApprovalConsumptionUncertain = "approval_consumption_uncertain"
+)
 
 var errStateRevisionConflict = errors.New("project state changed in another process")
 
@@ -1355,6 +1358,9 @@ func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string) (Rever
 	if plan.Mode != reversePlanModeConnectorCommand {
 		return ReversePlan{}, connectors.WritePreview{}, fmt.Errorf("reverse plan %q is not a connector command plan", id)
 	}
+	if err := approvalConsumptionUncertainError(plan, nil); err != nil {
+		return ReversePlan{}, connectors.WritePreview{}, err
+	}
 	if err := a.previewabilityError(plan, time.Now().UTC()); err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
@@ -1462,6 +1468,9 @@ func (a *App) PreviewReversePlan(ctx context.Context, id string) (ReversePlan, c
 	if err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
+	if err := approvalConsumptionUncertainError(plan, nil); err != nil {
+		return ReversePlan{}, connectors.WritePreview{}, err
+	}
 	if plan.Mode == reversePlanModeConnectorCommand {
 		return a.PreviewConnectorCommandPlan(ctx, id)
 	}
@@ -1541,6 +1550,9 @@ func (a *App) persistDestructivePreview(plan ReversePlan, preview connectors.Wri
 			if stored.ID != plan.ID {
 				continue
 			}
+			if err := approvalConsumptionUncertainError(stored, nil); err != nil {
+				return current, err
+			}
 			if err := a.previewabilityError(stored, now); err != nil {
 				return current, err
 			}
@@ -1613,6 +1625,9 @@ func (a *App) persistOperationDirectWritePreview(plan ReversePlan, preview conne
 			stored := current.ReversePlans[i]
 			if stored.ID != plan.ID {
 				continue
+			}
+			if err := approvalConsumptionUncertainError(stored, nil); err != nil {
+				return current, err
 			}
 			if err := a.previewabilityError(stored, now); err != nil {
 				return current, err
@@ -1818,6 +1833,9 @@ func (a *App) RunReverseETL(ctx context.Context, req RunReverseETLRequest) (Reve
 	if err != nil {
 		return ReverseRun{}, err
 	}
+	if err := approvalConsumptionUncertainError(plan, nil); err != nil {
+		return ReverseRun{}, err
+	}
 	if err := a.previewabilityError(plan, time.Now().UTC()); err != nil {
 		return ReverseRun{}, err
 	}
@@ -2021,6 +2039,9 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 			if stored.ID != expected.ID {
 				continue
 			}
+			if err := approvalConsumptionUncertainError(stored, nil); err != nil {
+				return current, err
+			}
 			if err := a.previewabilityError(stored, now); err != nil {
 				return current, err
 			}
@@ -2062,10 +2083,11 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 				}
 				evidence = verified
 			}
-			stored.Status = "executing"
+			stored.Status = reversePlanStatusApprovalConsumptionUncertain
 			stored.ApprovalTokenHash = ""
 			stored.ApprovalGrant = nil
 			stored.ApprovalConsumedAt = now
+			stored.ApprovalUncertainAt = now
 			current.ReversePlans[i] = stored
 			consumed = stored
 			return current, nil
@@ -2073,10 +2095,24 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 		return current, fmt.Errorf("reverse plan %q not found", expected.ID)
 	})
 	if err != nil {
+		if statestore.CommitOutcomeForError(err) == statestore.CommitOutcomeCommitted {
+			return nil, ReversePlan{}, approvalConsumptionUncertainError(consumed, err)
+		}
 		return nil, ReversePlan{}, err
 	}
 	a.state = updated
 	return evidence, consumed, nil
+}
+
+func approvalConsumptionUncertainError(plan ReversePlan, cause error) error {
+	if plan.Status != reversePlanStatusApprovalConsumptionUncertain {
+		return nil
+	}
+	return &ApprovalConsumptionUncertainError{
+		PlanID:     plan.ID,
+		ConsumedAt: plan.ApprovalConsumedAt,
+		err:        cause,
+	}
 }
 
 func (a *App) finishReverseWrite(planID string, run ReverseRun, result connectors.WriteResult, staged int, writeErr error) (ReverseRun, error) {
@@ -2113,8 +2149,9 @@ func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, res
 	updated, persistErr := a.updateState(func(current state) (state, error) {
 		current.ReverseRuns = append(current.ReverseRuns, run)
 		for i := range current.ReversePlans {
-			if current.ReversePlans[i].ID == planID && current.ReversePlans[i].Status == "executing" {
+			if current.ReversePlans[i].ID == planID && (current.ReversePlans[i].Status == "executing" || current.ReversePlans[i].Status == reversePlanStatusApprovalConsumptionUncertain) {
 				current.ReversePlans[i].Status = planStatus
+				current.ReversePlans[i].ApprovalUncertainAt = time.Time{}
 				break
 			}
 		}

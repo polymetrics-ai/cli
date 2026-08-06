@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"time"
 
 	"polymetrics.ai/internal/connectors"
@@ -32,6 +33,26 @@ type CredentialLinkValidationError struct {
 func (e *CredentialLinkValidationError) Error() string { return e.err.Error() }
 
 func (e *CredentialLinkValidationError) Unwrap() error { return e.err }
+
+type ApprovalConsumptionUncertainError struct {
+	PlanID     string
+	ConsumedAt time.Time
+	err        error
+}
+
+func (e *ApprovalConsumptionUncertainError) Error() string {
+	if e == nil {
+		return "reverse plan approval consumption transition is uncertain; create a new reverse plan and obtain a fresh preview and approval before retrying"
+	}
+	return fmt.Sprintf("reverse plan %q approval consumption transition is uncertain; create a new reverse plan and obtain a fresh preview and approval before retrying", e.PlanID)
+}
+
+func (e *ApprovalConsumptionUncertainError) Unwrap() error {
+	if e == nil {
+		return nil
+	}
+	return e.err
+}
 
 type CredentialMeta struct {
 	ID              string            `json:"id"`
@@ -183,6 +204,7 @@ type ReversePlan struct {
 	ApprovalGrant              *connectors.WriteApprovalGrant `json:"approval_grant,omitempty"`
 	ApprovalToken              string                         `json:"approval_token,omitempty"`
 	ApprovalConsumedAt         time.Time                      `json:"approval_consumed_at,omitempty"`
+	ApprovalUncertainAt        time.Time                      `json:"approval_consumption_uncertain_at,omitempty"`
 	CreatedAt                  time.Time                      `json:"created_at"`
 	ExpiresAt                  time.Time                      `json:"expires_at"`
 }
