@@ -889,7 +889,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 	flush := func(force bool) error {
 		if len(batch) == 0 {
 			if force && mode.IsOverwrite() && firstWrite {
-				_, err := destination.Write(ctx, connectors.WriteRequest{
+				writeResult, err := destination.Write(ctx, connectors.WriteRequest{
 					Stream:     streamName,
 					Table:      stream.DestinationTable,
 					Action:     "upsert",
@@ -898,7 +898,10 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 					PrimaryKey: stream.PrimaryKey,
 				}, nil)
 				firstWrite = false
-				return err
+				if err != nil {
+					return err
+				}
+				return validateCompleteETLBatchWrite(writeResult, 0)
 			}
 			return nil
 		}
@@ -914,11 +917,11 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 		if err != nil {
 			return err
 		}
+		if err := validateCompleteETLBatchWrite(writeResult, len(batch)); err != nil {
+			return err
+		}
 		result.RecordsLoaded += writeResult.RecordsWritten
 		result.RecordsFailed += writeResult.RecordsFailed
-		if writeResult.RecordsFailed > 0 {
-			return fmt.Errorf("destination write reported %d failed records", writeResult.RecordsFailed)
-		}
 		result.BatchCount++
 		batch = batch[:0]
 		return nil
@@ -987,6 +990,13 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 	result.Checkpoint = checkpointForResult(result, mode, stateKey, updated)
 	result.PendingStreamState = &pendingStreamState{Key: stateKey, State: updated}
 	return result, nil
+}
+
+func validateCompleteETLBatchWrite(result connectors.WriteResult, batchSize int) error {
+	if result.RecordsWritten != batchSize || result.RecordsFailed != 0 {
+		return fmt.Errorf("destination write reported %d records written and %d failed for batch of %d", result.RecordsWritten, result.RecordsFailed, batchSize)
+	}
+	return nil
 }
 
 func (a *App) beginRun(run Run) (Run, error) {
@@ -2095,7 +2105,7 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 		return current, fmt.Errorf("reverse plan %q not found", expected.ID)
 	})
 	if err != nil {
-		if statestore.CommitOutcomeForError(err) == statestore.CommitOutcomeCommitted {
+		if stateStoreCommitMayHaveSucceeded(err) {
 			return nil, ReversePlan{}, approvalConsumptionUncertainError(consumed, err)
 		}
 		return nil, ReversePlan{}, err

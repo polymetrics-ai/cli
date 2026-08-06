@@ -167,6 +167,42 @@ func TestJSONStoreUpdateReportsCommittedOutcomeAfterUnlockFailure(t *testing.T) 
 	}
 }
 
+func TestJSONStoreUpdateReportsIndeterminateOutcomeAfterDirectorySyncFailure(t *testing.T) {
+	wantErr := errors.New("directory sync failed")
+	store := state.JSONStore[testConfig]{
+		Path: filepath.Join(t.TempDir(), "state.json"),
+		SyncDirectory: func(string) error {
+			return wantErr
+		},
+	}
+
+	updated, err := store.Update(func(current testConfig) (testConfig, error) {
+		current.Count++
+		return current, nil
+	})
+	var outcome *state.CommitOutcomeError
+	if !errors.As(err, &outcome) {
+		t.Fatalf("Update() error = %T %v, want CommitOutcomeError", err, err)
+	}
+	if outcome.Outcome != state.CommitOutcomeIndeterminate || !outcome.Outcome.MayHaveCommitted() {
+		t.Fatalf("commit outcome = %q, want indeterminate", outcome.Outcome)
+	}
+	if !errors.Is(err, wantErr) {
+		t.Fatalf("Update() error = %v, want wrapped %v", err, wantErr)
+	}
+	if updated.Count != 1 {
+		t.Fatalf("updated count = %d, want 1", updated.Count)
+	}
+
+	persisted, err := store.Load()
+	if err != nil {
+		t.Fatalf("Load() error = %v", err)
+	}
+	if persisted.Count != updated.Count {
+		t.Fatalf("persisted count = %d, want %d", persisted.Count, updated.Count)
+	}
+}
+
 func TestJSONStoreRedactedSnapshot(t *testing.T) {
 	type credentials struct {
 		Name   string         `json:"name"`
