@@ -2,12 +2,18 @@ package postgres
 
 import (
 	"encoding/binary"
+	"errors"
 	"fmt"
 	"io"
 	"math"
 	"strconv"
 
 	"polymetrics.ai/internal/connectors"
+)
+
+var (
+	errCDCReplicaIdentityUpdate     = errors.New("postgres CDC does not support updates that change replica-identity fields")
+	errCDCReplicaIdentityFullUpdate = errors.New("postgres CDC does not support updates from REPLICA IDENTITY FULL tables")
 )
 
 type pgoutputDecoder struct {
@@ -42,7 +48,7 @@ func (d *pgoutputDecoder) decode(message []byte, lsn string) ([]connectors.CDCEv
 	}
 	r := pgoutputReader{buf: message[1:]}
 	switch message[0] {
-	case 'B', 'C', 'Y':
+	case 'B', 'C', 'O', 'Y':
 		return nil, nil
 	case 'R':
 		rel, err := r.relation()
@@ -115,6 +121,12 @@ func (d *pgoutputDecoder) decodeUpdate(r *pgoutputReader, lsn string) (connector
 	}
 	tag := r.byte()
 	if tag == 'K' || tag == 'O' {
+		if d.matches(rel) {
+			if tag == 'K' {
+				return connectors.CDCEvent{}, false, fmt.Errorf("pgoutput update: %w", errCDCReplicaIdentityUpdate)
+			}
+			return connectors.CDCEvent{}, false, fmt.Errorf("pgoutput update: %w", errCDCReplicaIdentityFullUpdate)
+		}
 		if _, err := r.tuple(rel); err != nil {
 			return connectors.CDCEvent{}, false, fmt.Errorf("pgoutput update: old tuple: %w", err)
 		}

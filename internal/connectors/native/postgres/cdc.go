@@ -99,13 +99,17 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 		Mode: pglogrepl.LogicalReplication,
 		PluginArgs: []string{
 			"proto_version '1'",
-			"publication_names '" + publication + "'",
+			cdcPublicationPluginArgument(publication),
 		},
 	}); err != nil {
 		return classifyCDCStartError(req.Checkpoint, err)
 	}
 
 	return consumeLogicalReplication(ctx, replication, source, slotSetup.barrier, start, req, emit)
+}
+
+func cdcPublicationPluginArgument(publication string) string {
+	return "publication_names '" + quoteIdentifier(publication) + "'"
 }
 
 func classifyCDCStartError(checkpoint *synccontract.CheckpointEnvelope, err error) error {

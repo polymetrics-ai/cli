@@ -33,6 +33,7 @@ var (
 	errCDCFixtureMode                  = errors.New("postgres CDC requires a real PostgreSQL source; fixture mode is not a replication protocol")
 	errCDCRelationHasDescendants       = errors.New("postgres CDC does not support a selected relation with descendant tables")
 	errCDCRelationNotPublished         = errors.New("postgres CDC selected relation is not included in the configured publication")
+	errCDCPublicationMissingDML        = errors.New("postgres CDC requires a publication that publishes insert, update, and delete changes")
 	errCDCPublicationPublishesTruncate = errors.New("postgres CDC requires a publication without TRUNCATE events")
 )
 
@@ -224,7 +225,7 @@ func validateCDCRelationScope(ctx context.Context, conn connConfig, source postg
 	}
 	defer func() { _ = data.Close(ctx) }()
 
-	var hasDescendants, published, publishesTruncate bool
+	var hasDescendants, published, publishesInsert, publishesUpdate, publishesDelete, publishesTruncate bool
 	err = data.QueryRow(ctx, `
 	SELECT
 		EXISTS (
@@ -240,10 +241,25 @@ func validateCDCRelationScope(ctx context.Context, conn connConfig, source postg
 			WHERE pubname = $3 AND schemaname = $1 AND tablename = $2
 		),
 		COALESCE((
+			SELECT pubinsert
+			FROM pg_publication
+			WHERE pubname = $3
+		), false),
+		COALESCE((
+			SELECT pubupdate
+			FROM pg_publication
+			WHERE pubname = $3
+		), false),
+		COALESCE((
+			SELECT pubdelete
+			FROM pg_publication
+			WHERE pubname = $3
+		), false),
+		COALESCE((
 			SELECT pubtruncate
 			FROM pg_publication
 			WHERE pubname = $3
-		), false)`, source.schema, source.table, publication).Scan(&hasDescendants, &published, &publishesTruncate)
+		), false)`, source.schema, source.table, publication).Scan(&hasDescendants, &published, &publishesInsert, &publishesUpdate, &publishesDelete, &publishesTruncate)
 	if err != nil {
 		return fmt.Errorf("postgres CDC: inspect selected relation scope: %w", err)
 	}
@@ -251,6 +267,9 @@ func validateCDCRelationScope(ctx context.Context, conn connConfig, source postg
 		return err
 	}
 	if err := validateCDCRelationHierarchy(hasDescendants); err != nil {
+		return err
+	}
+	if err := validateCDCPublicationDML(publishesInsert, publishesUpdate, publishesDelete); err != nil {
 		return err
 	}
 	return validateCDCPublicationTruncate(publishesTruncate)
@@ -266,6 +285,13 @@ func validateCDCPublicationScope(published bool) error {
 func validateCDCRelationHierarchy(hasDescendants bool) error {
 	if hasDescendants {
 		return errCDCRelationHasDescendants
+	}
+	return nil
+}
+
+func validateCDCPublicationDML(publishesInsert, publishesUpdate, publishesDelete bool) error {
+	if !publishesInsert || !publishesUpdate || !publishesDelete {
+		return errCDCPublicationMissingDML
 	}
 	return nil
 }

@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"encoding/binary"
+	"errors"
 	"reflect"
 	"testing"
 
@@ -55,8 +56,8 @@ func TestPGOutputDecoderDML(t *testing.T) {
 			},
 		},
 		{
-			name:    "update with old key",
-			message: updateMessage(testRelationID, []tupleField{textField("7")}, []tupleField{textField("7"), textField("grace@example.invalid"), textField("f"), textField("99.25")}),
+			name:    "update",
+			message: updateMessage(testRelationID, nil, []tupleField{textField("7"), textField("grace@example.invalid"), textField("f"), textField("99.25")}),
 			want: connectors.CDCEvent{
 				Operation: "update",
 				Record: connectors.Record{
@@ -131,6 +132,63 @@ func TestPGOutputDecoderConsumesTypeMetadata(t *testing.T) {
 	}
 	if len(events) != 0 {
 		t.Fatalf("type metadata emitted %d event(s), want 0", len(events))
+	}
+}
+
+func TestPGOutputDecoderConsumesOriginMetadata(t *testing.T) {
+	dec := newPGOutputDecoder("public", "users")
+	events, err := dec.decode(originMessage(42, "upstream"), "")
+	if err != nil {
+		t.Fatalf("decode origin metadata: %v", err)
+	}
+	if len(events) != 0 {
+		t.Fatalf("origin metadata emitted %d event(s), want 0", len(events))
+	}
+}
+
+func TestPGOutputDecoderRejectsSelectedReplicaIdentityUpdates(t *testing.T) {
+	dec := newPGOutputDecoder("public", "users")
+	columns := []testColumn{{name: "id", typeID: 23}, {name: "email", typeID: 25}}
+	if _, err := dec.decode(relationMessage(testRelationID, "public", "users", columns...), ""); err != nil {
+		t.Fatalf("decode relation: %v", err)
+	}
+
+	for _, tc := range []struct {
+		name    string
+		message []byte
+		want    error
+	}{
+		{
+			name:    "changed replica identity key",
+			message: updateMessage(testRelationID, []tupleField{textField("7")}, []tupleField{textField("8"), textField("grace@example.invalid")}),
+			want:    errCDCReplicaIdentityUpdate,
+		},
+		{
+			name:    "replica identity full",
+			message: updateMessageWithOldTuple(testRelationID, 'O', []tupleField{textField("7"), textField("ada@example.invalid")}, []tupleField{textField("7"), textField("grace@example.invalid")}),
+			want:    errCDCReplicaIdentityFullUpdate,
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			if _, err := dec.decode(tc.message, ""); !errors.Is(err, tc.want) {
+				t.Fatalf("decode update = %v, want %v", err, tc.want)
+			}
+		})
+	}
+}
+
+func TestPGOutputDecoderSkipsUnrequestedReplicaIdentityUpdates(t *testing.T) {
+	dec := newPGOutputDecoder("public", "users")
+	columns := []testColumn{{name: "id", typeID: 23}, {name: "email", typeID: 25}}
+	if _, err := dec.decode(relationMessage(testRelationID+1, "public", "orders", columns...), ""); err != nil {
+		t.Fatalf("decode relation: %v", err)
+	}
+	events, err := dec.decode(updateMessage(testRelationID+1, []tupleField{textField("7")}, []tupleField{textField("8"), textField("grace@example.invalid")}), "")
+	if err != nil {
+		t.Fatalf("decode unrelated update: %v", err)
+	}
+	if len(events) != 0 {
+		t.Fatalf("unrelated update emitted %d event(s), want 0", len(events))
 	}
 }
 
@@ -216,6 +274,14 @@ func typeMessage(id uint32, schema, name string) []byte {
 	return b
 }
 
+func originMessage(lsn uint64, name string) []byte {
+	var b []byte
+	b = append(b, 'O')
+	b = appendUint64(b, lsn)
+	b = appendCString(b, name)
+	return b
+}
+
 func insertMessage(relID uint32, fields ...tupleField) []byte {
 	b := insertPrefix(relID)
 	return append(b, tupleData(fields...)...)
@@ -230,12 +296,19 @@ func insertPrefix(relID uint32) []byte {
 }
 
 func updateMessage(relID uint32, oldKey, newTuple []tupleField) []byte {
+	if oldKey == nil {
+		return updateMessageWithOldTuple(relID, 0, nil, newTuple)
+	}
+	return updateMessageWithOldTuple(relID, 'K', oldKey, newTuple)
+}
+
+func updateMessageWithOldTuple(relID uint32, tupleKind byte, oldTuple, newTuple []tupleField) []byte {
 	var b []byte
 	b = append(b, 'U')
 	b = appendUint32(b, relID)
-	if oldKey != nil {
-		b = append(b, 'K')
-		b = append(b, tupleData(oldKey...)...)
+	if tupleKind != 0 {
+		b = append(b, tupleKind)
+		b = append(b, tupleData(oldTuple...)...)
 	}
 	b = append(b, 'N')
 	b = append(b, tupleData(newTuple...)...)
@@ -290,5 +363,11 @@ func appendUint16(b []byte, v uint16) []byte {
 func appendUint32(b []byte, v uint32) []byte {
 	var tmp [4]byte
 	binary.BigEndian.PutUint32(tmp[:], v)
+	return append(b, tmp[:]...)
+}
+
+func appendUint64(b []byte, v uint64) []byte {
+	var tmp [8]byte
+	binary.BigEndian.PutUint64(tmp[:], v)
 	return append(b, tmp[:]...)
 }
