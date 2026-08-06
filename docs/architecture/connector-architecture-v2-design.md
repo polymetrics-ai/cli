@@ -36,9 +36,10 @@ Follow the Ruby pattern (`connection_specification.json` / `metadata.json` / `sc
 agent-readability (a 60-line schema file, not a 4,000-line manifest), diff hygiene (one stream =
 one file; parallel authoring doesn't conflict), concern separation matching the runtime
 (`spec.json` at connection-setup time, `streams.json` at read time, `writes.json` at reverse-ETL
-time, `api_surface.json` only by conformance, `certification.json` only by the certification
-harness). One deviation from Ruby: request/pagination/cursor config is **not** code — it is
-`streams.json`, interpreted by the engine.
+time, `api_surface.json` at conformance and disk-backed direct-write endpoint cross-checks,
+`certification.json` only by the certification harness). One deviation from Ruby:
+request/pagination/cursor config is **not** code — it is `streams.json`, interpreted by the
+engine.
 
 ### Layout
 
@@ -51,7 +52,7 @@ internal/connectors/defs/
     spec.json                 // connection specification (JSON Schema draft-07)
     streams.json              // declarative read config: base HTTP + streams
     writes.json               // declarative write actions
-    api_surface.json          // API coverage manifest (conformance input)
+    api_surface.json          // API coverage + disk-backed direct-write endpoint cross-check manifest
     certification.json        // optional certify defaults, candidates, pairings
     schemas/
       issues.json             // per-stream record schema (draft-07 + x- extensions)
@@ -362,7 +363,7 @@ type Bundle struct {
     Streams  []StreamSpec      // streams.json "streams"
     Writes   []WriteAction     // writes.json (nil if absent)
     Schemas  map[string]*StreamSchema // stream name -> compiled schema + PK/cursor
-    Surface  *APISurface       // api_surface.json (conformance only)
+    Surface  *APISurface       // api_surface.json (conformance + disk-backed endpoint cross-check)
     Docs     string            // docs.md
     Fixtures fs.FS             // fixtures/ subtree
 }
@@ -467,6 +468,32 @@ through the provider-neutral gate before dispatch. `Write` returns redacted, typ
 `kind: delete` honors `missing_ok_status` (a 404 on an idempotent delete counts as written, not
 failed). Batch semantics stay one-request-per-record (matches github/stripe today);
 `metadata.json.batch.write_batch_size` is reserved for future bulk endpoints.
+
+### B.5.1 Declared multipart operation writes (engine/direct_write.go)
+
+`operations.json` can opt a `kind: "rest_write"` into the same typed multipart transport with a
+closed `rest.multipart` declaration. This is not a second upload runner and is not a generic HTTP
+write: the bundle fixes the mutating method, connector-relative path, literal
+`multipart/form-data` content type, closed typed body schema, response cap, aggregate/file caps,
+and all form/file-part names. The operation's `source_url` keeps the connector author's provider
+evidence reviewable. In a disk-backed bundle, its fixed method and path also cross-check an
+`api_surface.json` operation entry. Production endpoint validation is instead derived only from
+the shipped `rest_write` declarations because `api_surface.json` remains outside `defs.FS`; that
+proves internal declaration consistency, not provider documented-surface provenance. #3773 owns
+the separate per-operation `api_surface` provenance foundation. A caller can only supply declared
+`body.*` fields; a file source is a required string path, never inline bytes or a caller-selected
+request shape.
+
+`PreviewOperationDirectWrite` serializes the existing canonical multipart representation, so its
+digest binds the request target/query, fixed declaration, typed fields, source-path identities, and
+plan-approved SHA-256 of every file without a network call. Execution re-prepares and checks that
+same identity before the shared approval gate, then reuses the established root-confined multipart
+snapshot/regular-file/cap/digest/media validation and bounded requester. Direct multipart writes
+remain single-attempt and refuse redirect replay; bounded provider response and error content is
+returned without a new masking path. Existing `writes.json` multipart reverse-ETL actions remain
+their own proven path; legacy `file_upload` operation rows remain non-executable until migrated by
+a connector adoption lane. This shared capability does not itself create a command, manual, or
+website claim.
 
 ### B.6 Sync modes — derived, never declared
 

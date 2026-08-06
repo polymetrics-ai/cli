@@ -833,12 +833,73 @@ operation-level evidence.
 
 A `file` part may also declare `allowed_media_types`, which bounds what the file's **own bytes** may sniff as (`http.DetectContentType`), checked before any request is made. Three consequences worth knowing: it is the only restriction on a part's type, so **a single-entry list is how a bundle demands exactly one type**; when it is present the part's wire `Content-Type` header is set from the sniffed type rather than from the declared `content_type`, because the sniffed type has just been proven to be one the bundle accepts and asserting the declared one over disagreeing bytes would be a claim we had already falsified; and when it is absent the declared `content_type` is sent untouched, since nothing verified the sniff and `http.DetectContentType` is coarse (every CSV sniffs as `text/plain`). Omit the key to leave a part unconstrained — a present-but-empty list is a load-time error rather than a silent "allow anything", and a `content_type` outside its own `allowed_media_types` is rejected at load time as an unsatisfiable declaration.
 
-`redact_fields` is an action-local list of record paths whose values must be removed from
-operator-visible write surfaces. It is for non-secret identifiers or clinical values that can appear
-in templated paths or upstream error text; reverse-plan creation persists the list and masks matching
-sample fields, `DryRunWrite` replaces those path values in the resolved request preview, and `Write`
+**Operation-level multipart `rest_write`** (`operations.json`, not `writes.json`): use this only when a connector author has provider evidence for one fixed multipart mutation and is ready to bind it to a typed command. It extends the existing `rest_write`/direct-write executor; it does **not** introduce a generic uploader or make a MIME annotation executable. Preserve the provider operation URL in `source_url` so the method, fields, media types, and size limits remain reviewable. This authoring evidence does not make shipped endpoint validation provider-surface provenance; the endpoint-validation boundary below owns that distinction. The complete, closed declaration has this shape:
+
+```json
+{
+  "id": "example.attachments.create",
+  "kind": "rest_write",
+  "summary": "Create one attachment",
+  "source_url": "https://provider.example/docs/attachment-upload",
+  "risk": "high",
+  "approval": "plan-preview-confirm-execute",
+  "output_policy": "json",
+  "mutation_class": "create",
+  "rest": {
+    "method": "POST",
+    "path": "/attachments",
+    "content_type": "multipart/form-data",
+    "max_bytes": 1048576,
+    "body_schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["message", "media_file_path"],
+      "properties": {
+        "message": { "type": "string" },
+        "media_file_path": { "type": "string" }
+      }
+    },
+    "multipart": {
+      "max_bytes": 26214400,
+      "parts": [
+        { "name": "message", "type": "field", "field": "message", "required": true },
+        {
+          "name": "attachment",
+          "type": "file",
+          "field": "media_file_path",
+          "required": true,
+          "max_bytes": 26214400,
+          "content_type": "application/pdf",
+          "allowed_media_types": ["application/pdf"]
+        }
+      ]
+    }
+  }
+}
+```
+
+`rest.multipart` is valid only for `kind: "rest_write"`. `content_type` is the exact literal `multipart/form-data` — do not add a boundary; the requester owns it. The method, connector-relative path, output policy, part names, field mappings, declared media policy, and every cap are bundle-owned. `rest.max_bytes` is a required, positive **response-capture** cap; `multipart.max_bytes` is the required, positive aggregate upload cap; and each `file` part has its own required positive cap. The body schema is closed, every part must name a declared typed body field, and each file field is a required string path. A file source field may use any declared name; runtime identity binding comes from the file-part declaration, not a `file_path` naming convention. That is what rules out an inline byte body, an arbitrary file part, arbitrary headers, a caller-selected method/path, or a raw request body. A command adoption may map only its fixed flags to declared `body.*` fields; it must not add a generic file/method/path/header/body input.
+
+A command adoption must declare exactly one connector-relative mutating endpoint in
+its `cli_surface.json` `api_surface` field.
+For a disk-backed bundle, the operation's fixed method/path must also cross-check
+an `api_surface.json` entry marked as an `operation`. Shipped builds cannot read
+that file: their endpoint validation is derived only from the included
+`rest_write` declarations, so it proves consistency within those declarations,
+not provider documented-surface provenance. #3773 owns the separate per-operation
+`api_surface` provenance foundation. Neither check is an execution allowlist.
+
+All multipart mutations retain the plan → preview → approval → execute lifecycle. Preview is network-free and binds the resolved method, target/query, the full multipart declaration, typed form values, source-path identities, and the approved SHA-256 for every file. Execution re-prepares that canonical request, refuses a stale preview or changed/missing file before network dispatch, then uses the existing project-root confinement, regular-file, cap, snapshot, digest, and media checks. Declared `rest_write` multipart calls are single-attempt (`DisableRetries=true`): non-idempotent calls are never retried, and redirect replay remains refused. Runtime response and error content is preserved in full subject only to the declaration's response-capture bound; this flow does not add a masking policy.
+
+This is separate from the already executable reverse-ETL `writes.json` `body_type: "multipart"` path. Gong's `upload_call_media` action and `pm gong calls upload-media` command are its existing proof; no operation-level connector adoption is implied here. The legacy `operations.json` `kind: "file_upload"` remains planned/non-executable until a connector moves each endpoint to a complete declared contract and proves it. This shared-runtime documentation makes **no** GitLab, Freshchat, Gong, or other provider operation newly available. CLI/help/manual/website parity is therefore not applicable to this foundation: each adoption lane must update its own runtime help, `docs/cli/**`, website docs, generated manuals, command surface, and executable evidence before claiming `availability: implemented`.
+
+`redact_fields` on a `writes.json` action applies to source-table reverse-ETL and engine write
+surfaces. It is for non-secret identifiers or clinical values that can appear in templated paths or
+upstream error text; source-table reverse-plan creation persists the list and masks matching sample
+fields, `DryRunWrite` replaces those path values in the resolved request preview, and `Write`
 redacts raw and URL-encoded literal forms from returned write errors while preserving typed error
-wrapping.
+wrapping. `cli_surface.json` declarations remain load-compatible metadata, but `commandrunner` does
+not use them to mutate connector-command records or errors, or to forward them to executors.
 
 `confirmation` is the closed confirmation declaration for new actions:
 `"confirmation": {"kind": "destructive"}`. The writes and operations schemas are authoritative;

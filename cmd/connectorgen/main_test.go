@@ -15,6 +15,7 @@ import (
 	"testing/fstest"
 
 	"polymetrics.ai/internal/connectors/boundary"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 // --- boundary: scans connector definition boundary --------------------------
@@ -497,6 +498,96 @@ func TestValidate_CLISurfaceImplementedDirectWritePasses(t *testing.T) {
 	}
 	if len(report.Findings) != 0 {
 		t.Fatalf("expected zero findings for valid direct_write cli surface, got %+v", report.Findings)
+	}
+}
+
+func TestValidate_CLISurfaceImplementedMultipartDirectWritePasses(t *testing.T) {
+	fsys := directWriteCLISurfaceBundleFS()
+	cli := string(fsys["cli-surface/cli_surface.json"].Data)
+	originalCLI := cli
+	cli = strings.Replace(cli, `
+					{ "name": "id", "type": "string", "maps_to": "path.id" }
+				`, `
+					{ "name": "id", "type": "string", "maps_to": "path.id" },
+					{ "name": "media-file-path", "type": "string", "maps_to": "body.media_file_path", "required": true }
+				`, 1)
+	if cli == originalCLI {
+		t.Fatal("add multipart body flag to cli surface")
+	}
+	fsys["cli-surface/cli_surface.json"] = &fstest.MapFile{Data: []byte(cli)}
+
+	operations := string(fsys["cli-surface/operations.json"].Data)
+	originalOperations := operations
+	operations = strings.Replace(operations, `"max_bytes": 1024`, `"content_type": "multipart/form-data",
+					"max_bytes": 1024,
+					"body_schema": {
+						"type": "object",
+						"additionalProperties": false,
+						"required": ["media_file_path"],
+						"properties": {"media_file_path": {"type": "string"}}
+					},
+					"multipart": {
+						"max_bytes": 1024,
+						"parts": [{
+							"name": "media",
+							"type": "file",
+							"field": "media_file_path",
+							"required": true,
+							"max_bytes": 1024,
+							"content_type": "text/plain",
+							"allowed_media_types": ["text/plain"]
+						}]
+					}`, 1)
+	if operations == originalOperations {
+		t.Fatal("add typed multipart contract to operation")
+	}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for typed multipart direct_write cli surface, got %+v", report.Findings)
+	}
+}
+
+func TestSupportedDirectWriteContentTypeRequiresTypedMultipart(t *testing.T) {
+	tests := []struct {
+		name string
+		rest *engine.RESTOperationSpec
+		want bool
+	}{
+		{
+			name: "typed literal multipart",
+			rest: &engine.RESTOperationSpec{ContentType: "multipart/form-data", Multipart: &engine.MultipartSpec{}},
+			want: true,
+		},
+		{
+			name: "multipart annotation without contract",
+			rest: &engine.RESTOperationSpec{ContentType: "multipart/form-data"},
+		},
+		{
+			name: "multipart boundary is rejected",
+			rest: &engine.RESTOperationSpec{ContentType: "multipart/form-data; boundary=caller-controlled", Multipart: &engine.MultipartSpec{}},
+		},
+		{
+			name: "multipart whitespace is rejected",
+			rest: &engine.RESTOperationSpec{ContentType: " multipart/form-data ", Multipart: &engine.MultipartSpec{}},
+		},
+		{
+			name: "existing JSON content type remains supported",
+			rest: &engine.RESTOperationSpec{ContentType: "application/json"},
+			want: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := supportedDirectWriteContentType(tt.rest); got != tt.want {
+				t.Fatalf("supportedDirectWriteContentType() = %t, want %t", got, tt.want)
+			}
+		})
 	}
 }
 

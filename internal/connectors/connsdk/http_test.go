@@ -277,7 +277,7 @@ func TestRequesterDoMultipartEncodesFileAndAuth(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Open part: %v", err)
 		}
-		defer f.Close()
+		defer func() { _ = f.Close() }()
 		raw, _ := io.ReadAll(f)
 		sawFile = string(raw)
 		_, _ = w.Write([]byte(`{"ok":true}`))
@@ -297,6 +297,32 @@ func TestRequesterDoMultipartEncodesFileAndAuth(t *testing.T) {
 	}
 	if sawAuth != "Bearer test-token" || sawField != "recorder" || sawFile != "hello multipart" {
 		t.Fatalf("auth=%q field=%q file=%q", sawAuth, sawField, sawFile)
+	}
+}
+
+func TestRequesterDoMultipartLimitedBoundsCapturedResponse(t *testing.T) {
+	dir := t.TempDir()
+	filePath := dir + "/payload.txt"
+	if err := os.WriteFile(filePath, []byte("bounded multipart request"), 0o600); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseMultipartForm(1 << 20); err != nil {
+			t.Fatalf("ParseMultipartForm: %v", err)
+		}
+		_, _ = w.Write([]byte("this response is deliberately longer than the declared operation cap"))
+	}))
+	defer srv.Close()
+
+	r := &Requester{BaseURL: srv.URL, Sleep: noSleep}
+	resp, err := r.DoMultipartLimited(context.Background(), http.MethodPost, "/upload", nil, MultipartForm{
+		Files: []MultipartFile{{FieldName: "mediaFile", Path: filePath, MaxBytes: 1024}},
+	}, 4)
+	if err != nil {
+		t.Fatalf("DoMultipartLimited: %v", err)
+	}
+	if got := len(resp.Body); got != 5 {
+		t.Fatalf("captured response bytes = %d, want max_bytes + one = 5", got)
 	}
 }
 

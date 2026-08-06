@@ -103,8 +103,9 @@ pm github issue close --plan <plan-id> --preview --json
 pm github issue close --plan <plan-id> --approve <approval-token> --json
 ```
 
-JSON plan and preview output redacts raw approval tokens and raw command payload records. Commands
-without explicit `record.*` flag mappings remain blocked until their input model is declared.
+JSON plan and preview output omit approval tokens. `docs/cli/reverse.md` owns the command-record
+handling contract. Commands without explicit `record.*` flag mappings remain blocked until their
+input model is declared.
 
 ## Streams notes
 

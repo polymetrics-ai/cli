@@ -1,6 +1,8 @@
 package bundleregistry
 
 import (
+	"errors"
+	"io/fs"
 	"strings"
 	"testing"
 
@@ -9,6 +11,29 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 	nativepostgres "polymetrics.ai/internal/connectors/native/postgres"
 )
+
+func TestRegistryDirectWriteMetadataUsesEmbeddedOperationSurface(t *testing.T) {
+	if _, err := fs.Stat(defs.FS, "github/api_surface.json"); !errors.Is(err, fs.ErrNotExist) {
+		t.Fatalf("fs.Stat(github/api_surface.json) error = %v, want fs.ErrNotExist", err)
+	}
+
+	registry := New()
+	connector, ok := registry.Get("github")
+	if !ok {
+		t.Fatal("registry missing github")
+	}
+	provider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
+	if !ok {
+		t.Fatalf("github connector = %T, want direct-write metadata provider", connector)
+	}
+	metadata, err := provider.OperationDirectWriteMetadata("github.repo")
+	if err != nil {
+		t.Fatalf("OperationDirectWriteMetadata: %v", err)
+	}
+	if metadata.Operation != "github.repo" {
+		t.Fatalf("operation = %q, want github.repo", metadata.Operation)
+	}
+}
 
 func TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides(t *testing.T) {
 	bundles, err := engine.LoadAll(defs.FS)

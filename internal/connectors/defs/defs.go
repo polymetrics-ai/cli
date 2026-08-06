@@ -2,9 +2,12 @@
 //
 // The production CLI needs identity, specs, read/write declarations, schemas,
 // public docs, optional command-surface metadata, and optional certification
-// contracts. It deliberately does not embed conformance-only artifacts such as
-// api_surface.json and fixtures/**;
-// those remain on disk for connectorgen/conformance tests. Keeping replay
+// contracts. It deliberately does not embed API-surface coverage manifests or
+// fixtures/**. Those remain on disk for connectorgen/conformance checks. In
+// shipped builds, direct-write endpoint validation is derived only from the
+// embedded rest_write operation declarations; it checks internal declaration
+// consistency, not provider documented-surface provenance (#3773 owns that).
+// Keeping replay
 // fixtures out of cmd/pm avoids compiling tens of megabytes of inert JSON into
 // every shipped binary. A connector bundle whose spec publishes a fixture-replay
 // mode as a supported config value embeds its own fixtures from its own

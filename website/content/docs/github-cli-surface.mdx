@@ -88,8 +88,9 @@ API coverage, and which are local workflow features that should not become conne
 Mapped command writes never mutate GitHub directly from a plain invocation. A provider-style command
 creates a stored reverse plan. Non-destructive plans return an approval token in text output;
 destructive plans return it only after their no-network preview succeeds and additionally require
-`--confirm destructive`. JSON output redacts the token and raw command payload. See the
-[Reverse ETL security model](/docs/reverse-etl) for the authoritative lifecycle.
+`--confirm destructive`. JSON output omits the approval token. See the
+[Reverse ETL security model](/docs/reverse-etl) for the authoritative lifecycle and
+connector-command record handling.
 
 ```bash
 pm github issue close --issue-number 101 --credential github-token

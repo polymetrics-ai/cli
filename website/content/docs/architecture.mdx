@@ -40,7 +40,7 @@ pm init --root ./demo --json
 | Catalogs | state file | Stream names and schemas only. |
 | ETL runs | state file plus warehouse files | Records are written in bounded batches. |
 | Warehouse | JSONL files by default | DuckDB is available through the tagged build. |
-| Reverse plans | state file | Approval tokens are hashed; JSON output redacts them. |
+| Reverse plans | state file | Approval tokens are hashed and omitted from JSON output. |
 | Schedules | schedule manifests | Local cron/system scheduler bridge. |
 
 ## Connector registry
@@ -88,7 +88,7 @@ pm reverse run <plan-id> --approve <approval-token> --json
 pm reverse status <run-id> --json
 ```
 
-Reverse ETL is deliberately split across plan, preview, approval, and run. Agents can create and preview plans, but JSON plan output redacts approval tokens. Execution rejects missing, expired, replayed, or mismatched approval tokens.
+Reverse ETL is deliberately split across plan, preview, approval, and run. Agents can create and preview plans, but JSON plan output omits approval tokens. Execution rejects missing, expired, replayed, or mismatched approval tokens.
 
 ## Flows
 

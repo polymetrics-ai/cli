@@ -3,18 +3,24 @@ package app_test
 import (
 	"context"
 	"encoding/json"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-const restWriteDemoConnector = "restwrite-demo"
+const (
+	restWriteDemoConnector          = "restwrite-demo"
+	multipartRestWriteDemoConnector = "multipart-restwrite-demo"
+)
 
 func setupRestWriteDemoApp(t *testing.T, ctx context.Context, baseURL string) *app.App {
 	return setupRestWriteDemoAppWithBundle(t, ctx, baseURL, nil)
@@ -46,6 +52,145 @@ func setupRestWriteDemoAppWithBundle(t *testing.T, ctx context.Context, baseURL 
 		t.Fatalf("AddCredential: %v", err)
 	}
 	return a
+}
+
+// setupMultipartRestWriteDemoApp installs a fully declared in-memory bundle so
+// this lifecycle test reaches commandrunner.Preflight and the engine without
+// adding a fixture command to a provider-facing cli_surface.json.
+func setupMultipartRestWriteDemoApp(t *testing.T, ctx context.Context, baseURL string) *app.App {
+	return setupMultipartRestWriteDemoAppWithBundle(t, ctx, baseURL, multipartRestWriteDemoBundle())
+}
+
+func setupMultipartRestWriteDemoAppWithBundle(t *testing.T, ctx context.Context, baseURL string, bundle engine.Bundle) *app.App {
+	t.Helper()
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	a.Registry().Register(engine.New(bundle, nil))
+	if _, err := a.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "multipart-restwrite-local",
+		Connector: multipartRestWriteDemoConnector,
+		Config:    map[string]string{"base_url": baseURL},
+	}); err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+	return a
+}
+
+func multipartRestWriteDemoBundle() engine.Bundle {
+	nonBatchable := false
+	return engine.Bundle{
+		Name: multipartRestWriteDemoConnector,
+		Metadata: engine.Metadata{
+			Name:            multipartRestWriteDemoConnector,
+			DisplayName:     "Multipart REST write test fixture",
+			IntegrationType: "api",
+			ReleaseStage:    "alpha",
+			Capabilities:    engine.Capabilities{Check: true, Write: true},
+		},
+		HTTP: engine.HTTPBase{URL: "{{ config.base_url }}"},
+		Operations: []engine.OperationSpec{{
+			ID:            multipartRestWriteDemoConnector + ".attachment-create",
+			Kind:          "rest_write",
+			Summary:       "Attach one fixture file.",
+			Risk:          "high",
+			Approval:      "plan-preview-confirm-execute",
+			OutputPolicy:  "json",
+			MutationClass: "destructive",
+			Confirmation:  &engine.ConfirmationSpec{Kind: connectors.ConfirmationKindDestructive},
+			Batchable:     &nonBatchable,
+			REST: &engine.RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/api/attachments",
+				ContentType: "multipart/form-data",
+				MaxBytes:    1024,
+				BodySchema: json.RawMessage(`{
+					"type": "object",
+					"additionalProperties": false,
+					"required": ["message", "media_file_path"],
+					"properties": {
+						"message": {"type": "string"},
+						"media_file_path": {"type": "string"}
+					}
+				}`),
+				Multipart: &engine.MultipartSpec{
+					MaxBytes: 1024,
+					Parts: []engine.MultipartPartSpec{
+						{Name: "message", Type: "field", Field: "message", Required: true},
+						{
+							Name:              "attachment",
+							Type:              "file",
+							Field:             "media_file_path",
+							Required:          true,
+							MaxBytes:          1024,
+							ContentType:       "text/plain",
+							AllowedMediaTypes: []string{"text/plain"},
+						},
+					},
+				},
+			},
+		}},
+		Surface: &engine.APISurface{
+			API: "multipart-restwrite-demo fixture",
+			Endpoints: []engine.SurfaceEndpoint{{
+				Method: http.MethodPost,
+				Path:   "/api/attachments",
+				Operation: &engine.SurfaceOperation{
+					Model:            "destructive_action",
+					Status:           "blocked",
+					Risk:             "high",
+					BlockedByDefault: true,
+					Reason:           "Bound by the typed multipart rest_write executor.",
+				},
+			}},
+		},
+		CLISurface: &engine.CLISurface{
+			Tagline: "Multipart REST write test fixture command.",
+			Usage:   "pm multipart-restwrite-demo attachment create [flags]",
+			Commands: []engine.CLICommand{{
+				Path:         "attachment create",
+				Summary:      "Attach one fixture file.",
+				Intent:       "direct_write",
+				Availability: "implemented",
+				Operation:    multipartRestWriteDemoConnector + ".attachment-create",
+				APISurface: []engine.CLISurfaceEndpointRef{{
+					Method: http.MethodPost,
+					Path:   "/api/attachments",
+				}},
+				OutputPolicy: "json",
+				Risk:         "Uploads one bounded project-local fixture file.",
+				Approval:     "Requires plan -> no-network preview -> explicit single-use approval -> execute.",
+				Flags: []engine.CLIFlag{
+					{Name: "message", Type: "string", Summary: "Attachment message.", MapsTo: "body.message", Required: true},
+					{Name: "media-file-path", Type: "string", Summary: "Project-relative file path.", MapsTo: "body.media_file_path", Required: true},
+				},
+			}},
+		},
+	}
+}
+
+func multipartRestWriteDemoBundleWithUploadField() engine.Bundle {
+	bundle := multipartRestWriteDemoBundle()
+	operation := &bundle.Operations[0]
+	operation.REST.BodySchema = json.RawMessage(`{
+		"type": "object",
+		"additionalProperties": false,
+		"required": ["message", "upload"],
+		"properties": {
+			"message": {"type": "string"},
+			"upload": {"type": "string"}
+		}
+	}`)
+	operation.REST.Multipart.Parts[1].Field = "upload"
+	bundle.CLISurface.Commands[0].Flags[1] = engine.CLIFlag{
+		Name: "upload", Type: "string", Summary: "Project-relative upload path.", MapsTo: "body.upload", Required: true,
+	}
+	return bundle
 }
 
 func TestDirectWriteCommandPlanPreviewApprovalAndExecute(t *testing.T) {
@@ -233,6 +378,243 @@ func TestDirectWriteCommandHonorsDeclaredJSONAndNoneResponsePolicies(t *testing.
 			t.Logf("direct-write command policy=%q status=%d response=%s", tt.policy, run.OperationDirectWrite.Status, encoded)
 		})
 	}
+}
+
+func TestMultipartDirectWriteCommandPreflightPlanPreviewApprovalAndExecute(t *testing.T) {
+	ctx := context.Background()
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if r.Method != http.MethodPost || r.URL.Path != "/api/attachments" {
+			t.Fatalf("request = %s %s, want POST /api/attachments", r.Method, r.URL.Path)
+		}
+		if !strings.HasPrefix(r.Header.Get("Content-Type"), "multipart/form-data; boundary=") {
+			t.Fatalf("Content-Type = %q, want multipart boundary", r.Header.Get("Content-Type"))
+		}
+		if err := r.ParseMultipartForm(1 << 20); err != nil {
+			t.Fatalf("ParseMultipartForm: %v", err)
+		}
+		if got := r.MultipartForm.Value["message"]; len(got) != 1 || got[0] != "fixture attachment" {
+			t.Fatalf("multipart message = %#v, want declared command field", got)
+		}
+		files := r.MultipartForm.File["attachment"]
+		if len(files) != 1 || files[0].Filename != "attachment.txt" {
+			t.Fatalf("attachment files = %#v, want attachment.txt", files)
+		}
+		if !strings.HasPrefix(files[0].Header.Get("Content-Type"), "text/plain") {
+			t.Fatalf("attachment content type = %q, want text/plain", files[0].Header.Get("Content-Type"))
+		}
+		file, err := files[0].Open()
+		if err != nil {
+			t.Fatalf("Open attachment: %v", err)
+		}
+		defer func() { _ = file.Close() }()
+		body, err := io.ReadAll(file)
+		if err != nil {
+			t.Fatalf("ReadAll attachment: %v", err)
+		}
+		if string(body) != "fixture attachment bytes" {
+			t.Fatalf("attachment bytes = %q", body)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true,"server_value":"complete"}`))
+	}))
+	defer server.Close()
+
+	a := setupMultipartRestWriteDemoApp(t, ctx, server.URL)
+	if err := os.WriteFile(filepath.Join(a.ProjectDir(), "attachment.txt"), []byte("fixture attachment bytes"), 0o600); err != nil {
+		t.Fatalf("WriteFile attachment: %v", err)
+	}
+	connector, ok := a.Registry().Get(multipartRestWriteDemoConnector)
+	if !ok {
+		t.Fatalf("registry missing %q", multipartRestWriteDemoConnector)
+	}
+	if err := commandrunner.Preflight(connector, []string{"attachment", "create"}); err != nil {
+		t.Fatalf("Preflight multipart direct_write: %v", err)
+	}
+
+	plan, preview, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Connector:  multipartRestWriteDemoConnector,
+		Credential: "multipart-restwrite-local",
+		Path:       []string{"attachment", "create"},
+		Flags: map[string][]string{
+			"message":         {"fixture attachment"},
+			"media-file-path": {"attachment.txt"},
+		},
+		Preview: true,
+	})
+	if err != nil {
+		t.Fatalf("PlanConnectorCommand: %v", err)
+	}
+	if preview == nil || preview.Digest == "" || len(plan.PayloadIdentity) != 1 || plan.PayloadIdentity[0].ContentSHA256 == "" {
+		t.Fatalf("multipart plan/preview = %#v/%#v, want one digest-bound payload preview", plan, preview)
+	}
+	if calls != 0 {
+		t.Fatalf("multipart plan preview calls = %d, want 0", calls)
+	}
+
+	if _, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken}); err == nil || !strings.Contains(strings.ToLower(err.Error()), "confirmation") {
+		t.Fatalf("RunReverseETL without confirmation = %v, want confirmation rejection", err)
+	}
+	if calls != 0 {
+		t.Fatalf("unconfirmed multipart calls = %d, want 0", calls)
+	}
+
+	run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:        plan.ID,
+		ApprovalToken: plan.ApprovalToken,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	})
+	if err != nil {
+		t.Fatalf("RunReverseETL approved multipart: %v", err)
+	}
+	if run.Status != "completed" || run.OperationDirectWrite == nil || calls != 1 {
+		t.Fatalf("multipart run = %#v calls = %d, want one completed direct write", run, calls)
+	}
+	resultBody, ok := run.OperationDirectWrite.Body.(map[string]any)
+	if !ok || resultBody["server_value"] != "complete" {
+		t.Fatalf("multipart result body = %#v, want complete provider output", run.OperationDirectWrite.Body)
+	}
+
+	if _, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:        plan.ID,
+		ApprovalToken: plan.ApprovalToken,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	}); err == nil || (!strings.Contains(strings.ToLower(err.Error()), "consumed") && !strings.Contains(strings.ToLower(err.Error()), "already executed")) {
+		t.Fatalf("RunReverseETL replayed multipart approval = %v, want single-use rejection", err)
+	}
+	if calls != 1 {
+		t.Fatalf("replayed multipart calls = %d, want 1", calls)
+	}
+}
+
+func TestMultipartDirectWriteCommandRejectsChangedPayloadBeforeNetwork(t *testing.T) {
+	ctx := context.Background()
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		calls++
+	}))
+	defer server.Close()
+
+	a := setupMultipartRestWriteDemoApp(t, ctx, server.URL)
+	attachment := filepath.Join(a.ProjectDir(), "attachment.txt")
+	if err := os.WriteFile(attachment, []byte("approved bytes"), 0o600); err != nil {
+		t.Fatalf("WriteFile approved attachment: %v", err)
+	}
+	plan, _, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Connector:  multipartRestWriteDemoConnector,
+		Credential: "multipart-restwrite-local",
+		Path:       []string{"attachment", "create"},
+		Flags: map[string][]string{
+			"message":         {"fixture attachment"},
+			"media-file-path": {"attachment.txt"},
+		},
+		Preview: true,
+	})
+	if err != nil {
+		t.Fatalf("PlanConnectorCommand: %v", err)
+	}
+	if err := os.WriteFile(attachment, []byte("changed bytes after preview"), 0o600); err != nil {
+		t.Fatalf("WriteFile changed attachment: %v", err)
+	}
+	if _, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:        plan.ID,
+		ApprovalToken: plan.ApprovalToken,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	}); err == nil || !strings.Contains(err.Error(), "payload changed") {
+		t.Fatalf("RunReverseETL changed multipart payload = %v, want plan payload rejection", err)
+	}
+	if calls != 0 {
+		t.Fatalf("changed multipart payload calls = %d, want 0", calls)
+	}
+}
+
+func TestMultipartDirectWriteCommandBindsDeclaredUploadField(t *testing.T) {
+	ctx := context.Background()
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if r.URL.Path != "/api/attachments" {
+			t.Fatalf("request path = %q, want /api/attachments", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer server.Close()
+
+	a := setupMultipartRestWriteDemoAppWithBundle(t, ctx, server.URL, multipartRestWriteDemoBundleWithUploadField())
+	if err := os.WriteFile(filepath.Join(a.ProjectDir(), "attachment.txt"), []byte("fixture attachment bytes"), 0o600); err != nil {
+		t.Fatalf("WriteFile attachment: %v", err)
+	}
+	plan, preview, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Connector:  multipartRestWriteDemoConnector,
+		Credential: "multipart-restwrite-local",
+		Path:       []string{"attachment", "create"},
+		Flags: map[string][]string{
+			"message": {"fixture attachment"},
+			"upload":  {"attachment.txt"},
+		},
+		Preview: true,
+	})
+	if err != nil {
+		t.Fatalf("PlanConnectorCommand declared upload field: %v", err)
+	}
+	if preview == nil || len(plan.PayloadIdentity) != 1 || plan.PayloadIdentity[0].Field != "upload" || plan.PayloadIdentity[0].ContentSHA256 == "" {
+		t.Fatalf("declared upload payload identity = %#v / %#v, want the exact declared field and digest", plan, preview)
+	}
+	if calls != 0 {
+		t.Fatalf("declared upload preview calls = %d, want 0", calls)
+	}
+	if _, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:        plan.ID,
+		ApprovalToken: plan.ApprovalToken,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	}); err != nil {
+		t.Fatalf("RunReverseETL declared upload field: %v", err)
+	}
+	if calls != 1 {
+		t.Fatalf("declared upload execution calls = %d, want 1", calls)
+	}
+}
+
+func TestMultipartDirectWritePreflightRejectsMissingContractAndLegacyFileUpload(t *testing.T) {
+	operation := func(t *testing.T, bundle *engine.Bundle) *engine.OperationSpec {
+		t.Helper()
+		for index := range bundle.Operations {
+			if bundle.Operations[index].ID == multipartRestWriteDemoConnector+".attachment-create" {
+				return &bundle.Operations[index]
+			}
+		}
+		t.Fatal("multipart fixture operation is missing")
+		return nil
+	}
+
+	t.Run("missing multipart contract remains blocked", func(t *testing.T) {
+		bundle := multipartRestWriteDemoBundle()
+		operation(t, &bundle).REST.Multipart = nil
+		err := commandrunner.Preflight(engine.New(bundle, nil), []string{"attachment", "create"})
+		if err == nil || !strings.Contains(err.Error(), "not executable") {
+			t.Fatalf("Preflight missing multipart contract = %v, want executable-claim rejection", err)
+		}
+	})
+
+	t.Run("missing api surface endpoint remains blocked", func(t *testing.T) {
+		bundle := multipartRestWriteDemoBundle()
+		bundle.Surface = nil
+		err := commandrunner.Preflight(engine.New(bundle, nil), []string{"attachment", "create"})
+		if err == nil || !strings.Contains(err.Error(), "api_surface") {
+			t.Fatalf("Preflight missing api_surface = %v, want endpoint provenance rejection", err)
+		}
+	})
+
+	t.Run("legacy file upload cannot become direct write", func(t *testing.T) {
+		bundle := multipartRestWriteDemoBundle()
+		operation(t, &bundle).Kind = "file_upload"
+		err := commandrunner.Preflight(engine.New(bundle, nil), []string{"attachment", "create"})
+		if err == nil || !strings.Contains(err.Error(), "requires rest_write") {
+			t.Fatalf("Preflight legacy file_upload = %v, want rest_write executor rejection", err)
+		}
+	})
 }
 
 func TestDirectWriteCommandFailurePreservesErrorContent(t *testing.T) {
