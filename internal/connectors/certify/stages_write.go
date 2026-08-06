@@ -112,7 +112,7 @@ func stageWritePlanPreview(rc *runContext, rep *Report) error {
 // stageWritePlanPreviewSelfTest drives the plan/preview half of the
 // sample/outbox self-test path: register the outbox destination credential,
 // create a reverse plan mapping sample_customers rows tagged with wc.tag
-// into the outbox, then assert the redaction gate on `reverse preview
+// into the outbox, then assert the token-omission gate on `reverse preview
 // --json`.
 func stageWritePlanPreviewSelfTest(rc *runContext, rep *Report, wc *writeContext) {
 	recordStage(rc, rep, "write_outbox_credentials_add", 1, func() (bool, CLIStageInfo, string) {
@@ -249,7 +249,7 @@ func fieldNames(m map[string]any) []string {
 	return names
 }
 
-// checkPlanPreviewRedaction is the stage-12 redaction gate itself (design §A
+// checkPlanPreviewRedaction is the stage-12 JSON token-omission gate (design §A
 // "assert --json output has NO approval token"): the parsed envelope's
 // plan.approval_token field must be absent/empty, AND — belt and suspenders
 // — the raw JSON text must not contain the actual token value verbatim,

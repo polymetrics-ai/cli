@@ -459,10 +459,11 @@ loop; Retry-After handling already exists in connsdk.
 
 `ValidateWrite` = compile-once `record_schema` validation per record (structural errors carry
 record index, matching current behavior). Reverse-plan creation persists action `redact_fields` and
-masks matching sample fields. `DryRunWrite` validates and prepares every request without network
-access; `WritePreview.Warnings` shows the first resolved method/path as a redacted representative,
-while the preview digest binds the complete request set, connector/action target, credential and
-configuration identity, batchability, definition, and hook identity. Destructive execution
+masks matching source-table sample fields. `DryRunWrite` validates and prepares every request
+without network access; `WritePreview.Warnings` shows the first fully resolved method/path that
+execution will send, without substitute redactions for secret or `redact_fields` values, while the
+preview digest binds the complete request set, connector/action target, credential and configuration
+identity, batchability, definition, and hook identity. Destructive execution
 re-prepares and compares that digest, then consumes authenticated single-use approval evidence
 through the provider-neutral gate before dispatch. `Write` returns redacted, typed errors.
 `kind: delete` honors `missing_ok_status` (a 404 on an idempotent delete counts as written, not
