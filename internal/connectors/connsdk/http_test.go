@@ -61,7 +61,7 @@ func primeHTTPConnection(t *testing.T, client *http.Client, baseURL string) {
 		t.Fatalf("prime connection: %v", err)
 	}
 	if _, err := io.Copy(io.Discard, resp.Body); err != nil {
-		resp.Body.Close()
+		_ = resp.Body.Close()
 		t.Fatalf("drain prime response: %v", err)
 	}
 	if err := resp.Body.Close(); err != nil {

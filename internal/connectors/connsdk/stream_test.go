@@ -352,7 +352,7 @@ func TestDoStreamDisableRetriesPreventsMutationTransportReplay(t *testing.T) {
 	resp, err := r.DoStream(context.Background(), http.MethodPost, "/mutate", nil, StreamOptions{})
 	if err == nil {
 		if resp != nil {
-			resp.Body.Close()
+			_ = resp.Body.Close()
 		}
 		t.Fatal("DoStream: expected transport error")
 	}
@@ -385,7 +385,7 @@ func TestDoStreamDisableRetriesRejectsMutationRedirect(t *testing.T) {
 	r := &Requester{BaseURL: srv.URL, DisableRetries: true}
 	resp, err := r.DoStream(context.Background(), http.MethodPost, "/initial", nil, StreamOptions{})
 	if resp != nil {
-		resp.Body.Close()
+		_ = resp.Body.Close()
 		t.Fatal("DoStream returned a response after refusing redirect")
 	}
 	if !errors.Is(err, transportpolicy.ErrRedirectRefused) {
