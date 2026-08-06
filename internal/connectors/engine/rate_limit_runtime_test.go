@@ -157,6 +157,18 @@ func TestRateLimitResolverRefusesUnsupportedScopeKind(t *testing.T) {
 	}
 }
 
+func TestRateLimitResolverRefusesMultipleActualCostHeadersPerPolicy(t *testing.T) {
+	bundle := loadRateLimitFixture(t, "paced")
+	bundle.RateLimits.Policies[0].Budgets[1].Cost.ResponseHeader = "X-Other-Cost"
+	runtime, err := newRuntime(context.Background(), bundle, rateLimitTestConfig(t), nil)
+	if err != nil {
+		t.Fatalf("newRuntime: %v", err)
+	}
+	if _, err := runtime.RequesterFor(http.MethodGet, "/widgets"); err == nil {
+		t.Fatal("RequesterFor accepted multiple actual-cost headers for one policy")
+	}
+}
+
 func TestRateLimitResolverConsumesDeclaredActualCostHeader(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("X-Actual-Cost", "2")

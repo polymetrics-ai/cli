@@ -163,9 +163,13 @@ func (r *rateLimitResolver) resolve(policy connsdk.RateLimitPolicy) (resolvedRat
 	if r.registry == nil {
 		return resolvedRateLimitPolicy{}, fmt.Errorf("rate-limit policy %q local registry is unavailable", policy.ID)
 	}
+	costHeader, err := rateLimitCostHeader(policy)
+	if err != nil {
+		return resolvedRateLimitPolicy{}, fmt.Errorf("rate-limit policy %q: %w", policy.ID, err)
+	}
 	return resolvedRateLimitPolicy{
 		limiter:    r.registry.Limiter(coordination.RateLimitKey{Connector: r.connector, PolicyID: policy.ID, Scope: scope}, policy.Budgets),
-		costHeader: rateLimitCostHeader(policy),
+		costHeader: costHeader,
 	}, nil
 }
 
@@ -215,15 +219,6 @@ func rateLimitSelectorValueMatches(values []string, value string) bool {
 		}
 	}
 	return false
-}
-
-func rateLimitCostHeader(policy connsdk.RateLimitPolicy) string {
-	for _, budget := range policy.Budgets {
-		if budget.Cost != nil && budget.Cost.ResponseHeader != "" {
-			return budget.Cost.ResponseHeader
-		}
-	}
-	return ""
 }
 
 type resolvedRateLimitAdmission []resolvedRateLimitPolicy

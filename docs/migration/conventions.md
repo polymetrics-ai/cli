@@ -832,13 +832,15 @@ context, not a substitute for a retrieval date. Model the provider shape rather 
 to requests per minute: selectors can target an endpoint, tier, and auth type; budgets label their
 `burst` or `sustained` dimension, `requests` or `points` unit, and fixed/sliding-window or
 token/leaky-bucket replenishment model. Cost-weighted APIs can declare a default cost and the
-provider response header that reports cost.
+provider response header that reports cost. A policy may name at most one actual-cost header;
+when two policies can match one request, they must use the same header when both declare one.
 
 The root state is deliberately explicit: `declared` requires one or more cited policies, while
 `unknown` and `not_applicable` require a nonblank reason and cannot carry a policy. A policy's
 `scope.subject_kind` is one of `account`, `installation`, `application`, `endpoint`, or `ip`, and
 `scope.subject_config` names the corresponding **non-secret** `spec.json` configuration property.
-The declaration records only that property name; it never carries a runtime subject. At runtime the
+The loader rejects a missing or `x-secret` property. The declaration records only that property
+name; it never carries a runtime subject. At runtime the
 engine gives the transient config value to `connectors.CoordinationIdentity.RateScopeKey`, so the
 registry key is the credential binding plus policy ID plus the non-secret subject as an opaque salted
 projection. Never put a credential, token-derived value, or runtime subject value in the declaration,
@@ -853,7 +855,8 @@ writes (form, JSON, and multipart), and binary downloads all use this same reque
 The process-local registry enforces each declared burst/sustained request/point budget with its
 fixed-window, sliding-window, token-bucket, or leaky-bucket model. A declared actual-cost response
 header tightens a point budget when it reports a higher cost; it never credits capacity from a lower
-or absent value. Parsed reset/remaining/429 observations likewise only tighten state. #3755 still
+or absent value. A reset timestamp hard-blocks only after `Retry-After`, a 429, or an exhausted
+remaining budget; non-exhausted reset metadata only tightens state. #3755 still
 owns operator-visible output; this mechanism does not emit rate-limit events itself.
 
 An absent declaration, `unknown`, `not_applicable`, or a non-matching selector leaves the requester

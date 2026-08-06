@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"math"
+	"net/http"
 	"sync"
 	"time"
 
@@ -165,7 +166,7 @@ func (s *rateLimitSet) reserve(now time.Time) (time.Duration, error) {
 func (s *rateLimitSet) observe(now time.Time, observation connsdk.RateLimitObservation) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	if observation.HasReset && observation.ResetAt.After(s.blockedUntil) {
+	if rateLimitObservationBlocksUntilReset(observation) && observation.ResetAt.After(s.blockedUntil) {
 		s.blockedUntil = observation.ResetAt
 	}
 	for _, budget := range s.budgets {
@@ -184,6 +185,10 @@ func (s *rateLimitSet) observe(now time.Time, observation connsdk.RateLimitObser
 			}
 		}
 	}
+}
+
+func rateLimitObservationBlocksUntilReset(observation connsdk.RateLimitObservation) bool {
+	return observation.HasReset && (observation.HasRetryAfter || observation.Status == http.StatusTooManyRequests || (observation.HasRemaining && observation.Remaining <= 0))
 }
 
 type rateLimitUse struct {

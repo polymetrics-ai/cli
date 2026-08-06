@@ -18,7 +18,7 @@ var rateLimitScopeConfigKeyPattern = regexp.MustCompile(`^[A-Za-z][A-Za-z0-9_-]*
 // Absence deliberately remains valid during the fleet migration: an omitted
 // file says no new declaration has been authored, rather than inventing an
 // uncited provider limit from the legacy metadata field.
-func loadRateLimits(sub fs.FS, dirName string) (*connsdk.RateLimits, error) {
+func loadRateLimits(sub fs.FS, dirName string, spec *Schema) (*connsdk.RateLimits, error) {
 	if !fileExists(sub, "rate_limits.json") {
 		return nil, nil
 	}
@@ -34,13 +34,13 @@ func loadRateLimits(sub fs.FS, dirName string) (*connsdk.RateLimits, error) {
 	if err := strictDecode(raw, &rateLimits); err != nil {
 		return nil, fmt.Errorf("load bundle %s: rate_limits.json: %w", dirName, err)
 	}
-	if err := validateRateLimits(rateLimits); err != nil {
+	if err := validateRateLimits(rateLimits, spec); err != nil {
 		return nil, fmt.Errorf("load bundle %s: rate_limits.json: %w", dirName, err)
 	}
 	return &rateLimits, nil
 }
 
-func validateRateLimits(declaration connsdk.RateLimits) error {
+func validateRateLimits(declaration connsdk.RateLimits, spec *Schema) error {
 	if declaration.SchemaVersion != 1 {
 		return fmt.Errorf("schema_version must be 1")
 	}
@@ -62,6 +62,7 @@ func validateRateLimits(declaration connsdk.RateLimits) error {
 	}
 
 	seenPolicies := make(map[string]bool, len(declaration.Policies))
+	costHeaders := make([]string, len(declaration.Policies))
 	for i, policy := range declaration.Policies {
 		if !namePattern.MatchString(policy.ID) {
 			return fmt.Errorf("policies[%d].id %q does not match %s", i, policy.ID, namePattern.String())
@@ -70,25 +71,27 @@ func validateRateLimits(declaration connsdk.RateLimits) error {
 			return fmt.Errorf("policies[%d].id %q is duplicated", i, policy.ID)
 		}
 		seenPolicies[policy.ID] = true
-		if err := validateRateLimitPolicy(policy); err != nil {
+		if err := validateRateLimitPolicy(policy, spec); err != nil {
 			return fmt.Errorf("policies[%d]: %w", i, err)
 		}
+		header, err := rateLimitCostHeader(policy)
+		if err != nil {
+			return fmt.Errorf("policies[%d]: %w", i, err)
+		}
+		costHeaders[i] = header
 	}
-	return nil
+	return validateRateLimitCostHeaderConflicts(declaration.Policies, costHeaders)
 }
 
-func validateRateLimitPolicy(policy connsdk.RateLimitPolicy) error {
+func validateRateLimitPolicy(policy connsdk.RateLimitPolicy, spec *Schema) error {
 	if err := validateRateLimitSource(policy.Source); err != nil {
 		return fmt.Errorf("source: %w", err)
 	}
 	if err := validateRateLimitSelector(policy.Selector); err != nil {
 		return fmt.Errorf("selector: %w", err)
 	}
-	if !validRateLimitScopeSubject(policy.Scope.SubjectKind) {
-		return fmt.Errorf("scope.subject_kind %q is not a supported non-secret subject", policy.Scope.SubjectKind)
-	}
-	if !rateLimitScopeConfigKeyPattern.MatchString(policy.Scope.SubjectConfig) {
-		return fmt.Errorf("scope.subject_config %q must name a non-secret config property", policy.Scope.SubjectConfig)
+	if err := validateRateLimitScope(policy.Scope, spec); err != nil {
+		return err
 	}
 	if len(policy.Budgets) == 0 {
 		return fmt.Errorf("budgets must contain at least one provider budget")
@@ -234,6 +237,34 @@ func validRateLimitScopeSubject(subject connsdk.RateLimitScopeSubjectKind) bool 
 	}
 }
 
+func validateRateLimitScope(scope connsdk.RateLimitScope, spec *Schema) error {
+	if !validRateLimitScopeSubject(scope.SubjectKind) {
+		return fmt.Errorf("scope.subject_kind %q is not a supported non-secret subject", scope.SubjectKind)
+	}
+	if !rateLimitScopeConfigKeyPattern.MatchString(scope.SubjectConfig) {
+		return fmt.Errorf("scope.subject_config %q must name a non-secret config property", scope.SubjectConfig)
+	}
+	if spec == nil {
+		return fmt.Errorf("scope.subject_config %q cannot be verified without spec.json", scope.SubjectConfig)
+	}
+	propertyFound := false
+	for _, property := range spec.Properties() {
+		if property == scope.SubjectConfig {
+			propertyFound = true
+			break
+		}
+	}
+	if !propertyFound {
+		return fmt.Errorf("scope.subject_config %q must name a spec.json property", scope.SubjectConfig)
+	}
+	for _, secret := range spec.SecretKeys() {
+		if secret == scope.SubjectConfig {
+			return fmt.Errorf("scope.subject_config %q must name a non-secret spec.json property", scope.SubjectConfig)
+		}
+	}
+	return nil
+}
+
 func validateRateLimitBudget(budget connsdk.RateLimitBudget) error {
 	if budget.Dimension != connsdk.RateLimitBudgetBurst && budget.Dimension != connsdk.RateLimitBudgetSustained {
 		return fmt.Errorf("dimension must be burst or sustained")
@@ -293,10 +324,74 @@ func validateRateLimitCost(cost *connsdk.RateLimitCost) error {
 	if err := requirePositiveRateLimitFloat("cost.default_cost", cost.DefaultCost); err != nil && cost.DefaultCost != nil {
 		return err
 	}
-	if header := strings.TrimSpace(cost.ResponseHeader); header != "" {
-		if header != cost.ResponseHeader || !httpHeaderNamePattern.MatchString(header) {
+	if cost.ResponseHeader != "" {
+		header := strings.TrimSpace(cost.ResponseHeader)
+		if header == "" || header != cost.ResponseHeader || !httpHeaderNamePattern.MatchString(header) {
 			return fmt.Errorf("cost.response_header must be an HTTP field name")
 		}
 	}
 	return nil
+}
+
+func rateLimitCostHeader(policy connsdk.RateLimitPolicy) (string, error) {
+	var header string
+	for _, budget := range policy.Budgets {
+		if budget.Cost == nil || budget.Cost.ResponseHeader == "" {
+			continue
+		}
+		if header != "" && !strings.EqualFold(header, budget.Cost.ResponseHeader) {
+			return "", fmt.Errorf("cost.response_header must name at most one header per policy")
+		}
+		header = budget.Cost.ResponseHeader
+	}
+	return header, nil
+}
+
+func validateRateLimitCostHeaderConflicts(policies []connsdk.RateLimitPolicy, headers []string) error {
+	for i, policy := range policies {
+		if headers[i] == "" {
+			continue
+		}
+		for j := i + 1; j < len(policies); j++ {
+			if headers[j] == "" || strings.EqualFold(headers[i], headers[j]) || !rateLimitSelectorsOverlap(policy.Selector, policies[j].Selector) {
+				continue
+			}
+			return fmt.Errorf("policies %q and %q can both match a request but declare different cost.response_header values", policy.ID, policies[j].ID)
+		}
+	}
+	return nil
+}
+
+func rateLimitSelectorsOverlap(left, right connsdk.RateLimitSelector) bool {
+	return rateLimitEndpointSelectorsOverlap(left, right) &&
+		rateLimitSelectorValuesOverlap(left.Tiers, right.Tiers) &&
+		rateLimitSelectorValuesOverlap(left.AuthTypes, right.AuthTypes)
+}
+
+func rateLimitEndpointSelectorsOverlap(left, right connsdk.RateLimitSelector) bool {
+	if left.All || right.All || len(left.Endpoints) == 0 || len(right.Endpoints) == 0 {
+		return true
+	}
+	for _, leftEndpoint := range left.Endpoints {
+		for _, rightEndpoint := range right.Endpoints {
+			if leftEndpoint.Method == rightEndpoint.Method && leftEndpoint.Path == rightEndpoint.Path {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func rateLimitSelectorValuesOverlap(left, right []string) bool {
+	if len(left) == 0 || len(right) == 0 {
+		return true
+	}
+	for _, leftValue := range left {
+		for _, rightValue := range right {
+			if leftValue == rightValue {
+				return true
+			}
+		}
+	}
+	return false
 }

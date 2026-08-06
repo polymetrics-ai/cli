@@ -193,6 +193,26 @@ func TestRateLimitRegistryHonorsProviderResetObservation(t *testing.T) {
 	}
 }
 
+func TestRateLimitRegistryDoesNotBlockForNonExhaustedResetObservation(t *testing.T) {
+	clock := &fakeRateLimitClock{now: time.Date(2026, 8, 6, 12, 0, 0, 0, time.UTC)}
+	registry := NewRateLimitRegistry(clock)
+	limiter := registry.Limiter(testRateLimitKey(), []connsdk.RateLimitBudget{fixedRequestBudget(100, 60)})
+	limiter.Observe(context.Background(), connsdk.RateLimitObservation{
+		Attempted:    true,
+		Status:       http.StatusOK,
+		HasRemaining: true,
+		Remaining:    99,
+		HasReset:     true,
+		ResetAt:      clock.now.Add(time.Minute),
+	})
+	if err := limiter.Admit(context.Background(), connsdk.RateLimitRequest{Method: http.MethodGet, Attempt: 1}); err != nil {
+		t.Fatalf("Admit after non-exhausted observation: %v", err)
+	}
+	if len(clock.waits) != 0 {
+		t.Fatalf("non-exhausted reset blocked admission: %v", clock.waits)
+	}
+}
+
 func TestRateLimitRegistryRejectsProviderLimitBelowOneRequestCost(t *testing.T) {
 	clock := &fakeRateLimitClock{now: time.Date(2026, 8, 6, 12, 0, 0, 0, time.UTC)}
 	registry := NewRateLimitRegistry(clock)
