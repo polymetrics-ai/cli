@@ -2102,6 +2102,9 @@ func validateIdentifierSetBodySchema(i int, op OperationSpec, j int, set CallerS
 	if err := json.Unmarshal(op.REST.BodySchema, &bodySchema); err != nil {
 		return fmt.Errorf("operation %d (%q) caller_supplied_identifier_sets[%d] body_schema is not an object: %w", i, op.ID, j, err)
 	}
+	if !isObjectType(bodySchema) {
+		return fmt.Errorf("operation %d (%q) caller_supplied_identifier_sets[%d] body_schema must be an object", i, op.ID, j)
+	}
 	properties, _ := bodySchema["properties"].(map[string]any)
 	property, _ := properties[set.Name].(map[string]any)
 	if !isArrayType(property) || !identifierSetSchemaIntegerEquals(property, "minItems", set.MinItems) || !identifierSetSchemaIntegerEquals(property, "maxItems", set.MaxItems) {

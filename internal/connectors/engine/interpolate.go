@@ -85,11 +85,16 @@ func InterpolatePath(template string, vars Vars) (string, error) {
 // and their percent-decoded form so an encoded traversal segment (e.g.
 // "%2e%2e") is caught too.
 func containsDotDotSegment(path string) bool {
+	if hasDotDotSegment(path) {
+		return true
+	}
+	decoded, err := url.PathUnescape(path)
+	return err == nil && hasDotDotSegment(decoded)
+}
+
+func hasDotDotSegment(path string) bool {
 	for _, seg := range strings.Split(path, "/") {
 		if seg == ".." {
-			return true
-		}
-		if decoded, err := url.PathUnescape(seg); err == nil && decoded == ".." {
 			return true
 		}
 	}

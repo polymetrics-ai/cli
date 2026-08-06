@@ -214,6 +214,37 @@ func TestCallerSuppliedIdentifierSetsPreserveExplicitEmptyBodyArray(t *testing.T
 	}
 }
 
+func TestCallerSuppliedIdentifierSetsPreserveExplicitEmptyRepeatedQuery(t *testing.T) {
+	bundle, err := Load(os.DirFS("testdata"), "caller-supplied-identifiers")
+	if err != nil {
+		t.Fatalf("Load caller-supplied identifier test bundle: %v", err)
+	}
+
+	var hits int
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		hits++
+		markets, present := r.URL.Query()["markets"]
+		if !present || len(markets) != 1 || markets[0] != "" {
+			t.Fatalf("markets query = %#v, want one explicit empty value", markets)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer srv.Close()
+
+	_, err = OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{
+		Operation:      "caller.identifiers.repeated",
+		Config:         connectors.RuntimeConfig{Config: map[string]string{"base_url": srv.URL}},
+		IdentifierSets: map[string][]string{"markets": {}},
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	if hits != 1 {
+		t.Fatalf("server hits = %d, want 1", hits)
+	}
+}
+
 func TestCallerSuppliedIdentifierSetsRejectSensitiveRepositoryPathBeforeNetwork(t *testing.T) {
 	var hits int
 	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
@@ -249,6 +280,54 @@ func TestCallerSuppliedIdentifierSetsRejectSensitiveRepositoryPathBeforeNetwork(
 	}
 	if hits != 0 {
 		t.Fatalf("server hits = %d, want 0", hits)
+	}
+}
+
+func TestCallerSuppliedIdentifierSetsRejectTraversalShapedPathBeforeNetwork(t *testing.T) {
+	var hits int
+	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		hits++
+	}))
+	defer srv.Close()
+
+	bundle := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{{
+			ID: "acme.path.lookup", Kind: "rest_read", Summary: "Look up a path identifier", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{
+				Method: http.MethodGet, Path: "/lookups/path/{id}", MaxBytes: 1024,
+				CallerSuppliedIdentifierSets: []CallerSuppliedIdentifierSetSpec{{Name: "id", ElementShape: "opaque_string", Wire: "path_segment", MinItems: 1, MaxItems: 1}},
+			},
+		}},
+	}
+
+	for _, tt := range []struct {
+		name  string
+		value string
+	}{
+		{name: "dot dot segment", value: ".."},
+		{name: "encoded slash traversal", value: "private-segment/../target"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			hits = 0
+			_, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{
+				Operation:      "acme.path.lookup",
+				IdentifierSets: map[string][]string{"id": {tt.value}},
+			}, nil)
+			if err == nil {
+				t.Fatal("OperationDirectRead error = nil, want path traversal rejection")
+			}
+			if !strings.Contains(err.Error(), "path traversal") {
+				t.Fatalf("OperationDirectRead error = %q, want path traversal rejection", err.Error())
+			}
+			if strings.Contains(err.Error(), tt.value) {
+				t.Fatalf("OperationDirectRead error leaked supplied identifier: %q", err)
+			}
+			if hits != 0 {
+				t.Fatalf("server hits = %d, want 0", hits)
+			}
+		})
 	}
 }
 
@@ -330,6 +409,11 @@ func TestCallerSuppliedIdentifierSetDeclarationsRejectUnsafeContracts(t *testing
 			name: "body schema repeats the exact bounds",
 			rest: `{"method":"POST","path":"/lookups","content_type":"application/json","body_schema":{"type":"object","required":["ids"],"properties":{"ids":{"type":"array","minItems":0,"maxItems":3,"items":{"type":"string"}}}},"caller_supplied_identifier_sets":[{"name":"ids","element_shape":"opaque_string","wire":"body_json_array","min_items":0,"max_items":2}]}`,
 			want: `matching minItems and maxItems`,
+		},
+		{
+			name: "body schema root must allow objects",
+			rest: `{"method":"POST","path":"/lookups","content_type":"application/json","body_schema":{"type":"array","properties":{"ids":{"type":"array","minItems":0,"maxItems":2,"items":{"type":"string"}}}},"caller_supplied_identifier_sets":[{"name":"ids","element_shape":"opaque_string","wire":"body_json_array","min_items":0,"max_items":2}]}`,
+			want: `body_schema must be an object`,
 		},
 	}
 

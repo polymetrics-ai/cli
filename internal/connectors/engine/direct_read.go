@@ -169,6 +169,9 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		return connectors.DirectReadResult{}, err
 	}
 	for name, values := range repeatedQuery {
+		if len(values) == 0 {
+			continue
+		}
 		query[name] = cloneIdentifierSetValues(values)
 	}
 	policy := req.OutputPolicy
@@ -898,6 +901,9 @@ func resolveSurfaceEndpointPathWithIdentifierSets(template string, cfg connector
 	}
 	if strings.Contains(resolved, "{") || strings.Contains(resolved, "}") {
 		return "", fmt.Errorf("unresolved path template %q", template)
+	}
+	if containsDotDotSegment(resolved) {
+		return "", errors.New("direct read endpoint path contains path traversal")
 	}
 	return resolved, nil
 }

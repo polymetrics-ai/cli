@@ -35,7 +35,7 @@
           "name": "markets",
           "element_shape": "chain_address",
           "wire": "query_repeated",
-          "min_items": 1,
+          "min_items": 0,
           "max_items": 2
         }]
       }
