@@ -19,13 +19,14 @@ import (
 )
 
 const (
-	cdcSlotPrefix          = "pm_cdc_"
-	cdcSnapshotBarrierKind = "postgres_logical_slot"
-	cdcProtocolVersion     = "pgoutput-v1"
-	cdcCheckpointSchema    = "postgres-cdc-v1"
-	cdcChangefeedMechanism = "logical_replication"
-	cdcExecutorID          = "postgres_logical_replication"
-	cdcSlotCleanupTimeout  = 5 * time.Second
+	cdcSlotPrefix                 = "pm_cdc_"
+	cdcSnapshotBarrierKind        = "postgres_logical_slot"
+	cdcProtocolVersion            = "pgoutput-v1"
+	cdcCheckpointSchema           = "postgres-cdc-v1"
+	cdcChangefeedMechanism        = "logical_replication"
+	cdcExecutorID                 = "postgres_logical_replication"
+	cdcSlotCleanupTimeout         = 5 * time.Second
+	cdcPublicationFeaturesVersion = 150000
 )
 
 var (
@@ -35,6 +36,8 @@ var (
 	errCDCRelationNotPublished         = errors.New("postgres CDC selected relation is not included in the configured publication")
 	errCDCPublicationMissingDML        = errors.New("postgres CDC requires a publication that publishes insert, update, and delete changes")
 	errCDCPublicationPublishesTruncate = errors.New("postgres CDC requires a publication without TRUNCATE events")
+	errCDCPublicationHasRowFilter      = errors.New("postgres CDC does not support publication row filters")
+	errCDCPublicationHasColumnList     = errors.New("postgres CDC does not support publication column lists")
 )
 
 type postgresCDCSource struct {
@@ -46,17 +49,26 @@ type postgresCDCSource struct {
 	system     pglogrepl.IdentifySystemResult
 }
 
+type postgresCDCRelationScopeInspector struct {
+	data          *pgx.Conn
+	serverVersion int
+}
+
 type postgresCDCPublicationScope struct {
-	publicationOID     string
-	publicationVersion string
-	relationOID        string
-	membershipVersion  string
-	hasDescendants     bool
-	published          bool
-	publishesInsert    bool
-	publishesUpdate    bool
-	publishesDelete    bool
-	publishesTruncate  bool
+	publicationOID             string
+	publicationVersion         string
+	relationOID                string
+	membershipVersion          string
+	namespaceMembershipVersion string
+	publicationAllTables       bool
+	hasDescendants             bool
+	published                  bool
+	publishesInsert            bool
+	publishesUpdate            bool
+	publishesDelete            bool
+	publishesTruncate          bool
+	hasRowFilter               bool
+	hasColumnList              bool
 }
 
 type postgresReplicationSlot struct {
@@ -104,6 +116,13 @@ func closeCDCDataConnection(conn *pgx.Conn) {
 	ctx, cancel := context.WithTimeout(context.Background(), cdcSlotCleanupTimeout)
 	defer cancel()
 	_ = conn.Close(ctx)
+}
+
+func closeCDCRelationScopeConnection(inspector *postgresCDCRelationScopeInspector) {
+	if inspector == nil {
+		return
+	}
+	closeCDCDataConnection(inspector.data)
 }
 
 func identifyCDCSource(ctx context.Context, replication *pgconn.PgConn, database, schema, stream string, publication string) (postgresCDCSource, error) {
@@ -250,87 +269,44 @@ func slotBarrier(slot postgresReplicationSlot, fallback pglogrepl.LSN) (pglogrep
 	return fallback, nil
 }
 
-func openCDCRelationScopeConnection(ctx context.Context, conn connConfig) (*pgx.Conn, error) {
+func openCDCRelationScopeConnection(ctx context.Context, conn connConfig) (*postgresCDCRelationScopeInspector, error) {
 	data, err := pgx.Connect(ctx, conn.dsn())
 	if err != nil {
 		return nil, fmt.Errorf("postgres CDC: connect relation scope inspection: %w", err)
 	}
-	return data, nil
+	var rawVersion string
+	if err := data.QueryRow(ctx, "SHOW server_version_num").Scan(&rawVersion); err != nil {
+		closeCDCDataConnection(data)
+		return nil, fmt.Errorf("postgres CDC: inspect server version: %w", err)
+	}
+	serverVersion, err := strconv.Atoi(strings.TrimSpace(rawVersion))
+	if err != nil || serverVersion <= 0 {
+		closeCDCDataConnection(data)
+		return nil, errors.New("postgres CDC: server returned an invalid version")
+	}
+	return &postgresCDCRelationScopeInspector{data: data, serverVersion: serverVersion}, nil
 }
 
-func inspectCDCRelationScope(ctx context.Context, data *pgx.Conn, source postgresCDCSource, publication string) (postgresCDCPublicationScope, error) {
-	if data == nil {
+func inspectCDCRelationScope(ctx context.Context, inspector *postgresCDCRelationScopeInspector, source postgresCDCSource, publication string) (postgresCDCPublicationScope, error) {
+	if inspector == nil || inspector.data == nil {
 		return postgresCDCPublicationScope{}, errors.New("postgres CDC: relation scope inspection connection is required")
 	}
 	var scope postgresCDCPublicationScope
-	err := data.QueryRow(ctx, `
-	SELECT
-		COALESCE((
-			SELECT publication.oid::text
-			FROM pg_publication publication
-			WHERE publication.pubname = $3
-		), ''),
-		COALESCE((
-			SELECT publication.xmin::text
-			FROM pg_publication publication
-			WHERE publication.pubname = $3
-		), ''),
-		COALESCE((
-			SELECT relation.oid::text
-			FROM pg_class relation
-			JOIN pg_namespace relation_schema ON relation_schema.oid = relation.relnamespace
-			WHERE relation_schema.nspname = $1 AND relation.relname = $2
-		), ''),
-		COALESCE((
-			SELECT publication_relation.xmin::text
-			FROM pg_publication_rel publication_relation
-			JOIN pg_publication publication ON publication.oid = publication_relation.prpubid
-			JOIN pg_class relation ON relation.oid = publication_relation.prrelid
-			JOIN pg_namespace relation_schema ON relation_schema.oid = relation.relnamespace
-			WHERE publication.pubname = $3 AND relation_schema.nspname = $1 AND relation.relname = $2
-		), ''),
-		EXISTS (
-			SELECT 1
-			FROM pg_inherits inheritance
-			JOIN pg_class parent ON parent.oid = inheritance.inhparent
-			JOIN pg_namespace parent_schema ON parent_schema.oid = parent.relnamespace
-			WHERE parent_schema.nspname = $1 AND parent.relname = $2
-		),
-		EXISTS (
-			SELECT 1
-			FROM pg_publication_tables
-			WHERE pubname = $3 AND schemaname = $1 AND tablename = $2
-		),
-		COALESCE((
-			SELECT pubinsert
-			FROM pg_publication
-			WHERE pubname = $3
-		), false),
-		COALESCE((
-			SELECT pubupdate
-			FROM pg_publication
-			WHERE pubname = $3
-		), false),
-		COALESCE((
-			SELECT pubdelete
-			FROM pg_publication
-			WHERE pubname = $3
-		), false),
-		COALESCE((
-			SELECT pubtruncate
-			FROM pg_publication
-			WHERE pubname = $3
-		), false)`, source.schema, source.table, publication).Scan(
+	err := inspector.data.QueryRow(ctx, cdcRelationScopeQuery(inspector.serverVersion), source.schema, source.table, publication).Scan(
 		&scope.publicationOID,
 		&scope.publicationVersion,
 		&scope.relationOID,
 		&scope.membershipVersion,
+		&scope.namespaceMembershipVersion,
+		&scope.publicationAllTables,
 		&scope.hasDescendants,
 		&scope.published,
 		&scope.publishesInsert,
 		&scope.publishesUpdate,
 		&scope.publishesDelete,
 		&scope.publishesTruncate,
+		&scope.hasRowFilter,
+		&scope.hasColumnList,
 	)
 	if err != nil {
 		return postgresCDCPublicationScope{}, fmt.Errorf("postgres CDC: inspect selected relation scope: %w", err)
@@ -338,18 +314,155 @@ func inspectCDCRelationScope(ctx context.Context, data *pgx.Conn, source postgre
 	return scope, nil
 }
 
+func cdcRelationScopeQuery(serverVersion int) string {
+	if serverVersion >= cdcPublicationFeaturesVersion {
+		return cdcRelationScopeModernQuery
+	}
+	return cdcRelationScopeLegacyQuery
+}
+
+const cdcRelationScopeLegacyQuery = `
+WITH
+	target_relation AS (
+		SELECT relation.oid, relation.relnamespace
+		FROM pg_class relation
+		JOIN pg_namespace relation_schema ON relation_schema.oid = relation.relnamespace
+		WHERE relation_schema.nspname = $1
+			AND relation.relname = $2
+			AND relation.relkind IN ('r', 'p')
+			AND relation.relpersistence = 'p'
+	),
+	selected_publication AS (
+		SELECT
+			publication.oid,
+			publication.xmin::text AS version,
+			publication.puballtables,
+			publication.pubinsert,
+			publication.pubupdate,
+			publication.pubdelete,
+			publication.pubtruncate
+		FROM pg_publication publication
+		WHERE publication.pubname = $3
+	),
+	direct_membership AS (
+		SELECT
+			membership.xmin::text AS version,
+			membership.prrelid
+		FROM pg_publication_rel membership
+		JOIN selected_publication publication ON publication.oid = membership.prpubid
+		JOIN target_relation relation ON relation.oid = membership.prrelid
+	)
+SELECT
+	COALESCE(selected_publication.oid::text, ''),
+	COALESCE(selected_publication.version, ''),
+	COALESCE(target_relation.oid::text, ''),
+	COALESCE(direct_membership.version, ''),
+	''::text,
+	COALESCE(selected_publication.puballtables, false),
+	EXISTS (SELECT 1 FROM pg_inherits inheritance WHERE inheritance.inhparent = target_relation.oid),
+	COALESCE(
+		target_relation.oid IS NOT NULL
+		AND (selected_publication.puballtables OR direct_membership.prrelid IS NOT NULL),
+		false
+	),
+	COALESCE(selected_publication.pubinsert, false),
+	COALESCE(selected_publication.pubupdate, false),
+	COALESCE(selected_publication.pubdelete, false),
+	COALESCE(selected_publication.pubtruncate, false),
+	false,
+	false
+FROM (VALUES (1)) AS anchor(value)
+LEFT JOIN target_relation ON true
+LEFT JOIN selected_publication ON true
+LEFT JOIN direct_membership ON true`
+
+const cdcRelationScopeModernQuery = `
+WITH
+	target_relation AS (
+		SELECT relation.oid, relation.relnamespace
+		FROM pg_class relation
+		JOIN pg_namespace relation_schema ON relation_schema.oid = relation.relnamespace
+		WHERE relation_schema.nspname = $1
+			AND relation.relname = $2
+			AND relation.relkind IN ('r', 'p')
+			AND relation.relpersistence = 'p'
+	),
+	selected_publication AS (
+		SELECT
+			publication.oid,
+			publication.xmin::text AS version,
+			publication.puballtables,
+			publication.pubinsert,
+			publication.pubupdate,
+			publication.pubdelete,
+			publication.pubtruncate
+		FROM pg_publication publication
+		WHERE publication.pubname = $3
+	),
+	direct_membership AS (
+		SELECT
+			membership.xmin::text AS version,
+			membership.prrelid,
+			membership.prqual IS NOT NULL AS has_row_filter,
+			membership.prattrs IS NOT NULL AS has_column_list
+		FROM pg_publication_rel membership
+		JOIN selected_publication publication ON publication.oid = membership.prpubid
+		JOIN target_relation relation ON relation.oid = membership.prrelid
+	),
+	namespace_membership AS (
+		SELECT
+			membership.xmin::text AS version,
+			membership.pnnspid
+		FROM pg_publication_namespace membership
+		JOIN selected_publication publication ON publication.oid = membership.pnpubid
+		JOIN target_relation relation ON relation.relnamespace = membership.pnnspid
+	)
+SELECT
+	COALESCE(selected_publication.oid::text, ''),
+	COALESCE(selected_publication.version, ''),
+	COALESCE(target_relation.oid::text, ''),
+	COALESCE(direct_membership.version, ''),
+	COALESCE(namespace_membership.version, ''),
+	COALESCE(selected_publication.puballtables, false),
+	EXISTS (SELECT 1 FROM pg_inherits inheritance WHERE inheritance.inhparent = target_relation.oid),
+	COALESCE(
+		target_relation.oid IS NOT NULL
+		AND (
+			selected_publication.puballtables
+			OR direct_membership.prrelid IS NOT NULL
+			OR namespace_membership.pnnspid IS NOT NULL
+		),
+		false
+	),
+	COALESCE(selected_publication.pubinsert, false),
+	COALESCE(selected_publication.pubupdate, false),
+	COALESCE(selected_publication.pubdelete, false),
+	COALESCE(selected_publication.pubtruncate, false),
+	COALESCE(direct_membership.has_row_filter, false),
+	COALESCE(direct_membership.has_column_list, false)
+FROM (VALUES (1)) AS anchor(value)
+LEFT JOIN target_relation ON true
+LEFT JOIN selected_publication ON true
+LEFT JOIN direct_membership ON true
+LEFT JOIN namespace_membership ON true`
+
 func (scope postgresCDCPublicationScope) fingerprint() string {
 	parts := []string{
+		"postgres-cdc-publication-scope-v2",
 		scope.publicationOID,
 		scope.publicationVersion,
 		scope.relationOID,
 		scope.membershipVersion,
+		scope.namespaceMembershipVersion,
+		strconv.FormatBool(scope.publicationAllTables),
 		strconv.FormatBool(scope.hasDescendants),
 		strconv.FormatBool(scope.published),
 		strconv.FormatBool(scope.publishesInsert),
 		strconv.FormatBool(scope.publishesUpdate),
 		strconv.FormatBool(scope.publishesDelete),
 		strconv.FormatBool(scope.publishesTruncate),
+		strconv.FormatBool(scope.hasRowFilter),
+		strconv.FormatBool(scope.hasColumnList),
 	}
 	sum := sha256.Sum256([]byte(strings.Join(parts, "\x00")))
 	return hex.EncodeToString(sum[:])
@@ -360,6 +473,9 @@ func (scope postgresCDCPublicationScope) validate() error {
 		return err
 	}
 	if err := validateCDCRelationHierarchy(scope.hasDescendants); err != nil {
+		return err
+	}
+	if err := validateCDCPublicationTableShape(scope.hasRowFilter, scope.hasColumnList); err != nil {
 		return err
 	}
 	if err := validateCDCPublicationDML(scope.publishesInsert, scope.publishesUpdate, scope.publishesDelete); err != nil {
@@ -375,8 +491,8 @@ func validateCDCPublicationScopeChange(expected, current postgresCDCPublicationS
 	return current.validate()
 }
 
-func validateCurrentCDCRelationScope(ctx context.Context, data *pgx.Conn, source postgresCDCSource, publication string, expected postgresCDCPublicationScope) error {
-	current, err := inspectCDCRelationScope(ctx, data, source, publication)
+func validateCurrentCDCRelationScope(ctx context.Context, inspector *postgresCDCRelationScopeInspector, source postgresCDCSource, publication string, expected postgresCDCPublicationScope) error {
+	current, err := inspectCDCRelationScope(ctx, inspector, source, publication)
 	if err != nil {
 		return err
 	}
@@ -393,6 +509,16 @@ func validateCDCPublicationScope(published bool) error {
 func validateCDCRelationHierarchy(hasDescendants bool) error {
 	if hasDescendants {
 		return errCDCRelationHasDescendants
+	}
+	return nil
+}
+
+func validateCDCPublicationTableShape(hasRowFilter, hasColumnList bool) error {
+	if hasRowFilter {
+		return errCDCPublicationHasRowFilter
+	}
+	if hasColumnList {
+		return errCDCPublicationHasColumnList
 	}
 	return nil
 }

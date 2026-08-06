@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"errors"
+	"strings"
 	"testing"
 	"time"
 
@@ -236,20 +237,82 @@ func TestCDCPublicationScopeRejectsTruncate(t *testing.T) {
 	}
 }
 
+func TestCDCPublicationScopeRejectsPartialTablePublications(t *testing.T) {
+	for _, tc := range []struct {
+		name string
+		set  func(*postgresCDCPublicationScope)
+		want error
+	}{
+		{name: "row filter", set: func(scope *postgresCDCPublicationScope) { scope.hasRowFilter = true }, want: errCDCPublicationHasRowFilter},
+		{name: "column list", set: func(scope *postgresCDCPublicationScope) { scope.hasColumnList = true }, want: errCDCPublicationHasColumnList},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			scope := validCDCPublicationScope()
+			tc.set(&scope)
+			if err := scope.validate(); !errors.Is(err, tc.want) {
+				t.Fatalf("scope.validate() = %v, want %v", err, tc.want)
+			}
+		})
+	}
+}
+
 func TestCDCPublicationScopeChangeRequiresRebootstrap(t *testing.T) {
 	expected := validCDCPublicationScope()
 	if err := validateCDCPublicationScopeChange(expected, expected); err != nil {
 		t.Fatalf("validateCDCPublicationScopeChange(same scope) = %v", err)
 	}
-	changed := expected
-	changed.membershipVersion = "43"
-	err := validateCDCPublicationScopeChange(expected, changed)
-	if !errors.Is(err, synccontract.ErrRebootstrapRequired) {
-		t.Fatalf("validateCDCPublicationScopeChange(changed scope) = %v, want rebootstrap error", err)
+	for _, tc := range []struct {
+		name string
+		set  func(*postgresCDCPublicationScope)
+	}{
+		{name: "direct membership", set: func(scope *postgresCDCPublicationScope) { scope.membershipVersion = "43" }},
+		{name: "schema membership", set: func(scope *postgresCDCPublicationScope) { scope.namespaceMembershipVersion = "44" }},
+		{name: "all tables", set: func(scope *postgresCDCPublicationScope) { scope.publicationAllTables = true }},
+		{name: "row filter", set: func(scope *postgresCDCPublicationScope) { scope.hasRowFilter = true }},
+		{name: "column list", set: func(scope *postgresCDCPublicationScope) { scope.hasColumnList = true }},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			changed := expected
+			tc.set(&changed)
+			err := validateCDCPublicationScopeChange(expected, changed)
+			if !errors.Is(err, synccontract.ErrRebootstrapRequired) {
+				t.Fatalf("validateCDCPublicationScopeChange(changed scope) = %v, want rebootstrap error", err)
+			}
+			var recovery *synccontract.RebootstrapRequiredError
+			if !errors.As(err, &recovery) || recovery.Outcome != synccontract.RecoveryOutcomeSourceGenerationChanged {
+				t.Fatalf("validateCDCPublicationScopeChange(changed scope) recovery = %#v, want source generation changed", recovery)
+			}
+		})
 	}
-	var recovery *synccontract.RebootstrapRequiredError
-	if !errors.As(err, &recovery) || recovery.Outcome != synccontract.RecoveryOutcomeSourceGenerationChanged {
-		t.Fatalf("validateCDCPublicationScopeChange(changed scope) recovery = %#v, want source generation changed", recovery)
+}
+
+func TestCDCRelationScopeQueriesAvoidExpandedPublicationTables(t *testing.T) {
+	for _, tc := range []struct {
+		name    string
+		version int
+		modern  bool
+	}{
+		{name: "PostgreSQL 12", version: 120022},
+		{name: "PostgreSQL 15", version: cdcPublicationFeaturesVersion, modern: true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			query := cdcRelationScopeQuery(tc.version)
+			if strings.Contains(query, "pg_publication_tables") {
+				t.Fatal("scope query expands pg_publication_tables")
+			}
+			if !strings.Contains(query, "pg_publication_rel") || !strings.Contains(query, "puballtables") {
+				t.Fatal("scope query does not use direct publication membership")
+			}
+			if tc.modern {
+				if !strings.Contains(query, "pg_publication_namespace") || !strings.Contains(query, "prqual") || !strings.Contains(query, "prattrs") {
+					t.Fatal("modern scope query does not inspect schema membership and partial-table settings")
+				}
+				return
+			}
+			if strings.Contains(query, "pg_publication_namespace") || strings.Contains(query, "prqual") || strings.Contains(query, "prattrs") {
+				t.Fatal("legacy scope query requires a modern publication catalog")
+			}
+		})
 	}
 }
 

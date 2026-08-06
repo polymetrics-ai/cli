@@ -81,7 +81,7 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 	if err != nil {
 		return err
 	}
-	defer closeCDCDataConnection(scopeConnection)
+	defer closeCDCRelationScopeConnection(scopeConnection)
 	scope, err := inspectCDCRelationScope(ctx, scopeConnection, source, publication)
 	if err != nil {
 		return err
