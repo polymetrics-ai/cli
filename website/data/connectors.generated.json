@@ -40347,33 +40347,14 @@
           "id": "conversations",
           "title": "Crisp conversation-list read commands",
           "commands": [
-            "conversations list",
-            "conversations suggested-segments",
-            "conversations suggested-data",
-            "conversations spam-list",
-            "conversations spam-content"
+            "conversations"
           ]
         },
         {
           "id": "conversation",
           "title": "Crisp conversation-scoped read commands",
           "commands": [
-            "conversation get",
-            "conversation messages",
-            "conversation message",
-            "conversation routing",
-            "conversation meta",
-            "conversation original-message",
-            "conversation pages",
-            "conversation events",
-            "conversation files",
-            "conversation state",
-            "conversation relations",
-            "conversation participants",
-            "conversation block-status",
-            "conversation verify-status",
-            "conversation browsing",
-            "conversation call"
+            "conversation"
           ]
         }
       ],
@@ -40429,11 +40410,12 @@
             },
             {
               "name": "page-number",
-              "type": "string",
+              "type": "integer",
               "summary": "Positive Crisp conversation page number; defaults to 1 from config.",
               "values": [],
               "maps_to": "config.page_number",
-              "allow_empty": false
+              "allow_empty": false,
+              "minimum": 1
             },
             {
               "name": "per-page",
@@ -40668,11 +40650,12 @@
             },
             {
               "name": "page-number",
-              "type": "string",
+              "type": "integer",
               "summary": "Positive Crisp page number; defaults to 1 from config.",
               "values": [],
               "maps_to": "config.page_number",
-              "allow_empty": false
+              "allow_empty": false,
+              "minimum": 1
             }
           ],
           "examples": [],
@@ -40701,11 +40684,12 @@
             },
             {
               "name": "page-number",
-              "type": "string",
+              "type": "integer",
               "summary": "Positive Crisp page number; defaults to 1 from config.",
               "values": [],
               "maps_to": "config.page_number",
-              "allow_empty": false
+              "allow_empty": false,
+              "minimum": 1
             }
           ],
           "examples": [],
@@ -40734,11 +40718,12 @@
             },
             {
               "name": "page-number",
-              "type": "string",
+              "type": "integer",
               "summary": "Positive Crisp page number; defaults to 1 from config.",
               "values": [],
               "maps_to": "config.page_number",
-              "allow_empty": false
+              "allow_empty": false,
+              "minimum": 1
             },
             {
               "name": "filter-type",
@@ -41054,11 +41039,12 @@
             },
             {
               "name": "page-number",
-              "type": "string",
+              "type": "integer",
               "summary": "Positive Crisp page number; defaults to 1 from config.",
               "values": [],
               "maps_to": "config.page_number",
-              "allow_empty": false
+              "allow_empty": false,
+              "minimum": 1
             }
           ],
           "examples": [],
@@ -41095,11 +41081,12 @@
             },
             {
               "name": "page-number",
-              "type": "string",
+              "type": "integer",
               "summary": "Positive Crisp page number; defaults to 1 from config.",
               "values": [],
               "maps_to": "config.page_number",
-              "allow_empty": false
+              "allow_empty": false,
+              "minimum": 1
             }
           ],
           "examples": [],
@@ -41136,11 +41123,12 @@
             },
             {
               "name": "page-number",
-              "type": "string",
+              "type": "integer",
               "summary": "Positive Crisp page number; defaults to 1 from config.",
               "values": [],
               "maps_to": "config.page_number",
-              "allow_empty": false
+              "allow_empty": false,
+              "minimum": 1
             }
           ],
           "examples": [],

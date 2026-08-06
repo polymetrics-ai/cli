@@ -2221,6 +2221,26 @@ func TestCoerceFlagValueBoundsStringArrayItems(t *testing.T) {
 	}
 }
 
+func TestValidateFlagMinimumIsOptIn(t *testing.T) {
+	if err := validateFlagValue(connectors.CommandSurfaceFlag{Name: "page-number", Type: "integer"}, "0"); err != nil {
+		t.Fatalf("validateFlagValue without minimum = %v, want unchanged acceptance", err)
+	}
+
+	minimum := 1.0
+	flag := connectors.CommandSurfaceFlag{Name: "page-number", Type: "integer", Minimum: &minimum}
+	if err := validateFlagValue(flag, "1"); err != nil {
+		t.Fatalf("validateFlagValue at minimum = %v, want accepted", err)
+	}
+	err := validateFlagValue(flag, "0")
+	var minimumErr *MinimumFlagError
+	if !errors.As(err, &minimumErr) {
+		t.Fatalf("validateFlagValue below minimum error = %T %v, want MinimumFlagError", err, err)
+	}
+	if minimumErr.Parameter != "page-number" || minimumErr.Minimum != 1 {
+		t.Fatalf("MinimumFlagError = %+v, want page-number minimum 1", minimumErr)
+	}
+}
+
 func TestValidateRequiredCommandFlagsPreservesStringArrayPresence(t *testing.T) {
 	tests := []struct {
 		name    string
