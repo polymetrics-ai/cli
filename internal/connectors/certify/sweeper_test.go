@@ -2,12 +2,14 @@ package certify_test
 
 import (
 	"context"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 	"time"
 
+	"polymetrics.ai/internal/cli"
 	"polymetrics.ai/internal/connectors/certify"
 )
 
@@ -20,6 +22,31 @@ func TestSweeperCleansUnledgeredAgedEntries(t *testing.T) {
 	if err := initSweeperProject(t, root); err != nil {
 		t.Fatalf("init sweeper project: %v", err)
 	}
+
+	// The sample/outbox plan-approve-run lifecycle is covered end-to-end by
+	// TestWriteStagesSelfTestAgainstOutbox. Keep this test focused on the
+	// sweeper's ledger transition and its exact cleanup orchestration, without
+	// repeatedly loading every connector bundle through the CLI.
+	var calls []string
+	certify.SetCLIRunFunc(func(args []string, stdout, _ io.Writer) int {
+		call := strings.Join(args, " ")
+		calls = append(calls, call)
+
+		switch {
+		case strings.HasPrefix(call, "reverse plan "):
+			if _, err := io.WriteString(stdout, "Created reverse plan sweep-plan\nApproval token: sweep-approval\n"); err != nil {
+				t.Errorf("write fake reverse plan result: %v", err)
+				return 1
+			}
+		case strings.HasPrefix(call, "reverse run "):
+			if _, err := io.WriteString(stdout, `{"kind":"ReverseRun"}`); err != nil {
+				t.Errorf("write fake reverse run result: %v", err)
+				return 1
+			}
+		}
+		return 0
+	})
+	t.Cleanup(func() { certify.SetCLIRunFunc(cli.Run) })
 
 	ledger, err := certify.NewLedger(root)
 	if err != nil {
@@ -56,6 +83,22 @@ func TestSweeperCleansUnledgeredAgedEntries(t *testing.T) {
 	if !found {
 		t.Errorf("SweepResult.Cleaned = %v, want to include aged tag %q", result.Cleaned, agedTag)
 	}
+	for i, want := range []string{
+		"credentials add cert-outbox",
+		"credentials add cert-sweep-warehouse",
+		"credentials add cert-sweep-seed-file",
+		"connections create cert_sweep_seed_conn",
+		"etl run",
+		"reverse plan cert_write_selftest",
+		"reverse run sweep-plan",
+	} {
+		if i >= len(calls) || !strings.HasPrefix(calls[i], want) {
+			t.Errorf("cleanup call %d = %q, want prefix %q", i, callAt(calls, i), want)
+		}
+	}
+	if len(calls) != 7 {
+		t.Errorf("cleanup call count = %d, want 7 (%v)", len(calls), calls)
+	}
 
 	entries, err := certify.LoadLedger(root)
 	if err != nil {
@@ -65,6 +108,13 @@ func TestSweeperCleansUnledgeredAgedEntries(t *testing.T) {
 	if !ok || !status.Cleaned {
 		t.Errorf("ledger StatusFor(%q) = %+v, ok=%v, want Cleaned=true after sweep", agedTag, status, ok)
 	}
+}
+
+func callAt(calls []string, index int) string {
+	if index >= len(calls) {
+		return ""
+	}
+	return calls[index]
 }
 
 // TestSweeperSkipsRecentEntries proves the --older-than threshold: a
