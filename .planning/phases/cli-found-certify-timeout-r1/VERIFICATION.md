@@ -89,14 +89,15 @@ precedes the required rebase-on-current-main validation.
 
 ## Rebase validation
 
-The branch was cleanly rebased onto `origin/main` at `b0cd6cbcd` on
-2026-08-06. The rebase-local timing target passed at 119.492s under the 4m15s
-budget; the complete CLI package passed in 363.575s. The individual
-`tidy-check`, `lint`, `docs-check`, `smoke-no-build`, `agent-contract-check`,
+The branch was finally cleanly rebased onto `origin/main` at `d215d9636` on
+2026-08-06. The final-base timing target passed at 121.617s under the 4m15s
+budget; the complete CLI package passed in 364.625s. `go vet ./...` and
+`make lint` passed again on that final base; the individual `tidy-check`,
+`docs-check`, `smoke-no-build`, `agent-contract-check`,
 `connectorgen-validate`, `connectorgen-surface-sync`, `connector-boundary`,
-and `release-workflow-check` gates all passed, along with `go vet ./...` and
-`go build ./cmd/pm`. A fresh hosted Verify run is still required for the
-rebased commit range.
+and `release-workflow-check` gates passed during the immediately preceding
+clean rebase validation. A fresh hosted Verify run is still required for the
+final rebased commit range.
 
 ## Deliberate exclusions
 
