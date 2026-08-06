@@ -6,7 +6,9 @@ import (
 	"encoding/json"
 	"errors"
 	"os"
+	"path/filepath"
 	"reflect"
+	"strings"
 	"testing"
 	"time"
 
@@ -370,11 +372,69 @@ func TestConnectorETLRefusesDestinationWithoutDurableAcknowledgementBeforeRead(t
 	expectation := streamResumeExpectation(source, sourceCredential, sourceRuntime, "records")
 	destination := newScriptedSyncSource("undurable_connector_destination", nil)
 	_, err = a.runConnectorETL(ctx, "run_undurable", conn, source, sourceRuntime, destination, connectors.RuntimeConfig{}, expectation, "records", conn.Streams["records"], mode, 1)
-	if !errors.Is(err, errGenericETLDurabilityUnavailable) {
-		t.Fatalf("runConnectorETL() error = %v, want durable acknowledgement refusal", err)
+	var admission *synccontract.DestinationDurabilityAdmissionError
+	if !errors.As(err, &admission) {
+		t.Fatalf("runConnectorETL() error = %T %v, want typed durability admission failure", err, err)
+	}
+	if !errors.Is(err, synccontract.ErrDurableETLDestinationRequired) {
+		t.Fatalf("runConnectorETL() error = %v, want durable destination admission error", err)
+	}
+	if admission.Destination != destination.Name() {
+		t.Fatalf("admission destination = %q, want %q", admission.Destination, destination.Name())
+	}
+	if !strings.Contains(err.Error(), "migrate this connection") {
+		t.Fatalf("durability admission error lacks migration guidance: %v", err)
 	}
 	if len(source.requests) != 0 {
 		t.Fatalf("source read before generic destination durability admission: %#v", source.requests)
+	}
+}
+
+func TestRunETLRefusesOutboxWithoutDurableAcknowledgementBeforeRead(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("undurable_outbox_source", []connectors.Record{{
+		"id": "1", "updated_at": "2026-08-06T00:00:00Z",
+	}})
+	a, _ := setupSyncModeApp(t, source, "incremental_append")
+	outboxDir := filepath.Join(a.projectDir, "outbox")
+	if _, err := a.AddCredential(ctx, AddCredentialRequest{
+		Name:      "outbox",
+		Connector: "outbox",
+		Config:    map[string]string{"path": outboxDir},
+	}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := a.CreateConnection(ctx, CreateConnectionRequest{
+		Name:        "records_to_outbox",
+		Source:      EndpointConfig{Connector: source.Name(), Credential: "source"},
+		Destination: EndpointConfig{Connector: "outbox", Credential: "outbox"},
+		Streams: map[string]StreamConfig{
+			"records": {
+				SyncMode:         "incremental_append",
+				CursorField:      "updated_at",
+				DestinationTable: "records",
+			},
+		},
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	_, err := a.RunETL(ctx, RunETLRequest{Connection: "records_to_outbox", Stream: "records", BatchSize: 1})
+	var admission *synccontract.DestinationDurabilityAdmissionError
+	if !errors.As(err, &admission) {
+		t.Fatalf("RunETL() error = %T %v, want typed durability admission failure", err, err)
+	}
+	if admission.Destination != "outbox" {
+		t.Fatalf("admission destination = %q, want outbox", admission.Destination)
+	}
+	if !strings.Contains(err.Error(), "migrate this connection") {
+		t.Fatalf("durability admission error lacks migration guidance: %v", err)
+	}
+	if len(source.requests) != 0 {
+		t.Fatalf("source read before outbox durability admission: %#v", source.requests)
+	}
+	if _, statErr := os.Stat(filepath.Join(outboxDir, "records.jsonl")); !errors.Is(statErr, os.ErrNotExist) {
+		t.Fatalf("outbox write before durability admission: %v", statErr)
 	}
 }
 
