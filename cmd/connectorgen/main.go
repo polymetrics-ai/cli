@@ -16,6 +16,9 @@
 //	                           binary_download command metadata (api_surface,
 //	                           output_policy, flag maps_to, rest.max_bytes)
 //	                           from operations.json
+//	batch plan --ledger <path> --out <path>
+//	                           turns provider-artifact ledger evidence into a
+//	                           deterministic, reviewable connector batch
 //	new <name>                 scaffolds internal/connectors/defs/<name>/
 //
 // It owns bundle validation plus generated hook/native import sets for the
@@ -53,6 +56,8 @@ func run(args []string, stdout, stderr io.Writer) int {
 		return runGen(args, stdout, stderr)
 	case "surface-sync":
 		return runSurfaceSync(args, stdout, stderr)
+	case "batch":
+		return runBatch(args, stdout, stderr)
 	case "new":
 		return runNew(args, stdout, stderr)
 	case "-h", "--help", "help":
@@ -85,6 +90,8 @@ func usage() string {
   connectorgen ownership [repo-root] [--json] [--base <ref>] [--scope-file <path>]
   connectorgen gen
   connectorgen surface-sync [dir] [--check]  (default dir: internal/connectors/defs)
+  connectorgen batch plan --ledger <path> --out <path> [--size <1-40>] [--connector <name>] [--min-operations <n>] [--max-operations <n>]
+  connectorgen batch gate --manifest <path> --report <path> [--defs-root <path>]
   connectorgen new <name>`
 }
 

@@ -2,7 +2,7 @@
   "issue": null,
   "parent": null,
   "subissues": [],
-  "state": "executing",
+  "state": "review_complete_waiting_foundations",
   "execution": "inline_manual_no_spawn",
-  "next": "red_tests_then_connectorgen_batch_command"
+  "next": "commit_pipeline_and_wait_for_firstmate_authoring_direction"
 }
