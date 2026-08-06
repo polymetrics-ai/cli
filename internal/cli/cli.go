@@ -316,7 +316,7 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 		if flags.isBare("auth-profile") {
 			return usageErrorf("missing value for --auth-profile")
 		}
-		if flags.isBare("link-credential") {
+		if flags.isBare("link-credential") || flags.hasBlankValue("link-credential") {
 			return usageErrorf("--link-credential requires a credential identifier")
 		}
 		connector := flags.first("connector")

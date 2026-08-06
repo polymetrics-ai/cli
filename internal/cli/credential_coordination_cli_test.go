@@ -227,6 +227,16 @@ func TestCredentialsCoordinationBareLinkTargetsRequireCredentialIdentifiers(t *t
 			flag: "--link-credential",
 		},
 		{
+			name: "empty equals target",
+			args: []string{"credentials", "add", "empty-link-on-create", "--connector", "sample", "--link-credential=", "--root", root, "--json"},
+			flag: "--link-credential",
+		},
+		{
+			name: "whitespace equals target",
+			args: []string{"credentials", "add", "whitespace-link-on-create", "--connector", "sample", "--link-credential=   ", "--root", root, "--json"},
+			flag: "--link-credential",
+		},
+		{
 			name: "existing target",
 			args: []string{"credentials", "link", "source", "--to", "--root", root, "--json"},
 			flag: "--to",
@@ -250,8 +260,10 @@ func TestCredentialsCoordinationBareLinkTargetsRequireCredentialIdentifiers(t *t
 	if code := cli.Run([]string{"credentials", "list", "--root", root, "--json"}, &stdout, &stderr); code != 0 {
 		t.Fatalf("credentials list code = %d stdout = %s stderr = %s", code, stdout.String(), stderr.String())
 	}
-	if strings.Contains(stdout.String(), "bare-link-on-create") {
-		t.Fatalf("bare --link-credential persisted a credential: %s", stdout.String())
+	for _, name := range []string{"bare-link-on-create", "empty-link-on-create", "whitespace-link-on-create"} {
+		if strings.Contains(stdout.String(), name) {
+			t.Fatalf("invalid --link-credential persisted credential %q: %s", name, stdout.String())
+		}
 	}
 
 	instance, err := app.Open(root)

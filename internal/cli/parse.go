@@ -30,6 +30,15 @@ func (p parsedFlags) isBare(name string) bool {
 	return p.bare[name]
 }
 
+func (p parsedFlags) hasBlankValue(name string) bool {
+	for _, value := range p.values[name] {
+		if strings.TrimSpace(value) == "" {
+			return true
+		}
+	}
+	return false
+}
+
 func parseGlobal(args []string) (root string, jsonOut bool, clean []string) {
 	root = "."
 	for i := 0; i < len(args); i++ {
