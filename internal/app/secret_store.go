@@ -27,12 +27,7 @@ type credentialSecretStore struct {
 	id  string
 }
 
-// storeMu serialises rotation writes. A rotation can be driven from a
-// connector's own goroutine while a sync is in flight, and App carries no lock
-// of its own; without this, two credentials rotating at once would race on
-// a.state and the state file. It is package-level rather than per-store because
-// the contended resources — a.state and the state file — are per-App, not
-// per-credential, and rotation is rare enough that a single lock costs nothing.
+// storeMu serializes rotation writes.
 var storeMu sync.Mutex
 
 // credentialSecretStore returns a store scoped to the given credential id.
@@ -74,22 +69,25 @@ func (s *credentialSecretStore) PutSecret(ctx context.Context, key, value string
 // NAMES, never values — consistent after a rotation introduces a key the
 // credential did not previously carry, and stamps UpdatedAt.
 func (a *App) recordSecretField(id, key string) error {
-	for i := range a.state.Credentials {
-		if a.state.Credentials[i].ID != id {
-			continue
-		}
-		fields := a.state.Credentials[i].SecretFields
-		for _, existing := range fields {
-			if existing == key {
-				a.state.Credentials[i].UpdatedAt = time.Now().UTC()
-				return a.save()
+	_, err := a.updateState(func(current state) (state, error) {
+		for i := range current.Credentials {
+			if current.Credentials[i].ID != id {
+				continue
 			}
+			fields := current.Credentials[i].SecretFields
+			for _, existing := range fields {
+				if existing == key {
+					current.Credentials[i].UpdatedAt = time.Now().UTC()
+					return current, nil
+				}
+			}
+			fields = append(fields, key)
+			sort.Strings(fields)
+			current.Credentials[i].SecretFields = fields
+			current.Credentials[i].UpdatedAt = time.Now().UTC()
+			return current, nil
 		}
-		fields = append(fields, key)
-		sort.Strings(fields)
-		a.state.Credentials[i].SecretFields = fields
-		a.state.Credentials[i].UpdatedAt = time.Now().UTC()
-		return a.save()
-	}
-	return fmt.Errorf("rotate credential secret: credential %q not found", id)
+		return current, fmt.Errorf("rotate credential secret: credential %q not found", id)
+	})
+	return err
 }

@@ -96,11 +96,12 @@ func (a *App) ConfigureWebhookReceiver(ctx context.Context, req ConfigureWebhook
 
 	var cohort connectors.AuthCohortKey
 	if req.Credential != "" {
-		credential, ok := a.findCredential(req.Credential)
+		current := a.snapshotState()
+		credential, ok := findCredentialInState(current, req.Credential)
 		if !ok {
 			return WebhookReceiverStatus{}, errors.New("webhook receiver credential is unavailable")
 		}
-		identity, err := a.coordinationIdentityForCredential(credential)
+		identity, err := coordinationIdentityForCredential(current, credential)
 		if err != nil {
 			return WebhookReceiverStatus{}, errors.New("webhook receiver credential coordination is unavailable")
 		}

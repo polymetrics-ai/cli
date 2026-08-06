@@ -283,7 +283,7 @@ func (a *App) migrateCredentialCoordination() (bool, error) {
 			changed = true
 		}
 		a.state.CredentialBindings[credential.ID] = binding
-		if _, err := a.newCoordinationIdentity(providerFamily, authProfile, binding.BindingID); err != nil {
+		if _, err := newCoordinationIdentity(a.state.CoordinationSalt, providerFamily, authProfile, binding.BindingID); err != nil {
 			return false, fmt.Errorf("migrate credential coordination metadata: %w", err)
 		}
 	}
@@ -347,27 +347,31 @@ func newCoordinationSalt() (string, error) {
 	return salt, nil
 }
 
-func (a *App) newCoordinationIdentity(providerFamily, authProfile, bindingID string) (connectors.CoordinationIdentity, error) {
-	if strings.TrimSpace(a.state.CoordinationSalt) == "" {
+func newCoordinationIdentity(coordinationSalt, providerFamily, authProfile, bindingID string) (connectors.CoordinationIdentity, error) {
+	if strings.TrimSpace(coordinationSalt) == "" {
 		return connectors.CoordinationIdentity{}, errors.New("credential coordination identity is unavailable")
 	}
-	return connectors.NewCoordinationIdentity([]byte(a.state.CoordinationSalt), connectors.CredentialBinding{
+	return connectors.NewCoordinationIdentity([]byte(coordinationSalt), connectors.CredentialBinding{
 		BindingID:      bindingID,
 		ProviderFamily: providerFamily,
 		AuthProfile:    authProfile,
 	})
 }
 
-func (a *App) coordinationIdentityForCredential(credential CredentialMeta) (connectors.CoordinationIdentity, error) {
-	binding, err := a.credentialBindingForCredential(credential)
+func coordinationIdentityForCredential(current state, credential CredentialMeta) (connectors.CoordinationIdentity, error) {
+	binding, err := credentialBindingForCredential(current, credential)
 	if err != nil {
 		return connectors.CoordinationIdentity{}, err
 	}
-	return a.newCoordinationIdentity(credential.ProviderFamily, credential.AuthProfile, binding.BindingID)
+	return newCoordinationIdentity(current.CoordinationSalt, credential.ProviderFamily, credential.AuthProfile, binding.BindingID)
 }
 
-func (a *App) credentialBindingForCredential(credential CredentialMeta) (credentialBindingState, error) {
-	binding, ok := a.state.CredentialBindings[credential.ID]
+func (a *App) coordinationIdentityForCredential(credential CredentialMeta) (connectors.CoordinationIdentity, error) {
+	return coordinationIdentityForCredential(a.snapshotState(), credential)
+}
+
+func credentialBindingForCredential(current state, credential CredentialMeta) (credentialBindingState, error) {
+	binding, ok := current.CredentialBindings[credential.ID]
 	if !ok || strings.TrimSpace(binding.BindingID) == "" {
 		return credentialBindingState{}, errors.New("credential coordination metadata is unavailable")
 	}
@@ -433,6 +437,12 @@ func stateStoreCommitMayHaveSucceeded(err error) bool {
 	return statestore.CommitOutcomeForError(err).MayHaveCommitted()
 }
 
+func (a *App) snapshotState() state {
+	a.stateMu.RLock()
+	defer a.stateMu.RUnlock()
+	return a.state
+}
+
 func newStateStore(path string) statestore.JSONStore[state] {
 	return statestore.JSONStore[state]{
 		Path: path,
@@ -460,7 +470,8 @@ func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (Cred
 	if !ok {
 		return CredentialMeta{}, fmt.Errorf("connector %q not found", req.Connector)
 	}
-	if _, ok := a.findCredential(req.Name); ok {
+	current := a.snapshotState()
+	if _, ok := findCredentialInState(current, req.Name); ok {
 		return CredentialMeta{}, fmt.Errorf("credential %q already exists", req.Name)
 	}
 	providerFamily, authProfile, err := credentialCoordinationDeclarations(req.Connector, req.ProviderFamily, req.AuthProfile)
@@ -478,15 +489,15 @@ func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (Cred
 		DeclarationProvenanceRecorded: true,
 	}
 	if strings.TrimSpace(req.LinkCredential) != "" {
-		linked, ok := a.findCredential(req.LinkCredential)
+		linked, ok := findCredentialInState(current, req.LinkCredential)
 		if !ok {
 			return CredentialMeta{}, errors.New("link credential not found")
 		}
-		linkedBinding, err := a.credentialBindingForCredential(linked)
+		linkedBinding, err := credentialBindingForCredential(current, linked)
 		if err != nil {
 			return CredentialMeta{}, errors.New("linked credential coordination metadata is unavailable")
 		}
-		if err := a.validateCredentialLinkCohort(
+		if err := validateCredentialLinkCohort(current,
 			CredentialMeta{Connector: req.Connector, ProviderFamily: providerFamily, AuthProfile: authProfile},
 			binding,
 			linkedBinding,
@@ -495,7 +506,7 @@ func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (Cred
 		}
 		binding.BindingID = linkedBinding.BindingID
 	}
-	if _, err := a.newCoordinationIdentity(providerFamily, authProfile, binding.BindingID); err != nil {
+	if _, err := newCoordinationIdentity(current.CoordinationSalt, providerFamily, authProfile, binding.BindingID); err != nil {
 		return CredentialMeta{}, err
 	}
 	id, err := prefixedID("cred")
@@ -534,12 +545,18 @@ func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (Cred
 		CreatedAt:      now,
 		UpdatedAt:      now,
 	}
-	if a.state.CredentialBindings == nil {
-		a.state.CredentialBindings = map[string]credentialBindingState{}
-	}
-	a.state.Credentials = append(a.state.Credentials, meta)
-	a.state.CredentialBindings[id] = binding
-	if err := a.save(); err != nil {
+	_, err = a.updateState(func(current state) (state, error) {
+		if _, exists := findCredentialInState(current, req.Name); exists {
+			return current, fmt.Errorf("credential %q already exists", req.Name)
+		}
+		if current.CredentialBindings == nil {
+			current.CredentialBindings = map[string]credentialBindingState{}
+		}
+		current.Credentials = append(current.Credentials, meta)
+		current.CredentialBindings[id] = binding
+		return current, nil
+	})
+	if err != nil {
 		return CredentialMeta{}, err
 	}
 	return meta, nil
@@ -549,39 +566,40 @@ func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (Cred
 // protected non-secret binding. It never reads the vault and refuses to bridge
 // incompatible declared provider families or auth profiles.
 func (a *App) LinkCredential(name, target string) (CredentialMeta, error) {
-	sourceIndex := a.credentialIndex(name)
-	targetIndex := a.credentialIndex(target)
-	if sourceIndex < 0 || targetIndex < 0 {
-		return CredentialMeta{}, errors.New("credential link target not found")
-	}
-	if sourceIndex == targetIndex {
-		return CredentialMeta{}, errors.New("credential cannot link to itself")
-	}
-	source := a.state.Credentials[sourceIndex]
-	targetCredential := a.state.Credentials[targetIndex]
-	sourceBinding, err := a.credentialBindingForCredential(source)
+	var linked CredentialMeta
+	_, err := a.updateState(func(current state) (state, error) {
+		sourceIndex := credentialIndex(current, name)
+		targetIndex := credentialIndex(current, target)
+		if sourceIndex < 0 || targetIndex < 0 {
+			return current, errors.New("credential link target not found")
+		}
+		if sourceIndex == targetIndex {
+			return current, errors.New("credential cannot link to itself")
+		}
+		source := current.Credentials[sourceIndex]
+		targetCredential := current.Credentials[targetIndex]
+		sourceBinding, err := credentialBindingForCredential(current, source)
+		if err != nil {
+			return current, err
+		}
+		targetBinding, err := credentialBindingForCredential(current, targetCredential)
+		if err != nil {
+			return current, errors.New("credential link target coordination metadata is unavailable")
+		}
+		if err := validateCredentialLinkCohort(current, source, sourceBinding, targetBinding); err != nil {
+			return current, err
+		}
+		if _, err := newCoordinationIdentity(current.CoordinationSalt, source.ProviderFamily, source.AuthProfile, targetBinding.BindingID); err != nil {
+			return current, err
+		}
+		sourceBinding.BindingID = targetBinding.BindingID
+		current.CredentialBindings[source.ID] = sourceBinding
+		current.Credentials[sourceIndex].UpdatedAt = time.Now().UTC()
+		linked = current.Credentials[sourceIndex]
+		return current, nil
+	})
 	if err != nil {
 		return CredentialMeta{}, err
-	}
-	targetBinding, err := a.credentialBindingForCredential(targetCredential)
-	if err != nil {
-		return CredentialMeta{}, errors.New("credential link target coordination metadata is unavailable")
-	}
-	if err := a.validateCredentialLinkCohort(source, sourceBinding, targetBinding); err != nil {
-		return CredentialMeta{}, err
-	}
-	if _, err := a.newCoordinationIdentity(source.ProviderFamily, source.AuthProfile, targetBinding.BindingID); err != nil {
-		return CredentialMeta{}, err
-	}
-	sourceBinding.BindingID = targetBinding.BindingID
-	a.state.CredentialBindings[source.ID] = sourceBinding
-	a.state.Credentials[sourceIndex].UpdatedAt = time.Now().UTC()
-	if err := a.save(); err != nil {
-		return CredentialMeta{}, err
-	}
-	linked, ok := a.findCredential(name)
-	if !ok {
-		return CredentialMeta{}, errors.New("linked credential not found")
 	}
 	return linked, nil
 }
@@ -608,11 +626,11 @@ type credentialCohortMember struct {
 	binding    credentialBindingState
 }
 
-func (a *App) validateCredentialLinkCohort(source CredentialMeta, sourceBinding, targetBinding credentialBindingState) error {
-	members := make([]credentialCohortMember, 0, len(a.state.Credentials)+1)
+func validateCredentialLinkCohort(current state, source CredentialMeta, sourceBinding, targetBinding credentialBindingState) error {
+	members := make([]credentialCohortMember, 0, len(current.Credentials)+1)
 	sourceIncluded := false
-	for _, credential := range a.state.Credentials {
-		binding, err := a.credentialBindingForCredential(credential)
+	for _, credential := range current.Credentials {
+		binding, err := credentialBindingForCredential(current, credential)
 		if err != nil {
 			return err
 		}
@@ -650,8 +668,8 @@ func validateCredentialLinkPair(source, target credentialCohortMember) error {
 	return nil
 }
 
-func (a *App) credentialIndex(name string) int {
-	for index, credential := range a.state.Credentials {
+func credentialIndex(current state, name string) int {
+	for index, credential := range current.Credentials {
 		if credential.Name == name || credential.ID == name {
 			return index
 		}
@@ -660,7 +678,8 @@ func (a *App) credentialIndex(name string) int {
 }
 
 func (a *App) ListCredentials() []CredentialMeta {
-	out := append([]CredentialMeta(nil), a.state.Credentials...)
+	current := a.snapshotState()
+	out := append([]CredentialMeta(nil), current.Credentials...)
 	sort.Slice(out, func(i, j int) bool { return out[i].Name < out[j].Name })
 	return out
 }
@@ -699,31 +718,46 @@ func (a *App) TestCredential(ctx context.Context, name string) (CredentialMeta, 
 	if err := connector.Check(ctx, runtime); err != nil {
 		return CredentialMeta{}, err
 	}
-	for i := range a.state.Credentials {
-		if a.state.Credentials[i].Name == name {
-			a.state.Credentials[i].LastValidatedAt = time.Now().UTC()
-			cred = a.state.Credentials[i]
-			break
+	_, err = a.updateState(func(current state) (state, error) {
+		for i := range current.Credentials {
+			if current.Credentials[i].ID == cred.ID {
+				current.Credentials[i].LastValidatedAt = time.Now().UTC()
+				cred = current.Credentials[i]
+				return current, nil
+			}
 		}
-	}
-	if err := a.save(); err != nil {
+		return current, nil
+	})
+	if err != nil {
 		return CredentialMeta{}, err
 	}
 	return cred, nil
 }
 
 func (a *App) RemoveCredential(ctx context.Context, name string) error {
-	for i, cred := range a.state.Credentials {
-		if cred.Name == name {
-			if err := a.vault.Delete(ctx, cred.ID); err != nil {
-				return err
-			}
-			a.state.Credentials = append(a.state.Credentials[:i], a.state.Credentials[i+1:]...)
-			delete(a.state.CredentialBindings, cred.ID)
-			return a.save()
-		}
+	current := a.snapshotState()
+	credential, ok := findCredentialInState(current, name)
+	if !ok || credential.Name != name {
+		return fmt.Errorf("credential %q not found", name)
 	}
-	return fmt.Errorf("credential %q not found", name)
+	if err := a.vault.Delete(ctx, credential.ID); err != nil {
+		return err
+	}
+	_, err := a.updateState(func(current state) (state, error) {
+		for i, stored := range current.Credentials {
+			if stored.ID != credential.ID {
+				continue
+			}
+			current.Credentials = append(current.Credentials[:i], current.Credentials[i+1:]...)
+			delete(current.CredentialBindings, stored.ID)
+			return current, nil
+		}
+		return current, fmt.Errorf("credential %q not found", name)
+	})
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest) (Connection, error) {
@@ -786,15 +820,22 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 		CreatedAt:   now,
 		UpdatedAt:   now,
 	}
-	a.state.Connections = append(a.state.Connections, conn)
-	if err := a.save(); err != nil {
+	_, err = a.updateState(func(current state) (state, error) {
+		if _, exists := findConnectionInState(current, conn.Name); exists {
+			return current, fmt.Errorf("connection %q already exists", conn.Name)
+		}
+		current.Connections = append(current.Connections, conn)
+		return current, nil
+	})
+	if err != nil {
 		return Connection{}, err
 	}
 	return conn, nil
 }
 
 func (a *App) ListConnections() []Connection {
-	out := append([]Connection(nil), a.state.Connections...)
+	current := a.snapshotState()
+	out := append([]Connection(nil), current.Connections...)
 	sort.Slice(out, func(i, j int) bool { return out[i].Name < out[j].Name })
 	return out
 }
@@ -813,25 +854,25 @@ func (a *App) RefreshCatalog(ctx context.Context, connectionName string) (Catalo
 		return CatalogSnapshot{}, err
 	}
 	snapshot := CatalogSnapshot{Connection: conn.Name, Catalog: catalog, UpdatedAt: time.Now().UTC()}
-	replaced := false
-	for i := range a.state.Catalogs {
-		if a.state.Catalogs[i].Connection == conn.Name {
-			a.state.Catalogs[i] = snapshot
-			replaced = true
-			break
+	_, err = a.updateState(func(current state) (state, error) {
+		for i := range current.Catalogs {
+			if current.Catalogs[i].Connection == conn.Name {
+				current.Catalogs[i] = snapshot
+				return current, nil
+			}
 		}
-	}
-	if !replaced {
-		a.state.Catalogs = append(a.state.Catalogs, snapshot)
-	}
-	if err := a.save(); err != nil {
+		current.Catalogs = append(current.Catalogs, snapshot)
+		return current, nil
+	})
+	if err != nil {
 		return CatalogSnapshot{}, err
 	}
 	return snapshot, nil
 }
 
 func (a *App) ShowCatalog(ctx context.Context, connectionName string) (CatalogSnapshot, error) {
-	for _, snapshot := range a.state.Catalogs {
+	current := a.snapshotState()
+	for _, snapshot := range current.Catalogs {
 		if snapshot.Connection == connectionName {
 			return snapshot, nil
 		}
@@ -905,7 +946,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 		return etlExecutionResult{}, &synccontract.DestinationDurabilityAdmissionError{Destination: destination.Name()}
 	}
 	stateKey := streamStateKey(conn.Name, streamName)
-	prior := a.state.StreamStates[stateKey]
+	prior := a.streamState(stateKey)
 	if prior.Checkpoint != nil {
 		if err := validateStreamStateResume(prior, sourceExpectation); err != nil {
 			return etlExecutionResult{}, err
@@ -1037,12 +1078,11 @@ func validateCompleteETLBatchWrite(result connectors.WriteResult, batchSize int)
 }
 
 func (a *App) beginRun(run Run) (Run, error) {
-	previousRuns := a.state.Runs
-	a.state.Runs = append(append([]Run(nil), a.state.Runs...), run)
-	if err := a.save(); err != nil {
-		if !errors.Is(err, errStateRevisionConflict) && !stateStoreCommitMayHaveSucceeded(err) {
-			a.state.Runs = previousRuns
-		}
+	_, err := a.updateState(func(current state) (state, error) {
+		current.Runs = append(current.Runs, run)
+		return current, nil
+	})
+	if err != nil {
 		return Run{}, err
 	}
 	return run, nil
@@ -1052,13 +1092,9 @@ func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) 
 	if result.PendingStreamState == nil {
 		return Run{}, errors.New("completed ETL run is missing pending stream state")
 	}
-	expectedRevision := a.state.Revision
 	completedAt := time.Now().UTC()
-	updated, err := a.updateState(func(current state) (state, error) {
-		if current.Revision != expectedRevision {
-			return current, errStateRevisionConflict
-		}
-		found := false
+	run := Run{}
+	_, err := a.updateState(func(current state) (state, error) {
 		for i := range current.Runs {
 			if current.Runs[i].ID != runID {
 				continue
@@ -1071,35 +1107,28 @@ func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) 
 			current.Runs[i].BatchCount = result.BatchCount
 			current.Runs[i].Checkpoint = cloneStringMap(result.Checkpoint)
 			current.Runs[i].CompletedAt = completedAt
-			found = true
-			break
+			if current.Checkpoints == nil {
+				current.Checkpoints = map[string]map[string]string{}
+			}
+			current.Checkpoints[runID] = cloneStringMap(result.Checkpoint)
+			if current.StreamStates == nil {
+				current.StreamStates = map[string]StreamState{}
+			}
+			current.StreamStates[result.PendingStreamState.Key] = cloneStreamState(result.PendingStreamState.State)
+			run = current.Runs[i]
+			return current, nil
 		}
-		if !found {
-			return current, fmt.Errorf("run %q not found", runID)
-		}
-		if current.Checkpoints == nil {
-			current.Checkpoints = map[string]map[string]string{}
-		}
-		current.Checkpoints[runID] = cloneStringMap(result.Checkpoint)
-		if current.StreamStates == nil {
-			current.StreamStates = map[string]StreamState{}
-		}
-		current.StreamStates[result.PendingStreamState.Key] = cloneStreamState(result.PendingStreamState.State)
-		return current, nil
+		return current, fmt.Errorf("run %q not found", runID)
 	})
 	if err != nil {
 		return Run{}, err
 	}
-	for _, run := range updated.Runs {
-		if run.ID == runID {
-			return run, nil
-		}
-	}
-	return Run{}, fmt.Errorf("completed run %q was not stored", runID)
+	return run, nil
 }
 
 func (a *App) GetRun(id string) (Run, error) {
-	for _, run := range a.state.Runs {
+	current := a.snapshotState()
+	for _, run := range current.Runs {
 		if run.ID == id {
 			return run, nil
 		}
@@ -1251,8 +1280,11 @@ func (a *App) PlanReverseETL(ctx context.Context, req PlanReverseETLRequest) (Re
 	}
 	stored := plan
 	stored.ApprovalToken = ""
-	a.state.ReversePlans = append(a.state.ReversePlans, stored)
-	if err := a.save(); err != nil {
+	_, err = a.updateState(func(current state) (state, error) {
+		current.ReversePlans = append(current.ReversePlans, stored)
+		return current, nil
+	})
+	if err != nil {
 		return ReversePlan{}, err
 	}
 	return plan, nil
@@ -1379,8 +1411,11 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 	}
 	stored := plan
 	stored.ApprovalToken = ""
-	a.state.ReversePlans = append(a.state.ReversePlans, stored)
-	if err := a.save(); err != nil {
+	_, err = a.updateState(func(current state) (state, error) {
+		current.ReversePlans = append(current.ReversePlans, stored)
+		return current, nil
+	})
+	if err != nil {
 		return ReversePlan{}, nil, err
 	}
 	if writeCommand.Preview != nil && writeCommand.Operation != "" {
@@ -1844,7 +1879,8 @@ func (a *App) validatePlanConfirmation(plan ReversePlan, got connectors.WriteCon
 }
 
 func (a *App) GetReversePlan(id string) (ReversePlan, error) {
-	for _, plan := range a.state.ReversePlans {
+	current := a.snapshotState()
+	for _, plan := range current.ReversePlans {
 		if plan.ID == id {
 			return plan, nil
 		}
@@ -1853,13 +1889,15 @@ func (a *App) GetReversePlan(id string) (ReversePlan, error) {
 }
 
 func (a *App) ListReversePlans() []ReversePlan {
-	out := append([]ReversePlan(nil), a.state.ReversePlans...)
+	current := a.snapshotState()
+	out := append([]ReversePlan(nil), current.ReversePlans...)
 	sort.Slice(out, func(i, j int) bool { return out[i].CreatedAt.Before(out[j].CreatedAt) })
 	return out
 }
 
 func (a *App) GetReverseRun(id string) (ReverseRun, error) {
-	for _, run := range a.state.ReverseRuns {
+	current := a.snapshotState()
+	for _, run := range current.ReverseRuns {
 		if run.ID == id {
 			return run, nil
 		}
@@ -1868,7 +1906,8 @@ func (a *App) GetReverseRun(id string) (ReverseRun, error) {
 }
 
 func (a *App) ListReverseRuns() []ReverseRun {
-	out := append([]ReverseRun(nil), a.state.ReverseRuns...)
+	current := a.snapshotState()
+	out := append([]ReverseRun(nil), current.ReverseRuns...)
 	sort.Slice(out, func(i, j int) bool { return out[i].StartedAt.Before(out[j].StartedAt) })
 	return out
 }
@@ -2273,11 +2312,12 @@ func (a *App) ResolveConnectorCredential(ctx context.Context, connectorName, cre
 }
 
 func (a *App) resolveCredential(ctx context.Context, name string, overlay map[string]string) (CredentialMeta, connectors.RuntimeConfig, error) {
-	cred, ok := a.findCredential(name)
+	current := a.snapshotState()
+	cred, ok := findCredentialInState(current, name)
 	if !ok {
 		return CredentialMeta{}, connectors.RuntimeConfig{}, fmt.Errorf("credential %q not found", name)
 	}
-	coordinationIdentity, err := a.coordinationIdentityForCredential(cred)
+	coordinationIdentity, err := coordinationIdentityForCredential(current, cred)
 	if err != nil {
 		return CredentialMeta{}, connectors.RuntimeConfig{}, err
 	}
@@ -2313,7 +2353,11 @@ func (a *App) resolveCredential(ctx context.Context, name string, overlay map[st
 }
 
 func (a *App) findCredential(name string) (CredentialMeta, bool) {
-	for _, cred := range a.state.Credentials {
+	return findCredentialInState(a.snapshotState(), name)
+}
+
+func findCredentialInState(current state, name string) (CredentialMeta, bool) {
+	for _, cred := range current.Credentials {
 		if cred.Name == name || cred.ID == name {
 			return cred, true
 		}
@@ -2322,7 +2366,11 @@ func (a *App) findCredential(name string) (CredentialMeta, bool) {
 }
 
 func (a *App) findConnection(name string) (Connection, bool) {
-	for _, conn := range a.state.Connections {
+	return findConnectionInState(a.snapshotState(), name)
+}
+
+func findConnectionInState(current state, name string) (Connection, bool) {
+	for _, conn := range current.Connections {
 		if conn.Name == name {
 			return conn, true
 		}
@@ -2330,20 +2378,21 @@ func (a *App) findConnection(name string) (Connection, bool) {
 	return Connection{}, false
 }
 
+func (a *App) streamState(key string) StreamState {
+	return a.snapshotState().StreamStates[key]
+}
+
 func (a *App) failRun(runID string, runErr error) (Run, error) {
-	expectedRevision := a.state.Revision
-	completedAt := time.Now().UTC()
-	updated, persistErr := a.updateState(func(current state) (state, error) {
-		if current.Revision != expectedRevision {
-			return current, errStateRevisionConflict
-		}
+	failed := Run{}
+	_, persistErr := a.updateState(func(current state) (state, error) {
 		for i := range current.Runs {
 			if current.Runs[i].ID != runID {
 				continue
 			}
 			current.Runs[i].Status = "failed"
 			current.Runs[i].Error = safety.RedactErrorText(runErr.Error())
-			current.Runs[i].CompletedAt = completedAt
+			current.Runs[i].CompletedAt = time.Now().UTC()
+			failed = current.Runs[i]
 			return current, nil
 		}
 		return current, fmt.Errorf("run %q not found", runID)
@@ -2351,12 +2400,7 @@ func (a *App) failRun(runID string, runErr error) (Run, error) {
 	if persistErr != nil {
 		return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
 	}
-	for _, run := range updated.Runs {
-		if run.ID == runID {
-			return run, runErr
-		}
-	}
-	return Run{}, errors.Join(runErr, fmt.Errorf("failed run %q was not stored", runID))
+	return failed, runErr
 }
 
 func prefixedID(prefix string) (string, error) {
