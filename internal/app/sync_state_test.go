@@ -7,6 +7,7 @@ import (
 	"errors"
 	"reflect"
 	"testing"
+	"time"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/synccontract"
@@ -110,6 +111,86 @@ func TestContractModeCannotReadWithoutNativeExecutor(t *testing.T) {
 	}
 }
 
+func TestNewIncrementalAppendCannotReadWithoutNativeExecutor(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("new_incremental_without_executor", []connectors.Record{{
+		"id": "1", "updated_at": "2026-08-06T00:00:00Z",
+	}})
+	a, connection := setupSyncModeAppWithCompatibility(t, source, "incremental_append", false)
+
+	_, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1})
+	var unavailable *synccontract.ModeNotExecutableError
+	if !errors.As(err, &unavailable) || unavailable.Mode != synccontract.ModeIncrementalAppend {
+		t.Fatalf("RunETL() error = %T %v, want incremental native admission failure", err, err)
+	}
+	if len(source.requests) != 0 {
+		t.Fatalf("source read despite unavailable incremental contract mode: %#v", source.requests)
+	}
+}
+
+func TestUncommittedCheckpointRequiresRebootstrapBeforeRead(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("uncommitted_checkpoint", []connectors.Record{{
+		"id": "1", "updated_at": "2026-08-06T00:00:00Z",
+	}})
+	a, connection := setupSyncModeApp(t, source, "incremental_append")
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1}); err != nil {
+		t.Fatal(err)
+	}
+	stateKey := streamStateKey(connection, "records")
+	state := a.state.StreamStates[stateKey]
+	checkpoint := state.Checkpoint.Clone()
+	checkpoint.CommittedAt = nil
+	state.Checkpoint = &checkpoint
+	a.state.StreamStates[stateKey] = state
+	readCount := len(source.requests)
+
+	_, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1})
+	var recovery *synccontract.RebootstrapRequiredError
+	if !errors.As(err, &recovery) || recovery.Outcome != synccontract.RecoveryOutcomeInvalidCheckpoint {
+		t.Fatalf("RunETL() error = %T %v, want invalid checkpoint rebootstrap", err, err)
+	}
+	if len(source.requests) != readCount {
+		t.Fatalf("source read with observed-only checkpoint: %#v", source.requests)
+	}
+}
+
+func TestStreamStateRejectsRecreatedCredentialAliasBeforeRead(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("stable_credential_identity", []connectors.Record{{
+		"id": "1", "updated_at": "2026-08-06T00:00:00Z",
+	}})
+	a, connection := setupSyncModeApp(t, source, "incremental_append")
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1}); err != nil {
+		t.Fatal(err)
+	}
+	stateKey := streamStateKey(connection, "records")
+	before := a.state.StreamStates[stateKey].Checkpoint.Clone()
+	if before.Source.AccountOrCluster == "source" {
+		t.Fatal("checkpoint source identity retained the mutable credential alias")
+	}
+	if err := a.RemoveCredential(ctx, "source"); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := a.AddCredential(ctx, AddCredentialRequest{Name: "source", Connector: source.Name()}); err != nil {
+		t.Fatal(err)
+	}
+	readCount := len(source.requests)
+
+	_, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1})
+	var recovery *synccontract.RebootstrapRequiredError
+	if !errors.As(err, &recovery) || recovery.Outcome != synccontract.RecoveryOutcomeSourceIdentityIncompatible {
+		t.Fatalf("RunETL() error = %T %v, want source identity rebootstrap", err, err)
+	}
+	if len(source.requests) != readCount {
+		t.Fatalf("source read after credential identity changed: %#v", source.requests)
+	}
+	after := a.state.StreamStates[stateKey].Checkpoint
+	if after == nil || !reflect.DeepEqual(*after, before) {
+		t.Fatalf("checkpoint changed after credential identity recovery: got %#v want %#v", after, before)
+	}
+}
+
 func TestConnectorETLDoesNotCommitAfterPartialDestinationResult(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("partial_write_source", []connectors.Record{{
@@ -120,24 +201,67 @@ func TestConnectorETLDoesNotCommitAfterPartialDestinationResult(t *testing.T) {
 	if !ok {
 		t.Fatal("connection missing")
 	}
-	mode, err := ParseSyncMode("incremental_append")
+	mode, err := ParseStreamSyncMode(conn.Streams["records"])
 	if err != nil {
 		t.Fatal(err)
 	}
+	_, sourceCredential, sourceRuntime, err := a.resolveEndpointWithCredential(ctx, conn.Source)
+	if err != nil {
+		t.Fatal(err)
+	}
+	expectation := streamResumeExpectation(source, sourceCredential, sourceRuntime, "records")
 	destination := partialWriteDestination{scriptedSyncSource: newScriptedSyncSource("partial_write_destination", nil)}
-	_, err = a.runConnectorETL(ctx, "run_partial", conn, source, connectors.RuntimeConfig{}, &destination, connectors.RuntimeConfig{}, "records", conn.Streams["records"], mode, 1)
+	_, err = a.runConnectorETL(ctx, "run_partial", conn, source, sourceRuntime, &destination, connectors.RuntimeConfig{}, expectation, "records", conn.Streams["records"], mode, 1)
 	if err == nil {
 		t.Fatal("runConnectorETL() error = nil after partial destination result")
+	}
+	if destination.acknowledgements != 0 {
+		t.Fatalf("durability acknowledgement count = %d, want 0 after partial write", destination.acknowledgements)
 	}
 	if state := a.state.StreamStates[streamStateKey(connection, "records")]; state.Checkpoint != nil {
 		t.Fatalf("checkpoint committed after partial destination result: %#v", state.Checkpoint)
 	}
 }
 
+func TestConnectorETLRefusesDestinationWithoutDurableAcknowledgementBeforeRead(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("undurable_connector_source", []connectors.Record{{
+		"id": "1", "updated_at": "2026-08-06T00:00:00Z",
+	}})
+	a, connection := setupSyncModeApp(t, source, "incremental_append")
+	conn, ok := a.findConnection(connection)
+	if !ok {
+		t.Fatal("connection missing")
+	}
+	mode, err := ParseStreamSyncMode(conn.Streams["records"])
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, sourceCredential, sourceRuntime, err := a.resolveEndpointWithCredential(ctx, conn.Source)
+	if err != nil {
+		t.Fatal(err)
+	}
+	expectation := streamResumeExpectation(source, sourceCredential, sourceRuntime, "records")
+	destination := newScriptedSyncSource("undurable_connector_destination", nil)
+	_, err = a.runConnectorETL(ctx, "run_undurable", conn, source, sourceRuntime, destination, connectors.RuntimeConfig{}, expectation, "records", conn.Streams["records"], mode, 1)
+	if !errors.Is(err, errGenericETLDurabilityUnavailable) {
+		t.Fatalf("runConnectorETL() error = %v, want durable acknowledgement refusal", err)
+	}
+	if len(source.requests) != 0 {
+		t.Fatalf("source read before generic destination durability admission: %#v", source.requests)
+	}
+}
+
 type partialWriteDestination struct {
 	*scriptedSyncSource
+	acknowledgements int
 }
 
 func (d *partialWriteDestination) Write(_ context.Context, _ connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
 	return connectors.WriteResult{RecordsWritten: len(records) - 1, RecordsFailed: 1}, nil
+}
+
+func (d *partialWriteDestination) AcknowledgeETLDurability(_ context.Context, _ string) (synccontract.DownstreamAcknowledgement, error) {
+	d.acknowledgements++
+	return synccontract.NewDurableDownstreamAcknowledgement(d.Name(), time.Now().UTC())
 }
