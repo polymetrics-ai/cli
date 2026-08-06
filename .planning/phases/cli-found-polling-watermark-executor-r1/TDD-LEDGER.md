@@ -15,5 +15,26 @@ test. No provider, credential, database, or wall-clock sleep is used.
 
 ## Run log
 
-Pending red-test implementation. Each entry will retain the exact focused
-command and failure before its corresponding production edit.
+### R1–R7 — red confirmed
+
+Before production changes, the focused semantic suite was added with a
+test-only implemented declaration. It names the absent shared executor,
+page-source port, injected clock, and checkpoint committer first so the
+eventual implementation cannot silently fall back to the old scalar cursor
+path.
+
+```text
+$ go test ./internal/connectors/engine -run '^TestPollingWatermark' -count=1
+# polymetrics.ai/internal/connectors/engine [polymetrics.ai/internal/connectors/engine.test]
+polling_watermark_test.go:20:13: undefined: PollingWatermarkPage
+polling_watermark_test.go:21:13: undefined: PollingWatermarkPageRequest
+polling_watermark_test.go:74:60: undefined: PollingWatermarkPageSource
+polling_watermark_test.go:74:94: undefined: PollingWatermarkClock
+polling_watermark_test.go:74:118: undefined: PollingWatermarkConnector
+FAIL    polymetrics.ai/internal/connectors/engine [build failed]
+```
+
+No production code had been edited at this point. The new fixture also carries
+the intentionally unsupported `polling_watermark` JSON fields, so after the
+missing executor API is supplied the loader test will remain red until the
+declaration schema and semantic validation are extended.
