@@ -445,7 +445,7 @@ func stageScheduleRoundtrip(rc *runContext, rep *Report) error {
 		if err != nil {
 			return false, cliInfoFrom(res), fmt.Sprintf("schedule_install: read crontab file: %v", err)
 		}
-		if errMsg := validateInstalledScheduleLine(string(content), sentinel, scheduleCron, flow); errMsg != "" {
+		if errMsg := validateInstalledScheduleLine(string(content), sentinel, scheduleCron, rc.root, flow); errMsg != "" {
 			return false, cliInfoFrom(res), errMsg
 		}
 		return true, cliInfoFrom(res), ""
@@ -500,7 +500,7 @@ func stageScheduleRoundtrip(rc *runContext, rep *Report) error {
 	return nil
 }
 
-func validateInstalledScheduleLine(content, sentinel, cron, flow string) string {
+func validateInstalledScheduleLine(content, sentinel, cron, root, flow string) string {
 	var line string
 	for _, candidate := range strings.Split(content, "\n") {
 		candidate = strings.TrimSpace(candidate)
@@ -523,11 +523,26 @@ func validateInstalledScheduleLine(content, sentinel, cron, flow string) string 
 	if !strings.HasPrefix(command, cron+"  ") {
 		return fmt.Sprintf("schedule_install: sentinel-bearing line does not begin with cron %q", cron)
 	}
-	payload := "flow run " + flow + " --json"
+	payload := "--root " + quoteScheduleArg(root) + " flow run " + quoteScheduleArg(flow) + " --json"
 	if !strings.HasSuffix(command, " "+payload) {
-		return "schedule_install: sentinel-bearing line does not end with the expected flow run payload"
+		return "schedule_install: sentinel-bearing line does not end with the expected root argument and flow run payload"
 	}
 	return ""
+}
+
+func quoteScheduleArg(s string) string {
+	if s == "" {
+		return "''"
+	}
+	if strings.IndexFunc(s, func(r rune) bool {
+		return !(r >= 'A' && r <= 'Z') &&
+			!(r >= 'a' && r <= 'z') &&
+			!(r >= '0' && r <= '9') &&
+			!strings.ContainsRune("/._:-", r)
+	}) == -1 {
+		return s
+	}
+	return "'" + strings.ReplaceAll(s, "'", "'\\''") + "'"
 }
 
 // forceRemoveCrontabSentinel strips any line containing sentinel from the

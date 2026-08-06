@@ -273,7 +273,14 @@ func TestGlueStagesScheduleInstallRejectsMismatchedCommand(t *testing.T) {
 			mutate: func(driver *scriptedCLI) {
 				driver.installedScheduleFlow = "cert_flow_other"
 			},
-			want: "expected flow run payload",
+			want: "flow run payload",
+		},
+		{
+			name: "root",
+			mutate: func(driver *scriptedCLI) {
+				driver.installedScheduleRoot = "/tmp/scripted-root"
+			},
+			want: "expected root argument",
 		},
 		{
 			name: "sentinel delimiter",
