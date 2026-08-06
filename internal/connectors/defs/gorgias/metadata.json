@@ -1,7 +1,7 @@
 {
   "name": "gorgias",
   "display_name": "Gorgias",
-  "description": "Reads Gorgias helpdesk tickets, customers, messages, and satisfaction surveys through the Gorgias REST API (read-only).",
+  "description": "Reads Gorgias helpdesk, configuration, analytics, integration, job, voice, and widget list resources through the Gorgias REST API (read-only).",
   "integration_type": "api",
   "docs_url": "https://developers.gorgias.com/reference",
   "release_stage": "ga",
@@ -17,6 +17,6 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Gorgias API read of helpdesk tickets, customers, messages, and satisfaction surveys"
+    "read": "external Gorgias API reads of helpdesk, customer, account configuration, analytics, integration, job, voice, and widget list resources"
   }
 }

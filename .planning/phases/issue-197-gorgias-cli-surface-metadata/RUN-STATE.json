@@ -1,0 +1,116 @@
+{
+  "phase": "issue-197-gorgias-cli-surface-metadata",
+  "status": "verified",
+  "parent_issue": 196,
+  "sub_issue": 197,
+  "parent_pr": "https://github.com/polymetrics-ai/cli/pull/229",
+  "parent_branch": "feat/196-gorgias-cli-parity",
+  "branch": "feat/197-gorgias-cli-surface-metadata",
+  "gsd": {
+    "plan_prompt": "scripts/gsd prompt plan-phase 197 --skip-research",
+    "execute_prompt": "scripts/gsd prompt execute-phase issue-197-gorgias-cli-surface-metadata --dry-run",
+    "programming_loop_prompt": "blocked_unknown_command",
+    "manual_fallback": true
+  },
+  "required_skills_loaded": [
+    "gsd-core",
+    "caveman",
+    "golang-how-to",
+    "golang-cli",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-context",
+    "golang-concurrency",
+    "golang-documentation",
+    "golang-lint",
+    "golang-spf13-cobra"
+  ],
+  "orchestrationDecisions": [
+    {
+      "timestamp": "2026-07-09T20:08:00Z",
+      "cycle": "issue-197-plan",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        197
+      ],
+      "reason": "No subagent tool is available; #197 is the parent critical path and runs in this branch."
+    },
+    {
+      "timestamp": "2026-07-09T20:24:00Z",
+      "cycle": "issue-197-implementation",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        197
+      ],
+      "reason": "Added safe Gorgias cli_surface metadata and official operation capture locally because subagent tooling is unavailable."
+    },
+    {
+      "timestamp": "2026-07-09T20:55:00Z",
+      "cycle": "issue-197-verify",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        197
+      ],
+      "reason": "Full verification completed locally; make verify passed on second run after flaky certify timing test passed on targeted rerun."
+    }
+  ],
+  "redEvidence": [
+    {
+      "command": "python3 metadata completeness check for 114-operation baseline and cli_surface presence",
+      "result": "failed: gorgias api_surface endpoint count 11 != official baseline 114"
+    }
+  ],
+  "verificationPassed": true,
+  "verificationBlocker": "none",
+  "greenEvidence": [
+    {
+      "command": "jq empty internal/connectors/defs/gorgias/api_surface.json internal/connectors/defs/gorgias/cli_surface.json .planning/phases/issue-197-gorgias-cli-surface-metadata/OFFICIAL-OPERATIONS.json",
+      "result": "passed"
+    },
+    {
+      "command": "go test ./cmd/connectorgen -run CLISurface",
+      "result": "passed"
+    },
+    {
+      "command": "go test ./internal/connectors/engine -run CLISurface",
+      "result": "passed"
+    },
+    {
+      "command": "go run ./cmd/connectorgen validate internal/connectors/defs",
+      "result": "passed: 547 connector(s) checked, 0 findings"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    },
+    {
+      "command": "go test ./internal/connectors/conformance -run 'TestConformance/gorgias'",
+      "result": "passed"
+    },
+    {
+      "command": "gofmt -w cmd internal",
+      "result": "passed; no tracked Go changes remained"
+    },
+    {
+      "command": "go vet ./...",
+      "result": "passed"
+    },
+    {
+      "command": "go test ./...",
+      "result": "passed on rerun after earlier combined command timeout"
+    },
+    {
+      "command": "go build ./cmd/pm",
+      "result": "passed"
+    },
+    {
+      "command": "make verify",
+      "result": "passed on second run; first run hit flaky TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit and targeted rerun passed"
+    }
+  ],
+  "focusedVerificationPassed": true
+}

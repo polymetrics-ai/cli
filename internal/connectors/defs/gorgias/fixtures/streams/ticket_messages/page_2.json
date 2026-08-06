@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tickets/1/messages",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1601,
+          "message_id": "fixture-message",
+          "channel": "email",
+          "body_text": "Fixture ticket message",
+          "public": true,
+          "created_datetime": "2026-01-01T00:00:00Z",
+          "updated_datetime": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "meta": {
+        "next_cursor": null
+      }
+    }
+  }
+}

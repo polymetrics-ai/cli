@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/views",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1001,
+          "name": "Fixture view",
+          "slug": "fixture-view",
+          "category": "shared",
+          "visibility": "private",
+          "created_datetime": "2026-01-01T00:00:00Z",
+          "updated_datetime": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "meta": {
+        "next_cursor": null
+      }
+    }
+  }
+}

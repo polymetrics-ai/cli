@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/teams",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 801,
+          "name": "Fixture team",
+          "created_datetime": "2026-01-01T00:00:00Z",
+          "updated_datetime": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "meta": {
+        "next_cursor": null
+      }
+    }
+  }
+}
