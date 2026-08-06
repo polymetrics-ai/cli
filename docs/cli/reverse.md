@@ -76,7 +76,8 @@ COMMANDS
   run
     Execute a stored plan only when --approve is supplied with the approval
     token from human-readable plan or preview output. Destructive plans require
-    a matching persisted preview and the closed --confirm destructive value.
+    a matching persisted preview and the closed --confirm destructive value. A
+    failed dispatch is recorded; pm does not automatically retry a failed dispatch.
 
   status
     Show a completed or failed reverse ETL run by run ID.
