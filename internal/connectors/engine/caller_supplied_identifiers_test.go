@@ -214,6 +214,97 @@ func TestCallerSuppliedIdentifierSetsPreserveExplicitEmptyBodyArray(t *testing.T
 	}
 }
 
+func TestCallerSuppliedIdentifierSetsRejectSensitiveRepositoryPathBeforeNetwork(t *testing.T) {
+	var hits int
+	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		hits++
+	}))
+	defer srv.Close()
+
+	bundle := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{{
+			ID: "acme.repository.lookup", Kind: "rest_read", Summary: "Look up a repository file", Risk: "low", Approval: "none", OutputPolicy: "repository_contents_file_metadata",
+			REST: &RESTOperationSpec{
+				Method: http.MethodGet, Path: "/repos/{owner}/contents/{path}", MaxBytes: 1024,
+				CallerSuppliedIdentifierSets: []CallerSuppliedIdentifierSetSpec{{Name: "path", ElementShape: "opaque_string", Wire: "path_segment", MinItems: 1, MaxItems: 1}},
+			},
+		}},
+	}
+
+	_, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{
+		Operation:      "acme.repository.lookup",
+		PathParams:     map[string]string{"owner": "acme"},
+		IdentifierSets: map[string][]string{"path": {".env"}},
+	}, nil)
+	if err == nil {
+		t.Fatal("OperationDirectRead error = nil, want sensitive path rejection")
+	}
+	if !strings.Contains(err.Error(), "blocked") {
+		t.Fatalf("OperationDirectRead error = %q, want blocked", err.Error())
+	}
+	if strings.Contains(err.Error(), ".env") {
+		t.Fatalf("OperationDirectRead error leaked supplied identifier: %q", err)
+	}
+	if hits != 0 {
+		t.Fatalf("server hits = %d, want 0", hits)
+	}
+}
+
+func TestCallerSuppliedIdentifierSetsRejectEmptyRequiredQueryBeforeNetwork(t *testing.T) {
+	var hits int
+	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		hits++
+	}))
+	defer srv.Close()
+
+	bundle := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{{
+			ID: "acme.markets.lookup", Kind: "rest_read", Summary: "Look up explicit markets", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{
+				Method: http.MethodGet, Path: "/lookups/markets", MaxBytes: 1024,
+				RequiredQuery:                []RequiredQueryGroup{{AnyOf: []string{"markets"}}},
+				CallerSuppliedIdentifierSets: []CallerSuppliedIdentifierSetSpec{{Name: "markets", ElementShape: "opaque_string", Wire: "query_repeated", MinItems: 0, MaxItems: 2}},
+			},
+		}},
+	}
+	tests := []struct {
+		name   string
+		query  map[string]string
+		reason CallerSuppliedIdentifierSetErrorReason
+		secret string
+	}{
+		{name: "generic query collision", query: map[string]string{"markets": "private-value-never-render"}, reason: CallerSuppliedIdentifierSetQueryConflict, secret: "private-value-never-render"},
+		{name: "empty required set", reason: CallerSuppliedIdentifierSetEmptyRequiredQuery},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			hits = 0
+			_, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{
+				Operation:      "acme.markets.lookup",
+				Query:          tt.query,
+				IdentifierSets: map[string][]string{"markets": {}},
+			}, nil)
+			if err == nil {
+				t.Fatal("OperationDirectRead error = nil, want rejected input")
+			}
+			var rejection *CallerSuppliedIdentifierSetError
+			if !errors.As(err, &rejection) || rejection.Reason != tt.reason || rejection.Parameter != "markets" {
+				t.Fatalf("OperationDirectRead error = %#v, want caller-supplied identifier rejection %q", err, tt.reason)
+			}
+			if tt.secret != "" && strings.Contains(err.Error(), tt.secret) {
+				t.Fatalf("OperationDirectRead error leaked supplied identifier: %q", err)
+			}
+			if hits != 0 {
+				t.Fatalf("server hits = %d, want 0", hits)
+			}
+		})
+	}
+}
+
 func TestCallerSuppliedIdentifierSetDeclarationsRejectUnsafeContracts(t *testing.T) {
 	tests := []struct {
 		name string

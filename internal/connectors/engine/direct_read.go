@@ -57,7 +57,9 @@ const (
 	// CallerSuppliedIdentifierSetAboveMax means the set has too many items.
 	CallerSuppliedIdentifierSetAboveMax CallerSuppliedIdentifierSetErrorReason = "above_maximum"
 	// CallerSuppliedIdentifierSetMalformed means an item failed its shape.
-	CallerSuppliedIdentifierSetMalformed CallerSuppliedIdentifierSetErrorReason = "malformed_element"
+	CallerSuppliedIdentifierSetMalformed          CallerSuppliedIdentifierSetErrorReason = "malformed_element"
+	CallerSuppliedIdentifierSetQueryConflict      CallerSuppliedIdentifierSetErrorReason = "query_conflict"
+	CallerSuppliedIdentifierSetEmptyRequiredQuery CallerSuppliedIdentifierSetErrorReason = "required_query_empty"
 )
 
 func (e *CallerSuppliedIdentifierSetError) Error() string {
@@ -72,6 +74,10 @@ func (e *CallerSuppliedIdentifierSetError) Error() string {
 		return fmt.Sprintf("caller-supplied identifier set %q exceeds the maximum of %d elements", e.Parameter, e.Limit)
 	case CallerSuppliedIdentifierSetMalformed:
 		return fmt.Sprintf("caller-supplied identifier set %q element %d must match %s", e.Parameter, e.Position, e.ExpectedShape)
+	case CallerSuppliedIdentifierSetQueryConflict:
+		return fmt.Sprintf("caller-supplied identifier set %q cannot be combined with generic query input", e.Parameter)
+	case CallerSuppliedIdentifierSetEmptyRequiredQuery:
+		return fmt.Sprintf("caller-supplied identifier set %q cannot be empty because it is required to filter this operation", e.Parameter)
 	default:
 		return "caller-supplied identifier set is invalid"
 	}
@@ -132,6 +138,9 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		return connectors.DirectReadResult{}, err
 	}
 	cfg := materializeConfigDefaults(b, req.Config)
+	if err := rejectCallerSuppliedIdentifierSetQueryCollisions(op, req.Query); err != nil {
+		return connectors.DirectReadResult{}, err
+	}
 	pathParams := cloneOperationPathParams(req.PathParams)
 	queryMap := map[string]string{}
 	for key, value := range op.REST.Query {
@@ -143,6 +152,9 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	bodyOverrides := cloneAnyMap(req.Body)
 	repeatedQuery, identifierSetPathNames, err := applyCallerSuppliedIdentifierSets(op, req.IdentifierSets, pathParams, queryMap, bodyOverrides)
 	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	if err := rejectEmptyCallerSuppliedIdentifierSetRequiredQueries(op, req.IdentifierSets, queryMap); err != nil {
 		return connectors.DirectReadResult{}, err
 	}
 	resolvedPath, err := resolveOperationDirectReadPath(op.REST.Path, cfg, pathParams, identifierSetPathNames)
@@ -163,7 +175,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if policy == "" {
 		policy = op.OutputPolicy
 	}
-	if err := validateDirectReadOutputPolicy(policy, op.REST.Path, req.PathParams, cfg); err != nil {
+	if err := validateDirectReadOutputPolicy(policy, op.REST.Path, pathParams, cfg); err != nil {
 		return connectors.DirectReadResult{}, err
 	}
 	body, err := operationReadBody(op, bodyOverrides)
@@ -275,9 +287,9 @@ func applyCallerSuppliedIdentifierSets(
 		case "query_repeated":
 			repeated[set.Name] = cloneIdentifierSetValues(values)
 			if len(values) > 0 {
-				// required_query is evaluated over its historical string map. One
-				// non-blank item means this repeated parameter is present on wire.
 				query[set.Name] = values[0]
+			} else {
+				query[set.Name] = ""
 			}
 		case "body_json_array":
 			body[set.Name] = cloneIdentifierSetValues(values)
@@ -289,6 +301,65 @@ func applyCallerSuppliedIdentifierSets(
 		}
 	}
 	return repeated, pathNames, nil
+}
+
+func rejectCallerSuppliedIdentifierSetQueryCollisions(op OperationSpec, query map[string]string) error {
+	if op.REST == nil {
+		return nil
+	}
+	for _, set := range op.REST.CallerSuppliedIdentifierSets {
+		if set.Wire != "query_comma_separated" && set.Wire != "query_repeated" {
+			continue
+		}
+		if _, present := query[set.Name]; present {
+			return &CallerSuppliedIdentifierSetError{Parameter: set.Name, Reason: CallerSuppliedIdentifierSetQueryConflict}
+		}
+	}
+	return nil
+}
+
+func rejectEmptyCallerSuppliedIdentifierSetRequiredQueries(op OperationSpec, supplied map[string][]string, query map[string]string) error {
+	if op.REST == nil {
+		return nil
+	}
+	for _, set := range op.REST.CallerSuppliedIdentifierSets {
+		if set.Wire != "query_comma_separated" && set.Wire != "query_repeated" {
+			continue
+		}
+		values, present := supplied[set.Name]
+		if !present || len(values) != 0 {
+			continue
+		}
+		for _, group := range op.REST.RequiredQuery {
+			if !requiredQueryGroupIncludes(group, set.Name) || queryGroupSatisfiedExcluding(group, query, set.Name) {
+				continue
+			}
+			return &CallerSuppliedIdentifierSetError{Parameter: set.Name, Reason: CallerSuppliedIdentifierSetEmptyRequiredQuery}
+		}
+	}
+	return nil
+}
+
+func requiredQueryGroupIncludes(group RequiredQueryGroup, name string) bool {
+	for _, candidate := range group.AnyOf {
+		if strings.TrimSpace(candidate) == name {
+			return true
+		}
+	}
+	return false
+}
+
+func queryGroupSatisfiedExcluding(group RequiredQueryGroup, query map[string]string, excluded string) bool {
+	for _, name := range group.AnyOf {
+		name = strings.TrimSpace(name)
+		if name == excluded {
+			continue
+		}
+		if strings.TrimSpace(query[name]) != "" {
+			return true
+		}
+	}
+	return false
 }
 
 func validateCallerSuppliedIdentifierElement(set CallerSuppliedIdentifierSetSpec, position int, value string) error {
@@ -393,6 +464,21 @@ func findOperation(b Bundle, id string) (OperationSpec, error) {
 		}
 	}
 	return OperationSpec{}, fmt.Errorf("operation %q not found in bundle %q", id, b.Name)
+}
+
+func operationDirectReadIdentifierSetWires(b Bundle, operation string) (map[string]string, error) {
+	op, err := findOperation(b, operation)
+	if err != nil {
+		return nil, err
+	}
+	if op.Kind != "rest_read" || op.REST == nil {
+		return nil, fmt.Errorf("operation %q does not declare a rest_read identifier-set contract", operation)
+	}
+	wires := make(map[string]string, len(op.REST.CallerSuppliedIdentifierSets))
+	for _, set := range op.REST.CallerSuppliedIdentifierSets {
+		wires[set.Name] = set.Wire
+	}
+	return wires, nil
 }
 
 func requireOperationDirectReadEndpoint(b Bundle, method, endpointPath string) error {
@@ -712,7 +798,7 @@ func rejectSensitiveRepositoryPath(value string) error {
 	for _, part := range strings.Split(clean, "/") {
 		lower := strings.ToLower(part)
 		if isSensitiveRepositoryPathPart(lower) {
-			return fmt.Errorf("repository path %q is blocked by direct read output policy", value)
+			return errors.New("repository path is blocked by direct read output policy")
 		}
 	}
 	return nil

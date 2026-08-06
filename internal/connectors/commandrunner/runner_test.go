@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"slices"
 	"sort"
 	"strings"
 	"testing"
@@ -32,6 +33,8 @@ type fakeConnector struct {
 	binaryDownloadReq       connectors.OperationBinaryDownloadRequest
 	directReadErr           error
 	operationDirectReadErr  error
+	identifierSetWires      map[string]string
+	identifierSetWireErr    error
 	binaryDownloadErr       error
 	validateReq             connectors.WriteRequest
 	dryRunReq               connectors.WriteRequest
@@ -106,6 +109,16 @@ func (f *fakeConnector) OperationDirectRead(_ context.Context, req connectors.Op
 		Status:    200,
 		Body:      map[string]any{"ok": true},
 	}, nil
+}
+func (f *fakeConnector) OperationDirectReadIdentifierSetWires(string) (map[string]string, error) {
+	if f.identifierSetWireErr != nil {
+		return nil, f.identifierSetWireErr
+	}
+	wires := make(map[string]string, len(f.identifierSetWires))
+	for name, wire := range f.identifierSetWires {
+		wires[name] = wire
+	}
+	return wires, nil
 }
 func (f *fakeConnector) PreviewOperationDirectWrite(_ context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
 	f.operationDirectWriteReq = req
@@ -2316,7 +2329,7 @@ func TestRunOperationDirectReadPreservesExplicitEmptyRequiredStringArray(t *test
 }
 
 func TestRunOperationDirectReadPreservesIdentifierSetPresence(t *testing.T) {
-	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+	connector := &fakeConnector{identifierSetWires: map[string]string{"coins": "query_comma_separated"}, surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
 		Path:         "lookup coins",
 		Intent:       "direct_read",
 		Availability: "implemented",
@@ -2367,6 +2380,35 @@ func TestRunOperationDirectReadPreservesIdentifierSetPresence(t *testing.T) {
 	}
 }
 
+func TestOperationDirectReadOverridesCoercesIdentifierSetsByWire(t *testing.T) {
+	tests := []struct {
+		name  string
+		wire  string
+		input string
+		want  []string
+	}{
+		{name: "comma query splits values", wire: "query_comma_separated", input: "first, second", want: []string{"first", "second"}},
+		{name: "repeated query preserves opaque value", wire: "query_repeated", input: "opaque,with-comma", want: []string{"opaque,with-comma"}},
+		{name: "JSON body preserves opaque value", wire: "body_json_array", input: "opaque,with-comma", want: []string{"opaque,with-comma"}},
+		{name: "path segment preserves opaque value", wire: "path_segment", input: "opaque,with-comma", want: []string{"opaque,with-comma"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			cmd := connectors.CommandSurfaceCommand{
+				Path: "lookup identifiers", Intent: "direct_read", Availability: "implemented",
+				Flags: []connectors.CommandSurfaceFlag{{Name: "ids", Type: "string_array", Required: true, MapsTo: "identifier_set.ids"}},
+			}
+			_, _, _, sets, err := operationDirectReadOverrides(cmd, map[string][]string{"ids": {tt.input}}, map[string]string{"ids": tt.wire})
+			if err != nil {
+				t.Fatalf("operationDirectReadOverrides: %v", err)
+			}
+			if got := sets["ids"]; !slices.Equal(got, tt.want) {
+				t.Fatalf("identifier set = %#v, want %#v", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestRunCallerSuppliedIdentifierSetCommandsEndToEnd(t *testing.T) {
 	bundle, err := engine.Load(os.DirFS(filepath.Join("..", "engine", "testdata")), "caller-supplied-identifiers")
 	if err != nil {
@@ -2398,7 +2440,7 @@ func TestRunCallerSuppliedIdentifierSetCommandsEndToEnd(t *testing.T) {
 		{
 			name:  "repeated structured query",
 			path:  []string{"lookup", "repeated"},
-			flags: map[string][]string{"markets": {addressA + "," + addressB}},
+			flags: map[string][]string{"markets": {addressA, addressB}},
 			assert: func(t *testing.T, r *http.Request) {
 				t.Helper()
 				if got := r.URL.Query()["markets"]; len(got) != 2 || got[0] != addressA || got[1] != addressB {
@@ -2418,7 +2460,7 @@ func TestRunCallerSuppliedIdentifierSetCommandsEndToEnd(t *testing.T) {
 				if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 					t.Fatalf("decode request body: %v", err)
 				}
-				if got := strings.Join(body.IDs, ","); got != "fixture-id-a,fixture-id-b" {
+				if len(body.IDs) != 1 || body.IDs[0] != "fixture-id-a,fixture-id-b" {
 					t.Fatalf("body ids = %#v", body.IDs)
 				}
 			},
@@ -2426,10 +2468,10 @@ func TestRunCallerSuppliedIdentifierSetCommandsEndToEnd(t *testing.T) {
 		{
 			name:  "path segment",
 			path:  []string{"lookup", "path"},
-			flags: map[string][]string{"id": {"fixture-id"}},
+			flags: map[string][]string{"id": {"fixture-id,opaque"}},
 			assert: func(t *testing.T, r *http.Request) {
 				t.Helper()
-				if got := r.URL.Path; got != "/lookups/path/fixture-id" {
+				if got := r.URL.Path; got != "/lookups/path/fixture-id,opaque" {
 					t.Fatalf("path = %q", got)
 				}
 			},

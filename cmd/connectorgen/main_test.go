@@ -643,6 +643,14 @@ func TestValidate_CallerSuppliedIdentifierSetRequiresExactCLIBinding(t *testing.
 			flags: []engine.CLIFlag{{Name: "other", Type: "string_array", Required: true, MapsTo: "identifier_set.other"}},
 			want:  "maps to undeclared identifier_set.other",
 		},
+		{
+			name: "generic query collision",
+			flags: []engine.CLIFlag{
+				{Name: "coins", Type: "string_array", Required: true, MapsTo: "identifier_set.coins"},
+				{Name: "filter", Type: "string", MapsTo: "query.coins"},
+			},
+			want: "must not map to query.coins",
+		},
 	}
 
 	for _, tt := range tests {
@@ -653,6 +661,25 @@ func TestValidate_CallerSuppliedIdentifierSetRequiresExactCLIBinding(t *testing.
 			}
 		})
 	}
+}
+
+func TestValidate_CallerSuppliedIdentifierSetOperationRequiresImplementedDirectReadCommand(t *testing.T) {
+	findings := checkCLISurface(engine.Bundle{
+		Name: "acme",
+		Operations: []engine.OperationSpec{{
+			ID:   "acme.coins.lookup",
+			Kind: "rest_read",
+			REST: &engine.RESTOperationSpec{CallerSuppliedIdentifierSets: []engine.CallerSuppliedIdentifierSetSpec{{
+				Name: "coins", ElementShape: "opaque_string", Wire: "query_comma_separated", MinItems: 0, MaxItems: 2,
+			}}},
+		}},
+	})
+	for _, finding := range findings {
+		if finding.File == "operations.json" && strings.Contains(finding.Message, "has no implemented direct_read command") {
+			return
+		}
+	}
+	t.Fatalf("findings = %+v, want missing implemented direct_read command", findings)
 }
 
 func TestValidate_CLISurfaceRepositoryOutputPolicyRequiresPathVariable(t *testing.T) {

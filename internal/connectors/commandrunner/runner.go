@@ -75,6 +75,10 @@ type declarativeWritePreflighter interface {
 	PreflightWriteAction(name string) error
 }
 
+type operationDirectReadIdentifierSetWireProvider interface {
+	OperationDirectReadIdentifierSetWires(operation string) (map[string]string, error)
+}
+
 type BlockedCommandError struct {
 	Connector    string
 	Command      string
@@ -189,7 +193,7 @@ func buildOperationDirectWriteCommand(ctx context.Context, connector connectors.
 	if err := validateOperationDirectWriteCommand(connector, cmd); err != nil {
 		return WriteCommand{}, err
 	}
-	pathParams, query, body, identifierSets, err := operationDirectReadOverrides(cmd, req.Flags)
+	pathParams, query, body, identifierSets, err := operationDirectReadOverrides(cmd, req.Flags, nil)
 	if err != nil {
 		return WriteCommand{}, err
 	}
@@ -436,7 +440,11 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 	if err := validateOperationDirectReadCommand(connector, cmd); err != nil {
 		return Result{}, err
 	}
-	pathParams, query, body, identifierSets, err := operationDirectReadOverrides(cmd, req.Flags)
+	identifierSetWires, err := operationDirectReadIdentifierSetWires(connector, cmd)
+	if err != nil {
+		return Result{}, err
+	}
+	pathParams, query, body, identifierSets, err := operationDirectReadOverrides(cmd, req.Flags, identifierSetWires)
 	if err != nil {
 		return Result{}, err
 	}
@@ -537,7 +545,39 @@ func validateOperationDirectReadCommand(connector connectors.Connector, cmd conn
 	if !isSupportedDirectReadOutputPolicy(cmd.OutputPolicy) {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands require an explicit supported output_policy"}
 	}
+	if _, err := operationDirectReadIdentifierSetWires(connector, cmd); err != nil {
+		return err
+	}
 	return nil
+}
+
+func operationDirectReadIdentifierSetWires(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) (map[string]string, error) {
+	targets := make(map[string]struct{})
+	for _, flag := range cmd.Flags {
+		target, mapped := strings.CutPrefix(strings.TrimSpace(flag.MapsTo), "identifier_set.")
+		if mapped {
+			targets[target] = struct{}{}
+		}
+	}
+	if len(targets) == 0 {
+		return nil, nil
+	}
+	provider, ok := connector.(operationDirectReadIdentifierSetWireProvider)
+	if !ok {
+		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose caller-supplied identifier set metadata"}
+	}
+	wires, err := provider.OperationDirectReadIdentifierSetWires(cmd.Operation)
+	if err != nil {
+		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "caller-supplied identifier set metadata is unavailable"}
+	}
+	for target := range targets {
+		switch wires[target] {
+		case "query_comma_separated", "query_repeated", "body_json_array", "path_segment":
+		default:
+			return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("caller-supplied identifier set %q is not declared for this operation", target)}
+		}
+	}
+	return wires, nil
 }
 
 // validateOperationDirectWriteCommand is deliberately limited to the shape
@@ -855,6 +895,10 @@ func parseDateTimeValue(value, label string) (time.Time, error) {
 }
 
 func validateRequiredCommandFlags(cmd connectors.CommandSurfaceCommand, flags map[string][]string) error {
+	return validateRequiredCommandFlagsWithCoercer(cmd, flags, coerceFlagValue)
+}
+
+func validateRequiredCommandFlagsWithCoercer(cmd connectors.CommandSurfaceCommand, flags map[string][]string, coerce func(connectors.CommandSurfaceFlag, []string) (any, error)) error {
 	for _, flag := range cmd.Flags {
 		if !flag.Required {
 			continue
@@ -866,7 +910,7 @@ func validateRequiredCommandFlags(cmd connectors.CommandSurfaceCommand, flags ma
 		if !ok || len(values) == 0 {
 			return missingRequiredFlagError(cmd, flag.Name)
 		}
-		value, err := coerceFlagValue(flag, values)
+		value, err := coerce(flag, values)
 		if err != nil {
 			return err
 		}
@@ -1004,7 +1048,7 @@ func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string]
 	return pathParams, query, nil
 }
 
-func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, map[string]string, map[string]any, map[string][]string, error) {
+func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string, identifierSetWires map[string]string) (map[string]string, map[string]string, map[string]any, map[string][]string, error) {
 	allowed := map[string]connectors.CommandSurfaceFlag{}
 	for _, flag := range cmd.Flags {
 		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
@@ -1012,7 +1056,9 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 		}
 		allowed[flag.Name] = flag
 	}
-	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
+	if err := validateRequiredCommandFlagsWithCoercer(cmd, flags, func(flag connectors.CommandSurfaceFlag, values []string) (any, error) {
+		return coerceOperationDirectReadFlagValue(cmd, flag, values, identifierSetWires)
+	}); err != nil {
 		return nil, nil, nil, nil, err
 	}
 
@@ -1031,7 +1077,7 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 		if !ok {
 			return nil, nil, nil, nil, fmt.Errorf("unknown flag --%s for command %q", name, cmd.Path)
 		}
-		value, err := coerceFlagValue(flag, values)
+		value, err := coerceOperationDirectReadFlagValue(cmd, flag, values, identifierSetWires)
 		if err != nil {
 			return nil, nil, nil, nil, err
 		}
@@ -1071,6 +1117,18 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 		}
 	}
 	return pathParams, query, body, identifierSets, nil
+}
+
+func coerceOperationDirectReadFlagValue(cmd connectors.CommandSurfaceCommand, flag connectors.CommandSurfaceFlag, values []string, identifierSetWires map[string]string) (any, error) {
+	target, mapped := strings.CutPrefix(strings.TrimSpace(flag.MapsTo), "identifier_set.")
+	if !mapped || cmd.Intent != "direct_read" {
+		return coerceFlagValue(flag, values)
+	}
+	wire, ok := identifierSetWires[target]
+	if !ok {
+		return nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to undeclared caller-supplied identifier set", flag.Name)}
+	}
+	return coerceFlagValueWithStringArrayCommaSplit(flag, values, wire == "query_comma_separated")
 }
 
 func cloneStringSlice(values []string) []string {
@@ -1281,6 +1339,10 @@ func setRecordValue(record connectors.Record, path string, value any) error {
 }
 
 func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, error) {
+	return coerceFlagValueWithStringArrayCommaSplit(flag, values, true)
+}
+
+func coerceFlagValueWithStringArrayCommaSplit(flag connectors.CommandSurfaceFlag, values []string, splitCommas bool) (any, error) {
 	clean := make([]string, 0, len(values))
 	for _, value := range values {
 		if err := safety.RejectDangerousChars(value, "flag value"); err != nil {
@@ -1316,6 +1378,12 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 	case "string_array":
 		out := make([]string, 0)
 		for _, raw := range clean {
+			if !splitCommas {
+				if raw != "" {
+					out = append(out, raw)
+				}
+				continue
+			}
 			for _, item := range strings.Split(raw, ",") {
 				item = strings.TrimSpace(item)
 				if item != "" {

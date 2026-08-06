@@ -133,6 +133,10 @@ func (c *Connector) OperationDirectRead(ctx context.Context, req connectors.Oper
 	return OperationDirectRead(ctx, c.bundle, req, c.hooks)
 }
 
+func (c *Connector) OperationDirectReadIdentifierSetWires(operation string) (map[string]string, error) {
+	return operationDirectReadIdentifierSetWires(c.bundle, operation)
+}
+
 func (c *Connector) PreviewOperationDirectWrite(ctx context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
 	return PreviewOperationDirectWrite(ctx, c.bundle, req, c.hooks)
 }

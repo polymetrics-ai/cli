@@ -780,10 +780,6 @@ func checkAPISurfaceOperation(b engine.Bundle, i int, ep engine.SurfaceEndpoint)
 // checkCLISurface validates optional docs-only connector command metadata.
 // It deliberately validates references without enabling any command dispatch.
 func checkCLISurface(b engine.Bundle) []Finding {
-	if b.CLISurface == nil {
-		return nil
-	}
-
 	streams := map[string]bool{}
 	for _, s := range b.Streams {
 		streams[s.Name] = true
@@ -798,8 +794,12 @@ func checkCLISurface(b engine.Bundle) []Finding {
 	}
 	endpoints := cliSurfaceEndpointStates(b.Surface)
 
+	var commands []engine.CLICommand
+	if b.CLISurface != nil {
+		commands = b.CLISurface.Commands
+	}
 	var findings []Finding
-	for i, cmd := range b.CLISurface.Commands {
+	for i, cmd := range commands {
 		findings = append(findings, checkCLISurfaceReferences(b, i, cmd, streams, writes, operations)...)
 		findings = append(findings, checkCLISurfaceOperationSafety(b, i, cmd, operations)...)
 		findings = append(findings, checkCLISurfaceIntent(b, i, cmd)...)
@@ -807,6 +807,32 @@ func checkCLISurface(b engine.Bundle) []Finding {
 		findings = append(findings, checkCLISurfaceValidationDeclarations(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceWriteFlags(b, i, cmd, writes)...)
 		findings = append(findings, checkCLISurfaceEndpointCoverage(b, i, cmd, endpoints)...)
+	}
+	findings = append(findings, checkCLISurfaceCallerSuppliedIdentifierSetOperationBindings(b, commands)...)
+	return findings
+}
+
+func checkCLISurfaceCallerSuppliedIdentifierSetOperationBindings(b engine.Bundle, commands []engine.CLICommand) []Finding {
+	var findings []Finding
+	for _, op := range b.Operations {
+		if op.Kind != "rest_read" || op.REST == nil || len(op.REST.CallerSuppliedIdentifierSets) == 0 {
+			continue
+		}
+		bound := false
+		for _, cmd := range commands {
+			if cmd.Availability == "implemented" && cmd.Intent == "direct_read" && cmd.Operation == op.ID {
+				bound = true
+				break
+			}
+		}
+		if !bound {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "operations.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("operation %q declares caller_supplied_identifier_sets but has no implemented direct_read command", op.ID),
+			})
+		}
 	}
 	return findings
 }
@@ -968,6 +994,10 @@ func checkCLISurfaceCallerSuppliedIdentifierSets(b engine.Bundle, i int, cmd eng
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q %s", i, cmd.Path, op.ID, message)})
 	}
 	for _, flag := range cmd.Flags {
+		if target, mapped := strings.CutPrefix(strings.TrimSpace(flag.MapsTo), "query."); mapped && isQueryWiredCallerSuppliedIdentifierSet(declared[target]) {
+			add(fmt.Sprintf("flag --%s must not map to query.%s because identifier_set.%s owns that query parameter", flag.Name, target, target))
+			continue
+		}
 		target, mapped := strings.CutPrefix(strings.TrimSpace(flag.MapsTo), "identifier_set.")
 		if !mapped {
 			continue
@@ -1000,6 +1030,10 @@ func checkCLISurfaceCallerSuppliedIdentifierSets(b engine.Bundle, i int, cmd eng
 		}
 	}
 	return findings
+}
+
+func isQueryWiredCallerSuppliedIdentifierSet(set engine.CallerSuppliedIdentifierSetSpec) bool {
+	return set.Wire == "query_comma_separated" || set.Wire == "query_repeated"
 }
 
 // checkCLISurfaceDirectWriteOperationSafety validates the operation-specific
