@@ -16,6 +16,7 @@
     }
   ],
   "dropped": [],
+  "provenance_refusals": 0,
   "surveyed_operations": {
     "total": 52,
     "read": 28,
