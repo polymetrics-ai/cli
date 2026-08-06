@@ -215,8 +215,10 @@ not a full override by default.
   non-advancing refusal. Timestamp and monotonic-sequence sources merge primary and deletion
   records through a safe shared tuple boundary while preserving independent durable frontiers, so
   one source cannot skip the other source's page. A declared deletion endpoint also persists its
-  own query/start frontier from the first checkpoint, before any tombstone is accepted, and never
-  derives its next read from primary scan progress. Opaque cursor sources retain each source cursor
+  own query/start frontier from the first checkpoint, before any tombstone is accepted. Once a
+  deletion source has a durable timestamp tuple, restart derives that source's cursor and safety
+  overlap from the tuple and scan, never from primary progress. An uninitialized opaque deletion
+  source starts without a primary cursor. Opaque cursor sources retain each source cursor
   verbatim and promise only provider-local ordering; they do not claim a cross-source tuple merge.
   Reaching `max_pages` or exhausting that budget returns a typed,
   resumable stop after only the last durably accepted position; it is never a successful silent
