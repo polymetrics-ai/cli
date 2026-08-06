@@ -15,8 +15,9 @@ import { ensureMigrated, getPool } from '@/lib/db';
 
 const mockSession = vi.mocked(getSessionUser);
 
-const post = getBlogPost('human-harnesses');
-if (!post) throw new Error('Expected human-harnesses bookmark fixture');
+const post = getBlogPost('human-harnesses') ?? (() => {
+  throw new Error('Expected human-harnesses bookmark fixture');
+})();
 const slug = post.slug;
 
 function validAnchor() {
