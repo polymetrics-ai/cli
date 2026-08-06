@@ -111,9 +111,23 @@ the real `pm connectors certify sample --full --json` route proof and remove
 the standalone duplicate. This retains CLI dispatch, the real Runner and
 harness seam, report persistence, and all full source/read/flow/schedule
 assertions in one executable invocation. Re-measure the exact invocation caps
-and the existing wall-clock guard after the move; do not raise the guard.
+and the wall-clock guard after the move. The final duration limit must be
+derived only from final-topology hosted Verify evidence, not local timing.
 The local remediation measurement held 25/25 harness calls and 92/92 CLI
-calls, with `100.104s` total wall time against the unchanged `180s` limit.
+calls, with `100.104s` total wall time; it is not calibration evidence.
+
+### Hosted final-topology calibration
+
+The authoritative hosted samples preserve the final 25 harness plus 92 CLI
+invocations (117 total) and the one real
+`TestSampleOutboxWriteLifecycleAgainstRealCLI` proof.
+[Sample 1](https://github.com/polymetrics-ai/cli/actions/runs/31067299477)
+measured 94.662s elapsed and 125.655s wall time; [sample
+2](https://github.com/polymetrics-ai/cli/actions/runs/31068408270) measured
+124.013s elapsed and 165.891s wall time at
+`3332dc69378f39e10637a0d58777d4ddce6d51f4`. The enforced budget is
+`165.891 + (165.891 - 125.655) = 206.127s`, rounded up to the
+existing 15-second granularity: 210 seconds (`3m30s`).
 
 ## Delivery record
 

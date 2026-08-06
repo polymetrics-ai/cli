@@ -4,9 +4,19 @@ import (
 	"bytes"
 	"context"
 	"io"
+	"os"
+	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 	"time"
+)
+
+const (
+	hostedFinalTopologyFirstWall  = 125_655 * time.Millisecond
+	hostedFinalTopologySecondWall = 165_891 * time.Millisecond
+	hostedFinalTopologyBudget     = 210 * time.Second
+	hostedTimingGranularity       = 15 * time.Second
 )
 
 var certifyHarnessTarget = Target{
@@ -121,6 +131,33 @@ func TestCheckDurationBudgetRejectsMissingWallMeasurement(t *testing.T) {
 	err := CheckDurationBudget(report, 10*time.Second)
 	if err == nil || !strings.Contains(err.Error(), "no measured wall duration") {
 		t.Fatalf("CheckDurationBudget() error = %v, want missing wall measurement", err)
+	}
+}
+
+func TestHostedFinalTopologyBudgetMatchesMakefile(t *testing.T) {
+	spread := hostedFinalTopologySecondWall - hostedFinalTopologyFirstWall
+	if spread != 40_236*time.Millisecond {
+		t.Fatalf("hosted wall-time spread = %s, want 40.236s", spread)
+	}
+	unrounded := hostedFinalTopologySecondWall + spread
+	if unrounded != 206_127*time.Millisecond {
+		t.Fatalf("hosted wall-time budget before rounding = %s, want 206.127s", unrounded)
+	}
+	rounded := (unrounded + hostedTimingGranularity - time.Nanosecond) / hostedTimingGranularity * hostedTimingGranularity
+	if rounded != hostedFinalTopologyBudget {
+		t.Fatalf("hosted wall-time budget = %s, want %s", rounded, hostedFinalTopologyBudget)
+	}
+
+	_, file, _, ok := runtime.Caller(0)
+	if !ok {
+		t.Fatal("locate timing test file")
+	}
+	raw, err := os.ReadFile(filepath.Join(filepath.Dir(file), "..", "..", "Makefile"))
+	if err != nil {
+		t.Fatalf("read Makefile: %v", err)
+	}
+	if !strings.Contains(string(raw), "CERTIFY_TIMING_MAX_DURATION := 3m30s") {
+		t.Fatal("Makefile does not enforce the 3m30s hosted final-topology budget")
 	}
 }
 

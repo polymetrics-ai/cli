@@ -29,10 +29,10 @@ test:
 # Emits the raw cold -json streams and a compact timing summary for only the
 # certification harness and its CLI route tests. Verify invokes this target in
 # a separate step so the diagnostic is visible even when the aggregate suite
-# later fails or reaches its job limit. The final 93/61 harness/CLI topology
-# measured a 161.236s maximum wall time plus a 13.927s observed spread,
-# rounded to 3m.
-CERTIFY_TIMING_MAX_DURATION := 3m
+# later fails or reaches its job limit. The final hosted topology is 25 harness
+# plus 92 CLI invocations. Its 165.891s maximum wall time plus the 40.236s
+# observed spread is 206.127s, rounded to the existing 15-second boundary.
+CERTIFY_TIMING_MAX_DURATION := 3m30s
 
 certify-timing:
 	go run ./cmd/certifytiming --max-duration $(CERTIFY_TIMING_MAX_DURATION)

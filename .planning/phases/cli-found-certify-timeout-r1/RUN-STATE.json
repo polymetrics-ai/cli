@@ -4,7 +4,7 @@
   "subIssues": [3798, 3801, 3805, 3806, 3807],
   "branch": "fm/cli-found-certify-timeout-r1",
   "parentDraftPR": "https://github.com/polymetrics-ai/cli/pull/3808",
-  "status": "rebased_validated",
+  "status": "hosted_calibrated",
   "workflow": {
     "tddMode": true,
     "adapter": "inline_manual_fallback",
@@ -36,7 +36,7 @@
     "cliPackageElapsedSeconds": 227.819,
     "cliCommand": "go test -count=1 -v -run '^TestCertifyCLI' ./internal/cli"
   },
-  "greenEvidence": {
+  "intermediateGreenEvidence": {
     "certifyRealCLIInvocations": 93,
     "certifyInvocationBudget": 93,
     "certifyPackageElapsedSeconds": 81.733,
@@ -47,7 +47,7 @@
     "cliPackageElapsedSeconds": 54.825,
     "cliPackageWallElapsedSeconds": 60.665,
     "cliCommand": "go test -count=1 -run '^TestCertifyCLI' ./internal/cli",
-    "finalTimingMeasurements": [
+    "intermediateTimingMeasurements": [
       {
         "command": "make certify-timing",
         "topology": "one real sample/outbox write lifecycle proof plus the full source sweep",
@@ -76,7 +76,7 @@
         "slowestCLITest": "TestCertifyCLISingleConnectorPassExitsZero (34.630s)"
       }
     ],
-    "measuredWallTimeBudget": {
+    "intermediateWallTimeBudget": {
       "formula": "max(161.236, 147.309) + (161.236 - 147.309), rounded up to the next 15 seconds",
       "maximumWallElapsedSeconds": 161.236,
       "observedSpreadSeconds": 13.927,
@@ -84,7 +84,7 @@
       "budget": "3m",
       "budgetSeconds": 180
     },
-    "enforcementEvidence": {
+    "intermediateEnforcementEvidence": {
       "command": "make certify-timing",
       "certifyWallElapsedSeconds": 86.645,
       "cliWallElapsedSeconds": 60.665,
@@ -94,15 +94,47 @@
       "allowedDuration": "3m",
       "status": "passed"
     },
-    "rebaseValidation": {
+    "intermediateRebaseValidation": {
       "base": "origin/main d215d9636",
-      "finalTopology": "one real sample/outbox write lifecycle proof with loud missing-inventory failure",
-      "maximumFinalTimingWallElapsedSeconds": 161.236,
-      "latestFinalTimingWallElapsedSeconds": 147.309,
+      "thenFinalTopology": "one real sample/outbox write lifecycle proof with loud missing-inventory failure",
+      "maximumThenFinalTimingWallElapsedSeconds": 161.236,
+      "latestThenFinalTimingWallElapsedSeconds": 147.309,
       "certifyRealCLIInvocations": 93,
       "cliRealCLIInvocations": 61,
       "followUp": "fresh hosted Verify required for the final commit range"
     }
+  },
+  "hostedFinalCalibration": {
+    "topology": {
+      "certifyRealCLIInvocations": 25,
+      "cliRealCLIInvocations": 92,
+      "totalRealCLIInvocations": 117,
+      "realWriteLifecycleProof": "TestSampleOutboxWriteLifecycleAgainstRealCLI"
+    },
+    "samples": [
+      {
+        "url": "https://github.com/polymetrics-ai/cli/actions/runs/31067299477",
+        "date": "2026-08-06",
+        "totalElapsedSeconds": 94.662,
+        "totalWallElapsedSeconds": 125.655
+      },
+      {
+        "url": "https://github.com/polymetrics-ai/cli/actions/runs/31068408270",
+        "date": "2026-08-06",
+        "commit": "3332dc69378f39e10637a0d58777d4ddce6d51f4",
+        "totalElapsedSeconds": 124.013,
+        "totalWallElapsedSeconds": 165.891
+      }
+    ],
+    "durationBudget": {
+      "formula": "165.891 + (165.891 - 125.655), rounded up to the next 15 seconds",
+      "maximumWallElapsedSeconds": 165.891,
+      "observedSpreadSeconds": 40.236,
+      "unroundedSeconds": 206.127,
+      "budget": "3m30s",
+      "budgetSeconds": 210
+    },
+    "writeInventoryBehavior": "missing writes.json fails loudly; a green skip is indistinguishable from a check that ran and passed"
   },
   "ciRemediation": {
     "source": "hosted Verify timing failure on cd20f1074",
@@ -112,7 +144,7 @@
     "certifyInvocationBudget": 25,
     "cliRealCLIInvocations": 92,
     "cliInvocationBudget": 92,
-    "timing": {
+    "intermediateLocalTiming": {
       "command": "make certify-timing",
       "certifyElapsedSeconds": 15.252,
       "certifyWallElapsedSeconds": 19.691,
@@ -122,6 +154,12 @@
       "totalWallElapsedSeconds": 100.104,
       "allowedDuration": "3m",
       "status": "passed"
+    },
+    "hostedFinalTiming": {
+      "totalElapsedSeconds": 124.013,
+      "totalWallElapsedSeconds": 165.891,
+      "allowedDuration": "3m30s",
+      "status": "derived from final hosted topology"
     },
     "scopedVerification": [
       "go test -count=1 ./internal/connectors/certify",

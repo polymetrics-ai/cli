@@ -1,24 +1,23 @@
 # Verification checklist — certify-harness cost foundation (#3795)
 
-## Pre-remediation 93/61-call measurement
+## Hosted final-topology calibration
 
-- [x] Two final-topology `make certify-timing` measurements held the 93/93
-  harness and 61/61 CLI caps. The first had harness elapsed/wall time
-  79.229s/84.769s, CLI elapsed/wall time 70.000s/76.467s, and total
-  elapsed/wall time 149.229s/161.236s. The focused review verification had
-  harness elapsed/wall time 81.733s/86.645s, CLI elapsed/wall time
-  54.825s/60.665s, and total elapsed/wall time 136.558s/147.309s.
-- [x] The harness measurement retains exactly one real sample/outbox
-  plan → preview → approval → execute → cleanup/replay lifecycle proof,
-  `TestSampleOutboxWriteLifecycleAgainstRealCLI`, alongside the real full
-  source/read/flow/schedule sweep.
-- [x] `CERTIFY_TIMING_MAX_DURATION` is `3m`. The maximum final-topology wall
-  measurement is 161.236s and the observed spread is
-  `161.236 - 147.309 = 13.927s`; `161.236 + 13.927 = 175.163s`, rounded up to
-  the next 15-second boundary, gives 180s.
-
-The pre-refactor harness made 782 real invocations. That pre-remediation
-topology established the fixed 3-minute wall cap, which remains unchanged.
+- [x] The pre-refactor harness made 782 real CLI invocations. The final exact
+  topology is 25 harness invocations plus 92 CLI invocations, or 117 total.
+- [x] [Hosted Verify sample 1](https://github.com/polymetrics-ai/cli/actions/runs/31067299477)
+  on 2026-08-06 measured the final 25/92 topology at 94.662s total elapsed
+  and 125.655s wall elapsed.
+- [x] [Hosted Verify sample 2](https://github.com/polymetrics-ai/cli/actions/runs/31068408270)
+  on 2026-08-06 at `3332dc69378f39e10637a0d58777d4ddce6d51f4` measured the same
+  final 25/92 topology at 124.013s total elapsed and 165.891s wall elapsed.
+- [x] `CERTIFY_TIMING_MAX_DURATION` is `3m30s`. The maximum final wall
+  time plus the observed spread is `165.891 + (165.891 - 125.655) =
+  206.127s`; rounding up to the existing 15-second granularity yields
+  210 seconds.
+- [x] The harness retains exactly one real sample/outbox plan → preview →
+  approval → execute → cleanup/replay proof,
+  `TestSampleOutboxWriteLifecycleAgainstRealCLI`. The full source/read/flow/schedule
+  proof remains coalesced in the real CLI route.
 
 ## CI remediation — coalesced full-route measurement
 
@@ -29,10 +28,10 @@ topology established the fixed 3-minute wall cap, which remains unchanged.
   executable topology.
 - [x] The revised exact invocation caps are 25/25 in
   `internal/connectors/certify` and 92/92 in `internal/cli`.
-- [x] `make certify-timing` passed with harness elapsed/wall time
+- [x] The intermediate local `make certify-timing` run passed with harness elapsed/wall time
   15.252s/19.691s, CLI elapsed/wall time 77.330s/80.413s, and total
-  elapsed/wall time 92.582s/100.104s—well below the unchanged 3-minute
-  duration limit.
+  elapsed/wall time 92.582s/100.104s. It is not the source of the enforced
+  hosted final-topology duration limit.
 - [x] `go test -count=1 ./internal/connectors/certify`,
   `go test -count=1 -run '^TestCertifyCLI' ./internal/cli`,
   `go test -count=1 ./internal/certifytiming ./cmd/certifytiming`, and
