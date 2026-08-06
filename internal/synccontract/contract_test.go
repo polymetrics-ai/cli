@@ -2,6 +2,7 @@ package synccontract
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"reflect"
@@ -97,8 +98,27 @@ func TestCheckpointEnvelopeRequiresExplicitDedupeWindow(t *testing.T) {
 	}
 }
 
+func TestCheckpointEnvelopeRejectsNilPartitionsOnResumeAfterClone(t *testing.T) {
+	checkpoint := validCheckpoint()
+	committedAt := checkpoint.ObservedAt.Add(time.Minute)
+	checkpoint.CommittedAt = &committedAt
+	checkpoint.Partitions = nil
+
+	clone := checkpoint.Clone()
+	if clone.Partitions != nil {
+		t.Fatalf("CheckpointEnvelope.Clone() converted nil partitions to %#v", clone.Partitions)
+	}
+	err := clone.ValidateResume(ResumeExpectation{Source: clone.Source, SourceGeneration: clone.SourceGeneration})
+	var recovery *RebootstrapRequiredError
+	if !errors.As(err, &recovery) || recovery.Outcome != RecoveryOutcomeInvalidCheckpoint {
+		t.Fatalf("ValidateResume() error = %T %v, want invalid checkpoint rebootstrap", err, err)
+	}
+}
+
 func TestResumeOutcomesRequireExplicitRebootstrap(t *testing.T) {
 	checkpoint := validCheckpoint()
+	committedAt := checkpoint.ObservedAt.Add(time.Minute)
+	checkpoint.CommittedAt = &committedAt
 	before := checkpoint.Clone()
 	expected := ResumeExpectation{Source: checkpoint.Source, SourceGeneration: checkpoint.SourceGeneration}
 	if err := checkpoint.ValidateResume(expected); err != nil {
@@ -178,12 +198,23 @@ func TestCommitAfterDownstreamAcknowledgement(t *testing.T) {
 	}
 
 	acknowledgedAt := candidate.ObservedAt.Add(time.Minute)
+	err = CommitAfterDownstreamAcknowledgement(candidate, DownstreamAcknowledgement{Sink: "warehouse", AcknowledgedAt: acknowledgedAt}, func(CheckpointEnvelope) error {
+		commits++
+		return nil
+	})
+	if !errors.Is(err, ErrDownstreamAcknowledgementRequired) {
+		t.Fatalf("forged acknowledgement error = %v", err)
+	}
+	if commits != 0 {
+		t.Fatalf("committed %d times with a forged acknowledgement", commits)
+	}
+
+	acknowledgement, err := NewDurableDownstreamAcknowledgement("warehouse", acknowledgedAt)
+	if err != nil {
+		t.Fatal(err)
+	}
 	var committed CheckpointEnvelope
-	err = CommitAfterDownstreamAcknowledgement(candidate, DownstreamAcknowledgement{
-		Sink:           "warehouse",
-		Durable:        true,
-		AcknowledgedAt: acknowledgedAt,
-	}, func(got CheckpointEnvelope) error {
+	err = CommitAfterDownstreamAcknowledgement(candidate, acknowledgement, func(got CheckpointEnvelope) error {
 		commits++
 		committed = got
 		return nil
@@ -202,6 +233,15 @@ func TestCommitAfterDownstreamAcknowledgement(t *testing.T) {
 	}
 	if candidate.CommittedAt != nil {
 		t.Fatal("commit mutated uncommitted candidate")
+	}
+}
+
+func TestResumeRejectsObservedButUncommittedCheckpoint(t *testing.T) {
+	checkpoint := validCheckpoint()
+	err := checkpoint.ValidateResume(ResumeExpectation{Source: checkpoint.Source, SourceGeneration: checkpoint.SourceGeneration})
+	var recovery *RebootstrapRequiredError
+	if !errors.As(err, &recovery) || recovery.Outcome != RecoveryOutcomeInvalidCheckpoint {
+		t.Fatalf("ValidateResume() error = %T %v, want invalid checkpoint rebootstrap", err, err)
 	}
 }
 
@@ -244,7 +284,7 @@ func TestTombstoneClosesHistoryWindowInsteadOfPhysicalDelete(t *testing.T) {
 	}
 }
 
-func TestNativeContractNeedsMatchingExecutorAndFixtureEvidence(t *testing.T) {
+func TestNativeContractNeedsRegisteredRunnableExecutorAndFixtureEvidence(t *testing.T) {
 	contract := NativeCommandContract{
 		ContractVersion: NativeCommandContractVersion,
 		Protocol:        "postgres_wire",
@@ -256,45 +296,74 @@ func TestNativeContractNeedsMatchingExecutorAndFixtureEvidence(t *testing.T) {
 	if err := contract.Validate(); err != nil {
 		t.Fatalf("contract rejected: %v", err)
 	}
-	if contract.IsExecutable(nil) {
-		t.Fatal("contract executable without a native executor")
+	registry, err := NewNativeExecutorRegistry()
+	if err != nil {
+		t.Fatal(err)
 	}
-	wrong := fakeNativeExecutor{descriptor: NativeSyncExecutorDescriptor{
+	if registry.Admits(contract) {
+		t.Fatal("contract executable without a registered native executor")
+	}
+	wrong := &fakeNativeExecutor{descriptor: NativeSyncExecutorDescriptor{
 		Protocol: "postgres_wire",
 		Command:  "logical_replication",
 		Executor: ExecutorReference{Kind: "native", ID: "other"},
 		Modes:    []Mode{ModeChangeCapture},
 	}, evidence: RequiredConformanceEvidence()}
-	if contract.IsExecutable(wrong) {
-		t.Fatal("contract executable with a mismatched executor")
+	if err := registry.Register(wrong); err != nil {
+		t.Fatal(err)
 	}
-	missingEvidence := fakeNativeExecutor{descriptor: NativeSyncExecutorDescriptor{
+	if registry.Admits(contract) {
+		t.Fatal("contract executable with a mismatched registered executor")
+	}
+	missingEvidence := &fakeNativeExecutor{descriptor: NativeSyncExecutorDescriptor{
 		Protocol: contract.Protocol,
 		Command:  contract.Command,
 		Executor: contract.Executor,
 		Modes:    contract.Modes,
 	}}
-	if contract.IsExecutable(missingEvidence) {
-		t.Fatal("contract executable without fixture evidence")
+	if err := registry.Register(missingEvidence); err == nil {
+		t.Fatal("registry accepted a native executor without fixture evidence")
 	}
-	matching := fakeNativeExecutor{descriptor: NativeSyncExecutorDescriptor{
+	matching := &fakeNativeExecutor{descriptor: NativeSyncExecutorDescriptor{
 		Protocol: contract.Protocol,
 		Command:  contract.Command,
 		Executor: contract.Executor,
 		Modes:    contract.Modes,
 	}, evidence: RequiredConformanceEvidence()}
-	if !contract.IsExecutable(matching) {
-		t.Fatal("contract not executable with matching executor and evidence")
+	registry, err = NewNativeExecutorRegistry(matching)
+	if err != nil {
+		t.Fatal(err)
 	}
-	for field, value := range map[string]string{"protocol": "sql", "command": "query"} {
+	if !registry.Admits(contract) {
+		t.Fatal("registry did not admit matching runnable executor and evidence")
+	}
+	if _, err := registry.Execute(context.Background(), contract, NativeSyncRequest{Mode: ModeChangeCapture}); err != nil {
+		t.Fatal(err)
+	}
+	if matching.runCalls != 1 {
+		t.Fatalf("native executor calls = %d, want 1", matching.runCalls)
+	}
+	for _, test := range []struct {
+		field string
+		value string
+	}{
+		{field: "protocol", value: "rest-v2"},
+		{field: "protocol", value: "http-client"},
+		{field: "command", value: "sql-run"},
+		{field: "command", value: "shell-runner"},
+		{field: "executor", value: "https-adapter"},
+	} {
 		invalid := contract
-		if field == "protocol" {
-			invalid.Protocol = value
-		} else {
-			invalid.Command = value
+		switch test.field {
+		case "protocol":
+			invalid.Protocol = test.value
+		case "command":
+			invalid.Command = test.value
+		case "executor":
+			invalid.Executor.ID = test.value
 		}
 		if err := invalid.Validate(); err == nil {
-			t.Fatalf("generic %s %q was accepted", field, value)
+			t.Fatalf("generic %s %q was accepted", test.field, test.value)
 		}
 	}
 
@@ -399,10 +468,16 @@ func containsFixtureID(ids []string, expected string) bool {
 type fakeNativeExecutor struct {
 	descriptor NativeSyncExecutorDescriptor
 	evidence   ConformanceEvidence
+	runCalls   int
 }
 
-func (f fakeNativeExecutor) NativeSyncExecutorDescriptor() NativeSyncExecutorDescriptor {
+func (f *fakeNativeExecutor) NativeSyncExecutorDescriptor() NativeSyncExecutorDescriptor {
 	return f.descriptor
 }
 
-func (f fakeNativeExecutor) NativeSyncConformanceEvidence() ConformanceEvidence { return f.evidence }
+func (f *fakeNativeExecutor) NativeSyncConformanceEvidence() ConformanceEvidence { return f.evidence }
+
+func (f *fakeNativeExecutor) RunNativeSync(context.Context, NativeSyncRequest) (NativeSyncResult, error) {
+	f.runCalls++
+	return NativeSyncResult{}, nil
+}

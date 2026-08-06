@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/synccontract"
 )
 
@@ -62,35 +63,51 @@ func streamStateCursor(state StreamState) string {
 	return string(state.Checkpoint.Position.Primary)
 }
 
-func streamSourceIdentity(conn Connection, streamName string) synccontract.SourceIdentity {
+func streamSourceIdentity(source connectors.Connector, credential CredentialMeta, streamName string) synccontract.SourceIdentity {
 	return synccontract.SourceIdentity{
-		Engine:           conn.Source.Connector,
-		AccountOrCluster: conn.Source.Credential,
+		Engine:           source.Name(),
+		AccountOrCluster: credential.ID,
 		ObjectScope:      streamName,
 	}
 }
 
-func validateStreamStateResume(state StreamState, conn Connection, streamName string) error {
+func streamSourceGeneration(runtime connectors.RuntimeConfig) synccontract.OpaqueToken {
+	generation := make(synccontract.OpaqueToken, 0, len(runtime.CredentialRevision)+len(runtime.ConfigurationDigest)+1)
+	generation = append(generation, runtime.CredentialRevision...)
+	generation = append(generation, 0)
+	generation = append(generation, runtime.ConfigurationDigest...)
+	return generation
+}
+
+func streamResumeExpectation(source connectors.Connector, credential CredentialMeta, runtime connectors.RuntimeConfig, streamName string) synccontract.ResumeExpectation {
+	return synccontract.ResumeExpectation{
+		Source:           streamSourceIdentity(source, credential, streamName),
+		SourceGeneration: streamSourceGeneration(runtime),
+	}
+}
+
+func validateStreamStateResume(state StreamState, expected synccontract.ResumeExpectation) error {
 	if state.Checkpoint == nil {
 		return nil
 	}
-	return state.Checkpoint.ValidateResume(synccontract.ResumeExpectation{Source: streamSourceIdentity(conn, streamName)})
+	return state.Checkpoint.ValidateResume(expected)
 }
 
-func legacyCheckpointEnvelope(conn Connection, streamName string, stream StreamConfig, runID, cursor string, observedAt time.Time) synccontract.CheckpointEnvelope {
+func legacyCheckpointEnvelope(source synccontract.ResumeExpectation, stream StreamConfig, runID, cursor string, observedAt time.Time) synccontract.CheckpointEnvelope {
 	dedupeIdentity, _ := json.Marshal(stream.PrimaryKey)
 	return synccontract.CheckpointEnvelope{
 		StateVersion:    synccontract.StateVersion,
-		Source:          streamSourceIdentity(conn, streamName),
+		Source:          source.Source,
 		Mechanism:       "legacy_scalar_cursor",
 		SnapshotBarrier: &synccontract.SnapshotBarrier{Kind: "legacy_run", Token: synccontract.OpaqueToken([]byte(runID))},
 		Position: synccontract.CheckpointPosition{
 			Primary:    synccontract.OpaqueToken([]byte(cursor)),
 			TieBreaker: synccontract.OpaqueToken([]byte(runID)),
 		},
-		Partitions:      []synccontract.PartitionState{},
-		SchemaVersion:   "legacy-app-v1",
-		ProtocolVersion: "connector-read-v1",
+		Partitions:       []synccontract.PartitionState{},
+		SourceGeneration: source.SourceGeneration,
+		SchemaVersion:    "legacy-app-v1",
+		ProtocolVersion:  "connector-read-v1",
 		Dedupe: synccontract.DedupeIdentity{
 			Kind:  "legacy_primary_key",
 			Value: synccontract.OpaqueToken(dedupeIdentity),
@@ -104,14 +121,10 @@ func legacyCheckpointEnvelope(conn Connection, streamName string, stream StreamC
 	}
 }
 
-func committedLegacyStreamState(conn Connection, streamName string, stream StreamConfig, runID, cursor string, generationID int64, recordsLoaded int, sink string, observedAt, acknowledgedAt time.Time) (StreamState, error) {
-	candidate := legacyCheckpointEnvelope(conn, streamName, stream, runID, cursor, observedAt)
+func committedLegacyStreamState(conn Connection, source synccontract.ResumeExpectation, streamName string, stream StreamConfig, runID, cursor string, generationID int64, recordsLoaded int, observedAt time.Time, acknowledgement synccontract.DownstreamAcknowledgement) (StreamState, error) {
+	candidate := legacyCheckpointEnvelope(source, stream, runID, cursor, observedAt)
 	var committed synccontract.CheckpointEnvelope
-	if err := synccontract.CommitAfterDownstreamAcknowledgement(candidate, synccontract.DownstreamAcknowledgement{
-		Sink:           sink,
-		Durable:        true,
-		AcknowledgedAt: acknowledgedAt,
-	}, func(checkpoint synccontract.CheckpointEnvelope) error {
+	if err := synccontract.CommitAfterDownstreamAcknowledgement(candidate, acknowledgement, func(checkpoint synccontract.CheckpointEnvelope) error {
 		committed = checkpoint
 		return nil
 	}); err != nil {
@@ -124,6 +137,6 @@ func committedLegacyStreamState(conn Connection, streamName string, stream Strea
 		GenerationID:        generationID,
 		LastSuccessfulRunID: runID,
 		RecordsLoaded:       recordsLoaded,
-		UpdatedAt:           acknowledgedAt,
+		UpdatedAt:           acknowledgement.AcknowledgedAt,
 	}, nil
 }
