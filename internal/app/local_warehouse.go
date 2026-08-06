@@ -64,7 +64,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	}
 
 	dir := localWarehouseDir(destRuntime)
-	if err := os.MkdirAll(dir, 0o700); err != nil {
+	if err := durable.EnsureDirectoryTree(dir, filepath.Dir(dir), 0o700); err != nil {
 		return etlExecutionResult{}, fmt.Errorf("create warehouse directory: %w", err)
 	}
 	table := stream.DestinationTable
@@ -75,7 +75,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	tmpFinalPath := finalPath + "." + runID + ".tmp"
 	rawPath := localRawPath(dir, conn.Name, streamName, table)
 	tmpRawPath := rawPath + "." + runID + ".tmp"
-	if err := os.MkdirAll(filepath.Dir(rawPath), 0o700); err != nil {
+	if err := durable.EnsureDirectoryTree(filepath.Dir(rawPath), dir, 0o700); err != nil {
 		return etlExecutionResult{}, fmt.Errorf("create raw directory: %w", err)
 	}
 

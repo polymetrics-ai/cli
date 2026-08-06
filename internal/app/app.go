@@ -18,6 +18,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/commandrunner"
+	"polymetrics.ai/internal/durable"
 	"polymetrics.ai/internal/safety"
 	statestore "polymetrics.ai/internal/state"
 	"polymetrics.ai/internal/synccontract"
@@ -88,14 +89,16 @@ func InitProject(root string) error {
 		root = "."
 	}
 	projectDir := filepath.Join(root, ".polymetrics")
+	if err := durable.EnsureDirectoryTree(projectDir, root, 0o700); err != nil {
+		return fmt.Errorf("create %s: %w", projectDir, err)
+	}
 	for _, dir := range []string{
-		projectDir,
 		filepath.Join(projectDir, "state"),
 		filepath.Join(projectDir, "warehouse"),
 		filepath.Join(projectDir, "outbox"),
 		filepath.Join(projectDir, "logs"),
 	} {
-		if err := os.MkdirAll(dir, 0o700); err != nil {
+		if err := durable.EnsureDirectoryTree(dir, projectDir, 0o700); err != nil {
 			return fmt.Errorf("create %s: %w", dir, err)
 		}
 	}
@@ -124,7 +127,7 @@ func InitProject(root string) error {
 			WebhookSubscriptions:         map[string]webhookSubscriptionState{},
 			WebhookReceipts:              map[string]webhookReceiptState{},
 		}
-		if err := newStateStore(statePath).Save(initial); err != nil {
+		if err := newStateStore(statePath, root).Save(initial); err != nil {
 			return err
 		}
 	}
@@ -156,7 +159,7 @@ func Open(root string) (*App, error) {
 		root:       root,
 		projectDir: projectDir,
 		statePath:  statePath,
-		store:      newStateStore(statePath),
+		store:      newStateStore(statePath, root),
 		vault:      v,
 		approval:   approval,
 		registry:   bundleregistry.New(),
@@ -457,9 +460,10 @@ func (a *App) snapshotState() state {
 	return a.state
 }
 
-func newStateStore(path string) statestore.JSONStore[state] {
+func newStateStore(path, directoryRoot string) statestore.JSONStore[state] {
 	return statestore.JSONStore[state]{
-		Path: path,
+		Path:          path,
+		DirectoryRoot: directoryRoot,
 		Initial: func() state {
 			return state{
 				CredentialBindings:   map[string]credentialBindingState{},
@@ -469,7 +473,7 @@ func newStateStore(path string) statestore.JSONStore[state] {
 				WebhookReceipts:      map[string]webhookReceiptState{},
 			}
 		},
-		Locker: statestore.FileLock{Path: path + ".lock"},
+		Locker: statestore.FileLock{Path: path + ".lock", DirectoryRoot: directoryRoot},
 	}
 }
 

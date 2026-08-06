@@ -6,10 +6,13 @@ import (
 	"os"
 	"path/filepath"
 	"sync"
+
+	"polymetrics.ai/internal/durable"
 )
 
 type FileLock struct {
-	Path string
+	Path          string
+	DirectoryRoot string
 }
 
 // Lock acquires an exclusive interprocess lock for Path.
@@ -17,7 +20,12 @@ func (l FileLock) Lock() (func() error, error) {
 	if l.Path == "" {
 		return nil, errors.New("lock path is required")
 	}
-	if err := os.MkdirAll(filepath.Dir(l.Path), 0o700); err != nil {
+	dir := filepath.Dir(l.Path)
+	root := l.DirectoryRoot
+	if root == "" {
+		root = dir
+	}
+	if err := durable.EnsureDirectoryTree(dir, root, 0o700); err != nil {
 		return nil, fmt.Errorf("create lock directory: %w", err)
 	}
 	file, err := os.OpenFile(l.Path, os.O_RDWR|os.O_CREATE, 0o600)

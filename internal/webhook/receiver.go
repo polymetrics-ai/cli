@@ -15,7 +15,9 @@ import (
 var (
 	// ErrReceiptBackpressure rejects a new event when durable receipt capacity
 	// is exhausted. Existing durable duplicates remain successful.
-	ErrReceiptBackpressure = errors.New("webhook receipt capacity is exhausted")
+	ErrReceiptBackpressure      = errors.New("webhook receipt capacity is exhausted")
+	ErrReceiptHandoffInProgress = errors.New("webhook receipt handoff is in progress")
+	ErrReceiptNotFound          = errors.New("webhook receipt was not found")
 	// ErrInvalidEventIdentity rejects a verifier result without a documented,
 	// stable provider event identity. The receiver never invents a body hash.
 	ErrInvalidEventIdentity = errors.New("verified event identity is invalid")
@@ -44,6 +46,14 @@ const (
 	ReceiptInsertRejected  ReceiptInsertResult = "rejected"
 )
 
+type ReceiptConsumeResult string
+
+const (
+	ReceiptConsumeCompleted ReceiptConsumeResult = "completed"
+	ReceiptConsumeDuplicate ReceiptConsumeResult = "duplicate"
+	ReceiptConsumeRejected  ReceiptConsumeResult = "rejected"
+)
+
 // Verifier validates the original request bytes before any decoding or
 // persistence. It must return the provider's stable event identity.
 type Verifier interface {
@@ -54,6 +64,14 @@ type Verifier interface {
 // provider event identity within a subscription. It owns durable queue bounds.
 type ReceiptStore interface {
 	Insert(ctx context.Context, receipt Receipt) (ReceiptInsertResult, error)
+}
+
+type DurableReceiptHandoff func(context.Context, Receipt) error
+
+type DurableReceiptStore interface {
+	ReceiptStore
+	Consume(context.Context, string, DurableReceiptHandoff) (ReceiptConsumeResult, error)
+	ConsumeNext(context.Context, DurableReceiptHandoff) (ReceiptConsumeResult, error)
 }
 
 // ReceiverConfig requires explicit limits. There are no process-wide magic
@@ -185,7 +203,7 @@ func (r *Receiver) ServeHTTP(w http.ResponseWriter, request *http.Request) {
 		reject(w, http.StatusServiceUnavailable)
 		return
 	}
-	if err != nil || !validEventIdentity(event.ID) {
+	if err != nil || !ValidEventIdentity(event.ID) {
 		reject(w, http.StatusUnauthorized)
 		return
 	}
@@ -213,7 +231,7 @@ func reject(w http.ResponseWriter, status int) {
 	http.Error(w, "webhook rejected", status)
 }
 
-func validEventIdentity(value string) bool {
+func ValidEventIdentity(value string) bool {
 	if strings.TrimSpace(value) == "" || len(value) > 512 {
 		return false
 	}

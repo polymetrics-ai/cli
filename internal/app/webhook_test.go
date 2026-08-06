@@ -83,6 +83,38 @@ func TestWebhookReceiverPersistsOnlyOpaqueExposureAndEncryptedReceipts(t *testin
 	if len(vaultFilesAfterReject) != len(vaultFilesBeforeReject) {
 		t.Fatalf("rejected receipt added encrypted payload: before=%d after=%d", len(vaultFilesBeforeReject), len(vaultFilesAfterReject))
 	}
+	handoffFailure := errors.New("fixture handoff failure")
+	consumed, err := store.Consume(ctx, "event-one", func(context.Context, webhook.Receipt) error {
+		return handoffFailure
+	})
+	if consumed != webhook.ReceiptConsumeRejected || !errors.Is(err, handoffFailure) {
+		t.Fatalf("failed Consume() result=%q err=%v", consumed, err)
+	}
+	if _, err := store.Insert(ctx, webhook.Receipt{
+		Event:      webhook.VerifiedEvent{ID: "event-two"},
+		RawBody:    []byte(`{"event":"second"}`),
+		ReceivedAt: time.Now().UTC(),
+	}); !errors.Is(err, webhook.ErrReceiptBackpressure) {
+		t.Fatalf("receipt capacity released before handoff completion: %v", err)
+	}
+	handoffCalls := 0
+	consumed, err = store.Consume(ctx, "event-one", func(_ context.Context, receipt webhook.Receipt) error {
+		handoffCalls++
+		if receipt.Event.ID != "event-one" || string(receipt.RawBody) != `{"event":"first"}` {
+			return errors.New("unexpected handoff receipt")
+		}
+		return nil
+	})
+	if err != nil || consumed != webhook.ReceiptConsumeCompleted || handoffCalls != 1 {
+		t.Fatalf("completed Consume() result=%q calls=%d err=%v", consumed, handoffCalls, err)
+	}
+	consumed, err = store.Consume(ctx, "event-one", func(context.Context, webhook.Receipt) error {
+		handoffCalls++
+		return nil
+	})
+	if err != nil || consumed != webhook.ReceiptConsumeDuplicate || handoffCalls != 1 {
+		t.Fatalf("duplicate Consume() result=%q calls=%d err=%v", consumed, handoffCalls, err)
+	}
 
 	stateBytes, err := os.ReadFile(filepath.Join(root, ".polymetrics", "state", "state.json"))
 	if err != nil {
@@ -94,12 +126,104 @@ func TestWebhookReceiverPersistsOnlyOpaqueExposureAndEncryptedReceipts(t *testin
 			t.Fatalf("ordinary state leaked protected ingress value %q", forbidden)
 		}
 	}
+	reopened, err := app.Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	reopenedStore, err := reopened.WebhookReceiptStore("fixture-receiver")
+	if err != nil {
+		t.Fatal(err)
+	}
+	duplicate, err = reopenedStore.Insert(ctx, webhook.Receipt{
+		Event:      webhook.VerifiedEvent{ID: "event-one"},
+		RawBody:    []byte(`{"event":"first"}`),
+		ReceivedAt: time.Now().UTC(),
+	})
+	if err != nil || duplicate != webhook.ReceiptInsertDuplicate {
+		t.Fatalf("retained duplicate Insert() result=%q err=%v", duplicate, err)
+	}
+	second, err := reopenedStore.Insert(ctx, webhook.Receipt{
+		Event:      webhook.VerifiedEvent{ID: "event-two"},
+		RawBody:    []byte(`{"event":"second"}`),
+		ReceivedAt: time.Now().UTC(),
+	})
+	if err != nil || second != webhook.ReceiptInsertNew {
+		t.Fatalf("released-capacity Insert() result=%q err=%v", second, err)
+	}
 	vaultFiles, err := os.ReadDir(filepath.Join(root, ".polymetrics", "vault"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(vaultFiles) < 2 { // key plus one encrypted receipt
-		t.Fatalf("vault entries = %d, want encrypted receipt", len(vaultFiles))
+	if len(vaultFiles) < 3 {
+		t.Fatalf("vault entries = %d, want retained encrypted receipts", len(vaultFiles))
+	}
+}
+
+func TestWebhookReceiptStoreResumesPendingHandoffAfterRestart(t *testing.T) {
+	t.Parallel()
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	instance, err := app.Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := instance.ConfigureWebhookReceiver(ctx, app.ConfigureWebhookReceiverRequest{
+		Name: "resumable-receiver",
+		Exposure: webhook.ExposureConfig{
+			Mode:        webhook.ExposureModeOperatorEndpoint,
+			CallbackURL: "https://operator.example.test/receiver",
+		},
+		ReceiptCapacity: 1,
+	}); err != nil {
+		t.Fatal(err)
+	}
+	store, err := instance.WebhookReceiptStore("resumable-receiver")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if result, err := store.Insert(ctx, webhook.Receipt{
+		Event:      webhook.VerifiedEvent{ID: "event-one"},
+		RawBody:    []byte(`{"event":"first"}`),
+		ReceivedAt: time.Now().UTC(),
+	}); err != nil || result != webhook.ReceiptInsertNew {
+		t.Fatalf("Insert() result=%q err=%v", result, err)
+	}
+
+	reopened, err := app.Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	resumedStore, err := reopened.WebhookReceiptStore("resumable-receiver")
+	if err != nil {
+		t.Fatal(err)
+	}
+	handoffCalls := 0
+	result, err := resumedStore.ConsumeNext(ctx, func(_ context.Context, receipt webhook.Receipt) error {
+		handoffCalls++
+		if receipt.Event.ID != "event-one" || string(receipt.RawBody) != `{"event":"first"}` {
+			return errors.New("unexpected resumed receipt")
+		}
+		return nil
+	})
+	if err != nil || result != webhook.ReceiptConsumeCompleted || handoffCalls != 1 {
+		t.Fatalf("ConsumeNext() result=%q calls=%d err=%v", result, handoffCalls, err)
+	}
+	if result, err := resumedStore.Insert(ctx, webhook.Receipt{
+		Event:      webhook.VerifiedEvent{ID: "event-one"},
+		RawBody:    []byte(`{"event":"first"}`),
+		ReceivedAt: time.Now().UTC(),
+	}); err != nil || result != webhook.ReceiptInsertDuplicate {
+		t.Fatalf("retained Insert() result=%q err=%v", result, err)
+	}
+	if result, err := resumedStore.Insert(ctx, webhook.Receipt{
+		Event:      webhook.VerifiedEvent{ID: "event-two"},
+		RawBody:    []byte(`{"event":"second"}`),
+		ReceivedAt: time.Now().UTC(),
+	}); err != nil || result != webhook.ReceiptInsertNew {
+		t.Fatalf("released-capacity Insert() result=%q err=%v", result, err)
 	}
 }
 

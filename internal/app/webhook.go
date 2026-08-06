@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"crypto/hmac"
+	"crypto/rand"
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/hex"
@@ -84,7 +85,12 @@ type webhookReceiptState struct {
 	EventFingerprint   string    `json:"event_fingerprint"`
 	EncryptedPayloadID string    `json:"encrypted_payload_id"`
 	ReceivedAt         time.Time `json:"received_at"`
+	HandoffLeaseID     string    `json:"handoff_lease_id,omitempty"`
+	HandoffLeaseUntil  time.Time `json:"handoff_lease_until,omitempty"`
+	ConsumedAt         time.Time `json:"consumed_at,omitempty"`
 }
+
+const receiptHandoffLeaseDuration = time.Minute
 
 // ConfigureWebhookReceiver records the selected ingress mode. It intentionally
 // does not call a provider registration endpoint or start a tunnel process.
@@ -226,7 +232,7 @@ func (a *App) WebhookReceiverStatus(name string, now time.Time) (WebhookReceiver
 // WebhookReceiptStore returns the encrypted, durable receipt store used by a
 // provider verifier/receiver pair. It has no provider-specific parser or
 // dispatcher and never exposes stored payload bytes through status APIs.
-func (a *App) WebhookReceiptStore(name string) (webhook.ReceiptStore, error) {
+func (a *App) WebhookReceiptStore(name string) (webhook.DurableReceiptStore, error) {
 	if err := safety.ValidateIdentifier(name, "webhook receiver"); err != nil {
 		return nil, errors.New("webhook receiver is invalid")
 	}
@@ -270,6 +276,9 @@ func (s *appWebhookReceiptStore) Insert(ctx context.Context, receipt webhook.Rec
 	if err := ctx.Err(); err != nil {
 		return webhook.ReceiptInsertRejected, err
 	}
+	if !webhook.ValidEventIdentity(receipt.Event.ID) {
+		return webhook.ReceiptInsertRejected, errors.New("webhook receipt identity is invalid")
+	}
 	result := webhook.ReceiptInsertRejected
 	_, err := s.app.updateWebhookReceiptState(ctx, func(current state) (state, error) {
 		if current.WebhookSubscriptions == nil {
@@ -296,7 +305,7 @@ func (s *appWebhookReceiptStore) Insert(ctx context.Context, receipt webhook.Rec
 		}
 		pending := 0
 		for _, existing := range current.WebhookReceipts {
-			if existing.Subscription == s.subscription {
+			if existing.Subscription == s.subscription && existing.ConsumedAt.IsZero() {
 				pending++
 			}
 		}
@@ -306,6 +315,7 @@ func (s *appWebhookReceiptStore) Insert(ctx context.Context, receipt webhook.Rec
 		payloadID := "webhook-" + s.subscription + "-" + fingerprint
 		created, err := s.app.vault.PutDurableIfAbsent(ctx, payloadID, map[string]string{
 			"body_base64": base64.RawStdEncoding.EncodeToString(receipt.RawBody),
+			"event_id":    receipt.Event.ID,
 		})
 		if err != nil {
 			return current, fmt.Errorf("persist encrypted webhook receipt: %w", err)
@@ -331,6 +341,229 @@ func (s *appWebhookReceiptStore) Insert(ctx context.Context, receipt webhook.Rec
 		return webhook.ReceiptInsertRejected, err
 	}
 	return result, nil
+}
+
+func (s *appWebhookReceiptStore) Consume(ctx context.Context, eventID string, handoff webhook.DurableReceiptHandoff) (webhook.ReceiptConsumeResult, error) {
+	if s == nil || s.app == nil {
+		return webhook.ReceiptConsumeRejected, errors.New("webhook receipt store is unavailable")
+	}
+	if handoff == nil {
+		return webhook.ReceiptConsumeRejected, errors.New("webhook receipt handoff is required")
+	}
+	if !webhook.ValidEventIdentity(eventID) {
+		return webhook.ReceiptConsumeRejected, errors.New("webhook receipt identity is invalid")
+	}
+	if err := ctx.Err(); err != nil {
+		return webhook.ReceiptConsumeRejected, err
+	}
+	leaseID, err := newWebhookReceiptHandoffLeaseID()
+	if err != nil {
+		return webhook.ReceiptConsumeRejected, err
+	}
+	receiptState, claimed, err := s.claimReceiptHandoff(ctx, eventID, leaseID)
+	if err != nil {
+		return webhook.ReceiptConsumeRejected, err
+	}
+	if claimed == webhook.ReceiptConsumeDuplicate {
+		return claimed, nil
+	}
+	return s.deliverClaimedReceipt(ctx, eventID, receiptState, leaseID, handoff)
+}
+
+func (s *appWebhookReceiptStore) ConsumeNext(ctx context.Context, handoff webhook.DurableReceiptHandoff) (webhook.ReceiptConsumeResult, error) {
+	if s == nil || s.app == nil {
+		return webhook.ReceiptConsumeRejected, errors.New("webhook receipt store is unavailable")
+	}
+	if handoff == nil {
+		return webhook.ReceiptConsumeRejected, errors.New("webhook receipt handoff is required")
+	}
+	if err := ctx.Err(); err != nil {
+		return webhook.ReceiptConsumeRejected, err
+	}
+	leaseID, err := newWebhookReceiptHandoffLeaseID()
+	if err != nil {
+		return webhook.ReceiptConsumeRejected, err
+	}
+	receiptState, err := s.claimNextReceiptHandoff(ctx, leaseID)
+	if err != nil {
+		return webhook.ReceiptConsumeRejected, err
+	}
+	body, eventID, err := s.app.webhookReceiptPayload(ctx, receiptState.EncryptedPayloadID)
+	if err != nil {
+		return s.rejectClaimedReceipt(ctx, receiptState, leaseID, fmt.Errorf("recover encrypted webhook receipt: %w", err))
+	}
+	if !webhook.ValidEventIdentity(eventID) {
+		return s.rejectClaimedReceipt(ctx, receiptState, leaseID, errors.New("encrypted webhook receipt identity is invalid"))
+	}
+	if err := s.validateClaimedReceiptEvent(eventID, receiptState); err != nil {
+		return s.rejectClaimedReceipt(ctx, receiptState, leaseID, err)
+	}
+	return s.handoffClaimedReceipt(ctx, eventID, body, receiptState, leaseID, handoff)
+}
+
+func (s *appWebhookReceiptStore) deliverClaimedReceipt(ctx context.Context, eventID string, receiptState webhookReceiptState, leaseID string, handoff webhook.DurableReceiptHandoff) (webhook.ReceiptConsumeResult, error) {
+	body, err := s.app.webhookReceiptBody(ctx, receiptState.EncryptedPayloadID)
+	if err != nil {
+		return s.rejectClaimedReceipt(ctx, receiptState, leaseID, fmt.Errorf("recover encrypted webhook receipt: %w", err))
+	}
+	return s.handoffClaimedReceipt(ctx, eventID, body, receiptState, leaseID, handoff)
+}
+
+func (s *appWebhookReceiptStore) handoffClaimedReceipt(ctx context.Context, eventID string, body []byte, receiptState webhookReceiptState, leaseID string, handoff webhook.DurableReceiptHandoff) (webhook.ReceiptConsumeResult, error) {
+	if err := handoff(ctx, webhook.Receipt{
+		Event:      webhook.VerifiedEvent{ID: eventID},
+		RawBody:    body,
+		ReceivedAt: receiptState.ReceivedAt,
+	}); err != nil {
+		return s.rejectClaimedReceipt(ctx, receiptState, leaseID, fmt.Errorf("handoff webhook receipt: %w", err))
+	}
+	if err := s.completeReceiptHandoff(ctx, receiptState, leaseID); err != nil {
+		return webhook.ReceiptConsumeRejected, fmt.Errorf("complete webhook receipt handoff: %w", err)
+	}
+	return webhook.ReceiptConsumeCompleted, nil
+}
+
+func (s *appWebhookReceiptStore) rejectClaimedReceipt(ctx context.Context, receiptState webhookReceiptState, leaseID string, cause error) (webhook.ReceiptConsumeResult, error) {
+	if releaseErr := s.releaseReceiptHandoff(ctx, receiptState, leaseID); releaseErr != nil {
+		return webhook.ReceiptConsumeRejected, fmt.Errorf("%w (release handoff: %v)", cause, releaseErr)
+	}
+	return webhook.ReceiptConsumeRejected, cause
+}
+
+func (s *appWebhookReceiptStore) claimReceiptHandoff(ctx context.Context, eventID, leaseID string) (webhookReceiptState, webhook.ReceiptConsumeResult, error) {
+	now := time.Now().UTC()
+	leaseUntil := now.Add(receiptHandoffLeaseDuration)
+	if deadline, ok := ctx.Deadline(); ok && deadline.Before(leaseUntil) {
+		leaseUntil = deadline.UTC()
+	}
+	claimed := webhookReceiptState{}
+	result := webhook.ReceiptConsumeRejected
+	_, err := s.app.updateWebhookReceiptState(ctx, func(current state) (state, error) {
+		fingerprint, err := webhookEventFingerprint(current.CoordinationSalt, eventID)
+		if err != nil {
+			return current, err
+		}
+		key := s.receiptKey(fingerprint)
+		existing, ok := current.WebhookReceipts[key]
+		if !ok {
+			return current, webhook.ErrReceiptNotFound
+		}
+		if !existing.ConsumedAt.IsZero() {
+			result = webhook.ReceiptConsumeDuplicate
+			return current, nil
+		}
+		if !existing.HandoffLeaseUntil.IsZero() && existing.HandoffLeaseUntil.After(now) {
+			return current, webhook.ErrReceiptHandoffInProgress
+		}
+		existing.HandoffLeaseID = leaseID
+		existing.HandoffLeaseUntil = leaseUntil
+		current.WebhookReceipts[key] = existing
+		claimed = existing
+		result = webhook.ReceiptConsumeCompleted
+		return current, nil
+	})
+	if err != nil {
+		return webhookReceiptState{}, webhook.ReceiptConsumeRejected, err
+	}
+	return claimed, result, nil
+}
+
+func (s *appWebhookReceiptStore) claimNextReceiptHandoff(ctx context.Context, leaseID string) (webhookReceiptState, error) {
+	now := time.Now().UTC()
+	leaseUntil := now.Add(receiptHandoffLeaseDuration)
+	if deadline, ok := ctx.Deadline(); ok && deadline.Before(leaseUntil) {
+		leaseUntil = deadline.UTC()
+	}
+	claimed := webhookReceiptState{}
+	_, err := s.app.updateWebhookReceiptState(ctx, func(current state) (state, error) {
+		candidateKey := ""
+		candidate := webhookReceiptState{}
+		pending := false
+		for key, existing := range current.WebhookReceipts {
+			if existing.Subscription != s.subscription || !existing.ConsumedAt.IsZero() {
+				continue
+			}
+			pending = true
+			if !existing.HandoffLeaseUntil.IsZero() && existing.HandoffLeaseUntil.After(now) {
+				continue
+			}
+			if candidateKey == "" || existing.ReceivedAt.Before(candidate.ReceivedAt) || (existing.ReceivedAt.Equal(candidate.ReceivedAt) && key < candidateKey) {
+				candidateKey = key
+				candidate = existing
+			}
+		}
+		if candidateKey == "" {
+			if pending {
+				return current, webhook.ErrReceiptHandoffInProgress
+			}
+			return current, webhook.ErrReceiptNotFound
+		}
+		candidate.HandoffLeaseID = leaseID
+		candidate.HandoffLeaseUntil = leaseUntil
+		current.WebhookReceipts[candidateKey] = candidate
+		claimed = candidate
+		return current, nil
+	})
+	if err != nil {
+		return webhookReceiptState{}, err
+	}
+	return claimed, nil
+}
+
+func (s *appWebhookReceiptStore) receiptKey(fingerprint string) string {
+	return s.subscription + ":" + fingerprint
+}
+
+func (s *appWebhookReceiptStore) releaseReceiptHandoff(ctx context.Context, receiptState webhookReceiptState, leaseID string) error {
+	_, err := s.app.updateWebhookReceiptState(ctx, func(current state) (state, error) {
+		key := s.receiptKey(receiptState.EventFingerprint)
+		existing, ok := current.WebhookReceipts[key]
+		if !ok {
+			return current, webhook.ErrReceiptNotFound
+		}
+		if existing.ConsumedAt.IsZero() && existing.HandoffLeaseID == leaseID {
+			existing.HandoffLeaseID = ""
+			existing.HandoffLeaseUntil = time.Time{}
+			current.WebhookReceipts[key] = existing
+		}
+		return current, nil
+	})
+	return err
+}
+
+func (s *appWebhookReceiptStore) completeReceiptHandoff(ctx context.Context, receiptState webhookReceiptState, leaseID string) error {
+	now := time.Now().UTC()
+	_, err := s.app.updateWebhookReceiptState(ctx, func(current state) (state, error) {
+		key := s.receiptKey(receiptState.EventFingerprint)
+		existing, ok := current.WebhookReceipts[key]
+		if !ok {
+			return current, webhook.ErrReceiptNotFound
+		}
+		if !existing.ConsumedAt.IsZero() {
+			return current, nil
+		}
+		if existing.HandoffLeaseID != leaseID {
+			return current, webhook.ErrReceiptHandoffInProgress
+		}
+		existing.ConsumedAt = now
+		existing.HandoffLeaseID = ""
+		existing.HandoffLeaseUntil = time.Time{}
+		current.WebhookReceipts[key] = existing
+		return current, nil
+	})
+	return err
+}
+
+func (s *appWebhookReceiptStore) validateClaimedReceiptEvent(eventID string, receiptState webhookReceiptState) error {
+	current := s.app.snapshotState()
+	fingerprint, err := webhookEventFingerprint(current.CoordinationSalt, eventID)
+	if err != nil {
+		return err
+	}
+	if fingerprint != receiptState.EventFingerprint {
+		return errors.New("encrypted webhook receipt identity is invalid")
+	}
+	return nil
 }
 
 func (a *App) updateWebhookReceiptState(ctx context.Context, update func(state) (state, error)) (state, error) {
@@ -362,18 +595,37 @@ func (a *App) updateWebhookReceiptState(ctx context.Context, update func(state) 
 }
 
 func (a *App) validateWebhookReceiptPayload(ctx context.Context, payloadID string) error {
+	_, err := a.webhookReceiptBody(ctx, payloadID)
+	return err
+}
+
+func (a *App) webhookReceiptBody(ctx context.Context, payloadID string) ([]byte, error) {
+	body, _, err := a.webhookReceiptPayload(ctx, payloadID)
+	return body, err
+}
+
+func (a *App) webhookReceiptPayload(ctx context.Context, payloadID string) ([]byte, string, error) {
 	payload, err := a.vault.Get(ctx, payloadID)
 	if err != nil {
-		return err
+		return nil, "", err
 	}
 	body, ok := payload["body_base64"]
 	if !ok {
-		return errors.New("encrypted webhook receipt payload is invalid")
+		return nil, "", errors.New("encrypted webhook receipt payload is invalid")
 	}
-	if _, err := base64.RawStdEncoding.DecodeString(body); err != nil {
-		return errors.New("encrypted webhook receipt payload is invalid")
+	decoded, err := base64.RawStdEncoding.DecodeString(body)
+	if err != nil {
+		return nil, "", errors.New("encrypted webhook receipt payload is invalid")
 	}
-	return nil
+	return decoded, payload["event_id"], nil
+}
+
+func newWebhookReceiptHandoffLeaseID() (string, error) {
+	data := make([]byte, 16)
+	if _, err := rand.Read(data); err != nil {
+		return "", fmt.Errorf("generate webhook receipt handoff lease: %w", err)
+	}
+	return hex.EncodeToString(data), nil
 }
 
 func webhookEventFingerprint(coordinationSalt, eventID string) (string, error) {

@@ -17,13 +17,15 @@ import (
 )
 
 type Vault struct {
-	dir string
-	key []byte
+	root string
+	dir  string
+	key  []byte
 }
 
 func Init(projectDir string) (*Vault, error) {
+	root := filepath.Dir(projectDir)
 	dir := filepath.Join(projectDir, "vault")
-	if err := os.MkdirAll(dir, 0o700); err != nil {
+	if err := durable.EnsureDirectoryTree(dir, root, 0o700); err != nil {
 		return nil, fmt.Errorf("create vault directory: %w", err)
 	}
 	keyPath := filepath.Join(dir, "key")
@@ -51,7 +53,14 @@ func Init(projectDir string) (*Vault, error) {
 	if len(key) != 32 {
 		return nil, fmt.Errorf("vault key must be 32 bytes, got %d", len(key))
 	}
-	return &Vault{dir: dir, key: key}, nil
+	return &Vault{root: root, dir: dir, key: key}, nil
+}
+
+func (v *Vault) ensureDirectory() error {
+	if err := durable.EnsureDirectoryTree(v.dir, v.root, 0o700); err != nil {
+		return fmt.Errorf("create vault directory: %w", err)
+	}
+	return nil
 }
 
 func writeDurableVaultKey(dir, keyPath string, key []byte) (created bool, err error) {
@@ -110,6 +119,9 @@ func (v *Vault) Put(ctx context.Context, id string, secret map[string]string) er
 	if err := validateID(id); err != nil {
 		return err
 	}
+	if err := v.ensureDirectory(); err != nil {
+		return err
+	}
 	ciphertext, err := v.encrypt(id, secret)
 	if err != nil {
 		return err
@@ -135,6 +147,9 @@ func (v *Vault) PutDurableIfAbsent(ctx context.Context, id string, secret map[st
 		return false, err
 	}
 	if err := validateID(id); err != nil {
+		return false, err
+	}
+	if err := v.ensureDirectory(); err != nil {
 		return false, err
 	}
 	ciphertext, err := v.encrypt(id, secret)
