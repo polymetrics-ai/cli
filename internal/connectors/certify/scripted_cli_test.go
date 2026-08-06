@@ -24,6 +24,9 @@ type scriptedCLI struct {
 	calls                 [][]string
 	seen                  map[string]int
 	plans                 map[string]scriptedReversePlan
+	credentials           map[string]scriptedCredential
+	connections           map[string]scriptedConnection
+	tables                map[string]scriptedTable
 	previewed             map[string]bool
 	consumed              map[string]bool
 	replays               map[string]int
@@ -50,6 +53,29 @@ type scriptedCLI struct {
 type scriptedReversePlan struct {
 	action        string
 	approvalToken string
+	sourceTable   string
+	destination   scriptedEndpoint
+}
+
+type scriptedCredential struct {
+	connector string
+	config    map[string]string
+}
+
+type scriptedEndpoint struct {
+	connector  string
+	credential string
+}
+
+type scriptedConnection struct {
+	source      scriptedEndpoint
+	destination scriptedEndpoint
+	stream      string
+	table       string
+}
+
+type scriptedTable struct {
+	rows []map[string]any
 }
 
 const (
@@ -67,6 +93,9 @@ func newScriptedCLI(t *testing.T, protocols ...string) *scriptedCLI {
 		t:                     t,
 		seen:                  make(map[string]int),
 		plans:                 make(map[string]scriptedReversePlan),
+		credentials:           make(map[string]scriptedCredential),
+		connections:           make(map[string]scriptedConnection),
+		tables:                make(map[string]scriptedTable),
 		previewed:             make(map[string]bool),
 		consumed:              make(map[string]bool),
 		replays:               make(map[string]int),
@@ -164,21 +193,27 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 		s.seen["connectors_inspect"]++
 		return writeScriptedEnvelope(stdout, "Connector", map[string]any{"connector": "sample"})
 	case prefix(args, "credentials", "add") && hasJSON(args):
-		if !hasFlag(args, "--connector") {
-			return s.protocolError(stderr, "credentials add requires --connector")
+		if err := s.addCredential(args); err != nil {
+			return s.protocolError(stderr, err.Error())
 		}
 		s.seen["credentials_add"]++
 		return writeScriptedEnvelope(stdout, "Credential", nil)
 	case exact(args, "credentials", "test", "cert-source", "--json"):
+		if err := s.testCredential("cert-source"); err != nil {
+			return s.protocolError(stderr, err.Error())
+		}
 		s.seen["credentials_test"]++
 		return writeScriptedEnvelope(stdout, "CredentialTest", nil)
 	case prefix(args, "connections", "create") && hasJSON(args):
-		if !hasFlag(args, "--source") || !hasFlag(args, "--destination") || !hasFlag(args, "--stream") || !hasFlag(args, "--table") || !hasFlag(args, "--sync-mode") {
-			return s.protocolError(stderr, "connections create requires source, destination, stream, table, and sync mode")
+		if err := s.createConnection(args); err != nil {
+			return s.protocolError(stderr, err.Error())
 		}
 		s.seen["connections_create"]++
 		return writeScriptedEnvelope(stdout, "Connection", nil)
-	case prefix(args, "catalog", "refresh") && hasJSON(args) && hasFlag(args, "--connection"):
+	case prefix(args, "catalog", "refresh") && hasJSON(args):
+		if err := s.refreshCatalog(args); err != nil {
+			return s.protocolError(stderr, err.Error())
+		}
 		s.seen["catalog_refresh"]++
 		return writeScriptedEnvelope(stdout, "Catalog", map[string]any{
 			"catalog": map[string]any{"catalog": map[string]any{"streams": []map[string]any{
@@ -186,7 +221,10 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 				{"name": "events", "primary_key": []string{"id"}, "cursor_fields": []string{"updated_at"}},
 			}}},
 		})
-	case prefix(args, "etl", "run") && hasJSON(args) && hasFlag(args, "--connection") && hasFlag(args, "--stream"):
+	case prefix(args, "etl", "run") && hasJSON(args):
+		if err := s.runETL(args); err != nil {
+			return s.protocolError(stderr, err.Error())
+		}
 		s.seen["etl_run"]++
 		return writeScriptedEnvelope(stdout, "ETLRun", map[string]any{"run": map[string]any{
 			"records_read":      2,
@@ -194,15 +232,15 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 			"records_failed":    0,
 			"checkpoint":        map[string]any{"cursor": "2026-08-06T00:00:00Z"},
 		}})
-	case prefix(args, "query", "run") && hasJSON(args) && hasFlag(args, "--table"):
-		table := flagValue(args, "--table")
+	case prefix(args, "query", "run") && hasJSON(args):
+		table, err := s.queryTable(args)
 		s.seen["query_run"]++
-		if strings.HasPrefix(table, "cert_flow_query_") {
+		if err != nil {
 			return writeScriptedEnvelopeWithCode(stdout, "Error", map[string]any{"error": "synthetic query table is absent"}, 2)
 		}
 		return writeScriptedEnvelope(stdout, "QueryResult", map[string]any{
-			"count": 2,
-			"rows":  []map[string]any{{"id": "synthetic-1"}, {"id": "synthetic-2"}},
+			"count": len(table.rows),
+			"rows":  table.rows,
 		})
 	case prefix(args, "flow", "plan"):
 		if err := validateScriptedFlowManifest(args, root, "plan"); err != nil {
@@ -274,6 +312,9 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 		if err != nil {
 			return s.protocolError(stderr, err.Error())
 		}
+		if err := s.validateReversePlanDependencies(plan); err != nil {
+			return s.protocolError(stderr, err.Error())
+		}
 		s.nextPlan++
 		planID := fmt.Sprintf("scripted-plan-%d", s.nextPlan)
 		plan.approvalToken = fmt.Sprintf("scripted-approval-%d", s.nextPlan)
@@ -318,6 +359,9 @@ func (s *scriptedCLI) runReverse(args []string, root string, stdout, stderr io.W
 	if plan.action == "create" && !s.previewed[planID] {
 		return s.protocolError(stderr, "reverse run occurred before its preview")
 	}
+	if err := s.validateReversePlanDependencies(plan); err != nil {
+		return s.protocolError(stderr, err.Error())
+	}
 	if s.consumed[planID] {
 		s.replays[planID]++
 		if s.replays[planID] > 1 {
@@ -326,7 +370,7 @@ func (s *scriptedCLI) runReverse(args []string, root string, stdout, stderr io.W
 		s.seen["reverse_replay"]++
 		return writeScriptedEnvelopeWithCode(stdout, "Error", map[string]any{"error": "synthetic consumed approval"}, 2)
 	}
-	if err := s.appendOutboxAction(root, plan.action); err != nil {
+	if err := s.appendOutboxAction(root, plan); err != nil {
 		return s.protocolError(stderr, err.Error())
 	}
 	s.consumed[planID] = true
@@ -356,25 +400,198 @@ func (s *scriptedCLI) withoutRoot(args []string) ([]string, string, bool) {
 	return clean, root, true
 }
 
-func (s *scriptedCLI) appendOutboxAction(root, action string) error {
-	seed := filepath.Join(root, "cert_write_seed_sample_seed.jsonl")
-	raw, err := os.ReadFile(seed)
+func (s *scriptedCLI) addCredential(args []string) error {
+	if len(args) < 3 || args[2] == "" {
+		return fmt.Errorf("credentials add requires a credential name")
+	}
+	connector := flagValue(args, "--connector")
+	if connector == "" {
+		return fmt.Errorf("credentials add requires --connector")
+	}
+	if _, exists := s.credentials[args[2]]; exists {
+		return fmt.Errorf("scripted credential %q already exists", args[2])
+	}
+	config, err := scriptedConfig(args)
 	if err != nil {
-		return fmt.Errorf("read scripted write seed: %w", err)
+		return err
 	}
-	var row map[string]any
-	if err := json.Unmarshal(bytesTrimSpace(raw), &row); err != nil {
-		return fmt.Errorf("parse scripted write seed: %w", err)
+	s.credentials[args[2]] = scriptedCredential{connector: connector, config: config}
+	return nil
+}
+
+func (s *scriptedCLI) testCredential(name string) error {
+	credential, ok := s.credentials[name]
+	if !ok {
+		return fmt.Errorf("scripted credential %q does not exist", name)
 	}
-	tag, _ := row["tag"].(string)
+	if credential.connector != "sample" {
+		return fmt.Errorf("scripted credential %q has connector %q, want sample", name, credential.connector)
+	}
+	return nil
+}
+
+func (s *scriptedCLI) createConnection(args []string) error {
+	if len(args) < 3 || args[2] == "" {
+		return fmt.Errorf("connections create requires a connection name")
+	}
+	if _, exists := s.connections[args[2]]; exists {
+		return fmt.Errorf("scripted connection %q already exists", args[2])
+	}
+	sourceValue := flagValue(args, "--source")
+	destinationValue := flagValue(args, "--destination")
+	stream := flagValue(args, "--stream")
+	table := flagValue(args, "--table")
+	if sourceValue == "" || destinationValue == "" || stream == "" || table == "" || !hasFlag(args, "--sync-mode") {
+		return fmt.Errorf("connections create requires source, destination, stream, table, and sync mode")
+	}
+	source, err := parseScriptedEndpoint(sourceValue)
+	if err != nil {
+		return fmt.Errorf("connections create source: %w", err)
+	}
+	destination, err := parseScriptedEndpoint(destinationValue)
+	if err != nil {
+		return fmt.Errorf("connections create destination: %w", err)
+	}
+	if err := s.validateEndpoint(source); err != nil {
+		return fmt.Errorf("connections create source: %w", err)
+	}
+	if err := s.validateEndpoint(destination); err != nil {
+		return fmt.Errorf("connections create destination: %w", err)
+	}
+	s.connections[args[2]] = scriptedConnection{
+		source:      source,
+		destination: destination,
+		stream:      stream,
+		table:       table,
+	}
+	return nil
+}
+
+func (s *scriptedCLI) refreshCatalog(args []string) error {
+	connectionName := flagValue(args, "--connection")
+	if connectionName == "" {
+		return fmt.Errorf("catalog refresh requires --connection")
+	}
+	connection, ok := s.connections[connectionName]
+	if !ok {
+		return fmt.Errorf("scripted catalog connection %q does not exist", connectionName)
+	}
+	return s.validateConnection(connection)
+}
+
+func (s *scriptedCLI) runETL(args []string) error {
+	connectionName := flagValue(args, "--connection")
+	stream := flagValue(args, "--stream")
+	if connectionName == "" || stream == "" {
+		return fmt.Errorf("etl run requires --connection and --stream")
+	}
+	connection, ok := s.connections[connectionName]
+	if !ok {
+		return fmt.Errorf("scripted etl connection %q does not exist", connectionName)
+	}
+	if connection.stream != stream {
+		return fmt.Errorf("scripted etl stream %q is not configured on connection %q", stream, connectionName)
+	}
+	if err := s.validateConnection(connection); err != nil {
+		return fmt.Errorf("scripted etl connection %q: %w", connectionName, err)
+	}
+	if connection.destination.connector != "warehouse" {
+		return fmt.Errorf("scripted etl connection %q must target warehouse", connectionName)
+	}
+	rows, err := s.sourceRows(connection.source)
+	if err != nil {
+		return fmt.Errorf("scripted etl source: %w", err)
+	}
+	s.tables[connection.table] = scriptedTable{rows: rows}
+	return nil
+}
+
+func (s *scriptedCLI) queryTable(args []string) (scriptedTable, error) {
+	tableName := flagValue(args, "--table")
+	if tableName == "" {
+		return scriptedTable{}, fmt.Errorf("query run requires --table")
+	}
+	table, ok := s.tables[tableName]
+	if !ok {
+		return scriptedTable{}, fmt.Errorf("scripted table %q is not materialized", tableName)
+	}
+	return table, nil
+}
+
+func (s *scriptedCLI) validateConnection(connection scriptedConnection) error {
+	if err := s.validateEndpoint(connection.source); err != nil {
+		return fmt.Errorf("source: %w", err)
+	}
+	if err := s.validateEndpoint(connection.destination); err != nil {
+		return fmt.Errorf("destination: %w", err)
+	}
+	return nil
+}
+
+func (s *scriptedCLI) validateEndpoint(endpoint scriptedEndpoint) error {
+	credential, ok := s.credentials[endpoint.credential]
+	if !ok {
+		return fmt.Errorf("credential %q does not exist", endpoint.credential)
+	}
+	if credential.connector != endpoint.connector {
+		return fmt.Errorf("credential %q has connector %q, want %q", endpoint.credential, credential.connector, endpoint.connector)
+	}
+	return nil
+}
+
+func (s *scriptedCLI) sourceRows(endpoint scriptedEndpoint) ([]map[string]any, error) {
+	if endpoint.connector != "file" {
+		return []map[string]any{
+			{"id": "synthetic-1", "updated_at": "2026-08-06T00:00:00Z"},
+			{"id": "synthetic-2", "updated_at": "2026-08-06T00:00:01Z"},
+		}, nil
+	}
+	credential := s.credentials[endpoint.credential]
+	path := credential.config["path"]
+	if path == "" {
+		return nil, fmt.Errorf("file credential %q has no path", endpoint.credential)
+	}
+	return readScriptedJSONL(path)
+}
+
+func (s *scriptedCLI) validateReversePlanDependencies(plan scriptedReversePlan) error {
+	if _, ok := s.tables[plan.sourceTable]; !ok {
+		return fmt.Errorf("reverse plan source table %q is not materialized", plan.sourceTable)
+	}
+	if err := s.validateEndpoint(plan.destination); err != nil {
+		return fmt.Errorf("reverse plan destination: %w", err)
+	}
+	return nil
+}
+
+func (s *scriptedCLI) appendOutboxAction(root string, plan scriptedReversePlan) error {
+	table, ok := s.tables[plan.sourceTable]
+	if !ok {
+		return fmt.Errorf("scripted reverse source table %q is not materialized", plan.sourceTable)
+	}
+	tag := ""
+	for _, row := range table.rows {
+		if value, _ := row["tag"].(string); value != "" {
+			tag = value
+			break
+		}
+	}
 	if tag == "" {
-		return fmt.Errorf("scripted write seed did not contain tag")
+		return fmt.Errorf("scripted reverse source table %q did not contain tag", plan.sourceTable)
 	}
-	path := filepath.Join(root, ".polymetrics", "outbox", "cert_write_selftest.jsonl")
+	credential, ok := s.credentials[plan.destination.credential]
+	if !ok {
+		return fmt.Errorf("scripted outbox credential %q does not exist", plan.destination.credential)
+	}
+	outboxDir := credential.config["path"]
+	if outboxDir != filepath.Join(root, ".polymetrics", "outbox") {
+		return fmt.Errorf("scripted outbox credential path does not match the certification root")
+	}
+	path := filepath.Join(outboxDir, scriptedWritePlanName+".jsonl")
 	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
 		return fmt.Errorf("create scripted outbox: %w", err)
 	}
-	encoded, err := json.Marshal(map[string]any{"tag": tag, "_outbox_action": action})
+	encoded, err := json.Marshal(map[string]any{"tag": tag, "_outbox_action": plan.action})
 	if err != nil {
 		return fmt.Errorf("encode scripted outbox action: %w", err)
 	}
@@ -387,6 +604,53 @@ func (s *scriptedCLI) appendOutboxAction(root, action string) error {
 		return fmt.Errorf("append scripted outbox: %w", err)
 	}
 	return nil
+}
+
+func scriptedConfig(args []string) (map[string]string, error) {
+	config := make(map[string]string)
+	for i := 0; i < len(args); i++ {
+		if args[i] != "--config" {
+			continue
+		}
+		if i+1 >= len(args) {
+			return nil, fmt.Errorf("credentials add has config flag without value")
+		}
+		key, value, ok := strings.Cut(args[i+1], "=")
+		if !ok || key == "" {
+			return nil, fmt.Errorf("credentials add has invalid config")
+		}
+		config[key] = value
+		i++
+	}
+	return config, nil
+}
+
+func parseScriptedEndpoint(value string) (scriptedEndpoint, error) {
+	connector, credential, ok := strings.Cut(value, ":")
+	if !ok || connector == "" || credential == "" || strings.Contains(credential, ":") {
+		return scriptedEndpoint{}, fmt.Errorf("invalid endpoint %q", value)
+	}
+	return scriptedEndpoint{connector: connector, credential: credential}, nil
+}
+
+func readScriptedJSONL(path string) ([]map[string]any, error) {
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		return nil, fmt.Errorf("read scripted file source: %w", err)
+	}
+	rows := make([]map[string]any, 0)
+	for index, line := range strings.Split(string(raw), "\n") {
+		line = strings.TrimSpace(line)
+		if line == "" {
+			continue
+		}
+		var row map[string]any
+		if err := json.Unmarshal([]byte(line), &row); err != nil {
+			return nil, fmt.Errorf("parse scripted file record %d: %w", index+1, err)
+		}
+		rows = append(rows, row)
+	}
+	return rows, nil
 }
 
 func (s *scriptedCLI) writeCrontabSentinel() error {
@@ -550,8 +814,6 @@ func flagValue(args []string, want string) string {
 	return ""
 }
 
-func bytesTrimSpace(raw []byte) []byte { return []byte(strings.TrimSpace(string(raw))) }
-
 func scriptedReversePlanArgs(action string) []string {
 	return []string{
 		"reverse", "plan", scriptedWritePlanName,
@@ -602,7 +864,58 @@ func parseScriptedReversePlan(args []string, expectedAction string) (scriptedRev
 			return scriptedReversePlan{}, fmt.Errorf("reverse plan does not match the sample write lifecycle")
 		}
 	}
-	return scriptedReversePlan{action: expectedAction}, nil
+	return scriptedReversePlan{
+		action:      expectedAction,
+		sourceTable: scriptedWriteSourceTable,
+		destination: scriptedEndpoint{connector: "outbox", credential: "cert-outbox"},
+	}, nil
+}
+
+func mustRunScriptedCommand(t *testing.T, driver *scriptedCLI, root string, args ...string) {
+	t.Helper()
+	args = append(args, "--root", root)
+	var stdout, stderr strings.Builder
+	if code := driver.run(args, &stdout, &stderr); code != 0 {
+		t.Fatalf("scripted driver rejected %v: stdout=%s stderr=%s", args, stdout.String(), stderr.String())
+	}
+}
+
+func prepareScriptedSeedTable(t *testing.T, driver *scriptedCLI, root string) {
+	t.Helper()
+	seedPath := filepath.Join(root, scriptedWriteSourceTable+"_seed.jsonl")
+	seed, err := json.Marshal(map[string]any{"id": "scripted-seed", "tag": "scripted-seed"})
+	if err != nil {
+		t.Fatalf("marshal scripted seed: %v", err)
+	}
+	if err := os.WriteFile(seedPath, append(seed, '\n'), 0o600); err != nil {
+		t.Fatalf("write scripted seed: %v", err)
+	}
+	mustRunScriptedCommand(t, driver, root,
+		"credentials", "add", "cert-warehouse", "--connector", "warehouse",
+		"--config", "path="+filepath.Join(root, ".polymetrics", "warehouse"), "--json")
+	mustRunScriptedCommand(t, driver, root,
+		"credentials", "add", "cert-write-seed-file-"+scriptedWriteSourceTable, "--connector", "file",
+		"--config", "path="+seedPath, "--json")
+	mustRunScriptedCommand(t, driver, root,
+		"connections", "create", "cert_write_seed_conn_"+scriptedWriteSourceTable,
+		"--source", "file:cert-write-seed-file-"+scriptedWriteSourceTable,
+		"--destination", "warehouse:cert-warehouse",
+		"--stream", scriptedWriteSourceTable+"_seed",
+		"--primary-key", "id",
+		"--sync-mode", "full_refresh_overwrite",
+		"--table", scriptedWriteSourceTable,
+		"--json")
+	mustRunScriptedCommand(t, driver, root,
+		"etl", "run", "--connection", "cert_write_seed_conn_"+scriptedWriteSourceTable,
+		"--stream", scriptedWriteSourceTable+"_seed", "--json")
+}
+
+func prepareScriptedWriteDependencies(t *testing.T, driver *scriptedCLI, root string) {
+	t.Helper()
+	prepareScriptedSeedTable(t, driver, root)
+	mustRunScriptedCommand(t, driver, root,
+		"credentials", "add", "cert-outbox", "--connector", "outbox",
+		"--config", "path="+filepath.Join(root, ".polymetrics", "outbox"), "--json")
 }
 
 func TestScriptedCLIDriverRejectsProtocolDrift(t *testing.T) {
@@ -615,6 +928,55 @@ func TestScriptedCLIDriverRejectsProtocolDrift(t *testing.T) {
 		if !strings.Contains(stderr.String(), "requires source") {
 			t.Fatalf("protocol error = %q, want required-argument diagnostic", stderr.String())
 		}
+	})
+
+	t.Run("resource dependencies", func(t *testing.T) {
+		driver := newScriptedCLI(t)
+		root := t.TempDir()
+		mustRunScriptedCommand(t, driver, root, "credentials", "add", "cert-source", "--connector", "sample", "--json")
+		mustRunScriptedCommand(t, driver, root,
+			"credentials", "add", "cert-warehouse", "--connector", "warehouse",
+			"--config", "path="+filepath.Join(root, ".polymetrics", "warehouse"), "--json")
+		mustRunScriptedCommand(t, driver, root,
+			"connections", "create", "cert_live",
+			"--source", "sample:cert-source",
+			"--destination", "warehouse:cert-warehouse",
+			"--stream", "events",
+			"--sync-mode", "full_refresh_append",
+			"--table", "cert_live_events",
+			"--json")
+
+		var stdout, stderr strings.Builder
+		if code := driver.run([]string{"etl", "run", "--connection", "cert_live", "--stream", "customers", "--json", "--root", root}, &stdout, &stderr); code == 0 {
+			t.Fatal("scripted driver accepted an ETL stream not configured on the connection")
+		}
+		stdout.Reset()
+		stderr.Reset()
+		mustRunScriptedCommand(t, driver, root, "etl", "run", "--connection", "cert_live", "--stream", "events", "--json")
+		if code := driver.run([]string{"query", "run", "--table", "cert_live_customers", "--json", "--root", root}, &stdout, &stderr); code == 0 {
+			t.Fatal("scripted driver accepted a query for an unmaterialized table")
+		}
+	})
+
+	t.Run("reverse plan dependencies", func(t *testing.T) {
+		driver := newScriptedCLI(t)
+		root := t.TempDir()
+		var stdout, stderr strings.Builder
+		if code := driver.run(append(scriptedReversePlanArgs("create"), "--root", root), &stdout, &stderr); code == 0 {
+			t.Fatal("scripted driver accepted a reverse plan without a materialized source table")
+		}
+		stdout.Reset()
+		stderr.Reset()
+		prepareScriptedSeedTable(t, driver, root)
+		if code := driver.run(append(scriptedReversePlanArgs("create"), "--root", root), &stdout, &stderr); code == 0 {
+			t.Fatal("scripted driver accepted a reverse plan without its destination credential")
+		}
+		stdout.Reset()
+		stderr.Reset()
+		mustRunScriptedCommand(t, driver, root,
+			"credentials", "add", "cert-outbox", "--connector", "outbox",
+			"--config", "path="+filepath.Join(root, ".polymetrics", "outbox"), "--json")
+		mustRunScriptedCommand(t, driver, root, scriptedReversePlanArgs("create")...)
 	})
 
 	for _, tt := range []struct {
@@ -756,6 +1118,7 @@ func TestScriptedCLIDriverRejectsProtocolDrift(t *testing.T) {
 		t.Run("cleanup plan must delete", func(t *testing.T) {
 			driver := newScriptedCLI(t)
 			root := t.TempDir()
+			prepareScriptedWriteDependencies(t, driver, root)
 			var stdout, stderr strings.Builder
 			if code := driver.run(append(scriptedReversePlanArgs("create"), "--root", root), &stdout, &stderr); code != 0 {
 				t.Fatalf("scripted driver rejected valid create plan: stderr=%s", stderr.String())
@@ -771,6 +1134,7 @@ func TestScriptedCLIDriverRejectsProtocolDrift(t *testing.T) {
 	t.Run("per-plan approval token", func(t *testing.T) {
 		driver := newScriptedCLI(t)
 		root := t.TempDir()
+		prepareScriptedWriteDependencies(t, driver, root)
 		planArgs := append(scriptedReversePlanArgs("create"), "--root", root)
 		var stdout, stderr strings.Builder
 		if code := driver.run(planArgs, &stdout, &stderr); code != 0 {
