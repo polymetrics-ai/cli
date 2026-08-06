@@ -132,13 +132,20 @@ pm credentials add github-local \
   --from-env token=GITHUB_TOKEN \
   --json
 
-# Explicitly join only credentials that declare the same non-secret provider
-# family and compatible authentication profile.
+# Explicitly join a compatible credential as it is created.
 pm credentials add provider-secondary \
   --connector github \
   --provider-family provider-family \
+  --auth-profile service-profile \
+  --link-credential github-local \
+  --json
+
+# Or link an existing compatible credential after creation.
+pm credentials add provider-existing \
+  --connector github \
+  --provider-family provider-family \
   --auth-profile service-profile
-pm credentials link provider-secondary --to github-local --json
+pm credentials link provider-existing --to github-local --json
 
 pm credentials list --json
 pm credentials inspect github-local --json
@@ -149,8 +156,10 @@ pm credentials remove github-local
 Secrets must come from environment variables or stdin. Do not pass raw token values in chat, shell history, or docs.
 
 Each credential is isolated unless it is explicitly linked. A link requires
-matching declared `--provider-family` and `--auth-profile` values, and only
-creates protected local binding metadata. Credential inspection and runtime
+matching declared `--provider-family` and `--auth-profile` values. For a
+cross-connector link, every credential already in the target cohort must also
+have those declarations; matching defaults never create a link. Links only
+create protected local binding metadata. Credential inspection and runtime
 coordination output never reveal that binding; later coordination consumers use
 an opaque projection instead. A provider rate policy must separately declare
 its documented non-secret scope subject; no token-based default is assumed.

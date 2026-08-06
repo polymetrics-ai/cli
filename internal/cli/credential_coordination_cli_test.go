@@ -140,6 +140,18 @@ func TestCredentialsCoordinationInputErrorsUseDocumentedCategories(t *testing.T)
 			wantCode: 2,
 			category: "usage",
 		},
+		{
+			name:     "bare provider family",
+			args:     []string{"credentials", "add", "bare-provider-family", "--connector", "sample", "--provider-family", "--root", root, "--json"},
+			wantCode: 2,
+			category: "usage",
+		},
+		{
+			name:     "bare auth profile",
+			args:     []string{"credentials", "add", "bare-auth-profile", "--connector", "sample", "--auth-profile", "--root", root, "--json"},
+			wantCode: 2,
+			category: "usage",
+		},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			stdout.Reset()
@@ -152,5 +164,15 @@ func TestCredentialsCoordinationInputErrorsUseDocumentedCategories(t *testing.T)
 				t.Fatalf("Run(%v) did not return %s error category: %s", test.args, test.category, stdout.String())
 			}
 		})
+	}
+	stdout.Reset()
+	stderr.Reset()
+	if code := cli.Run([]string{"credentials", "list", "--root", root, "--json"}, &stdout, &stderr); code != 0 {
+		t.Fatalf("credentials list code = %d stdout = %s stderr = %s", code, stdout.String(), stderr.String())
+	}
+	for _, name := range []string{"bare-provider-family", "bare-auth-profile"} {
+		if strings.Contains(stdout.String(), name) {
+			t.Fatalf("bare declaration flag persisted credential %q: %s", name, stdout.String())
+		}
 	}
 }

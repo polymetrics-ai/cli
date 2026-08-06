@@ -310,6 +310,12 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 			return errUsage
 		}
 		flags := parseFlags(args[2:])
+		if flags.isBare("provider-family") {
+			return usageErrorf("missing value for --provider-family")
+		}
+		if flags.isBare("auth-profile") {
+			return usageErrorf("missing value for --auth-profile")
+		}
 		connector := flags.first("connector")
 		if connector == "" {
 			return errors.New("missing --connector")

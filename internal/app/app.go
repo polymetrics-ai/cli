@@ -423,10 +423,9 @@ func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (Cred
 		if err != nil {
 			return CredentialMeta{}, errors.New("linked credential coordination metadata is unavailable")
 		}
-		if err := validateCredentialLinkCompatibility(
+		if err := a.validateCredentialLinkCohort(
 			CredentialMeta{Connector: req.Connector, ProviderFamily: providerFamily, AuthProfile: authProfile},
 			binding,
-			linked,
 			linkedBinding,
 		); err != nil {
 			return CredentialMeta{}, err
@@ -505,7 +504,7 @@ func (a *App) LinkCredential(name, target string) (CredentialMeta, error) {
 	if err != nil {
 		return CredentialMeta{}, errors.New("credential link target coordination metadata is unavailable")
 	}
-	if err := validateCredentialLinkCompatibility(source, sourceBinding, targetCredential, targetBinding); err != nil {
+	if err := a.validateCredentialLinkCohort(source, sourceBinding, targetBinding); err != nil {
 		return CredentialMeta{}, err
 	}
 	if _, err := a.newCoordinationIdentity(source.ProviderFamily, source.AuthProfile, targetBinding.BindingID); err != nil {
@@ -541,14 +540,48 @@ func credentialCoordinationDeclarations(connector, providerFamily, authProfile s
 	return providerFamily, authProfile, nil
 }
 
-func validateCredentialLinkCompatibility(source CredentialMeta, sourceBinding credentialBindingState, target CredentialMeta, targetBinding credentialBindingState) error {
-	if source.Connector != target.Connector && (!sourceBinding.hasExplicitDeclarations() || !targetBinding.hasExplicitDeclarations()) {
+type credentialCohortMember struct {
+	credential CredentialMeta
+	binding    credentialBindingState
+}
+
+func (a *App) validateCredentialLinkCohort(source CredentialMeta, sourceBinding, targetBinding credentialBindingState) error {
+	members := make([]credentialCohortMember, 0, len(a.state.Credentials)+1)
+	sourceIncluded := false
+	for _, credential := range a.state.Credentials {
+		binding, err := a.credentialBindingForCredential(credential)
+		if err != nil {
+			return err
+		}
+		if binding.BindingID != targetBinding.BindingID {
+			continue
+		}
+		members = append(members, credentialCohortMember{credential: credential, binding: binding})
+		if credential.ID == source.ID {
+			sourceIncluded = true
+		}
+	}
+	if !sourceIncluded {
+		members = append(members, credentialCohortMember{credential: source, binding: sourceBinding})
+	}
+	for left := 0; left < len(members); left++ {
+		for right := left + 1; right < len(members); right++ {
+			if err := validateCredentialLinkPair(members[left], members[right]); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func validateCredentialLinkPair(source, target credentialCohortMember) error {
+	if source.credential.Connector != target.credential.Connector && (!source.binding.hasExplicitDeclarations() || !target.binding.hasExplicitDeclarations()) {
 		return errors.New("cross-connector credential link requires explicitly declared provider family and auth profile")
 	}
-	if source.ProviderFamily != target.ProviderFamily {
+	if source.credential.ProviderFamily != target.credential.ProviderFamily {
 		return errors.New("credential link requires matching provider family")
 	}
-	if source.AuthProfile != target.AuthProfile {
+	if source.credential.AuthProfile != target.credential.AuthProfile {
 		return errors.New("credential link requires matching auth profile")
 	}
 	return nil

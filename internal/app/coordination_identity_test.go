@@ -342,12 +342,22 @@ func TestCredentialCoordination_CrossConnectorLinksRequireExplicitDeclarations(t
 	requireExplicitDeclarations(err)
 	_, err = instance.LinkCredential("sample-undeclared", "faker-explicit")
 	requireExplicitDeclarations(err)
+	_, err = instance.LinkCredential("faker-explicit", "sample-declared")
+	requireExplicitDeclarations(err)
 	_, err = instance.AddCredential(ctx, app.AddCredentialRequest{
 		Name:           "faker-linked-on-create",
 		Connector:      "faker",
 		ProviderFamily: "sample",
 		AuthProfile:    "default",
 		LinkCredential: "sample-undeclared",
+	})
+	requireExplicitDeclarations(err)
+	_, err = instance.AddCredential(ctx, app.AddCredentialRequest{
+		Name:           "faker-linked-to-declared-on-create",
+		Connector:      "faker",
+		ProviderFamily: "sample",
+		AuthProfile:    "default",
+		LinkCredential: "sample-declared",
 	})
 	requireExplicitDeclarations(err)
 
