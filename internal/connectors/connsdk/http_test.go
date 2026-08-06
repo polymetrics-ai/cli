@@ -694,6 +694,40 @@ func TestRequesterDisableRetriesRejectsMutationRedirect(t *testing.T) {
 	}
 }
 
+func TestRequesterRedirectPolicyRefusalIsNotRetried(t *testing.T) {
+	var initialHits int32
+	var targetHits int32
+	mux := http.NewServeMux()
+	mux.HandleFunc("/initial", func(w http.ResponseWriter, req *http.Request) {
+		atomic.AddInt32(&initialHits, 1)
+		http.Redirect(w, req, "/target", http.StatusFound)
+	})
+	mux.HandleFunc("/target", func(http.ResponseWriter, *http.Request) {
+		atomic.AddInt32(&targetHits, 1)
+	})
+	srv := httptest.NewServer(mux)
+	defer srv.Close()
+
+	r := &Requester{
+		BaseURL:    srv.URL,
+		MaxRetries: 3,
+		Sleep:      noSleep,
+		RedirectCheck: func(*http.Request, []*http.Request) error {
+			return errors.New("caller-supplied identifier-set redirect refused")
+		},
+	}
+	_, err := r.Do(context.Background(), http.MethodGet, "/initial", nil, nil)
+	if !errors.Is(err, transportpolicy.ErrRedirectRefused) {
+		t.Fatalf("Do error = %v, want redirect refusal", err)
+	}
+	if got, want := atomic.LoadInt32(&initialHits), int32(1); got != want {
+		t.Fatalf("initial hits = %d, want %d", got, want)
+	}
+	if got := atomic.LoadInt32(&targetHits); got != 0 {
+		t.Fatalf("target hits = %d, want 0", got)
+	}
+}
+
 func TestRequesterAdmitsReplayableReadOncePerLogicalAttempt(t *testing.T) {
 	var readHits int32
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {

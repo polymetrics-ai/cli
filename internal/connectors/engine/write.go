@@ -224,10 +224,72 @@ func redactSensitiveLiterals(text string, values []string) string {
 	for _, literal := range sensitiveRedactionLiterals(values) {
 		text = strings.ReplaceAll(text, literal, "redacted")
 	}
+	for _, value := range sensitiveRedactionValues(values) {
+		text = redactMixedPercentEncodedLiteral(text, value)
+	}
 	for _, matcher := range sensitiveRedactionMatchers(values) {
 		text = matcher.ReplaceAllString(text, "redacted")
 	}
 	return text
+}
+
+func redactMixedPercentEncodedLiteral(text, value string) string {
+	if value == "" || len(text) < len(value) {
+		return text
+	}
+	var redacted strings.Builder
+	redacted.Grow(len(text))
+	for start := 0; start < len(text); {
+		end, ok := mixedPercentEncodedLiteralEnd(text, value, start)
+		if !ok {
+			redacted.WriteByte(text[start])
+			start++
+			continue
+		}
+		redacted.WriteString("redacted")
+		start = end
+	}
+	return redacted.String()
+}
+
+func mixedPercentEncodedLiteralEnd(text, value string, start int) (int, bool) {
+	position := start
+	for i := 0; i < len(value); i++ {
+		if position >= len(text) {
+			return 0, false
+		}
+		if text[position] == value[i] {
+			position++
+			continue
+		}
+		if value[i] == ' ' && text[position] == '+' {
+			position++
+			continue
+		}
+		if position+2 >= len(text) || text[position] != '%' {
+			return 0, false
+		}
+		high, highOK := sensitiveRedactionHexValue(text[position+1])
+		low, lowOK := sensitiveRedactionHexValue(text[position+2])
+		if !highOK || !lowOK || high<<4|low != value[i] {
+			return 0, false
+		}
+		position += 3
+	}
+	return position, true
+}
+
+func sensitiveRedactionHexValue(value byte) (byte, bool) {
+	switch {
+	case value >= '0' && value <= '9':
+		return value - '0', true
+	case value >= 'a' && value <= 'f':
+		return value - 'a' + 10, true
+	case value >= 'A' && value <= 'F':
+		return value - 'A' + 10, true
+	default:
+		return 0, false
+	}
 }
 
 func sortSensitiveRedactionLiterals(values []string) {

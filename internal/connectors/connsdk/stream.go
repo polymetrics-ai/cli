@@ -2,11 +2,14 @@ package connsdk
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
 	"strings"
+
+	"polymetrics.ai/internal/connectors/transportpolicy"
 )
 
 // maxRedirects bounds redirect hops. Go's default client stops at 10;
@@ -169,11 +172,11 @@ func (r *Requester) streamClient(base *url.URL, opts StreamOptions, credKeys *[]
 	clone.Timeout = 0
 	clone.CheckRedirect = func(req *http.Request, via []*http.Request) error {
 		if len(via) >= maxRedirects {
-			return fmt.Errorf("stopped after %d redirects", maxRedirects)
+			return redirectPolicyRefusal(fmt.Errorf("stopped after %d redirects", maxRedirects))
 		}
 		if r.RedirectCheck != nil {
-			if err := r.RedirectCheck(req.Method, req.URL.String()); err != nil {
-				return err
+			if err := r.RedirectCheck(req, via); err != nil {
+				return redirectPolicyRefusal(err)
 			}
 		}
 		sameOrigin := req.URL.Host == base.Host && req.URL.Scheme == base.Scheme
@@ -181,7 +184,7 @@ func (r *Requester) streamClient(base *url.URL, opts StreamOptions, credKeys *[]
 			return nil
 		}
 		if err := allowCrossOrigin(req.URL, base, opts); err != nil {
-			return err
+			return redirectPolicyRefusal(err)
 		}
 		// Permitted, but the credential never travels off-origin.
 		stripCredentialHeaders(req, *credKeys)
@@ -274,6 +277,9 @@ func stripCredentialHeaders(req *http.Request, keys []string) {
 // a refusal is a policy decision, not a transient failure, so retrying it
 // would only repeat the same rejection.
 func isRedirectPolicyError(err error) bool {
+	if errors.Is(err, transportpolicy.ErrRedirectRefused) {
+		return true
+	}
 	msg := err.Error()
 	return strings.Contains(msg, "cross-host redirect") ||
 		strings.Contains(msg, "scheme downgrade") ||

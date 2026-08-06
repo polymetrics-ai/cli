@@ -137,7 +137,7 @@ type requestBody struct {
 type Requester struct {
 	// Client is the HTTP client. Defaults to a client with a 60s timeout.
 	Client        *http.Client
-	RedirectCheck func(method, target string) error
+	RedirectCheck func(next *http.Request, via []*http.Request) error
 	// BaseURL is prepended to relative paths. A path beginning with http:// or
 	// https:// is treated as absolute and used as-is (e.g. Link-header next URLs).
 	BaseURL string
@@ -222,6 +222,13 @@ func noReplayClient(client *http.Client) *http.Client {
 	strictTransport.Protocols = &protocols
 	clone.Transport = strictTransport
 	return &clone
+}
+
+func redirectPolicyRefusal(err error) error {
+	if errors.Is(err, transportpolicy.ErrRedirectRefused) {
+		return err
+	}
+	return fmt.Errorf("%w: %v", transportpolicy.ErrRedirectRefused, err)
 }
 
 func disableTransportReplay(req *http.Request, strictWrite bool) {
@@ -337,7 +344,10 @@ func (r *Requester) clientWithRedirectCheck(client *http.Client) *http.Client {
 		} else if len(via) >= maxRedirects {
 			return fmt.Errorf("stopped after %d redirects", maxRedirects)
 		}
-		return r.RedirectCheck(req.Method, req.URL.String())
+		if err := r.RedirectCheck(req, via); err != nil {
+			return redirectPolicyRefusal(err)
+		}
+		return nil
 	}
 	return &clone
 }

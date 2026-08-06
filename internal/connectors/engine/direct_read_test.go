@@ -750,6 +750,112 @@ func TestDirectReadRejectsRedirectToCallerSuppliedIdentifierSetTarget(t *testing
 	}
 }
 
+func TestCallerSuppliedIdentifierSetTargetPolicyRejectsDotAndDefaultPortAliases(t *testing.T) {
+	b := Bundle{
+		Name: "acme",
+		Operations: []OperationSpec{{
+			ID:   "acme.coins.lookup",
+			Kind: "rest_read",
+			REST: &RESTOperationSpec{
+				Method:   http.MethodGet,
+				Path:     "/coins",
+				MaxBytes: 1024,
+				CallerSuppliedIdentifierSets: []CallerSuppliedIdentifierSetSpec{{
+					Name: "coins", ElementShape: "opaque_string", Wire: "query_comma_separated", MinItems: 1, MaxItems: 2,
+				}},
+			},
+		}},
+	}
+	for _, tt := range []struct {
+		name string
+		path string
+		want string
+	}{
+		{name: "dot segment", path: "/safe/./coins", want: "path traversal"},
+		{name: "default HTTPS port", path: "https://api.example.test:443/coins", want: "reserved for caller-supplied identifier-set operation"},
+		{name: "zero-padded default HTTPS port", path: "https://api.example.test:0443/coins", want: "reserved for caller-supplied identifier-set operation"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			err := rejectCallerSuppliedIdentifierSetTargetBypass(b, connectors.RuntimeConfig{}, "https://api.example.test", http.MethodGet, tt.path, nil, "")
+			if err == nil || !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("target policy error = %v, want %q", err, tt.want)
+			}
+		})
+	}
+}
+
+func TestOperationDirectReadRefusesCallerSuppliedIdentifierSetRedirects(t *testing.T) {
+	for _, tt := range []struct {
+		name        string
+		status      int
+		crossOrigin bool
+	}{
+		{name: "method rewrite", status: http.StatusFound},
+		{name: "cross origin replay", status: http.StatusTemporaryRedirect, crossOrigin: true},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			var targetHits int
+			target := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+				targetHits++
+			}))
+			t.Cleanup(target.Close)
+
+			var originHits int
+			destination := "/target"
+			if tt.crossOrigin {
+				destination = target.URL + "/target"
+			}
+			origin := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				switch r.URL.Path {
+				case "/coins":
+					originHits++
+					if r.Method != http.MethodPost {
+						t.Fatalf("method = %q, want POST", r.Method)
+					}
+					if r.Header.Get("X-Identifier-Test") != "source-only" {
+						t.Fatal("source request did not include its configured credential header")
+					}
+					http.Redirect(w, r, destination, tt.status)
+				case "/target":
+					targetHits++
+				default:
+					t.Fatalf("path = %q", r.URL.Path)
+				}
+			}))
+			t.Cleanup(origin.Close)
+
+			b := Bundle{
+				Name: "acme",
+				HTTP: HTTPBase{URL: origin.URL, Headers: map[string]string{"X-Identifier-Test": "source-only"}},
+				Operations: []OperationSpec{{
+					ID: "acme.coins.lookup", Kind: "rest_read", Summary: "Look up explicit identifiers", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
+					REST: &RESTOperationSpec{
+						Method: http.MethodPost, Path: "/coins", ContentType: "application/json", MaxBytes: 1024,
+						BodySchema: json.RawMessage(`{"type":"object","required":["ids"],"properties":{"ids":{"type":"array","items":{"type":"string"}}}}`),
+						CallerSuppliedIdentifierSets: []CallerSuppliedIdentifierSetSpec{{
+							Name: "ids", ElementShape: "opaque_string", Wire: "body_json_array", MinItems: 1, MaxItems: 1,
+						}},
+					},
+				}},
+			}
+
+			_, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+				Operation:      "acme.coins.lookup",
+				IdentifierSets: map[string][]string{"ids": {"opaque-identifier"}},
+			}, nil)
+			if err == nil || !strings.Contains(err.Error(), "redirect") {
+				t.Fatalf("OperationDirectRead error = %v, want redirect refusal", err)
+			}
+			if originHits != 1 {
+				t.Fatalf("source requests = %d, want 1", originHits)
+			}
+			if targetHits != 0 {
+				t.Fatalf("redirect target requests = %d, want 0", targetHits)
+			}
+		})
+	}
+}
+
 func directReadBundle(baseURL, method, endpointPath string) Bundle {
 	return Bundle{
 		Name: "code-host",

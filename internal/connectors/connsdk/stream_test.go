@@ -399,6 +399,44 @@ func TestDoStreamDisableRetriesRejectsMutationRedirect(t *testing.T) {
 	}
 }
 
+func TestDoStreamRedirectPolicyRefusalIsNotRetried(t *testing.T) {
+	var initialHits int32
+	var targetHits int32
+	mux := http.NewServeMux()
+	mux.HandleFunc("/initial", func(w http.ResponseWriter, req *http.Request) {
+		atomic.AddInt32(&initialHits, 1)
+		http.Redirect(w, req, "/target", http.StatusFound)
+	})
+	mux.HandleFunc("/target", func(http.ResponseWriter, *http.Request) {
+		atomic.AddInt32(&targetHits, 1)
+	})
+	srv := httptest.NewServer(mux)
+	defer srv.Close()
+
+	r := &Requester{
+		BaseURL:    srv.URL,
+		MaxRetries: 3,
+		Sleep:      noSleep,
+		RedirectCheck: func(*http.Request, []*http.Request) error {
+			return errors.New("caller-supplied identifier-set redirect refused")
+		},
+	}
+	resp, err := r.DoStream(context.Background(), http.MethodGet, "/initial", nil, StreamOptions{})
+	if resp != nil {
+		_ = resp.Body.Close()
+		t.Fatal("DoStream returned a response after refusing redirect")
+	}
+	if !errors.Is(err, transportpolicy.ErrRedirectRefused) {
+		t.Fatalf("DoStream error = %v, want redirect refusal", err)
+	}
+	if got, want := atomic.LoadInt32(&initialHits), int32(1); got != want {
+		t.Fatalf("initial hits = %d, want %d", got, want)
+	}
+	if got := atomic.LoadInt32(&targetHits); got != 0 {
+		t.Fatalf("target hits = %d, want 0", got)
+	}
+}
+
 // TestDoStreamDoesNotMutateSharedClient: the redirect policy must be set on a
 // clone. Mutating the shared client would silently apply this policy to every
 // other request the connector makes.

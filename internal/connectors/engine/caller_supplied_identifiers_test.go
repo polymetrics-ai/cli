@@ -309,6 +309,9 @@ func callerSuppliedIdentifierErrorForms(t *testing.T, identifier string) []strin
 	if mixed := mixedPercentEscapesForProvider(fullyEncoded); mixed != fullyEncoded {
 		forms = append(forms, mixed)
 	}
+	if partial := partiallyPercentEncodeForProvider(identifier); partial != identifier && partial != fullyEncoded {
+		forms = append(forms, partial)
+	}
 	jsonForms := []string{string(encodedJSON)}
 	if strings.Contains(identifier, "é") {
 		jsonForms = append(jsonForms,
@@ -377,6 +380,25 @@ func mixedPercentEscapesForProvider(value string) string {
 		i += 2
 	}
 	return string(buf)
+}
+
+func partiallyPercentEncodeForProvider(value string) string {
+	const hexadecimal = "0123456789ABCDEF"
+	var encoded strings.Builder
+	for i := 0; i < len(value); i++ {
+		if value[i] == ' ' {
+			encoded.WriteByte('+')
+			continue
+		}
+		if i%2 == 0 {
+			encoded.WriteByte(value[i])
+			continue
+		}
+		encoded.WriteByte('%')
+		encoded.WriteByte(hexadecimal[value[i]>>4])
+		encoded.WriteByte(hexadecimal[value[i]&0x0f])
+	}
+	return encoded.String()
 }
 
 func mixedASCIIUnicodeEscapedJSONForProvider(value string) string {

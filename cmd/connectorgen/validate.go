@@ -2077,7 +2077,21 @@ func callerSuppliedIdentifierSetTargetsOverlap(b engine.Bundle, op engine.Operat
 	}
 	protected := staticRequestTargetPath(b.HTTP.URL, op.REST.Path, true)
 	candidate := staticRequestTargetPath(b.HTTP.URL, path, direct)
-	return requestTargetPathsOverlap(protected, candidate)
+	if requestTargetPathsOverlap(protected, candidate) {
+		return true
+	}
+	return strings.Contains(b.HTTP.URL, "{{") && dynamicBaseRequestTargetPathsOverlap(op.REST.Path, path)
+}
+
+func dynamicBaseRequestTargetPathsOverlap(protected, candidate string) bool {
+	protected = canonicalStaticRequestTargetPath(requestTargetPathname(protected))
+	candidate = canonicalStaticRequestTargetPath(requestTargetPathname(candidate))
+	for i := 1; i < len(protected); i++ {
+		if protected[i] == '/' && requestTargetPathsOverlap(protected[i:], candidate) {
+			return true
+		}
+	}
+	return false
 }
 
 func requestTargetMethod(method string) string {

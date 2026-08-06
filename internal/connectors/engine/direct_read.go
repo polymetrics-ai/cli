@@ -11,6 +11,7 @@ import (
 	"net/url"
 	stdpath "path"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 
@@ -713,7 +714,7 @@ func rejectCallerSuppliedIdentifierSetTargetBypass(b Bundle, cfg connectors.Runt
 		return err
 	}
 	for _, op := range b.Operations {
-		if op.ID == allowedOperation || op.Kind != "rest_read" || op.REST == nil || len(op.REST.CallerSuppliedIdentifierSets) == 0 || !strings.EqualFold(op.REST.Method, method) {
+		if op.ID == allowedOperation || op.Kind != "rest_read" || op.REST == nil || len(op.REST.CallerSuppliedIdentifierSets) == 0 || canonicalRequesterTargetMethod(op.REST.Method) != canonicalRequesterTargetMethod(method) {
 			continue
 		}
 		pattern, err := callerSuppliedIdentifierSetOperationTargetPattern(op, cfg, baseURL, candidatePathParams)
@@ -725,6 +726,32 @@ func rejectCallerSuppliedIdentifierSetTargetBypass(b Bundle, cfg connectors.Runt
 		}
 	}
 	return nil
+}
+
+func rejectCallerSuppliedIdentifierSetRedirect(b Bundle, cfg connectors.RuntimeConfig, baseURL string, next *http.Request, via []*http.Request) error {
+	if next == nil || next.URL == nil {
+		return errors.New("redirect target is invalid")
+	}
+	if err := rejectCallerSuppliedIdentifierSetTargetBypass(b, cfg, baseURL, next.Method, next.URL.String(), nil, ""); err != nil {
+		return err
+	}
+	for _, previous := range via {
+		if previous == nil || previous.URL == nil {
+			continue
+		}
+		if err := rejectCallerSuppliedIdentifierSetTargetBypass(b, cfg, baseURL, previous.Method, previous.URL.String(), nil, ""); err != nil {
+			return fmt.Errorf("redirect from caller-supplied identifier-set request refused: %w", err)
+		}
+	}
+	return nil
+}
+
+func canonicalRequesterTargetMethod(method string) string {
+	method = strings.ToUpper(strings.TrimSpace(method))
+	if method == "" {
+		return http.MethodGet
+	}
+	return method
 }
 
 func callerSuppliedIdentifierSetOperationTargetPattern(op OperationSpec, cfg connectors.RuntimeConfig, baseURL string, candidatePathParams map[string]string) (string, error) {
@@ -775,14 +802,27 @@ func normalizedRequesterTargetPath(baseURL, requestPath string) (string, error) 
 	if path == "" {
 		path = "/"
 	}
-	if containsDotDotSegment(path) {
+	if containsDotPathSegment(path) {
 		return "", errors.New("request target path contains path traversal")
 	}
 	target := canonicalizeRequestTargetPercentEscapes(path)
 	if parsed.Scheme == "" && parsed.Host == "" {
 		return target, nil
 	}
-	return strings.ToLower(parsed.Scheme) + "://" + strings.ToLower(parsed.Host) + target, nil
+	return strings.ToLower(parsed.Scheme) + "://" + canonicalRequesterTargetHost(parsed) + target, nil
+}
+
+func canonicalRequesterTargetHost(parsed *url.URL) string {
+	host := strings.ToLower(parsed.Hostname())
+	if strings.Contains(host, ":") {
+		host = "[" + host + "]"
+	}
+	port := parsed.Port()
+	portNumber, portErr := strconv.Atoi(port)
+	if port == "" || (strings.EqualFold(parsed.Scheme, "http") && portErr == nil && portNumber == 80) || (strings.EqualFold(parsed.Scheme, "https") && portErr == nil && portNumber == 443) {
+		return host
+	}
+	return host + ":" + port
 }
 
 func callerSuppliedIdentifierSetTargetMatches(pattern, target string) bool {

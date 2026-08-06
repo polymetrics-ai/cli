@@ -93,6 +93,15 @@ func containsDotDotSegment(path string) bool {
 	return err == nil && hasDotDotSegment(decoded)
 }
 
+func containsDotPathSegment(path string) bool {
+	path = endpointPathname(path)
+	if hasDotPathSegment(path) {
+		return true
+	}
+	decoded, err := url.PathUnescape(path)
+	return err == nil && hasDotPathSegment(decoded)
+}
+
 func endpointPathname(endpointPath string) string {
 	if end := strings.IndexAny(endpointPath, "?#"); end >= 0 {
 		return endpointPath[:end]
@@ -104,6 +113,16 @@ func hasDotDotSegment(path string) bool {
 	path = strings.ReplaceAll(path, "\\", "/")
 	for _, seg := range strings.Split(path, "/") {
 		if seg == ".." {
+			return true
+		}
+	}
+	return false
+}
+
+func hasDotPathSegment(path string) bool {
+	path = strings.ReplaceAll(path, "\\", "/")
+	for _, seg := range strings.Split(path, "/") {
+		if seg == "." || seg == ".." {
 			return true
 		}
 	}
