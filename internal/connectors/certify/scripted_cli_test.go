@@ -23,7 +23,7 @@ type scriptedCLI struct {
 	root      string
 	calls     [][]string
 	seen      map[string]int
-	plans     map[string]string
+	plans     map[string]scriptedReversePlan
 	previewed map[string]bool
 	consumed  map[string]bool
 	replays   map[string]int
@@ -32,12 +32,23 @@ type scriptedCLI struct {
 	protocols []string
 }
 
+type scriptedReversePlan struct {
+	action        string
+	approvalToken string
+}
+
+const (
+	scriptedWritePlanName    = "cert_write_selftest"
+	scriptedWriteSourceTable = "cert_write_seed_sample"
+	scriptedWriteDestination = "outbox:cert-outbox"
+)
+
 func newScriptedCLI(t *testing.T, protocols ...string) *scriptedCLI {
 	t.Helper()
 	return &scriptedCLI{
 		t:         t,
 		seen:      make(map[string]int),
-		plans:     make(map[string]string),
+		plans:     make(map[string]scriptedReversePlan),
 		previewed: make(map[string]bool),
 		consumed:  make(map[string]bool),
 		replays:   make(map[string]int),
@@ -197,19 +208,17 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 		}
 		s.seen["schedule_remove"]++
 		return writeScriptedEnvelope(stdout, "ScheduleRemove", nil)
-	case prefix(args, "reverse", "plan") && !hasJSON(args):
-		if !hasFlag(args, "--source-table") || !hasFlag(args, "--destination") || !hasFlag(args, "--action") {
-			return s.protocolError(stderr, "reverse plan requires source table, destination, and action")
-		}
-		action := flagValue(args, "--action")
-		if action != "create" && action != "delete" {
-			return s.protocolError(stderr, "sample write lifecycle requires create or delete action")
+	case prefix(args, "reverse", "plan"):
+		plan, err := parseScriptedReversePlan(args)
+		if err != nil {
+			return s.protocolError(stderr, err.Error())
 		}
 		s.nextPlan++
 		planID := fmt.Sprintf("scripted-plan-%d", s.nextPlan)
-		s.plans[planID] = action
+		plan.approvalToken = fmt.Sprintf("scripted-approval-%d", s.nextPlan)
+		s.plans[planID] = plan
 		s.seen["reverse_plan"]++
-		_, _ = fmt.Fprintf(stdout, "Created reverse plan %s\nApproval token: scripted-approval-%d\n", planID, s.nextPlan)
+		_, _ = fmt.Fprintf(stdout, "Created reverse plan %s\nApproval token: %s\n", planID, plan.approvalToken)
 		return 0
 	case prefix(args, "reverse", "preview") && hasJSON(args) && len(args) == 4:
 		if _, ok := s.plans[args[2]]; !ok {
@@ -218,7 +227,7 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 		s.previewed[args[2]] = true
 		s.seen["reverse_preview"]++
 		return writeScriptedEnvelope(stdout, "ReversePlanPreview", map[string]any{"plan": map[string]any{"id": args[2], "records": 1}})
-	case prefix(args, "reverse", "run") && hasJSON(args) && hasFlag(args, "--approve"):
+	case prefix(args, "reverse", "run"):
 		return s.runReverse(args, root, stdout, stderr)
 	default:
 		return s.protocolError(stderr, "unexpected command: "+strings.Join(args, " "))
@@ -226,15 +235,18 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 }
 
 func (s *scriptedCLI) runReverse(args []string, root string, stdout, stderr io.Writer) int {
-	if len(args) < 3 {
-		return s.protocolError(stderr, "reverse run missing plan id")
+	if len(args) != 6 || args[3] != "--approve" || args[5] != "--json" {
+		return s.protocolError(stderr, "reverse run requires plan id, its approval token, and --json")
 	}
 	planID := args[2]
-	action, ok := s.plans[planID]
+	plan, ok := s.plans[planID]
 	if !ok {
 		return s.protocolError(stderr, "reverse run received an unknown plan")
 	}
-	if action == "create" && !s.previewed[planID] {
+	if args[4] != plan.approvalToken {
+		return s.protocolError(stderr, "reverse run approval token did not match its plan")
+	}
+	if plan.action == "create" && !s.previewed[planID] {
 		return s.protocolError(stderr, "reverse run occurred before its preview")
 	}
 	if s.consumed[planID] {
@@ -245,7 +257,7 @@ func (s *scriptedCLI) runReverse(args []string, root string, stdout, stderr io.W
 		s.seen["reverse_replay"]++
 		return writeScriptedEnvelopeWithCode(stdout, "Error", map[string]any{"error": "synthetic consumed approval"}, 2)
 	}
-	if err := s.appendOutboxAction(root, action); err != nil {
+	if err := s.appendOutboxAction(root, plan.action); err != nil {
 		return s.protocolError(stderr, err.Error())
 	}
 	s.consumed[planID] = true
@@ -432,13 +444,96 @@ func flagValue(args []string, want string) string {
 
 func bytesTrimSpace(raw []byte) []byte { return []byte(strings.TrimSpace(string(raw))) }
 
+func scriptedReversePlanArgs(action string) []string {
+	return []string{
+		"reverse", "plan", scriptedWritePlanName,
+		"--source-table", scriptedWriteSourceTable,
+		"--destination", scriptedWriteDestination,
+		"--map", "id:external_id",
+		"--map", "tag:tag",
+		"--action", action,
+	}
+}
+
+func parseScriptedReversePlan(args []string) (scriptedReversePlan, error) {
+	if len(args) != len(scriptedReversePlanArgs("create")) {
+		return scriptedReversePlan{}, fmt.Errorf("reverse plan requires the exact sample write lifecycle arguments")
+	}
+	action := args[len(args)-1]
+	if action != "create" && action != "delete" {
+		return scriptedReversePlan{}, fmt.Errorf("sample write lifecycle requires create or delete action")
+	}
+	want := scriptedReversePlanArgs(action)
+	for i := range want {
+		if args[i] != want[i] {
+			return scriptedReversePlan{}, fmt.Errorf("reverse plan does not match the sample write lifecycle")
+		}
+	}
+	return scriptedReversePlan{action: action}, nil
+}
+
 func TestScriptedCLIDriverRejectsProtocolDrift(t *testing.T) {
-	driver := newScriptedCLI(t)
-	var stdout, stderr strings.Builder
-	if code := driver.run([]string{"connections", "create", "missing-required-flags", "--json", "--root", t.TempDir()}, &stdout, &stderr); code == 0 {
-		t.Fatal("scripted driver accepted a connection command missing required flags")
+	t.Run("connection flags", func(t *testing.T) {
+		driver := newScriptedCLI(t)
+		var stdout, stderr strings.Builder
+		if code := driver.run([]string{"connections", "create", "missing-required-flags", "--json", "--root", t.TempDir()}, &stdout, &stderr); code == 0 {
+			t.Fatal("scripted driver accepted a connection command missing required flags")
+		}
+		if !strings.Contains(stderr.String(), "requires source") {
+			t.Fatalf("protocol error = %q, want required-argument diagnostic", stderr.String())
+		}
+	})
+
+	for _, tt := range []struct {
+		name   string
+		mutate func([]string)
+	}{
+		{
+			name: "source table",
+			mutate: func(args []string) {
+				args[4] = "wrong_source"
+			},
+		},
+		{
+			name: "destination",
+			mutate: func(args []string) {
+				args[6] = "outbox:wrong-destination"
+			},
+		},
+		{
+			name: "mapping",
+			mutate: func(args []string) {
+				args[10] = "tag:wrong_tag"
+			},
+		},
+	} {
+		t.Run("reverse plan "+tt.name, func(t *testing.T) {
+			driver := newScriptedCLI(t)
+			args := scriptedReversePlanArgs("create")
+			tt.mutate(args)
+			args = append(args, "--root", t.TempDir())
+			var stdout, stderr strings.Builder
+			if code := driver.run(args, &stdout, &stderr); code == 0 {
+				t.Fatalf("scripted driver accepted reverse plan with wrong %s", tt.name)
+			}
+		})
 	}
-	if !strings.Contains(stderr.String(), "requires source") {
-		t.Fatalf("protocol error = %q, want required-argument diagnostic", stderr.String())
-	}
+
+	t.Run("per-plan approval token", func(t *testing.T) {
+		driver := newScriptedCLI(t)
+		root := t.TempDir()
+		planArgs := append(scriptedReversePlanArgs("create"), "--root", root)
+		var stdout, stderr strings.Builder
+		if code := driver.run(planArgs, &stdout, &stderr); code != 0 {
+			t.Fatalf("scripted driver rejected valid reverse plan: stderr=%s", stderr.String())
+		}
+		stdout.Reset()
+		stderr.Reset()
+		if code := driver.run([]string{"reverse", "run", "scripted-plan-1", "--approve", "wrong-approval", "--json", "--root", root}, &stdout, &stderr); code == 0 {
+			t.Fatal("scripted driver accepted a mismatched approval token")
+		}
+		if !strings.Contains(stderr.String(), "did not match") {
+			t.Fatalf("protocol error = %q, want approval mismatch diagnostic", stderr.String())
+		}
+	})
 }

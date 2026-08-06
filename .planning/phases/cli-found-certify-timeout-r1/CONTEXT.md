@@ -38,6 +38,10 @@ the parent issue and all five children lock the remaining design decisions.
   measurement after the single real sample/outbox lifecycle proof is retained.
   It must never be guessed, cached, or used to raise the global Go-test
   timeout.
+- The authoritative final topology is 25 harness plus 92 CLI real invocations.
+  Hosted Verify wall times of 125.655s and 165.891s yield
+  `165.891 + (165.891 - 125.655) = 206.127s`, rounded to the existing
+  15-second granularity as the enforced 210-second (`3m30s`) budget.
 
 ## Scope fences
 

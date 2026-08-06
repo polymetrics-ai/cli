@@ -1,6 +1,9 @@
 package certify
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 func TestGithubWriteActionInventoryAccountsForAllDeclaredActions(t *testing.T) {
 	items, err := writeActionInventoryFor("github")
@@ -47,5 +50,8 @@ func TestWriteActionInventoryForPropagatesMissingWritesFile(t *testing.T) {
 	_, err := writeActionInventoryFor("does-not-exist")
 	if err == nil {
 		t.Fatal("writeActionInventoryFor(missing) error = nil, want read failure")
+	}
+	if got := err.Error(); !strings.Contains(got, "read does-not-exist writes") {
+		t.Fatalf("writeActionInventoryFor(missing) error = %q, want a loud writes.json read failure", got)
 	}
 }
