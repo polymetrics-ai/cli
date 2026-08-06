@@ -67,6 +67,10 @@ func (s *scriptedSyncSource) Write(ctx context.Context, req connectors.WriteRequ
 }
 
 func setupSyncModeApp(t *testing.T, source *scriptedSyncSource, mode string) (*App, string) {
+	return setupSyncModeAppWithCompatibility(t, source, mode, mode == "incremental_append")
+}
+
+func setupSyncModeAppWithCompatibility(t *testing.T, source *scriptedSyncSource, mode string, legacyCompatibility bool) (*App, string) {
 	t.Helper()
 	ctx := context.Background()
 	root := t.TempDir()
@@ -96,10 +100,11 @@ func setupSyncModeApp(t *testing.T, source *scriptedSyncSource, mode string) (*A
 		Destination: EndpointConfig{Connector: "warehouse", Credential: "warehouse"},
 		Streams: map[string]StreamConfig{
 			"records": {
-				SyncMode:         mode,
-				CursorField:      "updated_at",
-				PrimaryKey:       []string{"id"},
-				DestinationTable: "records",
+				SyncMode:            mode,
+				LegacyCompatibility: legacyCompatibility,
+				CursorField:         "updated_at",
+				PrimaryKey:          []string{"id"},
+				DestinationTable:    "records",
 			},
 		},
 	}); err != nil {
@@ -162,7 +167,7 @@ func TestValidateSyncModeRequirements(t *testing.T) {
 }
 
 func TestParseSyncModeSeparatesLegacyCompatibilityFromNewNativeAdmission(t *testing.T) {
-	legacy, err := ParseSyncMode("incremental_append")
+	legacy, err := ParseStreamSyncMode(StreamConfig{SyncMode: "incremental_append", LegacyCompatibility: true})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -170,12 +175,38 @@ func TestParseSyncModeSeparatesLegacyCompatibilityFromNewNativeAdmission(t *test
 		t.Fatalf("legacy incremental mode = %+v, want compatibility adapter", legacy)
 	}
 
-	contract, err := ParseSyncMode("full_append")
+	contract, err := ParseStreamSyncMode(StreamConfig{SyncMode: "incremental_append"})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if contract.ContractMode != "full_append" || contract.LegacyCompatibility || !contract.IsContractMode() {
-		t.Fatalf("full_append mode = %+v, want native contract admission", contract)
+	if contract.ContractMode != "incremental_append" || contract.LegacyCompatibility || !contract.IsContractMode() {
+		t.Fatalf("incremental_append mode = %+v, want native contract admission", contract)
+	}
+}
+
+func TestLegacyStateMigrationMarksExistingIncrementalAppendAdapter(t *testing.T) {
+	source := newScriptedSyncSource("legacy_incremental_migration", nil)
+	a, connection := setupSyncModeApp(t, source, "incremental_append")
+	a.state.SyncModeCompatibilityVersion = 0
+	for connectionIndex := range a.state.Connections {
+		if a.state.Connections[connectionIndex].Name != connection {
+			continue
+		}
+		stream := a.state.Connections[connectionIndex].Streams["records"]
+		stream.LegacyCompatibility = false
+		a.state.Connections[connectionIndex].Streams["records"] = stream
+	}
+
+	a.migrateLegacySyncModeCompatibility()
+	conn, ok := a.findConnection(connection)
+	if !ok {
+		t.Fatal("connection missing")
+	}
+	if !conn.Streams["records"].LegacyCompatibility {
+		t.Fatal("legacy incremental stream was not marked as an explicit adapter")
+	}
+	if a.state.SyncModeCompatibilityVersion != syncModeCompatibilityVersion {
+		t.Fatalf("compatibility version = %d, want %d", a.state.SyncModeCompatibilityVersion, syncModeCompatibilityVersion)
 	}
 }
 

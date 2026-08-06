@@ -39,6 +39,8 @@ type SyncMode struct {
 	LegacyCompatibility bool
 }
 
+const syncModeCompatibilityVersion uint = 1
+
 func ParseSyncMode(raw string) (SyncMode, error) {
 	value := strings.TrimSpace(strings.ToLower(raw))
 	if value == "" {
@@ -50,15 +52,11 @@ func ParseSyncMode(raw string) (SyncMode, error) {
 	case "full_refresh_overwrite":
 		return SyncMode{Name: value, Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwrite, ContractMode: synccontract.ModeFullOverwrite, LegacyCompatibility: true}, nil
 	case "full_refresh_overwrite_deduped", "full_refresh_overwrite_dedup", "full_refresh_deduped":
-		return SyncMode{Name: "full_refresh_overwrite_deduped", Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwriteDeduped}, nil
-	case "incremental_append":
-		// The pre-contract public spelling is also the closed vocabulary's
-		// incremental append name. Existing saved projects keep this explicit
-		// compatibility profile; newly admitted native commands use the shared
-		// contract rather than this scalar-cursor adapter.
-		return SyncMode{Name: value, Source: SourceSyncIncremental, Destination: DestinationSyncAppend, ContractMode: synccontract.ModeIncrementalAppend, LegacyCompatibility: true}, nil
+		return SyncMode{Name: "full_refresh_overwrite_deduped", Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwriteDeduped, LegacyCompatibility: true}, nil
+	case string(synccontract.ModeIncrementalAppend):
+		return SyncMode{Name: value, Source: SourceSyncIncremental, Destination: DestinationSyncAppend, ContractMode: synccontract.ModeIncrementalAppend}, nil
 	case "incremental_append_deduped", "incremental_append_dedup":
-		return SyncMode{Name: "incremental_append_deduped", Source: SourceSyncIncremental, Destination: DestinationSyncAppendDeduped}, nil
+		return SyncMode{Name: "incremental_append_deduped", Source: SourceSyncIncremental, Destination: DestinationSyncAppendDeduped, LegacyCompatibility: true}, nil
 	case string(synccontract.ModeFullOverwrite):
 		return SyncMode{Name: value, Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwrite, ContractMode: synccontract.ModeFullOverwrite}, nil
 	case string(synccontract.ModeFullAppend):
@@ -74,6 +72,42 @@ func ParseSyncMode(raw string) (SyncMode, error) {
 	default:
 		return SyncMode{}, fmt.Errorf("unsupported sync mode %q", raw)
 	}
+}
+
+func ParseStreamSyncMode(stream StreamConfig) (SyncMode, error) {
+	if stream.LegacyCompatibility {
+		return parseLegacySyncMode(stream.SyncMode)
+	}
+	return ParseSyncMode(stream.SyncMode)
+}
+
+func parseLegacySyncMode(raw string) (SyncMode, error) {
+	value := strings.TrimSpace(strings.ToLower(raw))
+	if value == "" {
+		value = DefaultUserFacingSyncMode
+	}
+	switch value {
+	case "full_refresh_append":
+		return SyncMode{Name: value, Source: SourceSyncFullRefresh, Destination: DestinationSyncAppend, ContractMode: synccontract.ModeFullAppend, LegacyCompatibility: true}, nil
+	case "full_refresh_overwrite":
+		return SyncMode{Name: value, Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwrite, ContractMode: synccontract.ModeFullOverwrite, LegacyCompatibility: true}, nil
+	case "full_refresh_overwrite_deduped", "full_refresh_overwrite_dedup", "full_refresh_deduped":
+		return SyncMode{Name: "full_refresh_overwrite_deduped", Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwriteDeduped, LegacyCompatibility: true}, nil
+	case "incremental_append":
+		return SyncMode{Name: value, Source: SourceSyncIncremental, Destination: DestinationSyncAppend, ContractMode: synccontract.ModeIncrementalAppend, LegacyCompatibility: true}, nil
+	case "incremental_append_deduped", "incremental_append_dedup":
+		return SyncMode{Name: "incremental_append_deduped", Source: SourceSyncIncremental, Destination: DestinationSyncAppendDeduped, LegacyCompatibility: true}, nil
+	default:
+		return SyncMode{}, fmt.Errorf("sync mode %q is not an explicit legacy compatibility adapter", raw)
+	}
+}
+
+func isLegacySyncModeName(raw string) bool {
+	if strings.TrimSpace(raw) == "" {
+		return false
+	}
+	_, err := parseLegacySyncMode(raw)
+	return err == nil
 }
 
 func MustSyncModeNames() []string {
@@ -110,7 +144,7 @@ func (m SyncMode) IsContractMode() bool {
 }
 
 func ValidateStreamSyncConfig(stream StreamConfig) error {
-	mode, err := ParseSyncMode(stream.SyncMode)
+	mode, err := ParseStreamSyncMode(stream)
 	if err != nil {
 		return err
 	}

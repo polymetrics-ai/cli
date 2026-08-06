@@ -32,10 +32,11 @@ type EndpointConfig struct {
 }
 
 type StreamConfig struct {
-	SyncMode         string   `json:"sync_mode"`
-	CursorField      string   `json:"cursor_field,omitempty"`
-	PrimaryKey       []string `json:"primary_key,omitempty"`
-	DestinationTable string   `json:"destination_table,omitempty"`
+	SyncMode            string   `json:"sync_mode"`
+	LegacyCompatibility bool     `json:"legacy_compatibility,omitempty"`
+	CursorField         string   `json:"cursor_field,omitempty"`
+	PrimaryKey          []string `json:"primary_key,omitempty"`
+	DestinationTable    string   `json:"destination_table,omitempty"`
 }
 
 type StreamState struct {

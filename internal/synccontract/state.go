@@ -189,9 +189,11 @@ func (c CheckpointEnvelope) Clone() CheckpointEnvelope {
 		clone.SnapshotBarrier = &barrier
 	}
 	clone.Position = c.Position.Clone()
-	clone.Partitions = make([]PartitionState, len(c.Partitions))
-	for i := range c.Partitions {
-		clone.Partitions[i] = c.Partitions[i].Clone()
+	if c.Partitions != nil {
+		clone.Partitions = make([]PartitionState, len(c.Partitions))
+		for i := range c.Partitions {
+			clone.Partitions[i] = c.Partitions[i].Clone()
+		}
 	}
 	clone.SourceGeneration = cloneToken(c.SourceGeneration)
 	clone.Dedupe = c.Dedupe.Clone()
@@ -275,6 +277,9 @@ func (c CheckpointEnvelope) ValidateResume(expected ResumeExpectation) error {
 	}
 	if err := c.Validate(); err != nil {
 		return RequireRebootstrap(RecoveryOutcomeInvalidCheckpoint, err.Error())
+	}
+	if c.CommittedAt == nil {
+		return RequireRebootstrap(RecoveryOutcomeInvalidCheckpoint, "checkpoint has not been durably acknowledged")
 	}
 	if err := expected.Source.Validate(); err != nil {
 		return RequireRebootstrap(RecoveryOutcomeInvalidCheckpoint, "resume source identity is incomplete")
