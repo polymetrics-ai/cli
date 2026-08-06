@@ -924,7 +924,7 @@ func (e *PollingWatermarkExecutor) checkpointState(current map[string]string, fr
 }
 
 func clonePollingWatermarkState(state map[string]string) map[string]string {
-	copy := make(map[string]string, len(state)+1)
+	copy := make(map[string]string, len(state))
 	for key, value := range state {
 		copy[key] = value
 	}
