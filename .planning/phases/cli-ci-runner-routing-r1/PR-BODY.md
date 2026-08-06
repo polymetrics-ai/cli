@@ -39,6 +39,6 @@ runner-provisioning dependency is satisfied. This PR does not touch the server.
 - GSD prompts for discuss, TDD planning, execute, verify, and code review were
   generated with `scripts/gsd prompt ...` and completed through the documented
   inline/manual fallback; role spawning is prohibited by the worker brief.
-- No Go, CLI, docs, or website UI behavior changes are included.
+- No Go, CLI, or website UI behavior changes are included.
 - No credentials, registration keys, server access, or deployment changes are
   included.

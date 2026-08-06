@@ -23,13 +23,16 @@ require "github.event_name == 'pull_request'"
 require "github.event.pull_request.head.repo.full_name == github.repository"
 require "github.event.pull_request.user.login == 'karthik-sivadas'"
 require "github.event.pull_request.user.login == 'alfred-polymetrics-ai'"
+# shellcheck disable=SC2016 # The expected workflow line contains a literal GitHub output variable.
 require 'echo "runner=polymetrics-cli" >> "$GITHUB_OUTPUT"'
+# shellcheck disable=SC2016 # The expected workflow line contains a literal GitHub output variable.
 require 'echo "runner=ubuntu-latest" >> "$GITHUB_OUTPUT"'
 require 'CI routing is unsafe until' "$policy"
 require 'Require approval for all external contributors' "$policy"
 require 'Repository access' "$policy"
 require 'Selected repositories' "$policy"
 require 'polymetrics-ai/cli' "$policy"
+# shellcheck disable=SC2016 # The rejected policy phrase intentionally includes Markdown backticks.
 if grep -Fq 'separate `polymetrics-website` runner' "$policy"; then
   printf 'routing policy must not retain a non-PR self-hosted website exception\n' >&2
   exit 1
@@ -59,13 +62,65 @@ require_claude_selector "contains(github.event.comment.body, '@claude')"
 require_claude_selector "github.event_name == 'pull_request_review_comment'"
 require_claude_selector '["OWNER","MEMBER","COLLABORATOR"]'
 
+require_selector_dependency() {
+  local file=$1
+
+  awk '
+    function validate_job() {
+      if (uses_selector && !needs_selector) {
+        printf "selector consumer %s in %s must declare needs: select-runner\n", job, FILENAME > "/dev/stderr"
+        failed=1
+      }
+    }
+
+    /^  [[:alnum:]_-]+:$/ {
+      validate_job()
+      job=$0
+      sub(/^  /, "", job)
+      sub(/:$/, "", job)
+      uses_selector=0
+      needs_selector=0
+      in_needs=0
+      next
+    }
+
+    index($0, "runs-on: ${{ needs.select-runner.outputs.runner }}") {
+      uses_selector=1
+    }
+
+    /^    needs:/ {
+      if (index($0, "select-runner")) {
+        needs_selector=1
+      }
+      in_needs=1
+      next
+    }
+
+    in_needs && /^      -[[:space:]]*select-runner[[:space:]]*$/ {
+      needs_selector=1
+      next
+    }
+
+    in_needs && $0 !~ /^      -/ {
+      in_needs=0
+    }
+
+    END {
+      validate_job()
+      exit failed
+    }
+  ' "$file"
+}
+
 linux_workflows=(
   scorecard.yml website.yml gsd-workflow.yml connector-boundary.yml conventions.yml
   verify.yml security.yml website-data.yml release.yml pr-issue-guard.yml claude-review.yml
 )
 for workflow in "${linux_workflows[@]}"; do
   require "uses: ./.github/workflows/runner-selection.yml" "$root/.github/workflows/$workflow"
+  # shellcheck disable=SC2016 # The expected workflow line contains a literal GitHub expression.
   require 'runs-on: ${{ needs.select-runner.outputs.runner }}' "$root/.github/workflows/$workflow"
+  require_selector_dependency "$root/.github/workflows/$workflow"
 done
 
 if rg -n --glob '*.yml' 'runs-on: ubuntu-latest' "$root/.github/workflows" | grep -Fv 'runner-selection.yml:'; then
@@ -99,6 +154,7 @@ require_website_deploy() {
   }
 }
 
+# shellcheck disable=SC2016 # The expected workflow line contains a literal GitHub expression.
 require_website_deploy 'runs-on: ${{ needs.select-runner.outputs.runner }}'
 require_website_deploy "if: github.ref_name == 'main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && vars.WEBSITE_DEPLOY_ENABLED == 'true'"
 if ! grep -Eq '^[[:space:]]+needs:.*select-runner' <<<"$website_deploy"; then
