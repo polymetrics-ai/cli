@@ -49,6 +49,17 @@ detector-disarming implemented-command failure pattern in which 213 declared
 implemented commands passed checks but failed at runtime, alongside the public
 485 generally-available/17 command-response disparity.
 
+## Post-rebase compatibility repair
+
+- [x] RED: hosted Verify run `31095059925` on rebased commit `428324630`
+  reports `certify CLI real invocations: 93 (budget 92)`; the harness package
+  remains 25/25.
+- [x] GREEN: `TestCertifyCLIHelpShowsProvenanceContract` preserves its
+  provenance-help assertions through the direct `runConnectors` router branch.
+  `make certify-timing` returned 25/25 harness calls and 92/92 CLI calls with
+  79.895s elapsed / 88.553s wall time, without changing either measured budget.
+- [ ] Hosted Verify: confirm the repaired PR head passes GitHub Verify.
+
 ## Scoped verification record
 
 - [x] timing parser/runner pass and controlled failure modes —
