@@ -737,7 +737,11 @@ func streamOverrides(cmd connectors.CommandSurfaceCommand, cfg connectors.Runtim
 			}
 		}
 	}
-	return runtimeConfigWithOverrides(cfg, configOverrides), query, nil
+	runtimeConfig := runtimeConfigWithOverrides(cfg, configOverrides)
+	if err := validateConfiguredFlagMinimums(cmd, runtimeConfig); err != nil {
+		return connectors.RuntimeConfig{}, nil, err
+	}
+	return runtimeConfig, query, nil
 }
 
 func runtimeConfigWithOverrides(cfg connectors.RuntimeConfig, overrides map[string]string) connectors.RuntimeConfig {
@@ -753,6 +757,26 @@ func runtimeConfigWithOverrides(cfg connectors.RuntimeConfig, overrides map[stri
 		out.Config[key] = value
 	}
 	return out
+}
+
+func validateConfiguredFlagMinimums(cmd connectors.CommandSurfaceCommand, cfg connectors.RuntimeConfig) error {
+	for _, flag := range cmd.Flags {
+		if flag.Minimum == nil || !strings.HasPrefix(flag.MapsTo, "config.") {
+			continue
+		}
+		target := strings.TrimPrefix(flag.MapsTo, "config.")
+		if err := safety.ValidateIdentifier(target, "config parameter"); err != nil {
+			return err
+		}
+		value, ok := cfg.Config[target]
+		if !ok {
+			continue
+		}
+		if err := validateFlagMinimum(flag, value); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 type mappedCommandInputs struct {

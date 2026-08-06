@@ -2241,6 +2241,62 @@ func TestValidateFlagMinimumIsOptIn(t *testing.T) {
 	}
 }
 
+func TestStreamOverridesConfigMinimumIsOptIn(t *testing.T) {
+	minimum := 1.0
+	tests := []struct {
+		name        string
+		flag        connectors.CommandSurfaceFlag
+		config      map[string]string
+		flags       map[string][]string
+		wantConfig  string
+		wantMinimum bool
+	}{
+		{
+			name:       "no declared minimum preserves config value",
+			flag:       connectors.CommandSurfaceFlag{Name: "page-number", Type: "integer", MapsTo: "config.page_number"},
+			config:     map[string]string{"page_number": "0"},
+			wantConfig: "0",
+		},
+		{
+			name:        "declared minimum rejects config value",
+			flag:        connectors.CommandSurfaceFlag{Name: "page-number", Type: "integer", MapsTo: "config.page_number", Minimum: &minimum},
+			config:      map[string]string{"page_number": "0"},
+			wantMinimum: true,
+		},
+		{
+			name:       "command flag wins over invalid config value",
+			flag:       connectors.CommandSurfaceFlag{Name: "page-number", Type: "integer", MapsTo: "config.page_number", Minimum: &minimum},
+			config:     map[string]string{"page_number": "0"},
+			flags:      map[string][]string{"page-number": {"1"}},
+			wantConfig: "1",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			cfg, _, err := streamOverrides(connectors.CommandSurfaceCommand{
+				Path:  "records list",
+				Flags: []connectors.CommandSurfaceFlag{tt.flag},
+			}, connectors.RuntimeConfig{Config: tt.config}, tt.flags)
+			if tt.wantMinimum {
+				var minimumErr *MinimumFlagError
+				if !errors.As(err, &minimumErr) {
+					t.Fatalf("streamOverrides error = %T %v, want MinimumFlagError", err, err)
+				}
+				if minimumErr.Parameter != "page-number" || minimumErr.Minimum != 1 {
+					t.Fatalf("MinimumFlagError = %+v, want page-number minimum 1", minimumErr)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("streamOverrides error = %v, want nil", err)
+			}
+			if got := cfg.Config["page_number"]; got != tt.wantConfig {
+				t.Fatalf("runtime config page_number = %q, want %q", got, tt.wantConfig)
+			}
+		})
+	}
+}
+
 func TestValidateRequiredCommandFlagsPreservesStringArrayPresence(t *testing.T) {
 	tests := []struct {
 		name    string
