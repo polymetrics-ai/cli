@@ -8,5 +8,5 @@ Status: **local verification passed; full suite remains CI-owned.**
 - [x] `gofmt`, targeted `go vet`, and `go build ./cmd/pm` pass.
 - [x] `connectorgen validate` and `surface-sync --check` pass with 550 production bundles and no production declaration/embed change.
 - [x] Individual non-full-suite gates pass: `tidy-check`, `lint`, `docs-check-no-build`, `smoke-no-build`, `agent-contract-check`, `connectorgen-validate`, `connectorgen-surface-sync`, `connector-boundary`, and `release-workflow-check`.
-- [ ] `scripts/verify-gsd-workflow origin/main` will run after the implementation commit so its diff contains the production changes.
+- [x] `scripts/verify-gsd-workflow origin/main` passed after the implementation commit, finding the recorded GSD/TDD evidence.
 - [x] Inline `execute-phase`, `verify-work`, and `code-review` prompts were generated and followed under the documented manual-GSD fallback.

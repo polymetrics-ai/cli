@@ -3,7 +3,7 @@
   "issues": [3753, 3754],
   "parentIssue": 3750,
   "branch": "fm/cli-found-rate-limit-enforcement-r1",
-  "status": "local_verification_passed",
+  "status": "complete_local_gates_passed",
   "gsd": {
     "manualFallback": true,
     "fallbackReason": "Pi interactive runtime unavailable; canonical single-worker contract and task prohibit role spawning.",
@@ -20,6 +20,7 @@
     "inlineExecutePhase": "completed",
     "inlineVerifyWork": "completed",
     "inlineCodeReview": "completed",
-    "fullSuite": "CI-owned; not run locally under the repository timeout policy"
+    "fullSuite": "CI-owned; not run locally under the repository timeout policy",
+    "gsdWorkflowVerifier": "passed against origin/main"
   }
 }
