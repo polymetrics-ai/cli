@@ -26,6 +26,7 @@ const (
 	cdcChangefeedMechanism        = "logical_replication"
 	cdcExecutorID                 = "postgres_logical_replication"
 	cdcSlotCleanupTimeout         = 5 * time.Second
+	cdcPublicationViaRootVersion  = 130000
 	cdcPublicationFeaturesVersion = 150000
 )
 
@@ -36,6 +37,7 @@ var (
 	errCDCRelationNotPublished         = errors.New("postgres CDC selected relation is not included in the configured publication")
 	errCDCPublicationMissingDML        = errors.New("postgres CDC requires a publication that publishes insert, update, and delete changes")
 	errCDCPublicationPublishesTruncate = errors.New("postgres CDC requires a publication without TRUNCATE events")
+	errCDCPublicationPublishesViaRoot  = errors.New("postgres CDC does not support publications that publish through partition roots")
 	errCDCPublicationHasRowFilter      = errors.New("postgres CDC does not support publication row filters")
 	errCDCPublicationHasColumnList     = errors.New("postgres CDC does not support publication column lists")
 )
@@ -61,6 +63,7 @@ type postgresCDCPublicationScope struct {
 	membershipVersion          string
 	namespaceMembershipVersion string
 	publicationAllTables       bool
+	publishesViaRoot           bool
 	hasDescendants             bool
 	published                  bool
 	publishesInsert            bool
@@ -299,6 +302,7 @@ func inspectCDCRelationScope(ctx context.Context, inspector *postgresCDCRelation
 		&scope.membershipVersion,
 		&scope.namespaceMembershipVersion,
 		&scope.publicationAllTables,
+		&scope.publishesViaRoot,
 		&scope.hasDescendants,
 		&scope.published,
 		&scope.publishesInsert,
@@ -317,6 +321,9 @@ func inspectCDCRelationScope(ctx context.Context, inspector *postgresCDCRelation
 func cdcRelationScopeQuery(serverVersion int) string {
 	if serverVersion >= cdcPublicationFeaturesVersion {
 		return cdcRelationScopeModernQuery
+	}
+	if serverVersion >= cdcPublicationViaRootVersion {
+		return cdcRelationScopeViaRootQuery
 	}
 	return cdcRelationScopeLegacyQuery
 }
@@ -359,6 +366,64 @@ SELECT
 	COALESCE(direct_membership.version, ''),
 	''::text,
 	COALESCE(selected_publication.puballtables, false),
+	false,
+	EXISTS (SELECT 1 FROM pg_inherits inheritance WHERE inheritance.inhparent = target_relation.oid),
+	COALESCE(
+		target_relation.oid IS NOT NULL
+		AND (selected_publication.puballtables OR direct_membership.prrelid IS NOT NULL),
+		false
+	),
+	COALESCE(selected_publication.pubinsert, false),
+	COALESCE(selected_publication.pubupdate, false),
+	COALESCE(selected_publication.pubdelete, false),
+	COALESCE(selected_publication.pubtruncate, false),
+	false,
+	false
+FROM (VALUES (1)) AS anchor(value)
+LEFT JOIN target_relation ON true
+LEFT JOIN selected_publication ON true
+LEFT JOIN direct_membership ON true`
+
+const cdcRelationScopeViaRootQuery = `
+WITH
+	target_relation AS (
+		SELECT relation.oid, relation.relnamespace
+		FROM pg_class relation
+		JOIN pg_namespace relation_schema ON relation_schema.oid = relation.relnamespace
+		WHERE relation_schema.nspname = $1
+			AND relation.relname = $2
+			AND relation.relkind IN ('r', 'p')
+			AND relation.relpersistence = 'p'
+	),
+	selected_publication AS (
+		SELECT
+			publication.oid,
+			publication.xmin::text AS version,
+			publication.puballtables,
+			publication.pubviaroot,
+			publication.pubinsert,
+			publication.pubupdate,
+			publication.pubdelete,
+			publication.pubtruncate
+		FROM pg_publication publication
+		WHERE publication.pubname = $3
+	),
+	direct_membership AS (
+		SELECT
+			membership.xmin::text AS version,
+			membership.prrelid
+		FROM pg_publication_rel membership
+		JOIN selected_publication publication ON publication.oid = membership.prpubid
+		JOIN target_relation relation ON relation.oid = membership.prrelid
+	)
+SELECT
+	COALESCE(selected_publication.oid::text, ''),
+	COALESCE(selected_publication.version, ''),
+	COALESCE(target_relation.oid::text, ''),
+	COALESCE(direct_membership.version, ''),
+	''::text,
+	COALESCE(selected_publication.puballtables, false),
+	COALESCE(selected_publication.pubviaroot, false),
 	EXISTS (SELECT 1 FROM pg_inherits inheritance WHERE inheritance.inhparent = target_relation.oid),
 	COALESCE(
 		target_relation.oid IS NOT NULL
@@ -392,6 +457,7 @@ WITH
 			publication.oid,
 			publication.xmin::text AS version,
 			publication.puballtables,
+			publication.pubviaroot,
 			publication.pubinsert,
 			publication.pubupdate,
 			publication.pubdelete,
@@ -424,6 +490,7 @@ SELECT
 	COALESCE(direct_membership.version, ''),
 	COALESCE(namespace_membership.version, ''),
 	COALESCE(selected_publication.puballtables, false),
+	COALESCE(selected_publication.pubviaroot, false),
 	EXISTS (SELECT 1 FROM pg_inherits inheritance WHERE inheritance.inhparent = target_relation.oid),
 	COALESCE(
 		target_relation.oid IS NOT NULL
@@ -448,13 +515,14 @@ LEFT JOIN namespace_membership ON true`
 
 func (scope postgresCDCPublicationScope) fingerprint() string {
 	parts := []string{
-		"postgres-cdc-publication-scope-v2",
+		"postgres-cdc-publication-scope-v3",
 		scope.publicationOID,
 		scope.publicationVersion,
 		scope.relationOID,
 		scope.membershipVersion,
 		scope.namespaceMembershipVersion,
 		strconv.FormatBool(scope.publicationAllTables),
+		strconv.FormatBool(scope.publishesViaRoot),
 		strconv.FormatBool(scope.hasDescendants),
 		strconv.FormatBool(scope.published),
 		strconv.FormatBool(scope.publishesInsert),
@@ -470,6 +538,9 @@ func (scope postgresCDCPublicationScope) fingerprint() string {
 
 func (scope postgresCDCPublicationScope) validate() error {
 	if err := validateCDCPublicationScope(scope.published); err != nil {
+		return err
+	}
+	if err := validateCDCPublicationViaRoot(scope.publishesViaRoot); err != nil {
 		return err
 	}
 	if err := validateCDCRelationHierarchy(scope.hasDescendants); err != nil {
@@ -502,6 +573,13 @@ func validateCurrentCDCRelationScope(ctx context.Context, inspector *postgresCDC
 func validateCDCPublicationScope(published bool) error {
 	if !published {
 		return errCDCRelationNotPublished
+	}
+	return nil
+}
+
+func validateCDCPublicationViaRoot(publishesViaRoot bool) error {
+	if publishesViaRoot {
+		return errCDCPublicationPublishesViaRoot
 	}
 	return nil
 }

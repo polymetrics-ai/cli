@@ -237,6 +237,20 @@ func TestCDCPublicationScopeRejectsTruncate(t *testing.T) {
 	}
 }
 
+func TestCDCPublicationScopeRejectsPartitionRootPublishing(t *testing.T) {
+	if err := validateCDCPublicationViaRoot(false); err != nil {
+		t.Fatalf("validateCDCPublicationViaRoot(false) = %v", err)
+	}
+	if err := validateCDCPublicationViaRoot(true); !errors.Is(err, errCDCPublicationPublishesViaRoot) {
+		t.Fatalf("validateCDCPublicationViaRoot(true) = %v, want partition-root rejection", err)
+	}
+	scope := validCDCPublicationScope()
+	scope.publishesViaRoot = true
+	if err := scope.validate(); !errors.Is(err, errCDCPublicationPublishesViaRoot) {
+		t.Fatalf("scope.validate() = %v, want partition-root rejection", err)
+	}
+}
+
 func TestCDCPublicationScopeRejectsPartialTablePublications(t *testing.T) {
 	for _, tc := range []struct {
 		name string
@@ -268,6 +282,7 @@ func TestCDCPublicationScopeChangeRequiresRebootstrap(t *testing.T) {
 		{name: "direct membership", set: func(scope *postgresCDCPublicationScope) { scope.membershipVersion = "43" }},
 		{name: "schema membership", set: func(scope *postgresCDCPublicationScope) { scope.namespaceMembershipVersion = "44" }},
 		{name: "all tables", set: func(scope *postgresCDCPublicationScope) { scope.publicationAllTables = true }},
+		{name: "partition root", set: func(scope *postgresCDCPublicationScope) { scope.publishesViaRoot = true }},
 		{name: "row filter", set: func(scope *postgresCDCPublicationScope) { scope.hasRowFilter = true }},
 		{name: "column list", set: func(scope *postgresCDCPublicationScope) { scope.hasColumnList = true }},
 	} {
@@ -290,10 +305,12 @@ func TestCDCRelationScopeQueriesAvoidExpandedPublicationTables(t *testing.T) {
 	for _, tc := range []struct {
 		name    string
 		version int
+		viaRoot bool
 		modern  bool
 	}{
 		{name: "PostgreSQL 12", version: 120022},
-		{name: "PostgreSQL 15", version: cdcPublicationFeaturesVersion, modern: true},
+		{name: "PostgreSQL 13", version: cdcPublicationViaRootVersion, viaRoot: true},
+		{name: "PostgreSQL 15", version: cdcPublicationFeaturesVersion, viaRoot: true, modern: true},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			query := cdcRelationScopeQuery(tc.version)
@@ -302,6 +319,12 @@ func TestCDCRelationScopeQueriesAvoidExpandedPublicationTables(t *testing.T) {
 			}
 			if !strings.Contains(query, "pg_publication_rel") || !strings.Contains(query, "puballtables") {
 				t.Fatal("scope query does not use direct publication membership")
+			}
+			if tc.viaRoot && !strings.Contains(query, "pubviaroot") {
+				t.Fatal("scope query does not inspect partition-root publishing")
+			}
+			if !tc.viaRoot && strings.Contains(query, "pubviaroot") {
+				t.Fatal("legacy scope query requires partition-root publication catalog")
 			}
 			if tc.modern {
 				if !strings.Contains(query, "pg_publication_namespace") || !strings.Contains(query, "prqual") || !strings.Contains(query, "prattrs") {

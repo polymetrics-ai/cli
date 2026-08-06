@@ -50,6 +50,8 @@ This connector is read-only. Read behavior: low.
   replication, and an existing `cdc_publication` that contains the selected table.
 - CDC requires publications to include `INSERT`, `UPDATE`, and `DELETE`, exclude `TRUNCATE`, and use
   selected relations without descendant tables.
+- CDC rejects `publish_via_partition_root` because the native decoder is bound to the selected
+  table.
 - CDC rejects publication row filters and column lists so every selected-table change is available to
   the native decoder.
 - CDC fingerprints the publication and selected relation; changing either requires rebootstrap before
