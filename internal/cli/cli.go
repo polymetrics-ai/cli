@@ -23,6 +23,12 @@ import (
 
 type envelope map[string]any
 
+type failedETLRun struct {
+	ID        string                      `json:"id"`
+	Status    string                      `json:"status"`
+	RateLimit connectors.RateLimitSummary `json:"rate_limit"`
+}
+
 const maxConnectorCommandLimit = 10000
 
 func Run(args []string, stdout, stderr io.Writer) int {
@@ -639,7 +645,25 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 			BatchSize:  batchSize,
 		})
 		if err != nil {
-			return err
+			if run.ID == "" || run.Status != "failed" {
+				return err
+			}
+			failed := failedETLRun{ID: run.ID, Status: run.Status, RateLimit: run.RateLimit}
+			if jsonOut {
+				if err := writeJSON(stdout, envelope{"kind": "ETLRun", "run": failed, "runtime_recorded": false}); err != nil {
+					return err
+				}
+			} else {
+				_, _ = fmt.Fprintf(stdout, "ETL run %s failed: read=%d loaded=%d failed=%d\n", run.ID, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)
+				writeRateLimitSummary(stdout, run.RateLimit)
+			}
+			return &cliError{
+				category:        categoryInternal,
+				code:            "etl_run_failed",
+				message:         fmt.Sprintf("ETL run %s failed", run.ID),
+				err:             err,
+				alreadyReported: true,
+			}
 		}
 		runtimeRecorded := false
 		if flags.first("runtime") == "true" {

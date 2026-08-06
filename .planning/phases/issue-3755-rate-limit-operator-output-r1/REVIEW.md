@@ -16,6 +16,10 @@
 - Info: removed the now-unused `failRun` wrapper after `RunETL` moved to the summary-aware failure path.
 - Existing behavior, not introduced by this issue: `pm etl run --help` attempts execution instead of leaf help. No command or flag was added here; runtime/bare namespace manuals and generated documentation cover the changed output contract.
 
+## Follow-up
+
+- `native-requester-rate-limit-activity-observer`: promoted native requester construction does not yet receive the rate-limit activity observer, so native transports do not report request latency or provider-429 activity in this declarative-engine observation slice.
+
 ## Review conclusion
 
 No reporting path accepts or renders a credential, binding, runtime subject, opaque scope, or `CredentialRevision`. The added callbacks cannot influence policy resolution, admission, reserve, retry, or sleep decisions. The report stores only coalesced scalar totals and at most 16 selected policy rows per connector.
