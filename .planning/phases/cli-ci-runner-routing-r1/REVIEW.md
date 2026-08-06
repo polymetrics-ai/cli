@@ -2,14 +2,14 @@
 
 ## Scope review
 
-- All prior Linux `ubuntu-latest` jobs now depend on and consume the one
-  reusable selector output; there are 19 such consumer jobs.
+- All Linux jobs now depend on and consume the one reusable selector output;
+  there are 20 such consumer jobs.
 - The selector itself is the only remaining Linux `ubuntu-latest` job. It is
   routing policy only; GitHub organization controls must secure fork workflow
   execution before any self-hosted runner is trusted.
 - `windows-package-check.yml` was not altered.
-- The existing `website.yml` deploy job remains on its dedicated label. Only
-  the non-deploy website checks/image jobs adopt shared routing.
+- The `website.yml` deploy job now depends on and consumes the shared selector
+  output with the website checks and image jobs.
 
 ## Safety review
 
@@ -23,8 +23,8 @@
 - `docs/security/self-hosted-ci-runner-policy.md` requires all-external-fork
   approval and a dedicated, repository-scoped CLI runner group. Routing remains
   unsafe until those GitHub-side controls are applied.
-- Website deployment remains the documented trusted-ref non-PR exception and
-  retains its original `main` plus feature-flag guard.
+- Website deployment retains its `main` plus feature-flag guard and resolves
+  to the hosted fallback for its non-PR triggers.
 - No token, runner registration key, credential, server path, or deployment
   configuration is added.
 

@@ -6,9 +6,9 @@ reserved for a later firstmate instruction.
 ## Passed
 
 - `./scripts/tests/verify-ci-runner-routing.sh` — proves the single selector,
-  exact trust conditions, GitHub-hosted fallback, 19 dynamic Linux consumers,
+  exact trust conditions, GitHub-hosted fallback, 20 dynamic Linux consumers,
   persistent GitHub configuration instructions, Claude selector eligibility,
-  Windows exception, and website deployment exception.
+  Windows exception, and selector-routed website deployment.
 - Ruby YAML parse of every `.github/workflows/*.yml` file.
 - `make release-workflow-check` — passed after its release dependency assertion
   was strengthened for the selector plus release-assets dependency.
@@ -28,5 +28,5 @@ label. Those expressions are routing policy, not a durable fork-security
 boundary, so `docs/security/self-hosted-ci-runner-policy.md` requires GitHub
 fork approval and dedicated runner-group scoping before routing is safe. All
 other event types return `ubuntu-latest` deliberately. The Windows workflow is
-untouched, and the website deployment job retains its separate trusted-ref
-runner exception.
+untouched, and website deployment consumes the selector's hosted fallback for
+its non-PR triggers.

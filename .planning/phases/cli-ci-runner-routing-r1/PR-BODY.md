@@ -3,10 +3,9 @@
 - Route same-repository PRs by `karthik-sivadas` and
   `alfred-polymetrics-ai` to the existing `polymetrics-cli` self-hosted
   runner label through one shared selector.
-- Route fork PRs and non-PR triggers to GitHub-hosted `ubuntu-latest`, except
-  for the documented trusted-ref website deployment runner.
-- Keep Windows on `windows-latest` and preserve the website deployment job's
-  dedicated runner without changing it.
+- Route fork PRs and all non-PR triggers to GitHub-hosted `ubuntu-latest`.
+- Keep Windows on `windows-latest` and route website deployment through the
+  shared selector.
 
 ## Required GitHub configuration before enabling routing
 

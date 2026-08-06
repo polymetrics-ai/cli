@@ -30,9 +30,5 @@ describe the corresponding settings.
 After the blocking configuration is in place, the shared selector may route a
 same-repository pull request from `karthik-sivadas` or
 `alfred-polymetrics-ai` to `polymetrics-cli`. It routes fork pull requests and
-non-pull-request events to GitHub-hosted `ubuntu-latest`.
-
-`website.yml` deployment is a documented trusted-ref non-PR exception. It
-continues to use its separate `polymetrics-website` runner only for a `main`
-push or `main` workflow dispatch when `WEBSITE_DEPLOY_ENABLED` is true; it does
-not participate in general CI runner routing.
+all non-pull-request events, including website deployment, to GitHub-hosted
+`ubuntu-latest`.

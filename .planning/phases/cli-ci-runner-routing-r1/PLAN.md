@@ -15,9 +15,9 @@
    `polymetrics-cli` label only for same-repository PRs from the two
    explicitly trusted accounts; it outputs `ubuntu-latest` otherwise. It is
    not a fork-security boundary on its own.
-2. Wire every existing Linux GitHub-hosted job to the selector output while
-   preserving their current dependencies and conditions. Leave Windows and the
-   dedicated website deployment runner untouched.
+2. Wire every existing Linux job, including website deployment, to the selector
+   output while preserving their current dependencies and conditions. Leave
+   Windows untouched.
 3. Add a source-level routing contract test and run it from the conventions
    workflow. Update filtered workflow triggers so a selector change exercises
    affected workflows.
@@ -30,8 +30,8 @@
 - RED: the routing contract test must fail before the selector exists.
 - GREEN: it must prove the exact structural plus explicit-author condition,
   hosted non-PR fallback, persisted GitHub configuration instructions, Claude
-  selector eligibility, all Linux consumer jobs, and unchanged Windows / site
-  deploy exceptions.
+  selector eligibility, all Linux consumer jobs, the Windows exception, and
+  selector-routed website deployment.
 - Verify YAML syntax, the routing contract, release workflow regression,
   `go run ./cmd/agentcontractgen check`, and final diff/secret inspection.
 

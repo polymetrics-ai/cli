@@ -30,7 +30,10 @@ require 'Require approval for all external contributors' "$policy"
 require 'Repository access' "$policy"
 require 'Selected repositories' "$policy"
 require 'polymetrics-ai/cli' "$policy"
-require 'trusted-ref non-PR exception' "$policy"
+if grep -Fq 'separate `polymetrics-website` runner' "$policy"; then
+  printf 'routing policy must not retain a non-PR self-hosted website exception\n' >&2
+  exit 1
+fi
 
 claude="$root/.github/workflows/claude-review.yml"
 claude_selector=$(awk '
