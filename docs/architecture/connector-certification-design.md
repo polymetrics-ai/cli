@@ -18,9 +18,9 @@ Status: approved (2026-07-02). Program PRD: `docs/plans/universal-programming-lo
 5. **Gotchas**: `directConnector` (`cli.go:591`) builds RuntimeConfig from `--config` only — `pm
    etl check/read --connector` never resolves credential Secrets. Live check must go through `pm
    credentials test` (vault-resolved secrets), and `--credential` is added to `etl check/read` as a
-   prerequisite fix. `pm reverse plan --json` deliberately strips the approval token — the harness
-   parses the token from text output and separately asserts the JSON path keeps hiding it
-   (redaction gate).
+   prerequisite fix. `pm reverse plan --json` deliberately omits the approval token — the harness
+   parses the token from text output and separately asserts the JSON path omits it
+   (token-omission gate).
 6. Crontab entries carry a `# pm-schedule-<name>` sentinel (`internal/schedule/crontab.go:88,100`)
    — a verifiable roundtrip marker. `runScheduleRemove` ignores backend removal errors — certify
    verifies independently.

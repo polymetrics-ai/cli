@@ -453,9 +453,12 @@ type WriteAction struct {
 	// existed (executeWriteRecord passed a nil url.Values in all six
 	// body_type branches). The field is strictly additive and opt-in: no
 	// existing bundle changes behavior by its introduction.
-	Query        map[string]QueryParam `json:"query,omitempty"`
-	RedactFields []string              `json:"redact_fields,omitempty"` // record fields redacted from source-table plan samples and engine previews/errors
-	BodyType     string                `json:"body_type,omitempty"`     // json (default) | form | none | graphql | json_array | multipart | base64_upload
+	Query map[string]QueryParam `json:"query,omitempty"`
+	// RedactFields identifies record fields redacted in generic source-table plan
+	// samples and returned write errors. DryRunWrite preview warnings preserve
+	// their resolved values.
+	RedactFields []string `json:"redact_fields,omitempty"`
+	BodyType     string   `json:"body_type,omitempty"` // json (default) | form | none | graphql | json_array | multipart | base64_upload
 	// BodyRequired forces an empty JSON object onto the wire when body construction
 	// resolves no fields. It is valid only for the default json body type.
 	BodyRequired bool                `json:"body_required,omitempty"`

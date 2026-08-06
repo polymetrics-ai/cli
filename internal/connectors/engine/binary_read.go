@@ -17,7 +17,6 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
-	"polymetrics.ai/internal/safety"
 )
 
 const (
@@ -159,7 +158,7 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 	})
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
-		msg := safety.RedactErrorText(err.Error())
+		msg := completeEngineErrorText(err)
 		if hint != "" {
 			msg = msg + ": " + hint
 		}

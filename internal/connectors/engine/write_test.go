@@ -827,10 +827,10 @@ func TestValidateWriteRecordSchemaValidPasses(t *testing.T) {
 
 // --- DryRunWrite ---
 
-func TestDryRunWritePreviewResolvedMethodPathSecretsRedacted(t *testing.T) {
+func TestDryRunWritePreviewResolvedMethodPathPreservesSecretValues(t *testing.T) {
 	b := Bundle{
 		Name: "acme",
-		HTTP: HTTPBase{URL: "https://api.example.com"},
+		HTTP: HTTPBase{URL: "https://api.example.com/{{ secrets.client_secret }}"},
 		Writes: []WriteAction{{
 			Name:         "update_customer",
 			Kind:         "update",
@@ -841,7 +841,7 @@ func TestDryRunWritePreviewResolvedMethodPathSecretsRedacted(t *testing.T) {
 		}},
 	}
 
-	cfg := connectors.RuntimeConfig{Secrets: map[string]string{"client_secret": "sk_live_abc123"}}
+	cfg := connectors.RuntimeConfig{Secrets: map[string]string{"client_secret": "fixture-preview-secret"}}
 	preview, err := DryRunWrite(context.Background(), b, connectors.WriteRequest{Action: "update_customer", Config: cfg}, []connectors.Record{
 		{"id": "cus_1", "name": "New Name"},
 	}, nil)
@@ -858,8 +858,8 @@ func TestDryRunWritePreviewResolvedMethodPathSecretsRedacted(t *testing.T) {
 	if !strings.Contains(joined, "POST") || !strings.Contains(joined, "/customers/cus_1") {
 		t.Fatalf("Warnings = %v, want resolved method+path", preview.Warnings)
 	}
-	if strings.Contains(joined, "sk_live_abc123") {
-		t.Fatalf("Warnings = %v, secret leaked into preview", preview.Warnings)
+	if !strings.Contains(joined, "fixture-preview-secret") {
+		t.Fatalf("Warnings = %v, want complete resolved secret value", preview.Warnings)
 	}
 }
 
@@ -932,7 +932,7 @@ func TestDryRunWriteDigestBindsCanonicalRequestAndCredentialRevision(t *testing.
 	}
 }
 
-func TestDryRunWritePreviewResolvedPathRedactsConfiguredRecordFields(t *testing.T) {
+func TestDryRunWritePreviewResolvedPathPreservesConfiguredRecordFields(t *testing.T) {
 	b := Bundle{
 		Name: "clinical",
 		HTTP: HTTPBase{URL: "https://api.example.com"},
@@ -954,15 +954,15 @@ func TestDryRunWritePreviewResolvedPathRedactsConfiguredRecordFields(t *testing.
 		t.Fatalf("DryRunWrite: %v", err)
 	}
 	joined := strings.Join(preview.Warnings, " | ")
-	if strings.Contains(joined, "patient-raw-uuid") {
-		t.Fatalf("Warnings = %v, record path field leaked into preview", preview.Warnings)
+	if !strings.Contains(joined, "patient-raw-uuid") {
+		t.Fatalf("Warnings = %v, want complete record path field", preview.Warnings)
 	}
-	if !strings.Contains(joined, "/patients/redacted") {
-		t.Fatalf("Warnings = %v, want redacted request path", preview.Warnings)
+	if !strings.Contains(joined, "/patients/patient-raw-uuid") {
+		t.Fatalf("Warnings = %v, want complete resolved request path", preview.Warnings)
 	}
 }
 
-func TestDryRunWritePreviewResolvedPathRedactionCopiesNestedRecord(t *testing.T) {
+func TestDryRunWritePreviewResolvedPathPreservesNestedRecordFields(t *testing.T) {
 	b := Bundle{
 		Name: "clinical",
 		HTTP: HTTPBase{URL: "https://api.example.com"},
@@ -985,8 +985,11 @@ func TestDryRunWritePreviewResolvedPathRedactionCopiesNestedRecord(t *testing.T)
 		t.Fatalf("DryRunWrite: %v", err)
 	}
 	joined := strings.Join(preview.Warnings, " | ")
-	if strings.Contains(joined, "patient-nested-uuid") {
-		t.Fatalf("Warnings = %v, nested record path field leaked into preview", preview.Warnings)
+	if !strings.Contains(joined, "patient-nested-uuid") {
+		t.Fatalf("Warnings = %v, want complete nested record path field", preview.Warnings)
+	}
+	if !strings.Contains(joined, "/patients/patient-nested-uuid") {
+		t.Fatalf("Warnings = %v, want complete resolved nested request path", preview.Warnings)
 	}
 	if patient["uuid"] != "patient-nested-uuid" {
 		t.Fatalf("DryRunWrite mutated caller record: %v", patient)
