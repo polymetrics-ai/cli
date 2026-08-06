@@ -99,11 +99,11 @@
       "aggregateVerify": "success"
     },
     "rebaseValidation": {
-      "base": "origin/main b0cd6cbcd",
-      "timingWallElapsedSeconds": 119.492,
+      "base": "origin/main d215d9636",
+      "timingWallElapsedSeconds": 121.617,
       "certifyRealCLIInvocations": 85,
       "cliRealCLIInvocations": 61,
-      "cliPackageElapsedSeconds": 363.575,
+      "cliPackageElapsedSeconds": 364.625,
       "nonSuiteGates": [
         "go vet ./...",
         "go build ./cmd/pm",
