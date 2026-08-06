@@ -87,6 +87,7 @@ schedule:
 | `pm init` | workspace creation | [/docs/quickstart](/docs/quickstart) |
 | `pm connectors` | `pm connectors list`, `pm connectors catalog`, `pm connectors port-plan`, `pm connectors inspect`, `pm connectors help`, `pm connectors certify` | [/docs/connectors](/docs/connectors) |
 | `pm credentials` | `pm credentials add`, `pm credentials link`, `pm credentials list`, `pm credentials inspect`, `pm credentials test`, `pm credentials remove` | this page |
+| `pm webhooks` | `pm webhooks configure`, `pm webhooks status` | this page |
 | `pm connections` | `pm connections create`, `pm connections list` | this page |
 | `pm catalog` | `pm catalog refresh`, `pm catalog show` | this page |
 | `pm etl` | `pm etl check`, `pm etl catalog`, `pm etl read`, `pm etl run`, `pm etl status` | [/docs/etl](/docs/etl) |
@@ -167,6 +168,55 @@ JSON output expose the non-secret family/profile declarations but never the
 binding itself; internal coordination receives opaque projections only. This
 identity-only release does not change connector authentication, rate limiting,
 or transport behavior.
+
+### `pm webhooks`
+
+```bash
+# The operator owns a stable HTTPS callback. pm records only an opaque endpoint generation.
+pm webhooks configure operator-receiver \
+  --mode operator_endpoint \
+  --callback-url https://operator.example.test/receiver \
+  --receipt-capacity 100 \
+  --json
+
+# Tailscale Funnel is already running; pm accepts its supplied URL and binds its receiver only to loopback.
+pm webhooks configure funnel-receiver \
+  --mode external_tunnel \
+  --tunnel-tool tailscale_funnel \
+  --callback-url https://node.tailnet.ts.net/receiver \
+  --heartbeat-ttl 5m \
+  --receipt-capacity 100 \
+  --json
+
+# A provider-owned polling or outbound stream adapter has no callback and is not a webhook.
+pm webhooks configure stream-receiver \
+  --mode provider_pull_or_stream \
+  --adapter provider-event-stream-v1 \
+  --receipt-capacity 100 \
+  --json
+
+pm webhooks status funnel-receiver --json
+```
+
+The modes are distinct contracts:
+
+| Mode | Local receiver | Callback URL | Recovery behavior |
+|---|---|---|---|
+| `operator_endpoint` | None | Operator-owned HTTPS endpoint | A changed endpoint generation needs explicit provider re-registration and reconciliation. |
+| `external_tunnel` | `127.0.0.1` only | Supplied by an already-running named tunnel | A URL rotation or missed heartbeat is `degraded`; provider re-registration and reconciliation are both required. |
+| `provider_pull_or_stream` | None | None | Describes polling or an outbound stream; it is never presented as a webhook. |
+
+`pm` does not install, start, probe, or shell out to Tailscale, and it does not register, edit, or remove provider subscriptions. It has no Tailscale dependency. Callback URLs, signing secrets, raw bodies, credentials, and credential revisions are omitted from ordinary state and command output; only opaque endpoint and credential-cohort projections are retained.
+
+Once an operator has enabled a stable Funnel endpoint, they may deliberately declare that endpoint as `operator_endpoint` instead of `external_tunnel`. That choice does not collapse the modes: the former records an operator-owned endpoint and starts no listener, while the latter owns only a loopback receiver and watches the external tool's heartbeat.
+
+For a provider adapter that attaches to a receiver, signature validation happens against the raw request body before parsing. The receiver durably records a receipt before acknowledging, rejects oversized, timed-out, or over-capacity work, and truthfully declares at-least-once, unordered delivery with provider-event identity deduplication. Duplicate and out-of-order events are normal. Downtime recovery is visible: an endpoint generation change or tunnel heartbeat lapse must be reconciled rather than treated as an empty gap.
+
+#### Tailscale Funnel target
+
+Tailscale Funnel is the first accepted `external_tunnel` tool. Funnel has a predictable `<host>.<tailnet>.ts.net` HTTPS name and is limited to `443`, `8443`, and `10000`; its supported HTTP reverse-proxy target is loopback. Its documented persistent (`-bg`) configuration resumes sharing after a device/Tailscale restart; a non-persistent invocation must be restarted manually. See the [Funnel examples](https://tailscale.com/docs/reference/examples/funnel) and [CLI reference](https://tailscale.com/docs/reference/tailscale-cli/funnel).
+
+On the validation host on 2026-08-06, the installed Tailscale client reported `v1.92.5`, the daemon `v1.98.10`, and the same three allowed Funnel ports. Existing private Serve mappings already occupied `443` and `8443`; they were read but never changed. No public Funnel was created because it could not be removed after the test under the safety contract. The loopback end-to-end receiver test is therefore real local proof; public Funnel reachability remains an operator-run production validation, not a claim made by `pm`.
 
 Before saving a credential, `pm` checks non-secret `--config` fields against
 only the selected connector's declared string `enum`, `pattern`, and `uri`,

@@ -36,12 +36,13 @@ Branch: `fm/cli-found-webhook-exposure-modes-r1`. Stack base:
 1. RED: cover raw-body signature verifier ordering, failed verification,
    durable-receipt failure, duplicate receipt, out-of-order arrival, overload,
    and oversized bodies.
-2. GREEN: implement an injectable receiver bound to `127.0.0.1`/`::1`, with
+2. GREEN: implement an injectable receiver bound to `127.0.0.1`, with
    method/path matching, `http.MaxBytesReader`, deadlines, and an explicit
    in-flight bound. Verify raw bounded bytes before JSON/event interpretation.
-3. GREEN: atomically persist a minimized durable receipt before HTTP success.
-   Existing durable duplicates acknowledge without redispatch; new writes that
-   cannot persist or enter bounded hand-off return retryable failure.
+3. GREEN: persist the protected receipt payload and durable receipt index before
+   HTTP success. Existing durable duplicates acknowledge without redispatch;
+   new writes that cannot persist or enter bounded hand-off return retryable
+   failure.
 
 ## Slice C — CLI/help/docs truth surface (TDD)
 

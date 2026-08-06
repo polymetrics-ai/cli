@@ -36,6 +36,7 @@ var goldenTranscriptInputs = []struct {
 	{Name: "root_space_form", Args: []string{"--root", ".", "--help"}},
 
 	{Name: "help_credentials", Args: []string{"help", "credentials"}},
+	{Name: "help_webhooks", Args: []string{"help", "webhooks"}},
 	{Name: "help_etl", Args: []string{"help", "etl"}},
 	{Name: "help_reverse", Args: []string{"help", "reverse"}},
 	{Name: "help_connectors", Args: []string{"help", "connectors"}},
@@ -53,6 +54,7 @@ var goldenTranscriptInputs = []struct {
 	{Name: "help_version", Args: []string{"help", "version"}},
 
 	{Name: "bare_credentials_manual", Args: []string{"credentials"}},
+	{Name: "bare_webhooks_manual", Args: []string{"webhooks"}},
 	{Name: "bare_etl_manual", Args: []string{"etl"}},
 	{Name: "bare_reverse_manual", Args: []string{"reverse"}},
 	{Name: "bare_connectors_manual", Args: []string{"connectors"}},
@@ -69,6 +71,7 @@ var goldenTranscriptInputs = []struct {
 	{Name: "bare_skills_manual", Args: []string{"skills"}},
 
 	{Name: "json_credentials_manual", Args: []string{"credentials", "--json"}},
+	{Name: "json_webhooks_manual", Args: []string{"webhooks", "--json"}},
 	{Name: "json_etl_manual", Args: []string{"etl", "--json"}},
 	{Name: "json_reverse_manual", Args: []string{"reverse", "--json"}},
 	{Name: "json_connectors_manual", Args: []string{"connectors", "--json"}},

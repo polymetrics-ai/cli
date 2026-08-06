@@ -52,18 +52,20 @@ type sqlQueryEngine interface {
 }
 
 type state struct {
-	Revision                     uint64                            `json:"revision"`
-	SyncModeCompatibilityVersion uint                              `json:"sync_mode_compatibility_version,omitempty"`
-	Credentials                  []CredentialMeta                  `json:"credentials"`
-	CredentialBindings           map[string]credentialBindingState `json:"credential_bindings"`
-	CoordinationSalt             string                            `json:"coordination_salt,omitempty"`
-	Connections                  []Connection                      `json:"connections"`
-	Catalogs                     []CatalogSnapshot                 `json:"catalogs"`
-	Runs                         []Run                             `json:"runs"`
-	ReversePlans                 []ReversePlan                     `json:"reverse_plans"`
-	ReverseRuns                  []ReverseRun                      `json:"reverse_runs"`
-	Checkpoints                  map[string]map[string]string      `json:"checkpoints,omitempty"`
-	StreamStates                 map[string]StreamState            `json:"stream_states,omitempty"`
+	Revision                     uint64                              `json:"revision"`
+	SyncModeCompatibilityVersion uint                                `json:"sync_mode_compatibility_version,omitempty"`
+	Credentials                  []CredentialMeta                    `json:"credentials"`
+	CredentialBindings           map[string]credentialBindingState   `json:"credential_bindings"`
+	CoordinationSalt             string                              `json:"coordination_salt,omitempty"`
+	Connections                  []Connection                        `json:"connections"`
+	Catalogs                     []CatalogSnapshot                   `json:"catalogs"`
+	Runs                         []Run                               `json:"runs"`
+	ReversePlans                 []ReversePlan                       `json:"reverse_plans"`
+	ReverseRuns                  []ReverseRun                        `json:"reverse_runs"`
+	Checkpoints                  map[string]map[string]string        `json:"checkpoints,omitempty"`
+	StreamStates                 map[string]StreamState              `json:"stream_states,omitempty"`
+	WebhookSubscriptions         map[string]webhookSubscriptionState `json:"webhook_subscriptions,omitempty"`
+	WebhookReceipts              map[string]webhookReceiptState      `json:"webhook_receipts,omitempty"`
 }
 
 // credentialBindingState is protected project-state metadata. The raw binding
@@ -118,6 +120,8 @@ func InitProject(root string) error {
 			CoordinationSalt:             coordinationSalt,
 			Checkpoints:                  map[string]map[string]string{},
 			StreamStates:                 map[string]StreamState{},
+			WebhookSubscriptions:         map[string]webhookSubscriptionState{},
+			WebhookReceipts:              map[string]webhookReceiptState{},
 		}
 		if err := writeJSONAtomic(statePath, initial); err != nil {
 			return err
@@ -201,6 +205,12 @@ func (a *App) normalizeLoadedState(loaded state) error {
 	}
 	if a.state.StreamStates == nil {
 		a.state.StreamStates = map[string]StreamState{}
+	}
+	if a.state.WebhookSubscriptions == nil {
+		a.state.WebhookSubscriptions = map[string]webhookSubscriptionState{}
+	}
+	if a.state.WebhookReceipts == nil {
+		a.state.WebhookReceipts = map[string]webhookReceiptState{}
 	}
 	a.migrateLegacySyncModeCompatibility()
 	return a.migrateCredentialCoordination()
@@ -409,9 +419,11 @@ func newStateStore(path string) statestore.JSONStore[state] {
 		Path: path,
 		Initial: func() state {
 			return state{
-				CredentialBindings: map[string]credentialBindingState{},
-				Checkpoints:        map[string]map[string]string{},
-				StreamStates:       map[string]StreamState{},
+				CredentialBindings:   map[string]credentialBindingState{},
+				Checkpoints:          map[string]map[string]string{},
+				StreamStates:         map[string]StreamState{},
+				WebhookSubscriptions: map[string]webhookSubscriptionState{},
+				WebhookReceipts:      map[string]webhookReceiptState{},
 			}
 		},
 		Locker: statestore.FileLock{Path: path + ".lock"},
