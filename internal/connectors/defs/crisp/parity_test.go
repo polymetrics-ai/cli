@@ -212,6 +212,39 @@ func TestCrispPageNumberMinimumRejectsCommandOverride(t *testing.T) {
 	}
 }
 
+func TestCrispPageNumberMinimumRejectsConfigOverride(t *testing.T) {
+	bundle, err := engine.Load(os.DirFS(".."), "crisp")
+	if err != nil {
+		t.Fatalf("load Crisp bundle: %v", err)
+	}
+
+	var requests atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		requests.Add(1)
+	}))
+	defer server.Close()
+
+	_, err = commandrunner.Run(context.Background(), engine.New(bundle, nil), commandrunner.Request{
+		Path: []string{"conversations", "list"},
+		Config: connectors.RuntimeConfig{Config: map[string]string{
+			"base_url":    server.URL,
+			"website_id":  "fixture-website",
+			"page_number": "0",
+			"token_tier":  "website",
+		}},
+	}, func(connectors.Record) error { return nil })
+	var minimumErr *commandrunner.MinimumFlagError
+	if !errors.As(err, &minimumErr) {
+		t.Fatalf("Crisp config page_number 0 error = %T %v, want MinimumFlagError", err, err)
+	}
+	if minimumErr.Parameter != "page-number" || minimumErr.Minimum != 1 {
+		t.Fatalf("MinimumFlagError = %+v, want page-number minimum 1", minimumErr)
+	}
+	if requests.Load() != 0 {
+		t.Fatalf("rejected config page number sent %d requests, want none", requests.Load())
+	}
+}
+
 func TestCrispListCommandPreservesFixtureContent(t *testing.T) {
 	fixture, err := os.ReadFile("fixtures/streams/list_conversations/page_1.json")
 	if err != nil {
