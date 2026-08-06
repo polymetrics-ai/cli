@@ -236,6 +236,45 @@ func TestCredentialCoordination_MigratesLegacyMetadataWithoutChangingApprovalLif
 	}
 }
 
+func TestCredentialCoordination_EmptyProjectOpenDoesNotRewriteState(t *testing.T) {
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject() error = %v", err)
+	}
+	statePath := filepath.Join(root, ".polymetrics", "state", "state.json")
+	readState := func() struct {
+		Revision           uint64                     `json:"revision"`
+		CredentialBindings map[string]json.RawMessage `json:"credential_bindings"`
+	} {
+		t.Helper()
+		stateBytes, err := os.ReadFile(statePath)
+		if err != nil {
+			t.Fatalf("read state: %v", err)
+		}
+		var persisted struct {
+			Revision           uint64                     `json:"revision"`
+			CredentialBindings map[string]json.RawMessage `json:"credential_bindings"`
+		}
+		if err := json.Unmarshal(stateBytes, &persisted); err != nil {
+			t.Fatalf("decode state: %v", err)
+		}
+		return persisted
+	}
+
+	initial := readState()
+	if initial.CredentialBindings == nil {
+		t.Fatal("initial state did not serialize the empty credential binding map")
+	}
+	for attempt := 0; attempt < 2; attempt++ {
+		if _, err := app.Open(root); err != nil {
+			t.Fatalf("Open() error = %v", err)
+		}
+		if got := readState().Revision; got != initial.Revision {
+			t.Fatalf("Open() rewrote empty project state revision = %d, want %d", got, initial.Revision)
+		}
+	}
+}
+
 func TestCredentialCoordination_RejectsInvalidDeclarationsBeforePersistence(t *testing.T) {
 	ctx := context.Background()
 	root := t.TempDir()

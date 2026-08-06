@@ -50,7 +50,7 @@ type sqlQueryEngine interface {
 type state struct {
 	Revision           uint64                            `json:"revision"`
 	Credentials        []CredentialMeta                  `json:"credentials"`
-	CredentialBindings map[string]credentialBindingState `json:"credential_bindings,omitempty"`
+	CredentialBindings map[string]credentialBindingState `json:"credential_bindings"`
 	CoordinationSalt   string                            `json:"coordination_salt,omitempty"`
 	Connections        []Connection                      `json:"connections"`
 	Catalogs           []CatalogSnapshot                 `json:"catalogs"`
@@ -576,13 +576,13 @@ func (a *App) validateCredentialLinkCohort(source CredentialMeta, sourceBinding,
 
 func validateCredentialLinkPair(source, target credentialCohortMember) error {
 	if source.credential.Connector != target.credential.Connector && (!source.binding.hasExplicitDeclarations() || !target.binding.hasExplicitDeclarations()) {
-		return errors.New("cross-connector credential link requires explicitly declared provider family and auth profile")
+		return &CredentialLinkValidationError{err: errors.New("cross-connector credential link requires explicitly declared provider family and auth profile")}
 	}
 	if source.credential.ProviderFamily != target.credential.ProviderFamily {
-		return errors.New("credential link requires matching provider family")
+		return &CredentialLinkValidationError{err: errors.New("credential link requires matching provider family")}
 	}
 	if source.credential.AuthProfile != target.credential.AuthProfile {
-		return errors.New("credential link requires matching auth profile")
+		return &CredentialLinkValidationError{err: errors.New("credential link requires matching auth profile")}
 	}
 	return nil
 }

@@ -316,6 +316,9 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 		if flags.isBare("auth-profile") {
 			return usageErrorf("missing value for --auth-profile")
 		}
+		if flags.isBare("link-credential") {
+			return usageErrorf("--link-credential requires a credential identifier")
+		}
 		connector := flags.first("connector")
 		if connector == "" {
 			return errors.New("missing --connector")
@@ -364,11 +367,7 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 			LinkCredential: flags.first("link-credential"),
 		})
 		if err != nil {
-			var declarationErr *app.CredentialCoordinationDeclarationError
-			if errors.As(err, &declarationErr) {
-				return validationErrorf("%v", err)
-			}
-			return err
+			return credentialCoordinationInputError(err)
 		}
 		if jsonOut {
 			return writeJSON(stdout, envelope{"kind": "Credential", "credential": cred})
@@ -383,6 +382,9 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 			return validationErrorf("%v", err)
 		}
 		flags := parseFlags(args[2:])
+		if flags.isBare("to") {
+			return usageErrorf("--to requires a credential identifier")
+		}
 		target := flags.first("to")
 		if target == "" {
 			return usageErrorf("missing --to")
@@ -392,7 +394,7 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 		}
 		cred, err := a.LinkCredential(args[1], target)
 		if err != nil {
-			return err
+			return credentialCoordinationInputError(err)
 		}
 		if jsonOut {
 			return writeJSON(stdout, envelope{"kind": "Credential", "credential": cred})
@@ -447,6 +449,18 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 	default:
 		return errUsage
 	}
+}
+
+func credentialCoordinationInputError(err error) error {
+	var declarationErr *app.CredentialCoordinationDeclarationError
+	if errors.As(err, &declarationErr) {
+		return validationErrorf("%v", err)
+	}
+	var linkErr *app.CredentialLinkValidationError
+	if errors.As(err, &linkErr) {
+		return validationErrorf("%v", err)
+	}
+	return err
 }
 
 func runConnections(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {

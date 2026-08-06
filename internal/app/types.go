@@ -24,6 +24,14 @@ func (e *CredentialCoordinationDeclarationError) Error() string { return e.err.E
 
 func (e *CredentialCoordinationDeclarationError) Unwrap() error { return e.err }
 
+type CredentialLinkValidationError struct {
+	err error
+}
+
+func (e *CredentialLinkValidationError) Error() string { return e.err.Error() }
+
+func (e *CredentialLinkValidationError) Unwrap() error { return e.err }
+
 type CredentialMeta struct {
 	ID              string            `json:"id"`
 	Name            string            `json:"name"`
