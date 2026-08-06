@@ -90,11 +90,12 @@ func TestInterpolatePathDefaultURLEncode(t *testing.T) {
 		name     string
 		template string
 		want     string
+		wantErr  bool
 	}{
 		{
-			name:     "path traversal encoded",
+			name:     "path traversal rejected",
 			template: "/repos/{{ config.repository }}",
-			want:     "/repos/a%2F..%2Fb",
+			wantErr:  true,
 		},
 		{
 			name:     "query metachars encoded",
@@ -116,6 +117,12 @@ func TestInterpolatePathDefaultURLEncode(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := InterpolatePath(tt.template, vars)
+			if tt.wantErr {
+				if err == nil {
+					t.Fatalf("InterpolatePath(%q) error = nil, want path traversal rejection", tt.template)
+				}
+				return
+			}
 			if err != nil {
 				t.Fatalf("InterpolatePath error: %v", err)
 			}

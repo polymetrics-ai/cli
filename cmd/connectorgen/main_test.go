@@ -682,6 +682,29 @@ func TestValidate_CallerSuppliedIdentifierSetOperationRequiresImplementedDirectR
 	t.Fatalf("findings = %+v, want missing implemented direct_read command", findings)
 }
 
+func TestValidate_CallerSuppliedIdentifierSetRejectsConnectorCommandControlNames(t *testing.T) {
+	for _, name := range []string{"_", "approve", "config", "confirm", "connection", "credential", "help", "json", "limit", "plan", "preview", "root"} {
+		t.Run(name, func(t *testing.T) {
+			op := engine.OperationSpec{
+				ID:   "acme.identifiers.lookup",
+				Kind: "rest_read",
+				REST: &engine.RESTOperationSpec{CallerSuppliedIdentifierSets: []engine.CallerSuppliedIdentifierSetSpec{{
+					Name: name, ElementShape: "opaque_string", Wire: "query_comma_separated", MinItems: 0, MaxItems: 2,
+				}}},
+			}
+			findings := checkCLISurfaceCallerSuppliedIdentifierSetOperationBindings(engine.Bundle{Name: "acme", Operations: []engine.OperationSpec{op}}, []engine.CLICommand{{
+				Availability: "implemented", Intent: "direct_read", Operation: op.ID,
+			}})
+			for _, finding := range findings {
+				if strings.Contains(finding.Message, "connector command control --"+name) {
+					return
+				}
+			}
+			t.Fatalf("findings = %+v, want connector command control rejection", findings)
+		})
+	}
+}
+
 func TestValidate_CLISurfaceRepositoryOutputPolicyRequiresPathVariable(t *testing.T) {
 	cliSurface := strings.ReplaceAll(validDirectReadCLISurfaceJSON(), "/widgets/{path}", "/widgets/{file_path}")
 	cliSurface = strings.Replace(cliSurface, `"maps_to": "path.path"`, `"maps_to": "path.file_path"`, 1)

@@ -9,6 +9,7 @@ import (
 	"sort"
 	"strings"
 
+	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
@@ -817,6 +818,16 @@ func checkCLISurfaceCallerSuppliedIdentifierSetOperationBindings(b engine.Bundle
 	for _, op := range b.Operations {
 		if op.Kind != "rest_read" || op.REST == nil || len(op.REST.CallerSuppliedIdentifierSets) == 0 {
 			continue
+		}
+		for _, set := range op.REST.CallerSuppliedIdentifierSets {
+			if connectors.IsConnectorCommandControlFlag(set.Name) {
+				findings = append(findings, Finding{
+					Connector: b.Name,
+					File:      "operations.json",
+					Rule:      ruleCLISurfaceSafety,
+					Message:   fmt.Sprintf("operation %q caller-supplied identifier set %q conflicts with connector command control --%s", op.ID, set.Name, set.Name),
+				})
+			}
 		}
 		bound := false
 		for _, cmd := range commands {

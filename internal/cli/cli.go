@@ -763,16 +763,12 @@ func connectorBareCommandGroupHelpRequested(flags parsedFlags, surface *connecto
 }
 
 func connectorHelpFlagsArePassive(flags parsedFlags, surface *connectors.CommandSurface) bool {
-	declared := map[string]bool{
-		"credential": true, "connection": true, "config": true,
-		"limit": true, "max-bytes": true,
-		"dest-root": true, "file-name": true,
-	}
+	declared := map[string]bool{}
 	for _, flag := range surface.GlobalFlags {
 		declared[flag.Name] = true
 	}
 	for name := range flags.values {
-		if name != "_" && !declared[name] {
+		if name != "_" && !connectors.IsConnectorCommandControlFlag(name) && !declared[name] {
 			return false
 		}
 	}
@@ -1102,12 +1098,10 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 	}
 	commandFlags := map[string][]string{}
 	for name, values := range flags.values {
-		switch name {
-		case "_", "credential", "connection", "config", "limit", "max-bytes", "plan", "preview", "approve", "confirm", "plan-name", "dest-root", "file-name":
+		if connectors.IsConnectorCommandControlFlag(name) {
 			continue
-		default:
-			commandFlags[name] = values
 		}
+		commandFlags[name] = values
 	}
 
 	if flags.first("plan") != "" {

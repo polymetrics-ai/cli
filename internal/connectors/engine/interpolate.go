@@ -80,8 +80,8 @@ func InterpolatePath(template string, vars Vars) (string, error) {
 	return out, nil
 }
 
-// containsDotDotSegment reports whether any "/"-delimited segment of path is
-// exactly "..", checking both the raw (possibly percent-encoded) segments
+// containsDotDotSegment reports whether any path segment is exactly "..",
+// checking both the raw (possibly percent-encoded) segments
 // and their percent-decoded form so an encoded traversal segment (e.g.
 // "%2e%2e") is caught too.
 func containsDotDotSegment(path string) bool {
@@ -93,6 +93,7 @@ func containsDotDotSegment(path string) bool {
 }
 
 func hasDotDotSegment(path string) bool {
+	path = strings.ReplaceAll(path, "\\", "/")
 	for _, seg := range strings.Split(path, "/") {
 		if seg == ".." {
 			return true

@@ -308,6 +308,7 @@ func TestCallerSuppliedIdentifierSetsRejectTraversalShapedPathBeforeNetwork(t *t
 	}{
 		{name: "dot dot segment", value: ".."},
 		{name: "encoded slash traversal", value: "private-segment/../target"},
+		{name: "backslash traversal", value: "private-segment\\..\\target"},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			hits = 0
@@ -406,6 +407,16 @@ func TestCallerSuppliedIdentifierSetDeclarationsRejectUnsafeContracts(t *testing
 			want: `path_segment requires min_items and max_items of 1`,
 		},
 		{
+			name: "path set placeholder must be in the pathname",
+			rest: `{"method":"GET","path":"/lookups?ids={id}","caller_supplied_identifier_sets":[{"name":"id","element_shape":"opaque_string","wire":"path_segment","min_items":1,"max_items":1}]}`,
+			want: `path_segment requires exactly one well-formed {id} path variable in the pathname`,
+		},
+		{
+			name: "path set placeholder must be well formed",
+			rest: `{"method":"GET","path":"/lookups/{{id}}","caller_supplied_identifier_sets":[{"name":"id","element_shape":"opaque_string","wire":"path_segment","min_items":1,"max_items":1}]}`,
+			want: `path_segment requires exactly one well-formed {id} path variable in the pathname`,
+		},
+		{
 			name: "body schema repeats the exact bounds",
 			rest: `{"method":"POST","path":"/lookups","content_type":"application/json","body_schema":{"type":"object","required":["ids"],"properties":{"ids":{"type":"array","minItems":0,"maxItems":3,"items":{"type":"string"}}}},"caller_supplied_identifier_sets":[{"name":"ids","element_shape":"opaque_string","wire":"body_json_array","min_items":0,"max_items":2}]}`,
 			want: `matching minItems and maxItems`,
@@ -426,5 +437,13 @@ func TestCallerSuppliedIdentifierSetDeclarationsRejectUnsafeContracts(t *testing
 				t.Fatalf("Load error = %v, want %q", err, tt.want)
 			}
 		})
+	}
+}
+
+func TestCallerSuppliedIdentifierSetPathSegmentAllowsStaticQuery(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{"operations":[{"id":"acme.lookup","kind":"rest_read","summary":"Lookup explicit identifiers","risk":"low","approval":"none","output_policy":"json_redacted","rest":{"method":"GET","path":"/lookups/{id}?fixed=true","caller_supplied_identifier_sets":[{"name":"id","element_shape":"opaque_string","wire":"path_segment","min_items":1,"max_items":1}]}}]}`)}
+	if _, err := Load(fsys, "acme"); err != nil {
+		t.Fatalf("Load: %v", err)
 	}
 }

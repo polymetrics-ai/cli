@@ -91,3 +91,14 @@ type CommandSurfaceHelpTopic struct {
 type CommandSurfaceProvider interface {
 	CommandSurface() *CommandSurface
 }
+
+// IsConnectorCommandControlFlag reports whether a command flag is handled by
+// the CLI rather than forwarded to a connector command.
+func IsConnectorCommandControlFlag(name string) bool {
+	switch name {
+	case "_", "approve", "config", "confirm", "connection", "credential", "dest-root", "file-name", "help", "json", "limit", "max-bytes", "plan", "plan-name", "preview", "root":
+		return true
+	default:
+		return false
+	}
+}
