@@ -82,9 +82,9 @@ GitHub-hosted cold samples are available in Verify logs.
 
 Own only the deterministic assertion and narrow Make/CI invocation needed to
 enforce it. First prove a controlled duplicate fixture trips both parser and
-invocation guards without sleeps. After multiple post-refactor GitHub-hosted
-cold target samples are collected, record sample URLs/timestamps/environment,
-derive a margin from the observed maximum, centralize the explicit threshold,
+invocation guards without sleeps. After the final topology includes exactly one
+real sample/outbox lifecycle proof, record its cold timing measurement, derive
+a margin from the observed process overhead, centralize the explicit threshold,
 and make failure name observed and allowed values. Do not increase the
 20-minute timeout, retry tests, skip tests, cache evidence, or move test work
 out of Verify.
