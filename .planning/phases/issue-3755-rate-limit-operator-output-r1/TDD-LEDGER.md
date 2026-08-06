@@ -4,13 +4,13 @@
 
 | Requirement | Red proof to add | Green proof to add | Status |
 | --- | --- | --- | --- |
-| Declared selection | A declared test-only bundle's selected policy does not appear in an execution summary | one coalesced row reports policy ID, subject kind, and structural selector reason | Planned |
-| Honest absence | A bundle without `rate_limits.json` serializes no state or implies unlimited | summary is exactly `undeclared`, has no selected policies, and does not change requester behavior | Planned |
-| Local pacing | Existing deterministic limiter waits are not surfaced | aggregate local pacing equals the injected clock's actual wait without per-request output | Planned |
-| Provider facts | Typed headers/429 are consumed by enforcement but not returned to the operator | latest remaining budget/reset-safe facts and 429 observed/honoured wait are included in the bounded summary | Planned |
+| Declared selection | A declared test-only bundle's selected policy does not appear in an execution summary | one coalesced row reports policy ID, subject kind, and structural selector reason | Red: `TestRateLimitReportShowsDeclaredPolicyPacingAndProviderPushbackWithoutSecrets` |
+| Honest absence | A bundle without `rate_limits.json` serializes no state or implies unlimited | summary is exactly `undeclared`, has no selected policies, and does not change requester behavior | Red: `TestRateLimitReportCallsAbsentDeclarationUndeclared` |
+| Local pacing | Existing deterministic limiter waits are not surfaced | aggregate local pacing equals the injected clock's actual wait without per-request output | Red: `TestRateLimitReportShowsDeclaredPolicyPacingAndProviderPushbackWithoutSecrets` |
+| Provider facts | Typed headers/429 are consumed by enforcement but not returned to the operator | latest remaining budget/reset-safe facts and 429 observed/honoured wait are included in the bounded summary | Red: `TestRateLimitReportShowsDeclaredPolicyPacingAndProviderPushbackWithoutSecrets` |
 | Ordinary latency | Operator cannot distinguish a normal slow requester from pacing/provider waits | requester latency is aggregated separately from local pacing and provider retry wait | Planned |
 | Human and JSON ETL run | `pm etl run` has only record counts and JSON omits report data | human output labels declaration/pacing/provider/latency; JSON exposes identical `run.rate_limit` data | Planned |
-| Secret-free invariant | A report could capture a credential, raw binding, runtime subject, opaque scope, or `CredentialRevision` | regression tests seed distinct sentinel values into every prohibited field and assert neither `json.Marshal(report)` nor human output contains any | Planned |
+| Secret-free invariant | A report could capture a credential, raw binding, runtime subject, opaque scope, or `CredentialRevision` | regression tests seed distinct sentinel values into every prohibited field and assert neither `json.Marshal(report)` nor human output contains any | Red: `TestRateLimitReportShowsDeclaredPolicyPacingAndProviderPushbackWithoutSecrets` (structured surface); human surface pending |
 | Bounded output | A long run could append an event per request | repeated policy/admission/observation calls leave one policy row and scalar aggregates only | Planned |
 
 ## Expected command log
