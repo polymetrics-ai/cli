@@ -753,24 +753,83 @@ func TestNativeCloudTrailRejectsInvalidMaxPages(t *testing.T) {
 	}
 }
 
-func TestNativeCloudTrailRejectsBlockedReadStreams(t *testing.T) {
-	blocked := []string{
+func TestNativeCloudTrailReadsLegacyEventStreamAliases(t *testing.T) {
+	aliases := []string{
 		"management_events",
 		"read_only_events",
 		"write_only_events",
 		"console_logins",
 	}
 	c := Connector{}
-	for _, stream := range blocked {
+	for _, stream := range aliases {
 		t.Run(stream, func(t *testing.T) {
-			err := c.Read(context.Background(), connectors.ReadRequest{Stream: stream}, func(connectors.Record) error {
-				t.Fatalf("emit called for blocked stream %s", stream)
+			var records []connectors.Record
+			err := c.Read(context.Background(), connectors.ReadRequest{
+				Stream: stream,
+				Config: connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture"}},
+				State:  map[string]string{"cursor": "1704067200"},
+			}, func(record connectors.Record) error {
+				records = append(records, record)
 				return nil
 			})
-			if err == nil {
-				t.Fatalf("Read(%s) unexpectedly succeeded", stream)
+			if err != nil {
+				t.Fatalf("Read(%s): %v", stream, err)
+			}
+			if len(records) != 2 {
+				t.Fatalf("Read(%s) records = %#v, want two fixture events", stream, records)
+			}
+			if records[0]["EventTime"] != legacyFixtureEventTime+1 {
+				t.Fatalf("Read(%s) EventTime = %#v, want cursor field", stream, records[0]["EventTime"])
+			}
+			if records[0]["previous_cursor"] != "1704067200" {
+				t.Fatalf("Read(%s) previous_cursor = %#v, want preserved cursor", stream, records[0]["previous_cursor"])
 			}
 		})
+	}
+}
+
+func TestNativeCloudTrailLegacyEventStreamUsesLookupFilterAndCursor(t *testing.T) {
+	var gotTarget string
+	var gotBody map[string]any
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotTarget = r.Header.Get("X-Amz-Target")
+		if err := json.NewDecoder(r.Body).Decode(&gotBody); err != nil {
+			t.Fatalf("decode body: %v", err)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"Events":[{"EventId":"fixture-event","EventName":"ConsoleLogin","EventSource":"signin.amazonaws.com","EventTime":1704067201}]}`))
+	}))
+	defer srv.Close()
+
+	c := Connector{Client: srv.Client()}
+	var records []connectors.Record
+	err := c.Read(context.Background(), connectors.ReadRequest{
+		Stream: "console_logins",
+		Config: fixtureRuntimeConfig(srv.URL),
+		State:  map[string]string{"cursor": "1704067200"},
+	}, func(record connectors.Record) error {
+		records = append(records, record)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if got, want := gotTarget, cloudTrailTarget("LookupEvents"); got != want {
+		t.Fatalf("X-Amz-Target = %q, want %q", got, want)
+	}
+	if got := gotBody["StartTime"]; got != float64(1704067200) {
+		t.Fatalf("StartTime = %#v, want cursor lower bound", got)
+	}
+	attributes, ok := gotBody["LookupAttributes"].([]any)
+	if !ok || len(attributes) != 1 {
+		t.Fatalf("LookupAttributes = %#v, want ConsoleLogin filter", gotBody["LookupAttributes"])
+	}
+	attribute, ok := attributes[0].(map[string]any)
+	if !ok || attribute["AttributeKey"] != "EventName" || attribute["AttributeValue"] != "ConsoleLogin" {
+		t.Fatalf("LookupAttributes = %#v, want ConsoleLogin filter", attributes)
+	}
+	if len(records) != 1 || records[0]["EventId"] != "fixture-event" || records[0]["EventTime"] != json.Number("1704067201") {
+		t.Fatalf("records = %#v, want mapped LookupEvents record", records)
 	}
 }
 

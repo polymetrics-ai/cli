@@ -62,6 +62,24 @@ func TestBuildActionBodyEnforcesDocumentedConstraints(t *testing.T) {
 			},
 			wantErr: "cannot combine ImportId with Destinations",
 		},
+		{
+			name:   "resource policy requires JSON syntax",
+			action: "PutResourcePolicy",
+			raw: map[string]any{
+				"ResourceArn":    "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example",
+				"ResourcePolicy": "not-json",
+			},
+			wantErr: "must be valid JSON",
+		},
+		{
+			name:   "insights source must be a trail ARN",
+			action: "ListInsightsData",
+			raw: map[string]any{
+				"DataType":      "InsightsEvents",
+				"InsightSource": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example",
+			},
+			wantErr: "must be a CloudTrail trail ARN",
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
@@ -141,6 +159,26 @@ func TestBuildActionBodyValidatesClosedNestedRequests(t *testing.T) {
 		}},
 	}, true); err == nil {
 		t.Fatal("UpdateChannel accepted an invalid Destination.Type")
+	}
+	if _, err := buildActionBody("CreateChannel", map[string]any{
+		"Destinations": []any{map[string]any{
+			"Location": "iam.amazonaws.com",
+			"Type":     "EVENT_DATA_STORE",
+		}},
+		"Name":   "example-channel",
+		"Source": "Custom",
+	}, true); err == nil || !strings.Contains(err.Error(), "must be an event data store ARN") {
+		t.Fatalf("CreateChannel EVENT_DATA_STORE location error = %v, want event-data-store ARN rejection", err)
+	}
+	if _, err := buildActionBody("CreateChannel", map[string]any{
+		"Destinations": []any{map[string]any{
+			"Location": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/channel-destination",
+			"Type":     "EVENT_DATA_STORE",
+		}},
+		"Name":   "example-channel",
+		"Source": "aws.partner/example",
+	}, true); err == nil || !strings.Contains(err.Error(), "must be one of") {
+		t.Fatalf("CreateChannel Source error = %v, want closed-source rejection", err)
 	}
 }
 
@@ -267,6 +305,32 @@ func TestBuildActionBodyValidatesClosedDashboardQueryParameters(t *testing.T) {
 		"QueryParameterValues": map[string]any{"$Unknown$": "value"},
 	}, true); err == nil || !strings.Contains(err.Error(), "unsupported dashboard query parameter") {
 		t.Fatalf("StartDashboardRefresh unknown parameter error = %v, want closed-key rejection", err)
+	}
+	if _, err := buildActionBody("StartDashboardRefresh", map[string]any{
+		"DashboardId": "AWSCloudTrail-Overview",
+	}, true); err == nil || !strings.Contains(err.Error(), "requires $EventDataStoreId$") {
+		t.Fatalf("StartDashboardRefresh managed dashboard error = %v, want event-data-store parameter requirement", err)
+	}
+	if _, err := buildActionBody("StartDashboardRefresh", map[string]any{
+		"DashboardId": "custom-dashboard",
+	}, true); err != nil {
+		t.Fatalf("StartDashboardRefresh custom dashboard: %v", err)
+	}
+	if _, err := buildActionBody("StartDashboardRefresh", map[string]any{
+		"DashboardId": "AWSCloudTrail-Overview",
+		"QueryParameterValues": map[string]any{
+			"$EventDataStoreId$": strings.Repeat("a", 129),
+		},
+	}, true); err == nil || !strings.Contains(err.Error(), "must have length at most 128") {
+		t.Fatalf("StartDashboardRefresh long parameter error = %v, want value-length rejection", err)
+	}
+	if _, err := buildActionBody("StartDashboardRefresh", map[string]any{
+		"DashboardId": "AWSCloudTrail-Overview",
+		"QueryParameterValues": map[string]any{
+			"$EventDataStoreId$": "invalid value",
+		},
+	}, true); err == nil || !strings.Contains(err.Error(), "does not match documented pattern") {
+		t.Fatalf("StartDashboardRefresh parameter pattern error = %v, want pattern rejection", err)
 	}
 }
 
@@ -609,6 +673,87 @@ func TestBuildActionBodyEnforcesRepeatableRequestBounds(t *testing.T) {
 	}, true); err == nil || !strings.Contains(err.Error(), "duplicates item 0") {
 		t.Fatalf("AddTags duplicate key error = %v, want duplicate rejection", err)
 	}
+	for _, test := range []struct {
+		name   string
+		action string
+		raw    map[string]any
+	}{
+		{
+			name:   "create channel",
+			action: "CreateChannel",
+			raw: map[string]any{
+				"Destinations": []any{map[string]any{
+					"Location": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/channel-destination",
+					"Type":     "EVENT_DATA_STORE",
+				}},
+				"Name":   "example-channel",
+				"Source": "Custom",
+				"Tags":   tags,
+			},
+		},
+		{
+			name:   "create event data store",
+			action: "CreateEventDataStore",
+			raw: map[string]any{
+				"Name":     "example-store",
+				"TagsList": tags,
+			},
+		},
+		{
+			name:   "create trail",
+			action: "CreateTrail",
+			raw: map[string]any{
+				"Name":         "example-trail",
+				"S3BucketName": "example-cloudtrail-bucket",
+				"TagsList":     tags,
+			},
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			if _, err := buildActionBody(test.action, test.raw, true); err == nil || !strings.Contains(err.Error(), "at most 50 tags") {
+				t.Fatalf("%s tag limit error = %v, want documented limit", test.action, err)
+			}
+		})
+	}
+	for _, test := range []struct {
+		name   string
+		action string
+		raw    map[string]any
+	}{
+		{
+			name:   "channel tags",
+			action: "CreateChannel",
+			raw: map[string]any{
+				"Destinations": []any{map[string]any{
+					"Location": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/channel-destination",
+					"Type":     "EVENT_DATA_STORE",
+				}},
+				"Name":   "example-channel",
+				"Source": "Custom",
+				"Tags": []any{
+					map[string]any{"Key": "Environment"},
+					map[string]any{"Key": "Environment"},
+				},
+			},
+		},
+		{
+			name:   "event data store tags",
+			action: "CreateEventDataStore",
+			raw: map[string]any{
+				"Name": "example-store",
+				"TagsList": []any{
+					map[string]any{"Key": "Environment"},
+					map[string]any{"Key": "Environment"},
+				},
+			},
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			if _, err := buildActionBody(test.action, test.raw, true); err == nil || !strings.Contains(err.Error(), "duplicates item 0") {
+				t.Fatalf("%s duplicate tag error = %v, want duplicate rejection", test.action, err)
+			}
+		})
+	}
 	if _, err := buildActionBody("CreateChannel", map[string]any{
 		"Destinations": []any{map[string]any{
 			"Location": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/channel-destination",
@@ -622,7 +767,7 @@ func TestBuildActionBodyEnforcesRepeatableRequestBounds(t *testing.T) {
 	}
 	dimensionsBody, err := buildActionBody("ListInsightsData", map[string]any{
 		"DataType":      "InsightsEvents",
-		"InsightSource": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example",
+		"InsightSource": "arn:aws:cloudtrail:us-east-1:123456789012:trail/example-trail",
 		"Dimensions":    map[string]any{"EventId": "event-123"},
 	}, true)
 	if err != nil {
@@ -634,17 +779,24 @@ func TestBuildActionBodyEnforcesRepeatableRequestBounds(t *testing.T) {
 
 	if _, err := buildActionBody("ListInsightsData", map[string]any{
 		"DataType":      "InsightsEvents",
-		"InsightSource": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example",
+		"InsightSource": "arn:aws:cloudtrail:us-east-1:123456789012:trail/example-trail",
 		"Dimensions":    map[string]any{"EventId": "event-123", "EventName": "ConsoleLogin"},
 	}, true); err == nil || !strings.Contains(err.Error(), "must contain at most 1 items") {
 		t.Fatalf("ListInsightsData multiple dimensions error = %v, want one-entry rejection", err)
 	}
 	if _, err := buildActionBody("ListInsightsData", map[string]any{
 		"DataType":      "InsightsEvents",
-		"InsightSource": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example",
+		"InsightSource": "arn:aws:cloudtrail:us-east-1:123456789012:trail/example-trail",
 		"Dimensions":    map[string]any{"Unknown": "value"},
 	}, true); err == nil || !strings.Contains(err.Error(), "must be one of EventId | EventName | EventSource") {
 		t.Fatalf("ListInsightsData unknown dimension error = %v, want closed-key rejection", err)
+	}
+	if _, err := buildActionBody("ListInsightsData", map[string]any{
+		"DataType":      "InsightsEvents",
+		"InsightSource": "arn:aws:cloudtrail:us-east-1:123456789012:trail/example-trail",
+		"Dimensions":    map[string]any{"EventId": strings.Repeat("a", 2001)},
+	}, true); err == nil || !strings.Contains(err.Error(), "must have length at most 2000") {
+		t.Fatalf("ListInsightsData long dimension error = %v, want value-length rejection", err)
 	}
 }
 

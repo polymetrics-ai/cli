@@ -1264,6 +1264,42 @@ func TestRecordOverridesBuildsRepeatableNestedCollections(t *testing.T) {
 	}
 }
 
+func TestRecordOverridesPairsNestedRepeatableCollections(t *testing.T) {
+	record, err := recordOverrides(connectors.CommandSurfaceCommand{
+		Path:         "selectors set",
+		Intent:       "reverse_etl",
+		Availability: "implemented",
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "selector", Type: "string", MapsTo: "record.selectors.[].name"},
+			{Name: "child", Type: "string", MapsTo: "record.selectors.[].children.[].name"},
+		},
+	}, map[string][]string{
+		"selector": {"first", "second"},
+		"child":    {"first-child", "second-child"},
+	})
+	if err != nil {
+		t.Fatalf("recordOverrides: %v", err)
+	}
+	selectors, ok := record["selectors"].([]any)
+	if !ok || len(selectors) != 2 {
+		t.Fatalf("selectors = %#v, want two repeatable records", record["selectors"])
+	}
+	for index, want := range []string{"first-child", "second-child"} {
+		selector, ok := selectors[index].(map[string]any)
+		if !ok {
+			t.Fatalf("selector %d = %#v, want object", index, selectors[index])
+		}
+		children, ok := selector["children"].([]any)
+		if !ok || len(children) != 1 {
+			t.Fatalf("selector %d children = %#v, want one child", index, selector["children"])
+		}
+		child, ok := children[0].(map[string]any)
+		if !ok || child["name"] != want {
+			t.Fatalf("selector %d child = %#v, want %q", index, children[0], want)
+		}
+	}
+}
+
 func TestRecordOverridesBuildsClosedMapEntries(t *testing.T) {
 	record, err := recordOverrides(connectors.CommandSurfaceCommand{
 		Path:         "dashboard refresh",

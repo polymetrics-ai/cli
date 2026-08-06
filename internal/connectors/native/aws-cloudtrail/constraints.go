@@ -1,6 +1,7 @@
 package awscloudtrail
 
 import (
+	"encoding/json"
 	"fmt"
 	"net"
 	"regexp"
@@ -53,6 +54,8 @@ var (
 	maximumLengthPattern                     = regexp.MustCompile(`(?i)Maximum length of ([0-9]+)\.`)
 	cloudTrailDestinationLocationConstraints = awsStringConstraints{minimumLength: 3, maximumLength: 1024, pattern: regexp.MustCompile(`^[a-zA-Z0-9._/\-:*]+$`)}
 	cloudTrailDestinationTypeConstraints     = awsStringConstraints{values: map[string]struct{}{"EVENT_DATA_STORE": {}, "AWS_SERVICE": {}}, valueList: "EVENT_DATA_STORE | AWS_SERVICE"}
+	cloudTrailChannelSourceConstraints       = awsStringConstraints{values: map[string]struct{}{"Custom": {}, "CloudStorageSecurityConsole": {}, "Clumio": {}, "CrowdStrike": {}, "CyberArk": {}, "GitHub": {}, "KongGatewayEnterprise": {}, "LaunchDarkly": {}, "NetskopeCloudExchange": {}, "IBMMulticloud": {}, "MontyCloud": {}, "OktaSystemLogEvents": {}, "OneLogin": {}, "Shoreline": {}, "Snyk": {}, "WizAuditLogs": {}}, valueList: "Custom | CloudStorageSecurityConsole | Clumio | CrowdStrike | CyberArk | GitHub | KongGatewayEnterprise | LaunchDarkly | NetskopeCloudExchange | IBMMulticloud | MontyCloud | OktaSystemLogEvents | OneLogin | Shoreline | Snyk | WizAuditLogs"}
+	cloudTrailAWSServiceDestinationPattern   = regexp.MustCompile(`^[a-z0-9-]+\.amazonaws\.com$`)
 	cloudTrailTagKeyConstraints              = awsStringConstraints{minimumLength: 1, maximumLength: 128}
 	cloudTrailTagValueConstraints            = awsStringConstraints{minimumLength: 1, maximumLength: 256}
 	cloudTrailInsightTypeConstraints         = awsStringConstraints{values: map[string]struct{}{"ApiCallRateInsight": {}, "ApiErrorRateInsight": {}}, valueList: "ApiCallRateInsight | ApiErrorRateInsight"}
@@ -132,6 +135,10 @@ func sectionAfter(description, marker string, stops ...string) string {
 	section := description[index+len(marker):]
 	lower := strings.ToLower(section)
 	for _, stop := range stops {
+		stop = strings.TrimSpace(stop)
+		if stop == "" {
+			continue
+		}
 		if stopIndex := strings.Index(lower, strings.ToLower(stop)); stopIndex >= 0 {
 			section = section[:stopIndex]
 			lower = lower[:stopIndex]
@@ -217,6 +224,8 @@ func validateActionField(action string, field awsActionField, value any) error {
 		return validateImportSource(value)
 	case (action == "CreateChannel" || action == "UpdateChannel") && field.Name == "Destinations":
 		return validateDestinations(value)
+	case action == "CreateChannel" && field.Name == "Source":
+		return validateChannelSource(value)
 	case field.Name == "TagsList" || field.Name == "Tags":
 		return validateTags(action, value)
 	case field.Name == "AdvancedEventSelectors":
@@ -231,6 +240,10 @@ func validateActionField(action string, field awsActionField, value any) error {
 		return validateContextKeySelectors(value)
 	case action == "StartDashboardRefresh" && field.Name == "QueryParameterValues":
 		return validateDashboardQueryParameterValues(value)
+	case action == "ListInsightsData" && field.Name == "InsightSource":
+		return validateInsightSource(value)
+	case action == "PutResourcePolicy" && field.Name == "ResourcePolicy":
+		return validateResourcePolicy(value)
 	case isTrailReferenceField(action, field.Name):
 		return validateTrailReference(action, field.Name, value)
 	case (action == "CreateTrail" || action == "UpdateTrail") && (field.Name == "S3KeyPrefix" || field.Name == "SnsTopicName"):
@@ -386,6 +399,8 @@ func validateActionSpecificCrossFields(action string, body map[string]any) error
 		return validateTrailCloudWatchLogs(action, body)
 	case "StartImport":
 		return validateStartImport(body)
+	case "StartDashboardRefresh":
+		return validateStartDashboardRefresh(body)
 	case "CreateEventDataStore", "UpdateEventDataStore":
 		if err := validateEventDataStoreRetention(action, body); err != nil {
 			return err
@@ -492,6 +507,20 @@ func validTrailARN(value string) bool {
 	return validateClassicTrailName(trailName) == nil
 }
 
+func validEventDataStoreARN(value string) bool {
+	parts := strings.SplitN(value, ":", 6)
+	if len(parts) != 6 || parts[0] != "arn" || !cloudTrailARNPartitionPattern.MatchString(parts[1]) || parts[2] != "cloudtrail" || strings.TrimSpace(parts[3]) == "" || len(parts[4]) != 12 {
+		return false
+	}
+	for _, character := range parts[4] {
+		if character < '0' || character > '9' {
+			return false
+		}
+	}
+	eventDataStore, ok := strings.CutPrefix(parts[5], "eventdatastore/")
+	return ok && strings.TrimSpace(eventDataStore) != ""
+}
+
 func trailNameAlphaNumeric(character rune) bool {
 	return character >= 'a' && character <= 'z' || character >= 'A' && character <= 'Z' || character >= '0' && character <= '9'
 }
@@ -526,6 +555,18 @@ func validateStartImport(body map[string]any) error {
 	}
 	if !allActionFieldsPresent(body, []string{"Destinations", "ImportSource"}) {
 		return fmt.Errorf("aws-cloudtrail StartImport requires ImportId or Destinations and ImportSource")
+	}
+	return nil
+}
+
+func validateStartDashboardRefresh(body map[string]any) error {
+	dashboardID, _ := actionString(body["DashboardId"])
+	if dashboardID != "AWSCloudTrail-Overview" && !strings.HasSuffix(dashboardID, ":dashboard/AWSCloudTrail-Overview") {
+		return nil
+	}
+	parameters, ok := body["QueryParameterValues"].(map[string]any)
+	if !ok || !actionValuePresent(parameters["$EventDataStoreId$"]) {
+		return fmt.Errorf("aws-cloudtrail StartDashboardRefresh requires $EventDataStoreId$ for managed dashboard %s", dashboardID)
 	}
 	return nil
 }
@@ -688,6 +729,36 @@ func validateDestinations(value any) error {
 		if err := validateActionString(destinationType, cloudTrailDestinationTypeConstraints); err != nil {
 			return fmt.Errorf("item %d: Destination.Type: %w", index, err)
 		}
+		if destinationType == "EVENT_DATA_STORE" && !validEventDataStoreARN(location) {
+			return fmt.Errorf("item %d: Destination.Location must be an event data store ARN for EVENT_DATA_STORE", index)
+		}
+		if destinationType == "AWS_SERVICE" && !cloudTrailAWSServiceDestinationPattern.MatchString(location) {
+			return fmt.Errorf("item %d: Destination.Location must be an AWS service name for AWS_SERVICE", index)
+		}
+	}
+	return nil
+}
+
+func validateChannelSource(value any) error {
+	source, ok := actionString(value)
+	if !ok {
+		return fmt.Errorf("must be a string")
+	}
+	return validateActionString(source, cloudTrailChannelSourceConstraints)
+}
+
+func validateInsightSource(value any) error {
+	source, ok := actionString(value)
+	if !ok || !validTrailARN(source) {
+		return fmt.Errorf("must be a CloudTrail trail ARN")
+	}
+	return nil
+}
+
+func validateResourcePolicy(value any) error {
+	policy, ok := actionString(value)
+	if !ok || !json.Valid([]byte(policy)) {
+		return fmt.Errorf("must be valid JSON")
 	}
 	return nil
 }
@@ -729,7 +800,9 @@ func validateTags(action string, value any) error {
 	if err := validateTagsList(value); err != nil {
 		return err
 	}
-	if action != "AddTags" {
+	switch action {
+	case "AddTags", "CreateChannel", "CreateEventDataStore", "CreateTrail":
+	default:
 		return nil
 	}
 	tags, _ := actionArray(value)

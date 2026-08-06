@@ -12,11 +12,9 @@ Blocked operations (3 of 60): `StartQuery`, `CreateDashboard`, `UpdateDashboard`
 
 Note on the other 9 CloudTrail Lake/query-family actions (`CancelQuery`, `DescribeQuery`, `GenerateQuery`, `GetQueryResults`, `ListQueries`, `SearchSampleQueries`, plus the Insights actions and `LookupEvents`): none of their request fields accept raw SQL text — they take typed identifiers (`QueryId`, `EventDataStore`, bounded enums, a natural-language `Prompt` for `GenerateQuery`) — so they are genuinely safe to implement. `CancelQuery` is an approval-gated reverse-ETL write; the remaining operations are executable direct reads.
 
-## Breaking change and migration
+## Legacy incremental stream aliases
 
-The earlier CloudTrail connector exposed four `LookupEvents`-backed event streams: `management_events`, `read_only_events`, `write_only_events`, and `console_logins`. None of them is an executable read stream in this native implementation, and their schemas are removed. Existing ETL connections that name one of them now fail with `aws-cloudtrail stream <name> not found`, and the incremental `EventTime` cursor those streams provided is gone; all 19 current streams are full-refresh.
-
-`LookupEvents` is now available as the `events lookup` direct-read command (`pm aws-cloudtrail events lookup`), using typed `LookupAttributes`/time-range/event-category filters — this is the replacement path for CloudTrail event-record lookups, though it is a bounded direct read rather than an incremental ETL stream (no cursor/pagination-state persistence across runs).
+The native connector retains the earlier `LookupEvents`-backed `management_events`, `read_only_events`, `write_only_events`, and `console_logins` streams as compatibility aliases for existing ETL connections. They preserve their `EventTime` cursor and use the configured `start_date` as their initial lower bound. These aliases remain outside the current 19-stream documented-operation ledger; `events lookup` remains the bounded typed direct-read command for new CloudTrail event-record lookups.
 
 The typed CloudTrail operations this connector implements read configuration, resource metadata, and (via direct reads) event/Insights records:
 

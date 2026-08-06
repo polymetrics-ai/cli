@@ -123,7 +123,7 @@
           "Tags": {
             "type": "array",
             "minItems": 1,
-            "maxItems": 200,
+            "maxItems": 50,
             "items": {
               "type": "object",
               "additionalProperties": false,
@@ -265,7 +265,7 @@
           "TagsList": {
             "type": "array",
             "minItems": 1,
-            "maxItems": 200,
+            "maxItems": 50,
             "items": {
               "type": "object",
               "additionalProperties": false,
@@ -342,7 +342,7 @@
           "TagsList": {
             "type": "array",
             "minItems": 1,
-            "maxItems": 200,
+            "maxItems": 50,
             "items": {
               "type": "object",
               "additionalProperties": false,

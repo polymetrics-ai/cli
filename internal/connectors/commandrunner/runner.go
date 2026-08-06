@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -1042,10 +1043,78 @@ func repeatableRecordTarget(path string) (bool, error) {
 			count++
 		}
 	}
-	if count > 1 {
-		return false, fmt.Errorf("record field %q supports at most one repeatable array segment", path)
+	return count > 0, nil
+}
+
+func repeatableRecordSegments(path string) (int, error) {
+	parts, err := validateDottedTargetPath(path, "record field")
+	if err != nil {
+		return 0, err
 	}
-	return count == 1, nil
+	count := 0
+	for _, part := range parts {
+		if part == "[]" {
+			count++
+		}
+	}
+	return count, nil
+}
+
+func expandRepeatableRecordTarget(path string, valueIndex, valueCount, parentCount int) (string, error) {
+	parts, err := validateDottedTargetPath(path, "record field")
+	if err != nil {
+		return "", err
+	}
+	segments, err := repeatableRecordSegments(path)
+	if err != nil {
+		return "", err
+	}
+	if segments == 0 {
+		return path, nil
+	}
+	if segments == 1 {
+		for index, part := range parts {
+			if part == "[]" {
+				parts[index] = strconv.Itoa(valueIndex)
+				break
+			}
+		}
+		return strings.Join(parts, "."), nil
+	}
+	if valueCount < 1 {
+		return "", fmt.Errorf("record field %q has no repeatable values", path)
+	}
+	if parentCount < 1 {
+		parentCount = 1
+	}
+	if parentCount > valueCount {
+		parentCount = valueCount
+	}
+	childrenPerParent := 1
+	if valueCount > parentCount {
+		if valueCount%parentCount != 0 {
+			return "", fmt.Errorf("record field %q has %d nested values that cannot be paired with %d parent records", path, valueCount, parentCount)
+		}
+		childrenPerParent = valueCount / parentCount
+	}
+	parentIndex := valueIndex / childrenPerParent
+	childIndex := valueIndex % childrenPerParent
+	arraySegment := 0
+	for index, part := range parts {
+		if part != "[]" {
+			continue
+		}
+		switch arraySegment {
+		case 0:
+			parts[index] = strconv.Itoa(parentIndex)
+		case 1:
+			parts[index] = strconv.Itoa(childIndex)
+		default:
+			parts[index] = "0"
+		}
+		arraySegment++
+	}
+	return strings.Join(parts, "."), nil
 }
 
 func setDottedValue(current any, parts []string, value any, fullPath string) (any, error) {
@@ -1142,6 +1211,61 @@ type recordFlagTarget struct {
 	mapKey string
 }
 
+type recordFlagApplication struct {
+	name   string
+	flag   connectors.CommandSurfaceFlag
+	values []string
+	target string
+}
+
+func nestedRepeatableParentCount(target string, applications []recordFlagApplication) int {
+	parts, err := validateDottedTargetPath(target, "record field")
+	if err != nil {
+		return 0
+	}
+	firstRepeatable := -1
+	for index, part := range parts {
+		if part == "[]" {
+			firstRepeatable = index
+			break
+		}
+	}
+	if firstRepeatable < 0 {
+		return 0
+	}
+	hasNestedRepeatable := false
+	for _, part := range parts[firstRepeatable+1:] {
+		if part == "[]" {
+			hasNestedRepeatable = true
+			break
+		}
+	}
+	if !hasNestedRepeatable {
+		return 0
+	}
+	parentCount := 0
+	for _, application := range applications {
+		candidate, err := validateDottedTargetPath(application.target, "record field")
+		if err != nil || len(candidate) <= firstRepeatable || candidate[firstRepeatable] != "[]" {
+			continue
+		}
+		if !slices.Equal(candidate[:firstRepeatable], parts[:firstRepeatable]) {
+			continue
+		}
+		candidateNested := false
+		for _, part := range candidate[firstRepeatable+1:] {
+			if part == "[]" {
+				candidateNested = true
+				break
+			}
+		}
+		if !candidateNested && len(application.values) > parentCount {
+			parentCount = len(application.values)
+		}
+	}
+	return parentCount
+}
+
 func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (connectors.Record, error) {
 	allowed := map[string]connectors.CommandSurfaceFlag{}
 	for _, flag := range cmd.Flags {
@@ -1156,13 +1280,7 @@ func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]st
 	if err := validateRecordFlagTargets(cmd); err != nil {
 		return nil, err
 	}
-	type flagApplication struct {
-		name   string
-		flag   connectors.CommandSurfaceFlag
-		values []string
-		target string
-	}
-	applications := make([]flagApplication, 0, len(flags))
+	applications := make([]recordFlagApplication, 0, len(flags))
 	for name, values := range flags {
 		if len(values) == 0 {
 			continue
@@ -1183,7 +1301,7 @@ func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]st
 				Reason:       fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo),
 			}
 		}
-		applications = append(applications, flagApplication{name: name, flag: flag, values: values, target: target})
+		applications = append(applications, recordFlagApplication{name: name, flag: flag, values: values, target: target})
 	}
 	sort.Slice(applications, func(i, j int) bool {
 		if applications[i].target == applications[j].target {
@@ -1222,12 +1340,16 @@ func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]st
 			return nil, err
 		}
 		if repeatable {
+			parentCount := nestedRepeatableParentCount(app.target, applications)
 			for index, raw := range app.values {
 				value, err := coerceFlagValue(app.flag, []string{raw})
 				if err != nil {
 					return nil, err
 				}
-				target := strings.Replace(app.target, "[]", strconv.Itoa(index), 1)
+				target, err := expandRepeatableRecordTarget(app.target, index, len(app.values), parentCount)
+				if err != nil {
+					return nil, err
+				}
 				if err := setRecordValue(record, target, value); err != nil {
 					return nil, err
 				}

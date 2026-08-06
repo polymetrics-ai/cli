@@ -58,6 +58,10 @@ func TestCommandSurfaceExposesDocumentedOperations(t *testing.T) {
 	if cancel.Intent != "reverse_etl" || cancel.Write != "cancel_query" || strings.TrimSpace(cancel.Approval) == "" || !commandFlagRequired(cancel, "event-data-store") {
 		t.Fatalf("query cancel command = %+v, want approval-gated cancel_query write", cancel)
 	}
+	resourcePolicy := commands["resource-policy set"]
+	if len(resourcePolicy.Examples) != 1 || !strings.Contains(resourcePolicy.Examples[0], "\"Action\":\"cloudtrail:StartQuery\"") {
+		t.Fatalf("resource-policy set examples = %q, want event-data-store StartQuery policy", resourcePolicy.Examples)
+	}
 	channelCreate := commands["channel create"]
 	if !commandFlagRequired(channelCreate, "destination-location") || !commandFlagRequired(channelCreate, "destination-type") {
 		t.Fatalf("channel create command = %+v, want required typed destination flags", channelCreate)
@@ -69,6 +73,14 @@ func TestCommandSurfaceExposesDocumentedOperations(t *testing.T) {
 	assertCommandFlagTargets(t, channelCreate, map[string]string{
 		"destination-location": "record.Destinations.[].Location",
 		"destination-type":     "record.Destinations.[].Type",
+	})
+	assertCommandFlagTargets(t, commands["event-selectors set"], map[string]string{
+		"event-selector-data-resource-type":              "record.EventSelectors.[].DataResources.[].Type",
+		"event-selector-data-resource-value":             "record.EventSelectors.[].DataResources.[].Values",
+		"event-selector-exclude-management-event-source": "record.EventSelectors.[].ExcludeManagementEventSources.[]",
+	})
+	assertCommandFlagTargets(t, commands["insight-selectors set"], map[string]string{
+		"insight-event-category": "record.InsightSelectors.[].EventCategories.[]",
 	})
 	assertCommandFlagTargets(t, commands["import start"], map[string]string{
 		"import-source-s3-bucket-access-role-arn": "record.ImportSource.S3.S3BucketAccessRoleArn",

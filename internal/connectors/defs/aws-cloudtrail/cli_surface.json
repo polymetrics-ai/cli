@@ -498,7 +498,7 @@
         {
           "name": "insight-source",
           "type": "string",
-          "summary": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+          "summary": "CloudTrail trail ARN. String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
           "maps_to": "body.InsightSource",
           "required": true,
           "allow_empty": false
@@ -564,7 +564,7 @@
         "Prompt"
       ],
       "examples": [
-        "pm aws-cloudtrail insights data list --credential ct-prod --data-type InsightsEvents --insight-source arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example"
+        "pm aws-cloudtrail insights data list --credential ct-prod --data-type InsightsEvents --insight-source arn:aws:cloudtrail:us-east-1:123456789012:trail/example-trail"
       ]
     },
     {
@@ -957,8 +957,26 @@
         },
         {
           "name": "source",
-          "type": "string",
-          "summary": "String Length Constraints: Minimum length of 1. Maximum length of 256. Pattern: .*",
+          "type": "enum",
+          "summary": "Valid Values: Custom | CloudStorageSecurityConsole | Clumio | CrowdStrike | CyberArk | GitHub | KongGatewayEnterprise | LaunchDarkly | NetskopeCloudExchange | IBMMulticloud | MontyCloud | OktaSystemLogEvents | OneLogin | Shoreline | Snyk | WizAuditLogs.",
+          "values": [
+            "Custom",
+            "CloudStorageSecurityConsole",
+            "Clumio",
+            "CrowdStrike",
+            "CyberArk",
+            "GitHub",
+            "KongGatewayEnterprise",
+            "LaunchDarkly",
+            "NetskopeCloudExchange",
+            "IBMMulticloud",
+            "MontyCloud",
+            "OktaSystemLogEvents",
+            "OneLogin",
+            "Shoreline",
+            "Snyk",
+            "WizAuditLogs"
+          ],
           "maps_to": "record.Source",
           "required": true,
           "allow_empty": false
@@ -979,7 +997,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail channel create --credential ct-prod --destination-location arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example-store --destination-type EVENT_DATA_STORE --name example-channel --source aws.partner/example --preview"
+        "pm aws-cloudtrail channel create --credential ct-prod --destination-location arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example-store --destination-type EVENT_DATA_STORE --name example-channel --source Custom --preview"
       ],
       "risk": "creates a CloudTrail organization/service event channel",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
@@ -1583,13 +1601,13 @@
             "AWS::Lambda::Function",
             "AWS::DynamoDB::Table"
           ],
-          "maps_to": "record.EventSelectors.0.DataResources.[].Type"
+          "maps_to": "record.EventSelectors.[].DataResources.[].Type"
         },
         {
           "name": "event-selector-data-resource-value",
           "type": "string_array",
           "summary": "One to 250 values paired with each repeated data-resource type.",
-          "maps_to": "record.EventSelectors.0.DataResources.[].Values",
+          "maps_to": "record.EventSelectors.[].DataResources.[].Values",
           "min_items": 1,
           "max_items": 250
         },
@@ -1601,7 +1619,7 @@
             "kms.amazonaws.com",
             "rdsdata.amazonaws.com"
           ],
-          "maps_to": "record.EventSelectors.0.ExcludeManagementEventSources.[]"
+          "maps_to": "record.EventSelectors.[].ExcludeManagementEventSources.[]"
         },
         {
           "name": "event-selector-include-management-events",
@@ -1671,12 +1689,12 @@
         {
           "name": "insight-event-category",
           "type": "enum",
-          "summary": "Repeat to set both categories on the first Insights selector. Valid Values: Management | Data.",
+          "summary": "Repeat categories alongside each repeated Insights selector. Valid Values: Management | Data.",
           "values": [
             "Management",
             "Data"
           ],
-          "maps_to": "record.InsightSelectors.0.EventCategories.[]"
+          "maps_to": "record.InsightSelectors.[].EventCategories.[]"
         },
         {
           "name": "trail-name",
@@ -1720,7 +1738,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail resource-policy set --credential ct-prod --resource-arn arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example --resource-policy '{\"Version\":\"2012-10-17\",\"Statement\":[]}' --preview"
+        "pm aws-cloudtrail resource-policy set --credential ct-prod --resource-arn arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example --resource-policy '{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"EDSPolicy\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"cloudtrail.amazonaws.com\"},\"Action\":\"cloudtrail:StartQuery\",\"Condition\":{\"StringEquals\":{\"AWS:SourceArn\":\"arn:aws:cloudtrail:us-east-1:123456789012:dashboard/example-dashboard\",\"AWS:SourceAccount\":\"123456789012\"}}}]}' --preview"
       ],
       "risk": "attaches a resource-based IAM policy document to a CloudTrail channel or event data store",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
