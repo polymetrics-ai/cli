@@ -727,6 +727,16 @@ pm reverse run <plan-id> --approve <token> --json`,
   },
 ];
 
+export function sortBlogPostsByPublishedAt(posts: readonly BlogPost[]): BlogPost[] {
+  return [...posts].sort((a, b) => {
+    if (a.publishedAt !== b.publishedAt) {
+      return a.publishedAt > b.publishedAt ? -1 : 1;
+    }
+    if (a.slug === b.slug) return 0;
+    return a.slug < b.slug ? -1 : 1;
+  });
+}
+
 export function getBlogPost(slug: string): BlogPost | undefined {
   return BLOG_POSTS.find((post) => post.slug === slug);
 }
