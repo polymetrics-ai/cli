@@ -90145,7 +90145,8 @@
         "kind": "binlog_position",
         "keys": [
           "binlog_file",
-          "binlog_pos"
+          "binlog_pos",
+          "schema_fingerprint"
         ],
         "commit_after": "downstream_ack",
         "on_invalid": "resnapshot_required"

@@ -27,7 +27,8 @@ The command passed against MySQL 8.4.11 in 53.48 seconds. It started the exact
 `docker.io/library/mysql:8.4.11` tag on a Docker-assigned non-default loopback port, seeded five
 deterministic rows, and asserted the connector's real check, dynamic discovery, paged full read,
 incremental read, and insert/update/delete binlog CDC records. Deferred teardown removed the
-generated container, volume, and run-pulled image, then reset Colima. The test reported
+generated container, volume, and run-specific image tag; the source image remained a shared cache
+until the opted-in Colima reset, which then removed the disposable VM state. The test reported
 before=84802707456 and after=84784943104 free bytes with `colima_reset=true` (a 17.8 MB decrease,
 within the harness's 128 MB ordinary-build noise allowance); a post-run explicit
 Docker-context listing showed zero containers, volumes, and images.
@@ -36,9 +37,10 @@ The live test uncovered and fixed Docker argument placement, MySQL protocol meta
 MySQL 8.4's `SHOW BINARY LOG STATUS` replacement for the removed `SHOW MASTER STATUS` syntax.
 The saved live run exercised the same native implementation directly; native registry installation
 is now asserted separately by the focused bundle-registry test. Follow-up review makes cleanup of a
-run-pulled image unconditional, preserves explicit empty and whitespace cursor state, normalizes
-text result values, and rejects unsafe statement binlog events. A fresh opt-in Docker replay after
-those final lifecycle, read, and CDC fixes belongs to the outer test phase.
+generated image tag unconditional, preserves explicit empty and whitespace cursor state, normalizes
+text result values, binds CDC checkpoints to schema metadata, and rejects unsafe statement binlog
+events. A fresh opt-in Docker replay after those final lifecycle, read, and CDC fixes belongs to the
+outer test phase.
 
 ## Dependency approval evidence
 

@@ -22,7 +22,9 @@ primary or unique key for incremental reads; pages order by `(cursor_field, prim
 resume strictly after a present stored cursor, including an empty or whitespace text value.
 `page_size` and `read_limit` bound every read. Textual and temporal wire values are emitted as
 strings, while binary values are copied before emission. CDC targets one discovered stream and stores
-the last acknowledged binary-log file and position.
+the last acknowledged binary-log file, position, and ordered-column schema fingerprint. A saved CDC
+position without that fingerprint, or one whose fingerprint no longer matches live metadata, requires
+a resnapshot rather than projecting rows against a changed schema.
 
 ## Write actions & risks
 
@@ -36,7 +38,7 @@ it does not create, alter, or delete database data.
   identity.
 - CDC requires row-based binary logging and full row images. Statement events, including DDL and
   runtime binlog format or row-image changes, are rejected before a later row or checkpoint is
-  emitted.
+  emitted. New CDC subscriptions capture their binary-log position before loading column metadata.
 - TLS configuration, GTID checkpointing, schema-change event projection, and cross-database CDC
   fan-out are outside this first engine slice.
 
@@ -55,11 +57,12 @@ DOCKER_CONTEXT=colima POLYMETRICS_DATABASE_INTEGRATION=1 \
 
 Every Docker command is scoped to the supplied context. The test refuses to run without the opt-in
 or explicit context, and never falls back to Docker's global default. Its deferred cleanup removes
-the generated container, named volume, and an image pulled by that run; it reports free disk before
-startup and after teardown. The reset opt-in then runs `colima delete` followed by `colima start`
-for the disposable default profile, because Docker removal frees space inside Colima but does not
-shrink its host VM disk file. It is destructive to that profile and must not be used while it holds
-other work. The harness always removes an image that it pulled for the run.
+the generated container, named volume, and a unique image tag created for that run; it reports free
+disk before startup and after teardown. The pinned source image is treated as a shared Docker cache
+and is never removed by the harness. The reset opt-in then runs `colima delete` followed by `colima
+start` for the disposable default profile, because Docker removal frees space inside Colima but does
+not shrink its host VM disk file. It is destructive to that profile and must not be used while it
+holds other work.
 
 Podman is not used for this harness: three task-era Podman machines on this host failed to start,
 whereas Docker via Colima was independently verified with MySQL 8.4 and row-format binary logging.

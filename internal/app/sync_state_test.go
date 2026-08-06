@@ -99,6 +99,30 @@ func TestLegacyStateReloadRetainsSyncModeCompatibilityAfterReversePlanLookup(t *
 	}
 }
 
+func TestStreamReadStateDistinguishesAbsentAndExplicitEmptyCursor(t *testing.T) {
+	initial := streamReadState(StreamState{}, 7)
+	if initial["generation_id"] != "7" {
+		t.Fatalf("initial read state = %#v, want generation", initial)
+	}
+	if _, present := initial["cursor"]; present {
+		t.Fatalf("initial read state = %#v, want no cursor", initial)
+	}
+
+	empty := streamReadState(StreamState{Checkpoint: &synccontract.CheckpointEnvelope{
+		Position: synccontract.CheckpointPosition{Primary: synccontract.OpaqueToken{}},
+	}}, 8)
+	if cursor, present := empty["cursor"]; !present || cursor != "" {
+		t.Fatalf("empty checkpoint read state = %#v, want explicit empty cursor", empty)
+	}
+
+	whitespace := streamReadState(StreamState{Checkpoint: &synccontract.CheckpointEnvelope{
+		Position: synccontract.CheckpointPosition{Primary: synccontract.OpaqueToken("  ")},
+	}}, 9)
+	if cursor := whitespace["cursor"]; cursor != "  " {
+		t.Fatalf("whitespace checkpoint cursor = %q, want preserved value", cursor)
+	}
+}
+
 func TestIncrementalRunStoresCommittedStateEnvelopeAfterDownstreamSuccess(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("envelope_commit", []connectors.Record{{
@@ -108,6 +132,12 @@ func TestIncrementalRunStoresCommittedStateEnvelopeAfterDownstreamSuccess(t *tes
 
 	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1}); err != nil {
 		t.Fatal(err)
+	}
+	if len(source.requests) != 1 {
+		t.Fatalf("initial source requests = %#v, want one", source.requests)
+	}
+	if _, present := source.requests[0].State["cursor"]; present {
+		t.Fatalf("initial source state = %#v, want no cursor", source.requests[0].State)
 	}
 	state := a.state.StreamStates[streamStateKey(connection, "records")]
 	if state.Checkpoint == nil {

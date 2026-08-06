@@ -85,10 +85,11 @@ type Harness struct {
 
 	containerName string
 	volumeName    string
+	runImage      string
 
 	mu             sync.Mutex
 	endpoint       Endpoint
-	pulledByRun    bool
+	runImageKnown  bool
 	containerKnown bool
 	volumeKnown    bool
 	report         Report
@@ -142,14 +143,16 @@ func New(config Config) (*Harness, error) {
 		config:        config,
 		containerName: prefix,
 		volumeName:    prefix + "-data",
+		runImage:      prefix + ":run",
 		stopSignal:    make(chan struct{}),
 	}, nil
 }
 
-// Start pulls an image only when absent, creates one named volume, starts one
-// loopback-published container, and returns its dynamically assigned,
-// non-default port. Call Close in a defer immediately after a successful New;
-// Close is also safe after an unsuccessful Start.
+// Start pulls the configured source image, tags it under one generated image
+// reference, creates one named volume, starts one loopback-published
+// container, and returns its dynamically assigned, non-default port. Call
+// Close in a defer immediately after a successful New; Close is also safe
+// after an unsuccessful Start.
 func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error) {
 	if err := ctx.Err(); err != nil {
 		return Endpoint{}, err
@@ -173,17 +176,14 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 		}
 	}()
 
-	imageAbsent, err := h.resourceAbsent(ctx, "image", "inspect", h.config.Image)
-	if err != nil {
-		return Endpoint{}, fmt.Errorf("inspect %s test image: %w", h.config.Engine, err)
+	if _, err := h.config.Run.Run(ctx, h.config.DockerContext, "pull", h.config.Image); err != nil {
+		return Endpoint{}, fmt.Errorf("pull %s test image: %w", h.config.Engine, err)
 	}
-	if imageAbsent {
-		h.mu.Lock()
-		h.pulledByRun = true
-		h.mu.Unlock()
-		if _, err := h.config.Run.Run(ctx, h.config.DockerContext, "pull", h.config.Image); err != nil {
-			return Endpoint{}, fmt.Errorf("pull %s test image: %w", h.config.Engine, err)
-		}
+	h.mu.Lock()
+	h.runImageKnown = true
+	h.mu.Unlock()
+	if _, err := h.config.Run.Run(ctx, h.config.DockerContext, "image", "tag", h.config.Image, h.runImage); err != nil {
+		return Endpoint{}, fmt.Errorf("tag %s test image: %w", h.config.Engine, err)
 	}
 
 	volumeAbsent, err := h.resourceAbsent(ctx, "volume", "inspect", h.volumeName)
@@ -207,7 +207,7 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 		"--publish", "127.0.0.1::" + strconv.Itoa(h.config.ContainerPort),
 	}
 	args = append(args, h.config.ContainerArgs...)
-	args = append(args, h.config.Image)
+	args = append(args, h.runImage)
 	args = append(args, h.config.EngineArgs...)
 	containerAbsent, err := h.resourceAbsent(ctx, "container", "inspect", h.containerName)
 	if err != nil {
@@ -255,8 +255,8 @@ func (h *Harness) Close(ctx context.Context) error {
 				errs = append(errs, fmt.Errorf("remove %s test volume: %w", h.config.Engine, err))
 			}
 		}
-		if h.imageWasPulled() {
-			if _, err := h.config.Run.Run(ctx, h.config.DockerContext, "image", "rm", h.config.Image); err != nil && !errors.Is(err, errDockerResourceNotFound) {
+		if h.runImageIsKnown() {
+			if _, err := h.config.Run.Run(ctx, h.config.DockerContext, "image", "rm", h.runImage); err != nil && !errors.Is(err, errDockerResourceNotFound) {
 				errs = append(errs, fmt.Errorf("remove %s test image: %w", h.config.Engine, err))
 			}
 		}
@@ -303,10 +303,10 @@ func (h *Harness) volumeIsKnown() bool {
 	return h.volumeKnown
 }
 
-func (h *Harness) imageWasPulled() bool {
+func (h *Harness) runImageIsKnown() bool {
 	h.mu.Lock()
 	defer h.mu.Unlock()
-	return h.pulledByRun
+	return h.runImageKnown
 }
 
 func (h *Harness) resourceAbsent(ctx context.Context, args ...string) (bool, error) {

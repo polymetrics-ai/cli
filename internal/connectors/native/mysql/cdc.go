@@ -2,6 +2,8 @@ package mysql
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"io"
@@ -15,7 +17,10 @@ import (
 	"polymetrics.ai/internal/connectors"
 )
 
-const mysqlBinlogExecutorID = "mysql-binlog-row-v1"
+const (
+	mysqlBinlogExecutorID          = "mysql-binlog-row-v1"
+	mysqlCDCSchemaFingerprintState = "schema_fingerprint"
+)
 
 // MySQL 8.4 removed SHOW MASTER STATUS with the legacy replication terms.
 // SHOW BINARY LOG STATUS retains the File/Position output required for a
@@ -37,7 +42,7 @@ func (c Connector) ChangefeedExecutorDescriptor() connectors.ChangefeedExecutorD
 		},
 		Checkpoint: connectors.ChangefeedCheckpoint{
 			Kind:        "binlog_position",
-			Keys:        []string{"binlog_file", "binlog_pos"},
+			Keys:        []string{"binlog_file", "binlog_pos", mysqlCDCSchemaFingerprintState},
 			CommitAfter: "downstream_ack",
 			OnInvalid:   "resnapshot_required",
 		},
@@ -71,11 +76,7 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 	if err := validateBinlogRequirements(ctx, conn); err != nil {
 		return err
 	}
-	columns, err := loadColumnNames(ctx, conn, database, table)
-	if err != nil {
-		return err
-	}
-	position, err := binlogPositionFromState(req.State)
+	position, checkpointSchema, err := binlogCheckpointFromState(req.State)
 	if err != nil {
 		return err
 	}
@@ -84,6 +85,14 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 		if err != nil {
 			return err
 		}
+	}
+	columns, err := loadColumnNames(ctx, conn, database, table)
+	if err != nil {
+		return err
+	}
+	schemaFingerprint := cdcSchemaFingerprint(columns)
+	if checkpointSchema != "" && checkpointSchema != schemaFingerprint {
+		return errors.New("mysql CDC schema changed; resnapshot required")
 	}
 
 	syncer := replication.NewBinlogSyncer(replication.BinlogSyncerConfig{
@@ -130,8 +139,9 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 			continue
 		}
 		state := connectors.Record{
-			"binlog_file": currentFile,
-			"binlog_pos":  strconv.FormatUint(uint64(event.Header.LogPos), 10),
+			"binlog_file":                  currentFile,
+			"binlog_pos":                   strconv.FormatUint(uint64(event.Header.LogPos), 10),
+			mysqlCDCSchemaFingerprintState: schemaFingerprint,
 		}
 		events, err := rowsToCDCEvents(rows, columns, state)
 		if err != nil {
@@ -144,8 +154,9 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 		}
 		if len(events) > 0 && req.CheckpointCommitter != nil {
 			nextState := map[string]string{
-				"binlog_file": currentFile,
-				"binlog_pos":  strconv.FormatUint(uint64(event.Header.LogPos), 10),
+				"binlog_file":                  currentFile,
+				"binlog_pos":                   strconv.FormatUint(uint64(event.Header.LogPos), 10),
+				mysqlCDCSchemaFingerprintState: schemaFingerprint,
 			}
 			if err := req.CheckpointCommitter.CommitChangefeedCheckpoint(ctx, nextState); err != nil {
 				return fmt.Errorf("commit mysql binlog checkpoint: %w", err)
@@ -191,6 +202,32 @@ func binlogPositionFromState(state map[string]string) (gomysql.Position, error) 
 		return gomysql.Position{}, errors.New("mysql CDC state binlog_pos must be a valid binlog position")
 	}
 	return gomysql.Position{Name: file, Pos: uint32(parsed)}, nil
+}
+
+func binlogCheckpointFromState(state map[string]string) (gomysql.Position, string, error) {
+	position, err := binlogPositionFromState(state)
+	if err != nil {
+		return gomysql.Position{}, "", err
+	}
+	schema, schemaPresent := state[mysqlCDCSchemaFingerprintState]
+	if position.Name == "" {
+		if schemaPresent {
+			return gomysql.Position{}, "", errors.New("mysql CDC schema fingerprint requires a binlog position")
+		}
+		return gomysql.Position{}, "", nil
+	}
+	if !schemaPresent || len(schema) != sha256.Size*2 {
+		return gomysql.Position{}, "", errors.New("mysql CDC state requires schema fingerprint")
+	}
+	if _, err := hex.DecodeString(schema); err != nil {
+		return gomysql.Position{}, "", errors.New("mysql CDC state schema fingerprint is invalid")
+	}
+	return position, schema, nil
+}
+
+func cdcSchemaFingerprint(columns []string) string {
+	sum := sha256.Sum256([]byte(strings.Join(columns, "\x00")))
+	return hex.EncodeToString(sum[:])
 }
 
 func currentBinlogPosition(ctx context.Context, conn connConfig) (gomysql.Position, error) {

@@ -250,7 +250,7 @@ func assertBinaryLogCDC(t *testing.T, ctx context.Context, connector native.Conn
 	for _, event := range events {
 		operations = append(operations, event.Operation)
 		identifiers = append(identifiers, recordText(event.Record["id"]))
-		if event.State["binlog_file"] == nil || event.State["binlog_pos"] == nil || event.State["binlog_row"] == nil {
+		if event.State["binlog_file"] == nil || event.State["binlog_pos"] == nil || event.State["binlog_row"] == nil || event.State["schema_fingerprint"] == nil {
 			t.Fatal("MySQL connector change capture returned an incomplete real record or checkpoint state")
 		}
 	}
@@ -265,6 +265,11 @@ func assertBinaryLogCDC(t *testing.T, ctx context.Context, connector native.Conn
 	}
 	if len(checkpoints.states) < 2 {
 		t.Fatal("MySQL change capture did not commit acknowledged binary-log positions")
+	}
+	for _, state := range checkpoints.states {
+		if state["schema_fingerprint"] == "" {
+			t.Fatal("MySQL change capture committed a checkpoint without schema metadata")
+		}
 	}
 }
 

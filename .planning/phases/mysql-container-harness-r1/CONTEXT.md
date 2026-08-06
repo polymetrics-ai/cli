@@ -5,8 +5,8 @@
 Deliver one reusable, opt-in Docker/Colima integration-test harness and prove it with exactly one new
 Tier-3 native database connector: MySQL. The harness must start one isolated, pinned-image
 container; seed deterministic multi-page data; exercise check, catalog, snapshot, incremental, and
-binary-log CDC paths; and reclaim its container, named volume, and any image it pulled on every
-exit path.
+binary-log CDC paths; and reclaim its container, named volume, and generated run-specific image
+reference on every exit path.
 
 ## Constraints selected from the task
 
@@ -18,8 +18,9 @@ exit path.
   shared runtime.
 - A host port is dynamically assigned by Docker and refused if it resolves to the database default.
   The connector receives host and port as separate configuration fields; no endpoint is logged.
-- The MySQL image is `docker.io/library/mysql:8.4.11`, pinned by tag. A preexisting image is never
-  removed. An image first pulled by this run is always removed during teardown.
+- The MySQL image is `docker.io/library/mysql:8.4.11`, pinned by tag. The harness creates and always
+  removes a unique run-specific tag; it never removes the shared pinned source image, whether that
+  source was already cached or was pulled for the run.
 - Podman is deliberately not used: three independent Podman machines on this host, including the
   task-owned one, failed to start. Docker on Colima was independently proven usable with MySQL 8.4
   and a row-format binary log. Ordinary cleanup removes Docker resources but cannot shrink the
