@@ -161,6 +161,24 @@ func TestValidateSyncModeRequirements(t *testing.T) {
 	}
 }
 
+func TestParseSyncModeSeparatesLegacyCompatibilityFromNewNativeAdmission(t *testing.T) {
+	legacy, err := ParseSyncMode("incremental_append")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if legacy.ContractMode != "incremental_append" || !legacy.LegacyCompatibility || legacy.IsContractMode() {
+		t.Fatalf("legacy incremental mode = %+v, want compatibility adapter", legacy)
+	}
+
+	contract, err := ParseSyncMode("full_append")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if contract.ContractMode != "full_append" || contract.LegacyCompatibility || !contract.IsContractMode() {
+		t.Fatalf("full_append mode = %+v, want native contract admission", contract)
+	}
+}
+
 func TestFullRefreshAppendDuplicatesAcrossRuns(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("scripted_append", []connectors.Record{
@@ -265,8 +283,8 @@ func TestIncrementalAppendCommitsCursorOnlyAfterSuccess(t *testing.T) {
 		t.Fatal("RunETL(failing incremental) error = nil")
 	}
 	state := a.state.StreamStates[streamStateKey(connection, "records")]
-	if state.Cursor != "2026-01-03T00:00:00Z" {
-		t.Fatalf("cursor advanced after failed run = %q", state.Cursor)
+	if cursor := streamStateCursor(state); cursor != "2026-01-03T00:00:00Z" {
+		t.Fatalf("cursor advanced after failed run = %q", cursor)
 	}
 }
 

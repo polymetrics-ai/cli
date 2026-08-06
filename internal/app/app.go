@@ -20,6 +20,7 @@ import (
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/safety"
 	statestore "polymetrics.ai/internal/state"
+	"polymetrics.ai/internal/synccontract"
 	"polymetrics.ai/internal/vault"
 )
 
@@ -787,6 +788,20 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	a.state.Runs = append(a.state.Runs, run)
 	_ = a.save()
 
+	mode, err := ParseSyncMode(stream.SyncMode)
+	if err != nil {
+		return a.failRun(runID, err)
+	}
+	stream.SyncMode = mode.Name
+	if err := ValidateStreamSyncConfig(stream); err != nil {
+		return a.failRun(runID, err)
+	}
+	if mode.IsContractMode() {
+		return a.failRun(runID, &synccontract.ModeNotExecutableError{
+			Mode:   mode.ContractMode,
+			Reason: "no matching native executor has completed the shared conformance corpus",
+		})
+	}
 	source, sourceRuntime, err := a.resolveEndpoint(ctx, conn.Source)
 	if err != nil {
 		return a.failRun(runID, err)
@@ -798,14 +813,6 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	batchSize := req.BatchSize
 	if batchSize <= 0 {
 		batchSize = 1000
-	}
-	mode, err := ParseSyncMode(stream.SyncMode)
-	if err != nil {
-		return a.failRun(runID, err)
-	}
-	stream.SyncMode = mode.Name
-	if err := ValidateStreamSyncConfig(stream); err != nil {
-		return a.failRun(runID, err)
 	}
 	var result etlExecutionResult
 	if materializer, ok := destination.(connectors.LocalWarehouseMaterializer); ok && materializer.MaterializesLocalWarehouse() {
@@ -828,6 +835,11 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 	}
 	stateKey := streamStateKey(conn.Name, streamName)
 	prior := a.state.StreamStates[stateKey]
+	if prior.Checkpoint != nil {
+		if err := validateStreamStateResume(prior, conn, streamName); err != nil {
+			return etlExecutionResult{}, err
+		}
+	}
 	generationID := prior.GenerationID
 	if generationID == 0 || mode.IsOverwrite() {
 		generationID++
@@ -836,7 +848,9 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 	result := etlExecutionResult{}
 	batch := make([]connectors.Record, 0, batchSize)
 	firstWrite := true
-	nextCursor := prior.Cursor
+	priorCursor := streamStateCursor(prior)
+	nextCursor := priorCursor
+	observedAt := time.Time{}
 
 	flush := func(force bool) error {
 		if len(batch) == 0 {
@@ -868,6 +882,9 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 		}
 		result.RecordsLoaded += writeResult.RecordsWritten
 		result.RecordsFailed += writeResult.RecordsFailed
+		if writeResult.RecordsFailed > 0 {
+			return fmt.Errorf("destination write reported %d failed records", writeResult.RecordsFailed)
+		}
 		result.BatchCount++
 		batch = batch[:0]
 		return nil
@@ -875,13 +892,13 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 
 	readConfig := sourceRuntime
 	readConfig.Config = cloneStringMap(sourceRuntime.Config)
-	if prior.Cursor != "" {
-		readConfig.Config["since"] = prior.Cursor
+	if priorCursor != "" {
+		readConfig.Config["since"] = priorCursor
 	}
 	err := source.Read(ctx, connectors.ReadRequest{
 		Stream: streamName,
 		Config: readConfig,
-		State:  map[string]string{"cursor": prior.Cursor, "generation_id": strconv.FormatInt(generationID, 10)},
+		State:  map[string]string{"cursor": priorCursor, "generation_id": strconv.FormatInt(generationID, 10)},
 	}, func(record connectors.Record) error {
 		result.RecordsRead++
 		cursor := ""
@@ -891,7 +908,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 			if err != nil {
 				return err
 			}
-			if mode.Source == SourceSyncIncremental && prior.Cursor != "" && compareCursor(cursor, prior.Cursor) < 0 {
+			if mode.Source == SourceSyncIncremental && priorCursor != "" && compareCursor(cursor, priorCursor) < 0 {
 				return nil
 			}
 			if nextCursor == "" || compareCursor(cursor, nextCursor) > 0 {
@@ -906,6 +923,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 			r["_polymetrics_cursor"] = cursor
 		}
 		result.RecordsTransformed++
+		observedAt = time.Now().UTC()
 		batch = append(batch, r)
 		if len(batch) >= batchSize {
 			return flush(false)
@@ -918,14 +936,13 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 	if err := flush(true); err != nil {
 		return result, err
 	}
-	updated := StreamState{
-		Connection:          conn.Name,
-		Stream:              streamName,
-		Cursor:              nextCursor,
-		GenerationID:        generationID,
-		LastSuccessfulRunID: runID,
-		RecordsLoaded:       result.RecordsLoaded,
-		UpdatedAt:           time.Now().UTC(),
+	if observedAt.IsZero() {
+		observedAt = time.Now().UTC()
+	}
+	acknowledgedAt := time.Now().UTC()
+	updated, err := committedLegacyStreamState(conn, streamName, stream, runID, nextCursor, generationID, result.RecordsLoaded, destination.Name(), observedAt, acknowledgedAt)
+	if err != nil {
+		return result, err
 	}
 	a.state.StreamStates[stateKey] = updated
 	result.Checkpoint = checkpointForResult(result, mode, stateKey, updated)
