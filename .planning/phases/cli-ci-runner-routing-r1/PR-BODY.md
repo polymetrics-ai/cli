@@ -1,0 +1,38 @@
+## Summary
+
+- Route same-repository PRs by `karthik-sivadas` and
+  `alfred-polymetrics-ai` to the existing `polymetrics-website` self-hosted
+  runner label through one shared selector.
+- Route fork PRs and every non-PR trigger to GitHub-hosted `ubuntu-latest`.
+- Keep Windows on `windows-latest` and preserve the website deployment job's
+  dedicated runner.
+
+## Runner provisioning dependency
+
+The existing online runner has the `polymetrics-website` label, but Go is not
+provisioned there. Provision the Go toolchain before relying on this change for
+Go jobs; this PR does not touch the server.
+
+## Required hardening follow-ups (not implemented here)
+
+1. Make runners ephemeral so job state cannot persist between runs.
+2. Require third-party actions to be pinned by immutable SHA. A compromised
+   action executes on the runner independently of the PR-author gate.
+3. Add runner capacity: one runner serializes a repository with roughly twenty
+   jobs per PR.
+
+## Verification
+
+- `./scripts/tests/verify-ci-runner-routing.sh`
+- YAML parse check for `.github/workflows/*.yml`
+- `make release-workflow-check`
+- `go run ./cmd/agentcontractgen check`
+
+## Delivery notes
+
+- GSD prompts for discuss, TDD planning, execute, verify, and code review were
+  generated with `scripts/gsd prompt ...` and completed through the documented
+  inline/manual fallback; role spawning is prohibited by the worker brief.
+- No Go, CLI, docs, or website UI behavior changes are included.
+- No credentials, registration keys, server access, or deployment changes are
+  included.

@@ -7,6 +7,7 @@ on:
       - "internal/connectors/icon_data.json"
       - "docs/connectors/icons/**"
       - ".github/workflows/website.yml"
+      - ".github/workflows/runner-selection.yml"
       - ".gitlab-ci.yml"
   push:
     branches:
@@ -16,6 +17,7 @@ on:
       - "internal/connectors/icon_data.json"
       - "docs/connectors/icons/**"
       - ".github/workflows/website.yml"
+      - ".github/workflows/runner-selection.yml"
       - ".gitlab-ci.yml"
   workflow_dispatch:
 
@@ -28,9 +30,13 @@ env:
   REGISTRY: ghcr.io
 
 jobs:
+  select-runner:
+    uses: ./.github/workflows/runner-selection.yml
+
   checks:
     name: Website checks
-    runs-on: ubuntu-latest
+    needs: select-runner
+    runs-on: ${{ needs.select-runner.outputs.runner }}
     defaults:
       run:
         working-directory: website
@@ -116,8 +122,8 @@ jobs:
 
   image:
     name: Website image
-    runs-on: ubuntu-latest
-    needs: checks
+    runs-on: ${{ needs.select-runner.outputs.runner }}
+    needs: [select-runner, checks]
     permissions:
       contents: read
       packages: write
