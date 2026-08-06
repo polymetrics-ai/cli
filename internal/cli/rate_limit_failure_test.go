@@ -184,6 +184,59 @@ func TestETLRunPreflightFailureDoesNotInventRunCarrier(t *testing.T) {
 	}
 }
 
+func TestETLRunSetupFailureReportsUndeclaredEndpoints(t *testing.T) {
+	a := newFailedRateLimitTestApp(t)
+	if err := a.RemoveCredential(context.Background(), "failed-rate-limit-source"); err != nil {
+		t.Fatalf("RemoveCredential: %v", err)
+	}
+	for _, jsonOut := range []bool{false, true} {
+		var stdout, stderr bytes.Buffer
+		err := runETL(context.Background(), a, []string{"run", "--connection", "failed_rate_limit_to_warehouse", "--stream", "widgets"}, &stdout, jsonOut, config.Config{})
+		if err == nil {
+			t.Fatalf("setup failure json=%t error = nil", jsonOut)
+		}
+		if code := writeError(&stdout, &stderr, err, jsonOut); code != 1 {
+			t.Fatalf("setup failure json=%t exit = %d, want 1", jsonOut, code)
+		}
+		if stderr.Len() != 0 {
+			t.Fatalf("setup failure json=%t stderr = %q, want empty", jsonOut, stderr.String())
+		}
+		output := stdout.String()
+		for _, forbidden := range []string{"failed-rate-limit-token-must-not-escape", "runtime-subject-must-not-escape"} {
+			if strings.Contains(output, forbidden) {
+				t.Fatalf("setup failure json=%t leaked %q", jsonOut, forbidden)
+			}
+		}
+		if !jsonOut {
+			for _, want := range []string{
+				"Rate limits: connector=failed-rate-limit declaration=undeclared",
+				"Rate limits: connector=warehouse declaration=undeclared",
+			} {
+				if !strings.Contains(output, want) {
+					t.Fatalf("setup failure human output missing %q:\n%s", want, output)
+				}
+			}
+			continue
+		}
+		var payload struct {
+			Run struct {
+				RateLimit connectors.RateLimitSummary `json:"rate_limit"`
+			} `json:"run"`
+		}
+		if err := json.Unmarshal([]byte(output), &payload); err != nil {
+			t.Fatalf("unmarshal setup failure JSON: %v\n%s", err, output)
+		}
+		if len(payload.Run.RateLimit.Connectors) != 2 {
+			t.Fatalf("setup failure rate-limit connectors = %+v", payload.Run.RateLimit.Connectors)
+		}
+		for _, connector := range payload.Run.RateLimit.Connectors {
+			if connector.Declaration != connectors.RateLimitDeclarationUndeclared {
+				t.Fatalf("setup failure connector %q declaration = %q, want undeclared", connector.Connector, connector.Declaration)
+			}
+		}
+	}
+}
+
 func TestETLStatusFailureUsesSafeRateLimitCarrier(t *testing.T) {
 	a := newFailedRateLimitTestApp(t)
 	structured, structuredErr, structuredCode := runFailedRateLimitETL(t, a, true)

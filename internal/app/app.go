@@ -823,9 +823,11 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		return Run{}, err
 	}
 	rateLimitReport := connectors.NewRateLimitReport()
+	rateLimitReport.Declare(conn.Source.Connector, connectors.RateLimitDeclarationUndeclared)
+	rateLimitReport.Declare(conn.Destination.Connector, connectors.RateLimitDeclarationUndeclared)
 	run := Run{ID: runID, Type: "etl", Connection: req.Connection, Stream: req.Stream, Status: "running", StartedAt: time.Now().UTC(), RateLimit: rateLimitReport.Snapshot()}
 	if _, err := a.beginRun(run); err != nil {
-		return Run{}, fmt.Errorf("start ETL run: %w", err)
+		return Run{}, fmt.Errorf("persist started ETL run: %w", err)
 	}
 
 	mode, err := ParseStreamSyncMode(stream)
