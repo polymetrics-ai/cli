@@ -873,16 +873,23 @@
           "allow_empty": false
         },
         {
-          "name": "tags-list",
+          "name": "tag-key",
           "type": "string",
-          "summary": "Array of Tag objects Array Members: Maximum number of 200 items.",
-          "maps_to": "record.TagsList",
+          "summary": "Tag key with a length from 1 to 128 characters.",
+          "maps_to": "record.TagsList.0.Key",
           "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "tag-value",
+          "type": "string",
+          "summary": "Optional tag value with a length from 1 to 256 characters.",
+          "maps_to": "record.TagsList.0.Value",
           "allow_empty": false
         }
       ],
       "examples": [
-        "pm aws-cloudtrail tags add --credential ct-prod --resource-id arn:aws:cloudtrail:us-east-1:123456789012:trail/example --tags-list '[{\"Key\":\"Environment\",\"Value\":\"preview\"}]' --preview"
+        "pm aws-cloudtrail tags add --credential ct-prod --resource-id arn:aws:cloudtrail:us-east-1:123456789012:trail/example --tag-key Environment --tag-value preview --preview"
       ],
       "risk": "adds tags to a CloudTrail trail, event data store, channel, or dashboard",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
@@ -1297,9 +1304,51 @@
         },
         {
           "name": "max-event-size",
-          "type": "string",
-          "summary": "String Valid Values: Standard | Large",
+          "type": "enum",
+          "summary": "Valid Values: Standard | Large.",
+          "values": [
+            "Standard",
+            "Large"
+          ],
           "maps_to": "record.MaxEventSize"
+        },
+        {
+          "name": "aggregation-event-category",
+          "type": "enum",
+          "summary": "Valid Values: Data.",
+          "values": [
+            "Data"
+          ],
+          "maps_to": "record.AggregationConfigurations.0.EventCategory"
+        },
+        {
+          "name": "aggregation-template",
+          "type": "enum",
+          "summary": "Valid Values: API_ACTIVITY | RESOURCE_ACCESS | USER_ACTIONS.",
+          "values": [
+            "API_ACTIVITY",
+            "RESOURCE_ACCESS",
+            "USER_ACTIONS"
+          ],
+          "maps_to": "record.AggregationConfigurations.0.Templates.0"
+        },
+        {
+          "name": "context-key-type",
+          "type": "enum",
+          "summary": "Valid Values: TagContext | RequestContext.",
+          "values": [
+            "TagContext",
+            "RequestContext"
+          ],
+          "maps_to": "record.ContextKeySelectors.0.Type"
+        },
+        {
+          "name": "context-key-equals",
+          "type": "string_array",
+          "summary": "One to 50 context-key values, each up to 128 characters.",
+          "maps_to": "record.ContextKeySelectors.0.Equals",
+          "min_items": 1,
+          "max_items": 50
         },
         {
           "name": "trail-name",
@@ -1309,7 +1358,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail event-configuration set --credential ct-prod --trail-name example-trail --preview"
+        "pm aws-cloudtrail event-configuration set --credential ct-prod --trail-name example-trail --aggregation-event-category Data --aggregation-template API_ACTIVITY --preview"
       ],
       "risk": "sets the maximum event size and context key selectors for a trail or event data store",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
@@ -1332,10 +1381,118 @@
           "maps_to": "record.TrailName",
           "required": true,
           "allow_empty": false
+        },
+        {
+          "name": "advanced-event-selector-name",
+          "type": "string",
+          "summary": "Optional advanced event selector name with a maximum length of 1000 characters.",
+          "maps_to": "record.AdvancedEventSelectors.0.Name",
+          "allow_empty": false
+        },
+        {
+          "name": "advanced-event-field",
+          "type": "string",
+          "summary": "Advanced event field selector with a maximum length of 1000 characters.",
+          "maps_to": "record.AdvancedEventSelectors.0.FieldSelectors.0.Field",
+          "allow_empty": false
+        },
+        {
+          "name": "advanced-event-ends-with",
+          "type": "string_array",
+          "summary": "One to 500 suffix-match values, each up to 2048 characters.",
+          "maps_to": "record.AdvancedEventSelectors.0.FieldSelectors.0.EndsWith",
+          "min_items": 1,
+          "max_items": 500
+        },
+        {
+          "name": "advanced-event-equals",
+          "type": "string_array",
+          "summary": "One to 500 exact-match values, each up to 2048 characters.",
+          "maps_to": "record.AdvancedEventSelectors.0.FieldSelectors.0.Equals",
+          "min_items": 1,
+          "max_items": 500
+        },
+        {
+          "name": "advanced-event-not-ends-with",
+          "type": "string_array",
+          "summary": "One to 500 negative suffix-match values, each up to 2048 characters.",
+          "maps_to": "record.AdvancedEventSelectors.0.FieldSelectors.0.NotEndsWith",
+          "min_items": 1,
+          "max_items": 500
+        },
+        {
+          "name": "advanced-event-not-equals",
+          "type": "string_array",
+          "summary": "One to 500 negative exact-match values, each up to 2048 characters.",
+          "maps_to": "record.AdvancedEventSelectors.0.FieldSelectors.0.NotEquals",
+          "min_items": 1,
+          "max_items": 500
+        },
+        {
+          "name": "advanced-event-not-starts-with",
+          "type": "string_array",
+          "summary": "One to 500 negative prefix-match values, each up to 2048 characters.",
+          "maps_to": "record.AdvancedEventSelectors.0.FieldSelectors.0.NotStartsWith",
+          "min_items": 1,
+          "max_items": 500
+        },
+        {
+          "name": "advanced-event-starts-with",
+          "type": "string_array",
+          "summary": "One to 500 prefix-match values, each up to 2048 characters.",
+          "maps_to": "record.AdvancedEventSelectors.0.FieldSelectors.0.StartsWith",
+          "min_items": 1,
+          "max_items": 500
+        },
+        {
+          "name": "event-selector-data-resource-type",
+          "type": "enum",
+          "summary": "Valid Values: AWS::S3::Object | AWS::Lambda::Function | AWS::DynamoDB::Table.",
+          "values": [
+            "AWS::S3::Object",
+            "AWS::Lambda::Function",
+            "AWS::DynamoDB::Table"
+          ],
+          "maps_to": "record.EventSelectors.0.DataResources.0.Type"
+        },
+        {
+          "name": "event-selector-data-resource-value",
+          "type": "string_array",
+          "summary": "One to 250 data-resource values.",
+          "maps_to": "record.EventSelectors.0.DataResources.0.Values",
+          "min_items": 1,
+          "max_items": 250
+        },
+        {
+          "name": "event-selector-exclude-management-event-source",
+          "type": "enum",
+          "summary": "Valid Values: kms.amazonaws.com | rdsdata.amazonaws.com.",
+          "values": [
+            "kms.amazonaws.com",
+            "rdsdata.amazonaws.com"
+          ],
+          "maps_to": "record.EventSelectors.0.ExcludeManagementEventSources.0"
+        },
+        {
+          "name": "event-selector-include-management-events",
+          "type": "boolean",
+          "summary": "Whether to include management events.",
+          "maps_to": "record.EventSelectors.0.IncludeManagementEvents"
+        },
+        {
+          "name": "event-selector-read-write-type",
+          "type": "enum",
+          "summary": "Valid Values: ReadOnly | WriteOnly | All.",
+          "values": [
+            "ReadOnly",
+            "WriteOnly",
+            "All"
+          ],
+          "maps_to": "record.EventSelectors.0.ReadWriteType"
         }
       ],
       "examples": [
-        "pm aws-cloudtrail event-selectors set --credential ct-prod --trail-name example-trail --preview"
+        "pm aws-cloudtrail event-selectors set --credential ct-prod --trail-name example-trail --event-selector-read-write-type All --event-selector-data-resource-type AWS::S3::Object --event-selector-data-resource-value arn:aws:s3:::example-bucket/ --preview"
       ],
       "risk": "sets basic or advanced event selectors on a CloudTrail trail",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
@@ -1364,12 +1521,26 @@
           "maps_to": "record.InsightsDestination"
         },
         {
-          "name": "insight-selectors",
-          "type": "string",
-          "summary": "Array of InsightSelector objects",
-          "maps_to": "record.InsightSelectors",
+          "name": "insight-type",
+          "type": "enum",
+          "summary": "Valid Values: ApiCallRateInsight | ApiErrorRateInsight.",
+          "values": [
+            "ApiCallRateInsight",
+            "ApiErrorRateInsight"
+          ],
+          "maps_to": "record.InsightSelectors.0.InsightType",
           "required": true,
           "allow_empty": false
+        },
+        {
+          "name": "insight-event-category",
+          "type": "enum",
+          "summary": "Valid Values: Management | Data.",
+          "values": [
+            "Management",
+            "Data"
+          ],
+          "maps_to": "record.InsightSelectors.0.EventCategories.0"
         },
         {
           "name": "trail-name",
@@ -1379,7 +1550,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail insight-selectors set --credential ct-prod --trail-name example-trail --insight-selectors '[{\"InsightType\":\"ApiCallRateInsight\"}]' --preview"
+        "pm aws-cloudtrail insight-selectors set --credential ct-prod --trail-name example-trail --insight-type ApiCallRateInsight --preview"
       ],
       "risk": "enables CloudTrail Insights event types on a trail or event data store",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
@@ -1458,16 +1629,23 @@
           "allow_empty": false
         },
         {
-          "name": "tags-list",
+          "name": "tag-key",
           "type": "string",
-          "summary": "Array of Tag objects Array Members: Maximum number of 200 items.",
-          "maps_to": "record.TagsList",
+          "summary": "Tag key with a length from 1 to 128 characters.",
+          "maps_to": "record.TagsList.0.Key",
           "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "tag-value",
+          "type": "string",
+          "summary": "Optional tag value with a length from 1 to 256 characters.",
+          "maps_to": "record.TagsList.0.Value",
           "allow_empty": false
         }
       ],
       "examples": [
-        "pm aws-cloudtrail tags remove --credential ct-prod --resource-id arn:aws:cloudtrail:us-east-1:123456789012:trail/example --tags-list '[{\"Key\":\"Environment\",\"Value\":\"preview\"}]' --preview"
+        "pm aws-cloudtrail tags remove --credential ct-prod --resource-id arn:aws:cloudtrail:us-east-1:123456789012:trail/example --tag-key Environment --tag-value preview --preview"
       ],
       "risk": "removes tags from a CloudTrail trail, event data store, channel, or dashboard",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive",

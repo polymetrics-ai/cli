@@ -208,6 +208,62 @@ func TestCloudTrailWriteExamplesBuildApprovalGatedPreviews(t *testing.T) {
 	}
 }
 
+func TestCloudTrailNestedWriteFlagsBuildClosedRecords(t *testing.T) {
+	var cloudTrail connectors.Connector
+	for _, factory := range Factories() {
+		if factory.Name == "aws-cloudtrail" {
+			cloudTrail = factory.New()
+			break
+		}
+	}
+	if cloudTrail == nil {
+		t.Fatal("aws-cloudtrail factory not found")
+	}
+	for _, test := range []struct {
+		name  string
+		path  []string
+		flags map[string][]string
+	}{
+		{
+			name: "advanced event selector",
+			path: []string{"event-selectors", "set"},
+			flags: map[string][]string{
+				"trail-name":            {"example-trail"},
+				"advanced-event-field":  {"eventCategory"},
+				"advanced-event-equals": {"Data"},
+			},
+		},
+		{
+			name: "context key selector",
+			path: []string{"event-configuration", "set"},
+			flags: map[string][]string{
+				"event-data-store":   {"arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example"},
+				"max-event-size":     {"Large"},
+				"context-key-type":   {"RequestContext"},
+				"context-key-equals": {"aws:PrincipalArn"},
+			},
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			plan, err := commandrunner.BuildWriteCommand(t.Context(), cloudTrail, commandrunner.Request{Path: test.path, Flags: test.flags, Preview: true})
+			if err != nil {
+				t.Fatalf("BuildWriteCommand(%q): %v", test.name, err)
+			}
+			if !plan.ApprovalRequired || plan.Preview == nil {
+				t.Fatalf("plan = %+v, want approval-gated preview", plan)
+			}
+		})
+	}
+	_, err := commandrunner.BuildWriteCommand(t.Context(), cloudTrail, commandrunner.Request{
+		Path:    []string{"tags", "add"},
+		Flags:   map[string][]string{"resource-id": {"arn:aws:cloudtrail:us-east-1:123456789012:trail/example"}, "tags-list": {"[]"}},
+		Preview: true,
+	})
+	if err == nil || !strings.Contains(err.Error(), "unknown flag --tags-list") {
+		t.Fatalf("BuildWriteCommand(tags add raw tags) error = %v, want closed flag error", err)
+	}
+}
+
 func writeRequestFromExample(t *testing.T, command connectors.CommandSurfaceCommand, example string) commandrunner.Request {
 	t.Helper()
 	tokens := strings.Fields(example)

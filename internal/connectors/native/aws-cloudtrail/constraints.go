@@ -2,6 +2,7 @@ package awscloudtrail
 
 import (
 	"fmt"
+	"net"
 	"regexp"
 	"strconv"
 	"strings"
@@ -52,6 +53,18 @@ var (
 	maximumLengthPattern                     = regexp.MustCompile(`(?i)Maximum length of ([0-9]+)\.`)
 	cloudTrailDestinationLocationConstraints = awsStringConstraints{minimumLength: 3, maximumLength: 1024, pattern: regexp.MustCompile(`^[a-zA-Z0-9._/\-:*]+$`)}
 	cloudTrailDestinationTypeConstraints     = awsStringConstraints{values: map[string]struct{}{"EVENT_DATA_STORE": {}, "AWS_SERVICE": {}}, valueList: "EVENT_DATA_STORE | AWS_SERVICE"}
+	cloudTrailTagKeyConstraints              = awsStringConstraints{minimumLength: 1, maximumLength: 128}
+	cloudTrailTagValueConstraints            = awsStringConstraints{minimumLength: 1, maximumLength: 256}
+	cloudTrailInsightTypeConstraints         = awsStringConstraints{values: map[string]struct{}{"ApiCallRateInsight": {}, "ApiErrorRateInsight": {}}, valueList: "ApiCallRateInsight | ApiErrorRateInsight"}
+	cloudTrailInsightCategoryConstraints     = awsStringConstraints{values: map[string]struct{}{"Management": {}, "Data": {}}, valueList: "Management | Data"}
+	cloudTrailReadWriteTypeConstraints       = awsStringConstraints{values: map[string]struct{}{"ReadOnly": {}, "WriteOnly": {}, "All": {}}, valueList: "ReadOnly | WriteOnly | All"}
+	cloudTrailDataResourceTypeConstraints    = awsStringConstraints{values: map[string]struct{}{"AWS::S3::Object": {}, "AWS::Lambda::Function": {}, "AWS::DynamoDB::Table": {}}, valueList: "AWS::S3::Object | AWS::Lambda::Function | AWS::DynamoDB::Table"}
+	cloudTrailManagementSourceConstraints    = awsStringConstraints{values: map[string]struct{}{"kms.amazonaws.com": {}, "rdsdata.amazonaws.com": {}}, valueList: "kms.amazonaws.com | rdsdata.amazonaws.com"}
+	cloudTrailAggregationCategoryConstraints = awsStringConstraints{values: map[string]struct{}{"Data": {}}, valueList: "Data"}
+	cloudTrailAggregationTemplateConstraints = awsStringConstraints{values: map[string]struct{}{"API_ACTIVITY": {}, "RESOURCE_ACCESS": {}, "USER_ACTIONS": {}}, valueList: "API_ACTIVITY | RESOURCE_ACCESS | USER_ACTIONS"}
+	cloudTrailContextKeyTypeConstraints      = awsStringConstraints{values: map[string]struct{}{"TagContext": {}, "RequestContext": {}}, valueList: "TagContext | RequestContext"}
+	cloudTrailTrailNamePattern               = regexp.MustCompile(`^[A-Za-z0-9._-]+$`)
+	cloudTrailARNPartitionPattern            = regexp.MustCompile(`^aws(?:-[a-z0-9-]+)?$`)
 )
 
 func buildActionFieldConstraints(actions map[string][]awsActionField) map[string]map[string]awsFieldConstraints {
@@ -204,6 +217,24 @@ func validateActionField(action string, field awsActionField, value any) error {
 		return validateImportSource(value)
 	case (action == "CreateChannel" || action == "UpdateChannel") && field.Name == "Destinations":
 		return validateDestinations(value)
+	case field.Name == "TagsList":
+		return validateTagsList(value)
+	case field.Name == "AdvancedEventSelectors":
+		return validateAdvancedEventSelectors(value)
+	case action == "PutEventSelectors" && field.Name == "EventSelectors":
+		return validateEventSelectors(value)
+	case action == "PutInsightSelectors" && field.Name == "InsightSelectors":
+		return validateInsightSelectors(value)
+	case action == "PutEventConfiguration" && field.Name == "AggregationConfigurations":
+		return validateAggregationConfigurations(value)
+	case action == "PutEventConfiguration" && field.Name == "ContextKeySelectors":
+		return validateContextKeySelectors(value)
+	case action == "CreateTrail" && field.Name == "Name":
+		return validateTrailName(value, false)
+	case action == "UpdateTrail" && field.Name == "Name":
+		return validateTrailName(value, true)
+	case (action == "CreateTrail" || action == "UpdateTrail") && (field.Name == "S3KeyPrefix" || field.Name == "SnsTopicName"):
+		return validateTrailOptionalString(field.Name, value)
 	}
 	return nil
 }
@@ -351,6 +382,8 @@ func validateActionSpecificCrossFields(action string, body map[string]any) error
 	switch action {
 	case "PutInsightSelectors":
 		return validatePutInsightSelectors(body)
+	case "CreateTrail", "UpdateTrail":
+		return validateTrailCloudWatchLogs(action, body)
 	case "StartImport":
 		return validateStartImport(body)
 	case "CreateEventDataStore", "UpdateEventDataStore":
@@ -366,6 +399,88 @@ func validateActionSpecificCrossFields(action string, body map[string]any) error
 		}
 	case "PutEventConfiguration":
 		return validatePutEventConfiguration(body)
+	case "PutEventSelectors":
+		return validatePutEventSelectors(body)
+	}
+	return nil
+}
+
+func validateTrailCloudWatchLogs(action string, body map[string]any) error {
+	if hasActionField(body, []string{"CloudWatchLogsRoleArn"}) && !hasActionField(body, []string{"CloudWatchLogsLogGroupArn"}) {
+		return fmt.Errorf("aws-cloudtrail %s requires CloudWatchLogsLogGroupArn with CloudWatchLogsRoleArn", action)
+	}
+	return nil
+}
+
+func validateTrailName(value any, allowARN bool) error {
+	name, ok := actionString(value)
+	if !ok {
+		return fmt.Errorf("must be a string")
+	}
+	if allowARN && validTrailARN(name) {
+		return nil
+	}
+	return validateClassicTrailName(name)
+}
+
+func validateClassicTrailName(name string) error {
+	if length := utf8.RuneCountInString(name); length < 3 || length > 128 {
+		return fmt.Errorf("must have length from 3 to 128")
+	}
+	if !cloudTrailTrailNamePattern.MatchString(name) {
+		return fmt.Errorf("does not match documented trail name pattern")
+	}
+	characters := []rune(name)
+	if !trailNameAlphaNumeric(characters[0]) || !trailNameAlphaNumeric(characters[len(characters)-1]) {
+		return fmt.Errorf("must start and end with an alphanumeric character")
+	}
+	for index := 1; index < len(characters); index++ {
+		if trailNamePunctuation(characters[index-1]) && trailNamePunctuation(characters[index]) {
+			return fmt.Errorf("cannot contain adjacent punctuation")
+		}
+	}
+	if parsed := net.ParseIP(name); parsed != nil && parsed.To4() != nil {
+		return fmt.Errorf("cannot be an IP address")
+	}
+	return nil
+}
+
+func validTrailARN(value string) bool {
+	parts := strings.SplitN(value, ":", 6)
+	if len(parts) != 6 || parts[0] != "arn" || !cloudTrailARNPartitionPattern.MatchString(parts[1]) || parts[2] != "cloudtrail" || strings.TrimSpace(parts[3]) == "" || len(parts[4]) != 12 {
+		return false
+	}
+	for _, character := range parts[4] {
+		if character < '0' || character > '9' {
+			return false
+		}
+	}
+	trailName, ok := strings.CutPrefix(parts[5], "trail/")
+	if !ok {
+		return false
+	}
+	return validateClassicTrailName(trailName) == nil
+}
+
+func trailNameAlphaNumeric(character rune) bool {
+	return character >= 'a' && character <= 'z' || character >= 'A' && character <= 'Z' || character >= '0' && character <= '9'
+}
+
+func trailNamePunctuation(character rune) bool {
+	return character == '.' || character == '_' || character == '-'
+}
+
+func validateTrailOptionalString(field string, value any) error {
+	stringValue, ok := actionString(value)
+	if !ok {
+		return fmt.Errorf("must be a string")
+	}
+	maximumLength := 200
+	if field == "SnsTopicName" {
+		maximumLength = 256
+	}
+	if utf8.RuneCountInString(stringValue) > maximumLength {
+		return fmt.Errorf("must have length at most %d", maximumLength)
 	}
 	return nil
 }
@@ -400,6 +515,13 @@ func validatePutInsightSelectors(body map[string]any) error {
 	}
 	if actionValuePresent(body["InsightSelectors"]) && !hasDestination {
 		return fmt.Errorf("aws-cloudtrail PutInsightSelectors requires InsightsDestination when enabling Insights on an EventDataStore")
+	}
+	return nil
+}
+
+func validatePutEventSelectors(body map[string]any) error {
+	if hasActionField(body, []string{"AdvancedEventSelectors"}) && hasActionField(body, []string{"EventSelectors"}) {
+		return fmt.Errorf("aws-cloudtrail PutEventSelectors cannot combine AdvancedEventSelectors with EventSelectors")
 	}
 	return nil
 }
@@ -509,6 +631,306 @@ func validateDestinations(value any) error {
 	return nil
 }
 
+func validateTagsList(value any) error {
+	tags, ok := actionArray(value)
+	if !ok {
+		return fmt.Errorf("want array")
+	}
+	for index, item := range tags {
+		tag, ok := item.(map[string]any)
+		if !ok {
+			return fmt.Errorf("item %d must be an object", index)
+		}
+		if err := validateClosedObjectFields(tag, "Tag", []string{"Key"}, []string{"Value"}); err != nil {
+			return fmt.Errorf("item %d: %w", index, err)
+		}
+		key, ok := actionString(tag["Key"])
+		if !ok {
+			return fmt.Errorf("item %d: Tag.Key must be a string", index)
+		}
+		if err := validateActionString(key, cloudTrailTagKeyConstraints); err != nil {
+			return fmt.Errorf("item %d: Tag.Key: %w", index, err)
+		}
+		if rawValue, present := tag["Value"]; present {
+			stringValue, ok := actionString(rawValue)
+			if !ok {
+				return fmt.Errorf("item %d: Tag.Value must be a string", index)
+			}
+			if err := validateActionString(stringValue, cloudTrailTagValueConstraints); err != nil {
+				return fmt.Errorf("item %d: Tag.Value: %w", index, err)
+			}
+		}
+	}
+	return nil
+}
+
+func validateInsightSelectors(value any) error {
+	selectors, ok := actionArray(value)
+	if !ok {
+		return fmt.Errorf("want array")
+	}
+	for index, item := range selectors {
+		selector, ok := item.(map[string]any)
+		if !ok {
+			return fmt.Errorf("item %d must be an object", index)
+		}
+		if err := validateClosedObjectFields(selector, "InsightSelector", []string{"InsightType"}, []string{"EventCategories"}); err != nil {
+			return fmt.Errorf("item %d: %w", index, err)
+		}
+		insightType, ok := actionString(selector["InsightType"])
+		if !ok {
+			return fmt.Errorf("item %d: InsightSelector.InsightType must be a string", index)
+		}
+		if err := validateActionString(insightType, cloudTrailInsightTypeConstraints); err != nil {
+			return fmt.Errorf("item %d: InsightSelector.InsightType: %w", index, err)
+		}
+		if categories, present := selector["EventCategories"]; present {
+			if err := validateClosedStringArray(categories, "InsightSelector.EventCategories", 0, 0, cloudTrailInsightCategoryConstraints); err != nil {
+				return fmt.Errorf("item %d: %w", index, err)
+			}
+		}
+	}
+	return nil
+}
+
+func validateEventSelectors(value any) error {
+	selectors, ok := actionArray(value)
+	if !ok {
+		return fmt.Errorf("want array")
+	}
+	if err := validateNestedItemCount(len(selectors), 1, 5); err != nil {
+		return err
+	}
+	dataResourceValues := 0
+	for index, item := range selectors {
+		selector, ok := item.(map[string]any)
+		if !ok {
+			return fmt.Errorf("item %d must be an object", index)
+		}
+		if err := validateClosedObjectFields(selector, "EventSelector", nil, []string{"DataResources", "ExcludeManagementEventSources", "IncludeManagementEvents", "ReadWriteType"}); err != nil {
+			return fmt.Errorf("item %d: %w", index, err)
+		}
+		if readWriteType, present := selector["ReadWriteType"]; present {
+			stringValue, ok := actionString(readWriteType)
+			if !ok {
+				return fmt.Errorf("item %d: EventSelector.ReadWriteType must be a string", index)
+			}
+			if err := validateActionString(stringValue, cloudTrailReadWriteTypeConstraints); err != nil {
+				return fmt.Errorf("item %d: EventSelector.ReadWriteType: %w", index, err)
+			}
+		}
+		if includeManagementEvents, present := selector["IncludeManagementEvents"]; present {
+			if _, ok := includeManagementEvents.(bool); !ok {
+				return fmt.Errorf("item %d: EventSelector.IncludeManagementEvents must be a boolean", index)
+			}
+		}
+		if excludedSources, present := selector["ExcludeManagementEventSources"]; present {
+			if err := validateClosedStringArray(excludedSources, "EventSelector.ExcludeManagementEventSources", 1, 0, cloudTrailManagementSourceConstraints); err != nil {
+				return fmt.Errorf("item %d: %w", index, err)
+			}
+		}
+		if rawResources, present := selector["DataResources"]; present {
+			resources, ok := actionArray(rawResources)
+			if !ok {
+				return fmt.Errorf("item %d: EventSelector.DataResources must be an array", index)
+			}
+			if err := validateNestedItemCount(len(resources), 1, 250); err != nil {
+				return fmt.Errorf("item %d: EventSelector.DataResources: %w", index, err)
+			}
+			for resourceIndex, rawResource := range resources {
+				resource, ok := rawResource.(map[string]any)
+				if !ok {
+					return fmt.Errorf("item %d: EventSelector.DataResources item %d must be an object", index, resourceIndex)
+				}
+				if err := requireExactObjectFields(resource, "DataResource", "Type", "Values"); err != nil {
+					return fmt.Errorf("item %d: EventSelector.DataResources item %d: %w", index, resourceIndex, err)
+				}
+				resourceType, ok := actionString(resource["Type"])
+				if !ok {
+					return fmt.Errorf("item %d: EventSelector.DataResources item %d: DataResource.Type must be a string", index, resourceIndex)
+				}
+				if err := validateActionString(resourceType, cloudTrailDataResourceTypeConstraints); err != nil {
+					return fmt.Errorf("item %d: EventSelector.DataResources item %d: DataResource.Type: %w", index, resourceIndex, err)
+				}
+				values, ok := actionArray(resource["Values"])
+				if !ok {
+					return fmt.Errorf("item %d: EventSelector.DataResources item %d: DataResource.Values must be an array", index, resourceIndex)
+				}
+				if err := validateClosedStringArray(resource["Values"], "DataResource.Values", 1, 250, awsStringConstraints{minimumLength: 1}); err != nil {
+					return fmt.Errorf("item %d: EventSelector.DataResources item %d: %w", index, resourceIndex, err)
+				}
+				dataResourceValues += len(values)
+			}
+		}
+	}
+	if dataResourceValues > 250 {
+		return fmt.Errorf("EventSelector.DataResources must contain at most 250 values")
+	}
+	return nil
+}
+
+func validateAdvancedEventSelectors(value any) error {
+	selectors, ok := actionArray(value)
+	if !ok {
+		return fmt.Errorf("want array")
+	}
+	conditionValues := 0
+	for index, item := range selectors {
+		selector, ok := item.(map[string]any)
+		if !ok {
+			return fmt.Errorf("item %d must be an object", index)
+		}
+		if err := validateClosedObjectFields(selector, "AdvancedEventSelector", []string{"FieldSelectors"}, []string{"Name"}); err != nil {
+			return fmt.Errorf("item %d: %w", index, err)
+		}
+		if name, present := selector["Name"]; present {
+			stringValue, ok := actionString(name)
+			if !ok {
+				return fmt.Errorf("item %d: AdvancedEventSelector.Name must be a string", index)
+			}
+			if err := validateActionString(stringValue, awsStringConstraints{minimumLength: 1, maximumLength: 1000}); err != nil {
+				return fmt.Errorf("item %d: AdvancedEventSelector.Name: %w", index, err)
+			}
+		}
+		fields, ok := actionArray(selector["FieldSelectors"])
+		if !ok {
+			return fmt.Errorf("item %d: AdvancedEventSelector.FieldSelectors must be an array", index)
+		}
+		if err := validateNestedItemCount(len(fields), 1, 500); err != nil {
+			return fmt.Errorf("item %d: AdvancedEventSelector.FieldSelectors: %w", index, err)
+		}
+		for fieldIndex, item := range fields {
+			fieldSelector, ok := item.(map[string]any)
+			if !ok {
+				return fmt.Errorf("item %d: AdvancedEventSelector.FieldSelectors item %d must be an object", index, fieldIndex)
+			}
+			if err := validateClosedObjectFields(fieldSelector, "AdvancedFieldSelector", []string{"Field"}, []string{"EndsWith", "Equals", "NotEndsWith", "NotEquals", "NotStartsWith", "StartsWith"}); err != nil {
+				return fmt.Errorf("item %d: AdvancedEventSelector.FieldSelectors item %d: %w", index, fieldIndex, err)
+			}
+			fieldName, ok := actionString(fieldSelector["Field"])
+			if !ok {
+				return fmt.Errorf("item %d: AdvancedEventSelector.FieldSelectors item %d: AdvancedFieldSelector.Field must be a string", index, fieldIndex)
+			}
+			if err := validateActionString(fieldName, awsStringConstraints{minimumLength: 1, maximumLength: 1000}); err != nil {
+				return fmt.Errorf("item %d: AdvancedEventSelector.FieldSelectors item %d: AdvancedFieldSelector.Field: %w", index, fieldIndex, err)
+			}
+			selectorsWithValues := 0
+			for _, operator := range []string{"EndsWith", "Equals", "NotEndsWith", "NotEquals", "NotStartsWith", "StartsWith"} {
+				rawValues, present := fieldSelector[operator]
+				if !present {
+					continue
+				}
+				values, ok := actionArray(rawValues)
+				if !ok {
+					return fmt.Errorf("item %d: AdvancedEventSelector.FieldSelectors item %d: AdvancedFieldSelector.%s must be an array", index, fieldIndex, operator)
+				}
+				if err := validateClosedStringArray(rawValues, "AdvancedFieldSelector."+operator, 1, 500, awsStringConstraints{minimumLength: 1, maximumLength: 2048}); err != nil {
+					return fmt.Errorf("item %d: AdvancedEventSelector.FieldSelectors item %d: %w", index, fieldIndex, err)
+				}
+				selectorsWithValues += len(values)
+				conditionValues += len(values)
+			}
+			if selectorsWithValues == 0 {
+				return fmt.Errorf("item %d: AdvancedEventSelector.FieldSelectors item %d: AdvancedFieldSelector requires at least one condition", index, fieldIndex)
+			}
+		}
+	}
+	if conditionValues > 500 {
+		return fmt.Errorf("AdvancedEventSelectors must contain at most 500 condition values")
+	}
+	return nil
+}
+
+func validateAggregationConfigurations(value any) error {
+	configurations, ok := actionArray(value)
+	if !ok {
+		return fmt.Errorf("want array")
+	}
+	if err := validateNestedItemCount(len(configurations), 1, 1); err != nil {
+		return err
+	}
+	for index, item := range configurations {
+		configuration, ok := item.(map[string]any)
+		if !ok {
+			return fmt.Errorf("item %d must be an object", index)
+		}
+		if err := requireExactObjectFields(configuration, "AggregationConfiguration", "EventCategory", "Templates"); err != nil {
+			return fmt.Errorf("item %d: %w", index, err)
+		}
+		category, ok := actionString(configuration["EventCategory"])
+		if !ok {
+			return fmt.Errorf("item %d: AggregationConfiguration.EventCategory must be a string", index)
+		}
+		if err := validateActionString(category, cloudTrailAggregationCategoryConstraints); err != nil {
+			return fmt.Errorf("item %d: AggregationConfiguration.EventCategory: %w", index, err)
+		}
+		if err := validateClosedStringArray(configuration["Templates"], "AggregationConfiguration.Templates", 1, 50, cloudTrailAggregationTemplateConstraints); err != nil {
+			return fmt.Errorf("item %d: %w", index, err)
+		}
+	}
+	return nil
+}
+
+func validateContextKeySelectors(value any) error {
+	selectors, ok := actionArray(value)
+	if !ok {
+		return fmt.Errorf("want array")
+	}
+	if err := validateNestedItemCount(len(selectors), 1, 2); err != nil {
+		return err
+	}
+	for index, item := range selectors {
+		selector, ok := item.(map[string]any)
+		if !ok {
+			return fmt.Errorf("item %d must be an object", index)
+		}
+		if err := requireExactObjectFields(selector, "ContextKeySelector", "Equals", "Type"); err != nil {
+			return fmt.Errorf("item %d: %w", index, err)
+		}
+		selectorType, ok := actionString(selector["Type"])
+		if !ok {
+			return fmt.Errorf("item %d: ContextKeySelector.Type must be a string", index)
+		}
+		if err := validateActionString(selectorType, cloudTrailContextKeyTypeConstraints); err != nil {
+			return fmt.Errorf("item %d: ContextKeySelector.Type: %w", index, err)
+		}
+		if err := validateClosedStringArray(selector["Equals"], "ContextKeySelector.Equals", 1, 50, awsStringConstraints{minimumLength: 1, maximumLength: 128}); err != nil {
+			return fmt.Errorf("item %d: %w", index, err)
+		}
+	}
+	return nil
+}
+
+func validateClosedStringArray(value any, name string, minimumItems, maximumItems int, constraints awsStringConstraints) error {
+	items, ok := actionArray(value)
+	if !ok {
+		return fmt.Errorf("%s must be an array", name)
+	}
+	if err := validateNestedItemCount(len(items), minimumItems, maximumItems); err != nil {
+		return fmt.Errorf("%s: %w", name, err)
+	}
+	for index, item := range items {
+		stringValue, ok := actionString(item)
+		if !ok {
+			return fmt.Errorf("%s item %d must be a string", name, index)
+		}
+		if err := validateActionString(stringValue, constraints); err != nil {
+			return fmt.Errorf("%s item %d: %w", name, index, err)
+		}
+	}
+	return nil
+}
+
+func validateNestedItemCount(length, minimumItems, maximumItems int) error {
+	if minimumItems > 0 && length < minimumItems {
+		return fmt.Errorf("must contain at least %d items", minimumItems)
+	}
+	if maximumItems > 0 && length > maximumItems {
+		return fmt.Errorf("must contain at most %d items", maximumItems)
+	}
+	return nil
+}
+
 func validateLookupAttributes(value any) error {
 	attributes, ok := actionArray(value)
 	if !ok {
@@ -581,13 +1003,20 @@ func validateImportSource(value any) error {
 }
 
 func requireExactObjectFields(object map[string]any, objectName string, required ...string) error {
-	allowed := make(map[string]struct{}, len(required))
+	return validateClosedObjectFields(object, objectName, required, nil)
+}
+
+func validateClosedObjectFields(object map[string]any, objectName string, required, optional []string) error {
+	allowed := make(map[string]struct{}, len(required)+len(optional))
 	for _, field := range required {
 		allowed[field] = struct{}{}
 		value, ok := object[field]
 		if !ok || !actionValuePresent(value) {
 			return fmt.Errorf("%s requires field %s", objectName, field)
 		}
+	}
+	for _, field := range optional {
+		allowed[field] = struct{}{}
 	}
 	for field := range object {
 		if _, ok := allowed[field]; !ok {

@@ -17,10 +17,24 @@
             "type": "string"
           },
           "TagsList": {
-            "type": [
-              "string",
-              "array"
-            ]
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 200,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "Key"
+              ],
+              "properties": {
+                "Key": {
+                  "type": "string"
+                },
+                "Value": {
+                  "type": "string"
+                }
+              }
+            }
           }
         }
       },
@@ -133,10 +147,84 @@
         ],
         "properties": {
           "AdvancedEventSelectors": {
-            "type": [
-              "string",
-              "array"
-            ]
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "FieldSelectors"
+              ],
+              "properties": {
+                "FieldSelectors": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 500,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "Field"
+                    ],
+                    "properties": {
+                      "EndsWith": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 500,
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "Equals": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 500,
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "Field": {
+                        "type": "string"
+                      },
+                      "NotEndsWith": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 500,
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "NotEquals": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 500,
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "NotStartsWith": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 500,
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "StartsWith": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 500,
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "Name": {
+                  "type": "string"
+                }
+              }
+            }
           },
           "BillingMode": {
             "type": "string"
@@ -160,10 +248,24 @@
             "type": "boolean"
           },
           "TagsList": {
-            "type": [
-              "string",
-              "array"
-            ]
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 200,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "Key"
+              ],
+              "properties": {
+                "Key": {
+                  "type": "string"
+                },
+                "Value": {
+                  "type": "string"
+                }
+              }
+            }
           },
           "TerminationProtectionEnabled": {
             "type": "boolean"
@@ -223,10 +325,24 @@
             "type": "string"
           },
           "TagsList": {
-            "type": [
-              "string",
-              "array"
-            ]
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 200,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "Key"
+              ],
+              "properties": {
+                "Key": {
+                  "type": "string"
+                },
+                "Value": {
+                  "type": "string"
+                }
+              }
+            }
           }
         }
       },
@@ -408,22 +524,78 @@
         "required": [],
         "properties": {
           "AggregationConfigurations": {
-            "type": [
-              "string",
-              "array"
-            ]
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "EventCategory",
+                "Templates"
+              ],
+              "properties": {
+                "EventCategory": {
+                  "type": "string",
+                  "enum": [
+                    "Data"
+                  ]
+                },
+                "Templates": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 50,
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "API_ACTIVITY",
+                      "RESOURCE_ACCESS",
+                      "USER_ACTIONS"
+                    ]
+                  }
+                }
+              }
+            }
           },
           "ContextKeySelectors": {
-            "type": [
-              "string",
-              "array"
-            ]
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 2,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "Equals",
+                "Type"
+              ],
+              "properties": {
+                "Equals": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 50,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "Type": {
+                  "type": "string",
+                  "enum": [
+                    "TagContext",
+                    "RequestContext"
+                  ]
+                }
+              }
+            }
           },
           "EventDataStore": {
             "type": "string"
           },
           "MaxEventSize": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "Standard",
+              "Large"
+            ]
           },
           "TrailName": {
             "type": "string"
@@ -449,16 +621,149 @@
         ],
         "properties": {
           "AdvancedEventSelectors": {
-            "type": [
-              "string",
-              "array"
-            ]
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "FieldSelectors"
+              ],
+              "properties": {
+                "FieldSelectors": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 500,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "Field"
+                    ],
+                    "properties": {
+                      "EndsWith": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 500,
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "Equals": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 500,
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "Field": {
+                        "type": "string"
+                      },
+                      "NotEndsWith": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 500,
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "NotEquals": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 500,
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "NotStartsWith": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 500,
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "StartsWith": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 500,
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "Name": {
+                  "type": "string"
+                }
+              }
+            }
           },
           "EventSelectors": {
-            "type": [
-              "string",
-              "array"
-            ]
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 5,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "DataResources": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 250,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "Type",
+                      "Values"
+                    ],
+                    "properties": {
+                      "Type": {
+                        "type": "string",
+                        "enum": [
+                          "AWS::S3::Object",
+                          "AWS::Lambda::Function",
+                          "AWS::DynamoDB::Table"
+                        ]
+                      },
+                      "Values": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 250,
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "ExcludeManagementEventSources": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 2,
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "kms.amazonaws.com",
+                      "rdsdata.amazonaws.com"
+                    ]
+                  }
+                },
+                "IncludeManagementEvents": {
+                  "type": "boolean"
+                },
+                "ReadWriteType": {
+                  "type": "string",
+                  "enum": [
+                    "ReadOnly",
+                    "WriteOnly",
+                    "All"
+                  ]
+                }
+              }
+            }
           },
           "TrailName": {
             "type": "string"
@@ -490,10 +795,35 @@
             "type": "string"
           },
           "InsightSelectors": {
-            "type": [
-              "string",
-              "array"
-            ]
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "InsightType"
+              ],
+              "properties": {
+                "EventCategories": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 2,
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "Management",
+                      "Data"
+                    ]
+                  }
+                },
+                "InsightType": {
+                  "type": "string",
+                  "enum": [
+                    "ApiCallRateInsight",
+                    "ApiErrorRateInsight"
+                  ]
+                }
+              }
+            }
           },
           "TrailName": {
             "type": "string"
@@ -567,10 +897,24 @@
             "type": "string"
           },
           "TagsList": {
-            "type": [
-              "string",
-              "array"
-            ]
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 200,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "Key"
+              ],
+              "properties": {
+                "Key": {
+                  "type": "string"
+                },
+                "Value": {
+                  "type": "string"
+                }
+              }
+            }
           }
         }
       },

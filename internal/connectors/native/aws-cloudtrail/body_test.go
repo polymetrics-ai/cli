@@ -233,6 +233,192 @@ func TestBuildActionBodyEnforcesConditionalRules(t *testing.T) {
 	}
 }
 
+func TestBuildActionBodyEnforcesClassicTrailContracts(t *testing.T) {
+	tests := []struct {
+		name    string
+		action  string
+		raw     map[string]any
+		wantErr string
+	}{
+		{
+			name:   "create trail cloudwatch role needs log group",
+			action: "CreateTrail",
+			raw: map[string]any{
+				"Name":                  "example-trail",
+				"S3BucketName":          "example-cloudtrail-bucket",
+				"CloudWatchLogsRoleArn": "arn:aws:iam::123456789012:role/CloudTrailLogs",
+			},
+			wantErr: "requires CloudWatchLogsLogGroupArn",
+		},
+		{
+			name:   "update trail cloudwatch role needs log group",
+			action: "UpdateTrail",
+			raw: map[string]any{
+				"Name":                  "example-trail",
+				"CloudWatchLogsRoleArn": "arn:aws:iam::123456789012:role/CloudTrailLogs",
+			},
+			wantErr: "requires CloudWatchLogsLogGroupArn",
+		},
+		{
+			name:   "create trail name minimum",
+			action: "CreateTrail",
+			raw: map[string]any{
+				"Name":         "a",
+				"S3BucketName": "example-cloudtrail-bucket",
+			},
+			wantErr: "length from 3 to 128",
+		},
+		{
+			name:   "create trail s3 prefix maximum",
+			action: "CreateTrail",
+			raw: map[string]any{
+				"Name":         "example-trail",
+				"S3BucketName": "example-cloudtrail-bucket",
+				"S3KeyPrefix":  strings.Repeat("x", 201),
+			},
+			wantErr: "length at most 200",
+		},
+		{
+			name:   "create trail sns topic maximum",
+			action: "CreateTrail",
+			raw: map[string]any{
+				"Name":         "example-trail",
+				"S3BucketName": "example-cloudtrail-bucket",
+				"SnsTopicName": strings.Repeat("x", 257),
+			},
+			wantErr: "length at most 256",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			_, err := buildActionBody(test.action, test.raw, true)
+			if err == nil || !strings.Contains(err.Error(), test.wantErr) {
+				t.Fatalf("buildActionBody(%s) error = %v, want %q", test.action, err, test.wantErr)
+			}
+		})
+	}
+
+	body, err := buildActionBody("UpdateTrail", map[string]any{
+		"Name": "arn:aws:cloudtrail:us-east-1:123456789012:trail/example-trail",
+	}, true)
+	if err != nil {
+		t.Fatalf("build UpdateTrail body with trail ARN: %v", err)
+	}
+	if body["Name"] != "arn:aws:cloudtrail:us-east-1:123456789012:trail/example-trail" {
+		t.Fatalf("UpdateTrail Name = %#v, want trail ARN", body["Name"])
+	}
+}
+
+func TestBuildActionBodyValidatesTypedCloudTrailNestedPayloads(t *testing.T) {
+	if _, err := buildActionBody("AddTags", map[string]any{
+		"ResourceId": "arn:aws:cloudtrail:us-east-1:123456789012:trail/example",
+		"TagsList":   []any{map[string]any{}},
+	}, true); err == nil || !strings.Contains(err.Error(), "Tag requires field Key") {
+		t.Fatalf("AddTags missing key error = %v, want closed Tag error", err)
+	}
+	if _, err := buildActionBody("PutInsightSelectors", map[string]any{
+		"TrailName":        "example-trail",
+		"InsightSelectors": []any{map[string]any{"InsightType": "UnknownInsight"}},
+	}, true); err == nil || !strings.Contains(err.Error(), "InsightSelector.InsightType") {
+		t.Fatalf("PutInsightSelectors invalid type error = %v, want enum error", err)
+	}
+	if _, err := buildActionBody("PutEventSelectors", map[string]any{
+		"TrailName": "example-trail",
+		"AdvancedEventSelectors": []any{map[string]any{
+			"FieldSelectors": []any{map[string]any{"Field": "eventCategory", "Equals": []string{"Data"}}},
+		}},
+		"EventSelectors": []any{map[string]any{"ReadWriteType": "All"}},
+	}, true); err == nil || !strings.Contains(err.Error(), "cannot combine AdvancedEventSelectors") {
+		t.Fatalf("PutEventSelectors mixed selectors error = %v, want exclusivity error", err)
+	}
+	if _, err := buildActionBody("PutEventConfiguration", map[string]any{
+		"EventDataStore": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example",
+		"MaxEventSize":   "Large",
+		"ContextKeySelectors": []any{map[string]any{
+			"Type": "RequestContext",
+		}},
+	}, true); err == nil || !strings.Contains(err.Error(), "ContextKeySelector requires field Equals") {
+		t.Fatalf("PutEventConfiguration incomplete context selector error = %v, want closed selector error", err)
+	}
+
+	for _, test := range []struct {
+		name   string
+		action string
+		raw    map[string]any
+	}{
+		{
+			name:   "tag",
+			action: "AddTags",
+			raw: map[string]any{
+				"ResourceId": "arn:aws:cloudtrail:us-east-1:123456789012:trail/example",
+				"TagsList":   []any{map[string]any{"Key": "Environment", "Value": "preview"}},
+			},
+		},
+		{
+			name:   "insight selector",
+			action: "PutInsightSelectors",
+			raw: map[string]any{
+				"TrailName":        "example-trail",
+				"InsightSelectors": []any{map[string]any{"InsightType": "ApiCallRateInsight", "EventCategories": []string{"Management"}}},
+			},
+		},
+		{
+			name:   "advanced event selector",
+			action: "PutEventSelectors",
+			raw: map[string]any{
+				"TrailName": "example-trail",
+				"AdvancedEventSelectors": []any{map[string]any{
+					"Name":           "s3-object-events",
+					"FieldSelectors": []any{map[string]any{"Field": "eventCategory", "Equals": []string{"Data"}}},
+				}},
+			},
+		},
+		{
+			name:   "event selector",
+			action: "PutEventSelectors",
+			raw: map[string]any{
+				"TrailName": "example-trail",
+				"EventSelectors": []any{map[string]any{
+					"ReadWriteType": "All",
+					"DataResources": []any{map[string]any{
+						"Type":   "AWS::S3::Object",
+						"Values": []string{"arn:aws:s3:::example-bucket/"},
+					}},
+				}},
+			},
+		},
+		{
+			name:   "aggregation configuration",
+			action: "PutEventConfiguration",
+			raw: map[string]any{
+				"TrailName": "example-trail",
+				"AggregationConfigurations": []any{map[string]any{
+					"EventCategory": "Data",
+					"Templates":     []string{"API_ACTIVITY"},
+				}},
+			},
+		},
+		{
+			name:   "context key selector",
+			action: "PutEventConfiguration",
+			raw: map[string]any{
+				"EventDataStore": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example",
+				"MaxEventSize":   "Large",
+				"ContextKeySelectors": []any{map[string]any{
+					"Type":   "RequestContext",
+					"Equals": []string{"aws:PrincipalArn"},
+				}},
+			},
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			if _, err := buildActionBody(test.action, test.raw, true); err != nil {
+				t.Fatalf("buildActionBody(%s): %v", test.action, err)
+			}
+		})
+	}
+}
+
 func TestPageSizeForActionClampsToDocumentedLimit(t *testing.T) {
 	value, err := pageSizeForAction("LookupEvents", connectors.RuntimeConfig{Config: map[string]string{"page_size": "1000"}})
 	if err != nil {
