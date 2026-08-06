@@ -2,6 +2,7 @@ package certify_test
 
 import (
 	"context"
+	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors/certify"
@@ -121,6 +122,34 @@ func TestGlueStagesFlowPreviewHasZeroSideEffects(t *testing.T) {
 	run := mustStage(t, rep, "flow_run")
 	if !run.Passed {
 		t.Fatalf("flow_run stage failed: %+v", run)
+	}
+}
+
+func TestGlueStagesFlowStatusRejectsMismatchedIdentity(t *testing.T) {
+	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
+
+	r, driver := scriptedSampleRunner(t, certify.Options{
+		Connector: "sample",
+		Stream:    "customers",
+		Limit:     50,
+		SecretEnv: map[string]string{"token": "PM_SAMPLE_TOKEN"},
+	})
+	driver.statusFlow = "cert_flow_other"
+
+	rep, err := r.Run(context.Background())
+	if err != nil {
+		t.Fatalf("Run() error = %v", err)
+	}
+	driver.assertProtocol(t)
+	if rep.Passed {
+		t.Fatal("Report.Passed = true, want false after mismatched flow status identity")
+	}
+	status := mustStage(t, rep, "flow_status")
+	if status.Passed {
+		t.Fatalf("flow_status stage Passed = true, want false: %+v", status)
+	}
+	if !strings.Contains(status.Error, `flow="cert_flow_other"`) {
+		t.Errorf("flow_status error = %q, want mismatched flow identity", status.Error)
 	}
 }
 

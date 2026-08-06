@@ -20,17 +20,18 @@ import (
 type scriptedCLI struct {
 	t *testing.T
 
-	root      string
-	calls     [][]string
-	seen      map[string]int
-	plans     map[string]scriptedReversePlan
-	previewed map[string]bool
-	consumed  map[string]bool
-	replays   map[string]int
-	nextPlan  int
-	schedule  string
-	installed bool
-	protocols []string
+	root       string
+	calls      [][]string
+	seen       map[string]int
+	plans      map[string]scriptedReversePlan
+	previewed  map[string]bool
+	consumed   map[string]bool
+	replays    map[string]int
+	nextPlan   int
+	schedule   string
+	installed  bool
+	statusFlow string
+	protocols  []string
 }
 
 type scriptedReversePlan struct {
@@ -44,19 +45,20 @@ const (
 	scriptedWriteDestination = "outbox:cert-outbox"
 	scriptedScheduleName     = "cert-schedule-sample"
 	scriptedScheduleCron     = "0 3 * * *"
-	scriptedScheduleFlow     = "cert_flow_sample"
+	scriptedFlowName         = "cert_flow_sample"
 )
 
 func newScriptedCLI(t *testing.T, protocols ...string) *scriptedCLI {
 	t.Helper()
 	return &scriptedCLI{
-		t:         t,
-		seen:      make(map[string]int),
-		plans:     make(map[string]scriptedReversePlan),
-		previewed: make(map[string]bool),
-		consumed:  make(map[string]bool),
-		replays:   make(map[string]int),
-		protocols: protocols,
+		t:          t,
+		seen:       make(map[string]int),
+		plans:      make(map[string]scriptedReversePlan),
+		previewed:  make(map[string]bool),
+		consumed:   make(map[string]bool),
+		replays:    make(map[string]int),
+		statusFlow: scriptedFlowName,
+		protocols:  protocols,
 	}
 }
 
@@ -185,9 +187,12 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 		return writeScriptedEnvelopeWithoutKind(stdout, map[string]any{"status": "ok", "steps": []map[string]any{
 			{"id": "cert_sync", "status": "ok"}, {"id": "cert_query", "status": "ok"},
 		}})
-	case prefix(args, "flow", "status") && hasJSON(args) && hasFlag(args, "--flows-dir"):
+	case prefix(args, "flow", "status"):
+		if len(args) != 6 || args[2] != scriptedFlowName || args[3] != "--flows-dir" || args[4] == "" || args[5] != "--json" {
+			return s.protocolError(stderr, "flow status requires the sample flow name, --flows-dir, and --json")
+		}
 		s.seen["flow_status"]++
-		return writeScriptedEnvelopeWithoutKind(stdout, map[string]any{"steps": []map[string]any{
+		return writeScriptedEnvelopeWithoutKind(stdout, map[string]any{"flow": s.statusFlow, "steps": []map[string]any{
 			{"id": "cert_sync", "status": "success"}, {"id": "cert_query", "status": "success"},
 		}})
 	case exact(args, scriptedScheduleCreateArgs()...):
@@ -482,7 +487,7 @@ func scriptedScheduleCreateArgs() []string {
 		"schedule", "create",
 		"--name", scriptedScheduleName,
 		"--cron", scriptedScheduleCron,
-		"--flow", scriptedScheduleFlow,
+		"--flow", scriptedFlowName,
 		"--json",
 	}
 }
@@ -565,6 +570,15 @@ func TestScriptedCLIDriverRejectsProtocolDrift(t *testing.T) {
 			}
 		})
 	}
+
+	t.Run("flow status target", func(t *testing.T) {
+		driver := newScriptedCLI(t)
+		root := t.TempDir()
+		var stdout, stderr strings.Builder
+		if code := driver.run([]string{"flow", "status", "wrong-flow", "--flows-dir", root, "--json", "--root", root}, &stdout, &stderr); code == 0 {
+			t.Fatal("scripted driver accepted flow status for the wrong flow")
+		}
+	})
 
 	t.Run("schedule contract", func(t *testing.T) {
 		for _, tt := range []struct {
