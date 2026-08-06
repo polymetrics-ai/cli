@@ -23,7 +23,8 @@ Required connection configuration:
 - `token_tier` (string): Crisp token tier sent as `X-Crisp-Tier`; defaults to `website` and also
   accepts `plugin` or `user` when the configured credential is issued for that tier.
 - `page_number` (string): positive page number for page-addressed provider resources; defaults to
-  `1`.
+  `1`. Wave 1 page-addressed commands reject values below `1` supplied with `--page-number` or
+  present in their effective credential/profile configuration before dispatch.
 - `base_url` (URI): Crisp API base URL; defaults to `https://api.crisp.chat` and can be overridden
   only for test fixtures or an approved proxy.
 
