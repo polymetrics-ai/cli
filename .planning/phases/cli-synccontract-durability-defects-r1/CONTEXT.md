@@ -1,8 +1,8 @@
 # Sync-contract durability defects — context
 
-**Gathered:** 2026-08-06  
-**Status:** Ready for TDD execution  
-**Source:** Error-severity review findings against shipped PR #3882.
+- **Gathered:** 2026-08-06
+- **Status:** Ready for TDD execution
+- **Source:** Error-severity review findings against shipped PR #3882.
 
 ## Locked decisions
 

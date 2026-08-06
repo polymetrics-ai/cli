@@ -20,8 +20,8 @@ coverage:
 
 The two error-severity defects shipped in PR #3882 are repaired without changing the surrounding
 sync contract. `normalizeLoadedState` now owns all `a.store.Load()` assignments, and local
-warehouse creation records the `MkdirAll` chain then flushes every required parent entry before
-building the durable downstream acknowledgement.
+warehouse writes synchronize the raw-directory ancestor chain before building the durable
+downstream acknowledgement.
 
 The manual GSD fallback executed the generated `discuss-phase`, `plan-phase --tdd`,
 `execute-phase`, `verify-work`, and `code-review` guidance inline because this is a bounded
