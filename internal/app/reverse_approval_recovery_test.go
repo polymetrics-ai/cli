@@ -14,6 +14,21 @@ import (
 )
 
 func TestRunReverseETLRecoversCommittedApprovalConsumptionUnlockFailure(t *testing.T) {
+	testRunReverseETLRecoversUncertainApprovalConsumption(t, func(a *App) {
+		a.store.Locker = &postCommitUnlockFailureLocker{failAt: 2}
+	}, statestore.CommitOutcomeCommitted)
+}
+
+func TestRunReverseETLRecoversIndeterminateApprovalConsumptionDirectorySyncFailure(t *testing.T) {
+	testRunReverseETLRecoversUncertainApprovalConsumption(t, func(a *App) {
+		a.store.SyncDirectory = func(string) error {
+			return errors.New("directory sync failed")
+		}
+	}, statestore.CommitOutcomeIndeterminate)
+}
+
+func testRunReverseETLRecoversUncertainApprovalConsumption(t *testing.T, configure func(*App), wantOutcome statestore.CommitOutcome) {
+	t.Helper()
 	ctx := context.Background()
 	writes := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
@@ -68,7 +83,7 @@ func TestRunReverseETLRecoversCommittedApprovalConsumptionUnlockFailure(t *testi
 		ApprovalToken: plan.ApprovalToken,
 		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
 	}
-	a.store.Locker = &postCommitUnlockFailureLocker{failAt: 2}
+	configure(a)
 
 	_, err = a.RunReverseETL(ctx, request)
 	var recovery *ApprovalConsumptionUncertainError
@@ -79,8 +94,8 @@ func TestRunReverseETLRecoversCommittedApprovalConsumptionUnlockFailure(t *testi
 		t.Fatalf("recovery = %#v, want plan %q and consumption timestamp", recovery, plan.ID)
 	}
 	var outcome *statestore.CommitOutcomeError
-	if !errors.As(err, &outcome) || outcome.Outcome != statestore.CommitOutcomeCommitted {
-		t.Fatalf("RunReverseETL() state outcome = %#v, want committed unlock failure", outcome)
+	if !errors.As(err, &outcome) || outcome.Outcome != wantOutcome {
+		t.Fatalf("RunReverseETL() state outcome = %#v, want %s", outcome, wantOutcome)
 	}
 	if writes != 0 {
 		t.Fatalf("authorized write calls = %d, want 0 after uncertain consumption", writes)
@@ -119,6 +134,7 @@ func TestRunReverseETLRecoversCommittedApprovalConsumptionUnlockFailure(t *testi
 		t.Fatalf("write calls after rejected retry = %d, want 0", writes)
 	}
 
+	a.store.SyncDirectory = nil
 	freshPlan, err := a.PlanReverseETL(ctx, planRequest)
 	if err != nil {
 		t.Fatal(err)

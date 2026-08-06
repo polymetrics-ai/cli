@@ -442,35 +442,65 @@ func TestStreamStateAllowsRefreshRotationButRejectsSourceConfigChange(t *testing
 	}
 }
 
-func TestConnectorETLDoesNotCommitAfterPartialDestinationResult(t *testing.T) {
-	ctx := context.Background()
-	source := newScriptedSyncSource("partial_write_source", []connectors.Record{{
-		"id": "1", "updated_at": "2026-08-06T00:00:00Z",
-	}})
-	a, connection := setupSyncModeApp(t, source, "incremental_append")
-	conn, ok := a.findConnection(connection)
-	if !ok {
-		t.Fatal("connection missing")
+func TestConnectorETLRequiresCompleteDestinationWritesBeforeDurabilityAcknowledgement(t *testing.T) {
+	tests := []struct {
+		name        string
+		mode        string
+		records     []connectors.Record
+		batchSize   int
+		writeResult connectors.WriteResult
+	}{
+		{
+			name:      "short batch without reported failures",
+			mode:      "incremental_append",
+			batchSize: 2,
+			records: []connectors.Record{
+				{"id": "1", "updated_at": "2026-08-06T00:00:00Z"},
+				{"id": "2", "updated_at": "2026-08-07T00:00:00Z"},
+			},
+			writeResult: connectors.WriteResult{RecordsWritten: 1},
+		},
+		{
+			name:        "failed empty overwrite setup",
+			mode:        "full_refresh_overwrite",
+			batchSize:   1,
+			writeResult: connectors.WriteResult{RecordsFailed: 1},
+		},
 	}
-	mode, err := ParseStreamSyncMode(conn.Streams["records"])
-	if err != nil {
-		t.Fatal(err)
-	}
-	_, sourceCredential, sourceRuntime, err := a.resolveEndpointWithCredential(ctx, conn.Source)
-	if err != nil {
-		t.Fatal(err)
-	}
-	expectation := streamResumeExpectation(source, sourceCredential, sourceRuntime, "records")
-	destination := partialWriteDestination{scriptedSyncSource: newScriptedSyncSource("partial_write_destination", nil)}
-	_, err = a.runConnectorETL(ctx, "run_partial", conn, source, sourceRuntime, &destination, connectors.RuntimeConfig{}, expectation, "records", conn.Streams["records"], mode, 1)
-	if err == nil {
-		t.Fatal("runConnectorETL() error = nil after partial destination result")
-	}
-	if destination.acknowledgements != 0 {
-		t.Fatalf("durability acknowledgement count = %d, want 0 after partial write", destination.acknowledgements)
-	}
-	if state := a.state.StreamStates[streamStateKey(connection, "records")]; state.Checkpoint != nil {
-		t.Fatalf("checkpoint committed after partial destination result: %#v", state.Checkpoint)
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctx := context.Background()
+			source := newScriptedSyncSource("incomplete_write_source", tt.records)
+			a, connection := setupSyncModeApp(t, source, tt.mode)
+			conn, ok := a.findConnection(connection)
+			if !ok {
+				t.Fatal("connection missing")
+			}
+			mode, err := ParseStreamSyncMode(conn.Streams["records"])
+			if err != nil {
+				t.Fatal(err)
+			}
+			_, sourceCredential, sourceRuntime, err := a.resolveEndpointWithCredential(ctx, conn.Source)
+			if err != nil {
+				t.Fatal(err)
+			}
+			expectation := streamResumeExpectation(source, sourceCredential, sourceRuntime, "records")
+			destination := &incompleteWriteDestination{
+				scriptedSyncSource: newScriptedSyncSource("incomplete_write_destination", nil),
+				result:             tt.writeResult,
+			}
+			result, err := a.runConnectorETL(ctx, "run_incomplete", conn, source, sourceRuntime, destination, connectors.RuntimeConfig{}, expectation, "records", conn.Streams["records"], mode, tt.batchSize)
+			if err == nil {
+				t.Fatal("runConnectorETL() error = nil after incomplete destination result")
+			}
+			if destination.acknowledgements != 0 {
+				t.Fatalf("durability acknowledgement count = %d, want 0 after incomplete write", destination.acknowledgements)
+			}
+			if result.PendingStreamState != nil || result.Checkpoint != nil {
+				t.Fatalf("checkpoint candidate = %#v, want none after incomplete write", result.PendingStreamState)
+			}
+		})
 	}
 }
 
@@ -561,16 +591,17 @@ func TestRunETLRefusesOutboxWithoutDurableAcknowledgementBeforeRead(t *testing.T
 	}
 }
 
-type partialWriteDestination struct {
+type incompleteWriteDestination struct {
 	*scriptedSyncSource
+	result           connectors.WriteResult
 	acknowledgements int
 }
 
-func (d *partialWriteDestination) Write(_ context.Context, _ connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
-	return connectors.WriteResult{RecordsWritten: len(records) - 1, RecordsFailed: 1}, nil
+func (d *incompleteWriteDestination) Write(context.Context, connectors.WriteRequest, []connectors.Record) (connectors.WriteResult, error) {
+	return d.result, nil
 }
 
-func (d *partialWriteDestination) AcknowledgeETLDurability(_ context.Context, _ string) (synccontract.DownstreamAcknowledgement, error) {
+func (d *incompleteWriteDestination) AcknowledgeETLDurability(_ context.Context, _ string) (synccontract.DownstreamAcknowledgement, error) {
 	d.acknowledgements++
 	return synccontract.NewDurableDownstreamAcknowledgement(d.Name(), time.Now().UTC())
 }

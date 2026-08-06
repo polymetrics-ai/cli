@@ -65,10 +65,11 @@ func CommitOutcomeForError(err error) CommitOutcome {
 
 // JSONStore persists a single JSON value at Path.
 type JSONStore[T any] struct {
-	Path    string
-	Initial func() T
-	Locker  Locker
-	Redact  func(path []string, value any) any
+	Path          string
+	Initial       func() T
+	Locker        Locker
+	Redact        func(path []string, value any) any
+	SyncDirectory func(string) error
 }
 
 func (s JSONStore[T]) Load() (out T, err error) {
@@ -208,7 +209,16 @@ func (s JSONStore[T]) saveNoLock(value T) (err error) {
 	if err := os.Rename(tmpPath, s.Path); err != nil {
 		return fmt.Errorf("replace state file: %w", err)
 	}
-	_ = syncDir(dir)
+	syncDirectory := s.SyncDirectory
+	if syncDirectory == nil {
+		syncDirectory = syncDir
+	}
+	if err := syncDirectory(dir); err != nil {
+		return &CommitOutcomeError{
+			Outcome: CommitOutcomeIndeterminate,
+			Err:     fmt.Errorf("sync state directory: %w", err),
+		}
+	}
 	return nil
 }
 
