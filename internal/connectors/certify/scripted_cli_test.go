@@ -71,6 +71,7 @@ type scriptedConnection struct {
 	source      scriptedEndpoint
 	destination scriptedEndpoint
 	stream      string
+	syncMode    string
 	table       string
 }
 
@@ -440,9 +441,17 @@ func (s *scriptedCLI) createConnection(args []string) error {
 	sourceValue := flagValue(args, "--source")
 	destinationValue := flagValue(args, "--destination")
 	stream := flagValue(args, "--stream")
+	syncMode := flagValue(args, "--sync-mode")
 	table := flagValue(args, "--table")
-	if sourceValue == "" || destinationValue == "" || stream == "" || table == "" || !hasFlag(args, "--sync-mode") {
+	if sourceValue == "" || destinationValue == "" || stream == "" || syncMode == "" || table == "" {
 		return fmt.Errorf("connections create requires source, destination, stream, table, and sync mode")
+	}
+	expectedMode, ok := expectedScriptedConnectionMode(args[2])
+	if !ok {
+		return fmt.Errorf("scripted connection %q is not a certification connection", args[2])
+	}
+	if syncMode != expectedMode {
+		return fmt.Errorf("scripted connection %q has sync mode %q, want %q", args[2], syncMode, expectedMode)
 	}
 	source, err := parseScriptedEndpoint(sourceValue)
 	if err != nil {
@@ -462,9 +471,31 @@ func (s *scriptedCLI) createConnection(args []string) error {
 		source:      source,
 		destination: destination,
 		stream:      stream,
+		syncMode:    syncMode,
 		table:       table,
 	}
 	return nil
+}
+
+func expectedScriptedConnectionMode(name string) (string, bool) {
+	switch {
+	case name == "cert_live" || strings.HasPrefix(name, "cert_live_"):
+		return "full_refresh_append", true
+	case name == "cert_incremental" || strings.HasPrefix(name, "cert_incremental_"):
+		return "incremental_append", true
+	case name == "cert_capture_full_refresh_overwrite_deduped" || strings.HasPrefix(name, "cert_capture_full_refresh_overwrite_deduped_"):
+		return "full_refresh_overwrite_deduped", true
+	case name == "cert_capture_full_refresh_overwrite" || strings.HasPrefix(name, "cert_capture_full_refresh_overwrite_"):
+		return "full_refresh_overwrite", true
+	case name == "cert_capture_incremental_append_deduped" || strings.HasPrefix(name, "cert_capture_incremental_append_deduped_"):
+		return "incremental_append_deduped", true
+	case strings.HasPrefix(name, "cert_flow_conn_"):
+		return "full_refresh_append", true
+	case name == "cert_write_verify" || strings.HasPrefix(name, "cert_write_seed_conn_") || name == "cert_sweep_seed_conn":
+		return "full_refresh_overwrite", true
+	default:
+		return "", false
+	}
 }
 
 func (s *scriptedCLI) refreshCatalog(args []string) error {
@@ -491,6 +522,10 @@ func (s *scriptedCLI) runETL(args []string) error {
 	}
 	if connection.stream != stream {
 		return fmt.Errorf("scripted etl stream %q is not configured on connection %q", stream, connectionName)
+	}
+	expectedMode, ok := expectedScriptedConnectionMode(connectionName)
+	if !ok || connection.syncMode != expectedMode {
+		return fmt.Errorf("scripted etl connection %q has an invalid sync mode", connectionName)
 	}
 	if err := s.validateConnection(connection); err != nil {
 		return fmt.Errorf("scripted etl connection %q: %w", connectionName, err)
@@ -918,6 +953,35 @@ func prepareScriptedWriteDependencies(t *testing.T, driver *scriptedCLI, root st
 		"--config", "path="+filepath.Join(root, ".polymetrics", "outbox"), "--json")
 }
 
+func TestExpectedScriptedConnectionMode(t *testing.T) {
+	for _, tt := range []struct {
+		name string
+		mode string
+		ok   bool
+	}{
+		{name: "cert_live", mode: "full_refresh_append", ok: true},
+		{name: "cert_live_events", mode: "full_refresh_append", ok: true},
+		{name: "cert_capture_full_refresh_overwrite", mode: "full_refresh_overwrite", ok: true},
+		{name: "cert_capture_full_refresh_overwrite_deduped_events", mode: "full_refresh_overwrite_deduped", ok: true},
+		{name: "cert_capture_incremental_append_deduped", mode: "incremental_append_deduped", ok: true},
+		{name: "cert_incremental", mode: "incremental_append", ok: true},
+		{name: "cert_incremental_events", mode: "incremental_append", ok: true},
+		{name: "cert_flow_conn_sample", mode: "full_refresh_append", ok: true},
+		{name: "cert_flow_conn_sample_events", mode: "full_refresh_append", ok: true},
+		{name: "cert_write_seed_conn_cert_write_seed_sample", mode: "full_refresh_overwrite", ok: true},
+		{name: "cert_write_verify", mode: "full_refresh_overwrite", ok: true},
+		{name: "cert_sweep_seed_conn", mode: "full_refresh_overwrite", ok: true},
+		{name: "not-a-certification-connection", ok: false},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			got, ok := expectedScriptedConnectionMode(tt.name)
+			if got != tt.mode || ok != tt.ok {
+				t.Fatalf("expectedScriptedConnectionMode(%q) = (%q, %t), want (%q, %t)", tt.name, got, ok, tt.mode, tt.ok)
+			}
+		})
+	}
+}
+
 func TestScriptedCLIDriverRejectsProtocolDrift(t *testing.T) {
 	t.Run("connection flags", func(t *testing.T) {
 		driver := newScriptedCLI(t)
@@ -937,6 +1001,20 @@ func TestScriptedCLIDriverRejectsProtocolDrift(t *testing.T) {
 		mustRunScriptedCommand(t, driver, root,
 			"credentials", "add", "cert-warehouse", "--connector", "warehouse",
 			"--config", "path="+filepath.Join(root, ".polymetrics", "warehouse"), "--json")
+		var stdout, stderr strings.Builder
+		if code := driver.run([]string{
+			"connections", "create", "cert_live",
+			"--source", "sample:cert-source",
+			"--destination", "warehouse:cert-warehouse",
+			"--stream", "events",
+			"--sync-mode", "full_refresh_overwrite",
+			"--table", "cert_live_events",
+			"--json", "--root", root,
+		}, &stdout, &stderr); code == 0 {
+			t.Fatal("scripted driver accepted a live connection with the wrong sync mode")
+		}
+		stdout.Reset()
+		stderr.Reset()
 		mustRunScriptedCommand(t, driver, root,
 			"connections", "create", "cert_live",
 			"--source", "sample:cert-source",
@@ -946,7 +1024,6 @@ func TestScriptedCLIDriverRejectsProtocolDrift(t *testing.T) {
 			"--table", "cert_live_events",
 			"--json")
 
-		var stdout, stderr strings.Builder
 		if code := driver.run([]string{"etl", "run", "--connection", "cert_live", "--stream", "customers", "--json", "--root", root}, &stdout, &stderr); code == 0 {
 			t.Fatal("scripted driver accepted an ETL stream not configured on the connection")
 		}
