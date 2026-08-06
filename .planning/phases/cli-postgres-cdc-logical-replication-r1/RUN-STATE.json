@@ -1,0 +1,8 @@
+{
+  "branch": "fm/cli-postgres-cdc-logical-replication-r1",
+  "base": "fm/cli-found-polling-watermark-executor-r1",
+  "base_head": "00da0633d",
+  "lifecycle": "inline-manual-gsd-fallback",
+  "status": "green",
+  "tdd": "PCDC-1 through PCDC-6 green; PostgreSQL 12.22 live conformance recorded"
+}

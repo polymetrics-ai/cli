@@ -1,8 +1,9 @@
 # Overview
 
 Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and
-supports cursor-incremental reads on a configurable cursor column. Read-only source; CDC is a
-documented stub pending the gated pglogrepl dependency.
+supports cursor-incremental reads on a configurable cursor column, and consumes change events
+through PostgreSQL logical replication. CDC uses a connector-owned, source-bound replication slot
+and commits an LSN only after downstream acknowledgement, so restart delivery is at-least-once.
 
 This connector discovers available streams and schemas from the configured service at runtime.
 
@@ -14,6 +15,8 @@ Connection fields:
 
 - `cursor_field` (optional, string); Optional column name used for incremental reads (rows with
   cursor_field greater than the stored cursor are read, ordered by cursor_field ascending).
+- `cdc_publication` (optional, string); Existing PostgreSQL publication used for logical-
+  replication CDC. Required only for CDC; it must include the selected table.
 - `database` (required, string); Database name to connect to.
 - `host` (required, string); Bare hostname or IP of the PostgreSQL server (no scheme, path, or
   credentials - a URL-shaped value is rejected).
@@ -26,8 +29,6 @@ Connection fields:
 - `sslmode` (optional, string); allowed values `disable`, `allow`, `prefer`, `require`, `verify-ca`,
   `verify-full`; libpq sslmode. Defaults to disable when omitted.
 - `username` (required, string); Database role used to authenticate.
-
-Secret fields are redacted in logs and write previews: `password`.
 
 Provide the secret fields listed above. Authentication is applied by the connector-specific
 implementation for this service.
@@ -44,3 +45,8 @@ This connector is read-only. Read behavior: low.
 ## Known limits
 
 - Schemas and stream availability depend on the configured service at runtime.
+- CDC requires a real PostgreSQL source with `wal_level=logical`, a role permitted to use logical
+  replication, and an existing `cdc_publication` that contains the selected table.
+- CDC slots are derived from the PostgreSQL system identity, database, and fully qualified stream;
+  teardown drops only that inactive connector-owned slot. Do not delete a slot while another CDC
+  reader is active.

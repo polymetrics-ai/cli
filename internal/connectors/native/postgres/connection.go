@@ -95,7 +95,7 @@ func resolveConfig(cfg connectors.RuntimeConfig) (connConfig, error) {
 	if cfg.Secrets != nil {
 		password = cfg.Secrets["password"]
 	}
-	if strings.TrimSpace(password) == "" {
+	if strings.TrimSpace(password) == "" && !fixtureMode(cfg) {
 		return connConfig{}, errors.New("postgres connector requires secret password")
 	}
 
