@@ -15,6 +15,7 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/engine"
 	native "polymetrics.ai/internal/connectors/native/amazon-sqs"
 )
 
@@ -45,8 +46,8 @@ func TestOperationDirectReadPreflightUsesClosedSQSContract(t *testing.T) {
 	}{
 		{name: "valid", op: "list_queues", method: http.MethodPost, path: "SQS.ListQueues", cap: 16 << 20, policy: "json_redacted"},
 		{name: "unknown operation", op: "raw_action", method: http.MethodPost, path: "SQS.RawAction", cap: 16 << 20, policy: "json_redacted", wantErr: "operation \"raw_action\" not found"},
-		{name: "method mismatch", op: "list_queues", method: http.MethodGet, path: "SQS.ListQueues", cap: 16 << 20, policy: "json_redacted", wantErr: "must be POST"},
-		{name: "path mismatch", op: "list_queues", method: http.MethodPost, path: "SQS.RawAction", cap: 16 << 20, policy: "json_redacted", wantErr: "does not match operation path"},
+		{name: "method mismatch", op: "list_queues", method: http.MethodGet, path: "SQS.ListQueues", cap: 16 << 20, policy: "json_redacted", wantErr: "does not match declared operation method"},
+		{name: "path mismatch", op: "list_queues", method: http.MethodPost, path: "SQS.RawAction", cap: 16 << 20, policy: "json_redacted", wantErr: "does not match declared operation path"},
 		{name: "missing cap", op: "list_queues", method: http.MethodPost, path: "SQS.ListQueues", cap: 0, policy: "json_redacted", wantErr: "requires positive max_bytes"},
 		{name: "policy mismatch", op: "list_queues", method: http.MethodPost, path: "SQS.ListQueues", cap: 16 << 20, policy: "json", wantErr: "not supported"},
 	}
@@ -63,6 +64,28 @@ func TestOperationDirectReadPreflightUsesClosedSQSContract(t *testing.T) {
 				t.Fatalf("PreflightOperationDirectRead error = %v, want %q", err, tt.wantErr)
 			}
 		})
+	}
+}
+
+func TestOperationDirectReadPreflightFailsClosedWithoutRuntimeLedger(t *testing.T) {
+	c := native.Connector{Base: engine.NewBase(engine.Bundle{
+		Name: "amazon-sqs",
+		Operations: []engine.OperationSpec{{
+			ID:   "list_queues",
+			Kind: "rest_read",
+			REST: &engine.RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "SQS.ListQueues",
+				ContentType: "application/json",
+				MaxBytes:    1 << 20,
+				BodySchema:  json.RawMessage(`{"type":"object","additionalProperties":false}`),
+			},
+		}},
+	})}
+
+	err := c.PreflightOperationDirectRead("list_queues", http.MethodPost, "SQS.ListQueues", 16<<20, "json_redacted")
+	if err == nil || !strings.Contains(err.Error(), "runtime operation endpoint ledger is unavailable") {
+		t.Fatalf("PreflightOperationDirectRead without runtime ledger = %v, want fail-closed ledger rejection", err)
 	}
 }
 
