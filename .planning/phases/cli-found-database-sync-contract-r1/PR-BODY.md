@@ -1,4 +1,4 @@
-<!-- CI repair handoff: the outer PR phase must replace PR #3879's live body with this file verbatim. -->
+<!-- Issue-first body for the active pull request. -->
 
 ## Intent
 
@@ -35,7 +35,10 @@ The red/green ledger, manual GSD fallback, focused verification, and review reco
 `.planning/phases/cli-found-database-sync-contract-r1/`. No CLI, connector bundle, credential,
 live-provider, generic SQL, generic HTTP-write, or shell surface was added.
 
+This current-main successor to #3879 inherits the certification harness fix from #3878; it does
+not vendor the unrelated certification change.
+
 ## Pipeline
 
-`require-linked-issue` reads the live GitHub PR body, so a source-only push cannot repair this
-failure. The outer PR phase must replace PR #3879's live body with this file before rerunning CI.
+`require-linked-issue` reads this live GitHub PR body. The `## Intent` and `Closes #3810` sections
+are intentionally retained here so the guard remains verifiable from the PR metadata.
