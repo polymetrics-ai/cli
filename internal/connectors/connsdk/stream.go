@@ -139,7 +139,7 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 			// attempt may reach the caller.
 			body, _ := io.ReadAll(io.LimitReader(resp.Body, maxErrorBody))
 			resp.Body.Close()
-			lastErr = responseHTTPError(resp.StatusCode, fullURL, body, observation)
+			lastErr = responseHTTPError(resp.StatusCode, fullURL, body, len(body) >= maxErrorBody, observation)
 			if werr := r.sleep(ctx, r.backoff(attempt, observation)); werr != nil {
 				return nil, werr
 			}
@@ -149,7 +149,7 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 			body, _ := io.ReadAll(io.LimitReader(resp.Body, maxErrorBody))
 			resp.Body.Close()
-			return nil, responseHTTPError(resp.StatusCode, fullURL, body, observation)
+			return nil, responseHTTPError(resp.StatusCode, fullURL, body, len(body) >= maxErrorBody, observation)
 		}
 
 		return &StreamResponse{

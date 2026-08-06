@@ -2068,6 +2068,35 @@ func validateCallerSuppliedIdentifierSets(i int, op OperationSpec) error {
 	return nil
 }
 
+func validateRequiredQueryCallerSuppliedIdentifierSetCompatibility(i int, op OperationSpec) error {
+	if op.REST == nil || len(op.REST.RequiredQuery) == 0 || len(op.REST.CallerSuppliedIdentifierSets) == 0 {
+		return nil
+	}
+	sets := make(map[string]CallerSuppliedIdentifierSetSpec, len(op.REST.CallerSuppliedIdentifierSets))
+	for _, set := range op.REST.CallerSuppliedIdentifierSets {
+		sets[set.Name] = set
+	}
+	for j, group := range op.REST.RequiredQuery {
+		satisfiable := false
+		for _, rawName := range group.AnyOf {
+			name := strings.TrimSpace(rawName)
+			if strings.TrimSpace(op.REST.Query[name]) != "" {
+				satisfiable = true
+				break
+			}
+			set, declared := sets[name]
+			if !declared || set.Wire == "query_comma_separated" || set.Wire == "query_repeated" {
+				satisfiable = true
+				break
+			}
+		}
+		if !satisfiable {
+			return fmt.Errorf("operation %d (%q) required_query group %d cannot be satisfied because it only names body_json_array or path_segment caller-supplied identifier sets", i, op.ID, j)
+		}
+	}
+	return nil
+}
+
 func surfacePathVariableName(name string) bool {
 	if name == "" {
 		return false
@@ -2330,6 +2359,9 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		return err
 	}
 	if err := validateCallerSuppliedIdentifierSets(i, op); err != nil {
+		return err
+	}
+	if err := validateRequiredQueryCallerSuppliedIdentifierSetCompatibility(i, op); err != nil {
 		return err
 	}
 	if err := validateOperationMultipartSemantics(i, op); err != nil {

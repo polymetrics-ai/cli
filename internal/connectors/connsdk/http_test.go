@@ -857,6 +857,38 @@ func TestHTTPErrorErrorRedactsURLQueryAndBody(t *testing.T) {
 	}
 }
 
+func TestRequesterRedactsErrorBodyBeforeTruncation(t *testing.T) {
+	const identifier = "caller-supplied-identifier"
+	prefix := strings.Repeat("x", maxErrorBody-len("redacted")-1)
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusBadRequest)
+		_, _ = w.Write([]byte(prefix + identifier + strings.Repeat("y", 32)))
+	}))
+	t.Cleanup(srv.Close)
+
+	r := &Requester{
+		BaseURL:        srv.URL,
+		DisableRetries: true,
+		ErrorBodyRedactor: func(body []byte) []byte {
+			return []byte(strings.ReplaceAll(string(body), identifier, "redacted"))
+		},
+	}
+	_, err := r.Do(context.Background(), http.MethodGet, "/items", nil, nil)
+	if err == nil {
+		t.Fatal("Do error = nil, want provider rejection")
+	}
+	var httpErr *HTTPError
+	if !errors.As(err, &httpErr) {
+		t.Fatalf("error type = %T, want HTTPError", err)
+	}
+	if strings.Contains(httpErr.Body, identifier[:8]) {
+		t.Fatalf("truncated HTTP error leaked identifier prefix: %q", httpErr.Body)
+	}
+	if !strings.Contains(httpErr.Body, "redacted") || !httpErr.BodyTruncated {
+		t.Fatalf("HTTP error did not retain redacted truncation context: %+v", httpErr)
+	}
+}
+
 func TestRequesterDoJSONDecodeErrorDoesNotIncludeRequestURL(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		_, _ = w.Write([]byte(`{"broken"`))

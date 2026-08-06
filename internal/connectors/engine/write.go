@@ -253,30 +253,144 @@ func redactMixedPercentEncodedLiteral(text, value string) string {
 }
 
 func mixedPercentEncodedLiteralEnd(text, value string, start int) (int, bool) {
-	position := start
-	for i := 0; i < len(value); i++ {
+	type state struct {
+		textPosition  int
+		valuePosition int
+	}
+	type result struct {
+		end int
+		ok  bool
+	}
+	memo := map[state]result{}
+	var match func(int, int) (int, bool)
+	match = func(position, valuePosition int) (int, bool) {
+		if valuePosition == len(value) {
+			return position, true
+		}
 		if position >= len(text) {
 			return 0, false
 		}
-		if text[position] == value[i] {
-			position++
-			continue
+		key := state{textPosition: position, valuePosition: valuePosition}
+		if cached, ok := memo[key]; ok {
+			return cached.end, cached.ok
 		}
-		if value[i] == ' ' && text[position] == '+' {
-			position++
-			continue
+		current := value[valuePosition]
+		if position+2 < len(text) && text[position] == '%' {
+			high, highOK := sensitiveRedactionHexValue(text[position+1])
+			low, lowOK := sensitiveRedactionHexValue(text[position+2])
+			if highOK && lowOK && high<<4|low == current {
+				if end, ok := match(position+3, valuePosition+1); ok {
+					memo[key] = result{end: end, ok: true}
+					return end, true
+				}
+			}
 		}
-		if position+2 >= len(text) || text[position] != '%' {
-			return 0, false
+		if text[position] == current {
+			if end, ok := match(position+1, valuePosition+1); ok {
+				memo[key] = result{end: end, ok: true}
+				return end, true
+			}
 		}
-		high, highOK := sensitiveRedactionHexValue(text[position+1])
-		low, lowOK := sensitiveRedactionHexValue(text[position+2])
-		if !highOK || !lowOK || high<<4|low != value[i] {
-			return 0, false
+		if current == ' ' && text[position] == '+' {
+			if end, ok := match(position+1, valuePosition+1); ok {
+				memo[key] = result{end: end, ok: true}
+				return end, true
+			}
 		}
-		position += 3
+		memo[key] = result{}
+		return 0, false
 	}
-	return position, true
+	return match(start, 0)
+}
+
+func redactSensitiveTruncatedSuffix(text string, values []string) string {
+	start := len(text)
+	for _, value := range sensitiveRedactionValues(values) {
+		if candidate, ok := mixedPercentEncodedLiteralPrefixSuffixStart(text, value); ok && candidate < start {
+			start = candidate
+		}
+		for _, form := range sensitiveRedactionLiteralForms(value) {
+			if candidate, ok := sensitiveLiteralPrefixSuffixStart(text, form); ok && candidate < start {
+				start = candidate
+			}
+		}
+	}
+	if start == len(text) {
+		return text
+	}
+	return text[:start] + "redacted"
+}
+
+func mixedPercentEncodedLiteralPrefixSuffixStart(text, value string) (int, bool) {
+	if text == "" || value == "" {
+		return 0, false
+	}
+	for start := 0; start < len(text); start++ {
+		if mixedPercentEncodedLiteralPrefixEndsAt(text, value, start) {
+			return start, true
+		}
+	}
+	return 0, false
+}
+
+func mixedPercentEncodedLiteralPrefixEndsAt(text, value string, start int) bool {
+	type state struct {
+		textPosition  int
+		valuePosition int
+	}
+	memo := map[state]bool{}
+	seen := map[state]bool{}
+	var match func(int, int) bool
+	match = func(position, valuePosition int) bool {
+		if position == len(text) {
+			return valuePosition > 0 && valuePosition < len(value)
+		}
+		if valuePosition >= len(value) {
+			return false
+		}
+		key := state{textPosition: position, valuePosition: valuePosition}
+		if seen[key] {
+			return memo[key]
+		}
+		seen[key] = true
+		current := value[valuePosition]
+		if position+2 < len(text) && text[position] == '%' {
+			high, highOK := sensitiveRedactionHexValue(text[position+1])
+			low, lowOK := sensitiveRedactionHexValue(text[position+2])
+			if highOK && lowOK && high<<4|low == current && match(position+3, valuePosition+1) {
+				memo[key] = true
+				return true
+			}
+		}
+		if text[position] == '%' && position+1 == len(text) && valuePosition > 0 {
+			return true
+		}
+		if text[position] == '%' && position+2 == len(text) && valuePosition > 0 {
+			high, highOK := sensitiveRedactionHexValue(text[position+1])
+			if highOK && high == current>>4 {
+				return true
+			}
+		}
+		if text[position] == current && match(position+1, valuePosition+1) {
+			memo[key] = true
+			return true
+		}
+		if current == ' ' && text[position] == '+' && match(position+1, valuePosition+1) {
+			memo[key] = true
+			return true
+		}
+		return false
+	}
+	return match(start, 0)
+}
+
+func sensitiveLiteralPrefixSuffixStart(text, literal string) (int, bool) {
+	for length := min(len(text), len(literal)-1); length > 0; length-- {
+		if strings.HasSuffix(text, literal[:length]) {
+			return len(text) - length, true
+		}
+	}
+	return 0, false
 }
 
 func sensitiveRedactionHexValue(value byte) (byte, bool) {

@@ -273,6 +273,62 @@ func TestCallerSuppliedIdentifierSetsRedactTransportErrors(t *testing.T) {
 	}
 }
 
+func TestCallerSuppliedIdentifierSetsRedactMixedPercentLiteralPercent(t *testing.T) {
+	const identifier = "opaque%identifier"
+	const echoed = "opaque%25i%64entifier"
+
+	message := redactSensitiveLiterals("provider rejected "+echoed, []string{identifier})
+	if strings.Contains(message, echoed) {
+		t.Fatalf("mixed-percent identifier leaked in %q", message)
+	}
+	if !strings.Contains(message, "redacted") {
+		t.Fatalf("mixed-percent identifier was not redacted in %q", message)
+	}
+}
+
+func TestCallerSuppliedIdentifierSetsRedactTruncatedRequestErrors(t *testing.T) {
+	identifier := strings.Repeat("opaque-identifier-", 1024)
+	prefix := strings.Repeat("x", (8<<10)-len("redacted")-1)
+
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusBadRequest)
+		_, _ = w.Write([]byte(prefix + identifier + strings.Repeat("y", 32)))
+	}))
+	t.Cleanup(srv.Close)
+
+	bundle := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{{
+			ID: "acme.identifiers.lookup", Kind: "rest_read", Summary: "Look up explicit identifiers", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{
+				Method: http.MethodPost, Path: "/lookups", ContentType: "application/json", MaxBytes: 64 << 10,
+				BodySchema: json.RawMessage(`{"type":"object","required":["ids"],"properties":{"ids":{"type":"array","minItems":1,"maxItems":1,"items":{"type":"string"}}}}`),
+				CallerSuppliedIdentifierSets: []CallerSuppliedIdentifierSetSpec{{
+					Name: "ids", ElementShape: "opaque_string", Wire: "body_json_array", MinItems: 1, MaxItems: 1,
+				}},
+			},
+		}},
+	}
+
+	_, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{
+		Operation:      "acme.identifiers.lookup",
+		IdentifierSets: map[string][]string{"ids": {identifier}},
+	}, nil)
+	if err == nil {
+		t.Fatal("OperationDirectRead error = nil, want provider rejection")
+	}
+	message := err.Error()
+	for _, leaked := range []string{identifier, identifier[:64]} {
+		if strings.Contains(message, leaked) {
+			t.Fatalf("truncated request error leaked supplied identifier prefix")
+		}
+	}
+	if !strings.Contains(message, "http 400") || !strings.Contains(message, "redacted") {
+		t.Fatalf("request error lost redacted provider context: %q", message)
+	}
+}
+
 func assertCallerSuppliedIdentifierFormsRedacted(t *testing.T, text string, identifiers []string) {
 	t.Helper()
 	for _, identifier := range identifiers {
@@ -666,6 +722,16 @@ func TestCallerSuppliedIdentifierSetDeclarationsRejectUnsafeContracts(t *testing
 			name: "body schema root must allow objects",
 			rest: `{"method":"POST","path":"/lookups","content_type":"application/json","body_schema":{"type":"array","properties":{"ids":{"type":"array","minItems":0,"maxItems":2,"items":{"type":"string"}}}},"caller_supplied_identifier_sets":[{"name":"ids","element_shape":"opaque_string","wire":"body_json_array","min_items":0,"max_items":2}]}`,
 			want: `body_schema must be an object`,
+		},
+		{
+			name: "body identifier set cannot be the only required query candidate",
+			rest: `{"method":"POST","path":"/lookups","content_type":"application/json","required_query":[{"any_of":["ids"]}],"body_schema":{"type":"object","required":["ids"],"properties":{"ids":{"type":"array","minItems":1,"maxItems":1,"items":{"type":"string"}}}},"caller_supplied_identifier_sets":[{"name":"ids","element_shape":"opaque_string","wire":"body_json_array","min_items":1,"max_items":1}]}`,
+			want: `required_query group 0 cannot be satisfied`,
+		},
+		{
+			name: "path identifier set cannot be the only required query candidate",
+			rest: `{"method":"GET","path":"/lookups/{id}","required_query":[{"any_of":["id"]}],"caller_supplied_identifier_sets":[{"name":"id","element_shape":"opaque_string","wire":"path_segment","min_items":1,"max_items":1}]}`,
+			want: `required_query group 0 cannot be satisfied`,
 		},
 	}
 

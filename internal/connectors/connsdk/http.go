@@ -42,9 +42,10 @@ type Response struct {
 // exhausting retries. The body is truncated and never assumed to be secret-free
 // by callers, but connsdk itself never logs it.
 type HTTPError struct {
-	Status int
-	URL    string
-	Body   string
+	Status        int
+	URL           string
+	Body          string
+	BodyTruncated bool
 }
 
 func (e *HTTPError) Error() string {
@@ -136,8 +137,9 @@ type requestBody struct {
 
 type Requester struct {
 	// Client is the HTTP client. Defaults to a client with a 60s timeout.
-	Client        *http.Client
-	RedirectCheck func(next *http.Request, via []*http.Request) error
+	Client            *http.Client
+	RedirectCheck     func(next *http.Request, via []*http.Request) error
+	ErrorBodyRedactor func([]byte) []byte
 	// BaseURL is prepended to relative paths. A path beginning with http:// or
 	// https:// is treated as absolute and used as-is (e.g. Link-header next URLs).
 	BaseURL string
@@ -937,6 +939,20 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 
 		respBody, _ := io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
 		resp.Body.Close()
+		bodyTruncated := len(respBody) >= maxBodyBytes
+		var errorBody []byte
+		errorBodyPrepared := false
+		prepareErrorBody := func() []byte {
+			if errorBodyPrepared {
+				return errorBody
+			}
+			errorBodyPrepared = true
+			errorBody = respBody
+			if r.ErrorBodyRedactor != nil {
+				errorBody = r.ErrorBodyRedactor(errorBody)
+			}
+			return errorBody
+		}
 
 		// A 401 can mean the credential was invalidated out of band (revoked
 		// grant, password change, scope change) rather than that it was never
@@ -952,7 +968,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 				// buy a second one.
 				reauthAttempted = true
 				if err := refresher.RefreshAuth(ctx, req); err == nil {
-					lastErr = &HTTPError{Status: resp.StatusCode, URL: fullURL, Body: truncate(respBody)}
+					lastErr = newHTTPError(resp.StatusCode, fullURL, prepareErrorBody(), bodyTruncated)
 					// The reauth retry does not spend the transient-failure
 					// budget, so a MaxRetries:0 requester still gets its one
 					// post-refresh attempt. Bounded by reauthAttempted, which
@@ -966,7 +982,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 		}
 
 		if !r.DisableRetries && r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {
-			lastErr = responseHTTPError(resp.StatusCode, fullURL, respBody, observation)
+			lastErr = responseHTTPError(resp.StatusCode, fullURL, prepareErrorBody(), bodyTruncated, observation)
 			if werr := r.sleep(ctx, r.backoff(attempt, observation)); werr != nil {
 				return nil, werr
 			}
@@ -974,7 +990,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 		}
 
 		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-			return nil, responseHTTPError(resp.StatusCode, fullURL, respBody, observation)
+			return nil, responseHTTPError(resp.StatusCode, fullURL, prepareErrorBody(), bodyTruncated, observation)
 		}
 
 		return &Response{Status: resp.StatusCode, Header: resp.Header, Body: respBody, requestURL: fullURL}, nil
@@ -1083,8 +1099,8 @@ func (r *Requester) fullJitter(cap time.Duration) time.Duration {
 	return delay
 }
 
-func responseHTTPError(status int, requestURL string, body []byte, observation RateLimitObservation) error {
-	httpErr := &HTTPError{Status: status, URL: requestURL, Body: truncate(body)}
+func responseHTTPError(status int, requestURL string, body []byte, bodyTruncated bool, observation RateLimitObservation) error {
+	httpErr := newHTTPError(status, requestURL, body, bodyTruncated)
 	if status != http.StatusTooManyRequests {
 		return httpErr
 	}
@@ -1098,9 +1114,14 @@ func responseHTTPError(status int, requestURL string, body []byte, observation R
 	}
 }
 
-func truncate(body []byte) string {
+func newHTTPError(status int, requestURL string, body []byte, bodyTruncated bool) *HTTPError {
+	message, truncated := truncate(body)
+	return &HTTPError{Status: status, URL: requestURL, Body: message, BodyTruncated: bodyTruncated || truncated}
+}
+
+func truncate(body []byte) (string, bool) {
 	if len(body) > maxErrorBody {
-		return string(body[:maxErrorBody])
+		return string(body[:maxErrorBody]), true
 	}
-	return string(body)
+	return string(body), false
 }

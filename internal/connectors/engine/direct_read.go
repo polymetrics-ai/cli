@@ -104,11 +104,28 @@ func completeEngineErrorText(err error) string {
 }
 
 func completeOperationDirectReadErrorText(err error, identifierSets map[string][]string) string {
+	values := callerSuppliedIdentifierSetValues(identifierSets)
+	var httpErr *connsdk.HTTPError
+	if !errors.As(err, &httpErr) {
+		return redactSensitiveLiterals(err.Error(), values)
+	}
+	message := redactSensitiveLiterals(httpErr.Body, values)
+	if httpErr.BodyTruncated {
+		message = redactSensitiveTruncatedSuffix(message, values)
+	}
+	message = strings.TrimSpace(message)
+	if message == "" {
+		message = http.StatusText(httpErr.Status)
+	}
+	return fmt.Sprintf("http %d for %s: %s", httpErr.Status, redactSensitiveLiterals(httpErr.URL, values), message)
+}
+
+func callerSuppliedIdentifierSetValues(identifierSets map[string][]string) []string {
 	values := make([]string, 0)
 	for _, identifiers := range identifierSets {
 		values = append(values, identifiers...)
 	}
-	return redactSensitiveLiterals(completeEngineErrorText(err), values)
+	return values
 }
 
 func OperationDirectRead(ctx context.Context, b Bundle, req connectors.OperationDirectReadRequest, h Hooks) (connectors.DirectReadResult, error) {
@@ -202,6 +219,12 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	rt, err := newRuntime(ctx, b, cfg, h)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
+	}
+	identifierValues := callerSuppliedIdentifierSetValues(req.IdentifierSets)
+	if len(identifierValues) > 0 {
+		rt.Requester.ErrorBodyRedactor = func(body []byte) []byte {
+			return []byte(redactSensitiveLiterals(string(body), identifierValues))
+		}
 	}
 	maxBytes := clampOperationDirectReadMaxBytes(req.MaxBytes, op.REST.MaxBytes)
 	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, rt.Requester.BaseURL)
@@ -709,12 +732,20 @@ func normalizeDirectReadPathForBaseURL(resolvedPath, baseURL string) string {
 }
 
 func rejectCallerSuppliedIdentifierSetTargetBypass(b Bundle, cfg connectors.RuntimeConfig, baseURL, method, requestPath string, candidatePathParams map[string]string, allowedOperation string) error {
+	return rejectCallerSuppliedIdentifierSetTargetBypassWithMethod(b, cfg, baseURL, method, requestPath, candidatePathParams, allowedOperation, true)
+}
+
+func rejectCallerSuppliedIdentifierSetTargetBypassRegardlessOfMethod(b Bundle, cfg connectors.RuntimeConfig, baseURL, requestPath string, candidatePathParams map[string]string, allowedOperation string) error {
+	return rejectCallerSuppliedIdentifierSetTargetBypassWithMethod(b, cfg, baseURL, "", requestPath, candidatePathParams, allowedOperation, false)
+}
+
+func rejectCallerSuppliedIdentifierSetTargetBypassWithMethod(b Bundle, cfg connectors.RuntimeConfig, baseURL, method, requestPath string, candidatePathParams map[string]string, allowedOperation string, requireMethodMatch bool) error {
 	target, err := normalizedRequesterTargetPath(baseURL, requestPath)
 	if err != nil {
 		return err
 	}
 	for _, op := range b.Operations {
-		if op.ID == allowedOperation || op.Kind != "rest_read" || op.REST == nil || len(op.REST.CallerSuppliedIdentifierSets) == 0 || canonicalRequesterTargetMethod(op.REST.Method) != canonicalRequesterTargetMethod(method) {
+		if op.ID == allowedOperation || op.Kind != "rest_read" || op.REST == nil || len(op.REST.CallerSuppliedIdentifierSets) == 0 || requireMethodMatch && canonicalRequesterTargetMethod(op.REST.Method) != canonicalRequesterTargetMethod(method) {
 			continue
 		}
 		pattern, err := callerSuppliedIdentifierSetOperationTargetPattern(op, cfg, baseURL, candidatePathParams)
@@ -735,12 +766,21 @@ func rejectCallerSuppliedIdentifierSetRedirect(b Bundle, cfg connectors.RuntimeC
 	if err := rejectCallerSuppliedIdentifierSetTargetBypass(b, cfg, baseURL, next.Method, next.URL.String(), nil, ""); err != nil {
 		return err
 	}
+	initialMethod := ""
 	for _, previous := range via {
 		if previous == nil || previous.URL == nil {
 			continue
 		}
+		if initialMethod == "" {
+			initialMethod = canonicalRequesterTargetMethod(previous.Method)
+		}
 		if err := rejectCallerSuppliedIdentifierSetTargetBypass(b, cfg, baseURL, previous.Method, previous.URL.String(), nil, ""); err != nil {
 			return fmt.Errorf("redirect from caller-supplied identifier-set request refused: %w", err)
+		}
+	}
+	if initialMethod != "" && initialMethod != canonicalRequesterTargetMethod(next.Method) {
+		if err := rejectCallerSuppliedIdentifierSetTargetBypassRegardlessOfMethod(b, cfg, baseURL, next.URL.String(), nil, ""); err != nil {
+			return fmt.Errorf("redirect changes request method to caller-supplied identifier-set target: %w", err)
 		}
 	}
 	return nil

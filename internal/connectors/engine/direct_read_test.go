@@ -856,6 +856,61 @@ func TestOperationDirectReadRefusesCallerSuppliedIdentifierSetRedirects(t *testi
 	}
 }
 
+func TestOperationDirectReadRefusesMethodChangedRedirectToProtectedIdentifierSetTarget(t *testing.T) {
+	var safeHits int
+	var protectedHits int
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/safe":
+			safeHits++
+			if r.Method != http.MethodPost {
+				t.Fatalf("safe method = %q, want POST", r.Method)
+			}
+			http.Redirect(w, r, "/coins", http.StatusFound)
+		case "/coins":
+			protectedHits++
+		default:
+			t.Fatalf("path = %q", r.URL.Path)
+		}
+	}))
+	t.Cleanup(srv.Close)
+
+	bundle := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{
+			{
+				ID: "acme.safe.read", Kind: "rest_read", Summary: "Read safe resource", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
+				REST: &RESTOperationSpec{
+					Method: http.MethodPost, Path: "/safe", ContentType: "application/json", MaxBytes: 1024,
+					BodySchema: json.RawMessage(`{"type":"object"}`),
+				},
+			},
+			{
+				ID: "acme.coins.lookup", Kind: "rest_read", Summary: "Look up explicit identifiers", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
+				REST: &RESTOperationSpec{
+					Method: http.MethodPost, Path: "/coins", ContentType: "application/json", MaxBytes: 1024,
+					BodySchema: json.RawMessage(`{"type":"object","required":["ids"],"properties":{"ids":{"type":"array","minItems":1,"maxItems":1,"items":{"type":"string"}}}}`),
+					CallerSuppliedIdentifierSets: []CallerSuppliedIdentifierSetSpec{{
+						Name: "ids", ElementShape: "opaque_string", Wire: "body_json_array", MinItems: 1, MaxItems: 1,
+					}},
+				},
+			},
+		},
+	}
+
+	_, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{Operation: "acme.safe.read"}, nil)
+	if err == nil || !strings.Contains(err.Error(), "redirect changes request method") {
+		t.Fatalf("OperationDirectRead error = %v, want method-changing redirect refusal", err)
+	}
+	if safeHits != 1 {
+		t.Fatalf("safe requests = %d, want 1", safeHits)
+	}
+	if protectedHits != 0 {
+		t.Fatalf("protected target requests = %d, want 0", protectedHits)
+	}
+}
+
 func directReadBundle(baseURL, method, endpointPath string) Bundle {
 	return Bundle{
 		Name: "code-host",

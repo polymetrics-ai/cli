@@ -1078,8 +1078,17 @@ func checkCLISurfaceCallerSuppliedIdentifierSets(b engine.Bundle, i int, cmd eng
 		return nil
 	}
 	declared := make(map[string]engine.CallerSuppliedIdentifierSetSpec, len(op.REST.CallerSuppliedIdentifierSets))
+	reservedTargets := make(map[string]string, len(op.REST.CallerSuppliedIdentifierSets))
 	for _, set := range op.REST.CallerSuppliedIdentifierSets {
 		declared[set.Name] = set
+		switch set.Wire {
+		case "query_comma_separated", "query_repeated":
+			reservedTargets["query."+set.Name] = "identifier_set." + set.Name
+		case "body_json_array":
+			reservedTargets["body."+set.Name] = "identifier_set." + set.Name
+		case "path_segment":
+			reservedTargets["path."+set.Name] = "identifier_set." + set.Name
+		}
 	}
 	seen := make(map[string]string)
 	var findings []Finding
@@ -1087,11 +1096,12 @@ func checkCLISurfaceCallerSuppliedIdentifierSets(b engine.Bundle, i int, cmd eng
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q %s", i, cmd.Path, op.ID, message)})
 	}
 	for _, flag := range cmd.Flags {
-		if target, mapped := strings.CutPrefix(strings.TrimSpace(flag.MapsTo), "query."); mapped && isQueryWiredCallerSuppliedIdentifierSet(declared[target]) {
-			add(fmt.Sprintf("flag --%s must not map to query.%s because identifier_set.%s owns that query parameter", flag.Name, target, target))
+		mapsTo := strings.TrimSpace(flag.MapsTo)
+		if identifierSet, reserved := reservedTargets[mapsTo]; reserved {
+			add(fmt.Sprintf("flag --%s must not map to %s because %s owns that target", flag.Name, mapsTo, identifierSet))
 			continue
 		}
-		target, mapped := strings.CutPrefix(strings.TrimSpace(flag.MapsTo), "identifier_set.")
+		target, mapped := strings.CutPrefix(mapsTo, "identifier_set.")
 		if !mapped {
 			continue
 		}
@@ -1123,10 +1133,6 @@ func checkCLISurfaceCallerSuppliedIdentifierSets(b engine.Bundle, i int, cmd eng
 		}
 	}
 	return findings
-}
-
-func isQueryWiredCallerSuppliedIdentifierSet(set engine.CallerSuppliedIdentifierSetSpec) bool {
-	return set.Wire == "query_comma_separated" || set.Wire == "query_repeated"
 }
 
 // checkCLISurfaceDirectWriteOperationSafety validates the operation-specific
