@@ -355,16 +355,6 @@ func mustStage(t *testing.T, rep certify.Report, name string) certify.StageResul
 	return certify.StageResult{}
 }
 
-func countStages(rep certify.Report, name string) int {
-	count := 0
-	for _, s := range rep.Stages {
-		if s.Name == name {
-			count++
-		}
-	}
-	return count
-}
-
 func containsAny(s string, subs ...string) bool {
 	for _, sub := range subs {
 		if len(sub) == 0 {
