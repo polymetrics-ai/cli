@@ -4,6 +4,8 @@ package durability
 
 import "syscall"
 
+// SyncDirectory flushes directory metadata after an atomic replacement so a
+// successful rename is durable across a crash.
 func SyncDirectory(path string) error {
 	name, err := syscall.UTF16PtrFromString(path)
 	if err != nil {

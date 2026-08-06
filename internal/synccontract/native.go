@@ -8,8 +8,12 @@ import (
 	"sync"
 )
 
+// NativeCommandContractVersion is the supported serialization version for a
+// native command admission contract.
 const NativeCommandContractVersion uint = 1
 
+// ExecutorReference names a concrete native executor without carrying a raw
+// transport, query, or shell payload.
 type ExecutorReference struct {
 	Kind string `json:"kind"`
 	ID   string `json:"id"`
@@ -22,6 +26,8 @@ func (r ExecutorReference) validate() error {
 	return nil
 }
 
+// NativeSyncExecutorDescriptor declares the fixed operation an executor can
+// perform and the closed modes it admits.
 type NativeSyncExecutorDescriptor struct {
 	Protocol string            `json:"protocol"`
 	Command  string            `json:"command"`
@@ -33,6 +39,8 @@ func (d NativeSyncExecutorDescriptor) validate() error {
 	return validateNativeOperation(d.Protocol, d.Command, d.Executor, d.Modes)
 }
 
+// NativeSyncRequest supplies the requested mode and the source identity that
+// must be checked before an existing checkpoint is resumed.
 type NativeSyncRequest struct {
 	Mode       Mode                `json:"mode"`
 	Resume     ResumeExpectation   `json:"resume"`
@@ -49,16 +57,22 @@ func (r NativeSyncRequest) clone() NativeSyncRequest {
 	return clone
 }
 
+// NativeSyncResult returns an observed checkpoint candidate; callers must
+// still commit it through downstream durability acknowledgement.
 type NativeSyncResult struct {
 	CandidateCheckpoint *CheckpointEnvelope `json:"candidate_checkpoint,omitempty"`
 }
 
+// NativeSyncExecutor is a named database-protocol implementation whose
+// descriptor and fixture evidence must match its admitted contract.
 type NativeSyncExecutor interface {
 	NativeSyncExecutorDescriptor() NativeSyncExecutorDescriptor
 	NativeSyncConformanceEvidence() ConformanceEvidence
 	RunNativeSync(context.Context, NativeSyncRequest) (NativeSyncResult, error)
 }
 
+// NativeCommandContract is the declarative admission record for a fixed
+// native database operation. It deliberately excludes generic query fields.
 type NativeCommandContract struct {
 	ContractVersion uint                `json:"contract_version"`
 	Protocol        string              `json:"protocol"`
@@ -68,6 +82,8 @@ type NativeCommandContract struct {
 	Conformance     ConformanceEvidence `json:"conformance"`
 }
 
+// Validate confirms that the contract names a concrete operation and carries
+// the complete shared conformance evidence required for execution.
 func (c NativeCommandContract) Validate() error {
 	if c.ContractVersion != NativeCommandContractVersion {
 		return fmt.Errorf("unsupported native command contract version %d", c.ContractVersion)
@@ -104,11 +120,15 @@ func validateNativeOperation(protocol, command string, executor ExecutorReferenc
 	return nil
 }
 
+// NativeExecutorRegistry matches admitted contracts to registered native
+// executors while protecting registry access from concurrent callers.
 type NativeExecutorRegistry struct {
 	mu        sync.RWMutex
 	executors map[ExecutorReference]NativeSyncExecutor
 }
 
+// NewNativeExecutorRegistry creates a registry and validates every supplied
+// executor before making it available.
 func NewNativeExecutorRegistry(executors ...NativeSyncExecutor) (*NativeExecutorRegistry, error) {
 	registry := &NativeExecutorRegistry{executors: make(map[ExecutorReference]NativeSyncExecutor)}
 	for _, executor := range executors {
@@ -119,6 +139,8 @@ func NewNativeExecutorRegistry(executors ...NativeSyncExecutor) (*NativeExecutor
 	return registry, nil
 }
 
+// Register admits one uniquely named executor only when its descriptor and
+// conformance evidence are complete.
 func (r *NativeExecutorRegistry) Register(executor NativeSyncExecutor) error {
 	if r == nil {
 		return fmt.Errorf("native executor registry is required")
@@ -145,11 +167,14 @@ func (r *NativeExecutorRegistry) Register(executor NativeSyncExecutor) error {
 	return nil
 }
 
+// Admits reports whether a registered executor exactly matches contract.
 func (r *NativeExecutorRegistry) Admits(contract NativeCommandContract) bool {
 	_, err := r.executorFor(contract)
 	return err == nil
 }
 
+// Execute validates admission and resume state before dispatching a defensive
+// copy of request to its matching native executor.
 func (r *NativeExecutorRegistry) Execute(ctx context.Context, contract NativeCommandContract, request NativeSyncRequest) (NativeSyncResult, error) {
 	executor, err := r.executorFor(contract)
 	if err != nil {

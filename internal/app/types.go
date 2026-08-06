@@ -34,6 +34,9 @@ func (e *CredentialLinkValidationError) Error() string { return e.err.Error() }
 
 func (e *CredentialLinkValidationError) Unwrap() error { return e.err }
 
+// ApprovalConsumptionUncertainError stops a reverse plan when its single-use
+// approval may have been consumed but the durability result is uncertain.
+// Callers must create a new plan rather than retrying the old approval.
 type ApprovalConsumptionUncertainError struct {
 	PlanID     string
 	ConsumedAt time.Time
