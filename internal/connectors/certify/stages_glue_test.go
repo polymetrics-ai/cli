@@ -16,7 +16,7 @@ import (
 func TestGlueStagesAgainstSample(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, driver := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -27,6 +27,7 @@ func TestGlueStagesAgainstSample(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
+	driver.assertProtocol(t)
 	if !rep.Passed {
 		t.Fatalf("Report.Passed = false, want true; stages=%+v", rep.Stages)
 	}
@@ -97,7 +98,7 @@ func TestGlueStagesAgainstSample(t *testing.T) {
 func TestGlueStagesFlowPreviewHasZeroSideEffects(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, driver := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -108,6 +109,7 @@ func TestGlueStagesFlowPreviewHasZeroSideEffects(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
+	driver.assertProtocol(t)
 	if !rep.Passed {
 		t.Fatalf("Report.Passed = false, want true; stages=%+v", rep.Stages)
 	}
@@ -129,7 +131,7 @@ func TestGlueStagesFlowPreviewHasZeroSideEffects(t *testing.T) {
 func TestGlueStagesScheduleRoundtripLeavesNoResidue(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, driver := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -140,6 +142,7 @@ func TestGlueStagesScheduleRoundtripLeavesNoResidue(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
+	driver.assertProtocol(t)
 
 	install := mustStage(t, rep, "schedule_install")
 	if !install.Passed {
@@ -162,7 +165,7 @@ func TestGlueStagesScheduleRoundtripLeavesNoResidue(t *testing.T) {
 func TestGlueStagesSabotageFlowFailsNamedStage(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, driver := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -174,6 +177,7 @@ func TestGlueStagesSabotageFlowFailsNamedStage(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
+	driver.assertProtocol(t)
 	if rep.Passed {
 		t.Fatalf("Report.Passed = true, want false after flow sabotage")
 	}
@@ -197,7 +201,7 @@ func TestGlueStagesSecretLeakInFlowStdoutFailsSecretRedaction(t *testing.T) {
 	const knownSecret = "sample-cert-token"
 	t.Setenv("PM_SAMPLE_TOKEN", knownSecret)
 
-	r := certify.NewRunner(certify.Options{
+	r, driver := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -209,6 +213,7 @@ func TestGlueStagesSecretLeakInFlowStdoutFailsSecretRedaction(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
+	driver.assertProtocol(t)
 
 	flowRun := mustStage(t, rep, "flow_run")
 	if !flowRun.Passed {
