@@ -39687,6 +39687,167 @@
     }
   },
   {
+    "name": "email",
+    "display_name": "Email (IMAP + SMTP)",
+    "description": "Reads mailboxes and bounded message data through IMAP4rev2, and sends one typed RFC 5322 message through SMTP submission after plan, preview, approval, and destructive confirmation.",
+    "integration_type": "email",
+    "docs_url": "https://www.rfc-editor.org/rfc/rfc9051.html",
+    "release_stage": "beta",
+    "capabilities": {
+      "check": true,
+      "catalog": true,
+      "read": true,
+      "write": true,
+      "query": false
+    },
+    "spec": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Email (IMAP + SMTP) Connection Specification",
+      "type": "object",
+      "required": [
+        "imap_host",
+        "imap_port",
+        "imap_security",
+        "smtp_host",
+        "smtp_port",
+        "smtp_security",
+        "username",
+        "password"
+      ],
+      "properties": {
+        "imap_host": {
+          "type": "string",
+          "description": "IMAP server host name or IP address, as entered in a mail client."
+        },
+        "imap_port": {
+          "type": "string",
+          "enum": [
+            "143",
+            "993"
+          ],
+          "description": "IMAP TCP port. Accepted before storage: 143 or 993."
+        },
+        "imap_security": {
+          "type": "string",
+          "enum": [
+            "tls",
+            "starttls",
+            "none"
+          ],
+          "description": "IMAP transport security: tls (implicit TLS), starttls, or none."
+        },
+        "smtp_host": {
+          "type": "string",
+          "description": "SMTP submission server host name or IP address, as entered in a mail client."
+        },
+        "smtp_port": {
+          "type": "string",
+          "enum": [
+            "25",
+            "465",
+            "587"
+          ],
+          "description": "SMTP TCP port. Accepted before storage: 25, 465, or 587."
+        },
+        "smtp_security": {
+          "type": "string",
+          "enum": [
+            "tls",
+            "starttls",
+            "none"
+          ],
+          "description": "SMTP transport security: tls (implicit TLS), starttls, or none."
+        },
+        "username": {
+          "type": "string",
+          "description": "Account username used for IMAP and, unless smtp_username is set, SMTP authentication."
+        },
+        "password": {
+          "type": "string",
+          "x-secret": true,
+          "description": "Account password or provider-issued app password. Stored as a secret and never printed."
+        },
+        "smtp_username": {
+          "type": "string",
+          "description": "Optional SMTP username when it differs from username."
+        },
+        "from_address": {
+          "type": "string",
+          "description": "Optional RFC 5322 From address. Defaults to username when username is an address."
+        },
+        "connection_timeout_seconds": {
+          "type": "string",
+          "enum": [
+            "5",
+            "10",
+            "15",
+            "30",
+            "60"
+          ],
+          "default": "30",
+          "description": "Optional connection timeout in seconds."
+        },
+        "mailbox": {
+          "type": "string",
+          "default": "INBOX",
+          "description": "Mailbox used by the messages stream. Set a separate credential or reset its state before changing this value."
+        }
+      }
+    },
+    "streams": [
+      {
+        "name": "mailboxes",
+        "primary_key": [
+          "name"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "messages",
+        "primary_key": [
+          "mailbox",
+          "uid_validity",
+          "uid"
+        ],
+        "cursor_field": "imap_cursor",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped",
+          "incremental_append",
+          "incremental_append_deduped"
+        ]
+      }
+    ],
+    "write_actions": [
+      {
+        "name": "send_message",
+        "kind": "create",
+        "method": "SMTP",
+        "path": "MAIL/RCPT/DATA",
+        "risk": "submits one externally visible SMTP message to the exact envelope recipients; once the SMTP server accepts DATA it cannot be undone",
+        "batchable": false,
+        "confirm": "destructive"
+      }
+    ],
+    "risk": {
+      "read": "polled IMAP mailbox and message reads; messages are never changed, but polling cannot report hard-deleted messages that no longer exist in the mailbox",
+      "write": "SMTP submission sends one externally visible message to the exact envelope recipients after the server accepts DATA; this cannot be undone",
+      "approval": "SMTP submission is a non-batchable destructive write: it requires plan, an unmasked payload preview, typed destructive confirmation, and approval before execution"
+    },
+    "icon": {
+      "id": "pm-sample",
+      "path": "icons/pm-sample.svg",
+      "source": "polymetrics",
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
+    }
+  },
+  {
     "name": "emailoctopus",
     "display_name": "EmailOctopus",
     "description": "Reads and writes EmailOctopus lists, campaigns, campaign summary reports, list contacts, list tags, and list custom fields through the EmailOctopus v1.6 REST API.",

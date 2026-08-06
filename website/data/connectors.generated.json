@@ -44112,6 +44112,219 @@
     }
   },
   {
+    "slug": "email",
+    "name": "Email (IMAP + SMTP)",
+    "description": "Reads mailboxes and bounded message data through IMAP4rev2, and sends one typed RFC 5322 message through SMTP submission after plan, preview, approval, and destructive confirmation.",
+    "docs_url": "https://www.rfc-editor.org/rfc/rfc9051.html",
+    "integration_type": "email",
+    "release_stage": "beta",
+    "capabilities": {
+      "check": true,
+      "read": true,
+      "write": true,
+      "query": false,
+      "cdc": false,
+      "dynamic_schema": false
+    },
+    "streams": [
+      {
+        "name": "mailboxes",
+        "primary_key": [
+          "name"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "messages",
+        "primary_key": [
+          "mailbox",
+          "uid_validity",
+          "uid"
+        ],
+        "cursor": "imap_cursor",
+        "incremental": true
+      }
+    ],
+    "write_actions": [
+      {
+        "name": "send_message",
+        "method": "SMTP",
+        "kind": "create"
+      }
+    ],
+    "cli_surface": {
+      "tagline": "Read IMAP mailboxes and send explicitly approved SMTP messages.",
+      "usage": "pm email <command> [options]",
+      "source_cli": {
+        "name": "IMAP4rev2 and SMTP submission",
+        "docs": "https://www.rfc-editor.org/rfc/rfc9051.html",
+        "reference": "https://www.rfc-editor.org/rfc/rfc6409.html",
+        "source": "IETF mail protocols"
+      },
+      "groups": [
+        {
+          "id": "read",
+          "title": "IMAP reads",
+          "commands": [
+            "mailboxes list",
+            "messages list"
+          ]
+        },
+        {
+          "id": "write",
+          "title": "SMTP submission",
+          "commands": [
+            "message send"
+          ]
+        }
+      ],
+      "global_flags": [],
+      "commands": [
+        {
+          "path": "mailboxes list",
+          "summary": "List mailboxes through IMAP LIST.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "mailboxes",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm email mailboxes list --credential polly-mail"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "messages list",
+          "summary": "Read bounded message envelopes, flags, dates, sizes, and bounded body parts from one IMAP mailbox.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "messages",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "mailbox",
+              "type": "string",
+              "summary": "Mailbox to read for this command; use a distinct credential/state for a different incremental mailbox.",
+              "values": [],
+              "maps_to": "config.mailbox",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm email messages list --credential polly-mail --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "message send",
+          "summary": "Plan, preview, approve, and submit one typed SMTP message; the preview includes the exact unmasked MIME payload.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "send_message",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "to",
+              "type": "string_array",
+              "summary": "One or more primary recipient addresses.",
+              "values": [],
+              "maps_to": "record.to",
+              "required": true
+            },
+            {
+              "name": "cc",
+              "type": "string_array",
+              "summary": "Optional carbon-copy recipient addresses.",
+              "values": [],
+              "maps_to": "record.cc"
+            },
+            {
+              "name": "bcc",
+              "type": "string_array",
+              "summary": "Optional blind-carbon-copy envelope recipient addresses; shown in the unmasked preview envelope but not as a MIME header.",
+              "values": [],
+              "maps_to": "record.bcc"
+            },
+            {
+              "name": "subject",
+              "type": "string",
+              "summary": "Message subject.",
+              "values": [],
+              "maps_to": "record.subject",
+              "allow_empty": true,
+              "required": true
+            },
+            {
+              "name": "body",
+              "type": "string",
+              "summary": "Message body; shown unmasked in the preview payload.",
+              "values": [],
+              "maps_to": "record.body",
+              "allow_empty": true,
+              "required": true
+            },
+            {
+              "name": "body-content-type",
+              "type": "enum",
+              "summary": "Body MIME media type; defaults to text/plain.",
+              "values": [
+                "text/plain",
+                "text/html"
+              ],
+              "maps_to": "record.body_content_type"
+            },
+            {
+              "name": "attachment",
+              "type": "string_array",
+              "summary": "Project-relative regular file paths to attach; each path is read into the preview-bound MIME payload.",
+              "values": [],
+              "maps_to": "record.attachments"
+            }
+          ],
+          "examples": [
+            "pm email message send --credential polly-mail --to recipient@example.invalid --subject 'Hello' --body 'Hello from Polymetrics' --plan email-send"
+          ],
+          "output_policy": "",
+          "risk": "SMTP submission is externally visible and irreversible after the server accepts it.",
+          "approval": "Requires plan, unmasked preview, approval evidence, and typed destructive confirmation.",
+          "notes": ""
+        }
+      ],
+      "help_topics": [
+        {
+          "name": "incremental",
+          "summary": "Messages use a mailbox-specific UIDVALIDITY+UID cursor; hard deletions are not observable by polling."
+        },
+        {
+          "name": "submission-safety",
+          "summary": "SMTP is send-only; message send is non-batchable, destructive, approval-gated, and previewed without masking."
+        }
+      ]
+    },
+    "docs_md": "# Overview\n\nEmail is a native protocol connector, not the Gmail or Outlook API connectors. IMAP4rev2 is the\npolled read side: it lists mailboxes and reads mailbox messages. SMTP submission is the send-only\nwrite side: it submits a typed message and does not list, fetch, or search mail.\n\nThe implementation uses [RFC 9051](https://www.rfc-editor.org/rfc/rfc9051.html) for IMAP and\n[RFC 6409](https://www.rfc-editor.org/rfc/rfc6409.html) for SMTP submission. RFC 9051 explicitly\nseparates IMAP message access from mail posting, which is handled by a submission protocol.\n\n## Auth setup\n\nSupply the same connection fields as a mail client:\n\n- `imap_host`, `imap_port` (`143` or `993`), and `imap_security` (`tls`, `starttls`, or `none`)\n- `smtp_host`, `smtp_port` (`25`, `465`, or `587`), and `smtp_security` (`tls`, `starttls`, or `none`)\n- `username` and secret `password`\n- optional `smtp_username`, `from_address`, `connection_timeout_seconds`, and `mailbox`\n\nThe port and security fields are closed constraints validated before credential persistence. The\npassword is a secret and is never printed, logged, included in fixtures, or put in a preview.\n`tls` means implicit TLS; `starttls` upgrades the established protocol connection. Use `none` only\nfor a trusted local/test server: remote password authentication over an unencrypted connection is\nrejected.\n\n## Streams notes\n\n`pm email mailboxes list` issues IMAP `LIST`. `pm email messages list` selects one mailbox and\nemits a bounded number of messages with envelope, flags, internal date, RFC822 size, and bounded\nleaf body parts. The connector requests at most 1 MiB per body part and never advertises message\nsearch as an SMTP feature.\n\nThe `messages` incremental cursor is a mailbox-scoped encoding of `UIDVALIDITY` plus UID, not a\nreceived-date timestamp. RFC 9051 §§2.3.1 and 2.3.2 define UIDs as the mailbox's stable message\nidentity while `UIDVALIDITY` detects when that UID namespace changes; a date is neither monotonic\nnor a mailbox identity. The cursor cannot be moved to a different mailbox. When UIDVALIDITY\nchanges, the connector starts from that mailbox's new UID namespace.\n\nPolling cannot see a hard delete. A message removed from the mailbox simply stops appearing; this\nconnector emits no tombstone and makes no claim to detect it. IMAP IDLE/push subscriptions are out\nof scope here and belong to the webhook/subscription seam in #3614.\n\n## Write actions & risks\n\n`pm email message send` is the only SMTP capability. It accepts typed `to`, optional `cc` and\n`bcc`, `subject`, `body`, optional `body_content_type`, and project-relative attachment paths.\nAttachments are regular files and become part of the preview-bound RFC 5322 MIME payload.\n\nSMTP submission is externally visible and irreversible after the server accepts the message. It is\nnon-batchable and always follows plan → preview → approval with typed destructive confirmation →\nexecute. The preview includes the exact unmasked envelope and MIME data that will be sent; BCC\nrecipients appear in the envelope preview but not the RFC 5322 headers.\n\n## Known limits\n\n- This connector polls; it does not implement IMAP IDLE, webhooks, or subscriptions (#3614 owns that seam).\n- Hard deletions are not observable in an incremental poll; no deletion tombstone is produced.\n- Message body parts are intentionally partial (1 MiB each; at most 32 leaf parts per message)\n  and the command `--limit` bounds emitted messages. Large or nested MIME content can therefore\n  be truncated by design.\n- SMTP is send-only. It does not and will not back mailbox, message, search, or stream reads.\n- Attachment paths must resolve to regular files under the project root. The aggregate attachment\n  limit is 25 MiB and each file is limited to 10 MiB.\n",
+    "icon": {
+      "id": "pm-sample",
+      "path": "icons/pm-sample.svg",
+      "publicPath": "/connectors/icons/pm-sample.svg",
+      "source": "polymetrics",
+      "reviewStatus": "polymetrics",
+      "reviewUrl": "https://github.com/polymetrics-ai/cli"
+    }
+  },
+  {
     "slug": "emailoctopus",
     "name": "EmailOctopus",
     "description": "Reads and writes EmailOctopus lists, campaigns, campaign summary reports, list contacts, list tags, and list custom fields through the EmailOctopus v1.6 REST API.",

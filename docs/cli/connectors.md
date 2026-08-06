@@ -25,10 +25,25 @@ DESCRIPTION
 
 CATALOG
   The connector catalog is generated from local connector metadata. The current
-  runtime catalog has 554 bare-name entries: 550 declarative bundles plus the
+  runtime catalog has 555 bare-name entries: 551 declarative bundles plus the
   local sample, file, warehouse, and outbox primitives. Use --all or the catalog
   subcommand when an agent needs to discover the complete connector universe.
   Use --capability read, write, cdc, or query to filter by executable surface.
+
+EMAIL (IMAP + SMTP)
+  Email is a native protocol connector, separate from the Gmail and Outlook API
+  connectors. IMAP lists mailboxes and reads bounded messages. SMTP is send-only:
+  it submits one typed message and never backs mailbox, message, or search reads.
+
+  Message increments use a mailbox-scoped UIDVALIDITY+UID cursor as defined by
+  RFC 9051, not a received-date timestamp. A polled cursor cannot observe hard
+  deletes: a removed message simply stops appearing and no tombstone is emitted.
+  IMAP IDLE/push subscriptions are outside this connector; #3614 owns that seam.
+
+  pm email message send is non-batchable and destructive. Its preview shows the
+  exact unmasked SMTP envelope and MIME payload before approval, typed destructive
+  confirmation, and execution. Run pm connectors inspect email or
+  pm email --help for its mail-client-style connection fields and command help.
 
 GITHUB AUTHENTICATION
   public

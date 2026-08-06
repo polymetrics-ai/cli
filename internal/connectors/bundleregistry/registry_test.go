@@ -40,8 +40,8 @@ func TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides(t *testing.T) {
 	if err != nil {
 		t.Fatalf("LoadAll(defs): %v", err)
 	}
-	if len(bundles) != 550 {
-		t.Fatalf("bundle count = %d, want 550", len(bundles))
+	if len(bundles) != 551 {
+		t.Fatalf("bundle count = %d, want 551", len(bundles))
 	}
 
 	registry := New()

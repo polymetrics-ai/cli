@@ -1,0 +1,12 @@
+{
+  "api": "IMAP4rev2 (RFC 9051) and SMTP submission (RFC 6409) wire protocols — not a REST API",
+  "docs": "https://www.rfc-editor.org/rfc/rfc9051.html",
+  "reviewed_at": "2026-08-06",
+  "scope": "Native protocol surface only. IMAP LIST supplies mailbox records; SELECT plus UID SEARCH and bounded UID FETCH supply message records. SMTP MAIL/RCPT/DATA submits the one typed write action. SMTP has no list, fetch, or search command and is deliberately not declared as a read surface. IMAP IDLE/subscription push is excluded from this polling connector and remains the #3614 seam.",
+  "endpoints": [
+    {"method": "IMAP", "path": "LIST", "covered_by": {"stream": "mailboxes"}},
+    {"method": "IMAP", "path": "UID SEARCH", "covered_by": {"stream": "messages"}},
+    {"method": "IMAP", "path": "UID FETCH", "covered_by": {"stream": "messages"}},
+    {"method": "SMTP", "path": "MAIL/RCPT/DATA", "covered_by": {"write": "send_message"}}
+  ]
+}

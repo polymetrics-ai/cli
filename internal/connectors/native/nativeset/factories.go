@@ -5,6 +5,7 @@ import (
 	amazonsqs "polymetrics.ai/internal/connectors/native/amazon-sqs"
 	bingads "polymetrics.ai/internal/connectors/native/bing-ads"
 	"polymetrics.ai/internal/connectors/native/dynamodb"
+	"polymetrics.ai/internal/connectors/native/email"
 	"polymetrics.ai/internal/connectors/native/faker"
 	"polymetrics.ai/internal/connectors/native/postgres"
 	tallyprime "polymetrics.ai/internal/connectors/native/tally-prime"
@@ -20,6 +21,7 @@ func Factories() []Factory {
 		{Name: "amazon-sqs", New: func() connectors.Connector { return amazonsqs.New() }},
 		{Name: "bing-ads", New: func() connectors.Connector { return bingads.New() }},
 		{Name: "dynamodb", New: func() connectors.Connector { return dynamodb.New() }},
+		{Name: "email", New: func() connectors.Connector { return email.New() }},
 		{Name: "faker", New: func() connectors.Connector { return faker.New() }},
 		{Name: "postgres", New: func() connectors.Connector { return postgres.New() }},
 		{Name: "tally-prime", New: func() connectors.Connector { return tallyprime.New() }},
