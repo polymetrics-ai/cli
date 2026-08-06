@@ -124,6 +124,9 @@ completed run and summary before returning a non-zero exit code. It reports
 `runtime_recorded=false` and `runtime_recording=failed` so incomplete runtime
 recording is explicit.
 
+If completed-run state persistence fails, `pm etl run` still emits the completed
+run and summary before returning a non-zero exit code with `persistence=failed`.
+
 ### JSON output
 
 ```json

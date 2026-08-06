@@ -59,6 +59,9 @@ RATE LIMIT OUTPUT
   run and summary, then exits non-zero. It reports runtime_recorded=false and
   runtime_recording=failed so incomplete runtime recording is explicit.
 
+  If completed-run state persistence fails, pm still emits the completed run and
+  summary, then exits non-zero with persistence=failed.
+
 DIRECT CONNECTOR COMMANDS
   check
     Calls the connector check operation and returns status=ok on success.

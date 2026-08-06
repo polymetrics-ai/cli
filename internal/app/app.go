@@ -29,7 +29,14 @@ const (
 	reversePlanStatusApprovalConsumptionUncertain = "approval_consumption_uncertain"
 )
 
-var errStateRevisionConflict = errors.New("project state changed in another process")
+var (
+	errStateRevisionConflict   = errors.New("project state changed in another process")
+	errCompletedRunPersistence = errors.New("completed run persistence failed")
+)
+
+func IsCompletedRunPersistenceError(err error) bool {
+	return errors.Is(err, errCompletedRunPersistence)
+}
 
 type App struct {
 	root       string
@@ -1021,8 +1028,30 @@ func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) 
 	if result.PendingStreamState == nil {
 		return Run{}, errors.New("completed ETL run is missing pending stream state")
 	}
-	expectedRevision := a.state.Revision
 	completedAt := time.Now().UTC()
+	run := Run{}
+	found := false
+	for _, candidate := range a.state.Runs {
+		if candidate.ID != runID {
+			continue
+		}
+		run = candidate
+		run.Status = "completed"
+		run.RecordsRead = result.RecordsRead
+		run.RecordsTransformed = result.RecordsTransformed
+		run.RecordsLoaded = result.RecordsLoaded
+		run.RecordsFailed = result.RecordsFailed
+		run.BatchCount = result.BatchCount
+		run.Checkpoint = cloneStringMap(result.Checkpoint)
+		run.RateLimit = result.RateLimit
+		run.CompletedAt = completedAt
+		found = true
+		break
+	}
+	if !found {
+		return Run{}, fmt.Errorf("%w: started ETL run %q is unavailable", errCompletedRunPersistence, runID)
+	}
+	expectedRevision := a.state.Revision
 	updated, err := a.updateState(func(current state) (state, error) {
 		if current.Revision != expectedRevision {
 			return current, errStateRevisionConflict
@@ -1058,14 +1087,14 @@ func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) 
 		return current, nil
 	})
 	if err != nil {
-		return Run{}, err
+		return run, fmt.Errorf("%w: %v", errCompletedRunPersistence, err)
 	}
 	for _, run := range updated.Runs {
 		if run.ID == runID {
 			return run, nil
 		}
 	}
-	return Run{}, fmt.Errorf("completed run %q was not stored", runID)
+	return run, fmt.Errorf("%w: completed run %q was not stored", errCompletedRunPersistence, runID)
 }
 
 func (a *App) GetRun(id string) (Run, error) {

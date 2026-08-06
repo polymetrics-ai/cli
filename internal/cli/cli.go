@@ -44,6 +44,12 @@ type completedETLRun struct {
 	CompletedAt        time.Time                   `json:"completed_at,omitempty"`
 }
 
+type completedETLRunOutputOptions struct {
+	runtimeRecorded        bool
+	runtimeRecordingFailed bool
+	persistenceFailed      bool
+}
+
 const maxConnectorCommandLimit = 10000
 
 func Run(args []string, stdout, stderr io.Writer) int {
@@ -660,6 +666,12 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 			BatchSize:  batchSize,
 		})
 		if runErr != nil {
+			if app.IsCompletedRunPersistenceError(runErr) && run.ID != "" && run.Status == "completed" {
+				if err := writeCompletedETLRun(stdout, run, jsonOut, completedETLRunOutputOptions{persistenceFailed: true}); err != nil {
+					return err
+				}
+				return reportedETLRunError("etl_run_persistence_failed", fmt.Sprintf("ETL run %s completed but persistence failed", run.ID), runErr)
+			}
 			if run.ID == "" || run.Status != "failed" {
 				return runErr
 			}
@@ -671,14 +683,14 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		runtimeRecorded := false
 		if flags.first("runtime") == "true" {
 			if runtimeErr := recordRuntimeETL(ctx, run, cfg); runtimeErr != nil {
-				if err := writeCompletedETLRun(stdout, run, jsonOut, false, true); err != nil {
+				if err := writeCompletedETLRun(stdout, run, jsonOut, completedETLRunOutputOptions{runtimeRecordingFailed: true}); err != nil {
 					return err
 				}
 				return reportedETLRunError("etl_runtime_recording_failed", fmt.Sprintf("ETL run %s completed but runtime recording failed", run.ID), runtimeErr)
 			}
 			runtimeRecorded = true
 		}
-		return writeCompletedETLRun(stdout, run, jsonOut, runtimeRecorded, false)
+		return writeCompletedETLRun(stdout, run, jsonOut, completedETLRunOutputOptions{runtimeRecorded: runtimeRecorded})
 	case "status":
 		if len(args) < 2 {
 			return errUsage
@@ -717,19 +729,29 @@ func writeFailedETLRun(stdout io.Writer, run app.Run, jsonOut bool) error {
 	return nil
 }
 
-func writeCompletedETLRun(stdout io.Writer, run app.Run, jsonOut, runtimeRecorded, runtimeRecordingFailed bool) error {
+func writeCompletedETLRun(stdout io.Writer, run app.Run, jsonOut bool, options completedETLRunOutputOptions) error {
 	if jsonOut {
-		result := envelope{"kind": "ETLRun", "run": completedETLRunCarrier(run), "runtime_recorded": runtimeRecorded}
-		if runtimeRecordingFailed {
+		result := envelope{"kind": "ETLRun", "run": completedETLRunCarrier(run), "runtime_recorded": options.runtimeRecorded}
+		if options.runtimeRecordingFailed {
 			result["runtime_recording"] = "failed"
+		}
+		if options.persistenceFailed {
+			result["persistence"] = "failed"
 		}
 		return writeJSON(stdout, result)
 	}
+	suffixParts := []string{}
+	if options.runtimeRecorded {
+		suffixParts = append(suffixParts, "runtime_recorded=true")
+	} else if options.runtimeRecordingFailed {
+		suffixParts = append(suffixParts, "runtime_recorded=false", "runtime_recording=failed")
+	}
+	if options.persistenceFailed {
+		suffixParts = append(suffixParts, "persistence=failed")
+	}
 	suffix := ""
-	if runtimeRecorded {
-		suffix = " runtime_recorded=true"
-	} else if runtimeRecordingFailed {
-		suffix = " runtime_recorded=false runtime_recording=failed"
+	if len(suffixParts) > 0 {
+		suffix = " " + strings.Join(suffixParts, " ")
 	}
 	_, _ = fmt.Fprintf(stdout, "ETL run %s completed: read=%d loaded=%d failed=%d%s\n", run.ID, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed, suffix)
 	writeRateLimitSummary(stdout, run.RateLimit)

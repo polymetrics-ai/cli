@@ -348,7 +348,7 @@ func TestCompletedETLRunCarrierOmitsUnboundedFields(t *testing.T) {
 		CompletedAt: time.Date(2026, time.August, 6, 12, 0, 1, 0, time.UTC),
 	}
 	var stdout bytes.Buffer
-	if err := writeCompletedETLRun(&stdout, run, true, false, true); err != nil {
+	if err := writeCompletedETLRun(&stdout, run, true, completedETLRunOutputOptions{persistenceFailed: true}); err != nil {
 		t.Fatalf("writeCompletedETLRun: %v", err)
 	}
 	output := stdout.String()
@@ -366,6 +366,13 @@ func TestCompletedETLRunCarrierOmitsUnboundedFields(t *testing.T) {
 	var payload map[string]json.RawMessage
 	if err := json.Unmarshal([]byte(output), &payload); err != nil {
 		t.Fatalf("unmarshal completed ETL carrier: %v\n%s", err, output)
+	}
+	var persistence string
+	if err := json.Unmarshal(payload["persistence"], &persistence); err != nil {
+		t.Fatalf("unmarshal persistence marker: %v", err)
+	}
+	if persistence != "failed" {
+		t.Fatalf("persistence marker = %q, want failed", persistence)
 	}
 	var carrier map[string]json.RawMessage
 	if err := json.Unmarshal(payload["run"], &carrier); err != nil {
