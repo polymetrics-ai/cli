@@ -1717,6 +1717,42 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 	}
 }
 
+func TestRunOperationDirectReadBuildsClosedMapEntries(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "insights data list",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Operation:    "aws.cloudtrail.list_insights_data",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: "POST", Path: "CloudTrail_20131101.ListInsightsData"},
+				},
+				OutputPolicy: "json_redacted",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "event-id", Type: "string", MapsTo: "body.Dimensions", MapKey: "EventId"},
+					{Name: "event-name", Type: "string", MapsTo: "body.Dimensions", MapKey: "EventName"},
+				},
+			},
+		},
+	}}
+
+	_, err := Run(context.Background(), connector, Request{
+		Path:  []string{"insights", "data", "list"},
+		Flags: map[string][]string{"event-id": {"event-123"}, "event-name": {"ConsoleLogin"}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for operation direct-read command")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	dimensions, ok := connector.operationDirectReadReq.Body["Dimensions"].(map[string]any)
+	if !ok || dimensions["EventId"] != "event-123" || dimensions["EventName"] != "ConsoleLogin" {
+		t.Fatalf("operation body Dimensions = %#v, want closed map entries", connector.operationDirectReadReq.Body["Dimensions"])
+	}
+}
+
 func TestRunOperationDirectReadRequiredQueryFlags(t *testing.T) {
 	command := connectors.CommandSurfaceCommand{
 		Path:         "customers invoices list",
@@ -1880,6 +1916,20 @@ func TestRunOperationDirectReadRejectsRawBodyAndMissingPolicy(t *testing.T) {
 			},
 			flags: map[string][]string{"email": {"ada@example.com"}},
 			want:  "output_policy",
+		},
+		{
+			name: "map key requires body mapping",
+			command: connectors.CommandSurfaceCommand{
+				Path:         "meetings integration-status",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Operation:    "gong.meetings_integration_status",
+				APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: "POST", Path: "/v2/meetings/integration/status"}},
+				OutputPolicy: "json_redacted",
+				Flags:        []connectors.CommandSurfaceFlag{{Name: "dimension", Type: "string", MapsTo: "query.dimension", MapKey: "EventId"}},
+			},
+			flags: map[string][]string{"dimension": {"event-123"}},
+			want:  "map_key requires a body mapping",
 		},
 	}
 	for _, tt := range tests {

@@ -273,7 +273,90 @@ func TestCloudTrailNestedWriteFlagsBuildClosedRecords(t *testing.T) {
 			}
 		})
 	}
-	_, err := commandrunner.BuildWriteCommand(t.Context(), cloudTrail, commandrunner.Request{
+	basicPlan, err := commandrunner.BuildWriteCommand(t.Context(), cloudTrail, commandrunner.Request{
+		Path: []string{"event-selectors", "set"},
+		Flags: map[string][]string{
+			"trail-name":                         {"example-trail"},
+			"event-selector-read-write-type":     {"All", "ReadOnly"},
+			"event-selector-data-resource-type":  {"AWS::S3::Object", "AWS::Lambda::Function"},
+			"event-selector-data-resource-value": {"arn:aws:s3:::example-bucket/", "arn:aws:lambda:us-east-1:123456789012:function:example"},
+		},
+		Preview: true,
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand(repeatable basic event selectors): %v", err)
+	}
+	basicSelectors, ok := basicPlan.Record["EventSelectors"].([]any)
+	if !ok || len(basicSelectors) != 2 {
+		t.Fatalf("EventSelectors = %#v, want two repeatable selectors", basicPlan.Record["EventSelectors"])
+	}
+	resources, ok := basicSelectors[0].(map[string]any)["DataResources"].([]any)
+	if !ok || len(resources) != 2 {
+		t.Fatalf("EventSelectors[0].DataResources = %#v, want two repeatable resources", basicSelectors[0])
+	}
+
+	insightsPlan, err := commandrunner.BuildWriteCommand(t.Context(), cloudTrail, commandrunner.Request{
+		Path: []string{"insight-selectors", "set"},
+		Flags: map[string][]string{
+			"trail-name":             {"example-trail"},
+			"insight-type":           {"ApiCallRateInsight", "ApiErrorRateInsight"},
+			"insight-event-category": {"Management", "Data"},
+		},
+		Preview: true,
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand(repeatable insight selectors): %v", err)
+	}
+	insightSelectors, ok := insightsPlan.Record["InsightSelectors"].([]any)
+	if !ok || len(insightSelectors) != 2 {
+		t.Fatalf("InsightSelectors = %#v, want two repeatable selectors", insightsPlan.Record["InsightSelectors"])
+	}
+	categories, ok := insightSelectors[0].(map[string]any)["EventCategories"].([]any)
+	if !ok || len(categories) != 2 {
+		t.Fatalf("InsightSelectors[0].EventCategories = %#v, want two repeatable categories", insightSelectors[0])
+	}
+
+	channelPlan, err := commandrunner.BuildWriteCommand(t.Context(), cloudTrail, commandrunner.Request{
+		Path: []string{"channel", "create"},
+		Flags: map[string][]string{
+			"destination-location": {"arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/one", "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/two"},
+			"destination-type":     {"EVENT_DATA_STORE", "EVENT_DATA_STORE"},
+			"name":                 {"example-channel"},
+			"source":               {"aws.partner/example"},
+			"tag-key":              {"Environment", "Team"},
+			"tag-value":            {"preview", "platform"},
+		},
+		Preview: true,
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand(repeatable channel destinations and tags): %v", err)
+	}
+	destinations, ok := channelPlan.Record["Destinations"].([]any)
+	if !ok || len(destinations) != 2 {
+		t.Fatalf("Destinations = %#v, want two repeatable destinations", channelPlan.Record["Destinations"])
+	}
+	tags, ok := channelPlan.Record["Tags"].([]any)
+	if !ok || len(tags) != 2 {
+		t.Fatalf("Tags = %#v, want two repeatable tags", channelPlan.Record["Tags"])
+	}
+
+	tagsPlan, err := commandrunner.BuildWriteCommand(t.Context(), cloudTrail, commandrunner.Request{
+		Path: []string{"tags", "add"},
+		Flags: map[string][]string{
+			"resource-id": {"arn:aws:cloudtrail:us-east-1:123456789012:trail/example"},
+			"tag-key":     {"Environment", "Team"},
+			"tag-value":   {"preview", "platform"},
+		},
+		Preview: true,
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand(repeatable tags): %v", err)
+	}
+	tagsList, ok := tagsPlan.Record["TagsList"].([]any)
+	if !ok || len(tagsList) != 2 {
+		t.Fatalf("TagsList = %#v, want two repeatable tags", tagsPlan.Record["TagsList"])
+	}
+	_, err = commandrunner.BuildWriteCommand(t.Context(), cloudTrail, commandrunner.Request{
 		Path:    []string{"tags", "add"},
 		Flags:   map[string][]string{"resource-id": {"arn:aws:cloudtrail:us-east-1:123456789012:trail/example"}, "tag-key": {"Environment"}, "tags-list": {"[]"}},
 		Preview: true,

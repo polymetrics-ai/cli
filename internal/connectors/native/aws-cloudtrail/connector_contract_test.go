@@ -67,8 +67,8 @@ func TestCommandSurfaceExposesDocumentedOperations(t *testing.T) {
 		"lookup-attribute-value": "body.LookupAttributes.0.AttributeValue",
 	})
 	assertCommandFlagTargets(t, channelCreate, map[string]string{
-		"destination-location": "record.Destinations.0.Location",
-		"destination-type":     "record.Destinations.0.Type",
+		"destination-location": "record.Destinations.[].Location",
+		"destination-type":     "record.Destinations.[].Type",
 	})
 	assertCommandFlagTargets(t, commands["import start"], map[string]string{
 		"import-source-s3-bucket-access-role-arn": "record.ImportSource.S3.S3BucketAccessRoleArn",

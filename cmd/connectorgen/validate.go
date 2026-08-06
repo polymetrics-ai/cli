@@ -907,6 +907,21 @@ func checkCLISurfaceOperationSafety(
 	}
 	for _, flag := range cmd.Flags {
 		mapsTo := strings.TrimSpace(flag.MapsTo)
+		if flag.MapKey != "" {
+			target, bodyMapping := strings.CutPrefix(mapsTo, "body.")
+			if !bodyMapping || target == "" {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) flag --%s uses map_key without a body mapping", i, cmd.Path, flag.Name)})
+				continue
+			}
+			if err := validateCLIRecordMapKey(flag.MapKey); err != nil {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) flag --%s map_key is invalid: %v", i, cmd.Path, flag.Name, err)})
+				continue
+			}
+			if err := validateCLIBodyMapTarget(target); err != nil {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) flag --%s map_key body target is invalid: %v", i, cmd.Path, flag.Name, err)})
+				continue
+			}
+		}
 		switch {
 		case strings.HasPrefix(mapsTo, "path."), strings.HasPrefix(mapsTo, "query."):
 			// allowed
@@ -1251,6 +1266,25 @@ func validateCLIRecordMapKey(key string) error {
 	for _, character := range key {
 		if character < 0x20 || character == 0x7f || (character >= 0x80 && character <= 0x9f) {
 			return fmt.Errorf("contains invalid control characters")
+		}
+	}
+	return nil
+}
+
+func validateCLIBodyMapTarget(target string) error {
+	if err := validateCLIConstraintPath(target); err != nil {
+		return err
+	}
+	for _, part := range strings.Split(target, ".") {
+		numeric := part != ""
+		for _, character := range part {
+			if character < '0' || character > '9' {
+				numeric = false
+				break
+			}
+		}
+		if numeric {
+			return fmt.Errorf("must not contain an array index")
 		}
 	}
 	return nil

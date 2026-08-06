@@ -615,6 +615,18 @@ func TestValidate_CLISurfaceOperationReferencePasses(t *testing.T) {
 	}
 }
 
+func TestValidate_CLISurfaceOperationDirectReadMapKeyRequiresBodyMapping(t *testing.T) {
+	cliSurface := strings.Replace(validOperationCLISurfaceJSON(), `"source_cli_path": "clis widget view",`, `"source_cli_path": "clis widget view",
+				"flags": [
+					{ "name": "dimension", "type": "string", "maps_to": "query.dimension", "map_key": "EventId" }
+				],`, 1)
+	report, err := validateDir(operationCLISurfaceBundleFS(cliSurface, validOperationsJSON()))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+}
+
 func TestValidate_CLISurfaceOperationDirectReadRequiresBodyMappings(t *testing.T) {
 	cliSurface := `{
 		"tagline": "Work with CLI Surface from the command line.",

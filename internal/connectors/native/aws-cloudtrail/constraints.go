@@ -217,8 +217,8 @@ func validateActionField(action string, field awsActionField, value any) error {
 		return validateImportSource(value)
 	case (action == "CreateChannel" || action == "UpdateChannel") && field.Name == "Destinations":
 		return validateDestinations(value)
-	case field.Name == "TagsList":
-		return validateTagsList(value)
+	case field.Name == "TagsList" || field.Name == "Tags":
+		return validateTags(action, value)
 	case field.Name == "AdvancedEventSelectors":
 		return validateAdvancedEventSelectors(action, value)
 	case action == "PutEventSelectors" && field.Name == "EventSelectors":
@@ -231,10 +231,8 @@ func validateActionField(action string, field awsActionField, value any) error {
 		return validateContextKeySelectors(value)
 	case action == "StartDashboardRefresh" && field.Name == "QueryParameterValues":
 		return validateDashboardQueryParameterValues(value)
-	case action == "CreateTrail" && field.Name == "Name":
-		return validateTrailName(value, false)
-	case action == "UpdateTrail" && field.Name == "Name":
-		return validateTrailName(value, true)
+	case isTrailReferenceField(action, field.Name):
+		return validateTrailReference(action, field.Name, value)
 	case (action == "CreateTrail" || action == "UpdateTrail") && (field.Name == "S3KeyPrefix" || field.Name == "SnsTopicName"):
 		return validateTrailOptionalString(field.Name, value)
 	}
@@ -423,6 +421,36 @@ func validateTrailName(value any, allowARN bool) error {
 		return nil
 	}
 	return validateClassicTrailName(name)
+}
+
+func isTrailReferenceField(action, field string) bool {
+	switch action {
+	case "CreateTrail", "DeleteTrail", "GetTrail", "GetTrailStatus", "StartLogging", "StopLogging", "UpdateTrail":
+		return field == "Name"
+	case "DescribeTrails":
+		return field == "trailNameList"
+	case "GetEventConfiguration", "GetEventSelectors", "GetInsightSelectors", "ListInsightsMetricData", "PutEventConfiguration", "PutEventSelectors", "PutInsightSelectors":
+		return field == "TrailName"
+	default:
+		return false
+	}
+}
+
+func validateTrailReference(action, field string, value any) error {
+	allowARN := action != "CreateTrail"
+	if field != "trailNameList" {
+		return validateTrailName(value, allowARN)
+	}
+	values, ok := actionArray(value)
+	if !ok {
+		return fmt.Errorf("must be an array")
+	}
+	for index, item := range values {
+		if err := validateTrailName(item, allowARN); err != nil {
+			return fmt.Errorf("item %d: %w", index, err)
+		}
+	}
+	return nil
 }
 
 func validateClassicTrailName(name string) error {
@@ -697,6 +725,29 @@ func validateTagsList(value any) error {
 	return nil
 }
 
+func validateTags(action string, value any) error {
+	if err := validateTagsList(value); err != nil {
+		return err
+	}
+	if action != "AddTags" {
+		return nil
+	}
+	tags, _ := actionArray(value)
+	if len(tags) > 50 {
+		return fmt.Errorf("must contain at most 50 tags")
+	}
+	seen := make(map[string]int, len(tags))
+	for index, item := range tags {
+		tag := item.(map[string]any)
+		key, _ := actionString(tag["Key"])
+		if previous, exists := seen[key]; exists {
+			return fmt.Errorf("item %d: Tag.Key %q duplicates item %d", index, key, previous)
+		}
+		seen[key] = index
+	}
+	return nil
+}
+
 func validateInsightSelectors(value any) error {
 	selectors, ok := actionArray(value)
 	if !ok {
@@ -870,6 +921,9 @@ func validateAdvancedEventSelectors(action string, value any) error {
 	selectors, ok := actionArray(value)
 	if !ok {
 		return fmt.Errorf("want array")
+	}
+	if (action == "CreateEventDataStore" || action == "UpdateEventDataStore") && len(selectors) > 5 {
+		return fmt.Errorf("must contain at most 5 AdvancedEventSelectors")
 	}
 	conditionValues := 0
 	for index, item := range selectors {

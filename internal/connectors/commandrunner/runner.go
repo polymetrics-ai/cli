@@ -451,6 +451,39 @@ func validateOperationDirectReadCommand(connector connectors.Connector, cmd conn
 	if !isSupportedDirectReadOutputPolicy(cmd.OutputPolicy) {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands require an explicit supported output_policy"}
 	}
+	if err := validateOperationDirectReadFlagMappings(cmd); err != nil {
+		return err
+	}
+	return nil
+}
+
+func validateOperationDirectReadFlagMappings(cmd connectors.CommandSurfaceCommand) error {
+	for _, flag := range cmd.Flags {
+		if flag.MapKey == "" {
+			continue
+		}
+		target, ok := strings.CutPrefix(flag.MapsTo, "body.")
+		if !ok || target == "" {
+			return &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s map_key requires a body mapping", flag.Name)}
+		}
+		parts, err := validateDottedTargetPath(target, "body field")
+		if err != nil {
+			return err
+		}
+		if dottedPathHasRepeatableArray(parts) {
+			return &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s map_key cannot use a repeatable body target", flag.Name)}
+		}
+		for _, part := range parts {
+			if _, indexed, err := pathArrayIndex(part); err != nil {
+				return err
+			} else if indexed {
+				return &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s map_key cannot use an indexed body target", flag.Name)}
+			}
+		}
+		if err := validateRecordMapKey(flag.MapKey); err != nil {
+			return fmt.Errorf("flag --%s map_key: %w", flag.Name, err)
+		}
+	}
 	return nil
 }
 
@@ -898,6 +931,12 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 			query[target] = stringifyCommandValue(value)
 		case strings.HasPrefix(flag.MapsTo, "body."):
 			target := strings.TrimPrefix(flag.MapsTo, "body.")
+			if flag.MapKey != "" {
+				if err := setBodyMapValue(body, target, flag.MapKey, value); err != nil {
+					return nil, nil, nil, err
+				}
+				continue
+			}
 			if err := setBodyValue(body, target, value); err != nil {
 				return nil, nil, nil, err
 			}
@@ -918,6 +957,56 @@ func setBodyValue(body map[string]any, path string, value any) error {
 	}
 	_, err = setDottedValue(body, parts, value, path)
 	return err
+}
+
+func setBodyMapValue(body map[string]any, path, key string, value any) error {
+	parts, err := validateDottedTargetPath(path, "body field")
+	if err != nil {
+		return err
+	}
+	if dottedPathHasRepeatableArray(parts) {
+		return fmt.Errorf("body map field %q cannot use repeatable array segments", path)
+	}
+	for _, part := range parts {
+		if _, indexed, err := pathArrayIndex(part); err != nil {
+			return err
+		} else if indexed {
+			return fmt.Errorf("body map field %q cannot contain an array index", path)
+		}
+	}
+	if err := validateRecordMapKey(key); err != nil {
+		return err
+	}
+	current := body
+	for index, part := range parts {
+		if index == len(parts)-1 {
+			existing, found := current[part]
+			if !found {
+				existing = map[string]any{}
+				current[part] = existing
+			}
+			object, ok := existing.(map[string]any)
+			if !ok {
+				return fmt.Errorf("body map field %q conflicts with existing non-object value", path)
+			}
+			if _, exists := object[key]; exists {
+				return fmt.Errorf("body map field %q already has key %q", path, key)
+			}
+			object[key] = value
+			return nil
+		}
+		next, found := current[part]
+		if !found {
+			next = map[string]any{}
+			current[part] = next
+		}
+		object, ok := next.(map[string]any)
+		if !ok {
+			return fmt.Errorf("body map field %q conflicts with existing non-object value", path)
+		}
+		current = object
+	}
+	return nil
 }
 
 func validateDottedTargetPath(path, field string) ([]string, error) {

@@ -140,10 +140,19 @@
               "type": "string"
             },
             "Dimensions": {
-              "type": [
-                "string",
-                "object"
-              ]
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "EventId": {
+                  "type": "string"
+                },
+                "EventName": {
+                  "type": "string"
+                },
+                "EventSource": {
+                  "type": "string"
+                }
+              }
             },
             "EndTime": {
               "type": "string"

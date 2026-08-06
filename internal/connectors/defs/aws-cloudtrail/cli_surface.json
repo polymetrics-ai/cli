@@ -504,6 +504,30 @@
           "allow_empty": false
         },
         {
+          "name": "dimension-event-id",
+          "type": "string",
+          "summary": "Optional EventId dimension value with a length from 1 to 2000 characters.",
+          "maps_to": "body.Dimensions",
+          "map_key": "EventId",
+          "allow_empty": false
+        },
+        {
+          "name": "dimension-event-name",
+          "type": "string",
+          "summary": "Optional EventName dimension value with a length from 1 to 2000 characters.",
+          "maps_to": "body.Dimensions",
+          "map_key": "EventName",
+          "allow_empty": false
+        },
+        {
+          "name": "dimension-event-source",
+          "type": "string",
+          "summary": "Optional EventSource dimension value with a length from 1 to 2000 characters.",
+          "maps_to": "body.Dimensions",
+          "map_key": "EventSource",
+          "allow_empty": false
+        },
+        {
           "name": "max-results",
           "type": "integer",
           "summary": "Integer Valid Range: Minimum value of 1. Maximum value of 50.",
@@ -875,16 +899,16 @@
         {
           "name": "tag-key",
           "type": "string",
-          "summary": "Tag key with a length from 1 to 128 characters.",
-          "maps_to": "record.TagsList.0.Key",
+          "summary": "Repeat for each tag key with a length from 1 to 128 characters.",
+          "maps_to": "record.TagsList.[].Key",
           "required": true,
           "allow_empty": false
         },
         {
           "name": "tag-value",
           "type": "string",
-          "summary": "Optional tag value with a length from 1 to 256 characters.",
-          "maps_to": "record.TagsList.0.Value",
+          "summary": "Optional value paired with each repeated tag key, with a length from 1 to 256 characters.",
+          "maps_to": "record.TagsList.[].Value",
           "allow_empty": false
         }
       ],
@@ -907,8 +931,8 @@
         {
           "name": "destination-location",
           "type": "string",
-          "summary": "String Length Constraints: Minimum length of 3. Maximum length of 1024. Pattern: ^[a-zA-Z0-9._/\\-:*]+$",
-          "maps_to": "record.Destinations.0.Location",
+          "summary": "Repeat for each destination location. String Length Constraints: Minimum length of 3. Maximum length of 1024. Pattern: ^[a-zA-Z0-9._/\\-:*]+$",
+          "maps_to": "record.Destinations.[].Location",
           "required": true,
           "allow_empty": false
         },
@@ -920,7 +944,7 @@
             "EVENT_DATA_STORE",
             "AWS_SERVICE"
           ],
-          "maps_to": "record.Destinations.0.Type",
+          "maps_to": "record.Destinations.[].Type",
           "required": true
         },
         {
@@ -937,6 +961,20 @@
           "summary": "String Length Constraints: Minimum length of 1. Maximum length of 256. Pattern: .*",
           "maps_to": "record.Source",
           "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "tag-key",
+          "type": "string",
+          "summary": "Repeat for each optional tag key with a length from 1 to 128 characters.",
+          "maps_to": "record.Tags.[].Key",
+          "allow_empty": false
+        },
+        {
+          "name": "tag-value",
+          "type": "string",
+          "summary": "Optional value paired with each repeated tag key, with a length from 1 to 256 characters.",
+          "maps_to": "record.Tags.[].Value",
           "allow_empty": false
         }
       ],
@@ -1064,6 +1102,20 @@
           "maps_to": "record.StartIngestion"
         },
         {
+          "name": "tag-key",
+          "type": "string",
+          "summary": "Repeat for each optional tag key with a length from 1 to 128 characters.",
+          "maps_to": "record.TagsList.[].Key",
+          "allow_empty": false
+        },
+        {
+          "name": "tag-value",
+          "type": "string",
+          "summary": "Optional value paired with each repeated tag key, with a length from 1 to 256 characters.",
+          "maps_to": "record.TagsList.[].Value",
+          "allow_empty": false
+        },
+        {
           "name": "termination-protection-enabled",
           "type": "boolean",
           "summary": "Boolean",
@@ -1157,6 +1209,20 @@
           "type": "string",
           "summary": "String",
           "maps_to": "record.SnsTopicName"
+        },
+        {
+          "name": "tag-key",
+          "type": "string",
+          "summary": "Repeat for each optional tag key with a length from 1 to 128 characters.",
+          "maps_to": "record.TagsList.[].Key",
+          "allow_empty": false
+        },
+        {
+          "name": "tag-value",
+          "type": "string",
+          "summary": "Optional value paired with each repeated tag key, with a length from 1 to 256 characters.",
+          "maps_to": "record.TagsList.[].Value",
+          "allow_empty": false
         }
       ],
       "examples": [
@@ -1511,48 +1577,48 @@
         {
           "name": "event-selector-data-resource-type",
           "type": "enum",
-          "summary": "Valid Values: AWS::S3::Object | AWS::Lambda::Function | AWS::DynamoDB::Table.",
+          "summary": "Repeat for each data-resource type. Valid Values: AWS::S3::Object | AWS::Lambda::Function | AWS::DynamoDB::Table.",
           "values": [
             "AWS::S3::Object",
             "AWS::Lambda::Function",
             "AWS::DynamoDB::Table"
           ],
-          "maps_to": "record.EventSelectors.0.DataResources.0.Type"
+          "maps_to": "record.EventSelectors.0.DataResources.[].Type"
         },
         {
           "name": "event-selector-data-resource-value",
           "type": "string_array",
-          "summary": "One to 250 data-resource values.",
-          "maps_to": "record.EventSelectors.0.DataResources.0.Values",
+          "summary": "One to 250 values paired with each repeated data-resource type.",
+          "maps_to": "record.EventSelectors.0.DataResources.[].Values",
           "min_items": 1,
           "max_items": 250
         },
         {
           "name": "event-selector-exclude-management-event-source",
           "type": "enum",
-          "summary": "Valid Values: kms.amazonaws.com | rdsdata.amazonaws.com.",
+          "summary": "Repeat for each excluded management event source. Valid Values: kms.amazonaws.com | rdsdata.amazonaws.com.",
           "values": [
             "kms.amazonaws.com",
             "rdsdata.amazonaws.com"
           ],
-          "maps_to": "record.EventSelectors.0.ExcludeManagementEventSources.0"
+          "maps_to": "record.EventSelectors.0.ExcludeManagementEventSources.[]"
         },
         {
           "name": "event-selector-include-management-events",
           "type": "boolean",
-          "summary": "Whether to include management events.",
-          "maps_to": "record.EventSelectors.0.IncludeManagementEvents"
+          "summary": "Repeat to configure each basic event selector's management-event setting.",
+          "maps_to": "record.EventSelectors.[].IncludeManagementEvents"
         },
         {
           "name": "event-selector-read-write-type",
           "type": "enum",
-          "summary": "Valid Values: ReadOnly | WriteOnly | All.",
+          "summary": "Repeat to configure each basic event selector. Valid Values: ReadOnly | WriteOnly | All.",
           "values": [
             "ReadOnly",
             "WriteOnly",
             "All"
           ],
-          "maps_to": "record.EventSelectors.0.ReadWriteType"
+          "maps_to": "record.EventSelectors.[].ReadWriteType"
         }
       ],
       "examples": [
@@ -1594,23 +1660,23 @@
         {
           "name": "insight-type",
           "type": "enum",
-          "summary": "Valid Values: ApiCallRateInsight | ApiErrorRateInsight.",
+          "summary": "Repeat for each Insights selector. Valid Values: ApiCallRateInsight | ApiErrorRateInsight.",
           "values": [
             "ApiCallRateInsight",
             "ApiErrorRateInsight"
           ],
-          "maps_to": "record.InsightSelectors.0.InsightType",
+          "maps_to": "record.InsightSelectors.[].InsightType",
           "allow_empty": false
         },
         {
           "name": "insight-event-category",
           "type": "enum",
-          "summary": "Valid Values: Management | Data.",
+          "summary": "Repeat to set both categories on the first Insights selector. Valid Values: Management | Data.",
           "values": [
             "Management",
             "Data"
           ],
-          "maps_to": "record.InsightSelectors.0.EventCategories.0"
+          "maps_to": "record.InsightSelectors.0.EventCategories.[]"
         },
         {
           "name": "trail-name",
@@ -1702,16 +1768,16 @@
         {
           "name": "tag-key",
           "type": "string",
-          "summary": "Tag key with a length from 1 to 128 characters.",
-          "maps_to": "record.TagsList.0.Key",
+          "summary": "Repeat for each tag key with a length from 1 to 128 characters.",
+          "maps_to": "record.TagsList.[].Key",
           "required": true,
           "allow_empty": false
         },
         {
           "name": "tag-value",
           "type": "string",
-          "summary": "Optional tag value with a length from 1 to 256 characters.",
-          "maps_to": "record.TagsList.0.Value",
+          "summary": "Optional value paired with each repeated tag key, with a length from 1 to 256 characters.",
+          "maps_to": "record.TagsList.[].Value",
           "allow_empty": false
         }
       ],
@@ -2009,8 +2075,8 @@
         {
           "name": "destination-location",
           "type": "string",
-          "summary": "String Length Constraints: Minimum length of 3. Maximum length of 1024. Pattern: ^[a-zA-Z0-9._/\\-:*]+$",
-          "maps_to": "record.Destinations.0.Location",
+          "summary": "Repeat for each destination location. String Length Constraints: Minimum length of 3. Maximum length of 1024. Pattern: ^[a-zA-Z0-9._/\\-:*]+$",
+          "maps_to": "record.Destinations.[].Location",
           "allow_empty": false
         },
         {
@@ -2021,7 +2087,7 @@
             "EVENT_DATA_STORE",
             "AWS_SERVICE"
           ],
-          "maps_to": "record.Destinations.0.Type"
+          "maps_to": "record.Destinations.[].Type"
         },
         {
           "name": "name",
