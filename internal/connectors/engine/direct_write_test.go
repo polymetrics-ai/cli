@@ -175,6 +175,105 @@ func TestOperationDirectWriteRedactingPoliciesKeepResponseBody(t *testing.T) {
 	}
 }
 
+func TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies(t *testing.T) {
+	for _, tt := range []struct {
+		name     string
+		policy   string
+		wantBody bool
+	}{
+		{name: "json returns complete decoded body", policy: directWritePolicyJSON, wantBody: true},
+		{name: "none intentionally suppresses response body", policy: directWritePolicyNone},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			calls := 0
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				calls++
+				if r.Method != http.MethodPost {
+					t.Fatalf("method = %s, want POST", r.Method)
+				}
+				if r.URL.Path != "/widgets" {
+					t.Fatalf("path = %s, want /widgets", r.URL.Path)
+				}
+				w.Header().Set("Content-Type", "application/json")
+				_, _ = w.Write([]byte(`{"created":true,"id":"widget-42","nested":{"state":"complete"}}`))
+			}))
+			defer srv.Close()
+
+			bundle := Bundle{
+				Name: "acme",
+				HTTP: HTTPBase{URL: srv.URL},
+				Operations: []OperationSpec{{
+					ID:            "acme.widgets.create",
+					Kind:          "rest_write",
+					Summary:       "Create one widget",
+					Risk:          "medium",
+					Approval:      "none",
+					OutputPolicy:  tt.policy,
+					MutationClass: "create",
+					REST: &RESTOperationSpec{
+						Method:      http.MethodPost,
+						Path:        "/widgets",
+						ContentType: "application/json",
+						MaxBytes:    1024,
+						BodySchema:  json.RawMessage(`{"type":"object","required":["name"],"properties":{"name":{"type":"string"}}}`),
+					},
+				}},
+				Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+					Method: http.MethodPost,
+					Path:   "/widgets",
+					Operation: &SurfaceOperation{
+						Model:            "write_action",
+						Status:           "blocked",
+						Risk:             "medium",
+						BlockedByDefault: true,
+						Reason:           "operation metadata is bound by the executor",
+					},
+				}}},
+			}
+			req := connectors.OperationDirectWriteRequest{
+				Operation: "acme.widgets.create",
+				Body:      map[string]any{"name": "widget"},
+			}
+			preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+			if err != nil {
+				t.Fatalf("PreviewOperationDirectWrite: %v", err)
+			}
+			req.PreviewDigest = preview.Digest
+
+			result, err := OperationDirectWrite(context.Background(), bundle, req, nil)
+			if err != nil {
+				t.Fatalf("OperationDirectWrite: %v", err)
+			}
+			if calls != 1 {
+				t.Fatalf("request calls = %d, want 1", calls)
+			}
+			if !tt.wantBody {
+				if result.Body != nil {
+					t.Fatalf("none policy body = %#v, want nil", result.Body)
+				}
+				t.Logf("direct-write policy=%q status=%d response=<none>", tt.policy, result.Status)
+				return
+			}
+			body, ok := result.Body.(map[string]any)
+			if !ok {
+				t.Fatalf("json policy body type = %T, want map", result.Body)
+			}
+			if body["id"] != "widget-42" || body["created"] != true {
+				t.Fatalf("json policy body = %#v, want complete response fields", body)
+			}
+			nested, ok := body["nested"].(map[string]any)
+			if !ok || nested["state"] != "complete" {
+				t.Fatalf("json policy nested body = %#v, want complete nested response", body["nested"])
+			}
+			encoded, err := json.Marshal(body)
+			if err != nil {
+				t.Fatalf("marshal json policy response: %v", err)
+			}
+			t.Logf("direct-write policy=%q status=%d response=%s", tt.policy, result.Status, encoded)
+		})
+	}
+}
+
 func TestOperationDirectWriteNeverRetriesNonIdempotentFailure(t *testing.T) {
 	calls := 0
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

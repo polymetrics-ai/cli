@@ -579,22 +579,33 @@ func validateOperationDirectWriteCommand(connector connectors.Connector, cmd con
 	return nil
 }
 
-func isSupportedDirectReadOutputPolicy(policy string) bool {
-	switch policy {
-	case "repository_contents_file_metadata", "repository_contents_directory", "json_redacted", "clinical_json_redacted":
-		return true
-	default:
-		return false
+// Keep these closed policy sets enumerable: the CLI schema regression test
+// compares their union with its output_policy enum so declaration and runtime
+// support cannot silently drift apart.
+var (
+	supportedDirectReadOutputPolicies = map[string]struct{}{
+		"repository_contents_file_metadata": {},
+		"repository_contents_directory":     {},
+		"json_redacted":                     {},
+		"clinical_json_redacted":            {},
 	}
+	supportedDirectWriteOutputPolicies = map[string]struct{}{
+		"none":                        {},
+		"json":                        {},
+		"json_redacted":               {},
+		"write_result_redacted":       {},
+		"gong_bounded_input_redacted": {},
+	}
+)
+
+func isSupportedDirectReadOutputPolicy(policy string) bool {
+	_, ok := supportedDirectReadOutputPolicies[policy]
+	return ok
 }
 
 func isSupportedDirectWriteOutputPolicy(policy string) bool {
-	switch policy {
-	case "none", "json", "json_redacted", "write_result_redacted", "gong_bounded_input_redacted":
-		return true
-	default:
-		return false
-	}
+	_, ok := supportedDirectWriteOutputPolicies[policy]
+	return ok
 }
 
 func isOperationDirectWriteMethod(method string) bool {

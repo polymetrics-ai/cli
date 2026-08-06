@@ -216,16 +216,21 @@ not a full override by default.
   "Command Surface Must Stay Executable"). The shared-code boundary guard
   (`docs/migration/connector-boundary-guard.md`) enforces this ownership rule outside connector
   defs/hooks/native escape hatches.
-- **Direct-read `output_policy` stays generic and bounded**: use `repository_contents_file_metadata`
-  for a single repository file metadata response and `repository_contents_directory` for repository
-  directory listings. Both policies reject sensitive repository paths before network access and
-  redact `content` plus download URLs from returned JSON. Use `json_redacted` or
-  `clinical_json_redacted` for non-repository direct reads, paired with `redact_fields` when the
-  operation has connector-specific sensitive response fields. `binary_file_bounded` is not one of
-  them: `commandrunner` blocks a `direct_read` command that declares it, because a file/binary
-  command is no longer a direct read (see the next bullet). Do not add provider-prefixed output
-  policy names in shared Go; new response families need a generic policy name and regression tests
-  proving reuse by more than one connector shape.
+- **`output_policy` is intent-specific, closed, and must be chosen deliberately**: for a
+  `direct_write` command whose caller needs the complete decoded JSON response, declare `"json"`;
+  the engine returns that decoded body unchanged. Declare `"none"` only when the operation
+  intentionally returns no response body to the caller. `json_redacted`, `write_result_redacted`,
+  and `gong_bounded_input_redacted` remain direct-write compatibility choices for explicitly
+  selected response contracts, not defaults for complete output. For `direct_read`, use
+  `repository_contents_file_metadata` for a single repository-file metadata response and
+  `repository_contents_directory` for repository directory listings; those bounded shapes reject
+  sensitive repository paths before network access and redact `content` plus download URLs from
+  returned JSON. `json_redacted` and `clinical_json_redacted` remain the direct-read compatibility
+  choices for explicitly selected response contracts. `binary_file_bounded` is neither a
+  direct-read nor direct-write policy: it remains schema-valid only for existing binary-download
+  metadata, while new file/binary commands use the distinct intent below. Do not add
+  provider-prefixed output-policy names in shared Go; new response families need a generic policy
+  name and regression tests proving reuse by more than one connector shape.
 - **File/binary commands are their own intent**: declare `intent:"binary_download"` with an
   `operation` of kind `binary_download` and exactly one connector-relative GET `api_surface`
   endpoint, and leave the command's `output_policy` unset — the response becomes a file on disk,

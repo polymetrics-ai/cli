@@ -765,6 +765,52 @@ func TestBundleLoadParsesOperations(t *testing.T) {
 	}
 }
 
+func TestBundleLoadAcceptsRuntimeSupportedDirectWriteOutputPolicies(t *testing.T) {
+	for _, tt := range []struct {
+		name   string
+		policy string
+	}{
+		{name: "json complete decoded response", policy: directWritePolicyJSON},
+		{name: "none intentional no body", policy: directWritePolicyNone},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := validateOperationDirectWriteOutputPolicy(tt.policy); err != nil {
+				t.Fatalf("validateOperationDirectWriteOutputPolicy(%q): %v", tt.policy, err)
+			}
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{
+				"operations": [{
+					"id": "acme.widgets.create",
+					"kind": "rest_write",
+					"summary": "Create one widget",
+					"risk": "medium",
+					"approval": "plan, preview, approval, execute",
+					"output_policy": %q,
+					"mutation_class": "create",
+					"rest": {"method": "POST", "path": "/widgets"}
+				}]
+			}`, tt.policy))}
+			fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{
+				"tagline": "Work with Acme from the command line.",
+				"usage": "pm acme <command> [flags]",
+				"commands": [{
+					"path": "widget create",
+					"summary": "Create one widget",
+					"intent": "direct_write",
+					"availability": "implemented",
+					"operation": "acme.widgets.create",
+					"output_policy": %q,
+					"api_surface": [{"method": "POST", "path": "/widgets"}]
+				}]
+			}`, tt.policy))}
+
+			if _, err := Load(fsys, "acme"); err != nil {
+				t.Fatalf("Load runtime-supported direct_write %s policy: %v", tt.policy, err)
+			}
+		})
+	}
+}
+
 func TestBundleLoadRejectsUnsafeOperationKind(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{

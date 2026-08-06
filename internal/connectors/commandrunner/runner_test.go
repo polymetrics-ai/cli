@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"testing"
 
@@ -2078,6 +2079,63 @@ func TestRunDirectReadRequiresOutputPolicy(t *testing.T) {
 	if !strings.Contains(err.Error(), "output_policy") {
 		t.Fatalf("Run error = %q, want output_policy", err.Error())
 	}
+}
+
+func TestCLISurfaceOutputPolicyEnumMatchesRuntimePolicySets(t *testing.T) {
+	raw, err := os.ReadFile(filepath.Join("..", "engine", "schema", "cli_surface.schema.json"))
+	if err != nil {
+		t.Fatalf("read cli surface schema: %v", err)
+	}
+	type schemaNode struct {
+		Properties map[string]schemaNode `json:"properties"`
+		Items      *schemaNode           `json:"items"`
+		Enum       []string              `json:"enum"`
+	}
+	var schema schemaNode
+	if err := json.Unmarshal(raw, &schema); err != nil {
+		t.Fatalf("decode cli surface schema: %v", err)
+	}
+	commands, ok := schema.Properties["commands"]
+	if !ok || commands.Items == nil {
+		t.Fatal("cli surface schema has no commands.items")
+	}
+	outputPolicy, ok := commands.Items.Properties["output_policy"]
+	if !ok || len(outputPolicy.Enum) == 0 {
+		t.Fatal("cli surface schema has no output_policy enum")
+	}
+
+	want := make(map[string]struct{}, len(supportedDirectReadOutputPolicies)+len(supportedDirectWriteOutputPolicies)+1)
+	for policy := range supportedDirectReadOutputPolicies {
+		want[policy] = struct{}{}
+	}
+	for policy := range supportedDirectWriteOutputPolicies {
+		want[policy] = struct{}{}
+	}
+	// This legacy compatibility value belongs to binary_download metadata, not
+	// either JSON direct-read/write executor, and existing bundles still use it.
+	want["binary_file_bounded"] = struct{}{}
+
+	got := make(map[string]struct{}, len(outputPolicy.Enum))
+	for _, policy := range outputPolicy.Enum {
+		if _, duplicate := got[policy]; duplicate {
+			t.Fatalf("cli surface output_policy enum repeats %q", policy)
+		}
+		got[policy] = struct{}{}
+	}
+	if missing, unexpected := outputPolicySetDifference(want, got), outputPolicySetDifference(got, want); len(missing) > 0 || len(unexpected) > 0 {
+		t.Fatalf("cli surface output_policy enum diverges from runtime support: missing=%v unexpected=%v", missing, unexpected)
+	}
+}
+
+func outputPolicySetDifference(left, right map[string]struct{}) []string {
+	result := make([]string, 0)
+	for policy := range left {
+		if _, ok := right[policy]; !ok {
+			result = append(result, policy)
+		}
+	}
+	sort.Strings(result)
+	return result
 }
 
 // TestCoerceFlagValueBoundsStringArrayItems pins the flag-level list bound. It
