@@ -224,7 +224,7 @@ func TestCompleteRunPublishesPendingStreamStateOnlyAfterStateSave(t *testing.T) 
 		t.Fatal(err)
 	}
 	expectation := streamResumeExpectation(sourceConnector, sourceCredential, sourceRuntime, "records")
-	result, err := a.runWarehouseETL(ctx, run.ID, conn, sourceConnector, sourceRuntime, destination, destinationRuntime, expectation, "records", conn.Streams["records"], mode, 1)
+	result, err := a.runWarehouseETL(ctx, run.ID, conn, sourceConnector, sourceRuntime, destination.Name(), destinationRuntime, expectation, "records", conn.Streams["records"], mode, 1)
 	if err != nil {
 		t.Fatal(err)
 	}
