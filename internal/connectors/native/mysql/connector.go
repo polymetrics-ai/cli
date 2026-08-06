@@ -1,8 +1,6 @@
 // Package mysql implements the Tier-3 native MySQL source connector. It uses
 // the MySQL wire protocol for connection checks, dynamic catalog discovery,
-// bounded snapshot/incremental reads, and binary-log replication CDC. The
-// connector is deliberately unregistered pending the architecture-v2 registry
-// cutover; callers and the Docker/Colima integration test exercise it directly.
+// bounded snapshot/incremental reads, and binary-log replication CDC.
 package mysql
 
 import (
@@ -34,8 +32,12 @@ func New() Connector {
 // Metadata keeps capability fields sourced exclusively from metadata.json.
 func (c Connector) Metadata() connectors.Metadata {
 	m := c.Base.Metadata()
-	m.Description = "Reads MySQL tables through the MySQL wire protocol, discovers dynamic schemas, supports bounded cursor-incremental reads, and consumes row-based binary-log replication changes. Read-only source."
+	m.Description = "Native MySQL source connector for wire-protocol checks, dynamic schemas, bounded reads, and row-based binary-log replication. Read-only source."
 	return m
+}
+
+func (c Connector) Manifest() connectors.Manifest {
+	return c.Base.BundleManifest()
 }
 
 // Write is unsupported because this connector is a read-only source.

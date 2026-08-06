@@ -2,7 +2,8 @@
 
 Adds the reusable, sequential MySQL container-test harness and one Tier-3 native MySQL source
 connector. The MySQL bundle declares `integration_type: "database"` and a fail-closed
-`binlog_replication` changefeed that is advertised only by the matching native executor.
+`binlog_replication` changefeed that is advertised only by the matching native executor. The
+production registry now installs that native MySQL connector over the declarative bundle.
 
 The harness was changed from Podman to Docker on Colima. Three independent Podman machines on
 this host, including the task-owned machine, failed to start. Docker through Colima was instead
@@ -33,6 +34,9 @@ Docker-context listing showed zero containers, volumes, and images.
 
 The live test uncovered and fixed Docker argument placement, MySQL protocol metadata casing, and
 MySQL 8.4's `SHOW BINARY LOG STATUS` replacement for the removed `SHOW MASTER STATUS` syntax.
+The saved live run exercised the same native implementation directly; native registry installation
+is now asserted separately by the focused bundle-registry test. A fresh opt-in Docker replay after
+the final lifecycle, paging, and row-ordinal fixes belongs to the outer test phase.
 
 ## Dependency approval evidence
 
@@ -53,9 +57,10 @@ the MySQL client and row-binlog replication protocol, so no second client depend
   v1.18.7 before this change lands. Final `go mod verify` and
   `go run golang.org/x/vuln/cmd/govulncheck@latest -show verbose
   ./internal/connectors/native/mysql` reported no vulnerabilities. [Go advisory](https://pkg.go.dev/vuln/GO-2026-5841)
-- Binary size: clean `pm` build before dependency work: **93,727,298 bytes**; after: **93,727,346
-  bytes**; delta: **+48 bytes**. The connector remains deliberately unregistered pending the
-  architecture-v2 cutover, so the production CLI does not yet link the native MySQL package.
+- Binary size: clean `pm` build before dependency work: **93,727,298 bytes**; the earlier
+  **93,727,346-byte** post-dependency build predates native MySQL registration and is not the final
+  production binary measurement. The native factory is now linked by the production registry; the
+  outer build phase must refresh the final binary-size evidence.
 
 ## Follow-on engine configurations
 
@@ -98,7 +103,8 @@ but empty after its reset.
 
 ## CLI/docs parity
 
-No new CLI verb or flag was needed, but the registered bundle count is now 551. Regenerated
+No new CLI verb or flag was needed, but the registered bundle count is now 551 and the MySQL bundle
+is overridden by its registered native connector. Regenerated
 connector catalog, CLI manual/help, golden transcript, connector manual/skill, icon registry, and
 website catalog/icon artifacts are included. `pm help connectors`, `pm connectors`, and
 `pm connectors inspect mysql --json` were exercised. The connector's bundled documentation

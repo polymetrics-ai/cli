@@ -7,7 +7,7 @@ description: MySQL connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads MySQL tables through the MySQL wire protocol, discovers dynamic schemas, supports bounded cursor-incremental reads, and consumes row-based binary-log replication changes. Read-only source.
+Native MySQL source connector for wire-protocol checks, dynamic schemas, bounded reads, and row-based binary-log replication. Read-only source.
 
 ## Icon
 

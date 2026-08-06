@@ -20,7 +20,7 @@
     "ordering": "source_ordered",
     "duplicates": "at_least_once",
     "deletes": "tombstone",
-    "dedupe_key": ["binlog_file", "binlog_pos"]
+    "dedupe_key": ["binlog_file", "binlog_pos", "binlog_row"]
   },
   "streams": ["*"]
 }

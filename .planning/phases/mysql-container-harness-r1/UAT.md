@@ -7,7 +7,7 @@ The following acceptance evidence was therefore evaluated directly.
 | Deliverable | Automated evidence | Result |
 | --- | --- | --- |
 | Explicit-context reusable harness | `go test ./internal/connectors/native/dbtest`; harness tests cover pinned tags, dynamic loopback ports, image ownership, cleanup order, reset order, and disk reporting. | pass |
-| MySQL source connector | `go test ./internal/connectors/native/mysql`; dynamic catalog/read/binlog component contracts pass. | pass |
+| MySQL source connector | `go test ./internal/connectors/native/mysql` plus the bundle-registry native-override assertion cover dynamic catalog/read/binlog contracts and public native registration. | pass |
 | Real engine proof | `DOCKER_CONTEXT=colima POLYMETRICS_DATABASE_INTEGRATION=1 POLYMETRICS_DATABASE_RESET_COLIMA=1 go test -tags=databaseintegration -count=1 -v ./internal/connectors/native/mysql` passed in 53.48 seconds against MySQL 8.4.11. | pass |
 | No leak after the live proof | Explicit `docker --context colima` listings for containers, volumes, and images all returned no records after deferred cleanup and Colima reset. | pass |
 | Safe absence behavior | The tagged test without the opt-in visibly skips with its Docker/Colima reason; with the opt-in, startup/reachability is a test failure rather than a green pass. | pass |

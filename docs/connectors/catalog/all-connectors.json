@@ -90117,7 +90117,7 @@
   {
     "name": "mysql",
     "display_name": "MySQL",
-    "description": "Reads MySQL tables through the MySQL wire protocol, discovers dynamic schemas, supports bounded cursor-incremental reads, and consumes row-based binary-log replication changes. Read-only source.",
+    "description": "Native MySQL source connector for wire-protocol checks, dynamic schemas, bounded reads, and row-based binary-log replication. Read-only source.",
     "integration_type": "database",
     "docs_url": "https://dev.mysql.com/doc/refman/8.4/en/",
     "release_stage": "ga",
@@ -90126,7 +90126,8 @@
       "catalog": true,
       "read": true,
       "write": false,
-      "query": false
+      "query": false,
+      "cdc": true
     },
     "changefeed": {
       "status": "implemented",
@@ -90155,7 +90156,8 @@
         "deletes": "tombstone",
         "dedupe_key": [
           "binlog_file",
-          "binlog_pos"
+          "binlog_pos",
+          "binlog_row"
         ]
       },
       "streams": [
@@ -90195,11 +90197,11 @@
         },
         "cursor_field": {
           "type": "string",
-          "description": "Optional safe column name used to page and filter cursor-incremental reads."
+          "description": "Optional safe, non-null, single-column primary or unique key for cursor-incremental reads."
         },
         "page_size": {
           "type": "string",
-          "description": "Maximum records per cursor read page. Defaults to 1000."
+          "description": "Maximum records per read page. Defaults to 1000."
         },
         "read_limit": {
           "type": "string",

@@ -22,6 +22,8 @@ const mysqlBinlogExecutorID = "mysql-binlog-row-v1"
 // position checkpoint.
 const currentBinlogStatusQuery = "SHOW BINARY LOG STATUS"
 
+const currentBinlogRequirementsQuery = "SELECT @@GLOBAL.binlog_format AS binlog_format, @@GLOBAL.binlog_row_image AS binlog_row_image"
+
 // ChangefeedExecutorDescriptor is the runtime half of defs/mysql/changefeed.
 // It must remain exactly in sync with the checked-in declaration; this is what
 // keeps public CDC capability fail-closed.
@@ -64,6 +66,9 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 	}
 	serverID, err := replicationServerID(req.Config)
 	if err != nil {
+		return err
+	}
+	if err := validateBinlogRequirements(ctx, conn); err != nil {
 		return err
 	}
 	columns, err := loadColumnNames(ctx, conn, database, table)
@@ -188,6 +193,36 @@ func currentBinlogPosition(ctx context.Context, conn connConfig) (gomysql.Positi
 	return gomysql.Position{Name: file, Pos: uint32(pos)}, nil
 }
 
+func validateBinlogRequirements(ctx context.Context, conn connConfig) error {
+	db, err := conn.open(ctx)
+	if err != nil {
+		return err
+	}
+	defer func() { _ = db.Close() }()
+	result, err := db.Execute(currentBinlogRequirementsQuery)
+	if err != nil {
+		return errors.New("read mysql CDC binlog requirements failed")
+	}
+	records, err := resultRecords(result)
+	result.Close()
+	if err != nil {
+		return err
+	}
+	return validateBinlogRequirementRecords(records)
+}
+
+func validateBinlogRequirementRecords(records []connectors.Record) error {
+	if len(records) != 1 {
+		return errors.New("mysql CDC could not determine binlog requirements")
+	}
+	format, formatOK := recordString(records[0]["binlog_format"])
+	rowImage, rowImageOK := recordString(records[0]["binlog_row_image"])
+	if !formatOK || !rowImageOK || !strings.EqualFold(strings.TrimSpace(format), "ROW") || !strings.EqualFold(strings.TrimSpace(rowImage), "FULL") {
+		return errors.New("mysql CDC requires binlog_format=ROW and binlog_row_image=FULL")
+	}
+	return nil
+}
+
 func loadColumnNames(ctx context.Context, conn connConfig, database, table string) ([]string, error) {
 	db, err := conn.open(ctx)
 	if err != nil {
@@ -239,6 +274,12 @@ func rowsToCDCEvents(rows *replication.RowsEvent, columns []string, state connec
 	default:
 		return nil, errors.New("mysql CDC received an unsupported rows event")
 	}
+	if rows.ColumnCount != uint64(len(columns)) {
+		return nil, errors.New("mysql CDC row event does not match its column metadata")
+	}
+	if err := validateCDCRowImages(rows.Rows, rows.SkippedColumns, columns); err != nil {
+		return nil, err
+	}
 	values := rows.Rows
 	if operation == "update" {
 		if len(values)%2 != 0 {
@@ -250,22 +291,40 @@ func rowsToCDCEvents(rows *replication.RowsEvent, columns []string, state connec
 		}
 		values = afterImages
 	}
-	events := make([]connectors.CDCEvent, 0, len(values))
-	for _, row := range values {
+	return cdcEventsFromRows(operation, values, columns, state), nil
+}
+
+func validateCDCRowImages(rows [][]any, skippedColumns [][]int, columns []string) error {
+	if len(rows) != len(skippedColumns) {
+		return errors.New("mysql CDC row image metadata is incomplete")
+	}
+	for index, row := range rows {
 		if len(row) != len(columns) {
-			return nil, errors.New("mysql CDC row does not match its column metadata")
+			return errors.New("mysql CDC row does not match its column metadata")
 		}
+		if len(skippedColumns[index]) != 0 {
+			return errors.New("mysql CDC requires complete row images")
+		}
+	}
+	return nil
+}
+
+func cdcEventsFromRows(operation string, values [][]any, columns []string, state connectors.Record) []connectors.CDCEvent {
+	events := make([]connectors.CDCEvent, 0, len(values))
+	for ordinal, row := range values {
 		record := make(connectors.Record, len(columns))
 		for index, column := range columns {
 			record[column] = copyCDCValue(row[index])
 		}
+		eventState := copyCDCState(state)
+		eventState["binlog_row"] = strconv.Itoa(ordinal)
 		events = append(events, connectors.CDCEvent{
 			Operation: operation,
 			Record:    record,
-			State:     copyCDCState(state),
+			State:     eventState,
 		})
 	}
-	return events, nil
+	return events
 }
 
 func copyCDCState(state connectors.Record) connectors.Record {

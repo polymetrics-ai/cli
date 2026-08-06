@@ -158,6 +158,7 @@ func TestFactoriesExposeDefinitions(t *testing.T) {
 		"metabase":                  false,
 		"mode":                      false,
 		"my-hours":                  false,
+		"mysql":                     false,
 		"pocket":                    false,
 		"postgres":                  false,
 		"prestashop":                false,

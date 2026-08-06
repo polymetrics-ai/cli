@@ -154,7 +154,7 @@ func seedMySQL(t *testing.T, ctx context.Context, endpoint dbtest.Endpoint) {
 	}
 	defer func() { _ = db.Close() }()
 	statements := []string{
-		"CREATE TABLE events (id BIGINT PRIMARY KEY, sequence BIGINT NOT NULL, label VARCHAR(64) NOT NULL)",
+		"CREATE TABLE events (id BIGINT PRIMARY KEY, sequence BIGINT NOT NULL UNIQUE, label VARCHAR(64) NOT NULL)",
 		"INSERT INTO events (id, sequence, label) VALUES (1, 1, 'alpha'), (2, 2, 'bravo'), (3, 3, 'charlie'), (4, 4, 'delta'), (5, 5, 'echo')",
 	}
 	for _, statement := range statements {
@@ -208,28 +208,25 @@ func assertBinaryLogCDC(t *testing.T, ctx context.Context, connector native.Conn
 		return nil
 	})
 
-	events := make([]connectors.CDCEvent, 0, 3)
+	events := make([]connectors.CDCEvent, 0, 4)
 	done := make(chan error, 1)
 	go func() {
 		done <- connector.ReadCDC(ctx, connectors.CDCReadRequest{Stream: stream, Config: config, CheckpointCommitter: commit}, func(event connectors.CDCEvent) error {
 			events = append(events, event)
-			if len(events) == 3 {
+			if len(events) == 4 {
 				return errCollectedCDCEvents
 			}
 			return nil
 		})
 	}()
-	// StartSync has to register the replication client before mutations are
-	// generated. The bounded delay is deliberately followed by a test deadline,
-	// so absence of a reachable server or stream fails rather than passing.
-	time.Sleep(500 * time.Millisecond)
+	waitForCDCRegistration(t, ctx, endpoint)
 	db, err := client.ConnectWithContext(ctx, net.JoinHostPort(endpoint.Host, strconv.Itoa(endpoint.Port)), gomysql.DEFAULT_USER, "", mysqlIntegrationDatabase, 10*time.Second)
 	if err != nil {
 		t.Fatal("could not open MySQL to generate change events")
 	}
 	defer func() { _ = db.Close() }()
 	for _, statement := range []string{
-		"INSERT INTO events (id, sequence, label) VALUES (6, 6, 'foxtrot')",
+		"INSERT INTO events (id, sequence, label) VALUES (6, 6, 'foxtrot'), (7, 7, 'hotel')",
 		"UPDATE events SET label = 'golf' WHERE id = 6",
 		"DELETE FROM events WHERE id = 6",
 	} {
@@ -250,17 +247,51 @@ func assertBinaryLogCDC(t *testing.T, ctx context.Context, connector native.Conn
 		t.Fatal("MySQL connector change capture did not receive real row events before the deadline")
 	}
 	operations := make([]string, 0, len(events))
+	identifiers := make([]string, 0, len(events))
 	for _, event := range events {
 		operations = append(operations, event.Operation)
-		if recordText(event.Record["id"]) != "6" || event.State["binlog_file"] == nil || event.State["binlog_pos"] == nil {
+		identifiers = append(identifiers, recordText(event.Record["id"]))
+		if event.State["binlog_file"] == nil || event.State["binlog_pos"] == nil || event.State["binlog_row"] == nil {
 			t.Fatal("MySQL connector change capture returned an incomplete real record or checkpoint state")
 		}
 	}
-	if strings.Join(operations, ",") != "insert,update,delete" {
-		t.Fatalf("MySQL change operations = %v, want insert, update, delete", operations)
+	if strings.Join(operations, ",") != "insert,insert,update,delete" {
+		t.Fatalf("MySQL change operations = %v, want insert, insert, update, delete", operations)
+	}
+	if strings.Join(identifiers, ",") != "6,7,6,6" {
+		t.Fatalf("MySQL change record identifiers = %v, want 6, 7, 6, 6", identifiers)
+	}
+	if events[0].State["binlog_pos"] != events[1].State["binlog_pos"] || events[0].State["binlog_row"] == events[1].State["binlog_row"] {
+		t.Fatal("MySQL change capture did not distinguish rows from one binary-log event")
 	}
 	if len(checkpoints.states) < 2 {
 		t.Fatal("MySQL change capture did not commit acknowledged binary-log positions")
+	}
+}
+
+func waitForCDCRegistration(t *testing.T, ctx context.Context, endpoint dbtest.Endpoint) {
+	t.Helper()
+	db, err := client.ConnectWithContext(ctx, net.JoinHostPort(endpoint.Host, strconv.Itoa(endpoint.Port)), gomysql.DEFAULT_USER, "", mysqlIntegrationDatabase, 10*time.Second)
+	if err != nil {
+		t.Fatal("could not inspect MySQL replication registration")
+	}
+	defer func() { _ = db.Close() }()
+	for {
+		result, err := db.Execute("SELECT COUNT(*) FROM information_schema.processlist WHERE COMMAND IN ('Binlog Dump', 'Binlog Dump GTID')")
+		if err == nil && result != nil && result.Resultset != nil {
+			count, countErr := result.GetInt(0, 0)
+			result.Close()
+			if countErr == nil && count > 0 {
+				return
+			}
+		} else if result != nil {
+			result.Close()
+		}
+		select {
+		case <-ctx.Done():
+			t.Fatal("MySQL replication client did not register before generating change events")
+		case <-time.After(50 * time.Millisecond):
+		}
 	}
 }
 
