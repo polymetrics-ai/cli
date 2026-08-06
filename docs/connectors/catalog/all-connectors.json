@@ -115057,6 +115057,16 @@
       "write": false,
       "query": false
     },
+    "changefeed": {
+      "status": "unsupported",
+      "mechanism": "logical_replication",
+      "source": {
+        "artifact_url": "https://www.postgresql.org/docs/current/logicaldecoding-explanation.html",
+        "artifact_version": "current",
+        "retrieved_at": "2026-08-05"
+      },
+      "reason": "logical replication requires the human-gated pglogrepl dependency, a replication connection and slot lifecycle, source-bound LSN recovery, and conformance proof; the current CDCReader is an unsupported stub"
+    },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "PostgreSQL connection config",
@@ -173803,7 +173813,7 @@
         "max_pages": {
           "type": "string",
           "default": "0",
-          "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+          "description": "Currently unused: the Zoom cursor paginator does not consume this configuration value."
         },
         "mode": {
           "type": "string",

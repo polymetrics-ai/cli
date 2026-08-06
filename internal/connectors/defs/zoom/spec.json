@@ -27,7 +27,7 @@
     "max_pages": {
       "type": "string",
       "default": "0",
-      "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
+      "description": "Currently unused: the Zoom cursor paginator does not consume this configuration value."
     },
     "mode": {
       "type": "string",

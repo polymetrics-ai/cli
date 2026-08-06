@@ -53,6 +53,24 @@ SECURITY
   approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+COMMAND SURFACE
+  Read the currently stream-backed Zoom users, meetings, and webinars API routes.
+  Usage: pm zoom <users|meetings|webinars> list [flags]
+  Source CLI: Zoom API reference (OpenAPI 3.1.1; docs static build 2026-08-03T14-58-19-06-00; retrieved 2026-08-05)
+  Global flags:
+    --credential (string): Credential name to use for the Zoom request.
+    --connection (string): Credential name alias used only when --credential is omitted; does not resolve pm connections.
+    --config (string_array): Connector config override as key=value; never pass secret values here.
+    --json (boolean): Emit machine-readable JSON output.
+    --limit (integer): Maximum records to emit from a stream command.
+  Users
+    users list - Read Zoom users through the declared ETL stream. [intent=etl availability=implemented stream=users]
+  Meetings and webinars
+    meetings list - Read meetings for one Zoom user through the declared ETL stream. [intent=etl availability=implemented stream=meetings]; flags: --user-id
+    webinars list - Read webinars for one Zoom user through the declared ETL stream. [intent=etl availability=implemented stream=webinars]; flags: --user-id
+  Help topics:
+    provider-inventory - The Zoom provider ledger tracks 1,913 documented REST operations; Wave 1 executes only these three existing stream-backed reads.
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect zoom
