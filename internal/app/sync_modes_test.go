@@ -349,6 +349,65 @@ func TestIncrementalAppendCommitsCursorOnlyAfterSuccess(t *testing.T) {
 	}
 }
 
+func TestWarehouseAndCursorRoundTripPreservesNonFiniteFloatStrings(t *testing.T) {
+	ctx := context.Background()
+	for _, tc := range []struct {
+		name  string
+		value string
+	}{
+		{name: "NaN", value: "NaN"},
+		{name: "infinity", value: "Infinity"},
+		{name: "negative infinity", value: "-Infinity"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			source := newScriptedSyncSource("scripted_nonfinite_float", []connectors.Record{{
+				"id":         "first",
+				"reading":    tc.value,
+				"updated_at": tc.value,
+			}})
+			a, connection := setupSyncModeApp(t, source, "incremental_append")
+
+			run, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1})
+			if err != nil {
+				t.Fatalf("first RunETL: %v", err)
+			}
+			if got := run.Checkpoint["cursor"]; got != tc.value {
+				t.Fatalf("checkpoint cursor = %q, want %q", got, tc.value)
+			}
+			rows, err := a.QueryTable(ctx, QueryTableRequest{Table: "records", Limit: 10})
+			if err != nil {
+				t.Fatalf("QueryTable: %v", err)
+			}
+			if len(rows) != 1 {
+				t.Fatalf("rows len = %d, want 1", len(rows))
+			}
+			reading, ok := rows[0]["reading"].(string)
+			if !ok || reading != tc.value {
+				t.Fatalf("warehouse reading = %#v, want string %q", rows[0]["reading"], tc.value)
+			}
+
+			source.records = []connectors.Record{{
+				"id":         "second",
+				"reading":    tc.value,
+				"updated_at": tc.value,
+			}}
+			if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1}); err != nil {
+				t.Fatalf("second RunETL: %v", err)
+			}
+			if len(source.requests) != 2 {
+				t.Fatalf("read requests = %d, want 2", len(source.requests))
+			}
+			second := source.requests[1]
+			if got := second.State["cursor"]; got != tc.value {
+				t.Fatalf("resumed state cursor = %q, want %q", got, tc.value)
+			}
+			if got := second.Config.Config["since"]; got != tc.value {
+				t.Fatalf("resumed config since = %q, want %q", got, tc.value)
+			}
+		})
+	}
+}
+
 func TestIncrementalAppendDedupedMaterializesLatestRows(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("scripted_incremental_deduped", []connectors.Record{

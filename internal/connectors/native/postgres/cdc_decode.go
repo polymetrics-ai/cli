@@ -332,7 +332,19 @@ func decodeTextValue(typeID uint32, raw string) any {
 			return v
 		}
 	case 700, 701: // float4, float8
+		switch raw {
+		case "NaN", "Infinity", "-Infinity":
+			return raw
+		}
 		if v, err := strconv.ParseFloat(raw, 64); err == nil {
+			switch {
+			case math.IsNaN(v):
+				return "NaN"
+			case math.IsInf(v, 1):
+				return "Infinity"
+			case math.IsInf(v, -1):
+				return "-Infinity"
+			}
 			return v
 		}
 	case 1700: // numeric

@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"encoding/binary"
+	"encoding/json"
 	"errors"
 	"reflect"
 	"testing"
@@ -121,6 +122,52 @@ func TestPGOutputDecoderDML(t *testing.T) {
 func TestDecodeTextValuePreservesNumericPrecision(t *testing.T) {
 	if got := decodeTextValue(1700, "9007199254740993"); got != "9007199254740993" {
 		t.Fatalf("decodeTextValue(numeric) = %#v, want exact decimal text", got)
+	}
+}
+
+func TestPGOutputDecoderEncodesNonFiniteFloatsAsJSONStrings(t *testing.T) {
+	cases := []struct {
+		name   string
+		typeID uint32
+		raw    string
+	}{
+		{name: "float4 NaN", typeID: 700, raw: "NaN"},
+		{name: "float4 infinity", typeID: 700, raw: "Infinity"},
+		{name: "float4 negative infinity", typeID: 700, raw: "-Infinity"},
+		{name: "float8 NaN", typeID: 701, raw: "NaN"},
+		{name: "float8 infinity", typeID: 701, raw: "Infinity"},
+		{name: "float8 negative infinity", typeID: 701, raw: "-Infinity"},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			dec := newPGOutputDecoder("public", "measurements")
+			if _, err := dec.decode(relationMessage(testRelationID, "public", "measurements", testColumn{name: "value", typeID: tc.typeID}), ""); err != nil {
+				t.Fatalf("decode relation: %v", err)
+			}
+			events, err := dec.decode(insertMessage(testRelationID, textField(tc.raw)), "")
+			if err != nil {
+				t.Fatalf("decode insert: %v", err)
+			}
+			if len(events) != 1 {
+				t.Fatalf("decode emitted %d event(s), want 1", len(events))
+			}
+			value, ok := events[0].Record["value"].(string)
+			if !ok || value != tc.raw {
+				t.Fatalf("decoded value = %#v, want string %q", events[0].Record["value"], tc.raw)
+			}
+			payload, err := json.Marshal(events[0])
+			if err != nil {
+				t.Fatalf("marshal CDC event: %v", err)
+			}
+			var roundTrip connectors.CDCEvent
+			if err := json.Unmarshal(payload, &roundTrip); err != nil {
+				t.Fatalf("unmarshal CDC event: %v", err)
+			}
+			value, ok = roundTrip.Record["value"].(string)
+			if !ok || value != tc.raw {
+				t.Fatalf("round-trip value = %#v, want string %q", roundTrip.Record["value"], tc.raw)
+			}
+		})
 	}
 }
 
