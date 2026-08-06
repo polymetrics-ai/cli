@@ -155,14 +155,18 @@ pm credentials remove github-local
 
 Secrets must come from environment variables or stdin. Do not pass raw token values in chat, shell history, or docs.
 
-Each credential is isolated unless it is explicitly linked. A link requires
-matching declared `--provider-family` and `--auth-profile` values. For a
-cross-connector link, every credential already in the target cohort must also
-have those declarations; matching defaults never create a link. Links only
-create protected local binding metadata. Credential inspection and runtime
-coordination output never reveal that binding; later coordination consumers use
-an opaque projection instead. A provider rate policy must separately declare
-its documented non-secret scope subject; no token-based default is assumed.
+When omitted, `--provider-family` defaults to the connector name and
+`--auth-profile` defaults to `default`. Existing credentials receive the same
+defaults when their project is opened. Each credential is isolated unless it is
+explicitly linked. A link requires matching effective declarations. For a
+cross-connector link, every credential in the resulting cohort must have both
+declarations supplied explicitly; matching defaults alone are not enough.
+
+Links only create protected local binding metadata. Credential inspection and
+JSON output expose the non-secret family/profile declarations but never the
+binding itself; internal coordination receives opaque projections only. This
+identity-only release does not change connector authentication, rate limiting,
+or transport behavior.
 
 Before saving a credential, `pm` checks non-secret `--config` fields against
 only the selected connector's declared string `enum`, `pattern`, and `uri`,
