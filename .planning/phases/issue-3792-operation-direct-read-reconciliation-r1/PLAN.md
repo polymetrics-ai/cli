@@ -38,11 +38,17 @@ reconcile stale `api_surface` operation reasons from that runtime result.
    preflight, plus refusal and blocked-reason fixtures. Run check-only,
    reason-filtered reporting for the six #2985 stale-reason connectors; do not
    apply its changes.
+5. **Shipped endpoint ledger repair.** Generate and embed a compact
+   operation direct-read endpoint ledger from disk `api_surface.json` rows,
+   carrying only method, path, operation kind, and response cap. Attach it at
+   bundle load, fail preflight closed for missing or incomplete entries, and
+   record the missing-ledger rejection count and binary-size comparison.
 
 ## Owned paths
 
 - `internal/connectors/connectors.go`
-- `internal/connectors/engine/{connector.go,direct_read.go,*_test.go}`
+- `internal/connectors/engine/{bundle.go,connector.go,direct_read.go,*_test.go}`
+- `internal/connectors/defs/{defs.go,operation_endpoint_ledger.json}`
 - `internal/connectors/commandrunner/{runner.go,runner_test.go}`
 - `internal/connectors/native/{amazon-sqs,ashby}/{direct_read.go,engine_delegate.go,*_test.go}`
 - `cmd/connectorgen/{main.go,surfacereconcile.go,surfacereconcile_test.go}`

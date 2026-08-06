@@ -121,7 +121,7 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 	if isAbsoluteHTTPURL(spec.Path) {
 		return BinaryDownloadResult{}, fmt.Errorf("binary download endpoint must be connector-relative, got absolute URL")
 	}
-	if err := requireOperationDirectReadEndpoint(b, http.MethodGet, spec.Path); err != nil {
+	if err := requireOperationSurfaceEndpoint(b, http.MethodGet, spec.Path); err != nil {
 		return BinaryDownloadResult{}, err
 	}
 	if strings.TrimSpace(req.DestRoot) == "" {

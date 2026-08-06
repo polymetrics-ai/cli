@@ -274,7 +274,10 @@ not a full override by default.
   command fields that are derivable from `operations.json` — `api_surface`, flag `maps_to`,
   `output_policy`, and `rest.max_bytes` — are not hand-authored:
   `go run ./cmd/connectorgen surface-sync` fills them and `--check` fails on drift (see AGENTS.md,
-  "Command Surface Must Stay Executable"). The shared-code boundary guard
+  "Command Surface Must Stay Executable"). The same command generates the embedded
+  `operation_endpoint_ledger.json` runtime projection from `api_surface.json` and
+  `operations.json`; it contains only direct-read method, path, operation kind, and response cap,
+  so preflight fails closed if a shipped bundle has no matching projection entry. The shared-code boundary guard
   (`docs/migration/connector-boundary-guard.md`) enforces this ownership rule outside connector
   defs/hooks/native escape hatches.
 - **`api_surface` operation rows are reconciled, never hand-edited**: use

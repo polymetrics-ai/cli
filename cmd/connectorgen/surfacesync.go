@@ -5,11 +5,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"regexp"
 	"sort"
 	"strings"
+
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 // surfaceSync derives the command-surface metadata that operation-backed
@@ -161,15 +164,91 @@ func runSurfaceSync(args []string, stdout, stderr io.Writer) int {
 		}
 		logf(stdout, "%s: %s filled %s; corrected %s\n", name, verb, stats.Filled, stats.Corrected)
 	}
+	ledgerStats, err := syncRuntimeOperationEndpointLedger(dir, check)
+	if err != nil {
+		logf(stderr, "connectorgen surface-sync: runtime operation endpoint ledger: %v\n", err)
+		return 1
+	}
+	if ledgerStats.Changed {
+		verb := "updated"
+		if check {
+			verb = "would update"
+		}
+		logf(stdout, "runtime operation endpoint ledger: %s %d endpoint(s)\n", verb, ledgerStats.Entries)
+	}
 
-	if check && total.total() > 0 {
-		logf(stderr, "connectorgen surface-sync: %d connector(s) out of sync, %d field(s) missing and %d field(s) divergent; run `connectorgen surface-sync`\n",
-			changed, total.Filled.total(), total.Corrected.total())
+	if check && (total.total() > 0 || ledgerStats.Changed) {
+		logf(stderr, "connectorgen surface-sync: %d connector(s) out of sync, %d field(s) missing, %d field(s) divergent, runtime endpoint ledger drift=%t; run `connectorgen surface-sync`\n",
+			changed, total.Filled.total(), total.Corrected.total(), ledgerStats.Changed)
 		return 1
 	}
 	logf(stdout, "connectorgen surface-sync: %d connector(s) scanned, %d field(s) filled and %d field(s) corrected across %d connector(s)\n",
 		len(names), total.Filled.total(), total.Corrected.total(), changed)
 	return 0
+}
+
+type runtimeOperationEndpointLedgerStats struct {
+	Entries int
+	Changed bool
+}
+
+func syncRuntimeOperationEndpointLedger(dir string, check bool) (runtimeOperationEndpointLedgerStats, error) {
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		return runtimeOperationEndpointLedgerStats{}, err
+	}
+	ledger := make(map[string][]engine.OperationEndpointLedgerEntry)
+	sourceFS := withoutRuntimeOperationEndpointLedgerFS{FS: os.DirFS(dir)}
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+		name := entry.Name()
+		bundle, err := engine.Load(sourceFS, name)
+		if err != nil {
+			return runtimeOperationEndpointLedgerStats{}, fmt.Errorf("load %s: %w", name, err)
+		}
+		if bundle.Surface == nil {
+			return runtimeOperationEndpointLedgerStats{}, fmt.Errorf("bundle %s has no api_surface.json", name)
+		}
+		ledger[name] = engine.OperationDirectReadEndpointLedgerEntries(bundle)
+	}
+	stats := runtimeOperationEndpointLedgerStats{}
+	for _, entries := range ledger {
+		stats.Entries += len(entries)
+	}
+	raw, err := json.MarshalIndent(ledger, "", "  ")
+	if err != nil {
+		return stats, err
+	}
+	raw = append(raw, '\n')
+	path := filepath.Join(dir, engine.RuntimeOperationEndpointLedgerFile)
+	existing, err := os.ReadFile(path)
+	if err == nil && bytes.Equal(existing, raw) {
+		return stats, nil
+	}
+	if err != nil && !os.IsNotExist(err) {
+		return stats, err
+	}
+	stats.Changed = true
+	if check {
+		return stats, nil
+	}
+	if err := os.WriteFile(path, raw, 0o644); err != nil {
+		return stats, err
+	}
+	return stats, nil
+}
+
+type withoutRuntimeOperationEndpointLedgerFS struct {
+	fs.FS
+}
+
+func (f withoutRuntimeOperationEndpointLedgerFS) Open(name string) (fs.File, error) {
+	if name == engine.RuntimeOperationEndpointLedgerFile {
+		return nil, fs.ErrNotExist
+	}
+	return f.FS.Open(name)
 }
 
 // syncBundle rewrites one bundle's cli_surface.json and operations.json in

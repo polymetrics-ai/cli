@@ -12,10 +12,10 @@
 //	gen                        regenerates hooks/hookset/hookset_gen.go and
 //	                           native/nativeset/nativeset_gen.go
 //	surface-sync [dir] [--check]
-//	                           derives operation-backed direct_read and
-//	                           binary_download command metadata (api_surface,
-//	                           output_policy, flag maps_to, rest.max_bytes)
-//	                           from operations.json
+//	                           derives operation-backed command metadata
+//	                           (api_surface, output_policy, flag maps_to,
+//	                           rest.max_bytes) and the compact runtime
+//	                           direct-read endpoint ledger from bundle sources
 //	surface-reconcile [dir] [--check] [--json] [--reason-contains text]
 //	                           derives direct-read api_surface coverage and
 //	                           blocked reasons from runtime preflight

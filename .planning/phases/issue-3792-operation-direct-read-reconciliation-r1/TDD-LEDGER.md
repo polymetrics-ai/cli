@@ -7,6 +7,7 @@
 | R3 | The global runtime sweep observes the stronger rule. | The existing sweep does not consult read metadata before this change. | `TestEveryImplementedCommandPassesRuntimePreflight` remains unchanged and passes against all declared implemented commands. |
 | R4 | An `api_surface` row becomes covered only through real runtime preflight. | A stale operation-row fixture has no reconciliation command. | A matching executable command produces `covered_by`; planned/failing/unknown candidates remain blocked or are refused, and check mode writes nothing. |
 | R5 | The 574 stale #2985 rows are reported without a ledger write. | No deterministic reporting command exists. | Check-only filtered run reports exact proposed covered/blocked/refused counts for Zendesk Support, HubSpot, Asana, Bitbucket, Freshchat, and YouTube Analytics. |
+| R6 | A shipped operation-backed direct read cannot bypass API-surface provenance because `defs.FS` omits raw `api_surface.json`. | With no compact projection, the old surface-optional helper accepted the operation after every other static check. | The generated root projection contains only method/path/kind/max_bytes; loader and preflight reject missing, unresolved, incomplete, and malformed projections. |
 
 ## Commands
 
@@ -38,3 +39,8 @@ go test ./cmd/connectorgen -run 'Test.*SurfaceReconcile|TestRun.*SurfaceReconcil
   is refused without writing the file.
 - **R5 green:** the check-only `#2985` report is recorded in
   `RECLASSIFICATION-REPORT.md`; it writes no connector definition.
+- **R6 green:** `go test ./internal/connectors/engine
+  ./internal/connectors/commandrunner ./cmd/connectorgen -count=1` passed. The
+  new shipped-registry test proves all 247 implemented operation-backed
+  direct-read commands pass with the embedded projection and reject when it is
+  removed; the unchanged global commandrunner sweep passes in the same run.

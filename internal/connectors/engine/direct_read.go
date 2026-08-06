@@ -195,7 +195,7 @@ func operationDirectReadSpec(b Bundle, operation string) (OperationSpec, error) 
 	if op.REST.MaxBytes <= 0 {
 		return OperationSpec{}, fmt.Errorf("operation direct read requires positive max_bytes")
 	}
-	if err := requireOperationDirectReadEndpoint(b, method, op.REST.Path); err != nil {
+	if err := requireOperationDirectReadLedgerEndpoint(b, op.Kind, method, op.REST.Path, op.REST.MaxBytes); err != nil {
 		return OperationSpec{}, err
 	}
 	return op, nil
@@ -288,7 +288,7 @@ func findOperation(b Bundle, id string) (OperationSpec, error) {
 	return OperationSpec{}, fmt.Errorf("operation %q not found in bundle %q", id, b.Name)
 }
 
-func requireOperationDirectReadEndpoint(b Bundle, method, endpointPath string) error {
+func requireOperationSurfaceEndpoint(b Bundle, method, endpointPath string) error {
 	if b.Surface == nil {
 		return nil
 	}
@@ -301,6 +301,19 @@ func requireOperationDirectReadEndpoint(b Bundle, method, endpointPath string) e
 		}
 	}
 	return fmt.Errorf("api_surface endpoint %s %s not found", method, endpointPath)
+}
+
+func requireOperationDirectReadLedgerEndpoint(b Bundle, kind, method, endpointPath string, maxBytes int) error {
+	ledger := operationDirectReadEndpointLedger(b)
+	if ledger == nil {
+		return fmt.Errorf("runtime operation endpoint ledger is unavailable for bundle %q", b.Name)
+	}
+	for _, entry := range ledger.entries {
+		if strings.EqualFold(entry.Method, method) && entry.Path == endpointPath && entry.Kind == kind && entry.MaxBytes == maxBytes {
+			return nil
+		}
+	}
+	return fmt.Errorf("runtime operation endpoint ledger does not contain %s %s kind %q with max_bytes %d", method, endpointPath, kind, maxBytes)
 }
 
 // requireOperationQueryGroups enforces rest.required_query against the merged
