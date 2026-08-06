@@ -151,7 +151,10 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 		return BinaryDownloadResult{}, err
 	}
 
-	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
+	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, rt.Requester.BaseURL)
+	if err := rejectCallerSuppliedIdentifierSetTargetBypass(b, cfg, rt.Requester.BaseURL, http.MethodGet, requestPath, req.PathParams, ""); err != nil {
+		return BinaryDownloadResult{}, err
+	}
 	resp, err := rt.Requester.DoStream(ctx, http.MethodGet, requestPath, query, connsdk.StreamOptions{
 		AllowCrossHost: spec.AllowCrossHost,
 		AllowedHosts:   spec.AllowedHosts,

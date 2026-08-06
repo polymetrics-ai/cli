@@ -648,6 +648,54 @@ func TestDirectReadAvoidsDoubleVersionPrefixWhenBaseURLAlreadyContainsVersion(t 
 	}
 }
 
+func TestDirectReadRejectsCallerSuppliedIdentifierSetTargetAlias(t *testing.T) {
+	issued := false
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		issued = true
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer srv.Close()
+
+	b := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: srv.URL + "/v1"},
+		Operations: []OperationSpec{{
+			ID:   "acme.coins.lookup",
+			Kind: "rest_read",
+			REST: &RESTOperationSpec{
+				Method:   http.MethodGet,
+				Path:     "/v1/tenants/{tenant}/coins",
+				MaxBytes: 1024,
+				CallerSuppliedIdentifierSets: []CallerSuppliedIdentifierSetSpec{{
+					Name: "coins", ElementShape: "opaque_string", Wire: "query_comma_separated", MinItems: 1, MaxItems: 2,
+				}},
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method: http.MethodGet,
+			Path:   "/tenants/acme/coins",
+			CoveredBy: &SurfaceCoverage{
+				DirectRead: "coins generic",
+			},
+		}}},
+	}
+
+	_, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/tenants/acme/coins",
+		Config:       connectors.RuntimeConfig{Config: map[string]string{"tenant": "acme"}},
+		MaxBytes:     1024,
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err == nil || !strings.Contains(err.Error(), "reserved for caller-supplied identifier-set operation") {
+		t.Fatalf("DirectRead error = %v, want protected target rejection", err)
+	}
+	if issued {
+		t.Fatal("protected target was requested")
+	}
+}
+
 func directReadBundle(baseURL, method, endpointPath string) Bundle {
 	return Bundle{
 		Name: "code-host",

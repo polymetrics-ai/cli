@@ -815,6 +815,10 @@ func checkCLISurface(b engine.Bundle) []Finding {
 }
 
 func checkCLISurfaceCallerSuppliedIdentifierSetOperationBindings(b engine.Bundle, commands []engine.CLICommand) []Finding {
+	operations := make(map[string]engine.OperationSpec, len(b.Operations))
+	for _, candidate := range b.Operations {
+		operations[candidate.ID] = candidate
+	}
 	var findings []Finding
 	for _, op := range b.Operations {
 		if op.Kind != "rest_read" || op.REST == nil || len(op.REST.CallerSuppliedIdentifierSets) == 0 {
@@ -845,46 +849,85 @@ func checkCLISurfaceCallerSuppliedIdentifierSetOperationBindings(b engine.Bundle
 				Message:   fmt.Sprintf("operation %q declares caller_supplied_identifier_sets but has no implemented direct_read command", op.ID),
 			})
 		}
-		endpoint := requestTargetEndpointKey(op.REST.Method, op.REST.Path)
 		for i, cmd := range commands {
-			if cmd.Availability != "implemented" || cmd.Intent != "direct_read" || cmd.Operation == op.ID {
+			if cmd.Availability != "implemented" || cmd.Operation == op.ID {
 				continue
 			}
-			if !commandReferencesEndpoint(cmd, endpoint) {
-				continue
+			switch cmd.Intent {
+			case "direct_read":
+				if cmd.Operation != "" {
+					candidate, ok := operations[cmd.Operation]
+					if !ok || candidate.REST == nil || !callerSuppliedIdentifierSetTargetsOverlap(b, op, candidate.REST.Method, candidate.REST.Path, true) {
+						continue
+					}
+					findings = append(findings, Finding{
+						Connector: b.Name,
+						File:      "cli_surface.json",
+						Rule:      ruleCLISurfaceSafety,
+						Message:   fmt.Sprintf("implemented direct read command %d (%q) references caller-supplied identifier-set operation %q endpoint without binding that operation", i, cmd.Path, op.ID),
+					})
+					continue
+				}
+				for _, candidate := range cmd.APISurface {
+					if !callerSuppliedIdentifierSetTargetsOverlap(b, op, candidate.Method, candidate.Path, true) {
+						continue
+					}
+					findings = append(findings, Finding{
+						Connector: b.Name,
+						File:      "cli_surface.json",
+						Rule:      ruleCLISurfaceSafety,
+						Message:   fmt.Sprintf("implemented direct read command %d (%q) references caller-supplied identifier-set operation %q endpoint without binding that operation", i, cmd.Path, op.ID),
+					})
+					break
+				}
+			case "binary_download":
+				candidate, ok := operations[cmd.Operation]
+				if !ok || candidate.Kind != "binary_download" || candidate.Binary == nil || !callerSuppliedIdentifierSetTargetsOverlap(b, op, candidate.Binary.Method, candidate.Binary.Path, true) {
+					continue
+				}
+				findings = append(findings, Finding{
+					Connector: b.Name,
+					File:      "cli_surface.json",
+					Rule:      ruleCLISurfaceSafety,
+					Message:   fmt.Sprintf("implemented binary download command %d (%q) targets caller-supplied identifier-set operation %q endpoint", i, cmd.Path, op.ID),
+				})
 			}
+		}
+		for _, stream := range b.Streams {
+			if callerSuppliedIdentifierSetTargetsOverlap(b, op, streamRequestMethod(stream), stream.Path, false) {
+				findings = append(findings, Finding{
+					Connector: b.Name,
+					File:      "streams.json",
+					Rule:      ruleCLISurfaceSafety,
+					Message:   fmt.Sprintf("stream %q covers caller-supplied identifier-set operation %q endpoint", stream.Name, op.ID),
+				})
+			}
+			if stream.FanOut != nil && stream.FanOut.IDsFrom.Request != nil && callerSuppliedIdentifierSetTargetsOverlap(b, op, "GET", stream.FanOut.IDsFrom.Request.Path, false) {
+				findings = append(findings, Finding{
+					Connector: b.Name,
+					File:      "streams.json",
+					Rule:      ruleCLISurfaceSafety,
+					Message:   fmt.Sprintf("stream %q fan-out request covers caller-supplied identifier-set operation %q endpoint", stream.Name, op.ID),
+				})
+			}
+		}
+		if b.HTTP.Check != nil && callerSuppliedIdentifierSetTargetsOverlap(b, op, b.HTTP.Check.Method, b.HTTP.Check.Path, false) {
 			findings = append(findings, Finding{
 				Connector: b.Name,
-				File:      "cli_surface.json",
+				File:      "streams.json",
 				Rule:      ruleCLISurfaceSafety,
-				Message:   fmt.Sprintf("implemented direct read command %d (%q) references caller-supplied identifier-set operation %q endpoint without binding that operation", i, cmd.Path, op.ID),
-			})
-		}
-		if b.Surface == nil {
-			continue
-		}
-		for i, candidate := range b.Surface.Endpoints {
-			if requestTargetEndpointKey(candidate.Method, candidate.Path) != endpoint || candidate.CoveredBy == nil || candidate.CoveredBy.Stream == "" {
-				continue
-			}
-			findings = append(findings, Finding{
-				Connector: b.Name,
-				File:      "api_surface.json",
-				Rule:      ruleCLISurfaceSafety,
-				Message:   fmt.Sprintf("api_surface endpoint %d (%s %s) covers caller-supplied identifier-set operation %q with stream %q", i, candidate.Method, candidate.Path, op.ID, candidate.CoveredBy.Stream),
+				Message:   fmt.Sprintf("connector check covers caller-supplied identifier-set operation %q endpoint", op.ID),
 			})
 		}
 	}
 	return findings
 }
 
-func commandReferencesEndpoint(cmd engine.CLICommand, endpoint string) bool {
-	for _, candidate := range cmd.APISurface {
-		if requestTargetEndpointKey(candidate.Method, candidate.Path) == endpoint {
-			return true
-		}
+func streamRequestMethod(stream engine.StreamSpec) string {
+	if strings.TrimSpace(stream.Method) == "" {
+		return "GET"
 	}
-	return false
+	return stream.Method
 }
 
 func checkCLISurfaceReferences(
@@ -2026,16 +2069,144 @@ func surfaceEndpointKey(method, path string) string {
 	return strings.ToUpper(strings.TrimSpace(method)) + " " + strings.TrimSpace(path)
 }
 
-func requestTargetEndpointKey(method, path string) string {
-	path = strings.TrimSpace(path)
-	parsed, err := url.Parse(path)
-	if err == nil {
-		parsed.Fragment = ""
-		path = parsed.String()
-	} else if fragment := strings.IndexByte(path, '#'); fragment >= 0 {
-		path = path[:fragment]
+var requestTargetTemplatePattern = regexp.MustCompile(`\{\{[^{}]+\}\}|\{[A-Za-z_][A-Za-z0-9_]*\}`)
+
+func callerSuppliedIdentifierSetTargetsOverlap(b engine.Bundle, op engine.OperationSpec, method, path string, direct bool) bool {
+	if op.REST == nil || !strings.EqualFold(strings.TrimSpace(op.REST.Method), requestTargetMethod(method)) {
+		return false
 	}
-	return surfaceEndpointKey(method, path)
+	protected := staticRequestTargetPath(b.HTTP.URL, op.REST.Path, true)
+	candidate := staticRequestTargetPath(b.HTTP.URL, path, direct)
+	return requestTargetPathsOverlap(protected, candidate)
+}
+
+func requestTargetMethod(method string) string {
+	if strings.TrimSpace(method) == "" {
+		return "GET"
+	}
+	return strings.TrimSpace(method)
+}
+
+func staticRequestTargetPath(baseURL, path string, direct bool) string {
+	path = requestTargetPathname(path)
+	basePath, ok := staticRequestTargetBasePath(baseURL)
+	if !ok {
+		return canonicalStaticRequestTargetPath(path)
+	}
+	if direct {
+		if path == basePath {
+			path = "/"
+		} else if prefix := basePath + "/"; basePath != "" && strings.HasPrefix(path, prefix) {
+			path = "/" + strings.TrimPrefix(path, prefix)
+		}
+	}
+	if basePath == "" {
+		return canonicalStaticRequestTargetPath("/" + strings.TrimLeft(path, "/"))
+	}
+	return canonicalStaticRequestTargetPath(strings.TrimRight(basePath, "/") + "/" + strings.TrimLeft(path, "/"))
+}
+
+func staticRequestTargetBasePath(baseURL string) (string, bool) {
+	if strings.Contains(baseURL, "{{") {
+		return "", false
+	}
+	parsed, err := url.Parse(strings.TrimSpace(baseURL))
+	if err != nil || parsed.Scheme == "" || parsed.Host == "" {
+		return "", false
+	}
+	basePath := strings.TrimRight(parsed.EscapedPath(), "/")
+	if basePath == "." {
+		basePath = ""
+	}
+	return basePath, true
+}
+
+func requestTargetPathname(path string) string {
+	path = strings.TrimSpace(path)
+	if end := strings.IndexAny(path, "?#"); end >= 0 {
+		path = path[:end]
+	}
+	if path == "" {
+		return "/"
+	}
+	return "/" + strings.TrimLeft(path, "/")
+}
+
+func canonicalStaticRequestTargetPath(path string) string {
+	path = "/" + strings.TrimLeft(path, "/")
+	if len(path) > 1 {
+		path = strings.TrimRight(path, "/")
+	}
+	var canonical strings.Builder
+	canonical.Grow(len(path))
+	for i := 0; i < len(path); i++ {
+		if path[i] != '%' || i+2 >= len(path) {
+			canonical.WriteByte(path[i])
+			continue
+		}
+		high, highOK := staticRequestTargetHexValue(path[i+1])
+		low, lowOK := staticRequestTargetHexValue(path[i+2])
+		if !highOK || !lowOK {
+			canonical.WriteByte(path[i])
+			continue
+		}
+		value := high<<4 | low
+		if isStaticRequestTargetUnreserved(value) {
+			canonical.WriteByte(value)
+		} else {
+			canonical.WriteByte('%')
+			canonical.WriteByte(uppercaseStaticRequestTargetHex(path[i+1]))
+			canonical.WriteByte(uppercaseStaticRequestTargetHex(path[i+2]))
+		}
+		i += 2
+	}
+	return canonical.String()
+}
+
+func staticRequestTargetHexValue(value byte) (byte, bool) {
+	switch {
+	case value >= '0' && value <= '9':
+		return value - '0', true
+	case value >= 'a' && value <= 'f':
+		return value - 'a' + 10, true
+	case value >= 'A' && value <= 'F':
+		return value - 'A' + 10, true
+	default:
+		return 0, false
+	}
+}
+
+func isStaticRequestTargetUnreserved(value byte) bool {
+	return (value >= 'a' && value <= 'z') || (value >= 'A' && value <= 'Z') || (value >= '0' && value <= '9') || strings.ContainsRune("-._~", rune(value))
+}
+
+func uppercaseStaticRequestTargetHex(value byte) byte {
+	if value >= 'a' && value <= 'f' {
+		return value - ('a' - 'A')
+	}
+	return value
+}
+
+func requestTargetPathsOverlap(left, right string) bool {
+	return requestTargetPathMatches(left, right) || requestTargetPathMatches(right, left)
+}
+
+func requestTargetPathMatches(pattern, target string) bool {
+	locations := requestTargetTemplatePattern.FindAllStringIndex(pattern, -1)
+	if len(locations) == 0 {
+		return pattern == target
+	}
+	var expression strings.Builder
+	expression.WriteString("^")
+	position := 0
+	for _, location := range locations {
+		expression.WriteString(regexp.QuoteMeta(pattern[position:location[0]]))
+		expression.WriteString(`.+`)
+		position = location[1]
+	}
+	expression.WriteString(regexp.QuoteMeta(pattern[position:]))
+	expression.WriteString("$")
+	return regexp.MustCompile(expression.String()).MatchString(target)
 }
 
 func isAbsoluteHTTPURL(raw string) bool {

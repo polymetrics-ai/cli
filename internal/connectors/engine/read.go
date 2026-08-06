@@ -203,6 +203,9 @@ func fanOutIDsFromRequest(ctx context.Context, b Bundle, stream StreamSpec, req 
 			}
 			reqPath = resolved
 		}
+		if err := rejectCallerSuppliedIdentifierSetTargetBypass(b, req.Config, rt.Requester.BaseURL, "GET", reqPath, nil, ""); err != nil {
+			return nil, fmt.Errorf("fan_out: ids_from.request: %w", err)
+		}
 
 		resp, err := rt.Requester.Do(ctx, "GET", reqPath, page.Query, nil)
 		if err != nil {
@@ -329,13 +332,17 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 			}
 			reqPath = resolved
 		}
+		method := methodOrDefault(stream.Method)
+		if err := rejectCallerSuppliedIdentifierSetTargetBypass(b, req.Config, rt.Requester.BaseURL, method, reqPath, nil, ""); err != nil {
+			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
+		}
 		query := mergeQuery(baseQuery, page.Query)
 		body, err := buildStreamRequestBody(stream, req.Config, req.Query, page, specForPaginator, formattedLowerBound, fc)
 		if err != nil {
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
 		}
 
-		resp, err := rt.Requester.Do(ctx, methodOrDefault(stream.Method), reqPath, query, body)
+		resp, err := rt.Requester.Do(ctx, method, reqPath, query, body)
 		if err != nil {
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Class: class, Hint: hint, Err: err}
@@ -1414,7 +1421,11 @@ func Check(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks)
 	if err != nil {
 		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: err}
 	}
-	_, err = rt.Requester.Do(ctx, methodOrDefault(b.HTTP.Check.Method), checkPath, checkQuery, nil)
+	method := methodOrDefault(b.HTTP.Check.Method)
+	if err := rejectCallerSuppliedIdentifierSetTargetBypass(b, cfg, rt.Requester.BaseURL, method, checkPath, nil, ""); err != nil {
+		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: err}
+	}
+	_, err = rt.Requester.Do(ctx, method, checkPath, checkQuery, nil)
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Class: class, Hint: hint, Err: err}

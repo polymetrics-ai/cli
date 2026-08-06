@@ -2387,7 +2387,8 @@ func TestOperationDirectReadOverridesCoercesIdentifierSetsByWire(t *testing.T) {
 		input string
 		want  []string
 	}{
-		{name: "comma query splits values", wire: "query_comma_separated", input: "first, second", want: []string{"first", "second"}},
+		{name: "comma query preserves opaque token bytes", wire: "query_comma_separated", input: " first ,second ", want: []string{" first ", "second "}},
+		{name: "comma query preserves empty tokens", wire: "query_comma_separated", input: "first,,third", want: []string{"first", "", "third"}},
 		{name: "repeated query preserves opaque value", wire: "query_repeated", input: "opaque,with-comma", want: []string{"opaque,with-comma"}},
 		{name: "JSON body preserves opaque value", wire: "body_json_array", input: "opaque,with-comma", want: []string{"opaque,with-comma"}},
 		{name: "path segment preserves opaque value", wire: "path_segment", input: "opaque,with-comma", want: []string{"opaque,with-comma"}},

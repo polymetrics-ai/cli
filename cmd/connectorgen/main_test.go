@@ -758,6 +758,45 @@ func TestValidate_CallerSuppliedIdentifierSetRejectsSiblingGenericDirectRead(t *
 	t.Fatalf("findings = %+v, want generic direct-read endpoint rejection", findings)
 }
 
+func TestValidate_CallerSuppliedIdentifierSetRejectsMaterializedGenericDirectRead(t *testing.T) {
+	op := engine.OperationSpec{
+		ID:   "acme.coins.lookup",
+		Kind: "rest_read",
+		REST: &engine.RESTOperationSpec{
+			Method:   "GET",
+			Path:     "/v1/tenants/{tenant}/coins",
+			MaxBytes: 1024,
+			CallerSuppliedIdentifierSets: []engine.CallerSuppliedIdentifierSetSpec{{
+				Name: "coins", ElementShape: "opaque_string", Wire: "query_comma_separated", MinItems: 1, MaxItems: 2,
+			}},
+		},
+	}
+	bundle := engine.Bundle{
+		Name:       "acme",
+		HTTP:       engine.HTTPBase{URL: "https://api.example.test/v1"},
+		Operations: []engine.OperationSpec{op},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{
+			{
+				Path: "coins lookup", Intent: "direct_read", Availability: "implemented", Operation: op.ID, OutputPolicy: "json_redacted",
+				APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/v1/tenants/{tenant}/coins"}},
+				Flags:      []engine.CLIFlag{{Name: "coins", Type: "string_array", Required: true, MapsTo: "identifier_set.coins"}},
+			},
+			{
+				Path: "coins generic", Intent: "direct_read", Availability: "implemented", OutputPolicy: "json_redacted",
+				APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/tenants/acme/coins"}},
+			},
+		}},
+	}
+
+	findings := checkCLISurface(bundle)
+	for _, finding := range findings {
+		if strings.Contains(finding.Message, "references caller-supplied identifier-set operation") {
+			return
+		}
+	}
+	t.Fatalf("findings = %+v, want materialized generic direct-read endpoint rejection", findings)
+}
+
 func TestValidate_CallerSuppliedIdentifierSetRejectsFragmentSiblingGenericDirectRead(t *testing.T) {
 	op := engine.OperationSpec{
 		ID:   "acme.coins.lookup",
@@ -816,10 +855,11 @@ func TestValidate_CallerSuppliedIdentifierSetRejectsStreamEndpointCoverage(t *te
 	bundle := engine.Bundle{
 		Name:       "acme",
 		Operations: []engine.OperationSpec{op},
-		Streams:    []engine.StreamSpec{{Name: "coins"}},
-		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
-			Method: "GET", Path: "/coins", CoveredBy: &engine.SurfaceCoverage{Stream: "coins", DirectRead: "coins lookup"},
-		}}},
+		Streams:    []engine.StreamSpec{{Name: "coins", Path: "/coins"}},
+		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{
+			{Method: "GET", Path: "/coins", CoveredBy: &engine.SurfaceCoverage{DirectRead: "coins lookup"}},
+			{Method: "GET", Path: "/other", CoveredBy: &engine.SurfaceCoverage{Stream: "coins"}},
+		}},
 		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
 			Path: "coins lookup", Intent: "direct_read", Availability: "implemented", Operation: op.ID, OutputPolicy: "json_redacted",
 			APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/coins"}},
@@ -834,6 +874,51 @@ func TestValidate_CallerSuppliedIdentifierSetRejectsStreamEndpointCoverage(t *te
 		}
 	}
 	t.Fatalf("findings = %+v, want stream endpoint coverage rejection", findings)
+}
+
+func TestValidate_CallerSuppliedIdentifierSetRejectsBinaryDownloadTarget(t *testing.T) {
+	lookup := engine.OperationSpec{
+		ID:   "acme.coins.lookup",
+		Kind: "rest_read",
+		REST: &engine.RESTOperationSpec{
+			Method:   "GET",
+			Path:     "/coins",
+			MaxBytes: 1024,
+			CallerSuppliedIdentifierSets: []engine.CallerSuppliedIdentifierSetSpec{{
+				Name: "coins", ElementShape: "opaque_string", Wire: "query_comma_separated", MinItems: 1, MaxItems: 2,
+			}},
+		},
+	}
+	binary := engine.OperationSpec{
+		ID:   "acme.coins.export",
+		Kind: "binary_download",
+		Binary: &engine.BinaryOperationSpec{
+			Method: "GET", Path: "/coins", MaxBytes: 1024,
+		},
+	}
+	bundle := engine.Bundle{
+		Name:       "acme",
+		Operations: []engine.OperationSpec{lookup, binary},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{
+			{
+				Path: "coins lookup", Intent: "direct_read", Availability: "implemented", Operation: lookup.ID, OutputPolicy: "json_redacted",
+				APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/coins"}},
+				Flags:      []engine.CLIFlag{{Name: "coins", Type: "string_array", Required: true, MapsTo: "identifier_set.coins"}},
+			},
+			{
+				Path: "coins export", Intent: "binary_download", Availability: "implemented", Operation: binary.ID,
+				APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/other"}},
+			},
+		}},
+	}
+
+	findings := checkCLISurface(bundle)
+	for _, finding := range findings {
+		if strings.Contains(finding.Message, "implemented binary download command") && strings.Contains(finding.Message, "caller-supplied identifier-set operation") {
+			return
+		}
+	}
+	t.Fatalf("findings = %+v, want binary-download target rejection", findings)
 }
 
 func TestValidate_CallerSuppliedIdentifierSetRejectsConnectorCommandControlNames(t *testing.T) {

@@ -219,6 +219,40 @@ func TestBinaryDownloadRequiresDeclaredEndpoint(t *testing.T) {
 	}
 }
 
+func TestBinaryDownloadRejectsCallerSuppliedIdentifierSetTarget(t *testing.T) {
+	issued := false
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		issued = true
+		_, _ = w.Write([]byte("data"))
+	}))
+	t.Cleanup(srv.Close)
+
+	b := binaryBundle(srv, &BinaryOperationSpec{Path: "/files/acme"})
+	b.HTTP.URL = srv.URL + "/v1"
+	b.Operations = append(b.Operations, OperationSpec{
+		ID:   "acme.files.lookup",
+		Kind: "rest_read",
+		REST: &RESTOperationSpec{
+			Method:   http.MethodGet,
+			Path:     "/v1/files/{tenant}",
+			MaxBytes: 1024,
+			CallerSuppliedIdentifierSets: []CallerSuppliedIdentifierSetSpec{{
+				Name: "files", ElementShape: "opaque_string", Wire: "query_comma_separated", MinItems: 1, MaxItems: 2,
+			}},
+		},
+	})
+	req := downloadReq(t.TempDir())
+	req.Config = connectors.RuntimeConfig{Config: map[string]string{"tenant": "acme"}}
+
+	_, err := OperationBinaryDownload(context.Background(), b, req, nil)
+	if err == nil || !strings.Contains(err.Error(), "reserved for caller-supplied identifier-set operation") {
+		t.Fatalf("OperationBinaryDownload error = %v, want protected target rejection", err)
+	}
+	if issued {
+		t.Fatal("protected target was requested")
+	}
+}
+
 // TestBinaryDownloadFilenameSanitized: provider-supplied names are never
 // trusted. RFC 6266 counts BOTH / and \ as separators, and filepath.Base on
 // Linux happily returns `..\..\etc\passwd` unchanged.

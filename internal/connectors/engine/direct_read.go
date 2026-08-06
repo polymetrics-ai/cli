@@ -27,6 +27,8 @@ const (
 	directReadPolicyRepositoryContentsDirectory    = "repository_contents_directory"
 	directReadPolicyJSONRedacted                   = "json_redacted"
 	directReadPolicyClinicalJSONRedacted           = "clinical_json_redacted"
+	callerSuppliedIdentifierSetTargetSegmentMarker = "polymetrics_identifier_set_target_segment"
+	callerSuppliedIdentifierSetTargetPathMarker    = "polymetrics_identifier_set_target_path"
 )
 
 var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
@@ -201,7 +203,10 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		return connectors.DirectReadResult{}, err
 	}
 	maxBytes := clampOperationDirectReadMaxBytes(req.MaxBytes, op.REST.MaxBytes)
-	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
+	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, rt.Requester.BaseURL)
+	if err := rejectCallerSuppliedIdentifierSetTargetBypass(b, cfg, rt.Requester.BaseURL, method, requestPath, pathParams, op.ID); err != nil {
+		return connectors.DirectReadResult{}, err
+	}
 	resp, err := rt.Requester.DoLimited(ctx, method, requestPath, query, body, maxBytes)
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
@@ -430,7 +435,10 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 	}
 
 	maxBytes := clampDirectReadMaxBytes(req.MaxBytes)
-	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
+	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, rt.Requester.BaseURL)
+	if err := rejectCallerSuppliedIdentifierSetTargetBypass(b, cfg, rt.Requester.BaseURL, method, requestPath, req.PathParams, ""); err != nil {
+		return connectors.DirectReadResult{}, err
+	}
 	resp, err := rt.Requester.DoLimited(ctx, method, requestPath, query, nil, maxBytes)
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
@@ -697,6 +705,139 @@ func normalizeDirectReadPathForBaseURL(resolvedPath, baseURL string) string {
 		return "/" + strings.TrimPrefix(resolvedPath, prefix)
 	}
 	return resolvedPath
+}
+
+func rejectCallerSuppliedIdentifierSetTargetBypass(b Bundle, cfg connectors.RuntimeConfig, baseURL, method, requestPath string, candidatePathParams map[string]string, allowedOperation string) error {
+	target, err := normalizedRequesterTargetPath(baseURL, requestPath)
+	if err != nil {
+		return nil
+	}
+	for _, op := range b.Operations {
+		if op.ID == allowedOperation || op.Kind != "rest_read" || op.REST == nil || len(op.REST.CallerSuppliedIdentifierSets) == 0 || !strings.EqualFold(op.REST.Method, method) {
+			continue
+		}
+		pattern, err := callerSuppliedIdentifierSetOperationTargetPattern(op, cfg, baseURL, candidatePathParams)
+		if err != nil {
+			continue
+		}
+		if callerSuppliedIdentifierSetTargetMatches(pattern, target) {
+			return fmt.Errorf("request target is reserved for caller-supplied identifier-set operation %q", op.ID)
+		}
+	}
+	return nil
+}
+
+func callerSuppliedIdentifierSetOperationTargetPattern(op OperationSpec, cfg connectors.RuntimeConfig, baseURL string, candidatePathParams map[string]string) (string, error) {
+	identifierSetPathNames := map[string]bool{}
+	for _, set := range op.REST.CallerSuppliedIdentifierSets {
+		if set.Wire == "path_segment" {
+			identifierSetPathNames[set.Name] = true
+		}
+	}
+	pathParams := map[string]string{}
+	for _, match := range surfacePathVarPattern.FindAllStringSubmatch(op.REST.Path, -1) {
+		name := match[1]
+		if identifierSetPathNames[name] {
+			pathParams[name] = callerSuppliedIdentifierSetTargetSegmentMarker
+			continue
+		}
+		if value := candidatePathParams[name]; value != "" {
+			pathParams[name] = value
+			continue
+		}
+		if value := cfg.Config[name]; value != "" {
+			pathParams[name] = value
+			continue
+		}
+		if name == "path" {
+			pathParams[name] = callerSuppliedIdentifierSetTargetPathMarker
+			continue
+		}
+		pathParams[name] = callerSuppliedIdentifierSetTargetSegmentMarker
+	}
+	resolved, err := resolveOperationDirectReadPath(op.REST.Path, cfg, pathParams, identifierSetPathNames)
+	if err != nil {
+		return "", err
+	}
+	return normalizedRequesterTargetPath(baseURL, normalizeDirectReadPathForBaseURL(resolved, baseURL))
+}
+
+func normalizedRequesterTargetPath(baseURL, requestPath string) (string, error) {
+	raw := requestPath
+	if !strings.HasPrefix(requestPath, "http://") && !strings.HasPrefix(requestPath, "https://") {
+		raw = strings.TrimRight(baseURL, "/") + "/" + strings.TrimLeft(requestPath, "/")
+	}
+	parsed, err := url.Parse(raw)
+	if err != nil {
+		return "", err
+	}
+	path := parsed.EscapedPath()
+	if path == "" {
+		path = "/"
+	}
+	target := canonicalizeRequestTargetPercentEscapes(path)
+	if parsed.Scheme == "" && parsed.Host == "" {
+		return target, nil
+	}
+	return strings.ToLower(parsed.Scheme) + "://" + strings.ToLower(parsed.Host) + target, nil
+}
+
+func callerSuppliedIdentifierSetTargetMatches(pattern, target string) bool {
+	expression := regexp.QuoteMeta(pattern)
+	expression = strings.ReplaceAll(expression, regexp.QuoteMeta(callerSuppliedIdentifierSetTargetSegmentMarker), `[^/]+`)
+	expression = strings.ReplaceAll(expression, regexp.QuoteMeta(callerSuppliedIdentifierSetTargetPathMarker), `.+`)
+	return regexp.MustCompile("^" + expression + "$").MatchString(target)
+}
+
+func canonicalizeRequestTargetPercentEscapes(path string) string {
+	var canonical strings.Builder
+	canonical.Grow(len(path))
+	for i := 0; i < len(path); i++ {
+		if path[i] != '%' || i+2 >= len(path) {
+			canonical.WriteByte(path[i])
+			continue
+		}
+		high, highOK := requestTargetHexValue(path[i+1])
+		low, lowOK := requestTargetHexValue(path[i+2])
+		if !highOK || !lowOK {
+			canonical.WriteByte(path[i])
+			continue
+		}
+		value := high<<4 | low
+		if isRequestTargetUnreserved(value) {
+			canonical.WriteByte(value)
+		} else {
+			canonical.WriteByte('%')
+			canonical.WriteByte(uppercaseRequestTargetHex(path[i+1]))
+			canonical.WriteByte(uppercaseRequestTargetHex(path[i+2]))
+		}
+		i += 2
+	}
+	return canonical.String()
+}
+
+func requestTargetHexValue(value byte) (byte, bool) {
+	switch {
+	case value >= '0' && value <= '9':
+		return value - '0', true
+	case value >= 'a' && value <= 'f':
+		return value - 'a' + 10, true
+	case value >= 'A' && value <= 'F':
+		return value - 'A' + 10, true
+	default:
+		return 0, false
+	}
+}
+
+func isRequestTargetUnreserved(value byte) bool {
+	return (value >= 'a' && value <= 'z') || (value >= 'A' && value <= 'Z') || (value >= '0' && value <= '9') || strings.ContainsRune("-._~", rune(value))
+}
+
+func uppercaseRequestTargetHex(value byte) byte {
+	if value >= 'a' && value <= 'f' {
+		return value - ('a' - 'A')
+	}
+	return value
 }
 
 func redactJSONValue(value any) any {

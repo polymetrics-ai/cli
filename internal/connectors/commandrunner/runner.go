@@ -1128,7 +1128,7 @@ func coerceOperationDirectReadFlagValue(cmd connectors.CommandSurfaceCommand, fl
 	if !ok {
 		return nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to undeclared caller-supplied identifier set", flag.Name)}
 	}
-	return coerceFlagValueWithStringArrayCommaSplit(flag, values, wire == "query_comma_separated")
+	return coerceFlagValueWithStringArrayCommaSplit(flag, values, wire == "query_comma_separated", wire == "query_comma_separated")
 }
 
 func cloneStringSlice(values []string) []string {
@@ -1339,10 +1339,10 @@ func setRecordValue(record connectors.Record, path string, value any) error {
 }
 
 func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, error) {
-	return coerceFlagValueWithStringArrayCommaSplit(flag, values, true)
+	return coerceFlagValueWithStringArrayCommaSplit(flag, values, true, false)
 }
 
-func coerceFlagValueWithStringArrayCommaSplit(flag connectors.CommandSurfaceFlag, values []string, splitCommas bool) (any, error) {
+func coerceFlagValueWithStringArrayCommaSplit(flag connectors.CommandSurfaceFlag, values []string, splitCommas, preserveExplicitEmpty bool) (any, error) {
 	clean := make([]string, 0, len(values))
 	for _, value := range values {
 		if err := safety.RejectDangerousChars(value, "flag value"); err != nil {
@@ -1377,6 +1377,9 @@ func coerceFlagValueWithStringArrayCommaSplit(flag connectors.CommandSurfaceFlag
 		return parsed, nil
 	case "string_array":
 		out := make([]string, 0)
+		if splitCommas && preserveExplicitEmpty && len(clean) == 1 && clean[0] == "" {
+			return out, nil
+		}
 		for _, raw := range clean {
 			if !splitCommas {
 				if raw != "" {
@@ -1385,10 +1388,13 @@ func coerceFlagValueWithStringArrayCommaSplit(flag connectors.CommandSurfaceFlag
 				continue
 			}
 			for _, item := range strings.Split(raw, ",") {
-				item = strings.TrimSpace(item)
-				if item != "" {
-					out = append(out, item)
+				if !preserveExplicitEmpty {
+					item = strings.TrimSpace(item)
+					if item == "" {
+						continue
+					}
 				}
+				out = append(out, item)
 			}
 		}
 		// Bounded here as well as in the body schema: the schema fires on the

@@ -2496,6 +2496,44 @@ func TestReadStreamPathStaticGoldenUnaffected(t *testing.T) {
 	}
 }
 
+func TestReadRejectsCallerSuppliedIdentifierSetTarget(t *testing.T) {
+	issued := false
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		issued = true
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	}))
+	defer srv.Close()
+
+	b := newTestBundle(t, srv, StreamSpec{Path: "/tenants/acme/coins", Records: RecordsSpec{Path: "data"}})
+	b.HTTP.URL = srv.URL + "/v1"
+	b.Operations = append(b.Operations, OperationSpec{
+		ID:   "acme.coins.lookup",
+		Kind: "rest_read",
+		REST: &RESTOperationSpec{
+			Method:   http.MethodGet,
+			Path:     "/v1/tenants/{tenant}/coins",
+			MaxBytes: 1024,
+			CallerSuppliedIdentifierSets: []CallerSuppliedIdentifierSetSpec{{
+				Name: "coins", ElementShape: "opaque_string", Wire: "query_comma_separated", MinItems: 1, MaxItems: 2,
+			}},
+		},
+	})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{
+		Stream: "widgets",
+		Config: connectors.RuntimeConfig{Config: map[string]string{
+			"tenant": "acme",
+		}},
+	}, nil)
+	if err == nil || !strings.Contains(err.Error(), "reserved for caller-supplied identifier-set operation") {
+		t.Fatalf("Read error = %v, want protected target rejection", err)
+	}
+	if issued {
+		t.Fatal("protected target was requested")
+	}
+}
+
 func TestCheckPathIsInterpolated(t *testing.T) {
 	var gotPath string
 	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
