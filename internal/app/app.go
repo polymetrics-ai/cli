@@ -20,10 +20,14 @@ import (
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/safety"
 	statestore "polymetrics.ai/internal/state"
+	"polymetrics.ai/internal/synccontract"
 	"polymetrics.ai/internal/vault"
 )
 
-const reversePlanModeConnectorCommand = "connector_command"
+const (
+	reversePlanModeConnectorCommand               = "connector_command"
+	reversePlanStatusApprovalConsumptionUncertain = "approval_consumption_uncertain"
+)
 
 var errStateRevisionConflict = errors.New("project state changed in another process")
 
@@ -48,17 +52,18 @@ type sqlQueryEngine interface {
 }
 
 type state struct {
-	Revision           uint64                            `json:"revision"`
-	Credentials        []CredentialMeta                  `json:"credentials"`
-	CredentialBindings map[string]credentialBindingState `json:"credential_bindings"`
-	CoordinationSalt   string                            `json:"coordination_salt,omitempty"`
-	Connections        []Connection                      `json:"connections"`
-	Catalogs           []CatalogSnapshot                 `json:"catalogs"`
-	Runs               []Run                             `json:"runs"`
-	ReversePlans       []ReversePlan                     `json:"reverse_plans"`
-	ReverseRuns        []ReverseRun                      `json:"reverse_runs"`
-	Checkpoints        map[string]map[string]string      `json:"checkpoints,omitempty"`
-	StreamStates       map[string]StreamState            `json:"stream_states,omitempty"`
+	Revision                     uint64                            `json:"revision"`
+	SyncModeCompatibilityVersion uint                              `json:"sync_mode_compatibility_version,omitempty"`
+	Credentials                  []CredentialMeta                  `json:"credentials"`
+	CredentialBindings           map[string]credentialBindingState `json:"credential_bindings"`
+	CoordinationSalt             string                            `json:"coordination_salt,omitempty"`
+	Connections                  []Connection                      `json:"connections"`
+	Catalogs                     []CatalogSnapshot                 `json:"catalogs"`
+	Runs                         []Run                             `json:"runs"`
+	ReversePlans                 []ReversePlan                     `json:"reverse_plans"`
+	ReverseRuns                  []ReverseRun                      `json:"reverse_runs"`
+	Checkpoints                  map[string]map[string]string      `json:"checkpoints,omitempty"`
+	StreamStates                 map[string]StreamState            `json:"stream_states,omitempty"`
 }
 
 // credentialBindingState is protected project-state metadata. The raw binding
@@ -108,10 +113,11 @@ func InitProject(root string) error {
 			return err
 		}
 		initial := state{
-			CredentialBindings: map[string]credentialBindingState{},
-			CoordinationSalt:   coordinationSalt,
-			Checkpoints:        map[string]map[string]string{},
-			StreamStates:       map[string]StreamState{},
+			SyncModeCompatibilityVersion: syncModeCompatibilityVersion,
+			CredentialBindings:           map[string]credentialBindingState{},
+			CoordinationSalt:             coordinationSalt,
+			Checkpoints:                  map[string]map[string]string{},
+			StreamStates:                 map[string]StreamState{},
 		}
 		if err := writeJSONAtomic(statePath, initial); err != nil {
 			return err
@@ -190,6 +196,7 @@ func (a *App) load() error {
 	if a.state.StreamStates == nil {
 		a.state.StreamStates = map[string]StreamState{}
 	}
+	a.migrateLegacySyncModeCompatibility()
 	return a.migrateCredentialCoordination()
 }
 
@@ -341,6 +348,21 @@ func (a *App) credentialBindingForCredential(credential CredentialMeta) (credent
 	return binding, nil
 }
 
+func (a *App) migrateLegacySyncModeCompatibility() {
+	if a.state.SyncModeCompatibilityVersion >= syncModeCompatibilityVersion {
+		return
+	}
+	for connectionIndex := range a.state.Connections {
+		for streamName, stream := range a.state.Connections[connectionIndex].Streams {
+			if isLegacySyncModeName(stream.SyncMode) {
+				stream.LegacyCompatibility = true
+				a.state.Connections[connectionIndex].Streams[streamName] = stream
+			}
+		}
+	}
+	a.state.SyncModeCompatibilityVersion = syncModeCompatibilityVersion
+}
+
 func (a *App) save() error {
 	expectedRevision := a.state.Revision
 	next := a.state
@@ -351,7 +373,7 @@ func (a *App) save() error {
 		next.Revision = current.Revision + 1
 		return next, nil
 	})
-	if err == nil || errors.Is(err, errStateRevisionConflict) {
+	if err == nil || errors.Is(err, errStateRevisionConflict) || stateStoreCommitMayHaveSucceeded(err) {
 		a.state = updated
 	}
 	return err
@@ -366,10 +388,14 @@ func (a *App) updateState(update func(state) (state, error)) (state, error) {
 		next.Revision = current.Revision + 1
 		return next, nil
 	})
-	if err == nil {
+	if err == nil || stateStoreCommitMayHaveSucceeded(err) {
 		a.state = updated
 	}
 	return updated, err
+}
+
+func stateStoreCommitMayHaveSucceeded(err error) bool {
+	return statestore.CommitOutcomeForError(err).MayHaveCommitted()
 }
 
 func newStateStore(path string) statestore.JSONStore[state] {
@@ -685,11 +711,17 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 		if stream.SyncMode == "" {
 			stream.SyncMode = DefaultUserFacingSyncMode
 		}
-		mode, err := ParseSyncMode(stream.SyncMode)
+		if isLegacySyncModeName(stream.SyncMode) {
+			stream.LegacyCompatibility = true
+		}
+		mode, err := ParseStreamSyncMode(stream)
 		if err != nil {
 			return Connection{}, err
 		}
 		stream.SyncMode = mode.Name
+		if mode.LegacyCompatibility {
+			stream.LegacyCompatibility = true
+		}
 		if catalogErr == nil {
 			if sourceStream, ok := findCatalogStream(catalog, name); ok {
 				if stream.CursorField == "" && len(sourceStream.CursorFields) > 0 {
@@ -784,13 +816,29 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		return Run{}, err
 	}
 	run := Run{ID: runID, Type: "etl", Connection: req.Connection, Stream: req.Stream, Status: "running", StartedAt: time.Now().UTC()}
-	a.state.Runs = append(a.state.Runs, run)
-	_ = a.save()
+	if _, err := a.beginRun(run); err != nil {
+		return Run{}, fmt.Errorf("start ETL run: %w", err)
+	}
 
-	source, sourceRuntime, err := a.resolveEndpoint(ctx, conn.Source)
+	mode, err := ParseStreamSyncMode(stream)
 	if err != nil {
 		return a.failRun(runID, err)
 	}
+	stream.SyncMode = mode.Name
+	if err := ValidateStreamSyncConfig(stream); err != nil {
+		return a.failRun(runID, err)
+	}
+	if mode.IsContractMode() {
+		return a.failRun(runID, &synccontract.ModeNotExecutableError{
+			Mode:   mode.ContractMode,
+			Reason: "no matching native executor has completed the shared conformance corpus",
+		})
+	}
+	source, sourceCredential, sourceRuntime, err := a.resolveEndpointWithCredential(ctx, conn.Source)
+	if err != nil {
+		return a.failRun(runID, err)
+	}
+	sourceExpectation := streamResumeExpectation(source, sourceCredential, sourceRuntime, req.Stream)
 	destination, destRuntime, err := a.resolveEndpoint(ctx, conn.Destination)
 	if err != nil {
 		return a.failRun(runID, err)
@@ -799,19 +847,11 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	if batchSize <= 0 {
 		batchSize = 1000
 	}
-	mode, err := ParseSyncMode(stream.SyncMode)
-	if err != nil {
-		return a.failRun(runID, err)
-	}
-	stream.SyncMode = mode.Name
-	if err := ValidateStreamSyncConfig(stream); err != nil {
-		return a.failRun(runID, err)
-	}
 	var result etlExecutionResult
 	if materializer, ok := destination.(connectors.LocalWarehouseMaterializer); ok && materializer.MaterializesLocalWarehouse() {
-		result, err = a.runWarehouseETL(ctx, runID, conn, source, sourceRuntime, destRuntime, req.Stream, stream, mode, batchSize)
+		result, err = a.runWarehouseETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, stream, mode, batchSize)
 	} else {
-		result, err = a.runConnectorETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, req.Stream, stream, mode, batchSize)
+		result, err = a.runConnectorETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, stream, mode, batchSize)
 	}
 	if err != nil {
 		return a.failRun(runID, err)
@@ -819,15 +859,21 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	return a.completeRun(runID, result)
 }
 
-func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
+func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
 	if mode.IsDeduped() {
 		return etlExecutionResult{}, fmt.Errorf("sync mode %s requires the local warehouse destination in this dependency-free implementation", mode.Name)
 	}
-	if a.state.StreamStates == nil {
-		a.state.StreamStates = map[string]StreamState{}
+	durableDestination, ok := destination.(synccontract.DurableETLDestination)
+	if !ok {
+		return etlExecutionResult{}, &synccontract.DestinationDurabilityAdmissionError{Destination: destination.Name()}
 	}
 	stateKey := streamStateKey(conn.Name, streamName)
 	prior := a.state.StreamStates[stateKey]
+	if prior.Checkpoint != nil {
+		if err := validateStreamStateResume(prior, sourceExpectation); err != nil {
+			return etlExecutionResult{}, err
+		}
+	}
 	generationID := prior.GenerationID
 	if generationID == 0 || mode.IsOverwrite() {
 		generationID++
@@ -836,12 +882,14 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 	result := etlExecutionResult{}
 	batch := make([]connectors.Record, 0, batchSize)
 	firstWrite := true
-	nextCursor := prior.Cursor
+	priorCursor := streamStateCursor(prior)
+	nextCursor := priorCursor
+	observedAt := time.Time{}
 
 	flush := func(force bool) error {
 		if len(batch) == 0 {
 			if force && mode.IsOverwrite() && firstWrite {
-				_, err := destination.Write(ctx, connectors.WriteRequest{
+				writeResult, err := destination.Write(ctx, connectors.WriteRequest{
 					Stream:     streamName,
 					Table:      stream.DestinationTable,
 					Action:     "upsert",
@@ -850,7 +898,10 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 					PrimaryKey: stream.PrimaryKey,
 				}, nil)
 				firstWrite = false
-				return err
+				if err != nil {
+					return err
+				}
+				return validateCompleteETLBatchWrite(writeResult, 0)
 			}
 			return nil
 		}
@@ -866,6 +917,9 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 		if err != nil {
 			return err
 		}
+		if err := validateCompleteETLBatchWrite(writeResult, len(batch)); err != nil {
+			return err
+		}
 		result.RecordsLoaded += writeResult.RecordsWritten
 		result.RecordsFailed += writeResult.RecordsFailed
 		result.BatchCount++
@@ -875,13 +929,13 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 
 	readConfig := sourceRuntime
 	readConfig.Config = cloneStringMap(sourceRuntime.Config)
-	if prior.Cursor != "" {
-		readConfig.Config["since"] = prior.Cursor
+	if priorCursor != "" {
+		readConfig.Config["since"] = priorCursor
 	}
 	err := source.Read(ctx, connectors.ReadRequest{
 		Stream: streamName,
 		Config: readConfig,
-		State:  map[string]string{"cursor": prior.Cursor, "generation_id": strconv.FormatInt(generationID, 10)},
+		State:  map[string]string{"cursor": priorCursor, "generation_id": strconv.FormatInt(generationID, 10)},
 	}, func(record connectors.Record) error {
 		result.RecordsRead++
 		cursor := ""
@@ -891,7 +945,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 			if err != nil {
 				return err
 			}
-			if mode.Source == SourceSyncIncremental && prior.Cursor != "" && compareCursor(cursor, prior.Cursor) < 0 {
+			if mode.Source == SourceSyncIncremental && priorCursor != "" && compareCursor(cursor, priorCursor) < 0 {
 				return nil
 			}
 			if nextCursor == "" || compareCursor(cursor, nextCursor) > 0 {
@@ -906,6 +960,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 			r["_polymetrics_cursor"] = cursor
 		}
 		result.RecordsTransformed++
+		observedAt = time.Now().UTC()
 		batch = append(batch, r)
 		if len(batch) >= batchSize {
 			return flush(false)
@@ -918,44 +973,92 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 	if err := flush(true); err != nil {
 		return result, err
 	}
-	updated := StreamState{
-		Connection:          conn.Name,
-		Stream:              streamName,
-		Cursor:              nextCursor,
-		GenerationID:        generationID,
-		LastSuccessfulRunID: runID,
-		RecordsLoaded:       result.RecordsLoaded,
-		UpdatedAt:           time.Now().UTC(),
+	if observedAt.IsZero() {
+		observedAt = time.Now().UTC()
 	}
-	a.state.StreamStates[stateKey] = updated
+	acknowledgement, err := durableDestination.AcknowledgeETLDurability(ctx, runID)
+	if err != nil {
+		return result, err
+	}
+	if acknowledgement.Sink != destination.Name() {
+		return result, fmt.Errorf("durable downstream acknowledgement sink %q does not match destination %q", acknowledgement.Sink, destination.Name())
+	}
+	updated, err := committedLegacyStreamState(conn, sourceExpectation, streamName, stream, runID, nextCursor, generationID, result.RecordsLoaded, observedAt, acknowledgement)
+	if err != nil {
+		return result, err
+	}
 	result.Checkpoint = checkpointForResult(result, mode, stateKey, updated)
+	result.PendingStreamState = &pendingStreamState{Key: stateKey, State: updated}
 	return result, nil
 }
 
-func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) {
-	run := Run{}
-	for i := range a.state.Runs {
-		if a.state.Runs[i].ID == runID {
-			a.state.Runs[i].Status = "completed"
-			a.state.Runs[i].RecordsRead = result.RecordsRead
-			a.state.Runs[i].RecordsTransformed = result.RecordsTransformed
-			a.state.Runs[i].RecordsLoaded = result.RecordsLoaded
-			a.state.Runs[i].RecordsFailed = result.RecordsFailed
-			a.state.Runs[i].BatchCount = result.BatchCount
-			a.state.Runs[i].Checkpoint = result.Checkpoint
-			a.state.Runs[i].CompletedAt = time.Now().UTC()
-			run = a.state.Runs[i]
-			break
-		}
+func validateCompleteETLBatchWrite(result connectors.WriteResult, batchSize int) error {
+	if result.RecordsWritten != batchSize || result.RecordsFailed != 0 {
+		return fmt.Errorf("destination write reported %d records written and %d failed for batch of %d", result.RecordsWritten, result.RecordsFailed, batchSize)
 	}
-	if a.state.Checkpoints == nil {
-		a.state.Checkpoints = map[string]map[string]string{}
-	}
-	a.state.Checkpoints[runID] = cloneStringMap(result.Checkpoint)
+	return nil
+}
+
+func (a *App) beginRun(run Run) (Run, error) {
+	previousRuns := a.state.Runs
+	a.state.Runs = append(append([]Run(nil), a.state.Runs...), run)
 	if err := a.save(); err != nil {
+		if !errors.Is(err, errStateRevisionConflict) && !stateStoreCommitMayHaveSucceeded(err) {
+			a.state.Runs = previousRuns
+		}
 		return Run{}, err
 	}
 	return run, nil
+}
+
+func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) {
+	if result.PendingStreamState == nil {
+		return Run{}, errors.New("completed ETL run is missing pending stream state")
+	}
+	expectedRevision := a.state.Revision
+	completedAt := time.Now().UTC()
+	updated, err := a.updateState(func(current state) (state, error) {
+		if current.Revision != expectedRevision {
+			return current, errStateRevisionConflict
+		}
+		found := false
+		for i := range current.Runs {
+			if current.Runs[i].ID != runID {
+				continue
+			}
+			current.Runs[i].Status = "completed"
+			current.Runs[i].RecordsRead = result.RecordsRead
+			current.Runs[i].RecordsTransformed = result.RecordsTransformed
+			current.Runs[i].RecordsLoaded = result.RecordsLoaded
+			current.Runs[i].RecordsFailed = result.RecordsFailed
+			current.Runs[i].BatchCount = result.BatchCount
+			current.Runs[i].Checkpoint = cloneStringMap(result.Checkpoint)
+			current.Runs[i].CompletedAt = completedAt
+			found = true
+			break
+		}
+		if !found {
+			return current, fmt.Errorf("run %q not found", runID)
+		}
+		if current.Checkpoints == nil {
+			current.Checkpoints = map[string]map[string]string{}
+		}
+		current.Checkpoints[runID] = cloneStringMap(result.Checkpoint)
+		if current.StreamStates == nil {
+			current.StreamStates = map[string]StreamState{}
+		}
+		current.StreamStates[result.PendingStreamState.Key] = cloneStreamState(result.PendingStreamState.State)
+		return current, nil
+	})
+	if err != nil {
+		return Run{}, err
+	}
+	for _, run := range updated.Runs {
+		if run.ID == runID {
+			return run, nil
+		}
+	}
+	return Run{}, fmt.Errorf("completed run %q was not stored", runID)
 }
 
 func (a *App) GetRun(id string) (Run, error) {
@@ -1265,6 +1368,9 @@ func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string) (Rever
 	if plan.Mode != reversePlanModeConnectorCommand {
 		return ReversePlan{}, connectors.WritePreview{}, fmt.Errorf("reverse plan %q is not a connector command plan", id)
 	}
+	if err := approvalConsumptionUncertainError(plan, nil); err != nil {
+		return ReversePlan{}, connectors.WritePreview{}, err
+	}
 	if err := a.previewabilityError(plan, time.Now().UTC()); err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
@@ -1372,6 +1478,9 @@ func (a *App) PreviewReversePlan(ctx context.Context, id string) (ReversePlan, c
 	if err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
+	if err := approvalConsumptionUncertainError(plan, nil); err != nil {
+		return ReversePlan{}, connectors.WritePreview{}, err
+	}
 	if plan.Mode == reversePlanModeConnectorCommand {
 		return a.PreviewConnectorCommandPlan(ctx, id)
 	}
@@ -1451,6 +1560,9 @@ func (a *App) persistDestructivePreview(plan ReversePlan, preview connectors.Wri
 			if stored.ID != plan.ID {
 				continue
 			}
+			if err := approvalConsumptionUncertainError(stored, nil); err != nil {
+				return current, err
+			}
 			if err := a.previewabilityError(stored, now); err != nil {
 				return current, err
 			}
@@ -1523,6 +1635,9 @@ func (a *App) persistOperationDirectWritePreview(plan ReversePlan, preview conne
 			stored := current.ReversePlans[i]
 			if stored.ID != plan.ID {
 				continue
+			}
+			if err := approvalConsumptionUncertainError(stored, nil); err != nil {
+				return current, err
 			}
 			if err := a.previewabilityError(stored, now); err != nil {
 				return current, err
@@ -1728,6 +1843,9 @@ func (a *App) RunReverseETL(ctx context.Context, req RunReverseETLRequest) (Reve
 	if err != nil {
 		return ReverseRun{}, err
 	}
+	if err := approvalConsumptionUncertainError(plan, nil); err != nil {
+		return ReverseRun{}, err
+	}
 	if err := a.previewabilityError(plan, time.Now().UTC()); err != nil {
 		return ReverseRun{}, err
 	}
@@ -1931,6 +2049,9 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 			if stored.ID != expected.ID {
 				continue
 			}
+			if err := approvalConsumptionUncertainError(stored, nil); err != nil {
+				return current, err
+			}
 			if err := a.previewabilityError(stored, now); err != nil {
 				return current, err
 			}
@@ -1972,10 +2093,11 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 				}
 				evidence = verified
 			}
-			stored.Status = "executing"
+			stored.Status = reversePlanStatusApprovalConsumptionUncertain
 			stored.ApprovalTokenHash = ""
 			stored.ApprovalGrant = nil
 			stored.ApprovalConsumedAt = now
+			stored.ApprovalUncertainAt = now
 			current.ReversePlans[i] = stored
 			consumed = stored
 			return current, nil
@@ -1983,10 +2105,24 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 		return current, fmt.Errorf("reverse plan %q not found", expected.ID)
 	})
 	if err != nil {
+		if stateStoreCommitMayHaveSucceeded(err) {
+			return nil, ReversePlan{}, approvalConsumptionUncertainError(consumed, err)
+		}
 		return nil, ReversePlan{}, err
 	}
 	a.state = updated
 	return evidence, consumed, nil
+}
+
+func approvalConsumptionUncertainError(plan ReversePlan, cause error) error {
+	if plan.Status != reversePlanStatusApprovalConsumptionUncertain {
+		return nil
+	}
+	return &ApprovalConsumptionUncertainError{
+		PlanID:     plan.ID,
+		ConsumedAt: plan.ApprovalConsumedAt,
+		err:        cause,
+	}
 }
 
 func (a *App) finishReverseWrite(planID string, run ReverseRun, result connectors.WriteResult, staged int, writeErr error) (ReverseRun, error) {
@@ -2023,8 +2159,9 @@ func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, res
 	updated, persistErr := a.updateState(func(current state) (state, error) {
 		current.ReverseRuns = append(current.ReverseRuns, run)
 		for i := range current.ReversePlans {
-			if current.ReversePlans[i].ID == planID && current.ReversePlans[i].Status == "executing" {
+			if current.ReversePlans[i].ID == planID && (current.ReversePlans[i].Status == "executing" || current.ReversePlans[i].Status == reversePlanStatusApprovalConsumptionUncertain) {
 				current.ReversePlans[i].Status = planStatus
+				current.ReversePlans[i].ApprovalUncertainAt = time.Time{}
 				break
 			}
 		}
@@ -2067,24 +2204,29 @@ func constantTimeStringEqual(left, right string) bool {
 }
 
 func (a *App) resolveEndpoint(ctx context.Context, endpoint EndpointConfig) (connectors.Connector, connectors.RuntimeConfig, error) {
+	connector, _, runtime, err := a.resolveEndpointWithCredential(ctx, endpoint)
+	return connector, runtime, err
+}
+
+func (a *App) resolveEndpointWithCredential(ctx context.Context, endpoint EndpointConfig) (connectors.Connector, CredentialMeta, connectors.RuntimeConfig, error) {
 	if err := connectors.RejectLegacyConnectorName(endpoint.Connector); err != nil {
-		return nil, connectors.RuntimeConfig{}, err
+		return nil, CredentialMeta{}, connectors.RuntimeConfig{}, err
 	}
 	cred, runtime, err := a.resolveCredential(ctx, endpoint.Credential, endpoint.Config)
 	if err != nil {
-		return nil, connectors.RuntimeConfig{}, err
+		return nil, CredentialMeta{}, connectors.RuntimeConfig{}, err
 	}
 	if err := connectors.RejectLegacyConnectorName(cred.Connector); err != nil {
-		return nil, connectors.RuntimeConfig{}, err
+		return nil, CredentialMeta{}, connectors.RuntimeConfig{}, err
 	}
 	if endpoint.Connector != "" && endpoint.Connector != cred.Connector {
-		return nil, connectors.RuntimeConfig{}, fmt.Errorf("credential %q is for connector %q, not %q", endpoint.Credential, cred.Connector, endpoint.Connector)
+		return nil, CredentialMeta{}, connectors.RuntimeConfig{}, fmt.Errorf("credential %q is for connector %q, not %q", endpoint.Credential, cred.Connector, endpoint.Connector)
 	}
 	connector, ok := a.registry.Get(cred.Connector)
 	if !ok {
-		return nil, connectors.RuntimeConfig{}, fmt.Errorf("connector %q not found", cred.Connector)
+		return nil, CredentialMeta{}, connectors.RuntimeConfig{}, fmt.Errorf("connector %q not found", cred.Connector)
 	}
-	return connector, runtime, nil
+	return connector, cred, runtime, nil
 }
 
 func (a *App) ResolveConnectorCredential(ctx context.Context, connectorName, credentialName string, overlay map[string]string) (connectors.Connector, connectors.RuntimeConfig, error) {
@@ -2156,18 +2298,33 @@ func (a *App) findConnection(name string) (Connection, bool) {
 	return Connection{}, false
 }
 
-func (a *App) failRun(runID string, err error) (Run, error) {
-	for i := range a.state.Runs {
-		if a.state.Runs[i].ID == runID {
-			a.state.Runs[i].Status = "failed"
-			a.state.Runs[i].Error = safety.RedactErrorText(err.Error())
-			a.state.Runs[i].CompletedAt = time.Now().UTC()
-			run := a.state.Runs[i]
-			_ = a.save()
-			return run, err
+func (a *App) failRun(runID string, runErr error) (Run, error) {
+	expectedRevision := a.state.Revision
+	completedAt := time.Now().UTC()
+	updated, persistErr := a.updateState(func(current state) (state, error) {
+		if current.Revision != expectedRevision {
+			return current, errStateRevisionConflict
+		}
+		for i := range current.Runs {
+			if current.Runs[i].ID != runID {
+				continue
+			}
+			current.Runs[i].Status = "failed"
+			current.Runs[i].Error = safety.RedactErrorText(runErr.Error())
+			current.Runs[i].CompletedAt = completedAt
+			return current, nil
+		}
+		return current, fmt.Errorf("run %q not found", runID)
+	})
+	if persistErr != nil {
+		return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
+	}
+	for _, run := range updated.Runs {
+		if run.ID == runID {
+			return run, runErr
 		}
 	}
-	return Run{}, err
+	return Run{}, errors.Join(runErr, fmt.Errorf("failed run %q was not stored", runID))
 }
 
 func writeJSONAtomic(path string, v any) error {
