@@ -40414,7 +40414,6 @@
               "summary": "Positive Crisp conversation page number; defaults to 1 from config.",
               "values": [],
               "maps_to": "config.page_number",
-              "allow_empty": false,
               "minimum": 1
             },
             {
@@ -40654,7 +40653,6 @@
               "summary": "Positive Crisp page number; defaults to 1 from config.",
               "values": [],
               "maps_to": "config.page_number",
-              "allow_empty": false,
               "minimum": 1
             }
           ],
@@ -40688,7 +40686,6 @@
               "summary": "Positive Crisp page number; defaults to 1 from config.",
               "values": [],
               "maps_to": "config.page_number",
-              "allow_empty": false,
               "minimum": 1
             }
           ],
@@ -40722,7 +40719,6 @@
               "summary": "Positive Crisp page number; defaults to 1 from config.",
               "values": [],
               "maps_to": "config.page_number",
-              "allow_empty": false,
               "minimum": 1
             },
             {
@@ -41043,7 +41039,6 @@
               "summary": "Positive Crisp page number; defaults to 1 from config.",
               "values": [],
               "maps_to": "config.page_number",
-              "allow_empty": false,
               "minimum": 1
             }
           ],
@@ -41085,7 +41080,6 @@
               "summary": "Positive Crisp page number; defaults to 1 from config.",
               "values": [],
               "maps_to": "config.page_number",
-              "allow_empty": false,
               "minimum": 1
             }
           ],
@@ -41127,7 +41121,6 @@
               "summary": "Positive Crisp page number; defaults to 1 from config.",
               "values": [],
               "maps_to": "config.page_number",
-              "allow_empty": false,
               "minimum": 1
             }
           ],
