@@ -99,7 +99,10 @@ func containsDecodedPathSegment(path string, containsSegment func(string) bool) 
 			return true
 		}
 		decoded, err := url.PathUnescape(path)
-		if err != nil || decoded == path {
+		if err != nil {
+			return true
+		}
+		if decoded == path {
 			return false
 		}
 		if decodedPasses >= 8 {

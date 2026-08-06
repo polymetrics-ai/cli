@@ -287,6 +287,13 @@ func TestCallerSuppliedIdentifierSetsRedactMixedPercentLiteralPercent(t *testing
 	}
 }
 
+func TestCallerSuppliedIdentifierSetsRedactMixedJSONAndPercentForms(t *testing.T) {
+	message := redactSensitiveLiterals(`provider rejected \u0061%62c`, []string{"abc"})
+	if message != "provider rejected redacted" {
+		t.Fatal("mixed JSON and percent identifier was not redacted")
+	}
+}
+
 func TestCallerSuppliedIdentifierSetsRedactTruncatedJSONEscapedPrefixes(t *testing.T) {
 	const identifier = "id/é"
 	message := completeOperationDirectReadErrorText(
@@ -308,11 +315,37 @@ func TestCallerSuppliedIdentifierSetsRedactTruncatedJSONEscapedPrefixes(t *testi
 	}
 }
 
+func TestCallerSuppliedIdentifierSetsRedactTruncatedMixedJSONAndPercentPrefixes(t *testing.T) {
+	message := completeOperationDirectReadErrorText(
+		&connsdk.HTTPError{
+			Status:        http.StatusBadRequest,
+			URL:           "https://api.example.test/lookups",
+			Body:          `provider rejected \u0061%62`,
+			BodyTruncated: true,
+		},
+		map[string][]string{"ids": {"abc"}},
+	)
+	if strings.Contains(message, `\u0061`) || strings.Contains(message, "%62") {
+		t.Fatal("truncated mixed identifier prefix leaked")
+	}
+	if !strings.Contains(message, "provider rejected redacted") {
+		t.Fatal("truncated mixed identifier prefix was not redacted")
+	}
+}
+
 func TestCallerSuppliedIdentifierSetsBoundRedactionWork(t *testing.T) {
 	identifier := strings.Repeat("a", maxSensitiveRedactionValueBytes+1)
 	message := redactSensitiveLiterals(strings.Repeat("a", maxSensitiveRedactionTextBytes*2), []string{identifier})
 	if message != "redacted" {
 		t.Fatalf("unbounded identifier redaction = %q, want redacted", message)
+	}
+}
+
+func TestCallerSuppliedIdentifierSetsRedactBoundedNearMatches(t *testing.T) {
+	identifier := strings.Repeat("a", maxSensitiveRedactionValueBytes-1) + "b"
+	message := redactSensitiveLiterals(strings.Repeat("a", maxSensitiveRedactionTextBytes), []string{identifier})
+	if message != strings.Repeat("a", maxSensitiveRedactionTextBytes) {
+		t.Fatal("near-match redaction changed provider context")
 	}
 }
 

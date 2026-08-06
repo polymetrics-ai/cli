@@ -139,6 +139,7 @@ func TestContainsDotPathSegmentRejectsRecursiveEscapedAliases(t *testing.T) {
 		"/safe/%252e%252e",
 		"/safe/%252f..%252fprivate",
 		"/safe/%255c..%255cprivate",
+		"/safe/%zz%252f..%252fprivate",
 	} {
 		if !containsDotPathSegment(path) {
 			t.Fatalf("containsDotPathSegment(%q) = false, want true", path)
