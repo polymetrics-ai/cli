@@ -1,0 +1,104 @@
+{
+  "tagline": "Run Flexmail's declared streams and reverse-ETL actions.",
+  "usage": "pm flexmail \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "contacts list",
+        "custom fields list",
+        "interests list",
+        "segments list",
+        "sources list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "contacts list",
+      "summary": "Run the contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_url": "https://api.flexmail.eu/documentation/openapi.php",
+      "examples": [
+        "pm flexmail contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts"
+        }
+      ]
+    },
+    {
+      "path": "custom fields list",
+      "summary": "Run the custom fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_fields",
+      "source_url": "https://api.flexmail.eu/documentation/openapi.php",
+      "examples": [
+        "pm flexmail custom fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom-fields"
+        }
+      ]
+    },
+    {
+      "path": "interests list",
+      "summary": "Run the interests ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "interests",
+      "source_url": "https://api.flexmail.eu/documentation/openapi.php",
+      "examples": [
+        "pm flexmail interests list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/interests"
+        }
+      ]
+    },
+    {
+      "path": "segments list",
+      "summary": "Run the segments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "segments",
+      "source_url": "https://api.flexmail.eu/documentation/openapi.php",
+      "examples": [
+        "pm flexmail segments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segments"
+        }
+      ]
+    },
+    {
+      "path": "sources list",
+      "summary": "Run the sources ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sources",
+      "source_url": "https://api.flexmail.eu/documentation/openapi.php",
+      "examples": [
+        "pm flexmail sources list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/sources"
+        }
+      ]
+    }
+  ]
+}
