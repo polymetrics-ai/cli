@@ -3,6 +3,7 @@ package engine
 import (
 	"context"
 	"encoding/json"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -179,6 +180,10 @@ func TestWriteActionQueryMultipartBodyType(t *testing.T) {
 	var seen url.Values
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		seen = r.URL.Query()
+		if _, err := io.Copy(io.Discard, r.Body); err != nil {
+			t.Errorf("drain multipart request body: %v", err)
+			return
+		}
 		_, _ = w.Write([]byte(`{"ok":true}`))
 	}))
 	t.Cleanup(srv.Close)
