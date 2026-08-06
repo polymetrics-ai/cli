@@ -543,6 +543,15 @@ func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 	return &Runtime{Requester: defaultRequester, baseRequester: requester, Bundle: &b, Config: cfg, rateLimits: resolver}, nil
 }
 
+// NewRuntime builds the bundle-authenticated requester used by a native
+// component that deliberately owns one narrow protocol extension. It applies
+// the same spec defaults and auth/header interpolation as engine Read and
+// Check, so natives do not recreate credential handling around their custom
+// catalog logic.
+func NewRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks) (*Runtime, error) {
+	return newRuntime(ctx, b, materializeConfigDefaults(b, cfg), h)
+}
+
 // resolveHeaders interpolates every declared header value, omitting a
 // header whose resolved value is empty (matches stripe's conditional
 // Stripe-Account header, SPEC §1.1) or whose template references an

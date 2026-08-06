@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"testing"
 	"testing/fstest"
 
@@ -12,6 +13,30 @@ import (
 )
 
 // --- compile-time interface assertions (design §B.7, API-CONTRACT.md §2) ---
+
+func TestCatalogStaticSchemaMatchesDiscoveredSchemaProjection(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	bundle, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+
+	staticCatalog, err := New(bundle, nil).Catalog(context.Background(), connectors.RuntimeConfig{})
+	if err != nil {
+		t.Fatalf("static Catalog: %v", err)
+	}
+	if len(staticCatalog.Streams) != 1 {
+		t.Fatalf("static Catalog streams = %d, want 1", len(staticCatalog.Streams))
+	}
+
+	discovered, err := connectors.StreamFromSchema("widgets", "", fsys["acme/schemas/widgets.json"].Data)
+	if err != nil {
+		t.Fatalf("StreamFromSchema: %v", err)
+	}
+	if !reflect.DeepEqual(staticCatalog.Streams[0], discovered) {
+		t.Fatalf("static stream = %#v, discovered stream = %#v; catalog consumers must not need separate paths", staticCatalog.Streams[0], discovered)
+	}
+}
 
 var (
 	_ connectors.Connector          = (*Connector)(nil)

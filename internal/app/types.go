@@ -116,6 +116,16 @@ type CatalogSnapshot struct {
 	UpdatedAt  time.Time          `json:"updated_at"`
 }
 
+// catalogReference is the compact state.json index for an account catalog.
+// AccountKey is an opaque CoordinationIdentity projection; it is never a
+// credential value and is intentionally kept out of CatalogSnapshot and CLI
+// output. The referenced file contains schemas only, never this key.
+type catalogReference struct {
+	Connector  string                   `json:"connector"`
+	AccountKey connectors.AuthCohortKey `json:"account_key"`
+	File       string                   `json:"file"`
+}
+
 type RunETLRequest struct {
 	Connection string `json:"connection"`
 	Stream     string `json:"stream"`

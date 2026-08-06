@@ -1,0 +1,10 @@
+$ go test ./internal/connectors -run TestStreamFromSchemaPreservesStaticBundleShape -count=1
+# polymetrics.ai/internal/connectors [polymetrics.ai/internal/connectors.test]
+internal/connectors/catalog_schema_test.go:22:17: undefined: StreamFromSchema
+FAIL	polymetrics.ai/internal/connectors [build failed]
+FAIL
+
+Green evidence:
+
+$ go test ./internal/connectors -run TestStreamFromSchemaPreservesStaticBundleShape -count=1
+ok  	polymetrics.ai/internal/connectors

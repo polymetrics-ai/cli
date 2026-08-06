@@ -142,6 +142,11 @@ pm catalog refresh --connection <name>   # fetch the latest connector catalog
 pm catalog show   --connection <name>   # display the cached catalog
 ```
 
+For a connector with provider-discovered fields, `pm catalog show` makes an
+expired snapshot explicit. Run `pm catalog refresh --connection <name>` before
+depending on a newly added provider field; cached schemas are never silently
+presented as current.
+
 ## Exit codes
 
 Agents and scripts should branch on exit codes, not parse stderr text.

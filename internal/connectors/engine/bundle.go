@@ -2319,6 +2319,7 @@ func loadStreamSchemas(sub fs.FS, dirName string, streams []StreamSpec) (map[str
 			Schema:      sch,
 			PrimaryKey:  sch.PrimaryKeys(),
 			CursorField: sch.CursorFieldName(),
+			Raw:         append(json.RawMessage(nil), raw...),
 		}
 	}
 	return out, nil

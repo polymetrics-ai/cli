@@ -31,6 +31,7 @@ import (
 	_ "polymetrics.ai/internal/connectors/native/google-calendar"
 	_ "polymetrics.ai/internal/connectors/native/google-classroom"
 	_ "polymetrics.ai/internal/connectors/native/google-pagespeed-insights"
+	_ "polymetrics.ai/internal/connectors/native/hubspot"
 	_ "polymetrics.ai/internal/connectors/native/less-annoying-crm"
 	_ "polymetrics.ai/internal/connectors/native/lokalise"
 	_ "polymetrics.ai/internal/connectors/native/mendeley"
