@@ -43,7 +43,7 @@
           "name": { "type": "string" },
           "type": {
             "type": "string",
-            "enum": ["boolean", "string", "integer", "enum", "string_array"]
+            "enum": ["boolean", "string", "integer", "enum", "string_array", "empty_array"]
           },
           "summary": { "type": "string" },
           "values": {
@@ -51,6 +51,7 @@
             "items": { "type": "string" }
           },
           "maps_to": { "type": "string" },
+          "map_key": { "type": "string" },
           "format": {
             "type": "string",
             "enum": ["date-time"]
@@ -114,7 +115,7 @@
                 "name": { "type": "string" },
                 "type": {
                   "type": "string",
-                  "enum": ["boolean", "string", "integer", "enum", "string_array"]
+                  "enum": ["boolean", "string", "integer", "enum", "string_array", "empty_array"]
                 },
                 "summary": { "type": "string" },
                 "values": {
@@ -122,6 +123,7 @@
                   "items": { "type": "string" }
                 },
                 "maps_to": { "type": "string" },
+                "map_key": { "type": "string" },
                 "format": {
                   "type": "string",
                   "enum": ["date-time"]

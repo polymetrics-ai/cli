@@ -32,6 +32,7 @@ type CommandSurfaceFlag struct {
 	Summary    string
 	Values     []string
 	MapsTo     string
+	MapKey     string
 	Format     string
 	AllowEmpty *bool
 	Required   bool

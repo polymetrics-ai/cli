@@ -822,6 +822,7 @@ type CLIFlag struct {
 	Summary    string   `json:"summary,omitempty"`
 	Values     []string `json:"values,omitempty"`
 	MapsTo     string   `json:"maps_to,omitempty"`
+	MapKey     string   `json:"map_key,omitempty"`
 	Format     string   `json:"format,omitempty"`
 	AllowEmpty *bool    `json:"allow_empty,omitempty"`
 	Required   bool     `json:"required,omitempty"`

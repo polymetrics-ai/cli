@@ -19,6 +19,19 @@ func TestRenderCommandSurfaceCommandIncludesOperationMapping(t *testing.T) {
 	}
 }
 
+func TestRenderCommandSurfaceFlagIncludesMapKey(t *testing.T) {
+	line := renderCommandSurfaceFlag(CommandSurfaceFlag{
+		Name:   "event-data-store-id",
+		Type:   "string",
+		MapsTo: "record.QueryParameterValues",
+		MapKey: "$EventDataStoreId$",
+	})
+
+	if !strings.Contains(line, "map_key=$EventDataStoreId$") {
+		t.Fatalf("rendered flag missing map key: %s", line)
+	}
+}
+
 func TestEveryRegisteredConnectorHasGuideManualAndSkill(t *testing.T) {
 	registry := NewRegistry()
 	for _, meta := range registry.List() {

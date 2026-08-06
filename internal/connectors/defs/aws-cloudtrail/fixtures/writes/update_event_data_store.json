@@ -1,12 +1,14 @@
 {
   "record": {
-    "EventDataStore": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture-store"
+    "EventDataStore": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture-store",
+    "Name": "fixture-store-updated"
   },
   "expect": {
     "method": "POST",
     "path": "/",
     "body": {
-      "EventDataStore": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture-store"
+      "EventDataStore": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture-store",
+      "Name": "fixture-store-updated"
     }
   }
 }

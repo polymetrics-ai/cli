@@ -116,7 +116,7 @@ var surfaceOperationRisks = map[string]bool{
 	"critical": true,
 }
 
-const maxCLIRecordPathArrayIndex = 128
+const maxCLIRecordPathArrayIndex = 500
 
 var directReadOutputPolicies = map[string]bool{
 	"repository_contents_file_metadata": true,
@@ -1118,6 +1118,13 @@ func validateCLIConstraintPath(path string) error {
 	return nil
 }
 
+type cliMappedRecordFlag struct {
+	name     string
+	typeName string
+	target   string
+	mapKey   string
+}
+
 func checkCLISurfaceWriteFlags(
 	b engine.Bundle,
 	i int,
@@ -1143,7 +1150,7 @@ func checkCLISurfaceWriteFlags(
 	}
 
 	mapped := map[string]bool{}
-	mappedByFlag := map[string]string{}
+	mappedByFlag := make([]cliMappedRecordFlag, 0, len(cmd.Flags))
 	var findings []Finding
 	for _, flag := range cmd.Flags {
 		target, ok := strings.CutPrefix(flag.MapsTo, "record.")
@@ -1151,21 +1158,40 @@ func checkCLISurfaceWriteFlags(
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) flag --%s maps to unsupported target %q", i, cmd.Path, flag.Name, flag.MapsTo)})
 			continue
 		}
-		if prior := mappedByFlag[target]; prior != "" {
-			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) flags --%s and --%s both map to record.%s", i, cmd.Path, prior, flag.Name, target)})
-			continue
-		}
-		for existing, prior := range mappedByFlag {
-			if dottedPathPrefix(existing, target) || dottedPathPrefix(target, existing) {
-				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) flags --%s and --%s have conflicting record mappings", i, cmd.Path, prior, flag.Name)})
+		mapKey := flag.MapKey
+		if mapKey != "" {
+			if err := validateCLIRecordMapKey(mapKey); err != nil {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) flag --%s map_key is invalid: %v", i, cmd.Path, flag.Name, err)})
+				continue
 			}
 		}
-		mappedByFlag[target] = flag.Name
-		mapped[target] = true
+		current := cliMappedRecordFlag{name: flag.Name, typeName: flag.Type, target: target, mapKey: mapKey}
+		conflict := false
+		for _, existing := range mappedByFlag {
+			if existing.target == current.target && existing.mapKey == current.mapKey {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) flags --%s and --%s both map to record.%s", i, cmd.Path, existing.name, flag.Name, target)})
+				conflict = true
+				break
+			}
+			if cliRecordMappingsConflict(existing, current) && !cliEmptyArrayMappingsConflict(existing, current) {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) flags --%s and --%s have conflicting record mappings", i, cmd.Path, existing.name, flag.Name)})
+				conflict = true
+				break
+			}
+		}
+		if conflict {
+			continue
+		}
+		mappedByFlag = append(mappedByFlag, current)
+		schemaTarget := target
+		if mapKey != "" {
+			schemaTarget += "." + mapKey
+		}
+		mapped[schemaTarget] = true
 		if schema == nil {
 			continue
 		}
-		leaf, err := schema.recordPath(target)
+		leaf, err := schema.recordPath(schemaTarget)
 		if err != nil {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) flag --%s maps outside write %q schema: %v", i, cmd.Path, flag.Name, cmd.Write, err)})
 			continue
@@ -1201,13 +1227,63 @@ func checkCLISurfaceWriteFlags(
 	return findings
 }
 
+func cliRecordMappingsConflict(left, right cliMappedRecordFlag) bool {
+	if left.target == right.target {
+		return left.mapKey == "" || right.mapKey == ""
+	}
+	return dottedPathPrefix(left.target, right.target) || dottedPathPrefix(right.target, left.target)
+}
+
+func cliEmptyArrayMappingsConflict(left, right cliMappedRecordFlag) bool {
+	return left.typeName == "empty_array" && dottedPathPrefix(left.target, right.target) || right.typeName == "empty_array" && dottedPathPrefix(right.target, left.target)
+}
+
+func validateCLIRecordMapKey(key string) error {
+	if strings.TrimSpace(key) == "" {
+		return fmt.Errorf("is required")
+	}
+	if strings.TrimSpace(key) != key {
+		return fmt.Errorf("must not have surrounding whitespace")
+	}
+	if len(key) > 128 {
+		return fmt.Errorf("must be at most 128 bytes")
+	}
+	for _, character := range key {
+		if character < 0x20 || character == 0x7f || (character >= 0x80 && character <= 0x9f) {
+			return fmt.Errorf("contains invalid control characters")
+		}
+	}
+	return nil
+}
+
 func mappedRecordPathSatisfies(mapped map[string]bool, required string) bool {
 	for target := range mapped {
-		if target == required || dottedPathPrefix(required, target) {
+		if cliRecordMappingCovers(target, required) {
 			return true
 		}
 	}
 	return false
+}
+
+func cliRecordMappingCovers(target, required string) bool {
+	targetParts := strings.Split(target, ".")
+	requiredParts := strings.Split(required, ".")
+	if len(targetParts) < len(requiredParts) {
+		return false
+	}
+	for index, requiredPart := range requiredParts {
+		targetPart := targetParts[index]
+		if targetPart == requiredPart {
+			continue
+		}
+		if targetPart == "[]" {
+			if err := validateCLIRecordArrayIndex(requiredPart); err == nil {
+				continue
+			}
+		}
+		return false
+	}
+	return true
 }
 
 func dottedPathPrefix(parent, child string) bool {
@@ -1310,6 +1386,9 @@ func (n *cliRecordSchemaNode) recordPath(path string) (*cliRecordSchemaNode, err
 }
 
 func validateCLIRecordArrayIndex(part string) error {
+	if part == "[]" {
+		return nil
+	}
 	for _, r := range part {
 		if r < '0' || r > '9' {
 			return fmt.Errorf("array segment %q is not a numeric index", part)
@@ -1318,7 +1397,7 @@ func validateCLIRecordArrayIndex(part string) error {
 	if len(part) > 1 && strings.HasPrefix(part, "0") {
 		return fmt.Errorf("array index %q must not have leading zeroes", part)
 	}
-	if len(part) > 3 || (len(part) == 3 && part > "128") {
+	if len(part) > 3 || (len(part) == 3 && part > "500") {
 		return fmt.Errorf("array index %q exceeds max %d", part, maxCLIRecordPathArrayIndex)
 	}
 	return nil
@@ -1417,6 +1496,8 @@ func cliFlagTypeMatchesSchema(flagType string, node *cliRecordSchemaNode) bool {
 	case "boolean":
 		return schemaTypes["boolean"] || schemaTypes["any"]
 	case "string_array":
+		return schemaTypes["array"] || schemaTypes["any"]
+	case "empty_array":
 		return schemaTypes["array"] || schemaTypes["any"]
 	default:
 		return false

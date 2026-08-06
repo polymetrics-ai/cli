@@ -220,7 +220,7 @@ func validateActionField(action string, field awsActionField, value any) error {
 	case field.Name == "TagsList":
 		return validateTagsList(value)
 	case field.Name == "AdvancedEventSelectors":
-		return validateAdvancedEventSelectors(value)
+		return validateAdvancedEventSelectors(action, value)
 	case action == "PutEventSelectors" && field.Name == "EventSelectors":
 		return validateEventSelectors(value)
 	case action == "PutInsightSelectors" && field.Name == "InsightSelectors":
@@ -229,6 +229,8 @@ func validateActionField(action string, field awsActionField, value any) error {
 		return validateAggregationConfigurations(value)
 	case action == "PutEventConfiguration" && field.Name == "ContextKeySelectors":
 		return validateContextKeySelectors(value)
+	case action == "StartDashboardRefresh" && field.Name == "QueryParameterValues":
+		return validateDashboardQueryParameterValues(value)
 	case action == "CreateTrail" && field.Name == "Name":
 		return validateTrailName(value, false)
 	case action == "UpdateTrail" && field.Name == "Name":
@@ -513,8 +515,39 @@ func validatePutInsightSelectors(body map[string]any) error {
 	if !hasEventDataStore {
 		return fmt.Errorf("aws-cloudtrail PutInsightSelectors requires TrailName or EventDataStore")
 	}
+	if err := validateEventDataStoreInsightCategories(body["InsightSelectors"]); err != nil {
+		return err
+	}
 	if actionValuePresent(body["InsightSelectors"]) && !hasDestination {
 		return fmt.Errorf("aws-cloudtrail PutInsightSelectors requires InsightsDestination when enabling Insights on an EventDataStore")
+	}
+	return nil
+}
+
+func validateEventDataStoreInsightCategories(value any) error {
+	selectors, ok := actionArray(value)
+	if !ok {
+		return fmt.Errorf("aws-cloudtrail PutInsightSelectors InsightSelectors must be an array")
+	}
+	for selectorIndex, item := range selectors {
+		selector, ok := item.(map[string]any)
+		if !ok {
+			return fmt.Errorf("aws-cloudtrail PutInsightSelectors InsightSelectors item %d must be an object", selectorIndex)
+		}
+		categories, present := selector["EventCategories"]
+		if !present {
+			continue
+		}
+		values, ok := actionArray(categories)
+		if !ok {
+			return fmt.Errorf("aws-cloudtrail PutInsightSelectors InsightSelector.EventCategories must be an array")
+		}
+		for _, raw := range values {
+			category, ok := actionString(raw)
+			if ok && category == "Data" {
+				return fmt.Errorf("aws-cloudtrail PutInsightSelectors EventDataStore supports Management Insights only")
+			}
+		}
 	}
 	return nil
 }
@@ -769,7 +802,71 @@ func validateEventSelectors(value any) error {
 	return nil
 }
 
-func validateAdvancedEventSelectors(value any) error {
+func normalizeAdvancedEventSelectors(value any) (any, error) {
+	selectors, ok := actionArray(value)
+	if !ok || len(selectors) < 2 {
+		return value, nil
+	}
+	allFragments := true
+	hasNames := false
+	categoryFragments := 0
+	for _, item := range selectors {
+		selector, ok := item.(map[string]any)
+		if !ok {
+			return value, nil
+		}
+		fields, ok := actionArray(selector["FieldSelectors"])
+		if !ok || len(fields) != 1 {
+			allFragments = false
+			break
+		}
+		fieldSelector, ok := fields[0].(map[string]any)
+		if !ok {
+			return value, nil
+		}
+		if fieldName, ok := actionString(fieldSelector["Field"]); ok && fieldName == "eventCategory" {
+			categoryFragments++
+		}
+		if _, present := selector["Name"]; present {
+			hasNames = true
+		}
+	}
+	if !allFragments || (!hasNames && categoryFragments != 1) {
+		return value, nil
+	}
+	mergedByName := map[string]map[string]any{}
+	order := make([]string, 0, len(selectors))
+	for index, item := range selectors {
+		selector := item.(map[string]any)
+		fields, _ := actionArray(selector["FieldSelectors"])
+		name := ""
+		if hasNames {
+			var ok bool
+			name, ok = actionString(selector["Name"])
+			if !ok || strings.TrimSpace(name) == "" {
+				return nil, fmt.Errorf("AdvancedEventSelector fragment %d requires Name when grouping named selectors", index)
+			}
+		}
+		merged, found := mergedByName[name]
+		if !found {
+			merged = map[string]any{"FieldSelectors": []any{}}
+			if hasNames {
+				merged["Name"] = name
+			}
+			mergedByName[name] = merged
+			order = append(order, name)
+		}
+		mergedFields, _ := actionArray(merged["FieldSelectors"])
+		merged["FieldSelectors"] = append(mergedFields, fields[0])
+	}
+	out := make([]any, 0, len(order))
+	for _, name := range order {
+		out = append(out, mergedByName[name])
+	}
+	return out, nil
+}
+
+func validateAdvancedEventSelectors(action string, value any) error {
 	selectors, ok := actionArray(value)
 	if !ok {
 		return fmt.Errorf("want array")
@@ -834,11 +931,200 @@ func validateAdvancedEventSelectors(value any) error {
 				return fmt.Errorf("item %d: AdvancedEventSelector.FieldSelectors item %d: AdvancedFieldSelector requires at least one condition", index, fieldIndex)
 			}
 		}
+		if err := validateAdvancedEventSelectorSemantics(action, fields); err != nil {
+			return fmt.Errorf("item %d: %w", index, err)
+		}
 	}
 	if conditionValues > 500 {
 		return fmt.Errorf("AdvancedEventSelectors must contain at most 500 condition values")
 	}
 	return nil
+}
+
+func validateAdvancedEventSelectorSemantics(action string, fields []any) error {
+	category := ""
+	categoryCount := 0
+	resourceTypeCount := 0
+	networkEventSourceCount := 0
+	for fieldIndex, item := range fields {
+		fieldSelector := item.(map[string]any)
+		fieldName, _ := actionString(fieldSelector["Field"])
+		if advancedSelectorEqualsOnlyField(fieldName) && !advancedSelectorUsesOnlyEquals(fieldSelector) {
+			return fmt.Errorf("AdvancedEventSelector.FieldSelectors item %d field %s only supports Equals", fieldIndex, fieldName)
+		}
+		switch fieldName {
+		case "eventCategory":
+			categoryCount++
+			values, _ := actionArray(fieldSelector["Equals"])
+			if len(values) != 1 {
+				return fmt.Errorf("AdvancedEventSelector eventCategory requires exactly one Equals value")
+			}
+			value, ok := actionString(values[0])
+			if !ok {
+				return fmt.Errorf("AdvancedEventSelector eventCategory Equals value must be a string")
+			}
+			category = value
+		case "resources.type":
+			resourceTypeCount++
+			values, _ := actionArray(fieldSelector["Equals"])
+			if len(values) != 1 {
+				return fmt.Errorf("AdvancedEventSelector resources.type requires exactly one Equals value")
+			}
+		case "eventSource":
+			if advancedSelectorUsesOnlyEquals(fieldSelector) {
+				networkEventSourceCount++
+			}
+		case "readOnly":
+			values, _ := actionArray(fieldSelector["Equals"])
+			for _, raw := range values {
+				value, _ := actionString(raw)
+				if value != "true" && value != "false" {
+					return fmt.Errorf("AdvancedEventSelector readOnly Equals values must be true or false")
+				}
+			}
+		case "errorCode":
+			values, _ := actionArray(fieldSelector["Equals"])
+			for _, raw := range values {
+				value, _ := actionString(raw)
+				if value != "VpceAccessDenied" {
+					return fmt.Errorf("AdvancedEventSelector errorCode Equals values must be VpceAccessDenied")
+				}
+			}
+		}
+	}
+	if categoryCount != 1 {
+		return fmt.Errorf("AdvancedEventSelector requires exactly one eventCategory field")
+	}
+	if !advancedSelectorCategoryAllowed(action, category) {
+		return fmt.Errorf("AdvancedEventSelector eventCategory %q is not supported for %s", category, action)
+	}
+	allowedFields := advancedSelectorAllowedFields(action, category)
+	for fieldIndex, item := range fields {
+		fieldSelector := item.(map[string]any)
+		fieldName, _ := actionString(fieldSelector["Field"])
+		if category == "Management" && action == "PutEventSelectors" && fieldName == "eventSource" {
+			if !advancedSelectorUsesOnlyOperator(fieldSelector, "NotEquals") {
+				return fmt.Errorf("AdvancedEventSelector management eventSource for trails only supports NotEquals")
+			}
+			for _, raw := range advancedSelectorOperatorValues(fieldSelector, "NotEquals") {
+				value, _ := actionString(raw)
+				if err := validateActionString(value, cloudTrailManagementSourceConstraints); err != nil {
+					return fmt.Errorf("AdvancedEventSelector management eventSource NotEquals value: %w", err)
+				}
+			}
+		}
+		if fieldName == "sessionCredentialFromConsole" && !advancedSelectorUsesOnlyOperators(fieldSelector, "Equals", "NotEquals") {
+			return fmt.Errorf("AdvancedEventSelector sessionCredentialFromConsole only supports Equals or NotEquals")
+		}
+		if category == "NetworkActivity" && fieldName == "eventSource" && len(advancedSelectorOperatorValues(fieldSelector, "Equals")) != 1 {
+			return fmt.Errorf("AdvancedEventSelector NetworkActivity eventSource requires exactly one Equals value")
+		}
+		if !allowedFields[fieldName] {
+			return fmt.Errorf("AdvancedEventSelector.FieldSelectors item %d field %s is not supported for %s events", fieldIndex, fieldName, category)
+		}
+	}
+	if category == "Data" {
+		if resourceTypeCount != 1 {
+			return fmt.Errorf("AdvancedEventSelector Data events require exactly one resources.type field")
+		}
+	} else if resourceTypeCount > 0 {
+		return fmt.Errorf("AdvancedEventSelector resources.type is only supported for Data events")
+	}
+	if category == "NetworkActivity" && networkEventSourceCount == 0 {
+		return fmt.Errorf("AdvancedEventSelector NetworkActivity events require eventSource with Equals")
+	}
+	if category != "NetworkActivity" {
+		for _, item := range fields {
+			fieldSelector := item.(map[string]any)
+			fieldName, _ := actionString(fieldSelector["Field"])
+			if fieldName == "errorCode" || fieldName == "vpcEndpointId" {
+				return fmt.Errorf("AdvancedEventSelector field %s is only supported for NetworkActivity events", fieldName)
+			}
+		}
+	}
+	if category == "Insight" || category == "ConfigurationItem" || category == "Evidence" || category == "ActivityAuditLog" {
+		if len(fields) != 1 {
+			return fmt.Errorf("AdvancedEventSelector %s events only support eventCategory", category)
+		}
+	}
+	return nil
+}
+
+func advancedSelectorEqualsOnlyField(field string) bool {
+	switch field {
+	case "eventCategory", "resources.type", "readOnly", "errorCode":
+		return true
+	default:
+		return false
+	}
+}
+
+func advancedSelectorUsesOnlyEquals(fieldSelector map[string]any) bool {
+	return advancedSelectorUsesOnlyOperator(fieldSelector, "Equals")
+}
+
+func advancedSelectorUsesOnlyOperator(fieldSelector map[string]any, wanted string) bool {
+	if _, ok := fieldSelector[wanted]; !ok {
+		return false
+	}
+	for _, operator := range []string{"EndsWith", "Equals", "NotEndsWith", "NotEquals", "NotStartsWith", "StartsWith"} {
+		if operator == wanted {
+			continue
+		}
+		if _, ok := fieldSelector[operator]; ok {
+			return false
+		}
+	}
+	return true
+}
+
+func advancedSelectorUsesOnlyOperators(fieldSelector map[string]any, allowed ...string) bool {
+	allowedSet := make(map[string]bool, len(allowed))
+	for _, operator := range allowed {
+		allowedSet[operator] = true
+	}
+	for _, operator := range []string{"EndsWith", "Equals", "NotEndsWith", "NotEquals", "NotStartsWith", "StartsWith"} {
+		if _, present := fieldSelector[operator]; present && !allowedSet[operator] {
+			return false
+		}
+	}
+	return true
+}
+
+func advancedSelectorOperatorValues(fieldSelector map[string]any, operator string) []any {
+	values, _ := actionArray(fieldSelector[operator])
+	return values
+}
+
+func advancedSelectorCategoryAllowed(action, category string) bool {
+	switch action {
+	case "PutEventSelectors":
+		return category == "Management" || category == "Data" || category == "NetworkActivity"
+	case "CreateEventDataStore", "UpdateEventDataStore":
+		return category == "Management" || category == "Data" || category == "Insight" || category == "ConfigurationItem" || category == "Evidence" || category == "ActivityAuditLog"
+	default:
+		return false
+	}
+}
+
+func advancedSelectorAllowedFields(action, category string) map[string]bool {
+	if category == "Insight" || category == "ConfigurationItem" || category == "Evidence" || category == "ActivityAuditLog" {
+		return map[string]bool{"eventCategory": true}
+	}
+	if category == "NetworkActivity" {
+		return map[string]bool{"eventCategory": true, "eventSource": true, "eventName": true, "errorCode": true, "vpcEndpointId": true, "userIdentity.arn": true}
+	}
+	if category == "Management" {
+		allowed := map[string]bool{"eventCategory": true, "eventSource": true, "readOnly": true}
+		if action == "CreateEventDataStore" || action == "UpdateEventDataStore" {
+			allowed["eventName"] = true
+			allowed["eventType"] = true
+			allowed["sessionCredentialFromConsole"] = true
+			allowed["userIdentity.arn"] = true
+		}
+		return allowed
+	}
+	return map[string]bool{"eventCategory": true, "eventName": true, "eventSource": true, "eventType": true, "resources.type": true, "readOnly": true, "resources.ARN": true, "sessionCredentialFromConsole": true, "userIdentity.arn": true}
 }
 
 func validateAggregationConfigurations(value any) error {
@@ -896,6 +1182,28 @@ func validateContextKeySelectors(value any) error {
 		}
 		if err := validateClosedStringArray(selector["Equals"], "ContextKeySelector.Equals", 1, 50, awsStringConstraints{minimumLength: 1, maximumLength: 128}); err != nil {
 			return fmt.Errorf("item %d: %w", index, err)
+		}
+	}
+	return nil
+}
+
+func validateDashboardQueryParameterValues(value any) error {
+	parameters, ok := value.(map[string]any)
+	if !ok {
+		return fmt.Errorf("must be an object")
+	}
+	if len(parameters) == 0 {
+		return fmt.Errorf("must contain at least one documented dashboard query parameter")
+	}
+	allowed := map[string]struct{}{
+		"$StartTime$":        {},
+		"$EndTime$":          {},
+		"$Period$":           {},
+		"$EventDataStoreId$": {},
+	}
+	for key := range parameters {
+		if _, ok := allowed[key]; !ok {
+			return fmt.Errorf("contains unsupported dashboard query parameter %q", key)
 		}
 	}
 	return nil

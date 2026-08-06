@@ -17,7 +17,7 @@ import (
 const (
 	MaxDirectReadBytes          = 1 << 20
 	MaxOperationDirectReadBytes = 16 << 20
-	maxRecordPathArrayIndex     = 128
+	maxRecordPathArrayIndex     = 500
 )
 
 type Request struct {
@@ -760,7 +760,7 @@ func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
 		return err
 	}
 	switch flag.Type {
-	case "", "string", "boolean", "integer", "string_array":
+	case "", "string", "boolean", "integer", "string_array", "empty_array":
 		return nil
 	case "enum":
 		for _, allowed := range flag.Values {
@@ -913,6 +913,9 @@ func setBodyValue(body map[string]any, path string, value any) error {
 	if err != nil {
 		return err
 	}
+	if dottedPathHasRepeatableArray(parts) {
+		return fmt.Errorf("body field %q cannot use repeatable array segments", path)
+	}
 	_, err = setDottedValue(body, parts, value, path)
 	return err
 }
@@ -920,11 +923,40 @@ func setBodyValue(body map[string]any, path string, value any) error {
 func validateDottedTargetPath(path, field string) ([]string, error) {
 	parts := strings.Split(path, ".")
 	for _, part := range parts {
+		if part == "[]" {
+			continue
+		}
 		if err := safety.ValidateIdentifier(part, field); err != nil {
 			return nil, err
 		}
 	}
 	return parts, nil
+}
+
+func dottedPathHasRepeatableArray(parts []string) bool {
+	for _, part := range parts {
+		if part == "[]" {
+			return true
+		}
+	}
+	return false
+}
+
+func repeatableRecordTarget(path string) (bool, error) {
+	parts, err := validateDottedTargetPath(path, "record field")
+	if err != nil {
+		return false, err
+	}
+	count := 0
+	for _, part := range parts {
+		if part == "[]" {
+			count++
+		}
+	}
+	if count > 1 {
+		return false, fmt.Errorf("record field %q supports at most one repeatable array segment", path)
+	}
+	return count == 1, nil
 }
 
 func setDottedValue(current any, parts []string, value any, fullPath string) (any, error) {
@@ -1014,6 +1046,13 @@ func stringifyCommandValue(value any) string {
 	return fmt.Sprint(value)
 }
 
+type recordFlagTarget struct {
+	name   string
+	flag   connectors.CommandSurfaceFlag
+	target string
+	mapKey string
+}
+
 func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (connectors.Record, error) {
 	allowed := map[string]connectors.CommandSurfaceFlag{}
 	for _, flag := range cmd.Flags {
@@ -1063,8 +1102,49 @@ func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]st
 		}
 		return applications[i].target < applications[j].target
 	})
+	for i := range applications {
+		for j := i + 1; j < len(applications); j++ {
+			if emptyArrayMappingsConflict(applications[i].flag, applications[i].target, applications[j].flag, applications[j].target) {
+				return nil, fmt.Errorf("flags --%s and --%s are mutually exclusive", applications[i].name, applications[j].name)
+			}
+		}
+	}
 	record := connectors.Record{}
 	for _, app := range applications {
+		if app.flag.MapKey != "" {
+			repeatable, err := repeatableRecordTarget(app.target)
+			if err != nil {
+				return nil, err
+			}
+			if repeatable {
+				return nil, fmt.Errorf("flag --%s cannot combine map_key with a repeatable record target", app.name)
+			}
+			value, err := coerceFlagValue(app.flag, app.values)
+			if err != nil {
+				return nil, err
+			}
+			if err := setRecordMapValue(record, app.target, app.flag.MapKey, value); err != nil {
+				return nil, err
+			}
+			continue
+		}
+		repeatable, err := repeatableRecordTarget(app.target)
+		if err != nil {
+			return nil, err
+		}
+		if repeatable {
+			for index, raw := range app.values {
+				value, err := coerceFlagValue(app.flag, []string{raw})
+				if err != nil {
+					return nil, err
+				}
+				target := strings.Replace(app.target, "[]", strconv.Itoa(index), 1)
+				if err := setRecordValue(record, target, value); err != nil {
+					return nil, err
+				}
+			}
+			continue
+		}
 		value, err := coerceFlagValue(app.flag, app.values)
 		if err != nil {
 			return nil, err
@@ -1077,28 +1157,51 @@ func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]st
 }
 
 func validateRecordFlagTargets(cmd connectors.CommandSurfaceCommand) error {
-	targets := map[string]string{}
+	targets := make([]recordFlagTarget, 0, len(cmd.Flags))
 	for _, flag := range cmd.Flags {
 		target, ok := strings.CutPrefix(flag.MapsTo, "record.")
 		if !ok || target == "" {
+			if flag.MapKey != "" {
+				return fmt.Errorf("flag --%s uses map_key without a record mapping", flag.Name)
+			}
 			continue
 		}
 		parts, err := validateDottedTargetPath(target, "record field")
 		if err != nil {
 			return err
 		}
-		normalized := strings.Join(parts, ".")
-		if prior := targets[normalized]; prior != "" {
-			return fmt.Errorf("flags --%s and --%s both map to record.%s", prior, flag.Name, normalized)
+		if _, err := repeatableRecordTarget(target); err != nil {
+			return err
 		}
-		for existing, prior := range targets {
-			if dottedPathPrefix(existing, normalized) || dottedPathPrefix(normalized, existing) {
-				return fmt.Errorf("flags --%s and --%s have conflicting record mappings", prior, flag.Name)
+		if flag.MapKey != "" {
+			if err := validateRecordMapKey(flag.MapKey); err != nil {
+				return fmt.Errorf("flag --%s map_key: %w", flag.Name, err)
 			}
 		}
-		targets[normalized] = flag.Name
+		normalized := strings.Join(parts, ".")
+		current := recordFlagTarget{name: flag.Name, flag: flag, target: normalized, mapKey: flag.MapKey}
+		for _, existing := range targets {
+			if existing.target == current.target && existing.mapKey == current.mapKey {
+				return fmt.Errorf("flags --%s and --%s both map to record.%s", existing.name, flag.Name, normalized)
+			}
+			if recordMappingsConflict(existing, current) && !emptyArrayMappingsConflict(existing.flag, existing.target, current.flag, current.target) {
+				return fmt.Errorf("flags --%s and --%s have conflicting record mappings", existing.name, flag.Name)
+			}
+		}
+		targets = append(targets, current)
 	}
 	return nil
+}
+
+func recordMappingsConflict(left, right recordFlagTarget) bool {
+	if left.target == right.target {
+		return left.mapKey == "" || right.mapKey == ""
+	}
+	return dottedPathPrefix(left.target, right.target) || dottedPathPrefix(right.target, left.target)
+}
+
+func emptyArrayMappingsConflict(left connectors.CommandSurfaceFlag, leftTarget string, right connectors.CommandSurfaceFlag, rightTarget string) bool {
+	return left.Type == "empty_array" && dottedPathPrefix(leftTarget, rightTarget) || right.Type == "empty_array" && dottedPathPrefix(rightTarget, leftTarget)
 }
 
 func dottedPathPrefix(parent, child string) bool {
@@ -1106,7 +1209,78 @@ func dottedPathPrefix(parent, child string) bool {
 }
 
 func setRecordValue(record connectors.Record, path string, value any) error {
-	return setBodyValue(map[string]any(record), path, value)
+	parts, err := validateDottedTargetPath(path, "record field")
+	if err != nil {
+		return err
+	}
+	if dottedPathHasRepeatableArray(parts) {
+		return fmt.Errorf("record field %q cannot use unexpanded repeatable array segments", path)
+	}
+	_, err = setDottedValue(map[string]any(record), parts, value, path)
+	return err
+}
+
+func validateRecordMapKey(key string) error {
+	if strings.TrimSpace(key) == "" {
+		return fmt.Errorf("is required")
+	}
+	if strings.TrimSpace(key) != key {
+		return fmt.Errorf("must not have surrounding whitespace")
+	}
+	if len(key) > 128 {
+		return fmt.Errorf("must be at most 128 bytes")
+	}
+	return safety.RejectDangerousChars(key, "record map key")
+}
+
+func setRecordMapValue(record connectors.Record, path, key string, value any) error {
+	parts, err := validateDottedTargetPath(path, "record field")
+	if err != nil {
+		return err
+	}
+	if dottedPathHasRepeatableArray(parts) {
+		return fmt.Errorf("record map field %q cannot use repeatable array segments", path)
+	}
+	for _, part := range parts {
+		if _, indexed, err := pathArrayIndex(part); err != nil {
+			return err
+		} else if indexed {
+			return fmt.Errorf("record map field %q cannot contain an array index", path)
+		}
+	}
+	if err := validateRecordMapKey(key); err != nil {
+		return err
+	}
+	current := map[string]any(record)
+	for index, part := range parts {
+		if index == len(parts)-1 {
+			existing, found := current[part]
+			if !found {
+				existing = map[string]any{}
+				current[part] = existing
+			}
+			object, ok := existing.(map[string]any)
+			if !ok {
+				return fmt.Errorf("record map field %q conflicts with existing non-object value", path)
+			}
+			if _, exists := object[key]; exists {
+				return fmt.Errorf("record map field %q already has key %q", path, key)
+			}
+			object[key] = value
+			return nil
+		}
+		next, found := current[part]
+		if !found {
+			next = map[string]any{}
+			current[part] = next
+		}
+		object, ok := next.(map[string]any)
+		if !ok {
+			return fmt.Errorf("record map field %q conflicts with existing non-object value", path)
+		}
+		current = object
+	}
+	return nil
 }
 
 func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, error) {
@@ -1156,6 +1330,12 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 			return nil, fmt.Errorf("invalid --%s: %d values is below the minimum of %d", flag.Name, len(out), flag.MinItems)
 		}
 		return out, nil
+	case "empty_array":
+		parsed, err := strconv.ParseBool(value)
+		if err != nil || !parsed {
+			return nil, fmt.Errorf("invalid --%s %q, want true", flag.Name, value)
+		}
+		return []any{}, nil
 	default:
 		return nil, &BlockedCommandError{
 			Command: "unknown",

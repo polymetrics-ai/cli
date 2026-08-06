@@ -229,8 +229,8 @@ func TestCloudTrailNestedWriteFlagsBuildClosedRecords(t *testing.T) {
 			path: []string{"event-selectors", "set"},
 			flags: map[string][]string{
 				"trail-name":            {"example-trail"},
-				"advanced-event-field":  {"eventCategory"},
-				"advanced-event-equals": {"Data"},
+				"advanced-event-field":  {"eventCategory", "resources.type"},
+				"advanced-event-equals": {"Data", "AWS::S3::Object"},
 			},
 		},
 		{
@@ -239,8 +239,27 @@ func TestCloudTrailNestedWriteFlagsBuildClosedRecords(t *testing.T) {
 			flags: map[string][]string{
 				"event-data-store":   {"arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example"},
 				"max-event-size":     {"Large"},
-				"context-key-type":   {"RequestContext"},
-				"context-key-equals": {"aws:PrincipalArn"},
+				"context-key-type":   {"RequestContext", "TagContext"},
+				"context-key-equals": {"aws:PrincipalArn", "Environment"},
+			},
+		},
+		{
+			name: "disable insights",
+			path: []string{"insight-selectors", "set"},
+			flags: map[string][]string{
+				"trail-name":       {"example-trail"},
+				"disable-insights": {"true"},
+			},
+		},
+		{
+			name: "dashboard query parameters",
+			path: []string{"dashboard", "refresh"},
+			flags: map[string][]string{
+				"dashboard-id":        {"AWSCloudTrail-Overview"},
+				"query-start-time":    {"2024-11-13T08:00:00Z"},
+				"query-end-time":      {"2024-11-13T12:00:00Z"},
+				"query-period":        {"minute"},
+				"event-data-store-id": {"example-event-store"},
 			},
 		},
 	} {
@@ -256,7 +275,7 @@ func TestCloudTrailNestedWriteFlagsBuildClosedRecords(t *testing.T) {
 	}
 	_, err := commandrunner.BuildWriteCommand(t.Context(), cloudTrail, commandrunner.Request{
 		Path:    []string{"tags", "add"},
-		Flags:   map[string][]string{"resource-id": {"arn:aws:cloudtrail:us-east-1:123456789012:trail/example"}, "tags-list": {"[]"}},
+		Flags:   map[string][]string{"resource-id": {"arn:aws:cloudtrail:us-east-1:123456789012:trail/example"}, "tag-key": {"Environment"}, "tags-list": {"[]"}},
 		Preview: true,
 	})
 	if err == nil || !strings.Contains(err.Error(), "unknown flag --tags-list") {
@@ -292,7 +311,7 @@ func writeRequestFromExample(t *testing.T, command connectors.CommandSurfaceComm
 			t.Fatalf("example %q omits a value for --%s", example, name)
 		}
 		if name != "credential" {
-			req.Flags[name] = []string{strings.Trim(tokens[index+1], "'")}
+			req.Flags[name] = append(req.Flags[name], strings.Trim(tokens[index+1], "'"))
 		}
 		index += 2
 	}

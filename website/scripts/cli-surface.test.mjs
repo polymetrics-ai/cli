@@ -43,6 +43,19 @@ test('other intents are left exactly as the bundle declares them', () => {
   assert.deepEqual(flagNames(mapped), ['issue-id']);
 });
 
+test('closed record map keys survive both generated surface mappings', () => {
+  const once = mapCLISurface(
+    surfaceWith({
+      intent: 'reverse_etl',
+      flags: [{ name: 'event-data-store-id', type: 'string', maps_to: 'record.QueryParameterValues', map_key: '$EventDataStoreId$' }],
+    }),
+  );
+  assert.equal(once.commands[0].flags[0].map_key, '$EventDataStoreId$');
+
+  const twice = mapCLISurface(once, { keyStyle: 'camel' });
+  assert.equal(twice.commands[0].flags[0].mapKey, '$EventDataStoreId$');
+});
+
 // gen-connector-catalog.mjs re-maps gen-connector-bundles.mjs output, so an
 // unconditional append documented --dest-root twice on the catalog page.
 test('re-mapping already-mapped output does not duplicate the destination flags', () => {

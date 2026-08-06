@@ -26530,6 +26530,64 @@
               "required": true
             },
             {
+              "name": "advanced-event-selector-name",
+              "type": "string",
+              "summary": "Repeat with each advanced-event field to group a named advanced selector.",
+              "values": [],
+              "maps_to": "record.AdvancedEventSelectors.[].Name",
+              "allow_empty": false
+            },
+            {
+              "name": "advanced-event-field",
+              "type": "string",
+              "summary": "Repeat for each advanced field; pair each occurrence with its condition flag.",
+              "values": [],
+              "maps_to": "record.AdvancedEventSelectors.[].FieldSelectors.0.Field",
+              "allow_empty": false
+            },
+            {
+              "name": "advanced-event-ends-with",
+              "type": "string_array",
+              "summary": "One to 500 suffix-match values for the paired advanced event field.",
+              "values": [],
+              "maps_to": "record.AdvancedEventSelectors.[].FieldSelectors.0.EndsWith"
+            },
+            {
+              "name": "advanced-event-equals",
+              "type": "string_array",
+              "summary": "One to 500 exact-match values for the paired advanced event field.",
+              "values": [],
+              "maps_to": "record.AdvancedEventSelectors.[].FieldSelectors.0.Equals"
+            },
+            {
+              "name": "advanced-event-not-ends-with",
+              "type": "string_array",
+              "summary": "One to 500 negative suffix-match values for the paired advanced event field.",
+              "values": [],
+              "maps_to": "record.AdvancedEventSelectors.[].FieldSelectors.0.NotEndsWith"
+            },
+            {
+              "name": "advanced-event-not-equals",
+              "type": "string_array",
+              "summary": "One to 500 negative exact-match values for the paired advanced event field.",
+              "values": [],
+              "maps_to": "record.AdvancedEventSelectors.[].FieldSelectors.0.NotEquals"
+            },
+            {
+              "name": "advanced-event-not-starts-with",
+              "type": "string_array",
+              "summary": "One to 500 negative prefix-match values for the paired advanced event field.",
+              "values": [],
+              "maps_to": "record.AdvancedEventSelectors.[].FieldSelectors.0.NotStartsWith"
+            },
+            {
+              "name": "advanced-event-starts-with",
+              "type": "string_array",
+              "summary": "One to 500 prefix-match values for the paired advanced event field.",
+              "values": [],
+              "maps_to": "record.AdvancedEventSelectors.[].FieldSelectors.0.StartsWith"
+            },
+            {
               "name": "organization-enabled",
               "type": "boolean",
               "summary": "Boolean",
@@ -26559,7 +26617,8 @@
             }
           ],
           "examples": [
-            "pm aws-cloudtrail event-data-store create --credential ct-prod --name example-store --preview"
+            "pm aws-cloudtrail event-data-store create --credential ct-prod --name example-store --preview",
+            "pm aws-cloudtrail event-data-store create --credential ct-prod --name example-store --advanced-event-field eventCategory --advanced-event-equals Data --advanced-event-field resources.type --advanced-event-equals AWS::S3::Object --preview"
           ],
           "output_policy": "",
           "risk": "creates a CloudTrail Lake event data store",
@@ -26938,13 +26997,13 @@
             {
               "name": "aggregation-template",
               "type": "enum",
-              "summary": "Valid Values: API_ACTIVITY | RESOURCE_ACCESS | USER_ACTIONS.",
+              "summary": "Repeat for each aggregation template: API_ACTIVITY | RESOURCE_ACCESS | USER_ACTIONS.",
               "values": [
                 "API_ACTIVITY",
                 "RESOURCE_ACCESS",
                 "USER_ACTIONS"
               ],
-              "maps_to": "record.AggregationConfigurations.0.Templates.0"
+              "maps_to": "record.AggregationConfigurations.0.Templates.[]"
             },
             {
               "name": "context-key-type",
@@ -26954,14 +27013,14 @@
                 "TagContext",
                 "RequestContext"
               ],
-              "maps_to": "record.ContextKeySelectors.0.Type"
+              "maps_to": "record.ContextKeySelectors.[].Type"
             },
             {
               "name": "context-key-equals",
               "type": "string_array",
-              "summary": "One to 50 context-key values, each up to 128 characters.",
+              "summary": "One to 50 comma-separated context-key values; repeat alongside each context-key type.",
               "values": [],
-              "maps_to": "record.ContextKeySelectors.0.Equals"
+              "maps_to": "record.ContextKeySelectors.[].Equals"
             },
             {
               "name": "trail-name",
@@ -26972,7 +27031,8 @@
             }
           ],
           "examples": [
-            "pm aws-cloudtrail event-configuration set --credential ct-prod --trail-name example-trail --aggregation-event-category Data --aggregation-template API_ACTIVITY --preview"
+            "pm aws-cloudtrail event-configuration set --credential ct-prod --event-data-store arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example --max-event-size Large --context-key-type RequestContext --context-key-equals aws:PrincipalArn --context-key-type TagContext --context-key-equals Environment --preview",
+            "pm aws-cloudtrail event-configuration set --credential ct-prod --trail-name example-trail --aggregation-event-category Data --aggregation-template API_ACTIVITY --aggregation-template RESOURCE_ACCESS --preview"
           ],
           "output_policy": "",
           "risk": "sets the maximum event size and context key selectors for a trail or event data store",
@@ -27001,17 +27061,17 @@
             {
               "name": "advanced-event-selector-name",
               "type": "string",
-              "summary": "Optional advanced event selector name with a maximum length of 1000 characters.",
+              "summary": "Repeat with each advanced-event field to group a named advanced selector.",
               "values": [],
-              "maps_to": "record.AdvancedEventSelectors.0.Name",
+              "maps_to": "record.AdvancedEventSelectors.[].Name",
               "allow_empty": false
             },
             {
               "name": "advanced-event-field",
               "type": "string",
-              "summary": "Advanced event field selector with a maximum length of 1000 characters.",
+              "summary": "Repeat for each advanced field; pair each occurrence with its condition flag.",
               "values": [],
-              "maps_to": "record.AdvancedEventSelectors.0.FieldSelectors.0.Field",
+              "maps_to": "record.AdvancedEventSelectors.[].FieldSelectors.0.Field",
               "allow_empty": false
             },
             {
@@ -27019,42 +27079,42 @@
               "type": "string_array",
               "summary": "One to 500 suffix-match values, each up to 2048 characters.",
               "values": [],
-              "maps_to": "record.AdvancedEventSelectors.0.FieldSelectors.0.EndsWith"
+              "maps_to": "record.AdvancedEventSelectors.[].FieldSelectors.0.EndsWith"
             },
             {
               "name": "advanced-event-equals",
               "type": "string_array",
               "summary": "One to 500 exact-match values, each up to 2048 characters.",
               "values": [],
-              "maps_to": "record.AdvancedEventSelectors.0.FieldSelectors.0.Equals"
+              "maps_to": "record.AdvancedEventSelectors.[].FieldSelectors.0.Equals"
             },
             {
               "name": "advanced-event-not-ends-with",
               "type": "string_array",
               "summary": "One to 500 negative suffix-match values, each up to 2048 characters.",
               "values": [],
-              "maps_to": "record.AdvancedEventSelectors.0.FieldSelectors.0.NotEndsWith"
+              "maps_to": "record.AdvancedEventSelectors.[].FieldSelectors.0.NotEndsWith"
             },
             {
               "name": "advanced-event-not-equals",
               "type": "string_array",
               "summary": "One to 500 negative exact-match values, each up to 2048 characters.",
               "values": [],
-              "maps_to": "record.AdvancedEventSelectors.0.FieldSelectors.0.NotEquals"
+              "maps_to": "record.AdvancedEventSelectors.[].FieldSelectors.0.NotEquals"
             },
             {
               "name": "advanced-event-not-starts-with",
               "type": "string_array",
               "summary": "One to 500 negative prefix-match values, each up to 2048 characters.",
               "values": [],
-              "maps_to": "record.AdvancedEventSelectors.0.FieldSelectors.0.NotStartsWith"
+              "maps_to": "record.AdvancedEventSelectors.[].FieldSelectors.0.NotStartsWith"
             },
             {
               "name": "advanced-event-starts-with",
               "type": "string_array",
               "summary": "One to 500 prefix-match values, each up to 2048 characters.",
               "values": [],
-              "maps_to": "record.AdvancedEventSelectors.0.FieldSelectors.0.StartsWith"
+              "maps_to": "record.AdvancedEventSelectors.[].FieldSelectors.0.StartsWith"
             },
             {
               "name": "event-selector-data-resource-type",
@@ -27104,7 +27164,8 @@
             }
           ],
           "examples": [
-            "pm aws-cloudtrail event-selectors set --credential ct-prod --trail-name example-trail --event-selector-read-write-type All --event-selector-data-resource-type AWS::S3::Object --event-selector-data-resource-value arn:aws:s3:::example-bucket/ --preview"
+            "pm aws-cloudtrail event-selectors set --credential ct-prod --trail-name example-trail --event-selector-read-write-type All --event-selector-data-resource-type AWS::S3::Object --event-selector-data-resource-value arn:aws:s3:::example-bucket/ --preview",
+            "pm aws-cloudtrail event-selectors set --credential ct-prod --trail-name example-trail --advanced-event-field eventCategory --advanced-event-equals Data --advanced-event-field resources.type --advanced-event-equals AWS::S3::Object --preview"
           ],
           "output_policy": "",
           "risk": "sets basic or advanced event selectors on a CloudTrail trail",
@@ -27136,6 +27197,13 @@
               "maps_to": "record.InsightsDestination"
             },
             {
+              "name": "disable-insights",
+              "type": "empty_array",
+              "summary": "Set true to send an empty InsightSelectors list and disable Insights.",
+              "values": [],
+              "maps_to": "record.InsightSelectors"
+            },
+            {
               "name": "insight-type",
               "type": "enum",
               "summary": "Valid Values: ApiCallRateInsight | ApiErrorRateInsight.",
@@ -27144,8 +27212,7 @@
                 "ApiErrorRateInsight"
               ],
               "maps_to": "record.InsightSelectors.0.InsightType",
-              "allow_empty": false,
-              "required": true
+              "allow_empty": false
             },
             {
               "name": "insight-event-category",
@@ -27166,7 +27233,8 @@
             }
           ],
           "examples": [
-            "pm aws-cloudtrail insight-selectors set --credential ct-prod --trail-name example-trail --insight-type ApiCallRateInsight --preview"
+            "pm aws-cloudtrail insight-selectors set --credential ct-prod --trail-name example-trail --insight-type ApiCallRateInsight --preview",
+            "pm aws-cloudtrail insight-selectors set --credential ct-prod --trail-name example-trail --disable-insights true --preview"
           ],
           "output_policy": "",
           "risk": "enables CloudTrail Insights event types on a trail or event data store",
@@ -27329,10 +27397,48 @@
               "maps_to": "record.DashboardId",
               "allow_empty": false,
               "required": true
+            },
+            {
+              "name": "query-start-time",
+              "type": "string",
+              "summary": "Optional RFC3339 $StartTime$ dashboard query parameter.",
+              "values": [],
+              "maps_to": "record.QueryParameterValues",
+              "map_key": "$StartTime$",
+              "format": "date-time",
+              "allow_empty": false
+            },
+            {
+              "name": "query-end-time",
+              "type": "string",
+              "summary": "Optional RFC3339 $EndTime$ dashboard query parameter.",
+              "values": [],
+              "maps_to": "record.QueryParameterValues",
+              "map_key": "$EndTime$",
+              "format": "date-time",
+              "allow_empty": false
+            },
+            {
+              "name": "query-period",
+              "type": "string",
+              "summary": "Optional $Period$ dashboard query parameter.",
+              "values": [],
+              "maps_to": "record.QueryParameterValues",
+              "map_key": "$Period$",
+              "allow_empty": false
+            },
+            {
+              "name": "event-data-store-id",
+              "type": "string",
+              "summary": "Optional $EventDataStoreId$ dashboard query parameter required by managed dashboards.",
+              "values": [],
+              "maps_to": "record.QueryParameterValues",
+              "map_key": "$EventDataStoreId$",
+              "allow_empty": false
             }
           ],
           "examples": [
-            "pm aws-cloudtrail dashboard refresh --credential ct-prod --dashboard-id arn:aws:cloudtrail:us-east-1:123456789012:dashboard/example --preview"
+            "pm aws-cloudtrail dashboard refresh --credential ct-prod --dashboard-id AWSCloudTrail-Overview --query-start-time 2024-11-13T08:00:00Z --query-end-time 2024-11-13T12:00:00Z --query-period minute --event-data-store-id example-event-store --preview"
           ],
           "output_policy": "",
           "risk": "starts an on-demand refresh of a CloudTrail Lake dashboard",
@@ -27644,6 +27750,64 @@
               "required": true
             },
             {
+              "name": "advanced-event-selector-name",
+              "type": "string",
+              "summary": "Repeat with each advanced-event field to group a named advanced selector.",
+              "values": [],
+              "maps_to": "record.AdvancedEventSelectors.[].Name",
+              "allow_empty": false
+            },
+            {
+              "name": "advanced-event-field",
+              "type": "string",
+              "summary": "Repeat for each advanced field; pair each occurrence with its condition flag.",
+              "values": [],
+              "maps_to": "record.AdvancedEventSelectors.[].FieldSelectors.0.Field",
+              "allow_empty": false
+            },
+            {
+              "name": "advanced-event-ends-with",
+              "type": "string_array",
+              "summary": "One to 500 suffix-match values for the paired advanced event field.",
+              "values": [],
+              "maps_to": "record.AdvancedEventSelectors.[].FieldSelectors.0.EndsWith"
+            },
+            {
+              "name": "advanced-event-equals",
+              "type": "string_array",
+              "summary": "One to 500 exact-match values for the paired advanced event field.",
+              "values": [],
+              "maps_to": "record.AdvancedEventSelectors.[].FieldSelectors.0.Equals"
+            },
+            {
+              "name": "advanced-event-not-ends-with",
+              "type": "string_array",
+              "summary": "One to 500 negative suffix-match values for the paired advanced event field.",
+              "values": [],
+              "maps_to": "record.AdvancedEventSelectors.[].FieldSelectors.0.NotEndsWith"
+            },
+            {
+              "name": "advanced-event-not-equals",
+              "type": "string_array",
+              "summary": "One to 500 negative exact-match values for the paired advanced event field.",
+              "values": [],
+              "maps_to": "record.AdvancedEventSelectors.[].FieldSelectors.0.NotEquals"
+            },
+            {
+              "name": "advanced-event-not-starts-with",
+              "type": "string_array",
+              "summary": "One to 500 negative prefix-match values for the paired advanced event field.",
+              "values": [],
+              "maps_to": "record.AdvancedEventSelectors.[].FieldSelectors.0.NotStartsWith"
+            },
+            {
+              "name": "advanced-event-starts-with",
+              "type": "string_array",
+              "summary": "One to 500 prefix-match values for the paired advanced event field.",
+              "values": [],
+              "maps_to": "record.AdvancedEventSelectors.[].FieldSelectors.0.StartsWith"
+            },
+            {
               "name": "kms-key-id",
               "type": "string",
               "summary": "String Length Constraints: Minimum length of 1. Maximum length of 350. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
@@ -27687,7 +27851,8 @@
             }
           ],
           "examples": [
-            "pm aws-cloudtrail event-data-store update --credential ct-prod --event-data-store arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example --name updated-event-data-store --preview"
+            "pm aws-cloudtrail event-data-store update --credential ct-prod --event-data-store arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example --name updated-event-data-store --preview",
+            "pm aws-cloudtrail event-data-store update --credential ct-prod --event-data-store arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example --advanced-event-field eventCategory --advanced-event-equals Data --advanced-event-field resources.type --advanced-event-equals AWS::S3::Object --preview"
           ],
           "output_policy": "",
           "risk": "updates a CloudTrail Lake event data store's configuration",

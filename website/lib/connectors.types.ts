@@ -40,6 +40,7 @@ export type ConnectorCliFlag = {
   summary: string;
   values: string[];
   mapsTo: string;
+  mapKey?: string;
   format?: string;
   allowEmpty?: boolean;
   required?: boolean;

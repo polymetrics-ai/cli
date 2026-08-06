@@ -157,6 +157,119 @@ func TestBuildActionBodyAllowsEmptyRequiredInsightSelectors(t *testing.T) {
 	}
 }
 
+func TestBuildActionBodyNormalizesRepeatableAdvancedSelectorFragments(t *testing.T) {
+	body, err := buildActionBody("CreateEventDataStore", map[string]any{
+		"Name": "example-store",
+		"AdvancedEventSelectors": []any{
+			map[string]any{"FieldSelectors": []any{map[string]any{"Field": "eventCategory", "Equals": []string{"Data"}}}},
+			map[string]any{"FieldSelectors": []any{map[string]any{"Field": "resources.type", "Equals": []string{"AWS::S3::Object"}}}},
+		},
+	}, true)
+	if err != nil {
+		t.Fatalf("build CreateEventDataStore body: %v", err)
+	}
+	selectors, ok := body["AdvancedEventSelectors"].([]any)
+	if !ok || len(selectors) != 1 {
+		t.Fatalf("AdvancedEventSelectors = %#v, want one normalized selector", body["AdvancedEventSelectors"])
+	}
+	fields := selectors[0].(map[string]any)["FieldSelectors"].([]any)
+	if len(fields) != 2 || fields[1].(map[string]any)["Field"] != "resources.type" {
+		t.Fatalf("FieldSelectors = %#v, want both repeatable fields", fields)
+	}
+
+	for _, test := range []struct {
+		name    string
+		action  string
+		raw     map[string]any
+		wantErr string
+	}{
+		{
+			name:   "data selector needs resource type",
+			action: "PutEventSelectors",
+			raw: map[string]any{
+				"TrailName": "example-trail",
+				"AdvancedEventSelectors": []any{map[string]any{
+					"FieldSelectors": []any{map[string]any{"Field": "eventCategory", "Equals": []string{"Data"}}},
+				}},
+			},
+			wantErr: "Data events require exactly one resources.type",
+		},
+		{
+			name:   "data selector category only uses equals",
+			action: "PutEventSelectors",
+			raw: map[string]any{
+				"TrailName": "example-trail",
+				"AdvancedEventSelectors": []any{map[string]any{
+					"FieldSelectors": []any{
+						map[string]any{"Field": "eventCategory", "StartsWith": []string{"Data"}},
+						map[string]any{"Field": "resources.type", "Equals": []string{"AWS::S3::Object"}},
+					},
+				}},
+			},
+			wantErr: "eventCategory only supports Equals",
+		},
+		{
+			name:   "trail management source only uses documented exclusion",
+			action: "PutEventSelectors",
+			raw: map[string]any{
+				"TrailName": "example-trail",
+				"AdvancedEventSelectors": []any{map[string]any{
+					"FieldSelectors": []any{
+						map[string]any{"Field": "eventCategory", "Equals": []string{"Management"}},
+						map[string]any{"Field": "eventSource", "StartsWith": []string{"kms."}},
+					},
+				}},
+			},
+			wantErr: "management eventSource for trails only supports NotEquals",
+		},
+		{
+			name:   "console credential selector only uses equality operators",
+			action: "CreateEventDataStore",
+			raw: map[string]any{
+				"Name": "example-store",
+				"AdvancedEventSelectors": []any{map[string]any{
+					"FieldSelectors": []any{
+						map[string]any{"Field": "eventCategory", "Equals": []string{"Data"}},
+						map[string]any{"Field": "resources.type", "Equals": []string{"AWS::S3::Object"}},
+						map[string]any{"Field": "sessionCredentialFromConsole", "StartsWith": []string{"t"}},
+					},
+				}},
+			},
+			wantErr: "sessionCredentialFromConsole only supports Equals or NotEquals",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			if _, err := buildActionBody(test.action, test.raw, true); err == nil || !strings.Contains(err.Error(), test.wantErr) {
+				t.Fatalf("buildActionBody(%s) error = %v, want %q", test.action, err, test.wantErr)
+			}
+		})
+	}
+}
+
+func TestBuildActionBodyValidatesClosedDashboardQueryParameters(t *testing.T) {
+	body, err := buildActionBody("StartDashboardRefresh", map[string]any{
+		"DashboardId": "AWSCloudTrail-Overview",
+		"QueryParameterValues": map[string]any{
+			"$StartTime$":        "2024-11-13T08:00:00Z",
+			"$EndTime$":          "2024-11-13T12:00:00Z",
+			"$Period$":           "minute",
+			"$EventDataStoreId$": "example-event-store",
+		},
+	}, true)
+	if err != nil {
+		t.Fatalf("build StartDashboardRefresh body: %v", err)
+	}
+	if got := body["QueryParameterValues"].(map[string]any)["$EventDataStoreId$"]; got != "example-event-store" {
+		t.Fatalf("$EventDataStoreId$ = %#v, want mapped value", got)
+	}
+	if _, err := buildActionBody("StartDashboardRefresh", map[string]any{
+		"DashboardId":          "AWSCloudTrail-Overview",
+		"QueryParameterValues": map[string]any{"$Unknown$": "value"},
+	}, true); err == nil || !strings.Contains(err.Error(), "unsupported dashboard query parameter") {
+		t.Fatalf("StartDashboardRefresh unknown parameter error = %v, want closed-key rejection", err)
+	}
+}
+
 func TestBuildActionBodyEnforcesConditionalRules(t *testing.T) {
 	tests := []struct {
 		name    string
@@ -172,6 +285,16 @@ func TestBuildActionBodyEnforcesConditionalRules(t *testing.T) {
 				"InsightSelectors": []any{map[string]any{"InsightType": "ApiCallRateInsight"}},
 			},
 			wantErr: "requires InsightsDestination",
+		},
+		{
+			name:   "event data store insights reject data category",
+			action: "PutInsightSelectors",
+			raw: map[string]any{
+				"EventDataStore":      "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example",
+				"InsightsDestination": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/insights",
+				"InsightSelectors":    []any{map[string]any{"InsightType": "ApiCallRateInsight", "EventCategories": []string{"Data"}}},
+			},
+			wantErr: "Management Insights only",
 		},
 		{
 			name:   "event data store update needs a change",
@@ -218,7 +341,7 @@ func TestBuildActionBodyEnforcesConditionalRules(t *testing.T) {
 			raw: map[string]any{
 				"EventDataStore":      "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example",
 				"MaxEventSize":        "Standard",
-				"ContextKeySelectors": []any{map[string]any{"Type": "RequestContext"}},
+				"ContextKeySelectors": []any{map[string]any{"Type": "RequestContext", "Equals": []any{"aws:PrincipalArn"}}},
 			},
 			wantErr: "requires MaxEventSize Large",
 		},
@@ -325,7 +448,10 @@ func TestBuildActionBodyValidatesTypedCloudTrailNestedPayloads(t *testing.T) {
 	if _, err := buildActionBody("PutEventSelectors", map[string]any{
 		"TrailName": "example-trail",
 		"AdvancedEventSelectors": []any{map[string]any{
-			"FieldSelectors": []any{map[string]any{"Field": "eventCategory", "Equals": []string{"Data"}}},
+			"FieldSelectors": []any{
+				map[string]any{"Field": "eventCategory", "Equals": []string{"Data"}},
+				map[string]any{"Field": "resources.type", "Equals": []string{"AWS::S3::Object"}},
+			},
 		}},
 		"EventSelectors": []any{map[string]any{"ReadWriteType": "All"}},
 	}, true); err == nil || !strings.Contains(err.Error(), "cannot combine AdvancedEventSelectors") {
@@ -368,8 +494,11 @@ func TestBuildActionBodyValidatesTypedCloudTrailNestedPayloads(t *testing.T) {
 			raw: map[string]any{
 				"TrailName": "example-trail",
 				"AdvancedEventSelectors": []any{map[string]any{
-					"Name":           "s3-object-events",
-					"FieldSelectors": []any{map[string]any{"Field": "eventCategory", "Equals": []string{"Data"}}},
+					"Name": "s3-object-events",
+					"FieldSelectors": []any{
+						map[string]any{"Field": "eventCategory", "Equals": []string{"Data"}},
+						map[string]any{"Field": "resources.type", "Equals": []string{"AWS::S3::Object"}},
+					},
 				}},
 			},
 		},

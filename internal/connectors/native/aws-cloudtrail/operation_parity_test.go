@@ -872,7 +872,10 @@ func TestNativeCloudTrailCancelQueryIsAWrite(t *testing.T) {
 	defer srv.Close()
 
 	c := Connector{Client: srv.Client()}
-	record := connectors.Record{"QueryId": "11111111-1111-1111-1111-111111111111"}
+	record := connectors.Record{
+		"EventDataStore": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example",
+		"QueryId":        "11111111-1111-1111-1111-111111111111",
+	}
 	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "cancel_query"}, []connectors.Record{record}); err != nil {
 		t.Fatalf("ValidateWrite: %v", err)
 	}

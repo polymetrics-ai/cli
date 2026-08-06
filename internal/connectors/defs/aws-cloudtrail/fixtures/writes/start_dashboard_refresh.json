@@ -1,12 +1,24 @@
 {
   "record": {
-    "DashboardId": "fixture-dashboard"
+    "DashboardId": "AWSCloudTrail-Overview",
+    "QueryParameterValues": {
+      "$StartTime$": "2024-11-13T08:00:00Z",
+      "$EndTime$": "2024-11-13T12:00:00Z",
+      "$Period$": "minute",
+      "$EventDataStoreId$": "fixture-event-store"
+    }
   },
   "expect": {
     "method": "POST",
     "path": "/",
     "body": {
-      "DashboardId": "fixture-dashboard"
+      "DashboardId": "AWSCloudTrail-Overview",
+      "QueryParameterValues": {
+        "$StartTime$": "2024-11-13T08:00:00Z",
+        "$EndTime$": "2024-11-13T12:00:00Z",
+        "$Period$": "minute",
+        "$EventDataStoreId$": "fixture-event-store"
+      }
     }
   }
 }

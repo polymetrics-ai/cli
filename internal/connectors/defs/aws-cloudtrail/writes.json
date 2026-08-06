@@ -959,10 +959,22 @@
             "type": "string"
           },
           "QueryParameterValues": {
-            "type": [
-              "string",
-              "object"
-            ]
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "$EndTime$": {
+                "type": "string"
+              },
+              "$EventDataStoreId$": {
+                "type": "string"
+              },
+              "$Period$": {
+                "type": "string"
+              },
+              "$StartTime$": {
+                "type": "string"
+              }
+            }
           }
         }
       },
@@ -1196,10 +1208,84 @@
         ],
         "properties": {
           "AdvancedEventSelectors": {
-            "type": [
-              "string",
-              "array"
-            ]
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "FieldSelectors"
+              ],
+              "properties": {
+                "FieldSelectors": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 500,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "Field"
+                    ],
+                    "properties": {
+                      "EndsWith": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 500,
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "Equals": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 500,
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "Field": {
+                        "type": "string"
+                      },
+                      "NotEndsWith": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 500,
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "NotEquals": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 500,
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "NotStartsWith": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 500,
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "StartsWith": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 500,
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "Name": {
+                  "type": "string"
+                }
+              }
+            }
           },
           "BillingMode": {
             "type": "string"

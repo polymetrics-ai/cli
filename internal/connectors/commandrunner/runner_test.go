@@ -1218,6 +1218,99 @@ func TestRecordOverridesBuildsExplicitNestedArrayObjectFields(t *testing.T) {
 	}
 }
 
+func TestRecordOverridesBuildsRepeatableNestedCollections(t *testing.T) {
+	record, err := recordOverrides(connectors.CommandSurfaceCommand{
+		Path:         "selectors set",
+		Intent:       "reverse_etl",
+		Availability: "implemented",
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "advanced-field", Type: "string", MapsTo: "record.advanced.[].fields.0.field"},
+			{Name: "advanced-equals", Type: "string_array", MapsTo: "record.advanced.[].fields.0.equals", MinItems: 1},
+			{Name: "context-type", Type: "enum", Values: []string{"TagContext", "RequestContext"}, MapsTo: "record.context.[].type"},
+			{Name: "context-equals", Type: "string_array", MapsTo: "record.context.[].equals", MinItems: 1},
+			{Name: "template", Type: "enum", Values: []string{"API_ACTIVITY", "RESOURCE_ACCESS"}, MapsTo: "record.templates.[]"},
+		},
+	}, map[string][]string{
+		"advanced-field":  {"eventCategory", "resources.type"},
+		"advanced-equals": {"Data", "AWS::S3::Object"},
+		"context-type":    {"RequestContext", "TagContext"},
+		"context-equals":  {"aws:PrincipalArn,aws:SourceIp", "Environment"},
+		"template":        {"API_ACTIVITY", "RESOURCE_ACCESS"},
+	})
+	if err != nil {
+		t.Fatalf("recordOverrides: %v", err)
+	}
+	advanced, ok := record["advanced"].([]any)
+	if !ok || len(advanced) != 2 {
+		t.Fatalf("advanced = %#v, want two repeatable records", record["advanced"])
+	}
+	firstField := advanced[0].(map[string]any)["fields"].([]any)[0].(map[string]any)
+	secondField := advanced[1].(map[string]any)["fields"].([]any)[0].(map[string]any)
+	if firstField["field"] != "eventCategory" || secondField["field"] != "resources.type" {
+		t.Fatalf("advanced fields = %#v, want ordered repeatable records", advanced)
+	}
+	if got := secondField["equals"].([]string); len(got) != 1 || got[0] != "AWS::S3::Object" {
+		t.Fatalf("second advanced equals = %#v, want one paired value", secondField["equals"])
+	}
+	contextSelectors, ok := record["context"].([]any)
+	if !ok || len(contextSelectors) != 2 {
+		t.Fatalf("context = %#v, want two repeatable records", record["context"])
+	}
+	if got := contextSelectors[0].(map[string]any)["equals"].([]string); len(got) != 2 || got[1] != "aws:SourceIp" {
+		t.Fatalf("first context equals = %#v, want grouped array", contextSelectors[0])
+	}
+	if got := record["templates"].([]any); len(got) != 2 || got[1] != "RESOURCE_ACCESS" {
+		t.Fatalf("templates = %#v, want repeatable enum array", record["templates"])
+	}
+}
+
+func TestRecordOverridesBuildsClosedMapEntries(t *testing.T) {
+	record, err := recordOverrides(connectors.CommandSurfaceCommand{
+		Path:         "dashboard refresh",
+		Intent:       "reverse_etl",
+		Availability: "implemented",
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "start", Type: "string", MapsTo: "record.queryParameters", MapKey: "$StartTime$"},
+			{Name: "store", Type: "string", MapsTo: "record.queryParameters", MapKey: "$EventDataStoreId$"},
+		},
+	}, map[string][]string{
+		"start": {"2024-11-13T08:00:00Z"},
+		"store": {"example-event-store"},
+	})
+	if err != nil {
+		t.Fatalf("recordOverrides: %v", err)
+	}
+	parameters, ok := record["queryParameters"].(map[string]any)
+	if !ok {
+		t.Fatalf("queryParameters = %#v, want map", record["queryParameters"])
+	}
+	if parameters["$StartTime$"] != "2024-11-13T08:00:00Z" || parameters["$EventDataStoreId$"] != "example-event-store" {
+		t.Fatalf("queryParameters = %#v, want closed map entries", parameters)
+	}
+}
+
+func TestRecordOverridesRejectsEmptyArrayAndSelectorInputs(t *testing.T) {
+	command := connectors.CommandSurfaceCommand{
+		Path:         "insights set",
+		Intent:       "reverse_etl",
+		Availability: "implemented",
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "disable", Type: "empty_array", MapsTo: "record.selectors"},
+			{Name: "type", Type: "string", MapsTo: "record.selectors.0.type"},
+		},
+	}
+	if _, err := recordOverrides(command, map[string][]string{"disable": {"true"}, "type": {"ApiCallRateInsight"}}); err == nil || !strings.Contains(err.Error(), "mutually exclusive") {
+		t.Fatalf("recordOverrides mixed disable and selector error = %v, want mutual exclusion", err)
+	}
+	record, err := recordOverrides(command, map[string][]string{"disable": {"true"}})
+	if err != nil {
+		t.Fatalf("recordOverrides disable: %v", err)
+	}
+	if selectors, ok := record["selectors"].([]any); !ok || len(selectors) != 0 {
+		t.Fatalf("selectors = %#v, want empty array", record["selectors"])
+	}
+}
+
 func TestRecordOverridesRejectsSparseHugeAndConflictingNestedPaths(t *testing.T) {
 	tests := []struct {
 		name    string
@@ -1236,10 +1329,10 @@ func TestRecordOverridesRejectsSparseHugeAndConflictingNestedPaths(t *testing.T)
 		{
 			name: "huge array index",
 			command: connectors.CommandSurfaceCommand{Path: "patients create", Intent: "reverse_etl", Availability: "implemented", Flags: []connectors.CommandSurfaceFlag{
-				{Name: "family-name", Type: "string", MapsTo: "record.person.names.129.familyName"},
+				{Name: "family-name", Type: "string", MapsTo: "record.person.names.501.familyName"},
 			}},
 			flags: map[string][]string{"family-name": {"Connectorcase"}},
-			want:  "exceeds max 128",
+			want:  "exceeds max 500",
 		},
 		{
 			name: "leading zero array index",

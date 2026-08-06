@@ -159,6 +159,9 @@ func renderCommandSurfaceFlag(flag CommandSurfaceFlag) string {
 	if flag.MapsTo != "" {
 		parts = append(parts, "maps_to="+flag.MapsTo)
 	}
+	if flag.MapKey != "" {
+		parts = append(parts, "map_key="+flag.MapKey)
+	}
 	return strings.Join(parts, ": ")
 }
 

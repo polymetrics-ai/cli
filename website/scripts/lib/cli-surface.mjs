@@ -22,6 +22,7 @@ const keyNames = (keyStyle) => {
   if (keyStyle === 'camel') {
     return {
       mapsTo: 'mapsTo',
+      mapKey: 'mapKey',
       allowEmpty: 'allowEmpty',
       leftFallback: 'leftFallback',
       rightFallback: 'rightFallback',
@@ -36,6 +37,7 @@ const keyNames = (keyStyle) => {
   }
   return {
     mapsTo: 'maps_to',
+    mapKey: 'map_key',
     allowEmpty: 'allow_empty',
     leftFallback: 'left_fallback',
     rightFallback: 'right_fallback',
@@ -73,6 +75,7 @@ export function mapFlags(flags, options = {}) {
         values: Array.isArray(flag.values) ? flag.values.map((value) => trim(value)).filter(Boolean) : [],
         [keys.mapsTo]: trim(flag.maps_to),
       };
+      if (trim(flag.map_key)) out[keys.mapKey] = trim(flag.map_key);
       if (trim(flag.format)) out.format = trim(flag.format);
       if (typeof flag.allow_empty === 'boolean') out[keys.allowEmpty] = flag.allow_empty;
       if (typeof flag.required === 'boolean') out.required = flag.required;

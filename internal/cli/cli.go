@@ -931,6 +931,9 @@ func writeConnectorFlag(b *strings.Builder, flag connectors.CommandSurfaceFlag) 
 	if flag.MapsTo != "" {
 		fmt.Fprintf(b, " maps_to=%s", flag.MapsTo)
 	}
+	if flag.MapKey != "" {
+		fmt.Fprintf(b, " map_key=%s", flag.MapKey)
+	}
 	b.WriteByte('\n')
 }
 

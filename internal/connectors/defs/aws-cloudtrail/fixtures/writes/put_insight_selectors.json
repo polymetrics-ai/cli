@@ -1,5 +1,6 @@
 {
   "record": {
+    "TrailName": "fixture-trail",
     "InsightSelectors": [
       {
         "InsightType": "ApiCallRateInsight"
@@ -10,6 +11,7 @@
     "method": "POST",
     "path": "/",
     "body": {
+      "TrailName": "fixture-trail",
       "InsightSelectors": [
         {
           "InsightType": "ApiCallRateInsight"

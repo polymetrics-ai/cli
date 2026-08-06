@@ -464,6 +464,7 @@ func commandSurfaceFlag(flag CLIFlag) connectors.CommandSurfaceFlag {
 		Summary:    flag.Summary,
 		Values:     append([]string(nil), flag.Values...),
 		MapsTo:     flag.MapsTo,
+		MapKey:     flag.MapKey,
 		Format:     flag.Format,
 		AllowEmpty: cloneBoolPtr(flag.AllowEmpty),
 		Required:   flag.Required,

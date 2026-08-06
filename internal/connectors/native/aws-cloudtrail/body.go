@@ -33,6 +33,12 @@ func buildActionBody(action string, raw map[string]any, requireRequired bool) (m
 		if err != nil {
 			return nil, fmt.Errorf("aws-cloudtrail %s field %q: %w", action, key, err)
 		}
+		if field.Name == "AdvancedEventSelectors" {
+			coerced, err = normalizeAdvancedEventSelectors(coerced)
+			if err != nil {
+				return nil, fmt.Errorf("aws-cloudtrail %s field %q: %w", action, key, err)
+			}
+		}
 		if err := validateActionField(action, field, coerced); err != nil {
 			return nil, fmt.Errorf("aws-cloudtrail %s field %q: %w", action, key, err)
 		}
