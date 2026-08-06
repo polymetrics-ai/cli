@@ -63,11 +63,6 @@
       "enum": ["5", "10", "15", "30", "60"],
       "default": "30",
       "description": "Optional connection timeout in seconds."
-    },
-    "mailbox": {
-      "type": "string",
-      "default": "INBOX",
-      "description": "Mailbox used by the messages stream. Set a separate credential or reset its state before changing this value."
     }
   }
 }

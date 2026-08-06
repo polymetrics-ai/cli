@@ -1,7 +1,7 @@
 // Package email implements the protocol-level Email connector.
 //
 // The connector is deliberately split by protocol responsibility: IMAP is
-// the read path (mailbox and message streams) and SMTP is a typed, approval
+// the mailbox-list read path and SMTP is a typed, approval
 // gated send-only write path. It is not a wrapper around Gmail or Outlook's
 // HTTP APIs, and SMTP never backs a read capability.
 package email
@@ -16,7 +16,6 @@ import (
 
 const (
 	mailboxesStream = "mailboxes"
-	messagesStream  = "messages"
 	sendAction      = "send_message"
 )
 
@@ -59,17 +58,6 @@ func New() Connector {
 	return Connector{Base: engine.NewBase(b)}
 }
 
-func (c Connector) Definition() connectors.Definition {
-	definition := c.Base.Definition()
-	syncModes := c.Manifest().SyncModes
-	for index := range definition.Streams {
-		if definition.Streams[index].Name == messagesStream {
-			definition.Streams[index].SyncModes = append([]string(nil), syncModes...)
-		}
-	}
-	return definition
-}
-
 // Manifest supplies the typed native write contract consumed by the shared
 // command plan/preview/approval gate. SMTP send is explicitly non-batchable
 // and destructive once the server accepts DATA.
@@ -88,7 +76,6 @@ func (c Connector) Manifest() connectors.Manifest {
 			{Name: "smtp_username"},
 			{Name: "from_address"},
 			{Name: "connection_timeout_seconds", Default: "30"},
-			{Name: "mailbox", Default: "INBOX"},
 		},
 		SecretFields: []connectors.SecretField{{Name: "password", Required: true}},
 		Streams: []connectors.Stream{
@@ -100,23 +87,6 @@ func (c Connector) Manifest() connectors.Manifest {
 					{Name: "name", Type: "string"},
 					{Name: "delimiter", Type: "string"},
 					{Name: "attributes", Type: "array"},
-				},
-			},
-			{
-				Name:         messagesStream,
-				Description:  "Messages from one IMAP mailbox, keyed and incremented by mailbox UIDVALIDITY plus UID. Hard deletions are not observable by polling. Full refresh is unavailable pending #3810.",
-				PrimaryKey:   []string{"mailbox", "uid_validity", "uid"},
-				CursorFields: []string{"imap_cursor"},
-				Fields: []connectors.Field{
-					{Name: "mailbox", Type: "string"},
-					{Name: "uid_validity", Type: "string"},
-					{Name: "uid", Type: "string"},
-					{Name: "imap_cursor", Type: "string"},
-					{Name: "envelope", Type: "object"},
-					{Name: "flags", Type: "array"},
-					{Name: "internal_date", Type: "string"},
-					{Name: "size", Type: "integer"},
-					{Name: "body_parts", Type: "array"},
 				},
 			},
 		},
@@ -131,10 +101,10 @@ func (c Connector) Manifest() connectors.Manifest {
 			Batchable:      &batchable,
 			Confirm:        string(connectors.ConfirmationKindDestructive),
 		}},
-		SyncModes:       []string{"incremental_append"},
-		SourceSyncModes: []string{"incremental"},
+		SyncModes:       []string{"full_refresh_append", "full_refresh_overwrite"},
+		SourceSyncModes: []string{"full_refresh"},
 		Risk: connectors.RiskSpec{
-			Read:     "polled IMAP reads; hard deletion is not observable by polling",
+			Read:     "polled IMAP mailbox list",
 			Write:    "SMTP send-only submission",
 			Approval: "plan, unmasked preview, typed destructive confirmation, and approval are required before SMTP submission",
 		},
@@ -150,23 +120,5 @@ func (c Connector) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (c
 	return connectors.Catalog{Connector: c.Name(), Streams: c.Manifest().Streams}, nil
 }
 
-// InitialState establishes the scalar state shape used by generic ETL state
-// persistence. The mailbox name is part of the encoded value, so state cannot
-// accidentally be reused for a different mailbox.
-func (c Connector) InitialState(ctx context.Context, stream string, cfg connectors.RuntimeConfig) (map[string]string, error) {
-	if err := ctx.Err(); err != nil {
-		return nil, err
-	}
-	if stream != messagesStream {
-		return map[string]string{}, nil
-	}
-	mailbox, err := mailboxFromConfig(cfg.Config)
-	if err != nil {
-		return nil, err
-	}
-	return map[string]string{"cursor": encodeCursor(mailbox, 0, 0)}, nil
-}
-
 var _ connectors.Connector = Connector{}
 var _ connectors.ManifestProvider = Connector{}
-var _ connectors.StatefulReader = Connector{}

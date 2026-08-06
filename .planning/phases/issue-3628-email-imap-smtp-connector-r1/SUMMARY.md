@@ -1,7 +1,7 @@
 ---
 coverage:
   - id: D1
-    description: Native IMAP mailbox/message streams with a UIDVALIDITY+UID cursor and bounded bodies.
+    description: Native IMAP mailbox listing; message reads remain blocked pending #3810.
     verification:
       - kind: integration
         ref: go test ./internal/connectors/native/email -count=1
@@ -39,7 +39,7 @@ task forbids role spawning. The approved inline/manual fallback was used. `scrip
 execute-phase 3628`, `verify-work 3628`, and `code-review 3628` were resolved on 2026-08-06; this
 directory holds their equivalent plan, TDD, validation, UAT, and review records.
 
-Delivered work: the `email` native bundle and executor, IMAP polled reads, SMTP-only destructive
+Delivered work: the `email` native bundle and executor, IMAP mailbox listing, SMTP-only destructive
 send, real command-runner preflight coverage, credential constraint regression coverage, generated
 CLI/manual/catalog/website data, and the approved IMAP module. See `VERIFICATION.md` for exact
 commands and binary evidence.

@@ -39689,7 +39689,7 @@
   {
     "name": "email",
     "display_name": "Email (IMAP + SMTP)",
-    "description": "Reads mailboxes and bounded message data through IMAP4rev2, and sends one typed RFC 5322 message through SMTP submission after plan, preview, approval, and destructive confirmation.",
+    "description": "Lists mailboxes through IMAP4rev2, and sends one typed RFC 5322 message through SMTP submission after plan, preview, approval, and destructive confirmation.",
     "integration_type": "email",
     "docs_url": "https://www.rfc-editor.org/rfc/rfc9051.html",
     "release_stage": "beta",
@@ -39786,11 +39786,6 @@
           ],
           "default": "30",
           "description": "Optional connection timeout in seconds."
-        },
-        "mailbox": {
-          "type": "string",
-          "default": "INBOX",
-          "description": "Mailbox used by the messages stream. Set a separate credential or reset its state before changing this value."
         }
       }
     },
@@ -39804,18 +39799,6 @@
           "full_refresh_append",
           "full_refresh_overwrite",
           "full_refresh_overwrite_deduped"
-        ]
-      },
-      {
-        "name": "messages",
-        "primary_key": [
-          "mailbox",
-          "uid_validity",
-          "uid"
-        ],
-        "cursor_field": "imap_cursor",
-        "sync_modes": [
-          "incremental_append"
         ]
       }
     ],
@@ -39831,7 +39814,7 @@
       }
     ],
     "risk": {
-      "read": "polled IMAP mailbox and message reads; messages are never changed, but polling cannot report hard-deleted messages that no longer exist in the mailbox",
+      "read": "polled IMAP mailbox list",
       "write": "SMTP submission sends one externally visible message to the exact envelope recipients after the server accepts DATA; this cannot be undone",
       "approval": "SMTP submission is a non-batchable destructive write: it requires plan, an unmasked payload preview, typed destructive confirmation, and approval before execution"
     },

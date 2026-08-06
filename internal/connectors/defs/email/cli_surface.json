@@ -1,5 +1,5 @@
 {
-  "tagline": "Read IMAP mailboxes and send explicitly approved SMTP messages.",
+  "tagline": "List IMAP mailboxes and send explicitly approved SMTP messages.",
   "usage": "pm email <command> [options]",
   "source_cli": {
     "name": "IMAP4rev2 and SMTP submission",
@@ -11,7 +11,7 @@
     {
       "id": "read",
       "title": "IMAP reads",
-      "commands": ["mailboxes list", "messages list"]
+      "commands": ["mailboxes list"]
     },
     {
       "id": "write",
@@ -28,27 +28,6 @@
       "stream": "mailboxes",
       "api_surface": [{"method": "IMAP", "path": "LIST"}],
       "examples": ["pm email mailboxes list --credential polly-mail"]
-    },
-    {
-      "path": "messages list",
-      "summary": "Read bounded message envelopes, flags, dates, sizes, and bounded body parts from one IMAP mailbox.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "messages",
-      "flags": [
-        {
-          "name": "mailbox",
-          "type": "string",
-          "summary": "Mailbox to read for this command; use a distinct credential/state for a different incremental mailbox.",
-          "maps_to": "config.mailbox",
-          "allow_empty": false
-        }
-      ],
-      "api_surface": [
-        {"method": "IMAP", "path": "UID SEARCH"},
-        {"method": "IMAP", "path": "UID FETCH"}
-      ],
-      "examples": ["pm email messages list --credential polly-mail --limit 25"]
     },
     {
       "path": "message send",
@@ -115,8 +94,8 @@
   ],
   "help_topics": [
     {
-      "name": "incremental",
-      "summary": "Messages use a mailbox-specific UIDVALIDITY+UID cursor; hard deletions are not observable by polling; full message refresh is unavailable pending #3810."
+      "name": "messages-availability",
+      "summary": "Message reads, full refresh, and sparse UID continuation are unavailable pending #3810; both become available when #3810 lands. Full refresh needs catalog-mode validation at internal/app/app.go:350-376 and cursor-mode handling at internal/app/app.go:543-551. Sparse UID continuation needs scan state at internal/app/types.go:40-47 and persistence at internal/app/local_warehouse.go:246-256."
     },
     {
       "name": "submission-safety",

@@ -7,7 +7,7 @@ description: Email (IMAP + SMTP) connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads mailboxes and bounded message data through IMAP4rev2, and sends one typed RFC 5322 message through SMTP submission after plan, preview, approval, and destructive confirmation.
+Lists mailboxes through IMAP4rev2, and sends one typed RFC 5322 message through SMTP submission after plan, preview, approval, and destructive confirmation.
 
 ## Icon
 
@@ -38,7 +38,6 @@ Reads mailboxes and bounded message data through IMAP4rev2, and sends one typed 
 - smtp_username
 - from_address
 - connection_timeout_seconds default=30
-- mailbox default=INBOX
 - password (secret) (required)
 
 ## ETL Streams
@@ -46,15 +45,11 @@ Reads mailboxes and bounded message data through IMAP4rev2, and sends one typed 
 - mailboxes: Mailboxes returned by IMAP LIST.
   - primary key: name
   - fields: name(string), delimiter(string), attributes(array)
-- messages: Messages from one IMAP mailbox, keyed and incremented by mailbox UIDVALIDITY plus UID. Hard deletions are not observable by polling. Full refresh is unavailable pending #3810.
-  - primary key: mailbox, uid_validity, uid
-  - cursor: imap_cursor
-  - fields: mailbox(string), uid_validity(string), uid(string), imap_cursor(string), envelope(object), flags(array), internal_date(string), size(integer), body_parts(array)
 
 ## Sync Modes
 
-- ETL sync modes: incremental_append
-- Source modes: incremental
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
+- Source modes: full_refresh
 
 ## Reverse ETL Actions
 
@@ -67,24 +62,23 @@ Reads mailboxes and bounded message data through IMAP4rev2, and sends one typed 
 
 ## Security
 
-- read risk: polled IMAP reads; hard deletion is not observable by polling
+- read risk: polled IMAP mailbox list
 - write risk: SMTP send-only submission
 - approval: plan, unmasked preview, typed destructive confirmation, and approval are required before SMTP submission
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Command Surface
 
-- Read IMAP mailboxes and send explicitly approved SMTP messages.
+- List IMAP mailboxes and send explicitly approved SMTP messages.
 - Usage: pm email <command> [options]
 - Source CLI: IMAP4rev2 and SMTP submission (https://www.rfc-editor.org/rfc/rfc6409.html)
 - IMAP reads
 - SMTP submission
 - Other Commands
   - mailboxes list - List mailboxes through IMAP LIST. [intent=etl availability=implemented stream=mailboxes]
-  - messages list - Read bounded message envelopes, flags, dates, sizes, and bounded body parts from one IMAP mailbox. [intent=etl availability=implemented stream=messages]; flags: --mailbox
   - message send - Plan, preview, approve, and submit one typed SMTP message; the preview includes the exact unmasked MIME payload. [intent=reverse_etl availability=implemented write=send_message]; approval: Requires plan, unmasked preview, approval evidence, and typed destructive confirmation.; risk: SMTP submission is externally visible and irreversible after the server accepts it.; flags: --to (required), --cc, --bcc, --subject (required), --body (required), --body-content-type, --attachment
 - Help topics:
-  - incremental - Messages use a mailbox-specific UIDVALIDITY+UID cursor; hard deletions are not observable by polling; full message refresh is unavailable pending #3810.
+  - messages-availability - Message reads, full refresh, and sparse UID continuation are unavailable pending #3810; both become available when #3810 lands. Full refresh needs catalog-mode validation at internal/app/app.go:350-376 and cursor-mode handling at internal/app/app.go:543-551. Sparse UID continuation needs scan state at internal/app/types.go:40-47 and persistence at internal/app/local_warehouse.go:246-256.
   - submission-safety - SMTP is send-only; message send is non-batchable, destructive, approval-gated, and previewed without masking.
 
 ## Commands

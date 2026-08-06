@@ -5,7 +5,7 @@ Date: 2026-08-06. Automated local protocol-double UAT passed.
 | Deliverable | Evidence | Result |
 | --- | --- | --- |
 | IMAP mailbox list is executable and limited | `TestMailboxesAreReachableThroughCommandRunner`; `TestMailboxListHonorsRequestedLimit` | pass |
-| IMAP message records are bounded and incremental | `TestMessagesReadUsesUIDValidityCursorAndBoundedBodyParts` | pass |
+| IMAP message reads are blocked until shared state support exists | `TestMessagesReadIsBlockedAndUndeclared` | pass |
 | SMTP remains send-only and approval-gated | `TestSendRequiresTypedApprovalBeforeSMTPDispatch`; command-runner fleet preflight | pass |
 | Preview is complete and unmasked | `TestSendPreviewIsUnmaskedAndAttachmentDriftCannotDispatch`; `TestMessageSendCommandBuildsTypedUnmaskedPreview` | pass |
 | Serialized plan data remains executable | `TestSendMessageAcceptsPersistedJSONArrays` | pass |

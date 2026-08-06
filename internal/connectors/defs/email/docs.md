@@ -1,8 +1,8 @@
 # Overview
 
-Email is a native protocol connector, not the Gmail or Outlook API connectors. IMAP4rev2 is the
-polled read side: it lists mailboxes and reads mailbox messages. SMTP submission is the send-only
-write side: it submits a typed message and does not list, fetch, or search mail.
+Email is a native protocol connector, not the Gmail or Outlook API connectors. IMAP4rev2 lists
+mailboxes. SMTP submission is the send-only write side: it submits a typed message and does not
+list, fetch, or search mail.
 
 The implementation uses [RFC 9051](https://www.rfc-editor.org/rfc/rfc9051.html) for IMAP and
 [RFC 6409](https://www.rfc-editor.org/rfc/rfc6409.html) for SMTP submission. RFC 9051 explicitly
@@ -15,35 +15,29 @@ Supply the same connection fields as a mail client:
 - `imap_host`, `imap_port` (`143` or `993`), and `imap_security` (`tls`, `starttls`, or `none`)
 - `smtp_host`, `smtp_port` (`25`, `465`, or `587`), and `smtp_security` (`tls`, `starttls`, or `none`)
 - `username` and secret `password`
-- optional `smtp_username`, `from_address`, `connection_timeout_seconds`, and `mailbox`
+- optional `smtp_username`, `from_address`, and `connection_timeout_seconds`
 
 The port and security fields are closed constraints validated before credential persistence. The
-password is a secret and is never printed, logged, included in fixtures, or put in a preview.
+password is a secret and is never printed, logged, or put in a preview.
 `tls` means implicit TLS; `starttls` upgrades the established protocol connection. Use `none` only
 for a trusted local/test server: remote password authentication over an unencrypted connection is
 rejected.
 
 ## Streams notes
 
-`pm email mailboxes list` issues IMAP `LIST`. `pm email messages list` selects one mailbox and
-emits a bounded number of messages with envelope, flags, internal date, RFC822 size, and bounded
-leaf body parts. The connector requests at most 1 MiB per body part and never advertises message
-search as an SMTP feature.
+`pm email mailboxes list` issues IMAP `LIST`. Message reads are not exposed while their full-refresh
+and sparse-UID continuation semantics cannot be enforced by the shared ETL boundary.
 
-The `messages` incremental cursor is a mailbox-scoped encoding of `UIDVALIDITY` plus UID, not a
-received-date timestamp. RFC 9051 §§2.3.1 and 2.3.2 define UIDs as the mailbox's stable message
-identity while `UIDVALIDITY` detects when that UID namespace changes; a date is neither monotonic
-nor a mailbox identity. The cursor cannot be moved to a different mailbox. When UIDVALIDITY
-changes, the connector starts from that mailbox's new UID namespace.
+Message reads, including full refresh, are blocked pending #3810. Full refresh needs catalog sync
+mode validation at `internal/app/app.go:350-376` and cursor-mode handling at
+`internal/app/app.go:543-551`; until then, a default full refresh could silently become incremental.
+Sparse UID continuation needs scan-continuation state at `internal/app/types.go:40-47` and
+non-emitted checkpoint persistence at `internal/app/local_warehouse.go:246-256`; until then, an
+empty sparse range could be scanned repeatedly. Both become available when #3810 lands.
 
-Polling cannot see a hard delete. A message removed from the mailbox simply stops appearing; this
-connector emits no tombstone and makes no claim to detect it. IMAP IDLE/push subscriptions are out
-of scope here and belong to the webhook/subscription seam in #3614.
-
-The `messages` stream supports incremental sync only. Full refresh of messages is blocked pending
-#3810: the shared ETL reader at `internal/app/app.go:557-564` always forwards persisted `since` and
-cursor state and does not pass the source mode to this connector, so Email cannot safely request a
-complete reread by itself.
+When #3810 enables message polling, its RFC 9051 UIDVALIDITY plus UID cursor will not observe hard
+deletes: a removed message simply stops appearing and no tombstone is emitted. IMAP IDLE/push
+subscriptions remain out of scope and belong to the webhook/subscription seam in #3614.
 
 ## Write actions & risks
 
@@ -60,11 +54,13 @@ recipients appear in the envelope preview but not the RFC 5322 headers.
 
 ## Known limits
 
-- This connector polls; it does not implement IMAP IDLE, webhooks, or subscriptions (#3614 owns that seam).
-- Hard deletions are not observable in an incremental poll; no deletion tombstone is produced.
-- Message body parts are intentionally partial (1 MiB each; at most 32 leaf parts per message)
-  and the command `--limit` bounds emitted messages. Large or nested MIME content can therefore
-  be truncated by design.
+- Message reads, full refresh, and sparse UID continuation are blocked pending #3810. Full refresh
+  needs `internal/app/app.go:350-376` catalog sync-mode validation and
+  `internal/app/app.go:543-551` cursor-mode handling. Sparse UID continuation needs scan state at
+  `internal/app/types.go:40-47` and persistence at `internal/app/local_warehouse.go:246-256`.
+  Both become available when #3810 lands.
+- When message polling becomes available, hard deletions will not be observable and no deletion
+  tombstone will be produced. IMAP IDLE, webhooks, and subscriptions remain #3614's seam.
 - SMTP is send-only. It does not and will not back mailbox, message, search, or stream reads.
 - Attachments must be relative regular files beneath `<project-root>/.polymetrics/`.
   The aggregate attachment limit is 25 MiB and each file is limited to 10 MiB.
