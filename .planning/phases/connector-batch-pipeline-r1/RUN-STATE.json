@@ -2,7 +2,7 @@
   "issue": null,
   "parent": null,
   "subissues": [],
-  "state": "authoring_first_batch_after_provenance_merge",
+  "state": "final_repository_validation_after_post_main_regate",
   "execution": "inline_manual_no_spawn",
-  "next": "implement_and_test_v2_artifact_materializer_then_author_five_candidates"
+  "next": "run final scoped repository gates, update verification evidence, and commit the batch"
 }

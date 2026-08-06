@@ -22,7 +22,8 @@ Connection fields:
 - `personal_access_token` (required, secret, string); Flexmail personal access token, used as the
   HTTP Basic auth password. Never logged.
 
-Secret fields are redacted in logs and write previews: `personal_access_token`.
+The `personal_access_token` credential field is encrypted at rest; this documentation never asks
+for or prints its value.
 
 Default configuration values: `base_url=https://api.flexmail.eu`, `page_size=500`.
 

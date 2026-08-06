@@ -1,33 +1,523 @@
 {
-  "api": "Flexmail REST API (https://api.flexmail.eu)",
+  "api": "Flexmail REST API (https://api.flexmail.eu); provider artifact version: Flexmail email marketing API 1.2.0 (OpenAPI 3.1.0)",
   "docs": "https://api.flexmail.eu/documentation/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (contacts, custom_fields, interests, segments, sources); Flexmail is read-only in legacy, no writes are modeled.",
+  "reviewed_at": "2026-08-06",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (43 documented HTTP operations). Existing executable stream/write bindings are retained only when the fetched provider method/path still matches; every other operation is explicitly provider-blocked or excluded.",
+  "artifacts": [
+    {
+      "id": "flexmail-artifact-2026-08-06",
+      "url": "https://api.flexmail.eu/documentation/openapi.php",
+      "retrieved_at": "2026-08-06",
+      "sha256": "f7280a3b90cf5efba92bf6c048a2621f923d5652d076d765b7a3f67efd39e1f6"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
+      "path": "/",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/account-contact-languages",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contact-preference-subscriptions",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contact-preference-subscriptions/{id}",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
       "path": "/contacts",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
       "covered_by": {
         "stream": "contacts"
       }
     },
     {
+      "method": "POST",
+      "path": "/contacts",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Legacy connector never implemented contact writes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/imports",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/imports/{id}",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/contacts/imports/{id}",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/imports/{id}/records",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/imports/{id}/start",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{id}",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{id}",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Legacy connector never implemented contact writes"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/contacts/{id}",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{id}/interest-labels",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{id}/interest-subscriptions",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{id}/interest-subscriptions",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{id}/interest-subscriptions/{interest_id}",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{id}/preferences",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{id}/sources",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{id}/unsubscribe",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
       "method": "GET",
       "path": "/custom-fields",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
       "covered_by": {
         "stream": "custom_fields"
       }
     },
     {
       "method": "GET",
+      "path": "/interest-labels",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "GET",
       "path": "/interests",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
       "covered_by": {
         "stream": "interests"
       }
     },
     {
+      "method": "POST",
+      "path": "/interests",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/interests/{id}",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/interests/{id}",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/interests/{id}",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/interests/{id}/translations",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/interests/{id}/translations",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opt-in-forms",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/opt-in-forms/{id}",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/opt-ins",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/preferences",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
       "method": "GET",
       "path": "/segments",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
       "covered_by": {
         "stream": "segments"
       }
@@ -35,48 +525,117 @@
     {
       "method": "GET",
       "path": "/sources",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
       "covered_by": {
         "stream": "sources"
       }
     },
     {
-      "method": "POST",
-      "path": "/contacts",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Legacy connector never implemented contact writes"
+      "method": "GET",
+      "path": "/sources/{id}",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
       }
     },
     {
-      "method": "PUT",
-      "path": "/contacts/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Legacy connector never implemented contact writes"
+      "method": "GET",
+      "path": "/webhook-events",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/webhooks/{id}",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/webhooks/{id}",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch."
       }
     },
     {
       "method": "DELETE",
-      "path": "/contacts/{id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "Destructive mutation, not modeled by legacy"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/mailings",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Campaign-send data not modeled by legacy"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/statistics",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Analytics surface not modeled by legacy"
+      "path": "/webhooks/{id}",
+      "provenance": {
+        "artifact": "flexmail-artifact-2026-08-06",
+        "source_url": "https://api.flexmail.eu/documentation/openapi.php"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract."
       }
     }
   ]

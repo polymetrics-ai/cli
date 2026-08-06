@@ -23,6 +23,17 @@ Manual inline code review completed after the focused and package tests.
    red-first test demonstrated that `json_redacted` was included; `batch gate`
    now records it as an `output_policy` drop and also rejects `redact_fields`
    and legacy repository-content policies.
+6. A post-main re-gate request suggested promoting 21 direct reads and six
+   document writes. **Verified without an unsafe promotion:** the actual
+   runner policy table permits `json`/`none` for direct writes only; direct
+   reads remain redacting-only. The cited DocuSeal artifact declares the six
+   document requests as `application/json`, not `multipart/form-data`, so the
+   #3871 multipart capability is not their executable contract. The
+   materializer and gate were rerun with zero hand edits to `api_surface`
+   reasons; the executable count remains 39.
+7. The new reachable connector namespaces changed root help. **Fixed:** the
+   existing golden transcript test first failed, then regenerated its expected
+   transcript through its documented update mode and passed unchanged.
 
 No unresolved review finding remains. Shared schema, engine, and runner paths
 were not edited.

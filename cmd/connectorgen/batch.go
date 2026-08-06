@@ -140,7 +140,7 @@ func batchUsage() string {
 	return `usage:
   connectorgen batch plan --ledger <path> --out <path> [--size <1-40>] [--connector <name>] [--min-operations <n>] [--max-operations <n>]
   connectorgen batch materialize --manifest <path> --retrieved-at <YYYY-MM-DD> --report <path> [--defs-root <path>] [--artifact-dir <path>] [--connector <name>]
-  connectorgen batch gate --manifest <path> --report <path> [--defs-root <path>]`
+  connectorgen batch gate --manifest <path> --report <path> [--defs-root <path>] [--connector <name>]`
 }
 
 // runBatchPlan validates a live survey snapshot and writes the deterministic
@@ -591,6 +591,7 @@ type batchGateOptions struct {
 	manifestPath string
 	defsRoot     string
 	reportPath   string
+	connectors   []string
 }
 
 // runBatchGate applies the existing per-bundle guarantees one candidate at a
@@ -614,15 +615,20 @@ func runBatchGate(args []string, stdout, stderr io.Writer) int {
 		logf(stderr, "connectorgen batch gate: %v\n", err)
 		return 1
 	}
+	candidates, err := selectedManifestCandidates(manifest, opts.connectors)
+	if err != nil {
+		logf(stderr, "connectorgen batch gate: %v\n", err)
+		return 1
+	}
 
 	report := BatchGateReport{
 		SchemaVersion: batchGateReportSchemaVersion,
 		Manifest:      opts.manifestPath,
-		Candidates:    len(manifest.Connectors),
+		Candidates:    len(candidates),
 		Included:      []BatchGateIncluded{},
 		Dropped:       []BatchGateDrop{},
 	}
-	for _, candidate := range manifest.Connectors {
+	for _, candidate := range candidates {
 		report.SurveyedOperations.Total += candidate.OperationsTotal
 		report.SurveyedOperations.Read += candidate.OperationsRead
 		report.SurveyedOperations.Write += candidate.OperationsWrite
@@ -665,6 +671,8 @@ func parseBatchGateOptions(args []string) (batchGateOptions, error) {
 			opts.defsRoot = value
 		case "--report":
 			opts.reportPath = value
+		case "--connector":
+			opts.connectors = append(opts.connectors, value)
 		default:
 			return batchGateOptions{}, fmt.Errorf("unknown flag %q", arg)
 		}

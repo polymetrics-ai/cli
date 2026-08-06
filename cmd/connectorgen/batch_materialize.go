@@ -91,7 +91,7 @@ func runBatchMaterialize(args []string, stdout, stderr io.Writer) int {
 		logf(stderr, "connectorgen batch materialize: %v\n", err)
 		return 1
 	}
-	candidates, err := selectedMaterializeCandidates(manifest, opts.connectors)
+	candidates, err := selectedManifestCandidates(manifest, opts.connectors)
 	if err != nil {
 		logf(stderr, "connectorgen batch materialize: %v\n", err)
 		return 1
@@ -173,7 +173,7 @@ func parseBatchMaterializeOptions(args []string) (batchMaterializeOptions, error
 	return opts, nil
 }
 
-func selectedMaterializeCandidates(manifest BatchManifest, names []string) ([]BatchManifestConnector, error) {
+func selectedManifestCandidates(manifest BatchManifest, names []string) ([]BatchManifestConnector, error) {
 	if len(names) == 0 {
 		return append([]BatchManifestConnector(nil), manifest.Connectors...), nil
 	}
@@ -385,17 +385,7 @@ type batchArtifactEndpoint struct {
 func parseBatchOpenAPIArtifact(raw []byte) ([]batchArtifactEndpoint, error) {
 	var document batchOpenAPIDocument
 	if err := json.Unmarshal(raw, &document); err != nil {
-		var yamlDocument any
-		if yamlErr := yaml.Unmarshal(raw, &yamlDocument); yamlErr != nil {
-			return nil, fmt.Errorf("decode artifact as JSON (%v) or YAML (%v)", err, yamlErr)
-		}
-		normalized, marshalErr := json.Marshal(yamlDocument)
-		if marshalErr != nil {
-			return nil, fmt.Errorf("normalize YAML artifact: %w", marshalErr)
-		}
-		if jsonErr := json.Unmarshal(normalized, &document); jsonErr != nil {
-			return nil, fmt.Errorf("decode normalized YAML artifact: %w", jsonErr)
-		}
+		return parseBatchYAMLOpenAPIArtifact(raw, err)
 	}
 	if strings.TrimSpace(document.OpenAPI) == "" && strings.TrimSpace(document.Swagger) == "" {
 		return nil, errors.New("artifact is not an OpenAPI or Swagger document")
@@ -443,6 +433,97 @@ func parseBatchOpenAPIArtifact(raw []byte) ([]batchArtifactEndpoint, error) {
 		return batchArtifactMethodRank(endpoints[i].Method) < batchArtifactMethodRank(endpoints[j].Method)
 	})
 	return endpoints, nil
+}
+
+// parseBatchYAMLOpenAPIArtifact extracts only the OAS fields this materializer
+// needs directly from the YAML node tree. Converting an entire provider YAML
+// document through map[any]any is unsafe: valid response status-code keys such
+// as 200 are numeric YAML map keys and json.Marshal rejects them. Reading the
+// path item nodes also deliberately ignores response bodies/schemas, which are
+// not operation inventory metadata.
+func parseBatchYAMLOpenAPIArtifact(raw []byte, jsonErr error) ([]batchArtifactEndpoint, error) {
+	var document yaml.Node
+	if err := yaml.Unmarshal(raw, &document); err != nil {
+		return nil, fmt.Errorf("decode artifact as JSON (%v) or YAML (%v)", jsonErr, err)
+	}
+	root := yamlDocumentRoot(&document)
+	if root == nil || root.Kind != yaml.MappingNode {
+		return nil, errors.New("YAML artifact root must be a mapping")
+	}
+	if yamlMappingString(root, "openapi") == "" && yamlMappingString(root, "swagger") == "" {
+		return nil, errors.New("artifact is not an OpenAPI or Swagger document")
+	}
+	paths := yamlMappingValue(root, "paths")
+	if paths == nil || paths.Kind != yaml.MappingNode || len(paths.Content) == 0 {
+		return nil, errors.New("artifact has no paths")
+	}
+
+	endpoints := make([]batchArtifactEndpoint, 0)
+	for i := 0; i+1 < len(paths.Content); i += 2 {
+		pathNode, pathItem := paths.Content[i], paths.Content[i+1]
+		path := strings.TrimSpace(pathNode.Value)
+		if path == "" || !strings.HasPrefix(path, "/") {
+			return nil, fmt.Errorf("artifact path %q must be non-empty and connector-relative", path)
+		}
+		if pathItem.Kind != yaml.MappingNode {
+			continue
+		}
+		for j := 0; j+1 < len(pathItem.Content); j += 2 {
+			method := strings.ToUpper(strings.TrimSpace(pathItem.Content[j].Value))
+			if !batchArtifactHTTPMethod(method) {
+				continue
+			}
+			operation := pathItem.Content[j+1]
+			summary := yamlMappingString(operation, "summary")
+			if summary == "" {
+				summary = yamlMappingString(operation, "operationId")
+			}
+			if summary == "" {
+				summary = fmt.Sprintf("%s %s", method, path)
+			}
+			endpoints = append(endpoints, batchArtifactEndpoint{Method: method, Path: path, Summary: summary})
+		}
+	}
+	if len(endpoints) == 0 {
+		return nil, errors.New("artifact has no HTTP operations")
+	}
+	sort.Slice(endpoints, func(i, j int) bool {
+		if endpoints[i].Path != endpoints[j].Path {
+			return endpoints[i].Path < endpoints[j].Path
+		}
+		return batchArtifactMethodRank(endpoints[i].Method) < batchArtifactMethodRank(endpoints[j].Method)
+	})
+	return endpoints, nil
+}
+
+func yamlDocumentRoot(document *yaml.Node) *yaml.Node {
+	if document == nil {
+		return nil
+	}
+	if document.Kind == yaml.DocumentNode && len(document.Content) == 1 {
+		return document.Content[0]
+	}
+	return document
+}
+
+func yamlMappingValue(node *yaml.Node, key string) *yaml.Node {
+	if node == nil || node.Kind != yaml.MappingNode {
+		return nil
+	}
+	for i := 0; i+1 < len(node.Content); i += 2 {
+		if node.Content[i].Value == key {
+			return node.Content[i+1]
+		}
+	}
+	return nil
+}
+
+func yamlMappingString(node *yaml.Node, key string) string {
+	value := yamlMappingValue(node, key)
+	if value == nil || value.Kind != yaml.ScalarNode {
+		return ""
+	}
+	return strings.TrimSpace(value.Value)
 }
 
 func batchArtifactHTTPMethod(method string) bool {
@@ -579,8 +660,7 @@ func copyMaterializedClassifier(dst *engine.SurfaceEndpoint, src engine.SurfaceE
 		return
 	}
 	if src.Excluded != nil {
-		exclusion := *src.Excluded
-		dst.Excluded = &exclusion
+		dst.Operation = materializedLegacyExclusion(*src.Excluded, dst.Method)
 		return
 	}
 	if src.Operation != nil {
@@ -589,6 +669,42 @@ func copyMaterializedClassifier(dst *engine.SurfaceEndpoint, src engine.SurfaceE
 		// would make the shared validator rightly reject this generated row.
 		operation.SourceURL = ""
 		dst.Operation = &operation
+	}
+}
+
+// materializedLegacyExclusion upgrades a v1 classifier into v2's blocked
+// operation ledger. V2 reserves excluded for no longer-supported legacy
+// syntax; an explicit disallowed/deprecated operation retains the original
+// reason and is counted as a justified exclusion by the batch report.
+func materializedLegacyExclusion(exclusion engine.SurfaceExclusion, method string) *engine.SurfaceOperation {
+	model := "disallowed"
+	risk := "medium"
+	if exclusion.Category == "deprecated" {
+		model = "deprecated"
+		risk = "low"
+	}
+	if exclusion.Category == "destructive_admin" || batchArtifactMutationMethod(method) {
+		risk = "high"
+	}
+	reason := strings.TrimSpace(exclusion.Reason)
+	if reason == "" {
+		reason = fmt.Sprintf("The provider operation is intentionally excluded from this batch (%s).", exclusion.Category)
+	}
+	return &engine.SurfaceOperation{
+		Model:            model,
+		Status:           "blocked",
+		Risk:             risk,
+		BlockedByDefault: true,
+		Reason:           reason,
+	}
+}
+
+func batchArtifactMutationMethod(method string) bool {
+	switch strings.ToUpper(strings.TrimSpace(method)) {
+	case http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete:
+		return true
+	default:
+		return false
 	}
 }
 
@@ -702,6 +818,18 @@ func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, cand
 		if len(refs) == 0 {
 			return engine.CLISurface{}, fmt.Errorf("write action %q has no materialized api_surface reference", action.Name)
 		}
+		flags, representable, err := materializedWriteFlags(action)
+		if err != nil {
+			return engine.CLISurface{}, fmt.Errorf("write action %q flags: %w", action.Name, err)
+		}
+		// A reverse-ETL action with a required object/array record cannot be
+		// honestly exposed as a scalar CLI-flag command. The action remains
+		// executable through the existing generic plan/preview/approval/execute
+		// workflow; this connector namespace deliberately advertises only the
+		// actions whose required record contract can be derived and validated.
+		if !representable {
+			continue
+		}
 		path := materializedCommandPath(action.Name, "apply")
 		commands = append(commands, engine.CLICommand{
 			Path:         path,
@@ -711,6 +839,7 @@ func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, cand
 			Write:        action.Name,
 			SourceURL:    candidate.Artifact.URL,
 			APISurface:   refs,
+			Flags:        flags,
 			Risk:         action.Risk,
 			Approval:     "requires plan, preview, approval, and execute",
 			Examples:     []string{fmt.Sprintf("pm %s %s --plan <plan-name>", bundle.Name, path)},
@@ -733,6 +862,97 @@ func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, cand
 		Groups:   groups,
 		Commands: commands,
 	}, nil
+}
+
+// materializedWriteFlags derives the smallest complete flag contract for a
+// reverse-ETL command. It intentionally refuses to flatten object or
+// object-array inputs into made-up scalar flags: those actions are still
+// available via the typed generic reverse-ETL workflow, but are not promoted
+// as a connector command unless every required value has a faithful flag type.
+func materializedWriteFlags(action engine.WriteAction) ([]engine.CLIFlag, bool, error) {
+	if len(action.RecordSchema) == 0 {
+		return nil, false, errors.New("record_schema is required")
+	}
+	schema, err := parseCLIRecordSchema(action.RecordSchema)
+	if err != nil {
+		return nil, false, fmt.Errorf("parse record_schema: %w", err)
+	}
+	required := map[string]bool{}
+	for _, path := range schema.requiredMappingPaths("") {
+		required[path] = true
+	}
+	for _, path := range action.PathFields {
+		required[path] = true
+	}
+	paths := make([]string, 0, len(required))
+	for path := range required {
+		paths = append(paths, path)
+	}
+	sort.Strings(paths)
+
+	flags := make([]engine.CLIFlag, 0, len(paths))
+	for _, path := range paths {
+		flag, ok, err := materializedWriteFlag(schema, path)
+		if err != nil {
+			return nil, false, err
+		}
+		if !ok {
+			return nil, false, nil
+		}
+		flags = append(flags, flag)
+	}
+	return flags, true, nil
+}
+
+func materializedWriteFlag(schema *cliRecordSchemaNode, path string) (engine.CLIFlag, bool, error) {
+	// Nested object/array paths would need structured JSON flags. The command
+	// surface has no such escape hatch, so leave that action on its existing
+	// reverse-ETL route rather than misrepresenting the input contract.
+	if strings.Contains(path, ".") {
+		return engine.CLIFlag{}, false, nil
+	}
+	node, err := schema.recordPath(path)
+	if err != nil {
+		return engine.CLIFlag{}, false, err
+	}
+	flagType, ok := materializedCLIFlagType(node)
+	if !ok {
+		return engine.CLIFlag{}, false, nil
+	}
+	return engine.CLIFlag{
+		Name:     path,
+		Type:     flagType,
+		Summary:  fmt.Sprintf("Required %s record field.", strings.ReplaceAll(path, "_", " ")),
+		MapsTo:   "record." + path,
+		Required: true,
+	}, true, nil
+}
+
+func materializedCLIFlagType(node *cliRecordSchemaNode) (string, bool) {
+	if node == nil {
+		return "", false
+	}
+	types := node.effectiveTypes()
+	if len(types) != 1 {
+		return "", false
+	}
+	switch types[0] {
+	case "string":
+		return "string", true
+	case "integer":
+		return "integer", true
+	case "number":
+		return "number", true
+	case "boolean":
+		return "boolean", true
+	case "array":
+		if node.items == nil || len(node.items.effectiveTypes()) != 1 || node.items.effectiveTypes()[0] != "string" {
+			return "", false
+		}
+		return "string_array", true
+	default:
+		return "", false
+	}
 }
 
 func sortedMaterializedReferences(refs []engine.CLISurfaceEndpointRef) []engine.CLISurfaceEndpointRef {

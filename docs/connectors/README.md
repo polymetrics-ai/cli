@@ -20,7 +20,7 @@
 - [airtable](airtable/MANUAL.md): Reads Airtable bases, tables, records, webhooks, and record comments, and writes record/table/field/comment/webhook mutations, through the Airtable Web API.
 - [akeneo](akeneo/MANUAL.md): Reads Akeneo PIM products, categories, families, attributes, channels, product models, family variants, attribute groups, association types, locales, currencies, and measure families, and writes create-or-update upserts for the 9 catalog-structure resources, through the Akeneo REST API (OAuth2 password grant).
 - [algolia](algolia/MANUAL.md): Reads Algolia indices, API keys, index settings, dictionaries, security sources, and logs, and writes index settings/API keys, through the Algolia Search REST API.
-- [alpaca-broker-api](alpaca-broker-api/MANUAL.md): Reads Alpaca Broker API accounts, assets, market calendar, clock, country info, account activities, journals, and per-account positions/watchlists/orders/documents over the Broker REST API (read-only).
+- [alpaca-broker-api](alpaca-broker-api/MANUAL.md): Reads Alpaca Broker API accounts, assets, market calendar, clock, account activities, journals, and per-account positions/watchlists/orders/documents over the Broker REST API (read-only).
 - [alpha-vantage](alpha-vantage/MANUAL.md): Reads Alpha Vantage daily, weekly, monthly, and intraday OHLCV time series plus the latest global quote for a configured stock symbol.
 - [amazon-ads](amazon-ads/MANUAL.md): Reads Amazon Advertising profiles, Sponsored Products campaigns, ad groups, product ads, keywords, negative keywords, and portfolios via the Amazon Ads API using a Login with Amazon (LWA) refresh-token grant. Read-only.
 - [amazon-seller-partner](amazon-seller-partner/MANUAL.md): Reads Amazon Selling Partner API orders, inventory, finance, catalog, listings, fulfillment, reports, feeds, seller, shipping, vendor, and supporting JSON resources via Login with Amazon (LWA) authentication; exposes declarative writes for SP-API mutations that fit path/body JSON requests.
@@ -124,7 +124,7 @@
 - [ding-connect](ding-connect/MANUAL.md): Reads DingConnect reference catalogs (countries, currencies, regions, providers, products, product descriptions, promotions, provider status, error code descriptions, account balance) through the DingConnect REST API, and sends real-money mobile top-up transfers.
 - [discord](discord/MANUAL.md): Reads Discord guild, channel, and role data through the Discord REST API using a bot token. The members stream is out of scope for this migration (see docs.md's Known limits).
 - [dixa](dixa/MANUAL.md): Reads Dixa conversations (and their queue, rating, and assignment projections) from the Dixa conversation_export API.
-- [dockerhub](dockerhub/MANUAL.md): Reads public Docker Hub repositories, image tags, and namespace profiles for a configured username or organization via the Docker Hub registry API.
+- [dockerhub](dockerhub/MANUAL.md): Reads public Docker Hub repositories and image tags for a configured username or organization via the Docker Hub registry API.
 - [docuseal](docuseal/MANUAL.md): Reads DocuSeal templates, submissions, and submitters, and writes submission/submitter/template mutations through the DocuSeal REST API.
 - [dolibarr](dolibarr/MANUAL.md): Reads and writes Dolibarr ERP/CRM third parties, contacts, products, customer invoices, and orders through the Dolibarr REST API.
 - [dremio](dremio/MANUAL.md): Reads and writes Dremio catalog entries, reflections, sources, users, and roles through the Dremio REST API.

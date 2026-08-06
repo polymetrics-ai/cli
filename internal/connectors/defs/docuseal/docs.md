@@ -23,7 +23,8 @@ Connection fields:
 - `template_id` (optional, string); Template ID the 'template_detail' stream reads a single template
   record for. Required only when reading the 'template_detail' stream.
 
-Secret fields are redacted in logs and write previews: `api_key`.
+The `api_key` credential field is encrypted at rest; this documentation never asks for or prints
+its value.
 
 Default configuration values: `base_url=https://api.docuseal.com`, `page_size=10`.
 
