@@ -880,7 +880,11 @@ func TestBatchArtifactURLAndDestinationGuards(t *testing.T) {
 	}
 	dialed := ""
 	local, remote := net.Pipe()
-	defer remote.Close()
+	t.Cleanup(func() {
+		if err := remote.Close(); err != nil {
+			t.Errorf("close remote pipe: %v", err)
+		}
+	})
 	connection, err := dialBatchArtifactAddress(context.Background(), "tcp", "artifact.example:443", func(context.Context, string) ([]net.IPAddr, error) {
 		return []net.IPAddr{{IP: net.ParseIP("8.8.8.8")}}, nil
 	}, func(_ context.Context, _ string, address string) (net.Conn, error) {
@@ -890,7 +894,11 @@ func TestBatchArtifactURLAndDestinationGuards(t *testing.T) {
 	if err != nil {
 		t.Fatalf("dial public destination: %v", err)
 	}
-	defer connection.Close()
+	t.Cleanup(func() {
+		if err := connection.Close(); err != nil {
+			t.Errorf("close batch artifact connection: %v", err)
+		}
+	})
 	if dialed != "8.8.8.8:443" {
 		t.Fatalf("dialed %q, want validated public address", dialed)
 	}
