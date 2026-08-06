@@ -220,11 +220,37 @@ func addWriteRedactionValue(value string, out map[string]bool) {
 	out[value] = true
 }
 
+const (
+	maxSensitiveRedactionValueBytes      = 256
+	maxSensitiveRedactionValues          = 32
+	maxSensitiveRedactionTotalValueBytes = 1 << 10
+	maxSensitiveRedactionTextBytes       = 16 << 10
+)
+
+type sensitiveRedactionToken struct {
+	literal     string
+	hexadecimal []bool
+}
+
+type sensitiveRedactionUnit struct {
+	tokens []sensitiveRedactionToken
+}
+
 func redactSensitiveLiterals(text string, values []string) string {
+	if text == "" {
+		return text
+	}
+	values, redactAll := boundedSensitiveRedactionValues(values)
+	if redactAll || len(text) > maxSensitiveRedactionTextBytes {
+		return "redacted"
+	}
+	if len(values) == 0 {
+		return text
+	}
 	for _, literal := range sensitiveRedactionLiterals(values) {
 		text = strings.ReplaceAll(text, literal, "redacted")
 	}
-	for _, value := range sensitiveRedactionValues(values) {
+	for _, value := range values {
 		text = redactMixedPercentEncodedLiteral(text, value)
 	}
 	for _, matcher := range sensitiveRedactionMatchers(values) {
@@ -233,84 +259,125 @@ func redactSensitiveLiterals(text string, values []string) string {
 	return text
 }
 
+func boundedSensitiveRedactionValues(values []string) ([]string, bool) {
+	if len(values) > maxSensitiveRedactionValues {
+		return nil, true
+	}
+	seen := map[string]bool{}
+	bounded := make([]string, 0, len(values))
+	total := 0
+	for _, value := range values {
+		if value == "" || seen[value] {
+			continue
+		}
+		if len(value) > maxSensitiveRedactionValueBytes || len(bounded) == maxSensitiveRedactionValues || total+len(value) > maxSensitiveRedactionTotalValueBytes {
+			return nil, true
+		}
+		seen[value] = true
+		bounded = append(bounded, value)
+		total += len(value)
+	}
+	sortSensitiveRedactionLiterals(bounded)
+	return bounded, false
+}
+
 func redactMixedPercentEncodedLiteral(text, value string) string {
 	if value == "" || len(text) < len(value) {
 		return text
 	}
+	ends := mixedPercentEncodedLiteralMatchEnds(text, value)
+	if len(ends) == 0 {
+		return text
+	}
 	var redacted strings.Builder
 	redacted.Grow(len(text))
-	for start := 0; start < len(text); {
-		end, ok := mixedPercentEncodedLiteralEnd(text, value, start)
-		if !ok {
-			redacted.WriteByte(text[start])
-			start++
+	last := 0
+	for start := 0; start < len(text); start++ {
+		end := ends[start]
+		if end <= start {
 			continue
 		}
+		for next := start + 1; next < end; next++ {
+			if ends[next] > end {
+				end = ends[next]
+			}
+		}
+		redacted.WriteString(text[last:start])
 		redacted.WriteString("redacted")
-		start = end
+		last = end
+		start = end - 1
 	}
+	if last == 0 {
+		return text
+	}
+	redacted.WriteString(text[last:])
 	return redacted.String()
 }
 
-func mixedPercentEncodedLiteralEnd(text, value string, start int) (int, bool) {
-	type state struct {
-		textPosition  int
-		valuePosition int
+func mixedPercentEncodedLiteralMatchEnds(text, value string) []int {
+	ends := make([]int, len(text))
+	pending := [4][]int{}
+	for i := range pending {
+		pending[i] = make([]int, len(value))
+		for position := range pending[i] {
+			pending[i][position] = -1
+		}
 	}
-	type result struct {
-		end int
-		ok  bool
-	}
-	memo := map[state]result{}
-	var match func(int, int) (int, bool)
-	match = func(position, valuePosition int) (int, bool) {
-		if valuePosition == len(value) {
-			return position, true
+	for position := 0; position < len(text); position++ {
+		states := pending[position%len(pending)]
+		if states[0] == -1 || position < states[0] {
+			states[0] = position
 		}
-		if position >= len(text) {
-			return 0, false
-		}
-		key := state{textPosition: position, valuePosition: valuePosition}
-		if cached, ok := memo[key]; ok {
-			return cached.end, cached.ok
-		}
-		current := value[valuePosition]
-		if position+2 < len(text) && text[position] == '%' {
-			high, highOK := sensitiveRedactionHexValue(text[position+1])
-			low, lowOK := sensitiveRedactionHexValue(text[position+2])
-			if highOK && lowOK && high<<4|low == current {
-				if end, ok := match(position+3, valuePosition+1); ok {
-					memo[key] = result{end: end, ok: true}
-					return end, true
+		for valuePosition, start := range states {
+			if start < 0 {
+				continue
+			}
+			current := value[valuePosition]
+			if text[position] == current || current == ' ' && text[position] == '+' {
+				addMixedPercentEncodedLiteralMatch(pending[(position+1)%len(pending)], valuePosition+1, start, position+1, len(value), ends)
+			}
+			if position+2 < len(text) && text[position] == '%' {
+				high, highOK := sensitiveRedactionHexValue(text[position+1])
+				low, lowOK := sensitiveRedactionHexValue(text[position+2])
+				if highOK && lowOK && high<<4|low == current {
+					addMixedPercentEncodedLiteralMatch(pending[(position+3)%len(pending)], valuePosition+1, start, position+3, len(value), ends)
 				}
 			}
 		}
-		if text[position] == current {
-			if end, ok := match(position+1, valuePosition+1); ok {
-				memo[key] = result{end: end, ok: true}
-				return end, true
-			}
+		for valuePosition := range states {
+			states[valuePosition] = -1
 		}
-		if current == ' ' && text[position] == '+' {
-			if end, ok := match(position+1, valuePosition+1); ok {
-				memo[key] = result{end: end, ok: true}
-				return end, true
-			}
-		}
-		memo[key] = result{}
-		return 0, false
 	}
-	return match(start, 0)
+	return ends
+}
+
+func addMixedPercentEncodedLiteralMatch(states []int, valuePosition, start, end, valueLength int, ends []int) {
+	if valuePosition == valueLength {
+		if ends[start] < end {
+			ends[start] = end
+		}
+		return
+	}
+	if states[valuePosition] == -1 || start < states[valuePosition] {
+		states[valuePosition] = start
+	}
 }
 
 func redactSensitiveTruncatedSuffix(text string, values []string) string {
+	if text == "" {
+		return text
+	}
+	values, redactAll := boundedSensitiveRedactionValues(values)
+	if redactAll || len(text) > maxSensitiveRedactionTextBytes {
+		return "redacted"
+	}
+	if len(values) == 0 {
+		return text
+	}
 	start := len(text)
-	for _, value := range sensitiveRedactionValues(values) {
-		if candidate, ok := mixedPercentEncodedLiteralPrefixSuffixStart(text, value); ok && candidate < start {
-			start = candidate
-		}
-		for _, form := range sensitiveRedactionLiteralForms(value) {
-			if candidate, ok := sensitiveLiteralPrefixSuffixStart(text, form); ok && candidate < start {
+	for _, value := range values {
+		for _, units := range [][]sensitiveRedactionUnit{mixedPercentSensitiveRedactionUnits(value), jsonSensitiveRedactionUnits(value)} {
+			if candidate, ok := sensitiveRedactionPrefixSuffixStart(text, units); ok && candidate < start {
 				start = candidate
 			}
 		}
@@ -321,76 +388,167 @@ func redactSensitiveTruncatedSuffix(text string, values []string) string {
 	return text[:start] + "redacted"
 }
 
-func mixedPercentEncodedLiteralPrefixSuffixStart(text, value string) (int, bool) {
-	if text == "" || value == "" {
+func mixedPercentSensitiveRedactionUnits(value string) []sensitiveRedactionUnit {
+	const hexadecimal = "0123456789ABCDEF"
+	units := make([]sensitiveRedactionUnit, len(value))
+	for position := range value {
+		current := value[position]
+		tokens := []sensitiveRedactionToken{
+			{literal: string(current)},
+			{literal: "%" + string(hexadecimal[current>>4]) + string(hexadecimal[current&0x0f]), hexadecimal: []bool{false, true, true}},
+		}
+		if current == ' ' {
+			tokens = append(tokens, sensitiveRedactionToken{literal: "+"})
+		}
+		units[position] = sensitiveRedactionUnit{tokens: tokens}
+	}
+	return units
+}
+
+func jsonSensitiveRedactionUnits(value string) []sensitiveRedactionUnit {
+	units := make([]sensitiveRedactionUnit, 0, len(value))
+	for _, r := range value {
+		tokens := []sensitiveRedactionToken{{literal: string(r)}, jsonUnicodeSensitiveRedactionToken(r)}
+		if encoded, err := json.Marshal(string(r)); err == nil && len(encoded) >= 2 {
+			tokens = append(tokens, sensitiveRedactionToken{literal: string(encoded[1 : len(encoded)-1])})
+		}
+		if r == '/' {
+			tokens = append(tokens, sensitiveRedactionToken{literal: `\/`})
+		}
+		units = append(units, sensitiveRedactionUnit{tokens: tokens})
+	}
+	return units
+}
+
+func jsonUnicodeSensitiveRedactionToken(r rune) sensitiveRedactionToken {
+	if r <= 0xffff {
+		return jsonUnicodeCodeUnitSensitiveRedactionToken(r)
+	}
+	high, low := utf16.EncodeRune(r)
+	first := jsonUnicodeCodeUnitSensitiveRedactionToken(high)
+	second := jsonUnicodeCodeUnitSensitiveRedactionToken(low)
+	return sensitiveRedactionToken{literal: first.literal + second.literal, hexadecimal: append(first.hexadecimal, second.hexadecimal...)}
+}
+
+func jsonUnicodeCodeUnitSensitiveRedactionToken(r rune) sensitiveRedactionToken {
+	hexadecimal := fmt.Sprintf("%04X", r)
+	return sensitiveRedactionToken{literal: `\u` + hexadecimal, hexadecimal: []bool{false, false, true, true, true, true}}
+}
+
+func sensitiveRedactionPrefixSuffixStart(text string, units []sensitiveRedactionUnit) (int, bool) {
+	if text == "" || len(units) == 0 {
 		return 0, false
 	}
-	for start := 0; start < len(text); start++ {
-		if mixedPercentEncodedLiteralPrefixEndsAt(text, value, start) {
-			return start, true
+	maximumLength := 0
+	maximumTokenLength := 0
+	for _, unit := range units {
+		unitMaximum := 0
+		for _, token := range unit.tokens {
+			if len(token.literal) > unitMaximum {
+				unitMaximum = len(token.literal)
+			}
+		}
+		maximumLength += unitMaximum
+		if unitMaximum > maximumTokenLength {
+			maximumTokenLength = unitMaximum
 		}
 	}
-	return 0, false
+	startOffset := len(text) - maximumLength
+	if startOffset < 0 {
+		startOffset = 0
+	}
+	text = text[startOffset:]
+	pending := make([][]int, maximumTokenLength+1)
+	for i := range pending {
+		pending[i] = make([]int, len(units))
+		for valuePosition := range pending[i] {
+			pending[i][valuePosition] = -1
+		}
+	}
+	candidate := -1
+	for position := 0; position < len(text); position++ {
+		states := pending[position%len(pending)]
+		if states[0] == -1 || position < states[0] {
+			states[0] = position
+		}
+		for valuePosition, start := range states {
+			if start < 0 {
+				continue
+			}
+			for _, token := range units[valuePosition].tokens {
+				if sensitiveRedactionTokenMatches(text, position, token) {
+					end := position + len(token.literal)
+					if end == len(text) {
+						if candidate == -1 || start < candidate {
+							candidate = start
+						}
+					} else if end < len(text) && valuePosition+1 < len(units) {
+						target := pending[end%len(pending)]
+						if target[valuePosition+1] == -1 || start < target[valuePosition+1] {
+							target[valuePosition+1] = start
+						}
+					}
+				}
+				if sensitiveRedactionTokenPrefixAtEnd(text, position, token) && (candidate == -1 || start < candidate) {
+					candidate = start
+				}
+			}
+		}
+		for valuePosition := range states {
+			states[valuePosition] = -1
+		}
+	}
+	if candidate < 0 {
+		return 0, false
+	}
+	return startOffset + candidate, true
 }
 
-func mixedPercentEncodedLiteralPrefixEndsAt(text, value string, start int) bool {
-	type state struct {
-		textPosition  int
-		valuePosition int
-	}
-	memo := map[state]bool{}
-	seen := map[state]bool{}
-	var match func(int, int) bool
-	match = func(position, valuePosition int) bool {
-		if position == len(text) {
-			return valuePosition > 0 && valuePosition < len(value)
-		}
-		if valuePosition >= len(value) {
-			return false
-		}
-		key := state{textPosition: position, valuePosition: valuePosition}
-		if seen[key] {
-			return memo[key]
-		}
-		seen[key] = true
-		current := value[valuePosition]
-		if position+2 < len(text) && text[position] == '%' {
-			high, highOK := sensitiveRedactionHexValue(text[position+1])
-			low, lowOK := sensitiveRedactionHexValue(text[position+2])
-			if highOK && lowOK && high<<4|low == current && match(position+3, valuePosition+1) {
-				memo[key] = true
-				return true
-			}
-		}
-		if text[position] == '%' && position+1 == len(text) && valuePosition > 0 {
-			return true
-		}
-		if text[position] == '%' && position+2 == len(text) && valuePosition > 0 {
-			high, highOK := sensitiveRedactionHexValue(text[position+1])
-			if highOK && high == current>>4 {
-				return true
-			}
-		}
-		if text[position] == current && match(position+1, valuePosition+1) {
-			memo[key] = true
-			return true
-		}
-		if current == ' ' && text[position] == '+' && match(position+1, valuePosition+1) {
-			memo[key] = true
-			return true
-		}
+func sensitiveRedactionTokenMatches(text string, position int, token sensitiveRedactionToken) bool {
+	if position+len(token.literal) > len(text) {
 		return false
 	}
-	return match(start, 0)
-}
-
-func sensitiveLiteralPrefixSuffixStart(text, literal string) (int, bool) {
-	for length := min(len(text), len(literal)-1); length > 0; length-- {
-		if strings.HasSuffix(text, literal[:length]) {
-			return len(text) - length, true
+	for offset := range token.literal {
+		if token.hexadecimal != nil && token.hexadecimal[offset] {
+			if !sameSensitiveRedactionHexadecimal(text[position+offset], token.literal[offset]) {
+				return false
+			}
+			continue
+		}
+		if text[position+offset] != token.literal[offset] {
+			return false
 		}
 	}
-	return 0, false
+	return true
+}
+
+func sensitiveRedactionTokenPrefixAtEnd(text string, position int, token sensitiveRedactionToken) bool {
+	remaining := len(text) - position
+	if remaining <= 0 || remaining >= len(token.literal) {
+		return false
+	}
+	for offset := 0; offset < remaining; offset++ {
+		if token.hexadecimal != nil && token.hexadecimal[offset] {
+			if !sameSensitiveRedactionHexadecimal(text[position+offset], token.literal[offset]) {
+				return false
+			}
+			continue
+		}
+		if text[position+offset] != token.literal[offset] {
+			return false
+		}
+	}
+	return true
+}
+
+func sameSensitiveRedactionHexadecimal(actual, expected byte) bool {
+	if actual == expected {
+		return true
+	}
+	if expected >= 'A' && expected <= 'F' {
+		return actual == expected+'a'-'A'
+	}
+	return false
 }
 
 func sensitiveRedactionHexValue(value byte) (byte, bool) {
@@ -468,7 +626,7 @@ func appendJSONRedactionForms(forms []string, encoded string) []string {
 func sensitiveRedactionMatchers(values []string) []*regexp.Regexp {
 	seen := map[string]bool{}
 	matchers := make([]*regexp.Regexp, 0, len(values)*4)
-	for _, value := range sensitiveRedactionValues(values) {
+	for _, value := range values {
 		for _, pattern := range sensitiveRedactionPatterns(value) {
 			if seen[pattern] {
 				continue
@@ -482,20 +640,6 @@ func sensitiveRedactionMatchers(values []string) []*regexp.Regexp {
 		}
 	}
 	return matchers
-}
-
-func sensitiveRedactionValues(values []string) []string {
-	seen := map[string]bool{}
-	unique := make([]string, 0, len(values))
-	for _, value := range values {
-		if value == "" || seen[value] {
-			continue
-		}
-		seen[value] = true
-		unique = append(unique, value)
-	}
-	sortSensitiveRedactionLiterals(unique)
-	return unique
 }
 
 func sensitiveRedactionPatterns(value string) []string {
@@ -546,37 +690,31 @@ func percentEscapeCasePattern(value string) (string, bool) {
 
 func jsonEscapedValuePattern(value string) string {
 	var b strings.Builder
-	for _, r := range value {
-		b.WriteString(jsonEscapedRunePattern(r))
+	for _, unit := range jsonSensitiveRedactionUnits(value) {
+		b.WriteString(sensitiveRedactionUnitPattern(unit))
 	}
 	return b.String()
 }
 
-func jsonEscapedRunePattern(r rune) string {
-	forms := []string{regexp.QuoteMeta(string(r)), jsonUnicodeEscapePattern(r)}
-	if encoded, err := json.Marshal(string(r)); err == nil && len(encoded) >= 2 {
-		forms = append(forms, regexp.QuoteMeta(string(encoded[1:len(encoded)-1])))
-	}
-	if r == '/' {
-		forms = append(forms, regexp.QuoteMeta(`\/`))
+func sensitiveRedactionUnitPattern(unit sensitiveRedactionUnit) string {
+	forms := make([]string, 0, len(unit.tokens))
+	for _, token := range unit.tokens {
+		forms = append(forms, sensitiveRedactionTokenPattern(token))
 	}
 	return regexpAlternatives(forms)
 }
 
-func jsonUnicodeEscapePattern(r rune) string {
-	if r <= 0xffff {
-		return jsonUnicodeCodeUnitPattern(r)
+func sensitiveRedactionTokenPattern(token sensitiveRedactionToken) string {
+	if token.hexadecimal == nil {
+		return regexp.QuoteMeta(token.literal)
 	}
-	high, low := utf16.EncodeRune(r)
-	return jsonUnicodeCodeUnitPattern(high) + jsonUnicodeCodeUnitPattern(low)
-}
-
-func jsonUnicodeCodeUnitPattern(r rune) string {
-	hexadecimal := fmt.Sprintf("%04X", r)
 	var b strings.Builder
-	b.WriteString(regexp.QuoteMeta(`\u`))
-	for i := range hexadecimal {
-		b.WriteString(hexadecimalCasePattern(hexadecimal[i]))
+	for position := range token.literal {
+		if token.hexadecimal[position] {
+			b.WriteString(hexadecimalCasePattern(token.literal[position]))
+			continue
+		}
+		b.WriteString(regexp.QuoteMeta(string(token.literal[position])))
 	}
 	return b.String()
 }

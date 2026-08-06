@@ -108,9 +108,9 @@ func TestInterpolatePathDefaultURLEncode(t *testing.T) {
 			want:     "/a%20b/h%C3%A9llo",
 		},
 		{
-			name:     "double encode guard: percent literal is re-encoded",
+			name:     "double encoded traversal rejected",
 			template: "/{{ config.double_enc }}",
-			want:     "/%252e%252e",
+			wantErr:  true,
 		},
 	}
 
@@ -130,6 +130,19 @@ func TestInterpolatePathDefaultURLEncode(t *testing.T) {
 				t.Fatalf("InterpolatePath(%q) = %q, want %q", tt.template, got, tt.want)
 			}
 		})
+	}
+}
+
+func TestContainsDotPathSegmentRejectsRecursiveEscapedAliases(t *testing.T) {
+	for _, path := range []string{
+		"/safe/%252e",
+		"/safe/%252e%252e",
+		"/safe/%252f..%252fprivate",
+		"/safe/%255c..%255cprivate",
+	} {
+		if !containsDotPathSegment(path) {
+			t.Fatalf("containsDotPathSegment(%q) = false, want true", path)
+		}
 	}
 }
 

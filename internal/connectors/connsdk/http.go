@@ -937,9 +937,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 			return nil, fmt.Errorf("send request body: %w", bodyErr)
 		}
 
-		respBody, _ := io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
-		resp.Body.Close()
-		bodyTruncated := len(respBody) >= maxBodyBytes
+		respBody, bodyTruncated := readBoundedErrorBody(resp.Body, int64(maxBodyBytes))
 		var errorBody []byte
 		errorBodyPrepared := false
 		prepareErrorBody := func() []byte {
@@ -1112,6 +1110,12 @@ func responseHTTPError(status int, requestURL string, body []byte, bodyTruncated
 		ResetAt:       observation.ResetAt,
 		HasReset:      observation.HasReset,
 	}
+}
+
+func readBoundedErrorBody(body io.ReadCloser, limit int64) ([]byte, bool) {
+	responseBody, err := io.ReadAll(io.LimitReader(body, limit))
+	_ = body.Close()
+	return responseBody, err != nil || int64(len(responseBody)) >= limit
 }
 
 func newHTTPError(status int, requestURL string, body []byte, bodyTruncated bool) *HTTPError {

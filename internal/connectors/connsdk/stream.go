@@ -137,9 +137,8 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 		if r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {
 			// Discard this attempt's body entirely; nothing from a failed
 			// attempt may reach the caller.
-			body, _ := io.ReadAll(io.LimitReader(resp.Body, maxErrorBody))
-			resp.Body.Close()
-			lastErr = responseHTTPError(resp.StatusCode, fullURL, body, len(body) >= maxErrorBody, observation)
+			body, bodyTruncated := readBoundedErrorBody(resp.Body, maxErrorBody)
+			lastErr = responseHTTPError(resp.StatusCode, fullURL, body, bodyTruncated, observation)
 			if werr := r.sleep(ctx, r.backoff(attempt, observation)); werr != nil {
 				return nil, werr
 			}
@@ -147,9 +146,8 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 		}
 
 		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-			body, _ := io.ReadAll(io.LimitReader(resp.Body, maxErrorBody))
-			resp.Body.Close()
-			return nil, responseHTTPError(resp.StatusCode, fullURL, body, len(body) >= maxErrorBody, observation)
+			body, bodyTruncated := readBoundedErrorBody(resp.Body, maxErrorBody)
+			return nil, responseHTTPError(resp.StatusCode, fullURL, body, bodyTruncated, observation)
 		}
 
 		return &StreamResponse{

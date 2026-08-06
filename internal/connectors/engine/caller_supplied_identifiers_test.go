@@ -14,6 +14,7 @@ import (
 	"testing/fstest"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 )
 
 func TestCallerSuppliedIdentifierSetsWireEncodings(t *testing.T) {
@@ -283,6 +284,35 @@ func TestCallerSuppliedIdentifierSetsRedactMixedPercentLiteralPercent(t *testing
 	}
 	if !strings.Contains(message, "redacted") {
 		t.Fatalf("mixed-percent identifier was not redacted in %q", message)
+	}
+}
+
+func TestCallerSuppliedIdentifierSetsRedactTruncatedJSONEscapedPrefixes(t *testing.T) {
+	const identifier = "id/é"
+	message := completeOperationDirectReadErrorText(
+		&connsdk.HTTPError{
+			Status:        http.StatusBadRequest,
+			URL:           "https://api.example.test/lookups",
+			Body:          `provider rejected \u0069\u0064\u002F\u00`,
+			BodyTruncated: true,
+		},
+		map[string][]string{"ids": {identifier}},
+	)
+	for _, leaked := range []string{`\u0069`, `\u0064`, `\u002F`, `\u00`} {
+		if strings.Contains(message, leaked) {
+			t.Fatal("truncated JSON-escaped identifier prefix leaked")
+		}
+	}
+	if !strings.Contains(message, "provider rejected redacted") {
+		t.Fatalf("truncated error lost redacted provider context: %q", message)
+	}
+}
+
+func TestCallerSuppliedIdentifierSetsBoundRedactionWork(t *testing.T) {
+	identifier := strings.Repeat("a", maxSensitiveRedactionValueBytes+1)
+	message := redactSensitiveLiterals(strings.Repeat("a", maxSensitiveRedactionTextBytes*2), []string{identifier})
+	if message != "redacted" {
+		t.Fatalf("unbounded identifier redaction = %q, want redacted", message)
 	}
 }
 

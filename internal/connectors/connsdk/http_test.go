@@ -54,6 +54,25 @@ func (r *advancingReadCloser) Read(p []byte) (int, error) {
 	return r.ReadCloser.Read(p)
 }
 
+type partialErrorReadCloser struct {
+	data   []byte
+	read   bool
+	closed bool
+}
+
+func (r *partialErrorReadCloser) Read(p []byte) (int, error) {
+	if r.read {
+		return 0, io.ErrUnexpectedEOF
+	}
+	r.read = true
+	return copy(p, r.data), io.ErrUnexpectedEOF
+}
+
+func (r *partialErrorReadCloser) Close() error {
+	r.closed = true
+	return nil
+}
+
 func primeHTTPConnection(t *testing.T, client *http.Client, baseURL string) {
 	t.Helper()
 	resp, err := client.Get(baseURL + "/prime")
@@ -886,6 +905,40 @@ func TestRequesterRedactsErrorBodyBeforeTruncation(t *testing.T) {
 	}
 	if !strings.Contains(httpErr.Body, "redacted") || !httpErr.BodyTruncated {
 		t.Fatalf("HTTP error did not retain redacted truncation context: %+v", httpErr)
+	}
+}
+
+func TestRequesterMarksPartialErrorBodiesTruncated(t *testing.T) {
+	body := &partialErrorReadCloser{data: []byte("provider response prefix")}
+	r := &Requester{
+		BaseURL:        "https://api.example.test",
+		DisableRetries: true,
+		Client: &http.Client{Transport: roundTripperFunc(func(req *http.Request) (*http.Response, error) {
+			return &http.Response{
+				StatusCode: http.StatusBadRequest,
+				Header:     make(http.Header),
+				Body:       body,
+				Request:    req,
+			}, nil
+		})},
+	}
+
+	_, err := r.Do(context.Background(), http.MethodGet, "/items", nil, nil)
+	if err == nil {
+		t.Fatal("Do error = nil, want provider rejection")
+	}
+	var httpErr *HTTPError
+	if !errors.As(err, &httpErr) {
+		t.Fatalf("error type = %T, want HTTPError", err)
+	}
+	if !httpErr.BodyTruncated {
+		t.Fatal("partial error body was not marked truncated")
+	}
+	if httpErr.Body != "provider response prefix" {
+		t.Fatalf("HTTP error body = %q", httpErr.Body)
+	}
+	if !body.closed {
+		t.Fatal("partial error body was not closed")
 	}
 }
 
