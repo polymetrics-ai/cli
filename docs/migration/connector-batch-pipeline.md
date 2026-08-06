@@ -36,7 +36,7 @@ adding a competing provenance shape.
 | `boundary` | Detect connector-specific policy outside definition ownership | Run against the final branch as a repository gate. |
 | `ownership` | Check changed paths for an owned connector scope | Run for each authored connector slice. |
 | `batch plan` | New: turn live ledger evidence into a deterministic manifest | Prepare a 1–40 connector batch without mutating a bundle or calling a provider. |
-| `batch materialize` | New: read a selected public OpenAPI/Swagger artifact into the shared v2 operation ledger | Fetches only the manifest URL (or an explicit offline cache), records URL/date/SHA evidence, preserves real stream/write bindings, and derives a reachable command surface. |
+| `batch materialize` | New: read a selected public OpenAPI/Swagger artifact into the shared v2 operation ledger | Reads a source bundle root and writes only a newly created destination bundle; it fetches only the manifest URL (or an explicit offline cache), records URL/date/SHA evidence, preserves real stream/write bindings, and derives a reachable command surface. |
 | `batch gate` | New: run each candidate's existing checks independently | Produce included/drop results rather than stopping at the first bad bundle. |
 
 The new `batch` command is genuinely needed because none of the existing
@@ -105,37 +105,53 @@ SHA-256 in the v2 artifact table.
 ## Phase 2: materialize from the cited artifact
 
 This step consumes #3869's shared v2 provenance contract; it never adds a
-sidecar provenance schema or invents a `covered_by` relation. Fetch only the
-manifest URL (or use a verified offline cache for a repeatable local run):
+sidecar provenance schema or invents a `covered_by` relation. The source root
+is a read-only pre-batch bundle snapshot. The source and destination bundle
+paths must not overlap, and the destination root must not already contain the
+selected connector: a pre-existing directory is recorded as a `bundle_collision`
+drop before any artifact request or file mutation. Fetch only the manifest URL
+(or use a verified offline cache for a repeatable local run):
 
 ```bash
 go run ./cmd/connectorgen batch materialize \
   --manifest docs/migration/batches/cli-provider-artifact-sweep-r1-batch-001.json \
-  --defs-root internal/connectors/defs \
+  --source-defs-root <pre-batch-defs-root> \
+  --defs-root <new-batch-output-defs-root> \
   --retrieved-at 2026-08-06 \
   --report docs/migration/batches/cli-provider-artifact-sweep-r1-batch-001-materialize.json
 ```
 
 For each selected manifest record:
 
-1. Fetch or read only its cited public artifact. Store the source URL, exact
-   version, full-date retrieval date, and SHA-256. The shared v2 artifact table
-   owns URL/date/SHA; the materialization report preserves the survey's exact
-   version, and every endpoint joins to the cited artifact through its local
-   provenance row. No credential and no live provider API call is allowed.
-2. Enumerate each provider operation from the artifact. Give every endpoint
-   exactly one result: executable coverage, provider-blocked with a concrete
-   reason, or justified exclusion. A generic unclassified/default omission is
-   a failure, not a temporary state.
-3. Generate the bundle's `operations.json` and `cli_surface.json` from the
+1. Fetch or read only its cited public artifact. An artifact URL must be HTTPS,
+   have no userinfo, query, or fragment, and resolve exclusively to public
+   addresses before every dial; proxy routing is disabled and every redirect is
+   revalidated. Store the source URL, exact version, full-date retrieval date,
+   and SHA-256. The shared v2 artifact table owns URL/date/SHA; the
+   materialization report preserves the survey's exact version, and every
+   endpoint joins to the cited artifact through its local provenance row. No
+   credential and no live provider API call is allowed.
+2. Enumerate each provider operation from the artifact. Local Path Item
+   references and every HTTP method, including `TRACE`, are resolved. A form
+   that cannot be exhaustively represented—such as a non-empty top-level
+   OpenAPI 3.1 `webhooks` container, callbacks, an external reference, or an
+   unsupported path-item field—is an `artifact_inventory_unknown` drop with a
+   concrete reason; it never yields a partial inventory count. Give every
+   enumerated endpoint exactly one result: executable coverage,
+   provider-blocked with a concrete reason, or justified exclusion. A generic
+   unclassified/default omission is a failure, not a temporary state.
+3. Copy the reviewed source bundle into the fresh, batch-owned destination,
+   then generate its `operations.json` and `cli_surface.json` from the
    reviewed artifact inventory. In this first lane `operations.json` is an
    explicit empty direct-executor catalog: provider operation classification
    lives in the v2 `api_surface.json`, and no direct read can be promoted while
    its only runtime policy is redacting. Stream and existing reverse-ETL write
-   commands are derived only from real bindings. A write action with a required
-   structured object/object-array record is intentionally not exposed as a
-   scalar-flag namespace command; it remains available through the existing
-   generic plan → preview → approval → execute workflow.
+   commands are derived only from real bindings and pass production runtime
+   preflight before any write; zero reachable implemented commands or a
+   preflight failure is a named drop. A write action with a required structured
+   object/object-array record is intentionally not exposed as a scalar-flag
+   namespace command; it remains available through the existing generic plan →
+   preview → approval → execute workflow.
 4. Only promote a command to `availability: implemented` after it has a real
    executor and the v2 `api_surface.json` contains its cited method/path row.
    Every other operation stays provider-blocked or justified-excluded with its
@@ -183,8 +199,8 @@ required `submitters` value is an object array, not a truthful scalar CLI flag.
 
 ### Post-main capability re-gate
 
-After rebasing on current `origin/main` at `5da755596`, batch 001 was
-materialized again from its five cited artifacts and gated again. It remains
+After rebasing on current `origin/main` at `5da755596`, batch 001's checked-in
+artifact inventory was gated again. It remains
 five included, zero dropped, with **39 executable**, 27 provider-blocked, and
 137 excluded rows across 203 declared artifact operations.
 
@@ -251,9 +267,15 @@ quietly on the branch:
 
 1. Keep the failed `*-gate.json` report in the branch; it is the durable record
    of the connector and concrete failure reason.
-2. Remove only the named generated bundle directory from the branch with
-   `git rm -r -- internal/connectors/defs/<connector>` after the validation run
-   has ended. Do not remove another candidate, shared schema, or runner file.
+2. Establish ownership from the pre-batch revision before changing a failed
+   bundle. Only a directory that was absent before the batch and was created by
+   the batch may be removed with `git rm -r --
+   internal/connectors/defs/<connector>`. For a pre-existing bundle, restore or
+   revert only the branch-owned changes beneath that directory from the
+   pre-batch revision; never delete the directory. A `bundle_collision` is
+   refused without writing or deleting its target. Batch 001's five definition
+   directories existed before this branch, so they always use the restore/revert
+   path if dropped.
 3. Regenerate the manifest from the same ledger with only the surviving
    `--connector` values. Do not hand-edit the count/evidence fields.
 4. Re-run `batch gate` and commit the updated manifest, bundle removal, and

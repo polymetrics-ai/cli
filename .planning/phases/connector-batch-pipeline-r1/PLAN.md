@@ -20,7 +20,7 @@ Tracker: task/branch name; no parent issue number was supplied.
 ## Required skills loaded
 
 - `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`,
-  `golang-security`, `golang-safety`, `golang-design-patterns`,
+  `golang-security`, `golang-safety`, `golang-lint`, `golang-design-patterns`,
   `golang-structs-interfaces`, and `golang-documentation`.
 
 ## Slice A — ledger intake and deterministic manifest (RED → GREEN)
@@ -109,6 +109,20 @@ manifest-selected bundle directories.
 - `connectorgen` is a developer tool, not a `pm` public command; website/public
   CLI manual parity is N/A. Its own usage text, tests, and migration guide are
   the applicable documentation contract.
+
+## Review remediation — fail-closed artifact and bundle ownership boundaries
+
+1. Reject artifact URLs with userinfo, query, or fragment components; resolve
+   every hostname before dialing, reject non-public destinations, disable proxy
+   routing, and apply the same guard to every redirect.
+2. Parse OpenAPI/Swagger inventories through a strict path-item walker that
+   resolves local references, includes TRACE, and fails with a concrete unknown
+   inventory reason for unsupported operation containers such as webhooks.
+3. Treat a successful CLI-surface load with zero implemented commands as a
+   runtime-preflight failure rather than an included candidate.
+4. Read an existing bundle only from an explicit source root and materialize a
+   copied, new destination bundle. A pre-existing destination is a named
+   collision; cleanup may remove only a destination created by that invocation.
 
 ## Commit checkpoints
 

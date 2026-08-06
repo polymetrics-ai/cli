@@ -2,7 +2,11 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
+	"net"
+	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -118,6 +122,23 @@ func TestBatchGateUsesRuntimePreflightForEveryImplementedCommand(t *testing.T) {
 	}
 }
 
+func TestBatchGateDropsSurfaceWithoutImplementedCommands(t *testing.T) {
+	defsRoot := t.TempDir()
+	writeBatchBundle(t, defsRoot, cliSurfaceBundleFS(strings.ReplaceAll(validCLISurfaceJSON(), `"availability": "implemented"`, `"availability": "planned"`)))
+	manifestPath := writeBatchManifestFixture(t, "cli-surface")
+	reportPath := filepath.Join(t.TempDir(), "report.json")
+	var stdout, stderr bytes.Buffer
+
+	code := run([]string{"batch", "gate", "--manifest", manifestPath, "--defs-root", defsRoot, "--report", reportPath}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("batch gate exit = 0, want no-implemented-command failure; stdout=%s stderr=%s", stdout.String(), stderr.String())
+	}
+	report := readBatchGateReportFixture(t, reportPath)
+	if len(report.Included) != 0 || len(report.Dropped) != 1 || report.Dropped[0].Stage != "runtime_preflight" || !strings.Contains(report.Dropped[0].Reason, "no implemented command") {
+		t.Fatalf("report = %+v, want runtime-preflight drop for zero implemented commands", report)
+	}
+}
+
 func TestBatchGateSelectsOneManifestCandidateForIndividualPreflight(t *testing.T) {
 	defsRoot := t.TempDir()
 	writeBatchBundle(t, defsRoot, cliSurfaceBundleFS(validCLISurfaceJSON()))
@@ -197,8 +218,9 @@ func TestBatchGateDropsWriteRedactFields(t *testing.T) {
 }
 
 func TestBatchMaterializeGeneratesV2ProvenanceAndReachableSurface(t *testing.T) {
+	sourceDefsRoot := t.TempDir()
+	writeBatchBundle(t, sourceDefsRoot, cliSurfaceBundleFS(validCLISurfaceJSON()))
 	defsRoot := t.TempDir()
-	writeBatchBundle(t, defsRoot, cliSurfaceBundleFS(validCLISurfaceJSON()))
 	manifestPath := writeBatchManifestFixture(t, "cli-surface")
 	artifactDir := t.TempDir()
 	if err := os.WriteFile(filepath.Join(artifactDir, "cli-surface.json"), []byte(`{
@@ -218,7 +240,7 @@ func TestBatchMaterializeGeneratesV2ProvenanceAndReachableSurface(t *testing.T) 
 	reportPath := filepath.Join(t.TempDir(), "materialize.json")
 	var stdout, stderr bytes.Buffer
 
-	code := run([]string{"batch", "materialize", "--manifest", manifestPath, "--defs-root", defsRoot, "--artifact-dir", artifactDir, "--retrieved-at", "2026-08-06", "--report", reportPath}, &stdout, &stderr)
+	code := run([]string{"batch", "materialize", "--manifest", manifestPath, "--source-defs-root", sourceDefsRoot, "--defs-root", defsRoot, "--artifact-dir", artifactDir, "--retrieved-at", "2026-08-06", "--report", reportPath}, &stdout, &stderr)
 	if code != 0 {
 		t.Fatalf("batch materialize exit = %d, want 0; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
 	}
@@ -304,8 +326,9 @@ func TestBatchMaterializeGeneratesV2ProvenanceAndReachableSurface(t *testing.T) 
 }
 
 func TestBatchMaterializeDropsMissingExecutableCoverageWithoutMutatingBundle(t *testing.T) {
+	sourceDefsRoot := t.TempDir()
+	writeBatchBundle(t, sourceDefsRoot, cliSurfaceBundleFS(validCLISurfaceJSON()))
 	defsRoot := t.TempDir()
-	writeBatchBundle(t, defsRoot, cliSurfaceBundleFS(validCLISurfaceJSON()))
 	manifestPath := writeBatchManifestFixture(t, "cli-surface")
 	artifactDir := t.TempDir()
 	if err := os.WriteFile(filepath.Join(artifactDir, "cli-surface.json"), []byte(`{
@@ -317,7 +340,7 @@ func TestBatchMaterializeDropsMissingExecutableCoverageWithoutMutatingBundle(t *
 	reportPath := filepath.Join(t.TempDir(), "materialize.json")
 	var stdout, stderr bytes.Buffer
 
-	code := run([]string{"batch", "materialize", "--manifest", manifestPath, "--defs-root", defsRoot, "--artifact-dir", artifactDir, "--retrieved-at", "2026-08-06", "--report", reportPath}, &stdout, &stderr)
+	code := run([]string{"batch", "materialize", "--manifest", manifestPath, "--source-defs-root", sourceDefsRoot, "--defs-root", defsRoot, "--artifact-dir", artifactDir, "--retrieved-at", "2026-08-06", "--report", reportPath}, &stdout, &stderr)
 	if code == 0 {
 		t.Fatalf("batch materialize exit = 0, want missing coverage drop; stdout=%s stderr=%s", stdout.String(), stderr.String())
 	}
@@ -328,15 +351,73 @@ func TestBatchMaterializeDropsMissingExecutableCoverageWithoutMutatingBundle(t *
 	if !strings.Contains(string(reportRaw), `"coverage"`) || !strings.Contains(string(reportRaw), `"cli-surface"`) {
 		t.Fatalf("materialize report = %s, want named coverage drop", reportRaw)
 	}
-	surfaceRaw, err := os.ReadFile(filepath.Join(defsRoot, "cli-surface", "api_surface.json"))
+	surfaceRaw, err := os.ReadFile(filepath.Join(sourceDefsRoot, "cli-surface", "api_surface.json"))
 	if err != nil {
 		t.Fatalf("read original api surface: %v", err)
 	}
 	if strings.Contains(string(surfaceRaw), `"operation_ledger_version": 2`) {
 		t.Fatalf("materializer mutated dropped bundle api surface: %s", surfaceRaw)
 	}
-	if _, err := os.Stat(filepath.Join(defsRoot, "cli-surface", "operations.json")); !os.IsNotExist(err) {
+	if _, err := os.Stat(filepath.Join(sourceDefsRoot, "cli-surface", "operations.json")); !os.IsNotExist(err) {
 		t.Fatalf("materializer wrote operations.json for dropped bundle: %v", err)
+	}
+}
+
+func TestBatchMaterializeDropsPreexistingDestinationBundle(t *testing.T) {
+	sourceDefsRoot := t.TempDir()
+	writeBatchBundle(t, sourceDefsRoot, cliSurfaceBundleFS(validCLISurfaceJSON()))
+	defsRoot := t.TempDir()
+	destination := writeBatchBundle(t, defsRoot, cliSurfaceBundleFS(validCLISurfaceJSON()))
+	before, err := os.ReadFile(filepath.Join(destination, "api_surface.json"))
+	if err != nil {
+		t.Fatalf("read destination api surface before materialization: %v", err)
+	}
+	manifestPath := writeBatchManifestFixture(t, "cli-surface")
+	artifactDir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(artifactDir, "cli-surface.json"), []byte(`{
+		"openapi": "3.0.0",
+		"paths": {"/widgets": {"get": {"summary": "List widgets"}, "post": {"summary": "Create widget"}}}
+	}`), 0o644); err != nil {
+		t.Fatalf("write artifact: %v", err)
+	}
+	reportPath := filepath.Join(t.TempDir(), "materialize.json")
+	var stdout, stderr bytes.Buffer
+
+	code := run([]string{"batch", "materialize", "--manifest", manifestPath, "--source-defs-root", sourceDefsRoot, "--defs-root", defsRoot, "--artifact-dir", artifactDir, "--retrieved-at", "2026-08-06", "--report", reportPath}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("batch materialize exit = 0, want destination-collision drop; stdout=%s stderr=%s", stdout.String(), stderr.String())
+	}
+	report := readBatchGateReportFixture(t, reportPath)
+	if len(report.Included) != 0 || len(report.Dropped) != 1 || report.Dropped[0].Stage != "bundle_collision" {
+		t.Fatalf("materialize report = %+v, want named destination collision", report)
+	}
+	after, err := os.ReadFile(filepath.Join(destination, "api_surface.json"))
+	if err != nil {
+		t.Fatalf("read destination api surface after materialization: %v", err)
+	}
+	if string(after) != string(before) {
+		t.Fatalf("materializer changed pre-existing destination bundle:\nbefore=%s\nafter=%s", before, after)
+	}
+}
+
+func TestBatchMaterializeRejectsDestinationInsideSourceBundle(t *testing.T) {
+	sourceDefsRoot := t.TempDir()
+	source := writeBatchBundle(t, sourceDefsRoot, cliSurfaceBundleFS(validCLISurfaceJSON()))
+	defsRoot := filepath.Join(source, "batch-output")
+	manifestPath := writeBatchManifestFixture(t, "cli-surface")
+	reportPath := filepath.Join(t.TempDir(), "materialize.json")
+	var stdout, stderr bytes.Buffer
+
+	code := run([]string{"batch", "materialize", "--manifest", manifestPath, "--source-defs-root", sourceDefsRoot, "--defs-root", defsRoot, "--retrieved-at", "2026-08-06", "--report", reportPath}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("batch materialize exit = 0, want source/destination overlap drop; stdout=%s stderr=%s", stdout.String(), stderr.String())
+	}
+	report := readBatchGateReportFixture(t, reportPath)
+	if len(report.Included) != 0 || len(report.Dropped) != 1 || report.Dropped[0].Stage != "bundle_path" || !strings.Contains(report.Dropped[0].Reason, "must not overlap") {
+		t.Fatalf("materialize report = %+v, want source/destination overlap drop", report)
+	}
+	if _, err := os.Stat(filepath.Join(source, "batch-output")); !os.IsNotExist(err) {
+		t.Fatalf("materializer created a destination inside the source bundle: %v", err)
 	}
 }
 
@@ -360,7 +441,123 @@ paths:
 	}
 }
 
+func TestParseBatchOpenAPIArtifactResolvesLocalPathItemReferencesAndTrace(t *testing.T) {
+	artifact := []byte(`{
+		"openapi": "3.1.0",
+		"paths": {
+			"/widgets": {"$ref": "#/components/pathItems/widgets"},
+			"/diagnostics": {"trace": {"summary": "Trace diagnostics"}}
+		},
+		"components": {
+			"pathItems": {
+				"widgets": {"get": {"operationId": "listWidgets"}}
+			}
+		}
+	}`)
+
+	endpoints, err := parseBatchOpenAPIArtifact(artifact)
+	if err != nil {
+		t.Fatalf("parse local-ref artifact: %v", err)
+	}
+	if len(endpoints) != 2 || endpoints[0].Method != "TRACE" || endpoints[0].Path != "/diagnostics" || endpoints[1].Method != "GET" || endpoints[1].Path != "/widgets" {
+		t.Fatalf("parsed endpoints = %+v, want TRACE and local-ref GET operations", endpoints)
+	}
+}
+
+func TestParseBatchOpenAPIArtifactFailsClosedForUnsupportedOperationContainers(t *testing.T) {
+	tests := []struct {
+		name     string
+		artifact string
+		want     string
+	}{
+		{
+			name: "webhooks",
+			artifact: `{
+				"openapi": "3.1.0",
+				"paths": {"/widgets": {"get": {"summary": "List widgets"}}},
+				"webhooks": {"widget.created": {"post": {"summary": "Widget created"}}}
+			}`,
+			want: "top-level webhooks",
+		},
+		{
+			name: "external path item reference",
+			artifact: `{
+				"openapi": "3.1.0",
+				"paths": {"/widgets": {"$ref": "other.yaml#/components/pathItems/widgets"}}
+			}`,
+			want: "external path-item reference",
+		},
+		{
+			name: "multiple YAML documents",
+			artifact: `openapi: 3.1.0
+paths:
+  /widgets:
+    get:
+      summary: List widgets
+---
+openapi: 3.1.0
+paths:
+  /other:
+    get:
+      summary: List other widgets
+`,
+			want: "multiple YAML documents",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			_, err := parseBatchOpenAPIArtifact([]byte(test.artifact))
+			if err == nil || !strings.Contains(err.Error(), "artifact operation inventory is unknown") || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("parse error = %v, want concrete unknown-inventory reason containing %q", err, test.want)
+			}
+		})
+	}
+}
+
+func TestBatchArtifactURLAndDestinationGuards(t *testing.T) {
+	for _, raw := range []string{
+		"https://user@example.test/openapi.json",
+		"https://example.test/openapi.json?token=value",
+		"https://example.test/openapi.json#access_token=value",
+		"https://127.0.0.1/openapi.json",
+	} {
+		if err := validateBatchArtifactURL(raw); err == nil {
+			t.Fatalf("validateBatchArtifactURL(%q) succeeded, want rejection", raw)
+		}
+	}
+	privateLookup := func(context.Context, string) ([]net.IPAddr, error) {
+		return []net.IPAddr{{IP: net.ParseIP("169.254.169.254")}}, nil
+	}
+	if _, err := batchArtifactPublicAddresses(context.Background(), "artifact.example", privateLookup); err == nil {
+		t.Fatal("private resolved destination was accepted")
+	}
+	redirectURL, err := url.Parse("https://artifact.example/redirected.json")
+	if err != nil {
+		t.Fatalf("parse redirect URL: %v", err)
+	}
+	if err := newBatchArtifactHTTPClient(privateLookup).CheckRedirect(&http.Request{URL: redirectURL}, nil); err == nil {
+		t.Fatal("redirect to private resolved destination was accepted")
+	}
+	dialed := ""
+	local, remote := net.Pipe()
+	defer remote.Close()
+	connection, err := dialBatchArtifactAddress(context.Background(), "tcp", "artifact.example:443", func(context.Context, string) ([]net.IPAddr, error) {
+		return []net.IPAddr{{IP: net.ParseIP("8.8.8.8")}}, nil
+	}, func(_ context.Context, _ string, address string) (net.Conn, error) {
+		dialed = address
+		return local, nil
+	})
+	if err != nil {
+		t.Fatalf("dial public destination: %v", err)
+	}
+	defer connection.Close()
+	if dialed != "8.8.8.8:443" {
+		t.Fatalf("dialed %q, want validated public address", dialed)
+	}
+}
+
 func TestBatchMaterializeConvertsLegacyExclusionsAndDerivesWriteFlags(t *testing.T) {
+	sourceDefsRoot := t.TempDir()
 	defsRoot := t.TempDir()
 	fsys := cliSurfaceBundleFS(validCLISurfaceJSON())
 	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
@@ -371,7 +568,7 @@ func TestBatchMaterializeConvertsLegacyExclusionsAndDerivesWriteFlags(t *testing
 			{ "method": "GET", "path": "/widgets/{id}", "excluded": { "category": "duplicate_of", "reason": "The widgets stream already returns the complete record." } }
 		]
 	}`)}
-	writeBatchBundle(t, defsRoot, fsys)
+	writeBatchBundle(t, sourceDefsRoot, fsys)
 	manifestPath := writeBatchManifestFixture(t, "cli-surface")
 	artifactDir := t.TempDir()
 	if err := os.WriteFile(filepath.Join(artifactDir, "cli-surface.json"), []byte(`{
@@ -386,7 +583,7 @@ func TestBatchMaterializeConvertsLegacyExclusionsAndDerivesWriteFlags(t *testing
 	reportPath := filepath.Join(t.TempDir(), "materialize.json")
 	var stdout, stderr bytes.Buffer
 
-	code := run([]string{"batch", "materialize", "--manifest", manifestPath, "--defs-root", defsRoot, "--artifact-dir", artifactDir, "--retrieved-at", "2026-08-06", "--report", reportPath}, &stdout, &stderr)
+	code := run([]string{"batch", "materialize", "--manifest", manifestPath, "--source-defs-root", sourceDefsRoot, "--defs-root", defsRoot, "--artifact-dir", artifactDir, "--retrieved-at", "2026-08-06", "--report", reportPath}, &stdout, &stderr)
 	if code != 0 {
 		t.Fatalf("batch materialize exit = %d, want 0; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
 	}

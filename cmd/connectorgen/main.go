@@ -91,7 +91,7 @@ func usage() string {
   connectorgen gen
   connectorgen surface-sync [dir] [--check]  (default dir: internal/connectors/defs)
   connectorgen batch plan --ledger <path> --out <path> [--size <1-40>] [--connector <name>] [--min-operations <n>] [--max-operations <n>]
-  connectorgen batch materialize --manifest <path> --retrieved-at <YYYY-MM-DD> --report <path> [--defs-root <path>] [--artifact-dir <path>] [--connector <name>]
+  connectorgen batch materialize --manifest <path> --source-defs-root <path> --retrieved-at <YYYY-MM-DD> --report <path> [--defs-root <path>] [--artifact-dir <path>] [--connector <name>]
   connectorgen batch gate --manifest <path> --report <path> [--defs-root <path>] [--connector <name>]
   connectorgen new <name>`
 }

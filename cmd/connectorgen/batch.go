@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"net/url"
 	"os"
 	"path/filepath"
 	"sort"
@@ -139,7 +138,7 @@ func runBatch(args []string, stdout, stderr io.Writer) int {
 func batchUsage() string {
 	return `usage:
   connectorgen batch plan --ledger <path> --out <path> [--size <1-40>] [--connector <name>] [--min-operations <n>] [--max-operations <n>]
-  connectorgen batch materialize --manifest <path> --retrieved-at <YYYY-MM-DD> --report <path> [--defs-root <path>] [--artifact-dir <path>] [--connector <name>]
+  connectorgen batch materialize --manifest <path> --source-defs-root <path> --retrieved-at <YYYY-MM-DD> --report <path> [--defs-root <path>] [--artifact-dir <path>] [--connector <name>]
   connectorgen batch gate --manifest <path> --report <path> [--defs-root <path>] [--connector <name>]`
 }
 
@@ -429,11 +428,8 @@ func validateBatchCandidate(record batchLedgerRecord, opts batchPlanOptions) err
 }
 
 func validateBatchArtifactURL(raw string) error {
-	parsed, err := url.Parse(raw)
-	if err != nil || parsed.Scheme != "https" || parsed.Host == "" || parsed.User != nil {
-		return fmt.Errorf("artifact_url %q must be an absolute HTTPS URL without userinfo", raw)
-	}
-	return nil
+	_, err := parseBatchArtifactURL(raw)
+	return err
 }
 
 func sortBatchRecords(records []batchLedgerRecord) {
@@ -906,6 +902,9 @@ func batchRuntimePreflight(bundle engine.Bundle) (int, error) {
 			return checked, fmt.Errorf("command %q: %w", cmd.Path, err)
 		}
 		checked++
+	}
+	if checked == 0 {
+		return 0, errors.New("cli_surface.json has no implemented command reachable by runtime preflight")
 	}
 	return checked, nil
 }
