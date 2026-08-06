@@ -243,7 +243,11 @@ func runConnectors(ctx context.Context, root string, args []string, stdout io.Wr
 		}
 		if c, ok := registry.Get(args[1]); ok {
 			if jsonOut {
-				return writeJSON(stdout, envelope{"kind": "Connector", "connector": connectors.MetadataWithIcon(c.Metadata()), "manifest": connectors.ManifestOf(c)})
+				response := envelope{"kind": "Connector", "connector": connectors.MetadataOf(c), "manifest": connectors.ManifestOf(c)}
+				if def, ok := connectors.DefinitionOf(c); ok && def.Changefeed != nil {
+					response["changefeed"] = def.Changefeed
+				}
+				return writeJSON(stdout, response)
 			}
 			_, _ = fmt.Fprint(stdout, connectors.RenderConnectorManual(c))
 			return nil
@@ -271,7 +275,7 @@ func connectorCatalogEntries(registry *connectors.Registry, flags parsedFlags) (
 		if stage != "" && def.ReleaseStage != stage {
 			continue
 		}
-		if !definitionHasCapability(registry, def, capability) {
+		if !definitionHasCapability(def, capability) {
 			continue
 		}
 		out = append(out, def)
@@ -279,7 +283,7 @@ func connectorCatalogEntries(registry *connectors.Registry, flags parsedFlags) (
 	return out, nil
 }
 
-func definitionHasCapability(registry *connectors.Registry, def connectors.Definition, capability string) bool {
+func definitionHasCapability(def connectors.Definition, capability string) bool {
 	switch capability {
 	case "":
 		return true
@@ -290,12 +294,7 @@ func definitionHasCapability(registry *connectors.Registry, def connectors.Defin
 	case "query":
 		return def.Capabilities.Query
 	case "cdc":
-		connector, ok := registry.Get(def.Name)
-		if !ok {
-			return false
-		}
-		_, ok = connector.(connectors.CDCReader)
-		return ok
+		return def.Capabilities.CDC
 	default:
 		return false
 	}

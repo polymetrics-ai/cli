@@ -229,6 +229,47 @@ func TestBuildIconEntriesRejectsAmbiguousSourceDestinationCollapse(t *testing.T)
 	}
 }
 
+func TestBuildIconEntriesAllowsCuratedRowToResolveConflictingSourceURLs(t *testing.T) {
+	entries, assets, err := buildIconEntries(registryFile{
+		Sources: []map[string]any{{
+			"public":           true,
+			"dockerRepository": "registry/source-demo",
+			"documentationUrl": "https://example.com/integrations/sources/demo",
+			"icon":             "demo.svg",
+			"iconUrl":          "https://example.com/source-demo/demo.svg",
+		}},
+		Destinations: []map[string]any{{
+			"public":           true,
+			"dockerRepository": "registry/destination-demo",
+			"documentationUrl": "https://example.com/integrations/destinations/demo",
+			"icon":             "demo.svg",
+			"iconUrl":          "https://example.com/destination-demo/demo.svg",
+		}},
+	}, buildOptions{
+		ImplementedConnectors: map[string]bool{"demo": true},
+		CuratedEntries: []iconEntry{{
+			Connector:    "demo",
+			ID:           "demo",
+			Path:         "icons/demo.svg",
+			Source:       connectors.IconSourceUpstream,
+			ReviewStatus: connectors.IconReviewUpstreamSeeded,
+			ReviewURL:    "https://example.com/review/demo",
+		}},
+	})
+	if err != nil {
+		t.Fatalf("buildIconEntries curated collapse: %v", err)
+	}
+	if len(entries) != 1 {
+		t.Fatalf("entries = %+v, want one curated demo entry", entries)
+	}
+	if got := entries[0]; got.Connector != "demo" || got.ReviewURL != "https://example.com/review/demo" || got.SourceURL != "" {
+		t.Fatalf("entry = %+v, want the authored curated row", got)
+	}
+	if len(assets) != 0 {
+		t.Fatalf("assets = %+v, want no silently selected conflicting upstream asset", assets)
+	}
+}
+
 func TestBuildIconEntriesAllowsReviewedSameAssetCollapse(t *testing.T) {
 	entries, assets, err := buildIconEntries(registryFile{
 		Sources: []map[string]any{{
@@ -274,8 +315,20 @@ func TestBuildIconEntriesRejectsSamePathWithDifferentSourceURLs(t *testing.T) {
 			"iconUrl":          "https://example.com/destination-demo/demo.svg",
 		}},
 	}, buildOptions{ImplementedConnectors: map[string]bool{"demo": true}})
-	if err == nil || !strings.Contains(err.Error(), "conflicting source URLs") {
-		t.Fatalf("buildIconEntries source URL conflict error = %v", err)
+	if err == nil {
+		t.Fatal("buildIconEntries accepted uncurated conflicting source URLs")
+	}
+	for _, want := range []string{
+		"conflicting source URLs",
+		"source-demo",
+		"destination-demo",
+		"https://example.com/source-demo/demo.svg",
+		"https://example.com/destination-demo/demo.svg",
+		`curated icon entry for "demo"`,
+	} {
+		if !strings.Contains(err.Error(), want) {
+			t.Fatalf("buildIconEntries source URL conflict error = %q, want %q", err, want)
+		}
 	}
 }
 

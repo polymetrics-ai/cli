@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"testing"
 
@@ -2085,6 +2086,63 @@ func TestRunDirectReadRequiresOutputPolicy(t *testing.T) {
 	}
 }
 
+func TestCLISurfaceOutputPolicyEnumMatchesRuntimePolicySets(t *testing.T) {
+	raw, err := os.ReadFile(filepath.Join("..", "engine", "schema", "cli_surface.schema.json"))
+	if err != nil {
+		t.Fatalf("read cli surface schema: %v", err)
+	}
+	type schemaNode struct {
+		Properties map[string]schemaNode `json:"properties"`
+		Items      *schemaNode           `json:"items"`
+		Enum       []string              `json:"enum"`
+	}
+	var schema schemaNode
+	if err := json.Unmarshal(raw, &schema); err != nil {
+		t.Fatalf("decode cli surface schema: %v", err)
+	}
+	commands, ok := schema.Properties["commands"]
+	if !ok || commands.Items == nil {
+		t.Fatal("cli surface schema has no commands.items")
+	}
+	outputPolicy, ok := commands.Items.Properties["output_policy"]
+	if !ok || len(outputPolicy.Enum) == 0 {
+		t.Fatal("cli surface schema has no output_policy enum")
+	}
+
+	want := make(map[string]struct{}, len(supportedDirectReadOutputPolicies)+len(supportedDirectWriteOutputPolicies)+1)
+	for policy := range supportedDirectReadOutputPolicies {
+		want[policy] = struct{}{}
+	}
+	for policy := range supportedDirectWriteOutputPolicies {
+		want[policy] = struct{}{}
+	}
+	// This legacy compatibility value belongs to binary_download metadata, not
+	// either JSON direct-read/write executor, and existing bundles still use it.
+	want["binary_file_bounded"] = struct{}{}
+
+	got := make(map[string]struct{}, len(outputPolicy.Enum))
+	for _, policy := range outputPolicy.Enum {
+		if _, duplicate := got[policy]; duplicate {
+			t.Fatalf("cli surface output_policy enum repeats %q", policy)
+		}
+		got[policy] = struct{}{}
+	}
+	if missing, unexpected := outputPolicySetDifference(want, got), outputPolicySetDifference(got, want); len(missing) > 0 || len(unexpected) > 0 {
+		t.Fatalf("cli surface output_policy enum diverges from runtime support: missing=%v unexpected=%v", missing, unexpected)
+	}
+}
+
+func outputPolicySetDifference(left, right map[string]struct{}) []string {
+	result := make([]string, 0)
+	for policy := range left {
+		if _, ok := right[policy]; !ok {
+			result = append(result, policy)
+		}
+	}
+	sort.Strings(result)
+	return result
+}
+
 // TestCoerceFlagValueBoundsStringArrayItems pins the flag-level list bound. It
 // is deliberately independent of the body schema's maxItems: the schema fires on
 // the assembled body, this fires on the flag the user typed, so the error can
@@ -2104,6 +2162,239 @@ func TestCoerceFlagValueBoundsStringArrayItems(t *testing.T) {
 	}
 	if _, err := coerceFlagValue(flag, []string{","}); err == nil {
 		t.Fatal("coerceFlagValue under the minimum = nil, want rejection")
+	}
+}
+
+func TestValidateRequiredCommandFlagsPreservesStringArrayPresence(t *testing.T) {
+	tests := []struct {
+		name    string
+		flag    connectors.CommandSurfaceFlag
+		flags   map[string][]string
+		wantErr string
+	}{
+		{
+			name:    "missing key remains missing",
+			flag:    connectors.CommandSurfaceFlag{Name: "items", Type: "string_array", Required: true},
+			flags:   map[string][]string{},
+			wantErr: "missing required flag --items",
+		},
+		{
+			name:    "raw empty values remain missing",
+			flag:    connectors.CommandSurfaceFlag{Name: "items", Type: "string_array", Required: true},
+			flags:   map[string][]string{"items": {}},
+			wantErr: "missing required flag --items",
+		},
+		{
+			name:    "required scalar blank remains missing",
+			flag:    connectors.CommandSurfaceFlag{Name: "title", Type: "string", Required: true},
+			flags:   map[string][]string{"title": {""}},
+			wantErr: "missing required flag --title",
+		},
+		{
+			name:  "explicit blank zero minimum array is supplied",
+			flag:  connectors.CommandSurfaceFlag{Name: "items", Type: "string_array", Required: true},
+			flags: map[string][]string{"items": {""}},
+		},
+		{
+			name:  "blank only csv zero minimum array is supplied",
+			flag:  connectors.CommandSurfaceFlag{Name: "items", Type: "string_array", Required: true},
+			flags: map[string][]string{"items": {", ,"}},
+		},
+		{
+			name:    "minimum one still rejects materialized empty array",
+			flag:    connectors.CommandSurfaceFlag{Name: "items", Type: "string_array", Required: true, MinItems: 1},
+			flags:   map[string][]string{"items": {""}},
+			wantErr: "below the minimum of 1",
+		},
+		{
+			name:    "maximum remains authoritative",
+			flag:    connectors.CommandSurfaceFlag{Name: "items", Type: "string_array", Required: true, MaxItems: 2},
+			flags:   map[string][]string{"items": {"one,two,three"}},
+			wantErr: "maximum of 2",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := validateRequiredCommandFlags(connectors.CommandSurfaceCommand{
+				Path:  "widgets create",
+				Flags: []connectors.CommandSurfaceFlag{tt.flag},
+			}, tt.flags)
+			if tt.wantErr == "" {
+				if err != nil {
+					t.Fatalf("validateRequiredCommandFlags error = %v, want accepted", err)
+				}
+				return
+			}
+			if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+				t.Fatalf("validateRequiredCommandFlags error = %v, want %q", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestRunOperationDirectReadPreservesExplicitEmptyRequiredStringArray(t *testing.T) {
+	tests := []struct {
+		name     string
+		flags    map[string][]string
+		minItems int
+		wantErr  string
+	}{
+		{
+			name:  "explicit blank maps to literal empty body array",
+			flags: map[string][]string{"items": {""}},
+		},
+		{
+			name:    "omitted required flag does not invoke operation",
+			flags:   map[string][]string{},
+			wantErr: "missing required flag --items",
+		},
+		{
+			name:    "raw empty values do not invoke operation",
+			flags:   map[string][]string{"items": {}},
+			wantErr: "missing required flag --items",
+		},
+		{
+			name:     "minimum one does not invoke operation",
+			flags:    map[string][]string{"items": {""}},
+			minItems: 1,
+			wantErr:  "below the minimum of 1",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+				Path:         "widgets search",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Operation:    "acme.widgets.search",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: http.MethodPost, Path: "/widgets/search"},
+				},
+				OutputPolicy: "json_redacted",
+				Flags: []connectors.CommandSurfaceFlag{{
+					Name: "items", Type: "string_array", Required: true, MinItems: tt.minItems, MapsTo: "body.items",
+				}},
+			}}}}
+
+			result, err := Run(context.Background(), connector, Request{
+				Path:  []string{"widgets", "search"},
+				Flags: tt.flags,
+			}, func(connectors.Record) error {
+				t.Fatal("emit called for operation direct-read command")
+				return nil
+			})
+			if tt.wantErr != "" {
+				if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+					t.Fatalf("Run error = %v, want %q", err, tt.wantErr)
+				}
+				if connector.operationDirectReadReq.Operation != "" {
+					t.Fatalf("operation direct read executed: %+v", connector.operationDirectReadReq)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("Run: %v", err)
+			}
+			if result.DirectRead == nil {
+				t.Fatalf("result = %+v, want direct-read result", result)
+			}
+			items, ok := connector.operationDirectReadReq.Body["items"].([]string)
+			if !ok || len(items) != 0 {
+				t.Fatalf("operation body items = %#v, want literal empty []string", connector.operationDirectReadReq.Body["items"])
+			}
+			bodyJSON, err := json.Marshal(connector.operationDirectReadReq.Body)
+			if err != nil {
+				t.Fatalf("marshal operation body: %v", err)
+			}
+			if string(bodyJSON) != `{"items":[]}` {
+				t.Fatalf("operation body JSON = %s, want literal empty array", bodyJSON)
+			}
+		})
+	}
+}
+
+func TestBuildWriteCommandPreservesExplicitEmptyRequiredStringArray(t *testing.T) {
+	tests := []struct {
+		name     string
+		flags    map[string][]string
+		minItems int
+		wantErr  string
+	}{
+		{
+			name:  "explicit blank maps to literal empty planned record array",
+			flags: map[string][]string{"items": {""}},
+		},
+		{
+			name:    "omitted required flag does not plan or execute",
+			flags:   map[string][]string{},
+			wantErr: "missing required flag --items",
+		},
+		{
+			name:    "raw empty values do not plan or execute",
+			flags:   map[string][]string{"items": {}},
+			wantErr: "missing required flag --items",
+		},
+		{
+			name:     "minimum one does not plan or execute",
+			flags:    map[string][]string{"items": {""}},
+			minItems: 1,
+			wantErr:  "below the minimum of 1",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			connector := &fakeConnector{
+				surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+					Path:         "widgets create",
+					Intent:       "reverse_etl",
+					Availability: "implemented",
+					Write:        "create_widgets",
+					Flags: []connectors.CommandSurfaceFlag{{
+						Name: "items", Type: "string_array", Required: true, MinItems: tt.minItems, MapsTo: "record.items",
+					}},
+				}}},
+				manifest: connectors.Manifest{WriteActions: []connectors.WriteActionSpec{{
+					Name: "create_widgets", Method: http.MethodPost, Path: "/widgets",
+				}}},
+			}
+
+			command, err := BuildWriteCommand(context.Background(), connector, Request{
+				Path:  []string{"widgets", "create"},
+				Flags: tt.flags,
+			})
+			if tt.wantErr != "" {
+				if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+					t.Fatalf("BuildWriteCommand error = %v, want %q", err, tt.wantErr)
+				}
+				if connector.validateReq.Action != "" || connector.writeReq.Action != "" || len(connector.writeRecords) != 0 {
+					t.Fatalf("rejected command reached write path: validate=%+v write=%+v records=%+v", connector.validateReq, connector.writeReq, connector.writeRecords)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("BuildWriteCommand: %v", err)
+			}
+			if !command.ApprovalRequired {
+				t.Fatalf("command = %+v, want approval-required reverse-ETL plan", command)
+			}
+			if connector.validateReq.Action != "create_widgets" || connector.writeReq.Action != "" || len(connector.writeRecords) != 0 {
+				t.Fatalf("plan lifecycle = validate=%+v write=%+v records=%+v, want validation only", connector.validateReq, connector.writeReq, connector.writeRecords)
+			}
+			items, ok := command.Record["items"].([]string)
+			if !ok || len(items) != 0 {
+				t.Fatalf("planned record items = %#v, want literal empty []string", command.Record["items"])
+			}
+			recordJSON, err := json.Marshal(command.Record)
+			if err != nil {
+				t.Fatalf("marshal planned record: %v", err)
+			}
+			if string(recordJSON) != `{"items":[]}` {
+				t.Fatalf("planned record JSON = %s, want literal empty array", recordJSON)
+			}
+		})
 	}
 }
 

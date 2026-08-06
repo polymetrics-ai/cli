@@ -422,6 +422,11 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 		})
 	}
 
+	var changefeed *connectors.ChangefeedDescriptor
+	if b.Changefeed != nil {
+		changefeed = b.Changefeed.Clone()
+	}
+
 	return connectors.Definition{
 		Name:            b.Metadata.Name,
 		DisplayName:     b.Metadata.DisplayName,
@@ -430,6 +435,7 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 		DocsURL:         b.Metadata.DocsURL,
 		ReleaseStage:    b.Metadata.ReleaseStage,
 		Capabilities:    synthesizeMetadata(b).Capabilities,
+		Changefeed:      changefeed,
 		Spec:            specJSON(b),
 		Streams:         streamSummaries,
 		WriteActions:    writeActions,

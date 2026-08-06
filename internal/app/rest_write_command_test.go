@@ -143,6 +143,98 @@ func TestDirectWriteCommandPlanPreviewApprovalAndExecute(t *testing.T) {
 	}
 }
 
+func TestDirectWriteCommandHonorsDeclaredJSONAndNoneResponsePolicies(t *testing.T) {
+	ctx := context.Background()
+	for _, tt := range []struct {
+		name     string
+		policy   string
+		wantBody bool
+	}{
+		{name: "json returns complete decoded body", policy: "json", wantBody: true},
+		{name: "none intentionally suppresses response body", policy: "none"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			calls := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				calls++
+				if r.Method != http.MethodPatch || r.URL.Path != "/api/widgets/w_1" {
+					t.Fatalf("request = %s %s, want PATCH /api/widgets/w_1", r.Method, r.URL.Path)
+				}
+				var body map[string]any
+				if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+					t.Fatalf("decode request body: %v", err)
+				}
+				if body["name"] != "Ada" {
+					t.Fatalf("request body = %#v, want typed name Ada", body)
+				}
+				w.Header().Set("Content-Type", "application/json")
+				_, _ = w.Write([]byte(`{"updated":true,"id":"w_1","nested":{"state":"complete"}}`))
+			}))
+			defer server.Close()
+
+			a := setupRestWriteDemoAppWithBundle(t, ctx, server.URL, func(bundle *engine.Bundle) {
+				for i := range bundle.Operations {
+					if bundle.Operations[i].ID == "restwrite-demo.widget-update" {
+						bundle.Operations[i].OutputPolicy = tt.policy
+					}
+				}
+				for i := range bundle.CLISurface.Commands {
+					if bundle.CLISurface.Commands[i].Path == "widget update" {
+						bundle.CLISurface.Commands[i].OutputPolicy = tt.policy
+					}
+				}
+			})
+			plan, preview, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+				Connector:  restWriteDemoConnector,
+				Credential: "restwrite-local",
+				Path:       []string{"widget", "update"},
+				Flags:      map[string][]string{"id": {"w_1"}, "name": {"Ada"}},
+				Preview:    true,
+			})
+			if err != nil {
+				t.Fatalf("PlanConnectorCommand: %v", err)
+			}
+			if preview == nil || preview.Digest == "" || plan.ApprovalToken == "" {
+				t.Fatalf("preview/token = %#v/%q, want bound preview and approval token", preview, plan.ApprovalToken)
+			}
+			if calls != 0 {
+				t.Fatalf("preview reached the network; calls = %d", calls)
+			}
+
+			run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken})
+			if err != nil {
+				t.Fatalf("RunReverseETL: %v", err)
+			}
+			if calls != 1 || run.Status != "completed" || run.OperationDirectWrite == nil {
+				t.Fatalf("run/calls = %#v/%d, want one completed direct write", run, calls)
+			}
+			if !tt.wantBody {
+				if run.OperationDirectWrite.Body != nil {
+					t.Fatalf("none policy body = %#v, want nil", run.OperationDirectWrite.Body)
+				}
+				t.Logf("direct-write command policy=%q status=%d response=<none>", tt.policy, run.OperationDirectWrite.Status)
+				return
+			}
+			body, ok := run.OperationDirectWrite.Body.(map[string]any)
+			if !ok {
+				t.Fatalf("json policy body type = %T, want map", run.OperationDirectWrite.Body)
+			}
+			if body["id"] != "w_1" || body["updated"] != true {
+				t.Fatalf("json policy body = %#v, want complete response fields", body)
+			}
+			nested, ok := body["nested"].(map[string]any)
+			if !ok || nested["state"] != "complete" {
+				t.Fatalf("json policy nested body = %#v, want complete nested response", body["nested"])
+			}
+			encoded, err := json.Marshal(body)
+			if err != nil {
+				t.Fatalf("marshal json policy response: %v", err)
+			}
+			t.Logf("direct-write command policy=%q status=%d response=%s", tt.policy, run.OperationDirectWrite.Status, encoded)
+		})
+	}
+}
+
 func TestDirectWriteCommandFailurePreservesErrorContent(t *testing.T) {
 	ctx := context.Background()
 	calls := 0

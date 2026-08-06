@@ -26,21 +26,22 @@ var httpHeaderNamePattern = regexp.MustCompile("^[!#$%&'*+.^_`|~0-9A-Za-z-]+$")
 type Bundle struct {
 	Name             string
 	Metadata         Metadata
-	Spec             *Schema                  // compiled spec.json; SecretKeys() from x-secret
-	RawSpec          json.RawMessage          // verbatim spec.json bytes (F5, REVIEW.md: Definition.Spec must serve this, not a lossy reconstruction); nil for a bundle that never loaded a real spec.json
-	HTTP             HTTPBase                 // streams.json "base"; zero value when no streams.json
-	Streams          []StreamSpec             // streams.json "streams"
-	Writes           []WriteAction            // writes.json "actions"; nil when writes.json absent
-	Operations       []OperationSpec          // operations.json "operations"; nil when operations.json absent
-	RawOperations    json.RawMessage          // verbatim operations.json bytes for validation/audit scanning
-	Schemas          map[string]*StreamSchema // stream name -> compiled schema + PK/cursor
-	Surface          *APISurface              // api_surface.json
-	CLISurface       *CLISurface              // cli_surface.json
-	RawCLISurface    json.RawMessage          // verbatim cli_surface.json bytes; nil when absent
-	Certification    *CertificationSpec       // certification.json; nil when absent
-	RawCertification json.RawMessage          // verbatim certification.json bytes; nil when absent
-	Docs             string                   // docs.md
-	Fixtures         fs.FS                    // fixtures/ subtree; nil when absent
+	Changefeed       *connectors.ChangefeedDescriptor // changefeed.json; nil when a connector has not been surveyed
+	Spec             *Schema                          // compiled spec.json; SecretKeys() from x-secret
+	RawSpec          json.RawMessage                  // verbatim spec.json bytes (F5, REVIEW.md: Definition.Spec must serve this, not a lossy reconstruction); nil for a bundle that never loaded a real spec.json
+	HTTP             HTTPBase                         // streams.json "base"; zero value when no streams.json
+	Streams          []StreamSpec                     // streams.json "streams"
+	Writes           []WriteAction                    // writes.json "actions"; nil when writes.json absent
+	Operations       []OperationSpec                  // operations.json "operations"; nil when operations.json absent
+	RawOperations    json.RawMessage                  // verbatim operations.json bytes for validation/audit scanning
+	Schemas          map[string]*StreamSchema         // stream name -> compiled schema + PK/cursor
+	Surface          *APISurface                      // api_surface.json
+	CLISurface       *CLISurface                      // cli_surface.json
+	RawCLISurface    json.RawMessage                  // verbatim cli_surface.json bytes; nil when absent
+	Certification    *CertificationSpec               // certification.json; nil when absent
+	RawCertification json.RawMessage                  // verbatim certification.json bytes; nil when absent
+	Docs             string                           // docs.md
+	Fixtures         fs.FS                            // fixtures/ subtree; nil when absent
 }
 
 // Metadata is the parsed metadata.json.
@@ -974,8 +975,8 @@ type CertificationWritePairing struct {
 // metaSchemas holds the compiled meta-schemas used to validate the bundle
 // files themselves, lazily compiled once from the embedded schema/ dir.
 var metaSchemas = struct {
-	metadata, spec, streams, writes, apiSurface, operations, cliSurface, certification *Schema
-	err                                                                                error
+	metadata, changefeed, spec, streams, writes, apiSurface, operations, cliSurface, certification *Schema
+	err                                                                                            error
 }{}
 
 func init() {
@@ -991,6 +992,7 @@ func init() {
 		return sch
 	}
 	metaSchemas.metadata = compileMeta(metadataSchemaJSON)
+	metaSchemas.changefeed = compileMeta(changefeedSchemaJSON)
 	metaSchemas.spec = compileMeta(specSchemaJSON)
 	metaSchemas.streams = compileMeta(streamsSchemaJSON)
 	metaSchemas.writes = compileMeta(writesSchemaJSON)
@@ -1124,6 +1126,10 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 	if err != nil {
 		return Bundle{}, err
 	}
+	changefeed, err := loadChangefeed(sub, dirName)
+	if err != nil {
+		return Bundle{}, err
+	}
 
 	spec, rawSpec, err := loadSpec(sub, dirName)
 	if err != nil {
@@ -1175,6 +1181,7 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 	return Bundle{
 		Name:             dirName,
 		Metadata:         metadata,
+		Changefeed:       changefeed,
 		Spec:             spec,
 		RawSpec:          rawSpec,
 		HTTP:             httpBase,
@@ -1215,6 +1222,27 @@ func loadMetadata(sub fs.FS, dirName string) (Metadata, error) {
 	}
 
 	return m, nil
+}
+
+func loadChangefeed(sub fs.FS, dirName string) (*connectors.ChangefeedDescriptor, error) {
+	if !fileExists(sub, "changefeed.json") {
+		return nil, nil
+	}
+	raw, err := readFile(sub, "changefeed.json")
+	if err != nil {
+		return nil, fmt.Errorf("load bundle %s: %w", dirName, err)
+	}
+	if err := metaSchemas.changefeed.Validate(mustDecodeAny(raw)); err != nil {
+		return nil, fmt.Errorf("load bundle %s: changefeed.json: %w", dirName, err)
+	}
+	var changefeed connectors.ChangefeedDescriptor
+	if err := strictDecode(raw, &changefeed); err != nil {
+		return nil, fmt.Errorf("load bundle %s: changefeed.json: %w", dirName, err)
+	}
+	if err := changefeed.Validate(); err != nil {
+		return nil, fmt.Errorf("load bundle %s: changefeed.json: %w", dirName, err)
+	}
+	return changefeed.Clone(), nil
 }
 
 // loadSpec returns both the compiled *Schema (used for runtime interpolation
