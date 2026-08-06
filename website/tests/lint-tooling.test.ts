@@ -1,3 +1,4 @@
+import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
@@ -81,6 +82,30 @@ describe('lint tooling', () => {
         }),
       ]),
     );
+  });
+
+  it('returns a failure status from the ESLint CLI for an error', () => {
+    const result = spawnSync(
+      process.execPath,
+      [
+        path.join(rootDir, 'node_modules', 'eslint', 'bin', 'eslint.js'),
+        '--no-config-lookup',
+        '--rule',
+        'no-undef:error',
+        '--stdin',
+        '--stdin-filename',
+        'lint-failure-proof.js',
+      ],
+      {
+        cwd: rootDir,
+        encoding: 'utf8',
+        input: 'lintProof;\n',
+      },
+    );
+
+    expect(result.error).toBeUndefined();
+    expect(result.status).toBe(1);
+    expect(result.stdout).toContain('no-undef');
   });
 
   it('keeps generated and build artifacts out of the lint scope', () => {
