@@ -332,7 +332,10 @@ func queryTableExists(rc *runContext, table string) bool {
 // ALL crontab reads/writes to for the duration of schedule_roundtrip
 // (internal/schedule/crontab.go's PM_CRONTAB_FILE seam) — the real
 // certification run must never touch the operator's actual crontab.
-const scheduleCrontabFileName = "cert-crontab"
+const (
+	scheduleCrontabFileName = "cert-crontab"
+	scheduleCron            = "0 3 * * *"
+)
 
 // stageScheduleRoundtrip drives stage 19 (design §D): snapshot the
 // (redirected, ephemeral) crontab, create + list + install --crontab, assert
@@ -369,13 +372,14 @@ func stageScheduleRoundtrip(rc *runContext, rep *Report) error {
 	snapshot, _ := os.ReadFile(crontabPath)
 
 	name := rc.scheduleName()
+	flow := rc.flowName()
 	sentinel := "# pm-schedule-" + name
 
 	createStage := recordStage(rc, rep, "schedule_create", 2, func() (bool, CLIStageInfo, string) {
 		res := rc.run("schedule", "create",
 			"--name", name,
-			"--cron", "0 3 * * *",
-			"--flow", rc.flowName(),
+			"--cron", scheduleCron,
+			"--flow", flow,
 			"--json")
 		passed, errMsg := assertKind(rc, "schedule_create", res, "Schedule", 0)
 		return passed, cliInfoFrom(res), errMsg
@@ -394,10 +398,17 @@ func stageScheduleRoundtrip(rc *runContext, rep *Report) error {
 			if !ok {
 				continue
 			}
-			if n, _ := m["name"].(string); n == name {
-				found = true
-				break
+			if n, _ := m["name"].(string); n != name {
+				continue
 			}
+			if cron, _ := m["cron"].(string); cron != scheduleCron {
+				return false, cliInfoFrom(res), fmt.Sprintf("schedule_list: schedule %q cron=%q, want %q", name, cron, scheduleCron)
+			}
+			if listedFlow, _ := m["flow"].(string); listedFlow != flow {
+				return false, cliInfoFrom(res), fmt.Sprintf("schedule_list: schedule %q flow=%q, want %q", name, listedFlow, flow)
+			}
+			found = true
+			break
 		}
 		if !found {
 			return false, cliInfoFrom(res), fmt.Sprintf("schedule_list: schedule %q not present in list", name)

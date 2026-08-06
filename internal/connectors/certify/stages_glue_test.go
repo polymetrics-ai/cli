@@ -153,6 +153,57 @@ func TestGlueStagesFlowStatusRejectsMismatchedIdentity(t *testing.T) {
 	}
 }
 
+func TestGlueStagesScheduleListRejectsMismatchedDefinition(t *testing.T) {
+	for _, tt := range []struct {
+		name   string
+		mutate func(*scriptedCLI)
+		want   string
+	}{
+		{
+			name: "cron",
+			mutate: func(driver *scriptedCLI) {
+				driver.scheduleCron = "0 4 * * *"
+			},
+			want: `cron="0 4 * * *"`,
+		},
+		{
+			name: "flow",
+			mutate: func(driver *scriptedCLI) {
+				driver.scheduleFlow = "cert_flow_other"
+			},
+			want: `flow="cert_flow_other"`,
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
+
+			r, driver := scriptedSampleRunner(t, certify.Options{
+				Connector: "sample",
+				Stream:    "customers",
+				Limit:     50,
+				SecretEnv: map[string]string{"token": "PM_SAMPLE_TOKEN"},
+			})
+			tt.mutate(driver)
+
+			rep, err := r.Run(context.Background())
+			if err != nil {
+				t.Fatalf("Run() error = %v", err)
+			}
+			driver.assertProtocol(t)
+			if rep.Passed {
+				t.Fatal("Report.Passed = true, want false after mismatched schedule definition")
+			}
+			list := mustStage(t, rep, "schedule_list")
+			if list.Passed {
+				t.Fatalf("schedule_list stage Passed = true, want false: %+v", list)
+			}
+			if !strings.Contains(list.Error, tt.want) {
+				t.Errorf("schedule_list error = %q, want mismatched %s", list.Error, tt.name)
+			}
+		})
+	}
+}
+
 // TestGlueStagesScheduleRoundtripLeavesNoResidue proves the harness snapshots
 // the (redirected, ephemeral) crontab before create/install and asserts it is
 // byte-identical after remove, per design §D "remove -> assert sentinel
