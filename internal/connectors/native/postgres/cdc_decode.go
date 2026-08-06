@@ -11,7 +11,9 @@ import (
 )
 
 type pgoutputDecoder struct {
-	relations map[uint32]pgoutputRelation
+	relations    map[uint32]pgoutputRelation
+	targetSchema string
+	targetTable  string
 }
 
 type pgoutputRelation struct {
@@ -26,8 +28,12 @@ type pgoutputColumn struct {
 	typeID uint32
 }
 
-func newPGOutputDecoder() *pgoutputDecoder {
-	return &pgoutputDecoder{relations: map[uint32]pgoutputRelation{}}
+func newPGOutputDecoder(schema, table string) *pgoutputDecoder {
+	return &pgoutputDecoder{
+		relations:    map[uint32]pgoutputRelation{},
+		targetSchema: schema,
+		targetTable:  table,
+	}
 }
 
 func (d *pgoutputDecoder) decode(message []byte, lsn string) ([]connectors.CDCEvent, error) {
@@ -46,80 +52,98 @@ func (d *pgoutputDecoder) decode(message []byte, lsn string) ([]connectors.CDCEv
 		d.relations[rel.id] = rel
 		return nil, r.done()
 	case 'I':
-		ev, err := d.decodeInsert(&r, lsn)
+		ev, emit, err := d.decodeInsert(&r, lsn)
 		if err != nil {
 			return nil, err
 		}
-		return []connectors.CDCEvent{ev}, r.done()
+		if err := r.done(); err != nil {
+			return nil, err
+		}
+		if !emit {
+			return nil, nil
+		}
+		return []connectors.CDCEvent{ev}, nil
 	case 'U':
-		ev, err := d.decodeUpdate(&r, lsn)
+		ev, emit, err := d.decodeUpdate(&r, lsn)
 		if err != nil {
 			return nil, err
 		}
-		return []connectors.CDCEvent{ev}, r.done()
+		if err := r.done(); err != nil {
+			return nil, err
+		}
+		if !emit {
+			return nil, nil
+		}
+		return []connectors.CDCEvent{ev}, nil
 	case 'D':
-		ev, err := d.decodeDelete(&r, lsn)
+		ev, emit, err := d.decodeDelete(&r, lsn)
 		if err != nil {
 			return nil, err
 		}
-		return []connectors.CDCEvent{ev}, r.done()
+		if err := r.done(); err != nil {
+			return nil, err
+		}
+		if !emit {
+			return nil, nil
+		}
+		return []connectors.CDCEvent{ev}, nil
 	default:
 		return nil, fmt.Errorf("pgoutput: unsupported message type %q", message[0])
 	}
 }
 
-func (d *pgoutputDecoder) decodeInsert(r *pgoutputReader, lsn string) (connectors.CDCEvent, error) {
+func (d *pgoutputDecoder) decodeInsert(r *pgoutputReader, lsn string) (connectors.CDCEvent, bool, error) {
 	rel, err := d.relation(r.uint32())
 	if err != nil {
-		return connectors.CDCEvent{}, err
+		return connectors.CDCEvent{}, false, err
 	}
 	tag := r.byte()
 	if tag != 'N' {
-		return connectors.CDCEvent{}, fmt.Errorf("pgoutput insert: expected new tuple tag 'N', got %q", tag)
+		return connectors.CDCEvent{}, false, fmt.Errorf("pgoutput insert: expected new tuple tag 'N', got %q", tag)
 	}
 	rec, err := r.tuple(rel)
 	if err != nil {
-		return connectors.CDCEvent{}, fmt.Errorf("pgoutput insert: %w", err)
+		return connectors.CDCEvent{}, false, fmt.Errorf("pgoutput insert: %w", err)
 	}
-	return cdcEvent("insert", rec, lsn), nil
+	return cdcEvent("insert", rec, lsn), d.matches(rel), nil
 }
 
-func (d *pgoutputDecoder) decodeUpdate(r *pgoutputReader, lsn string) (connectors.CDCEvent, error) {
+func (d *pgoutputDecoder) decodeUpdate(r *pgoutputReader, lsn string) (connectors.CDCEvent, bool, error) {
 	rel, err := d.relation(r.uint32())
 	if err != nil {
-		return connectors.CDCEvent{}, err
+		return connectors.CDCEvent{}, false, err
 	}
 	tag := r.byte()
 	if tag == 'K' || tag == 'O' {
 		if _, err := r.tuple(rel); err != nil {
-			return connectors.CDCEvent{}, fmt.Errorf("pgoutput update: old tuple: %w", err)
+			return connectors.CDCEvent{}, false, fmt.Errorf("pgoutput update: old tuple: %w", err)
 		}
 		tag = r.byte()
 	}
 	if tag != 'N' {
-		return connectors.CDCEvent{}, fmt.Errorf("pgoutput update: expected new tuple tag 'N', got %q", tag)
+		return connectors.CDCEvent{}, false, fmt.Errorf("pgoutput update: expected new tuple tag 'N', got %q", tag)
 	}
 	rec, err := r.tuple(rel)
 	if err != nil {
-		return connectors.CDCEvent{}, fmt.Errorf("pgoutput update: %w", err)
+		return connectors.CDCEvent{}, false, fmt.Errorf("pgoutput update: %w", err)
 	}
-	return cdcEvent("update", rec, lsn), nil
+	return cdcEvent("update", rec, lsn), d.matches(rel), nil
 }
 
-func (d *pgoutputDecoder) decodeDelete(r *pgoutputReader, lsn string) (connectors.CDCEvent, error) {
+func (d *pgoutputDecoder) decodeDelete(r *pgoutputReader, lsn string) (connectors.CDCEvent, bool, error) {
 	rel, err := d.relation(r.uint32())
 	if err != nil {
-		return connectors.CDCEvent{}, err
+		return connectors.CDCEvent{}, false, err
 	}
 	tag := r.byte()
 	if tag != 'K' && tag != 'O' {
-		return connectors.CDCEvent{}, fmt.Errorf("pgoutput delete: expected old tuple tag 'K' or 'O', got %q", tag)
+		return connectors.CDCEvent{}, false, fmt.Errorf("pgoutput delete: expected old tuple tag 'K' or 'O', got %q", tag)
 	}
 	rec, err := r.tuple(rel)
 	if err != nil {
-		return connectors.CDCEvent{}, fmt.Errorf("pgoutput delete: %w", err)
+		return connectors.CDCEvent{}, false, fmt.Errorf("pgoutput delete: %w", err)
 	}
-	return cdcEvent("delete", rec, lsn), nil
+	return cdcEvent("delete", rec, lsn), d.matches(rel), nil
 }
 
 func (d *pgoutputDecoder) relation(id uint32) (pgoutputRelation, error) {
@@ -128,6 +152,10 @@ func (d *pgoutputDecoder) relation(id uint32) (pgoutputRelation, error) {
 		return pgoutputRelation{}, fmt.Errorf("pgoutput: relation %d not known; relation message must arrive before DML", id)
 	}
 	return rel, nil
+}
+
+func (d *pgoutputDecoder) matches(rel pgoutputRelation) bool {
+	return rel.schema == d.targetSchema && rel.table == d.targetTable
 }
 
 func cdcEvent(op string, rec connectors.Record, lsn string) connectors.CDCEvent {

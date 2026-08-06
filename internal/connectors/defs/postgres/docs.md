@@ -3,7 +3,7 @@
 Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and
 supports cursor-incremental reads on a configurable cursor column, and consumes change events
 through PostgreSQL logical replication. CDC uses a connector-owned, source-bound replication slot
-and commits an LSN only after downstream acknowledgement, so restart delivery is at-least-once.
+and commits an LSN only after validated durable downstream acknowledgement, so restart delivery is at-least-once.
 
 This connector discovers available streams and schemas from the configured service at runtime.
 

@@ -1,6 +1,7 @@
 package postgres
 
 import (
+	"context"
 	"errors"
 	"testing"
 	"time"
@@ -106,4 +107,36 @@ func TestClassifyCDCStartErrorRequiresRebootstrapForLostWAL(t *testing.T) {
 	if !errors.As(err, &recovery) || recovery.Outcome != synccontract.RecoveryOutcomeRetentionGap {
 		t.Fatalf("classifyCDCStartError recovery = %#v, want retention gap", recovery)
 	}
+}
+
+func TestCommitDurableCDCCheckpointRejectsUnprovenCommitment(t *testing.T) {
+	source := postgresCDCSource{
+		identity: synccontract.SourceIdentity{
+			Engine:           "postgres",
+			AccountOrCluster: "system-one:database-one",
+			ObjectScope:      "public.events",
+		},
+		generation: synccontract.OpaqueToken("timeline-one"),
+	}
+	candidate := postgresCDCCheckpoint(source, pglogrepl.LSN(16), 0, &pglogrepl.CommitMessage{
+		CommitLSN:         pglogrepl.LSN(24),
+		TransactionEndLSN: pglogrepl.LSN(32),
+	})
+	err := commitDurableCDCCheckpoint(context.Background(), unprovenCheckpointCommitter{}, candidate)
+	if !errors.Is(err, synccontract.ErrDownstreamAcknowledgementRequired) {
+		t.Fatalf("commitDurableCDCCheckpoint = %v, want durable acknowledgement rejection", err)
+	}
+}
+
+func TestClassifyCDCSlotDropErrorRefusesActiveSlot(t *testing.T) {
+	err := classifyCDCSlotDropError(&pgconn.PgError{Code: "55006"})
+	if !errors.Is(err, ErrCDCSlotActive) {
+		t.Fatalf("classifyCDCSlotDropError = %v, want active slot refusal", err)
+	}
+}
+
+type unprovenCheckpointCommitter struct{}
+
+func (unprovenCheckpointCommitter) CommitDurableChangefeedCheckpoint(context.Context, synccontract.CheckpointEnvelope) (synccontract.DurableCheckpointCommitment, error) {
+	return synccontract.DurableCheckpointCommitment{}, nil
 }

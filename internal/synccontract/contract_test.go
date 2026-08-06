@@ -236,6 +236,32 @@ func TestCommitAfterDownstreamAcknowledgement(t *testing.T) {
 	}
 }
 
+func TestDurableCheckpointCommitmentRequiresValidatedAcknowledgement(t *testing.T) {
+	candidate := validCheckpoint()
+	acknowledgement, err := NewDurableDownstreamAcknowledgement("warehouse", candidate.ObservedAt.Add(time.Minute))
+	if err != nil {
+		t.Fatal(err)
+	}
+	commitment, err := CommitDurableCheckpointAfterDownstreamAcknowledgement(candidate, acknowledgement, func(CheckpointEnvelope) error {
+		return nil
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := commitment.ValidateCandidate(candidate); err != nil {
+		t.Fatalf("ValidateCandidate: %v", err)
+	}
+
+	different := candidate.Clone()
+	different.Position.Primary = OpaqueToken("different-position")
+	if err := commitment.ValidateCandidate(different); !errors.Is(err, ErrDownstreamAcknowledgementRequired) {
+		t.Fatalf("mismatched commitment error = %v", err)
+	}
+	if err := (DurableCheckpointCommitment{}).ValidateCandidate(candidate); !errors.Is(err, ErrDownstreamAcknowledgementRequired) {
+		t.Fatalf("missing commitment error = %v", err)
+	}
+}
+
 func TestResumeRejectsObservedButUncommittedCheckpoint(t *testing.T) {
 	checkpoint := validCheckpoint()
 	err := checkpoint.ValidateResume(ResumeExpectation{Source: checkpoint.Source, SourceGeneration: checkpoint.SourceGeneration})

@@ -10,6 +10,12 @@ import (
 	"polymetrics.ai/internal/connectors"
 )
 
+func TestCatalogCapabilitySummaryIncludesCDC(t *testing.T) {
+	if got := catalogCapabilitySummary(connectors.Capabilities{Check: true, CDC: true}); got != "check, cdc" {
+		t.Fatalf("catalogCapabilitySummary() = %q, want %q", got, "check, cdc")
+	}
+}
+
 func TestValidateConnectorDocsRejectsStaleIconMetadata(t *testing.T) {
 	dir := t.TempDir()
 	registry := appRegistry()

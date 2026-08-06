@@ -286,6 +286,9 @@ func catalogCapabilitySummary(caps connectors.Capabilities) string {
 	if caps.Query {
 		enabled = append(enabled, "query")
 	}
+	if caps.CDC {
+		enabled = append(enabled, "cdc")
+	}
 	if len(enabled) == 0 {
 		return "metadata"
 	}

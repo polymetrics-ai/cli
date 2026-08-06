@@ -420,11 +420,10 @@ type ChangefeedCheckpointCommitter interface {
 
 // DurableChangefeedCheckpointCommitter receives a fully structured
 // synccontract envelope after the caller has durably accepted the emitted
-// source transaction. Implementations commit through
-// synccontract.CommitAfterDownstreamAcknowledgement; the connector never
-// treats a received record or an unacknowledged candidate as resumable state.
+// source transaction and returns the shared evidence that the exact candidate
+// is durably committed.
 type DurableChangefeedCheckpointCommitter interface {
-	CommitDurableChangefeedCheckpoint(context.Context, synccontract.CheckpointEnvelope) error
+	CommitDurableChangefeedCheckpoint(context.Context, synccontract.CheckpointEnvelope) (synccontract.DurableCheckpointCommitment, error)
 }
 
 // ChangefeedStatus is the closed lifecycle vocabulary for a declared

@@ -143,7 +143,7 @@ func cdcStartLSN(checkpoint *synccontract.CheckpointEnvelope, barrier pglogrepl.
 }
 
 func consumeLogicalReplication(ctx context.Context, replication *pgconn.PgConn, source postgresCDCSource, barrier pglogrepl.LSN, req connectors.CDCReadRequest, emit func(connectors.CDCEvent) error) error {
-	decoder := newPGOutputDecoder()
+	decoder := newPGOutputDecoder(source.schema, source.table)
 	lastDurable := pglogrepl.LSN(0)
 	inTransaction := false
 
@@ -197,8 +197,8 @@ func consumeLogicalReplication(ctx context.Context, replication *pgconn.PgConn, 
 					return errors.New("postgres CDC: commit without a pgoutput transaction")
 				}
 				candidate := postgresCDCCheckpoint(source, barrier, lastDurable, message)
-				if err := req.DurableCheckpointCommitter.CommitDurableChangefeedCheckpoint(ctx, candidate); err != nil {
-					return fmt.Errorf("postgres CDC: persist durable checkpoint: %w", err)
+				if err := commitDurableCDCCheckpoint(ctx, req.DurableCheckpointCommitter, candidate); err != nil {
+					return err
 				}
 				if err := sendStandbyStatus(ctx, replication, message.TransactionEndLSN); err != nil {
 					return err
@@ -223,6 +223,17 @@ func consumeLogicalReplication(ctx context.Context, replication *pgconn.PgConn, 
 			return fmt.Errorf("postgres CDC: unsupported replication copy data type %q", copyData.Data[0])
 		}
 	}
+}
+
+func commitDurableCDCCheckpoint(ctx context.Context, committer connectors.DurableChangefeedCheckpointCommitter, candidate synccontract.CheckpointEnvelope) error {
+	commitment, err := committer.CommitDurableChangefeedCheckpoint(ctx, candidate)
+	if err != nil {
+		return fmt.Errorf("postgres CDC: persist durable checkpoint: %w", err)
+	}
+	if err := commitment.ValidateCandidate(candidate); err != nil {
+		return fmt.Errorf("postgres CDC: validate durable checkpoint commitment: %w", err)
+	}
+	return nil
 }
 
 func postgresCDCCheckpoint(source postgresCDCSource, barrier, previous pglogrepl.LSN, message *pglogrepl.CommitMessage) synccontract.CheckpointEnvelope {

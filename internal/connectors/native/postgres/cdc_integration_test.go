@@ -252,12 +252,12 @@ func newIntegrationCheckpointCommitter() *integrationCheckpointCommitter {
 	return &integrationCheckpointCommitter{committed: make(chan synccontract.CheckpointEnvelope, 1)}
 }
 
-func (c *integrationCheckpointCommitter) CommitDurableChangefeedCheckpoint(_ context.Context, candidate synccontract.CheckpointEnvelope) error {
+func (c *integrationCheckpointCommitter) CommitDurableChangefeedCheckpoint(_ context.Context, candidate synccontract.CheckpointEnvelope) (synccontract.DurableCheckpointCommitment, error) {
 	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement("postgres_cdc_conformance", time.Now().UTC())
 	if err != nil {
-		return err
+		return synccontract.DurableCheckpointCommitment{}, err
 	}
-	return synccontract.CommitAfterDownstreamAcknowledgement(candidate, acknowledgement, func(committed synccontract.CheckpointEnvelope) error {
+	return synccontract.CommitDurableCheckpointAfterDownstreamAcknowledgement(candidate, acknowledgement, func(committed synccontract.CheckpointEnvelope) error {
 		clone := committed.Clone()
 		select {
 		case c.committed <- clone:

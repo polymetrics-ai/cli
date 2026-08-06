@@ -28,10 +28,14 @@ const (
 	cdcSlotCleanupTimeout  = 5 * time.Second
 )
 
+var ErrCDCSlotActive = errors.New("postgres CDC replication slot is active")
+
 type postgresCDCSource struct {
 	identity   synccontract.SourceIdentity
 	generation synccontract.OpaqueToken
 	slotName   string
+	schema     string
+	table      string
 	system     pglogrepl.IdentifySystemResult
 }
 
@@ -91,11 +95,14 @@ func identifyCDCSource(ctx context.Context, replication *pgconn.PgConn, database
 	if err := identity.Validate(); err != nil {
 		return postgresCDCSource{}, fmt.Errorf("postgres CDC: source identity: %w", err)
 	}
+	sourceSchema, sourceTable, _ := strings.Cut(canonicalStream, ".")
 	generation := synccontract.OpaqueToken([]byte(strconv.FormatInt(int64(system.Timeline), 10) + "\n" + publication))
 	return postgresCDCSource{
 		identity:   identity,
 		generation: generation,
 		slotName:   cdcSlotName(identity),
+		schema:     sourceSchema,
+		table:      sourceTable,
 		system:     system,
 	}, nil
 }
@@ -170,7 +177,7 @@ func validateReplicationSlot(slot postgresReplicationSlot, database string) erro
 		return errors.New("postgres CDC: derived replication slot belongs to another database")
 	}
 	if slot.active {
-		return errors.New("postgres CDC: derived replication slot is already active")
+		return fmt.Errorf("%w: derived replication slot is already active", ErrCDCSlotActive)
 	}
 	return nil
 }
@@ -288,8 +295,16 @@ func (c Connector) TeardownCDC(ctx context.Context, cfg connectors.RuntimeConfig
 	if err := validateReplicationSlot(slot, conn.database); err != nil {
 		return err
 	}
-	if err := pglogrepl.DropReplicationSlot(ctx, replication, source.slotName, pglogrepl.DropReplicationSlotOptions{Wait: true}); err != nil {
-		return fmt.Errorf("postgres CDC: drop replication slot: %w", err)
+	if err := pglogrepl.DropReplicationSlot(ctx, replication, source.slotName, pglogrepl.DropReplicationSlotOptions{}); err != nil {
+		return classifyCDCSlotDropError(err)
 	}
 	return nil
+}
+
+func classifyCDCSlotDropError(err error) error {
+	var server *pgconn.PgError
+	if errors.As(err, &server) && server.Code == "55006" {
+		return fmt.Errorf("%w: PostgreSQL refused to drop a slot that became active", ErrCDCSlotActive)
+	}
+	return fmt.Errorf("postgres CDC: drop replication slot: %w", err)
 }

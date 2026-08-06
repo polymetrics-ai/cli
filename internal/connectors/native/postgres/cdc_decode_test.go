@@ -96,7 +96,7 @@ func TestPGOutputDecoderDML(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			dec := newPGOutputDecoder()
+			dec := newPGOutputDecoder("public", "users")
 			if events, err := dec.decode(relationMessage(testRelationID, "public", "users", columns...), ""); err != nil {
 				t.Fatalf("decode relation: %v", err)
 			} else if len(events) != 0 {
@@ -118,7 +118,7 @@ func TestPGOutputDecoderDML(t *testing.T) {
 }
 
 func TestPGOutputDecoderErrors(t *testing.T) {
-	dec := newPGOutputDecoder()
+	dec := newPGOutputDecoder("public", "users")
 	cases := []struct {
 		name    string
 		message []byte
@@ -139,6 +139,33 @@ func TestPGOutputDecoderErrors(t *testing.T) {
 				t.Fatal("decode error = nil, want error")
 			}
 		})
+	}
+}
+
+func TestPGOutputDecoderFiltersUnrequestedRelations(t *testing.T) {
+	dec := newPGOutputDecoder("public", "users")
+	columns := []testColumn{{name: "id", typeID: 23}}
+	if _, err := dec.decode(relationMessage(testRelationID, "public", "users", columns...), ""); err != nil {
+		t.Fatalf("decode target relation: %v", err)
+	}
+	if _, err := dec.decode(relationMessage(testRelationID+1, "public", "orders", columns...), ""); err != nil {
+		t.Fatalf("decode unrelated relation: %v", err)
+	}
+
+	events, err := dec.decode(insertMessage(testRelationID+1, textField("7")), "")
+	if err != nil {
+		t.Fatalf("decode unrelated insert: %v", err)
+	}
+	if len(events) != 0 {
+		t.Fatalf("unrelated insert emitted %d event(s), want 0", len(events))
+	}
+
+	events, err = dec.decode(insertMessage(testRelationID, textField("8")), "")
+	if err != nil {
+		t.Fatalf("decode target insert: %v", err)
+	}
+	if len(events) != 1 || events[0].Record["id"] != 8 {
+		t.Fatalf("target insert events = %#v, want selected relation event", events)
 	}
 }
 

@@ -7,7 +7,7 @@ description: PostgreSQL connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and supports cursor-incremental reads on a configurable cursor column. Read-only source; CDC is a documented stub pending the gated pglogrepl dependency.
+Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, supports cursor-incremental reads, and consumes logical-replication CDC through source-bound durable LSN checkpoints. Read-only source.
 
 ## Icon
 
