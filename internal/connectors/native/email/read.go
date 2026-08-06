@@ -18,9 +18,10 @@ const (
 )
 
 type imapConnection struct {
-	client *imapclient.Client
-	ctx    context.Context
-	stop   func() bool
+	client  *imapclient.Client
+	ctx     context.Context
+	stop    func() bool
+	aborted bool
 }
 
 // Check authenticates to each configured protocol without changing mailbox
@@ -68,7 +69,7 @@ func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit fu
 	}
 	defer closeIMAP(client)
 
-	return readMailboxes(ctx, client.client, boundedMessageLimit(req.Limit), emit)
+	return readMailboxes(ctx, client, boundedMessageLimit(req.Limit), emit)
 }
 
 func (c Connector) openIMAP(ctx context.Context, connection connectionConfig) (*imapConnection, error) {
@@ -141,27 +142,46 @@ func closeIMAP(connection *imapConnection) {
 	if connection == nil || connection.client == nil {
 		return
 	}
-	if connection.ctx.Err() == nil {
+	if !connection.aborted && connection.ctx.Err() == nil {
 		_ = connection.client.Logout().Wait()
 	}
+	abortIMAP(connection)
+}
+
+func abortIMAP(connection *imapConnection) {
+	if connection == nil || connection.client == nil {
+		return
+	}
+	connection.aborted = true
 	if connection.stop != nil {
 		_ = connection.stop()
 	}
 	_ = connection.client.Close()
 }
 
-func readMailboxes(ctx context.Context, client *imapclient.Client, limit int, emit func(connectors.Record) error) error {
+func readMailboxes(ctx context.Context, connection *imapConnection, limit int, emit func(connectors.Record) error) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
+	if connection == nil || connection.client == nil {
+		return errors.New("IMAP connection is unavailable")
+	}
+	client := connection.client
 	command := client.List("", "*", nil)
 	for emitted := 0; emitted < limit; emitted++ {
 		mailbox := command.Next()
 		if err := ctx.Err(); err != nil {
+			abortIMAP(connection)
 			return err
 		}
 		if mailbox == nil {
-			break
+			if err := command.Close(); err != nil {
+				if ctxErr := ctx.Err(); ctxErr != nil {
+					return ctxErr
+				}
+				return errors.New("IMAP LIST failed")
+			}
+			return nil
 		}
 		attributes := make([]string, 0, len(mailbox.Attrs))
 		for _, attribute := range mailbox.Attrs {
@@ -177,19 +197,15 @@ func readMailboxes(ctx context.Context, client *imapclient.Client, limit int, em
 			record["delimiter"] = string(mailbox.Delim)
 		}
 		if err := emit(record); err != nil {
-			_ = command.Close()
+			abortIMAP(connection)
 			return err
 		}
 	}
 	if err := ctx.Err(); err != nil {
+		abortIMAP(connection)
 		return err
 	}
-	if err := command.Close(); err != nil {
-		if ctxErr := ctx.Err(); ctxErr != nil {
-			return ctxErr
-		}
-		return errors.New("IMAP LIST failed")
-	}
+	abortIMAP(connection)
 	return nil
 }
 

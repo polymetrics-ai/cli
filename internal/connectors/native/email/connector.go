@@ -92,7 +92,7 @@ func (c Connector) Manifest() connectors.Manifest {
 		},
 		WriteActions: []connectors.WriteActionSpec{{
 			Name:           sendAction,
-			Description:    "Submit one RFC 5322/MIME message through SMTP; attachment paths are relative to the runtime .polymetrics staging root.",
+			Description:    "Submit one RFC 5322/MIME message through SMTP; attachment paths are relative to the runtime .polymetrics/email-attachments staging root.",
 			RequiredFields: []string{"to", "subject", "body"},
 			OptionalFields: []string{"cc", "bcc", "body_content_type", "attachments"},
 			Method:         "SMTP",

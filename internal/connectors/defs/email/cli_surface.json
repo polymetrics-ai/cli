@@ -87,7 +87,7 @@
         {
           "name": "attachment",
           "type": "string_array",
-          "summary": "Relative regular file paths beneath the runtime .polymetrics staging root; absolute paths, traversal, and escaping symlinks are rejected before preview.",
+          "summary": "Relative regular file paths beneath the runtime .polymetrics/email-attachments staging root; absolute paths, traversal, and escaping symlinks are rejected before preview.",
           "maps_to": "record.attachments",
           "control_policy": "reject",
           "max_items": 100

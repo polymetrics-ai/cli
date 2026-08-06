@@ -122,7 +122,7 @@ pending #3810. Full-refresh enforcement needs catalog sync-mode validation at
 `internal/app/local_warehouse.go:246-256`. Both become available when #3810 lands. When message
 polling becomes available, its RFC 9051 UIDVALIDITY+UID cursor cannot observe hard deletions, and
 IMAP IDLE remains the #3614 subscription seam.
-Attachments must be relative regular files staged beneath `.polymetrics`;
+Attachments must be relative regular files staged beneath `.polymetrics/email-attachments`;
 absolute paths, traversal, and escaping symlinks are rejected. Run `pm email --help`
 or `pm connectors inspect email` for the full connection fields and command contract.
 

@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"net"
+	"net/smtp"
 	"net/textproto"
 	"os"
 	"path/filepath"
@@ -111,6 +112,49 @@ func TestMailboxListHonorsRequestedLimit(t *testing.T) {
 	}
 }
 
+func TestMailboxListAbortsConnectionOnTerminalExit(t *testing.T) {
+	stopEmit := errors.New("stop mailbox emission")
+	for _, tc := range []struct {
+		name  string
+		limit int
+		emit  func(connectors.Record) error
+		want  error
+	}{
+		{name: "limit", limit: 1, emit: func(connectors.Record) error { return nil }},
+		{name: "emitter", limit: 2, emit: func(connectors.Record) error { return stopEmit }, want: stopEmit},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			address, listed := startStalledIMAPListFixture(t)
+			connector := New()
+			connector.imapAddressOverride = address
+			config := testRuntimeConfig(t)
+			ctx, cancel := context.WithCancel(context.Background())
+			defer cancel()
+			result := make(chan error, 1)
+			go func() {
+				result <- connector.Read(ctx, connectors.ReadRequest{
+					Stream: mailboxesStream,
+					Config: config,
+					Limit:  tc.limit,
+				}, tc.emit)
+			}()
+			select {
+			case <-listed:
+			case <-time.After(time.Second):
+				t.Fatal("IMAP fixture did not receive LIST")
+			}
+			select {
+			case err := <-result:
+				if !errors.Is(err, tc.want) {
+					t.Fatalf("Read error = %v, want %v", err, tc.want)
+				}
+			case <-time.After(time.Second):
+				t.Fatal("Read did not abort the IMAP connection after a terminal exit")
+			}
+		})
+	}
+}
+
 func TestOpenIMAPCancellationClosesOwnedConnection(t *testing.T) {
 	for _, tc := range []struct {
 		name     string
@@ -201,14 +245,113 @@ func TestOpenSMTPCancellationClosesOwnedConnection(t *testing.T) {
 	}
 }
 
+func TestSMTPExtensionCancellationReturnsContextError(t *testing.T) {
+	t.Run("STARTTLS", func(t *testing.T) {
+		address, extension := startSMTPGreetingStallFixture(t)
+		connection, err := resolveConnectionConfig(testRuntimeConfig(t))
+		if err != nil {
+			t.Fatalf("resolveConnectionConfig: %v", err)
+		}
+		connection.smtpSecurity = securitySTARTTLS
+		connection.timeout = time.Minute
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+		result := make(chan error, 1)
+		go func() {
+			opened, openErr := openSMTP(ctx, connection, address)
+			if opened != nil {
+				closeSMTP(opened)
+			}
+			result <- openErr
+		}()
+		select {
+		case <-extension:
+		case <-time.After(time.Second):
+			t.Fatal("SMTP fixture did not receive STARTTLS extension probe")
+		}
+		cancel()
+		select {
+		case err := <-result:
+			if !errors.Is(err, context.Canceled) {
+				t.Fatalf("openSMTP error = %v, want context.Canceled", err)
+			}
+		case <-time.After(time.Second):
+			t.Fatal("openSMTP did not return after STARTTLS probe cancellation")
+		}
+	})
+
+	t.Run("AUTH", func(t *testing.T) {
+		address, extension := startSMTPGreetingStallFixture(t)
+		connection, err := resolveConnectionConfig(testRuntimeConfig(t))
+		if err != nil {
+			t.Fatalf("resolveConnectionConfig: %v", err)
+		}
+		connection.timeout = time.Minute
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+		opened, err := openSMTP(ctx, connection, address)
+		if err != nil {
+			t.Fatalf("openSMTP: %v", err)
+		}
+		defer closeSMTP(opened)
+		result := make(chan error, 1)
+		go func() { result <- authenticateSMTP(ctx, opened.client, connection) }()
+		select {
+		case <-extension:
+		case <-time.After(time.Second):
+			t.Fatal("SMTP fixture did not receive AUTH extension probe")
+		}
+		cancel()
+		select {
+		case err := <-result:
+			if !errors.Is(err, context.Canceled) {
+				t.Fatalf("authenticateSMTP error = %v, want context.Canceled", err)
+			}
+		case <-time.After(time.Second):
+			t.Fatal("authenticateSMTP did not return after AUTH probe cancellation")
+		}
+	})
+}
+
+func TestPlainAuthUsesLoopbackHostPolicy(t *testing.T) {
+	for _, tc := range []struct {
+		name    string
+		host    string
+		tls     bool
+		wantErr bool
+	}{
+		{name: "loopback alias", host: "127.0.0.2"},
+		{name: "remote plaintext", host: "192.0.2.1", wantErr: true},
+		{name: "remote TLS", host: "192.0.2.1", tls: true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			auth := &plainAuth{username: "fixture-user", password: transientTestSecret(t), host: tc.host}
+			mechanism, _, err := auth.Start(&smtp.ServerInfo{Name: tc.host, TLS: tc.tls})
+			if tc.wantErr {
+				if err == nil {
+					t.Fatal("PLAIN authentication accepted a non-loopback plaintext host")
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("PLAIN authentication rejected %s: %v", tc.name, err)
+			}
+			if mechanism != "PLAIN" {
+				t.Fatalf("PLAIN mechanism = %q, want PLAIN", mechanism)
+			}
+		})
+	}
+}
+
 func TestSendPreviewIsUnmaskedAndAttachmentDriftCannotDispatch(t *testing.T) {
 	address, captured := startSMTPFixture(t)
 	projectRoot := t.TempDir()
 	runtimeRoot := filepath.Join(projectRoot, ".polymetrics")
-	if err := os.MkdirAll(runtimeRoot, 0o700); err != nil {
+	attachmentRoot := filepath.Join(runtimeRoot, emailAttachmentStagingDirectory)
+	if err := os.MkdirAll(attachmentRoot, 0o700); err != nil {
 		t.Fatalf("create attachment staging root: %v", err)
 	}
-	attachmentPath := filepath.Join(runtimeRoot, "note.txt")
+	attachmentPath := filepath.Join(attachmentRoot, "note.txt")
 	if err := osWriteFile(attachmentPath, []byte("attachment payload")); err != nil {
 		t.Fatalf("write attachment: %v", err)
 	}
@@ -256,14 +399,22 @@ func TestSendPreviewIsUnmaskedAndAttachmentDriftCannotDispatch(t *testing.T) {
 	}
 }
 
-func TestAttachmentsRequireRelativePathsWithinRuntimeStagingRoot(t *testing.T) {
+func TestAttachmentsRequireDedicatedEmailStagingRoot(t *testing.T) {
+	address, captured := startSMTPFixture(t)
 	projectRoot := t.TempDir()
 	runtimeRoot := filepath.Join(projectRoot, ".polymetrics")
-	if err := os.MkdirAll(runtimeRoot, 0o700); err != nil {
+	attachmentRoot := filepath.Join(runtimeRoot, emailAttachmentStagingDirectory)
+	if err := os.MkdirAll(attachmentRoot, 0o700); err != nil {
 		t.Fatalf("create attachment staging root: %v", err)
 	}
-	if err := osWriteFile(filepath.Join(runtimeRoot, "inside.txt"), []byte("staged attachment")); err != nil {
+	if err := osWriteFile(filepath.Join(attachmentRoot, "inside.txt"), []byte("staged attachment")); err != nil {
 		t.Fatalf("write staged attachment: %v", err)
+	}
+	if err := os.MkdirAll(filepath.Join(runtimeRoot, "vault"), 0o700); err != nil {
+		t.Fatalf("create vault fixture: %v", err)
+	}
+	if err := osWriteFile(filepath.Join(runtimeRoot, "vault", "key"), []byte("vault fixture")); err != nil {
+		t.Fatalf("write vault fixture: %v", err)
 	}
 	if err := osWriteFile(filepath.Join(projectRoot, "project-only.txt"), []byte("project attachment")); err != nil {
 		t.Fatalf("write project-root attachment: %v", err)
@@ -273,32 +424,57 @@ func TestAttachmentsRequireRelativePathsWithinRuntimeStagingRoot(t *testing.T) {
 	if err := osWriteFile(outsidePath, []byte("outside attachment")); err != nil {
 		t.Fatalf("write outside attachment: %v", err)
 	}
-	if err := os.Symlink(outsidePath, filepath.Join(runtimeRoot, "escape.txt")); err != nil {
+	if err := os.Symlink(outsidePath, filepath.Join(attachmentRoot, "escape.txt")); err != nil {
 		t.Fatalf("create attachment symlink: %v", err)
 	}
 
 	c := New()
 	cfg := testRuntimeConfig(t)
 	cfg.ProjectDir = runtimeRoot
+	c.smtpAddressOverride = address
 	request := connectors.WriteRequest{Action: sendAction, Config: cfg}
+	staged := []connectors.Record{{
+		"to":          []string{"to@example.invalid"},
+		"subject":     "attachment boundary",
+		"body":        "attachment boundary",
+		"attachments": []string{"inside.txt"},
+	}}
+	preview, err := c.DryRunWrite(context.Background(), request, staged)
+	if err != nil {
+		t.Fatalf("DryRunWrite(staged attachment): %v", err)
+	}
+	request.Approval = approvalForPreview(t, preview)
+	result, err := c.Write(context.Background(), request, staged)
+	if err != nil || result.RecordsWritten != 1 || captured.calls != 1 {
+		t.Fatalf("Write(staged attachment) result=%+v err=%v calls=%d, want one submission", result, err, captured.calls)
+	}
 	for _, test := range []struct {
 		name string
 		path string
 	}{
+		{name: "runtime vault", path: filepath.Join("vault", "key")},
 		{name: "project root", path: "project-only.txt"},
-		{name: "absolute", path: filepath.Join(runtimeRoot, "inside.txt")},
-		{name: "traversal", path: filepath.Join("..", "inside.txt")},
+		{name: "absolute", path: filepath.Join(attachmentRoot, "inside.txt")},
+		{name: "traversal", path: filepath.Join("..", "vault", "key")},
 		{name: "symlink escape", path: "escape.txt"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
-			_, err := c.DryRunWrite(context.Background(), request, []connectors.Record{{
+			records := []connectors.Record{{
 				"to":          []string{"to@example.invalid"},
 				"subject":     "attachment boundary",
 				"body":        "attachment boundary",
 				"attachments": []string{test.path},
-			}})
+			}}
+			_, err := c.DryRunWrite(context.Background(), request, records)
 			if err == nil {
-				t.Fatal("DryRunWrite accepted an attachment outside the runtime staging root")
+				t.Fatal("DryRunWrite accepted an attachment outside the Email staging root")
+			}
+			result, err := c.Write(context.Background(), request, records)
+			if err == nil {
+				t.Fatal("Write accepted an attachment outside the Email staging root")
+			}
+			if result.RecordsWritten != 0 || captured.calls != 1 {
+				t.Fatalf("Write dispatched outside attachment result=%+v calls=%d", result, captured.calls)
 			}
 		})
 	}
@@ -306,7 +482,11 @@ func TestAttachmentsRequireRelativePathsWithinRuntimeStagingRoot(t *testing.T) {
 
 func TestLoadAttachmentsBoundsCount(t *testing.T) {
 	runtimeRoot := t.TempDir()
-	if err := osWriteFile(filepath.Join(runtimeRoot, "empty.txt"), nil); err != nil {
+	attachmentRoot := filepath.Join(runtimeRoot, emailAttachmentStagingDirectory)
+	if err := os.MkdirAll(attachmentRoot, 0o700); err != nil {
+		t.Fatalf("create attachment staging root: %v", err)
+	}
+	if err := osWriteFile(filepath.Join(attachmentRoot, "empty.txt"), nil); err != nil {
 		t.Fatalf("write empty attachment: %v", err)
 	}
 	paths := make([]string, maxAttachmentCount+1)
@@ -717,6 +897,123 @@ func startStalledTCPFixture(t *testing.T) (string, <-chan struct{}) {
 		}
 	})
 	return listener.Addr().String(), accepted
+}
+
+func startStalledIMAPListFixture(t *testing.T) (string, <-chan struct{}) {
+	t.Helper()
+	listener, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatalf("listen stalled IMAP fixture: %v", err)
+	}
+	listed := make(chan struct{})
+	done := make(chan struct{})
+	go func() {
+		defer close(done)
+		conn, acceptErr := listener.Accept()
+		if acceptErr != nil {
+			return
+		}
+		defer func() { _ = conn.Close() }()
+		reader := textproto.NewReader(bufio.NewReader(conn))
+		writer := textproto.NewWriter(bufio.NewWriter(conn))
+		if err := writer.PrintfLine("* OK [CAPABILITY IMAP4rev2] local fixture ready"); err != nil {
+			return
+		}
+		if err := writer.W.Flush(); err != nil {
+			return
+		}
+		for {
+			line, err := reader.ReadLine()
+			if err != nil {
+				return
+			}
+			fields := strings.Fields(line)
+			if len(fields) < 2 {
+				return
+			}
+			tag := fields[0]
+			switch strings.ToUpper(fields[1]) {
+			case "CAPABILITY":
+				_, _ = fmt.Fprint(writer.W, "* CAPABILITY IMAP4rev2\r\n")
+				_ = writer.PrintfLine("%s OK CAPABILITY completed", tag)
+				_ = writer.W.Flush()
+			case "LOGIN":
+				_ = writer.PrintfLine("%s OK LOGIN completed", tag)
+				_ = writer.W.Flush()
+			case "LIST":
+				close(listed)
+				_ = writer.PrintfLine("* LIST (\\HasNoChildren) \"/\" \"INBOX\"")
+				_ = writer.W.Flush()
+				for {
+					if _, err := reader.ReadLine(); err != nil {
+						return
+					}
+				}
+			case "LOGOUT":
+				_ = writer.PrintfLine("* BYE closing")
+				_ = writer.PrintfLine("%s OK LOGOUT completed", tag)
+				_ = writer.W.Flush()
+				return
+			default:
+				_ = writer.PrintfLine("%s BAD unsupported command", tag)
+				_ = writer.W.Flush()
+			}
+		}
+	}()
+	t.Cleanup(func() {
+		_ = listener.Close()
+		select {
+		case <-done:
+		case <-time.After(time.Second):
+			t.Error("stalled IMAP fixture did not stop")
+		}
+	})
+	return listener.Addr().String(), listed
+}
+
+func startSMTPGreetingStallFixture(t *testing.T) (string, <-chan struct{}) {
+	t.Helper()
+	listener, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatalf("listen stalled SMTP extension fixture: %v", err)
+	}
+	extension := make(chan struct{})
+	done := make(chan struct{})
+	go func() {
+		defer close(done)
+		conn, acceptErr := listener.Accept()
+		if acceptErr != nil {
+			return
+		}
+		defer func() { _ = conn.Close() }()
+		reader := textproto.NewReader(bufio.NewReader(conn))
+		writer := textproto.NewWriter(bufio.NewWriter(conn))
+		if err := writer.PrintfLine("220 local fixture ready"); err != nil {
+			return
+		}
+		if err := writer.W.Flush(); err != nil {
+			return
+		}
+		line, err := reader.ReadLine()
+		if err != nil || !strings.HasPrefix(strings.ToUpper(line), "EHLO ") {
+			return
+		}
+		close(extension)
+		for {
+			if _, err := reader.ReadLine(); err != nil {
+				return
+			}
+		}
+	}()
+	t.Cleanup(func() {
+		_ = listener.Close()
+		select {
+		case <-done:
+		case <-time.After(time.Second):
+			t.Error("stalled SMTP extension fixture did not stop")
+		}
+	})
+	return listener.Addr().String(), extension
 }
 
 func startIMAPFixture(t *testing.T) imapFixture {

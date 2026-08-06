@@ -44,7 +44,7 @@ subscriptions remain out of scope and belong to the webhook/subscription seam in
 
 `pm email message send` is the only SMTP capability. It accepts typed `to`, optional `cc` and
 `bcc`, `subject`, `body`, optional `body_content_type`, and attachment paths relative to the Email
-runtime staging root, `<project-root>/.polymetrics/`. Stage regular files there; absolute paths,
+attachment staging root, `<project-root>/.polymetrics/email-attachments/`. Stage regular files there; absolute paths,
 traversal, and escaping symlinks are rejected before preview.
 Attachments become part of the preview-bound RFC 5322 MIME payload.
 
@@ -63,5 +63,5 @@ recipients appear in the envelope preview but not the RFC 5322 headers.
 - When message polling becomes available, hard deletions will not be observable and no deletion
   tombstone will be produced. IMAP IDLE, webhooks, and subscriptions remain #3614's seam.
 - SMTP is send-only. It does not and will not back mailbox, message, search, or stream reads.
-- Attachments must be relative regular files beneath `<project-root>/.polymetrics/`.
+- Attachments must be relative regular files beneath `<project-root>/.polymetrics/email-attachments/`.
   The aggregate attachment limit is 25 MiB and each file is limited to 10 MiB.

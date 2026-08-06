@@ -26,9 +26,10 @@ import (
 )
 
 const (
-	maxAttachmentBytes      = 10 << 20
-	maxAttachmentTotalBytes = 25 << 20
-	maxAttachmentCount      = 100
+	maxAttachmentBytes              = 10 << 20
+	maxAttachmentTotalBytes         = 25 << 20
+	maxAttachmentCount              = 100
+	emailAttachmentStagingDirectory = "email-attachments"
 )
 
 type sendMessage struct {
@@ -311,15 +312,7 @@ func loadAttachments(runtimeRoot string, paths []string) ([]attachment, error) {
 	if len(paths) > maxAttachmentCount {
 		return nil, fmt.Errorf("email send_message accepts at most %d attachments", maxAttachmentCount)
 	}
-	stagingRoot, err := attachmentStagingRoot(runtimeRoot)
-	if err != nil {
-		return nil, err
-	}
-	rootPath, err := filepath.Abs(stagingRoot)
-	if err != nil {
-		return nil, errors.New("email attachment staging root is unavailable")
-	}
-	root, err := os.OpenRoot(rootPath)
+	root, err := openAttachmentStagingRoot(runtimeRoot)
 	if err != nil {
 		return nil, errors.New("email attachment staging root is unavailable")
 	}
@@ -365,11 +358,28 @@ func loadAttachments(runtimeRoot string, paths []string) ([]attachment, error) {
 	return attachments, nil
 }
 
-func attachmentStagingRoot(runtimeRoot string) (string, error) {
+func openAttachmentStagingRoot(runtimeRoot string) (*os.Root, error) {
 	if strings.TrimSpace(runtimeRoot) == "" {
-		return "", errors.New("email attachment staging root is unavailable")
+		return nil, errors.New("email attachment staging root is unavailable")
 	}
-	return runtimeRoot, nil
+	rootPath, err := filepath.Abs(runtimeRoot)
+	if err != nil {
+		return nil, errors.New("email attachment staging root is unavailable")
+	}
+	runtime, err := os.OpenRoot(rootPath)
+	if err != nil {
+		return nil, errors.New("email attachment staging root is unavailable")
+	}
+	defer func() { _ = runtime.Close() }()
+	info, err := runtime.Lstat(emailAttachmentStagingDirectory)
+	if err != nil || !info.IsDir() {
+		return nil, errors.New("email attachment staging root is unavailable")
+	}
+	root, err := runtime.OpenRoot(emailAttachmentStagingDirectory)
+	if err != nil {
+		return nil, errors.New("email attachment staging root is unavailable")
+	}
+	return root, nil
 }
 
 func attachmentStagingRelativePath(raw string) (string, error) {
@@ -597,7 +607,12 @@ func openSMTP(ctx context.Context, connection connectionConfig, address string) 
 	}
 	opened := &smtpConnection{client: client, ctx: ctx, stop: stop}
 	if connection.smtpSecurity == securitySTARTTLS {
-		if ok, _ := client.Extension("STARTTLS"); !ok {
+		ok, _ := client.Extension("STARTTLS")
+		if ctxErr := ctx.Err(); ctxErr != nil {
+			abortSMTP(opened)
+			return nil, ctxErr
+		}
+		if !ok {
 			abortSMTP(opened)
 			return nil, errors.New("SMTP server does not support STARTTLS")
 		}
@@ -637,6 +652,9 @@ func authenticateSMTP(ctx context.Context, client *smtp.Client, connection conne
 		return err
 	}
 	ok, mechanisms := client.Extension("AUTH")
+	if ctxErr := ctx.Err(); ctxErr != nil {
+		return ctxErr
+	}
 	if !ok {
 		return errors.New("SMTP server does not advertise password authentication")
 	}
@@ -647,7 +665,7 @@ func authenticateSMTP(ctx context.Context, client *smtp.Client, connection conne
 	var auth smtp.Auth
 	switch {
 	case available["PLAIN"]:
-		auth = smtp.PlainAuth("", connection.smtpUsername, connection.password, connection.smtpHost)
+		auth = &plainAuth{username: connection.smtpUsername, password: connection.password, host: connection.smtpHost}
 	case available["LOGIN"]:
 		auth = &loginAuth{username: connection.smtpUsername, password: connection.password, host: connection.smtpHost}
 	default:
@@ -660,6 +678,29 @@ func authenticateSMTP(ctx context.Context, client *smtp.Client, connection conne
 		return errors.New("SMTP authentication failed")
 	}
 	return nil
+}
+
+type plainAuth struct {
+	username string
+	password string
+	host     string
+}
+
+func (auth *plainAuth) Start(server *smtp.ServerInfo) (string, []byte, error) {
+	if !server.TLS && !isLoopbackHost(auth.host) {
+		return "", nil, errors.New("PLAIN authentication requires TLS for a non-loopback host")
+	}
+	if server.Name != auth.host {
+		return "", nil, errors.New("SMTP PLAIN authentication server name mismatch")
+	}
+	return "PLAIN", []byte("\x00" + auth.username + "\x00" + auth.password), nil
+}
+
+func (auth *plainAuth) Next(_ []byte, more bool) ([]byte, error) {
+	if more {
+		return nil, errors.New("unexpected SMTP PLAIN challenge")
+	}
+	return nil, nil
 }
 
 type loginAuth struct {

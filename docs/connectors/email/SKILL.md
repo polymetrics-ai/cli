@@ -53,7 +53,7 @@ Lists mailboxes through IMAP4rev2, and sends one typed RFC 5322 message through 
 
 ## Reverse ETL Actions
 
-- send_message: Submit one RFC 5322/MIME message through SMTP; attachment paths are relative to the runtime .polymetrics staging root.
+- send_message: Submit one RFC 5322/MIME message through SMTP; attachment paths are relative to the runtime .polymetrics/email-attachments staging root.
   - endpoint: SMTP MAIL/RCPT/DATA
   - required fields: to, subject, body
   - optional fields: cc, bcc, body_content_type, attachments
