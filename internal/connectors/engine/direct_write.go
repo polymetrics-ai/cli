@@ -91,7 +91,11 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		if err != nil {
 			return err
 		}
-		requester := *rt.Requester
+		resolvedRequester, err := rt.requesterFor(prepared.method, prepared.op.REST.Path)
+		if err != nil {
+			return err
+		}
+		requester := *resolvedRequester
 		requester.DisableRetries = true
 
 		var response *connsdk.Response

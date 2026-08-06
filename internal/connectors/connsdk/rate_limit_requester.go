@@ -2,6 +2,7 @@ package connsdk
 
 import (
 	"context"
+	"math"
 	"net/http"
 	"strconv"
 	"strings"
@@ -31,7 +32,7 @@ type RateLimitAdmission interface {
 
 // RateLimitObserver receives parsed, secret-free rate-limit facts from a
 // provider response. It is called synchronously before a retry is scheduled
-// so a future resolver can tighten its next admission. It is not an operator
+// so attached policies can tighten their next admissions. It is not an operator
 // output hook; #3755 owns human and JSON event rendering.
 type RateLimitObserver interface {
 	Observe(ctx context.Context, observation RateLimitObservation)
@@ -67,6 +68,13 @@ type RateLimitObservation struct {
 	HasLimit     bool
 	Remaining    int64
 	HasRemaining bool
+
+	// Cost is the provider-reported cost for a request whose selected policy
+	// declared RateLimitCost.ResponseHeader. It is deliberately scalar and
+	// typed: the requester never retains a response header map or body in the
+	// observation.
+	Cost    float64
+	HasCost bool
 }
 
 // RateLimitError reports a terminal HTTP 429. It preserves the existing
@@ -100,9 +108,9 @@ func (e *RateLimitError) Unwrap() error {
 
 // rateLimitObservation parses only known numeric rate-limit headers. Unknown
 // or provider-specific headers are intentionally not copied through this
-// foundation: a future declaration-aware resolver can add a typed parser for
-// its cited policy without turning arbitrary headers into event payloads.
-func rateLimitObservation(status int, header http.Header, attempt int, now time.Time) (RateLimitObservation, bool) {
+// foundation. A declared actual-cost header is parsed into one typed scalar
+// without turning arbitrary headers into event payloads.
+func rateLimitObservation(status int, header http.Header, attempt int, now time.Time, costHeader string) (RateLimitObservation, bool) {
 	observation := RateLimitObservation{
 		Status:    status,
 		Attempt:   attempt,
@@ -130,11 +138,15 @@ func rateLimitObservation(status int, header http.Header, attempt int, now time.
 			observation.HasReset = true
 		}
 	}
+	if cost, ok := parsePositiveRateLimitCost(header.Get(costHeader)); ok {
+		observation.Cost = cost
+		observation.HasCost = true
+	}
 
 	switch {
 	case observation.Source == RateLimitObservationSourceRetryAfter:
 		return observation, true
-	case observation.HasLimit || observation.HasRemaining || observation.HasReset:
+	case observation.HasLimit || observation.HasRemaining || observation.HasReset || observation.HasCost:
 		observation.Source = RateLimitObservationSourceHeaders
 		return observation, true
 	case status == http.StatusTooManyRequests:
@@ -143,6 +155,17 @@ func rateLimitObservation(status int, header http.Header, attempt int, now time.
 	default:
 		return RateLimitObservation{}, false
 	}
+}
+
+func parsePositiveRateLimitCost(value string) (float64, bool) {
+	if strings.TrimSpace(value) == "" {
+		return 0, false
+	}
+	cost, err := strconv.ParseFloat(strings.TrimSpace(value), 64)
+	if err != nil || cost < 0 || math.IsNaN(cost) || math.IsInf(cost, 0) {
+		return 0, false
+	}
+	return cost, true
 }
 
 func parseNonNegativeRateLimitHeader(header http.Header, names ...string) (int64, bool) {

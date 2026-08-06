@@ -174,12 +174,18 @@ type Requester struct {
 	// Admission runs immediately before each logical Requester send and permitted
 	// redirect hop. It must honor the request context; an error prevents that
 	// attempt from reaching the provider. A safe replayable read can be replayed
-	// inside net/http without another admission. #3753 owns attaching a
-	// declaration-aware implementation.
+	// inside net/http without another admission. The engine attaches a
+	// declaration-aware implementation where a policy matches.
 	Admission RateLimitAdmission
 	// Observer receives parsed response rate-limit facts synchronously. It is
 	// deliberately not an output hook; #3755 owns operator-visible events.
 	Observer RateLimitObserver
+	// RateLimitCostHeader is the one provider header named by the selected
+	// declaration that reports a request's actual point cost. It is an HTTP
+	// field name validated by the bundle loader, never a caller-provided value.
+	// The parsed scalar is delivered through RateLimitObservation; raw headers
+	// are never retained.
+	RateLimitCostHeader string
 }
 
 func (r *Requester) client() *http.Client {
@@ -294,7 +300,7 @@ func (r *Requester) admit(ctx context.Context, method string, attempt int) error
 }
 
 func (r *Requester) observeRateLimit(ctx context.Context, status int, header http.Header, attempt int) RateLimitObservation {
-	observation, ok := rateLimitObservation(status, header, attempt, r.now())
+	observation, ok := rateLimitObservation(status, header, attempt, r.now(), r.RateLimitCostHeader)
 	if ok && r.Observer != nil {
 		r.Observer.Observe(ctx, observation)
 	}

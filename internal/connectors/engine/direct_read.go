@@ -124,7 +124,11 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	}
 	maxBytes := clampOperationDirectReadMaxBytes(req.MaxBytes, op.REST.MaxBytes)
 	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
-	resp, err := rt.Requester.DoLimited(ctx, method, requestPath, query, body, maxBytes)
+	requester, err := rt.requesterFor(method, op.REST.Path)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	resp, err := requester.DoLimited(ctx, method, requestPath, query, body, maxBytes)
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 		msg := completeEngineErrorText(err)
@@ -194,7 +198,11 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 
 	maxBytes := clampDirectReadMaxBytes(req.MaxBytes)
 	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
-	resp, err := rt.Requester.DoLimited(ctx, method, requestPath, query, nil, maxBytes)
+	requester, err := rt.requesterFor(method, req.Path)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	resp, err := requester.DoLimited(ctx, method, requestPath, query, nil, maxBytes)
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 		msg := completeEngineErrorText(err)

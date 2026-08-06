@@ -13,6 +13,7 @@ import (
 	"testing/fstest"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/defs"
 )
 
@@ -44,6 +45,7 @@ const validSpec = `{
 	"required": ["base_url"],
 	"properties": {
 		"base_url": { "type": "string" },
+		"installation_id": { "type": "string" },
 		"token": { "type": "string", "x-secret": true }
 	}
 }`
@@ -318,7 +320,7 @@ const validProviderCitedRateLimits = `{
 			"tiers": ["enterprise"],
 			"auth_types": ["oauth_app"]
 		},
-		"scope": {"subject_kind": "installation"},
+		"scope": {"subject_kind": "installation", "subject_config": "installation_id"},
 		"budgets": [
 			{
 				"model": "fixed_window",
@@ -414,6 +416,26 @@ func TestBundleLoadRejectsUncitedOrMalformedRateLimits(t *testing.T) {
 			want: "source",
 		},
 		{
+			name: "policy scope must name a non-secret config key",
+			data: strings.Replace(validProviderCitedRateLimits, `, "subject_config": "installation_id"`, "", 1),
+			want: "subject_config",
+		},
+		{
+			name: "policy scope kind must be declared",
+			data: strings.Replace(validProviderCitedRateLimits, `"subject_kind": "installation"`, `"subject_kind": "outside-vocabulary"`, 1),
+			want: "subject_kind",
+		},
+		{
+			name: "policy scope config must exist in spec",
+			data: strings.Replace(validProviderCitedRateLimits, "installation_id", "missing_scope", 1),
+			want: "scope.subject_config",
+		},
+		{
+			name: "policy scope config cannot be secret",
+			data: strings.Replace(validProviderCitedRateLimits, "installation_id", "token", 1),
+			want: "non-secret",
+		},
+		{
 			name: "retrieval date is not a date",
 			data: strings.Replace(validProviderCitedRateLimits, "2026-08-05", "not-a-date", 1),
 			want: "retrieved_at",
@@ -498,6 +520,16 @@ func TestBundleLoadRejectsUncitedOrMalformedRateLimits(t *testing.T) {
 			data: strings.Replace(validProviderCitedRateLimits, "X-RateLimit-Cost", "X Rate Limit Cost", 1),
 			want: "cost.response_header",
 		},
+		{
+			name: "cost header cannot be whitespace",
+			data: strings.Replace(validProviderCitedRateLimits, "X-RateLimit-Cost", " ", 1),
+			want: "cost.response_header",
+		},
+		{
+			name: "policy cannot declare multiple cost headers",
+			data: strings.Replace(validProviderCitedRateLimits, `"restore_per_second": 2`, `"restore_per_second": 2, "cost": {"default_cost": 1, "response_header": "X-Other-Cost"}`, 1),
+			want: "at most one header",
+		},
 	}
 
 	for _, tt := range tests {
@@ -510,6 +542,88 @@ func TestBundleLoadRejectsUncitedOrMalformedRateLimits(t *testing.T) {
 			}
 			if !strings.Contains(err.Error(), "rate_limits.json") || !strings.Contains(err.Error(), tt.want) {
 				t.Fatalf("Load error = %q, want rate_limits.json and %q", err, tt.want)
+			}
+		})
+	}
+}
+
+func TestBundleLoadRejectsOverlappingRateLimitCostHeaders(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/rate_limits.json"] = &fstest.MapFile{Data: []byte(`{
+		"schema_version": 1,
+		"state": "declared",
+		"policies": [
+			{
+				"id": "connector-points",
+				"source": {"url": "https://docs.example.test/rate-limits", "retrieved_at": "2026-08-05"},
+				"selector": {"all": true},
+				"scope": {"subject_kind": "installation", "subject_config": "installation_id"},
+				"budgets": [{"model": "fixed_window", "dimension": "sustained", "unit": "points", "limit": 100, "window_seconds": 60, "cost": {"default_cost": 1, "response_header": "X-Connector-Cost"}}]
+			},
+			{
+				"id": "graphql-points",
+				"source": {"url": "https://docs.example.test/rate-limits", "retrieved_at": "2026-08-05"},
+				"selector": {"endpoints": [{"method": "POST", "path": "/graphql"}]},
+				"scope": {"subject_kind": "installation", "subject_config": "installation_id"},
+				"budgets": [{"model": "fixed_window", "dimension": "sustained", "unit": "points", "limit": 100, "window_seconds": 60, "cost": {"default_cost": 1, "response_header": "X-GraphQL-Cost"}}]
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatal("Load: expected overlapping actual-cost headers to be rejected")
+	}
+	for _, want := range []string{"rate_limits.json", "connector-points", "graphql-points"} {
+		if !strings.Contains(err.Error(), want) {
+			t.Fatalf("Load error = %q, want %q", err, want)
+		}
+	}
+}
+
+func TestRateLimitSelectorsOverlap(t *testing.T) {
+	tests := []struct {
+		name  string
+		left  connsdk.RateLimitSelector
+		right connsdk.RateLimitSelector
+		want  bool
+	}{
+		{
+			name:  "all overlaps endpoint",
+			left:  connsdk.RateLimitSelector{All: true},
+			right: connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: "GET", Path: "/widgets"}}},
+			want:  true,
+		},
+		{
+			name:  "tier selector overlaps matching endpoint tier",
+			left:  connsdk.RateLimitSelector{Tiers: []string{"pro"}},
+			right: connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: "GET", Path: "/widgets"}}, Tiers: []string{"pro"}},
+			want:  true,
+		},
+		{
+			name:  "different endpoints do not overlap",
+			left:  connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: "GET", Path: "/widgets"}}},
+			right: connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: "GET", Path: "/projects"}}},
+			want:  false,
+		},
+		{
+			name:  "disjoint tiers do not overlap",
+			left:  connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: "GET", Path: "/widgets"}}, Tiers: []string{"pro"}},
+			right: connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: "GET", Path: "/widgets"}}, Tiers: []string{"free"}},
+			want:  false,
+		},
+		{
+			name:  "disjoint auth types do not overlap",
+			left:  connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: "GET", Path: "/widgets"}}, AuthTypes: []string{"oauth"}},
+			right: connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: "GET", Path: "/widgets"}}, AuthTypes: []string{"api_key"}},
+			want:  false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := rateLimitSelectorsOverlap(tt.left, tt.right); got != tt.want {
+				t.Fatalf("rateLimitSelectorsOverlap() = %t, want %t", got, tt.want)
 			}
 		})
 	}
