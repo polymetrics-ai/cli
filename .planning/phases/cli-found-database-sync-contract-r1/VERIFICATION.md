@@ -73,13 +73,15 @@ Local remediation evidence:
 - `go test -count=1 -timeout 5m -run '^TestCertifyCLI' ./internal/cli` —
   pass in 87.119s.
 
-The `require-linked-issue` workflow reads the live GitHub PR body, not a file
-in this checkout. The outer executor must prepend this completed-work link
-before rerunning CI:
+The `require-linked-issue` workflow reads the live GitHub PR body, not a source
+change alone. [`PR-BODY.md`](PR-BODY.md) is the exact replacement input for
+the outer PR phase; it preserves the issue-first intent and declares the
+completed-work link `Closes #3810`.
 
-```text
-Closes #3810
-```
+- [x] `go run ./cmd/prissueguard --title 'feat(synccontract): add durable database sync contract' --body-file .planning/phases/cli-found-database-sync-contract-r1/PR-BODY.md`
+      returns `issueguard: ok (1 linked issue)`.
+- [ ] Outer PR phase replaces PR #3879's live body with `PR-BODY.md` and
+      reruns `require-linked-issue`.
 
 The CI phase deliberately did not edit the live PR or trigger a rerun.
 Required remediation skills: `golang-how-to`, `golang-troubleshooting`,
