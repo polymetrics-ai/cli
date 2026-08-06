@@ -104,5 +104,32 @@
       "followUp": "fresh hosted Verify required for the final commit range"
     }
   },
+  "ciRemediation": {
+    "source": "hosted Verify timing failure on cd20f1074",
+    "rootCause": "the direct full source sweep and the real CLI route duplicated the same Runner/harness certification topology",
+    "topology": "one real CLI --full route carries full source/read/flow/schedule assertions, JSON rendering, and persistence; the package retains the outbox lifecycle proof",
+    "certifyRealCLIInvocations": 25,
+    "certifyInvocationBudget": 25,
+    "cliRealCLIInvocations": 92,
+    "cliInvocationBudget": 92,
+    "timing": {
+      "command": "make certify-timing",
+      "certifyElapsedSeconds": 15.252,
+      "certifyWallElapsedSeconds": 19.691,
+      "cliElapsedSeconds": 77.33,
+      "cliWallElapsedSeconds": 80.413,
+      "totalElapsedSeconds": 92.582,
+      "totalWallElapsedSeconds": 100.104,
+      "allowedDuration": "3m",
+      "status": "passed"
+    },
+    "scopedVerification": [
+      "go test -count=1 ./internal/connectors/certify",
+      "go test -count=1 -run '^TestCertifyCLI' ./internal/cli",
+      "go test -count=1 ./internal/certifytiming ./cmd/certifytiming",
+      "go test -count=1 ./internal/cli"
+    ],
+    "followUp": "outer executor owns fresh hosted Verify"
+  },
   "verificationPassed": false
 }

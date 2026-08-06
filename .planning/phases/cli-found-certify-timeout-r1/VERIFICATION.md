@@ -1,6 +1,6 @@
 # Verification checklist — certify-harness cost foundation (#3795)
 
-## Final 93-call measurement
+## Pre-remediation 93/61-call measurement
 
 - [x] Two final-topology `make certify-timing` measurements held the 93/93
   harness and 61/61 CLI caps. The first had harness elapsed/wall time
@@ -17,9 +17,27 @@
   `161.236 - 147.309 = 13.927s`; `161.236 + 13.927 = 175.163s`, rounded up to
   the next 15-second boundary, gives 180s.
 
-The pre-refactor harness made 782 real invocations. The current exact 93-call
-cap prevents added real work from being hidden as duplicated coverage, while
-the 3-minute wall cap detects broad cost regressions.
+The pre-refactor harness made 782 real invocations. That pre-remediation
+topology established the fixed 3-minute wall cap, which remains unchanged.
+
+## CI remediation — coalesced full-route measurement
+
+- [x] `TestCertifyCLISingleConnectorPassExitsZero` now runs
+  `pm connectors certify sample --full --json` and checks the full source/read/
+  flow/schedule report assertions alongside the CLI envelope and persistence.
+  The separate direct full-sweep test was removed because it duplicated that
+  executable topology.
+- [x] The revised exact invocation caps are 25/25 in
+  `internal/connectors/certify` and 92/92 in `internal/cli`.
+- [x] `make certify-timing` passed with harness elapsed/wall time
+  15.252s/19.691s, CLI elapsed/wall time 77.330s/80.413s, and total
+  elapsed/wall time 92.582s/100.104s—well below the unchanged 3-minute
+  duration limit.
+- [x] `go test -count=1 ./internal/connectors/certify`,
+  `go test -count=1 -run '^TestCertifyCLI' ./internal/cli`,
+  `go test -count=1 ./internal/certifytiming ./cmd/certifytiming`, and
+  `go test -count=1 ./internal/cli` passed. The complete CLI package took
+  458.490s.
 
 ## Write-inventory contract
 

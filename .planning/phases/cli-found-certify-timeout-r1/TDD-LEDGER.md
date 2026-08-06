@@ -26,6 +26,33 @@ The final ledger will replace every planned row with the exact command, test
 name, failure output or exit status, and the matching green command before the
 PR is declared ready.
 
+## CI remediation — duplicate full-route execution
+
+| State | Evidence |
+| --- | --- |
+| RED | Hosted Verify for `cd20f1074` failed `make certify-timing`: `201.488s` observed versus its fixed `180.000s` budget. Its slow-test report identifies a direct full source sweep (`75.980s`) plus a separate real CLI route (`42.480s`) that repeats the same Runner/harness topology. |
+| GREEN target | A single `TestCertifyCLI…` route invokes `pm connectors certify sample --full --json`, persists the report, and asserts every former direct full-sweep invariant from the JSON report. The standalone full-sweep test is removed, invocation caps are re-measured exactly, and `make certify-timing` remains under the unchanged `3m` budget. |
+| Guard | This is a test-topology consolidation only: no production certification behavior, timeout, retry policy, or duration allowance is relaxed. |
+
+### CI remediation GREEN evidence
+
+The coalesced `TestCertifyCLISingleConnectorPassExitsZero` route retained the
+full source/read/flow/schedule assertions while exercising CLI dispatch, the
+real Runner/harness seam, JSON rendering, and report persistence. The revised
+exact caps are 25 harness calls and 92 CLI calls. The unchanged timing gate
+passed locally:
+
+```text
+$ make certify-timing
+certify real CLI invocations: 25 (budget 25)
+certify CLI real invocations: 92 (budget 92)
+total elapsed=92.582s wall_elapsed=100.104s
+```
+
+The focused package tests and the complete `internal/cli` package also passed;
+the latter completed in `458.490s`. The outer executor retains ownership of a
+fresh hosted Verify run.
+
 ## Captured RED evidence
 
 ### #3798 — certify package invocation budget

@@ -100,6 +100,21 @@ Run `go vet ./...`, `go build ./cmd/pm`, and the individual non-suite Verify
 gates. Do not run aggregate `go test ./...` or `make verify` as a single
 per-command timeout-bound local call; CI carries those aggregate gates.
 
+### CI remediation — coalesced full-route proof
+
+Hosted Verify on commit `cd20f1074` measured `201.488s` against the fixed
+`180s` duration guard. The slow tests show that the direct
+`TestFullSweepSourceStagesAgainstSample` proof and
+`TestCertifyCLISingleConnectorPassExitsZero` each execute the same expensive
+source certification topology. Move the complete full-sweep assertions into
+the real `pm connectors certify sample --full --json` route proof and remove
+the standalone duplicate. This retains CLI dispatch, the real Runner and
+harness seam, report persistence, and all full source/read/flow/schedule
+assertions in one executable invocation. Re-measure the exact invocation caps
+and the existing wall-clock guard after the move; do not raise the guard.
+The local remediation measurement held 25/25 harness calls and 92/92 CLI
+calls, with `100.104s` total wall time against the unchanged `180s` limit.
+
 ## Delivery record
 
 Parent issue: #3795. Sub-issues: #3798, #3801, #3805, #3806, #3807. Parent
