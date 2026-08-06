@@ -337,9 +337,6 @@ func (s *appWebhookReceiptStore) Insert(ctx context.Context, receipt webhook.Rec
 	if err != nil {
 		return webhook.ReceiptInsertRejected, err
 	}
-	if err := ctx.Err(); err != nil {
-		return webhook.ReceiptInsertRejected, err
-	}
 	return result, nil
 }
 
@@ -569,13 +566,16 @@ func (s *appWebhookReceiptStore) validateClaimedReceiptEvent(eventID string, rec
 func (a *App) updateWebhookReceiptState(ctx context.Context, update func(state) (state, error)) (state, error) {
 	deadline, hasDeadline := ctx.Deadline()
 	if !hasDeadline {
-		deadline = time.Now().Add(time.Second)
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, time.Second)
+		defer cancel()
+		deadline, _ = ctx.Deadline()
 	}
 	for {
 		if err := ctx.Err(); err != nil {
 			return state{}, err
 		}
-		updated, err := a.updateState(update)
+		updated, err := a.updateStateContext(ctx, update)
 		if !errors.Is(err, os.ErrExist) {
 			return updated, err
 		}

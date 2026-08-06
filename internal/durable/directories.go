@@ -9,6 +9,10 @@ import (
 )
 
 func EnsureDirectoryTree(path, root string, mode os.FileMode) error {
+	return ensureDirectoryTree(path, root, mode, SyncDirectory)
+}
+
+func ensureDirectoryTree(path, root string, mode os.FileMode, syncDirectory func(string) error) error {
 	if path == "" || root == "" {
 		return errors.New("durable directory path and root are required")
 	}
@@ -28,52 +32,38 @@ func EnsureDirectoryTree(path, root string, mode os.FileMode) error {
 		return errors.New("durable directory path is outside its root")
 	}
 
-	directories := []string{absoluteRoot}
-	current := absoluteRoot
-	if relativePath != "." {
-		for _, component := range strings.Split(relativePath, string(os.PathSeparator)) {
-			if component == "" || component == "." {
-				continue
-			}
-			current = filepath.Join(current, component)
-			directories = append(directories, current)
-		}
-	}
+	directories := directoryAncestors(absolutePath)
 	for _, directory := range directories {
 		if err := ensureDirectory(directory, mode); err != nil {
 			return err
 		}
 	}
 	for _, directory := range directories {
-		if filepath.Dir(directory) == directory {
-			continue
-		}
-		if err := SyncDirectory(directory); err != nil {
+		if err := syncDirectory(directory); err != nil {
 			return fmt.Errorf("sync durable directory %s: %w", directory, err)
 		}
 	}
 	return nil
 }
 
-func ensureDirectory(path string, mode os.FileMode) error {
-	parent := filepath.Dir(path)
-	err := os.Mkdir(path, mode)
-	if err != nil && errors.Is(err, os.ErrNotExist) && parent != path {
-		if err := ensureDirectory(parent, mode); err != nil {
-			return err
+func directoryAncestors(path string) []string {
+	directories := []string{}
+	for current := path; ; current = filepath.Dir(current) {
+		directories = append(directories, current)
+		if filepath.Dir(current) == current {
+			break
 		}
-		err = os.Mkdir(path, mode)
 	}
+	for left, right := 0, len(directories)-1; left < right; left, right = left+1, right-1 {
+		directories[left], directories[right] = directories[right], directories[left]
+	}
+	return directories
+}
+
+func ensureDirectory(path string, mode os.FileMode) error {
+	err := os.Mkdir(path, mode)
 	if err != nil && !errors.Is(err, os.ErrExist) {
 		return fmt.Errorf("create durable directory %s: %w", path, err)
-	}
-	if parent != path {
-		if err := SyncDirectory(parent); err != nil {
-			return fmt.Errorf("sync durable directory parent %s: %w", parent, err)
-		}
-		if err := SyncDirectory(path); err != nil {
-			return fmt.Errorf("sync durable directory %s: %w", path, err)
-		}
 	}
 	return nil
 }

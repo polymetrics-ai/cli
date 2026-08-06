@@ -27,6 +27,33 @@ func TestEnsureDirectoryTreeCreatesMissingAncestors(t *testing.T) {
 	}
 }
 
+func TestEnsureDirectoryTreeSyncsCompleteExistingAncestorChain(t *testing.T) {
+	root := filepath.Join(t.TempDir(), "project")
+	directory := filepath.Join(root, "state", "receipts")
+	if err := os.MkdirAll(directory, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	synced := map[string]bool{}
+	if err := ensureDirectoryTree(directory, root, 0o700, func(path string) error {
+		synced[path] = true
+		return nil
+	}); err != nil {
+		t.Fatal(err)
+	}
+	absoluteDirectory, err := filepath.Abs(directory)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for current := absoluteDirectory; ; current = filepath.Dir(current) {
+		if !synced[current] {
+			t.Fatalf("directory %s was not synced", current)
+		}
+		if filepath.Dir(current) == current {
+			break
+		}
+	}
+}
+
 func TestEnsureDirectoryTreeRejectsPathOutsideRoot(t *testing.T) {
 	root := t.TempDir()
 	if err := EnsureDirectoryTree(filepath.Join(t.TempDir(), "state"), root, 0o700); err == nil {

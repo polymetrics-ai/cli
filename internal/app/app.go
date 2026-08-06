@@ -37,12 +37,70 @@ type App struct {
 	projectDir string
 	statePath  string
 	store      statestore.JSONStore[state]
-	stateMu    sync.RWMutex
+	stateMu    appStateMutex
 	state      state
 	vault      *vault.Vault
 	approval   *projectWriteApprovalAuthority
 	registry   *connectors.Registry
 	sqlEngine  sqlQueryEngine
+}
+
+type appStateMutex struct {
+	once sync.Once
+	gate chan struct{}
+	mu   sync.RWMutex
+}
+
+func (m *appStateMutex) initialize() {
+	m.once.Do(func() {
+		m.gate = make(chan struct{}, 1)
+	})
+}
+
+func (m *appStateMutex) Lock() {
+	m.initialize()
+	m.gate <- struct{}{}
+	m.mu.Lock()
+}
+
+func (m *appStateMutex) LockContext(ctx context.Context) error {
+	m.initialize()
+	select {
+	case m.gate <- struct{}{}:
+	case <-ctx.Done():
+		return ctx.Err()
+	}
+	for {
+		if m.mu.TryLock() {
+			return nil
+		}
+		timer := time.NewTimer(time.Millisecond)
+		select {
+		case <-ctx.Done():
+			if !timer.Stop() {
+				select {
+				case <-timer.C:
+				default:
+				}
+			}
+			<-m.gate
+			return ctx.Err()
+		case <-timer.C:
+		}
+	}
+}
+
+func (m *appStateMutex) Unlock() {
+	m.mu.Unlock()
+	<-m.gate
+}
+
+func (m *appStateMutex) RLock() {
+	m.mu.RLock()
+}
+
+func (m *appStateMutex) RUnlock() {
+	m.mu.RUnlock()
 }
 
 // sqlQueryEngine is the pluggable backend for App.QuerySQL. The default build
@@ -436,10 +494,31 @@ func (a *App) saveLocked() error {
 func (a *App) updateState(update func(state) (state, error)) (state, error) {
 	a.stateMu.Lock()
 	defer a.stateMu.Unlock()
+	return a.updateStateLocked(context.Background(), update)
+}
+
+func (a *App) updateStateContext(ctx context.Context, update func(state) (state, error)) (state, error) {
+	if err := a.stateMu.LockContext(ctx); err != nil {
+		return state{}, err
+	}
+	defer a.stateMu.Unlock()
+	if err := ctx.Err(); err != nil {
+		return state{}, err
+	}
+	return a.updateStateLocked(ctx, update)
+}
+
+func (a *App) updateStateLocked(ctx context.Context, update func(state) (state, error)) (state, error) {
 	updated, err := a.store.Update(func(current state) (state, error) {
+		if err := ctx.Err(); err != nil {
+			return current, err
+		}
 		next, updateErr := update(current)
 		if updateErr != nil {
 			return current, updateErr
+		}
+		if err := ctx.Err(); err != nil {
+			return current, err
 		}
 		next.Revision = current.Revision + 1
 		return next, nil

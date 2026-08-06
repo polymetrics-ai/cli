@@ -3,7 +3,9 @@ package app
 import (
 	"context"
 	"encoding/base64"
+	"errors"
 	"fmt"
+	"os"
 	"path/filepath"
 	"testing"
 	"time"
@@ -165,6 +167,56 @@ func TestWebhookReceiptCommitKeepsLiveStateCurrent(t *testing.T) {
 	defer instance.stateMu.RUnlock()
 	if got := len(instance.state.WebhookReceipts); got != receiptCount {
 		t.Fatalf("live receipt count = %d, want %d", got, receiptCount)
+	}
+}
+
+func TestWebhookReceiptInsertHonorsStateMutationDeadline(t *testing.T) {
+	root := t.TempDir()
+	if err := InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	instance, err := Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := instance.ConfigureWebhookReceiver(context.Background(), ConfigureWebhookReceiverRequest{
+		Name: "deadline-receiver",
+		Exposure: webhook.ExposureConfig{
+			Mode:        webhook.ExposureModeOperatorEndpoint,
+			CallbackURL: "https://operator.example.test/receiver",
+		},
+		ReceiptCapacity: 1,
+	}); err != nil {
+		t.Fatal(err)
+	}
+	store, err := instance.WebhookReceiptStore("deadline-receiver")
+	if err != nil {
+		t.Fatal(err)
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+	defer cancel()
+	instance.stateMu.Lock()
+	result, insertErr := store.Insert(ctx, webhook.Receipt{
+		Event:      webhook.VerifiedEvent{ID: "deadline-event"},
+		RawBody:    []byte(`{"event":"deadline"}`),
+		ReceivedAt: time.Now().UTC(),
+	})
+	instance.stateMu.Unlock()
+	if !errors.Is(insertErr, context.DeadlineExceeded) {
+		t.Fatalf("Insert() error = %v, want deadline exceeded", insertErr)
+	}
+	if result != webhook.ReceiptInsertRejected {
+		t.Fatalf("Insert() result = %q, want rejected", result)
+	}
+	if got := len(instance.snapshotState().WebhookReceipts); got != 0 {
+		t.Fatalf("committed receipt count = %d, want 0", got)
+	}
+	entries, err := os.ReadDir(filepath.Join(root, ".polymetrics", "vault"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(entries) != 1 || entries[0].Name() != "key" {
+		t.Fatalf("vault entries after rejected insert = %v", entries)
 	}
 }
 
