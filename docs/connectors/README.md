@@ -111,6 +111,7 @@
 - [convex](convex/MANUAL.md): Reads Convex tables and documents through the deployment HTTP API.
 - [copper](copper/MANUAL.md): Reads Copper CRM people, companies, opportunities, leads, and tasks through the Copper REST API.
 - [countercyclical](countercyclical/MANUAL.md): Reads Countercyclical investments, valuations, research memos, teams, assumptions, and pipelines, and creates investments, through the Countercyclical REST API.
+- [crisp](crisp/MANUAL.md): Reads the first Wave 1 set of Crisp REST API conversation resources through HTTP Basic authentication.
 - [criteo-marketing](criteo-marketing/MANUAL.md): Reads Criteo Marketing Solutions ad sets, advertisers, campaigns, audiences, ad spend statistics, and Marketplace Performance Outcomes (MPO) advertisers/sellers/budgets/seller-campaigns through the Criteo REST API using OAuth2 client-credentials auth.
 - [customer-io](customer-io/MANUAL.md): Reads Customer.io campaigns, newsletters, segments, broadcasts, activities, messages, exports, transactional templates, object types, reporting webhooks, sender identities, snippets, subscription channels/topics, workspaces, and collections; writes snippet/webhook/segment mutations and can send transactional email or trigger broadcasts, through the Customer.io App API.
 - [customerly](customerly/MANUAL.md): Reads Customerly users, leads, and accounts, and writes user/lead/tag/message/attribute/company mutations through the Customerly v1 REST API.
