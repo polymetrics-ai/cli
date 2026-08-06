@@ -7,13 +7,16 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"polymetrics.ai/internal/synccontract"
 )
 
 type SourceSyncMode string
 
 const (
-	SourceSyncFullRefresh SourceSyncMode = "full_refresh"
-	SourceSyncIncremental SourceSyncMode = "incremental"
+	SourceSyncFullRefresh   SourceSyncMode = "full_refresh"
+	SourceSyncIncremental   SourceSyncMode = "incremental"
+	SourceSyncChangeCapture SourceSyncMode = "change_capture"
 )
 
 type DestinationSyncMode string
@@ -23,13 +26,17 @@ const (
 	DestinationSyncOverwrite        DestinationSyncMode = "overwrite"
 	DestinationSyncAppendDeduped    DestinationSyncMode = "append_dedup"
 	DestinationSyncOverwriteDeduped DestinationSyncMode = "overwrite_dedup"
+	DestinationSyncUpsert           DestinationSyncMode = "upsert"
+	DestinationSyncDedupeHistory    DestinationSyncMode = "dedupe_history"
 	DefaultUserFacingSyncMode                           = "full_refresh_overwrite"
 )
 
 type SyncMode struct {
-	Name        string
-	Source      SourceSyncMode
-	Destination DestinationSyncMode
+	Name                string
+	Source              SourceSyncMode
+	Destination         DestinationSyncMode
+	ContractMode        synccontract.Mode
+	LegacyCompatibility bool
 }
 
 func ParseSyncMode(raw string) (SyncMode, error) {
@@ -39,15 +46,31 @@ func ParseSyncMode(raw string) (SyncMode, error) {
 	}
 	switch value {
 	case "full_refresh_append":
-		return SyncMode{Name: value, Source: SourceSyncFullRefresh, Destination: DestinationSyncAppend}, nil
+		return SyncMode{Name: value, Source: SourceSyncFullRefresh, Destination: DestinationSyncAppend, ContractMode: synccontract.ModeFullAppend, LegacyCompatibility: true}, nil
 	case "full_refresh_overwrite":
-		return SyncMode{Name: value, Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwrite}, nil
+		return SyncMode{Name: value, Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwrite, ContractMode: synccontract.ModeFullOverwrite, LegacyCompatibility: true}, nil
 	case "full_refresh_overwrite_deduped", "full_refresh_overwrite_dedup", "full_refresh_deduped":
 		return SyncMode{Name: "full_refresh_overwrite_deduped", Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwriteDeduped}, nil
 	case "incremental_append":
-		return SyncMode{Name: value, Source: SourceSyncIncremental, Destination: DestinationSyncAppend}, nil
+		// The pre-contract public spelling is also the closed vocabulary's
+		// incremental append name. Existing saved projects keep this explicit
+		// compatibility profile; newly admitted native commands use the shared
+		// contract rather than this scalar-cursor adapter.
+		return SyncMode{Name: value, Source: SourceSyncIncremental, Destination: DestinationSyncAppend, ContractMode: synccontract.ModeIncrementalAppend, LegacyCompatibility: true}, nil
 	case "incremental_append_deduped", "incremental_append_dedup":
 		return SyncMode{Name: "incremental_append_deduped", Source: SourceSyncIncremental, Destination: DestinationSyncAppendDeduped}, nil
+	case string(synccontract.ModeFullOverwrite):
+		return SyncMode{Name: value, Source: SourceSyncFullRefresh, Destination: DestinationSyncOverwrite, ContractMode: synccontract.ModeFullOverwrite}, nil
+	case string(synccontract.ModeFullAppend):
+		return SyncMode{Name: value, Source: SourceSyncFullRefresh, Destination: DestinationSyncAppend, ContractMode: synccontract.ModeFullAppend}, nil
+	case string(synccontract.ModeIncrementalUpsert):
+		return SyncMode{Name: value, Source: SourceSyncIncremental, Destination: DestinationSyncUpsert, ContractMode: synccontract.ModeIncrementalUpsert}, nil
+	case string(synccontract.ModeIncrementalDedupe):
+		return SyncMode{Name: value, Source: SourceSyncIncremental, Destination: DestinationSyncAppendDeduped, ContractMode: synccontract.ModeIncrementalDedupe}, nil
+	case string(synccontract.ModeIncrementalDedupeHistory):
+		return SyncMode{Name: value, Source: SourceSyncIncremental, Destination: DestinationSyncDedupeHistory, ContractMode: synccontract.ModeIncrementalDedupeHistory}, nil
+	case string(synccontract.ModeChangeCapture):
+		return SyncMode{Name: value, Source: SourceSyncChangeCapture, Destination: DestinationSyncUpsert, ContractMode: synccontract.ModeChangeCapture}, nil
 	default:
 		return SyncMode{}, fmt.Errorf("unsupported sync mode %q", raw)
 	}
@@ -68,7 +91,7 @@ func (m SyncMode) RequiresCursor() bool {
 }
 
 func (m SyncMode) RequiresPrimaryKey() bool {
-	return m.IsDeduped()
+	return m.IsDeduped() || m.Destination == DestinationSyncUpsert || m.Destination == DestinationSyncDedupeHistory
 }
 
 func (m SyncMode) IsOverwrite() bool {
@@ -76,7 +99,14 @@ func (m SyncMode) IsOverwrite() bool {
 }
 
 func (m SyncMode) IsDeduped() bool {
-	return m.Destination == DestinationSyncAppendDeduped || m.Destination == DestinationSyncOverwriteDeduped
+	return m.Destination == DestinationSyncAppendDeduped || m.Destination == DestinationSyncOverwriteDeduped || m.Destination == DestinationSyncDedupeHistory
+}
+
+// IsContractMode reports a new closed vocabulary entry. It may parse and be
+// persisted, but RunETL refuses to execute it until a native executor and the
+// shared conformance evidence have been admitted.
+func (m SyncMode) IsContractMode() bool {
+	return m.ContractMode != "" && !m.LegacyCompatibility
 }
 
 func ValidateStreamSyncConfig(stream StreamConfig) error {
