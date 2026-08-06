@@ -40,11 +40,18 @@ Polling cannot see a hard delete. A message removed from the mailbox simply stop
 connector emits no tombstone and makes no claim to detect it. IMAP IDLE/push subscriptions are out
 of scope here and belong to the webhook/subscription seam in #3614.
 
+The `messages` stream supports incremental sync only. Full refresh of messages is blocked pending
+#3810: the shared ETL reader at `internal/app/app.go:557-564` always forwards persisted `since` and
+cursor state and does not pass the source mode to this connector, so Email cannot safely request a
+complete reread by itself.
+
 ## Write actions & risks
 
 `pm email message send` is the only SMTP capability. It accepts typed `to`, optional `cc` and
-`bcc`, `subject`, `body`, optional `body_content_type`, and project-relative attachment paths.
-Attachments are regular files and become part of the preview-bound RFC 5322 MIME payload.
+`bcc`, `subject`, `body`, optional `body_content_type`, and attachment paths relative to the Email
+runtime staging root, `<project-root>/.polymetrics/`. Stage regular files there; absolute paths,
+traversal, and escaping symlinks are rejected before preview.
+Attachments become part of the preview-bound RFC 5322 MIME payload.
 
 SMTP submission is externally visible and irreversible after the server accepts the message. It is
 non-batchable and always follows plan → preview → approval with typed destructive confirmation →
@@ -59,5 +66,5 @@ recipients appear in the envelope preview but not the RFC 5322 headers.
   and the command `--limit` bounds emitted messages. Large or nested MIME content can therefore
   be truncated by design.
 - SMTP is send-only. It does not and will not back mailbox, message, search, or stream reads.
-- Attachment paths must resolve to regular files under the project root. The aggregate attachment
-  limit is 25 MiB and each file is limited to 10 MiB.
+- Attachments must be relative regular files beneath `<project-root>/.polymetrics/`.
+  The aggregate attachment limit is 25 MiB and each file is limited to 10 MiB.

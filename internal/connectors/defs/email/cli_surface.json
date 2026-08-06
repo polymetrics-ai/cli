@@ -103,7 +103,7 @@
         {
           "name": "attachment",
           "type": "string_array",
-          "summary": "Project-relative regular file paths to attach; each path is read into the preview-bound MIME payload.",
+          "summary": "Relative regular file paths beneath the runtime .polymetrics staging root; absolute paths, traversal, and escaping symlinks are rejected before preview.",
           "maps_to": "record.attachments"
         }
       ],
@@ -116,7 +116,7 @@
   "help_topics": [
     {
       "name": "incremental",
-      "summary": "Messages use a mailbox-specific UIDVALIDITY+UID cursor; hard deletions are not observable by polling."
+      "summary": "Messages use a mailbox-specific UIDVALIDITY+UID cursor; hard deletions are not observable by polling; full message refresh is unavailable pending #3810."
     },
     {
       "name": "submission-safety",

@@ -116,8 +116,12 @@ Email is a native protocol command surface: `pm email mailboxes list` and
 non-batchable destructive write. It uses the same plan, unmasked preview, approval,
 typed `destructive` confirmation, and execute gate as other writes. Its IMAP
 cursor is mailbox-scoped `UIDVALIDITY+UID`; polling cannot observe hard deletions,
-and IMAP IDLE belongs to the #3614 subscription seam. Run `pm email --help` or
-`pm connectors inspect email` for the full connection fields and command contract.
+and IMAP IDLE belongs to the #3614 subscription seam. The `messages` stream advertises
+incremental sync only: full refresh is blocked pending #3810 at `internal/app/app.go:557-564`,
+where shared ETL always forwards persisted cursor state without a source-mode signal.
+Attachments must be relative regular files staged beneath `.polymetrics`;
+absolute paths, traversal, and escaping symlinks are rejected. Run `pm email --help`
+or `pm connectors inspect email` for the full connection fields and command contract.
 
 ## Workspace commands
 

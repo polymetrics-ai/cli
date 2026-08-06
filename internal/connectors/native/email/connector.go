@@ -59,6 +59,17 @@ func New() Connector {
 	return Connector{Base: engine.NewBase(b)}
 }
 
+func (c Connector) Definition() connectors.Definition {
+	definition := c.Base.Definition()
+	syncModes := c.Manifest().SyncModes
+	for index := range definition.Streams {
+		if definition.Streams[index].Name == messagesStream {
+			definition.Streams[index].SyncModes = append([]string(nil), syncModes...)
+		}
+	}
+	return definition
+}
+
 // Manifest supplies the typed native write contract consumed by the shared
 // command plan/preview/approval gate. SMTP send is explicitly non-batchable
 // and destructive once the server accepts DATA.
@@ -93,7 +104,7 @@ func (c Connector) Manifest() connectors.Manifest {
 			},
 			{
 				Name:         messagesStream,
-				Description:  "Messages from one IMAP mailbox, keyed and incremented by mailbox UIDVALIDITY plus UID. Hard deletions are not observable by polling.",
+				Description:  "Messages from one IMAP mailbox, keyed and incremented by mailbox UIDVALIDITY plus UID. Hard deletions are not observable by polling. Full refresh is unavailable pending #3810.",
 				PrimaryKey:   []string{"mailbox", "uid_validity", "uid"},
 				CursorFields: []string{"imap_cursor"},
 				Fields: []connectors.Field{
@@ -111,7 +122,7 @@ func (c Connector) Manifest() connectors.Manifest {
 		},
 		WriteActions: []connectors.WriteActionSpec{{
 			Name:           sendAction,
-			Description:    "Submit one RFC 5322/MIME message through SMTP.",
+			Description:    "Submit one RFC 5322/MIME message through SMTP; attachment paths are relative to the runtime .polymetrics staging root.",
 			RequiredFields: []string{"to", "subject", "body"},
 			OptionalFields: []string{"cc", "bcc", "body_content_type", "attachments"},
 			Method:         "SMTP",
@@ -120,8 +131,8 @@ func (c Connector) Manifest() connectors.Manifest {
 			Batchable:      &batchable,
 			Confirm:        string(connectors.ConfirmationKindDestructive),
 		}},
-		SyncModes:       []string{"full_refresh_append", "incremental_append"},
-		SourceSyncModes: []string{"full_refresh", "incremental"},
+		SyncModes:       []string{"incremental_append"},
+		SourceSyncModes: []string{"incremental"},
 		Risk: connectors.RiskSpec{
 			Read:     "polled IMAP reads; hard deletion is not observable by polling",
 			Write:    "SMTP send-only submission",

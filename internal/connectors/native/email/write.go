@@ -291,29 +291,27 @@ func (message sendMessage) envelopeRecipients() []string {
 	return addresses
 }
 
-func loadAttachments(projectDir string, paths []string) ([]attachment, error) {
+func loadAttachments(runtimeRoot string, paths []string) ([]attachment, error) {
 	if len(paths) == 0 {
 		return nil, nil
 	}
-	if strings.TrimSpace(projectDir) == "" {
-		projectDir = "."
-	}
-	rootPath, err := filepath.Abs(projectDir)
+	stagingRoot, err := attachmentStagingRoot(runtimeRoot)
 	if err != nil {
-		return nil, fmt.Errorf("resolve project root for email attachments: %w", err)
+		return nil, err
+	}
+	rootPath, err := filepath.Abs(stagingRoot)
+	if err != nil {
+		return nil, errors.New("email attachment staging root is unavailable")
 	}
 	root, err := os.OpenRoot(rootPath)
 	if err != nil {
-		return nil, fmt.Errorf("open project root for email attachments: %w", err)
+		return nil, errors.New("email attachment staging root is unavailable")
 	}
 	defer func() { _ = root.Close() }()
 	attachments := make([]attachment, 0, len(paths))
 	total := int64(0)
 	for _, path := range paths {
-		if err := safety.ValidateLocalWritePath(rootPath, path, "email attachment path", false); err != nil {
-			return nil, err
-		}
-		relative, err := attachmentRootRelativePath(rootPath, path)
+		relative, err := attachmentStagingRelativePath(path)
 		if err != nil {
 			return nil, err
 		}
@@ -351,32 +349,25 @@ func loadAttachments(projectDir string, paths []string) ([]attachment, error) {
 	return attachments, nil
 }
 
-func attachmentRootRelativePath(projectDir, raw string) (string, error) {
+func attachmentStagingRoot(runtimeRoot string) (string, error) {
+	if strings.TrimSpace(runtimeRoot) == "" {
+		return "", errors.New("email attachment staging root is unavailable")
+	}
+	return runtimeRoot, nil
+}
+
+func attachmentStagingRelativePath(raw string) (string, error) {
+	if strings.TrimSpace(raw) == "" {
+		return "", errors.New("email attachment path is required")
+	}
+	if err := safety.RejectDangerousChars(raw, "email attachment path"); err != nil {
+		return "", err
+	}
 	clean := filepath.Clean(filepath.FromSlash(raw))
-	if !filepath.IsAbs(clean) {
-		if !filepath.IsLocal(clean) {
-			return "", errors.New("email attachment path outside the project root is not allowed")
-		}
-		return clean, nil
+	if filepath.IsAbs(clean) || !filepath.IsLocal(clean) {
+		return "", errors.New("email attachment path must be relative to the attachment staging root")
 	}
-	rootAbs, err := filepath.Abs(projectDir)
-	if err != nil {
-		return "", fmt.Errorf("resolve project root for email attachments: %w", err)
-	}
-	candidates := []string{rootAbs}
-	if resolvedRoot, err := filepath.EvalSymlinks(rootAbs); err == nil && resolvedRoot != rootAbs {
-		candidates = append(candidates, resolvedRoot)
-	}
-	for _, candidate := range candidates {
-		relative, err := filepath.Rel(candidate, clean)
-		if err != nil {
-			continue
-		}
-		if relative == "." || filepath.IsLocal(relative) {
-			return relative, nil
-		}
-	}
-	return "", errors.New("email attachment path outside the project root is not allowed")
+	return clean, nil
 }
 
 func buildMIME(message sendMessage, attachments []attachment) ([]byte, error) {

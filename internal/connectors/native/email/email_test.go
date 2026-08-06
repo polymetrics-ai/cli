@@ -10,6 +10,7 @@ import (
 	"net"
 	"net/textproto"
 	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 	"testing"
@@ -39,6 +40,27 @@ func TestConnectorDeclaresExecutableProtocolCommandSurface(t *testing.T) {
 			t.Fatalf("Preflight(%q): %v", path, err)
 		}
 	}
+}
+
+func TestMessagesAdvertiseOnlyIncrementalSync(t *testing.T) {
+	c := New()
+	manifest := c.Manifest()
+	if len(manifest.SyncModes) != 1 || manifest.SyncModes[0] != "incremental_append" {
+		t.Fatalf("Manifest().SyncModes = %v, want [incremental_append]", manifest.SyncModes)
+	}
+	if len(manifest.SourceSyncModes) != 1 || manifest.SourceSyncModes[0] != "incremental" {
+		t.Fatalf("Manifest().SourceSyncModes = %v, want [incremental]", manifest.SourceSyncModes)
+	}
+	for _, stream := range c.Definition().Streams {
+		if stream.Name != messagesStream {
+			continue
+		}
+		if len(stream.SyncModes) != 1 || stream.SyncModes[0] != "incremental_append" {
+			t.Fatalf("Definition().Streams[%q].SyncModes = %v, want [incremental_append]", stream.Name, stream.SyncModes)
+		}
+		return
+	}
+	t.Fatalf("Definition().Streams does not contain %q", messagesStream)
 }
 
 func TestMessagesReadUsesUIDValidityCursorAndBoundedBodyParts(t *testing.T) {
@@ -140,14 +162,18 @@ func TestMailboxListHonorsRequestedLimit(t *testing.T) {
 
 func TestSendPreviewIsUnmaskedAndAttachmentDriftCannotDispatch(t *testing.T) {
 	address, captured := startSMTPFixture(t)
-	root := t.TempDir()
-	attachmentPath := root + "/note.txt"
+	projectRoot := t.TempDir()
+	runtimeRoot := filepath.Join(projectRoot, ".polymetrics")
+	if err := os.MkdirAll(runtimeRoot, 0o700); err != nil {
+		t.Fatalf("create attachment staging root: %v", err)
+	}
+	attachmentPath := filepath.Join(runtimeRoot, "note.txt")
 	if err := osWriteFile(attachmentPath, []byte("attachment payload")); err != nil {
 		t.Fatalf("write attachment: %v", err)
 	}
 	c := New()
 	cfg := testRuntimeConfig(t)
-	cfg.ProjectDir = root
+	cfg.ProjectDir = runtimeRoot
 	c.smtpAddressOverride = address
 	request := connectors.WriteRequest{Action: sendAction, Config: cfg}
 	records := []connectors.Record{{
@@ -186,6 +212,54 @@ func TestSendPreviewIsUnmaskedAndAttachmentDriftCannotDispatch(t *testing.T) {
 	}
 	if result.RecordsWritten != 0 || captured.calls != 0 {
 		t.Fatalf("attachment drift dispatched SMTP result=%+v calls=%d", result, captured.calls)
+	}
+}
+
+func TestAttachmentsRequireRelativePathsWithinRuntimeStagingRoot(t *testing.T) {
+	projectRoot := t.TempDir()
+	runtimeRoot := filepath.Join(projectRoot, ".polymetrics")
+	if err := os.MkdirAll(runtimeRoot, 0o700); err != nil {
+		t.Fatalf("create attachment staging root: %v", err)
+	}
+	if err := osWriteFile(filepath.Join(runtimeRoot, "inside.txt"), []byte("staged attachment")); err != nil {
+		t.Fatalf("write staged attachment: %v", err)
+	}
+	if err := osWriteFile(filepath.Join(projectRoot, "project-only.txt"), []byte("project attachment")); err != nil {
+		t.Fatalf("write project-root attachment: %v", err)
+	}
+	outsideRoot := t.TempDir()
+	outsidePath := filepath.Join(outsideRoot, "outside.txt")
+	if err := osWriteFile(outsidePath, []byte("outside attachment")); err != nil {
+		t.Fatalf("write outside attachment: %v", err)
+	}
+	if err := os.Symlink(outsidePath, filepath.Join(runtimeRoot, "escape.txt")); err != nil {
+		t.Fatalf("create attachment symlink: %v", err)
+	}
+
+	c := New()
+	cfg := testRuntimeConfig(t)
+	cfg.ProjectDir = runtimeRoot
+	request := connectors.WriteRequest{Action: sendAction, Config: cfg}
+	for _, test := range []struct {
+		name string
+		path string
+	}{
+		{name: "project root", path: "project-only.txt"},
+		{name: "absolute", path: filepath.Join(runtimeRoot, "inside.txt")},
+		{name: "traversal", path: filepath.Join("..", "inside.txt")},
+		{name: "symlink escape", path: "escape.txt"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			_, err := c.DryRunWrite(context.Background(), request, []connectors.Record{{
+				"to":          []string{"to@example.invalid"},
+				"subject":     "attachment boundary",
+				"body":        "attachment boundary",
+				"attachments": []string{test.path},
+			}})
+			if err == nil {
+				t.Fatal("DryRunWrite accepted an attachment outside the runtime staging root")
+			}
+		})
 	}
 }
 
