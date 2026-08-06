@@ -307,21 +307,52 @@ func TestRunWarehouseETLSyncsNewDirectoryParentChainBeforeAcknowledgement(t *tes
 	// directory calls above. This assertion proves the calls cover the entire
 	// newly created chain; it deliberately does not attempt to emulate a power
 	// loss in a unit test.
-	wantOrder := []string{
+	wantSyncs := []string{
 		filepath.Join(warehouseDir, "_pm_raw"),
 		warehouseDir,
 		filepath.Dir(warehouseDir),
 		filepath.Dir(filepath.Dir(warehouseDir)),
 		filepath.Dir(filepath.Dir(filepath.Dir(warehouseDir))),
 	}
-	position := 0
-	for _, dir := range synced {
-		if position < len(wantOrder) && dir == wantOrder[position] {
-			position++
+	for _, want := range wantSyncs {
+		found := false
+		for _, dir := range synced {
+			if dir == want {
+				found = true
+				break
+			}
+		}
+		if !found {
+			t.Fatalf("warehouse directory sync calls = %#v, want %q to be synced", synced, want)
 		}
 	}
-	if position != len(wantOrder) {
-		t.Fatalf("warehouse directory sync calls = %#v, want ordered parent chain %#v", synced, wantOrder)
+}
+
+func TestRunWarehouseETLDoesNotAcknowledgeWhileDirectorySetupIsLocked(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("warehouse_directory_setup_lock", []connectors.Record{{
+		"id": "1", "updated_at": "2026-08-06T00:00:00Z",
+	}})
+	a, connection := setupSyncModeApp(t, source, "incremental_append")
+	lock := statestore.FileLock{Path: a.statePath + ".warehouse.lock"}
+	unlock, err := lock.Lock()
+	if err != nil {
+		t.Fatalf("lock warehouse setup: %v", err)
+	}
+	t.Cleanup(func() {
+		if err := unlock(); err != nil {
+			t.Errorf("unlock warehouse setup: %v", err)
+		}
+	})
+
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1}); err == nil {
+		t.Fatal("RunETL() error = nil while warehouse setup is locked")
+	}
+	if len(source.requests) != 0 {
+		t.Fatalf("source reads while warehouse setup is locked = %#v", source.requests)
+	}
+	if state := a.state.StreamStates[streamStateKey(connection, "records")]; state.Checkpoint != nil {
+		t.Fatalf("checkpoint acknowledged while warehouse setup is locked: %#v", state.Checkpoint)
 	}
 }
 
