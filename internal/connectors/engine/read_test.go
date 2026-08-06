@@ -2534,6 +2534,59 @@ func TestReadRejectsCallerSuppliedIdentifierSetTarget(t *testing.T) {
 	}
 }
 
+func TestReadRejectsPaginatorTraversalAliasBeforeRequest(t *testing.T) {
+	for _, tt := range []struct {
+		name string
+		next string
+	}{
+		{name: "dot segment", next: "/safe/../coins"},
+		{name: "backslash segment", next: "/safe%5C..%5Ccoins"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			protectedHits := 0
+			var srv *httptest.Server
+			srv = jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+				switch r.URL.Path {
+				case "/safe":
+					_, _ = fmt.Fprintf(w, `{"data":[{"id":"1","name":"a","updated_at":"2026-01-01T00:00:00Z"}],"meta":{"next_page_link":%q}}`, srv.URL+tt.next)
+				case "/coins":
+					protectedHits++
+					_, _ = w.Write([]byte(`{"data":[]}`))
+				default:
+					t.Fatalf("path = %q", r.URL.Path)
+				}
+			})
+			b := newTestBundle(t, srv, StreamSpec{
+				Path:    "/safe",
+				Records: RecordsSpec{Path: "data"},
+				Pagination: &PaginationSpec{
+					Type: "next_url", NextURLPath: "meta.next_page_link",
+				},
+			})
+			b.Operations = append(b.Operations, OperationSpec{
+				ID:   "acme.coins.lookup",
+				Kind: "rest_read",
+				REST: &RESTOperationSpec{
+					Method:   http.MethodGet,
+					Path:     "/coins",
+					MaxBytes: 1024,
+					CallerSuppliedIdentifierSets: []CallerSuppliedIdentifierSetSpec{{
+						Name: "coins", ElementShape: "opaque_string", Wire: "query_comma_separated", MinItems: 1, MaxItems: 2,
+					}},
+				},
+			})
+
+			_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+			if err == nil || !strings.Contains(err.Error(), "path traversal") {
+				t.Fatalf("Read error = %v, want path traversal rejection", err)
+			}
+			if protectedHits != 0 {
+				t.Fatalf("protected target requests = %d, want 0", protectedHits)
+			}
+		})
+	}
+}
+
 func TestCheckPathIsInterpolated(t *testing.T) {
 	var gotPath string
 	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {

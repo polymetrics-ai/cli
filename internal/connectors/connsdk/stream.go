@@ -171,6 +171,11 @@ func (r *Requester) streamClient(base *url.URL, opts StreamOptions, credKeys *[]
 		if len(via) >= maxRedirects {
 			return fmt.Errorf("stopped after %d redirects", maxRedirects)
 		}
+		if r.RedirectCheck != nil {
+			if err := r.RedirectCheck(req.Method, req.URL.String()); err != nil {
+				return err
+			}
+		}
 		sameOrigin := req.URL.Host == base.Host && req.URL.Scheme == base.Scheme
 		if sameOrigin {
 			return nil

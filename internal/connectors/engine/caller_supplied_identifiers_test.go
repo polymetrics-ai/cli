@@ -301,6 +301,14 @@ func callerSuppliedIdentifierErrorForms(t *testing.T, identifier string) []strin
 			forms = append(forms, mixed)
 		}
 	}
+	fullyEncoded := fullyPercentEncode(identifier)
+	forms = append(forms, fullyEncoded)
+	if lower := lowercasePercentEscapesForProvider(fullyEncoded); lower != fullyEncoded {
+		forms = append(forms, lower)
+	}
+	if mixed := mixedPercentEscapesForProvider(fullyEncoded); mixed != fullyEncoded {
+		forms = append(forms, mixed)
+	}
 	jsonForms := []string{string(encodedJSON)}
 	if strings.Contains(identifier, "é") {
 		jsonForms = append(jsonForms,
@@ -620,6 +628,11 @@ func TestCallerSuppliedIdentifierSetDeclarationsRejectUnsafeContracts(t *testing
 		{
 			name: "path set placeholder must not repeat in fragment",
 			rest: `{"method":"GET","path":"/lookups/{id}#mirror={id}","caller_supplied_identifier_sets":[{"name":"id","element_shape":"opaque_string","wire":"path_segment","min_items":1,"max_items":1}]}`,
+			want: `path_segment requires exactly one well-formed {id} path variable in the pathname`,
+		},
+		{
+			name: "path set static query template must be well formed",
+			rest: `{"method":"GET","path":"/lookups/{id}?fixed={{bad}}","caller_supplied_identifier_sets":[{"name":"id","element_shape":"opaque_string","wire":"path_segment","min_items":1,"max_items":1}]}`,
 			want: `path_segment requires exactly one well-formed {id} path variable in the pathname`,
 		},
 		{

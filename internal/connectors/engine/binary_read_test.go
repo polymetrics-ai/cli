@@ -253,6 +253,44 @@ func TestBinaryDownloadRejectsCallerSuppliedIdentifierSetTarget(t *testing.T) {
 	}
 }
 
+func TestBinaryDownloadRejectsRedirectToCallerSuppliedIdentifierSetTarget(t *testing.T) {
+	protectedHits := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/file":
+			http.Redirect(w, r, "/coins", http.StatusFound)
+		case "/coins":
+			protectedHits++
+			_, _ = w.Write([]byte("data"))
+		default:
+			t.Fatalf("path = %q", r.URL.Path)
+		}
+	}))
+	t.Cleanup(srv.Close)
+
+	b := binaryBundle(srv, &BinaryOperationSpec{Path: "/file"})
+	b.Operations = append(b.Operations, OperationSpec{
+		ID:   "acme.coins.lookup",
+		Kind: "rest_read",
+		REST: &RESTOperationSpec{
+			Method:   http.MethodGet,
+			Path:     "/coins",
+			MaxBytes: 1024,
+			CallerSuppliedIdentifierSets: []CallerSuppliedIdentifierSetSpec{{
+				Name: "coins", ElementShape: "opaque_string", Wire: "query_comma_separated", MinItems: 1, MaxItems: 2,
+			}},
+		},
+	})
+
+	_, err := OperationBinaryDownload(context.Background(), b, downloadReq(t.TempDir()), nil)
+	if err == nil || !strings.Contains(err.Error(), "reserved for caller-supplied identifier-set operation") {
+		t.Fatalf("OperationBinaryDownload error = %v, want protected redirect rejection", err)
+	}
+	if protectedHits != 0 {
+		t.Fatalf("protected target requests = %d, want 0", protectedHits)
+	}
+}
+
 // TestBinaryDownloadFilenameSanitized: provider-supplied names are never
 // trusted. RFC 6266 counts BOTH / and \ as separators, and filepath.Base on
 // Linux happily returns `..\..\etc\passwd` unchanged.

@@ -710,7 +710,7 @@ func normalizeDirectReadPathForBaseURL(resolvedPath, baseURL string) string {
 func rejectCallerSuppliedIdentifierSetTargetBypass(b Bundle, cfg connectors.RuntimeConfig, baseURL, method, requestPath string, candidatePathParams map[string]string, allowedOperation string) error {
 	target, err := normalizedRequesterTargetPath(baseURL, requestPath)
 	if err != nil {
-		return nil
+		return err
 	}
 	for _, op := range b.Operations {
 		if op.ID == allowedOperation || op.Kind != "rest_read" || op.REST == nil || len(op.REST.CallerSuppliedIdentifierSets) == 0 || !strings.EqualFold(op.REST.Method, method) {
@@ -774,6 +774,9 @@ func normalizedRequesterTargetPath(baseURL, requestPath string) (string, error) 
 	path := parsed.EscapedPath()
 	if path == "" {
 		path = "/"
+	}
+	if containsDotDotSegment(path) {
+		return "", errors.New("request target path contains path traversal")
 	}
 	target := canonicalizeRequestTargetPercentEscapes(path)
 	if parsed.Scheme == "" && parsed.Host == "" {

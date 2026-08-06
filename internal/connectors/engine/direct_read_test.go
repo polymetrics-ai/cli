@@ -696,6 +696,60 @@ func TestDirectReadRejectsCallerSuppliedIdentifierSetTargetAlias(t *testing.T) {
 	}
 }
 
+func TestDirectReadRejectsRedirectToCallerSuppliedIdentifierSetTarget(t *testing.T) {
+	protectedHits := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/safe":
+			http.Redirect(w, r, "/coins", http.StatusFound)
+		case "/coins":
+			protectedHits++
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"ok":true}`))
+		default:
+			t.Fatalf("path = %q", r.URL.Path)
+		}
+	}))
+	t.Cleanup(srv.Close)
+
+	b := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: srv.URL},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method: http.MethodGet,
+			Path:   "/safe",
+			CoveredBy: &SurfaceCoverage{
+				DirectRead: "safe direct read",
+			},
+		}}},
+		Operations: []OperationSpec{{
+			ID:   "acme.coins.lookup",
+			Kind: "rest_read",
+			REST: &RESTOperationSpec{
+				Method:   http.MethodGet,
+				Path:     "/coins",
+				MaxBytes: 1024,
+				CallerSuppliedIdentifierSets: []CallerSuppliedIdentifierSetSpec{{
+					Name: "coins", ElementShape: "opaque_string", Wire: "query_comma_separated", MinItems: 1, MaxItems: 2,
+				}},
+			},
+		}},
+	}
+
+	_, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/safe",
+		MaxBytes:     1024,
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err == nil || !strings.Contains(err.Error(), "reserved for caller-supplied identifier-set operation") {
+		t.Fatalf("DirectRead error = %v, want protected redirect rejection", err)
+	}
+	if protectedHits != 0 {
+		t.Fatalf("protected target requests = %d, want 0", protectedHits)
+	}
+}
+
 func directReadBundle(baseURL, method, endpointPath string) Bundle {
 	return Bundle{
 		Name: "code-host",

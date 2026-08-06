@@ -324,12 +324,24 @@ func sensitiveRedactionValues(values []string) []string {
 
 func sensitiveRedactionPatterns(value string) []string {
 	patterns := []string{jsonEscapedValuePattern(value)}
-	for _, form := range []string{urlencodeSegment(value), url.QueryEscape(value), url.PathEscape(value)} {
+	for _, form := range []string{urlencodeSegment(value), url.QueryEscape(value), url.PathEscape(value), fullyPercentEncode(value)} {
 		if pattern, ok := percentEscapeCasePattern(form); ok {
 			patterns = append(patterns, pattern)
 		}
 	}
 	return patterns
+}
+
+func fullyPercentEncode(value string) string {
+	const hexadecimal = "0123456789ABCDEF"
+	var encoded strings.Builder
+	encoded.Grow(len(value) * 3)
+	for i := 0; i < len(value); i++ {
+		encoded.WriteByte('%')
+		encoded.WriteByte(hexadecimal[value[i]>>4])
+		encoded.WriteByte(hexadecimal[value[i]&0x0f])
+	}
+	return encoded.String()
 }
 
 func percentEscapeCasePattern(value string) (string, bool) {

@@ -136,7 +136,8 @@ type requestBody struct {
 
 type Requester struct {
 	// Client is the HTTP client. Defaults to a client with a 60s timeout.
-	Client *http.Client
+	Client        *http.Client
+	RedirectCheck func(method, target string) error
 	// BaseURL is prepended to relative paths. A path beginning with http:// or
 	// https:// is treated as absolute and used as-is (e.g. Link-header next URLs).
 	BaseURL string
@@ -320,6 +321,25 @@ func (r *Requester) admitRequesterSend(ctx context.Context, method string, reque
 	}
 	*requesterAttempt = nextAttempt
 	return nil
+}
+
+func (r *Requester) clientWithRedirectCheck(client *http.Client) *http.Client {
+	if r.RedirectCheck == nil {
+		return client
+	}
+	clone := *client
+	checkRedirect := clone.CheckRedirect
+	clone.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+		if checkRedirect != nil {
+			if err := checkRedirect(req, via); err != nil {
+				return err
+			}
+		} else if len(via) >= maxRedirects {
+			return fmt.Errorf("stopped after %d redirects", maxRedirects)
+		}
+		return r.RedirectCheck(req.Method, req.URL.String())
+	}
+	return &clone
 }
 
 func (r *Requester) clientWithRateLimitAdmission(client *http.Client, requesterAttempt *int) *http.Client {
@@ -837,7 +857,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 	reauthAttempted := false
 	requesterAttempt := 0
 	strictWrite := r.DisableRetries && !isSafeReplayableRead(method)
-	baseClient := r.clientFor(ctx)
+	baseClient := r.clientWithRedirectCheck(r.clientFor(ctx))
 	if strictWrite {
 		baseClient = noReplayClient(baseClient)
 	}

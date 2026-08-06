@@ -530,6 +530,9 @@ func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 		Auth:           auth,
 		UserAgent:      b.HTTP.UserAgent,
 		DefaultHeaders: headers,
+		RedirectCheck: func(method, target string) error {
+			return rejectCallerSuppliedIdentifierSetTargetBypass(b, cfg, baseURL, method, target, nil, "")
+		},
 	}
 
 	return &Runtime{Requester: requester, Bundle: &b, Config: cfg}, nil
