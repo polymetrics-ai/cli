@@ -34,6 +34,13 @@ Passed after the final production change:
 reverse-ETL write, both excluded by this identity-only issue. Per repository guidance, the timeout-prone
 `go test ./...` and `make verify` monoliths remain CI-owned.
 
+## Base freshness
+
+The branch was rebased cleanly onto `origin/main` at `4d77ef3ed` and the scoped package suites,
+command-runner preflight, build, vet, lint, docs/website checks, and repository gates above were
+rerun afterward. A final `git fetch origin main` confirmed that `origin/main` remains an ancestor
+of this branch.
+
 ## GSD and review evidence
 
 - Inline/manual `execute-phase` prompt completed; the canonical contract and runtime do not permit
