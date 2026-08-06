@@ -162,6 +162,9 @@ func renderCommandSurfaceFlag(flag CommandSurfaceFlag) string {
 	if flag.MapKey != "" {
 		parts = append(parts, "map_key="+flag.MapKey)
 	}
+	if len(flag.ParentIndexFor) > 0 {
+		parts = append(parts, "parent_index_for="+strings.Join(flag.ParentIndexFor, "|"))
+	}
 	return strings.Join(parts, ": ")
 }
 

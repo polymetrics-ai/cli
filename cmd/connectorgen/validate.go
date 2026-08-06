@@ -1164,10 +1164,14 @@ func checkCLISurfaceWriteFlags(
 		}
 	}
 
+	parentIndexFindings, parentIndexFlags := checkCLIParentIndexFlags(b, i, cmd)
 	mapped := map[string]bool{}
 	mappedByFlag := make([]cliMappedRecordFlag, 0, len(cmd.Flags))
-	var findings []Finding
+	findings := append([]Finding(nil), parentIndexFindings...)
 	for _, flag := range cmd.Flags {
+		if parentIndexFlags[flag.Name] {
+			continue
+		}
 		target, ok := strings.CutPrefix(flag.MapsTo, "record.")
 		if !ok || target == "" {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) flag --%s maps to unsupported target %q", i, cmd.Path, flag.Name, flag.MapsTo)})
@@ -1240,6 +1244,80 @@ func checkCLISurfaceWriteFlags(
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceMissingMapping, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) for write %q lacks flag mappings for required record fields: %s", i, cmd.Path, cmd.Write, strings.Join(missing, ", "))})
 	}
 	return findings
+}
+
+func checkCLIParentIndexFlags(b engine.Bundle, i int, cmd engine.CLICommand) ([]Finding, map[string]bool) {
+	flagsByName := make(map[string]engine.CLIFlag, len(cmd.Flags))
+	for _, flag := range cmd.Flags {
+		flagsByName[flag.Name] = flag
+	}
+	parentIndexFlags := map[string]bool{}
+	parentFlagByChild := map[string]string{}
+	var findings []Finding
+	for _, flag := range cmd.Flags {
+		if len(flag.ParentIndexFor) == 0 {
+			continue
+		}
+		parentIndexFlags[flag.Name] = true
+		if strings.TrimSpace(flag.MapsTo) != "" || flag.MapKey != "" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) parent index flag --%s must not map to a record field", i, cmd.Path, flag.Name)})
+		}
+		if flag.Type != "integer" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) parent index flag --%s must use integer type", i, cmd.Path, flag.Name)})
+		}
+		if flag.Required {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) parent index flag --%s cannot be required", i, cmd.Path, flag.Name)})
+		}
+		parentPrefix := ""
+		for _, childName := range flag.ParentIndexFor {
+			child, found := flagsByName[childName]
+			if !found {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) parent index flag --%s references unknown flag --%s", i, cmd.Path, flag.Name, childName)})
+				continue
+			}
+			target, mapped := strings.CutPrefix(child.MapsTo, "record.")
+			if !mapped || target == "" {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) parent index flag --%s target --%s must map to nested records", i, cmd.Path, flag.Name, childName)})
+				continue
+			}
+			prefix, nested := cliNestedRepeatableParentPrefix(target)
+			if !nested {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) parent index flag --%s target --%s must map to nested repeatable records", i, cmd.Path, flag.Name, childName)})
+				continue
+			}
+			if parentPrefix == "" {
+				parentPrefix = prefix
+			} else if parentPrefix != prefix {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) parent index flag --%s targets different parent record collections", i, cmd.Path, flag.Name)})
+			}
+			if existing, exists := parentFlagByChild[childName]; exists {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) parent index flags --%s and --%s both target --%s", i, cmd.Path, existing, flag.Name, childName)})
+				continue
+			}
+			parentFlagByChild[childName] = flag.Name
+		}
+	}
+	return findings, parentIndexFlags
+}
+
+func cliNestedRepeatableParentPrefix(target string) (string, bool) {
+	parts := strings.Split(target, ".")
+	firstRepeatable := -1
+	for index, part := range parts {
+		if part == "[]" {
+			firstRepeatable = index
+			break
+		}
+	}
+	if firstRepeatable < 0 {
+		return "", false
+	}
+	for _, part := range parts[firstRepeatable+1:] {
+		if part == "[]" {
+			return strings.Join(parts[:firstRepeatable+1], "."), true
+		}
+	}
+	return "", false
 }
 
 func cliRecordMappingsConflict(left, right cliMappedRecordFlag) bool {

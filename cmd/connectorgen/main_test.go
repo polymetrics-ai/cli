@@ -15,6 +15,7 @@ import (
 	"testing/fstest"
 
 	"polymetrics.ai/internal/connectors/boundary"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 // --- boundary: scans connector definition boundary --------------------------
@@ -240,6 +241,24 @@ func TestValidateCLIConstraintMappedTargetSupportsRecord(t *testing.T) {
 		if err := validateCLIConstraintMappedTarget(target); err != nil {
 			t.Fatalf("validateCLIConstraintMappedTarget(%q): %v", target, err)
 		}
+	}
+}
+
+func TestValidateCLIParentIndexFlags(t *testing.T) {
+	cmd := engine.CLICommand{
+		Path: "selectors set",
+		Flags: []engine.CLIFlag{
+			{Name: "selector", Type: "string", MapsTo: "record.selectors.[].name"},
+			{Name: "child", Type: "string", MapsTo: "record.selectors.[].children.[].name"},
+			{Name: "child-parent-index", Type: "integer", ParentIndexFor: []string{"child"}},
+		},
+	}
+	findings, flags := checkCLIParentIndexFlags(engine.Bundle{Name: "example"}, 0, cmd)
+	if len(findings) != 0 {
+		t.Fatalf("checkCLIParentIndexFlags findings = %+v", findings)
+	}
+	if !flags["child-parent-index"] {
+		t.Fatalf("parent index flags = %#v, want child-parent-index", flags)
 	}
 }
 

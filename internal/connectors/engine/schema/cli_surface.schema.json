@@ -52,6 +52,11 @@
           },
           "maps_to": { "type": "string" },
           "map_key": { "type": "string" },
+          "parent_index_for": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" }
+          },
           "format": {
             "type": "string",
             "enum": ["date-time"]
@@ -124,6 +129,11 @@
                 },
                 "maps_to": { "type": "string" },
                 "map_key": { "type": "string" },
+                "parent_index_for": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": { "type": "string" }
+                },
                 "format": {
                   "type": "string",
                   "enum": ["date-time"]

@@ -59,8 +59,8 @@ func TestCommandSurfaceExposesDocumentedOperations(t *testing.T) {
 		t.Fatalf("query cancel command = %+v, want approval-gated cancel_query write", cancel)
 	}
 	resourcePolicy := commands["resource-policy set"]
-	if len(resourcePolicy.Examples) != 1 || !strings.Contains(resourcePolicy.Examples[0], "\"Action\":\"cloudtrail:StartQuery\"") || !strings.Contains(resourcePolicy.Examples[0], "\"Resource\":\"arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example\"") {
-		t.Fatalf("resource-policy set examples = %q, want event-data-store StartQuery policy", resourcePolicy.Examples)
+	if len(resourcePolicy.Examples) != 1 || !strings.Contains(resourcePolicy.Examples[0], "\"Action\":\"cloudtrail:StartQuery\"") || !strings.Contains(resourcePolicy.Examples[0], "\"Resource\":\"arn:aws:cloudtrail:us-east-1:123456789012:dashboard/*\"") {
+		t.Fatalf("resource-policy set examples = %q, want dashboard StartQuery policy", resourcePolicy.Examples)
 	}
 	channelCreate := commands["channel create"]
 	if !commandFlagRequired(channelCreate, "destination-location") || !commandFlagRequired(channelCreate, "destination-type") {
@@ -81,6 +81,13 @@ func TestCommandSurfaceExposesDocumentedOperations(t *testing.T) {
 	})
 	assertCommandFlagTargets(t, commands["insight-selectors set"], map[string]string{
 		"insight-event-category": "record.InsightSelectors.[].EventCategories.[]",
+	})
+	assertCommandParentIndexTargets(t, commands["event-selectors set"], map[string][]string{
+		"event-selector-data-resource-parent-index":                   {"event-selector-data-resource-type", "event-selector-data-resource-value"},
+		"event-selector-exclude-management-event-source-parent-index": {"event-selector-exclude-management-event-source"},
+	})
+	assertCommandParentIndexTargets(t, commands["insight-selectors set"], map[string][]string{
+		"insight-event-category-parent-index": {"insight-event-category"},
 	})
 	assertCommandFlagTargets(t, commands["import start"], map[string]string{
 		"import-source-s3-bucket-access-role-arn": "record.ImportSource.S3.S3BucketAccessRoleArn",
@@ -120,6 +127,19 @@ func assertCommandFlagTargets(t *testing.T, command connectors.CommandSurfaceCom
 	for name, target := range want {
 		if got[name] != target {
 			t.Fatalf("command %q flag --%s maps to %q, want %q", command.Path, name, got[name], target)
+		}
+	}
+}
+
+func assertCommandParentIndexTargets(t *testing.T, command connectors.CommandSurfaceCommand, want map[string][]string) {
+	t.Helper()
+	got := make(map[string][]string, len(command.Flags))
+	for _, flag := range command.Flags {
+		got[flag.Name] = flag.ParentIndexFor
+	}
+	for name, targets := range want {
+		if !slices.Equal(got[name], targets) {
+			t.Fatalf("command %q parent index flag --%s targets %q, want %q", command.Path, name, got[name], targets)
 		}
 	}
 }

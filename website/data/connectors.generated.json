@@ -27227,6 +27227,13 @@
               "maps_to": "record.EventSelectors.[].DataResources.[].Values"
             },
             {
+              "name": "event-selector-data-resource-parent-index",
+              "type": "integer",
+              "summary": "Repeat the one-based EventSelector index for each paired data-resource type and value.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
               "name": "event-selector-exclude-management-event-source",
               "type": "enum",
               "summary": "Repeat for each excluded management event source. Valid Values: kms.amazonaws.com | rdsdata.amazonaws.com.",
@@ -27235,6 +27242,13 @@
                 "rdsdata.amazonaws.com"
               ],
               "maps_to": "record.EventSelectors.[].ExcludeManagementEventSources.[]"
+            },
+            {
+              "name": "event-selector-exclude-management-event-source-parent-index",
+              "type": "integer",
+              "summary": "Repeat the one-based EventSelector index for each excluded management event source.",
+              "values": [],
+              "maps_to": ""
             },
             {
               "name": "event-selector-include-management-events",
@@ -27256,7 +27270,7 @@
             }
           ],
           "examples": [
-            "pm aws-cloudtrail event-selectors set --credential ct-prod --trail-name example-trail --event-selector-read-write-type All --event-selector-data-resource-type AWS::S3::Object --event-selector-data-resource-value arn:aws:s3:::example-bucket/ --preview",
+            "pm aws-cloudtrail event-selectors set --credential ct-prod --trail-name example-trail --event-selector-read-write-type All --event-selector-data-resource-type AWS::S3::Object --event-selector-data-resource-value arn:aws:s3:::example-bucket/ --event-selector-data-resource-parent-index 1 --preview",
             "pm aws-cloudtrail event-selectors set --credential ct-prod --trail-name example-trail --advanced-event-field eventCategory --advanced-event-equals Data --advanced-event-field resources.type --advanced-event-equals AWS::S3::Object --preview"
           ],
           "output_policy": "",
@@ -27317,6 +27331,13 @@
               "maps_to": "record.InsightSelectors.[].EventCategories.[]"
             },
             {
+              "name": "insight-event-category-parent-index",
+              "type": "integer",
+              "summary": "Repeat the one-based Insights selector index for each event category.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
               "name": "trail-name",
               "type": "string",
               "summary": "String",
@@ -27325,7 +27346,7 @@
             }
           ],
           "examples": [
-            "pm aws-cloudtrail insight-selectors set --credential ct-prod --trail-name example-trail --insight-type ApiCallRateInsight --preview",
+            "pm aws-cloudtrail insight-selectors set --credential ct-prod --trail-name example-trail --insight-type ApiCallRateInsight --insight-event-category Management --insight-event-category-parent-index 1 --preview",
             "pm aws-cloudtrail insight-selectors set --credential ct-prod --trail-name example-trail --disable-insights true --preview"
           ],
           "output_policy": "",
@@ -27363,7 +27384,7 @@
             }
           ],
           "examples": [
-            "pm aws-cloudtrail resource-policy set --credential ct-prod --resource-arn arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example --resource-policy '{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"EDSPolicy\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"cloudtrail.amazonaws.com\"},\"Action\":\"cloudtrail:StartQuery\",\"Resource\":\"arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example\",\"Condition\":{\"StringEquals\":{\"AWS:SourceArn\":\"arn:aws:cloudtrail:us-east-1:123456789012:dashboard/example-dashboard\",\"AWS:SourceAccount\":\"123456789012\"}}}]}' --preview"
+            "pm aws-cloudtrail resource-policy set --credential ct-prod --resource-arn arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example --resource-policy '{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"EDSPolicy\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"cloudtrail.amazonaws.com\"},\"Action\":\"cloudtrail:StartQuery\",\"Resource\":\"arn:aws:cloudtrail:us-east-1:123456789012:dashboard/*\",\"Condition\":{\"StringEquals\":{\"AWS:SourceArn\":\"arn:aws:cloudtrail:us-east-1:123456789012:dashboard/example-dashboard\",\"AWS:SourceAccount\":\"123456789012\"}}}]}' --preview"
           ],
           "output_policy": "",
           "risk": "attaches a resource-based IAM policy document to a CloudTrail channel or event data store",

@@ -1307,11 +1307,15 @@ func TestRecordOverridesPairsNonUniformNestedRepeatableCollections(t *testing.T)
 		Availability: "implemented",
 		Flags: []connectors.CommandSurfaceFlag{
 			{Name: "selector", Type: "string", MapsTo: "record.selectors.[].name"},
-			{Name: "child", Type: "string", MapsTo: "record.selectors.[].children.[].name"},
+			{Name: "child-kind", Type: "string", MapsTo: "record.selectors.[].children.[].kind"},
+			{Name: "child-value", Type: "string", MapsTo: "record.selectors.[].children.[].value"},
+			{Name: "child-parent-index", Type: "integer", ParentIndexFor: []string{"child-kind", "child-value"}},
 		},
 	}, map[string][]string{
-		"selector": {"first", "second"},
-		"child":    {"first-child", "second-child", "third-child"},
+		"selector":           {"first", "second"},
+		"child-kind":         {"first-kind", "second-kind", "third-kind"},
+		"child-value":        {"first-value", "second-value", "third-value"},
+		"child-parent-index": {"1", "2", "2"},
 	})
 	if err != nil {
 		t.Fatalf("recordOverrides: %v", err)
@@ -1320,22 +1324,45 @@ func TestRecordOverridesPairsNonUniformNestedRepeatableCollections(t *testing.T)
 	if !ok || len(selectors) != 2 {
 		t.Fatalf("selectors = %#v, want two repeatable records", record["selectors"])
 	}
-	wantChildren := [][]string{{"first-child", "second-child"}, {"third-child"}}
-	for index, want := range wantChildren {
+	wantChildren := [][]string{{"first-kind", "first-value"}, {"second-kind", "second-value"}, {"third-kind", "third-value"}}
+	wantChildCounts := []int{1, 2}
+	childOffset := 0
+	for index, childCount := range wantChildCounts {
 		selector, ok := selectors[index].(map[string]any)
 		if !ok {
 			t.Fatalf("selector %d = %#v, want object", index, selectors[index])
 		}
 		children, ok := selector["children"].([]any)
-		if !ok || len(children) != len(want) {
-			t.Fatalf("selector %d children = %#v, want %d children", index, selector["children"], len(want))
+		if !ok || len(children) != childCount {
+			t.Fatalf("selector %d children = %#v, want %d children", index, selector["children"], childCount)
 		}
-		for childIndex, childName := range want {
+		for childIndex := range children {
 			child, ok := children[childIndex].(map[string]any)
-			if !ok || child["name"] != childName {
-				t.Fatalf("selector %d child %d = %#v, want %q", index, childIndex, children[childIndex], childName)
+			want := wantChildren[childOffset]
+			childOffset++
+			if !ok || child["kind"] != want[0] || child["value"] != want[1] {
+				t.Fatalf("selector %d child %d = %#v, want kind=%q value=%q", index, childIndex, children[childIndex], want[0], want[1])
 			}
 		}
+	}
+}
+
+func TestRecordOverridesRejectsUnassociatedNestedRepeatableCollections(t *testing.T) {
+	_, err := recordOverrides(connectors.CommandSurfaceCommand{
+		Path:         "selectors set",
+		Intent:       "reverse_etl",
+		Availability: "implemented",
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "selector", Type: "string", MapsTo: "record.selectors.[].name"},
+			{Name: "child", Type: "string", MapsTo: "record.selectors.[].children.[].name"},
+			{Name: "child-parent-index", Type: "integer", ParentIndexFor: []string{"child"}},
+		},
+	}, map[string][]string{
+		"selector": {"first", "second"},
+		"child":    {"first-child", "second-child", "third-child"},
+	})
+	if err == nil || !strings.Contains(err.Error(), "requires --child-parent-index") {
+		t.Fatalf("recordOverrides error = %v, want explicit parent index requirement", err)
 	}
 }
 

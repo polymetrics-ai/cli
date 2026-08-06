@@ -1060,7 +1060,7 @@ func repeatableRecordSegments(path string) (int, error) {
 	return count, nil
 }
 
-func expandRepeatableRecordTarget(path string, valueIndex, valueCount, parentCount int) (string, error) {
+func expandRepeatableRecordTarget(path string, valueIndex, valueCount, parentCount int, parentIndexes []int) (string, error) {
 	parts, err := validateDottedTargetPath(path, "record field")
 	if err != nil {
 		return "", err
@@ -1084,26 +1084,12 @@ func expandRepeatableRecordTarget(path string, valueIndex, valueCount, parentCou
 	if valueCount < 1 {
 		return "", fmt.Errorf("record field %q has no repeatable values", path)
 	}
-	if parentCount < 1 {
-		parentCount = 1
+	if valueIndex < 0 || valueIndex >= valueCount {
+		return "", fmt.Errorf("record field %q value index %d is outside %d values", path, valueIndex, valueCount)
 	}
-	if parentCount > valueCount {
-		parentCount = valueCount
-	}
-	childrenPerParent := valueCount / parentCount
-	extraChildren := valueCount % parentCount
-	parentIndex := 0
-	childIndex := valueIndex
-	for parentIndex < parentCount {
-		childCount := childrenPerParent
-		if parentIndex < extraChildren {
-			childCount++
-		}
-		if childIndex < childCount {
-			break
-		}
-		childIndex -= childCount
-		parentIndex++
+	parentIndex, childIndex, err := nestedRepeatableRecordIndexes(path, valueIndex, valueCount, parentCount, parentIndexes)
+	if err != nil {
+		return "", err
 	}
 	arraySegment := 0
 	for index, part := range parts {
@@ -1121,6 +1107,38 @@ func expandRepeatableRecordTarget(path string, valueIndex, valueCount, parentCou
 		arraySegment++
 	}
 	return strings.Join(parts, "."), nil
+}
+
+func nestedRepeatableRecordIndexes(path string, valueIndex, valueCount, parentCount int, parentIndexes []int) (int, int, error) {
+	if len(parentIndexes) > 0 {
+		if len(parentIndexes) != valueCount {
+			return 0, 0, fmt.Errorf("record field %q has %d values but %d explicit parent indexes", path, valueCount, len(parentIndexes))
+		}
+		if parentCount < 1 {
+			return 0, 0, fmt.Errorf("record field %q cannot associate nested values without a parent record", path)
+		}
+		parentIndex := parentIndexes[valueIndex]
+		if parentIndex < 0 || parentIndex >= parentCount {
+			return 0, 0, fmt.Errorf("record field %q parent index %d is outside %d parent records", path, parentIndex+1, parentCount)
+		}
+		childIndex := 0
+		for _, candidate := range parentIndexes[:valueIndex] {
+			if candidate == parentIndex {
+				childIndex++
+			}
+		}
+		return parentIndex, childIndex, nil
+	}
+	if parentCount < 1 {
+		parentCount = 1
+	}
+	if parentCount == 1 {
+		return 0, valueIndex, nil
+	}
+	if valueCount == parentCount {
+		return valueIndex, 0, nil
+	}
+	return 0, 0, fmt.Errorf("record field %q has %d nested values for %d parent records and requires explicit parent indexes", path, valueCount, parentCount)
 }
 
 func setDottedValue(current any, parts []string, value any, fullPath string) (any, error) {
@@ -1224,6 +1242,93 @@ type recordFlagApplication struct {
 	target string
 }
 
+func recordParentIndexFlags(cmd connectors.CommandSurfaceCommand, allowed map[string]connectors.CommandSurfaceFlag) (map[string][]string, map[string]string, error) {
+	byFlag := map[string][]string{}
+	byChild := map[string]string{}
+	for _, flag := range cmd.Flags {
+		if len(flag.ParentIndexFor) == 0 {
+			continue
+		}
+		if strings.TrimSpace(flag.MapsTo) != "" || flag.MapKey != "" {
+			return nil, nil, fmt.Errorf("parent index flag --%s must not map to a record field", flag.Name)
+		}
+		if flag.Type != "integer" {
+			return nil, nil, fmt.Errorf("parent index flag --%s must use integer type", flag.Name)
+		}
+		if flag.Required {
+			return nil, nil, fmt.Errorf("parent index flag --%s cannot be required", flag.Name)
+		}
+		parentPrefix := ""
+		for _, childName := range flag.ParentIndexFor {
+			if err := safety.ValidateIdentifier(childName, "parent index target"); err != nil {
+				return nil, nil, err
+			}
+			child, ok := allowed[childName]
+			if !ok {
+				return nil, nil, fmt.Errorf("parent index flag --%s references unknown flag --%s", flag.Name, childName)
+			}
+			target, ok := strings.CutPrefix(child.MapsTo, "record.")
+			if !ok || target == "" {
+				return nil, nil, fmt.Errorf("parent index flag --%s target --%s must map to a record field", flag.Name, childName)
+			}
+			segments, err := repeatableRecordSegments(target)
+			if err != nil {
+				return nil, nil, err
+			}
+			if segments < 2 {
+				return nil, nil, fmt.Errorf("parent index flag --%s target --%s must map to nested repeatable records", flag.Name, childName)
+			}
+			prefix, err := repeatableRecordParentPrefix(target)
+			if err != nil {
+				return nil, nil, err
+			}
+			if parentPrefix == "" {
+				parentPrefix = prefix
+			} else if parentPrefix != prefix {
+				return nil, nil, fmt.Errorf("parent index flag --%s targets different parent record collections", flag.Name)
+			}
+			if existing, found := byChild[childName]; found {
+				return nil, nil, fmt.Errorf("flags --%s and --%s both provide parent indexes for --%s", existing, flag.Name, childName)
+			}
+			byChild[childName] = flag.Name
+		}
+		byFlag[flag.Name] = append([]string(nil), flag.ParentIndexFor...)
+	}
+	return byFlag, byChild, nil
+}
+
+func repeatableRecordParentPrefix(target string) (string, error) {
+	parts, err := validateDottedTargetPath(target, "record field")
+	if err != nil {
+		return "", err
+	}
+	for index, part := range parts {
+		if part == "[]" {
+			return strings.Join(parts[:index+1], "."), nil
+		}
+	}
+	return "", fmt.Errorf("record field %q has no repeatable parent", target)
+}
+
+func coerceRecordParentIndexes(flag connectors.CommandSurfaceFlag, values []string) ([]int, error) {
+	indexes := make([]int, 0, len(values))
+	for _, raw := range values {
+		value, err := coerceFlagValue(flag, []string{raw})
+		if err != nil {
+			return nil, err
+		}
+		index, ok := value.(int)
+		if !ok {
+			return nil, fmt.Errorf("parent index flag --%s did not produce an integer", flag.Name)
+		}
+		if index < 1 || index > maxRecordPathArrayIndex+1 {
+			return nil, fmt.Errorf("invalid --%s %d, want a parent index between 1 and %d", flag.Name, index, maxRecordPathArrayIndex+1)
+		}
+		indexes = append(indexes, index-1)
+	}
+	return indexes, nil
+}
+
 func nestedRepeatableParentCount(target string, applications []recordFlagApplication) int {
 	parts, err := validateDottedTargetPath(target, "record field")
 	if err != nil {
@@ -1280,6 +1385,10 @@ func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]st
 		}
 		allowed[flag.Name] = flag
 	}
+	parentIndexFlags, parentIndexFlagForChild, err := recordParentIndexFlags(cmd, allowed)
+	if err != nil {
+		return nil, err
+	}
 	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
 		return nil, err
 	}
@@ -1287,6 +1396,7 @@ func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]st
 		return nil, err
 	}
 	applications := make([]recordFlagApplication, 0, len(flags))
+	parentIndexesForChild := map[string][]int{}
 	for name, values := range flags {
 		if len(values) == 0 {
 			continue
@@ -1298,6 +1408,16 @@ func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]st
 		if !ok {
 			return nil, fmt.Errorf("unknown flag --%s for command %q", name, cmd.Path)
 		}
+		if children, ok := parentIndexFlags[name]; ok {
+			indexes, err := coerceRecordParentIndexes(flag, values)
+			if err != nil {
+				return nil, err
+			}
+			for _, child := range children {
+				parentIndexesForChild[child] = indexes
+			}
+			continue
+		}
 		target, ok := strings.CutPrefix(flag.MapsTo, "record.")
 		if !ok || target == "" {
 			return nil, &BlockedCommandError{
@@ -1308,6 +1428,23 @@ func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]st
 			}
 		}
 		applications = append(applications, recordFlagApplication{name: name, flag: flag, values: values, target: target})
+	}
+	applicationsByName := make(map[string]recordFlagApplication, len(applications))
+	for _, application := range applications {
+		applicationsByName[application.name] = application
+	}
+	for childName, indexFlagName := range parentIndexFlagForChild {
+		indexes, provided := parentIndexesForChild[childName]
+		if !provided {
+			continue
+		}
+		application, found := applicationsByName[childName]
+		if !found {
+			return nil, fmt.Errorf("flag --%s requires --%s", indexFlagName, childName)
+		}
+		if len(indexes) != len(application.values) {
+			return nil, fmt.Errorf("flag --%s must be repeated once for each --%s value", indexFlagName, childName)
+		}
 	}
 	sort.Slice(applications, func(i, j int) bool {
 		if applications[i].target == applications[j].target {
@@ -1347,12 +1484,16 @@ func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]st
 		}
 		if repeatable {
 			parentCount := nestedRepeatableParentCount(app.target, applications)
+			parentIndexes := parentIndexesForChild[app.name]
+			if parentIndexFlag, hasParentIndexFlag := parentIndexFlagForChild[app.name]; hasParentIndexFlag && len(parentIndexes) == 0 && parentCount > 1 {
+				return nil, fmt.Errorf("flag --%s requires --%s when multiple parent records are present", app.name, parentIndexFlag)
+			}
 			for index, raw := range app.values {
 				value, err := coerceFlagValue(app.flag, []string{raw})
 				if err != nil {
 					return nil, err
 				}
-				target, err := expandRepeatableRecordTarget(app.target, index, len(app.values), parentCount)
+				target, err := expandRepeatableRecordTarget(app.target, index, len(app.values), parentCount, parentIndexes)
 				if err != nil {
 					return nil, err
 				}
