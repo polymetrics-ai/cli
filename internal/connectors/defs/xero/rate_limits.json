@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Xero's published tenant limits require the tenant identifier, but this bundle marks tenant_id secret and has no non-secret equivalent scope property."
+}

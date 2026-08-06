@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Vercel documents endpoint-specific limits and response headers, but does not publish one enumerable policy for this bundle's API surface."
+}

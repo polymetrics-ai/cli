@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Chargebee publishes site limits that vary by plan and may be customized, while this bundle has no non-secret plan selector."
+}

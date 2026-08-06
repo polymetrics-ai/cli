@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Intercom publishes separate workspace and app budgets that vary by access-token type, but this bundle has no non-secret workspace or app scope property."
+}

@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Jira Cloud publishes app and tenant quotas plus endpoint token buckets, while API-token traffic follows separate legacy limits; this bundle has no non-secret app, tenant, or plan selector."
+}

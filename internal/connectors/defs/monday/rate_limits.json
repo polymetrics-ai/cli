@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "monday.com publishes per-account, per-app limits that vary by plan and request complexity, but this bundle has no non-secret app or plan selector."
+}

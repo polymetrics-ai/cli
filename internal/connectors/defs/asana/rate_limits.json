@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Asana applies token-scoped quotas that vary by domain plan and endpoint, including separate concurrency and cost limits; this bundle has no non-secret token or plan selector."
+}

@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Zendesk Support limits vary by plan, add-on, and endpoint; the bundle has no non-secret plan or add-on selector."
+}

@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Clockify publishes different workspace limits for free and paid plans, but this bundle has no non-secret plan selector."
+}

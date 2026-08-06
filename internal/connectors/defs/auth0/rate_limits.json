@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Auth0 publishes API and endpoint token-bucket limits that vary by tenant type, subscription, and deployment; this bundle has no matching non-secret selectors."
+}

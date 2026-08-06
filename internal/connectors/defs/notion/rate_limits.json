@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Notion's documented average and burst allowance are per connection, but this bundle has no non-secret connection identifier for that scope."
+}

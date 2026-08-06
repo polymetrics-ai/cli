@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "ClickUp applies token-scoped limits that vary by workspace plan; this bundle has no non-secret token or workspace-plan selector."
+}

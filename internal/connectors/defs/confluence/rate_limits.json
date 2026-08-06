@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Confluence Cloud publishes app and tenant points quotas plus endpoint burst limits, while API-token traffic follows separate limits; this bundle has no matching non-secret selector."
+}

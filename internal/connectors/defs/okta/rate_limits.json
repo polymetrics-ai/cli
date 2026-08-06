@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Okta publishes organization and endpoint-specific buckets whose applicable values are exposed by the rate-limit dashboard; this bundle has no enumerable endpoint policy mapping."
+}

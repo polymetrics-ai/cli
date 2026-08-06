@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Recurly documents different sandbox and production limits, with production limits also varying by HTTP method; the bundle has no non-secret site or environment selector."
+}

@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Klaviyo publishes endpoint-specific tiers per account, but this bundle lacks a non-secret account scope property and endpoint-tier mapping."
+}

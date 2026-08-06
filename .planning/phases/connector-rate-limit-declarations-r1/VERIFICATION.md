@@ -24,4 +24,18 @@
 
 ## Results
 
-Pending implementation.
+- `jq empty internal/connectors/defs/*/rate_limits.json` — pass (25 files).
+- `go test ./internal/connectors/engine -run TestProductionDefinitionsEmbedEveryRateLimitDeclaration -count=1` — pass after the planned red result.
+- `go test ./internal/connectors/engine -count=1` — pass.
+- `go test ./internal/connectors/commandrunner -count=1` — pass.
+- `go vet ./...` and `go build ./cmd/pm` — pass.
+- `go run ./cmd/connectorgen validate` — 550 connectors checked, 0 findings.
+- `go run ./cmd/connectorgen surface-sync --check` — 550 connectors scanned, 0 changes.
+- `make tidy-check`, `make lint`, `make docs-check`, `make smoke-no-build`,
+  `make agent-contract-check`, `make connectorgen-validate`, `make connectorgen-surface-sync`,
+  `make connector-boundary`, and `make release-workflow-check` — pass.
+- `git diff --check` — pass.
+
+The full `go test ./...` and aggregate `make verify` are intentionally left to CI because this
+repository's full suite exceeds the worker command timeout; all relevant package tests and each
+non-test verification gate were run individually.

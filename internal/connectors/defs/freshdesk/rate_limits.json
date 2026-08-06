@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Freshdesk publishes account-wide and endpoint limits that vary by plan and purchased capacity, but this bundle has no non-secret plan selector."
+}
