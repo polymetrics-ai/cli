@@ -35,6 +35,7 @@ type scriptedCLI struct {
 	installedScheduleFlow string
 	installedScheduleGap  string
 	installedScheduleRoot string
+	installedScheduleBin  string
 	installed             bool
 	planFlow              string
 	previewFlow           string
@@ -393,12 +394,34 @@ func (s *scriptedCLI) writeCrontabSentinel() error {
 	if path == "" || s.schedule == "" {
 		return fmt.Errorf("scripted schedule install missing crontab path or schedule name")
 	}
+	executable, err := os.Executable()
+	if err != nil {
+		return fmt.Errorf("resolve scripted executable: %w", err)
+	}
+	if s.installedScheduleBin != "" {
+		executable = s.installedScheduleBin
+	}
 	root := s.root
 	if s.installedScheduleRoot != "" {
 		root = s.installedScheduleRoot
 	}
-	line := fmt.Sprintf("%s  pm --root %s flow run %s --json%s# pm-schedule-%s\n", s.installedScheduleCron, root, s.installedScheduleFlow, s.installedScheduleGap, s.schedule)
+	line := fmt.Sprintf("%s  %s --root %s flow run %s --json%s# pm-schedule-%s\n", s.installedScheduleCron, scriptedScheduleArg(executable), scriptedScheduleArg(root), scriptedScheduleArg(s.installedScheduleFlow), s.installedScheduleGap, s.schedule)
 	return os.WriteFile(path, []byte(line), 0o600)
+}
+
+func scriptedScheduleArg(s string) string {
+	if s == "" {
+		return "''"
+	}
+	if strings.IndexFunc(s, func(r rune) bool {
+		return !(r >= 'A' && r <= 'Z') &&
+			!(r >= 'a' && r <= 'z') &&
+			!(r >= '0' && r <= '9') &&
+			!strings.ContainsRune("/._:-", r)
+	}) == -1 {
+		return s
+	}
+	return "'" + strings.ReplaceAll(s, "'", "'\\''") + "'"
 }
 
 func (s *scriptedCLI) clearCrontab() error {
