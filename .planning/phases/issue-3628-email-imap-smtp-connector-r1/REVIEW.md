@@ -13,7 +13,7 @@ surface, generated docs, and dependency change.
 
 Email exposes mailbox listing and the SMTP send path only. Message reads, full refresh, and sparse
 UID continuation are blocked pending #3810: `internal/app/app.go:350-376` lacks catalog sync-mode
-validation, `internal/app/app.go:543-551` forwards persisted cursor state,
+validation, `internal/app/app.go:555-563` forwards persisted cursor state,
 `internal/app/types.go:40-47` lacks scan-continuation state, and
 `internal/app/local_warehouse.go:246-256` persists only an emitted cursor. Both become available
 when #3810 lands. Review also confirms no SMTP read surface, no fabricated REST endpoint, no live

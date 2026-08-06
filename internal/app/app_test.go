@@ -316,7 +316,7 @@ func TestAddCredentialValidatesCompleteEmailConfigurationBeforePersistence(t *te
 		{name: "invalid from address", field: "from_address", value: "<@>", mutate: func(config, _ map[string]string) { config["from_address"] = "<@>" }},
 		{name: "control from address", field: "from_address", value: "\n", mutate: func(config, _ map[string]string) { config["from_address"] = "\n" }},
 		{name: "invalid timeout", field: "connection_timeout_seconds", value: "999", mutate: func(config, _ map[string]string) { config["connection_timeout_seconds"] = "999" }},
-		{name: "control mailbox", field: "mailbox", value: "\n", mutate: func(config, _ map[string]string) { config["mailbox"] = "\n" }},
+		{name: "control username", field: "username", value: "\n", mutate: func(config, _ map[string]string) { config["username"] = "\n" }},
 		{name: "unencrypted remote IMAP", field: "imap_security", value: "none", mutate: func(config, _ map[string]string) { config["imap_security"] = "none" }},
 		{name: "unencrypted remote SMTP", field: "smtp_security", value: "none", mutate: func(config, _ map[string]string) { config["smtp_security"] = "none" }},
 	}
@@ -369,6 +369,73 @@ func TestAddCredentialValidatesCompleteEmailConfigurationBeforePersistence(t *te
 	}
 	if meta.Name != "email-valid" || len(meta.SecretFields) != 1 || meta.SecretFields[0] != "password" {
 		t.Fatalf("AddCredential valid Email metadata = %#v", meta)
+	}
+}
+
+func TestAddCredentialRejectsEmailRawControlsBeforePersistence(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject() error = %v", err)
+	}
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open() error = %v", err)
+	}
+
+	const marker = "email-control-probe"
+	cases := []struct {
+		name   string
+		field  string
+		mutate func(map[string]string, map[string]string)
+	}{
+		{name: "IMAP host", field: "imap_host", mutate: func(config, _ map[string]string) { config["imap_host"] = "\r\n" + marker }},
+		{name: "IMAP port", field: "imap_port", mutate: func(config, _ map[string]string) { config["imap_port"] = "\r\n" + marker }},
+		{name: "IMAP security", field: "imap_security", mutate: func(config, _ map[string]string) { config["imap_security"] = "\r\n" + marker }},
+		{name: "SMTP host", field: "smtp_host", mutate: func(config, _ map[string]string) { config["smtp_host"] = "\r\n" + marker }},
+		{name: "SMTP port", field: "smtp_port", mutate: func(config, _ map[string]string) { config["smtp_port"] = "\r\n" + marker }},
+		{name: "SMTP security", field: "smtp_security", mutate: func(config, _ map[string]string) { config["smtp_security"] = "\r\n" + marker }},
+		{name: "username", field: "username", mutate: func(config, _ map[string]string) { config["username"] = "\r\n" + marker }},
+		{name: "SMTP username", field: "smtp_username", mutate: func(config, _ map[string]string) { config["smtp_username"] = "\r\n" + marker }},
+		{name: "from address", field: "from_address", mutate: func(config, _ map[string]string) { config["from_address"] = "\r\n" + marker }},
+		{name: "connection timeout", field: "connection_timeout_seconds", mutate: func(config, _ map[string]string) { config["connection_timeout_seconds"] = "\r\n" + marker }},
+		{name: "password", field: "password", mutate: func(_ map[string]string, secrets map[string]string) {
+			secrets["password"] = "\r\n" + marker + secrets["password"]
+		}},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			config, secrets := validEmailCredential(t)
+			secret := secrets["password"]
+			tc.mutate(config, secrets)
+			_, err := a.AddCredential(ctx, app.AddCredentialRequest{
+				Name:      "email-control-" + strings.ReplaceAll(strings.ToLower(tc.name), " ", "-"),
+				Connector: "email",
+				Config:    config,
+				Secrets:   secrets,
+			})
+			if err == nil {
+				t.Fatalf("AddCredential accepted a control character in %s", tc.field)
+			}
+			if !strings.Contains(err.Error(), tc.field) {
+				t.Fatalf("AddCredential error did not identify %s", tc.field)
+			}
+			if strings.Contains(err.Error(), marker) || strings.Contains(err.Error(), secret) || strings.Contains(err.Error(), "\r") || strings.Contains(err.Error(), "\n") {
+				t.Fatal("AddCredential error exposed a supplied value or secret")
+			}
+			if credentials := a.ListCredentials(); len(credentials) != 0 {
+				t.Fatalf("ListCredentials() = %#v, want no persisted credentials after validation failure", credentials)
+			}
+			entries, readErr := os.ReadDir(filepath.Join(root, ".polymetrics", "vault"))
+			if readErr != nil {
+				t.Fatalf("ReadDir(vault): %v", readErr)
+			}
+			for _, entry := range entries {
+				if strings.HasSuffix(entry.Name(), ".enc") {
+					t.Fatalf("AddCredential persisted vault entry %q after validation failure", entry.Name())
+				}
+			}
+		})
 	}
 }
 

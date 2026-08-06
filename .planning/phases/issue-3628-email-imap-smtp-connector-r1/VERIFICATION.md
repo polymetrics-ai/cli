@@ -37,7 +37,7 @@ creates an external temporary project and is unrelated to this native protocol c
 
 Email message reads, full-refresh enforcement, and sparse UID scan continuation are blocked pending
 #3810. Full-refresh enforcement is blocked because `internal/app/app.go:350-376` does not validate
-catalog sync modes and `internal/app/app.go:543-551` forwards persisted cursor state. Sparse UID
+catalog sync modes and `internal/app/app.go:555-563` forwards persisted cursor state. Sparse UID
 scan continuation is blocked because `internal/app/types.go:40-47` lacks scan-continuation state
 and `internal/app/local_warehouse.go:246-256` persists only an emitted cursor. Both become
 available when #3810 lands.

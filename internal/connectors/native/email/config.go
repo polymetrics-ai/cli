@@ -70,19 +70,24 @@ func resolveConnectionConfig(cfg connectors.RuntimeConfig) (connectionConfig, er
 	if err != nil {
 		return connectionConfig{}, err
 	}
-	username := strings.TrimSpace(cfg.Config["username"])
-	if username == "" || containsControl(username) {
+	username, err := trimEmailConfigValue(cfg.Config["username"], "username")
+	if err != nil {
+		return connectionConfig{}, err
+	}
+	if username == "" {
 		return connectionConfig{}, errors.New("email connector requires a non-empty username")
 	}
 	password := cfg.Secrets["password"]
+	if containsControl(password) {
+		return connectionConfig{}, errors.New("email secret password must not contain control characters")
+	}
 	if strings.TrimSpace(password) == "" {
 		return connectionConfig{}, errors.New("email connector requires secret password")
 	}
-	smtpUsernameRaw := cfg.Config["smtp_username"]
-	if containsControl(smtpUsernameRaw) {
-		return connectionConfig{}, errors.New("email config smtp_username must not contain control characters")
+	smtpUsername, err := trimEmailConfigValue(cfg.Config["smtp_username"], "smtp_username")
+	if err != nil {
+		return connectionConfig{}, err
 	}
-	smtpUsername := strings.TrimSpace(smtpUsernameRaw)
 	if smtpUsername == "" {
 		smtpUsername = username
 	}
@@ -114,7 +119,10 @@ func (Connector) ValidateCredential(cfg connectors.RuntimeConfig) error {
 }
 
 func normalizeHost(raw, field string) (string, error) {
-	host := strings.TrimSpace(raw)
+	host, err := trimEmailConfigValue(raw, field)
+	if err != nil {
+		return "", err
+	}
 	host = strings.TrimSuffix(host, ".")
 	if host == "" {
 		return "", fmt.Errorf("email connector requires config %s", field)
@@ -150,7 +158,10 @@ func validHostname(host string) bool {
 }
 
 func allowedPort(raw, field string, allowed ...string) (string, error) {
-	port := strings.TrimSpace(raw)
+	port, err := trimEmailConfigValue(raw, field)
+	if err != nil {
+		return "", err
+	}
 	for _, candidate := range allowed {
 		if port == candidate {
 			return port, nil
@@ -160,7 +171,11 @@ func allowedPort(raw, field string, allowed ...string) (string, error) {
 }
 
 func allowedSecurity(raw, field string) (transportSecurity, error) {
-	security := transportSecurity(strings.TrimSpace(raw))
+	value, err := trimEmailConfigValue(raw, field)
+	if err != nil {
+		return "", err
+	}
+	security := transportSecurity(value)
 	switch security {
 	case securityTLS, securitySTARTTLS, securityNone:
 		return security, nil
@@ -170,10 +185,10 @@ func allowedSecurity(raw, field string) (transportSecurity, error) {
 }
 
 func resolveFromAddress(raw, username string) (string, error) {
-	if containsControl(raw) {
-		return "", errors.New("email config from_address must be an email address (or username must be an email address)")
+	from, err := trimEmailConfigValue(raw, "from_address")
+	if err != nil {
+		return "", err
 	}
-	from := strings.TrimSpace(raw)
 	if from == "" {
 		from = username
 	}
@@ -185,18 +200,25 @@ func resolveFromAddress(raw, username string) (string, error) {
 }
 
 func connectionTimeout(raw string) (time.Duration, error) {
-	if containsControl(raw) {
-		return 0, errors.New("email config connection_timeout_seconds must satisfy its declared enum constraint")
+	value, err := trimEmailConfigValue(raw, "connection_timeout_seconds")
+	if err != nil {
+		return 0, err
 	}
-	raw = strings.TrimSpace(raw)
-	if raw == "" {
+	if value == "" {
 		return defaultTimeout, nil
 	}
-	seconds, err := strconv.Atoi(raw)
+	seconds, err := strconv.Atoi(value)
 	if err != nil || (seconds != 5 && seconds != 10 && seconds != 15 && seconds != 30 && seconds != 60) {
 		return 0, errors.New("email config connection_timeout_seconds must satisfy its declared enum constraint")
 	}
 	return time.Duration(seconds) * time.Second, nil
+}
+
+func trimEmailConfigValue(raw, field string) (string, error) {
+	if containsControl(raw) {
+		return "", fmt.Errorf("email config %s must not contain control characters", field)
+	}
+	return strings.TrimSpace(raw), nil
 }
 
 func containsControl(value string) bool {
