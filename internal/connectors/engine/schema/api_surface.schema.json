@@ -8,8 +8,21 @@
     "api": { "type": "string" },
     "docs": { "type": "string" },
     "reviewed_at": { "type": "string" },
-    "operation_ledger_version": { "type": "integer", "enum": [1] },
+    "operation_ledger_version": { "type": "integer", "enum": [1, 2] },
     "scope": { "type": "string" },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "url": { "type": "string" },
+          "retrieved_at": { "type": "string" },
+          "sha256": { "type": "string" }
+        }
+      }
+    },
     "endpoints": {
       "type": "array",
       "items": {
@@ -18,6 +31,14 @@
         "properties": {
           "method": { "type": "string" },
           "path": { "type": "string" },
+          "provenance": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "artifact": { "type": "string" },
+              "source_url": { "type": "string" }
+            }
+          },
           "covered_by": {
             "type": "object",
             "additionalProperties": false,

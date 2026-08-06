@@ -194,6 +194,9 @@ func runConnectors(ctx context.Context, root string, args []string, stdout io.Wr
 	}
 	switch args[0] {
 	case "certify":
+		if len(args) == 2 && isHelpArg(args[1]) {
+			return writeManual("connectors", stdout, jsonOut)
+		}
 		return runCertify(ctx, root, args[1:], stdout, jsonOut)
 	case "list":
 		flags := parseFlags(args[1:])

@@ -28,6 +28,7 @@ const (
 	ruleSurfaceIncomplete        = "surface_incomplete"
 	ruleSurfaceCategory          = "surface_category"
 	ruleSurfaceOperation         = "surface_operation"
+	ruleSurfaceProvenance        = "surface_provenance"
 	ruleSurfaceFailFirstRun      = "surface_fail_first_run"
 	ruleCLISurfaceUnknownTarget  = "cli_surface_unknown_target"
 	ruleCLISurfaceMissingMapping = "cli_surface_missing_mapping"
@@ -577,6 +578,14 @@ func checkAPISurface(b engine.Bundle) []Finding {
 		}}
 	}
 	var findings []Finding
+	for _, issue := range engine.ValidateSurfaceProvenance(b.Surface).Issues {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "api_surface.json",
+			Rule:      ruleSurfaceProvenance,
+			Message:   issue.Error(),
+		})
+	}
 
 	streams := map[string]bool{}
 	for _, s := range b.Streams {
@@ -760,7 +769,7 @@ func checkAPISurfaceOperation(b engine.Bundle, i int, ep engine.SurfaceEndpoint)
 	if op.Model == "duplicate" && strings.TrimSpace(op.DuplicateOf) == "" {
 		add("operation.duplicate_of is required for duplicate rows")
 	}
-	if sourceRequiredOperationModels[op.Model] &&
+	if b.Surface.OperationLedgerVersion < 2 && sourceRequiredOperationModels[op.Model] &&
 		strings.TrimSpace(op.SourceURL) == "" &&
 		strings.TrimSpace(op.Notes) == "" {
 		add("operation.source_url or operation.notes is required for sensitive/admin/destructive/disallowed rows")

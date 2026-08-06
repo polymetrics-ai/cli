@@ -102,6 +102,25 @@ func TestCertifyCLIMissingConnectorArgIsUsageError(t *testing.T) {
 	}
 }
 
+func TestCertifyCLIHelpShowsProvenanceContract(t *testing.T) {
+	root := t.TempDir()
+
+	stdout, stderr, code := certifyRun(t, root, "connectors", "certify", "--help")
+	if code != 0 {
+		t.Fatalf("exit code = %d, want 0; stdout=%s stderr=%s", code, stdout, stderr)
+	}
+	for _, want := range []string{
+		"pm connectors certify <connector> [--full] [--json]",
+		"provider-artifact",
+		"provenance evidence",
+		"legacy_unverified",
+	} {
+		if !strings.Contains(stdout, want) {
+			t.Errorf("stdout missing %q: %s", want, stdout)
+		}
+	}
+}
+
 // TestCertifyCLIUnknownConnectorFails proves a connector name not present in
 // the registry surfaces as a certify failure with a non-zero exit rather
 // than a panic.
