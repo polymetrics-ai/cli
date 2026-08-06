@@ -43,6 +43,9 @@ func TestNameMetadataAndExecutableChangefeed(t *testing.T) {
 	if !connectors.HasImplementedChangefeed(c, definition.Definition().Changefeed) {
 		t.Fatal("mysql connector must expose CDC only through its matching binlog executor")
 	}
+	if checkpoint := c.ChangefeedExecutorDescriptor().Checkpoint.Keys; !reflect.DeepEqual(checkpoint, []string{"binlog_file", "binlog_pos", mysqlCDCSchemaFingerprintState}) {
+		t.Fatalf("CDC checkpoint keys = %v, want schema-bound position", checkpoint)
+	}
 	manifest := connectors.ManifestOf(c)
 	if manifest.Risk.Read == "" || len(manifest.ConfigFields) == 0 || len(manifest.SecretFields) != 1 || manifest.SecretFields[0].Name != "password" {
 		t.Fatalf("native mysql manifest = %+v, want bundle configuration and risk", manifest)
@@ -278,6 +281,34 @@ func TestBinlogPositionStateRequiresCompleteValidPosition(t *testing.T) {
 	}
 }
 
+func TestBinlogCheckpointStateRequiresSchemaFingerprint(t *testing.T) {
+	columns := []string{"id", "label"}
+	fingerprint := cdcSchemaFingerprint(columns)
+	if _, _, err := binlogCheckpointFromState(nil); err != nil {
+		t.Fatalf("initial checkpoint state = %v, want accepted", err)
+	}
+	if _, _, err := binlogCheckpointFromState(map[string]string{"binlog_file": "mysql-bin.000001", "binlog_pos": "4"}); err == nil {
+		t.Fatal("checkpoint without schema fingerprint accepted")
+	}
+	if _, _, err := binlogCheckpointFromState(map[string]string{mysqlCDCSchemaFingerprintState: fingerprint}); err == nil {
+		t.Fatal("schema fingerprint without checkpoint position accepted")
+	}
+	if _, _, err := binlogCheckpointFromState(map[string]string{"binlog_file": "mysql-bin.000001", "binlog_pos": "4", mysqlCDCSchemaFingerprintState: "not-a-fingerprint"}); err == nil {
+		t.Fatal("invalid schema fingerprint accepted")
+	}
+	position, gotFingerprint, err := binlogCheckpointFromState(map[string]string{
+		"binlog_file":                  "mysql-bin.000001",
+		"binlog_pos":                   "4",
+		mysqlCDCSchemaFingerprintState: fingerprint,
+	})
+	if err != nil || position.Name != "mysql-bin.000001" || position.Pos != 4 || gotFingerprint != fingerprint {
+		t.Fatalf("binlogCheckpointFromState() = %#v, %q, %v", position, gotFingerprint, err)
+	}
+	if cdcSchemaFingerprint([]string{"label", "id"}) == fingerprint {
+		t.Fatal("schema fingerprint did not bind ordered column metadata")
+	}
+}
+
 func TestCurrentBinlogStatusQueryUsesMySQL84Syntax(t *testing.T) {
 	if currentBinlogStatusQuery != "SHOW BINARY LOG STATUS" {
 		t.Fatalf("current binlog status query = %q", currentBinlogStatusQuery)
@@ -337,12 +368,14 @@ func TestCDCRowImagesAndDedupeOrdinal(t *testing.T) {
 	if err := validateCDCRowImages([][]any{{"6", "foxtrot"}}, [][]int{}, []string{"id", "label"}); err == nil {
 		t.Fatal("validateCDCRowImages() accepted incomplete row image metadata")
 	}
-	state := connectors.Record{"binlog_file": "mysql-bin.000001", "binlog_pos": "412"}
-	events := cdcEventsFromRows("insert", [][]any{{[]byte("6"), "foxtrot"}, {[]byte("7"), "golf"}}, []string{"id", "label"}, state)
+	columns := []string{"id", "label"}
+	fingerprint := cdcSchemaFingerprint(columns)
+	state := connectors.Record{"binlog_file": "mysql-bin.000001", "binlog_pos": "412", mysqlCDCSchemaFingerprintState: fingerprint}
+	events := cdcEventsFromRows("insert", [][]any{{[]byte("6"), "foxtrot"}, {[]byte("7"), "golf"}}, columns, state)
 	if len(events) != 2 || events[0].State["binlog_row"] != "0" || events[1].State["binlog_row"] != "1" {
 		t.Fatalf("CDC events = %#v, want ordered per-row dedupe state", events)
 	}
-	if events[0].State["binlog_file"] != "mysql-bin.000001" || events[0].State["binlog_pos"] != "412" {
+	if events[0].State["binlog_file"] != "mysql-bin.000001" || events[0].State["binlog_pos"] != "412" || events[0].State[mysqlCDCSchemaFingerprintState] != fingerprint {
 		t.Fatalf("CDC event state = %#v, want preserved binlog position", events[0].State)
 	}
 	if _, ok := state["binlog_row"]; ok {

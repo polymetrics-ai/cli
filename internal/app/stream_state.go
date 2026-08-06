@@ -76,6 +76,16 @@ func streamStateCursor(state StreamState) string {
 	return string(state.Checkpoint.Position.Primary)
 }
 
+func streamReadState(state StreamState, generationID int64) map[string]string {
+	readState := map[string]string{
+		"generation_id": strconv.FormatInt(generationID, 10),
+	}
+	if state.Checkpoint != nil {
+		readState["cursor"] = streamStateCursor(state)
+	}
+	return readState
+}
+
 func streamSourceIdentity(source connectors.Connector, credential CredentialMeta, streamName string) synccontract.SourceIdentity {
 	return synccontract.SourceIdentity{
 		Engine:           source.Name(),

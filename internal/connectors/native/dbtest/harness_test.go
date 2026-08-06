@@ -2,22 +2,21 @@ package dbtest
 
 import (
 	"context"
-	"errors"
 	"os/exec"
 	"reflect"
 	"testing"
 )
 
 type scriptedRunner struct {
-	imagePresent        bool
 	volumePresent       bool
 	containerLive       bool
-	imageInspectErr     error
 	pullErr             error
+	tagErr              error
 	volumeInspectErr    error
 	volumeCreateErr     error
 	containerInspectErr error
 	runErr              error
+	images              map[string]bool
 	commands            [][]string
 	contexts            []string
 }
@@ -26,19 +25,20 @@ func (r *scriptedRunner) Run(_ context.Context, dockerContext string, args ...st
 	r.contexts = append(r.contexts, dockerContext)
 	r.commands = append(r.commands, append([]string(nil), args...))
 	switch {
-	case commandHasPrefix(args, "image", "inspect"):
-		if r.imageInspectErr != nil {
-			return "", r.imageInspectErr
-		}
-		if r.imagePresent {
-			return "", nil
-		}
-		return "", errDockerResourceNotFound
 	case len(args) > 0 && args[0] == "pull":
-		r.imagePresent = true
+		if len(args) > 1 {
+			r.setImage(args[1], true)
+		}
 		return "", r.pullErr
+	case commandHasPrefix(args, "image", "tag"):
+		if len(args) > 3 {
+			r.setImage(args[3], true)
+		}
+		return "", r.tagErr
 	case commandHasPrefix(args, "image", "rm"):
-		r.imagePresent = false
+		if len(args) > 2 {
+			r.setImage(args[2], false)
+		}
 	case commandHasPrefix(args, "volume", "inspect"):
 		if r.volumeInspectErr != nil {
 			return "", r.volumeInspectErr
@@ -69,6 +69,21 @@ func (r *scriptedRunner) Run(_ context.Context, dockerContext string, args ...st
 		return "127.0.0.1:43123\n", nil
 	}
 	return "", nil
+}
+
+func (r *scriptedRunner) imagePresent(image string) bool {
+	return r.images != nil && r.images[image]
+}
+
+func (r *scriptedRunner) setImage(image string, present bool) {
+	if r.images == nil {
+		r.images = make(map[string]bool)
+	}
+	if present {
+		r.images[image] = true
+		return
+	}
+	delete(r.images, image)
 }
 
 func commandHasPrefix(args []string, prefix ...string) bool {
@@ -134,7 +149,8 @@ func TestNewRejectsUnpinnedImages(t *testing.T) {
 
 func TestCleanupRemovesOnlyRunOwnedResources(t *testing.T) {
 	runner := &scriptedRunner{}
-	h, err := New(testConfig(runner))
+	config := testConfig(runner)
+	h, err := New(config)
 	if err != nil {
 		t.Fatalf("New(): %v", err)
 	}
@@ -146,8 +162,14 @@ func TestCleanupRemovesOnlyRunOwnedResources(t *testing.T) {
 	if endpoint.Host != "127.0.0.1" || endpoint.Port == 3306 {
 		t.Fatalf("endpoint = %+v, want loopback non-default port", endpoint)
 	}
+	if !runner.imagePresent(config.Image) || !runner.imagePresent(h.runImage) {
+		t.Fatalf("images after start = %#v, want source and generated references", runner.images)
+	}
 	if err := h.Close(context.Background()); err != nil {
 		t.Fatalf("Close(): %v", err)
+	}
+	if !runner.imagePresent(config.Image) || runner.imagePresent(h.runImage) {
+		t.Fatalf("images after cleanup = %#v, want shared source only", runner.images)
 	}
 
 	var gotCleanup []string
@@ -158,6 +180,9 @@ func TestCleanupRemovesOnlyRunOwnedResources(t *testing.T) {
 	}
 	if want := []string{"container", "volume", "image"}; !reflect.DeepEqual(gotCleanup, want) {
 		t.Fatalf("cleanup order = %v, want %v", gotCleanup, want)
+	}
+	if commandsContain(runner.commands, "image", "rm", config.Image) || !commandsContain(runner.commands, "image", "rm", h.runImage) {
+		t.Fatalf("image cleanup commands = %v, want generated reference only", runner.commands)
 	}
 	for _, dockerContext := range runner.contexts {
 		if dockerContext != "colima" {
@@ -189,7 +214,7 @@ func TestStartPlacesEngineArgumentsAfterImage(t *testing.T) {
 		}
 		imageIndex, engineArgumentIndex := -1, -1
 		for index, arg := range command {
-			if arg == config.Image {
+			if arg == h.runImage {
 				imageIndex = index
 			}
 			if arg == "--server-id=731000" {
@@ -206,13 +231,19 @@ func TestStartPlacesEngineArgumentsAfterImage(t *testing.T) {
 
 func TestStartCleansResourcesAfterIndeterminateDaemonOutcomes(t *testing.T) {
 	for _, tc := range []struct {
-		name      string
-		runner    *scriptedRunner
-		wantClean [][]string
+		name             string
+		runner           *scriptedRunner
+		wantClean        [][]string
+		wantNoImageClean bool
 	}{
 		{
-			name:   "pull returns an error after creating the image",
-			runner: &scriptedRunner{pullErr: context.Canceled},
+			name:             "pull returns an error before a generated reference exists",
+			runner:           &scriptedRunner{pullErr: context.Canceled},
+			wantNoImageClean: true,
+		},
+		{
+			name:   "tag returns an error after creating the generated reference",
+			runner: &scriptedRunner{tagErr: context.Canceled},
 			wantClean: [][]string{
 				{"image", "rm"},
 			},
@@ -236,7 +267,8 @@ func TestStartCleansResourcesAfterIndeterminateDaemonOutcomes(t *testing.T) {
 		},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			h, err := New(testConfig(tc.runner))
+			config := testConfig(tc.runner)
+			h, err := New(config)
 			if err != nil {
 				t.Fatalf("New(): %v", err)
 			}
@@ -248,27 +280,35 @@ func TestStartCleansResourcesAfterIndeterminateDaemonOutcomes(t *testing.T) {
 					t.Fatalf("cleanup commands = %v, missing %v", tc.runner.commands, prefix)
 				}
 			}
+			if tc.wantNoImageClean && commandsContain(tc.runner.commands, "image", "rm") {
+				t.Fatalf("cleanup commands = %v, want no generated image removal", tc.runner.commands)
+			}
+			if tc.wantNoImageClean && !tc.runner.imagePresent(config.Image) {
+				t.Fatalf("images after pull error = %#v, want retained shared source cache", tc.runner.images)
+			}
+			if !tc.wantNoImageClean && tc.runner.imagePresent(h.runImage) {
+				t.Fatalf("images after cleanup = %#v, want generated reference removed", tc.runner.images)
+			}
 		})
 	}
 }
 
-func TestStartDoesNotClassifyUnexpectedInspectFailuresAsAbsence(t *testing.T) {
-	runner := &scriptedRunner{
-		imagePresent:    true,
-		imageInspectErr: errors.New("docker daemon unavailable"),
-	}
-	h, err := New(testConfig(runner))
+func TestStartUsesGeneratedImageReferenceWithoutInspectingSource(t *testing.T) {
+	runner := &scriptedRunner{}
+	config := testConfig(runner)
+	h, err := New(config)
 	if err != nil {
 		t.Fatalf("New(): %v", err)
 	}
-	if _, err := h.Start(context.Background()); err == nil {
-		t.Fatal("Start() succeeded after an image inspect failure")
+	if _, err := h.Start(context.Background()); err != nil {
+		t.Fatalf("Start(): %v", err)
 	}
-	if commandsContain(runner.commands, "pull") {
-		t.Fatalf("commands = %v, want no pull after an indeterminate inspect", runner.commands)
+	defer func() { _ = h.Close(context.Background()) }()
+	if commandsContain(runner.commands, "image", "inspect") {
+		t.Fatalf("commands = %v, want no shared image inspection", runner.commands)
 	}
-	if commandsContain(runner.commands, "image", "rm") {
-		t.Fatalf("commands = %v, want no removal of a pre-existing image", runner.commands)
+	if !commandsContain(runner.commands, "pull", config.Image) || !commandsContain(runner.commands, "image", "tag", config.Image, h.runImage) {
+		t.Fatalf("commands = %v, want generated image reference", runner.commands)
 	}
 }
 
@@ -295,18 +335,20 @@ func TestStartPreservesPreexistingGeneratedVolume(t *testing.T) {
 	}
 }
 
-func TestCleanupPreservesOnlyPreexistingImages(t *testing.T) {
+func TestCleanupRemovesOnlyGeneratedImageReference(t *testing.T) {
 	for _, tc := range []struct {
-		name         string
-		imagePresent bool
-		wantImageRM  bool
+		name          string
+		sourcePresent bool
 	}{
-		{name: "preexisting image", imagePresent: true},
-		{name: "run-owned image", wantImageRM: true},
+		{name: "preexisting source image", sourcePresent: true},
+		{name: "source image pulled for the run"},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			runner := &scriptedRunner{imagePresent: tc.imagePresent}
+			runner := &scriptedRunner{}
 			config := testConfig(runner)
+			if tc.sourcePresent {
+				runner.setImage(config.Image, true)
+			}
 			h, err := New(config)
 			if err != nil {
 				t.Fatalf("New(): %v", err)
@@ -317,12 +359,11 @@ func TestCleanupPreservesOnlyPreexistingImages(t *testing.T) {
 			if err := h.Close(context.Background()); err != nil {
 				t.Fatalf("Close(): %v", err)
 			}
-			gotImageRM := false
-			for _, command := range runner.commands {
-				gotImageRM = gotImageRM || (len(command) > 1 && command[0] == "image" && command[1] == "rm")
+			if !runner.imagePresent(config.Image) || runner.imagePresent(h.runImage) {
+				t.Fatalf("images after cleanup = %#v, want shared source only", runner.images)
 			}
-			if gotImageRM != tc.wantImageRM {
-				t.Fatalf("image removal = %t, want %t", gotImageRM, tc.wantImageRM)
+			if commandsContain(runner.commands, "image", "rm", config.Image) || !commandsContain(runner.commands, "image", "rm", h.runImage) {
+				t.Fatalf("image cleanup commands = %v, want generated reference only", runner.commands)
 			}
 		})
 	}

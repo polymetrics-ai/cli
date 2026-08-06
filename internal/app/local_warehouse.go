@@ -161,7 +161,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	err = source.Read(ctx, connectors.ReadRequest{
 		Stream: streamName,
 		Config: readConfig,
-		State:  map[string]string{"cursor": priorCursor, "generation_id": strconv.FormatInt(generationID, 10)},
+		State:  streamReadState(prior, generationID),
 	}, func(record connectors.Record) error {
 		result.RecordsRead++
 		cursor := ""
