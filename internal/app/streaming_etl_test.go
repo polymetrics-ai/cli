@@ -5,8 +5,10 @@ import (
 	"path/filepath"
 	"reflect"
 	"testing"
+	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/synccontract"
 )
 
 type streamingSource struct {
@@ -46,7 +48,8 @@ func (s *streamingSource) Write(ctx context.Context, req connectors.WriteRequest
 }
 
 type batchDestination struct {
-	batches []int
+	batches          []int
+	acknowledgements int
 }
 
 func (d *batchDestination) Name() string { return "batch_destination" }
@@ -75,6 +78,11 @@ func (d *batchDestination) Read(ctx context.Context, req connectors.ReadRequest,
 func (d *batchDestination) Write(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
 	d.batches = append(d.batches, len(records))
 	return connectors.WriteResult{RecordsWritten: len(records)}, nil
+}
+
+func (d *batchDestination) AcknowledgeETLDurability(_ context.Context, _ string) (synccontract.DownstreamAcknowledgement, error) {
+	d.acknowledgements++
+	return synccontract.NewDurableDownstreamAcknowledgement(d.Name(), time.Now().UTC())
 }
 
 func TestRunETLWritesBoundedBatches(t *testing.T) {
@@ -117,6 +125,9 @@ func TestRunETLWritesBoundedBatches(t *testing.T) {
 	}
 	if got, want := dest.batches, []int{2, 2, 1}; !reflect.DeepEqual(got, want) {
 		t.Fatalf("destination batches = %v, want %v", got, want)
+	}
+	if dest.acknowledgements != 1 {
+		t.Fatalf("durability acknowledgements = %d, want 1", dest.acknowledgements)
 	}
 	if run.RecordsRead != 5 || run.RecordsLoaded != 5 || run.BatchCount != 3 {
 		t.Fatalf("unexpected run counts: %+v", run)

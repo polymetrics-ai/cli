@@ -14,6 +14,8 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/durability"
+	"polymetrics.ai/internal/synccontract"
 )
 
 type etlExecutionResult struct {
@@ -23,6 +25,12 @@ type etlExecutionResult struct {
 	RecordsFailed      int
 	BatchCount         int
 	Checkpoint         map[string]string
+	PendingStreamState *pendingStreamState
+}
+
+type pendingStreamState struct {
+	Key   string
+	State StreamState
 }
 
 type localRawRecord struct {
@@ -38,12 +46,14 @@ type localRawRecord struct {
 	Record       connectors.Record `json:"record"`
 }
 
-func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destRuntime connectors.RuntimeConfig, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
-	if a.state.StreamStates == nil {
-		a.state.StreamStates = map[string]StreamState{}
-	}
+func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
 	stateKey := streamStateKey(conn.Name, streamName)
 	prior := a.state.StreamStates[stateKey]
+	if prior.Checkpoint != nil {
+		if err := validateStreamStateResume(prior, sourceExpectation); err != nil {
+			return etlExecutionResult{}, err
+		}
+	}
 	generationID := prior.GenerationID
 	if generationID == 0 || mode.IsOverwrite() {
 		generationID++
@@ -110,8 +120,10 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	result := etlExecutionResult{}
 	recordBatch := make([]connectors.Record, 0, batchSize)
 	rawBatch := make([]localRawRecord, 0, batchSize)
-	nextCursor := prior.Cursor
+	priorCursor := streamStateCursor(prior)
+	nextCursor := priorCursor
 	rawSeq := 0
+	observedAt := time.Time{}
 
 	flush := func() error {
 		if len(rawBatch) == 0 {
@@ -143,13 +155,13 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 
 	readConfig := sourceRuntime
 	readConfig.Config = cloneStringMap(sourceRuntime.Config)
-	if prior.Cursor != "" {
-		readConfig.Config["since"] = prior.Cursor
+	if priorCursor != "" {
+		readConfig.Config["since"] = priorCursor
 	}
 	err = source.Read(ctx, connectors.ReadRequest{
 		Stream: streamName,
 		Config: readConfig,
-		State:  map[string]string{"cursor": prior.Cursor, "generation_id": strconv.FormatInt(generationID, 10)},
+		State:  map[string]string{"cursor": priorCursor, "generation_id": strconv.FormatInt(generationID, 10)},
 	}, func(record connectors.Record) error {
 		result.RecordsRead++
 		cursor := ""
@@ -159,7 +171,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 			if err != nil {
 				return err
 			}
-			if mode.Source == SourceSyncIncremental && prior.Cursor != "" && compareCursor(cursor, prior.Cursor) < 0 {
+			if mode.Source == SourceSyncIncremental && priorCursor != "" && compareCursor(cursor, priorCursor) < 0 {
 				return nil
 			}
 			if nextCursor == "" || compareCursor(cursor, nextCursor) > 0 {
@@ -199,6 +211,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 		rawBatch = append(rawBatch, raw)
 		recordBatch = append(recordBatch, enriched)
 		result.RecordsTransformed++
+		observedAt = time.Now().UTC()
 		result.RecordsLoaded++
 		if len(rawBatch) >= batchSize {
 			return flush()
@@ -211,10 +224,16 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	if err := flush(); err != nil {
 		return result, err
 	}
+	if err := rawFile.Sync(); err != nil {
+		return result, fmt.Errorf("sync raw table: %w", err)
+	}
 	if err := rawFile.Close(); err != nil {
 		return result, fmt.Errorf("close raw table: %w", err)
 	}
 	if finalFile != nil {
+		if err := finalFile.Sync(); err != nil {
+			return result, fmt.Errorf("sync final table: %w", err)
+		}
 		if err := finalFile.Close(); err != nil {
 			return result, fmt.Errorf("close final table: %w", err)
 		}
@@ -242,23 +261,39 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 			return result, fmt.Errorf("replace final table: %w", err)
 		}
 	}
-
-	updated := StreamState{
-		Connection:          conn.Name,
-		Stream:              streamName,
-		Cursor:              nextCursor,
-		GenerationID:        generationID,
-		LastSuccessfulRunID: runID,
-		RecordsLoaded:       result.RecordsLoaded,
-		UpdatedAt:           time.Now().UTC(),
+	for _, outputDir := range []string{filepath.Dir(rawPath), filepath.Dir(finalPath)} {
+		if err := syncLocalWarehouseDirectory(outputDir); err != nil {
+			return result, err
+		}
 	}
-	a.state.StreamStates[stateKey] = updated
+
+	if observedAt.IsZero() {
+		observedAt = time.Now().UTC()
+	}
+	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement(destination.Name(), time.Now().UTC())
+	if err != nil {
+		return result, err
+	}
+	updated, err := committedLegacyStreamState(conn, sourceExpectation, streamName, stream, runID, nextCursor, generationID, result.RecordsLoaded, observedAt, acknowledgement)
+	if err != nil {
+		return result, err
+	}
 	result.Checkpoint = checkpointForResult(result, mode, stateKey, updated)
+	result.PendingStreamState = &pendingStreamState{Key: stateKey, State: updated}
 	success = true
 	return result, nil
 }
 
+func syncLocalWarehouseDirectory(dir string) error {
+	if err := durability.SyncDirectory(dir); err != nil {
+		return fmt.Errorf("sync warehouse directory: %w", err)
+	}
+	return nil
+}
+
 func checkpointForResult(result etlExecutionResult, mode SyncMode, stateKey string, state StreamState) map[string]string {
+	// This map is a backward-compatible run report, not resumable sync state.
+	// StreamState.Checkpoint is the sole durable resume record.
 	checkpoint := map[string]string{
 		"records_read":        strconv.Itoa(result.RecordsRead),
 		"records_transformed": strconv.Itoa(result.RecordsTransformed),
@@ -269,8 +304,8 @@ func checkpointForResult(result etlExecutionResult, mode SyncMode, stateKey stri
 		"state_key":           stateKey,
 		"generation_id":       strconv.FormatInt(state.GenerationID, 10),
 	}
-	if state.Cursor != "" {
-		checkpoint["cursor"] = state.Cursor
+	if cursor := streamStateCursor(state); cursor != "" {
+		checkpoint["cursor"] = cursor
 	}
 	return checkpoint
 }
@@ -292,17 +327,25 @@ func materializeDedupedFinal(ctx context.Context, rawPath, finalPath string) (in
 	if err != nil {
 		return 0, fmt.Errorf("open deduped final table: %w", err)
 	}
-	defer file.Close()
 	encoder := json.NewEncoder(file)
 	count := 0
 	for _, key := range keys {
 		if err := ctx.Err(); err != nil {
+			_ = file.Close()
 			return count, err
 		}
 		if err := encoder.Encode(best[key].Record); err != nil {
+			_ = file.Close()
 			return count, fmt.Errorf("write deduped final record: %w", err)
 		}
 		count++
+	}
+	if err := file.Sync(); err != nil {
+		_ = file.Close()
+		return count, fmt.Errorf("sync deduped final table: %w", err)
+	}
+	if err := file.Close(); err != nil {
+		return count, fmt.Errorf("close deduped final table: %w", err)
 	}
 	return count, nil
 }
@@ -325,7 +368,7 @@ func readBestLocalRawRecords(ctx context.Context, path string) (map[string]local
 		}
 		return nil, fmt.Errorf("open raw table: %w", err)
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 	reader := bufio.NewScanner(file)
 	reader.Buffer(make([]byte, 0, 64*1024), 10*1024*1024)
 	best := map[string]localRawRecord{}

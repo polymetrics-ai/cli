@@ -1,9 +1,11 @@
 package app
 
 import (
+	"fmt"
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/synccontract"
 )
 
 type AddCredentialRequest struct {
@@ -32,6 +34,29 @@ func (e *CredentialLinkValidationError) Error() string { return e.err.Error() }
 
 func (e *CredentialLinkValidationError) Unwrap() error { return e.err }
 
+// ApprovalConsumptionUncertainError stops a reverse plan when its single-use
+// approval may have been consumed but the durability result is uncertain.
+// Callers must create a new plan rather than retrying the old approval.
+type ApprovalConsumptionUncertainError struct {
+	PlanID     string
+	ConsumedAt time.Time
+	err        error
+}
+
+func (e *ApprovalConsumptionUncertainError) Error() string {
+	if e == nil {
+		return "reverse plan approval consumption transition is uncertain; create a new reverse plan and obtain a fresh preview and approval before retrying"
+	}
+	return fmt.Sprintf("reverse plan %q approval consumption transition is uncertain; create a new reverse plan and obtain a fresh preview and approval before retrying", e.PlanID)
+}
+
+func (e *ApprovalConsumptionUncertainError) Unwrap() error {
+	if e == nil {
+		return nil
+	}
+	return e.err
+}
+
 type CredentialMeta struct {
 	ID              string            `json:"id"`
 	Name            string            `json:"name"`
@@ -52,20 +77,21 @@ type EndpointConfig struct {
 }
 
 type StreamConfig struct {
-	SyncMode         string   `json:"sync_mode"`
-	CursorField      string   `json:"cursor_field,omitempty"`
-	PrimaryKey       []string `json:"primary_key,omitempty"`
-	DestinationTable string   `json:"destination_table,omitempty"`
+	SyncMode            string   `json:"sync_mode"`
+	LegacyCompatibility bool     `json:"legacy_compatibility,omitempty"`
+	CursorField         string   `json:"cursor_field,omitempty"`
+	PrimaryKey          []string `json:"primary_key,omitempty"`
+	DestinationTable    string   `json:"destination_table,omitempty"`
 }
 
 type StreamState struct {
-	Connection          string    `json:"connection"`
-	Stream              string    `json:"stream"`
-	Cursor              string    `json:"cursor,omitempty"`
-	GenerationID        int64     `json:"generation_id"`
-	LastSuccessfulRunID string    `json:"last_successful_run_id,omitempty"`
-	RecordsLoaded       int       `json:"records_loaded,omitempty"`
-	UpdatedAt           time.Time `json:"updated_at"`
+	Connection          string                           `json:"connection"`
+	Stream              string                           `json:"stream"`
+	Checkpoint          *synccontract.CheckpointEnvelope `json:"checkpoint,omitempty"`
+	GenerationID        int64                            `json:"generation_id"`
+	LastSuccessfulRunID string                           `json:"last_successful_run_id,omitempty"`
+	RecordsLoaded       int                              `json:"records_loaded,omitempty"`
+	UpdatedAt           time.Time                        `json:"updated_at"`
 }
 
 type CreateConnectionRequest struct {
@@ -181,6 +207,7 @@ type ReversePlan struct {
 	ApprovalGrant              *connectors.WriteApprovalGrant `json:"approval_grant,omitempty"`
 	ApprovalToken              string                         `json:"approval_token,omitempty"`
 	ApprovalConsumedAt         time.Time                      `json:"approval_consumed_at,omitempty"`
+	ApprovalUncertainAt        time.Time                      `json:"approval_consumption_uncertain_at,omitempty"`
 	CreatedAt                  time.Time                      `json:"created_at"`
 	ExpiresAt                  time.Time                      `json:"expires_at"`
 }
