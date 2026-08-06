@@ -758,7 +758,7 @@ func TestCallerSuppliedIdentifierSetTargetPolicyRejectsDotAndDefaultPortAliases(
 			Kind: "rest_read",
 			REST: &RESTOperationSpec{
 				Method:   http.MethodGet,
-				Path:     "/coins",
+				Path:     "/v1/coins",
 				MaxBytes: 1024,
 				CallerSuppliedIdentifierSets: []CallerSuppliedIdentifierSetSpec{{
 					Name: "coins", ElementShape: "opaque_string", Wire: "query_comma_separated", MinItems: 1, MaxItems: 2,
@@ -767,17 +767,26 @@ func TestCallerSuppliedIdentifierSetTargetPolicyRejectsDotAndDefaultPortAliases(
 		}},
 	}
 	for _, tt := range []struct {
-		name string
-		path string
-		want string
+		name    string
+		baseURL string
+		path    string
+		want    string
 	}{
-		{name: "dot segment", path: "/safe/./coins", want: "path traversal"},
-		{name: "default HTTPS port", path: "https://api.example.test:443/coins", want: "reserved for caller-supplied identifier-set operation"},
-		{name: "zero-padded default HTTPS port", path: "https://api.example.test:0443/coins", want: "reserved for caller-supplied identifier-set operation"},
-		{name: "terminal DNS dot", path: "https://api.example.test./coins", want: "reserved for caller-supplied identifier-set operation"},
+		{name: "dot segment", path: "/safe/./v1/coins", want: "path traversal"},
+		{name: "default HTTPS port", path: "https://api.example.test:443/v1/coins", want: "reserved for caller-supplied identifier-set operation"},
+		{name: "zero-padded default HTTPS port", path: "https://api.example.test:0443/v1/coins", want: "reserved for caller-supplied identifier-set operation"},
+		{name: "terminal DNS dot", path: "https://api.example.test./v1/coins", want: "reserved for caller-supplied identifier-set operation"},
+		{name: "IPv6 literal", baseURL: "https://[::1]:8443", path: "https://[0:0:0:0:0:0:0:1]:8443/v1/coins", want: "reserved for caller-supplied identifier-set operation"},
+		{name: "encoded slash", path: "https://api.example.test/v1%2Fcoins", want: "reserved for caller-supplied identifier-set operation"},
+		{name: "encoded backslash", path: "https://api.example.test/v1%5Ccoins", want: "reserved for caller-supplied identifier-set operation"},
+		{name: "nested encoded slash", path: "https://api.example.test/v1%252Fcoins", want: "reserved for caller-supplied identifier-set operation"},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
-			err := rejectCallerSuppliedIdentifierSetTargetBypass(b, connectors.RuntimeConfig{}, "https://api.example.test", http.MethodGet, tt.path, nil, "")
+			baseURL := tt.baseURL
+			if baseURL == "" {
+				baseURL = "https://api.example.test"
+			}
+			err := rejectCallerSuppliedIdentifierSetTargetBypass(b, connectors.RuntimeConfig{}, baseURL, http.MethodGet, tt.path, nil, "")
 			if err == nil || !strings.Contains(err.Error(), tt.want) {
 				t.Fatalf("target policy error = %v, want %q", err, tt.want)
 			}
@@ -785,7 +794,7 @@ func TestCallerSuppliedIdentifierSetTargetPolicyRejectsDotAndDefaultPortAliases(
 	}
 }
 
-func TestCallerSuppliedIdentifierSetRedirectRejectsTerminalDNSDotAlias(t *testing.T) {
+func TestCallerSuppliedIdentifierSetRedirectRejectsTargetAliases(t *testing.T) {
 	b := Bundle{
 		Name: "acme",
 		Operations: []OperationSpec{{
@@ -793,7 +802,7 @@ func TestCallerSuppliedIdentifierSetRedirectRejectsTerminalDNSDotAlias(t *testin
 			Kind: "rest_read",
 			REST: &RESTOperationSpec{
 				Method:   http.MethodGet,
-				Path:     "/coins",
+				Path:     "/v1/coins",
 				MaxBytes: 1024,
 				CallerSuppliedIdentifierSets: []CallerSuppliedIdentifierSetSpec{{
 					Name: "coins", ElementShape: "opaque_string", Wire: "query_comma_separated", MinItems: 1, MaxItems: 2,
@@ -801,13 +810,26 @@ func TestCallerSuppliedIdentifierSetRedirectRejectsTerminalDNSDotAlias(t *testin
 			},
 		}},
 	}
-	next, err := http.NewRequest(http.MethodGet, "https://api.example.test./coins", nil)
-	if err != nil {
-		t.Fatalf("NewRequest: %v", err)
-	}
-	err = rejectCallerSuppliedIdentifierSetRedirect(b, connectors.RuntimeConfig{}, "https://api.example.test", next, nil)
-	if err == nil || !strings.Contains(err.Error(), "reserved for caller-supplied identifier-set operation") {
-		t.Fatalf("redirect policy error = %v, want protected target rejection", err)
+	for _, tt := range []struct {
+		name    string
+		baseURL string
+		target  string
+	}{
+		{name: "terminal DNS dot", baseURL: "https://api.example.test", target: "https://api.example.test./v1/coins"},
+		{name: "IPv6 literal", baseURL: "https://[::1]:8443", target: "https://[0:0:0:0:0:0:0:1]:8443/v1/coins"},
+		{name: "encoded slash", baseURL: "https://api.example.test", target: "https://api.example.test/v1%2Fcoins"},
+		{name: "encoded backslash", baseURL: "https://api.example.test", target: "https://api.example.test/v1%5Ccoins"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			next, err := http.NewRequest(http.MethodGet, tt.target, nil)
+			if err != nil {
+				t.Fatalf("NewRequest: %v", err)
+			}
+			err = rejectCallerSuppliedIdentifierSetRedirect(b, connectors.RuntimeConfig{}, tt.baseURL, next, nil)
+			if err == nil || !strings.Contains(err.Error(), "reserved for caller-supplied identifier-set operation") {
+				t.Fatalf("redirect policy error = %v, want protected target rejection", err)
+			}
+		})
 	}
 }
 

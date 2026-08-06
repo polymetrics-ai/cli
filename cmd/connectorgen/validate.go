@@ -1161,8 +1161,8 @@ func callerSuppliedIdentifierSetReservedTarget(mapsTo string, reservedTargets ma
 
 func hasIndependentCLISurfacePathBinding(cmd engine.CLICommand, name string) bool {
 	target := "path." + name
-	for _, flag := range cmd.Flags {
-		if flag.Name != name && flag.MapsTo == target {
+	for index, flag := range cmd.Flags {
+		if flag.Name != name && flag.MapsTo == target && viableCLISurfaceForwardedFlag(cmd, index) {
 			return true
 		}
 	}
@@ -1395,8 +1395,13 @@ func commandBodyFlagCoveringRequiredPath(schema *cliRecordSchemaNode, mappedTarg
 
 func checkCLISurfaceValidationDeclarations(b engine.Bundle, i int, cmd engine.CLICommand) []Finding {
 	mappedTargets := map[string]string{}
+	flagNames := map[string]struct{}{}
 	var findings []Finding
 	for _, flag := range cmd.Flags {
+		if _, exists := flagNames[flag.Name]; exists {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s is declared more than once", i, cmd.Path, flag.Name)})
+		}
+		flagNames[flag.Name] = struct{}{}
 		if flag.MapsTo != strings.TrimSpace(flag.MapsTo) {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s maps_to must not contain surrounding whitespace", i, cmd.Path, flag.Name)})
 		}

@@ -766,6 +766,14 @@ func TestValidate_CallerSuppliedIdentifierSetRequiresIndependentPathBinding(t *t
 			},
 			wantPass: true,
 		},
+		{
+			name: "invalid independent path binding",
+			flags: []engine.CLIFlag{
+				{Name: "ids", Type: "string_array", Required: true, MapsTo: "identifier_set.ids"},
+				{Name: "bad/name", Type: "string", MapsTo: "path.ids"},
+			},
+			want: "requires an independent flag mapped to path.ids",
+		},
 	}
 
 	for _, tt := range tests {
@@ -851,6 +859,44 @@ func TestValidate_CallerSuppliedIdentifierSetRejectsMapsToWhitespace(t *testing.
 		}
 	}
 	t.Fatalf("findings = %+v, want maps_to whitespace rejection", findings)
+}
+
+func TestValidate_CallerSuppliedIdentifierSetRejectsDuplicateFlagName(t *testing.T) {
+	bundle := engine.Bundle{
+		Name: "acme",
+		Operations: []engine.OperationSpec{{
+			ID:   "acme.coins.lookup",
+			Kind: "rest_read",
+			REST: &engine.RESTOperationSpec{
+				Method:   "GET",
+				Path:     "/coins",
+				MaxBytes: 1024,
+				CallerSuppliedIdentifierSets: []engine.CallerSuppliedIdentifierSetSpec{{
+					Name: "coins", ElementShape: "opaque_string", Wire: "query_comma_separated", MinItems: 0, MaxItems: 2,
+				}},
+			},
+		}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path:         "coins lookup",
+			Intent:       "direct_read",
+			Availability: "implemented",
+			Operation:    "acme.coins.lookup",
+			OutputPolicy: "json_redacted",
+			APISurface:   []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/coins"}},
+			Flags: []engine.CLIFlag{
+				{Name: "coins", Type: "string_array", Required: true, MapsTo: "identifier_set.coins"},
+				{Name: "coins", Type: "string", MapsTo: "query.other"},
+			},
+		}}},
+	}
+
+	findings := checkCLISurface(bundle)
+	for _, finding := range findings {
+		if strings.Contains(finding.Message, "flag --coins is declared more than once") {
+			return
+		}
+	}
+	t.Fatalf("findings = %+v, want duplicate flag name rejection", findings)
 }
 
 func TestValidate_CallerSuppliedIdentifierSetOperationRequiresImplementedDirectReadCommand(t *testing.T) {

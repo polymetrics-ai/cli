@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"net/url"
 	stdpath "path"
@@ -845,7 +846,7 @@ func normalizedRequesterTargetPath(baseURL, requestPath string) (string, error) 
 	if containsDotPathSegment(path) {
 		return "", errors.New("request target path contains path traversal")
 	}
-	target := canonicalizeRequestTargetPercentEscapes(path)
+	target := canonicalizeRequesterTargetPath(path)
 	if parsed.Scheme == "" && parsed.Host == "" {
 		return target, nil
 	}
@@ -854,6 +855,9 @@ func normalizedRequesterTargetPath(baseURL, requestPath string) (string, error) 
 
 func canonicalRequesterTargetHost(parsed *url.URL) string {
 	host := strings.TrimSuffix(strings.ToLower(parsed.Hostname()), ".")
+	if ip := net.ParseIP(host); ip != nil {
+		host = ip.String()
+	}
 	if strings.Contains(host, ":") {
 		host = "[" + host + "]"
 	}
@@ -863,6 +867,17 @@ func canonicalRequesterTargetHost(parsed *url.URL) string {
 		return host
 	}
 	return host + ":" + port
+}
+
+func canonicalizeRequesterTargetPath(path string) string {
+	for decodedPasses := 0; decodedPasses < 8; decodedPasses++ {
+		decoded, err := url.PathUnescape(path)
+		if err != nil || decoded == path {
+			break
+		}
+		path = decoded
+	}
+	return canonicalizeRequestTargetPercentEscapes(strings.ReplaceAll(path, "\\", "/"))
 }
 
 func callerSuppliedIdentifierSetTargetMatches(pattern, target string) bool {
