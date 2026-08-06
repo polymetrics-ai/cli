@@ -70,6 +70,30 @@ Tracker: task/branch name; no parent issue number was supplied.
 - No output redaction or `redact_fields` declaration.
 - No artifact parser that emits a competing v1/v2 provenance representation.
 
+## Slice D — v2 artifact materialization and first five (RED → GREEN)
+
+The #3869 provenance contract merged after the original control-plane slice.
+This slice is intentionally limited to `cmd/connectorgen` and the five
+manifest-selected bundle directories.
+
+1. RED: add a local-artifact test showing that a selected bundle cannot gain a
+   v2 inventory, command surface, or empty operation-executor catalog without
+   every cited OpenAPI endpoint being classified and every existing executable
+   stream/write remaining covered.
+2. GREEN: add `connectorgen batch materialize`, which fetches (or reads a
+   supplied public-artifact cache) only manifest URLs, records the new
+   retrieval date and SHA-256 through the v2 artifact table, generates
+   provenance for every artifact endpoint, writes an explicit empty
+   `operations.json` when no non-redacting direct executor is promotable, and
+   derives `cli_surface.json` commands only from existing executable
+   streams/writes.
+3. Author the five selected directories from their cited artifacts. Any
+   artifact/bundle mismatch becomes a named materialization or gate drop; it
+   is never filled with an invented endpoint or implicit capability.
+4. Regenerate connector manuals/catalog data and validate each candidate with
+   `connectorgen validate`, `surface-sync --check`, and real
+   `commandrunner.Preflight` before the final batch report.
+
 ## Verification plan
 
 - Red and green focused tests: `go test ./cmd/connectorgen -run '^TestBatch'`.

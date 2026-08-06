@@ -2,7 +2,7 @@
   "issue": null,
   "parent": null,
   "subissues": [],
-  "state": "review_complete_waiting_foundations",
+  "state": "authoring_first_batch_after_provenance_merge",
   "execution": "inline_manual_no_spawn",
-  "next": "commit_current_main_reverification_and_wait_for_3869_merge"
+  "next": "implement_and_test_v2_artifact_materializer_then_author_five_candidates"
 }

@@ -176,6 +176,150 @@ func TestBatchGateDropsWriteRedactFields(t *testing.T) {
 	}
 }
 
+func TestBatchMaterializeGeneratesV2ProvenanceAndReachableSurface(t *testing.T) {
+	defsRoot := t.TempDir()
+	writeBatchBundle(t, defsRoot, cliSurfaceBundleFS(validCLISurfaceJSON()))
+	manifestPath := writeBatchManifestFixture(t, "cli-surface")
+	artifactDir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(artifactDir, "cli-surface.json"), []byte(`{
+		"openapi": "3.0.0",
+		"paths": {
+			"/widgets": {
+				"get": {"operationId": "listWidgets", "summary": "List widgets"},
+				"post": {"operationId": "createWidget", "summary": "Create widget"}
+			},
+			"/widgets/{id}": {
+				"delete": {"operationId": "deleteWidget", "summary": "Delete widget"}
+			}
+		}
+	}`), 0o644); err != nil {
+		t.Fatalf("write artifact: %v", err)
+	}
+	reportPath := filepath.Join(t.TempDir(), "materialize.json")
+	var stdout, stderr bytes.Buffer
+
+	code := run([]string{"batch", "materialize", "--manifest", manifestPath, "--defs-root", defsRoot, "--artifact-dir", artifactDir, "--retrieved-at", "2026-08-06", "--report", reportPath}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("batch materialize exit = %d, want 0; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+
+	surfaceRaw, err := os.ReadFile(filepath.Join(defsRoot, "cli-surface", "api_surface.json"))
+	if err != nil {
+		t.Fatalf("read generated api surface: %v", err)
+	}
+	var surface struct {
+		OperationLedgerVersion int `json:"operation_ledger_version"`
+		Artifacts              []struct {
+			URL         string `json:"url"`
+			RetrievedAt string `json:"retrieved_at"`
+			SHA256      string `json:"sha256"`
+		} `json:"artifacts"`
+		Endpoints []struct {
+			Method     string `json:"method"`
+			Path       string `json:"path"`
+			Provenance struct {
+				Artifact  string `json:"artifact"`
+				SourceURL string `json:"source_url"`
+			} `json:"provenance"`
+			CoveredBy any `json:"covered_by"`
+			Operation any `json:"operation"`
+		} `json:"endpoints"`
+	}
+	if err := json.Unmarshal(surfaceRaw, &surface); err != nil {
+		t.Fatalf("decode generated api surface: %v", err)
+	}
+	if surface.OperationLedgerVersion != 2 || len(surface.Artifacts) != 1 || surface.Artifacts[0].URL != "https://example.test/cli-surface.json" || surface.Artifacts[0].RetrievedAt != "2026-08-06" || len(surface.Artifacts[0].SHA256) != 64 {
+		t.Fatalf("generated provenance = %+v, want v2 artifact evidence", surface)
+	}
+	if len(surface.Endpoints) != 3 {
+		t.Fatalf("generated endpoints = %d, want 3 artifact operations", len(surface.Endpoints))
+	}
+	for _, endpoint := range surface.Endpoints {
+		if endpoint.Provenance.Artifact == "" || endpoint.Provenance.SourceURL != "https://example.test/cli-surface.json" {
+			t.Fatalf("endpoint provenance = %+v, want artifact-local citation", endpoint)
+		}
+	}
+	if surface.Endpoints[2].Method != "DELETE" || surface.Endpoints[2].Operation == nil || surface.Endpoints[2].CoveredBy != nil {
+		t.Fatalf("defaulted DELETE endpoint = %+v, want explicitly blocked operation", surface.Endpoints[2])
+	}
+
+	opsRaw, err := os.ReadFile(filepath.Join(defsRoot, "cli-surface", "operations.json"))
+	if err != nil {
+		t.Fatalf("read generated operations: %v", err)
+	}
+	if string(opsRaw) != "{\n  \"operations\": []\n}\n" {
+		t.Fatalf("operations.json = %s, want explicit no-direct-executor catalog", opsRaw)
+	}
+
+	cliRaw, err := os.ReadFile(filepath.Join(defsRoot, "cli-surface", "cli_surface.json"))
+	if err != nil {
+		t.Fatalf("read generated cli surface: %v", err)
+	}
+	var cli struct {
+		Commands []struct {
+			Path         string `json:"path"`
+			Intent       string `json:"intent"`
+			Availability string `json:"availability"`
+			Stream       string `json:"stream"`
+			Write        string `json:"write"`
+			APISurface   []struct {
+				Method string `json:"method"`
+				Path   string `json:"path"`
+			} `json:"api_surface"`
+		} `json:"commands"`
+	}
+	if err := json.Unmarshal(cliRaw, &cli); err != nil {
+		t.Fatalf("decode generated cli surface: %v", err)
+	}
+	if len(cli.Commands) != 2 || cli.Commands[0].Intent != "reverse_etl" || cli.Commands[0].Write != "create_widget" || cli.Commands[1].Intent != "etl" || cli.Commands[1].Stream != "widgets" {
+		t.Fatalf("generated CLI commands = %+v, want reachable stream/write commands", cli.Commands)
+	}
+	if len(cli.Commands[0].APISurface) != 1 || len(cli.Commands[1].APISurface) != 1 {
+		t.Fatalf("generated CLI command endpoint bindings = %+v, want one per command", cli.Commands)
+	}
+
+	if reportRaw, err := os.ReadFile(reportPath); err != nil || !strings.Contains(string(reportRaw), `"cli-surface"`) || !strings.Contains(string(reportRaw), `"included"`) {
+		t.Fatalf("materialize report = %q, want included candidate report (err=%v)", reportRaw, err)
+	}
+}
+
+func TestBatchMaterializeDropsMissingExecutableCoverageWithoutMutatingBundle(t *testing.T) {
+	defsRoot := t.TempDir()
+	writeBatchBundle(t, defsRoot, cliSurfaceBundleFS(validCLISurfaceJSON()))
+	manifestPath := writeBatchManifestFixture(t, "cli-surface")
+	artifactDir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(artifactDir, "cli-surface.json"), []byte(`{
+		"openapi": "3.0.0",
+		"paths": {"/different": {"get": {"summary": "Different endpoint"}}}
+	}`), 0o644); err != nil {
+		t.Fatalf("write artifact: %v", err)
+	}
+	reportPath := filepath.Join(t.TempDir(), "materialize.json")
+	var stdout, stderr bytes.Buffer
+
+	code := run([]string{"batch", "materialize", "--manifest", manifestPath, "--defs-root", defsRoot, "--artifact-dir", artifactDir, "--retrieved-at", "2026-08-06", "--report", reportPath}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("batch materialize exit = 0, want missing coverage drop; stdout=%s stderr=%s", stdout.String(), stderr.String())
+	}
+	reportRaw, err := os.ReadFile(reportPath)
+	if err != nil {
+		t.Fatalf("read materialize report: %v", err)
+	}
+	if !strings.Contains(string(reportRaw), `"coverage"`) || !strings.Contains(string(reportRaw), `"cli-surface"`) {
+		t.Fatalf("materialize report = %s, want named coverage drop", reportRaw)
+	}
+	surfaceRaw, err := os.ReadFile(filepath.Join(defsRoot, "cli-surface", "api_surface.json"))
+	if err != nil {
+		t.Fatalf("read original api surface: %v", err)
+	}
+	if strings.Contains(string(surfaceRaw), `"operation_ledger_version": 2`) {
+		t.Fatalf("materializer mutated dropped bundle api surface: %s", surfaceRaw)
+	}
+	if _, err := os.Stat(filepath.Join(defsRoot, "cli-surface", "operations.json")); !os.IsNotExist(err) {
+		t.Fatalf("materializer wrote operations.json for dropped bundle: %v", err)
+	}
+}
+
 func writeBatchLedger(t *testing.T, records []map[string]any) string {
 	t.Helper()
 	path := filepath.Join(t.TempDir(), "ledger.json")
