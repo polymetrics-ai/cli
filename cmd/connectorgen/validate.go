@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/fs"
 	"mime"
+	"net/url"
 	"regexp"
 	"sort"
 	"strings"
@@ -844,7 +845,7 @@ func checkCLISurfaceCallerSuppliedIdentifierSetOperationBindings(b engine.Bundle
 				Message:   fmt.Sprintf("operation %q declares caller_supplied_identifier_sets but has no implemented direct_read command", op.ID),
 			})
 		}
-		endpoint := surfaceEndpointKey(op.REST.Method, op.REST.Path)
+		endpoint := requestTargetEndpointKey(op.REST.Method, op.REST.Path)
 		for i, cmd := range commands {
 			if cmd.Availability != "implemented" || cmd.Intent != "direct_read" || cmd.Operation == op.ID {
 				continue
@@ -859,13 +860,27 @@ func checkCLISurfaceCallerSuppliedIdentifierSetOperationBindings(b engine.Bundle
 				Message:   fmt.Sprintf("implemented direct read command %d (%q) references caller-supplied identifier-set operation %q endpoint without binding that operation", i, cmd.Path, op.ID),
 			})
 		}
+		if b.Surface == nil {
+			continue
+		}
+		for i, candidate := range b.Surface.Endpoints {
+			if requestTargetEndpointKey(candidate.Method, candidate.Path) != endpoint || candidate.CoveredBy == nil || candidate.CoveredBy.Stream == "" {
+				continue
+			}
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "api_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("api_surface endpoint %d (%s %s) covers caller-supplied identifier-set operation %q with stream %q", i, candidate.Method, candidate.Path, op.ID, candidate.CoveredBy.Stream),
+			})
+		}
 	}
 	return findings
 }
 
 func commandReferencesEndpoint(cmd engine.CLICommand, endpoint string) bool {
 	for _, candidate := range cmd.APISurface {
-		if surfaceEndpointKey(candidate.Method, candidate.Path) == endpoint {
+		if requestTargetEndpointKey(candidate.Method, candidate.Path) == endpoint {
 			return true
 		}
 	}
@@ -2009,6 +2024,18 @@ func directReadCoverageMatches(covered *engine.SurfaceCoverage, path string) boo
 
 func surfaceEndpointKey(method, path string) string {
 	return strings.ToUpper(strings.TrimSpace(method)) + " " + strings.TrimSpace(path)
+}
+
+func requestTargetEndpointKey(method, path string) string {
+	path = strings.TrimSpace(path)
+	parsed, err := url.Parse(path)
+	if err == nil {
+		parsed.Fragment = ""
+		path = parsed.String()
+	} else if fragment := strings.IndexByte(path, '#'); fragment >= 0 {
+		path = path[:fragment]
+	}
+	return surfaceEndpointKey(method, path)
 }
 
 func isAbsoluteHTTPURL(raw string) bool {

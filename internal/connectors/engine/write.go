@@ -14,6 +14,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 	"unicode/utf16"
@@ -223,6 +224,9 @@ func redactSensitiveLiterals(text string, values []string) string {
 	for _, literal := range sensitiveRedactionLiterals(values) {
 		text = strings.ReplaceAll(text, literal, "redacted")
 	}
+	for _, matcher := range sensitiveRedactionMatchers(values) {
+		text = matcher.ReplaceAllString(text, "redacted")
+	}
 	return text
 }
 
@@ -254,20 +258,8 @@ func sensitiveRedactionLiterals(values []string) []string {
 func sensitiveRedactionLiteralForms(value string) []string {
 	urlForms := []string{urlencodeSegment(value), url.QueryEscape(value), url.PathEscape(value)}
 	forms := append([]string{value}, urlForms...)
-	for _, form := range urlForms {
-		if lower := lowercasePercentEscapes(form); lower != form {
-			forms = append(forms, lower)
-		}
-	}
 	if encoded, err := json.Marshal(value); err == nil {
-		encodedValue := string(encoded)
-		for _, form := range []string{
-			encodedValue,
-			jsonUnicodeEscapedString(encodedValue, false),
-			jsonUnicodeEscapedString(encodedValue, true),
-		} {
-			forms = appendJSONRedactionForms(forms, form)
-		}
+		forms = appendJSONRedactionForms(forms, string(encoded))
 	}
 	seen := map[string]bool{}
 	out := make([]string, 0, len(forms))
@@ -297,48 +289,138 @@ func appendJSONRedactionForms(forms []string, encoded string) []string {
 	return forms
 }
 
-func lowercasePercentEscapes(value string) string {
-	buf := []byte(value)
-	changed := false
-	for i := 0; i+2 < len(buf); i++ {
-		if buf[i] != '%' {
-			continue
-		}
-		for j := i + 1; j <= i+2; j++ {
-			if buf[j] >= 'A' && buf[j] <= 'F' {
-				buf[j] += 'a' - 'A'
-				changed = true
+func sensitiveRedactionMatchers(values []string) []*regexp.Regexp {
+	seen := map[string]bool{}
+	matchers := make([]*regexp.Regexp, 0, len(values)*4)
+	for _, value := range sensitiveRedactionValues(values) {
+		for _, pattern := range sensitiveRedactionPatterns(value) {
+			if seen[pattern] {
+				continue
 			}
+			seen[pattern] = true
+			matcher, err := regexp.Compile(pattern)
+			if err != nil {
+				continue
+			}
+			matchers = append(matchers, matcher)
 		}
-		i += 2
 	}
-	if !changed {
-		return value
-	}
-	return string(buf)
+	return matchers
 }
 
-func jsonUnicodeEscapedString(value string, uppercase bool) string {
+func sensitiveRedactionValues(values []string) []string {
+	seen := map[string]bool{}
+	unique := make([]string, 0, len(values))
+	for _, value := range values {
+		if value == "" || seen[value] {
+			continue
+		}
+		seen[value] = true
+		unique = append(unique, value)
+	}
+	sortSensitiveRedactionLiterals(unique)
+	return unique
+}
+
+func sensitiveRedactionPatterns(value string) []string {
+	patterns := []string{jsonEscapedValuePattern(value)}
+	for _, form := range []string{urlencodeSegment(value), url.QueryEscape(value), url.PathEscape(value)} {
+		if pattern, ok := percentEscapeCasePattern(form); ok {
+			patterns = append(patterns, pattern)
+		}
+	}
+	return patterns
+}
+
+func percentEscapeCasePattern(value string) (string, bool) {
 	var b strings.Builder
 	b.Grow(len(value))
-	format := `\u%04x`
-	if uppercase {
-		format = `\u%04X`
+	start := 0
+	found := false
+	for i := 0; i+2 < len(value); i++ {
+		if value[i] != '%' || !isHexadecimal(value[i+1]) || !isHexadecimal(value[i+2]) {
+			continue
+		}
+		b.WriteString(regexp.QuoteMeta(value[start:i]))
+		b.WriteByte('%')
+		b.WriteString(hexadecimalCasePattern(value[i+1]))
+		b.WriteString(hexadecimalCasePattern(value[i+2]))
+		start = i + 3
+		i += 2
+		found = true
 	}
+	if !found {
+		return "", false
+	}
+	b.WriteString(regexp.QuoteMeta(value[start:]))
+	return b.String(), true
+}
+
+func jsonEscapedValuePattern(value string) string {
+	var b strings.Builder
 	for _, r := range value {
-		if r <= 0x7f {
-			b.WriteRune(r)
-			continue
-		}
-		if r <= 0xffff {
-			_, _ = fmt.Fprintf(&b, format, r)
-			continue
-		}
-		high, low := utf16.EncodeRune(r)
-		_, _ = fmt.Fprintf(&b, format, high)
-		_, _ = fmt.Fprintf(&b, format, low)
+		b.WriteString(jsonEscapedRunePattern(r))
 	}
 	return b.String()
+}
+
+func jsonEscapedRunePattern(r rune) string {
+	forms := []string{regexp.QuoteMeta(string(r)), jsonUnicodeEscapePattern(r)}
+	if encoded, err := json.Marshal(string(r)); err == nil && len(encoded) >= 2 {
+		forms = append(forms, regexp.QuoteMeta(string(encoded[1:len(encoded)-1])))
+	}
+	if r == '/' {
+		forms = append(forms, regexp.QuoteMeta(`\/`))
+	}
+	return regexpAlternatives(forms)
+}
+
+func jsonUnicodeEscapePattern(r rune) string {
+	if r <= 0xffff {
+		return jsonUnicodeCodeUnitPattern(r)
+	}
+	high, low := utf16.EncodeRune(r)
+	return jsonUnicodeCodeUnitPattern(high) + jsonUnicodeCodeUnitPattern(low)
+}
+
+func jsonUnicodeCodeUnitPattern(r rune) string {
+	hexadecimal := fmt.Sprintf("%04X", r)
+	var b strings.Builder
+	b.WriteString(regexp.QuoteMeta(`\u`))
+	for i := range hexadecimal {
+		b.WriteString(hexadecimalCasePattern(hexadecimal[i]))
+	}
+	return b.String()
+}
+
+func regexpAlternatives(forms []string) string {
+	seen := map[string]bool{}
+	unique := make([]string, 0, len(forms))
+	for _, form := range forms {
+		if seen[form] {
+			continue
+		}
+		seen[form] = true
+		unique = append(unique, form)
+	}
+	if len(unique) == 1 {
+		return unique[0]
+	}
+	return "(?:" + strings.Join(unique, "|") + ")"
+}
+
+func isHexadecimal(value byte) bool {
+	return value >= '0' && value <= '9' || value >= 'a' && value <= 'f' || value >= 'A' && value <= 'F'
+}
+
+func hexadecimalCasePattern(value byte) string {
+	if value >= 'a' && value <= 'f' {
+		value -= 'a' - 'A'
+	}
+	if value >= 'A' && value <= 'F' {
+		return "[" + string(value) + string(value+'a'-'A') + "]"
+	}
+	return string(value)
 }
 
 func joinURL(base, path string) string {

@@ -758,6 +758,84 @@ func TestValidate_CallerSuppliedIdentifierSetRejectsSiblingGenericDirectRead(t *
 	t.Fatalf("findings = %+v, want generic direct-read endpoint rejection", findings)
 }
 
+func TestValidate_CallerSuppliedIdentifierSetRejectsFragmentSiblingGenericDirectRead(t *testing.T) {
+	op := engine.OperationSpec{
+		ID:   "acme.coins.lookup",
+		Kind: "rest_read",
+		REST: &engine.RESTOperationSpec{
+			Method:   "GET",
+			Path:     "/coins",
+			MaxBytes: 1024,
+			CallerSuppliedIdentifierSets: []engine.CallerSuppliedIdentifierSetSpec{{
+				Name: "coins", ElementShape: "opaque_string", Wire: "query_comma_separated", MinItems: 1, MaxItems: 2,
+			}},
+		},
+	}
+	bundle := engine.Bundle{
+		Name:       "acme",
+		Operations: []engine.OperationSpec{op},
+		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{
+			{Method: "GET", Path: "/coins", CoveredBy: &engine.SurfaceCoverage{DirectRead: "coins lookup"}},
+			{Method: "GET", Path: "/coins#generic", CoveredBy: &engine.SurfaceCoverage{DirectRead: "coins generic"}},
+		}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{
+			{
+				Path: "coins lookup", Intent: "direct_read", Availability: "implemented", Operation: op.ID, OutputPolicy: "json_redacted",
+				APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/coins"}},
+				Flags:      []engine.CLIFlag{{Name: "coins", Type: "string_array", Required: true, MapsTo: "identifier_set.coins"}},
+			},
+			{
+				Path: "coins generic", Intent: "direct_read", Availability: "implemented", OutputPolicy: "json_redacted",
+				APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/coins#generic"}},
+			},
+		}},
+	}
+
+	findings := checkCLISurface(bundle)
+	for _, finding := range findings {
+		if strings.Contains(finding.Message, "references caller-supplied identifier-set operation") {
+			return
+		}
+	}
+	t.Fatalf("findings = %+v, want fragment-equivalent direct-read endpoint rejection", findings)
+}
+
+func TestValidate_CallerSuppliedIdentifierSetRejectsStreamEndpointCoverage(t *testing.T) {
+	op := engine.OperationSpec{
+		ID:   "acme.coins.lookup",
+		Kind: "rest_read",
+		REST: &engine.RESTOperationSpec{
+			Method:   "GET",
+			Path:     "/coins",
+			MaxBytes: 1024,
+			CallerSuppliedIdentifierSets: []engine.CallerSuppliedIdentifierSetSpec{{
+				Name: "coins", ElementShape: "opaque_string", Wire: "query_comma_separated", MinItems: 1, MaxItems: 2,
+			}},
+		},
+	}
+	bundle := engine.Bundle{
+		Name:       "acme",
+		Operations: []engine.OperationSpec{op},
+		Streams:    []engine.StreamSpec{{Name: "coins"}},
+		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+			Method: "GET", Path: "/coins", CoveredBy: &engine.SurfaceCoverage{Stream: "coins", DirectRead: "coins lookup"},
+		}}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path: "coins lookup", Intent: "direct_read", Availability: "implemented", Operation: op.ID, OutputPolicy: "json_redacted",
+			APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/coins"}},
+			Flags:      []engine.CLIFlag{{Name: "coins", Type: "string_array", Required: true, MapsTo: "identifier_set.coins"}},
+		}}},
+	}
+
+	findings := checkCLISurface(bundle)
+	for _, finding := range findings {
+		if strings.Contains(finding.Message, "covers caller-supplied identifier-set operation") {
+			return
+		}
+	}
+	t.Fatalf("findings = %+v, want stream endpoint coverage rejection", findings)
+}
+
 func TestValidate_CallerSuppliedIdentifierSetRejectsConnectorCommandControlNames(t *testing.T) {
 	for _, name := range []string{"_", "approve", "config", "confirm", "connection", "credential", "help", "json", "limit", "plan", "preview", "root"} {
 		t.Run(name, func(t *testing.T) {

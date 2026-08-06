@@ -293,8 +293,12 @@ func callerSuppliedIdentifierErrorForms(t *testing.T, identifier string) []strin
 	urlForms := []string{strings.ReplaceAll(url.QueryEscape(identifier), "+", "%20"), url.QueryEscape(identifier), url.PathEscape(identifier)}
 	forms := append([]string{identifier}, urlForms...)
 	for _, form := range urlForms {
-		if lower := lowercasePercentEscapesForProvider(form); lower != form {
+		lower := lowercasePercentEscapesForProvider(form)
+		if lower != form {
 			forms = append(forms, lower)
+		}
+		if mixed := mixedPercentEscapesForProvider(form); mixed != form && mixed != lower {
+			forms = append(forms, mixed)
 		}
 	}
 	jsonForms := []string{string(encodedJSON)}
@@ -303,6 +307,9 @@ func callerSuppliedIdentifierErrorForms(t *testing.T, identifier string) []strin
 			strings.ReplaceAll(string(encodedJSON), "é", `\u00e9`),
 			strings.ReplaceAll(string(encodedJSON), "é", `\u00E9`),
 		)
+	}
+	if mixed := mixedASCIIUnicodeEscapedJSONForProvider(string(encodedJSON)); mixed != string(encodedJSON) {
+		jsonForms = append(jsonForms, mixed)
 	}
 	for _, form := range jsonForms {
 		forms = appendProviderJSONIdentifierForms(forms, form)
@@ -339,6 +346,39 @@ func lowercasePercentEscapesForProvider(value string) string {
 		i += 2
 	}
 	return string(buf)
+}
+
+func mixedPercentEscapesForProvider(value string) string {
+	buf := []byte(value)
+	lower := true
+	for i := 0; i+2 < len(buf); i++ {
+		if buf[i] != '%' {
+			continue
+		}
+		for j := i + 1; j <= i+2; j++ {
+			if buf[j] >= 'A' && buf[j] <= 'F' || buf[j] >= 'a' && buf[j] <= 'f' {
+				if lower && buf[j] >= 'A' && buf[j] <= 'F' {
+					buf[j] += 'a' - 'A'
+				}
+				if !lower && buf[j] >= 'a' && buf[j] <= 'f' {
+					buf[j] -= 'a' - 'A'
+				}
+				lower = !lower
+			}
+		}
+		i += 2
+	}
+	return string(buf)
+}
+
+func mixedASCIIUnicodeEscapedJSONForProvider(value string) string {
+	return strings.NewReplacer(
+		"a", `\u0061`,
+		"c", `\u0063`,
+		"m", `\u006D`,
+		"/", `\u002f`,
+		"é", `\u00E9`,
+	).Replace(value)
 }
 
 func TestCallerSuppliedIdentifierSetsPreserveExplicitEmptyBodyArray(t *testing.T) {
