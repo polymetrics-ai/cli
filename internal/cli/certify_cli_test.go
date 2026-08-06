@@ -2,6 +2,7 @@ package cli
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -219,11 +220,9 @@ func TestCertifyCLIMissingConnectorArgIsUsageError(t *testing.T) {
 }
 
 func TestCertifyCLIHelpShowsProvenanceContract(t *testing.T) {
-	root := t.TempDir()
-
-	stdout, stderr, code := certifyRun(t, root, "connectors", "certify", "--help")
-	if code != 0 {
-		t.Fatalf("exit code = %d, want 0; stdout=%s stderr=%s", code, stdout, stderr)
+	var stdout bytes.Buffer
+	if err := runConnectors(context.Background(), t.TempDir(), []string{"certify", "--help"}, &stdout, false); err != nil {
+		t.Fatalf("runConnectors(certify --help): %v", err)
 	}
 	for _, want := range []string{
 		"pm connectors certify <connector> [--full] [--json]",
@@ -231,8 +230,8 @@ func TestCertifyCLIHelpShowsProvenanceContract(t *testing.T) {
 		"provenance evidence",
 		"legacy_unverified",
 	} {
-		if !strings.Contains(stdout, want) {
-			t.Errorf("stdout missing %q: %s", want, stdout)
+		if !strings.Contains(stdout.String(), want) {
+			t.Errorf("stdout missing %q: %s", want, stdout.String())
 		}
 	}
 }

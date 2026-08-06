@@ -11,7 +11,8 @@ the generated workflow inline and records the evidence here.
 Required skills loaded: `golang-how-to`, `golang-testing`, `golang-benchmark`,
 `golang-performance`, `golang-continuous-integration`,
 `golang-error-handling`, `golang-safety`, `golang-cli`, `golang-security`,
-`github-issue-first-delivery`, and `no-mistakes`.
+`golang-lint`, `golang-troubleshooting`, `github-issue-first-delivery`, and
+`no-mistakes`.
 
 ## Verified premise
 
@@ -114,6 +115,18 @@ assertions in one executable invocation. Re-measure the exact invocation caps
 and the existing wall-clock guard after the move; do not raise the guard.
 The local remediation measurement held 25/25 harness calls and 92/92 CLI
 calls, with `100.104s` total wall time against the unchanged `180s` limit.
+
+### Post-rebase compatibility repair
+
+Current `main` adds the #3869 provenance-help assertion as
+`TestCertifyCLIHelpShowsProvenanceContract`. Its direct `certifyRun(...,
+"--help")` call is the single new real CLI invocation observed after rebasing:
+hosted Verify run `31095059925` reports 93 calls against the measured 92-call
+contract. Keep the same help-text assertion, but exercise the exact
+`runConnectors(..., []string{"certify", "--help"}, ...)` router branch
+directly. This removes duplicate `Run` wrapper work without removing help
+coverage, retains the one full route proof, and does not recalibrate the
+measured budget.
 
 ## Delivery record
 

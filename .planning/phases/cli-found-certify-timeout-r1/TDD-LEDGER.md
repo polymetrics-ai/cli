@@ -53,6 +53,14 @@ The focused package tests and the complete `internal/cli` package also passed;
 the latter completed in `458.490s`. The outer executor retains ownership of a
 fresh hosted Verify run.
 
+### Post-rebase compatibility — provenance help route
+
+| State | Evidence |
+| --- | --- |
+| RED | Hosted Verify run `31095059925` on rebased PR head `428324630` failed `make certify-timing`: `internal/cli` reported `certify CLI real invocations: 93 (budget 92)`. `git diff 3332dc69..428324630 -- internal/cli/certify_cli_test.go` identifies the sole added direct call: #3869's `TestCertifyCLIHelpShowsProvenanceContract` invokes `certifyRun(..., "--help")`. |
+| GREEN | The same provenance-help assertions now call the exact `runConnectors` `certify --help` branch directly. `make certify-timing` returned 25/25 harness calls and 92/92 CLI calls; total elapsed/wall time was 79.895s/88.553s. |
+| Guard | Do not change the 92-call cap or the 210-second hosted timing budget. The retained full route and one real sample/outbox write lifecycle proof remain unchanged. |
+
 ## Captured RED evidence
 
 ### #3798 — certify package invocation budget
