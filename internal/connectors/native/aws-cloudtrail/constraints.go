@@ -36,20 +36,22 @@ type awsActionCrossFields struct {
 }
 
 var (
-	cloudTrailActionFieldConstraints = buildActionFieldConstraints(cloudTrailActionFields)
-	cloudTrailActionCrossFields      = map[string]awsActionCrossFields{
+	cloudTrailActionFieldConstraints         = buildActionFieldConstraints(cloudTrailActionFields)
+	cloudTrailAdditionalRequiredActionFields = map[string]map[string]bool{"CancelQuery": {"EventDataStore": true}}
+	cloudTrailActionCrossFields              = map[string]awsActionCrossFields{
 		"DescribeQuery":         {anyOf: []string{"QueryId", "QueryAlias"}},
 		"GetEventConfiguration": {anyOf: []string{"EventDataStore", "TrailName"}},
 		"GetInsightSelectors":   {exactlyOneOf: [][]string{{"EventDataStore"}, {"TrailName"}}},
-		"StartImport":           {exactlyOneOf: [][]string{{"ImportId"}, {"Destinations", "ImportSource"}}},
 	}
-	integerRangePattern  = regexp.MustCompile(`(?i)Valid Range:\s*Minimum value of ([0-9]+)\.\s*Maximum value of ([0-9]+)\.`)
-	fixedItemsPattern    = regexp.MustCompile(`(?i)(?:Array Members|Map Entries):\s*Fixed number of ([0-9]+) items?\.`)
-	minimumItemsPattern  = regexp.MustCompile(`(?i)(?:Array Members|Map Entries):\s*Minimum number of ([0-9]+) items?\.`)
-	maximumItemsPattern  = regexp.MustCompile(`(?i)(?:Array Members|Map Entries):.*?Maximum number of ([0-9]+) items?\.`)
-	fixedLengthPattern   = regexp.MustCompile(`(?i)Fixed length of ([0-9]+)\.`)
-	minimumLengthPattern = regexp.MustCompile(`(?i)Minimum length of ([0-9]+)\.`)
-	maximumLengthPattern = regexp.MustCompile(`(?i)Maximum length of ([0-9]+)\.`)
+	integerRangePattern                      = regexp.MustCompile(`(?i)Valid Range:\s*Minimum value of ([0-9]+)\.\s*Maximum value of ([0-9]+)\.`)
+	fixedItemsPattern                        = regexp.MustCompile(`(?i)(?:Array Members|Map Entries):\s*Fixed number of ([0-9]+) items?\.`)
+	minimumItemsPattern                      = regexp.MustCompile(`(?i)(?:Array Members|Map Entries):\s*Minimum number of ([0-9]+) items?\.`)
+	maximumItemsPattern                      = regexp.MustCompile(`(?i)(?:Array Members|Map Entries):.*?Maximum number of ([0-9]+) items?\.`)
+	fixedLengthPattern                       = regexp.MustCompile(`(?i)Fixed length of ([0-9]+)\.`)
+	minimumLengthPattern                     = regexp.MustCompile(`(?i)Minimum length of ([0-9]+)\.`)
+	maximumLengthPattern                     = regexp.MustCompile(`(?i)Maximum length of ([0-9]+)\.`)
+	cloudTrailDestinationLocationConstraints = awsStringConstraints{minimumLength: 3, maximumLength: 1024, pattern: regexp.MustCompile(`^[a-zA-Z0-9._/\-:*]+$`)}
+	cloudTrailDestinationTypeConstraints     = awsStringConstraints{values: map[string]struct{}{"EVENT_DATA_STORE": {}, "AWS_SERVICE": {}}, valueList: "EVENT_DATA_STORE | AWS_SERVICE"}
 )
 
 func buildActionFieldConstraints(actions map[string][]awsActionField) map[string]map[string]awsFieldConstraints {
@@ -200,8 +202,14 @@ func validateActionField(action string, field awsActionField, value any) error {
 		return validateLookupAttributes(value)
 	case action == "StartImport" && field.Name == "ImportSource":
 		return validateImportSource(value)
+	case (action == "CreateChannel" || action == "UpdateChannel") && field.Name == "Destinations":
+		return validateDestinations(value)
 	}
 	return nil
+}
+
+func requiredActionField(action string, field awsActionField) bool {
+	return field.Required || cloudTrailAdditionalRequiredActionFields[action][field.Name]
 }
 
 func validateActionItemCount(items []any, constraints awsFieldConstraints) error {
@@ -343,6 +351,8 @@ func validateActionSpecificCrossFields(action string, body map[string]any) error
 	switch action {
 	case "PutInsightSelectors":
 		return validatePutInsightSelectors(body)
+	case "StartImport":
+		return validateStartImport(body)
 	case "CreateEventDataStore", "UpdateEventDataStore":
 		if err := validateEventDataStoreRetention(action, body); err != nil {
 			return err
@@ -356,6 +366,21 @@ func validateActionSpecificCrossFields(action string, body map[string]any) error
 		}
 	case "PutEventConfiguration":
 		return validatePutEventConfiguration(body)
+	}
+	return nil
+}
+
+func validateStartImport(body map[string]any) error {
+	if hasActionField(body, []string{"ImportId"}) {
+		for _, field := range []string{"Destinations", "ImportSource", "StartEventTime", "EndEventTime"} {
+			if hasActionField(body, []string{field}) {
+				return fmt.Errorf("aws-cloudtrail StartImport cannot combine ImportId with %s", field)
+			}
+		}
+		return nil
+	}
+	if !allActionFieldsPresent(body, []string{"Destinations", "ImportSource"}) {
+		return fmt.Errorf("aws-cloudtrail StartImport requires ImportId or Destinations and ImportSource")
 	}
 	return nil
 }
@@ -451,6 +476,37 @@ func actionTimestamp(value any) (int64, bool) {
 	default:
 		return 0, false
 	}
+}
+
+func validateDestinations(value any) error {
+	destinations, ok := actionArray(value)
+	if !ok {
+		return fmt.Errorf("want array")
+	}
+	for index, item := range destinations {
+		destination, ok := item.(map[string]any)
+		if !ok {
+			return fmt.Errorf("item %d must be an object", index)
+		}
+		if err := requireExactObjectFields(destination, "Destination", "Location", "Type"); err != nil {
+			return fmt.Errorf("item %d: %w", index, err)
+		}
+		location, ok := actionString(destination["Location"])
+		if !ok {
+			return fmt.Errorf("item %d: Destination.Location must be a string", index)
+		}
+		if err := validateActionString(location, cloudTrailDestinationLocationConstraints); err != nil {
+			return fmt.Errorf("item %d: Destination.Location: %w", index, err)
+		}
+		destinationType, ok := actionString(destination["Type"])
+		if !ok {
+			return fmt.Errorf("item %d: Destination.Type must be a string", index)
+		}
+		if err := validateActionString(destinationType, cloudTrailDestinationTypeConstraints); err != nil {
+			return fmt.Errorf("item %d: Destination.Type: %w", index, err)
+		}
+	}
+	return nil
 }
 
 func validateLookupAttributes(value any) error {

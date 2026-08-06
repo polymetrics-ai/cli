@@ -134,9 +134,15 @@ func TestCloudTrailBundleDefinitionPreservesActualRuntimeCapabilities(t *testing
 	if got, want := len(manifest.Manifest().WriteActions), 30; got != want {
 		t.Fatalf("aws-cloudtrail manifest write actions = %d, want %d", got, want)
 	}
+	if _, err := commandrunner.BuildWriteCommand(t.Context(), cloudTrail, commandrunner.Request{
+		Path:  []string{"query", "cancel"},
+		Flags: map[string][]string{"query-id": {"11111111-1111-1111-1111-111111111111"}},
+	}); err == nil || !strings.Contains(err.Error(), "missing required flag --event-data-store") {
+		t.Fatalf("BuildWriteCommand(query cancel without event data store) error = %v, want required flag error", err)
+	}
 	plan, err := commandrunner.BuildWriteCommand(t.Context(), cloudTrail, commandrunner.Request{
 		Path:    []string{"query", "cancel"},
-		Flags:   map[string][]string{"query-id": {"11111111-1111-1111-1111-111111111111"}},
+		Flags:   map[string][]string{"event-data-store": {"arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example"}, "query-id": {"11111111-1111-1111-1111-111111111111"}},
 		Preview: true,
 	})
 	if err != nil {
@@ -155,6 +161,16 @@ func TestCloudTrailBundleDefinitionPreservesActualRuntimeCapabilities(t *testing
 	})
 	if err == nil || !strings.Contains(err.Error(), "invalid import time range") {
 		t.Fatalf("BuildWriteCommand(import start) error = %v, want time-range validation", err)
+	}
+	_, err = commandrunner.BuildWriteCommand(t.Context(), cloudTrail, commandrunner.Request{
+		Path: []string{"import", "start"},
+		Flags: map[string][]string{
+			"import-id":    {"11111111-1111-1111-1111-111111111111"},
+			"destinations": {"arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/import-destination"},
+		},
+	})
+	if err == nil || !strings.Contains(err.Error(), "cannot combine ImportId with Destinations") {
+		t.Fatalf("BuildWriteCommand(import start mixed modes) error = %v, want mode validation", err)
 	}
 }
 

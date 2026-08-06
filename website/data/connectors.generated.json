@@ -25432,7 +25432,6 @@
             "public-keys list",
             "tags list",
             "trail list",
-            "query cancel",
             "query describe",
             "query generate",
             "query results",
@@ -25448,6 +25447,7 @@
           "title": "Typed write/admin actions",
           "commands": [
             "tags add",
+            "query cancel",
             "channel create",
             "event-data-store create",
             "trail create",
@@ -25838,7 +25838,9 @@
               "type": "string",
               "summary": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
               "values": [],
-              "maps_to": "record.EventDataStore"
+              "maps_to": "record.EventDataStore",
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "event-data-store-owner-account-id",
@@ -25858,7 +25860,7 @@
             }
           ],
           "examples": [
-            "pm aws-cloudtrail query cancel --credential ct-prod --query-id 11111111-1111-1111-1111-111111111111 --preview"
+            "pm aws-cloudtrail query cancel --credential ct-prod --event-data-store arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example-store --query-id 11111111-1111-1111-1111-111111111111 --preview"
           ],
           "output_policy": "",
           "risk": "cancels a running CloudTrail Lake query",
@@ -26433,12 +26435,23 @@
           "source_url": "",
           "flags": [
             {
-              "name": "destinations",
+              "name": "destination-location",
               "type": "string",
-              "summary": "Array of Destination objects Array Members: Minimum number of 1 item. Maximum number of 200 items.",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 1024. Pattern: ^[a-zA-Z0-9._/\\-:*]+$",
               "values": [],
-              "maps_to": "record.Destinations",
+              "maps_to": "record.Destinations.0.Location",
               "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "destination-type",
+              "type": "enum",
+              "summary": "Valid Values: EVENT_DATA_STORE | AWS_SERVICE.",
+              "values": [
+                "EVENT_DATA_STORE",
+                "AWS_SERVICE"
+              ],
+              "maps_to": "record.Destinations.0.Type",
               "required": true
             },
             {
@@ -26461,7 +26474,7 @@
             }
           ],
           "examples": [
-            "pm aws-cloudtrail channel create --credential ct-prod --destinations '[{\"Location\":\"arn:aws:lambda:us-east-1:123456789012:function:destination\"}]' --name example-channel --source aws.partner/example --preview"
+            "pm aws-cloudtrail channel create --credential ct-prod --destination-location arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example-store --destination-type EVENT_DATA_STORE --name example-channel --source aws.partner/example --preview"
           ],
           "output_policy": "",
           "risk": "creates a CloudTrail organization/service event channel",
@@ -27396,6 +27409,24 @@
               "maps_to": "record.Channel",
               "allow_empty": false,
               "required": true
+            },
+            {
+              "name": "destination-location",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 1024. Pattern: ^[a-zA-Z0-9._/\\-:*]+$",
+              "values": [],
+              "maps_to": "record.Destinations.0.Location",
+              "allow_empty": false
+            },
+            {
+              "name": "destination-type",
+              "type": "enum",
+              "summary": "Valid Values: EVENT_DATA_STORE | AWS_SERVICE.",
+              "values": [
+                "EVENT_DATA_STORE",
+                "AWS_SERVICE"
+              ],
+              "maps_to": "record.Destinations.0.Type"
             },
             {
               "name": "name",

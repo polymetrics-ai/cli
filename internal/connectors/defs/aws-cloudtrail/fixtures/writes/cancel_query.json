@@ -1,9 +1,14 @@
 {
   "record": {
+    "EventDataStore": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture-store",
     "QueryId": "11111111-1111-1111-1111-111111111111"
   },
   "expect": {
     "method": "POST",
-    "path": "/"
+    "path": "/",
+    "body": {
+      "EventDataStore": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture-store",
+      "QueryId": "11111111-1111-1111-1111-111111111111"
+    }
   }
 }

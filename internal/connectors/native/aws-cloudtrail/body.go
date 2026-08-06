@@ -40,7 +40,7 @@ func buildActionBody(action string, raw map[string]any, requireRequired bool) (m
 	}
 	if requireRequired {
 		for _, field := range fields {
-			if field.Required {
+			if requiredActionField(action, field) {
 				if value, ok := body[field.Name]; !ok || !requiredActionValuePresent(value) {
 					return nil, fmt.Errorf("aws-cloudtrail %s requires field %s", action, field.Name)
 				}

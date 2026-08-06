@@ -33,6 +33,12 @@ func TestBuildActionBodyEnforcesDocumentedConstraints(t *testing.T) {
 			wantErr: "QueryId or QueryAlias",
 		},
 		{
+			name:    "cancel query event data store",
+			action:  "CancelQuery",
+			raw:     map[string]any{"QueryId": "11111111-1111-1111-1111-111111111111"},
+			wantErr: "requires field EventDataStore",
+		},
+		{
 			name:   "get insight selectors target",
 			action: "GetInsightSelectors",
 			raw: map[string]any{
@@ -46,6 +52,15 @@ func TestBuildActionBodyEnforcesDocumentedConstraints(t *testing.T) {
 			action:  "StartImport",
 			raw:     map[string]any{},
 			wantErr: "ImportId or Destinations and ImportSource",
+		},
+		{
+			name:   "start import retry mode cannot mix new import fields",
+			action: "StartImport",
+			raw: map[string]any{
+				"ImportId":     "11111111-1111-1111-1111-111111111111",
+				"Destinations": []string{"arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/import-destination"},
+			},
+			wantErr: "cannot combine ImportId with Destinations",
 		},
 	}
 	for _, test := range tests {
@@ -95,6 +110,37 @@ func TestBuildActionBodyValidatesClosedNestedRequests(t *testing.T) {
 		"ImportSource": map[string]any{"S3": map[string]any{"S3BucketRegion": "us-east-1"}},
 	}, true); err == nil {
 		t.Fatal("StartImport accepted an incomplete ImportSource.S3 object")
+	}
+
+	channelBody, err := buildActionBody("CreateChannel", map[string]any{
+		"Destinations": []any{map[string]any{
+			"Location": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/channel-destination",
+			"Type":     "EVENT_DATA_STORE",
+		}},
+		"Name":   "example-channel",
+		"Source": "Custom",
+	}, true)
+	if err != nil {
+		t.Fatalf("build CreateChannel body: %v", err)
+	}
+	if got := channelBody["Destinations"].([]any)[0].(map[string]any)["Type"]; got != "EVENT_DATA_STORE" {
+		t.Fatalf("Destination.Type = %v, want EVENT_DATA_STORE", got)
+	}
+	if _, err := buildActionBody("CreateChannel", map[string]any{
+		"Destinations": []any{map[string]any{"Location": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/channel-destination"}},
+		"Name":         "example-channel",
+		"Source":       "Custom",
+	}, true); err == nil {
+		t.Fatal("CreateChannel accepted a Destination without Type")
+	}
+	if _, err := buildActionBody("UpdateChannel", map[string]any{
+		"Channel": "arn:aws:cloudtrail:us-east-1:123456789012:channel/example",
+		"Destinations": []any{map[string]any{
+			"Location": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/channel-destination",
+			"Type":     "AWS::SNS::Topic",
+		}},
+	}, true); err == nil {
+		t.Fatal("UpdateChannel accepted an invalid Destination.Type")
 	}
 }
 

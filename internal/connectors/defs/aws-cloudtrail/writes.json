@@ -38,6 +38,7 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
+          "EventDataStore",
           "QueryId"
         ],
         "properties": {
@@ -74,10 +75,30 @@
         ],
         "properties": {
           "Destinations": {
-            "type": [
-              "string",
-              "array"
-            ]
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 200,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "Location",
+                "Type"
+              ],
+              "properties": {
+                "Location": {
+                  "type": "string",
+                  "pattern": "^[a-zA-Z0-9._/\\-:*]+$"
+                },
+                "Type": {
+                  "type": "string",
+                  "enum": [
+                    "EVENT_DATA_STORE",
+                    "AWS_SERVICE"
+                  ]
+                }
+              }
+            }
           },
           "Name": {
             "type": "string"
@@ -783,10 +804,30 @@
             "type": "string"
           },
           "Destinations": {
-            "type": [
-              "string",
-              "array"
-            ]
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 200,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "Location",
+                "Type"
+              ],
+              "properties": {
+                "Location": {
+                  "type": "string",
+                  "pattern": "^[a-zA-Z0-9._/\\-:*]+$"
+                },
+                "Type": {
+                  "type": "string",
+                  "enum": [
+                    "EVENT_DATA_STORE",
+                    "AWS_SERVICE"
+                  ]
+                }
+              }
+            }
           },
           "Name": {
             "type": "string"

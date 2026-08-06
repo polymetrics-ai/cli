@@ -2,8 +2,8 @@
   "record": {
     "Destinations": [
       {
-        "Type": "AWS::SNS::Topic",
-        "Location": "arn:aws:sns:us-east-1:123456789012:fixture-topic"
+        "Type": "EVENT_DATA_STORE",
+        "Location": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture-store"
       }
     ],
     "Name": "fixture-trail",
@@ -15,8 +15,8 @@
     "body": {
       "Destinations": [
         {
-          "Type": "AWS::SNS::Topic",
-          "Location": "arn:aws:sns:us-east-1:123456789012:fixture-topic"
+          "Type": "EVENT_DATA_STORE",
+          "Location": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture-store"
         }
       ],
       "Name": "fixture-trail",

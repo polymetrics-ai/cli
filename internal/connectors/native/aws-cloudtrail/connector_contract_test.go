@@ -55,12 +55,20 @@ func TestCommandSurfaceExposesDocumentedOperations(t *testing.T) {
 		}
 	}
 	cancel := commands["query cancel"]
-	if cancel.Intent != "reverse_etl" || cancel.Write != "cancel_query" || strings.TrimSpace(cancel.Approval) == "" {
+	if cancel.Intent != "reverse_etl" || cancel.Write != "cancel_query" || strings.TrimSpace(cancel.Approval) == "" || !commandFlagRequired(cancel, "event-data-store") {
 		t.Fatalf("query cancel command = %+v, want approval-gated cancel_query write", cancel)
+	}
+	channelCreate := commands["channel create"]
+	if !commandFlagRequired(channelCreate, "destination-location") || !commandFlagRequired(channelCreate, "destination-type") {
+		t.Fatalf("channel create command = %+v, want required typed destination flags", channelCreate)
 	}
 	assertCommandFlagTargets(t, commands["events lookup"], map[string]string{
 		"lookup-attribute-key":   "body.LookupAttributes.0.AttributeKey",
 		"lookup-attribute-value": "body.LookupAttributes.0.AttributeValue",
+	})
+	assertCommandFlagTargets(t, channelCreate, map[string]string{
+		"destination-location": "record.Destinations.0.Location",
+		"destination-type":     "record.Destinations.0.Type",
 	})
 	assertCommandFlagTargets(t, commands["import start"], map[string]string{
 		"import-source-s3-bucket-access-role-arn": "record.ImportSource.S3.S3BucketAccessRoleArn",
@@ -80,6 +88,15 @@ func TestCommandSurfaceExposesDocumentedOperations(t *testing.T) {
 			}
 		}
 	}
+}
+
+func commandFlagRequired(command connectors.CommandSurfaceCommand, name string) bool {
+	for _, flag := range command.Flags {
+		if flag.Name == name {
+			return flag.Required
+		}
+	}
+	return false
 }
 
 func assertCommandFlagTargets(t *testing.T, command connectors.CommandSurfaceCommand, want map[string]string) {
