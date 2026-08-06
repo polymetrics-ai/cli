@@ -1,9 +1,7 @@
 package certify
 
 import (
-	"errors"
 	"fmt"
-	"io/fs"
 )
 
 // stageWriteSweepAllPairings runs only when Options.Full is true. It accounts
@@ -25,11 +23,6 @@ func stageWriteSweepAllPairings(rc *runContext, rep *Report) error {
 
 	inventory, err := writeActionInventoryFor(rc.opts.Connector)
 	if err != nil {
-		if errors.Is(err, fs.ErrNotExist) {
-			skipStage(rc, rep, "write_sweep_all_pairings",
-				fmt.Sprintf("skipped: connector %q has no declared write action inventory", rc.opts.Connector))
-			return nil
-		}
 		recordStage(rc, rep, "write_sweep_all_pairings", 2, func() (bool, CLIStageInfo, string) {
 			return false, CLIStageInfo{}, fmt.Sprintf("write action inventory: %v", err)
 		})

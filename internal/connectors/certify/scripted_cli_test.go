@@ -15,8 +15,8 @@ import (
 // scriptedCLI is a deterministic test-only implementation of the CLI seam.
 // It returns complete, synthetic envelopes while validating every command
 // family and its required arguments. It never calls cli.Run, a provider, or
-// credentials. The real full-sweep proof remains separately counted by
-// TestMain.
+// credentials. The real full-sweep and sample/outbox write-lifecycle proofs
+// remain separately counted by TestMain.
 type scriptedCLI struct {
 	t *testing.T
 
@@ -46,8 +46,9 @@ func newScriptedCLI(t *testing.T, protocols ...string) *scriptedCLI {
 }
 
 // scriptedSampleRunner replaces duplicated real CLI runs in the focused
-// stage-contract tests. The retained full-sweep test is intentionally not
-// routed through this helper: it remains the package's real CLI proof.
+// stage-contract tests. The retained full-sweep and sample/outbox write-
+// lifecycle tests are intentionally not routed through this helper: they
+// remain the package's real CLI proofs.
 func scriptedSampleRunner(t *testing.T, opts certify.Options) (*certify.Runner, *scriptedCLI) {
 	t.Helper()
 	driver := newScriptedCLI(t, scriptedProtocols(opts)...)
