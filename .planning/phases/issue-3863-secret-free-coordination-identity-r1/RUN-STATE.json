@@ -1,7 +1,7 @@
 {
   "issue": 3863,
   "parent": 3862,
-  "state": "planned",
+  "state": "red_tests_recorded",
   "execution": "inline_manual_no_spawn",
-  "next": "red_tests"
+  "next": "implementation"
 }
