@@ -148,11 +148,12 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 		})
 	case prefix(args, "etl", "run") && hasJSON(args) && hasFlag(args, "--connection") && hasFlag(args, "--stream"):
 		s.seen["etl_run"]++
+		// The public ETL carrier intentionally omits the durable checkpoint so
+		// test it as the certifier receives it, not as the app persists it.
 		return writeScriptedEnvelope(stdout, "ETLRun", map[string]any{"run": map[string]any{
 			"records_read":      2,
 			"records_succeeded": 1,
 			"records_failed":    0,
-			"checkpoint":        map[string]any{"cursor": "2026-08-06T00:00:00Z"},
 		}})
 	case prefix(args, "query", "run") && hasJSON(args) && hasFlag(args, "--table"):
 		table := flagValue(args, "--table")

@@ -1069,12 +1069,14 @@ func stageIncrementalAppend(rc *runContext, rep *Report) error {
 		}
 		cursor := checkpointString(res.Envelope, "cursor")
 		read1, _ := runInt(res.Envelope, "records_read")
+		// The public ETL carrier intentionally omits durable checkpoint data,
+		// but its bounded record count remains available for the resume check.
+		rc.incrementalRun1Records = read1
 		if cursor == "" {
 			rep.Capabilities.SyncModes["incremental_append"] = SyncModeResult{Result: "passed_no_cursor", DataSource: "live", Reason: "no cursor recorded on checkpoint"}
 			return true, cliInfoFrom(res), ""
 		}
 		rc.incrementalRun1Cursor = cursor
-		rc.incrementalRun1Records = read1
 		rep.Capabilities.SyncModes["incremental_append"] = SyncModeResult{Result: "pass", DataSource: "live", CursorAdvanced: true}
 		return true, cliInfoFrom(res), ""
 	})
