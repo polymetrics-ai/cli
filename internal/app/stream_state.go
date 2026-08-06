@@ -1,8 +1,12 @@
 package app
 
 import (
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
+	"sort"
+	"strconv"
+	"strings"
 	"time"
 
 	"polymetrics.ai/internal/connectors"
@@ -80,18 +84,32 @@ func streamSourceIdentity(source connectors.Connector, credential CredentialMeta
 	}
 }
 
-func streamSourceGeneration(runtime connectors.RuntimeConfig) synccontract.OpaqueToken {
-	generation := make(synccontract.OpaqueToken, 0, len(runtime.CredentialRevision)+len(runtime.ConfigurationDigest)+1)
-	generation = append(generation, runtime.CredentialRevision...)
-	generation = append(generation, 0)
-	generation = append(generation, runtime.ConfigurationDigest...)
-	return generation
+func streamSourceGeneration(source connectors.Connector, credential CredentialMeta, runtime connectors.RuntimeConfig, streamName string) synccontract.OpaqueToken {
+	keys := make([]string, 0, len(runtime.Config))
+	for key := range runtime.Config {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+
+	var canonical strings.Builder
+	for _, value := range []string{source.Name(), credential.ID, streamName} {
+		canonical.WriteString(strconv.Quote(value))
+		canonical.WriteByte('\n')
+	}
+	for _, key := range keys {
+		canonical.WriteString(strconv.Quote(key))
+		canonical.WriteByte('\n')
+		canonical.WriteString(strconv.Quote(runtime.Config[key]))
+		canonical.WriteByte('\n')
+	}
+	digest := sha256.Sum256([]byte(canonical.String()))
+	return append(synccontract.OpaqueToken(nil), digest[:]...)
 }
 
 func streamResumeExpectation(source connectors.Connector, credential CredentialMeta, runtime connectors.RuntimeConfig, streamName string) synccontract.ResumeExpectation {
 	return synccontract.ResumeExpectation{
 		Source:           streamSourceIdentity(source, credential, streamName),
-		SourceGeneration: streamSourceGeneration(runtime),
+		SourceGeneration: streamSourceGeneration(source, credential, runtime, streamName),
 	}
 }
 

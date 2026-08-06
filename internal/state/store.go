@@ -13,6 +13,56 @@ type Locker interface {
 	Lock() (func() error, error)
 }
 
+type CommitOutcome uint8
+
+const (
+	CommitOutcomeNotCommitted CommitOutcome = iota
+	CommitOutcomeCommitted
+	CommitOutcomeIndeterminate
+)
+
+func (o CommitOutcome) MayHaveCommitted() bool {
+	return o == CommitOutcomeCommitted || o == CommitOutcomeIndeterminate
+}
+
+func (o CommitOutcome) String() string {
+	switch o {
+	case CommitOutcomeCommitted:
+		return "committed"
+	case CommitOutcomeIndeterminate:
+		return "indeterminate"
+	default:
+		return "not_committed"
+	}
+}
+
+type CommitOutcomeError struct {
+	Outcome CommitOutcome
+	Err     error
+}
+
+func (e *CommitOutcomeError) Error() string {
+	if e == nil || e.Err == nil {
+		return "state commit outcome is unavailable"
+	}
+	return fmt.Sprintf("state commit %s: %v", e.Outcome, e.Err)
+}
+
+func (e *CommitOutcomeError) Unwrap() error {
+	if e == nil {
+		return nil
+	}
+	return e.Err
+}
+
+func CommitOutcomeForError(err error) CommitOutcome {
+	var outcome *CommitOutcomeError
+	if errors.As(err, &outcome) {
+		return outcome.Outcome
+	}
+	return CommitOutcomeNotCommitted
+}
+
 // JSONStore persists a single JSON value at Path.
 type JSONStore[T any] struct {
 	Path    string
@@ -26,7 +76,7 @@ func (s JSONStore[T]) Load() (out T, err error) {
 	if err != nil {
 		return out, err
 	}
-	defer finishUnlock(unlock, &err)
+	defer func() { finishUnlock(unlock, &err, CommitOutcomeNotCommitted) }()
 
 	return s.loadNoLock()
 }
@@ -36,9 +86,14 @@ func (s JSONStore[T]) Save(value T) (err error) {
 	if err != nil {
 		return err
 	}
-	defer finishUnlock(unlock, &err)
+	outcome := CommitOutcomeNotCommitted
+	defer func() { finishUnlock(unlock, &err, outcome) }()
 
-	return s.saveNoLock(value)
+	if err := s.saveNoLock(value); err != nil {
+		return err
+	}
+	outcome = CommitOutcomeCommitted
+	return nil
 }
 
 func (s JSONStore[T]) Update(update func(T) (T, error)) (out T, err error) {
@@ -49,7 +104,8 @@ func (s JSONStore[T]) Update(update func(T) (T, error)) (out T, err error) {
 	if err != nil {
 		return out, err
 	}
-	defer finishUnlock(unlock, &err)
+	outcome := CommitOutcomeNotCommitted
+	defer func() { finishUnlock(unlock, &err, outcome) }()
 
 	current, err := s.loadNoLock()
 	if err != nil {
@@ -62,6 +118,7 @@ func (s JSONStore[T]) Update(update func(T) (T, error)) (out T, err error) {
 	if err := s.saveNoLock(next); err != nil {
 		return next, err
 	}
+	outcome = CommitOutcomeCommitted
 	return next, nil
 }
 
@@ -166,12 +223,17 @@ func (s JSONStore[T]) lock() (func() error, error) {
 	return unlock, nil
 }
 
-func finishUnlock(unlock func() error, err *error) {
+func finishUnlock(unlock func() error, err *error, outcome CommitOutcome) {
 	if unlock == nil {
 		return
 	}
 	if unlockErr := unlock(); *err == nil && unlockErr != nil {
-		*err = fmt.Errorf("unlock state: %w", unlockErr)
+		unlockErr = fmt.Errorf("unlock state: %w", unlockErr)
+		if outcome.MayHaveCommitted() {
+			*err = &CommitOutcomeError{Outcome: outcome, Err: unlockErr}
+			return
+		}
+		*err = unlockErr
 	}
 }
 

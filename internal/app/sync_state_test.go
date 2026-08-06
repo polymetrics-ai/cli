@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	statestore "polymetrics.ai/internal/state"
 	"polymetrics.ai/internal/synccontract"
 )
 
@@ -152,7 +153,7 @@ func TestCompleteRunPublishesPendingStreamStateOnlyAfterStateSave(t *testing.T) 
 	if err != nil {
 		t.Fatal(err)
 	}
-	_, destinationRuntime, err := a.resolveEndpoint(ctx, conn.Destination)
+	destination, destinationRuntime, err := a.resolveEndpoint(ctx, conn.Destination)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -169,7 +170,7 @@ func TestCompleteRunPublishesPendingStreamStateOnlyAfterStateSave(t *testing.T) 
 		t.Fatal(err)
 	}
 	expectation := streamResumeExpectation(sourceConnector, sourceCredential, sourceRuntime, "records")
-	result, err := a.runWarehouseETL(ctx, run.ID, conn, sourceConnector, sourceRuntime, destinationRuntime, expectation, "records", conn.Streams["records"], mode, 1)
+	result, err := a.runWarehouseETL(ctx, run.ID, conn, sourceConnector, sourceRuntime, destination, destinationRuntime, expectation, "records", conn.Streams["records"], mode, 1)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -208,6 +209,71 @@ func TestCompleteRunPublishesPendingStreamStateOnlyAfterStateSave(t *testing.T) 
 	}
 	if got := source.requests[len(source.requests)-1].State["cursor"]; got != "" {
 		t.Fatalf("later run resumed from unpublished checkpoint %q", got)
+	}
+}
+
+func TestRunETLPublishesCommittedCheckpointAfterStateUnlockFailure(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("post_commit_unlock_failure", []connectors.Record{{
+		"id": "1", "updated_at": "2026-08-06T00:00:00Z",
+	}})
+	a, connection := setupSyncModeApp(t, source, "incremental_append")
+	a.store.Locker = &postCommitUnlockFailureLocker{failAt: 2}
+
+	_, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1})
+	var outcome *statestore.CommitOutcomeError
+	if !errors.As(err, &outcome) {
+		t.Fatalf("RunETL() error = %T %v, want CommitOutcomeError", err, err)
+	}
+	if outcome.Outcome != statestore.CommitOutcomeCommitted {
+		t.Fatalf("commit outcome = %q, want committed", outcome.Outcome)
+	}
+	stateKey := streamStateKey(connection, "records")
+	memoryState := a.state.StreamStates[stateKey]
+	if memoryState.Checkpoint == nil {
+		t.Fatal("in-memory checkpoint was not published after committed state save")
+	}
+
+	reopened, err := Open(a.root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	diskState := reopened.state.StreamStates[stateKey]
+	if diskState.Checkpoint == nil || !reflect.DeepEqual(*diskState.Checkpoint, *memoryState.Checkpoint) {
+		t.Fatalf("persisted checkpoint = %#v, want %#v", diskState.Checkpoint, memoryState.Checkpoint)
+	}
+
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1}); err != nil {
+		t.Fatalf("RunETL() after committed state save error = %v", err)
+	}
+	if len(source.requests) != 2 {
+		t.Fatalf("source reads = %d, want 2", len(source.requests))
+	}
+	if got := source.requests[1].State["cursor"]; got != "2026-08-06T00:00:00Z" {
+		t.Fatalf("resumed cursor = %q, want committed checkpoint cursor", got)
+	}
+}
+
+func TestWarehouseETLUsesResolvedDestinationName(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("credential_resolved_warehouse", []connectors.Record{{
+		"id": "1", "updated_at": "2026-08-06T00:00:00Z",
+	}})
+	a, connection := setupSyncModeApp(t, source, "incremental_append")
+	for i := range a.state.Connections {
+		if a.state.Connections[i].Name != connection {
+			continue
+		}
+		destination := a.state.Connections[i].Destination
+		destination.Connector = ""
+		a.state.Connections[i].Destination = destination
+	}
+
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1}); err != nil {
+		t.Fatalf("RunETL() error = %v", err)
+	}
+	if state := a.state.StreamStates[streamStateKey(connection, "records")]; state.Checkpoint == nil {
+		t.Fatal("warehouse run did not commit a checkpoint")
 	}
 }
 
@@ -316,6 +382,63 @@ func TestStreamStateRejectsRecreatedCredentialAliasBeforeRead(t *testing.T) {
 	after := a.state.StreamStates[stateKey].Checkpoint
 	if after == nil || !reflect.DeepEqual(*after, before) {
 		t.Fatalf("checkpoint changed after credential identity recovery: got %#v want %#v", after, before)
+	}
+}
+
+func TestStreamStateAllowsRefreshRotationButRejectsSourceConfigChange(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("refresh_rotation_resume", []connectors.Record{{
+		"id": "1", "updated_at": "2026-08-06T00:00:00Z",
+	}})
+	a, connection := setupSyncModeApp(t, source, "incremental_append")
+	credential, ok := a.findCredential("source")
+	if !ok {
+		t.Fatal("source credential missing")
+	}
+	if err := a.vault.Put(ctx, credential.ID, map[string]string{"refresh_token": "before"}); err != nil {
+		t.Fatal(err)
+	}
+	rotated := false
+	source.onRead = func(ctx context.Context, req connectors.ReadRequest) error {
+		if rotated {
+			return nil
+		}
+		rotated = true
+		if req.Config.SecretStore == nil {
+			return errors.New("source secret store is unavailable")
+		}
+		return req.Config.SecretStore.PutSecret(ctx, "refresh_token", "after")
+	}
+
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1}); err != nil {
+		t.Fatalf("RunETL() after refresh rotation error = %v", err)
+	}
+	if len(source.requests) != 2 {
+		t.Fatalf("source reads after rotation = %d, want 2", len(source.requests))
+	}
+	if got := source.requests[1].State["cursor"]; got != "2026-08-06T00:00:00Z" {
+		t.Fatalf("resumed cursor after rotation = %q, want prior cursor", got)
+	}
+
+	for i := range a.state.Connections {
+		if a.state.Connections[i].Name != connection {
+			continue
+		}
+		sourceConfig := a.state.Connections[i].Source
+		sourceConfig.Config = map[string]string{"account": "changed"}
+		a.state.Connections[i].Source = sourceConfig
+	}
+	readCount := len(source.requests)
+	_, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1})
+	var recovery *synccontract.RebootstrapRequiredError
+	if !errors.As(err, &recovery) || recovery.Outcome != synccontract.RecoveryOutcomeSourceGenerationChanged {
+		t.Fatalf("RunETL() error = %T %v, want source generation rebootstrap", err, err)
+	}
+	if len(source.requests) != readCount {
+		t.Fatalf("source read after stable source configuration changed: %#v", source.requests)
 	}
 }
 
@@ -450,4 +573,19 @@ func (d *partialWriteDestination) Write(_ context.Context, _ connectors.WriteReq
 func (d *partialWriteDestination) AcknowledgeETLDurability(_ context.Context, _ string) (synccontract.DownstreamAcknowledgement, error) {
 	d.acknowledgements++
 	return synccontract.NewDurableDownstreamAcknowledgement(d.Name(), time.Now().UTC())
+}
+
+type postCommitUnlockFailureLocker struct {
+	unlocks int
+	failAt  int
+}
+
+func (l *postCommitUnlockFailureLocker) Lock() (func() error, error) {
+	return func() error {
+		l.unlocks++
+		if l.unlocks == l.failAt {
+			return errors.New("unlock failed")
+		}
+		return nil
+	}, nil
 }

@@ -322,6 +322,43 @@ func TestTombstoneSeparatesUnavailableImagesAndSourceStateEvents(t *testing.T) {
 	}
 }
 
+func TestTombstoneRejectsNullRowFields(t *testing.T) {
+	position := CheckpointPosition{Primary: OpaqueToken("00000010"), TieBreaker: OpaqueToken{0x00, 0xfe}}
+	tests := []struct {
+		name      string
+		tombstone Tombstone
+	}{
+		{
+			name: "null key",
+			tombstone: Tombstone{
+				Operation:   OperationDelete,
+				EventID:     OpaqueToken("null-key"),
+				Key:         json.RawMessage(" null "),
+				DeleteImage: DeleteImageKeyOnly,
+				Position:    position,
+			},
+		},
+		{
+			name: "null before image",
+			tombstone: Tombstone{
+				Operation:   OperationDelete,
+				EventID:     OpaqueToken("null-before"),
+				Key:         json.RawMessage(`{"id":"42"}`),
+				DeleteImage: DeleteImageBefore,
+				Before:      json.RawMessage("null"),
+				Position:    position,
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := tt.tombstone.Validate(); err == nil {
+				t.Fatal("Tombstone.Validate() accepted null row field")
+			}
+		})
+	}
+}
+
 func TestNativeContractNeedsRegisteredRunnableExecutorAndFixtureEvidence(t *testing.T) {
 	contract := NativeCommandContract{
 		ContractVersion: NativeCommandContractVersion,

@@ -16,6 +16,7 @@ type scriptedSyncSource struct {
 	records   []connectors.Record
 	failAfter int
 	requests  []connectors.ReadRequest
+	onRead    func(context.Context, connectors.ReadRequest) error
 }
 
 func newScriptedSyncSource(name string, records []connectors.Record) *scriptedSyncSource {
@@ -48,6 +49,11 @@ func (s *scriptedSyncSource) Catalog(ctx context.Context, cfg connectors.Runtime
 
 func (s *scriptedSyncSource) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
 	s.requests = append(s.requests, req)
+	if s.onRead != nil {
+		if err := s.onRead(ctx, req); err != nil {
+			return err
+		}
+	}
 	for i, record := range s.records {
 		if err := ctx.Err(); err != nil {
 			return err
