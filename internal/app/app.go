@@ -48,15 +48,31 @@ type sqlQueryEngine interface {
 }
 
 type state struct {
-	Revision     uint64                       `json:"revision"`
-	Credentials  []CredentialMeta             `json:"credentials"`
-	Connections  []Connection                 `json:"connections"`
-	Catalogs     []CatalogSnapshot            `json:"catalogs"`
-	Runs         []Run                        `json:"runs"`
-	ReversePlans []ReversePlan                `json:"reverse_plans"`
-	ReverseRuns  []ReverseRun                 `json:"reverse_runs"`
-	Checkpoints  map[string]map[string]string `json:"checkpoints,omitempty"`
-	StreamStates map[string]StreamState       `json:"stream_states,omitempty"`
+	Revision           uint64                            `json:"revision"`
+	Credentials        []CredentialMeta                  `json:"credentials"`
+	CredentialBindings map[string]credentialBindingState `json:"credential_bindings"`
+	CoordinationSalt   string                            `json:"coordination_salt,omitempty"`
+	Connections        []Connection                      `json:"connections"`
+	Catalogs           []CatalogSnapshot                 `json:"catalogs"`
+	Runs               []Run                             `json:"runs"`
+	ReversePlans       []ReversePlan                     `json:"reverse_plans"`
+	ReverseRuns        []ReverseRun                      `json:"reverse_runs"`
+	Checkpoints        map[string]map[string]string      `json:"checkpoints,omitempty"`
+	StreamStates       map[string]StreamState            `json:"stream_states,omitempty"`
+}
+
+// credentialBindingState is protected project-state metadata. The raw binding
+// is deliberately absent from CredentialMeta so ordinary list, inspect, JSON
+// event, and runtime surfaces cannot reveal it.
+type credentialBindingState struct {
+	BindingID                     string `json:"binding_id"`
+	ProviderFamilyDeclared        bool   `json:"provider_family_declared"`
+	AuthProfileDeclared           bool   `json:"auth_profile_declared"`
+	DeclarationProvenanceRecorded bool   `json:"declaration_provenance_recorded"`
+}
+
+func (binding credentialBindingState) hasExplicitDeclarations() bool {
+	return binding.DeclarationProvenanceRecorded && binding.ProviderFamilyDeclared && binding.AuthProfileDeclared
 }
 
 func InitProject(root string) error {
@@ -87,7 +103,16 @@ func InitProject(root string) error {
 	}
 	statePath := filepath.Join(projectDir, "state", "state.json")
 	if _, err := os.Stat(statePath); errors.Is(err, os.ErrNotExist) {
-		initial := state{Checkpoints: map[string]map[string]string{}, StreamStates: map[string]StreamState{}}
+		coordinationSalt, err := newCoordinationSalt()
+		if err != nil {
+			return err
+		}
+		initial := state{
+			CredentialBindings: map[string]credentialBindingState{},
+			CoordinationSalt:   coordinationSalt,
+			Checkpoints:        map[string]map[string]string{},
+			StreamStates:       map[string]StreamState{},
+		}
 		if err := writeJSONAtomic(statePath, initial); err != nil {
 			return err
 		}
@@ -165,7 +190,155 @@ func (a *App) load() error {
 	if a.state.StreamStates == nil {
 		a.state.StreamStates = map[string]StreamState{}
 	}
+	return a.migrateCredentialCoordination()
+}
+
+// migrateCredentialCoordination gives pre-#3863 credentials an isolated
+// non-secret binding and declaration defaults. It intentionally never opens
+// the vault: coordination is an explicit relationship, not secret equality.
+func (a *App) migrateCredentialCoordination() error {
+	changed := false
+	if a.state.CredentialBindings == nil {
+		a.state.CredentialBindings = map[string]credentialBindingState{}
+		changed = true
+	}
+	if strings.TrimSpace(a.state.CoordinationSalt) == "" {
+		salt, err := newCoordinationSalt()
+		if err != nil {
+			return err
+		}
+		a.state.CoordinationSalt = salt
+		changed = true
+	}
+	for index := range a.state.Credentials {
+		credential := &a.state.Credentials[index]
+		providerFamily, authProfile, err := credentialCoordinationDeclarations(
+			credential.Connector,
+			credential.ProviderFamily,
+			credential.AuthProfile,
+		)
+		if err != nil {
+			return fmt.Errorf("migrate credential coordination metadata: %w", err)
+		}
+		if credential.ProviderFamily != providerFamily {
+			credential.ProviderFamily = providerFamily
+			changed = true
+		}
+		if credential.AuthProfile != authProfile {
+			credential.AuthProfile = authProfile
+			changed = true
+		}
+		binding, ok := a.state.CredentialBindings[credential.ID]
+		if !ok || strings.TrimSpace(binding.BindingID) == "" {
+			bindingID, err := prefixedID("cbind")
+			if err != nil {
+				return err
+			}
+			binding = credentialBindingState{BindingID: bindingID}
+			changed = true
+		}
+		if !binding.DeclarationProvenanceRecorded {
+			binding.ProviderFamilyDeclared = false
+			binding.AuthProfileDeclared = false
+			binding.DeclarationProvenanceRecorded = true
+			changed = true
+		}
+		a.state.CredentialBindings[credential.ID] = binding
+		if _, err := a.newCoordinationIdentity(providerFamily, authProfile, binding.BindingID); err != nil {
+			return fmt.Errorf("migrate credential coordination metadata: %w", err)
+		}
+	}
+	isolationChanged, err := a.isolateUnverifiedCrossConnectorBindings()
+	if err != nil {
+		return fmt.Errorf("migrate credential coordination metadata: %w", err)
+	}
+	changed = changed || isolationChanged
+	if !changed {
+		return nil
+	}
+	if err := a.save(); err != nil {
+		return fmt.Errorf("persist credential coordination metadata: %w", err)
+	}
 	return nil
+}
+
+func (a *App) isolateUnverifiedCrossConnectorBindings() (bool, error) {
+	credentialsByBinding := make(map[string][]int, len(a.state.Credentials))
+	for index, credential := range a.state.Credentials {
+		binding, ok := a.state.CredentialBindings[credential.ID]
+		if !ok || strings.TrimSpace(binding.BindingID) == "" {
+			return false, errors.New("credential coordination metadata is unavailable")
+		}
+		credentialsByBinding[binding.BindingID] = append(credentialsByBinding[binding.BindingID], index)
+	}
+
+	changed := false
+	for _, indexes := range credentialsByBinding {
+		if len(indexes) < 2 {
+			continue
+		}
+		connector := a.state.Credentials[indexes[0]].Connector
+		crossConnector := false
+		for _, index := range indexes[1:] {
+			if a.state.Credentials[index].Connector != connector {
+				crossConnector = true
+				break
+			}
+		}
+		if !crossConnector {
+			continue
+		}
+		for _, index := range indexes {
+			credential := a.state.Credentials[index]
+			binding := a.state.CredentialBindings[credential.ID]
+			if binding.hasExplicitDeclarations() {
+				continue
+			}
+			bindingID, err := prefixedID("cbind")
+			if err != nil {
+				return false, err
+			}
+			binding.BindingID = bindingID
+			a.state.CredentialBindings[credential.ID] = binding
+			changed = true
+		}
+	}
+	return changed, nil
+}
+
+func newCoordinationSalt() (string, error) {
+	salt, err := randomToken(32)
+	if err != nil {
+		return "", fmt.Errorf("generate coordination salt: %w", err)
+	}
+	return salt, nil
+}
+
+func (a *App) newCoordinationIdentity(providerFamily, authProfile, bindingID string) (connectors.CoordinationIdentity, error) {
+	if strings.TrimSpace(a.state.CoordinationSalt) == "" {
+		return connectors.CoordinationIdentity{}, errors.New("credential coordination identity is unavailable")
+	}
+	return connectors.NewCoordinationIdentity([]byte(a.state.CoordinationSalt), connectors.CredentialBinding{
+		BindingID:      bindingID,
+		ProviderFamily: providerFamily,
+		AuthProfile:    authProfile,
+	})
+}
+
+func (a *App) coordinationIdentityForCredential(credential CredentialMeta) (connectors.CoordinationIdentity, error) {
+	binding, err := a.credentialBindingForCredential(credential)
+	if err != nil {
+		return connectors.CoordinationIdentity{}, err
+	}
+	return a.newCoordinationIdentity(credential.ProviderFamily, credential.AuthProfile, binding.BindingID)
+}
+
+func (a *App) credentialBindingForCredential(credential CredentialMeta) (credentialBindingState, error) {
+	binding, ok := a.state.CredentialBindings[credential.ID]
+	if !ok || strings.TrimSpace(binding.BindingID) == "" {
+		return credentialBindingState{}, errors.New("credential coordination metadata is unavailable")
+	}
+	return binding, nil
 }
 
 func (a *App) save() error {
@@ -203,7 +376,11 @@ func newStateStore(path string) statestore.JSONStore[state] {
 	return statestore.JSONStore[state]{
 		Path: path,
 		Initial: func() state {
-			return state{Checkpoints: map[string]map[string]string{}, StreamStates: map[string]StreamState{}}
+			return state{
+				CredentialBindings: map[string]credentialBindingState{},
+				Checkpoints:        map[string]map[string]string{},
+				StreamStates:       map[string]StreamState{},
+			}
 		},
 		Locker: statestore.FileLock{Path: path + ".lock"},
 	}
@@ -222,6 +399,41 @@ func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (Cred
 	}
 	if _, ok := a.findCredential(req.Name); ok {
 		return CredentialMeta{}, fmt.Errorf("credential %q already exists", req.Name)
+	}
+	providerFamily, authProfile, err := credentialCoordinationDeclarations(req.Connector, req.ProviderFamily, req.AuthProfile)
+	if err != nil {
+		return CredentialMeta{}, err
+	}
+	bindingID, err := prefixedID("cbind")
+	if err != nil {
+		return CredentialMeta{}, err
+	}
+	binding := credentialBindingState{
+		BindingID:                     bindingID,
+		ProviderFamilyDeclared:        strings.TrimSpace(req.ProviderFamily) != "",
+		AuthProfileDeclared:           strings.TrimSpace(req.AuthProfile) != "",
+		DeclarationProvenanceRecorded: true,
+	}
+	if strings.TrimSpace(req.LinkCredential) != "" {
+		linked, ok := a.findCredential(req.LinkCredential)
+		if !ok {
+			return CredentialMeta{}, errors.New("link credential not found")
+		}
+		linkedBinding, err := a.credentialBindingForCredential(linked)
+		if err != nil {
+			return CredentialMeta{}, errors.New("linked credential coordination metadata is unavailable")
+		}
+		if err := a.validateCredentialLinkCohort(
+			CredentialMeta{Connector: req.Connector, ProviderFamily: providerFamily, AuthProfile: authProfile},
+			binding,
+			linkedBinding,
+		); err != nil {
+			return CredentialMeta{}, err
+		}
+		binding.BindingID = linkedBinding.BindingID
+	}
+	if _, err := a.newCoordinationIdentity(providerFamily, authProfile, binding.BindingID); err != nil {
+		return CredentialMeta{}, err
 	}
 	id, err := prefixedID("cred")
 	if err != nil {
@@ -249,19 +461,139 @@ func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (Cred
 	}
 	sort.Strings(fields)
 	meta := CredentialMeta{
-		ID:           id,
-		Name:         req.Name,
-		Connector:    req.Connector,
-		Config:       cloneStringMap(req.Config),
-		SecretFields: fields,
-		CreatedAt:    now,
-		UpdatedAt:    now,
+		ID:             id,
+		Name:           req.Name,
+		Connector:      req.Connector,
+		ProviderFamily: providerFamily,
+		AuthProfile:    authProfile,
+		Config:         cloneStringMap(req.Config),
+		SecretFields:   fields,
+		CreatedAt:      now,
+		UpdatedAt:      now,
+	}
+	if a.state.CredentialBindings == nil {
+		a.state.CredentialBindings = map[string]credentialBindingState{}
 	}
 	a.state.Credentials = append(a.state.Credentials, meta)
+	a.state.CredentialBindings[id] = binding
 	if err := a.save(); err != nil {
 		return CredentialMeta{}, err
 	}
 	return meta, nil
+}
+
+// LinkCredential explicitly joins one credential to another credential's
+// protected non-secret binding. It never reads the vault and refuses to bridge
+// incompatible declared provider families or auth profiles.
+func (a *App) LinkCredential(name, target string) (CredentialMeta, error) {
+	sourceIndex := a.credentialIndex(name)
+	targetIndex := a.credentialIndex(target)
+	if sourceIndex < 0 || targetIndex < 0 {
+		return CredentialMeta{}, errors.New("credential link target not found")
+	}
+	if sourceIndex == targetIndex {
+		return CredentialMeta{}, errors.New("credential cannot link to itself")
+	}
+	source := a.state.Credentials[sourceIndex]
+	targetCredential := a.state.Credentials[targetIndex]
+	sourceBinding, err := a.credentialBindingForCredential(source)
+	if err != nil {
+		return CredentialMeta{}, err
+	}
+	targetBinding, err := a.credentialBindingForCredential(targetCredential)
+	if err != nil {
+		return CredentialMeta{}, errors.New("credential link target coordination metadata is unavailable")
+	}
+	if err := a.validateCredentialLinkCohort(source, sourceBinding, targetBinding); err != nil {
+		return CredentialMeta{}, err
+	}
+	if _, err := a.newCoordinationIdentity(source.ProviderFamily, source.AuthProfile, targetBinding.BindingID); err != nil {
+		return CredentialMeta{}, err
+	}
+	sourceBinding.BindingID = targetBinding.BindingID
+	a.state.CredentialBindings[source.ID] = sourceBinding
+	a.state.Credentials[sourceIndex].UpdatedAt = time.Now().UTC()
+	if err := a.save(); err != nil {
+		return CredentialMeta{}, err
+	}
+	linked, ok := a.findCredential(name)
+	if !ok {
+		return CredentialMeta{}, errors.New("linked credential not found")
+	}
+	return linked, nil
+}
+
+func credentialCoordinationDeclarations(connector, providerFamily, authProfile string) (string, string, error) {
+	if strings.TrimSpace(providerFamily) == "" {
+		providerFamily = connector
+	}
+	if strings.TrimSpace(authProfile) == "" {
+		authProfile = "default"
+	}
+	if _, err := connectors.NewCoordinationIdentity([]byte("credential-coordination-validation"), connectors.CredentialBinding{
+		BindingID:      "binding-validation",
+		ProviderFamily: providerFamily,
+		AuthProfile:    authProfile,
+	}); err != nil {
+		return "", "", &CredentialCoordinationDeclarationError{err: err}
+	}
+	return providerFamily, authProfile, nil
+}
+
+type credentialCohortMember struct {
+	credential CredentialMeta
+	binding    credentialBindingState
+}
+
+func (a *App) validateCredentialLinkCohort(source CredentialMeta, sourceBinding, targetBinding credentialBindingState) error {
+	members := make([]credentialCohortMember, 0, len(a.state.Credentials)+1)
+	sourceIncluded := false
+	for _, credential := range a.state.Credentials {
+		binding, err := a.credentialBindingForCredential(credential)
+		if err != nil {
+			return err
+		}
+		if binding.BindingID != targetBinding.BindingID {
+			continue
+		}
+		members = append(members, credentialCohortMember{credential: credential, binding: binding})
+		if credential.ID == source.ID {
+			sourceIncluded = true
+		}
+	}
+	if !sourceIncluded {
+		members = append(members, credentialCohortMember{credential: source, binding: sourceBinding})
+	}
+	for left := 0; left < len(members); left++ {
+		for right := left + 1; right < len(members); right++ {
+			if err := validateCredentialLinkPair(members[left], members[right]); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func validateCredentialLinkPair(source, target credentialCohortMember) error {
+	if source.credential.Connector != target.credential.Connector && (!source.binding.hasExplicitDeclarations() || !target.binding.hasExplicitDeclarations()) {
+		return &CredentialLinkValidationError{err: errors.New("cross-connector credential link requires explicitly declared provider family and auth profile")}
+	}
+	if source.credential.ProviderFamily != target.credential.ProviderFamily {
+		return &CredentialLinkValidationError{err: errors.New("credential link requires matching provider family")}
+	}
+	if source.credential.AuthProfile != target.credential.AuthProfile {
+		return &CredentialLinkValidationError{err: errors.New("credential link requires matching auth profile")}
+	}
+	return nil
+}
+
+func (a *App) credentialIndex(name string) int {
+	for index, credential := range a.state.Credentials {
+		if credential.Name == name || credential.ID == name {
+			return index
+		}
+	}
+	return -1
 }
 
 func (a *App) ListCredentials() []CredentialMeta {
@@ -324,6 +656,7 @@ func (a *App) RemoveCredential(ctx context.Context, name string) error {
 				return err
 			}
 			a.state.Credentials = append(a.state.Credentials[:i], a.state.Credentials[i+1:]...)
+			delete(a.state.CredentialBindings, cred.ID)
 			return a.save()
 		}
 	}
@@ -337,7 +670,7 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 	if _, ok := a.findConnection(req.Name); ok {
 		return Connection{}, fmt.Errorf("connection %q already exists", req.Name)
 	}
-	if req.Streams == nil || len(req.Streams) == 0 {
+	if len(req.Streams) == 0 {
 		return Connection{}, errors.New("at least one stream is required")
 	}
 	source, sourceRuntime, err := a.resolveEndpoint(ctx, req.Source)
@@ -1770,6 +2103,10 @@ func (a *App) resolveCredential(ctx context.Context, name string, overlay map[st
 	if !ok {
 		return CredentialMeta{}, connectors.RuntimeConfig{}, fmt.Errorf("credential %q not found", name)
 	}
+	coordinationIdentity, err := a.coordinationIdentityForCredential(cred)
+	if err != nil {
+		return CredentialMeta{}, connectors.RuntimeConfig{}, err
+	}
 	secrets, err := a.vault.Get(ctx, cred.ID)
 	if err != nil {
 		return CredentialMeta{}, connectors.RuntimeConfig{}, err
@@ -1787,12 +2124,13 @@ func (a *App) resolveCredential(ctx context.Context, name string, overlay map[st
 		return CredentialMeta{}, connectors.RuntimeConfig{}, err
 	}
 	return cred, connectors.RuntimeConfig{
-		ProjectDir:          a.projectDir,
-		Config:              config,
-		Secrets:             secrets,
-		CredentialRevision:  credentialRevision,
-		ConfigurationDigest: configurationDigest,
-		WriteApprovalScope:  connectors.WriteApprovalScopeProject,
+		ProjectDir:           a.projectDir,
+		Config:               config,
+		Secrets:              secrets,
+		CoordinationIdentity: coordinationIdentity,
+		CredentialRevision:   credentialRevision,
+		ConfigurationDigest:  configurationDigest,
+		WriteApprovalScope:   connectors.WriteApprovalScopeProject,
 		// Scoped to this credential, so a provider-rotated secret (an OAuth2
 		// refresh token) is written back to the same encrypted vault entry it
 		// was read from, and to no other.

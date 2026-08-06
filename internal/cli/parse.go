@@ -15,6 +15,7 @@ var errUsage = usageErrorf("invalid usage")
 
 type parsedFlags struct {
 	values map[string][]string
+	bare   map[string]bool
 }
 
 func (p parsedFlags) first(name string) string {
@@ -23,6 +24,19 @@ func (p parsedFlags) first(name string) string {
 		return ""
 	}
 	return values[len(values)-1]
+}
+
+func (p parsedFlags) isBare(name string) bool {
+	return p.bare[name]
+}
+
+func (p parsedFlags) hasBlankValue(name string) bool {
+	for _, value := range p.values[name] {
+		if strings.TrimSpace(value) == "" {
+			return true
+		}
+	}
+	return false
 }
 
 func parseGlobal(args []string) (root string, jsonOut bool, clean []string) {
@@ -45,7 +59,7 @@ func parseGlobal(args []string) (root string, jsonOut bool, clean []string) {
 }
 
 func parseFlags(args []string) parsedFlags {
-	out := parsedFlags{values: map[string][]string{}}
+	out := parsedFlags{values: map[string][]string{}, bare: map[string]bool{}}
 	for i := 0; i < len(args); i++ {
 		arg := args[i]
 		if !strings.HasPrefix(arg, "--") {
@@ -59,6 +73,8 @@ func parseFlags(args []string) parsedFlags {
 			if i+1 < len(args) && !strings.HasPrefix(args[i+1], "--") {
 				value = args[i+1]
 				i++
+			} else {
+				out.bare[key] = true
 			}
 		}
 		out.values[key] = append(out.values[key], value)

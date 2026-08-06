@@ -7,16 +7,37 @@ import (
 )
 
 type AddCredentialRequest struct {
-	Name      string            `json:"name"`
-	Connector string            `json:"connector"`
-	Config    map[string]string `json:"config"`
-	Secrets   map[string]string `json:"-"`
+	Name           string            `json:"name"`
+	Connector      string            `json:"connector"`
+	Config         map[string]string `json:"config"`
+	Secrets        map[string]string `json:"-"`
+	ProviderFamily string            `json:"provider_family,omitempty"`
+	AuthProfile    string            `json:"auth_profile,omitempty"`
+	LinkCredential string            `json:"-"`
 }
+
+type CredentialCoordinationDeclarationError struct {
+	err error
+}
+
+func (e *CredentialCoordinationDeclarationError) Error() string { return e.err.Error() }
+
+func (e *CredentialCoordinationDeclarationError) Unwrap() error { return e.err }
+
+type CredentialLinkValidationError struct {
+	err error
+}
+
+func (e *CredentialLinkValidationError) Error() string { return e.err.Error() }
+
+func (e *CredentialLinkValidationError) Unwrap() error { return e.err }
 
 type CredentialMeta struct {
 	ID              string            `json:"id"`
 	Name            string            `json:"name"`
 	Connector       string            `json:"connector"`
+	ProviderFamily  string            `json:"provider_family,omitempty"`
+	AuthProfile     string            `json:"auth_profile,omitempty"`
 	Config          map[string]string `json:"config,omitempty"`
 	SecretFields    []string          `json:"secret_fields,omitempty"`
 	CreatedAt       time.Time         `json:"created_at"`
