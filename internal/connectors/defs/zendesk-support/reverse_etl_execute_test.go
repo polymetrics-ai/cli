@@ -249,7 +249,8 @@ func TestReverseETLWriteActionsExecute(t *testing.T) {
 				if built.Preview == nil || built.Preview.RecordsStaged != 1 {
 					t.Fatalf("command %q preview = %+v, want 1 staged record", cmd.Path, built.Preview)
 				}
-				assertRedactedFieldsHidden(t, action, cmd, fixture.Record, built.RedactedRecord)
+				assertRedactFieldsLoadCompatible(t, action, cmd, fixture.Record)
+				assertCommandRecordPreserved(t, built.Record, built.RedactedRecord)
 			} else if err := commandrunner.Preflight(conn, path); err == nil {
 				t.Fatalf("Preflight(%q) = nil for a command marked %q, want it refused", cmd.Path, cmd.Availability)
 			}
@@ -504,61 +505,25 @@ func assertSchemaFieldsCitePinnedOAS(t *testing.T, path string, schema map[strin
 	}
 }
 
-// assertRedactedFieldsHidden proves the redaction declarations are live rather
-// than decorative. Two separate things have to hold, and a declaration that
-// silently resolves to nothing fails BOTH here rather than being skipped:
-//
-//   - every path writes.json declares must resolve against the authored record
-//     the way the engine resolves it, descending maps only from the record
-//     root, because a path the engine cannot walk redacts nothing;
-//   - every field the action or its command declares must be masked wherever it
-//     appears in the operator-visible plan sample, at any depth.
-func assertRedactedFieldsHidden(t *testing.T, action engine.WriteAction, cmd connectors.CommandSurfaceCommand, record map[string]any, redacted connectors.Record) {
+func assertRedactFieldsLoadCompatible(t *testing.T, action engine.WriteAction, cmd connectors.CommandSurfaceCommand, record map[string]any) {
 	t.Helper()
+	for _, field := range cmd.RedactFields {
+		if strings.TrimSpace(field) == "" {
+			t.Errorf("command %q loaded an empty redact field", cmd.Path)
+		}
+	}
 	for _, field := range action.RedactFields {
 		target := strings.TrimPrefix(strings.TrimSpace(field), "record.")
 		if _, ok := lookupMapPath(record, strings.Split(target, ".")); !ok {
-			t.Errorf("write action %q declares redact field %q, but the engine's map-only resolver cannot reach it in the sanitized record", action.Name, field)
+			t.Errorf("write action %q loaded redact field %q that cannot resolve in the sanitized record", action.Name, field)
 		}
 	}
-
-	declared := map[string]bool{}
-	for _, field := range append(append([]string{}, action.RedactFields...), cmd.RedactFields...) {
-		parts := strings.Split(strings.TrimPrefix(strings.TrimSpace(field), "record."), ".")
-		declared[parts[len(parts)-1]] = true
-	}
-	if len(declared) == 0 {
-		return
-	}
-	assertRedactedValuesHidden(t, declared, "", map[string]any(redacted))
 }
 
-// assertRedactedValuesHidden walks the entire approval sample instead of
-// probing declared paths, so a declared field that surfaces somewhere the
-// declaration did not anticipate is still caught.
-func assertRedactedValuesHidden(t *testing.T, declared map[string]bool, prefix string, value any) {
+func assertCommandRecordPreserved(t *testing.T, original, preserved connectors.Record) {
 	t.Helper()
-	switch typed := value.(type) {
-	case map[string]any:
-		for key, child := range typed {
-			path := key
-			if prefix != "" {
-				path = prefix + "." + key
-			}
-			if declared[key] {
-				if s, isString := child.(string); !isString || (s != "***" && s != "redacted") {
-					t.Errorf("redact field %q is still visible as %v at record.%s of the approval sample", key, child, path)
-				}
-				continue
-			}
-			assertRedactedValuesHidden(t, declared, path, child)
-		}
-	case connectors.Record:
-		assertRedactedValuesHidden(t, declared, prefix, map[string]any(typed))
-	case []any:
-		for i, item := range typed {
-			assertRedactedValuesHidden(t, declared, fmt.Sprintf("%s.%d", prefix, i), item)
-		}
+	if !reflect.DeepEqual(original, preserved) {
+		t.Errorf("command record = %#v, want complete record %#v", preserved, original)
 	}
 }
 

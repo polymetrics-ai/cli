@@ -154,7 +154,7 @@ func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req 
 		Approval:              firstNonEmpty(cmd.Approval, "reverse ETL writes require plan, preview, approval, execute"),
 		ConfirmationChallenge: string(connectors.ConfirmationForWriteAction(action).Kind),
 		Record:                cloneRecord(record),
-		RedactedRecord:        redactRecordWithFields(record, cmd.RedactFields),
+		RedactedRecord:        cloneRecord(record),
 		Batchable:             action.IsBatchable(),
 	}
 	if req.Preview {
@@ -267,10 +267,10 @@ func Run(ctx context.Context, connector connectors.Connector, req Request, emit 
 	}
 	err = connector.Read(ctx, readReq, connectors.LimitEmitter(limit, func(record connectors.Record) error {
 		result.Count++
-		return emit(redactRecordWithFields(record, cmd.RedactFields))
+		return emit(record)
 	}))
 	if err := connectors.IgnoreReadLimit(err); err != nil {
-		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+		return Result{}, err
 	}
 	return result, nil
 }
@@ -386,10 +386,10 @@ func runDirectRead(ctx context.Context, connector connectors.Connector, cmd conn
 	}
 	pathParams, query, err := directReadOverrides(cmd, req.Flags)
 	if err != nil {
-		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+		return Result{}, err
 	}
 	if err := validateCommandInputs(cmd, req.Config, mappedCommandInputs{Query: query}); err != nil {
-		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+		return Result{}, err
 	}
 	maxBytes := req.MaxBytes
 	if maxBytes <= 0 {
@@ -408,10 +408,9 @@ func runDirectRead(ctx context.Context, connector connectors.Connector, cmd conn
 		Query:        query,
 		MaxBytes:     maxBytes,
 		OutputPolicy: cmd.OutputPolicy,
-		RedactFields: cmd.RedactFields,
 	})
 	if err != nil {
-		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+		return Result{}, err
 	}
 	return Result{
 		Connector:  connector.Name(),
@@ -436,10 +435,10 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 	}
 	pathParams, query, body, err := operationDirectReadOverrides(cmd, req.Flags)
 	if err != nil {
-		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+		return Result{}, err
 	}
 	if err := validateCommandInputs(cmd, req.Config, mappedCommandInputs{Query: query, Body: body}); err != nil {
-		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+		return Result{}, err
 	}
 	maxBytes := req.MaxBytes
 	if maxBytes <= 0 {
@@ -456,10 +455,9 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 		Body:         body,
 		MaxBytes:     maxBytes,
 		OutputPolicy: cmd.OutputPolicy,
-		RedactFields: cmd.RedactFields,
 	})
 	if err != nil {
-		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+		return Result{}, err
 	}
 	return Result{Connector: connector.Name(), Command: cmd.Path, DirectRead: &direct}, nil
 }
@@ -1368,115 +1366,6 @@ func cloneStringMap(in map[string]string) map[string]string {
 	return out
 }
 
-func redactRecord(in connectors.Record) connectors.Record {
-	return redactRecordWithFields(in, nil)
-}
-
-func redactCommandError(err error, fields []string, req Request) error {
-	if err == nil {
-		return nil
-	}
-	text := safety.RedactErrorText(err.Error())
-	for _, values := range req.Flags {
-		for _, value := range values {
-			text = redactLiteral(text, value)
-		}
-	}
-	explicit := explicitRedactFieldSet(fields)
-	for key, value := range req.Config.Config {
-		if explicit[normalizeRecordFieldName(key)] || explicit[compactRecordFieldName(key)] || isSensitiveRecordField(key) || strings.Contains(compactRecordFieldName(key), "patient") {
-			text = redactLiteral(text, value)
-		}
-	}
-	return errors.New(text)
-}
-
-func redactLiteral(text, value string) string {
-	value = strings.TrimSpace(value)
-	if value == "" || value == "***" {
-		return text
-	}
-	return strings.ReplaceAll(text, value, "***")
-}
-
-func redactRecordWithFields(in connectors.Record, fields []string) connectors.Record {
-	explicit := explicitRedactFieldSet(fields)
-	out := make(connectors.Record, len(in))
-	for k, v := range in {
-		out[k] = redactValueForField(k, v, explicit)
-	}
-	return out
-}
-
-func redactValueForField(field string, value any, explicit map[string]bool) any {
-	if isSensitiveRecordField(field) || explicit[normalizeRecordFieldName(field)] || explicit[compactRecordFieldName(field)] {
-		return "***"
-	}
-	switch typed := value.(type) {
-	case map[string]any:
-		out := make(map[string]any, len(typed))
-		for k, v := range typed {
-			out[k] = redactValueForField(k, v, explicit)
-		}
-		return out
-	case connectors.Record:
-		return redactRecordWithFields(typed, redactFieldsFromSet(explicit))
-	case []any:
-		out := make([]any, len(typed))
-		for i, v := range typed {
-			out[i] = redactValueForField("", v, explicit)
-		}
-		return out
-	case []connectors.Record:
-		out := make([]connectors.Record, len(typed))
-		for i, v := range typed {
-			out[i] = redactRecordWithFields(v, redactFieldsFromSet(explicit))
-		}
-		return out
-	default:
-		return value
-	}
-}
-
-func redactFieldsFromSet(explicit map[string]bool) []string {
-	out := make([]string, 0, len(explicit))
-	for field := range explicit {
-		out = append(out, field)
-	}
-	return out
-}
-
-func explicitRedactFieldSet(fields []string) map[string]bool {
-	out := make(map[string]bool, len(fields))
-	for _, field := range fields {
-		field = strings.TrimSpace(field)
-		if field == "" {
-			continue
-		}
-		out[normalizeRecordFieldName(field)] = true
-		out[compactRecordFieldName(field)] = true
-	}
-	return out
-}
-
-func isSensitiveRecordField(name string) bool {
-	normalized := normalizeRecordFieldName(name)
-	for _, marker := range []string{"token", "secret", "password", "private_key", "api_key", "key", "body", "comment", "content", "payload", "inputs", "download", "clone", "media_url", "data_file", "media_file", "file_path"} {
-		if strings.Contains(normalized, marker) {
-			return true
-		}
-	}
-	return false
-}
-
-func normalizeRecordFieldName(name string) string {
-	return strings.ToLower(strings.NewReplacer("-", "_", " ", "_", ".", "_").Replace(name))
-}
-
-func compactRecordFieldName(name string) string {
-	return strings.ReplaceAll(normalizeRecordFieldName(name), "_", "")
-}
-
 func firstNonEmpty(values ...string) string {
 	for _, value := range values {
 		if strings.TrimSpace(value) != "" {
@@ -1534,23 +1423,22 @@ func runBinaryDownload(ctx context.Context, connector connectors.Connector, cmd 
 	}
 	pathParams, query, err := directReadOverrides(cmd, req.Flags)
 	if err != nil {
-		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+		return Result{}, err
 	}
 	if err := validateCommandInputs(cmd, req.Config, mappedCommandInputs{Query: query}); err != nil {
-		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+		return Result{}, err
 	}
 	download, err := downloader.OperationBinaryDownload(ctx, connectors.OperationBinaryDownloadRequest{
-		Operation:    cmd.Operation,
-		Config:       req.Config,
-		PathParams:   pathParams,
-		Query:        query,
-		MaxBytes:     int64(req.MaxBytes),
-		DestRoot:     req.DestRoot,
-		FileName:     req.FileName,
-		RedactFields: cmd.RedactFields,
+		Operation:  cmd.Operation,
+		Config:     req.Config,
+		PathParams: pathParams,
+		Query:      query,
+		MaxBytes:   int64(req.MaxBytes),
+		DestRoot:   req.DestRoot,
+		FileName:   req.FileName,
 	})
 	if err != nil {
-		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+		return Result{}, err
 	}
 	return Result{Connector: connector.Name(), Command: cmd.Path, BinaryDownload: &download}, nil
 }

@@ -529,6 +529,36 @@ func TestReverseManualHasGithubCLIStyleDiscoverability(t *testing.T) {
 	}
 }
 
+func TestReverseManualExplainsConnectorCommandContentPolicy(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"reverse"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("reverse manual code = %d stderr = %s", code, stderr.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{
+		"The connector command runner does not mask",
+		"This runner policy does not change source-table output or other execution paths.",
+		"does not automatically retry a failed dispatch",
+		"JSON plan and preview output omit tokens",
+	} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("reverse manual missing %q:\n%s", want, out)
+		}
+	}
+	for _, obsolete := range []string{
+		"Connector-command content is complete",
+		"request, response, error, and preview content is complete",
+		"mask those fields in plan samples",
+		"connector-declared fields masked in sample rows",
+		"masks connector-declared sensitive record fields",
+	} {
+		if strings.Contains(out, obsolete) {
+			t.Fatalf("reverse manual retained obsolete masking claim %q:\n%s", obsolete, out)
+		}
+	}
+}
+
 func setupReverseCLIProject(t *testing.T) string {
 	t.Helper()
 	root := t.TempDir()
