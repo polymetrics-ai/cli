@@ -50,6 +50,9 @@ func (c Connector) OperationDirectRead(ctx context.Context, req connectors.Opera
 // fixed POST method, action path, 16 MiB response ceiling, and redacted JSON
 // output contract.
 func (c Connector) PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error {
+	if err := c.Base.PreflightOperationDirectRead(operation, method, path, maxBytes, outputPolicy); err != nil {
+		return err
+	}
 	if _, ok := sqsDirectReadOperations[operation]; !ok {
 		return fmt.Errorf("amazon-sqs direct read operation %q not found", operation)
 	}

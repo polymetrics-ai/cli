@@ -225,11 +225,11 @@ func (c *Connector) DryRunWrite(ctx context.Context, req connectors.WriteRequest
 }
 
 // Base is embedded by Tier-3 native connectors (design §B.7 Tier 3, e.g.
-// native/postgres) to serve identity/metadata/definition from their bundle
-// without duplicating the synthesis logic Connector already has. Tier-3
-// connectors are NOT declaratively read/written by the engine — they
-// implement Check/Catalog/Read/Write themselves and embed Base purely for
-// Name/Metadata/Definition.
+// native/postgres) to serve identity/metadata/definition and operation
+// direct-read preflight from their bundle without duplicating the synthesis
+// logic Connector already has. Tier-3 connectors are NOT declaratively
+// read/written by the engine — they implement Check/Catalog/Read/Write
+// themselves.
 type Base struct {
 	bundle Bundle
 }
@@ -251,6 +251,12 @@ func (b Base) Definition() connectors.Definition {
 
 func (b Base) CommandSurface() *connectors.CommandSurface {
 	return synthesizeCommandSurface(b.bundle)
+}
+
+// PreflightOperationDirectRead validates a native connector's declared
+// operation direct-read binding without resolving credentials or network I/O.
+func (b Base) PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error {
+	return PreflightOperationDirectRead(b.bundle, operation, method, path, maxBytes, outputPolicy)
 }
 
 // HasConfigurationConstraints exposes bundle-declared configuration
