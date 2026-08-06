@@ -1,11 +1,12 @@
 // Package postgres implements the Tier-3 native PostgreSQL source connector
 // (architecture v2 design §B.7 Tier 3, PLAN.md T-17/B-17 — the golden
 // migration reference for every future database/file/native connector). It
-// is a database connector (family: db) built on github.com/jackc/pgx/v5
-// (already in go.mod — no new dependency), following the mandated Tier-3
+// is a database connector (family: db) built on github.com/jackc/pgx/v5 and
+// the PostgreSQL logical-replication protocol library github.com/jackc/pglogrepl,
+// following the mandated Tier-3
 // component split: connector.go (entry, wiring), connection.go
 // (config/DSN/identifier safety), reader.go (Read/InitialState), cataloger.go
-// (Catalog/discovery + fixtures), cdc.go (documented CDC stub). Each file is
+// (Catalog/discovery + fixtures), cdc.go (logical-replication CDC). Each file is
 // well under the design's <400-line cap.
 //
 // Unlike a Tier-1/Tier-2 declarative bundle, this package implements
@@ -34,9 +35,8 @@
 //     with the legacy package. Capabilities.Write is false and Write
 //     returns ErrUnsupportedOperation.
 //
-// CDC (change data capture) is a documented STUB (cdc.go): ReadCDC returns
-// ErrUnsupportedOperation because full logical-replication CDC requires the
-// pglogrepl dependency, a gated add not present in go.mod.
+// CDC (change data capture) consumes PostgreSQL logical replication using a
+// source-bound slot and versioned durable checkpoints (cdc.go).
 //
 // A mode=fixture config (cfg.Config["mode"]=="fixture") short-circuits all
 // network access so the conformance harness and unit tests can run with no
@@ -90,7 +90,7 @@ func New() Connector {
 // Description/DisplayName wording, never capability semantics.
 func (c Connector) Metadata() connectors.Metadata {
 	m := c.Base.Metadata()
-	m.Description = "Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and supports cursor-incremental reads on a configurable cursor column. Read-only source; CDC is a documented stub pending the gated pglogrepl dependency."
+	m.Description = "Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, supports cursor-incremental reads, and consumes logical-replication CDC through source-bound durable LSN checkpoints. Read-only source."
 	return m
 }
 
