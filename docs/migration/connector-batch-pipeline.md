@@ -4,29 +4,24 @@ This is the repeatable control plane for a connector batch: one branch, one
 reviewable manifest, one per-connector gate report, and one PR. It deliberately
 does **not** convert survey evidence into an executable claim by itself.
 
-The first prepared batch is
+The first delivered batch is
 [`cli-provider-artifact-sweep-r1-batch-001.json`](batches/cli-provider-artifact-sweep-r1-batch-001.json).
 It contains five candidates and 190 measured provider operations (113 read,
-77 write). It is a preparation artifact, not an authored connector batch.
+77 write). The immutable survey totals stay separate from the freshly fetched
+artifact inventory in the materialization and gate reports.
 
-## Current external gate
+## Foundation status
 
-Do not author a bundle from this manifest until this remaining foundation has
-merged to `main` and the branch has been rebased on `main` (never on a sibling
-branch):
+The batch was authored after rebasing on `main` with all required foundations:
 
 - #3773 / PR #3869 provides `api_surface.json` operation-ledger v2 provenance:
   provider-artifact records and endpoint-local citations.
+- #3870 allows non-redacting `json` and `none` direct-write policies.
+- #3868 preserves command-runner content.
 
-#3870 is merged at `ee26d20fc`: direct writes can declare non-redacting `json`
-or `none`. #3868 is merged at `50deaade9`: command-runner content preservation
-is current on `main`. They are consumed by the batch gate below; #3869 is the
-only external authoring dependency.
-
-The command-runner, shared schemas, and engine are intentionally untouched by
-this pipeline. A v2 provenance writer before #3869 would compete with a shared
-contract that is still landing; a new executable policy before #3870 would risk
-reintroducing redaction. Neither is acceptable.
+The command-runner, shared schemas, and engine remain intentionally untouched
+by this pipeline. The materializer consumes the shared v2 contract rather than
+adding a competing provenance shape.
 
 ## Command ownership
 
@@ -41,6 +36,7 @@ reintroducing redaction. Neither is acceptable.
 | `boundary` | Detect connector-specific policy outside definition ownership | Run against the final branch as a repository gate. |
 | `ownership` | Check changed paths for an owned connector scope | Run for each authored connector slice. |
 | `batch plan` | New: turn live ledger evidence into a deterministic manifest | Prepare a 1–40 connector batch without mutating a bundle or calling a provider. |
+| `batch materialize` | New: read a selected public OpenAPI/Swagger artifact into the shared v2 operation ledger | Fetches only the manifest URL (or an explicit offline cache), records URL/date/SHA evidence, preserves real stream/write bindings, and derives a reachable command surface. |
 | `batch gate` | New: run each candidate's existing checks independently | Produce included/drop results rather than stopping at the first bad bundle. |
 
 The new `batch` command is genuinely needed because none of the existing
@@ -84,7 +80,7 @@ Output is deterministic: it contains the ledger schema/version metadata and
 only the selected records' measured counts and citations. It has no generated
 timestamp, so rerunning against the same ledger yields byte-identical JSON.
 
-## First prepared batch
+## First batch selection
 
 The prepared candidates were selected for direct, provider-published,
 versioned machine-readable artifacts and moderate sizes—not provider-name
@@ -101,31 +97,45 @@ recognition.
 All five existing definition directories were present in the checked-out
 connector tree, and an open-issue title scan found no active issue named for
 these candidates. Public, credential-free artifact probes on 2026-08-06
-returned HTTP 200 or 206 for all five URLs. Those probes only establish source
-availability; their ledger retrieval dates remain the immutable survey evidence
-in the manifest. The authoring run must retrieve each artifact again and record
-its new full-date retrieval value and content SHA-256 in the v2 artifact table.
+returned HTTP 200 or 206 for all five URLs. Those probes establish source
+availability only; the ledger retrieval dates remain immutable survey evidence,
+and the materializer records its own full-date retrieval value and content
+SHA-256 in the v2 artifact table.
 
-## Phase 2: materialize only after the foundations merge
+## Phase 2: materialize from the cited artifact
 
-This is intentionally a gated authoring step, not a command to run on the
-current base. It must consume #3869's shared v2 provenance contract; it must
-not add a sidecar provenance schema or an invented `covered_by` relation.
+This step consumes #3869's shared v2 provenance contract; it never adds a
+sidecar provenance schema or invents a `covered_by` relation. Fetch only the
+manifest URL (or use a verified offline cache for a repeatable local run):
+
+```bash
+go run ./cmd/connectorgen batch materialize \
+  --manifest docs/migration/batches/cli-provider-artifact-sweep-r1-batch-001.json \
+  --defs-root internal/connectors/defs \
+  --retrieved-at 2026-08-06 \
+  --report docs/migration/batches/cli-provider-artifact-sweep-r1-batch-001-materialize.json
+```
 
 For each selected manifest record:
 
 1. Fetch or read only its cited public artifact. Store the source URL, exact
-   version, full-date retrieval date, and SHA-256 in the v2 provider-artifact
-   table. No credential and no live provider API call is allowed.
+   version, full-date retrieval date, and SHA-256. The shared v2 artifact table
+   owns URL/date/SHA; the materialization report preserves the survey's exact
+   version, and every endpoint joins to the cited artifact through its local
+   provenance row. No credential and no live provider API call is allowed.
 2. Enumerate each provider operation from the artifact. Give every endpoint
    exactly one result: executable coverage, provider-blocked with a concrete
    reason, or justified exclusion. A generic unclassified/default omission is
    a failure, not a temporary state.
 3. Generate the bundle's `operations.json` and `cli_surface.json` from the
-   reviewed artifact inventory. Facts that can be derived stay derived:
-   `surface-sync` fills command `api_surface`, flag `maps_to`, operation
-   byte limits, and supported output policy from `operations.json`. Do not
-   hand-copy them.
+   reviewed artifact inventory. In this first lane `operations.json` is an
+   explicit empty direct-executor catalog: provider operation classification
+   lives in the v2 `api_surface.json`, and no direct read can be promoted while
+   its only runtime policy is redacting. Stream and existing reverse-ETL write
+   commands are derived only from real bindings. A write action with a required
+   structured object/object-array record is intentionally not exposed as a
+   scalar-flag namespace command; it remains available through the existing
+   generic plan → preview → approval → execute workflow.
 4. Only promote a command to `availability: implemented` after it has a real
    executor and the v2 `api_surface.json` contains its cited method/path row.
    Every other operation stays provider-blocked or justified-excluded with its
@@ -136,10 +146,10 @@ For each selected manifest record:
    require typed confirmation; non-idempotent writes remain non-retriable.
    Never introduce a generic HTTP write escape hatch.
 
-The materializer itself is deferred because its output is the shared-contract
-surface that #3869 is changing. The work now prepares its deterministic input,
-gate, output report, and no-redaction rules; the only safe next code slice
-after #3869 merges is the contract-aware artifact-to-bundle emitter.
+`surface-sync --check` remains a separate derivation gate for implemented
+operation-backed direct commands. It deliberately leaves stream and
+reverse-ETL command bindings intact, because their executor truth is
+`streams.json` or `writes.json`, not an invented direct operation.
 
 No-redaction is an explicit batch-gate rule. `batch gate` drops a candidate
 that declares `redact_fields`, an output policy containing `redact`, or either
@@ -150,9 +160,58 @@ provider-blocked or justified-excluded unless a separate, shared-owned
 non-redacting direct-read capability lands; stream and reverse-ETL executors
 remain available where their real implementation applies.
 
+### Batch 001 materialization result
+
+The checked-in
+[`materialize report`](batches/cli-provider-artifact-sweep-r1-batch-001-materialize.json)
+records five included connectors and zero drops on 2026-08-06.
+
+| Connector | Fresh artifact operations | Executable | Provider-blocked | Excluded | Reachable commands |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `docuseal` | 23 | 10 | 0 | 13 | 9 |
+| `defillama` | 31 | 10 | 0 | 21 | 10 |
+| `dockerhub` | 54 | 4 | 0 | 50 | 4 |
+| `flexmail` | 43 | 5 | 22 | 16 | 5 |
+| `alpaca-broker-api` | 52 | 10 | 5 | 37 | 10 |
+
+Docker Hub's 54 is intentionally not rewritten to the ledger's 41: the ledger
+counting note excludes 13 documented authentication/access-token-flow
+operations, while the v2 inventory records and classifies every operation in
+the fetched artifact. DocuSeal's `create_submission` remains a real generic
+reverse-ETL write action but is not a connector-namespace command because its
+required `submitters` value is an object array, not a truthful scalar CLI flag.
+
+### Post-main capability re-gate
+
+After rebasing on current `origin/main` at `5da755596`, batch 001 was
+materialized again from its five cited artifacts and gated again. It remains
+five included, zero dropped, with **39 executable**, 27 provider-blocked, and
+137 excluded rows across 203 declared artifact operations.
+
+The executable count did not rise merely because two foundations are present:
+the real runner currently accepts only redacting direct-read policies, whereas
+`json` and `none` are direct-write policies. The batch's no-redaction rule
+therefore still blocks promotion of the 21 unmatched GET rows. Separately,
+the cited DocuSeal artifact declares the six document-creation/update requests
+as `application/json` structured document payloads, not literal
+`multipart/form-data`; #3871's opt-in `rest.multipart` contract cannot be
+used to make those different provider contracts executable. The materializer
+and runtime gate made that result; no `api_surface.json` reason was hand-edited.
+
 ## Phase 3: individual gate and batch report
 
-After authoring, run one gate for the manifest:
+Run the gate once per candidate before the final batch gate. `--connector`
+selects a manifest record without hand-editing its survey evidence:
+
+```bash
+go run ./cmd/connectorgen batch gate \
+  --manifest docs/migration/batches/cli-provider-artifact-sweep-r1-batch-001.json \
+  --defs-root internal/connectors/defs \
+  --connector docuseal \
+  --report docs/migration/batches/cli-provider-artifact-sweep-r1-batch-001-docuseal-gate.json
+```
+
+Then run one final gate for the manifest:
 
 ```bash
 go run ./cmd/connectorgen batch gate \
@@ -224,9 +283,20 @@ PR. Do not merge the PR.
 
 `batch plan` has a hard maximum of 40 candidates and `batch gate` performs
 failure-isolated checks for each one, so the control plane can mechanically
-support 30–40 candidates per PR. The honest immediate batch size is **five
-prepared, zero authored**: #3869's v2 provenance contract remains unmerged, so
-no evidence yet supports a claim that 30–40 fully authored connectors are
-merge-ready. After this five-connector proof passes, start at 30 and increase
-to 40 only if artifact materialization and the per-candidate report stay
-reviewable.
+support 30–40 candidates per PR. The proven first batch is **five authored,
+five individually gated, zero dropped**. The honest operating estimate is
+**30 connectors per batch only for small, complete, provenance-ready provider
+surfaces**: it retains a reviewable failure-isolated report and one PR/CI merge
+cost. Increase to 40 only after another 30-connector run shows that its
+generated artifact diff and per-candidate report remain reviewable; the limit
+is review throughput, not the tool's loop.
+
+The Top-50 provider programme is intentionally not treated as such a uniform
+batch. Its 13,761-operation cohort ranges from an 11-operation provider to
+Zoom's 1,913-operation multi-module surface. The planned size tiers, readiness
+gates, and proposed merge units are in
+[`cli-top50-surface-audit-r1-batch-plan.md`](batches/cli-top50-surface-audit-r1-batch-plan.md).
+For that cohort, use one-provider PRs for 250+ operations, 2–3 complete
+provider bundles for 100–249, and 4–6 only below 100; large-provider work may
+be sequenced by module inside a branch, but its final artifact inventory and
+runtime gate must remain whole-provider.

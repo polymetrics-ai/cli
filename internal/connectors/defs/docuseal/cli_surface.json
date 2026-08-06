@@ -1,0 +1,237 @@
+{
+  "tagline": "Run DocuSeal's declared streams and reverse-ETL actions.",
+  "usage": "pm docuseal \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "submissions list",
+        "submitters list",
+        "template detail list",
+        "templates list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "archive submission apply",
+        "archive template apply",
+        "clone template apply",
+        "update submitter apply",
+        "update template apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "archive submission apply",
+      "summary": "Plan and execute the archive submission reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "archive_submission",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm docuseal archive submission apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/submissions/{id}"
+        }
+      ],
+      "risk": "external mutation; archives a live DocuSeal submission (soft-delete, still recoverable via the DocuSeal UI); approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "archive template apply",
+      "summary": "Plan and execute the archive template reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "archive_template",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm docuseal archive template apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/templates/{id}"
+        }
+      ],
+      "risk": "external mutation; archives a live DocuSeal template (soft-delete, recoverable by unarchiving via update_template); approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "clone template apply",
+      "summary": "Plan and execute the clone template reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "clone_template",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm docuseal clone template apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/templates/{id}/clone"
+        }
+      ],
+      "risk": "external mutation; creates a new live DocuSeal template by cloning an existing one; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "submissions list",
+      "summary": "Run the submissions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "submissions",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "examples": [
+        "pm docuseal submissions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/submissions"
+        }
+      ]
+    },
+    {
+      "path": "submitters list",
+      "summary": "Run the submitters ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "submitters",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "examples": [
+        "pm docuseal submitters list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/submitters"
+        }
+      ]
+    },
+    {
+      "path": "template detail list",
+      "summary": "Run the template detail ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "template_detail",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "examples": [
+        "pm docuseal template detail list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/templates/{id}"
+        }
+      ]
+    },
+    {
+      "path": "templates list",
+      "summary": "Run the templates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "templates",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "examples": [
+        "pm docuseal templates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/templates"
+        }
+      ]
+    },
+    {
+      "path": "update submitter apply",
+      "summary": "Plan and execute the update submitter reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_submitter",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm docuseal update submitter apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/submitters/{id}"
+        }
+      ],
+      "risk": "external mutation; overwrites a live DocuSeal submitter's pre-filled values/contact info, can re-send signature request notifications, and can force-mark the submitter completed/auto-signed; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update template apply",
+      "summary": "Plan and execute the update template reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_template",
+      "source_url": "https://console.docuseal.com/openapi.yml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm docuseal update template apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/templates/{id}"
+        }
+      ],
+      "risk": "external mutation; renames/moves/relabels a live DocuSeal template and can unarchive it; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    }
+  ]
+}

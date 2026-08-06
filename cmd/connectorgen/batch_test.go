@@ -118,6 +118,26 @@ func TestBatchGateUsesRuntimePreflightForEveryImplementedCommand(t *testing.T) {
 	}
 }
 
+func TestBatchGateSelectsOneManifestCandidateForIndividualPreflight(t *testing.T) {
+	defsRoot := t.TempDir()
+	writeBatchBundle(t, defsRoot, cliSurfaceBundleFS(validCLISurfaceJSON()))
+	if err := os.MkdirAll(filepath.Join(defsRoot, "broken"), 0o755); err != nil {
+		t.Fatalf("mkdir broken bundle: %v", err)
+	}
+	manifestPath := writeBatchManifestFixture(t, "cli-surface", "broken")
+	reportPath := filepath.Join(t.TempDir(), "report.json")
+	var stdout, stderr bytes.Buffer
+
+	code := run([]string{"batch", "gate", "--manifest", manifestPath, "--defs-root", defsRoot, "--connector", "cli-surface", "--report", reportPath}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("individual batch gate exit = %d, want 0; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	report := readBatchGateReportFixture(t, reportPath)
+	if len(report.Included) != 1 || report.Included[0].Connector != "cli-surface" || len(report.Dropped) != 0 {
+		t.Fatalf("individual gate report = %+v, want only cli-surface included", report)
+	}
+}
+
 func TestBatchGateDropsSurfaceSyncDrift(t *testing.T) {
 	defsRoot := t.TempDir()
 	writeBatchBundle(t, defsRoot, batchSurfaceSyncDriftBundleFS())
@@ -317,6 +337,80 @@ func TestBatchMaterializeDropsMissingExecutableCoverageWithoutMutatingBundle(t *
 	}
 	if _, err := os.Stat(filepath.Join(defsRoot, "cli-surface", "operations.json")); !os.IsNotExist(err) {
 		t.Fatalf("materializer wrote operations.json for dropped bundle: %v", err)
+	}
+}
+
+func TestParseBatchOpenAPIArtifactAcceptsYAMLResponseStatusKeys(t *testing.T) {
+	artifact := []byte(`openapi: 3.0.3
+paths:
+  /widgets:
+    get:
+      summary: List widgets
+      responses:
+        200:
+          description: OK
+`)
+
+	endpoints, err := parseBatchOpenAPIArtifact(artifact)
+	if err != nil {
+		t.Fatalf("parse YAML artifact: %v", err)
+	}
+	if len(endpoints) != 1 || endpoints[0].Method != "GET" || endpoints[0].Path != "/widgets" || endpoints[0].Summary != "List widgets" {
+		t.Fatalf("parsed endpoints = %+v, want cited GET /widgets", endpoints)
+	}
+}
+
+func TestBatchMaterializeConvertsLegacyExclusionsAndDerivesWriteFlags(t *testing.T) {
+	defsRoot := t.TempDir()
+	fsys := cliSurfaceBundleFS(validCLISurfaceJSON())
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"api": "test API v1",
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+			{ "method": "GET", "path": "/widgets/{id}", "excluded": { "category": "duplicate_of", "reason": "The widgets stream already returns the complete record." } }
+		]
+	}`)}
+	writeBatchBundle(t, defsRoot, fsys)
+	manifestPath := writeBatchManifestFixture(t, "cli-surface")
+	artifactDir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(artifactDir, "cli-surface.json"), []byte(`{
+		"openapi": "3.0.0",
+		"paths": {
+			"/widgets": { "get": {"summary": "List widgets"}, "post": {"summary": "Create widget"} },
+			"/widgets/{id}": { "get": {"summary": "Get widget"} }
+		}
+	}`), 0o644); err != nil {
+		t.Fatalf("write artifact: %v", err)
+	}
+	reportPath := filepath.Join(t.TempDir(), "materialize.json")
+	var stdout, stderr bytes.Buffer
+
+	code := run([]string{"batch", "materialize", "--manifest", manifestPath, "--defs-root", defsRoot, "--artifact-dir", artifactDir, "--retrieved-at", "2026-08-06", "--report", reportPath}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("batch materialize exit = %d, want 0; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	validation, err := validatePath(filepath.Join(defsRoot, "cli-surface"))
+	if err != nil {
+		t.Fatalf("validate materialized bundle: %v", err)
+	}
+	if len(validation.Findings) != 0 {
+		t.Fatalf("materialized bundle findings = %+v, want no legacy classifier or write-flag drift", validation.Findings)
+	}
+
+	cliRaw, err := os.ReadFile(filepath.Join(defsRoot, "cli-surface", "cli_surface.json"))
+	if err != nil {
+		t.Fatalf("read generated CLI surface: %v", err)
+	}
+	if !strings.Contains(string(cliRaw), `"maps_to": "record.name"`) || !strings.Contains(string(cliRaw), `"required": true`) {
+		t.Fatalf("generated CLI write flags = %s, want required record.name binding", cliRaw)
+	}
+	surfaceRaw, err := os.ReadFile(filepath.Join(defsRoot, "cli-surface", "api_surface.json"))
+	if err != nil {
+		t.Fatalf("read generated api surface: %v", err)
+	}
+	if strings.Contains(string(surfaceRaw), `"excluded"`) || !strings.Contains(string(surfaceRaw), `"operation"`) {
+		t.Fatalf("generated v2 api surface = %s, want legacy exclusion converted to blocked operation", surfaceRaw)
 	}
 }
 
