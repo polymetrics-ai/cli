@@ -263,9 +263,9 @@ func TestCheckSurfaceComplete_V2ProvenanceSuppliesBlockedOperationCitation(t *te
 					BlockedByDefault: true,
 					Reason:           "requires sensitive-data safeguards",
 				},
-            }},
-        },
-    }
+			}},
+		},
+	}
 
 	if err := checkSurfaceComplete(b); err != nil {
 		t.Fatalf("checkSurfaceComplete: v2 endpoint provenance should supply the blocked-operation citation: %v", err)
