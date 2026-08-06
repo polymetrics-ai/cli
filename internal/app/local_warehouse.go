@@ -305,28 +305,44 @@ func syncLocalWarehouseDirectory(dir string) error {
 // leaf-to-ancestor order. The parent entry for each must be synced separately
 // before a checkpoint can acknowledge the warehouse write.
 func mkdirAllTrackingCreatedDirectories(dir string) ([]string, error) {
+	if dir == "" {
+		return nil, os.MkdirAll(dir, 0o700)
+	}
 	path := filepath.Clean(dir)
-	created := make([]string, 0)
-	for {
-		info, err := os.Stat(path)
-		if err == nil {
-			if !info.IsDir() {
-				return nil, errors.New("warehouse directory is not a directory")
-			}
-			break
-		}
-		if !errors.Is(err, os.ErrNotExist) {
-			return nil, fmt.Errorf("inspect warehouse directory: %w", err)
-		}
-		parent := filepath.Dir(path)
-		if parent == path {
-			return nil, errors.New("find existing warehouse directory ancestor")
-		}
-		created = append(created, path)
+	paths := make([]string, 0)
+	for parent := filepath.Dir(path); parent != path; parent = filepath.Dir(path) {
+		paths = append(paths, path)
 		path = parent
 	}
-	if err := os.MkdirAll(dir, 0o700); err != nil {
-		return nil, err
+	info, err := os.Stat(path)
+	if err != nil {
+		return nil, fmt.Errorf("inspect warehouse directory: %w", err)
+	}
+	if !info.IsDir() {
+		return nil, errors.New("warehouse directory is not a directory")
+	}
+
+	created := make([]string, 0, len(paths))
+	for index := len(paths) - 1; index >= 0; index-- {
+		path := paths[index]
+		err := os.Mkdir(path, 0o700)
+		if err == nil {
+			created = append(created, path)
+			continue
+		}
+		if !errors.Is(err, os.ErrExist) {
+			return nil, err
+		}
+		info, err := os.Stat(path)
+		if err != nil {
+			return nil, fmt.Errorf("inspect warehouse directory: %w", err)
+		}
+		if !info.IsDir() {
+			return nil, errors.New("warehouse directory is not a directory")
+		}
+	}
+	for left, right := 0, len(created)-1; left < right; left, right = left+1, right-1 {
+		created[left], created[right] = created[right], created[left]
 	}
 	return created, nil
 }
