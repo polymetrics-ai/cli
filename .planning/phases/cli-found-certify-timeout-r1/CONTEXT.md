@@ -34,10 +34,10 @@ the parent issue and all five children lock the remaining design decisions.
   `./internal/connectors/certify` and `./internal/cli`, prints source events,
   and fails clearly for malformed streams or target test failures.
 - Invocation count is the deterministic primary cost guard. A wall-clock
-  budget is a secondary guard and is added only after several fresh,
-  post-refactor GitHub-hosted samples from the timing target are recorded in
-  the PR evidence. It must never be guessed, cached, or used to raise the
-  global Go-test timeout.
+  budget is a secondary guard and is derived from a fresh final-topology timing
+  measurement after the single real sample/outbox lifecycle proof is retained.
+  It must never be guessed, cached, or used to raise the global Go-test
+  timeout.
 
 ## Scope fences
 
