@@ -1,6 +1,7 @@
 package synccontract
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"time"
@@ -59,7 +60,7 @@ func (t Tombstone) Validate() error {
 	}
 	switch t.Operation {
 	case OperationDelete:
-		if len(t.Key) == 0 || !json.Valid(t.Key) {
+		if !validTombstoneJSON(t.Key) {
 			return fmt.Errorf("tombstone key must be valid JSON")
 		}
 		switch t.DeleteImage {
@@ -68,7 +69,7 @@ func (t Tombstone) Validate() error {
 				return fmt.Errorf("key-only tombstone cannot include a before image")
 			}
 		case DeleteImageBefore:
-			if len(t.Before) == 0 || !json.Valid(t.Before) {
+			if !validTombstoneJSON(t.Before) {
 				return fmt.Errorf("before-image tombstone requires valid before JSON")
 			}
 		case DeleteImageUnavailable:
@@ -86,6 +87,10 @@ func (t Tombstone) Validate() error {
 		return fmt.Errorf("unsupported tombstone operation %q", t.Operation)
 	}
 	return nil
+}
+
+func validTombstoneJSON(value json.RawMessage) bool {
+	return len(value) != 0 && json.Valid(value) && !bytes.Equal(bytes.TrimSpace(value), []byte("null"))
 }
 
 // HistoryDeleteAction is deliberately closed: a history target may close its
