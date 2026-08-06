@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/durability"
 	"polymetrics.ai/internal/synccontract"
 )
 
@@ -284,12 +285,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 }
 
 func syncLocalWarehouseDirectory(dir string) error {
-	directory, err := os.Open(dir)
-	if err != nil {
-		return fmt.Errorf("open warehouse directory for sync: %w", err)
-	}
-	defer func() { _ = directory.Close() }()
-	if err := directory.Sync(); err != nil {
+	if err := durability.SyncDirectory(dir); err != nil {
 		return fmt.Errorf("sync warehouse directory: %w", err)
 	}
 	return nil

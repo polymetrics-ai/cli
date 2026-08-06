@@ -212,6 +212,19 @@ func TestCompleteRunPublishesPendingStreamStateOnlyAfterStateSave(t *testing.T) 
 	}
 }
 
+func TestSyncLocalWarehouseDirectoryUsesDurableCommit(t *testing.T) {
+	if err := syncLocalWarehouseDirectory(t.TempDir()); err != nil {
+		t.Fatalf("syncLocalWarehouseDirectory() error = %v", err)
+	}
+}
+
+func TestSyncLocalWarehouseDirectoryReportsCommitFailure(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "missing")
+	if err := syncLocalWarehouseDirectory(path); err == nil {
+		t.Fatal("syncLocalWarehouseDirectory() error = nil, want missing directory error")
+	}
+}
+
 func TestRunETLPublishesCommittedCheckpointAfterStateUnlockFailure(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("post_commit_unlock_failure", []connectors.Record{{
