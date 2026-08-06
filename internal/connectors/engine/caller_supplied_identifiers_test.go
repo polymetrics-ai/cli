@@ -188,7 +188,7 @@ func TestCallerSuppliedIdentifierSetsRejectBeforeNetworkWithoutValueDisclosure(t
 
 func TestCallerSuppliedIdentifierSetsRedactRequestErrors(t *testing.T) {
 	const pathIdentifier = "path/identifier with space"
-	const commaIdentifier = "comma/identifier with space"
+	const commaIdentifier = "comma/identifiér with space"
 	const repeatedIdentifier = "repeated/identifier with space"
 	const bodyIdentifier = `body/"identifier" with space`
 	identifiers := []string{pathIdentifier, commaIdentifier, repeatedIdentifier, bodyIdentifier}
@@ -290,18 +290,55 @@ func callerSuppliedIdentifierErrorForms(t *testing.T, identifier string) []strin
 	if err != nil {
 		t.Fatalf("marshal identifier for provider echo: %v", err)
 	}
-	forms := []string{identifier, strings.ReplaceAll(url.QueryEscape(identifier), "+", "%20"), url.QueryEscape(identifier), url.PathEscape(identifier), string(encodedJSON)}
-	if len(encodedJSON) > 2 {
-		forms = append(forms, string(encodedJSON[1:len(encodedJSON)-1]))
+	urlForms := []string{strings.ReplaceAll(url.QueryEscape(identifier), "+", "%20"), url.QueryEscape(identifier), url.PathEscape(identifier)}
+	forms := append([]string{identifier}, urlForms...)
+	for _, form := range urlForms {
+		if lower := lowercasePercentEscapesForProvider(form); lower != form {
+			forms = append(forms, lower)
+		}
 	}
-	escapedSolidus := strings.ReplaceAll(string(encodedJSON), "/", `\/`)
-	if escapedSolidus != string(encodedJSON) {
+	jsonForms := []string{string(encodedJSON)}
+	if strings.Contains(identifier, "é") {
+		jsonForms = append(jsonForms,
+			strings.ReplaceAll(string(encodedJSON), "é", `\u00e9`),
+			strings.ReplaceAll(string(encodedJSON), "é", `\u00E9`),
+		)
+	}
+	for _, form := range jsonForms {
+		forms = appendProviderJSONIdentifierForms(forms, form)
+	}
+	return forms
+}
+
+func appendProviderJSONIdentifierForms(forms []string, encoded string) []string {
+	forms = append(forms, encoded)
+	if len(encoded) > 2 {
+		forms = append(forms, encoded[1:len(encoded)-1])
+	}
+	escapedSolidus := strings.ReplaceAll(encoded, "/", `\/`)
+	if escapedSolidus != encoded {
 		forms = append(forms, escapedSolidus)
 		if len(escapedSolidus) > 2 {
 			forms = append(forms, escapedSolidus[1:len(escapedSolidus)-1])
 		}
 	}
 	return forms
+}
+
+func lowercasePercentEscapesForProvider(value string) string {
+	buf := []byte(value)
+	for i := 0; i+2 < len(buf); i++ {
+		if buf[i] != '%' {
+			continue
+		}
+		for j := i + 1; j <= i+2; j++ {
+			if buf[j] >= 'A' && buf[j] <= 'F' {
+				buf[j] += 'a' - 'A'
+			}
+		}
+		i += 2
+	}
+	return string(buf)
 }
 
 func TestCallerSuppliedIdentifierSetsPreserveExplicitEmptyBodyArray(t *testing.T) {

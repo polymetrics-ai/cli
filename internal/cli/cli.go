@@ -708,6 +708,11 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	if err := validateConnectorLifecycleFlagValues(flags); err != nil {
 		return err
 	}
+	if command, ok := connectorSurfaceCommand(surface, strings.Join(path, " ")); ok {
+		if err := validateConnectorCommandFlagValues(flags, command); err != nil {
+			return err
+		}
+	}
 	if err := commandrunner.Preflight(connector, path); err != nil {
 		var blocked *commandrunner.BlockedCommandError
 		if errors.As(err, &blocked) {
@@ -1201,6 +1206,15 @@ func validateConnectorLifecycleFlagValues(flags parsedFlags) error {
 			if value == "" || value == "true" {
 				return usageErrorf("--%s requires a value", name)
 			}
+		}
+	}
+	return nil
+}
+
+func validateConnectorCommandFlagValues(flags parsedFlags, command connectors.CommandSurfaceCommand) error {
+	for _, flag := range command.Flags {
+		if flag.Type != "boolean" && flags.isBare(flag.Name) {
+			return usageErrorf("--%s requires a value", flag.Name)
 		}
 	}
 	return nil

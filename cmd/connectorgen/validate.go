@@ -844,8 +844,32 @@ func checkCLISurfaceCallerSuppliedIdentifierSetOperationBindings(b engine.Bundle
 				Message:   fmt.Sprintf("operation %q declares caller_supplied_identifier_sets but has no implemented direct_read command", op.ID),
 			})
 		}
+		endpoint := surfaceEndpointKey(op.REST.Method, op.REST.Path)
+		for i, cmd := range commands {
+			if cmd.Availability != "implemented" || cmd.Intent != "direct_read" || cmd.Operation == op.ID {
+				continue
+			}
+			if !commandReferencesEndpoint(cmd, endpoint) {
+				continue
+			}
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("implemented direct read command %d (%q) references caller-supplied identifier-set operation %q endpoint without binding that operation", i, cmd.Path, op.ID),
+			})
+		}
 	}
 	return findings
+}
+
+func commandReferencesEndpoint(cmd engine.CLICommand, endpoint string) bool {
+	for _, candidate := range cmd.APISurface {
+		if surfaceEndpointKey(candidate.Method, candidate.Path) == endpoint {
+			return true
+		}
+	}
+	return false
 }
 
 func checkCLISurfaceReferences(

@@ -16,6 +16,7 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+	"unicode/utf16"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
@@ -251,19 +252,21 @@ func sensitiveRedactionLiterals(values []string) []string {
 }
 
 func sensitiveRedactionLiteralForms(value string) []string {
-	forms := []string{value, urlencodeSegment(value), url.QueryEscape(value), url.PathEscape(value)}
+	urlForms := []string{urlencodeSegment(value), url.QueryEscape(value), url.PathEscape(value)}
+	forms := append([]string{value}, urlForms...)
+	for _, form := range urlForms {
+		if lower := lowercasePercentEscapes(form); lower != form {
+			forms = append(forms, lower)
+		}
+	}
 	if encoded, err := json.Marshal(value); err == nil {
 		encodedValue := string(encoded)
-		forms = append(forms, encodedValue)
-		if len(encoded) > 2 {
-			forms = append(forms, string(encoded[1:len(encoded)-1]))
-		}
-		escapedSolidus := strings.ReplaceAll(encodedValue, "/", `\/`)
-		if escapedSolidus != encodedValue {
-			forms = append(forms, escapedSolidus)
-			if len(escapedSolidus) > 2 {
-				forms = append(forms, escapedSolidus[1:len(escapedSolidus)-1])
-			}
+		for _, form := range []string{
+			encodedValue,
+			jsonUnicodeEscapedString(encodedValue, false),
+			jsonUnicodeEscapedString(encodedValue, true),
+		} {
+			forms = appendJSONRedactionForms(forms, form)
 		}
 	}
 	seen := map[string]bool{}
@@ -277,6 +280,65 @@ func sensitiveRedactionLiteralForms(value string) []string {
 		out = append(out, form)
 	}
 	return out
+}
+
+func appendJSONRedactionForms(forms []string, encoded string) []string {
+	forms = append(forms, encoded)
+	if len(encoded) > 2 {
+		forms = append(forms, encoded[1:len(encoded)-1])
+	}
+	escapedSolidus := strings.ReplaceAll(encoded, "/", `\/`)
+	if escapedSolidus != encoded {
+		forms = append(forms, escapedSolidus)
+		if len(escapedSolidus) > 2 {
+			forms = append(forms, escapedSolidus[1:len(escapedSolidus)-1])
+		}
+	}
+	return forms
+}
+
+func lowercasePercentEscapes(value string) string {
+	buf := []byte(value)
+	changed := false
+	for i := 0; i+2 < len(buf); i++ {
+		if buf[i] != '%' {
+			continue
+		}
+		for j := i + 1; j <= i+2; j++ {
+			if buf[j] >= 'A' && buf[j] <= 'F' {
+				buf[j] += 'a' - 'A'
+				changed = true
+			}
+		}
+		i += 2
+	}
+	if !changed {
+		return value
+	}
+	return string(buf)
+}
+
+func jsonUnicodeEscapedString(value string, uppercase bool) string {
+	var b strings.Builder
+	b.Grow(len(value))
+	format := `\u%04x`
+	if uppercase {
+		format = `\u%04X`
+	}
+	for _, r := range value {
+		if r <= 0x7f {
+			b.WriteRune(r)
+			continue
+		}
+		if r <= 0xffff {
+			_, _ = fmt.Fprintf(&b, format, r)
+			continue
+		}
+		high, low := utf16.EncodeRune(r)
+		_, _ = fmt.Fprintf(&b, format, high)
+		_, _ = fmt.Fprintf(&b, format, low)
+	}
+	return b.String()
 }
 
 func joinURL(base, path string) string {
