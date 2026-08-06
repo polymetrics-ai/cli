@@ -67,6 +67,48 @@
       "type": "array",
       "minItems": 1,
       "items": { "type": "string" }
+    },
+    "polling_watermark": {
+      "type": "object",
+      "required": ["watermark", "tie_breaker", "boundary", "safety_lag_seconds", "page_size", "max_pages", "request_budget"],
+      "additionalProperties": false,
+      "properties": {
+        "watermark": {
+          "type": "object",
+          "required": ["kind", "path"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": { "type": "string", "enum": ["timestamp", "monotonic_sequence", "opaque_cursor"] },
+            "path": { "type": "string" }
+          }
+        },
+        "tie_breaker": {
+          "type": "object",
+          "required": ["path"],
+          "additionalProperties": false,
+          "properties": { "path": { "type": "string" } }
+        },
+        "boundary": { "type": "string", "enum": ["inclusive"] },
+        "safety_lag_seconds": { "type": "integer" },
+        "page_size": { "type": "integer" },
+        "max_pages": { "type": "integer" },
+        "request_budget": { "type": "integer" },
+        "soft_delete": {
+          "type": "object",
+          "required": ["path"],
+          "additionalProperties": false,
+          "properties": { "path": { "type": "string" } }
+        },
+        "deletion_endpoint": {
+          "type": "object",
+          "required": ["path", "records_path"],
+          "additionalProperties": false,
+          "properties": {
+            "path": { "type": "string" },
+            "records_path": { "type": "string" }
+          }
+        }
+      }
     }
   }
 }
