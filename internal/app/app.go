@@ -710,6 +710,9 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 		if stream.SyncMode == "" {
 			stream.SyncMode = DefaultUserFacingSyncMode
 		}
+		if isLegacySyncModeName(stream.SyncMode) {
+			stream.LegacyCompatibility = true
+		}
 		mode, err := ParseStreamSyncMode(stream)
 		if err != nil {
 			return Connection{}, err
@@ -812,8 +815,9 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		return Run{}, err
 	}
 	run := Run{ID: runID, Type: "etl", Connection: req.Connection, Stream: req.Stream, Status: "running", StartedAt: time.Now().UTC()}
-	a.state.Runs = append(a.state.Runs, run)
-	_ = a.save()
+	if _, err := a.beginRun(run); err != nil {
+		return Run{}, fmt.Errorf("start ETL run: %w", err)
+	}
 
 	mode, err := ParseStreamSyncMode(stream)
 	if err != nil {
@@ -861,9 +865,6 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 	durableDestination, ok := destination.(durableETLDestination)
 	if !ok {
 		return etlExecutionResult{}, fmt.Errorf("%w: %q", errGenericETLDurabilityUnavailable, destination.Name())
-	}
-	if a.state.StreamStates == nil {
-		a.state.StreamStates = map[string]StreamState{}
 	}
 	stateKey := streamStateKey(conn.Name, streamName)
 	prior := a.state.StreamStates[stateKey]
@@ -982,35 +983,71 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 	if err != nil {
 		return result, err
 	}
-	a.state.StreamStates[stateKey] = updated
 	result.Checkpoint = checkpointForResult(result, mode, stateKey, updated)
+	result.PendingStreamState = &pendingStreamState{Key: stateKey, State: updated}
 	return result, nil
 }
 
-func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) {
-	run := Run{}
-	for i := range a.state.Runs {
-		if a.state.Runs[i].ID == runID {
-			a.state.Runs[i].Status = "completed"
-			a.state.Runs[i].RecordsRead = result.RecordsRead
-			a.state.Runs[i].RecordsTransformed = result.RecordsTransformed
-			a.state.Runs[i].RecordsLoaded = result.RecordsLoaded
-			a.state.Runs[i].RecordsFailed = result.RecordsFailed
-			a.state.Runs[i].BatchCount = result.BatchCount
-			a.state.Runs[i].Checkpoint = result.Checkpoint
-			a.state.Runs[i].CompletedAt = time.Now().UTC()
-			run = a.state.Runs[i]
-			break
-		}
-	}
-	if a.state.Checkpoints == nil {
-		a.state.Checkpoints = map[string]map[string]string{}
-	}
-	a.state.Checkpoints[runID] = cloneStringMap(result.Checkpoint)
+func (a *App) beginRun(run Run) (Run, error) {
+	previousRuns := a.state.Runs
+	a.state.Runs = append(append([]Run(nil), a.state.Runs...), run)
 	if err := a.save(); err != nil {
+		if !errors.Is(err, errStateRevisionConflict) {
+			a.state.Runs = previousRuns
+		}
 		return Run{}, err
 	}
 	return run, nil
+}
+
+func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) {
+	if result.PendingStreamState == nil {
+		return Run{}, errors.New("completed ETL run is missing pending stream state")
+	}
+	expectedRevision := a.state.Revision
+	completedAt := time.Now().UTC()
+	updated, err := a.updateState(func(current state) (state, error) {
+		if current.Revision != expectedRevision {
+			return current, errStateRevisionConflict
+		}
+		found := false
+		for i := range current.Runs {
+			if current.Runs[i].ID != runID {
+				continue
+			}
+			current.Runs[i].Status = "completed"
+			current.Runs[i].RecordsRead = result.RecordsRead
+			current.Runs[i].RecordsTransformed = result.RecordsTransformed
+			current.Runs[i].RecordsLoaded = result.RecordsLoaded
+			current.Runs[i].RecordsFailed = result.RecordsFailed
+			current.Runs[i].BatchCount = result.BatchCount
+			current.Runs[i].Checkpoint = cloneStringMap(result.Checkpoint)
+			current.Runs[i].CompletedAt = completedAt
+			found = true
+			break
+		}
+		if !found {
+			return current, fmt.Errorf("run %q not found", runID)
+		}
+		if current.Checkpoints == nil {
+			current.Checkpoints = map[string]map[string]string{}
+		}
+		current.Checkpoints[runID] = cloneStringMap(result.Checkpoint)
+		if current.StreamStates == nil {
+			current.StreamStates = map[string]StreamState{}
+		}
+		current.StreamStates[result.PendingStreamState.Key] = cloneStreamState(result.PendingStreamState.State)
+		return current, nil
+	})
+	if err != nil {
+		return Run{}, err
+	}
+	for _, run := range updated.Runs {
+		if run.ID == runID {
+			return run, nil
+		}
+	}
+	return Run{}, fmt.Errorf("completed run %q was not stored", runID)
 }
 
 func (a *App) GetRun(id string) (Run, error) {
@@ -2216,18 +2253,33 @@ func (a *App) findConnection(name string) (Connection, bool) {
 	return Connection{}, false
 }
 
-func (a *App) failRun(runID string, err error) (Run, error) {
-	for i := range a.state.Runs {
-		if a.state.Runs[i].ID == runID {
-			a.state.Runs[i].Status = "failed"
-			a.state.Runs[i].Error = safety.RedactErrorText(err.Error())
-			a.state.Runs[i].CompletedAt = time.Now().UTC()
-			run := a.state.Runs[i]
-			_ = a.save()
-			return run, err
+func (a *App) failRun(runID string, runErr error) (Run, error) {
+	expectedRevision := a.state.Revision
+	completedAt := time.Now().UTC()
+	updated, persistErr := a.updateState(func(current state) (state, error) {
+		if current.Revision != expectedRevision {
+			return current, errStateRevisionConflict
+		}
+		for i := range current.Runs {
+			if current.Runs[i].ID != runID {
+				continue
+			}
+			current.Runs[i].Status = "failed"
+			current.Runs[i].Error = safety.RedactErrorText(runErr.Error())
+			current.Runs[i].CompletedAt = completedAt
+			return current, nil
+		}
+		return current, fmt.Errorf("run %q not found", runID)
+	})
+	if persistErr != nil {
+		return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
+	}
+	for _, run := range updated.Runs {
+		if run.ID == runID {
+			return run, runErr
 		}
 	}
-	return Run{}, err
+	return Run{}, errors.Join(runErr, fmt.Errorf("failed run %q was not stored", runID))
 }
 
 func writeJSONAtomic(path string, v any) error {

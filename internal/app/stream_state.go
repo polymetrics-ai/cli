@@ -54,6 +54,15 @@ func (s *StreamState) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func cloneStreamState(state StreamState) StreamState {
+	clone := state
+	if state.Checkpoint != nil {
+		checkpoint := state.Checkpoint.Clone()
+		clone.Checkpoint = &checkpoint
+	}
+	return clone
+}
+
 func streamStateCursor(state StreamState) string {
 	if state.Checkpoint == nil {
 		return ""

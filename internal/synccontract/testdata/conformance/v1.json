@@ -72,9 +72,19 @@
       "expected_outcome": "before_image_delete"
     },
     {
-      "id": "truncate-or-invalidate",
-      "guarantee": "a truncate or source invalidation is never represented as a row delete",
-      "expected_outcome": "explicit_invalidation"
+      "id": "tombstone-unavailable-image",
+      "guarantee": "deletes with unavailable source images retain their stable key, identity, and ordering",
+      "expected_outcome": "unavailable_image_delete"
+    },
+    {
+      "id": "source-truncate",
+      "guarantee": "a source truncate is represented as a source-level event, never a row delete",
+      "expected_outcome": "source_truncated"
+    },
+    {
+      "id": "source-invalidate",
+      "guarantee": "a source invalidation is represented as a source-level event, never a row delete",
+      "expected_outcome": "source_invalidated"
     },
     {
       "id": "duplicate-replay-deduped",
