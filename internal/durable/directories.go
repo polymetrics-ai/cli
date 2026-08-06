@@ -49,10 +49,11 @@ func ensureDirectoryTree(path, root string, mode os.FileMode, syncDirectory func
 func directoryAncestors(path string) []string {
 	directories := []string{}
 	for current := path; ; current = filepath.Dir(current) {
-		directories = append(directories, current)
-		if filepath.Dir(current) == current {
+		parent := filepath.Dir(current)
+		if parent == current {
 			break
 		}
+		directories = append(directories, current)
 	}
 	for left, right := 0, len(directories)-1; left < right; left, right = left+1, right-1 {
 		directories[left], directories[right] = directories[right], directories[left]

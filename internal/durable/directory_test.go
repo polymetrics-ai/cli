@@ -45,11 +45,15 @@ func TestEnsureDirectoryTreeSyncsCompleteExistingAncestorChain(t *testing.T) {
 		t.Fatal(err)
 	}
 	for current := absoluteDirectory; ; current = filepath.Dir(current) {
+		parent := filepath.Dir(current)
+		if parent == current {
+			if synced[current] {
+				t.Fatalf("filesystem root %s was synced", current)
+			}
+			break
+		}
 		if !synced[current] {
 			t.Fatalf("directory %s was not synced", current)
-		}
-		if filepath.Dir(current) == current {
-			break
 		}
 	}
 }
