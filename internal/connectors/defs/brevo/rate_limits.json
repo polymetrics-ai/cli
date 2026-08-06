@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Brevo publishes endpoint- and account-tier-specific limits, but this bundle has no tier selector."
+}

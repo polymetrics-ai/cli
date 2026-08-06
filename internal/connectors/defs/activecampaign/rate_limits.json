@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "ActiveCampaign publishes a 5-requests-per-second account limit, but not the counter or replenishment model required for an enforced declaration."
+}

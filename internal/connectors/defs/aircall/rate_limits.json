@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Aircall's published limit is per company, but this bundle has no non-secret company identifier for the declaration scope."
+}

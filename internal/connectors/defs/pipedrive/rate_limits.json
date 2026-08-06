@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Pipedrive's documented Search API rate is per secret token while other endpoint limits follow separate general rules."
+}

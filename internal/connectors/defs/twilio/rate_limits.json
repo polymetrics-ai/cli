@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Twilio applies provider limits to individual accounts, senders, services, and resource types rather than one enumerable API policy."
+}

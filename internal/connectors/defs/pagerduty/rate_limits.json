@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "PagerDuty's provider reference does not publish an enumerable request-rate policy compatible with this bundle."
+}

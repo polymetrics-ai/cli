@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Cisco Meraki's documented organization and source-IP limits have no matching non-secret subject property in this bundle."
+}

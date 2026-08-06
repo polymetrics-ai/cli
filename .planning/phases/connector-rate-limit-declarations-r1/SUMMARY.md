@@ -8,7 +8,7 @@ coverage:
         status: pass
     human_judgment: false
   - id: D2
-    description: The first 25 researched connectors have a valid cited policy or explicit unknown declaration.
+    description: The retained 24 first-batch connectors have a valid cited policy or explicit unknown declaration.
     verification:
       - kind: integration
         ref: jq plus internal/connectors/engine tests and connectorgen validate
@@ -18,14 +18,19 @@ coverage:
 
 # Provider-cited rate-limit declarations R1 summary
 
-The first production rate-limit batch adds 25 declarations and the optional `defs.FS` embed
-pattern that ships them. Harvest and CallRail carry cited, scoped policies. The other 23
-providers carry explicit `unknown` states because their published policy varies by unrepresented
-plan, auth, token, tenant, endpoint, or subject scope. All 25 were later rechecked against the
-authoritative provider-artifact sweep ledger and are `done` records with live enumerable provider
-artifacts; no declaration is based on an unresearched, skipped, or retired surface.
+The first production rate-limit batch originally added 25 declarations and the optional `defs.FS`
+embed pattern that ships them. Population recheck removed `vercel`, because it is absent from the
+authoritative sweep rather than a `done` record; the retained 24 remain valid. Harvest and CallRail
+carry cited, scoped policies. The other 22 providers carry explicit `unknown` states because their
+published policy varies by unrepresented plan, auth, token, tenant, endpoint, or subject scope.
 
 The gitignored resumability ledger contains every connector verdict, provider URL, retrieval date,
-and one-line rationale. `PROGRESS.md` resumes at `sendgrid` for the next batch.
+and one-line rationale. `PROGRESS.md` contains the exact next connector for the next batch.
+
+The second batch adds 25 more declarations: Aha! carries two cited account-scoped fixed-window
+budgets (20 requests/second and 300 requests/minute), while 24 providers carry evidence-backed
+`unknown` results. The current population-gated total is 49 declarations: 3 `declared` and 46
+`unknown`. Every current declaration joins to a `done` sweep record; the separate population audit
+lists seven deprecation candidates, none of which has a declaration.
 
 No `streams.json` throttle, credential, CLI surface, or documentation page changed.

@@ -24,7 +24,7 @@
 
 ## Results
 
-- `jq empty internal/connectors/defs/*/rate_limits.json` — pass (25 files).
+- `jq empty internal/connectors/defs/*/rate_limits.json` — pass (49 files).
 - `go test ./internal/connectors/engine -run TestProductionDefinitionsEmbedEveryRateLimitDeclaration -count=1` — pass after the planned red result.
 - `go test ./internal/connectors/engine -count=1` — pass.
 - `go test ./internal/connectors/commandrunner -count=1` — pass.
@@ -35,9 +35,10 @@
   `make agent-contract-check`, `make connectorgen-validate`, `make connectorgen-surface-sync`,
   `make connector-boundary`, and `make release-workflow-check` — pass.
 - `git diff --check` — pass.
-- Population audit — pass: all 25 `rate_limits.json` directories join to the current authoritative
+- Population audit — pass: all 49 `rate_limits.json` directories join to the current authoritative
   sweep ledger as `status: done`, with a nonblank provider artifact URL and
-  `scope_in_current_defs: true`. No selected connector matches a dead/retired sweep reason.
+  `scope_in_current_defs: true`. The recheck removed `vercel` because it is absent from the sweep;
+  no selected connector matches a dead/retired sweep reason.
 
 The full `go test ./...` and aggregate `make verify` are intentionally left to CI because this
 repository's full suite exceeds the worker command timeout; all relevant package tests and each

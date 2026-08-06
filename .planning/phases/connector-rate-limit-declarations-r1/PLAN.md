@@ -37,8 +37,10 @@ production `defs.FS` embed pattern in the same slice.
 - A dead or retired provider surface is a lifecycle/deprecation finding, not a rate-limit
   `unknown`. Do not create a `rate_limits.json` or a rate-limit-ledger record for it. Capture it
   separately in `POPULATION-AUDIT.md`.
-- The committed 25-connector batch was rechecked against this gate. Every member is `done`, has a
-  recorded provider artifact, and has `scope_in_current_defs: true`; none was removed.
+- A recheck found that `vercel` is absent from the current sweep ledger, rather than a `done`
+  record. Its declaration and rate-limit ledger entry were removed; it is neither a rate-limit
+  `unknown` nor a deprecation candidate. The retained 24 first-batch declarations all have a
+  `done` record, a provider artifact, and `scope_in_current_defs: true`.
 
 ## Scope guard and ownership
 

@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Algolia lets customers configure optional, per-key rate limits; no provider-default enumerable policy applies to this bundle."
+}

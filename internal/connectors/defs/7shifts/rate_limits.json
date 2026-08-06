@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "7shifts scopes its documented limit to the access token, which is secret and cannot be a declaration subject."
+}

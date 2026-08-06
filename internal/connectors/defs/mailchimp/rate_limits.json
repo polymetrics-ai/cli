@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Mailchimp's Marketing API reference does not publish an enumerable request-rate policy for this bundle."
+}

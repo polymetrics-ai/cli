@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "AppsFlyer quotas vary by subscription, report type, app, account, and request shape beyond this bundle's selectors."
+}

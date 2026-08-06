@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Ashby's provider reference does not publish an enumerable rate-limit policy for this API."
+}

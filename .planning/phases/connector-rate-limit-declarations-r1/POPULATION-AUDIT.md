@@ -7,18 +7,35 @@ is the sole candidate population. On 2026-08-06 it contained 359 records: 281 `d
 `unknown`, and 7 `skipped`. This live read supersedes the earlier handoff snapshot (358 / 281 /
 70 / 7).
 
-## First-batch result
+## First-batch correction
 
-Every committed declaration matches a sweep record with `status: done`, a nonblank provider
-artifact URL, and `scope_in_current_defs: true`:
+The retained 24 first-batch declarations match a sweep record with `status: done`, a nonblank
+provider artifact URL, and `scope_in_current_defs: true`:
 
 `airtable`, `asana`, `auth0`, `basecamp`, `callrail`, `chargebee`, `clickup-api`, `clockify`,
 `confluence`, `datadog`, `freshdesk`, `github`, `harvest`, `hubspot`, `intercom`, `jira`,
-`klaviyo`, `monday`, `notion`, `okta`, `recurly`, `stripe`, `vercel`, `xero`, and
+`klaviyo`, `monday`, `notion`, `okta`, `recurly`, `stripe`, `xero`, and
 `zendesk-support`.
 
-No declaration was removed by the population correction. Sweep `unknown` and `skipped` records
-are not candidates for a rate-limit declaration, even if a matching connector definition exists.
+`vercel` is absent from the current sweep ledger. Its prior declaration and rate-limit-ledger entry
+were removed: this is an out-of-population research gap, not a provider-deprecation finding and not
+a rate-limit `unknown`. Sweep `unknown` and `skipped` records are also not candidates for a
+rate-limit declaration, even if a matching connector definition exists.
+
+## Second-batch result
+
+All 25 second-batch declarations join to `status: done` records with provider artifacts and
+`scope_in_current_defs: true`:
+
+`7shifts`, `activecampaign`, `aha`, `aircall`, `algolia`, `apify-dataset`, `appsflyer`, `ashby`,
+`assemblyai`, `bamboo-hr`, `bitbucket`, `box`, `braze`, `brevo`, `cisco-meraki`, `commercetools`,
+`discord`, `google-ads`, `mailchimp`, `mailgun`, `pagerduty`, `pipedrive`, `reddit`, `square`, and
+`twilio`.
+
+`aha` supplies a cited account-scoped policy. The other 24 remain explicit rate-limit `unknown`
+results because their provider policies are absent, per-token, per-resource, plan-dependent,
+response-derived, or otherwise incompatible with this declaration dialect. No member is a
+deprecation candidate.
 
 ## Deprecation candidates — separate from rate-limit unknowns
 

@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Google Ads applies variable token-bucket limits jointly by client customer ID and developer token, with no safe declared budget."
+}

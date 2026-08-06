@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Discord requires response-derived route buckets and uses credential- and resource-scoped limits not representable by this bundle."
+}

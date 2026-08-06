@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Apify combines a user-scoped global limit with resource-scoped limits, neither of which maps to a supported non-secret bundle subject."
+}

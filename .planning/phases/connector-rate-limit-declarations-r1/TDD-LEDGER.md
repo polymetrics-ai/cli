@@ -5,11 +5,11 @@
 | Slice | Red evidence | Green evidence | Status |
 | --- | --- | --- | --- |
 | First declaration embed | `TestProductionDefinitionsEmbedEveryRateLimitDeclaration` failed for `harvest/rate_limits.json` before the optional wildcard was added | The same test passed after adding `*/rate_limits.json` to `defs.FS` | green |
-| Closed declaration validation | Invalid source/scope/shape is rejected by existing engine tests and loader rules | All 25 authored files parse and `go test ./internal/connectors/engine` passes | green |
+| Closed declaration validation | Invalid source/scope/shape is rejected by existing engine tests and loader rules | The retained 24 first-batch files parse and `go test ./internal/connectors/engine` passes | green |
 | Batch conformance | Surface and command metadata remain unchanged | `connectorgen validate` and `surface-sync --check` pass with zero findings or changes | green |
-| Population eligibility | Every declaration directory is joined to the authoritative sweep ledger | All 25 join to `status: done` records with provider artifacts; no `unknown`/`skipped` record is declared | green |
-| Batch 2 eligibility | Each named candidate is rejoined to the live sweep ledger before authoring | Planned: all 25 must remain `done`, have a provider artifact, and retain a valid bundle scope | planned |
-| Batch 2 declaration conformance | Invalid source/scope/shape is refused by existing loader tests | Planned: JSON, engine, and surface validation will pass after the batch; no legacy stream throttle will change | planned |
+| Population eligibility | Every declaration directory is joined to the authoritative sweep ledger | The retained 24 first-batch records join to `status: done` provider artifacts; `vercel` was removed because it is absent from the sweep | green |
+| Batch 2 eligibility | Each named candidate is rejoined to the live sweep ledger before authoring | All 25 join to `status: done` records with provider artifacts and `scope_in_current_defs: true` | green |
+| Batch 2 declaration conformance | Invalid source/scope/shape is refused by existing loader tests | 25 files parse; engine, commandrunner, generator, and scoped repository gates pass with no `streams.json` change | green |
 
 ## Evidence rules
 

@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Braze's provider documentation does not publish an enumerable default rate-limit policy for this bundle."
+}

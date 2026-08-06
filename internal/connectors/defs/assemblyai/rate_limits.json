@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "AssemblyAI's documented account limits vary by service, model, plan, and custom allocation, without a non-secret account scope property."
+}

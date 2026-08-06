@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Square documents that rate limits may differ by endpoint but does not publish compatible enumerable budgets for this bundle."
+}

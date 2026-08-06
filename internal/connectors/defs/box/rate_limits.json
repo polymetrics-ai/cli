@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Box's policies vary by user, enterprise, endpoint, and licensed allocation; the configured subject cannot safely model those scopes."
+}
