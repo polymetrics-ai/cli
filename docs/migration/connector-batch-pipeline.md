@@ -169,8 +169,9 @@ For each selected manifest record:
    executor and the v2 `api_surface.json` contains its cited method/path row.
    Every other operation stays provider-blocked or justified-excluded with its
    reason and endpoint-local artifact citation.
-5. Add `httptest` fixtures and the usual connector documentation. Fixtures are
-   synthetic and contain no secret values. No live provider request is used.
+5. Keep the reviewed source bundle's `httptest` fixtures and connector documentation accurate
+   before materialization. The materializer copies that bundle; it does not synthesize fixtures or
+   prose. Fixtures are synthetic and contain no secret values. No live provider request is used.
 6. For writes, retain plan → preview → approval → execute. Destructive writes
    require typed confirmation; non-idempotent writes remain non-retriable.
    Never introduce a generic HTTP write escape hatch.

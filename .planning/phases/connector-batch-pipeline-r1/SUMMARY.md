@@ -11,7 +11,8 @@ evidence-quality-first batch, and recorded its individual and full gates.
   Flexmail, and Alpaca Broker API (190 surveyed operations).
 - Materialized the cited public artifacts into v2 provenance-backed operation
   ledgers, generated `operations.json` and reachable `cli_surface.json`, and
-  added the normal fixtures and generated documentation surfaces.
+  retained the reviewed synthetic fixtures and regenerated documentation
+  surfaces.
 - Individually validated and runtime-preflight-gated every candidate, then ran
   the clean batch gate: five included, zero dropped, 203 declared operations,
   split 39 executable / 27 provider-blocked / 137 excluded.

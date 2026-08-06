@@ -29,9 +29,10 @@
   validate/generate a bundle but cannot consume a ledger, retain candidate/drop
   decisions, or aggregate a per-connector gate.
 
-## Deferred by an external contract
+## Originally deferred by an external contract
 
-- The generator that emits v2 `api_surface.json` provenance must wait for #3869
-  to merge; it will consume its provider-artifact table and endpoint citations.
-- Default executable output policy must wait for #3870; the current
-  `surface-sync` default is redacting and cannot be used for a new bundle.
+- The generator that emits v2 `api_surface.json` provenance waited for #3869
+  to merge so it could consume the provider-artifact table and endpoint
+  citations.
+- Default executable output policy waited for #3870; the then-current
+  `surface-sync` default was redacting and could not be used for a new bundle.

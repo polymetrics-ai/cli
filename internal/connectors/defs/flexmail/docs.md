@@ -59,5 +59,5 @@ data.
 
 - Batch defaults: read_page_size=500.
 - API coverage includes 5 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  destructive_admin=1, out_of_scope=4.
+- Other cited artifact endpoints are explicitly classified in `api_surface.json`; endpoints absent
+  from the cited artifact are not exposed by this bundle.

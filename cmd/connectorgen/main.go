@@ -19,6 +19,12 @@
 //	batch plan --ledger <path> --out <path>
 //	                           turns provider-artifact ledger evidence into a
 //	                           deterministic, reviewable connector batch
+//	batch materialize --manifest <path> --source-defs-root <path> ...
+//	                           copies a reviewed source bundle and derives its
+//	                           cited provider-artifact inventory and CLI surface
+//	batch gate --manifest <path> --report <path>
+//	                           records independent candidate validation and
+//	                           runtime-preflight results
 //	new <name>                 scaffolds internal/connectors/defs/<name>/
 //
 // It owns bundle validation plus generated hook/native import sets for the
