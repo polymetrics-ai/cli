@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"net"
 	"net/http"
 	"net/url"
@@ -78,6 +79,30 @@ func TestBatchPlanWritesDeterministicEvidenceManifest(t *testing.T) {
 	}
 	if got := manifest.Connectors[0]; got.Connector != "alpha" || got.OperationsTotal != 23 || got.Artifact.URL == "" || got.Artifact.Version == "" || got.Artifact.RetrievedAt != "2026-08-05" {
 		t.Fatalf("first manifest connector = %+v, want preserved alpha evidence", got)
+	}
+}
+
+func TestBatchNamespaceRendersContextualHelp(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+
+	code := run([]string{"batch"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("bare batch exit = %d, want 0; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if !strings.Contains(stdout.String(), "connectorgen batch materialize") || stderr.Len() != 0 {
+		t.Fatalf("bare batch output = stdout %q stderr %q, want contextual stdout help only", stdout.String(), stderr.String())
+	}
+}
+
+func TestBatchRejectsInvalidSubcommand(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+
+	code := run([]string{"batch", "unknown"}, &stdout, &stderr)
+	if code != 2 {
+		t.Fatalf("invalid batch subcommand exit = %d, want 2; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if stdout.Len() != 0 || !strings.Contains(stderr.String(), "unknown subcommand") {
+		t.Fatalf("invalid batch output = stdout %q stderr %q, want usage error on stderr", stdout.String(), stderr.String())
 	}
 }
 
@@ -553,6 +578,45 @@ func TestBatchArtifactURLAndDestinationGuards(t *testing.T) {
 	defer connection.Close()
 	if dialed != "8.8.8.8:443" {
 		t.Fatalf("dialed %q, want validated public address", dialed)
+	}
+}
+
+func TestBatchArtifactResponseRejectsIncompleteInventories(t *testing.T) {
+	tests := []struct {
+		name     string
+		status   int
+		headers  http.Header
+		contains string
+	}{
+		{
+			name:     "partial content status",
+			status:   http.StatusPartialContent,
+			headers:  http.Header{},
+			contains: "HTTP 206",
+		},
+		{
+			name:   "content range header",
+			status: http.StatusOK,
+			headers: http.Header{
+				"Content-Range": []string{"bytes 0-1023/4096"},
+			},
+			contains: "Content-Range",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			err := validateBatchArtifactResponse(&http.Response{StatusCode: test.status, Header: test.headers})
+			var unknown *batchArtifactInventoryUnknownError
+			if !errors.As(err, &unknown) || !strings.Contains(err.Error(), "incomplete") || !strings.Contains(err.Error(), test.contains) {
+				t.Fatalf("response error = %v, want incomplete unknown inventory containing %q", err, test.contains)
+			}
+			if stage := batchArtifactDropStage(err, "artifact_fetch"); stage != "artifact_inventory_unknown" {
+				t.Fatalf("drop stage = %q, want artifact_inventory_unknown", stage)
+			}
+		})
+	}
+	if err := validateBatchArtifactResponse(&http.Response{StatusCode: http.StatusOK, Header: http.Header{}}); err != nil {
+		t.Fatalf("complete artifact response rejected: %v", err)
 	}
 }
 

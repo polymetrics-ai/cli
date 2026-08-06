@@ -249,16 +249,11 @@ func materializeBatchCandidate(opts batchMaterializeOptions, candidate BatchMani
 
 	rawArtifact, err := readBatchMaterializeArtifact(opts, candidate)
 	if err != nil {
-		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, "artifact_fetch", err)
+		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, batchArtifactDropStage(err, "artifact_fetch"), err)
 	}
 	artifactEndpoints, err := parseBatchOpenAPIArtifact(rawArtifact)
 	if err != nil {
-		var unknown *batchArtifactInventoryUnknownError
-		stage := "artifact_parse"
-		if errors.As(err, &unknown) {
-			stage = "artifact_inventory_unknown"
-		}
-		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, stage, err)
+		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, batchArtifactDropStage(err, "artifact_parse"), err)
 	}
 	sha := fmt.Sprintf("%x", sha256.Sum256(rawArtifact))
 	surface, err := materializeAPISurface(bundle, candidate, opts.retrievedAt, sha, artifactEndpoints)
@@ -541,8 +536,8 @@ func fetchBatchMaterializeArtifact(rawURL string) ([]byte, error) {
 		return nil, fmt.Errorf("fetch artifact: %w", err)
 	}
 	defer func() { _ = response.Body.Close() }()
-	if response.StatusCode < http.StatusOK || response.StatusCode >= http.StatusMultipleChoices {
-		return nil, fmt.Errorf("fetch artifact: provider returned HTTP %d", response.StatusCode)
+	if err := validateBatchArtifactResponse(response); err != nil {
+		return nil, err
 	}
 	if response.ContentLength > maxMaterializeArtifactBytes {
 		return nil, fmt.Errorf("fetch artifact: content length %d exceeds %d-byte artifact limit", response.ContentLength, maxMaterializeArtifactBytes)
@@ -555,6 +550,22 @@ func fetchBatchMaterializeArtifact(rawURL string) ([]byte, error) {
 		return nil, fmt.Errorf("fetch artifact: response exceeds %d-byte artifact limit", maxMaterializeArtifactBytes)
 	}
 	return raw, nil
+}
+
+func validateBatchArtifactResponse(response *http.Response) error {
+	if response == nil {
+		return errors.New("fetch artifact: empty HTTP response")
+	}
+	if response.StatusCode == http.StatusPartialContent {
+		return batchArtifactInventoryUnknown("artifact response is incomplete: received HTTP 206 Partial Content")
+	}
+	if len(response.Header.Values("Content-Range")) > 0 {
+		return batchArtifactInventoryUnknown("artifact response is incomplete: response carries Content-Range")
+	}
+	if response.StatusCode != http.StatusOK {
+		return fmt.Errorf("fetch artifact: provider returned HTTP %d", response.StatusCode)
+	}
+	return nil
 }
 
 type batchArtifactLookupIPAddr func(context.Context, string) ([]net.IPAddr, error)
@@ -806,6 +817,14 @@ func (err *batchArtifactInventoryUnknownError) Error() string {
 
 func batchArtifactInventoryUnknown(format string, args ...any) error {
 	return &batchArtifactInventoryUnknownError{reason: fmt.Sprintf(format, args...)}
+}
+
+func batchArtifactDropStage(err error, fallback string) string {
+	var unknown *batchArtifactInventoryUnknownError
+	if errors.As(err, &unknown) {
+		return "artifact_inventory_unknown"
+	}
+	return fallback
 }
 
 func batchYAMLDeref(node *yaml.Node) (*yaml.Node, error) {

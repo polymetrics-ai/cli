@@ -44,6 +44,9 @@ commands consumes the survey ledger, preserves candidate evidence, or retains
 per-candidate drop decisions. It orchestrates existing checks; it does not
 parallel the runtime or write a second validator.
 
+A bare `connectorgen batch` prints this namespace's contextual usage and exits
+successfully; an invalid subcommand remains a usage error.
+
 ## Phase 1: select from the live ledger
 
 The ledger is external to this checkout and intentionally gitignored. Read it
@@ -126,11 +129,14 @@ For each selected manifest record:
 1. Fetch or read only its cited public artifact. An artifact URL must be HTTPS,
    have no userinfo, query, or fragment, and resolve exclusively to public
    addresses before every dial; proxy routing is disabled and every redirect is
-   revalidated. Store the source URL, exact version, full-date retrieval date,
-   and SHA-256. The shared v2 artifact table owns URL/date/SHA; the
-   materialization report preserves the survey's exact version, and every
-   endpoint joins to the cited artifact through its local provenance row. No
-   credential and no live provider API call is allowed.
+   revalidated. Only an HTTP 200 response without `Content-Range` is complete;
+   HTTP 206 or any response carrying `Content-Range` is an
+   `artifact_inventory_unknown` drop before parsing. Store the source URL,
+   exact version, full-date retrieval date, and SHA-256. The shared v2 artifact
+   table owns URL/date/SHA; the materialization report preserves the survey's
+   exact version, and every endpoint joins to the cited artifact through its
+   local provenance row. No credential and no live provider API call is
+   allowed.
 2. Enumerate each provider operation from the artifact. Local Path Item
    references and every HTTP method, including `TRACE`, are resolved. A form
    that cannot be exhaustively represented—such as a non-empty top-level

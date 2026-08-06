@@ -115,8 +115,8 @@ type batchPlanOptions struct {
 // rule set.
 func runBatch(args []string, stdout, stderr io.Writer) int {
 	if len(args) < 2 {
-		logln(stderr, batchUsage())
-		return 2
+		logln(stdout, batchUsage())
+		return 0
 	}
 
 	switch args[1] {

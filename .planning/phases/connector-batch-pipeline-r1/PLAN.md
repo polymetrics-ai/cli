@@ -123,6 +123,10 @@ manifest-selected bundle directories.
 4. Read an existing bundle only from an explicit source root and materialize a
    copied, new destination bundle. A pre-existing destination is a named
    collision; cleanup may remove only a destination created by that invocation.
+5. Require an HTTP 200 artifact response without `Content-Range`; classify a
+   partial or ranged response as an unknown inventory before parsing it.
+6. Make a bare `connectorgen batch` invocation render its contextual usage to
+   stdout and succeed, while invalid subcommands retain usage-error behavior.
 
 ## Commit checkpoints
 
