@@ -189,6 +189,12 @@ func (a *App) load() error {
 	if err != nil {
 		return err
 	}
+	return a.normalizeLoadedState(loaded)
+}
+
+// normalizeLoadedState applies every compatibility invariant after a state
+// reload. Callers must not assign a store result to a.state directly.
+func (a *App) normalizeLoadedState(loaded state) error {
 	a.state = loaded
 	if a.state.Checkpoints == nil {
 		a.state.Checkpoints = map[string]map[string]string{}
@@ -2030,8 +2036,10 @@ func (a *App) loadReversePlan(id string) (ReversePlan, error) {
 	if err != nil {
 		return ReversePlan{}, err
 	}
-	a.state = loaded
-	for _, plan := range loaded.ReversePlans {
+	if err := a.normalizeLoadedState(loaded); err != nil {
+		return ReversePlan{}, err
+	}
+	for _, plan := range a.state.ReversePlans {
 		if plan.ID == id {
 			return plan, nil
 		}

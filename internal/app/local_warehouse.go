@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -46,6 +47,8 @@ type localRawRecord struct {
 	Record       connectors.Record `json:"record"`
 }
 
+var syncLocalWarehouseDirectoryCommit = durability.SyncDirectory
+
 func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
 	stateKey := streamStateKey(conn.Name, streamName)
 	prior := a.state.StreamStates[stateKey]
@@ -60,7 +63,8 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	}
 
 	dir := localWarehouseDir(destRuntime)
-	if err := os.MkdirAll(dir, 0o700); err != nil {
+	warehouseCreated, err := mkdirAllTrackingCreatedDirectories(dir)
+	if err != nil {
 		return etlExecutionResult{}, fmt.Errorf("create warehouse directory: %w", err)
 	}
 	table := stream.DestinationTable
@@ -71,7 +75,8 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	tmpFinalPath := finalPath + "." + runID + ".tmp"
 	rawPath := localRawPath(dir, conn.Name, streamName, table)
 	tmpRawPath := rawPath + "." + runID + ".tmp"
-	if err := os.MkdirAll(filepath.Dir(rawPath), 0o700); err != nil {
+	rawCreated, err := mkdirAllTrackingCreatedDirectories(filepath.Dir(rawPath))
+	if err != nil {
 		return etlExecutionResult{}, fmt.Errorf("create raw directory: %w", err)
 	}
 
@@ -261,10 +266,15 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 			return result, fmt.Errorf("replace final table: %w", err)
 		}
 	}
+	syncedDirectories := make(map[string]struct{}, 2)
 	for _, outputDir := range []string{filepath.Dir(rawPath), filepath.Dir(finalPath)} {
 		if err := syncLocalWarehouseDirectory(outputDir); err != nil {
 			return result, err
 		}
+		syncedDirectories[filepath.Clean(outputDir)] = struct{}{}
+	}
+	if err := syncCreatedLocalWarehouseDirectoryParents(append(warehouseCreated, rawCreated...), syncedDirectories); err != nil {
+		return result, err
 	}
 
 	if observedAt.IsZero() {
@@ -285,8 +295,55 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 }
 
 func syncLocalWarehouseDirectory(dir string) error {
-	if err := durability.SyncDirectory(dir); err != nil {
+	if err := syncLocalWarehouseDirectoryCommit(dir); err != nil {
 		return fmt.Errorf("sync warehouse directory: %w", err)
+	}
+	return nil
+}
+
+// mkdirAllTrackingCreatedDirectories returns the newly created directories in
+// leaf-to-ancestor order. The parent entry for each must be synced separately
+// before a checkpoint can acknowledge the warehouse write.
+func mkdirAllTrackingCreatedDirectories(dir string) ([]string, error) {
+	path := filepath.Clean(dir)
+	created := make([]string, 0)
+	for {
+		info, err := os.Stat(path)
+		if err == nil {
+			if !info.IsDir() {
+				return nil, errors.New("warehouse directory is not a directory")
+			}
+			break
+		}
+		if !errors.Is(err, os.ErrNotExist) {
+			return nil, fmt.Errorf("inspect warehouse directory: %w", err)
+		}
+		parent := filepath.Dir(path)
+		if parent == path {
+			return nil, errors.New("find existing warehouse directory ancestor")
+		}
+		created = append(created, path)
+		path = parent
+	}
+	if err := os.MkdirAll(dir, 0o700); err != nil {
+		return nil, err
+	}
+	return created, nil
+}
+
+// syncCreatedLocalWarehouseDirectoryParents makes every newly created
+// directory entry durable through the first ancestor that existed before
+// MkdirAll. Directories already synced after their writes are not repeated.
+func syncCreatedLocalWarehouseDirectoryParents(created []string, synced map[string]struct{}) error {
+	for _, dir := range created {
+		parent := filepath.Clean(filepath.Dir(dir))
+		if _, ok := synced[parent]; ok {
+			continue
+		}
+		if err := syncLocalWarehouseDirectory(parent); err != nil {
+			return fmt.Errorf("sync newly created warehouse directory parent: %w", err)
+		}
+		synced[parent] = struct{}{}
 	}
 	return nil
 }

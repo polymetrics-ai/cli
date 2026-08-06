@@ -52,6 +52,52 @@ func TestLegacyScalarStreamStateRequiresRebootstrapBeforeRead(t *testing.T) {
 	}
 }
 
+func TestLegacyStateReloadRetainsSyncModeCompatibilityAfterReversePlanLookup(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("legacy_mode_reload", []connectors.Record{{
+		"id": "1", "updated_at": "2026-08-06T00:00:00Z",
+	}})
+	created, connection := setupSyncModeApp(t, source, "incremental_append")
+
+	// This is a pre-contract project state with coordination metadata that is
+	// already current. Opening it applies the legacy mode adapter only in
+	// memory, which is exactly what a later raw reload used to discard.
+	legacy := created.state
+	legacy.SyncModeCompatibilityVersion = 0
+	for index := range legacy.Connections {
+		if legacy.Connections[index].Name != connection {
+			continue
+		}
+		stream := legacy.Connections[index].Streams["records"]
+		stream.LegacyCompatibility = false
+		legacy.Connections[index].Streams["records"] = stream
+	}
+	if legacy.CoordinationSalt == "" || len(legacy.CredentialBindings) == 0 {
+		t.Fatal("test setup did not retain current credential coordination metadata")
+	}
+	if err := created.store.Save(legacy); err != nil {
+		t.Fatalf("persist legacy-shaped state: %v", err)
+	}
+
+	reopened, err := Open(created.root)
+	if err != nil {
+		t.Fatalf("Open() error = %v", err)
+	}
+	reopened.registry = created.registry
+	conn, ok := reopened.findConnection(connection)
+	if !ok || !conn.Streams["records"].LegacyCompatibility {
+		t.Fatalf("Open() did not normalize persisted legacy stream: %#v", conn)
+	}
+
+	_, err = reopened.RunReverseETL(ctx, RunReverseETLRequest{PlanID: "unknown-plan"})
+	if err == nil || !strings.Contains(err.Error(), `reverse plan "unknown-plan" not found`) {
+		t.Fatalf("RunReverseETL(unknown plan) error = %v, want missing-plan error", err)
+	}
+	if _, err := reopened.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1}); err != nil {
+		t.Fatalf("RunETL() after unknown reverse plan error = %v", err)
+	}
+}
+
 func TestIncrementalRunStoresCommittedStateEnvelopeAfterDownstreamSuccess(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("envelope_commit", []connectors.Record{{
@@ -222,6 +268,60 @@ func TestSyncLocalWarehouseDirectoryReportsCommitFailure(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "missing")
 	if err := syncLocalWarehouseDirectory(path); err == nil {
 		t.Fatal("syncLocalWarehouseDirectory() error = nil, want missing directory error")
+	}
+}
+
+func TestRunWarehouseETLSyncsNewDirectoryParentChainBeforeAcknowledgement(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("warehouse_directory_parent_chain", []connectors.Record{{
+		"id": "1", "updated_at": "2026-08-06T00:00:00Z",
+	}})
+	a, connection := setupSyncModeApp(t, source, "incremental_append")
+	warehouseDir := filepath.Join(t.TempDir(), "new", "warehouse", "root")
+	if _, err := os.Stat(filepath.Dir(warehouseDir)); !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("test setup warehouse parent stat error = %v, want missing parent", err)
+	}
+	for index := range a.state.Credentials {
+		if a.state.Credentials[index].Name != "warehouse" {
+			continue
+		}
+		a.state.Credentials[index].Config = map[string]string{"path": warehouseDir}
+	}
+
+	originalSync := syncLocalWarehouseDirectoryCommit
+	var synced []string
+	syncLocalWarehouseDirectoryCommit = func(dir string) error {
+		synced = append(synced, filepath.Clean(dir))
+		return originalSync(dir)
+	}
+	t.Cleanup(func() { syncLocalWarehouseDirectoryCommit = originalSync })
+
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 1}); err != nil {
+		t.Fatalf("RunETL() error = %v", err)
+	}
+	if state := a.state.StreamStates[streamStateKey(connection, "records")]; state.Checkpoint == nil {
+		t.Fatal("successful run did not acknowledge a checkpoint")
+	}
+
+	// A successful run acknowledges and persists the checkpoint only after the
+	// directory calls above. This assertion proves the calls cover the entire
+	// newly created chain; it deliberately does not attempt to emulate a power
+	// loss in a unit test.
+	wantOrder := []string{
+		filepath.Join(warehouseDir, "_pm_raw"),
+		warehouseDir,
+		filepath.Dir(warehouseDir),
+		filepath.Dir(filepath.Dir(warehouseDir)),
+		filepath.Dir(filepath.Dir(filepath.Dir(warehouseDir))),
+	}
+	position := 0
+	for _, dir := range synced {
+		if position < len(wantOrder) && dir == wantOrder[position] {
+			position++
+		}
+	}
+	if position != len(wantOrder) {
+		t.Fatalf("warehouse directory sync calls = %#v, want ordered parent chain %#v", synced, wantOrder)
 	}
 }
 
