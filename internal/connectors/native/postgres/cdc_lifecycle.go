@@ -28,11 +28,13 @@ const (
 	cdcSlotCleanupTimeout  = 5 * time.Second
 )
 
-var ErrCDCSlotActive = errors.New("postgres CDC replication slot is active")
-
-var errCDCRelationHasDescendants = errors.New("postgres CDC does not support a selected relation with descendant tables")
-
-var errCDCRelationNotPublished = errors.New("postgres CDC selected relation is not included in the configured publication")
+var (
+	ErrCDCSlotActive                   = errors.New("postgres CDC replication slot is active")
+	errCDCFixtureMode                  = errors.New("postgres CDC requires a real PostgreSQL source; fixture mode is not a replication protocol")
+	errCDCRelationHasDescendants       = errors.New("postgres CDC does not support a selected relation with descendant tables")
+	errCDCRelationNotPublished         = errors.New("postgres CDC selected relation is not included in the configured publication")
+	errCDCPublicationPublishesTruncate = errors.New("postgres CDC requires a publication without TRUNCATE events")
+)
 
 type postgresCDCSource struct {
 	identity   synccontract.SourceIdentity
@@ -156,6 +158,13 @@ func cdcPublication(cfg connectors.RuntimeConfig) (string, error) {
 	return publication, nil
 }
 
+func requireRealCDCSource(cfg connectors.RuntimeConfig) error {
+	if fixtureMode(cfg) {
+		return errCDCFixtureMode
+	}
+	return nil
+}
+
 func replicationSlotStatus(ctx context.Context, conn connConfig, slotName string) (postgresReplicationSlot, bool, error) {
 	data, err := pgx.Connect(ctx, conn.dsn())
 	if err != nil {
@@ -215,7 +224,7 @@ func validateCDCRelationScope(ctx context.Context, conn connConfig, source postg
 	}
 	defer func() { _ = data.Close(ctx) }()
 
-	var hasDescendants, published bool
+	var hasDescendants, published, publishesTruncate bool
 	err = data.QueryRow(ctx, `
 	SELECT
 		EXISTS (
@@ -229,14 +238,22 @@ func validateCDCRelationScope(ctx context.Context, conn connConfig, source postg
 			SELECT 1
 			FROM pg_publication_tables
 			WHERE pubname = $3 AND schemaname = $1 AND tablename = $2
-		)`, source.schema, source.table, publication).Scan(&hasDescendants, &published)
+		),
+		COALESCE((
+			SELECT pubtruncate
+			FROM pg_publication
+			WHERE pubname = $3
+		), false)`, source.schema, source.table, publication).Scan(&hasDescendants, &published, &publishesTruncate)
 	if err != nil {
 		return fmt.Errorf("postgres CDC: inspect selected relation scope: %w", err)
 	}
 	if err := validateCDCPublicationScope(published); err != nil {
 		return err
 	}
-	return validateCDCRelationHierarchy(hasDescendants)
+	if err := validateCDCRelationHierarchy(hasDescendants); err != nil {
+		return err
+	}
+	return validateCDCPublicationTruncate(publishesTruncate)
 }
 
 func validateCDCPublicationScope(published bool) error {
@@ -249,6 +266,13 @@ func validateCDCPublicationScope(published bool) error {
 func validateCDCRelationHierarchy(hasDescendants bool) error {
 	if hasDescendants {
 		return errCDCRelationHasDescendants
+	}
+	return nil
+}
+
+func validateCDCPublicationTruncate(publishesTruncate bool) error {
+	if publishesTruncate {
+		return errCDCPublicationPublishesTruncate
 	}
 	return nil
 }
@@ -300,6 +324,9 @@ func (c Connector) CDCSlotName(ctx context.Context, cfg connectors.RuntimeConfig
 	if err := ctx.Err(); err != nil {
 		return "", err
 	}
+	if err := requireRealCDCSource(cfg); err != nil {
+		return "", err
+	}
 	conn, err := resolveConfig(cfg)
 	if err != nil {
 		return "", err
@@ -325,6 +352,9 @@ func (c Connector) CDCSlotName(ctx context.Context, cfg connectors.RuntimeConfig
 // process restart yet cannot be accidentally left behind after a teardown.
 func (c Connector) TeardownCDC(ctx context.Context, cfg connectors.RuntimeConfig, stream string) error {
 	if err := ctx.Err(); err != nil {
+		return err
+	}
+	if err := requireRealCDCSource(cfg); err != nil {
 		return err
 	}
 	conn, err := resolveConfig(cfg)

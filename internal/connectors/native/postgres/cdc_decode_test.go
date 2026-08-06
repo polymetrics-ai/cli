@@ -123,6 +123,17 @@ func TestDecodeTextValuePreservesNumericPrecision(t *testing.T) {
 	}
 }
 
+func TestPGOutputDecoderConsumesTypeMetadata(t *testing.T) {
+	dec := newPGOutputDecoder("public", "users")
+	events, err := dec.decode(typeMessage(23, "public", "custom_status"), "")
+	if err != nil {
+		t.Fatalf("decode type metadata: %v", err)
+	}
+	if len(events) != 0 {
+		t.Fatalf("type metadata emitted %d event(s), want 0", len(events))
+	}
+}
+
 func TestPGOutputDecoderErrors(t *testing.T) {
 	dec := newPGOutputDecoder("public", "users")
 	cases := []struct {
@@ -193,6 +204,15 @@ func relationMessage(id uint32, schema, table string, columns ...testColumn) []b
 		b = appendUint32(b, col.typeID)
 		b = appendUint32(b, 0xffffffff) // typmod -1
 	}
+	return b
+}
+
+func typeMessage(id uint32, schema, name string) []byte {
+	var b []byte
+	b = append(b, 'Y')
+	b = appendUint32(b, id)
+	b = appendCString(b, schema)
+	b = appendCString(b, name)
 	return b
 }
 

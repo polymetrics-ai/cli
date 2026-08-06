@@ -43,7 +43,7 @@ func NewDurableChangefeedTransaction(sink DurableChangefeedSink, checkpointStore
 	return &DurableChangefeedTransaction{sink: sink, checkpointStore: checkpointStore}, nil
 }
 
-// Commit writes a source transaction, persists its checkpoint, then publishes its events.
+// Commit publishes a source transaction, writes it durably downstream, then persists its checkpoint.
 func (t *DurableChangefeedTransaction) Commit(ctx context.Context, candidate synccontract.CheckpointEnvelope, events []CDCEvent, emit func(CDCEvent) error) error {
 	if err := ctx.Err(); err != nil {
 		return err
@@ -60,6 +60,14 @@ func (t *DurableChangefeedTransaction) Commit(ctx context.Context, candidate syn
 	if err := candidate.Validate(); err != nil {
 		return fmt.Errorf("validate CDC checkpoint candidate: %w", err)
 	}
+	for _, event := range events {
+		if err := ctx.Err(); err != nil {
+			return err
+		}
+		if err := emit(event); err != nil {
+			return err
+		}
+	}
 	if err := t.sink.CommitChangefeedTransaction(ctx, candidate.Clone(), events); err != nil {
 		return fmt.Errorf("write CDC transaction: %w", err)
 	}
@@ -71,11 +79,6 @@ func (t *DurableChangefeedTransaction) Commit(ctx context.Context, candidate syn
 		return t.checkpointStore.PersistDurableChangefeedCheckpoint(ctx, committed)
 	}); err != nil {
 		return fmt.Errorf("persist durable CDC checkpoint: %w", err)
-	}
-	for _, event := range events {
-		if err := emit(event); err != nil {
-			return err
-		}
 	}
 	return nil
 }

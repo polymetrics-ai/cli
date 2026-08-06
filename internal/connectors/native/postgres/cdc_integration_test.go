@@ -62,7 +62,7 @@ func TestLogicalReplicationResumesAndCleansSlot(t *testing.T) {
 	defer func() {
 		_, _ = data.Exec(context.Background(), "DROP TABLE IF EXISTS "+quoteIdentifier(table))
 	}()
-	if _, err := data.Exec(ctx, "CREATE PUBLICATION "+quoteIdentifier(publication)+" FOR TABLE "+quoteIdentifier(table)); err != nil {
+	if _, err := data.Exec(ctx, "CREATE PUBLICATION "+quoteIdentifier(publication)+" FOR TABLE "+quoteIdentifier(table)+" WITH (publish = 'insert, update, delete')"); err != nil {
 		t.Fatal("could not create PostgreSQL CDC integration publication")
 	}
 	defer func() {

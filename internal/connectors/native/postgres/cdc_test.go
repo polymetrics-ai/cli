@@ -1,6 +1,7 @@
 package postgres
 
 import (
+	"context"
 	"errors"
 	"testing"
 	"time"
@@ -8,6 +9,7 @@ import (
 	"github.com/jackc/pglogrepl"
 	"github.com/jackc/pgx/v5/pgconn"
 
+	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/synccontract"
 )
 
@@ -122,6 +124,20 @@ func TestCDCSlotReuseRequiresDurableCheckpoint(t *testing.T) {
 	}
 }
 
+func TestCDCLifecycleRejectsFixtureMode(t *testing.T) {
+	c := New()
+	cfg := connectors.RuntimeConfig{Config: map[string]string{
+		"mode":            "fixture",
+		"cdc_publication": "pm_cdc",
+	}}
+	if _, err := c.CDCSlotName(context.Background(), cfg, "public.users"); !errors.Is(err, errCDCFixtureMode) {
+		t.Fatalf("CDCSlotName(fixture) = %v, want fixture rejection", err)
+	}
+	if err := c.TeardownCDC(context.Background(), cfg, "public.users"); !errors.Is(err, errCDCFixtureMode) {
+		t.Fatalf("TeardownCDC(fixture) = %v, want fixture rejection", err)
+	}
+}
+
 func TestCDCRelationHierarchyRejectsDescendants(t *testing.T) {
 	if err := validateCDCRelationHierarchy(false); err != nil {
 		t.Fatalf("validateCDCRelationHierarchy(no descendants) = %v", err)
@@ -137,6 +153,15 @@ func TestCDCPublicationScopeRequiresSelectedRelation(t *testing.T) {
 	}
 	if err := validateCDCPublicationScope(false); !errors.Is(err, errCDCRelationNotPublished) {
 		t.Fatalf("validateCDCPublicationScope(unpublished) = %v, want publication rejection", err)
+	}
+}
+
+func TestCDCPublicationScopeRejectsTruncate(t *testing.T) {
+	if err := validateCDCPublicationTruncate(false); err != nil {
+		t.Fatalf("validateCDCPublicationTruncate(false) = %v", err)
+	}
+	if err := validateCDCPublicationTruncate(true); !errors.Is(err, errCDCPublicationPublishesTruncate) {
+		t.Fatalf("validateCDCPublicationTruncate(true) = %v, want truncate rejection", err)
 	}
 }
 

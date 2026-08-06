@@ -115117,7 +115117,7 @@
         },
         "cdc_publication": {
           "type": "string",
-          "description": "Existing PostgreSQL publication used for logical-replication CDC. Required only for CDC; it must include the selected table."
+          "description": "Existing PostgreSQL publication used for logical-replication CDC. Required only for CDC; it must include the selected table and publish only insert, update, and delete changes."
         },
         "cursor_field": {
           "type": "string",

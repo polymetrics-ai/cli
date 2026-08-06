@@ -42,7 +42,7 @@ func (d *pgoutputDecoder) decode(message []byte, lsn string) ([]connectors.CDCEv
 	}
 	r := pgoutputReader{buf: message[1:]}
 	switch message[0] {
-	case 'B', 'C':
+	case 'B', 'C', 'Y':
 		return nil, nil
 	case 'R':
 		rel, err := r.relation()

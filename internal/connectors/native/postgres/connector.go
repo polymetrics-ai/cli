@@ -82,16 +82,23 @@ func New() Connector {
 	return Connector{Base: engine.NewBase(b)}
 }
 
-// Metadata overrides engine.Base's bundle-synthesized Metadata with the
-// legacy-shaped description text, matching the pre-migration
-// connectors.Metadata field-for-field (parity target); Capabilities are
-// still whatever the bundle's metadata.json declares (single source of
-// truth for capability flags), so this override only refines
-// Description/DisplayName wording, never capability semantics.
+// Metadata returns PostgreSQL connector metadata.
 func (c Connector) Metadata() connectors.Metadata {
 	m := c.Base.Metadata()
 	m.Description = "Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, supports cursor-incremental reads, and consumes logical-replication CDC through source-bound durable LSN checkpoints. Read-only source."
+	m.Capabilities.CDC = c.hasImplementedChangefeed()
 	return m
+}
+
+// Definition returns PostgreSQL connector definition.
+func (c Connector) Definition() connectors.Definition {
+	definition := c.Base.Definition()
+	definition.Capabilities.CDC = c.hasImplementedChangefeed()
+	return definition
+}
+
+func (c Connector) hasImplementedChangefeed() bool {
+	return connectors.HasImplementedChangefeed(c, c.Base.Definition().Changefeed)
 }
 
 func (c Connector) Manifest() connectors.Manifest {

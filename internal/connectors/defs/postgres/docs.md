@@ -16,7 +16,8 @@ Connection fields:
 - `cursor_field` (optional, string); Optional column name used for incremental reads (rows with
   cursor_field greater than the stored cursor are read, ordered by cursor_field ascending).
 - `cdc_publication` (optional, string); Existing PostgreSQL publication used for logical-
-  replication CDC. Required only for CDC; it must include the selected table.
+  replication CDC. Required only for CDC; it must include the selected table and publish only insert,
+  update, and delete changes.
 - `database` (required, string); Database name to connect to.
 - `host` (required, string); Bare hostname or IP of the PostgreSQL server (no scheme, path, or
   credentials - a URL-shaped value is rejected).
@@ -47,6 +48,8 @@ This connector is read-only. Read behavior: low.
 - Schemas and stream availability depend on the configured service at runtime.
 - CDC requires a real PostgreSQL source with `wal_level=logical`, a role permitted to use logical
   replication, and an existing `cdc_publication` that contains the selected table.
+- CDC supports publications that exclude `TRUNCATE` changes and selected relations without descendant
+  tables.
 - CDC slots are derived from the PostgreSQL system identity, database, and fully qualified stream;
   teardown drops only that inactive connector-owned slot. Do not delete a slot while another CDC
   reader is active.

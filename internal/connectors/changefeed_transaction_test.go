@@ -26,7 +26,7 @@ func TestDurableChangefeedTransactionOrdersDeliveryBeforeCheckpoint(t *testing.T
 	}); err != nil {
 		t.Fatal(err)
 	}
-	if want := []string{"write", "checkpoint", "emit"}; !reflect.DeepEqual(steps, want) {
+	if want := []string{"emit", "write", "checkpoint"}; !reflect.DeepEqual(steps, want) {
 		t.Fatalf("transaction steps = %v, want %v", steps, want)
 	}
 	if store.checkpoint.CommittedAt == nil {
@@ -45,14 +45,35 @@ func TestDurableChangefeedTransactionDoesNotPersistFailedWrite(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = transaction.Commit(context.Background(), changefeedTransactionCheckpoint(time.Now().UTC().Add(-time.Second)), nil, func(CDCEvent) error {
+	err = transaction.Commit(context.Background(), changefeedTransactionCheckpoint(time.Now().UTC().Add(-time.Second)), []CDCEvent{{Operation: "insert", Record: Record{"id": 7}}}, func(CDCEvent) error {
 		steps = append(steps, "emit")
 		return nil
 	})
 	if !errors.Is(err, sink.writeErr) {
 		t.Fatalf("Commit() error = %v, want write failure", err)
 	}
-	if want := []string{"write"}; !reflect.DeepEqual(steps, want) {
+	if want := []string{"emit", "write"}; !reflect.DeepEqual(steps, want) {
+		t.Fatalf("transaction steps = %v, want %v", steps, want)
+	}
+}
+
+func TestDurableChangefeedTransactionDoesNotCommitRejectedEvents(t *testing.T) {
+	steps := []string{}
+	sink := &changefeedTransactionSink{steps: &steps}
+	store := &changefeedTransactionStore{steps: &steps}
+	transaction, err := NewDurableChangefeedTransaction(sink, store)
+	if err != nil {
+		t.Fatal(err)
+	}
+	emitErr := errors.New("event rejected")
+	err = transaction.Commit(context.Background(), changefeedTransactionCheckpoint(time.Now().UTC().Add(-time.Second)), []CDCEvent{{Operation: "insert", Record: Record{"id": 7}}}, func(CDCEvent) error {
+		steps = append(steps, "emit")
+		return emitErr
+	})
+	if !errors.Is(err, emitErr) {
+		t.Fatalf("Commit() error = %v, want event rejection", err)
+	}
+	if want := []string{"emit"}; !reflect.DeepEqual(steps, want) {
 		t.Fatalf("transaction steps = %v, want %v", steps, want)
 	}
 }

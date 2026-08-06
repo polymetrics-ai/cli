@@ -43,8 +43,8 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 	if err := ctx.Err(); err != nil {
 		return err
 	}
-	if fixtureMode(req.Config) {
-		return errors.New("postgres CDC requires a real PostgreSQL source; fixture mode is not a replication protocol")
+	if err := requireRealCDCSource(req.Config); err != nil {
+		return err
 	}
 	if emit == nil {
 		return errors.New("postgres CDC requires an event callback")

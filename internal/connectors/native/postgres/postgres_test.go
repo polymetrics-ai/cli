@@ -40,6 +40,15 @@ func TestNameAndMetadata(t *testing.T) {
 	if caps.Write {
 		t.Fatalf("postgres source connector must be read-only, got Write=true")
 	}
+	if !caps.CDC {
+		t.Fatal("Metadata().Capabilities.CDC = false, want true")
+	}
+	if !c.Definition().Capabilities.CDC {
+		t.Fatal("Definition().Capabilities.CDC = false, want true")
+	}
+	if !c.Manifest().Metadata.Capabilities.CDC {
+		t.Fatal("Manifest().Metadata.Capabilities.CDC = false, want true")
+	}
 	if !connectors.MetadataOf(c).Capabilities.CDC {
 		t.Fatal("PostgreSQL CDC must be advertised only through its matching executor")
 	}
