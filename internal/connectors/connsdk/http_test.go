@@ -269,7 +269,7 @@ func TestRequesterFallbackRetryUsesBoundedFullJitter(t *testing.T) {
 	}
 }
 
-func TestRequesterAdmissionPreventsEveryTransportSend(t *testing.T) {
+func TestRequesterAdmissionPreventsInitialLogicalSend(t *testing.T) {
 	var hits int32
 	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
 		atomic.AddInt32(&hits, 1)
@@ -327,7 +327,7 @@ func TestRequesterAdmissionPreventsEveryTransportSend(t *testing.T) {
 		})
 	}
 	if got, want := atomic.LoadInt32(&hits), int32(0); got != want {
-		t.Fatalf("HTTP sends = %d, want %d", got, want)
+		t.Fatalf("server hits = %d, want %d", got, want)
 	}
 	if got, want := len(admissions), len(tests); got != want {
 		t.Fatalf("admissions = %d, want %d", got, want)
@@ -339,7 +339,7 @@ func TestRequesterAdmissionPreventsEveryTransportSend(t *testing.T) {
 	}
 }
 
-func TestRequesterAdmissionHonorsCallerCancellationBeforeSend(t *testing.T) {
+func TestRequesterAdmissionHonorsCallerCancellationBeforeLogicalSend(t *testing.T) {
 	var hits int32
 	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
 		atomic.AddInt32(&hits, 1)
@@ -377,11 +377,11 @@ func TestRequesterAdmissionHonorsCallerCancellationBeforeSend(t *testing.T) {
 		t.Fatal("request did not return when admission context was canceled")
 	}
 	if got, want := atomic.LoadInt32(&hits), int32(0); got != want {
-		t.Fatalf("HTTP sends = %d, want %d", got, want)
+		t.Fatalf("server hits = %d, want %d", got, want)
 	}
 }
 
-func TestRequesterAdmitsEveryRetryAttempt(t *testing.T) {
+func TestRequesterAdmitsEachLogicalRetryAttempt(t *testing.T) {
 	var calls int32
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if atomic.AddInt32(&calls, 1) == 1 {
@@ -411,7 +411,7 @@ func TestRequesterAdmitsEveryRetryAttempt(t *testing.T) {
 	}
 }
 
-func TestRequesterAdmitsRedirectTransportHop(t *testing.T) {
+func TestRequesterAdmitsPermittedRedirectHop(t *testing.T) {
 	var finalHits int32
 	mux := http.NewServeMux()
 	mux.HandleFunc("/redirect", func(w http.ResponseWriter, r *http.Request) {
@@ -694,7 +694,7 @@ func TestRequesterDisableRetriesRejectsMutationRedirect(t *testing.T) {
 	}
 }
 
-func TestRequesterCountsReplayableReadAdmissionLogically(t *testing.T) {
+func TestRequesterAdmitsReplayableReadOncePerLogicalAttempt(t *testing.T) {
 	var readHits int32
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		if req.URL.Path == "/read" {

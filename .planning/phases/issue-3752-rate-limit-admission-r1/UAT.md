@@ -9,7 +9,7 @@ credential, CLI, or browser behavior is in scope.
 | D1 | Provider-cited optional declaration contract | `TestBundleLoadParsesProviderCitedRateLimits`, malformed/state tables, and `go run ./cmd/connectorgen validate internal/connectors/defs` (550, zero findings) | passed |
 | D2 | Future production declarations cannot be silently omitted from `defs.FS` | `TestProductionDefinitionsEmbedEveryRateLimitDeclaration` | passed |
 | D3 | Exact provider reset, typed terminal 429, bounded fallback jitter | requester unit tests plus focused `-race` run | passed |
-| D4 | Context-aware admission covers every requester transport path | JSON/form/multipart/stream no-send and cancellation tests | passed |
+| D4 | Context-aware admission covers logical requester attempts; replayable reads may replay internally and strict writes cannot | JSON/form/multipart/stream no-send and cancellation, redirect, read-replay, and strict-write tests | passed |
 | D5 | Deferred seams remain unactivated | changed-path audit: no `commandrunner`, engine read/write/direct-operation, connector migration, or CLI changes | passed |
 
 Verdict: **passed** for the foundation’s automated deliverables. Full repository CI and the

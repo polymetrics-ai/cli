@@ -159,7 +159,7 @@ func TestDoStreamKeepsAuthSameOrigin(t *testing.T) {
 	}
 }
 
-func TestDoStreamAdmitsPermittedRedirectTransportHops(t *testing.T) {
+func TestDoStreamAdmitsPermittedRedirectHops(t *testing.T) {
 	t.Run("same origin", func(t *testing.T) {
 		mux := http.NewServeMux()
 		mux.HandleFunc("/file", func(w http.ResponseWriter, r *http.Request) {

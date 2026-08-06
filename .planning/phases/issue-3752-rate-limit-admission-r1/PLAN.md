@@ -50,8 +50,10 @@ issue tree and the paths below.
 1. Add compact, consumer-owned `RateLimitAdmission` and `RateLimitObserver` interfaces plus
    typed request/observation values in `internal/connectors/connsdk`. They carry only safe
    transport metadata and typed timing/header facts; they do not log, persist, or derive a scope key.
-2. Call admission immediately before every transport send in both `Requester.doWithBody` and
-   `Requester.DoStream`. A rejected/cancelled admission prevents the send.
+2. Call admission immediately before each logical requester send: an outer `Client.Do` attempt or
+   a permitted redirect hop in `Requester.doWithBody` and `Requester.DoStream`. A
+   rejected/cancelled admission prevents that logical send. Safe replayable reads may replay inside
+   `net/http` without another admission; strict non-idempotent writes suppress replays.
 3. Parse deterministic `Retry-After` once against an injectable clock. Preserve its absolute reset
    time and exact delay. On 429, notify the observer even if the requester will not retry.
 4. Return `*RateLimitError` for terminal HTTP 429 responses. It must wrap `*HTTPError`, preserve
@@ -80,7 +82,7 @@ issue tree and the paths below.
 | A2 | declaration expressiveness | load a valid endpoint/tier/auth policy with burst+sustained, points, and leaky bucket facts | retain typed values without flattening into requests-per-minute | ensure selector/scope fields cannot contain secret sources |
 | B1 | provider wait defect | `Retry-After: 90` with `MaxBackoff: 30s` records a 30s sleep on current code | exact 90s wait and reset timestamp | retain ordinary fallback cap |
 | B2 | fallback jitter | fallback exponential retry remains deterministic/uncapped by injection today | injected bounded full jitter and clamp untrusted injection to `[0, cap]` | valid `Retry-After` proves jitter callback was not invoked |
-| B3 | admission before send | a context-cancelled admission has no requester seam today | admission cancellation returns before server hit for JSON, form, multipart, and stream methods | shallow requester clones retain the interface fields |
+| B3 | logical-send admission | a context-cancelled admission has no requester seam today | admission cancellation returns before server hit for JSON, form, multipart, and stream methods; logical retries and redirects are re-admitted | safe replayable reads retain one admission through an internal replay; strict writes suppress replay; shallow requester clones retain the interface fields |
 | B4 | observation and terminal typing | 429 currently returns only `*HTTPError` and emits no typed signal | typed observation + `RateLimitError` wrapping safe `HTTPError` | `errors.As`, retry cap, disabled-retry, and no-secret output checks |
 
 The first executable RED test is B1 because it compiles against the pre-change public shape and

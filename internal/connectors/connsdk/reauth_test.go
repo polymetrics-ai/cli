@@ -80,7 +80,7 @@ func TestRequesterRefreshesAuthOnceOn401AndRetries(t *testing.T) {
 	}
 }
 
-func TestRequesterReauthKeepsTransportAttemptsMonotonic(t *testing.T) {
+func TestRequesterReauthKeepsLogicalAttemptsMonotonic(t *testing.T) {
 	var calls int32
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		if atomic.AddInt32(&calls, 1) == 1 {

@@ -14,7 +14,7 @@ canonical delivery contract forbids spawning GSD roles. This ledger is the durab
 | #3752 provider reset | `Retry-After: 90` + `MaxBackoff: 30s` records `30s` through injected `Sleep` | the same fixture records exactly `90s` | Green |
 | #3752 reset typing | terminal 429 exposes only `*HTTPError` today | `errors.As(err, *RateLimitError)` exposes reset and still reaches `*HTTPError` | Green |
 | #3752 fallback jitter | fallback retry has no jitter hook and retries in lockstep | injected full jitter is within cap; valid provider reset calls no jitter hook | Green |
-| #3752 admission | no pre-send admission exists in `doWithBody` / `DoStream` | cancellation/error prevents every `httptest` send and shallow clones preserve the admission | Green |
+| #3752 admission | no pre-send admission exists in `doWithBody` / `DoStream` | cancellation/error prevents an initial logical `httptest` request; logical retries and redirects are re-admitted, while shallow clones preserve the admission | Green |
 | #3752 observation | 429 has no typed callback | observer sees status, attempted request, source, retry duration/reset; output contains no fixture secret | Green |
 | #3752 retry safety | retry cap / DisableRetries are existing contracts | typed rate limiting retains retry count and no-replay behavior | Green |
 
@@ -56,7 +56,7 @@ The requester-contract tests were then added before any requester production cha
 compile against the old public shape, which has no admission/observation/error/jitter seam:
 
 ```text
-$ go test ./internal/connectors/connsdk -run 'TestRequester(HonorsProviderRetryAfterBeyondFallbackCap|FallbackRetryUsesBoundedFullJitter|AdmissionPreventsEveryTransportSend|ReturnsTypedRateLimitErrorAndObservation)' -count=1
+$ go test ./internal/connectors/connsdk -run 'TestRequester(HonorsProviderRetryAfterBeyondFallbackCap|FallbackRetryUsesBoundedFullJitter|AdmissionPreventsInitialLogicalSend|ReturnsTypedRateLimitErrorAndObservation)' -count=1
 # polymetrics.ai/internal/connectors/connsdk [polymetrics.ai/internal/connectors/connsdk.test]
 internal/connectors/connsdk/http_test.go:96:3: unknown field Jitter in struct literal of type Requester
 internal/connectors/connsdk/http_test.go:119:51: undefined: RateLimitRequest
@@ -66,15 +66,17 @@ FAIL    polymetrics.ai/internal/connectors/connsdk [build failed]
 ```
 
 The green requester suite covers exact 90-second provider waits, no jitter for a valid provider
-reset, capped injected full jitter only for fallback retries, admission before JSON/form/multipart/
-stream sends, caller cancellation while an admission is waiting, every retry attempt, terminal
-typed-429 wrapping, standard limit/remaining/reset headers, and HTTP-date preservation:
+reset, capped injected full jitter only for fallback retries, admission before initial logical
+JSON/form/multipart/stream sends, caller cancellation while an admission is waiting, each logical
+retry or redirect, terminal typed-429 wrapping, standard limit/remaining/reset headers, and
+HTTP-date preservation. Safe replayable reads retain one admission through an internal `net/http`
+replay, while strict non-idempotent writes suppress replay:
 
 ```text
 $ go test ./internal/connectors/connsdk -count=1
 ok      polymetrics.ai/internal/connectors/connsdk    0.873s
 
-$ go test -race ./internal/connectors/connsdk -run '^(TestRequesterHonorsProviderRetryAfterBeyondFallbackCap|TestRequesterFallbackRetryUsesBoundedFullJitter|TestRequesterAdmissionPreventsEveryTransportSend|TestRequesterAdmissionHonorsCallerCancellationBeforeSend|TestRequesterAdmitsEveryRetryAttempt|TestRequesterReturnsTypedRateLimitErrorAndObservation|TestParseRetryAfterAtPreservesProviderDate|TestRateLimitObservationParsesStandardBudgetHeaders|TestDoStreamReturnsTypedRateLimitError)$' -count=1
+$ go test -race ./internal/connectors/connsdk -run '^(TestRequesterHonorsProviderRetryAfterBeyondFallbackCap|TestRequesterFallbackRetryUsesBoundedFullJitter|TestRequesterAdmissionPreventsInitialLogicalSend|TestRequesterAdmissionHonorsCallerCancellationBeforeLogicalSend|TestRequesterAdmitsEachLogicalRetryAttempt|TestRequesterReturnsTypedRateLimitErrorAndObservation|TestParseRetryAfterAtPreservesProviderDate|TestRateLimitObservationParsesStandardBudgetHeaders|TestDoStreamReturnsTypedRateLimitError)$' -count=1
 ok      polymetrics.ai/internal/connectors/connsdk    1.286s
 ```
 

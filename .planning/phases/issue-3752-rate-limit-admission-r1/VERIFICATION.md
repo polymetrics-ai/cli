@@ -16,9 +16,12 @@ Status: **scoped local verification complete; full CI/no-mistakes remains firstm
 - [x] `TestRequesterReturnsTypedRateLimitErrorAndObservation` proves a terminal 429 is both
   `*connsdk.RateLimitError` and its wrapped `*connsdk.HTTPError`, with no fixture credential text
   in `err.Error()` or typed observation values.
-- [x] `TestRequesterAdmissionPreventsEveryTransportSend` and
-  `TestRequesterAdmissionHonorsCallerCancellationBeforeSend` prove no `httptest` send for JSON,
-  form, multipart, or stream admission rejection/cancellation.
+- [x] `TestRequesterAdmissionPreventsInitialLogicalSend` and
+  `TestRequesterAdmissionHonorsCallerCancellationBeforeLogicalSend` prove a rejected/cancelled
+  admission prevents the initial logical JSON, form, multipart, or stream request.
+- [x] `TestRequesterAdmitsReplayableReadOncePerLogicalAttempt` proves a safe replayable read has
+  one admission per logical `Client.Do` attempt even if `net/http` replays it; the ordinary and
+  stream strict-write replay/redirect tests prove non-idempotent writes do not replay.
 
 ## Loader and fleet compatibility gates
 

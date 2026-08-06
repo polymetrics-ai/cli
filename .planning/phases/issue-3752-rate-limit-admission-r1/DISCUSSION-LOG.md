@@ -22,7 +22,7 @@ instead of reopening issue-fixed choices through an interactive questionnaire.
 | Retry wait | preserve provider reset exactly; no 30-second cap | #3752; #3750 |
 | Fallback retry | bounded full jitter only when no deterministic provider reset exists | #3752 |
 | Typed result | `RateLimitError` wraps safe `HTTPError` and exposes reset | #3752 |
-| Admission placement | directly before every requester transport call | #3752 |
+| Admission placement | directly before each logical `Client.Do` attempt and permitted redirect hop; safe replayable reads may replay internally, while strict non-idempotent writes cannot | #3752 |
 | Scope privacy | never form a key from a secret; subject is non-secret | task brief; #3754 |
 | Deferred work | resolver #3753, registry #3754, operator output #3755 | task brief |
 
