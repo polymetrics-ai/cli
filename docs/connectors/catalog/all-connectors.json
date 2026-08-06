@@ -33056,6 +33056,242 @@
     }
   },
   {
+    "name": "crisp",
+    "display_name": "Crisp",
+    "description": "Reads the first Wave 1 set of Crisp REST API conversation resources through HTTP Basic authentication.",
+    "integration_type": "api",
+    "docs_url": "https://docs.crisp.chat/references/rest-api/v1/",
+    "release_stage": "alpha",
+    "capabilities": {
+      "check": true,
+      "catalog": true,
+      "read": true,
+      "write": false,
+      "query": false
+    },
+    "spec": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Crisp REST API Connection Specification",
+      "type": "object",
+      "required": [
+        "website_id"
+      ],
+      "properties": {
+        "identifier": {
+          "type": "string",
+          "x-secret": true,
+          "description": "Crisp token identifier, stored as a credential secret and sent as the HTTP Basic username."
+        },
+        "key": {
+          "type": "string",
+          "x-secret": true,
+          "description": "Crisp token secret key, stored as a credential secret and sent as the HTTP Basic password."
+        },
+        "website_id": {
+          "type": "string",
+          "description": "Crisp workspace/website identifier used to scope every Wave 1 request."
+        },
+        "token_tier": {
+          "type": "string",
+          "enum": [
+            "website",
+            "plugin",
+            "user"
+          ],
+          "default": "website",
+          "description": "Crisp token tier sent as X-Crisp-Tier; website is the default documented website-token tier."
+        },
+        "base_url": {
+          "type": "string",
+          "format": "uri",
+          "default": "https://api.crisp.chat",
+          "description": "Crisp API origin override for approved tests or proxies; the bundle adds the documented /v1 path."
+        },
+        "page_number": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]{0,4}$",
+          "default": "1",
+          "description": "Positive numbered provider page for page-addressed Crisp list resources; defaults to 1."
+        },
+        "session_id": {
+          "type": "string",
+          "description": "Conversation session identifier required by conversation-scoped reads."
+        },
+        "spam_id": {
+          "type": "string",
+          "description": "Spam conversation identifier required by the spam-content read."
+        },
+        "fingerprint": {
+          "type": "string",
+          "description": "Message fingerprint required by the single-message read."
+        },
+        "original_id": {
+          "type": "string",
+          "description": "Original-message identifier required by the original-message read."
+        }
+      }
+    },
+    "streams": [
+      {
+        "name": "list_conversations",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "suggested_conversation_segments",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "suggested_conversation_data",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "spam_conversations",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "spam_conversation_content",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "conversation",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "conversation_messages",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "conversation_message",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "conversation_routing",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "conversation_meta",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "conversation_original_message",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "conversation_pages",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "conversation_events",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "conversation_files",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "conversation_state",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "conversation_relations",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "conversation_participants",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "conversation_block_status",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "conversation_verify_status",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "conversation_browsing",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "conversation_call",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      }
+    ],
+    "risk": {
+      "read": "external Crisp REST API reads of conversation records, messages, routing, metadata, participants, browsing sessions, and call state"
+    },
+    "icon": {
+      "id": "pm-sample",
+      "path": "icons/pm-sample.svg",
+      "source": "polymetrics",
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
+    }
+  },
+  {
     "name": "criteo-marketing",
     "display_name": "Criteo Marketing",
     "description": "Reads Criteo Marketing Solutions ad sets, advertisers, campaigns, audiences, ad spend statistics, and Marketplace Performance Outcomes (MPO) advertisers/sellers/budgets/seller-campaigns through the Criteo REST API using OAuth2 client-credentials auth.",
