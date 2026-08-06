@@ -294,6 +294,13 @@ func callerSuppliedIdentifierErrorForms(t *testing.T, identifier string) []strin
 	if len(encodedJSON) > 2 {
 		forms = append(forms, string(encodedJSON[1:len(encodedJSON)-1]))
 	}
+	escapedSolidus := strings.ReplaceAll(string(encodedJSON), "/", `\/`)
+	if escapedSolidus != string(encodedJSON) {
+		forms = append(forms, escapedSolidus)
+		if len(escapedSolidus) > 2 {
+			forms = append(forms, escapedSolidus[1:len(escapedSolidus)-1])
+		}
+	}
 	return forms
 }
 

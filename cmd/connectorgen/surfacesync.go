@@ -341,11 +341,12 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			// DERIVED: an operation-declared identifier set or a path variable
 			// is owned by the operation contract. Any other target either drops
 			// the caller input or leaves the endpoint unresolvable.
-			switch got := strings.TrimSpace(stringField(flag, "maps_to")); {
+			rawMapsTo := stringField(flag, "maps_to")
+			switch got := strings.TrimSpace(rawMapsTo); {
 			case got == "":
 				flag.set("maps_to", want)
 				stats.Filled.FlagMapsTo++
-			case got != want:
+			case got != want || rawMapsTo != got:
 				flag.set("maps_to", want)
 				stats.Corrected.FlagMapsTo++
 			}

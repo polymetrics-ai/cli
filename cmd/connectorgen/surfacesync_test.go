@@ -157,46 +157,56 @@ func TestSyncBundleReportsDivergentFlagMapsTo(t *testing.T) {
 }
 
 func TestSyncBundleDerivesCallerSuppliedIdentifierSetMapping(t *testing.T) {
-	cli := map[string]any{"usage": "pm acme <command>", "commands": []any{map[string]any{
-		"path":          "coins lookup",
-		"intent":        "direct_read",
-		"availability":  "implemented",
-		"operation":     "acme.coins.lookup",
-		"output_policy": "json_redacted",
-		"api_surface":   []any{map[string]any{"method": "GET", "path": "/coins/{coins}"}},
-		"flags":         []any{map[string]any{"name": "coins", "type": "string_array", "maps_to": "path.coins"}},
-	}}}
-	ops := map[string]any{"operations": []any{map[string]any{
-		"id":   "acme.coins.lookup",
-		"kind": "rest_read",
-		"rest": map[string]any{
-			"method":    "GET",
-			"path":      "/coins/{coins}",
-			"max_bytes": 1024,
-			"caller_supplied_identifier_sets": []any{map[string]any{
-				"name":          "coins",
-				"element_shape": "opaque_string",
-				"wire":          "path_segment",
-				"min_items":     1,
-				"max_items":     1,
-			}},
-		},
-	}}}
-	dir := writeSyncBundle(t, cli, ops)
+	for _, tt := range []struct {
+		name   string
+		mapsTo string
+	}{
+		{name: "stale target", mapsTo: "path.coins"},
+		{name: "surrounding whitespace", mapsTo: " identifier_set.coins "},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			cli := map[string]any{"usage": "pm acme <command>", "commands": []any{map[string]any{
+				"path":          "coins lookup",
+				"intent":        "direct_read",
+				"availability":  "implemented",
+				"operation":     "acme.coins.lookup",
+				"output_policy": "json_redacted",
+				"api_surface":   []any{map[string]any{"method": "GET", "path": "/coins/{coins}"}},
+				"flags":         []any{map[string]any{"name": "coins", "type": "string_array", "maps_to": tt.mapsTo}},
+			}}}
+			ops := map[string]any{"operations": []any{map[string]any{
+				"id":   "acme.coins.lookup",
+				"kind": "rest_read",
+				"rest": map[string]any{
+					"method":    "GET",
+					"path":      "/coins/{coins}",
+					"max_bytes": 1024,
+					"caller_supplied_identifier_sets": []any{map[string]any{
+						"name":          "coins",
+						"element_shape": "opaque_string",
+						"wire":          "path_segment",
+						"min_items":     1,
+						"max_items":     1,
+					}},
+				},
+			}}}
+			dir := writeSyncBundle(t, cli, ops)
 
-	stats, err := syncBundle(dir, true)
-	if err != nil {
-		t.Fatalf("syncBundle check: %v", err)
-	}
-	if stats.Corrected.FlagMapsTo != 1 || stats.Filled.FlagMapsTo != 0 {
-		t.Fatalf("flag maps_to stats = %+v, want one correction", stats)
-	}
+			stats, err := syncBundle(dir, true)
+			if err != nil {
+				t.Fatalf("syncBundle check: %v", err)
+			}
+			if stats.Corrected.FlagMapsTo != 1 || stats.Filled.FlagMapsTo != 0 {
+				t.Fatalf("flag maps_to stats = %+v, want one correction", stats)
+			}
 
-	if _, err := syncBundle(dir, false); err != nil {
-		t.Fatalf("syncBundle write: %v", err)
-	}
-	if got := readSyncedCommand(t, dir)["flags"]; !flagMapsTo(got, "identifier_set.coins") {
-		t.Fatalf("flags = %v, want identifier_set.coins", got)
+			if _, err := syncBundle(dir, false); err != nil {
+				t.Fatalf("syncBundle write: %v", err)
+			}
+			if got := readSyncedCommand(t, dir)["flags"]; !flagMapsTo(got, "identifier_set.coins") {
+				t.Fatalf("flags = %v, want identifier_set.coins", got)
+			}
+		})
 	}
 }
 

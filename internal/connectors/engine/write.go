@@ -253,9 +253,17 @@ func sensitiveRedactionLiterals(values []string) []string {
 func sensitiveRedactionLiteralForms(value string) []string {
 	forms := []string{value, urlencodeSegment(value), url.QueryEscape(value), url.PathEscape(value)}
 	if encoded, err := json.Marshal(value); err == nil {
-		forms = append(forms, string(encoded))
+		encodedValue := string(encoded)
+		forms = append(forms, encodedValue)
 		if len(encoded) > 2 {
 			forms = append(forms, string(encoded[1:len(encoded)-1]))
+		}
+		escapedSolidus := strings.ReplaceAll(encodedValue, "/", `\/`)
+		if escapedSolidus != encodedValue {
+			forms = append(forms, escapedSolidus)
+			if len(escapedSolidus) > 2 {
+				forms = append(forms, escapedSolidus[1:len(escapedSolidus)-1])
+			}
 		}
 	}
 	seen := map[string]bool{}

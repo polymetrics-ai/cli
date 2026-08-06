@@ -1228,7 +1228,10 @@ func checkCLISurfaceValidationDeclarations(b engine.Bundle, i int, cmd engine.CL
 	mappedTargets := map[string]string{}
 	var findings []Finding
 	for _, flag := range cmd.Flags {
-		if strings.TrimSpace(flag.MapsTo) != "" {
+		if flag.MapsTo != strings.TrimSpace(flag.MapsTo) {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s maps_to must not contain surrounding whitespace", i, cmd.Path, flag.Name)})
+		}
+		if flag.MapsTo != "" {
 			mappedTargets[flag.MapsTo] = flag.Name
 		}
 		if flag.Format != "" && flag.Format != "date-time" {

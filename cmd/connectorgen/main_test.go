@@ -663,6 +663,41 @@ func TestValidate_CallerSuppliedIdentifierSetRequiresExactCLIBinding(t *testing.
 	}
 }
 
+func TestValidate_CallerSuppliedIdentifierSetRejectsMapsToWhitespace(t *testing.T) {
+	bundle := engine.Bundle{
+		Name: "acme",
+		Operations: []engine.OperationSpec{{
+			ID:   "acme.coins.lookup",
+			Kind: "rest_read",
+			REST: &engine.RESTOperationSpec{
+				Method:   "GET",
+				Path:     "/coins",
+				MaxBytes: 1024,
+				CallerSuppliedIdentifierSets: []engine.CallerSuppliedIdentifierSetSpec{{
+					Name: "coins", ElementShape: "opaque_string", Wire: "query_comma_separated", MinItems: 0, MaxItems: 2,
+				}},
+			},
+		}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path:         "coins lookup",
+			Intent:       "direct_read",
+			Availability: "implemented",
+			Operation:    "acme.coins.lookup",
+			OutputPolicy: "json_redacted",
+			APISurface:   []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/coins"}},
+			Flags:        []engine.CLIFlag{{Name: "coins", Type: "string_array", Required: true, MapsTo: " identifier_set.coins "}},
+		}}},
+	}
+
+	findings := checkCLISurface(bundle)
+	for _, finding := range findings {
+		if strings.Contains(finding.Message, "maps_to must not contain surrounding whitespace") {
+			return
+		}
+	}
+	t.Fatalf("findings = %+v, want maps_to whitespace rejection", findings)
+}
+
 func TestValidate_CallerSuppliedIdentifierSetOperationRequiresImplementedDirectReadCommand(t *testing.T) {
 	findings := checkCLISurface(engine.Bundle{
 		Name: "acme",
