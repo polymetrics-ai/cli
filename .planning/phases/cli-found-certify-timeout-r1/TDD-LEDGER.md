@@ -6,7 +6,7 @@
 | #3801 scripted stages | Scripted-driver tests initially fail for a command argument/envelope/exit/stage mismatch. | Migrated stage/error tests assert exact protocol, outcome, leak, idempotency, no-retry, and approval-replay-negative behavior. | Share transparent fixture/driver construction only after a family is green. |
 | #3805 CLI fixtures | Fixture-render parity fails before a full route launch is removed. | JSON/text, exit, persistence, resume/batch, ordering/worker-pool, and usage tests pass from complete synthetic reports; exactly one real route proof remains. | Fixture completeness remains explicit rather than relying on zero values. |
 | #3806 timing visibility | Parser tests fail on pass/fail/malformed/missing `go test -json` event streams; Make/workflow assertion fails before wiring. | Cold timing target prints raw events, package totals, slow tests, and fails on target/parser errors. | Formatting is deterministic and no source event is suppressed. |
-| #3807 measured budget | Controlled duplicate fixture fails invocation and duration guards without sleeps. | Fixed threshold derived from documented GitHub-hosted cold samples passes and diagnostics name observed/allowed time. | Threshold/configuration lives in one place; deterministic invocation count remains the primary guard. |
+| #3807 measured budget | Controlled duplicate fixture fails invocation and duration guards without sleeps. | Fixed threshold derived from the documented final topology measurement passes and diagnostics name observed/allowed time. | Threshold/configuration lives in one place; deterministic invocation count remains the primary guard. |
 
 ## Intended command evidence
 
@@ -57,17 +57,20 @@ the harness-injected root, verifies command/envelope/exit transitions, and
 materializes the sample outbox protocol needed for the write lifecycle. The
 focused source, glue, write, failure, cleanup, and replay assertions remain
 in their existing test cases; only repeated real `cli.Run` execution was
-removed. `TestFullSweepSourceStagesAgainstSample` remains the one real
-full-source/read/flow/schedule proof.
+removed. `TestFullSweepSourceStagesAgainstSample` remains the real
+full-source/read/flow/schedule proof, and
+`TestSampleOutboxWriteLifecycleAgainstRealCLI` is the exactly-one real
+sample/outbox lifecycle proof.
 
 ```text
 $ go test -count=1 ./internal/connectors/certify
-ok      polymetrics.ai/internal/connectors/certify    58.972s
+ok      polymetrics.ai/internal/connectors/certify    81.733s
 ```
 
-The TestMain output from the preceding verbose cold run measured 85 real CLI
-invocations, so the committed deterministic ceiling is exactly 85 (the
-pre-refactor red run was 782). The cap is a count, not a duration budget.
+The final topology adds exactly one real sample/outbox lifecycle proof. Its
+`make certify-timing` measurement reports 93 real harness invocations, so the
+committed deterministic ceiling is exactly 93 (the pre-refactor red run was
+782). The cap is a count, not a duration budget.
 
 ### #3805 — CLI router and complete-fixture rendering
 
@@ -97,7 +100,7 @@ ceiling:
 
 ```text
 $ go test -count=1 -run '^TestCertifyCLI' ./internal/cli
-ok      polymetrics.ai/internal/cli    43.128s
+ok      polymetrics.ai/internal/cli    54.825s
 ```
 
 ### #3806 — RED/GREEN cold timing parser and Verify visibility
@@ -116,18 +119,21 @@ ok      polymetrics.ai/internal/certifytiming    0.144s
 
 $ make certify-timing
 ... raw go test -count=1 -json events ...
+certify real CLI invocations: 93 (budget 93)
+certify CLI real invocations: 61 (budget 61)
 certify timing summary
-  certify-harness package=polymetrics.ai/internal/connectors/certify elapsed=57.745s
-    slow_test=TestFullSweepSourceStagesAgainstSample elapsed=49.160s
-  certify-cli package=polymetrics.ai/internal/cli elapsed=42.359s
-    slow_test=TestCertifyCLISingleConnectorPassExitsZero elapsed=27.150s
-  total elapsed=100.104s
+  certify-harness elapsed=81.733s wall_elapsed=86.645s
+    slow TestFullSweepSourceStagesAgainstSample=59.260s
+    slow TestSweeperCleansUnledgeredAgedEntries=11.740s
+    slow TestSampleOutboxWriteLifecycleAgainstRealCLI=8.480s
+  certify-cli elapsed=54.825s wall_elapsed=60.665s
+    slow TestCertifyCLISingleConnectorPassExitsZero=34.630s
+  total elapsed=136.558s wall_elapsed=147.309s
 ```
 
-The local sample is diagnostic only; it cannot establish #3807's fixed
-threshold. `.github/workflows/verify.yml` now runs `make certify-timing`
-before the unchanged aggregate `make verify` step, so GitHub-hosted runs
-provide the required evidence.
+The final topology measurement is recorded in `VERIFICATION.md` and
+`RUN-STATE.json`. `.github/workflows/verify.yml` runs `make certify-timing`
+before the unchanged aggregate `make verify` step.
 
 ### #3807 — wall-clock measurement and duplicate guards
 
@@ -140,16 +146,14 @@ compilation), prints per-target and total `wall_elapsed`, and refuses to
 evaluate a duration budget if any target lacks a measurement.
 
 The deliberate no-sleep duplicate fixtures exercise both independent guards:
-`TestCertifyRealCLIInvocationBudgetRejectsControlledDuplicate` rejects 86
-real harness calls against the 85-call contract, while
+`TestCertifyRealCLIInvocationBudgetRejectsControlledDuplicate` rejects 94
+real harness calls against the 93-call contract, while
 `TestCheckDurationBudgetRejectsControlledDuplicateFixture` rejects two
-4-second wall measurements against a 7-second bound. The fixed production
-wall-time threshold was held unset until two post-refactor GitHub-hosted
-samples from the new measurement were recorded. The selected `4m15s` bound is
-not a guess: sample walls were 193.213s and 140.932s, so `max + observed
-spread = 193.213 + 52.281 = 245.494s`; rounding up to the next 15-second
-boundary yields 255s. The Make target supplies that fixed value to the timing
-command, which reports the observed and allowed duration when it fails.
+4-second wall measurements against a 7-second bound. The two final-topology
+wall measurements are 161.236s and 147.309s; their 13.927s spread gives
+`161.236 + 13.927 = 175.163s`, which rounds up to the 180-second (`3m`) bound.
+The Make target supplies that fixed value to the timing command, which reports
+the observed and allowed duration when it fails.
 
 ```text
 $ go test -count=1 -run '^TestCertifyRealCLIInvocationBudgetRejectsControlledDuplicate$' ./internal/connectors/certify
