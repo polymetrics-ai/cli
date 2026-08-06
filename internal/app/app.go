@@ -810,7 +810,7 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 	if name == "" {
 		name = strings.ReplaceAll(writeCommand.Command, " ", "_")
 	}
-	payloadIdentity, err := payloadIdentitiesForRecords(runtime.ProjectDir, []connectors.Record{writeCommand.Record})
+	payloadIdentity, err := payloadIdentitiesForConnectorCommand(runtime.ProjectDir, connector, writeCommand.Operation, writeCommand.Record)
 	if err != nil {
 		return ReversePlan{}, nil, err
 	}
@@ -946,7 +946,7 @@ func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string) (Rever
 	if err := a.verifyPlanSealForRuntime(plan, runtime); err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
-	payloadIdentity, err := payloadIdentitiesForRecords(runtime.ProjectDir, []connectors.Record{plan.ConnectorCommandRecord})
+	payloadIdentity, err := payloadIdentitiesForConnectorCommand(runtime.ProjectDir, writer, plan.ConnectorCommandOperation, plan.ConnectorCommandRecord)
 	if err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
@@ -1490,7 +1490,7 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, plan ReversePlan, req
 	if err != nil {
 		return ReverseRun{}, err
 	}
-	payloadIdentity, err := payloadIdentitiesForRecords(runtime.ProjectDir, []connectors.Record{plan.ConnectorCommandRecord})
+	payloadIdentity, err := payloadIdentitiesForConnectorCommand(runtime.ProjectDir, writer, plan.ConnectorCommandOperation, plan.ConnectorCommandRecord)
 	if err != nil {
 		return ReverseRun{}, err
 	}

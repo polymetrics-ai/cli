@@ -206,6 +206,11 @@ type OperationDirectWriteMetadata struct {
 	ConfirmationChallenge string
 	OutputPolicy          string
 	Batchable             bool
+	// PayloadFileFields is nil for non-multipart operations. For a declared
+	// multipart operation it is the closed set of body paths whose local-file
+	// identities must be captured before preview, even when their names do not
+	// follow a file_path convention.
+	PayloadFileFields []string
 }
 
 // OperationDirectWriter is implemented by connectors that can preview and

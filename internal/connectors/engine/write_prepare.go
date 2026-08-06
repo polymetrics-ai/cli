@@ -235,16 +235,36 @@ func prepareCanonicalWriteBody(action WriteAction, record connectors.Record, rec
 }
 
 func prepareCanonicalMultipart(action WriteAction, record connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, requirePayloadApproval bool) (any, error) {
-	if action.Multipart == nil {
-		return nil, fmt.Errorf("engine: write action %q: multipart spec is required", action.Name)
+	return prepareCanonicalMultipartSpec(fmt.Sprintf("write action %q", action.Name), action.Multipart, record, recordIndex, cfg, requirePayloadApproval)
+}
+
+// prepareCanonicalOperationMultipart gives a declared rest_write the exact
+// same preview representation as writes.json multipart actions. The caller
+// passes requirePayloadApproval=true: operation-level multipart is only
+// executable when every source is already bound to the plan's approved digest,
+// even when its mutation class does not independently require confirmation.
+func prepareCanonicalOperationMultipart(op OperationSpec, record connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, requirePayloadApproval bool) (any, error) {
+	if op.REST == nil {
+		return nil, fmt.Errorf("engine: operation %q: rest multipart spec is required", op.ID)
+	}
+	return prepareCanonicalMultipartSpec(fmt.Sprintf("operation %q", op.ID), op.REST.Multipart, record, recordIndex, cfg, requirePayloadApproval)
+}
+
+// prepareCanonicalMultipartSpec is shared by reverse-ETL actions and declared
+// rest_write operations. It intentionally carries identities and approved
+// hashes, not file bytes or caller-selected wire shape, so the preview digest
+// stays stable, bounded, and safe to carry through approval.
+func prepareCanonicalMultipartSpec(subject string, multipart *MultipartSpec, record connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, requirePayloadApproval bool) (any, error) {
+	if multipart == nil {
+		return nil, fmt.Errorf("engine: %s: multipart spec is required", subject)
 	}
 	fields := map[string]string{}
 	files := []canonicalMultipartFile{}
-	for _, part := range action.Multipart.Parts {
+	for _, part := range multipart.Parts {
 		value, err := resolveRecordPathValue(map[string]any(record), strings.Split(part.Field, "."))
 		if err != nil || value == nil {
 			if part.Required {
-				return nil, fmt.Errorf("engine: write action %q: multipart part %q is required", action.Name, part.Name)
+				return nil, fmt.Errorf("engine: %s: multipart part %q is required", subject, part.Name)
 			}
 			continue
 		}
@@ -253,15 +273,15 @@ func prepareCanonicalMultipart(action WriteAction, record connectors.Record, rec
 			continue
 		}
 		if part.Type != "file" {
-			return nil, fmt.Errorf("engine: write action %q: multipart part %q has unsupported type %q", action.Name, part.Name, part.Type)
+			return nil, fmt.Errorf("engine: %s: multipart part %q has unsupported type %q", subject, part.Name, part.Type)
 		}
 		path, ok := value.(string)
 		if !ok || strings.TrimSpace(path) == "" {
-			return nil, fmt.Errorf("engine: write action %q: multipart file part %q requires a file path string", action.Name, part.Name)
+			return nil, fmt.Errorf("engine: %s: multipart file part %q requires a file path string", subject, part.Name)
 		}
 		approved := cfg.ApprovedPayloadSHA256[connectors.PayloadApprovalKey(recordIndex, part.Field)]
 		if requirePayloadApproval && strings.TrimSpace(approved) == "" {
-			return nil, fmt.Errorf("engine: write action %q: multipart file part %q is missing its approved payload digest", action.Name, part.Name)
+			return nil, fmt.Errorf("engine: %s: multipart file part %q is missing its approved payload digest", subject, part.Name)
 		}
 		files = append(files, canonicalMultipartFile{
 			FieldName:         part.Name,
@@ -276,7 +296,7 @@ func prepareCanonicalMultipart(action WriteAction, record connectors.Record, rec
 		MaxBytes int64                    `json:"max_bytes,omitempty"`
 		Fields   map[string]string        `json:"fields,omitempty"`
 		Files    []canonicalMultipartFile `json:"files,omitempty"`
-	}{MaxBytes: action.Multipart.MaxBytes, Fields: fields, Files: files}, nil
+	}{MaxBytes: multipart.MaxBytes, Fields: fields, Files: files}, nil
 }
 
 func prepareCanonicalBase64Upload(action WriteAction, record connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, requirePayloadApproval bool) (any, error) {

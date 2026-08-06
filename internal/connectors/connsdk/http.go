@@ -323,6 +323,19 @@ func (r *Requester) DoFormLimited(ctx context.Context, method, path string, quer
 // parts are opened for each retry attempt, so callers may use it with the same
 // retry policy as JSON/form requests without reusing a consumed reader.
 func (r *Requester) DoMultipart(ctx context.Context, method, path string, query url.Values, form MultipartForm) (*Response, error) {
+	return r.doMultipart(ctx, method, path, query, form, defaultMaxResponseBody)
+}
+
+// DoMultipartLimited performs DoMultipart while bounding a successful response
+// to maxBodyBytes+1. It is the multipart counterpart to DoLimited and
+// DoFormLimited: operation-level rest.max_bytes constrains capture itself,
+// rather than allowing a multipart response to fill the default 64 MiB buffer
+// before the caller can reject it.
+func (r *Requester) DoMultipartLimited(ctx context.Context, method, path string, query url.Values, form MultipartForm, maxBodyBytes int) (*Response, error) {
+	return r.doMultipart(ctx, method, path, query, form, maxBodyBytes+1)
+}
+
+func (r *Requester) doMultipart(ctx context.Context, method, path string, query url.Values, form MultipartForm, maxResponseBytes int) (*Response, error) {
 	if err := validateMultipartForm(form); err != nil {
 		return nil, err
 	}
@@ -331,7 +344,7 @@ func (r *Requester) DoMultipart(ctx context.Context, method, path string, query 
 		return nil, err
 	}
 	defer cleanup()
-	return r.doWithBody(ctx, method, path, query, defaultMaxResponseBody, func() (*requestBody, error) {
+	return r.doWithBody(ctx, method, path, query, maxResponseBytes, func() (*requestBody, error) {
 		return multipartBody(prepared)
 	})
 }

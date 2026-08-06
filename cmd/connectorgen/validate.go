@@ -966,8 +966,8 @@ func checkCLISurfaceDirectWriteOperationSafety(
 	if op.REST.MaxBytes <= 0 {
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) operation %q must declare positive rest.max_bytes", i, cmd.Path, cmd.Operation)})
 	}
-	if !supportedDirectWriteContentType(op.REST.ContentType) {
-		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) operation %q must use application/json, application/x-www-form-urlencoded, or no content_type", i, cmd.Path, cmd.Operation)})
+	if !supportedDirectWriteContentType(op.REST) {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) operation %q must use application/json, application/x-www-form-urlencoded, no content_type, or literal multipart/form-data with rest.multipart", i, cmd.Path, cmd.Operation)})
 	}
 	if !directWriteOutputPolicies[cmd.OutputPolicy] {
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) operation %q must declare a supported output_policy", i, cmd.Path, cmd.Operation)})
@@ -997,8 +997,14 @@ func checkCLISurfaceDirectWriteOperationSafety(
 	return findings
 }
 
-func supportedDirectWriteContentType(raw string) bool {
-	raw = strings.TrimSpace(raw)
+func supportedDirectWriteContentType(rest *engine.RESTOperationSpec) bool {
+	if rest == nil {
+		return false
+	}
+	if rest.Multipart != nil {
+		return rest.ContentType == "multipart/form-data"
+	}
+	raw := strings.TrimSpace(rest.ContentType)
 	if raw == "" {
 		return true
 	}
