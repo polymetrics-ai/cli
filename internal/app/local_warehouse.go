@@ -16,6 +16,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/durability"
+	statestore "polymetrics.ai/internal/state"
 	"polymetrics.ai/internal/synccontract"
 )
 
@@ -63,10 +64,6 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	}
 
 	dir := localWarehouseDir(destRuntime)
-	warehouseCreated, err := mkdirAllTrackingCreatedDirectories(dir)
-	if err != nil {
-		return etlExecutionResult{}, fmt.Errorf("create warehouse directory: %w", err)
-	}
 	table := stream.DestinationTable
 	if table == "" {
 		table = streamName
@@ -75,9 +72,8 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	tmpFinalPath := finalPath + "." + runID + ".tmp"
 	rawPath := localRawPath(dir, conn.Name, streamName, table)
 	tmpRawPath := rawPath + "." + runID + ".tmp"
-	rawCreated, err := mkdirAllTrackingCreatedDirectories(filepath.Dir(rawPath))
-	if err != nil {
-		return etlExecutionResult{}, fmt.Errorf("create raw directory: %w", err)
+	if err := a.prepareLocalWarehouseDirectories(dir, filepath.Dir(rawPath)); err != nil {
+		return etlExecutionResult{}, err
 	}
 
 	rawTarget := rawPath
@@ -266,15 +262,10 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 			return result, fmt.Errorf("replace final table: %w", err)
 		}
 	}
-	syncedDirectories := make(map[string]struct{}, 2)
 	for _, outputDir := range []string{filepath.Dir(rawPath), filepath.Dir(finalPath)} {
 		if err := syncLocalWarehouseDirectory(outputDir); err != nil {
 			return result, err
 		}
-		syncedDirectories[filepath.Clean(outputDir)] = struct{}{}
-	}
-	if err := syncCreatedLocalWarehouseDirectoryParents(append(warehouseCreated, rawCreated...), syncedDirectories); err != nil {
-		return result, err
 	}
 
 	if observedAt.IsZero() {
@@ -299,6 +290,29 @@ func syncLocalWarehouseDirectory(dir string) error {
 		return fmt.Errorf("sync warehouse directory: %w", err)
 	}
 	return nil
+}
+
+func (a *App) prepareLocalWarehouseDirectories(warehouseDir, rawDir string) (err error) {
+	lock := statestore.FileLock{Path: a.statePath + ".warehouse.lock"}
+	unlock, err := lock.Lock()
+	if err != nil {
+		return fmt.Errorf("lock warehouse directory setup: %w", err)
+	}
+	defer func() {
+		if unlockErr := unlock(); err == nil && unlockErr != nil {
+			err = fmt.Errorf("unlock warehouse directory setup: %w", unlockErr)
+		}
+	}()
+
+	warehouseCreated, err := mkdirAllTrackingCreatedDirectories(warehouseDir)
+	if err != nil {
+		return fmt.Errorf("create warehouse directory: %w", err)
+	}
+	rawCreated, err := mkdirAllTrackingCreatedDirectories(rawDir)
+	if err != nil {
+		return fmt.Errorf("create raw directory: %w", err)
+	}
+	return syncCreatedLocalWarehouseDirectoryParents(append(warehouseCreated, rawCreated...), make(map[string]struct{}))
 }
 
 // mkdirAllTrackingCreatedDirectories returns the newly created directories in
