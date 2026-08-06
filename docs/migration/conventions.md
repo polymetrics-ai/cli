@@ -22,7 +22,7 @@ writes.json          # actions[] (omit entirely when capabilities.write is false
 api_surface.json     # coverage manifest (always required)
 cli_surface.json     # optional provider-style CLI/help metadata
 certification.json   # optional certify metadata: defaults, safe candidates, pairings
-rate_limits.json     # optional provider-cited rate-limit declaration (staged; see §3)
+rate_limits.json     # optional provider-cited HTTP pacing policy (see §3)
 schemas/<stream>.json  # one draft-07 schema per stream, x-primary-key/x-cursor-field
 fixtures/
   check.json
@@ -851,7 +851,8 @@ of their budgets before the logical requester send. `all` matches the whole HTTP
 endpoint selector matches its declared method/path pair; optional `tiers` and `auth_types` match the
 non-secret `config.tier` and `config.auth_type` values as additional AND conditions. Check requests,
 stream pages (including pagination), direct and operation direct reads, declarative and operation
-writes (form, JSON, and multipart), and binary downloads all use this same requester admission path.
+writes (form, JSON, and multipart), binary downloads, and whole-connector hook requester access all
+use this same requester admission path.
 The process-local registry enforces each declared burst/sustained request/point budget with its
 fixed-window, sliding-window, token-bucket, or leaky-bucket model. A declared actual-cost response
 header tightens a point budget when it reports a higher cost; it never credits capacity from a lower

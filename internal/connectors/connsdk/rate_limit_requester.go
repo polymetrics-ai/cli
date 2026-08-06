@@ -32,7 +32,7 @@ type RateLimitAdmission interface {
 
 // RateLimitObserver receives parsed, secret-free rate-limit facts from a
 // provider response. It is called synchronously before a retry is scheduled
-// so a future resolver can tighten its next admission. It is not an operator
+// so attached policies can tighten their next admissions. It is not an operator
 // output hook; #3755 owns human and JSON event rendering.
 type RateLimitObserver interface {
 	Observe(ctx context.Context, observation RateLimitObservation)

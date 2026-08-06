@@ -367,7 +367,7 @@ type Bundle struct {
     Name     string
     Metadata Metadata          // parsed metadata.json
     Changefeed *connectors.ChangefeedDescriptor // optional changefeed.json
-    RateLimits *connsdk.RateLimits // optional rate_limits.json; declaration only
+    RateLimits *connsdk.RateLimits // optional rate_limits.json HTTP pacing policy
     Spec     *Schema           // compiled spec.json; SecretKeys() from x-secret
     HTTP     HTTPBase          // streams.json "base"
     Streams  []StreamSpec      // streams.json "streams"
