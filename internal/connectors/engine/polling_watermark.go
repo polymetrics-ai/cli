@@ -165,6 +165,9 @@ func (e *PollingWatermarkExecutor) ReadCDC(ctx context.Context, req connectors.C
 		if len(page.Records) == 0 && len(page.DeletionRecords) == 0 {
 			return nil
 		}
+		if len(page.DeletionRecords) > 0 && polling.DeletionEndpoint == nil {
+			return errors.New("polling watermark source returned deletion records without a declared deletion_endpoint")
+		}
 
 		var last *PollingWatermarkPosition
 		var previous *PollingWatermarkPosition
@@ -219,10 +222,10 @@ func (e *PollingWatermarkExecutor) initialPosition(state map[string]string) (*Po
 		return nil, errors.New("polling watermark checkpoint is incomplete")
 	}
 	if !hasWatermark {
-		if polling.Watermark.Kind != "timestamp" {
-			return nil, nil
-		}
-		return &PollingWatermarkPosition{Watermark: e.clock.Now().UTC().Add(-time.Duration(polling.SafetyLagSeconds) * time.Second).Format(time.RFC3339Nano)}, nil
+		// A new changefeed has no safe implicit timestamp boundary. Leave the
+		// initial snapshot/barrier choice to the closed source adapter rather
+		// than silently starting at the local wall clock and skipping history.
+		return nil, nil
 	}
 	committed := PollingWatermarkPosition{Watermark: watermark, TieBreaker: tieBreaker}
 	if err := validatePollingWatermarkValue(polling.Watermark.Kind, committed.Watermark); err != nil {

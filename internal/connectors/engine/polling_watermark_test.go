@@ -204,6 +204,22 @@ func TestPollingWatermarkExecutorAppliesDeclaredSafetyLagWithInjectedClock(t *te
 	}
 }
 
+func TestPollingWatermarkExecutorLeavesInitialSnapshotBoundaryToSource(t *testing.T) {
+	source := &scriptedPollingWatermarkSource{pages: []PollingWatermarkPage{{}}}
+	connector := newPollingWatermarkTestConnector(t, source, fixedPollingWatermarkClock{now: time.Date(2026, 8, 6, 10, 0, 0, 0, time.UTC)})
+	err := connector.ReadCDC(context.Background(), connectors.CDCReadRequest{
+		Stream:              "widgets",
+		Config:              connectors.RuntimeConfig{Config: map[string]string{"base_url": "https://example.test"}},
+		CheckpointCommitter: &recordingChangefeedCheckpointCommitter{},
+	}, func(connectors.CDCEvent) error { return nil })
+	if err != nil {
+		t.Fatalf("ReadCDC: %v", err)
+	}
+	if len(source.calls) != 1 || source.calls[0].After != nil {
+		t.Fatalf("initial source request = %+v, want no implicit current-time boundary", source.calls)
+	}
+}
+
 func TestPollingWatermarkExecutorOnlyEmitsDeclaredSoftDeletes(t *testing.T) {
 	source := &scriptedPollingWatermarkSource{pages: []PollingWatermarkPage{{Records: []connectors.Record{
 		{"id": "live", "updated_at": "2026-08-06T10:00:00Z", "deleted": false},
@@ -258,6 +274,29 @@ func TestPollingWatermarkExecutorUsesDeclaredDeletionEndpoint(t *testing.T) {
 	}
 	if len(source.calls) != 1 || source.calls[0].DeletionEndpoint == nil || source.calls[0].DeletionEndpoint.Path != "/widgets/deletions" {
 		t.Fatalf("source request = %+v, want declared deletion endpoint", source.calls)
+	}
+}
+
+func TestPollingWatermarkExecutorRejectsUndeclaredDeletionRecords(t *testing.T) {
+	source := &scriptedPollingWatermarkSource{pages: []PollingWatermarkPage{{DeletionRecords: []connectors.Record{
+		{"id": "gone", "updated_at": "2026-08-06T10:01:00Z"},
+	}}}}
+	connector := newPollingWatermarkTestConnector(t, source, fixedPollingWatermarkClock{now: time.Date(2026, 8, 6, 10, 2, 0, 0, time.UTC)})
+	committer := &recordingChangefeedCheckpointCommitter{}
+	var emitted int
+	err := connector.ReadCDC(context.Background(), connectors.CDCReadRequest{
+		Stream:              "widgets",
+		Config:              connectors.RuntimeConfig{Config: map[string]string{"base_url": "https://example.test"}},
+		CheckpointCommitter: committer,
+	}, func(connectors.CDCEvent) error {
+		emitted++
+		return nil
+	})
+	if err == nil || !strings.Contains(err.Error(), "without a declared deletion_endpoint") {
+		t.Fatalf("ReadCDC error = %v, want undeclared deletion record rejection", err)
+	}
+	if emitted != 0 || len(committer.states) != 0 {
+		t.Fatalf("emitted=%d committed=%+v, want no undeclared tombstone or checkpoint", emitted, committer.states)
 	}
 }
 

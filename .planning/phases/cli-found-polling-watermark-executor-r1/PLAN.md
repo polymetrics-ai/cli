@@ -61,12 +61,13 @@ explicitly confirm this is still true.
    interface. A process crash before persistence must replay the last page;
    the required destination contract is consequently idempotent/replay-safe.
 3. Timestamp watermark declarations explicitly set `safety_lag_seconds`.
-   Positive values make the executor subtract the lag from the supplied clock
-   time on a first read and when constructing an overlap boundary; `0` is an
-   explicit opt-out that is documented as capable of losing late arrivals. No
-   wall-clock is read directly in tests. Opaque cursor and monotonic-sequence
-   declarations must set this field to `0` rather than pretend to use timestamp
-   lag.
+   Positive values make the executor subtract the lag from a committed
+   timestamp when constructing the next-run overlap boundary; an initial
+   checkpoint deliberately leaves the source's declared snapshot/barrier
+   choice untouched. `0` is an explicit opt-out that is documented as capable
+   of losing late arrivals. No wall-clock is read directly in tests. Opaque
+   cursor and monotonic-sequence declarations must set this field to `0`
+   rather than pretend to use timestamp lag.
 4. Hard deletes are not observable. A declaration may only advertise deletes
    when it names a soft-delete extraction path or a deletion-feed declaration;
    otherwise it must say `not_available`. Soft deletes are emitted as tombstone
