@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	maxDuration := flag.String("max-duration", "", "optional total package elapsed duration budget, for example 3m30s")
+	maxDuration := flag.String("max-duration", "", "optional total wall-time duration budget, for example 3m30s")
 	flag.Parse()
 	if flag.NArg() != 0 {
 		_, _ = fmt.Fprintln(os.Stderr, "usage: certifytiming [--max-duration <duration>]")
