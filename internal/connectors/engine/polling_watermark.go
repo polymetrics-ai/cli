@@ -86,7 +86,9 @@ type PollingWatermarkPageRequest struct {
 
 // PollingWatermarkPage is one bounded source response. DeletionRecords are
 // supplied only for a declared deletion endpoint; all other hard deletes are
-// intentionally invisible to polling.
+// intentionally invisible to polling. More is a lockstep continuation signal
+// for every configured source. A source with independently paginated primary
+// and deletion reads must set PrimaryMore and DeletionMore instead.
 type PollingWatermarkPage struct {
 	Records         []connectors.Record
 	DeletionRecords []connectors.Record

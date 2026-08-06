@@ -8,7 +8,7 @@ test. No provider, credential, database, or wall-clock sleep is used.
 | R1 | Test bundle is CDC-capable only through its matching executor | an implemented `polling_watermark` declaration alone remains non-capable | the existing real projection reports CDC only with a full matching executor |
 | R2 | Complete checkpoint contract is mandatory | a declaration/executor missing `kind`, `keys`, `commit_after`, or `on_invalid` is accepted or promoted | each omission rejects/does not promote |
 | R3 | Ties replay safely | page-edge records sharing a watermark are skipped or `at_least_once` is not enforced | inclusive boundary rereads edge records and delivers duplicates truthfully |
-| R4 | Timestamp safety lag includes late arrivals | clock-derived lower bound omits an earlier timestamp | injected clock produces a lagged lower bound; a missing lag rejects timestamp use |
+| R4 | Timestamp safety lag includes late arrivals | checkpoint-derived lower bound omits an earlier timestamp | committed state produces a lagged lower bound; an initial read leaves its snapshot boundary to the source |
 | R5 | Delete observability is honest | a hard-delete-only declaration claims a tombstone or a soft-delete marker is ignored | `not_available` remains non-tombstone; declared marker yields tombstone |
 | R6 | Checkpoint follows durable destination acknowledgement | destination failure or persistence failure advances the checkpoint | no advance on failure; post-accept persistence failure reruns the same window |
 | R7 | Work and cancellation are bounded | executor exceeds page/request limits or ignores cancelled context | bounded calls stop at every limit; cancellation returns without a follow-up fetch |
@@ -19,7 +19,7 @@ test. No provider, credential, database, or wall-clock sleep is used.
 
 Before production changes, the focused semantic suite was added with a
 test-only implemented declaration. It names the absent shared executor,
-page-source port, injected clock, and checkpoint committer first so the
+page-source port, and checkpoint committer first so the
 eventual implementation cannot silently fall back to the old scalar cursor
 path.
 
@@ -29,7 +29,6 @@ $ go test ./internal/connectors/engine -run '^TestPollingWatermark' -count=1
 polling_watermark_test.go:20:13: undefined: PollingWatermarkPage
 polling_watermark_test.go:21:13: undefined: PollingWatermarkPageRequest
 polling_watermark_test.go:74:60: undefined: PollingWatermarkPageSource
-polling_watermark_test.go:74:94: undefined: PollingWatermarkClock
 polling_watermark_test.go:74:118: undefined: PollingWatermarkConnector
 FAIL    polymetrics.ai/internal/connectors/engine [build failed]
 ```
@@ -41,8 +40,8 @@ declaration schema and semantic validation are extended.
 
 ### R1–R7 — green transition
 
-The shared executor now consumes only the declaration, an injected page source,
-an injected clock, the destination-acknowledging event callback, and the narrow
+The shared executor now consumes only the declaration, a closed page source,
+the destination-acknowledging event callback, and the narrow
 checkpoint committer. Its tests prove all required paths without a provider,
 credential, database, or sleep:
 
@@ -64,8 +63,8 @@ ok      polymetrics.ai/internal/connectors
   rejection through the real loader schema/semantic path.
 - R3 records `a,b,b,c` across the inclusive timestamp boundary, requires the
   tuple on the second source request, and advertises `at_least_once`.
-- R4 uses a fixed clock and a committed `09:59` timestamp to request `09:57`
-  for its two-minute safety lag, with no wall-clock test dependency.
+- R4 uses a committed `09:59` timestamp to request `09:57` for its two-minute
+  safety lag, while an initial read leaves its snapshot boundary to the source.
 - R5 proves both soft-delete and fixed declared deletion-endpoint tombstones;
   a hard-delete-only descriptor claiming tombstones is rejected.
 - R6 proves no commit on destination rejection and a checkpoint persistence

@@ -27,7 +27,7 @@ coverage:
         ref: internal/connectors/engine/polling_watermark_test.go:TestPollingWatermarkExecutorReplaysTieAtPageBoundary
         status: pass
       - kind: unit
-        ref: internal/connectors/engine/polling_watermark_test.go:TestPollingWatermarkExecutorAppliesDeclaredSafetyLagWithInjectedClock
+        ref: internal/connectors/engine/polling_watermark_test.go:TestPollingWatermarkExecutorAppliesDeclaredSafetyLag
         status: pass
       - kind: unit
         ref: internal/connectors/engine/polling_watermark_test.go:TestPollingWatermarkExecutorLeavesInitialSnapshotBoundaryToSource

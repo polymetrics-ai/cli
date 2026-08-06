@@ -57,7 +57,8 @@ explicitly confirm this is still true.
    It intentionally produces duplicates and therefore requires
    `delivery.duplicates: at_least_once`.
 2. The executor advances after a destination `Accept` returns successfully,
-   then persists the resulting checkpoint through a small `CheckpointStore`
+   then persists the resulting checkpoint through the small
+   `ChangefeedCheckpointCommitter`
    interface. A process crash before persistence must replay the last page;
    the required destination contract is consequently idempotent/replay-safe.
 3. Timestamp watermark declarations explicitly set `safety_lag_seconds`.
@@ -83,7 +84,7 @@ explicitly confirm this is still true.
    registered executor fully matches the checkpoint contract. Prove each
    missing required checkpoint field remains rejected.
 2. **Red: execution semantics.** Write executor tests for equal-watermark
-   records over a page edge, lagged timestamp bounds with an injected clock,
+   records over a page edge, lagged timestamp bounds from a committed checkpoint,
    soft-delete versus hard-delete visibility, cancelled context, and every
    declared work bound.
 3. **Red: durability ordering.** Add a destination/store test double that

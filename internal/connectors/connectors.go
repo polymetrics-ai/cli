@@ -372,9 +372,11 @@ type WritePreview struct {
 }
 
 type CDCReadRequest struct {
-	Stream              string
-	Config              RuntimeConfig
-	State               map[string]string
+	Stream string
+	Config RuntimeConfig
+	State  map[string]string
+	// CheckpointCommitter receives the next source state only after its page's
+	// emitted events have been durably accepted by the caller.
 	CheckpointCommitter ChangefeedCheckpointCommitter
 }
 

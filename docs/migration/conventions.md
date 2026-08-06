@@ -195,7 +195,9 @@ not a full override by default.
   supply `polling_watermark` beside the normal evidence/checkpoint/delivery fields. Its
   `watermark` declares `{kind, path}` where kind is exactly `timestamp`,
   `monotonic_sequence`, or `opaque_cursor`; `tie_breaker.path` names the stable secondary order
-  value. `checkpoint.keys` must list those paths in that order. The only supported `boundary` is
+  value. Each timestamp or monotonic-sequence source page must be ordered ascending by that tuple;
+  an unordered page is refused before delivery or checkpoint advancement. `checkpoint.keys` must
+  list those paths in that order. The only supported `boundary` is
   `inclusive`: the next read starts at `>=` the committed boundary and therefore deliberately
   replays the edge record. Set `delivery.duplicates` to `at_least_once`; `>` would silently lose
   tied timestamps and is not an allowed substitute. Declare positive `safety_lag_seconds` for a
