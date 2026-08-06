@@ -1,14 +1,14 @@
 # PLAN — PostgreSQL logical-replication CDC
 
-## Scope and stacking
+## Scope and integration base
 
 Implement the native PostgreSQL logical-replication `ChangefeedExecutor` on
-`fm/cli-postgres-cdc-logical-replication-r1`. This branch is deliberately
-stacked on PR #3880 (`fm/cli-found-polling-watermark-executor-r1`, head
-`00da0633d`), which establishes the non-webhook executor shape and its
-checkpoint callback. Its code is parent-owned; this lane changes only the
-PostgreSQL native connector, its bundle/docs, the narrow typed checkpoint
-extension needed to consume #3882, tests, dependency files, and this evidence.
+`fm/cli-postgres-cdc-logical-replication-r1`. The branch is rebased onto
+`origin/main` after PR #3880 established the non-webhook executor shape and
+PR #3882 established the durable database sync contract. This lane changes
+only the PostgreSQL native connector, its bundle/docs, the narrow typed
+checkpoint extension needed to consume #3882, tests, dependency files, and
+this evidence.
 
 `pm` currently has no standalone CDC invocation command. This lane therefore
 does not invent a generic SQL/replication CLI surface. It makes the registered
