@@ -38,3 +38,33 @@ func TestRateLimitReportCoalescesLongRunsIntoBoundedPolicySummary(t *testing.T) 
 		t.Fatalf("bounded summary is unexpectedly large (%d bytes): %s", len(encoded), encoded)
 	}
 }
+
+func TestRateLimitSummaryNormalizesLegacyOutputAsUndeclared(t *testing.T) {
+	summary := (RateLimitSummary{}).Normalized()
+	if len(summary.Connectors) != 1 {
+		t.Fatalf("normalized connector count = %d, want 1", len(summary.Connectors))
+	}
+	connector := summary.Connectors[0]
+	if connector.Declaration != RateLimitDeclarationUndeclared {
+		t.Fatalf("normalized declaration = %q, want undeclared", connector.Declaration)
+	}
+	if connector.Policies == nil {
+		t.Fatal("normalized policies = nil, want empty array")
+	}
+	encoded, err := json.Marshal(summary)
+	if err != nil {
+		t.Fatalf("marshal normalized summary: %v", err)
+	}
+	var payload struct {
+		Connectors []map[string]json.RawMessage `json:"connectors"`
+	}
+	if err := json.Unmarshal(encoded, &payload); err != nil {
+		t.Fatalf("unmarshal normalized summary: %v", err)
+	}
+	if payload.Connectors == nil || len(payload.Connectors) != 1 {
+		t.Fatalf("normalized JSON connectors = %s, want one entry", encoded)
+	}
+	if _, ok := payload.Connectors[0]["connector"]; ok {
+		t.Fatalf("normalized JSON invented connector identity: %s", encoded)
+	}
+}

@@ -33,7 +33,7 @@ type RateLimitSummary struct {
 // RateLimitConnectorSummary separates the three causes of a slow run:
 // local pacing, provider 429 retry waits, and ordinary request latency.
 type RateLimitConnectorSummary struct {
-	Connector           string                   `json:"connector"`
+	Connector           string                   `json:"connector,omitempty"`
 	Declaration         RateLimitDeclaration     `json:"declaration"`
 	Policies            []RateLimitPolicySummary `json:"policies"`
 	PoliciesOmitted     int                      `json:"policies_omitted,omitempty"`
@@ -254,18 +254,38 @@ func (r *RateLimitReport) Snapshot() RateLimitSummary {
 	return summary
 }
 
+func (s RateLimitSummary) Normalized() RateLimitSummary {
+	if len(s.Connectors) == 0 {
+		return RateLimitSummary{Connectors: []RateLimitConnectorSummary{{
+			Declaration: RateLimitDeclarationUndeclared,
+			Policies:    []RateLimitPolicySummary{},
+		}}}
+	}
+	connectors := make([]RateLimitConnectorSummary, len(s.Connectors))
+	for i, connector := range s.Connectors {
+		connector.Declaration = normalizeRateLimitDeclaration(connector.Declaration)
+		if connector.Policies == nil {
+			connector.Policies = []RateLimitPolicySummary{}
+		}
+		connectors[i] = connector
+	}
+	return RateLimitSummary{Connectors: connectors}
+}
+
 // HumanLines renders the same bounded, secret-free values as Snapshot for the
 // CLI's text surface. It does not accept arbitrary request data, and therefore
 // cannot introduce credentials, bindings, runtime subjects, scope values, or
 // credential revisions into operator output.
 func (s RateLimitSummary) HumanLines() []string {
-	if len(s.Connectors) == 0 {
-		return []string{"Rate limits: declaration=undeclared policies=none local_pacing_wait=0ms provider_429_observed=0 provider_429_honored=0 provider_429_wait=0ms request_latency=0ms requests=0"}
-	}
+	s = s.Normalized()
 	lines := make([]string, 0, len(s.Connectors))
 	for _, connector := range s.Connectors {
-		lines = append(lines, fmt.Sprintf("Rate limits: connector=%s declaration=%s policies=%s local_pacing_wait=%dms provider_429_observed=%d provider_429_honored=%d provider_429_wait=%dms request_latency=%dms requests=%d",
-			connector.Connector,
+		connectorName := ""
+		if connector.Connector != "" {
+			connectorName = " connector=" + connector.Connector
+		}
+		lines = append(lines, fmt.Sprintf("Rate limits:%s declaration=%s policies=%s local_pacing_wait=%dms provider_429_observed=%d provider_429_honored=%d provider_429_wait=%dms request_latency=%dms requests=%d",
+			connectorName,
 			connector.Declaration,
 			formatRateLimitPolicies(connector),
 			connector.PacingWaitMS,

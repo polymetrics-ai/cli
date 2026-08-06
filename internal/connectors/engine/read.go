@@ -534,9 +534,7 @@ func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 		UserAgent:      b.HTTP.UserAgent,
 		DefaultHeaders: headers,
 	}
-	if cfg.RateLimitReport != nil {
-		requester.ActivityObserver = rateLimitActivityReporter{report: cfg.RateLimitReport, connector: b.Name}
-	}
+	AttachRateLimitActivityObserver(requester, cfg, b.Name)
 
 	resolver := newRateLimitResolver(b, cfg)
 	defaultRequester, err := resolver.defaultRequester(requester)

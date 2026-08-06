@@ -296,6 +296,13 @@ func (o resolvedRateLimitObserver) Observe(ctx context.Context, observation conn
 	}
 }
 
+func AttachRateLimitActivityObserver(requester *connsdk.Requester, cfg connectors.RuntimeConfig, connector string) {
+	if requester == nil || cfg.RateLimitReport == nil || connector == "" {
+		return
+	}
+	requester.ActivityObserver = rateLimitActivityReporter{report: cfg.RateLimitReport, connector: connector}
+}
+
 type rateLimitActivityReporter struct {
 	report    *connectors.RateLimitReport
 	connector string

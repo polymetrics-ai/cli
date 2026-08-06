@@ -443,6 +443,36 @@ func TestCompletedETLRunCarrierOmitsUnboundedFields(t *testing.T) {
 	}
 }
 
+func TestETLRunCarriersNormalizeLegacyRateLimitSummary(t *testing.T) {
+	completed := completedETLRunCarrier(app.Run{ID: "run_legacy_completed", Status: "completed"})
+	requireLegacyRateLimitSummary(t, completed.RateLimit)
+
+	var stdout bytes.Buffer
+	if err := writeFailedETLRun(&stdout, app.Run{ID: "run_legacy_failed", Status: "failed"}, true); err != nil {
+		t.Fatalf("writeFailedETLRun: %v", err)
+	}
+	var payload struct {
+		Run struct {
+			RateLimit connectors.RateLimitSummary `json:"rate_limit"`
+		} `json:"run"`
+	}
+	if err := json.Unmarshal(stdout.Bytes(), &payload); err != nil {
+		t.Fatalf("unmarshal failed ETL carrier: %v", err)
+	}
+	requireLegacyRateLimitSummary(t, payload.Run.RateLimit)
+}
+
+func requireLegacyRateLimitSummary(t *testing.T, summary connectors.RateLimitSummary) {
+	t.Helper()
+	if len(summary.Connectors) != 1 {
+		t.Fatalf("legacy rate-limit connector count = %d, want 1", len(summary.Connectors))
+	}
+	connector := summary.Connectors[0]
+	if connector.Connector != "" || connector.Declaration != connectors.RateLimitDeclarationUndeclared || connector.Policies == nil {
+		t.Fatalf("legacy rate-limit summary = %+v, want bounded undeclared marker", connector)
+	}
+}
+
 func newFailedRateLimitTestApp(t *testing.T) *app.App {
 	t.Helper()
 	ctx := context.Background()

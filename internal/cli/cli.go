@@ -720,7 +720,7 @@ func writeRateLimitSummary(stdout io.Writer, summary connectors.RateLimitSummary
 }
 
 func writeFailedETLRun(stdout io.Writer, run app.Run, jsonOut bool) error {
-	failed := failedETLRun{ID: run.ID, Status: run.Status, RateLimit: run.RateLimit}
+	failed := failedETLRun{ID: run.ID, Status: run.Status, RateLimit: run.RateLimit.Normalized()}
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "ETLRun", "run": failed, "runtime_recorded": false})
 	}
@@ -768,7 +768,7 @@ func completedETLRunCarrier(run app.Run) completedETLRun {
 		RecordsLoaded:      run.RecordsLoaded,
 		RecordsFailed:      run.RecordsFailed,
 		BatchCount:         run.BatchCount,
-		RateLimit:          run.RateLimit,
+		RateLimit:          run.RateLimit.Normalized(),
 		StartedAt:          run.StartedAt,
 		CompletedAt:        run.CompletedAt,
 	}
