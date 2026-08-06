@@ -28,6 +28,12 @@ const reversePlanModeConnectorCommand = "connector_command"
 
 var errStateRevisionConflict = errors.New("project state changed in another process")
 
+var errGenericETLDurabilityUnavailable = errors.New("generic ETL destination cannot provide a durable downstream acknowledgement")
+
+type durableETLDestination interface {
+	AcknowledgeETLDurability(context.Context, string) (synccontract.DownstreamAcknowledgement, error)
+}
+
 type App struct {
 	root       string
 	projectDir string
@@ -49,17 +55,18 @@ type sqlQueryEngine interface {
 }
 
 type state struct {
-	Revision           uint64                            `json:"revision"`
-	Credentials        []CredentialMeta                  `json:"credentials"`
-	CredentialBindings map[string]credentialBindingState `json:"credential_bindings"`
-	CoordinationSalt   string                            `json:"coordination_salt,omitempty"`
-	Connections        []Connection                      `json:"connections"`
-	Catalogs           []CatalogSnapshot                 `json:"catalogs"`
-	Runs               []Run                             `json:"runs"`
-	ReversePlans       []ReversePlan                     `json:"reverse_plans"`
-	ReverseRuns        []ReverseRun                      `json:"reverse_runs"`
-	Checkpoints        map[string]map[string]string      `json:"checkpoints,omitempty"`
-	StreamStates       map[string]StreamState            `json:"stream_states,omitempty"`
+	Revision                     uint64                            `json:"revision"`
+	SyncModeCompatibilityVersion uint                              `json:"sync_mode_compatibility_version,omitempty"`
+	Credentials                  []CredentialMeta                  `json:"credentials"`
+	CredentialBindings           map[string]credentialBindingState `json:"credential_bindings"`
+	CoordinationSalt             string                            `json:"coordination_salt,omitempty"`
+	Connections                  []Connection                      `json:"connections"`
+	Catalogs                     []CatalogSnapshot                 `json:"catalogs"`
+	Runs                         []Run                             `json:"runs"`
+	ReversePlans                 []ReversePlan                     `json:"reverse_plans"`
+	ReverseRuns                  []ReverseRun                      `json:"reverse_runs"`
+	Checkpoints                  map[string]map[string]string      `json:"checkpoints,omitempty"`
+	StreamStates                 map[string]StreamState            `json:"stream_states,omitempty"`
 }
 
 // credentialBindingState is protected project-state metadata. The raw binding
@@ -109,10 +116,11 @@ func InitProject(root string) error {
 			return err
 		}
 		initial := state{
-			CredentialBindings: map[string]credentialBindingState{},
-			CoordinationSalt:   coordinationSalt,
-			Checkpoints:        map[string]map[string]string{},
-			StreamStates:       map[string]StreamState{},
+			SyncModeCompatibilityVersion: syncModeCompatibilityVersion,
+			CredentialBindings:           map[string]credentialBindingState{},
+			CoordinationSalt:             coordinationSalt,
+			Checkpoints:                  map[string]map[string]string{},
+			StreamStates:                 map[string]StreamState{},
 		}
 		if err := writeJSONAtomic(statePath, initial); err != nil {
 			return err
@@ -191,6 +199,7 @@ func (a *App) load() error {
 	if a.state.StreamStates == nil {
 		a.state.StreamStates = map[string]StreamState{}
 	}
+	a.migrateLegacySyncModeCompatibility()
 	return a.migrateCredentialCoordination()
 }
 
@@ -340,6 +349,21 @@ func (a *App) credentialBindingForCredential(credential CredentialMeta) (credent
 		return credentialBindingState{}, errors.New("credential coordination metadata is unavailable")
 	}
 	return binding, nil
+}
+
+func (a *App) migrateLegacySyncModeCompatibility() {
+	if a.state.SyncModeCompatibilityVersion >= syncModeCompatibilityVersion {
+		return
+	}
+	for connectionIndex := range a.state.Connections {
+		for streamName, stream := range a.state.Connections[connectionIndex].Streams {
+			if isLegacySyncModeName(stream.SyncMode) {
+				stream.LegacyCompatibility = true
+				a.state.Connections[connectionIndex].Streams[streamName] = stream
+			}
+		}
+	}
+	a.state.SyncModeCompatibilityVersion = syncModeCompatibilityVersion
 }
 
 func (a *App) save() error {
@@ -686,11 +710,14 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 		if stream.SyncMode == "" {
 			stream.SyncMode = DefaultUserFacingSyncMode
 		}
-		mode, err := ParseSyncMode(stream.SyncMode)
+		mode, err := ParseStreamSyncMode(stream)
 		if err != nil {
 			return Connection{}, err
 		}
 		stream.SyncMode = mode.Name
+		if mode.LegacyCompatibility {
+			stream.LegacyCompatibility = true
+		}
 		if catalogErr == nil {
 			if sourceStream, ok := findCatalogStream(catalog, name); ok {
 				if stream.CursorField == "" && len(sourceStream.CursorFields) > 0 {
@@ -788,7 +815,7 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	a.state.Runs = append(a.state.Runs, run)
 	_ = a.save()
 
-	mode, err := ParseSyncMode(stream.SyncMode)
+	mode, err := ParseStreamSyncMode(stream)
 	if err != nil {
 		return a.failRun(runID, err)
 	}
@@ -802,10 +829,11 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 			Reason: "no matching native executor has completed the shared conformance corpus",
 		})
 	}
-	source, sourceRuntime, err := a.resolveEndpoint(ctx, conn.Source)
+	source, sourceCredential, sourceRuntime, err := a.resolveEndpointWithCredential(ctx, conn.Source)
 	if err != nil {
 		return a.failRun(runID, err)
 	}
+	sourceExpectation := streamResumeExpectation(source, sourceCredential, sourceRuntime, req.Stream)
 	destination, destRuntime, err := a.resolveEndpoint(ctx, conn.Destination)
 	if err != nil {
 		return a.failRun(runID, err)
@@ -816,9 +844,9 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	}
 	var result etlExecutionResult
 	if materializer, ok := destination.(connectors.LocalWarehouseMaterializer); ok && materializer.MaterializesLocalWarehouse() {
-		result, err = a.runWarehouseETL(ctx, runID, conn, source, sourceRuntime, destRuntime, req.Stream, stream, mode, batchSize)
+		result, err = a.runWarehouseETL(ctx, runID, conn, source, sourceRuntime, destRuntime, sourceExpectation, req.Stream, stream, mode, batchSize)
 	} else {
-		result, err = a.runConnectorETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, req.Stream, stream, mode, batchSize)
+		result, err = a.runConnectorETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, stream, mode, batchSize)
 	}
 	if err != nil {
 		return a.failRun(runID, err)
@@ -826,9 +854,13 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	return a.completeRun(runID, result)
 }
 
-func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
+func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
 	if mode.IsDeduped() {
 		return etlExecutionResult{}, fmt.Errorf("sync mode %s requires the local warehouse destination in this dependency-free implementation", mode.Name)
+	}
+	durableDestination, ok := destination.(durableETLDestination)
+	if !ok {
+		return etlExecutionResult{}, fmt.Errorf("%w: %q", errGenericETLDurabilityUnavailable, destination.Name())
 	}
 	if a.state.StreamStates == nil {
 		a.state.StreamStates = map[string]StreamState{}
@@ -836,7 +868,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 	stateKey := streamStateKey(conn.Name, streamName)
 	prior := a.state.StreamStates[stateKey]
 	if prior.Checkpoint != nil {
-		if err := validateStreamStateResume(prior, conn, streamName); err != nil {
+		if err := validateStreamStateResume(prior, sourceExpectation); err != nil {
 			return etlExecutionResult{}, err
 		}
 	}
@@ -939,8 +971,14 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 	if observedAt.IsZero() {
 		observedAt = time.Now().UTC()
 	}
-	acknowledgedAt := time.Now().UTC()
-	updated, err := committedLegacyStreamState(conn, streamName, stream, runID, nextCursor, generationID, result.RecordsLoaded, destination.Name(), observedAt, acknowledgedAt)
+	acknowledgement, err := durableDestination.AcknowledgeETLDurability(ctx, runID)
+	if err != nil {
+		return result, err
+	}
+	if acknowledgement.Sink != destination.Name() {
+		return result, fmt.Errorf("durable downstream acknowledgement sink %q does not match destination %q", acknowledgement.Sink, destination.Name())
+	}
+	updated, err := committedLegacyStreamState(conn, sourceExpectation, streamName, stream, runID, nextCursor, generationID, result.RecordsLoaded, observedAt, acknowledgement)
 	if err != nil {
 		return result, err
 	}
@@ -2084,24 +2122,29 @@ func constantTimeStringEqual(left, right string) bool {
 }
 
 func (a *App) resolveEndpoint(ctx context.Context, endpoint EndpointConfig) (connectors.Connector, connectors.RuntimeConfig, error) {
+	connector, _, runtime, err := a.resolveEndpointWithCredential(ctx, endpoint)
+	return connector, runtime, err
+}
+
+func (a *App) resolveEndpointWithCredential(ctx context.Context, endpoint EndpointConfig) (connectors.Connector, CredentialMeta, connectors.RuntimeConfig, error) {
 	if err := connectors.RejectLegacyConnectorName(endpoint.Connector); err != nil {
-		return nil, connectors.RuntimeConfig{}, err
+		return nil, CredentialMeta{}, connectors.RuntimeConfig{}, err
 	}
 	cred, runtime, err := a.resolveCredential(ctx, endpoint.Credential, endpoint.Config)
 	if err != nil {
-		return nil, connectors.RuntimeConfig{}, err
+		return nil, CredentialMeta{}, connectors.RuntimeConfig{}, err
 	}
 	if err := connectors.RejectLegacyConnectorName(cred.Connector); err != nil {
-		return nil, connectors.RuntimeConfig{}, err
+		return nil, CredentialMeta{}, connectors.RuntimeConfig{}, err
 	}
 	if endpoint.Connector != "" && endpoint.Connector != cred.Connector {
-		return nil, connectors.RuntimeConfig{}, fmt.Errorf("credential %q is for connector %q, not %q", endpoint.Credential, cred.Connector, endpoint.Connector)
+		return nil, CredentialMeta{}, connectors.RuntimeConfig{}, fmt.Errorf("credential %q is for connector %q, not %q", endpoint.Credential, cred.Connector, endpoint.Connector)
 	}
 	connector, ok := a.registry.Get(cred.Connector)
 	if !ok {
-		return nil, connectors.RuntimeConfig{}, fmt.Errorf("connector %q not found", cred.Connector)
+		return nil, CredentialMeta{}, connectors.RuntimeConfig{}, fmt.Errorf("connector %q not found", cred.Connector)
 	}
-	return connector, runtime, nil
+	return connector, cred, runtime, nil
 }
 
 func (a *App) ResolveConnectorCredential(ctx context.Context, connectorName, credentialName string, overlay map[string]string) (connectors.Connector, connectors.RuntimeConfig, error) {

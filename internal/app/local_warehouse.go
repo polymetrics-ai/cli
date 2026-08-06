@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/synccontract"
 )
 
 type etlExecutionResult struct {
@@ -38,14 +39,14 @@ type localRawRecord struct {
 	Record       connectors.Record `json:"record"`
 }
 
-func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destRuntime connectors.RuntimeConfig, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
+func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
 	if a.state.StreamStates == nil {
 		a.state.StreamStates = map[string]StreamState{}
 	}
 	stateKey := streamStateKey(conn.Name, streamName)
 	prior := a.state.StreamStates[stateKey]
 	if prior.Checkpoint != nil {
-		if err := validateStreamStateResume(prior, conn, streamName); err != nil {
+		if err := validateStreamStateResume(prior, sourceExpectation); err != nil {
 			return etlExecutionResult{}, err
 		}
 	}
@@ -265,8 +266,11 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	if observedAt.IsZero() {
 		observedAt = time.Now().UTC()
 	}
-	acknowledgedAt := time.Now().UTC()
-	updated, err := committedLegacyStreamState(conn, streamName, stream, runID, nextCursor, generationID, result.RecordsLoaded, conn.Destination.Connector, observedAt, acknowledgedAt)
+	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement(conn.Destination.Connector, time.Now().UTC())
+	if err != nil {
+		return result, err
+	}
+	updated, err := committedLegacyStreamState(conn, sourceExpectation, streamName, stream, runID, nextCursor, generationID, result.RecordsLoaded, observedAt, acknowledgement)
 	if err != nil {
 		return result, err
 	}

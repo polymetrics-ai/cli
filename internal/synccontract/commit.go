@@ -15,12 +15,24 @@ var ErrDownstreamAcknowledgementRequired = errors.New("durable downstream acknow
 // the batch durable according to its own native protocol.
 type DownstreamAcknowledgement struct {
 	Sink           string    `json:"sink"`
-	Durable        bool      `json:"durable"`
 	AcknowledgedAt time.Time `json:"acknowledged_at"`
+	durable        bool
+}
+
+func NewDurableDownstreamAcknowledgement(sink string, acknowledgedAt time.Time) (DownstreamAcknowledgement, error) {
+	acknowledgement := DownstreamAcknowledgement{
+		Sink:           sink,
+		AcknowledgedAt: acknowledgedAt,
+		durable:        true,
+	}
+	if err := acknowledgement.validate(); err != nil {
+		return DownstreamAcknowledgement{}, err
+	}
+	return acknowledgement, nil
 }
 
 func (a DownstreamAcknowledgement) validate() error {
-	if !a.Durable {
+	if !a.durable {
 		return ErrDownstreamAcknowledgementRequired
 	}
 	if strings.TrimSpace(a.Sink) == "" || a.AcknowledgedAt.IsZero() {

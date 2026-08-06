@@ -1,17 +1,15 @@
 package synccontract
 
 import (
+	"context"
 	"fmt"
+	"reflect"
 	"strings"
+	"sync"
 )
 
-// NativeCommandContractVersion is the schema version for named database-wire
-// commands. It is intentionally independent from checkpoint StateVersion.
 const NativeCommandContractVersion uint = 1
 
-// ExecutorReference names fixed product code. It is never populated from a
-// caller, so a native contract cannot become a generic SQL, HTTP, or shell
-// escape hatch.
 type ExecutorReference struct {
 	Kind string `json:"kind"`
 	ID   string `json:"id"`
@@ -24,8 +22,6 @@ func (r ExecutorReference) validate() error {
 	return nil
 }
 
-// NativeSyncExecutorDescriptor is the runtime half of a named native command.
-// It intentionally has no request string, REST endpoint, or command payload.
 type NativeSyncExecutorDescriptor struct {
 	Protocol string            `json:"protocol"`
 	Command  string            `json:"command"`
@@ -33,16 +29,36 @@ type NativeSyncExecutorDescriptor struct {
 	Modes    []Mode            `json:"modes"`
 }
 
-// NativeSyncExecutor is the explicit admission interface. Implementing a
-// generic connector/read method cannot accidentally advertise sync support.
+func (d NativeSyncExecutorDescriptor) validate() error {
+	return validateNativeOperation(d.Protocol, d.Command, d.Executor, d.Modes)
+}
+
+type NativeSyncRequest struct {
+	Mode       Mode                `json:"mode"`
+	Resume     ResumeExpectation   `json:"resume"`
+	Checkpoint *CheckpointEnvelope `json:"checkpoint,omitempty"`
+}
+
+func (r NativeSyncRequest) clone() NativeSyncRequest {
+	clone := r
+	clone.Resume.SourceGeneration = cloneToken(r.Resume.SourceGeneration)
+	if r.Checkpoint != nil {
+		checkpoint := r.Checkpoint.Clone()
+		clone.Checkpoint = &checkpoint
+	}
+	return clone
+}
+
+type NativeSyncResult struct {
+	CandidateCheckpoint *CheckpointEnvelope `json:"candidate_checkpoint,omitempty"`
+}
+
 type NativeSyncExecutor interface {
 	NativeSyncExecutorDescriptor() NativeSyncExecutorDescriptor
 	NativeSyncConformanceEvidence() ConformanceEvidence
+	RunNativeSync(context.Context, NativeSyncRequest) (NativeSyncResult, error)
 }
 
-// NativeCommandContract admits a fixed native database-wire operation. It is
-// the alternative to fabricated REST api_surface rows for SQL and other wire
-// protocols.
 type NativeCommandContract struct {
 	ContractVersion uint                `json:"contract_version"`
 	Protocol        string              `json:"protocol"`
@@ -52,23 +68,31 @@ type NativeCommandContract struct {
 	Conformance     ConformanceEvidence `json:"conformance"`
 }
 
-// Validate verifies that a native command contains fixed execution identity
-// and the complete shared fixture evidence before any mode can be advertised.
 func (c NativeCommandContract) Validate() error {
 	if c.ContractVersion != NativeCommandContractVersion {
 		return fmt.Errorf("unsupported native command contract version %d", c.ContractVersion)
 	}
-	if !isConcreteNativeIdentifier(c.Protocol) || !isConcreteNativeIdentifier(c.Command) {
-		return fmt.Errorf("native command protocol and command must name a concrete database wire operation")
-	}
-	if err := c.Executor.validate(); err != nil {
+	if err := validateNativeOperation(c.Protocol, c.Command, c.Executor, c.Modes); err != nil {
 		return err
 	}
-	if len(c.Modes) == 0 {
+	if !c.Conformance.matchesRequired() {
+		return fmt.Errorf("native command requires complete shared conformance evidence")
+	}
+	return nil
+}
+
+func validateNativeOperation(protocol, command string, executor ExecutorReference, modes []Mode) error {
+	if !isConcreteNativeIdentifier(protocol) || !isConcreteNativeIdentifier(command) {
+		return fmt.Errorf("native command protocol and command must name a concrete database wire operation")
+	}
+	if err := executor.validate(); err != nil {
+		return err
+	}
+	if len(modes) == 0 {
 		return fmt.Errorf("native command requires at least one sync mode")
 	}
-	seen := make(map[Mode]struct{}, len(c.Modes))
-	for _, mode := range c.Modes {
+	seen := make(map[Mode]struct{}, len(modes))
+	for _, mode := range modes {
 		if err := mode.Validate(); err != nil {
 			return err
 		}
@@ -77,28 +101,118 @@ func (c NativeCommandContract) Validate() error {
 		}
 		seen[mode] = struct{}{}
 	}
-	if !c.Conformance.matchesRequired() {
-		return fmt.Errorf("native command requires complete shared conformance evidence")
-	}
 	return nil
 }
 
-// IsExecutable admits a mode claim only if this valid declaration has a
-// matching runtime executor and both sides attest to the same fixture corpus.
-func (c NativeCommandContract) IsExecutable(candidate any) bool {
-	if c.Validate() != nil {
-		return false
+type NativeExecutorRegistry struct {
+	mu        sync.RWMutex
+	executors map[ExecutorReference]NativeSyncExecutor
+}
+
+func NewNativeExecutorRegistry(executors ...NativeSyncExecutor) (*NativeExecutorRegistry, error) {
+	registry := &NativeExecutorRegistry{executors: make(map[ExecutorReference]NativeSyncExecutor)}
+	for _, executor := range executors {
+		if err := registry.Register(executor); err != nil {
+			return nil, err
+		}
 	}
-	executor, ok := candidate.(NativeSyncExecutor)
-	if !ok {
-		return false
+	return registry, nil
+}
+
+func (r *NativeExecutorRegistry) Register(executor NativeSyncExecutor) error {
+	if r == nil {
+		return fmt.Errorf("native executor registry is required")
+	}
+	if isNilNativeSyncExecutor(executor) {
+		return fmt.Errorf("native sync executor is required")
 	}
 	descriptor := executor.NativeSyncExecutorDescriptor()
-	if descriptor.Protocol != c.Protocol || descriptor.Command != c.Command || descriptor.Executor != c.Executor || !sameModeSet(descriptor.Modes, c.Modes) {
-		return false
+	if err := descriptor.validate(); err != nil {
+		return err
+	}
+	if !executor.NativeSyncConformanceEvidence().matchesRequired() {
+		return fmt.Errorf("native executor requires complete shared conformance evidence")
+	}
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	if r.executors == nil {
+		r.executors = make(map[ExecutorReference]NativeSyncExecutor)
+	}
+	if _, exists := r.executors[descriptor.Executor]; exists {
+		return fmt.Errorf("native executor %q is already registered", descriptor.Executor.ID)
+	}
+	r.executors[descriptor.Executor] = executor
+	return nil
+}
+
+func (r *NativeExecutorRegistry) Admits(contract NativeCommandContract) bool {
+	_, err := r.executorFor(contract)
+	return err == nil
+}
+
+func (r *NativeExecutorRegistry) Execute(ctx context.Context, contract NativeCommandContract, request NativeSyncRequest) (NativeSyncResult, error) {
+	executor, err := r.executorFor(contract)
+	if err != nil {
+		return NativeSyncResult{}, err
+	}
+	if err := request.Mode.Validate(); err != nil {
+		return NativeSyncResult{}, err
+	}
+	if !containsMode(contract.Modes, request.Mode) {
+		return NativeSyncResult{}, fmt.Errorf("native command does not admit sync mode %q", request.Mode)
+	}
+	if request.Checkpoint != nil {
+		if err := request.Checkpoint.ValidateResume(request.Resume); err != nil {
+			return NativeSyncResult{}, err
+		}
+	}
+	return executor.RunNativeSync(ctx, request.clone())
+}
+
+func (r *NativeExecutorRegistry) executorFor(contract NativeCommandContract) (NativeSyncExecutor, error) {
+	if r == nil {
+		return nil, fmt.Errorf("native executor registry is required")
+	}
+	if err := contract.Validate(); err != nil {
+		return nil, err
+	}
+	r.mu.RLock()
+	executor, ok := r.executors[contract.Executor]
+	r.mu.RUnlock()
+	if !ok || isNilNativeSyncExecutor(executor) {
+		return nil, fmt.Errorf("native executor %q is not registered", contract.Executor.ID)
+	}
+	descriptor := executor.NativeSyncExecutorDescriptor()
+	if descriptor.Protocol != contract.Protocol || descriptor.Command != contract.Command || descriptor.Executor != contract.Executor || !sameModeSet(descriptor.Modes, contract.Modes) {
+		return nil, fmt.Errorf("registered native executor does not match the command contract")
 	}
 	evidence := executor.NativeSyncConformanceEvidence()
-	return evidence.matchesRequired() && evidence.equal(c.Conformance)
+	if !evidence.matchesRequired() || !evidence.equal(contract.Conformance) {
+		return nil, fmt.Errorf("registered native executor lacks matching shared conformance evidence")
+	}
+	return executor, nil
+}
+
+func isNilNativeSyncExecutor(executor NativeSyncExecutor) bool {
+	if executor == nil {
+		return true
+	}
+	value := reflect.ValueOf(executor)
+	switch value.Kind() {
+	case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice:
+		return value.IsNil()
+	default:
+		return false
+	}
+}
+
+func containsMode(modes []Mode, expected Mode) bool {
+	for _, mode := range modes {
+		if mode == expected {
+			return true
+		}
+	}
+	return false
 }
 
 func sameModeSet(left, right []Mode) bool {
@@ -141,10 +255,14 @@ func isConcreteNativeIdentifier(value string) bool {
 }
 
 func isGenericIdentifier(value string) bool {
-	switch strings.ToLower(value) {
-	case "http", "https", "rest", "sql", "query", "execute", "shell", "command":
-		return true
-	default:
-		return false
+	for _, segment := range strings.FieldsFunc(strings.ToLower(value), func(r rune) bool {
+		return r == '-' || r == '_' || r == '.'
+	}) {
+		for _, generic := range []string{"http", "https", "rest", "sql", "query", "execute", "shell", "command"} {
+			if segment == generic || strings.HasPrefix(segment, generic) {
+				return true
+			}
+		}
 	}
+	return false
 }
