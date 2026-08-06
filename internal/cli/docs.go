@@ -328,13 +328,18 @@ CATALOG
 
 EMAIL (IMAP + SMTP)
   Email is a native protocol connector, separate from the Gmail and Outlook API
-  connectors. IMAP lists mailboxes and reads bounded messages. SMTP is send-only:
-  it submits one typed message and never backs mailbox, message, or search reads.
+  connectors. IMAP lists mailboxes. SMTP is send-only: it submits one typed
+  message and never backs mailbox, message, or search reads.
 
-  Message increments use a mailbox-scoped UIDVALIDITY+UID cursor as defined by
-  RFC 9051, not a received-date timestamp. A polled cursor cannot observe hard
-  deletes: a removed message simply stops appearing and no tombstone is emitted.
-  IMAP IDLE/push subscriptions are outside this connector; #3614 owns that seam.
+  Email message reads, full-refresh enforcement, and sparse UID scan continuation
+  are blocked pending #3810. Full-refresh enforcement needs catalog sync-mode
+  validation at internal/app/app.go:350-376 and cursor-mode handling at
+  internal/app/app.go:543-551. Sparse UID scan continuation needs
+  scan-continuation state at internal/app/types.go:40-47 and persistence at
+  internal/app/local_warehouse.go:246-256. Both become available when #3810 lands.
+
+  When message polling becomes available, its RFC 9051 UIDVALIDITY+UID cursor
+  cannot observe hard deletes. IMAP IDLE/push subscriptions remain the #3614 seam.
 
   pm email message send is non-batchable and destructive. Its preview shows the
   exact unmasked SMTP envelope and MIME payload before approval, typed destructive

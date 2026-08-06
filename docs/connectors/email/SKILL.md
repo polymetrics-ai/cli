@@ -78,7 +78,7 @@ Lists mailboxes through IMAP4rev2, and sends one typed RFC 5322 message through 
   - mailboxes list - List mailboxes through IMAP LIST. [intent=etl availability=implemented stream=mailboxes]
   - message send - Plan, preview, approve, and submit one typed SMTP message; the preview includes the exact unmasked MIME payload. [intent=reverse_etl availability=implemented write=send_message]; approval: Requires plan, unmasked preview, approval evidence, and typed destructive confirmation.; risk: SMTP submission is externally visible and irreversible after the server accepts it.; flags: --to (required), --cc, --bcc, --subject (required), --body (required), --body-content-type, --attachment
 - Help topics:
-  - messages-availability - Message reads, full refresh, and sparse UID continuation are unavailable pending #3810; both become available when #3810 lands. Full refresh needs catalog-mode validation at internal/app/app.go:350-376 and cursor-mode handling at internal/app/app.go:543-551. Sparse UID continuation needs scan state at internal/app/types.go:40-47 and persistence at internal/app/local_warehouse.go:246-256.
+  - messages-availability - Email message reads, full-refresh enforcement, and sparse UID scan continuation are blocked pending #3810. Full-refresh enforcement needs catalog sync-mode validation at internal/app/app.go:350-376 and cursor-mode handling at internal/app/app.go:543-551. Sparse UID scan continuation needs scan-continuation state at internal/app/types.go:40-47 and persistence at internal/app/local_warehouse.go:246-256. Both become available when #3810 lands.
   - submission-safety - SMTP is send-only; message send is non-batchable, destructive, approval-gated, and previewed without masking.
 
 ## Commands
