@@ -184,6 +184,139 @@ func TestETLRunPreflightFailureDoesNotInventRunCarrier(t *testing.T) {
 	}
 }
 
+func TestETLStatusFailureUsesSafeRateLimitCarrier(t *testing.T) {
+	a := newFailedRateLimitTestApp(t)
+	structured, structuredErr, structuredCode := runFailedRateLimitETL(t, a, true)
+	if structuredCode != 1 || structuredErr != "" {
+		t.Fatalf("failed ETL result = code %d stderr %q, want code 1 with empty stderr", structuredCode, structuredErr)
+	}
+	var failedResult struct {
+		Run struct {
+			ID string `json:"id"`
+		} `json:"run"`
+	}
+	if err := json.Unmarshal([]byte(structured), &failedResult); err != nil {
+		t.Fatalf("unmarshal failed ETL: %v", err)
+	}
+	if failedResult.Run.ID == "" {
+		t.Fatal("failed ETL run ID is empty")
+	}
+
+	for _, jsonOut := range []bool{false, true} {
+		var stdout bytes.Buffer
+		if err := runETL(context.Background(), a, []string{"status", failedResult.Run.ID}, &stdout, jsonOut, config.Config{}); err != nil {
+			t.Fatalf("failed ETL status json=%t: %v", jsonOut, err)
+		}
+		output := stdout.String()
+		for _, forbidden := range []string{
+			"failed-rate-limit-token-must-not-escape",
+			"runtime-subject-must-not-escape",
+			"provider.example.test",
+			"body-must-not-escape",
+		} {
+			if strings.Contains(output, forbidden) {
+				t.Fatalf("failed ETL status json=%t leaked %q", jsonOut, forbidden)
+			}
+		}
+		if !jsonOut {
+			for _, want := range []string{
+				"ETL run " + failedResult.Run.ID + " failed: read=0 loaded=0 failed=0",
+				"Rate limits: connector=failed-rate-limit declaration=declared",
+				"provider_429_observed=1",
+				"request_latency=7ms",
+			} {
+				if !strings.Contains(output, want) {
+					t.Fatalf("failed ETL status human output missing %q:\n%s", want, output)
+				}
+			}
+			continue
+		}
+		var payload map[string]json.RawMessage
+		if err := json.Unmarshal([]byte(output), &payload); err != nil {
+			t.Fatalf("unmarshal failed ETL status JSON: %v\n%s", err, output)
+		}
+		var carrier map[string]json.RawMessage
+		if err := json.Unmarshal(payload["run"], &carrier); err != nil {
+			t.Fatalf("unmarshal failed ETL status carrier: %v", err)
+		}
+		if len(carrier) != 3 {
+			t.Fatalf("failed ETL status carrier field count = %d, want 3: %s", len(carrier), payload["run"])
+		}
+		for _, want := range []string{"id", "status", "rate_limit"} {
+			if _, ok := carrier[want]; !ok {
+				t.Fatalf("failed ETL status carrier missing %q", want)
+			}
+		}
+		for _, omitted := range []string{"error", "checkpoint"} {
+			if _, ok := carrier[omitted]; ok {
+				t.Fatalf("failed ETL status carrier included %q", omitted)
+			}
+		}
+	}
+}
+
+func TestETLRuntimeRecordingFailureReportsCompletedRun(t *testing.T) {
+	for _, jsonOut := range []bool{false, true} {
+		a := newRuntimeFailureTestApp(t)
+		stdout, stderr, code := runRuntimeRecordingFailureETL(t, a, jsonOut)
+		if code != 1 {
+			t.Fatalf("runtime recording failure json=%t exit = %d, want 1", jsonOut, code)
+		}
+		if stderr != "" {
+			t.Fatalf("runtime recording failure json=%t stderr = %q, want empty", jsonOut, stderr)
+		}
+		for _, forbidden := range []string{"runtime-password-must-not-escape", "127.0.0.1:1"} {
+			if strings.Contains(stdout+stderr, forbidden) {
+				t.Fatalf("runtime recording failure json=%t leaked %q", jsonOut, forbidden)
+			}
+		}
+		if !jsonOut {
+			for _, want := range []string{
+				"ETL run run_",
+				"completed: read=3 loaded=3 failed=0 runtime_recorded=false runtime_recording=failed",
+				"Rate limits: connector=sample declaration=undeclared",
+			} {
+				if !strings.Contains(stdout, want) {
+					t.Fatalf("runtime recording failure human output missing %q:\n%s", want, stdout)
+				}
+			}
+			continue
+		}
+		var payload map[string]json.RawMessage
+		if err := json.Unmarshal([]byte(stdout), &payload); err != nil {
+			t.Fatalf("unmarshal runtime recording failure JSON: %v\n%s", err, stdout)
+		}
+		var kind, runtimeRecording string
+		var runtimeRecorded bool
+		if err := json.Unmarshal(payload["kind"], &kind); err != nil {
+			t.Fatalf("unmarshal runtime recording kind: %v", err)
+		}
+		if err := json.Unmarshal(payload["runtime_recorded"], &runtimeRecorded); err != nil {
+			t.Fatalf("unmarshal runtime_recorded: %v", err)
+		}
+		if err := json.Unmarshal(payload["runtime_recording"], &runtimeRecording); err != nil {
+			t.Fatalf("unmarshal runtime_recording: %v", err)
+		}
+		if kind != "ETLRun" || runtimeRecorded || runtimeRecording != "failed" {
+			t.Fatalf("runtime recording failure envelope = kind %q recorded %t recording %q", kind, runtimeRecorded, runtimeRecording)
+		}
+		if _, ok := payload["error"]; ok {
+			t.Fatal("runtime recording failure envelope included error")
+		}
+		var run struct {
+			ID        string                      `json:"id"`
+			Status    string                      `json:"status"`
+			RateLimit connectors.RateLimitSummary `json:"rate_limit"`
+		}
+		if err := json.Unmarshal(payload["run"], &run); err != nil {
+			t.Fatalf("unmarshal completed run: %v", err)
+		}
+		if run.ID == "" || run.Status != "completed" || len(run.RateLimit.Connectors) != 2 {
+			t.Fatalf("runtime recording failure run = %+v", run)
+		}
+	}
+}
+
 func newFailedRateLimitTestApp(t *testing.T) *app.App {
 	t.Helper()
 	ctx := context.Background()
@@ -224,12 +357,66 @@ func newFailedRateLimitTestApp(t *testing.T) *app.App {
 	return a
 }
 
+func newRuntimeFailureTestApp(t *testing.T) *app.App {
+	t.Helper()
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if _, err := a.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "runtime-failure-source",
+		Connector: "sample",
+		Secrets:   map[string]string{"token": "runtime-source-token-must-not-escape"},
+	}); err != nil {
+		t.Fatalf("AddCredential source: %v", err)
+	}
+	if _, err := a.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "runtime-failure-warehouse",
+		Connector: "warehouse",
+		Config:    map[string]string{"path": filepath.Join(root, ".polymetrics", "warehouse")},
+	}); err != nil {
+		t.Fatalf("AddCredential warehouse: %v", err)
+	}
+	if _, err := a.CreateConnection(ctx, app.CreateConnectionRequest{
+		Name:        "runtime_failure_to_warehouse",
+		Source:      app.EndpointConfig{Connector: "sample", Credential: "runtime-failure-source"},
+		Destination: app.EndpointConfig{Connector: "warehouse", Credential: "runtime-failure-warehouse"},
+		Streams: map[string]app.StreamConfig{
+			"customers": {SyncMode: "full_refresh_overwrite", PrimaryKey: []string{"id"}, CursorField: "updated_at", DestinationTable: "runtime_failure_customers"},
+		},
+	}); err != nil {
+		t.Fatalf("CreateConnection: %v", err)
+	}
+	return a
+}
+
 func runFailedRateLimitETL(t *testing.T, a *app.App, jsonOut bool) (stdout, stderr string, code int) {
 	t.Helper()
 	var outBuf, errBuf bytes.Buffer
 	err := runETL(context.Background(), a, []string{"run", "--connection", "failed_rate_limit_to_warehouse", "--stream", "widgets"}, &outBuf, jsonOut, config.Config{})
 	if err == nil {
 		t.Fatal("runETL error = nil, want failed run")
+	}
+	code = writeError(&outBuf, &errBuf, err, jsonOut)
+	return outBuf.String(), errBuf.String(), code
+}
+
+func runRuntimeRecordingFailureETL(t *testing.T, a *app.App, jsonOut bool) (stdout, stderr string, code int) {
+	t.Helper()
+	var outBuf, errBuf bytes.Buffer
+	cfg := config.Config{Runtime: config.RuntimeConfig{
+		PostgresURL:   "postgres://runtime-user:runtime-password-must-not-escape@127.0.0.1:1/polymetrics?sslmode=disable",
+		DragonflyAddr: "127.0.0.1:1",
+		TemporalAddr:  "127.0.0.1:1",
+	}}
+	err := runETL(context.Background(), a, []string{"run", "--connection", "runtime_failure_to_warehouse", "--stream", "customers", "--runtime"}, &outBuf, jsonOut, cfg)
+	if err == nil {
+		t.Fatal("runETL error = nil, want runtime recording failure")
 	}
 	code = writeError(&outBuf, &errBuf, err, jsonOut)
 	return outBuf.String(), errBuf.String(), code

@@ -47,9 +47,13 @@ RATE LIMIT OUTPUT
   provider traffic is unlimited. Rate-limit output never includes credentials,
   bindings, runtime subject values, scope values, or credential revisions.
 
-  When an ETL run fails after it starts, pm emits a failed run ID and the same
-  bounded summary before exiting non-zero. Its JSON failed-run carrier contains
-  only id, status, and rate_limit; it omits error text and checkpoints.
+  Failed pm etl run and pm etl status results emit a failed run ID and the same
+  bounded summary. Their JSON failed-run carrier contains only id, status, and
+  rate_limit; it omits error text and checkpoints.
+
+  If --runtime recording fails after ETL completes, pm still emits the completed
+  run and summary, then exits non-zero. It reports runtime_recorded=false and
+  runtime_recording=failed so incomplete runtime recording is explicit.
 
 DIRECT CONNECTOR COMMANDS
   check

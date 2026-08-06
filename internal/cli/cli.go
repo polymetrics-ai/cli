@@ -639,50 +639,31 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		if err != nil {
 			return err
 		}
-		run, err := a.RunETL(ctx, app.RunETLRequest{
+		run, runErr := a.RunETL(ctx, app.RunETLRequest{
 			Connection: flags.first("connection"),
 			Stream:     flags.first("stream"),
 			BatchSize:  batchSize,
 		})
-		if err != nil {
+		if runErr != nil {
 			if run.ID == "" || run.Status != "failed" {
+				return runErr
+			}
+			if err := writeFailedETLRun(stdout, run, jsonOut); err != nil {
 				return err
 			}
-			failed := failedETLRun{ID: run.ID, Status: run.Status, RateLimit: run.RateLimit}
-			if jsonOut {
-				if err := writeJSON(stdout, envelope{"kind": "ETLRun", "run": failed, "runtime_recorded": false}); err != nil {
-					return err
-				}
-			} else {
-				_, _ = fmt.Fprintf(stdout, "ETL run %s failed: read=%d loaded=%d failed=%d\n", run.ID, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)
-				writeRateLimitSummary(stdout, run.RateLimit)
-			}
-			return &cliError{
-				category:        categoryInternal,
-				code:            "etl_run_failed",
-				message:         fmt.Sprintf("ETL run %s failed", run.ID),
-				err:             err,
-				alreadyReported: true,
-			}
+			return reportedETLRunError("etl_run_failed", fmt.Sprintf("ETL run %s failed", run.ID), runErr)
 		}
 		runtimeRecorded := false
 		if flags.first("runtime") == "true" {
-			if err := recordRuntimeETL(ctx, run, cfg); err != nil {
-				return err
+			if runtimeErr := recordRuntimeETL(ctx, run, cfg); runtimeErr != nil {
+				if err := writeCompletedETLRun(stdout, run, jsonOut, false, true); err != nil {
+					return err
+				}
+				return reportedETLRunError("etl_runtime_recording_failed", fmt.Sprintf("ETL run %s completed but runtime recording failed", run.ID), runtimeErr)
 			}
 			runtimeRecorded = true
 		}
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ETLRun", "run": run, "runtime_recorded": runtimeRecorded})
-		}
-		if runtimeRecorded {
-			_, _ = fmt.Fprintf(stdout, "ETL run %s completed: read=%d loaded=%d failed=%d runtime_recorded=true\n", run.ID, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)
-			writeRateLimitSummary(stdout, run.RateLimit)
-			return nil
-		}
-		_, _ = fmt.Fprintf(stdout, "ETL run %s completed: read=%d loaded=%d failed=%d\n", run.ID, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)
-		writeRateLimitSummary(stdout, run.RateLimit)
-		return nil
+		return writeCompletedETLRun(stdout, run, jsonOut, runtimeRecorded, false)
 	case "status":
 		if len(args) < 2 {
 			return errUsage
@@ -690,6 +671,9 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		run, err := a.GetRun(args[1])
 		if err != nil {
 			return err
+		}
+		if run.Status == "failed" {
+			return writeFailedETLRun(stdout, run, jsonOut)
 		}
 		if jsonOut {
 			return writeJSON(stdout, envelope{"kind": "ETLRun", "run": run})
@@ -706,6 +690,39 @@ func writeRateLimitSummary(stdout io.Writer, summary connectors.RateLimitSummary
 	for _, line := range summary.HumanLines() {
 		_, _ = fmt.Fprintln(stdout, line)
 	}
+}
+
+func writeFailedETLRun(stdout io.Writer, run app.Run, jsonOut bool) error {
+	failed := failedETLRun{ID: run.ID, Status: run.Status, RateLimit: run.RateLimit}
+	if jsonOut {
+		return writeJSON(stdout, envelope{"kind": "ETLRun", "run": failed, "runtime_recorded": false})
+	}
+	_, _ = fmt.Fprintf(stdout, "ETL run %s failed: read=%d loaded=%d failed=%d\n", run.ID, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)
+	writeRateLimitSummary(stdout, run.RateLimit)
+	return nil
+}
+
+func writeCompletedETLRun(stdout io.Writer, run app.Run, jsonOut, runtimeRecorded, runtimeRecordingFailed bool) error {
+	if jsonOut {
+		result := envelope{"kind": "ETLRun", "run": run, "runtime_recorded": runtimeRecorded}
+		if runtimeRecordingFailed {
+			result["runtime_recording"] = "failed"
+		}
+		return writeJSON(stdout, result)
+	}
+	suffix := ""
+	if runtimeRecorded {
+		suffix = " runtime_recorded=true"
+	} else if runtimeRecordingFailed {
+		suffix = " runtime_recorded=false runtime_recording=failed"
+	}
+	_, _ = fmt.Fprintf(stdout, "ETL run %s completed: read=%d loaded=%d failed=%d%s\n", run.ID, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed, suffix)
+	writeRateLimitSummary(stdout, run.RateLimit)
+	return nil
+}
+
+func reportedETLRunError(code, message string, err error) error {
+	return &cliError{category: categoryInternal, code: code, message: message, err: err, alreadyReported: true}
 }
 
 func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, args []string, stdout io.Writer, jsonOut bool) error {

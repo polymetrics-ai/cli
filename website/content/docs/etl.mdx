@@ -112,10 +112,14 @@ capacity when reported. A connector without `rate_limits.json` reports
 summary contains no credentials, bindings, runtime subject values, scope
 values, or credential revisions.
 
-When an ETL run fails after it starts, `pm etl run` emits a failed run ID and the
-same summary before returning a non-zero exit code. The JSON failed-run carrier
-exposes only `id`, `status`, and `rate_limit`; it omits error text and
-checkpoints.
+Failed `pm etl run` and `pm etl status` results emit a failed run ID and the
+same summary. Their JSON failed-run carrier exposes only `id`, `status`, and
+`rate_limit`; it omits error text and checkpoints.
+
+If `--runtime` recording fails after ETL completes, `pm etl run` still emits the
+completed run and summary before returning a non-zero exit code. It reports
+`runtime_recorded=false` and `runtime_recording=failed` so incomplete runtime
+recording is explicit.
 
 ### JSON output
 
