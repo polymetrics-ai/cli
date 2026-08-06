@@ -1,0 +1,46 @@
+{
+  "tagline": "Run bounded lookup operations from the command line.",
+  "usage": "pm caller-supplied-identifiers <command> [flags]",
+  "commands": [
+    {
+      "path": "lookup comma",
+      "summary": "Look up an explicit coin set.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "caller.identifiers.comma",
+      "output_policy": "json_redacted",
+      "api_surface": [{ "method": "GET", "path": "/lookups/comma" }],
+      "flags": [{ "name": "coins", "type": "string_array", "required": true, "maps_to": "identifier_set.coins" }]
+    },
+    {
+      "path": "lookup repeated",
+      "summary": "Look up explicit chain-address identifiers.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "caller.identifiers.repeated",
+      "output_policy": "json_redacted",
+      "api_surface": [{ "method": "GET", "path": "/lookups/repeated" }],
+      "flags": [{ "name": "markets", "type": "string_array", "required": true, "maps_to": "identifier_set.markets" }]
+    },
+    {
+      "path": "lookup body",
+      "summary": "Look up an explicit identifier set in a JSON body.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "caller.identifiers.body",
+      "output_policy": "json_redacted",
+      "api_surface": [{ "method": "POST", "path": "/lookups/body" }],
+      "flags": [{ "name": "ids", "type": "string_array", "required": true, "maps_to": "identifier_set.ids" }]
+    },
+    {
+      "path": "lookup path",
+      "summary": "Look up one explicit identifier in a path segment.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "caller.identifiers.path",
+      "output_policy": "json_redacted",
+      "api_surface": [{ "method": "GET", "path": "/lookups/path/{id}" }],
+      "flags": [{ "name": "id", "type": "string_array", "required": true, "maps_to": "identifier_set.id" }]
+    }
+  ]
+}

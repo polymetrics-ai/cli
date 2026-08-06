@@ -223,6 +223,61 @@ not a full override by default.
   "Command Surface Must Stay Executable"). The shared-code boundary guard
   (`docs/migration/connector-boundary-guard.md`) enforces this ownership rule outside connector
   defs/hooks/native escape hatches.
+- **Caller-supplied identifier sets are bounded direct lookups, never streams**: when an operation
+  accepts a collection that cannot be derived from a catalogue or parent stream, declare it in the
+  `rest.caller_supplied_identifier_sets` array on a `kind:"rest_read"` operation. Each closed
+  declaration has a `name`, an `element_shape` (`"opaque_string"` or
+  `"chain_address"`), a `wire` (`"query_comma_separated"`, `"query_repeated"`,
+  `"body_json_array"`, or `"path_segment"`), and both `min_items` and a positive,
+  **mandatory** `max_items`. For example:
+
+  ```json
+  {
+    "id": "example.tokens.lookup",
+    "kind": "rest_read",
+    "summary": "Look up explicitly supplied token identifiers",
+    "risk": "low",
+    "approval": "none",
+    "output_policy": "json_redacted",
+    "rest": {
+      "method": "GET",
+      "path": "/prices/current",
+      "max_bytes": 1048576,
+      "caller_supplied_identifier_sets": [{
+        "name": "coins",
+        "element_shape": "chain_address",
+        "wire": "query_comma_separated",
+        "min_items": 1,
+        "max_items": 100
+      }]
+    }
+  }
+  ```
+
+  `opaque_string` accepts a non-blank, control-character-free identifier; `chain_address` is the
+  canonical lowercase chain name, a colon, and an `0x` plus 40 hexadecimal-character address.
+  A comma-separated set must additionally use elements without commas, because comma is its
+  provider-visible element separator. A `path_segment` set is intentionally a one-item form, so
+  both bounds must be `1` and its named `{parameter}` appears exactly once in `rest.path`.
+  A `body_json_array` set is a root-level JSON body property: the operation must be POST with
+  `application/json`, and that property must be a string array whose `minItems` and `maxItems`
+  exactly match the declaration.
+
+  Bind every declared set to exactly one `cli_surface.json` flag with the same name,
+  `type:"string_array"`, `required:true`, and `maps_to:"identifier_set.<name>"`; do not repeat
+  the set's bounds on the flag. `surface-sync` derives that mapping (including the `path_segment`
+  case) from `operations.json`, and `connectorgen validate` rejects a missing, duplicate, optional,
+  differently named, non-array, or bound-restating binding. An explicitly supplied blank flag is
+  a literal empty array when `min_items: 0`; an absent required flag remains absent and is rejected.
+  Before any network call, the engine enforces cardinality and element shape. Diagnostics name the
+  parameter, position, expected shape, or limit, but never reproduce a supplied identifier.
+
+  This declaration makes a fixed, caller-driven lookup reachable as its own
+  `pm <connector> <command>` `direct_read`; it does not create a stream, an identifier catalogue,
+  a sync target, or parent-stream fan-out. Nested batches such as a JSON map from identifier to a
+  timestamp array are deliberately **out of scope** for this surface. Do not encode them through
+  `opaque_string`, a raw body field, or an ad-hoc nested `body_json_array`; wait for the separately
+  designed bounded fan-out/nested-batch contract.
 - **`output_policy` is intent-specific, closed, and must be chosen deliberately**: for a
   `direct_write` command whose caller needs the complete decoded JSON response, declare `"json"`;
   the engine returns that decoded body unchanged. Declare `"none"` only when the operation

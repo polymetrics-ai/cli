@@ -1,0 +1,8 @@
+{
+  "name": "caller-supplied-identifiers",
+  "display_name": "Caller Supplied Identifiers",
+  "description": "Test-only bundle for bounded caller-supplied identifier-set operations.",
+  "integration_type": "api",
+  "release_stage": "ga",
+  "capabilities": { "check": true, "read": true, "write": true, "query": false, "cdc": false, "dynamic_schema": false }
+}

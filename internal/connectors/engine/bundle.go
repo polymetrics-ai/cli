@@ -756,6 +756,23 @@ type RESTOperationSpec struct {
 	// the constraint is about the wire request rather than about who supplied
 	// it. Empty (the default) imposes nothing.
 	RequiredQuery []RequiredQueryGroup `json:"required_query,omitempty"`
+	// CallerSuppliedIdentifierSets declares bounded identifier collections
+	// supplied only for one direct-read operation. It is deliberately separate
+	// from config, streams, and generic query/body maps: each entry fixes a
+	// name, element shape, cardinality, and one supported wire encoding.
+	CallerSuppliedIdentifierSets []CallerSuppliedIdentifierSetSpec `json:"caller_supplied_identifier_sets,omitempty"`
+}
+
+// CallerSuppliedIdentifierSetSpec is one closed, operation-level collection
+// parameter. The caller may provide identifiers but cannot choose the target,
+// structure, encoding, or bounds. Nested maps/batches are intentionally not
+// represented by this flat-list declaration.
+type CallerSuppliedIdentifierSetSpec struct {
+	Name         string `json:"name"`
+	ElementShape string `json:"element_shape"`
+	Wire         string `json:"wire"`
+	MinItems     int    `json:"min_items"`
+	MaxItems     int    `json:"max_items"`
 }
 
 // RequiredQueryGroup is one "at least one of these" constraint. Several groups
@@ -1996,6 +2013,112 @@ func validateRequiredQuery(i int, op OperationSpec) error {
 	return nil
 }
 
+func validateCallerSuppliedIdentifierSets(i int, op OperationSpec) error {
+	if op.REST == nil || len(op.REST.CallerSuppliedIdentifierSets) == 0 {
+		return nil
+	}
+	if op.Kind != "rest_read" {
+		return fmt.Errorf("operation %d (%q) caller_supplied_identifier_sets are only supported for rest_read operations", i, op.ID)
+	}
+
+	seen := make(map[string]struct{}, len(op.REST.CallerSuppliedIdentifierSets))
+	for j, set := range op.REST.CallerSuppliedIdentifierSets {
+		if !surfacePathVariableName(set.Name) {
+			return fmt.Errorf("operation %d (%q) caller_supplied_identifier_sets[%d] name must be a path-safe identifier", i, op.ID, j)
+		}
+		if _, duplicate := seen[set.Name]; duplicate {
+			return fmt.Errorf("operation %d (%q) caller_supplied_identifier_sets repeats name %q", i, op.ID, set.Name)
+		}
+		seen[set.Name] = struct{}{}
+		if set.MinItems < 0 {
+			return fmt.Errorf("operation %d (%q) caller_supplied_identifier_sets[%d] min_items must be non-negative", i, op.ID, j)
+		}
+		if set.MaxItems <= 0 {
+			return fmt.Errorf("operation %d (%q) caller_supplied_identifier_sets[%d] max_items must be positive", i, op.ID, j)
+		}
+		if set.MinItems > set.MaxItems {
+			return fmt.Errorf("operation %d (%q) caller_supplied_identifier_sets[%d] min_items exceeds max_items", i, op.ID, j)
+		}
+		switch set.ElementShape {
+		case "opaque_string", "chain_address":
+		default:
+			return fmt.Errorf("operation %d (%q) caller_supplied_identifier_sets[%d] has unsupported element_shape %q", i, op.ID, j, set.ElementShape)
+		}
+
+		switch set.Wire {
+		case "query_comma_separated", "query_repeated":
+			if _, reserved := op.REST.Query[set.Name]; reserved {
+				return fmt.Errorf("operation %d (%q) caller_supplied_identifier_sets[%d] name %q conflicts with rest.query", i, op.ID, j, set.Name)
+			}
+		case "body_json_array":
+			if err := validateIdentifierSetBodySchema(i, op, j, set); err != nil {
+				return err
+			}
+		case "path_segment":
+			if set.MinItems != 1 || set.MaxItems != 1 {
+				return fmt.Errorf("operation %d (%q) caller_supplied_identifier_sets[%d] path_segment requires min_items and max_items of 1", i, op.ID, j)
+			}
+			if strings.Count(op.REST.Path, "{"+set.Name+"}") != 1 {
+				return fmt.Errorf("operation %d (%q) caller_supplied_identifier_sets[%d] path_segment requires exactly one {%s} path variable", i, op.ID, j, set.Name)
+			}
+		default:
+			return fmt.Errorf("operation %d (%q) caller_supplied_identifier_sets[%d] has unsupported wire %q", i, op.ID, j, set.Wire)
+		}
+	}
+	return nil
+}
+
+func surfacePathVariableName(name string) bool {
+	if name == "" {
+		return false
+	}
+	for i, r := range name {
+		if (r >= 'A' && r <= 'Z') || (r >= 'a' && r <= 'z') || r == '_' {
+			continue
+		}
+		if i > 0 && r >= '0' && r <= '9' {
+			continue
+		}
+		return false
+	}
+	return true
+}
+
+func validateIdentifierSetBodySchema(i int, op OperationSpec, j int, set CallerSuppliedIdentifierSetSpec) error {
+	if strings.ToUpper(strings.TrimSpace(op.REST.Method)) != "POST" || !strings.EqualFold(strings.TrimSpace(op.REST.ContentType), "application/json") {
+		return fmt.Errorf("operation %d (%q) caller_supplied_identifier_sets[%d] body_json_array requires POST application/json", i, op.ID, j)
+	}
+	if len(op.REST.BodySchema) == 0 {
+		return fmt.Errorf("operation %d (%q) caller_supplied_identifier_sets[%d] body_json_array requires body_schema", i, op.ID, j)
+	}
+	if _, alreadySet := op.REST.Body[set.Name]; alreadySet {
+		return fmt.Errorf("operation %d (%q) caller_supplied_identifier_sets[%d] name %q conflicts with rest.body", i, op.ID, j, set.Name)
+	}
+	if _, err := CompileSchema(op.REST.BodySchema); err != nil {
+		return fmt.Errorf("operation %d (%q) caller_supplied_identifier_sets[%d] body_schema: %w", i, op.ID, j, err)
+	}
+
+	var bodySchema map[string]any
+	if err := json.Unmarshal(op.REST.BodySchema, &bodySchema); err != nil {
+		return fmt.Errorf("operation %d (%q) caller_supplied_identifier_sets[%d] body_schema is not an object: %w", i, op.ID, j, err)
+	}
+	properties, _ := bodySchema["properties"].(map[string]any)
+	property, _ := properties[set.Name].(map[string]any)
+	if !isArrayType(property) || !identifierSetSchemaIntegerEquals(property, "minItems", set.MinItems) || !identifierSetSchemaIntegerEquals(property, "maxItems", set.MaxItems) {
+		return fmt.Errorf("operation %d (%q) caller_supplied_identifier_sets[%d] body_schema property %q must be an array with matching minItems and maxItems", i, op.ID, j, set.Name)
+	}
+	items, _ := property["items"].(map[string]any)
+	if typeName, _ := items["type"].(string); typeName != "string" {
+		return fmt.Errorf("operation %d (%q) caller_supplied_identifier_sets[%d] body_schema property %q items must be strings", i, op.ID, j, set.Name)
+	}
+	return nil
+}
+
+func identifierSetSchemaIntegerEquals(node map[string]any, name string, want int) bool {
+	got, ok := node[name].(float64)
+	return ok && got == float64(want)
+}
+
 // validateOperationMultipartSemantics closes the operation-level multipart
 // contract before a connector can expose it as an executable rest_write. The
 // ordinary writes.json multipart path remains its own established contract;
@@ -2170,6 +2293,9 @@ func multipartSchemaString(node map[string]any) bool {
 
 func validateOperationSemantics(i int, op OperationSpec) error {
 	if err := validateRequiredQuery(i, op); err != nil {
+		return err
+	}
+	if err := validateCallerSuppliedIdentifierSets(i, op); err != nil {
 		return err
 	}
 	if err := validateOperationMultipartSemantics(i, op); err != nil {

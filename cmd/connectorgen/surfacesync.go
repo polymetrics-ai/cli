@@ -36,7 +36,10 @@ import (
 //     api_surface.json, so this is a join across consistent files, never an
 //     invented endpoint.
 //   - flags[].maps_to <- "path.<var>" when the flag's name matches a {var} in
-//     that endpoint's path.
+//     that endpoint's path, or "identifier_set.<name>" when it matches an
+//     operation-declared caller-supplied identifier set. The latter takes
+//     precedence for path_segment sets: its single item is still an explicit
+//     set rather than an ordinary path parameter.
 //
 // DEFAULTED — the bundle author's value wins; only an absent or unusable one is
 // replaced:
@@ -302,6 +305,18 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			stats.Corrected.OutputPolicy++
 		}
 
+		identifierSets := map[string]bool{}
+		if intent == "direct_read" {
+			for _, setRaw := range arrayField(block, "caller_supplied_identifier_sets") {
+				set, ok := setRaw.(*orderedObject)
+				if !ok {
+					continue
+				}
+				if name := stringField(set, "name"); name != "" {
+					identifierSets[name] = true
+				}
+			}
+		}
 		pathVars := map[string]bool{}
 		for _, match := range surfacePathVarRE.FindAllStringSubmatch(endpointPath, -1) {
 			pathVars[match[1]] = true
@@ -311,15 +326,21 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			if !ok {
 				continue
 			}
-			name := strings.ReplaceAll(stringField(flag, "name"), "-", "_")
-			if !pathVars[name] {
+			flagName := stringField(flag, "name")
+			want := ""
+			if identifierSets[flagName] {
+				want = "identifier_set." + flagName
+			} else if name := strings.ReplaceAll(flagName, "-", "_"); pathVars[name] {
+				want = "path." + name
+			}
+			if want == "" {
 				// Flags that name no path variable map to query or body
 				// targets the operation does not determine; leave them alone.
 				continue
 			}
-			// DERIVED: a flag named after a path variable resolves that
-			// variable. Any other target leaves the path unresolvable.
-			want := "path." + name
+			// DERIVED: an operation-declared identifier set or a path variable
+			// is owned by the operation contract. Any other target either drops
+			// the caller input or leaves the endpoint unresolvable.
 			switch got := strings.TrimSpace(stringField(flag, "maps_to")); {
 			case got == "":
 				flag.set("maps_to", want)

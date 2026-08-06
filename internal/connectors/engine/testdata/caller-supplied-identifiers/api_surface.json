@@ -1,0 +1,9 @@
+{
+  "api": "Test-only caller supplied identifiers API",
+  "endpoints": [
+    { "method": "GET", "path": "/lookups/comma", "covered_by": { "direct_read": "lookup comma" } },
+    { "method": "GET", "path": "/lookups/repeated", "covered_by": { "direct_read": "lookup repeated" } },
+    { "method": "POST", "path": "/lookups/body", "covered_by": { "direct_read": "lookup body" } },
+    { "method": "GET", "path": "/lookups/path/{id}", "covered_by": { "direct_read": "lookup path" } }
+  ]
+}

@@ -139,14 +139,20 @@ type DirectReadRequest struct {
 }
 
 type OperationDirectReadRequest struct {
-	Operation    string
-	Config       RuntimeConfig
-	PathParams   map[string]string
-	Query        map[string]string
-	Body         map[string]any
-	MaxBytes     int
-	OutputPolicy string
-	RedactFields []string
+	Operation  string
+	Config     RuntimeConfig
+	PathParams map[string]string
+	Query      map[string]string
+	Body       map[string]any
+	// IdentifierSets holds only operation-declared, caller-supplied identifier
+	// collections. Its keys are bundle-owned parameter names; the engine checks
+	// every set's presence, bounds, element shape, and wire placement before it
+	// builds a request. This is intentionally distinct from Query/Body so an
+	// arbitrary caller value cannot become a generic request-shaping input.
+	IdentifierSets map[string][]string
+	MaxBytes       int
+	OutputPolicy   string
+	RedactFields   []string
 }
 
 type DirectReadResult struct {

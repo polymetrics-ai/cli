@@ -30,6 +30,52 @@ const (
 )
 
 var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
+var chainAddressIdentifierSetPattern = regexp.MustCompile(`^[a-z0-9][a-z0-9_-]*:0x[0-9a-fA-F]{40}$`)
+
+// CallerSuppliedIdentifierSetError is the typed, value-redacted rejection for
+// a caller-supplied identifier collection. It deliberately carries only the
+// declared parameter contract, never an identifier value.
+type CallerSuppliedIdentifierSetError struct {
+	Parameter     string
+	Reason        CallerSuppliedIdentifierSetErrorReason
+	Limit         int
+	Position      int
+	ExpectedShape string
+}
+
+// CallerSuppliedIdentifierSetErrorReason classifies a safe, caller-correctable
+// identifier-set rejection without retaining any supplied value.
+type CallerSuppliedIdentifierSetErrorReason string
+
+const (
+	// CallerSuppliedIdentifierSetUndeclared means input named no declared set.
+	CallerSuppliedIdentifierSetUndeclared CallerSuppliedIdentifierSetErrorReason = "undeclared"
+	// CallerSuppliedIdentifierSetMissing means a declared set was absent.
+	CallerSuppliedIdentifierSetMissing CallerSuppliedIdentifierSetErrorReason = "missing"
+	// CallerSuppliedIdentifierSetBelowMin means the set has too few items.
+	CallerSuppliedIdentifierSetBelowMin CallerSuppliedIdentifierSetErrorReason = "below_minimum"
+	// CallerSuppliedIdentifierSetAboveMax means the set has too many items.
+	CallerSuppliedIdentifierSetAboveMax CallerSuppliedIdentifierSetErrorReason = "above_maximum"
+	// CallerSuppliedIdentifierSetMalformed means an item failed its shape.
+	CallerSuppliedIdentifierSetMalformed CallerSuppliedIdentifierSetErrorReason = "malformed_element"
+)
+
+func (e *CallerSuppliedIdentifierSetError) Error() string {
+	switch e.Reason {
+	case CallerSuppliedIdentifierSetUndeclared:
+		return "caller-supplied identifier set is not declared for this operation"
+	case CallerSuppliedIdentifierSetMissing:
+		return fmt.Sprintf("caller-supplied identifier set %q is required", e.Parameter)
+	case CallerSuppliedIdentifierSetBelowMin:
+		return fmt.Sprintf("caller-supplied identifier set %q is below the minimum of %d elements", e.Parameter, e.Limit)
+	case CallerSuppliedIdentifierSetAboveMax:
+		return fmt.Sprintf("caller-supplied identifier set %q exceeds the maximum of %d elements", e.Parameter, e.Limit)
+	case CallerSuppliedIdentifierSetMalformed:
+		return fmt.Sprintf("caller-supplied identifier set %q element %d must match %s", e.Parameter, e.Position, e.ExpectedShape)
+	default:
+		return "caller-supplied identifier set is invalid"
+	}
+}
 
 // completeEngineErrorText preserves the bounded diagnostic content captured by
 // connsdk for direct-read callers. HTTPError.Error deliberately applies its
@@ -86,16 +132,22 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		return connectors.DirectReadResult{}, err
 	}
 	cfg := materializeConfigDefaults(b, req.Config)
-	resolvedPath, err := resolveSurfaceEndpointPath(op.REST.Path, cfg, req.PathParams)
-	if err != nil {
-		return connectors.DirectReadResult{}, err
-	}
+	pathParams := cloneOperationPathParams(req.PathParams)
 	queryMap := map[string]string{}
 	for key, value := range op.REST.Query {
 		queryMap[key] = value
 	}
 	for key, value := range req.Query {
 		queryMap[key] = value
+	}
+	bodyOverrides := cloneAnyMap(req.Body)
+	repeatedQuery, identifierSetPathNames, err := applyCallerSuppliedIdentifierSets(op, req.IdentifierSets, pathParams, queryMap, bodyOverrides)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	resolvedPath, err := resolveOperationDirectReadPath(op.REST.Path, cfg, pathParams, identifierSetPathNames)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
 	}
 	if err := requireOperationQueryGroups(op, queryMap); err != nil {
 		return connectors.DirectReadResult{}, err
@@ -104,6 +156,9 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
+	for name, values := range repeatedQuery {
+		query[name] = cloneIdentifierSetValues(values)
+	}
 	policy := req.OutputPolicy
 	if policy == "" {
 		policy = op.OutputPolicy
@@ -111,7 +166,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if err := validateDirectReadOutputPolicy(policy, op.REST.Path, req.PathParams, cfg); err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	body, err := operationReadBody(op, req.Body)
+	body, err := operationReadBody(op, bodyOverrides)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
@@ -155,6 +210,106 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		decoded = redactNamedJSONFields(decoded, redactFields)
 	}
 	return connectors.DirectReadResult{Connector: b.Name, Method: method, Path: resolvedPath, Status: resp.Status, Body: decoded}, nil
+}
+
+func cloneOperationPathParams(in map[string]string) map[string]string {
+	out := make(map[string]string, len(in))
+	for name, value := range in {
+		out[name] = value
+	}
+	return out
+}
+
+func cloneIdentifierSetValues(values []string) []string {
+	clone := make([]string, len(values))
+	copy(clone, values)
+	return clone
+}
+
+// applyCallerSuppliedIdentifierSets verifies each closed declaration before a
+// request path, query, or body is assembled. It intentionally reports names,
+// positions, shapes, and bounds only: identifier values can be account or
+// wallet data and must never be reflected in a diagnostic.
+func applyCallerSuppliedIdentifierSets(
+	op OperationSpec,
+	supplied map[string][]string,
+	pathParams map[string]string,
+	query map[string]string,
+	body map[string]any,
+) (map[string][]string, map[string]bool, error) {
+	if op.REST == nil {
+		return nil, nil, nil
+	}
+	declared := make(map[string]CallerSuppliedIdentifierSetSpec, len(op.REST.CallerSuppliedIdentifierSets))
+	for _, set := range op.REST.CallerSuppliedIdentifierSets {
+		declared[set.Name] = set
+	}
+	for name := range supplied {
+		if _, ok := declared[name]; !ok {
+			return nil, nil, &CallerSuppliedIdentifierSetError{Reason: CallerSuppliedIdentifierSetUndeclared}
+		}
+	}
+
+	repeated := make(map[string][]string)
+	pathNames := make(map[string]bool)
+	for _, set := range op.REST.CallerSuppliedIdentifierSets {
+		values, present := supplied[set.Name]
+		if !present {
+			return nil, nil, &CallerSuppliedIdentifierSetError{Parameter: set.Name, Reason: CallerSuppliedIdentifierSetMissing}
+		}
+		if len(values) < set.MinItems {
+			return nil, nil, &CallerSuppliedIdentifierSetError{Parameter: set.Name, Reason: CallerSuppliedIdentifierSetBelowMin, Limit: set.MinItems}
+		}
+		if len(values) > set.MaxItems {
+			return nil, nil, &CallerSuppliedIdentifierSetError{Parameter: set.Name, Reason: CallerSuppliedIdentifierSetAboveMax, Limit: set.MaxItems}
+		}
+		for position, value := range values {
+			if err := validateCallerSuppliedIdentifierElement(set, position+1, value); err != nil {
+				return nil, nil, err
+			}
+		}
+
+		switch set.Wire {
+		case "query_comma_separated":
+			query[set.Name] = strings.Join(values, ",")
+		case "query_repeated":
+			repeated[set.Name] = cloneIdentifierSetValues(values)
+			if len(values) > 0 {
+				// required_query is evaluated over its historical string map. One
+				// non-blank item means this repeated parameter is present on wire.
+				query[set.Name] = values[0]
+			}
+		case "body_json_array":
+			body[set.Name] = cloneIdentifierSetValues(values)
+		case "path_segment":
+			pathParams[set.Name] = values[0]
+			pathNames[set.Name] = true
+		default:
+			return nil, nil, fmt.Errorf("operation %q has unsupported caller-supplied identifier wire", op.ID)
+		}
+	}
+	return repeated, pathNames, nil
+}
+
+func validateCallerSuppliedIdentifierElement(set CallerSuppliedIdentifierSetSpec, position int, value string) error {
+	invalid := func() error {
+		return &CallerSuppliedIdentifierSetError{Parameter: set.Name, Reason: CallerSuppliedIdentifierSetMalformed, Position: position, ExpectedShape: set.ElementShape}
+	}
+	switch set.ElementShape {
+	case "opaque_string":
+		if strings.TrimSpace(value) == "" ||
+			safety.RejectDangerousChars(value, "identifier set element") != nil ||
+			(set.Wire == "query_comma_separated" && strings.Contains(value, ",")) {
+			return invalid()
+		}
+	case "chain_address":
+		if !chainAddressIdentifierSetPattern.MatchString(value) {
+			return invalid()
+		}
+	default:
+		return invalid()
+	}
+	return nil
 }
 
 func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest, h Hooks) (connectors.DirectReadResult, error) {
@@ -613,6 +768,14 @@ func requireDirectReadSurfaceEndpoint(surface *APISurface, method, endpointPath 
 }
 
 func resolveSurfaceEndpointPath(template string, cfg connectors.RuntimeConfig, pathParams map[string]string) (string, error) {
+	return resolveSurfaceEndpointPathWithIdentifierSets(template, cfg, pathParams, nil)
+}
+
+func resolveOperationDirectReadPath(template string, cfg connectors.RuntimeConfig, pathParams map[string]string, identifierSetPathNames map[string]bool) (string, error) {
+	return resolveSurfaceEndpointPathWithIdentifierSets(template, cfg, pathParams, identifierSetPathNames)
+}
+
+func resolveSurfaceEndpointPathWithIdentifierSets(template string, cfg connectors.RuntimeConfig, pathParams map[string]string, identifierSetPathNames map[string]bool) (string, error) {
 	if strings.TrimSpace(template) == "" {
 		return "", fmt.Errorf("direct read endpoint path is required")
 	}
@@ -634,6 +797,10 @@ func resolveSurfaceEndpointPath(template string, cfg connectors.RuntimeConfig, p
 			return ""
 		}
 		encoded, err := encodeSurfacePathValue(name, value)
+		if identifierSetPathNames[name] {
+			encoded = url.PathEscape(value)
+			err = nil
+		}
 		if err != nil {
 			firstErr = err
 			return ""

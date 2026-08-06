@@ -115,6 +115,22 @@
                   }
                 }
               },
+              "caller_supplied_identifier_sets": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": ["name", "element_shape", "wire", "min_items", "max_items"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$" },
+                    "element_shape": { "type": "string", "enum": ["opaque_string", "chain_address"] },
+                    "wire": { "type": "string", "enum": ["query_comma_separated", "query_repeated", "body_json_array", "path_segment"] },
+                    "min_items": { "type": "integer" },
+                    "max_items": { "type": "integer" }
+                  }
+                }
+              },
               "body": {
                 "type": "object",
                 "additionalProperties": true

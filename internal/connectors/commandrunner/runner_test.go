@@ -2315,6 +2315,155 @@ func TestRunOperationDirectReadPreservesExplicitEmptyRequiredStringArray(t *test
 	}
 }
 
+func TestRunOperationDirectReadPreservesIdentifierSetPresence(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path:         "lookup coins",
+		Intent:       "direct_read",
+		Availability: "implemented",
+		Operation:    "acme.lookup.coins",
+		APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/coins"}},
+		OutputPolicy: "json_redacted",
+		Flags: []connectors.CommandSurfaceFlag{{
+			Name: "coins", Type: "string_array", Required: true, MapsTo: "identifier_set.coins",
+		}},
+	}}}}
+
+	for _, tt := range []struct {
+		name    string
+		flags   map[string][]string
+		wantErr string
+		present bool
+	}{
+		{name: "absent is rejected", flags: map[string][]string{}, wantErr: "missing required flag --coins"},
+		{name: "explicit blank is an empty set", flags: map[string][]string{"coins": {""}}, present: true},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			connector.operationDirectReadReq = connectors.OperationDirectReadRequest{}
+			_, err := Run(context.Background(), connector, Request{Path: []string{"lookup", "coins"}, Flags: tt.flags}, func(connectors.Record) error {
+				t.Fatal("emit called for operation direct-read command")
+				return nil
+			})
+			if tt.wantErr != "" {
+				if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+					t.Fatalf("Run error = %v, want %q", err, tt.wantErr)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("Run: %v", err)
+			}
+			values, ok := connector.operationDirectReadReq.IdentifierSets["coins"]
+			if ok != tt.present || len(values) != 0 || (tt.present && values == nil) {
+				t.Fatalf("identifier sets = %#v, want present empty coins set", connector.operationDirectReadReq.IdentifierSets)
+			}
+			encoded, err := json.Marshal(connector.operationDirectReadReq.IdentifierSets)
+			if err != nil {
+				t.Fatalf("marshal identifier sets: %v", err)
+			}
+			if string(encoded) != `{"coins":[]}` {
+				t.Fatalf("identifier set JSON = %s, want literal empty array", encoded)
+			}
+		})
+	}
+}
+
+func TestRunCallerSuppliedIdentifierSetCommandsEndToEnd(t *testing.T) {
+	bundle, err := engine.Load(os.DirFS(filepath.Join("..", "engine", "testdata")), "caller-supplied-identifiers")
+	if err != nil {
+		t.Fatalf("load caller-supplied identifier test bundle: %v", err)
+	}
+	if len(bundle.Streams) != 0 {
+		t.Fatalf("caller-supplied identifier bundle streams = %+v, want no sync streams", bundle.Streams)
+	}
+
+	const addressA = "eth:0x1111111111111111111111111111111111111111"
+	const addressB = "base:0x2222222222222222222222222222222222222222"
+	tests := []struct {
+		name   string
+		path   []string
+		flags  map[string][]string
+		assert func(*testing.T, *http.Request)
+	}{
+		{
+			name:  "comma separated query",
+			path:  []string{"lookup", "comma"},
+			flags: map[string][]string{"coins": {"fixture-coin-a,fixture-coin-b"}},
+			assert: func(t *testing.T, r *http.Request) {
+				t.Helper()
+				if got := r.URL.Query().Get("coins"); got != "fixture-coin-a,fixture-coin-b" {
+					t.Fatalf("coins query = %q", got)
+				}
+			},
+		},
+		{
+			name:  "repeated structured query",
+			path:  []string{"lookup", "repeated"},
+			flags: map[string][]string{"markets": {addressA + "," + addressB}},
+			assert: func(t *testing.T, r *http.Request) {
+				t.Helper()
+				if got := r.URL.Query()["markets"]; len(got) != 2 || got[0] != addressA || got[1] != addressB {
+					t.Fatalf("markets query = %#v", got)
+				}
+			},
+		},
+		{
+			name:  "JSON body array",
+			path:  []string{"lookup", "body"},
+			flags: map[string][]string{"ids": {"fixture-id-a,fixture-id-b"}},
+			assert: func(t *testing.T, r *http.Request) {
+				t.Helper()
+				var body struct {
+					IDs []string `json:"ids"`
+				}
+				if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+					t.Fatalf("decode request body: %v", err)
+				}
+				if got := strings.Join(body.IDs, ","); got != "fixture-id-a,fixture-id-b" {
+					t.Fatalf("body ids = %#v", body.IDs)
+				}
+			},
+		},
+		{
+			name:  "path segment",
+			path:  []string{"lookup", "path"},
+			flags: map[string][]string{"id": {"fixture-id"}},
+			assert: func(t *testing.T, r *http.Request) {
+				t.Helper()
+				if got := r.URL.Path; got != "/lookups/path/fixture-id" {
+					t.Fatalf("path = %q", got)
+				}
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				tt.assert(t, r)
+				w.Header().Set("Content-Type", "application/json")
+				_, _ = w.Write([]byte(`{"ok":true}`))
+			}))
+			defer server.Close()
+
+			connector := engine.New(bundle, nil)
+			result, err := Run(context.Background(), connector, Request{
+				Path:   tt.path,
+				Flags:  tt.flags,
+				Config: connectors.RuntimeConfig{Config: map[string]string{"base_url": server.URL}},
+			}, func(connectors.Record) error {
+				t.Fatal("emit called for caller-supplied identifier lookup")
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Run: %v", err)
+			}
+			if result.DirectRead == nil {
+				t.Fatalf("result = %+v, want direct read", result)
+			}
+		})
+	}
+}
+
 func TestBuildWriteCommandPreservesExplicitEmptyRequiredStringArray(t *testing.T) {
 	tests := []struct {
 		name     string

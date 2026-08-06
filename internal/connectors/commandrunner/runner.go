@@ -189,9 +189,12 @@ func buildOperationDirectWriteCommand(ctx context.Context, connector connectors.
 	if err := validateOperationDirectWriteCommand(connector, cmd); err != nil {
 		return WriteCommand{}, err
 	}
-	pathParams, query, body, err := operationDirectReadOverrides(cmd, req.Flags)
+	pathParams, query, body, identifierSets, err := operationDirectReadOverrides(cmd, req.Flags)
 	if err != nil {
 		return WriteCommand{}, err
+	}
+	if len(identifierSets) > 0 {
+		return WriteCommand{}, &BlockedCommandError{Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "caller-supplied identifier sets are only supported by direct_read operations"}
 	}
 	if err := validateCommandInputs(cmd, req.Config, mappedCommandInputs{Query: query, Body: body}); err != nil {
 		return WriteCommand{}, err
@@ -433,7 +436,7 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 	if err := validateOperationDirectReadCommand(connector, cmd); err != nil {
 		return Result{}, err
 	}
-	pathParams, query, body, err := operationDirectReadOverrides(cmd, req.Flags)
+	pathParams, query, body, identifierSets, err := operationDirectReadOverrides(cmd, req.Flags)
 	if err != nil {
 		return Result{}, err
 	}
@@ -448,13 +451,14 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 		maxBytes = MaxOperationDirectReadBytes
 	}
 	direct, err := reader.OperationDirectRead(ctx, connectors.OperationDirectReadRequest{
-		Operation:    cmd.Operation,
-		Config:       req.Config,
-		PathParams:   pathParams,
-		Query:        query,
-		Body:         body,
-		MaxBytes:     maxBytes,
-		OutputPolicy: cmd.OutputPolicy,
+		Operation:      cmd.Operation,
+		Config:         req.Config,
+		PathParams:     pathParams,
+		Query:          query,
+		Body:           body,
+		IdentifierSets: identifierSets,
+		MaxBytes:       maxBytes,
+		OutputPolicy:   cmd.OutputPolicy,
 	})
 	if err != nil {
 		return Result{}, err
@@ -1000,59 +1004,79 @@ func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string]
 	return pathParams, query, nil
 }
 
-func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, map[string]string, map[string]any, error) {
+func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, map[string]string, map[string]any, map[string][]string, error) {
 	allowed := map[string]connectors.CommandSurfaceFlag{}
 	for _, flag := range cmd.Flags {
 		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
-			return nil, nil, nil, err
+			return nil, nil, nil, nil, err
 		}
 		allowed[flag.Name] = flag
 	}
 	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
-		return nil, nil, nil, err
+		return nil, nil, nil, nil, err
 	}
 
 	pathParams := map[string]string{}
 	query := map[string]string{}
 	body := map[string]any{}
+	identifierSets := map[string][]string{}
 	for name, values := range flags {
 		if len(values) == 0 {
 			continue
 		}
 		if err := safety.ValidateIdentifier(name, "flag name"); err != nil {
-			return nil, nil, nil, err
+			return nil, nil, nil, nil, err
 		}
 		flag, ok := allowed[name]
 		if !ok {
-			return nil, nil, nil, fmt.Errorf("unknown flag --%s for command %q", name, cmd.Path)
+			return nil, nil, nil, nil, fmt.Errorf("unknown flag --%s for command %q", name, cmd.Path)
 		}
 		value, err := coerceFlagValue(flag, values)
 		if err != nil {
-			return nil, nil, nil, err
+			return nil, nil, nil, nil, err
 		}
 		switch {
 		case strings.HasPrefix(flag.MapsTo, "path."):
 			target := strings.TrimPrefix(flag.MapsTo, "path.")
 			if err := safety.ValidateIdentifier(target, "path parameter"); err != nil {
-				return nil, nil, nil, err
+				return nil, nil, nil, nil, err
 			}
 			pathParams[target] = stringifyCommandValue(value)
 		case strings.HasPrefix(flag.MapsTo, "query."):
 			target := strings.TrimPrefix(flag.MapsTo, "query.")
 			if err := safety.ValidateIdentifier(target, "query parameter"); err != nil {
-				return nil, nil, nil, err
+				return nil, nil, nil, nil, err
 			}
 			query[target] = stringifyCommandValue(value)
 		case strings.HasPrefix(flag.MapsTo, "body."):
 			target := strings.TrimPrefix(flag.MapsTo, "body.")
 			if err := setBodyValue(body, target, value); err != nil {
-				return nil, nil, nil, err
+				return nil, nil, nil, nil, err
 			}
+		case strings.HasPrefix(flag.MapsTo, "identifier_set."):
+			if cmd.Intent != "direct_read" {
+				return nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to caller-supplied identifier set for a non-direct-read command", name)}
+			}
+			target := strings.TrimPrefix(flag.MapsTo, "identifier_set.")
+			if err := safety.ValidateIdentifier(target, "identifier set parameter"); err != nil {
+				return nil, nil, nil, nil, err
+			}
+			values, ok := value.([]string)
+			if !ok {
+				return nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s must use string_array for a caller-supplied identifier set", name)}
+			}
+			identifierSets[target] = cloneStringSlice(values)
 		default:
-			return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo)}
+			return nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo)}
 		}
 	}
-	return pathParams, query, body, nil
+	return pathParams, query, body, identifierSets, nil
+}
+
+func cloneStringSlice(values []string) []string {
+	clone := make([]string, len(values))
+	copy(clone, values)
+	return clone
 }
 
 func setBodyValue(body map[string]any, path string, value any) error {

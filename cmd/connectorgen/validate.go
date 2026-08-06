@@ -924,6 +924,7 @@ func checkCLISurfaceOperationSafety(
 			findings = append(findings, checkCLISurfaceOperationBodyMappings(b, i, cmd, op)...)
 		}
 	}
+	findings = append(findings, checkCLISurfaceCallerSuppliedIdentifierSets(b, i, cmd, op)...)
 	if !directReadOutputPolicies[cmd.OutputPolicy] {
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q must declare a supported output_policy", i, cmd.Path, cmd.Operation)})
 	}
@@ -935,12 +936,67 @@ func checkCLISurfaceOperationSafety(
 		switch {
 		case strings.HasPrefix(mapsTo, "path."), strings.HasPrefix(mapsTo, "query."):
 			// allowed
+		case strings.HasPrefix(mapsTo, "identifier_set."):
+			// The dedicated operation declaration check above validates the
+			// target, type, required presence, and non-duplicated bounds.
 		case strings.HasPrefix(mapsTo, "body."):
 			if method != "POST" {
 				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) flag --%s maps to body for non-POST operation", i, cmd.Path, flag.Name)})
 			}
 		default:
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) flag --%s maps to unsupported target %q", i, cmd.Path, flag.Name, flag.MapsTo)})
+		}
+	}
+	return findings
+}
+
+// checkCLISurfaceCallerSuppliedIdentifierSets binds every operation-level set
+// to one required string_array flag. The operation declaration owns shape and
+// cardinality; repeating min/max on the CLI flag risks a drift where the help
+// surface accepts a request the real executor must reject (or vice versa).
+func checkCLISurfaceCallerSuppliedIdentifierSets(b engine.Bundle, i int, cmd engine.CLICommand, op engine.OperationSpec) []Finding {
+	if op.REST == nil {
+		return nil
+	}
+	declared := make(map[string]engine.CallerSuppliedIdentifierSetSpec, len(op.REST.CallerSuppliedIdentifierSets))
+	for _, set := range op.REST.CallerSuppliedIdentifierSets {
+		declared[set.Name] = set
+	}
+	seen := make(map[string]string)
+	var findings []Finding
+	add := func(message string) {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q %s", i, cmd.Path, op.ID, message)})
+	}
+	for _, flag := range cmd.Flags {
+		target, mapped := strings.CutPrefix(strings.TrimSpace(flag.MapsTo), "identifier_set.")
+		if !mapped {
+			continue
+		}
+		if _, ok := declared[target]; !ok {
+			add(fmt.Sprintf("flag --%s maps to undeclared identifier_set.%s", flag.Name, target))
+			continue
+		}
+		if prior := seen[target]; prior != "" {
+			add(fmt.Sprintf("flags --%s and --%s both map to identifier_set.%s", prior, flag.Name, target))
+			continue
+		}
+		seen[target] = flag.Name
+		if flag.Name != target {
+			add(fmt.Sprintf("identifier_set.%s must use flag --%s, got --%s", target, target, flag.Name))
+		}
+		if flag.Type != "string_array" {
+			add(fmt.Sprintf("flag --%s for identifier_set.%s must use string_array", flag.Name, target))
+		}
+		if !flag.Required {
+			add(fmt.Sprintf("flag --%s for identifier_set.%s must be required", flag.Name, target))
+		}
+		if flag.MinItems != 0 || flag.MaxItems != 0 {
+			add(fmt.Sprintf("flag --%s for identifier_set.%s must not restate min_items or max_items", flag.Name, target))
+		}
+	}
+	for name := range declared {
+		if seen[name] == "" {
+			add(fmt.Sprintf("requires one required string_array flag mapped to identifier_set.%s", name))
 		}
 	}
 	return findings
@@ -1046,6 +1102,17 @@ func checkCLISurfaceOperationBodyMappingsForIntent(b engine.Bundle, i int, cmd e
 		target, ok := strings.CutPrefix(flag.MapsTo, "body.")
 		if ok && target != "" {
 			mappedTargets = append(mappedTargets, cliBodyFlagMapping{target: target, name: flag.Name, required: flag.Required})
+			continue
+		}
+		identifierSet, ok := strings.CutPrefix(flag.MapsTo, "identifier_set.")
+		if !ok || identifierSet == "" {
+			continue
+		}
+		for _, set := range op.REST.CallerSuppliedIdentifierSets {
+			if set.Name == identifierSet && set.Wire == "body_json_array" {
+				mappedTargets = append(mappedTargets, cliBodyFlagMapping{target: identifierSet, name: flag.Name, required: flag.Required})
+				break
+			}
 		}
 	}
 	var findings []Finding

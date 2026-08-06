@@ -601,6 +601,60 @@ func TestValidate_CLISurfaceImplementedDirectReadWithOutputPolicyPasses(t *testi
 	}
 }
 
+func TestValidate_CallerSuppliedIdentifierSetBundlePasses(t *testing.T) {
+	fsys := singleBundleFS(t, filepath.Join("..", "..", "internal", "connectors", "engine", "testdata"), "caller-supplied-identifiers")
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for caller-supplied identifier set bundle, got %+v", report.Findings)
+	}
+}
+
+func TestValidate_CallerSuppliedIdentifierSetRequiresExactCLIBinding(t *testing.T) {
+	op := engine.OperationSpec{
+		ID: "acme.coins.lookup",
+		REST: &engine.RESTOperationSpec{CallerSuppliedIdentifierSets: []engine.CallerSuppliedIdentifierSetSpec{{
+			Name: "coins", ElementShape: "opaque_string", Wire: "query_comma_separated", MinItems: 0, MaxItems: 2,
+		}}},
+	}
+	tests := []struct {
+		name  string
+		flags []engine.CLIFlag
+		want  string
+	}{
+		{
+			name: "missing binding",
+			want: "requires one required string_array flag",
+		},
+		{
+			name:  "non array binding",
+			flags: []engine.CLIFlag{{Name: "coins", Type: "string", Required: true, MapsTo: "identifier_set.coins"}},
+			want:  "must use string_array",
+		},
+		{
+			name:  "bounds stay operation owned",
+			flags: []engine.CLIFlag{{Name: "coins", Type: "string_array", Required: true, MaxItems: 2, MapsTo: "identifier_set.coins"}},
+			want:  "must not restate min_items or max_items",
+		},
+		{
+			name:  "undeclared target",
+			flags: []engine.CLIFlag{{Name: "other", Type: "string_array", Required: true, MapsTo: "identifier_set.other"}},
+			want:  "maps to undeclared identifier_set.other",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			findings := checkCLISurfaceCallerSuppliedIdentifierSets(engine.Bundle{Name: "acme"}, 0, engine.CLICommand{Path: "coins lookup", Flags: tt.flags}, op)
+			if len(findings) == 0 || !strings.Contains(findings[0].Message, tt.want) {
+				t.Fatalf("findings = %+v, want %q", findings, tt.want)
+			}
+		})
+	}
+}
+
 func TestValidate_CLISurfaceRepositoryOutputPolicyRequiresPathVariable(t *testing.T) {
 	cliSurface := strings.ReplaceAll(validDirectReadCLISurfaceJSON(), "/widgets/{path}", "/widgets/{file_path}")
 	cliSurface = strings.Replace(cliSurface, `"maps_to": "path.path"`, `"maps_to": "path.file_path"`, 1)
