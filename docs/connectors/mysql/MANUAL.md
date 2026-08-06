@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector mysql [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads MySQL tables through the MySQL wire protocol, discovers dynamic schemas, supports bounded cursor-incremental reads, and consumes row-based binary-log replication changes. Read-only source.
+  Native MySQL source connector for wire-protocol checks, dynamic schemas, bounded reads, and row-based binary-log replication. Read-only source.
 
 ICON
   id: mysql

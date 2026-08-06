@@ -53,11 +53,61 @@ ORDER BY c.table_name, c.ordinal_position`, conn.database)
 		return connectors.Catalog{}, err
 	}
 	cursorField := strings.TrimSpace(cfg.Config["cursor_field"])
-	streams, err := catalogStreams(conn.database, columns, pks, cursorField)
+	uniqueCursorTables, err := discoverUniqueCursorTables(ctx, db, conn.database, cursorField)
+	if err != nil {
+		return connectors.Catalog{}, err
+	}
+	streams, err := catalogStreams(conn.database, columns, pks, cursorField, uniqueCursorTables)
 	if err != nil {
 		return connectors.Catalog{}, err
 	}
 	return connectors.Catalog{Connector: c.Name(), Streams: streams}, nil
+}
+
+func discoverUniqueCursorTables(ctx context.Context, db mysqlExecutor, database, cursorField string) (map[string]bool, error) {
+	if cursorField == "" {
+		return nil, nil
+	}
+	if err := validateIdentifier(cursorField); err != nil {
+		return nil, fmt.Errorf("mysql catalog cursor_field: %w", err)
+	}
+	result, err := db.Execute(`
+SELECT s.table_name AS table_name
+FROM information_schema.statistics s
+JOIN information_schema.columns c
+  ON c.table_schema = s.table_schema
+ AND c.table_name = s.table_name
+ AND c.column_name = s.column_name
+WHERE s.table_schema = ?
+  AND s.column_name = ?
+  AND s.non_unique = 0
+  AND s.seq_in_index = 1
+  AND c.is_nullable = 'NO'
+  AND NOT EXISTS (
+    SELECT 1
+    FROM information_schema.statistics trailing
+    WHERE trailing.table_schema = s.table_schema
+      AND trailing.table_name = s.table_name
+      AND trailing.index_name = s.index_name
+      AND trailing.seq_in_index > 1
+  )`, database, cursorField)
+	if err != nil {
+		return nil, errors.New("catalog mysql cursor metadata failed")
+	}
+	records, err := resultRecords(result)
+	result.Close()
+	if err != nil {
+		return nil, err
+	}
+	tables := make(map[string]bool, len(records))
+	for _, record := range records {
+		table, ok := recordString(record["table_name"])
+		if !ok || validateIdentifier(table) != nil {
+			return nil, errors.New("catalog mysql cursor metadata is invalid")
+		}
+		tables[table] = true
+	}
+	return tables, nil
 }
 
 func discoverPrimaryKeys(ctx context.Context, db mysqlExecutor, database string) (map[string][]string, error) {
@@ -93,7 +143,7 @@ ORDER BY k.table_name, k.ordinal_position`, database)
 	return pks, nil
 }
 
-func catalogStreams(database string, columns []connectors.Record, pks map[string][]string, cursorField string) ([]connectors.Stream, error) {
+func catalogStreams(database string, columns []connectors.Record, pks map[string][]string, cursorField string, uniqueCursorTables map[string]bool) ([]connectors.Stream, error) {
 	byTable := make(map[string][]connectors.Field)
 	cursorByTable := make(map[string]bool)
 	for _, record := range columns {
@@ -104,7 +154,7 @@ func catalogStreams(database string, columns []connectors.Record, pks map[string
 			return nil, errors.New("catalog mysql columns returned invalid metadata")
 		}
 		byTable[table] = append(byTable[table], connectors.Field{Name: column, Type: mysqlTypeToFieldType(dataType)})
-		if column == cursorField {
+		if column == cursorField && uniqueCursorTables[table] {
 			cursorByTable[table] = true
 		}
 	}

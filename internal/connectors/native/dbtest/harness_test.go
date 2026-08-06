@@ -3,39 +3,85 @@ package dbtest
 import (
 	"context"
 	"errors"
+	"os/exec"
 	"reflect"
 	"testing"
 )
 
 type scriptedRunner struct {
-	imagePresent  bool
-	containerLive bool
-	commands      [][]string
-	contexts      []string
+	imagePresent        bool
+	volumePresent       bool
+	containerLive       bool
+	imageInspectErr     error
+	pullErr             error
+	volumeInspectErr    error
+	volumeCreateErr     error
+	containerInspectErr error
+	runErr              error
+	commands            [][]string
+	contexts            []string
 }
 
 func (r *scriptedRunner) Run(_ context.Context, dockerContext string, args ...string) (string, error) {
 	r.contexts = append(r.contexts, dockerContext)
 	r.commands = append(r.commands, append([]string(nil), args...))
-	if reflect.DeepEqual(args[:2], []string{"image", "inspect"}) {
+	switch {
+	case commandHasPrefix(args, "image", "inspect"):
+		if r.imageInspectErr != nil {
+			return "", r.imageInspectErr
+		}
 		if r.imagePresent {
 			return "", nil
 		}
-		return "", errors.New("not present")
-	}
-	if reflect.DeepEqual(args[:2], []string{"container", "inspect"}) && !r.containerLive {
-		return "", errors.New("not present")
-	}
-	if args[0] == "run" {
+		return "", errDockerResourceNotFound
+	case len(args) > 0 && args[0] == "pull":
+		r.imagePresent = true
+		return "", r.pullErr
+	case commandHasPrefix(args, "image", "rm"):
+		r.imagePresent = false
+	case commandHasPrefix(args, "volume", "inspect"):
+		if r.volumeInspectErr != nil {
+			return "", r.volumeInspectErr
+		}
+		if r.volumePresent {
+			return "", nil
+		}
+		return "", errDockerResourceNotFound
+	case commandHasPrefix(args, "volume", "create"):
+		r.volumePresent = true
+		return "", r.volumeCreateErr
+	case commandHasPrefix(args, "volume", "rm"):
+		r.volumePresent = false
+	case commandHasPrefix(args, "container", "inspect"):
+		if r.containerInspectErr != nil {
+			return "", r.containerInspectErr
+		}
+		if r.containerLive {
+			return "", nil
+		}
+		return "", errDockerResourceNotFound
+	case len(args) > 0 && args[0] == "run":
 		r.containerLive = true
-	}
-	if reflect.DeepEqual(args[:2], []string{"container", "rm"}) {
+		return "", r.runErr
+	case commandHasPrefix(args, "container", "rm"):
 		r.containerLive = false
-	}
-	if args[0] == "port" {
+	case len(args) > 0 && args[0] == "port":
 		return "127.0.0.1:43123\n", nil
 	}
 	return "", nil
+}
+
+func commandHasPrefix(args []string, prefix ...string) bool {
+	return len(args) >= len(prefix) && reflect.DeepEqual(args[:len(prefix)], prefix)
+}
+
+func commandsContain(commands [][]string, prefix ...string) bool {
+	for _, command := range commands {
+		if commandHasPrefix(command, prefix...) {
+			return true
+		}
+	}
+	return false
 }
 
 type scriptedColimaRunner struct{ commands [][]string }
@@ -107,7 +153,7 @@ func TestCleanupRemovesOnlyRunOwnedResources(t *testing.T) {
 
 	var gotCleanup []string
 	for _, command := range runner.commands {
-		if reflect.DeepEqual(command[:2], []string{"container", "rm"}) || (len(command) > 1 && command[0] == "volume" && command[1] == "rm") || (len(command) > 1 && command[0] == "image" && command[1] == "rm") {
+		if commandHasPrefix(command, "container", "rm") || commandHasPrefix(command, "volume", "rm") || commandHasPrefix(command, "image", "rm") {
 			gotCleanup = append(gotCleanup, command[0])
 		}
 	}
@@ -137,6 +183,7 @@ func TestStartPlacesEngineArgumentsAfterImage(t *testing.T) {
 	if _, err := h.Start(context.Background()); err != nil {
 		t.Fatalf("Start(): %v", err)
 	}
+	defer func() { _ = h.Close(context.Background()) }()
 	for _, command := range runner.commands {
 		if command[0] != "run" {
 			continue
@@ -156,6 +203,97 @@ func TestStartPlacesEngineArgumentsAfterImage(t *testing.T) {
 		return
 	}
 	t.Fatal("Start did not issue a Docker run command")
+}
+
+func TestStartCleansResourcesAfterIndeterminateDaemonOutcomes(t *testing.T) {
+	for _, tc := range []struct {
+		name      string
+		runner    *scriptedRunner
+		wantClean [][]string
+	}{
+		{
+			name:   "pull returns an error after creating the image",
+			runner: &scriptedRunner{pullErr: context.Canceled},
+			wantClean: [][]string{
+				{"image", "rm"},
+			},
+		},
+		{
+			name:   "volume create returns an error after creating the volume",
+			runner: &scriptedRunner{volumeCreateErr: context.Canceled},
+			wantClean: [][]string{
+				{"volume", "rm"},
+				{"image", "rm"},
+			},
+		},
+		{
+			name:   "container run returns an error after creating the container",
+			runner: &scriptedRunner{runErr: context.Canceled},
+			wantClean: [][]string{
+				{"container", "rm"},
+				{"volume", "rm"},
+				{"image", "rm"},
+			},
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			h, err := New(testConfig(tc.runner))
+			if err != nil {
+				t.Fatalf("New(): %v", err)
+			}
+			if _, err := h.Start(context.Background()); err == nil {
+				t.Fatal("Start() succeeded after an indeterminate daemon outcome")
+			}
+			for _, prefix := range tc.wantClean {
+				if !commandsContain(tc.runner.commands, prefix...) {
+					t.Fatalf("cleanup commands = %v, missing %v", tc.runner.commands, prefix)
+				}
+			}
+		})
+	}
+}
+
+func TestStartDoesNotClassifyUnexpectedInspectFailuresAsAbsence(t *testing.T) {
+	runner := &scriptedRunner{
+		imagePresent:    true,
+		imageInspectErr: errors.New("docker daemon unavailable"),
+	}
+	h, err := New(testConfig(runner))
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err == nil {
+		t.Fatal("Start() succeeded after an image inspect failure")
+	}
+	if commandsContain(runner.commands, "pull") {
+		t.Fatalf("commands = %v, want no pull after an indeterminate inspect", runner.commands)
+	}
+	if commandsContain(runner.commands, "image", "rm") {
+		t.Fatalf("commands = %v, want no removal of a pre-existing image", runner.commands)
+	}
+}
+
+func TestDockerResourceNotFoundClassifiesOnlyKnownAbsence(t *testing.T) {
+	if !dockerResourceNotFound(&exec.ExitError{Stderr: []byte("Error response from daemon: No such image")}) {
+		t.Fatal("dockerResourceNotFound() did not recognize a missing image")
+	}
+	if dockerResourceNotFound(&exec.ExitError{Stderr: []byte("Error response from daemon: access denied")}) {
+		t.Fatal("dockerResourceNotFound() classified an indeterminate inspect error as absence")
+	}
+}
+
+func TestStartPreservesPreexistingGeneratedVolume(t *testing.T) {
+	runner := &scriptedRunner{volumePresent: true}
+	h, err := New(testConfig(runner))
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err == nil {
+		t.Fatal("Start() accepted an existing generated volume")
+	}
+	if commandsContain(runner.commands, "volume", "rm") {
+		t.Fatalf("commands = %v, want no removal of a pre-existing volume", runner.commands)
+	}
 }
 
 func TestCleanupPreservesPreexistingImageAndKeepImageOptIn(t *testing.T) {

@@ -21,8 +21,9 @@ review was completed inline over the changed Go, bundle, test, generated-doc, an
 
 ## Findings
 
-No blocking correctness, security, cleanup, or documentation finding remains. During inline review,
-identifier and connection error paths were tightened so a caller-supplied value cannot be echoed in
-an error. `make lint` and the focused tests passed after that adjustment.
+The follow-up review repaired native registry installation, ambiguous Docker resource ownership,
+complete primary-key-tiebroken read paging, binlog row-format fail-closure, per-row CDC dedupe
+state, and CDC readiness synchronization. The focused repair test is recorded by this gate; the
+outer pipeline owns the remaining test, lint, build, and review phases.
 
-Verdict: clean for commit; GitHub automated-review routing remains a PR-stage responsibility.
+Verdict: review findings addressed; GitHub automated-review routing remains a PR-stage responsibility.

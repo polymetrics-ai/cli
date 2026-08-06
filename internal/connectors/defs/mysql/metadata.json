@@ -1,7 +1,7 @@
 {
   "name": "mysql",
   "display_name": "MySQL",
-  "description": "Reads MySQL tables through the MySQL wire protocol, discovers dynamic schemas, supports bounded cursor-incremental reads, and consumes row-based binary-log replication changes. Read-only source.",
+  "description": "Native MySQL source connector for wire-protocol checks, dynamic schemas, bounded reads, and row-based binary-log replication. Read-only source.",
   "integration_type": "database",
   "docs_url": "https://dev.mysql.com/doc/refman/8.4/en/",
   "release_stage": "ga",

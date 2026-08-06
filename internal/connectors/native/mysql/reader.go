@@ -22,9 +22,9 @@ func (c Connector) InitialState(ctx context.Context, stream string, _ connectors
 	return connsdk.WithCursor(map[string]string{"stream": stream}, ""), nil
 }
 
-// Read runs a bounded snapshot or incremental read. A configured cursor field
-// makes paging deterministic: each page continues strictly after its last
-// emitted cursor, so the Docker/Colima proof can exercise more than one real query.
+// Read runs a bounded snapshot or incremental read. Snapshot pages use a
+// single-column primary key, while cursor pages use the cursor and primary key
+// together so each page has a complete deterministic order.
 func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
 	if err := ctx.Err(); err != nil {
 		return err
@@ -64,7 +64,25 @@ func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit fu
 	}
 	defer func() { _ = db.Close() }()
 
-	last := connsdk.Cursor(req.State)
+	primaryKeys, err := discoverPrimaryKeys(ctx, db, database)
+	if err != nil {
+		return err
+	}
+	primaryKey, err := singleColumnPrimaryKey(primaryKeys[table])
+	if err != nil {
+		return err
+	}
+	if cursorField != "" {
+		if err := requireUniqueNonNullableCursorField(ctx, db, database, table, cursorField); err != nil {
+			return err
+		}
+	}
+
+	initialCursor := connsdk.Cursor(req.State)
+	lastCursor := any(initialCursor)
+	var lastPrimaryKey any
+	resume := cursorField != "" && initialCursor != ""
+	hasPageBoundary := false
 	emitted := 0
 	for {
 		if err := ctx.Err(); err != nil {
@@ -78,7 +96,7 @@ func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit fu
 			return nil
 		}
 
-		query, args := snapshotQuery(database, table, cursorField, last, remaining)
+		query, args := snapshotQuery(database, table, cursorField, primaryKey, lastCursor, lastPrimaryKey, resume, hasPageBoundary, remaining)
 		result, err := db.Execute(query, args...)
 		if err != nil {
 			return fmt.Errorf("read mysql table: %w", err)
@@ -94,17 +112,23 @@ func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit fu
 			}
 			emitted++
 		}
-		if len(records) < remaining || cursorField == "" {
+		if len(records) < remaining {
 			return nil
 		}
-		cursor, ok := records[len(records)-1][cursorField]
-		if !ok || cursor == nil {
-			return fmt.Errorf("mysql read cursor_field %q missing from result", cursorField)
+		lastRecord := records[len(records)-1]
+		if cursorField != "" {
+			cursor, ok := lastRecord[cursorField]
+			if !ok || cursor == nil {
+				return errors.New("mysql read cursor_field is missing from a result")
+			}
+			lastCursor = copyReadBoundaryValue(cursor)
 		}
-		last = recordCursor(cursor)
-		if last == "" {
-			return fmt.Errorf("mysql read cursor_field %q produced an empty cursor", cursorField)
+		value, ok := lastRecord[primaryKey]
+		if !ok || value == nil {
+			return errors.New("mysql read primary key is missing from a result")
 		}
+		lastPrimaryKey = copyReadBoundaryValue(value)
+		hasPageBoundary = true
 	}
 }
 
@@ -123,13 +147,85 @@ func pageSize(cfg connectors.RuntimeConfig, limit int) (int, error) {
 	return value, nil
 }
 
-func snapshotQuery(database, table, cursorField, lowerBound string, limit int) (string, []any) {
-	query := "SELECT * FROM " + quoteIdentifier(database) + "." + quoteIdentifier(table)
-	if cursorField != "" {
-		query += " WHERE " + quoteIdentifier(cursorField) + " > ? ORDER BY " + quoteIdentifier(cursorField) + " ASC"
-		return query + " LIMIT " + strconv.Itoa(limit), []any{lowerBound}
+func singleColumnPrimaryKey(primaryKey []string) (string, error) {
+	if len(primaryKey) != 1 || validateIdentifier(primaryKey[0]) != nil {
+		return "", errors.New("mysql read requires a single-column primary key for complete paging")
 	}
-	return query + " LIMIT " + strconv.Itoa(limit), nil
+	return primaryKey[0], nil
+}
+
+func requireUniqueNonNullableCursorField(ctx context.Context, db mysqlExecutor, database, table, cursorField string) error {
+	result, err := db.Execute(`
+SELECT s.column_name AS column_name
+FROM information_schema.statistics s
+JOIN information_schema.columns c
+  ON c.table_schema = s.table_schema
+ AND c.table_name = s.table_name
+ AND c.column_name = s.column_name
+WHERE s.table_schema = ?
+  AND s.table_name = ?
+  AND s.column_name = ?
+  AND s.non_unique = 0
+  AND s.seq_in_index = 1
+  AND c.is_nullable = 'NO'
+  AND NOT EXISTS (
+    SELECT 1
+    FROM information_schema.statistics trailing
+    WHERE trailing.table_schema = s.table_schema
+      AND trailing.table_name = s.table_name
+      AND trailing.index_name = s.index_name
+      AND trailing.seq_in_index > 1
+  )
+LIMIT 1`, database, table, cursorField)
+	if err != nil {
+		return errors.New("read mysql cursor metadata failed")
+	}
+	records, err := resultRecords(result)
+	result.Close()
+	if err != nil {
+		return err
+	}
+	return validateUniqueCursorFieldRecords(records, cursorField)
+}
+
+func validateUniqueCursorFieldRecords(records []connectors.Record, cursorField string) error {
+	if len(records) != 1 {
+		return errors.New("mysql read cursor_field must reference a non-null single-column primary or unique key")
+	}
+	name, ok := recordString(records[0]["column_name"])
+	if !ok || name != cursorField {
+		return errors.New("mysql read cursor metadata is invalid")
+	}
+	return nil
+}
+
+func snapshotQuery(database, table, cursorField, primaryKey string, lowerCursor, lowerPrimaryKey any, resume, hasPageBoundary bool, limit int) (string, []any) {
+	query := "SELECT * FROM " + quoteIdentifier(database) + "." + quoteIdentifier(table)
+	if cursorField == "" {
+		if hasPageBoundary {
+			query += " WHERE " + quoteIdentifier(primaryKey) + " > ?"
+			return query + " ORDER BY " + quoteIdentifier(primaryKey) + " ASC LIMIT " + strconv.Itoa(limit), []any{lowerPrimaryKey}
+		}
+		return query + " ORDER BY " + quoteIdentifier(primaryKey) + " ASC LIMIT " + strconv.Itoa(limit), nil
+	}
+	if hasPageBoundary {
+		query += " WHERE (" + quoteIdentifier(cursorField) + " > ? OR (" + quoteIdentifier(cursorField) + " = ? AND " + quoteIdentifier(primaryKey) + " > ?))"
+		query += " ORDER BY " + quoteIdentifier(cursorField) + " ASC, " + quoteIdentifier(primaryKey) + " ASC"
+		return query + " LIMIT " + strconv.Itoa(limit), []any{lowerCursor, lowerCursor, lowerPrimaryKey}
+	}
+	if resume {
+		query += " WHERE " + quoteIdentifier(cursorField) + " > ?"
+		query += " ORDER BY " + quoteIdentifier(cursorField) + " ASC, " + quoteIdentifier(primaryKey) + " ASC"
+		return query + " LIMIT " + strconv.Itoa(limit), []any{lowerCursor}
+	}
+	return query + " ORDER BY " + quoteIdentifier(cursorField) + " ASC, " + quoteIdentifier(primaryKey) + " ASC LIMIT " + strconv.Itoa(limit), nil
+}
+
+func copyReadBoundaryValue(value any) any {
+	if bytes, ok := value.([]byte); ok {
+		return append([]byte(nil), bytes...)
+	}
+	return value
 }
 
 func resultRecords(result *gomysql.Result) ([]connectors.Record, error) {

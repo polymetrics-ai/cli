@@ -9,6 +9,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
+	nativemysql "polymetrics.ai/internal/connectors/native/mysql"
 	nativepostgres "polymetrics.ai/internal/connectors/native/postgres"
 )
 
@@ -107,6 +108,17 @@ func TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides(t *testing.T) {
 	}
 	if _, ok := postgresConnector.(nativepostgres.Connector); !ok {
 		t.Fatalf("postgres registry type = %T, want Tier-3 native override", postgresConnector)
+	}
+	mysqlConnector, ok := registry.Get("mysql")
+	if !ok {
+		t.Fatal("registry missing mysql")
+	}
+	if _, ok := mysqlConnector.(nativemysql.Connector); !ok {
+		t.Fatalf("mysql registry type = %T, want Tier-3 native override", mysqlConnector)
+	}
+	mysqlDefinition, ok := connectors.DefinitionOf(mysqlConnector)
+	if !ok || !connectors.HasImplementedChangefeed(mysqlConnector, mysqlDefinition.Changefeed) {
+		t.Fatal("mysql registry connector must expose its matching native changefeed")
 	}
 }
 

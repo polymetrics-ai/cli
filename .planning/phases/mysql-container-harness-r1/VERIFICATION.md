@@ -3,6 +3,8 @@
 ## Completed evidence
 
 - [x] Focused unit tests for the harness, MySQL native connector, bundle loader, and changefeed contract.
+- [x] The focused bundle-registry test asserts that the public `mysql` entry is the native connector
+      and exposes its matching binlog changefeed executor.
 - [x] `go mod verify`; `govulncheck -show verbose ./internal/connectors/native/mysql` is clean after
       upgrading the transitive `github.com/klauspost/compress` to v1.18.7.
 - [x] Documented tagged MySQL Docker/Colima test on the explicit `colima` context, with the opt-in
@@ -21,3 +23,7 @@
       isolated GSD workers are unavailable/forbidden by the single-worker contract.
 - [x] Committed on `fm/cli-database-container-test-harness-r1` and reran the clean-tree
       `make tidy-check` gate.
+
+The saved Docker evidence exercised the native implementation directly. The outer test phase must
+replay it after the final native registration, lifecycle reconciliation, deterministic pagination,
+and row-ordinal changes.

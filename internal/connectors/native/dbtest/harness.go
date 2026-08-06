@@ -28,6 +28,8 @@ const (
 	defaultColimaProfile = "default"
 )
 
+var errDockerResourceNotFound = errors.New("docker resource not found")
+
 // Endpoint is the loopback-only address allocated for an ephemeral engine.
 // It deliberately represents host and port separately so callers never need
 // to persist or log a connection string.
@@ -152,7 +154,7 @@ func New(config Config) (*Harness, error) {
 // loopback-published container, and returns its dynamically assigned,
 // non-default port. Call Close in a defer immediately after a successful New;
 // Close is also safe after an unsuccessful Start.
-func (h *Harness) Start(ctx context.Context) (Endpoint, error) {
+func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error) {
 	if err := ctx.Err(); err != nil {
 		return Endpoint{}, err
 	}
@@ -164,22 +166,43 @@ func (h *Harness) Start(ctx context.Context) (Endpoint, error) {
 	h.report.DiskFreeBefore = before
 	h.mu.Unlock()
 	h.installInterruptCleanup()
-
-	if _, err := h.config.Run.Run(ctx, h.config.DockerContext, "image", "inspect", h.config.Image); err != nil {
-		if _, err := h.config.Run.Run(ctx, h.config.DockerContext, "pull", h.config.Image); err != nil {
-			return Endpoint{}, fmt.Errorf("pull %s test image: %w", h.config.Engine, err)
+	defer func() {
+		if startErr == nil {
+			return
 		}
+		cleanupCtx, cancel := context.WithTimeout(context.Background(), 3*time.Minute)
+		defer cancel()
+		if cleanupErr := h.Close(cleanupCtx); cleanupErr != nil {
+			startErr = errors.Join(startErr, cleanupErr)
+		}
+	}()
+
+	imageAbsent, err := h.resourceAbsent(ctx, "image", "inspect", h.config.Image)
+	if err != nil {
+		return Endpoint{}, fmt.Errorf("inspect %s test image: %w", h.config.Engine, err)
+	}
+	if imageAbsent {
 		h.mu.Lock()
 		h.pulledByRun = true
 		h.mu.Unlock()
+		if _, err := h.config.Run.Run(ctx, h.config.DockerContext, "pull", h.config.Image); err != nil {
+			return Endpoint{}, fmt.Errorf("pull %s test image: %w", h.config.Engine, err)
+		}
 	}
 
-	if _, err := h.config.Run.Run(ctx, h.config.DockerContext, "volume", "create", h.volumeName); err != nil {
-		return Endpoint{}, fmt.Errorf("create %s test volume: %w", h.config.Engine, err)
+	volumeAbsent, err := h.resourceAbsent(ctx, "volume", "inspect", h.volumeName)
+	if err != nil {
+		return Endpoint{}, fmt.Errorf("inspect %s test volume: %w", h.config.Engine, err)
+	}
+	if !volumeAbsent {
+		return Endpoint{}, errors.New("generated database test volume already exists")
 	}
 	h.mu.Lock()
 	h.volumeKnown = true
 	h.mu.Unlock()
+	if _, err := h.config.Run.Run(ctx, h.config.DockerContext, "volume", "create", h.volumeName); err != nil {
+		return Endpoint{}, fmt.Errorf("create %s test volume: %w", h.config.Engine, err)
+	}
 
 	args := []string{
 		"run", "--detach",
@@ -190,6 +213,13 @@ func (h *Harness) Start(ctx context.Context) (Endpoint, error) {
 	args = append(args, h.config.ContainerArgs...)
 	args = append(args, h.config.Image)
 	args = append(args, h.config.EngineArgs...)
+	containerAbsent, err := h.resourceAbsent(ctx, "container", "inspect", h.containerName)
+	if err != nil {
+		return Endpoint{}, fmt.Errorf("inspect %s test container: %w", h.config.Engine, err)
+	}
+	if !containerAbsent {
+		return Endpoint{}, errors.New("generated database test container already exists")
+	}
 	h.mu.Lock()
 	h.containerKnown = true
 	h.mu.Unlock()
@@ -205,7 +235,7 @@ func (h *Harness) Start(ctx context.Context) (Endpoint, error) {
 	if err != nil {
 		return Endpoint{}, fmt.Errorf("parse %s test port: %w", h.config.Engine, err)
 	}
-	endpoint := Endpoint{Host: "127.0.0.1", Port: port}
+	endpoint = Endpoint{Host: "127.0.0.1", Port: port}
 	h.mu.Lock()
 	h.endpoint = endpoint
 	h.mu.Unlock()
@@ -220,19 +250,17 @@ func (h *Harness) Close(ctx context.Context) error {
 		close(h.stopSignal)
 		var errs []error
 		if h.containerIsKnown() {
-			if _, err := h.config.Run.Run(ctx, h.config.DockerContext, "container", "inspect", h.containerName); err == nil {
-				if _, err := h.config.Run.Run(ctx, h.config.DockerContext, "container", "rm", "--force", h.containerName); err != nil {
-					errs = append(errs, fmt.Errorf("remove %s test container: %w", h.config.Engine, err))
-				}
+			if _, err := h.config.Run.Run(ctx, h.config.DockerContext, "container", "rm", "--force", h.containerName); err != nil && !errors.Is(err, errDockerResourceNotFound) {
+				errs = append(errs, fmt.Errorf("remove %s test container: %w", h.config.Engine, err))
 			}
 		}
 		if h.volumeIsKnown() {
-			if _, err := h.config.Run.Run(ctx, h.config.DockerContext, "volume", "rm", "--force", h.volumeName); err != nil {
+			if _, err := h.config.Run.Run(ctx, h.config.DockerContext, "volume", "rm", "--force", h.volumeName); err != nil && !errors.Is(err, errDockerResourceNotFound) {
 				errs = append(errs, fmt.Errorf("remove %s test volume: %w", h.config.Engine, err))
 			}
 		}
 		if h.imageWasPulled() && !h.config.KeepImage {
-			if _, err := h.config.Run.Run(ctx, h.config.DockerContext, "image", "rm", h.config.Image); err != nil {
+			if _, err := h.config.Run.Run(ctx, h.config.DockerContext, "image", "rm", h.config.Image); err != nil && !errors.Is(err, errDockerResourceNotFound) {
 				errs = append(errs, fmt.Errorf("remove %s test image: %w", h.config.Engine, err))
 			}
 		}
@@ -285,6 +313,17 @@ func (h *Harness) imageWasPulled() bool {
 	return h.pulledByRun
 }
 
+func (h *Harness) resourceAbsent(ctx context.Context, args ...string) (bool, error) {
+	_, err := h.config.Run.Run(ctx, h.config.DockerContext, args...)
+	if err == nil {
+		return false, nil
+	}
+	if errors.Is(err, errDockerResourceNotFound) {
+		return true, nil
+	}
+	return false, err
+}
+
 func (h *Harness) installInterruptCleanup() {
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt, syscall.SIGTERM)
@@ -309,12 +348,27 @@ func (dockerRunner) Run(ctx context.Context, dockerContext string, args ...strin
 	cmd := exec.CommandContext(ctx, defaultDockerBinary, command...)
 	output, err := cmd.Output()
 	if err != nil {
+		if dockerResourceNotFound(err) {
+			return "", fmt.Errorf("%w: docker command failed: %w", errDockerResourceNotFound, err)
+		}
 		// Do not attach command arguments or captured output. Future engine
 		// configurations may contain authentication material and test support
 		// must never turn it into an error/logging channel.
 		return "", fmt.Errorf("docker command failed: %w", err)
 	}
 	return string(output), nil
+}
+
+func dockerResourceNotFound(err error) bool {
+	var exitErr *exec.ExitError
+	if !errors.As(err, &exitErr) {
+		return false
+	}
+	stderr := strings.ToLower(string(exitErr.Stderr))
+	return strings.Contains(stderr, "no such image") ||
+		strings.Contains(stderr, "no such container") ||
+		strings.Contains(stderr, "no such volume") ||
+		strings.Contains(stderr, "no such object")
 }
 
 type colimaRunner struct{}

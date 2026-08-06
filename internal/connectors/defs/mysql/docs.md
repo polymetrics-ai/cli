@@ -2,7 +2,7 @@
 
 Reads MySQL tables through the MySQL wire protocol. It discovers tables/columns dynamically,
 performs bounded full and cursor-incremental reads, and consumes row-based binary-log changes for a
-selected discovered table. It is a read-only source.
+selected discovered table. It is a read-only source registered through the native MySQL factory.
 
 ## Auth setup
 
@@ -15,10 +15,12 @@ configured account the narrowly appropriate replication-read privilege for the d
 
 ## Streams notes
 
-The catalog exposes every base table in the configured database as `database.table`. Set
-`cursor_field` to a stable sortable column to make reads cursor-incremental and internally paged;
-`page_size` and `read_limit` bound those reads. CDC targets one discovered stream and stores the
-last acknowledged binary-log file and position.
+The catalog exposes every base table in the configured database as `database.table`. Complete
+read paging requires a single-column primary key. Without `cursor_field`, a full snapshot is
+unfiltered and pages by that primary key. Set `cursor_field` only to a non-null single-column
+primary or unique key for incremental reads; pages order by `(cursor_field, primary_key)` and
+resume strictly after the stored cursor. `page_size` and `read_limit` bound every read. CDC targets
+one discovered stream and stores the last acknowledged binary-log file and position.
 
 ## Write actions & risks
 
@@ -28,9 +30,10 @@ it does not create, alter, or delete database data.
 ## Known limits
 
 - CDC guarantees source ordering and at-least-once delivery. A replay at the committed binary-log
-  boundary is possible; downstream consumers must use the file/position dedupe identity.
+  boundary is possible; downstream consumers must use the file/position/row-ordinal dedupe
+  identity.
 - CDC requires row-based binary logging and full row images. Statement-only or minimal row-image
-  binary logs are rejected as unsuitable for complete row event projection.
+  binary logs are rejected before replication starts or a row is projected.
 - TLS configuration, GTID checkpointing, schema-change event projection, and cross-database CDC
   fan-out are outside this first engine slice.
 
