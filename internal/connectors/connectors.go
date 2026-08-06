@@ -508,6 +508,8 @@ type PollingWatermarkSpec struct {
 	DeletionEndpoint *PollingWatermarkDeletionEndpoint `json:"deletion_endpoint,omitempty"`
 }
 
+const maxPollingWatermarkSafetyLagSeconds = int64(1<<63-1) / int64(time.Second)
+
 // ChangefeedDescriptor is the evidence-backed, declarative contract for a
 // connector changefeed. It is distinct from CDCReader because a reader method
 // can be an unsupported migration stub.
@@ -741,6 +743,9 @@ func validatePollingWatermark(d ChangefeedDescriptor) error {
 	}
 	if polling.SafetyLagSeconds < 0 {
 		return errors.New("polling watermark safety_lag_seconds cannot be negative")
+	}
+	if int64(polling.SafetyLagSeconds) > maxPollingWatermarkSafetyLagSeconds {
+		return fmt.Errorf("polling watermark safety_lag_seconds exceeds the maximum duration-safe value of %d", maxPollingWatermarkSafetyLagSeconds)
 	}
 	if polling.Watermark.Kind != "timestamp" && polling.SafetyLagSeconds != 0 {
 		return errors.New("polling watermark safety_lag_seconds is only valid for timestamp watermarks")

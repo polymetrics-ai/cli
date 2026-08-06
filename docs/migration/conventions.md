@@ -202,12 +202,16 @@ not a full override by default.
   timestamp source whose provider can publish late/clock-skewed records; the executor rereads that
   overlap on the next run. `0` is an explicit no-lag opt-out and can lose such records. Non-time
   watermark kinds must declare `0` because a timestamp lag has no honest meaning for them.
-  `page_size`, `max_pages`, and `request_budget` are all positive required bounds; each run stops
-  at the lower of page and request limits and checks cancellation between source fetch, delivery,
-  and checkpoint commit. The executor advances the tuple only after every emitted record in its
-  page is durably accepted by the destination and the checkpoint committer succeeds; a failure in
-  either step replays the page. The committer is a consumer-facing adapter for the durable database
-  sync contract rather than a second checkpoint store.
+  `page_size`, `max_pages`, and `request_budget` are all positive required bounds. Each physical
+  declared-source request consumes the one shared request budget: the source adapter must consume
+  a budget token before its primary read and before every additional fixed read, including a
+  declared deletion endpoint. Reaching `max_pages` or exhausting that budget returns a typed,
+  resumable stop after only the last durably accepted position; it is never a successful silent
+  truncation. The executor checks cancellation between source fetch, delivery, and checkpoint
+  commit. It advances the tuple only after every emitted record in its page is durably accepted by
+  the destination and the checkpoint committer succeeds; a failure in either step replays the
+  page. The committer is a consumer-facing adapter for the durable database sync contract rather
+  than a second checkpoint store.
 
   A polling scan cannot see a hard delete after the record disappears. With no delete source,
   declare `delivery.deletes: "not_available"`; inspect/catalog output carries that exact truth and
