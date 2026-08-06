@@ -1,7 +1,7 @@
 # Issue 3810 — Shared database sync contract: context
 
-**Gathered:** 2026-08-06  
-**Status:** Ready for implementation  
+**Gathered:** 2026-08-06\
+**Status:** Ready for implementation\
 **Source:** GitHub issue #3810, its captain attachment ruling, and the required database-sync research reports.
 
 <domain>

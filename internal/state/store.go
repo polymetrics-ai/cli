@@ -15,6 +15,8 @@ type Locker interface {
 	Lock() (func() error, error)
 }
 
+// CommitOutcome describes whether a state update definitely did not commit,
+// committed, or may have committed despite a durability error.
 type CommitOutcome uint8
 
 const (
@@ -23,10 +25,13 @@ const (
 	CommitOutcomeIndeterminate
 )
 
+// MayHaveCommitted reports whether callers must preserve in-memory state and
+// avoid replaying an operation that may already be durable.
 func (o CommitOutcome) MayHaveCommitted() bool {
 	return o == CommitOutcomeCommitted || o == CommitOutcomeIndeterminate
 }
 
+// String returns the stable diagnostic name for o.
 func (o CommitOutcome) String() string {
 	switch o {
 	case CommitOutcomeCommitted:
@@ -38,6 +43,8 @@ func (o CommitOutcome) String() string {
 	}
 }
 
+// CommitOutcomeError preserves the commit outcome when a post-rename
+// durability or unlock error makes the final on-disk state uncertain.
 type CommitOutcomeError struct {
 	Outcome CommitOutcome
 	Err     error
@@ -57,6 +64,8 @@ func (e *CommitOutcomeError) Unwrap() error {
 	return e.Err
 }
 
+// CommitOutcomeForError extracts a wrapped commit outcome, or returns
+// CommitOutcomeNotCommitted when err carries no such outcome.
 func CommitOutcomeForError(err error) CommitOutcome {
 	var outcome *CommitOutcomeError
 	if errors.As(err, &outcome) {

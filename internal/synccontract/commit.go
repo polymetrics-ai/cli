@@ -48,6 +48,9 @@ func (e *DestinationDurabilityAdmissionError) Unwrap() error {
 	return ErrDurableETLDestinationRequired
 }
 
+// NewDurableDownstreamAcknowledgement constructs evidence that a destination
+// has made a run durable. Callers cannot manufacture valid evidence with a
+// struct literal because its durable marker is intentionally unexported.
 func NewDurableDownstreamAcknowledgement(sink string, acknowledgedAt time.Time) (DownstreamAcknowledgement, error) {
 	acknowledgement := DownstreamAcknowledgement{
 		Sink:           sink,

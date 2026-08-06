@@ -49,9 +49,9 @@ slice and must be addressed by those consumer lanes.
 
 ## Additional scoped lint note
 
-`golangci-lint run ./internal/app/... ./internal/synccontract/...` was run after the repository
-gate. The new materialized-final-file close warning was fixed. The remaining five findings are
-pre-existing: an unrelated reader close in `internal/app/local_warehouse.go`,
-`internal/app/query_engine_helpers_test.go`, `internal/app/reverse_approval_test.go`,
-`internal/app/util.go`, and the existing nil-map check in `internal/app/app.go`. `make lint` itself
-passes.
+`golangci-lint run ./internal/app/... ./internal/state/... ./internal/durability/... ./internal/synccontract/...`
+was rerun during documentation and lint housekeeping. The scoped production close warnings in
+`internal/app/local_warehouse.go` and `internal/app/util.go` were fixed. Two pre-existing
+`errcheck` findings remain in `internal/app/query_engine_helpers_test.go` and
+`internal/app/reverse_approval_test.go`; test changes are outside this phase.
+`make lint` itself passes.

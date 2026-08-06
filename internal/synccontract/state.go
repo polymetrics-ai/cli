@@ -26,6 +26,8 @@ type SourceIdentity struct {
 	ObjectScope      string `json:"object_scope"`
 }
 
+// Validate rejects a source identity that could match more than one source
+// scope during checkpoint recovery.
 func (s SourceIdentity) Validate() error {
 	if strings.TrimSpace(s.Engine) == "" {
 		return fmt.Errorf("source identity engine is required")
@@ -74,6 +76,7 @@ type CheckpointPosition struct {
 	TieBreaker OpaqueToken `json:"tie_breaker"`
 }
 
+// Clone returns an independent copy of both opaque position tokens.
 func (p CheckpointPosition) Clone() CheckpointPosition {
 	p.Primary = cloneToken(p.Primary)
 	p.TieBreaker = cloneToken(p.TieBreaker)
@@ -104,6 +107,7 @@ type PartitionState struct {
 	Position  CheckpointPosition `json:"position"`
 }
 
+// Clone returns an independent copy of a partition and its ordered position.
 func (p PartitionState) Clone() PartitionState {
 	p.Partition = cloneToken(p.Partition)
 	p.Position = p.Position.Clone()
@@ -124,6 +128,7 @@ type DedupeIdentity struct {
 	Value OpaqueToken `json:"value,omitempty"`
 }
 
+// Clone returns an independent copy of the opaque dedupe identity.
 func (d DedupeIdentity) Clone() DedupeIdentity {
 	d.Value = cloneToken(d.Value)
 	return d
@@ -146,6 +151,7 @@ type DedupeWindow struct {
 	End   OpaqueToken `json:"end"`
 }
 
+// Clone returns an independent copy of the opaque replay-window bounds.
 func (d DedupeWindow) Clone() DedupeWindow {
 	d.Start = cloneToken(d.Start)
 	d.End = cloneToken(d.End)
