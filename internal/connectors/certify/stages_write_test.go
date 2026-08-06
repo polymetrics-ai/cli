@@ -81,7 +81,7 @@ func planOutboxLifecycle(t *testing.T, h *certify.Harness, action string) (strin
 		"--map", "tag:tag",
 		"--action", action)
 	if res.ExitCode != 0 {
-		t.Fatalf("reverse plan %s: exit %d stdout=%s stderr=%s", action, res.ExitCode, res.Stdout, res.Stderr)
+		t.Fatalf("reverse plan %s: exit %d", action, res.ExitCode)
 	}
 	return reversePlanField(t, res.Stdout, "Created reverse plan "), reversePlanField(t, res.Stdout, "Approval token: ")
 }
@@ -93,7 +93,7 @@ func reversePlanField(t *testing.T, stdout, prefix string) string {
 			return strings.Fields(value)[0]
 		}
 	}
-	t.Fatalf("reverse plan output missing %q: %s", prefix, stdout)
+	t.Fatalf("reverse plan output missing %q", prefix)
 	return ""
 }
 

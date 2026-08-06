@@ -29,6 +29,7 @@ type scriptedCLI struct {
 	replays   map[string]int
 	nextPlan  int
 	schedule  string
+	installed bool
 	protocols []string
 }
 
@@ -41,6 +42,9 @@ const (
 	scriptedWritePlanName    = "cert_write_selftest"
 	scriptedWriteSourceTable = "cert_write_seed_sample"
 	scriptedWriteDestination = "outbox:cert-outbox"
+	scriptedScheduleName     = "cert-schedule-sample"
+	scriptedScheduleCron     = "0 3 * * *"
+	scriptedScheduleFlow     = "cert_flow_sample"
 )
 
 func newScriptedCLI(t *testing.T, protocols ...string) *scriptedCLI {
@@ -186,30 +190,48 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 		return writeScriptedEnvelopeWithoutKind(stdout, map[string]any{"steps": []map[string]any{
 			{"id": "cert_sync", "status": "success"}, {"id": "cert_query", "status": "success"},
 		}})
-	case prefix(args, "schedule", "create") && hasJSON(args) && hasFlag(args, "--name") && hasFlag(args, "--cron") && hasFlag(args, "--flow"):
-		s.schedule = flagValue(args, "--name")
+	case exact(args, scriptedScheduleCreateArgs()...):
+		if s.schedule != "" {
+			return s.protocolError(stderr, "schedule create repeated")
+		}
+		s.schedule = scriptedScheduleName
 		s.seen["schedule_create"]++
 		return writeScriptedEnvelope(stdout, "Schedule", nil)
 	case exact(args, "schedule", "list", "--json"):
-		if s.schedule == "" {
+		if s.schedule != scriptedScheduleName {
 			return s.protocolError(stderr, "schedule list ran before schedule create")
 		}
 		s.seen["schedule_list"]++
 		return writeScriptedEnvelope(stdout, "ScheduleList", map[string]any{"schedules": []map[string]any{{"name": s.schedule}}})
-	case prefix(args, "schedule", "install") && hasJSON(args) && hasArg(args, "--crontab"):
+	case exact(args, scriptedScheduleInstallArgs()...):
+		if s.schedule != scriptedScheduleName || s.seen["schedule_list"] == 0 {
+			return s.protocolError(stderr, "schedule install ran before schedule create and list")
+		}
+		if s.installed {
+			return s.protocolError(stderr, "schedule install repeated")
+		}
 		if err := s.writeCrontabSentinel(); err != nil {
 			return s.protocolError(stderr, err.Error())
 		}
+		s.installed = true
 		s.seen["schedule_install"]++
 		return writeScriptedEnvelope(stdout, "ScheduleInstall", map[string]any{"backend": "crontab"})
-	case prefix(args, "schedule", "remove") && hasJSON(args) && hasArg(args, "--crontab"):
+	case exact(args, scriptedScheduleRemoveArgs()...):
+		if s.schedule != scriptedScheduleName || !s.installed {
+			return s.protocolError(stderr, "schedule remove ran before schedule install")
+		}
 		if err := s.clearCrontab(); err != nil {
 			return s.protocolError(stderr, err.Error())
 		}
+		s.installed = false
 		s.seen["schedule_remove"]++
 		return writeScriptedEnvelope(stdout, "ScheduleRemove", nil)
 	case prefix(args, "reverse", "plan"):
-		plan, err := parseScriptedReversePlan(args)
+		expectedAction, err := nextScriptedReversePlanAction(s.nextPlan)
+		if err != nil {
+			return s.protocolError(stderr, err.Error())
+		}
+		plan, err := parseScriptedReversePlan(args, expectedAction)
 		if err != nil {
 			return s.protocolError(stderr, err.Error())
 		}
@@ -455,21 +477,46 @@ func scriptedReversePlanArgs(action string) []string {
 	}
 }
 
-func parseScriptedReversePlan(args []string) (scriptedReversePlan, error) {
-	if len(args) != len(scriptedReversePlanArgs("create")) {
+func scriptedScheduleCreateArgs() []string {
+	return []string{
+		"schedule", "create",
+		"--name", scriptedScheduleName,
+		"--cron", scriptedScheduleCron,
+		"--flow", scriptedScheduleFlow,
+		"--json",
+	}
+}
+
+func scriptedScheduleInstallArgs() []string {
+	return []string{"schedule", "install", scriptedScheduleName, "--crontab", "--json"}
+}
+
+func scriptedScheduleRemoveArgs() []string {
+	return []string{"schedule", "remove", scriptedScheduleName, "--crontab", "--json"}
+}
+
+func nextScriptedReversePlanAction(planCount int) (string, error) {
+	switch planCount {
+	case 0:
+		return "create", nil
+	case 1:
+		return "delete", nil
+	default:
+		return "", fmt.Errorf("sample write lifecycle permits exactly create then delete plans")
+	}
+}
+
+func parseScriptedReversePlan(args []string, expectedAction string) (scriptedReversePlan, error) {
+	want := scriptedReversePlanArgs(expectedAction)
+	if len(args) != len(want) {
 		return scriptedReversePlan{}, fmt.Errorf("reverse plan requires the exact sample write lifecycle arguments")
 	}
-	action := args[len(args)-1]
-	if action != "create" && action != "delete" {
-		return scriptedReversePlan{}, fmt.Errorf("sample write lifecycle requires create or delete action")
-	}
-	want := scriptedReversePlanArgs(action)
 	for i := range want {
 		if args[i] != want[i] {
 			return scriptedReversePlan{}, fmt.Errorf("reverse plan does not match the sample write lifecycle")
 		}
 	}
-	return scriptedReversePlan{action: action}, nil
+	return scriptedReversePlan{action: expectedAction}, nil
 }
 
 func TestScriptedCLIDriverRejectsProtocolDrift(t *testing.T) {
@@ -518,6 +565,99 @@ func TestScriptedCLIDriverRejectsProtocolDrift(t *testing.T) {
 			}
 		})
 	}
+
+	t.Run("schedule contract", func(t *testing.T) {
+		for _, tt := range []struct {
+			name   string
+			mutate func([]string)
+		}{
+			{
+				name: "name",
+				mutate: func(args []string) {
+					args[3] = "wrong-schedule"
+				},
+			},
+			{
+				name: "cron",
+				mutate: func(args []string) {
+					args[5] = "0 4 * * *"
+				},
+			},
+			{
+				name: "flow",
+				mutate: func(args []string) {
+					args[7] = "wrong-flow"
+				},
+			},
+		} {
+			t.Run("create "+tt.name, func(t *testing.T) {
+				driver := newScriptedCLI(t)
+				args := scriptedScheduleCreateArgs()
+				tt.mutate(args)
+				args = append(args, "--root", t.TempDir())
+				var stdout, stderr strings.Builder
+				if code := driver.run(args, &stdout, &stderr); code == 0 {
+					t.Fatalf("scripted driver accepted schedule create with wrong %s", tt.name)
+				}
+			})
+		}
+
+		driver := newScriptedCLI(t)
+		root := t.TempDir()
+		t.Setenv("PM_CRONTAB_FILE", filepath.Join(root, "crontab"))
+		var stdout, stderr strings.Builder
+		for _, args := range [][]string{scriptedScheduleCreateArgs(), {"schedule", "list", "--json"}} {
+			args = append(args, "--root", root)
+			if code := driver.run(args, &stdout, &stderr); code != 0 {
+				t.Fatalf("scripted driver rejected valid schedule setup: stderr=%s", stderr.String())
+			}
+			stdout.Reset()
+			stderr.Reset()
+		}
+
+		install := scriptedScheduleInstallArgs()
+		install[2] = "wrong-schedule"
+		if code := driver.run(append(install, "--root", root), &stdout, &stderr); code == 0 {
+			t.Fatal("scripted driver accepted schedule install for the wrong schedule")
+		}
+		stdout.Reset()
+		stderr.Reset()
+		if code := driver.run(append(scriptedScheduleInstallArgs(), "--root", root), &stdout, &stderr); code != 0 {
+			t.Fatalf("scripted driver rejected valid schedule install: stderr=%s", stderr.String())
+		}
+		stdout.Reset()
+		stderr.Reset()
+
+		remove := scriptedScheduleRemoveArgs()
+		remove[2] = "wrong-schedule"
+		if code := driver.run(append(remove, "--root", root), &stdout, &stderr); code == 0 {
+			t.Fatal("scripted driver accepted schedule remove for the wrong schedule")
+		}
+	})
+
+	t.Run("reverse plan lifecycle actions", func(t *testing.T) {
+		t.Run("first plan must create", func(t *testing.T) {
+			driver := newScriptedCLI(t)
+			var stdout, stderr strings.Builder
+			if code := driver.run(append(scriptedReversePlanArgs("delete"), "--root", t.TempDir()), &stdout, &stderr); code == 0 {
+				t.Fatal("scripted driver accepted delete as the first lifecycle plan")
+			}
+		})
+
+		t.Run("cleanup plan must delete", func(t *testing.T) {
+			driver := newScriptedCLI(t)
+			root := t.TempDir()
+			var stdout, stderr strings.Builder
+			if code := driver.run(append(scriptedReversePlanArgs("create"), "--root", root), &stdout, &stderr); code != 0 {
+				t.Fatalf("scripted driver rejected valid create plan: stderr=%s", stderr.String())
+			}
+			stdout.Reset()
+			stderr.Reset()
+			if code := driver.run(append(scriptedReversePlanArgs("create"), "--root", root), &stdout, &stderr); code == 0 {
+				t.Fatal("scripted driver accepted create as the cleanup lifecycle plan")
+			}
+		})
+	})
 
 	t.Run("per-plan approval token", func(t *testing.T) {
 		driver := newScriptedCLI(t)
