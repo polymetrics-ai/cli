@@ -5,7 +5,7 @@ agent and reviewer follows; deviations are defects, not judgment calls. Goldens 
 blindly — port the *pattern*): `internal/connectors/defs/stripe/**` (declarative HTTP + writes),
 `internal/connectors/defs/searxng/**` (read-only, no-auth), `internal/connectors/defs/postgres/**`
 + `internal/connectors/native/postgres/**` (Tier-3 split). Engine source of truth:
-`internal/connectors/engine/{bundle,interpolate,paginate,read,write,hooks,schema}.go`.
+`internal/connectors/engine/{bundle,interpolate,paginate,read,write,hooks,rate_limits,schema}.go`.
 
 ## 1. Target layouts
 
@@ -821,7 +821,7 @@ dropped — don't declare one.
 optional, closed-schema file records a provider policy only when it can be cited. A declared policy
 must carry an HTTPS provider artifact URL without userinfo, query parameters, or credential-like
 query-style fragment parameters (an ordinary documentation anchor fragment is allowed) and an ISO
-`retrieved_at` date; `version` is optional
+`retrieved_at` date. Every file starts with `schema_version: 1`; `version` is optional
 context, not a substitute for a retrieval date. Model the provider shape rather than flattening it
 to requests per minute: selectors can target an endpoint, tier, and auth type; budgets label their
 `burst` or `sustained` dimension, `requests` or `points` unit, and fixed/sliding-window or

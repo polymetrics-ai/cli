@@ -124,7 +124,7 @@ func rateLimitObservation(status int, header http.Header, attempt int, now time.
 		observation.Remaining = remaining
 		observation.HasRemaining = true
 	}
-	if observation.HasReset == false {
+	if !observation.HasReset {
 		if resetAt, ok := parseRateLimitReset(header, now); ok {
 			observation.ResetAt = resetAt
 			observation.HasReset = true

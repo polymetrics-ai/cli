@@ -865,7 +865,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 			disableTransportReplay(req, strictWrite)
 		}
 		if err := r.admitRequesterSend(ctx, method, &requesterAttempt); err != nil {
-			cleanupRequestBody(body)
+			_ = cleanupRequestBody(body)
 			return nil, err
 		}
 
