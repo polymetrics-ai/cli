@@ -12,6 +12,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/safety"
 )
 
 // Rule identifiers named by every validate Finding. Kept as exported-looking
@@ -1074,7 +1075,7 @@ func checkCLISurfaceOperationSafety(
 // cardinality; repeating min/max on the CLI flag risks a drift where the help
 // surface accepts a request the real executor must reject (or vice versa).
 func checkCLISurfaceCallerSuppliedIdentifierSets(b engine.Bundle, i int, cmd engine.CLICommand, op engine.OperationSpec) []Finding {
-	if op.REST == nil {
+	if op.REST == nil || len(op.REST.CallerSuppliedIdentifierSets) == 0 {
 		return nil
 	}
 	declared := make(map[string]engine.CallerSuppliedIdentifierSetSpec, len(op.REST.CallerSuppliedIdentifierSets))
@@ -1137,6 +1138,12 @@ func checkCLISurfaceCallerSuppliedIdentifierSets(b engine.Bundle, i int, cmd eng
 			add(fmt.Sprintf("requires one required string_array flag mapped to identifier_set.%s", name))
 		}
 	}
+	for j, group := range op.REST.RequiredQuery {
+		if hasViableCLISurfaceRequiredQuerySource(op.REST, cmd, group) {
+			continue
+		}
+		add(fmt.Sprintf("required_query group %d has no viable command-supplied source", j))
+	}
 	return findings
 }
 
@@ -1160,6 +1167,53 @@ func hasIndependentCLISurfacePathBinding(cmd engine.CLICommand, name string) boo
 		}
 	}
 	return false
+}
+
+func hasViableCLISurfaceRequiredQuerySource(rest *engine.RESTOperationSpec, cmd engine.CLICommand, group engine.RequiredQueryGroup) bool {
+	for _, rawName := range group.AnyOf {
+		name := strings.TrimSpace(rawName)
+		if strings.TrimSpace(rest.Query[name]) != "" || hasViableCLISurfaceQueryIdentifierSet(cmd, rest, name) || hasViableCLISurfaceQueryFlag(cmd, name) {
+			return true
+		}
+	}
+	return false
+}
+
+func hasViableCLISurfaceQueryIdentifierSet(cmd engine.CLICommand, rest *engine.RESTOperationSpec, name string) bool {
+	for _, set := range rest.CallerSuppliedIdentifierSets {
+		if set.Name != name || (set.Wire != "query_comma_separated" && set.Wire != "query_repeated") {
+			continue
+		}
+		for index, flag := range cmd.Flags {
+			if flag.MapsTo == "identifier_set."+name && flag.Name == name && flag.Type == "string_array" && flag.Required && flag.MinItems == 0 && flag.MaxItems == 0 && viableCLISurfaceForwardedFlag(cmd, index) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func hasViableCLISurfaceQueryFlag(cmd engine.CLICommand, name string) bool {
+	target := "query." + name
+	for index, flag := range cmd.Flags {
+		if flag.MapsTo == target && viableCLISurfaceForwardedFlag(cmd, index) {
+			return true
+		}
+	}
+	return false
+}
+
+func viableCLISurfaceForwardedFlag(cmd engine.CLICommand, index int) bool {
+	flag := cmd.Flags[index]
+	if connectors.IsConnectorCommandControlFlag(flag.Name) || safety.ValidateIdentifier(flag.Name, "flag name") != nil {
+		return false
+	}
+	for otherIndex, other := range cmd.Flags {
+		if otherIndex != index && other.Name == flag.Name {
+			return false
+		}
+	}
+	return true
 }
 
 // checkCLISurfaceDirectWriteOperationSafety validates the operation-specific

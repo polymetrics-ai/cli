@@ -663,6 +663,80 @@ func TestValidate_CallerSuppliedIdentifierSetRequiresExactCLIBinding(t *testing.
 	}
 }
 
+func TestValidate_CallerSuppliedIdentifierSetRequiredQuerySources(t *testing.T) {
+	tests := []struct {
+		name     string
+		query    map[string]string
+		anyOf    []string
+		flags    []engine.CLIFlag
+		wantPass bool
+	}{
+		{
+			name:  "missing source",
+			anyOf: []string{"filter"},
+			flags: []engine.CLIFlag{{Name: "ids", Type: "string_array", Required: true, MapsTo: "identifier_set.ids"}},
+		},
+		{
+			name:     "static query value",
+			query:    map[string]string{"filter": "fixed"},
+			anyOf:    []string{"filter"},
+			flags:    []engine.CLIFlag{{Name: "ids", Type: "string_array", Required: true, MapsTo: "identifier_set.ids"}},
+			wantPass: true,
+		},
+		{
+			name:     "query identifier set",
+			anyOf:    []string{"ids"},
+			flags:    []engine.CLIFlag{{Name: "ids", Type: "string_array", Required: true, MapsTo: "identifier_set.ids"}},
+			wantPass: true,
+		},
+		{
+			name:  "generic query flag",
+			anyOf: []string{"filter", "cursor"},
+			flags: []engine.CLIFlag{
+				{Name: "ids", Type: "string_array", Required: true, MapsTo: "identifier_set.ids"},
+				{Name: "cursor", Type: "string", MapsTo: "query.cursor"},
+			},
+			wantPass: true,
+		},
+		{
+			name:  "connector control is not a query source",
+			anyOf: []string{"filter"},
+			flags: []engine.CLIFlag{
+				{Name: "ids", Type: "string_array", Required: true, MapsTo: "identifier_set.ids"},
+				{Name: "limit", Type: "string", MapsTo: "query.filter"},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			op := engine.OperationSpec{
+				ID: "acme.ids.lookup",
+				REST: &engine.RESTOperationSpec{
+					Query:         tt.query,
+					RequiredQuery: []engine.RequiredQueryGroup{{AnyOf: tt.anyOf}},
+					CallerSuppliedIdentifierSets: []engine.CallerSuppliedIdentifierSetSpec{{
+						Name: "ids", ElementShape: "opaque_string", Wire: "query_repeated", MinItems: 1, MaxItems: 2,
+					}},
+				},
+			}
+			findings := checkCLISurfaceCallerSuppliedIdentifierSets(engine.Bundle{Name: "acme"}, 0, engine.CLICommand{Path: "ids lookup", Flags: tt.flags}, op)
+			if tt.wantPass {
+				if len(findings) != 0 {
+					t.Fatalf("findings = %+v, want none", findings)
+				}
+				return
+			}
+			for _, finding := range findings {
+				if strings.Contains(finding.Message, "required_query group 0 has no viable command-supplied source") {
+					return
+				}
+			}
+			t.Fatalf("findings = %+v, want required-query source rejection", findings)
+		})
+	}
+}
+
 func TestValidate_CallerSuppliedIdentifierSetRequiresIndependentPathBinding(t *testing.T) {
 	op := engine.OperationSpec{
 		ID: "acme.ids.lookup",

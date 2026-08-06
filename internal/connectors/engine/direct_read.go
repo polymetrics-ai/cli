@@ -853,7 +853,7 @@ func normalizedRequesterTargetPath(baseURL, requestPath string) (string, error) 
 }
 
 func canonicalRequesterTargetHost(parsed *url.URL) string {
-	host := strings.ToLower(parsed.Hostname())
+	host := strings.TrimSuffix(strings.ToLower(parsed.Hostname()), ".")
 	if strings.Contains(host, ":") {
 		host = "[" + host + "]"
 	}

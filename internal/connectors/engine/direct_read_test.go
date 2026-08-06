@@ -774,6 +774,7 @@ func TestCallerSuppliedIdentifierSetTargetPolicyRejectsDotAndDefaultPortAliases(
 		{name: "dot segment", path: "/safe/./coins", want: "path traversal"},
 		{name: "default HTTPS port", path: "https://api.example.test:443/coins", want: "reserved for caller-supplied identifier-set operation"},
 		{name: "zero-padded default HTTPS port", path: "https://api.example.test:0443/coins", want: "reserved for caller-supplied identifier-set operation"},
+		{name: "terminal DNS dot", path: "https://api.example.test./coins", want: "reserved for caller-supplied identifier-set operation"},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			err := rejectCallerSuppliedIdentifierSetTargetBypass(b, connectors.RuntimeConfig{}, "https://api.example.test", http.MethodGet, tt.path, nil, "")
@@ -781,6 +782,32 @@ func TestCallerSuppliedIdentifierSetTargetPolicyRejectsDotAndDefaultPortAliases(
 				t.Fatalf("target policy error = %v, want %q", err, tt.want)
 			}
 		})
+	}
+}
+
+func TestCallerSuppliedIdentifierSetRedirectRejectsTerminalDNSDotAlias(t *testing.T) {
+	b := Bundle{
+		Name: "acme",
+		Operations: []OperationSpec{{
+			ID:   "acme.coins.lookup",
+			Kind: "rest_read",
+			REST: &RESTOperationSpec{
+				Method:   http.MethodGet,
+				Path:     "/coins",
+				MaxBytes: 1024,
+				CallerSuppliedIdentifierSets: []CallerSuppliedIdentifierSetSpec{{
+					Name: "coins", ElementShape: "opaque_string", Wire: "query_comma_separated", MinItems: 1, MaxItems: 2,
+				}},
+			},
+		}},
+	}
+	next, err := http.NewRequest(http.MethodGet, "https://api.example.test./coins", nil)
+	if err != nil {
+		t.Fatalf("NewRequest: %v", err)
+	}
+	err = rejectCallerSuppliedIdentifierSetRedirect(b, connectors.RuntimeConfig{}, "https://api.example.test", next, nil)
+	if err == nil || !strings.Contains(err.Error(), "reserved for caller-supplied identifier-set operation") {
+		t.Fatalf("redirect policy error = %v, want protected target rejection", err)
 	}
 }
 
