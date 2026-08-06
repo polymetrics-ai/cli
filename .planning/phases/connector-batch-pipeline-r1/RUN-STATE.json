@@ -4,5 +4,5 @@
   "subissues": [],
   "state": "review_complete_waiting_foundations",
   "execution": "inline_manual_no_spawn",
-  "next": "commit_pipeline_and_wait_for_firstmate_authoring_direction"
+  "next": "commit_current_main_reverification_and_wait_for_3869_merge"
 }

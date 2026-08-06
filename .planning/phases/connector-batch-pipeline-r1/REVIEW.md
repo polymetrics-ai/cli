@@ -18,6 +18,11 @@ Manual inline code review completed after the focused and package tests.
 4. Batch failure must not hide sibling results. **Verified:** the loop builds a
    complete report before returning nonzero; tests retain an included sibling
    plus a named drop.
+5. The current main permits a non-redacting direct-write policy, but the old
+   gate would also admit redacting declarations. **Fixed after the rebase:** a
+   red-first test demonstrated that `json_redacted` was included; `batch gate`
+   now records it as an `output_policy` drop and also rejects `redact_fields`
+   and legacy repository-content policies.
 
 No unresolved review finding remains. Shared schema, engine, and runner paths
 were not edited.

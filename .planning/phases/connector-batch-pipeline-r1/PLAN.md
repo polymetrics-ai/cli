@@ -57,8 +57,8 @@ Tracker: task/branch name; no parent issue number was supplied.
    command ownership, no-redaction rule, and plan/preview/approval/execute
    requirements for writes.
 2. State the precise external gate: no `api_surface.json` v2 emission before
-   #3869 and no new executable command policy before #3870. Name #3868 as the
-   associated content-preservation foundation.
+   #3869. Rebase and reverify against the #3870 and #3868 foundation commits
+   once they land; do not invent a replacement provenance contract.
 3. Provide the exact next-run commands and batch-drop mechanics so a worker can
    begin authoring as soon as the dependencies merge.
 

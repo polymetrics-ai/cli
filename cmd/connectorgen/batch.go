@@ -805,6 +805,9 @@ func gateBatchConnector(defsRoot string, candidate BatchManifestConnector) (Batc
 	if bundle.CLISurface == nil || len(bundle.CLISurface.Commands) == 0 {
 		return BatchGateIncluded{}, batchGateDrop(candidate.Connector, "cli_surface", errors.New("cli_surface.json with at least one reachable command is required"))
 	}
+	if err := batchNoRedactionDeclarations(bundle); err != nil {
+		return BatchGateIncluded{}, batchGateDrop(candidate.Connector, "output_policy", err)
+	}
 
 	checked, err := batchRuntimePreflight(bundle)
 	if err != nil {
@@ -837,6 +840,45 @@ func batchBundleDirectory(defsRoot, connector string) (string, error) {
 		return "", fmt.Errorf("bundle path escapes defs root")
 	}
 	return dir, nil
+}
+
+// batchNoRedactionDeclarations is a batch-specific safety policy, not a
+// second runtime validator. The batch lane must not mint a declaration that
+// strips provider output. Runtime support remains the source of truth for
+// executability and is checked separately through commandrunner.Preflight.
+func batchNoRedactionDeclarations(bundle engine.Bundle) error {
+	for _, action := range bundle.Writes {
+		if len(action.RedactFields) > 0 {
+			return fmt.Errorf("write action %q declares redact_fields", action.Name)
+		}
+	}
+	for _, operation := range bundle.Operations {
+		if batchOutputPolicyRedacts(operation.OutputPolicy) {
+			return fmt.Errorf("operation %q declares redacting output_policy %q", operation.ID, operation.OutputPolicy)
+		}
+		if operation.SensitivePolicy != nil && len(operation.SensitivePolicy.RedactFields) > 0 {
+			return fmt.Errorf("operation %q declares redact_fields", operation.ID)
+		}
+	}
+	for _, command := range bundle.CLISurface.Commands {
+		if batchOutputPolicyRedacts(command.OutputPolicy) {
+			return fmt.Errorf("command %q declares redacting output_policy %q", command.Path, command.OutputPolicy)
+		}
+		if len(command.RedactFields) > 0 {
+			return fmt.Errorf("command %q declares redact_fields", command.Path)
+		}
+	}
+	return nil
+}
+
+func batchOutputPolicyRedacts(policy string) bool {
+	switch strings.TrimSpace(policy) {
+	case "repository_contents_file_metadata", "repository_contents_directory":
+		// These two legacy policies redact repository-content responses despite
+		// their names not containing the word "redacted".
+		return true
+	}
+	return strings.Contains(strings.ToLower(policy), "redact")
 }
 
 // batchRuntimePreflight uses the production command runner entry point. It

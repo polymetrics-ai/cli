@@ -135,6 +135,47 @@ func TestBatchGateDropsSurfaceSyncDrift(t *testing.T) {
 	}
 }
 
+func TestBatchGateDropsRedactingOutputPolicy(t *testing.T) {
+	defsRoot := t.TempDir()
+	writeBatchBundle(t, defsRoot, directWriteCLISurfaceBundleFS())
+	manifestPath := writeBatchManifestFixture(t, "cli-surface")
+	reportPath := filepath.Join(t.TempDir(), "report.json")
+	var stdout, stderr bytes.Buffer
+
+	code := run([]string{"batch", "gate", "--manifest", manifestPath, "--defs-root", defsRoot, "--report", reportPath}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("batch gate exit = 0, want no-redaction failure; stdout=%s stderr=%s", stdout.String(), stderr.String())
+	}
+	report := readBatchGateReportFixture(t, reportPath)
+	if len(report.Dropped) != 1 || report.Dropped[0].Stage != "output_policy" || !strings.Contains(report.Dropped[0].Reason, "json_redacted") {
+		t.Fatalf("dropped = %+v, want json_redacted output-policy drop", report.Dropped)
+	}
+}
+
+func TestBatchGateDropsWriteRedactFields(t *testing.T) {
+	defsRoot := t.TempDir()
+	fsys := cliSurfaceBundleFS(validCLISurfaceJSON())
+	fsys["cli-surface/writes.json"] = &fstest.MapFile{Data: []byte(strings.Replace(
+		string(fsys["cli-surface/writes.json"].Data),
+		`"risk": "creates a widget"`,
+		`"redact_fields": ["token"], "risk": "creates a widget"`,
+		1,
+	))}
+	writeBatchBundle(t, defsRoot, fsys)
+	manifestPath := writeBatchManifestFixture(t, "cli-surface")
+	reportPath := filepath.Join(t.TempDir(), "report.json")
+	var stdout, stderr bytes.Buffer
+
+	code := run([]string{"batch", "gate", "--manifest", manifestPath, "--defs-root", defsRoot, "--report", reportPath}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("batch gate exit = 0, want redact_fields failure; stdout=%s stderr=%s", stdout.String(), stderr.String())
+	}
+	report := readBatchGateReportFixture(t, reportPath)
+	if len(report.Dropped) != 1 || report.Dropped[0].Stage != "output_policy" || !strings.Contains(report.Dropped[0].Reason, `write action "create_widget" declares redact_fields`) {
+		t.Fatalf("dropped = %+v, want write redact_fields output-policy drop", report.Dropped)
+	}
+}
+
 func writeBatchLedger(t *testing.T, records []map[string]any) string {
 	t.Helper()
 	path := filepath.Join(t.TempDir(), "ledger.json")
