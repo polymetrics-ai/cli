@@ -17,8 +17,8 @@ import (
 
 // certifyCLIRealInvocationBudget permits exactly one route proof that reaches
 // the real certify.Runner. Rendering, persistence, batch, and failure cases
-// are migrated to complete report fixtures; their direct Run calls remain
-// counted here so the contract covers the whole CLI test binary. A cold
+// use complete report fixtures. Every remaining direct Run call is counted
+// here, so the contract covers the whole CLI test binary. A cold
 // -count=1 run measures 61 calls, so the ceiling intentionally has no slack.
 const certifyCLIRealInvocationBudget = 61
 
@@ -240,7 +240,7 @@ func TestCertifyCLIBatchFixturePreservesMatrixOrderingAndExit(t *testing.T) {
 	alpha := strings.Index(stdout, "alpha\t")
 	resumed := strings.Index(stdout, "resumed\t")
 	zeta := strings.Index(stdout, "zeta\t")
-	if alpha < 0 || resumed < 0 || zeta < 0 || !(alpha < resumed && resumed < zeta) {
+	if alpha < 0 || resumed < 0 || zeta < 0 || alpha >= resumed || resumed >= zeta {
 		t.Errorf("matrix rows are not name-ordered: %s", stdout)
 	}
 	assertCertifyExitCode(t, exitForBatch(batch), 2)
