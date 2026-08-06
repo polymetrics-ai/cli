@@ -13,17 +13,17 @@ import (
 )
 
 // certifyRealCLIInvocationBudget is a deterministic test-only ceiling. The
-// retained real-surface proofs are TestFullSweepSourceStagesAgainstSample
-// (full source/read/flow/schedule) and TestSampleOutboxWriteLifecycleAgainstRealCLI
-// (sample/outbox write lifecycle); every other runner scenario must use the
-// scripted harness driver. The count also includes focused Harness and
-// Sweeper coverage because they deliberately exercise the same in-process
-// cli.Run seam.
+// retained real-surface proof in this package is
+// TestSampleOutboxWriteLifecycleAgainstRealCLI (sample/outbox write
+// lifecycle); the full source/read/flow/schedule proof is coalesced with the
+// real CLI route in internal/cli. Every other runner scenario must use the
+// scripted harness driver. The count also includes focused Harness and Sweeper
+// coverage because they deliberately exercise the same in-process cli.Run seam.
 //
-// The pre-refactor suite made 782 calls. A cold -count=1 GREEN run makes 93,
+// The pre-refactor suite made 782 calls. A cold -count=1 GREEN run makes 25,
 // so the ceiling intentionally has no slack: new real CLI work must be an
 // explicit change to this test contract rather than accidental duplication.
-const certifyRealCLIInvocationBudget = 93
+const certifyRealCLIInvocationBudget = 25
 
 var certifyRealCLIInvocations atomic.Int64
 
@@ -55,7 +55,7 @@ func certifyInvocationBudgetError(got int64) error {
 	if got <= certifyRealCLIInvocationBudget {
 		return nil
 	}
-	return fmt.Errorf("certify real CLI invocation budget exceeded: got %d, allowed %d; retain the named full-sweep and write-lifecycle proofs and script duplicate stage cases", got, certifyRealCLIInvocationBudget)
+	return fmt.Errorf("certify real CLI invocation budget exceeded: got %d, allowed %d; retain the write-lifecycle proof, keep the full sweep coalesced in the CLI route, and script duplicate stage cases", got, certifyRealCLIInvocationBudget)
 }
 
 func TestCertifyRealCLIInvocationBudgetRejectsControlledDuplicate(t *testing.T) {
@@ -63,7 +63,7 @@ func TestCertifyRealCLIInvocationBudgetRejectsControlledDuplicate(t *testing.T) 
 	if err == nil {
 		t.Fatal("certifyInvocationBudgetError() error = nil, want duplicate invocation failure")
 	}
-	if got, want := err.Error(), "got 94, allowed 93"; !strings.Contains(got, want) {
+	if got, want := err.Error(), fmt.Sprintf("got %d, allowed %d", certifyRealCLIInvocationBudget+1, certifyRealCLIInvocationBudget); !strings.Contains(got, want) {
 		t.Errorf("certifyInvocationBudgetError() = %q, want %q", got, want)
 	}
 }

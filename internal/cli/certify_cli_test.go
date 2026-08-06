@@ -2,6 +2,7 @@ package cli
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -19,8 +20,8 @@ import (
 // the real certify.Runner. Rendering, persistence, batch, and failure cases
 // use complete report fixtures. Every remaining direct Run call is counted
 // here, so the contract covers the whole CLI test binary. A cold
-// -count=1 run measures 61 calls, so the ceiling intentionally has no slack.
-const certifyCLIRealInvocationBudget = 61
+// -count=1 run measures 92 calls, so the ceiling intentionally has no slack.
+const certifyCLIRealInvocationBudget = 92
 
 var certifyCLIRealInvocations atomic.Int64
 
@@ -59,29 +60,94 @@ func certifyRun(t *testing.T, root string, args ...string) (stdout, stderr strin
 	return outBuf.String(), errBuf.String(), code
 }
 
-// TestCertifyCLISingleConnectorPassExitsZero drives `pm connectors certify
-// sample` against the real CLI end-to-end and proves a passing run exits 0
-// with a ConnectorCertification JSON envelope (certification design §A).
+// TestCertifyCLISingleConnectorPassExitsZero is the one retained real
+// certification route proof. It drives the full sample sweep through `pm`, so
+// the CLI dispatch, Runner, harness, report persistence, and full source
+// coverage all share one executable invocation rather than running the same
+// expensive topology in a separate package test.
 func TestCertifyCLISingleConnectorPassExitsZero(t *testing.T) {
 	t.Setenv("PM_CERT_SAMPLE_TOKEN", "sample-cli-token")
 	root := t.TempDir()
 
 	stdout, stderr, code := certifyRun(t, root, "connectors", "certify", "sample",
-		"--from-env", "token=PM_CERT_SAMPLE_TOKEN", "--json")
+		"--from-env", "token=PM_CERT_SAMPLE_TOKEN", "--full", "--json")
 
 	if code != 0 {
 		t.Fatalf("exit code = %d, want 0; stdout=%s stderr=%s", code, stdout, stderr)
 	}
-	if !strings.Contains(stdout, `"kind": "ConnectorCertification"`) {
-		t.Errorf("stdout missing ConnectorCertification envelope: %s", stdout)
+	var envelope struct {
+		Kind   string         `json:"kind"`
+		Report certify.Report `json:"report"`
 	}
-	if !strings.Contains(stdout, `"connector": "sample"`) {
-		t.Errorf("stdout missing connector=sample: %s", stdout)
+	if err := json.Unmarshal([]byte(stdout), &envelope); err != nil {
+		t.Fatalf("decode certification JSON envelope: %v; stdout=%s", err, stdout)
 	}
+	if envelope.Kind != "ConnectorCertification" {
+		t.Errorf("envelope kind = %q, want ConnectorCertification", envelope.Kind)
+	}
+	if envelope.Report.Connector != "sample" {
+		t.Errorf("report connector = %q, want sample", envelope.Report.Connector)
+	}
+	if !envelope.Report.Passed {
+		t.Fatalf("full certification report Passed = false; stages=%+v", envelope.Report.Stages)
+	}
+	assertFullSourceSweepReport(t, envelope.Report)
 	path := filepath.Join(root, ".polymetrics", "certifications", "sample.json")
 	if _, err := os.Stat(path); err != nil {
 		t.Fatalf("router proof did not persist its report at %s: %v", path, err)
 	}
+}
+
+func assertFullSourceSweepReport(t *testing.T, report certify.Report) {
+	t.Helper()
+	if stage := certifyReportStage(t, report, "full_sweep_connection_create_customers"); !stage.Passed {
+		t.Fatalf("full sweep customers connection stage failed: %+v", stage)
+	}
+	if stage := certifyReportStage(t, report, "full_sweep_connection_create_events"); !stage.Passed {
+		t.Fatalf("full sweep events connection stage failed: %+v", stage)
+	}
+	if got := countCertifyReportStages(report, "etl_full_refresh_append"); got != 2 {
+		t.Fatalf("etl_full_refresh_append stages = %d, want 2 for sample's catalog streams", got)
+	}
+	if got := countCertifyReportStages(report, "flow_roundtrip"); got != 2 {
+		t.Fatalf("flow_roundtrip stages = %d, want 2 for sample's catalog streams", got)
+	}
+	if got := countCertifyReportStages(report, "schedule_roundtrip"); got != 2 {
+		t.Fatalf("schedule_roundtrip stages = %d, want 2 for sample's catalog streams", got)
+	}
+	if stage := certifyReportStage(t, report, "direct_read_sweep"); stage.Passed || !strings.Contains(stage.Error, "skipped:") {
+		t.Fatalf("direct_read_sweep = %+v, want documented skip for sample", stage)
+	}
+	if report.Capabilities.DirectRead == nil || report.Capabilities.DirectRead.Result != "skipped" {
+		t.Fatalf("Capabilities.DirectRead = %+v, want skipped", report.Capabilities.DirectRead)
+	}
+	if stage := certifyReportStage(t, report, "binary_download_sweep"); stage.Passed || !strings.Contains(stage.Error, "skipped:") {
+		t.Fatalf("binary_download_sweep = %+v, want documented skip for sample", stage)
+	}
+	if report.Capabilities.Binary == nil || report.Capabilities.Binary.Result != "skipped" {
+		t.Fatalf("Capabilities.Binary = %+v, want skipped", report.Capabilities.Binary)
+	}
+}
+
+func certifyReportStage(t *testing.T, report certify.Report, name string) certify.StageResult {
+	t.Helper()
+	for _, stage := range report.Stages {
+		if stage.Name == name {
+			return stage
+		}
+	}
+	t.Fatalf("stage %q not found; stages=%+v", name, report.Stages)
+	return certify.StageResult{}
+}
+
+func countCertifyReportStages(report certify.Report, name string) int {
+	count := 0
+	for _, stage := range report.Stages {
+		if stage.Name == name {
+			count++
+		}
+	}
+	return count
 }
 
 // TestCertifyCLISingleConnectorTextMode proves the non-JSON rendering path
