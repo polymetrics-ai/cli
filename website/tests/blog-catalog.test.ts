@@ -1,8 +1,31 @@
 import { describe, expect, it } from 'vitest';
 
-import { getBlogPost } from '@/lib/blog';
+import { getBlogPost, sortBlogPostsByPublishedAt } from '@/lib/blog';
 
 describe('blog catalog', () => {
+  it('sorts posts by descending date and ascending slug ties', () => {
+    const pointBearingPost = getBlogPost('human-harnesses');
+    if (!pointBearingPost) throw new Error('Expected human-harnesses blog post');
+    const reviewedPost = getBlogPost('the-review-agent-was-right');
+    if (!reviewedPost) throw new Error('Expected reviewed blog post');
+
+    const posts = [
+      { ...pointBearingPost, slug: 'older', publishedAt: '2026-08-05' },
+      reviewedPost,
+      { ...pointBearingPost, slug: 'zeta', publishedAt: '2026-08-04' },
+      { ...pointBearingPost, slug: 'alpha', publishedAt: '2026-08-04' },
+    ];
+    const orderedPosts = sortBlogPostsByPublishedAt(posts);
+
+    expect(orderedPosts).not.toBe(posts);
+    expect(orderedPosts[0]?.slug).toBe('the-review-agent-was-right');
+    expect(
+      orderedPosts
+        .filter((post) => post.publishedAt === '2026-08-04')
+        .map((post) => post.slug),
+    ).toEqual(['alpha', 'zeta']);
+  });
+
   it('publishes the human harnesses essay with verified repository evidence', () => {
     const post = getBlogPost('human-harnesses');
 
