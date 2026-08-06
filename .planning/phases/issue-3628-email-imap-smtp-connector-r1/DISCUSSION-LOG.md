@@ -16,8 +16,9 @@ No unresolved product question remains:
   unmasked preview channel for the exact SMTP envelope and MIME bytes, while
   `engine.PreparedWrite` binds the same bytes into the approval digest. No shared preview schema
   change is needed.
-- The existing scalar persisted cursor can safely carry a fixed-width mailbox + UIDVALIDITY + UID
-  tuple. It is not a received-date approximation.
+- The original mailbox + UIDVALIDITY + UID cursor decision is superseded for this slice: sparse
+  UID scan continuation and full-refresh enforcement need #3810's shared mode validation and
+  checkpoint state, so message reads remain unavailable until #3810 lands.
 
 Canonical sources: RFC 9051 (IMAP4rev2) and RFC 6409 (message submission), both retrieved
 2026-08-06; `docs/migration/conventions.md`; `docs/architecture/connector-architecture-v2-design.md`;

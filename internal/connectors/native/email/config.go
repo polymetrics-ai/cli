@@ -14,7 +14,6 @@ import (
 )
 
 const (
-	defaultMailbox = "INBOX"
 	defaultTimeout = 30 * time.Second
 )
 
@@ -40,7 +39,6 @@ type connectionConfig struct {
 	password     string
 	smtpUsername string
 	fromAddress  string
-	mailbox      string
 	timeout      time.Duration
 }
 
@@ -92,10 +90,6 @@ func resolveConnectionConfig(cfg connectors.RuntimeConfig) (connectionConfig, er
 	if err != nil {
 		return connectionConfig{}, err
 	}
-	mailbox, err := mailboxFromConfig(cfg.Config)
-	if err != nil {
-		return connectionConfig{}, err
-	}
 	timeout, err := connectionTimeout(cfg.Config["connection_timeout_seconds"])
 	if err != nil {
 		return connectionConfig{}, err
@@ -110,7 +104,7 @@ func resolveConnectionConfig(cfg connectors.RuntimeConfig) (connectionConfig, er
 		imapHost: imapHost, imapPort: imapPort, imapSecurity: imapSecurity,
 		smtpHost: smtpHost, smtpPort: smtpPort, smtpSecurity: smtpSecurity,
 		username: username, password: password, smtpUsername: smtpUsername,
-		fromAddress: fromAddress, mailbox: mailbox, timeout: timeout,
+		fromAddress: fromAddress, timeout: timeout,
 	}, nil
 }
 
@@ -188,18 +182,6 @@ func resolveFromAddress(raw, username string) (string, error) {
 		return "", errors.New("email config from_address must be an email address (or username must be an email address)")
 	}
 	return address.Address, nil
-}
-
-func mailboxFromConfig(values map[string]string) (string, error) {
-	raw := values["mailbox"]
-	if containsControl(raw) {
-		return "", errors.New("email config mailbox must not contain control characters")
-	}
-	mailbox := strings.TrimSpace(raw)
-	if mailbox == "" {
-		mailbox = defaultMailbox
-	}
-	return mailbox, nil
 }
 
 func connectionTimeout(raw string) (time.Duration, error) {

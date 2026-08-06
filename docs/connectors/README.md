@@ -140,7 +140,7 @@
 - [ebay-fulfillment](ebay-fulfillment/MANUAL.md): Reads eBay seller orders, exploded line items, shipping fulfillments, and payment disputes through the eBay Sell Fulfillment REST API.
 - [elasticemail](elasticemail/MANUAL.md): Reads and writes Elastic Email contacts, campaigns, lists, segments, templates, webhooks, domains, inbound routes, suppressions, and account statistics through the Elastic Email v4 REST API.
 - [elasticsearch](elasticsearch/MANUAL.md): Reads Elasticsearch index metadata and documents through the REST API. Read-only.
-- [email](email/MANUAL.md): Reads mailboxes and bounded message data through IMAP4rev2, and sends one typed RFC 5322 message through SMTP submission after plan, preview, approval, and destructive confirmation.
+- [email](email/MANUAL.md): Lists mailboxes through IMAP4rev2, and sends one typed RFC 5322 message through SMTP submission after plan, preview, approval, and destructive confirmation.
 - [emailoctopus](emailoctopus/MANUAL.md): Reads and writes EmailOctopus lists, campaigns, campaign summary reports, list contacts, list tags, and list custom fields through the EmailOctopus v1.6 REST API.
 - [employment-hero](employment-hero/MANUAL.md): Reads Employment Hero organisations, employees, HR reference data, forms, goals, rosters, employee subresources, and exposes documented JSON mutations through the Employment Hero REST API.
 - [encharge](encharge/MANUAL.md): Reads Encharge people, segments, fields, account tags, and schemas through the Encharge REST API.
