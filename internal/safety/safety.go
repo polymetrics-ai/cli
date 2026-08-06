@@ -85,6 +85,18 @@ func RejectDangerousChars(value, field string) error {
 	return nil
 }
 
+func RejectDangerousCharsExceptLineBreaks(value, field string) error {
+	for _, r := range value {
+		if (r < 0x20 && r != '\r' && r != '\n') || r == 0x7f || (r >= 0x80 && r <= 0x9f) {
+			return fmt.Errorf("%s contains invalid control characters", field)
+		}
+		if IsDangerousUnicode(r) {
+			return fmt.Errorf("%s contains invalid unicode characters", field)
+		}
+	}
+	return nil
+}
+
 func ValidateIdentifier(value, field string) error {
 	if strings.TrimSpace(value) == "" {
 		return fmt.Errorf("%s is required", field)

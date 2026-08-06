@@ -41,6 +41,7 @@
           "type": "string_array",
           "summary": "One or more primary recipient addresses.",
           "maps_to": "record.to",
+          "control_policy": "reject",
           "required": true,
           "min_items": 1
         },
@@ -48,19 +49,22 @@
           "name": "cc",
           "type": "string_array",
           "summary": "Optional carbon-copy recipient addresses.",
-          "maps_to": "record.cc"
+          "maps_to": "record.cc",
+          "control_policy": "reject"
         },
         {
           "name": "bcc",
           "type": "string_array",
           "summary": "Optional blind-carbon-copy envelope recipient addresses; shown in the unmasked preview envelope but not as a MIME header.",
-          "maps_to": "record.bcc"
+          "maps_to": "record.bcc",
+          "control_policy": "reject"
         },
         {
           "name": "subject",
           "type": "string",
           "summary": "Message subject.",
           "maps_to": "record.subject",
+          "control_policy": "reject",
           "required": true,
           "allow_empty": true
         },
@@ -69,6 +73,7 @@
           "type": "string",
           "summary": "Message body; shown unmasked in the preview payload.",
           "maps_to": "record.body",
+          "control_policy": "allow_line_breaks",
           "required": true,
           "allow_empty": true
         },
@@ -77,19 +82,21 @@
           "type": "enum",
           "values": ["text/plain", "text/html"],
           "summary": "Body MIME media type; defaults to text/plain.",
-          "maps_to": "record.body_content_type"
+          "maps_to": "record.body_content_type",
+          "control_policy": "reject"
         },
         {
           "name": "attachment",
           "type": "string_array",
           "summary": "Relative regular file paths beneath the runtime .polymetrics staging root; absolute paths, traversal, and escaping symlinks are rejected before preview.",
-          "maps_to": "record.attachments"
+          "maps_to": "record.attachments",
+          "control_policy": "reject"
         }
       ],
       "api_surface": [{"method": "SMTP", "path": "MAIL/RCPT/DATA"}],
       "risk": "SMTP submission is externally visible and irreversible after the server accepts it.",
       "approval": "Requires plan, unmasked preview, approval evidence, and typed destructive confirmation.",
-      "examples": ["pm email message send --credential polly-mail --to recipient@example.invalid --subject 'Hello' --body 'Hello from Polymetrics' --plan email-send"]
+      "examples": ["pm email message send --credential polly-mail --to recipient@example.invalid --subject 'Hello' --body 'Hello from Polymetrics' --preview"]
     }
   ],
   "help_topics": [

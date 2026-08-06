@@ -1110,6 +1110,12 @@ func checkCLISurfaceValidationDeclarations(b engine.Bundle, i int, cmd engine.CL
 		if flag.Format != "" && flag.Type != "string" {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s format validation requires string type", i, cmd.Path, flag.Name)})
 		}
+		if flag.ControlPolicy != "" && flag.ControlPolicy != "reject" && flag.ControlPolicy != "allow_line_breaks" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s declares unsupported control policy %q", i, cmd.Path, flag.Name, flag.ControlPolicy)})
+		}
+		if flag.ControlPolicy == "allow_line_breaks" && flag.Type != "string" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s allow_line_breaks control policy requires string type", i, cmd.Path, flag.Name)})
+		}
 		if flag.AllowEmpty != nil && flag.Type != "string" {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s allow_empty is supported only for string flags", i, cmd.Path, flag.Name)})
 		}

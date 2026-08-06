@@ -300,7 +300,7 @@ func definitionHasCapability(def connectors.Definition, capability string) bool 
 	}
 }
 
-func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
+func runCredentials(ctx context.Context, a *app.App, args []string, stdin io.Reader, stdout io.Writer, jsonOut bool) error {
 	if len(args) == 0 {
 		return errUsage
 	}
@@ -335,11 +335,11 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 			}
 		}
 		if field := flags.first("value-stdin"); field != "" {
-			b, err := io.ReadAll(os.Stdin)
+			b, err := io.ReadAll(stdin)
 			if err != nil {
 				return fmt.Errorf("read stdin secret: %w", err)
 			}
-			secrets[field] = strings.TrimRight(string(b), "\r\n")
+			secrets[field] = credentialStdinValue(connector, b)
 		}
 		config, err := keyValues(flags.values["config"])
 		if err != nil {
@@ -410,6 +410,14 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 	default:
 		return errUsage
 	}
+}
+
+func credentialStdinValue(connector string, raw []byte) string {
+	value := string(raw)
+	if connector == "email" {
+		return value
+	}
+	return strings.TrimRight(value, "\r\n")
 }
 
 func runConnections(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {

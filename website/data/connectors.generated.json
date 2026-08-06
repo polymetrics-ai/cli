@@ -44257,7 +44257,7 @@
             }
           ],
           "examples": [
-            "pm email message send --credential polly-mail --to recipient@example.invalid --subject 'Hello' --body 'Hello from Polymetrics' --plan email-send"
+            "pm email message send --credential polly-mail --to recipient@example.invalid --subject 'Hello' --body 'Hello from Polymetrics' --preview"
           ],
           "output_policy": "",
           "risk": "SMTP submission is externally visible and irreversible after the server accepts it.",

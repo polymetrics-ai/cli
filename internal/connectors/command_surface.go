@@ -27,14 +27,15 @@ type CommandSurfaceGroup struct {
 }
 
 type CommandSurfaceFlag struct {
-	Name       string
-	Type       string
-	Summary    string
-	Values     []string
-	MapsTo     string
-	Format     string
-	AllowEmpty *bool
-	Required   bool
+	Name          string
+	Type          string
+	Summary       string
+	Values        []string
+	MapsTo        string
+	Format        string
+	ControlPolicy string
+	AllowEmpty    *bool
+	Required      bool
 	// MaxItems/MinItems bound a string_array flag's item count. This is a second,
 	// independent bound alongside the body schema's maxItems: the schema bound
 	// only fires after the flag has been expanded into a body, whereas this one
