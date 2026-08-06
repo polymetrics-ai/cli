@@ -80,3 +80,22 @@ ledger is required resumability state. No unrelated connector migration files ma
 2. First green declaration + production embed checkpoint.
 3. Complete first batch + validation checkpoint.
 4. Any review-fix checkpoint.
+
+## Batch 2 — live, enumerable provider slice
+
+The second bounded slice contains only the following `status: done` sweep records, each of which
+has a live provider artifact and `scope_in_current_defs: true`: `7shifts`, `activecampaign`,
+`aha`, `aircall`, `algolia`, `apify-dataset`, `appsflyer`, `ashby`, `assemblyai`, `bamboo-hr`,
+`bitbucket`, `box`, `braze`, `brevo`, `cisco-meraki`, `commercetools`, `discord`, `google-ads`,
+`mailchimp`, `mailgun`, `pagerduty`, `pipedrive`, `reddit`, `square`, and `twilio`.
+
+The batch begins at `aha`, the stored resume point from batch 1, and selects the remaining
+well-documented providers deliberately rather than treating all definition directories as a
+population. Every declaration will be independently rejoined to the sweep ledger immediately
+before it is written. A provider policy that depends on a secret token, an undeclared subject,
+plan/tier not represented by the bundle, an unsupported subject type, endpoint dimensions not
+represented by the bundle, or an unpublished replenishment shape is `unknown`; it is never
+approximated.
+
+The first-batch `defs.FS` wildcard already ships the optional file. This slice must not modify it,
+nor any legacy `streams.json` throttle.
