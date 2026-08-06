@@ -100,6 +100,14 @@ func completeEngineErrorText(err error) string {
 	return fmt.Sprintf("http %d for %s: %s", httpErr.Status, httpErr.URL, message)
 }
 
+func completeOperationDirectReadErrorText(err error, identifierSets map[string][]string) string {
+	values := make([]string, 0)
+	for _, identifiers := range identifierSets {
+		values = append(values, identifiers...)
+	}
+	return redactSensitiveLiterals(completeEngineErrorText(err), values)
+}
+
 func OperationDirectRead(ctx context.Context, b Bundle, req connectors.OperationDirectReadRequest, h Hooks) (connectors.DirectReadResult, error) {
 	if err := ctx.Err(); err != nil {
 		return connectors.DirectReadResult{}, err
@@ -197,7 +205,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	resp, err := rt.Requester.DoLimited(ctx, method, requestPath, query, body, maxBytes)
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
-		msg := completeEngineErrorText(err)
+		msg := completeOperationDirectReadErrorText(err, req.IdentifierSets)
 		if hint != "" {
 			msg = msg + ": " + hint
 		}

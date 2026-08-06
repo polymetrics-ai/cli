@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"os"
 	"strings"
 	"testing"
@@ -183,6 +184,117 @@ func TestCallerSuppliedIdentifierSetsRejectBeforeNetworkWithoutValueDisclosure(t
 			}
 		})
 	}
+}
+
+func TestCallerSuppliedIdentifierSetsRedactRequestErrors(t *testing.T) {
+	const pathIdentifier = "path/identifier with space"
+	const commaIdentifier = "comma/identifier with space"
+	const repeatedIdentifier = "repeated/identifier with space"
+	const bodyIdentifier = `body/"identifier" with space`
+	identifiers := []string{pathIdentifier, commaIdentifier, repeatedIdentifier, bodyIdentifier}
+
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if got := r.URL.Path; got != "/lookups/"+pathIdentifier {
+			t.Fatal("path identifier was not sent on the declared path wire")
+		}
+		if got := r.URL.Query().Get("comma_ids"); got != commaIdentifier {
+			t.Fatal("comma identifier was not sent on the declared query wire")
+		}
+		if got := r.URL.Query()["repeated_ids"]; len(got) != 1 || got[0] != repeatedIdentifier {
+			t.Fatal("repeated identifier was not sent on the declared query wire")
+		}
+		var body map[string][]string
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatalf("decode request body: %v", err)
+		}
+		if got := body["body_ids"]; len(got) != 1 || got[0] != bodyIdentifier {
+			t.Fatal("body identifier was not sent on the declared body wire")
+		}
+
+		echoes := make([]string, 0, len(identifiers)*5)
+		for _, identifier := range identifiers {
+			echoes = append(echoes, callerSuppliedIdentifierErrorForms(t, identifier)...)
+		}
+		w.WriteHeader(http.StatusBadRequest)
+		_, _ = fmt.Fprintf(w, "provider rejected: %s", strings.Join(echoes, " "))
+	}))
+	t.Cleanup(srv.Close)
+
+	bundle := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{{
+			ID: "acme.identifiers.lookup", Kind: "rest_read", Summary: "Look up explicit identifiers", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{
+				Method: http.MethodPost, Path: "/lookups/{path_id}", ContentType: "application/json", MaxBytes: 1024,
+				BodySchema: json.RawMessage(`{"type":"object","required":["body_ids"],"properties":{"body_ids":{"type":"array","minItems":1,"maxItems":1,"items":{"type":"string"}}}}`),
+				CallerSuppliedIdentifierSets: []CallerSuppliedIdentifierSetSpec{
+					{Name: "path_id", ElementShape: "opaque_string", Wire: "path_segment", MinItems: 1, MaxItems: 1},
+					{Name: "comma_ids", ElementShape: "opaque_string", Wire: "query_comma_separated", MinItems: 1, MaxItems: 1},
+					{Name: "repeated_ids", ElementShape: "opaque_string", Wire: "query_repeated", MinItems: 1, MaxItems: 1},
+					{Name: "body_ids", ElementShape: "opaque_string", Wire: "body_json_array", MinItems: 1, MaxItems: 1},
+				},
+			},
+		}},
+	}
+
+	_, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{
+		Operation: "acme.identifiers.lookup",
+		IdentifierSets: map[string][]string{
+			"path_id":      {pathIdentifier},
+			"comma_ids":    {commaIdentifier},
+			"repeated_ids": {repeatedIdentifier},
+			"body_ids":     {bodyIdentifier},
+		},
+	}, nil)
+	if err == nil {
+		t.Fatal("OperationDirectRead error = nil, want provider rejection")
+	}
+	msg := err.Error()
+	assertCallerSuppliedIdentifierFormsRedacted(t, msg, identifiers)
+	if !strings.Contains(msg, "http 400") || !strings.Contains(msg, "provider rejected") {
+		t.Fatal("request error lost normal provider context")
+	}
+	if !strings.Contains(msg, "redacted") {
+		t.Fatal("request error did not mark caller-supplied identifiers as redacted")
+	}
+}
+
+func TestCallerSuppliedIdentifierSetsRedactTransportErrors(t *testing.T) {
+	const identifier = "transport/identifier with space"
+	msg := completeOperationDirectReadErrorText(
+		errors.New("request to https://api.example.test/lookups/"+url.PathEscape(identifier)+"?ids="+url.QueryEscape(identifier)+" failed: provider echoed "+identifier),
+		map[string][]string{"ids": {identifier}},
+	)
+
+	assertCallerSuppliedIdentifierFormsRedacted(t, msg, []string{identifier})
+	if !strings.Contains(msg, "request to") || !strings.Contains(msg, "failed") || !strings.Contains(msg, "provider echoed") {
+		t.Fatal("transport error lost normal context")
+	}
+}
+
+func assertCallerSuppliedIdentifierFormsRedacted(t *testing.T, text string, identifiers []string) {
+	t.Helper()
+	for _, identifier := range identifiers {
+		for _, form := range callerSuppliedIdentifierErrorForms(t, identifier) {
+			if strings.Contains(text, form) {
+				t.Fatal("caller-supplied identifier leaked in request error")
+			}
+		}
+	}
+}
+
+func callerSuppliedIdentifierErrorForms(t *testing.T, identifier string) []string {
+	t.Helper()
+	encodedJSON, err := json.Marshal(identifier)
+	if err != nil {
+		t.Fatalf("marshal identifier for provider echo: %v", err)
+	}
+	forms := []string{identifier, strings.ReplaceAll(url.QueryEscape(identifier), "+", "%20"), url.QueryEscape(identifier), url.PathEscape(identifier), string(encodedJSON)}
+	if len(encodedJSON) > 2 {
+		forms = append(forms, string(encodedJSON[1:len(encodedJSON)-1]))
+	}
+	return forms
 }
 
 func TestCallerSuppliedIdentifierSetsPreserveExplicitEmptyBodyArray(t *testing.T) {

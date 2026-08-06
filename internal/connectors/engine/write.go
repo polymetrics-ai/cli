@@ -143,7 +143,7 @@ type writeActionRedactedError struct {
 }
 
 func (e *writeActionRedactedError) Error() string {
-	return safety.RedactErrorText(redactWriteLiterals(e.err.Error(), e.values))
+	return safety.RedactErrorText(redactSensitiveLiterals(e.err.Error(), e.values))
 }
 
 func (e *writeActionRedactedError) Unwrap() error {
@@ -179,7 +179,7 @@ func writeActionRedactionValues(action WriteAction, rec connectors.Record) []str
 	for value := range seen {
 		values = append(values, value)
 	}
-	sortWriteRedactionLiterals(values)
+	sortSensitiveRedactionLiterals(values)
 	return values
 }
 
@@ -218,14 +218,14 @@ func addWriteRedactionValue(value string, out map[string]bool) {
 	out[value] = true
 }
 
-func redactWriteLiterals(text string, values []string) string {
-	for _, literal := range writeRedactionLiterals(values) {
+func redactSensitiveLiterals(text string, values []string) string {
+	for _, literal := range sensitiveRedactionLiterals(values) {
 		text = strings.ReplaceAll(text, literal, "redacted")
 	}
 	return text
 }
 
-func sortWriteRedactionLiterals(values []string) {
+func sortSensitiveRedactionLiterals(values []string) {
 	sort.Slice(values, func(i, j int) bool {
 		if len(values[i]) != len(values[j]) {
 			return len(values[i]) > len(values[j])
@@ -234,11 +234,11 @@ func sortWriteRedactionLiterals(values []string) {
 	})
 }
 
-func writeRedactionLiterals(values []string) []string {
+func sensitiveRedactionLiterals(values []string) []string {
 	seen := map[string]bool{}
 	literals := make([]string, 0, len(values)*4)
 	for _, value := range values {
-		for _, literal := range writeRedactionLiteralForms(value) {
+		for _, literal := range sensitiveRedactionLiteralForms(value) {
 			if seen[literal] {
 				continue
 			}
@@ -246,12 +246,18 @@ func writeRedactionLiterals(values []string) []string {
 			literals = append(literals, literal)
 		}
 	}
-	sortWriteRedactionLiterals(literals)
+	sortSensitiveRedactionLiterals(literals)
 	return literals
 }
 
-func writeRedactionLiteralForms(value string) []string {
+func sensitiveRedactionLiteralForms(value string) []string {
 	forms := []string{value, urlencodeSegment(value), url.QueryEscape(value), url.PathEscape(value)}
+	if encoded, err := json.Marshal(value); err == nil {
+		forms = append(forms, string(encoded))
+		if len(encoded) > 2 {
+			forms = append(forms, string(encoded[1:len(encoded)-1]))
+		}
+	}
 	seen := map[string]bool{}
 	out := make([]string, 0, len(forms))
 	for _, form := range forms {
