@@ -97,6 +97,21 @@ pm runtime doctor --json
 pm etl run --connection my-github --stream issues --runtime --json
 ```
 
+## Rate-limit output
+
+Every ETL run and status includes one bounded rate-limit summary per connector.
+It separates `local_pacing_wait` (our declared-policy pacing),
+`provider_429_wait` (a provider pushback we honoured), and `request_latency`
+(ordinary request time), so a slow sync does not look like one undifferentiated
+delay.
+
+For a declared policy, the summary names the policy ID, subject kind, and
+structural selection reason, plus provider budget facts such as remaining
+capacity when reported. A connector without `rate_limits.json` reports
+`undeclared`; that is not a claim that provider traffic is unlimited. The
+summary contains no credentials, bindings, runtime subject values, scope
+values, or credential revisions.
+
 ### JSON output
 
 ```json
@@ -108,6 +123,24 @@ pm etl run --connection my-github --stream issues --runtime --json
     "records_read": 142,
     "records_loaded": 142,
     "records_failed": 0,
+    "rate_limit": {
+      "connectors": [{
+        "connector": "github",
+        "declaration": "declared",
+        "policies": [{
+          "id": "core-rest",
+          "subject_kind": "account",
+          "selection_reason": "endpoint+auth_type",
+          "provider_remaining": 4987
+        }],
+        "pacing_wait_ms": 0,
+        "provider_429_observed": 0,
+        "provider_429_honored": 0,
+        "provider_wait_ms": 0,
+        "request_latency_ms": 742,
+        "request_count": 3
+      }]
+    },
     "stream": "issues",
     "connection": "my-github",
     "started_at": "2026-01-15T10:00:00Z",

@@ -512,6 +512,18 @@ DESCRIPTION
   endpoints. It acquires a Dragonfly lease and appends a PostgreSQL run-ledger
   record after the local ETL completes.
 
+RATE LIMIT OUTPUT
+  Every ETL run and status result includes a bounded rate-limit summary. Human
+  output labels local_pacing_wait, provider_429_wait, and request_latency
+  separately so a slow run does not look like one undifferentiated delay. JSON
+  places the same data at run.rate_limit.
+
+  A declared connector reports selected policy IDs, subject kinds, structural
+  selection reasons, and typed provider budget facts when available. An
+  undeclared connector has no rate_limits.json; undeclared is not a claim that
+  provider traffic is unlimited. Rate-limit output never includes credentials,
+  bindings, runtime subject values, scope values, or credential revisions.
+
 DIRECT CONNECTOR COMMANDS
   check
     Calls the connector check operation and returns status=ok on success.

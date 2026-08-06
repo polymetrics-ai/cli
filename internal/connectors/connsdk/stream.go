@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 )
 
 // maxRedirects bounds redirect hops. Go's default client stops at 10;
@@ -115,7 +116,15 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 			return nil, err
 		}
 
+		observeLatency := r.ActivityObserver != nil
+		var sendStarted time.Time
+		if observeLatency {
+			sendStarted = time.Now()
+		}
 		resp, err := client.Do(req)
+		if observeLatency {
+			r.observeRequestLatency(ctx, sendStarted)
+		}
 		if err != nil {
 			lastErr = fmt.Errorf("send request: %w", err)
 			if isRateLimitAdmissionError(err) {
@@ -137,9 +146,12 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 			body, _ := io.ReadAll(io.LimitReader(resp.Body, maxErrorBody))
 			resp.Body.Close()
 			lastErr = responseHTTPError(resp.StatusCode, fullURL, body, observation)
-			if werr := r.sleep(ctx, r.backoff(attempt, observation)); werr != nil {
+			wait := r.backoff(attempt, observation)
+			if werr := r.sleep(ctx, wait); werr != nil {
+				r.observeProviderRateLimitWait(ctx, observation, wait, false)
 				return nil, werr
 			}
+			r.observeProviderRateLimitWait(ctx, observation, wait, true)
 			continue
 		}
 

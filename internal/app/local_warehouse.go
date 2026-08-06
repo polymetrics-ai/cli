@@ -26,6 +26,7 @@ type etlExecutionResult struct {
 	BatchCount         int
 	Checkpoint         map[string]string
 	PendingStreamState *pendingStreamState
+	RateLimit          connectors.RateLimitSummary
 }
 
 type pendingStreamState struct {

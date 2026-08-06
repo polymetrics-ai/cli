@@ -653,9 +653,11 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		}
 		if runtimeRecorded {
 			_, _ = fmt.Fprintf(stdout, "ETL run %s completed: read=%d loaded=%d failed=%d runtime_recorded=true\n", run.ID, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)
+			writeRateLimitSummary(stdout, run.RateLimit)
 			return nil
 		}
 		_, _ = fmt.Fprintf(stdout, "ETL run %s completed: read=%d loaded=%d failed=%d\n", run.ID, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)
+		writeRateLimitSummary(stdout, run.RateLimit)
 		return nil
 	case "status":
 		if len(args) < 2 {
@@ -669,9 +671,16 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 			return writeJSON(stdout, envelope{"kind": "ETLRun", "run": run})
 		}
 		_, _ = fmt.Fprintf(stdout, "%s\t%s\tread=%d loaded=%d failed=%d\n", run.ID, run.Status, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)
+		writeRateLimitSummary(stdout, run.RateLimit)
 		return nil
 	default:
 		return errUsage
+	}
+}
+
+func writeRateLimitSummary(stdout io.Writer, summary connectors.RateLimitSummary) {
+	for _, line := range summary.HumanLines() {
+		_, _ = fmt.Fprintln(stdout, line)
 	}
 }
 

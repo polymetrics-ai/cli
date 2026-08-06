@@ -37,6 +37,30 @@ func drain(t *testing.T, rc io.ReadCloser) string {
 	return string(raw)
 }
 
+type rateLimitActivityWait struct {
+	observation RateLimitObservation
+	wait        time.Duration
+	honored     bool
+}
+
+type rateLimitActivityCollector struct {
+	provider []RateLimitObservation
+	waits    []rateLimitActivityWait
+	latency  []time.Duration
+}
+
+func (c *rateLimitActivityCollector) ObserveProviderRateLimit(_ context.Context, observation RateLimitObservation) {
+	c.provider = append(c.provider, observation)
+}
+
+func (c *rateLimitActivityCollector) ObserveProviderRateLimitWait(_ context.Context, observation RateLimitObservation, wait time.Duration, honored bool) {
+	c.waits = append(c.waits, rateLimitActivityWait{observation: observation, wait: wait, honored: honored})
+}
+
+func (c *rateLimitActivityCollector) ObserveRequestLatency(_ context.Context, latency time.Duration) {
+	c.latency = append(c.latency, latency)
+}
+
 // TestDoStreamReturnsOpenBody: DoStream hands back an OPEN body rather than a
 // buffered []byte, which is the whole reason it exists — Response.Body is
 // capped at 64 MiB, so a declared 100 MiB max_bytes cannot be satisfied
@@ -274,6 +298,46 @@ func TestDoStreamRetryDiscardsPartialBody(t *testing.T) {
 	}
 	if attempts.Load() != 2 {
 		t.Fatalf("attempts = %d, want 2", attempts.Load())
+	}
+}
+
+func TestDoStreamReportsProvider429ActivitySeparatelyFromRequestLatency(t *testing.T) {
+	attempts := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		attempts++
+		if attempts == 1 {
+			w.WriteHeader(http.StatusTooManyRequests)
+			return
+		}
+		_, _ = w.Write([]byte("downloaded"))
+	}))
+	t.Cleanup(srv.Close)
+
+	activity := &rateLimitActivityCollector{}
+	r := &Requester{
+		BaseURL:          srv.URL,
+		MaxRetries:       1,
+		BaseBackoff:      7 * time.Millisecond,
+		MaxBackoff:       7 * time.Millisecond,
+		Jitter:           func(cap time.Duration) time.Duration { return cap },
+		Sleep:            func(context.Context, time.Duration) error { return nil },
+		ActivityObserver: activity,
+	}
+	resp, err := r.DoStream(context.Background(), http.MethodGet, "/file", nil, StreamOptions{})
+	if err != nil {
+		t.Fatalf("DoStream: %v", err)
+	}
+	if got := drain(t, resp.Body); got != "downloaded" {
+		t.Fatalf("body = %q, want downloaded", got)
+	}
+	if len(activity.provider) != 1 || activity.provider[0].Status != http.StatusTooManyRequests {
+		t.Fatalf("provider observations = %+v, want one typed 429", activity.provider)
+	}
+	if len(activity.waits) != 1 || activity.waits[0].wait != 7*time.Millisecond || !activity.waits[0].honored {
+		t.Fatalf("provider waits = %+v, want one honored 7ms wait", activity.waits)
+	}
+	if len(activity.latency) != 2 {
+		t.Fatalf("request latency observations = %d, want 2 attempts", len(activity.latency))
 	}
 }
 

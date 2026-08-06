@@ -815,34 +815,39 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	if err != nil {
 		return Run{}, err
 	}
-	run := Run{ID: runID, Type: "etl", Connection: req.Connection, Stream: req.Stream, Status: "running", StartedAt: time.Now().UTC()}
+	rateLimitReport := connectors.NewRateLimitReport()
+	run := Run{ID: runID, Type: "etl", Connection: req.Connection, Stream: req.Stream, Status: "running", StartedAt: time.Now().UTC(), RateLimit: rateLimitReport.Snapshot()}
 	if _, err := a.beginRun(run); err != nil {
 		return Run{}, fmt.Errorf("start ETL run: %w", err)
 	}
 
 	mode, err := ParseStreamSyncMode(stream)
 	if err != nil {
-		return a.failRun(runID, err)
+		return a.failRunWithRateLimit(runID, err, rateLimitReport.Snapshot())
 	}
 	stream.SyncMode = mode.Name
 	if err := ValidateStreamSyncConfig(stream); err != nil {
-		return a.failRun(runID, err)
+		return a.failRunWithRateLimit(runID, err, rateLimitReport.Snapshot())
 	}
 	if mode.IsContractMode() {
-		return a.failRun(runID, &synccontract.ModeNotExecutableError{
+		return a.failRunWithRateLimit(runID, &synccontract.ModeNotExecutableError{
 			Mode:   mode.ContractMode,
 			Reason: "no matching native executor has completed the shared conformance corpus",
-		})
+		}, rateLimitReport.Snapshot())
 	}
 	source, sourceCredential, sourceRuntime, err := a.resolveEndpointWithCredential(ctx, conn.Source)
 	if err != nil {
-		return a.failRun(runID, err)
+		return a.failRunWithRateLimit(runID, err, rateLimitReport.Snapshot())
 	}
+	rateLimitReport.Declare(source.Name(), connectors.RateLimitDeclarationUndeclared)
+	sourceRuntime.RateLimitReport = rateLimitReport
 	sourceExpectation := streamResumeExpectation(source, sourceCredential, sourceRuntime, req.Stream)
 	destination, destRuntime, err := a.resolveEndpoint(ctx, conn.Destination)
 	if err != nil {
-		return a.failRun(runID, err)
+		return a.failRunWithRateLimit(runID, err, rateLimitReport.Snapshot())
 	}
+	rateLimitReport.Declare(destination.Name(), connectors.RateLimitDeclarationUndeclared)
+	destRuntime.RateLimitReport = rateLimitReport
 	batchSize := req.BatchSize
 	if batchSize <= 0 {
 		batchSize = 1000
@@ -854,8 +859,9 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		result, err = a.runConnectorETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, stream, mode, batchSize)
 	}
 	if err != nil {
-		return a.failRun(runID, err)
+		return a.failRunWithRateLimit(runID, err, rateLimitReport.Snapshot())
 	}
+	result.RateLimit = rateLimitReport.Snapshot()
 	return a.completeRun(runID, result)
 }
 
@@ -1033,6 +1039,7 @@ func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) 
 			current.Runs[i].RecordsFailed = result.RecordsFailed
 			current.Runs[i].BatchCount = result.BatchCount
 			current.Runs[i].Checkpoint = cloneStringMap(result.Checkpoint)
+			current.Runs[i].RateLimit = result.RateLimit
 			current.Runs[i].CompletedAt = completedAt
 			found = true
 			break
@@ -2299,6 +2306,10 @@ func (a *App) findConnection(name string) (Connection, bool) {
 }
 
 func (a *App) failRun(runID string, runErr error) (Run, error) {
+	return a.failRunWithRateLimit(runID, runErr, connectors.RateLimitSummary{})
+}
+
+func (a *App) failRunWithRateLimit(runID string, runErr error, rateLimit connectors.RateLimitSummary) (Run, error) {
 	expectedRevision := a.state.Revision
 	completedAt := time.Now().UTC()
 	updated, persistErr := a.updateState(func(current state) (state, error) {
@@ -2310,6 +2321,7 @@ func (a *App) failRun(runID string, runErr error) (Run, error) {
 				continue
 			}
 			current.Runs[i].Status = "failed"
+			current.Runs[i].RateLimit = rateLimit
 			current.Runs[i].Error = safety.RedactErrorText(runErr.Error())
 			current.Runs[i].CompletedAt = completedAt
 			return current, nil

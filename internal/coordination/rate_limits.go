@@ -92,7 +92,19 @@ var _ connsdk.RateLimitObserver = (*RateLimiter)(nil)
 
 // Admit reserves capacity for one logical requester send. It has no network
 // operation and waits only through the injected context-aware clock.
-func (l *RateLimiter) Admit(ctx context.Context, _ connsdk.RateLimitRequest) error {
+func (l *RateLimiter) Admit(ctx context.Context, request connsdk.RateLimitRequest) error {
+	return l.admit(ctx, request, nil)
+}
+
+// AdmitWithWaitObserver preserves Admit's reservation semantics while exposing
+// each completed local pacing wait to a caller-owned observer. The observer
+// receives only a duration: no coordination key, scope, credential, or subject
+// leaves this package.
+func (l *RateLimiter) AdmitWithWaitObserver(ctx context.Context, request connsdk.RateLimitRequest, observeWait func(time.Duration)) error {
+	return l.admit(ctx, request, observeWait)
+}
+
+func (l *RateLimiter) admit(ctx context.Context, _ connsdk.RateLimitRequest, observeWait func(time.Duration)) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
@@ -110,6 +122,9 @@ func (l *RateLimiter) Admit(ctx context.Context, _ connsdk.RateLimitRequest) err
 		}
 		if err := l.clock.Sleep(ctx, wait); err != nil {
 			return err
+		}
+		if observeWait != nil {
+			observeWait(wait)
 		}
 	}
 }

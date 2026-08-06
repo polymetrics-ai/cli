@@ -227,6 +227,14 @@ func TestRateLimitReportShowsDeclaredPolicyPacingAndProviderPushbackWithoutSecre
 	config.Config["account_id"] = "runtime-subject-must-not-escape"
 	config.Secrets = map[string]string{"token": "token-must-not-escape"}
 	config.RateLimitReport = report
+	scope, err := config.CoordinationIdentity.RateScopeKey(connectors.RateLimitScope{
+		PolicyID: "widgets-points",
+		Kind:     connectors.RateScopeKindAccount,
+		Subject:  config.Config["account_id"],
+	})
+	if err != nil {
+		t.Fatalf("RateScopeKey: %v", err)
+	}
 
 	runtime, err := newRuntime(context.Background(), bundle, config, nil)
 	if err != nil {
@@ -279,9 +287,13 @@ func TestRateLimitReportShowsDeclaredPolicyPacingAndProviderPushbackWithoutSecre
 		"credential-revision-must-not-escape",
 		"runtime-subject-must-not-escape",
 		"token-must-not-escape",
+		string(scope),
 	} {
 		if strings.Contains(string(encoded), forbidden) {
-			t.Fatalf("rate-limit report leaked %q: %s", forbidden, encoded)
+			t.Fatal("rate-limit report leaked prohibited identity data")
+		}
+		if human := strings.Join(summary.HumanLines(), "\n"); strings.Contains(human, forbidden) {
+			t.Fatal("human rate-limit report leaked prohibited identity data")
 		}
 	}
 }
