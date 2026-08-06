@@ -353,3 +353,38 @@ func TestWebhookReceiverHeartbeatExpiryPersistsFencedRecovery(t *testing.T) {
 		t.Fatalf("delayed completion changed expiry recovery state: %+v", stillDegraded)
 	}
 }
+
+func TestWebhookReceiverReconfigureDoesNotMaskHeartbeatExpiry(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	instance, err := app.Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	request := app.ConfigureWebhookReceiverRequest{
+		Name: "reconfigure-funnel",
+		Exposure: webhook.ExposureConfig{
+			Mode:         webhook.ExposureModeExternalTunnel,
+			TunnelTool:   webhook.TunnelToolTailscaleFunnel,
+			CallbackURL:  "https://node.tailnet.ts.net/receiver",
+			HeartbeatTTL: time.Nanosecond,
+		},
+		ReceiptCapacity: 2,
+	}
+	configured, err := instance.ConfigureWebhookReceiver(ctx, request)
+	if err != nil {
+		t.Fatal(err)
+	}
+	reconfigured, err := instance.ConfigureWebhookReceiver(ctx, request)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !reconfigured.LastHeartbeatAt.Equal(configured.LastHeartbeatAt) || reconfigured.RecoveryEpoch != configured.RecoveryEpoch+1 || reconfigured.Status != webhook.SubscriptionStatusDegraded || !reconfigured.ReregistrationRequired || !reconfigured.ReconciliationRequired {
+		t.Fatalf("same endpoint reconfiguration status = %+v", reconfigured)
+	}
+}

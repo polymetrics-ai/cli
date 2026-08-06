@@ -124,6 +124,7 @@ func (a *App) ConfigureWebhookReceiver(ctx context.Context, req ConfigureWebhook
 			entry.Subscription = webhook.NewSubscription(req.Name, exposure, now)
 		} else {
 			entry.Subscription.ApplyExposure(exposure, now)
+			entry.Subscription.DegradeIfHeartbeatExpired(now)
 		}
 		entry.CredentialCohort = cohort
 		entry.ReceiptCapacity = req.ReceiptCapacity

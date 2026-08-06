@@ -140,7 +140,7 @@ func ConfigureExposure(config ExposureConfig, endpointKey []byte) (Exposure, err
 		return Exposure{
 			Mode:               config.Mode,
 			ListenerScope:      ListenerScopeNone,
-			EndpointGeneration: endpointGeneration(endpointKey, config.Mode, "", callback.String()),
+			EndpointGeneration: endpointGeneration(endpointKey, config.Mode, "", canonicalCallbackString(callback)),
 		}, nil
 	case ExposureModeExternalTunnel:
 		if config.TunnelTool != TunnelToolTailscaleFunnel {
@@ -167,7 +167,7 @@ func ConfigureExposure(config ExposureConfig, endpointKey []byte) (Exposure, err
 			Mode:               config.Mode,
 			TunnelTool:         config.TunnelTool,
 			ListenerScope:      ListenerScopeLoopback,
-			EndpointGeneration: endpointGeneration(endpointKey, config.Mode, string(config.TunnelTool), callback.String()),
+			EndpointGeneration: endpointGeneration(endpointKey, config.Mode, string(config.TunnelTool), canonicalCallbackString(callback)),
 			HeartbeatTTL:       config.HeartbeatTTL,
 			ExternalTunnel:     cloneExternalTunnelConfig(tunnelConfig),
 		}, nil
@@ -240,8 +240,8 @@ func (s *Subscription) ApplyExposure(next Exposure, now time.Time) bool {
 	s.ensureRecoveryEpoch()
 	changed := s.Exposure.Mode != next.Mode || s.Exposure.EndpointGeneration != next.EndpointGeneration
 	s.Exposure = cloneExposure(next)
-	s.LastHeartbeatAt = now
 	if changed {
+		s.LastHeartbeatAt = now
 		s.beginRecovery()
 	}
 	return changed
@@ -354,6 +354,17 @@ func parseHTTPSCallback(raw string) (*url.URL, error) {
 		return nil, errors.New("callback endpoint must be an absolute HTTPS URL")
 	}
 	return callback, nil
+}
+
+func canonicalCallbackString(callback *url.URL) string {
+	canonical := *callback
+	canonical.Host = strings.ToLower(canonical.Host)
+	if rawPort := canonical.Port(); rawPort != "" {
+		if port, err := strconv.Atoi(rawPort); err == nil && port == 443 {
+			canonical.Host = strings.TrimSuffix(canonical.Host, ":"+rawPort)
+		}
+	}
+	return canonical.String()
 }
 
 func configuredExternalTunnelConfig(config ExternalTunnelConfig) (ExternalTunnelConfig, error) {

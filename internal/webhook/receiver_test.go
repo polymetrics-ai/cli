@@ -246,6 +246,59 @@ func TestExternalTunnelValidatesDeclaredPublicPorts(t *testing.T) {
 	}
 }
 
+func TestConfigureExposureCanonicalizesEquivalentCallbackGenerations(t *testing.T) {
+	t.Parallel()
+
+	key := []byte("test-project-key-material")
+	tests := []struct {
+		name       string
+		configured ExposureConfig
+		equivalent ExposureConfig
+	}{
+		{
+			name: "operator endpoint",
+			configured: ExposureConfig{
+				Mode:        ExposureModeOperatorEndpoint,
+				CallbackURL: "https://OPERATOR.EXAMPLE.TEST:443/receiver",
+			},
+			equivalent: ExposureConfig{
+				Mode:        ExposureModeOperatorEndpoint,
+				CallbackURL: "https://operator.example.test/receiver",
+			},
+		},
+		{
+			name: "external tunnel",
+			configured: ExposureConfig{
+				Mode:         ExposureModeExternalTunnel,
+				TunnelTool:   TunnelToolTailscaleFunnel,
+				CallbackURL:  "https://NODE.TAILNET.TS.NET:443/receiver",
+				HeartbeatTTL: time.Minute,
+			},
+			equivalent: ExposureConfig{
+				Mode:         ExposureModeExternalTunnel,
+				TunnelTool:   TunnelToolTailscaleFunnel,
+				CallbackURL:  "https://node.tailnet.ts.net/receiver",
+				HeartbeatTTL: time.Minute,
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			configured, err := ConfigureExposure(tt.configured, key)
+			if err != nil {
+				t.Fatal(err)
+			}
+			equivalent, err := ConfigureExposure(tt.equivalent, key)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if configured.EndpointGeneration != equivalent.EndpointGeneration {
+				t.Fatalf("equivalent endpoint generations = %q and %q", configured.EndpointGeneration, equivalent.EndpointGeneration)
+			}
+		})
+	}
+}
+
 func TestSubscriptionLifecycleDegradesOnGenerationRotationAndHeartbeatLoss(t *testing.T) {
 	t.Parallel()
 
@@ -302,6 +355,39 @@ func TestSubscriptionLifecycleDegradesOnGenerationRotationAndHeartbeatLoss(t *te
 	}
 	if subscription.Status != SubscriptionStatusActive || subscription.ReregistrationRequired || subscription.ReconciliationRequired {
 		t.Fatalf("explicit recovery state = %+v", subscription)
+	}
+}
+
+func TestApplyExposureDoesNotMaskHeartbeatExpiry(t *testing.T) {
+	t.Parallel()
+
+	key := []byte("test-project-key-material")
+	now := time.Date(2026, time.August, 6, 0, 0, 0, 0, time.UTC)
+	exposure, err := ConfigureExposure(ExposureConfig{
+		Mode:         ExposureModeExternalTunnel,
+		TunnelTool:   TunnelToolTailscaleFunnel,
+		CallbackURL:  "https://node.tailnet.ts.net/receiver",
+		HeartbeatTTL: time.Minute,
+	}, key)
+	if err != nil {
+		t.Fatal(err)
+	}
+	subscription := NewSubscription("fixture", exposure, now)
+	initialEpoch := subscription.RecoveryEpoch
+	if changed := subscription.ApplyExposure(exposure, now.Add(2*time.Minute)); changed {
+		t.Fatal("same endpoint reconfiguration changed the generation")
+	}
+	if !subscription.LastHeartbeatAt.Equal(now) || subscription.RecoveryEpoch != initialEpoch || subscription.Status != SubscriptionStatusActive || subscription.ReregistrationRequired || subscription.ReconciliationRequired {
+		t.Fatalf("same endpoint reconfiguration changed liveness state: %+v", subscription)
+	}
+	if !subscription.DegradeIfHeartbeatExpired(now.Add(2 * time.Minute)) {
+		t.Fatal("same endpoint reconfiguration masked heartbeat expiry")
+	}
+	if changed := subscription.ApplyExposure(exposure, now.Add(3*time.Minute)); changed {
+		t.Fatal("repeated same endpoint reconfiguration changed the generation")
+	}
+	if !subscription.LastHeartbeatAt.Equal(now) || subscription.RecoveryEpoch != initialEpoch+1 || subscription.Status != SubscriptionStatusDegraded || !subscription.ReregistrationRequired || !subscription.ReconciliationRequired {
+		t.Fatalf("repeated reconfiguration changed liveness state: %+v", subscription)
 	}
 }
 
