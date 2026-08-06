@@ -10,6 +10,8 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
+	"sort"
+	"strconv"
 	"strings"
 	"time"
 	"unicode"
@@ -35,6 +37,17 @@ const (
 	TunnelToolTailscaleFunnel TunnelTool = "tailscale_funnel"
 )
 
+// ExternalTunnelConfig declares the public-port policy for an external tunnel.
+// A nil AllowedPublicPorts value uses DefaultExternalTunnelConfig.
+type ExternalTunnelConfig struct {
+	AllowedPublicPorts []int
+}
+
+// DefaultExternalTunnelConfig returns the documented default public-port policy.
+func DefaultExternalTunnelConfig() ExternalTunnelConfig {
+	return ExternalTunnelConfig{AllowedPublicPorts: []int{443, 8443, 10000}}
+}
+
 // ListenerScope states whether pm owns a local HTTP listener for an exposure.
 type ListenerScope string
 
@@ -52,6 +65,7 @@ type ExposureConfig struct {
 	CallbackURL      string
 	AdapterReference string
 	HeartbeatTTL     time.Duration
+	ExternalTunnel   ExternalTunnelConfig
 }
 
 // Exposure is the output-safe representation persisted for a subscription.
@@ -63,6 +77,7 @@ type Exposure struct {
 	ListenerScope      ListenerScope
 	EndpointGeneration string
 	HeartbeatTTL       time.Duration
+	ExternalTunnel     ExternalTunnelConfig
 }
 
 // AtLeastOnceDelivery is the ingress-side delivery truth that provider
@@ -112,7 +127,7 @@ func ConfigureExposure(config ExposureConfig, endpointKey []byte) (Exposure, err
 		if err != nil {
 			return Exposure{}, err
 		}
-		if config.TunnelTool != "" || config.AdapterReference != "" || config.HeartbeatTTL != 0 {
+		if config.TunnelTool != "" || config.AdapterReference != "" || config.HeartbeatTTL != 0 || len(config.ExternalTunnel.AllowedPublicPorts) != 0 {
 			return Exposure{}, errors.New("operator endpoint configuration contains unsupported fields")
 		}
 		return Exposure{
@@ -127,6 +142,10 @@ func ConfigureExposure(config ExposureConfig, endpointKey []byte) (Exposure, err
 		if config.AdapterReference != "" || config.HeartbeatTTL <= 0 {
 			return Exposure{}, errors.New("external tunnel requires a positive heartbeat timeout and no adapter reference")
 		}
+		tunnelConfig, err := configuredExternalTunnelConfig(config.ExternalTunnel)
+		if err != nil {
+			return Exposure{}, err
+		}
 		callback, err := parseHTTPSCallback(config.CallbackURL)
 		if err != nil {
 			return Exposure{}, err
@@ -134,15 +153,19 @@ func ConfigureExposure(config ExposureConfig, endpointKey []byte) (Exposure, err
 		if !strings.HasSuffix(strings.ToLower(callback.Hostname()), ".ts.net") {
 			return Exposure{}, errors.New("tailscale funnel callback host is invalid")
 		}
+		if err := validateExternalTunnelPort(callback, tunnelConfig.AllowedPublicPorts); err != nil {
+			return Exposure{}, err
+		}
 		return Exposure{
 			Mode:               config.Mode,
 			TunnelTool:         config.TunnelTool,
 			ListenerScope:      ListenerScopeLoopback,
 			EndpointGeneration: endpointGeneration(endpointKey, config.Mode, string(config.TunnelTool), callback.String()),
 			HeartbeatTTL:       config.HeartbeatTTL,
+			ExternalTunnel:     cloneExternalTunnelConfig(tunnelConfig),
 		}, nil
 	case ExposureModeProviderPullOrStream:
-		if config.CallbackURL != "" || config.TunnelTool != "" || config.HeartbeatTTL != 0 {
+		if config.CallbackURL != "" || config.TunnelTool != "" || config.HeartbeatTTL != 0 || len(config.ExternalTunnel.AllowedPublicPorts) != 0 {
 			return Exposure{}, errors.New("provider pull or stream does not accept a callback or tunnel")
 		}
 		if !safeReference(config.AdapterReference) {
@@ -163,7 +186,7 @@ func ConfigureExposure(config ExposureConfig, endpointKey []byte) (Exposure, err
 func NewSubscription(name string, exposure Exposure, now time.Time) Subscription {
 	return Subscription{
 		Name:            name,
-		Exposure:        exposure,
+		Exposure:        cloneExposure(exposure),
 		Status:          SubscriptionStatusActive,
 		LastHeartbeatAt: now,
 	}
@@ -178,10 +201,11 @@ func (s *Subscription) Heartbeat(callbackURL string, now time.Time, endpointKey 
 		return false, errors.New("subscription does not use an external tunnel")
 	}
 	next, err := ConfigureExposure(ExposureConfig{
-		Mode:         ExposureModeExternalTunnel,
-		TunnelTool:   s.Exposure.TunnelTool,
-		CallbackURL:  callbackURL,
-		HeartbeatTTL: s.Exposure.HeartbeatTTL,
+		Mode:           ExposureModeExternalTunnel,
+		TunnelTool:     s.Exposure.TunnelTool,
+		CallbackURL:    callbackURL,
+		HeartbeatTTL:   s.Exposure.HeartbeatTTL,
+		ExternalTunnel: cloneExternalTunnelConfig(s.Exposure.ExternalTunnel),
 	}, endpointKey)
 	if err != nil {
 		return false, err
@@ -200,7 +224,7 @@ func (s *Subscription) ApplyExposure(next Exposure, now time.Time) bool {
 		return false
 	}
 	changed := s.Exposure.Mode != next.Mode || s.Exposure.EndpointGeneration != next.EndpointGeneration
-	s.Exposure = next
+	s.Exposure = cloneExposure(next)
 	s.LastHeartbeatAt = now
 	if changed {
 		s.degradeForEndpointChange()
@@ -231,10 +255,35 @@ func (s *Subscription) CompleteReregistrationAndReconciliation() error {
 	if !s.ReregistrationRequired || !s.ReconciliationRequired {
 		return errors.New("subscription does not require recovery")
 	}
-	s.Status = SubscriptionStatusActive
-	s.RecoveryOutcome = ""
 	s.ReregistrationRequired = false
 	s.ReconciliationRequired = false
+	s.completeRecoveryIfReady()
+	return nil
+}
+
+// CompleteReregistration records one completed provider re-registration action.
+func (s *Subscription) CompleteReregistration() error {
+	if s == nil {
+		return errors.New("subscription is required")
+	}
+	if !s.ReregistrationRequired {
+		return errors.New("subscription does not require re-registration")
+	}
+	s.ReregistrationRequired = false
+	s.completeRecoveryIfReady()
+	return nil
+}
+
+// CompleteReconciliation records one completed provider reconciliation action.
+func (s *Subscription) CompleteReconciliation() error {
+	if s == nil {
+		return errors.New("subscription is required")
+	}
+	if !s.ReconciliationRequired {
+		return errors.New("subscription does not require reconciliation")
+	}
+	s.ReconciliationRequired = false
+	s.completeRecoveryIfReady()
 	return nil
 }
 
@@ -245,12 +294,82 @@ func (s *Subscription) degradeForEndpointChange() {
 	s.ReconciliationRequired = true
 }
 
+func (s *Subscription) completeRecoveryIfReady() {
+	if s.ReregistrationRequired || s.ReconciliationRequired {
+		return
+	}
+	s.Status = SubscriptionStatusActive
+	s.RecoveryOutcome = ""
+}
+
 func parseHTTPSCallback(raw string) (*url.URL, error) {
 	callback, err := url.Parse(raw)
 	if err != nil || callback == nil || callback.Scheme != "https" || callback.Host == "" || callback.User != nil || callback.Fragment != "" {
 		return nil, errors.New("callback endpoint must be an absolute HTTPS URL")
 	}
 	return callback, nil
+}
+
+func configuredExternalTunnelConfig(config ExternalTunnelConfig) (ExternalTunnelConfig, error) {
+	ports := config.AllowedPublicPorts
+	if ports == nil {
+		ports = DefaultExternalTunnelConfig().AllowedPublicPorts
+	}
+	if len(ports) == 0 {
+		return ExternalTunnelConfig{}, errors.New("external tunnel allowed public ports are required")
+	}
+	seen := make(map[int]struct{}, len(ports))
+	validated := make([]int, 0, len(ports))
+	for _, port := range ports {
+		if port < 1 || port > 65535 {
+			return ExternalTunnelConfig{}, errors.New("external tunnel allowed public port is invalid")
+		}
+		if _, exists := seen[port]; exists {
+			return ExternalTunnelConfig{}, errors.New("external tunnel allowed public ports contain a duplicate")
+		}
+		seen[port] = struct{}{}
+		validated = append(validated, port)
+	}
+	sort.Ints(validated)
+	return ExternalTunnelConfig{AllowedPublicPorts: validated}, nil
+}
+
+func validateExternalTunnelPort(callback *url.URL, allowedPorts []int) error {
+	port := 443
+	rawPort := callback.Port()
+	if rawPort == "" && strings.Contains(callback.Host, ":") {
+		return errors.New("external tunnel callback port is invalid")
+	}
+	if rawPort != "" {
+		parsed, err := strconv.Atoi(rawPort)
+		if err != nil || parsed < 1 || parsed > 65535 {
+			return errors.New("external tunnel callback port is invalid")
+		}
+		port = parsed
+	}
+	for _, allowedPort := range allowedPorts {
+		if port == allowedPort {
+			return nil
+		}
+	}
+	return fmt.Errorf("external tunnel callback port %d is not allowed; allowed public ports: %s", port, formatPorts(allowedPorts))
+}
+
+func formatPorts(ports []int) string {
+	formatted := make([]string, len(ports))
+	for index, port := range ports {
+		formatted[index] = strconv.Itoa(port)
+	}
+	return strings.Join(formatted, ", ")
+}
+
+func cloneExternalTunnelConfig(config ExternalTunnelConfig) ExternalTunnelConfig {
+	return ExternalTunnelConfig{AllowedPublicPorts: append([]int(nil), config.AllowedPublicPorts...)}
+}
+
+func cloneExposure(exposure Exposure) Exposure {
+	exposure.ExternalTunnel = cloneExternalTunnelConfig(exposure.ExternalTunnel)
+	return exposure
 }
 
 func endpointGeneration(key []byte, mode ExposureMode, tool, callback string) string {

@@ -157,6 +157,49 @@ func TestConfigureExposureRejectsModeBoundaryViolations(t *testing.T) {
 	}
 }
 
+func TestExternalTunnelValidatesDeclaredPublicPorts(t *testing.T) {
+	t.Parallel()
+
+	key := []byte("test-project-key-material")
+	base := ExposureConfig{
+		Mode:         ExposureModeExternalTunnel,
+		TunnelTool:   TunnelToolTailscaleFunnel,
+		CallbackURL:  "https://node.tailnet.ts.net/receiver",
+		HeartbeatTTL: time.Minute,
+	}
+	defaultExposure, err := ConfigureExposure(base, key)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := formatPorts(defaultExposure.ExternalTunnel.AllowedPublicPorts); got != "443, 8443, 10000" {
+		t.Fatalf("default allowed public ports = %q", got)
+	}
+
+	base.CallbackURL = "https://node.tailnet.ts.net:8443/receiver"
+	if _, err := ConfigureExposure(base, key); err != nil {
+		t.Fatalf("ConfigureExposure(default allowed port) error = %v", err)
+	}
+	base.CallbackURL = "https://node.tailnet.ts.net:4444/receiver"
+	if _, err := ConfigureExposure(base, key); err == nil || !strings.Contains(err.Error(), "443, 8443, 10000") {
+		t.Fatalf("ConfigureExposure(disallowed default port) error = %v", err)
+	}
+
+	custom := base
+	custom.ExternalTunnel = ExternalTunnelConfig{AllowedPublicPorts: []int{4444}}
+	customExposure, err := ConfigureExposure(custom, key)
+	if err != nil {
+		t.Fatalf("ConfigureExposure(custom allowed port) error = %v", err)
+	}
+	subscription := NewSubscription("fixture", customExposure, time.Now().UTC())
+	if changed, err := subscription.Heartbeat(custom.CallbackURL, time.Now().UTC(), key); err != nil || changed {
+		t.Fatalf("Heartbeat(custom allowed port) changed=%t err=%v", changed, err)
+	}
+	custom.CallbackURL = "https://node.tailnet.ts.net/receiver"
+	if _, err := ConfigureExposure(custom, key); err == nil || !strings.Contains(err.Error(), "4444") {
+		t.Fatalf("ConfigureExposure(disallowed custom port) error = %v", err)
+	}
+}
+
 func TestSubscriptionLifecycleDegradesOnGenerationRotationAndHeartbeatLoss(t *testing.T) {
 	t.Parallel()
 
@@ -202,8 +245,17 @@ func TestSubscriptionLifecycleDegradesOnGenerationRotationAndHeartbeatLoss(t *te
 	if subscription.Status != SubscriptionStatusDegraded || subscription.RecoveryOutcome != synccontract.RecoveryOutcomeSourceGenerationChanged {
 		t.Fatalf("rotated endpoint state = %+v", subscription)
 	}
-	if subscription.CompleteReregistrationAndReconciliation() != nil {
-		t.Fatal("explicit recovery did not restore active status")
+	if subscription.CompleteReregistration() != nil {
+		t.Fatal("explicit re-registration completion failed")
+	}
+	if subscription.Status != SubscriptionStatusDegraded || subscription.ReregistrationRequired || !subscription.ReconciliationRequired {
+		t.Fatalf("partial recovery state = %+v", subscription)
+	}
+	if subscription.CompleteReconciliation() != nil {
+		t.Fatal("explicit reconciliation completion failed")
+	}
+	if subscription.Status != SubscriptionStatusActive || subscription.ReregistrationRequired || subscription.ReconciliationRequired {
+		t.Fatalf("explicit recovery state = %+v", subscription)
 	}
 }
 

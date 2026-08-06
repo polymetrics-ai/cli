@@ -8,7 +8,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"sync"
+	"os"
 	"time"
 
 	"polymetrics.ai/internal/connectors"
@@ -27,6 +27,13 @@ type ConfigureWebhookReceiverRequest struct {
 	ReceiptCapacity int                    `json:"receipt_capacity"`
 }
 
+// WebhookReceiverHeartbeatRequest records an operator-observed tunnel heartbeat.
+type WebhookReceiverHeartbeatRequest struct {
+	Name        string    `json:"name"`
+	CallbackURL string    `json:"-"`
+	ObservedAt  time.Time `json:"observed_at"`
+}
+
 // WebhookReceiverStatus is safe to render in CLI text or JSON. It excludes
 // callback URLs, event bodies, credentials, signing headers, and secrets.
 type WebhookReceiverStatus struct {
@@ -36,12 +43,32 @@ type WebhookReceiverStatus struct {
 	AdapterReference       string                       `json:"adapter_reference,omitempty"`
 	ListenerScope          webhook.ListenerScope        `json:"listener_scope"`
 	EndpointGeneration     string                       `json:"endpoint_generation,omitempty"`
+	AllowedPublicPorts     []int                        `json:"allowed_public_ports,omitempty"`
 	Status                 webhook.SubscriptionStatus   `json:"status"`
 	LastHeartbeatAt        time.Time                    `json:"last_heartbeat_at,omitempty"`
 	RecoveryOutcome        synccontract.RecoveryOutcome `json:"recovery_outcome,omitempty"`
 	ReregistrationRequired bool                         `json:"reregistration_required"`
 	ReconciliationRequired bool                         `json:"reconciliation_required"`
 	ReceiptCapacity        int                          `json:"receipt_capacity"`
+}
+
+// IngressAdapterStatus is the safe non-webhook status projection for a
+// provider-owned pull or stream adapter.
+type IngressAdapterStatus struct {
+	Name             string                     `json:"name"`
+	Mode             webhook.ExposureMode       `json:"mode"`
+	AdapterReference string                     `json:"adapter_reference"`
+	Status           webhook.SubscriptionStatus `json:"status"`
+}
+
+// IngressAdapterStatus returns the safe adapter-only projection of a status.
+func (status WebhookReceiverStatus) IngressAdapterStatus() IngressAdapterStatus {
+	return IngressAdapterStatus{
+		Name:             status.Name,
+		Mode:             status.Mode,
+		AdapterReference: status.AdapterReference,
+		Status:           status.Status,
+	}
 }
 
 type webhookSubscriptionState struct {
@@ -87,7 +114,7 @@ func (a *App) ConfigureWebhookReceiver(ctx context.Context, req ConfigureWebhook
 		}
 		exposure, configErr := webhook.ConfigureExposure(req.Exposure, []byte(current.CoordinationSalt))
 		if configErr != nil {
-			return current, errors.New("webhook receiver configuration is invalid")
+			return current, fmt.Errorf("webhook receiver configuration: %w", configErr)
 		}
 		entry, exists := current.WebhookSubscriptions[req.Name]
 		if !exists {
@@ -108,6 +135,64 @@ func (a *App) ConfigureWebhookReceiver(ctx context.Context, req ConfigureWebhook
 		return WebhookReceiverStatus{}, errors.New("webhook receiver state is unavailable")
 	}
 	return webhookStatus(req.Name, entry), nil
+}
+
+// RecordWebhookReceiverHeartbeat persists an observed external-tunnel heartbeat
+// without probing or changing the external tunnel.
+func (a *App) RecordWebhookReceiverHeartbeat(ctx context.Context, req WebhookReceiverHeartbeatRequest) (WebhookReceiverStatus, error) {
+	if req.ObservedAt.IsZero() {
+		return WebhookReceiverStatus{}, errors.New("webhook receiver heartbeat time is required")
+	}
+	return a.updateWebhookSubscription(ctx, req.Name, func(subscription *webhook.Subscription, current state) error {
+		if _, err := subscription.Heartbeat(req.CallbackURL, req.ObservedAt.UTC(), []byte(current.CoordinationSalt)); err != nil {
+			return fmt.Errorf("webhook receiver heartbeat: %w", err)
+		}
+		return nil
+	})
+}
+
+// CompleteWebhookReceiverReregistration persists a provider lane's completed
+// re-registration declaration without invoking a provider API.
+func (a *App) CompleteWebhookReceiverReregistration(ctx context.Context, name string) (WebhookReceiverStatus, error) {
+	return a.updateWebhookSubscription(ctx, name, func(subscription *webhook.Subscription, _ state) error {
+		return subscription.CompleteReregistration()
+	})
+}
+
+// CompleteWebhookReceiverReconciliation persists a provider lane's completed
+// reconciliation declaration without invoking a provider API.
+func (a *App) CompleteWebhookReceiverReconciliation(ctx context.Context, name string) (WebhookReceiverStatus, error) {
+	return a.updateWebhookSubscription(ctx, name, func(subscription *webhook.Subscription, _ state) error {
+		return subscription.CompleteReconciliation()
+	})
+}
+
+func (a *App) updateWebhookSubscription(ctx context.Context, name string, update func(*webhook.Subscription, state) error) (WebhookReceiverStatus, error) {
+	if err := ctx.Err(); err != nil {
+		return WebhookReceiverStatus{}, err
+	}
+	if err := safety.ValidateIdentifier(name, "webhook receiver"); err != nil {
+		return WebhookReceiverStatus{}, errors.New("webhook receiver is invalid")
+	}
+	updated, err := a.updateState(func(current state) (state, error) {
+		entry, ok := current.WebhookSubscriptions[name]
+		if !ok {
+			return current, errors.New("webhook receiver not found")
+		}
+		if err := update(&entry.Subscription, current); err != nil {
+			return current, err
+		}
+		current.WebhookSubscriptions[name] = entry
+		return current, nil
+	})
+	if err != nil {
+		return WebhookReceiverStatus{}, err
+	}
+	entry, ok := updated.WebhookSubscriptions[name]
+	if !ok {
+		return WebhookReceiverStatus{}, errors.New("webhook receiver state is unavailable")
+	}
+	return webhookStatus(name, entry), nil
 }
 
 // WebhookReceiverStatus loads safe receiver state and persists external tunnel
@@ -156,6 +241,7 @@ func webhookStatus(name string, entry webhookSubscriptionState) WebhookReceiverS
 		AdapterReference:       entry.Subscription.Exposure.AdapterReference,
 		ListenerScope:          entry.Subscription.Exposure.ListenerScope,
 		EndpointGeneration:     entry.Subscription.Exposure.EndpointGeneration,
+		AllowedPublicPorts:     append([]int(nil), entry.Subscription.Exposure.ExternalTunnel.AllowedPublicPorts...),
 		Status:                 entry.Subscription.Status,
 		LastHeartbeatAt:        entry.Subscription.LastHeartbeatAt,
 		RecoveryOutcome:        entry.Subscription.RecoveryOutcome,
@@ -168,7 +254,6 @@ func webhookStatus(name string, entry webhookSubscriptionState) WebhookReceiverS
 type appWebhookReceiptStore struct {
 	app          *App
 	subscription string
-	mu           sync.Mutex
 }
 
 func (s *appWebhookReceiptStore) Insert(ctx context.Context, receipt webhook.Receipt) (webhook.ReceiptInsertResult, error) {
@@ -178,54 +263,23 @@ func (s *appWebhookReceiptStore) Insert(ctx context.Context, receipt webhook.Rec
 	if err := ctx.Err(); err != nil {
 		return webhook.ReceiptInsertRejected, err
 	}
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
-	fingerprint, err := s.app.webhookEventFingerprint(receipt.Event.ID)
-	if err != nil {
-		return webhook.ReceiptInsertRejected, err
-	}
-	key := s.subscription + ":" + fingerprint
-	current, err := s.app.store.Load()
-	if err != nil {
-		return webhook.ReceiptInsertRejected, err
-	}
-	if current.WebhookSubscriptions == nil {
-		return webhook.ReceiptInsertRejected, errors.New("webhook receiver state is unavailable")
-	}
-	if _, exists := current.WebhookReceipts[key]; exists {
-		return webhook.ReceiptInsertDuplicate, nil
-	}
-	entry, ok := current.WebhookSubscriptions[s.subscription]
-	if !ok {
-		return webhook.ReceiptInsertRejected, errors.New("webhook receiver not found")
-	}
-	pending := 0
-	for _, existing := range current.WebhookReceipts {
-		if existing.Subscription == s.subscription {
-			pending++
-		}
-	}
-	if pending >= entry.ReceiptCapacity {
-		return webhook.ReceiptInsertRejected, webhook.ErrReceiptBackpressure
-	}
-
-	payloadID := "webhook-" + s.subscription + "-" + fingerprint
-	if err := s.app.vault.Put(ctx, payloadID, map[string]string{
-		"body_base64": base64.RawStdEncoding.EncodeToString(receipt.RawBody),
-	}); err != nil {
-		return webhook.ReceiptInsertRejected, fmt.Errorf("persist encrypted webhook receipt: %w", err)
-	}
-
 	result := webhook.ReceiptInsertRejected
-	_, err = s.app.updateState(func(current state) (state, error) {
+	_, err := s.app.updateWebhookReceiptState(ctx, func(current state) (state, error) {
 		if current.WebhookSubscriptions == nil {
 			return current, errors.New("webhook receiver state is unavailable")
 		}
 		if current.WebhookReceipts == nil {
 			current.WebhookReceipts = map[string]webhookReceiptState{}
 		}
-		if _, exists := current.WebhookReceipts[key]; exists {
+		fingerprint, err := webhookEventFingerprint(current.CoordinationSalt, receipt.Event.ID)
+		if err != nil {
+			return current, err
+		}
+		key := s.subscription + ":" + fingerprint
+		if existing, exists := current.WebhookReceipts[key]; exists {
+			if err := s.app.validateWebhookReceiptPayload(ctx, existing.EncryptedPayloadID); err != nil {
+				return current, fmt.Errorf("recover encrypted webhook receipt: %w", err)
+			}
 			result = webhook.ReceiptInsertDuplicate
 			return current, nil
 		}
@@ -242,6 +296,18 @@ func (s *appWebhookReceiptStore) Insert(ctx context.Context, receipt webhook.Rec
 		if pending >= entry.ReceiptCapacity {
 			return current, webhook.ErrReceiptBackpressure
 		}
+		payloadID := "webhook-" + s.subscription + "-" + fingerprint
+		created, err := s.app.vault.PutDurableIfAbsent(ctx, payloadID, map[string]string{
+			"body_base64": base64.RawStdEncoding.EncodeToString(receipt.RawBody),
+		})
+		if err != nil {
+			return current, fmt.Errorf("persist encrypted webhook receipt: %w", err)
+		}
+		if !created {
+			if err := s.app.validateWebhookReceiptPayload(ctx, payloadID); err != nil {
+				return current, fmt.Errorf("recover encrypted webhook receipt: %w", err)
+			}
+		}
 		current.WebhookReceipts[key] = webhookReceiptState{
 			Subscription:       s.subscription,
 			EventFingerprint:   fingerprint,
@@ -254,14 +320,60 @@ func (s *appWebhookReceiptStore) Insert(ctx context.Context, receipt webhook.Rec
 	if err != nil {
 		return webhook.ReceiptInsertRejected, err
 	}
+	if err := ctx.Err(); err != nil {
+		return webhook.ReceiptInsertRejected, err
+	}
 	return result, nil
 }
 
-func (a *App) webhookEventFingerprint(eventID string) (string, error) {
-	if a == nil || a.state.CoordinationSalt == "" {
+func (a *App) updateWebhookReceiptState(ctx context.Context, update func(state) (state, error)) (state, error) {
+	deadline, hasDeadline := ctx.Deadline()
+	if !hasDeadline {
+		deadline = time.Now().Add(time.Second)
+	}
+	for {
+		if err := ctx.Err(); err != nil {
+			return state{}, err
+		}
+		updated, err := a.updateState(update)
+		if !errors.Is(err, os.ErrExist) {
+			return updated, err
+		}
+		if !time.Now().Before(deadline) {
+			return updated, err
+		}
+		timer := time.NewTimer(5 * time.Millisecond)
+		select {
+		case <-ctx.Done():
+			if !timer.Stop() {
+				<-timer.C
+			}
+			return state{}, ctx.Err()
+		case <-timer.C:
+		}
+	}
+}
+
+func (a *App) validateWebhookReceiptPayload(ctx context.Context, payloadID string) error {
+	payload, err := a.vault.Get(ctx, payloadID)
+	if err != nil {
+		return err
+	}
+	body, ok := payload["body_base64"]
+	if !ok {
+		return errors.New("encrypted webhook receipt payload is invalid")
+	}
+	if _, err := base64.RawStdEncoding.DecodeString(body); err != nil {
+		return errors.New("encrypted webhook receipt payload is invalid")
+	}
+	return nil
+}
+
+func webhookEventFingerprint(coordinationSalt, eventID string) (string, error) {
+	if coordinationSalt == "" {
 		return "", errors.New("webhook receipt identity is unavailable")
 	}
-	mac := hmac.New(sha256.New, []byte(a.state.CoordinationSalt))
+	mac := hmac.New(sha256.New, []byte(coordinationSalt))
 	_, _ = mac.Write([]byte("webhook-event-receipt-v1\x00"))
 	_, _ = mac.Write([]byte(eventID))
 	return "evt_" + hex.EncodeToString(mac.Sum(nil)[:16]), nil

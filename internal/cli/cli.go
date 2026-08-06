@@ -469,7 +469,7 @@ func runWebhooks(ctx context.Context, a *app.App, args []string, stdout io.Write
 			return validationErrorf("%v", err)
 		}
 		flags := parseFlags(args[2:])
-		for _, name := range []string{"mode", "callback-url", "tunnel-tool", "adapter", "heartbeat-ttl", "receipt-capacity", "credential"} {
+		for _, name := range []string{"mode", "callback-url", "tunnel-tool", "adapter", "heartbeat-ttl", "receipt-capacity", "allowed-public-port", "credential"} {
 			if flags.isBare(name) {
 				return usageErrorf("--%s requires a value", name)
 			}
@@ -485,6 +485,10 @@ func runWebhooks(ctx context.Context, a *app.App, args []string, stdout io.Write
 				return usageErrorf("--heartbeat-ttl must be a positive duration")
 			}
 		}
+		allowedPublicPorts, err := parseWebhookAllowedPublicPorts(flags.values["allowed-public-port"])
+		if err != nil {
+			return err
+		}
 		status, err := a.ConfigureWebhookReceiver(ctx, app.ConfigureWebhookReceiverRequest{
 			Name:       args[1],
 			Credential: flags.first("credential"),
@@ -494,6 +498,9 @@ func runWebhooks(ctx context.Context, a *app.App, args []string, stdout io.Write
 				CallbackURL:      flags.first("callback-url"),
 				AdapterReference: flags.first("adapter"),
 				HeartbeatTTL:     heartbeatTTL,
+				ExternalTunnel: webhook.ExternalTunnelConfig{
+					AllowedPublicPorts: allowedPublicPorts,
+				},
 			},
 			ReceiptCapacity: capacity,
 		})
@@ -516,6 +523,13 @@ func runWebhooks(ctx context.Context, a *app.App, args []string, stdout io.Write
 }
 
 func writeWebhookStatus(stdout io.Writer, jsonOut bool, status app.WebhookReceiverStatus) error {
+	if status.Mode == webhook.ExposureModeProviderPullOrStream {
+		if jsonOut {
+			return writeJSON(stdout, envelope{"kind": "IngressAdapter", "ingress_adapter": status.IngressAdapterStatus()})
+		}
+		_, err := fmt.Fprintf(stdout, "%s\tmode=%s\tadapter=%s\tstatus=%s\n", status.Name, status.Mode, status.AdapterReference, status.Status)
+		return err
+	}
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "WebhookReceiver", "receiver": status})
 	}
@@ -530,6 +544,21 @@ func writeWebhookStatus(stdout io.Writer, jsonOut bool, status app.WebhookReceiv
 		status.ReconciliationRequired,
 	)
 	return err
+}
+
+func parseWebhookAllowedPublicPorts(values []string) ([]int, error) {
+	if len(values) == 0 {
+		return nil, nil
+	}
+	ports := make([]int, 0, len(values))
+	for _, value := range values {
+		port, err := parseIntFlag("allowed-public-port", value, 0)
+		if err != nil || port < 1 || port > 65535 {
+			return nil, usageErrorf("--allowed-public-port must be an integer from 1 to 65535")
+		}
+		ports = append(ports, port)
+	}
+	return ports, nil
 }
 
 func credentialCoordinationInputError(err error) error {

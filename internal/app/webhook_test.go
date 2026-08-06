@@ -139,3 +139,94 @@ func TestWebhookReceiverExternalTunnelRequiresReconciliationAfterRotation(t *tes
 		t.Fatalf("rotated recovery outcome = %q", rotated.RecoveryOutcome)
 	}
 }
+
+func TestWebhookReceiverPersistsHeartbeatAndSeparateRecoveryCompletion(t *testing.T) {
+	t.Parallel()
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	instance, err := app.Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := instance.ConfigureWebhookReceiver(ctx, app.ConfigureWebhookReceiverRequest{
+		Name: "durable-funnel",
+		Exposure: webhook.ExposureConfig{
+			Mode:         webhook.ExposureModeExternalTunnel,
+			TunnelTool:   webhook.TunnelToolTailscaleFunnel,
+			CallbackURL:  "https://node.tailnet.ts.net/receiver",
+			HeartbeatTTL: time.Hour,
+		},
+		ReceiptCapacity: 2,
+	}); err != nil {
+		t.Fatal(err)
+	}
+	observedAt := time.Date(2026, time.August, 6, 12, 0, 0, 0, time.UTC)
+	heartbeat, err := instance.RecordWebhookReceiverHeartbeat(ctx, app.WebhookReceiverHeartbeatRequest{
+		Name:        "durable-funnel",
+		CallbackURL: "https://node.tailnet.ts.net/receiver",
+		ObservedAt:  observedAt,
+	})
+	if err != nil {
+		t.Fatalf("RecordWebhookReceiverHeartbeat() error = %v", err)
+	}
+	if !heartbeat.LastHeartbeatAt.Equal(observedAt) || len(heartbeat.AllowedPublicPorts) != 3 || heartbeat.AllowedPublicPorts[0] != 443 || heartbeat.AllowedPublicPorts[1] != 8443 || heartbeat.AllowedPublicPorts[2] != 10000 {
+		t.Fatalf("heartbeat status = %+v", heartbeat)
+	}
+	if _, err := instance.ConfigureWebhookReceiver(ctx, app.ConfigureWebhookReceiverRequest{
+		Name: "invalid-port",
+		Exposure: webhook.ExposureConfig{
+			Mode:         webhook.ExposureModeExternalTunnel,
+			TunnelTool:   webhook.TunnelToolTailscaleFunnel,
+			CallbackURL:  "https://node.tailnet.ts.net:4444/receiver",
+			HeartbeatTTL: time.Hour,
+		},
+		ReceiptCapacity: 2,
+	}); err == nil || !strings.Contains(err.Error(), "443, 8443, 10000") {
+		t.Fatalf("ConfigureWebhookReceiver(disallowed port) error = %v", err)
+	}
+
+	reopened, err := app.Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	persisted, err := reopened.WebhookReceiverStatus("durable-funnel", observedAt.Add(time.Minute))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !persisted.LastHeartbeatAt.Equal(observedAt) {
+		t.Fatalf("persisted heartbeat = %s, want %s", persisted.LastHeartbeatAt, observedAt)
+	}
+	rotated, err := reopened.RecordWebhookReceiverHeartbeat(ctx, app.WebhookReceiverHeartbeatRequest{
+		Name:        "durable-funnel",
+		CallbackURL: "https://node.tailnet.ts.net/rotated",
+		ObservedAt:  observedAt.Add(time.Minute),
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if rotated.Status != webhook.SubscriptionStatusDegraded || !rotated.ReregistrationRequired || !rotated.ReconciliationRequired {
+		t.Fatalf("rotated heartbeat status = %+v", rotated)
+	}
+	partial, err := reopened.CompleteWebhookReceiverReregistration(ctx, "durable-funnel")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if partial.Status != webhook.SubscriptionStatusDegraded || partial.ReregistrationRequired || !partial.ReconciliationRequired {
+		t.Fatalf("partial recovery status = %+v", partial)
+	}
+
+	afterPartial, err := app.Open(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	completed, err := afterPartial.CompleteWebhookReceiverReconciliation(ctx, "durable-funnel")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if completed.Status != webhook.SubscriptionStatusActive || completed.ReregistrationRequired || completed.ReconciliationRequired || completed.RecoveryOutcome != "" {
+		t.Fatalf("completed recovery status = %+v", completed)
+	}
+}

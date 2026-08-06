@@ -200,26 +200,41 @@ func (a *App) load() error {
 // reload. Callers must not assign a store result to a.state directly.
 func (a *App) normalizeLoadedState(loaded state) error {
 	a.state = loaded
+	changed := false
 	if a.state.Checkpoints == nil {
 		a.state.Checkpoints = map[string]map[string]string{}
+		changed = true
 	}
 	if a.state.StreamStates == nil {
 		a.state.StreamStates = map[string]StreamState{}
+		changed = true
 	}
 	if a.state.WebhookSubscriptions == nil {
 		a.state.WebhookSubscriptions = map[string]webhookSubscriptionState{}
+		changed = true
 	}
 	if a.state.WebhookReceipts == nil {
 		a.state.WebhookReceipts = map[string]webhookReceiptState{}
+		changed = true
 	}
-	a.migrateLegacySyncModeCompatibility()
-	return a.migrateCredentialCoordination()
+	changed = a.migrateLegacySyncModeCompatibility() || changed
+	coordinationChanged, err := a.migrateCredentialCoordination()
+	if err != nil {
+		return err
+	}
+	if !changed && !coordinationChanged {
+		return nil
+	}
+	if err := a.save(); err != nil {
+		return fmt.Errorf("persist project state migrations: %w", err)
+	}
+	return nil
 }
 
 // migrateCredentialCoordination gives pre-#3863 credentials an isolated
 // non-secret binding and declaration defaults. It intentionally never opens
 // the vault: coordination is an explicit relationship, not secret equality.
-func (a *App) migrateCredentialCoordination() error {
+func (a *App) migrateCredentialCoordination() (bool, error) {
 	changed := false
 	if a.state.CredentialBindings == nil {
 		a.state.CredentialBindings = map[string]credentialBindingState{}
@@ -228,7 +243,7 @@ func (a *App) migrateCredentialCoordination() error {
 	if strings.TrimSpace(a.state.CoordinationSalt) == "" {
 		salt, err := newCoordinationSalt()
 		if err != nil {
-			return err
+			return false, err
 		}
 		a.state.CoordinationSalt = salt
 		changed = true
@@ -241,7 +256,7 @@ func (a *App) migrateCredentialCoordination() error {
 			credential.AuthProfile,
 		)
 		if err != nil {
-			return fmt.Errorf("migrate credential coordination metadata: %w", err)
+			return false, fmt.Errorf("migrate credential coordination metadata: %w", err)
 		}
 		if credential.ProviderFamily != providerFamily {
 			credential.ProviderFamily = providerFamily
@@ -255,7 +270,7 @@ func (a *App) migrateCredentialCoordination() error {
 		if !ok || strings.TrimSpace(binding.BindingID) == "" {
 			bindingID, err := prefixedID("cbind")
 			if err != nil {
-				return err
+				return false, err
 			}
 			binding = credentialBindingState{BindingID: bindingID}
 			changed = true
@@ -268,21 +283,15 @@ func (a *App) migrateCredentialCoordination() error {
 		}
 		a.state.CredentialBindings[credential.ID] = binding
 		if _, err := a.newCoordinationIdentity(providerFamily, authProfile, binding.BindingID); err != nil {
-			return fmt.Errorf("migrate credential coordination metadata: %w", err)
+			return false, fmt.Errorf("migrate credential coordination metadata: %w", err)
 		}
 	}
 	isolationChanged, err := a.isolateUnverifiedCrossConnectorBindings()
 	if err != nil {
-		return fmt.Errorf("migrate credential coordination metadata: %w", err)
+		return false, fmt.Errorf("migrate credential coordination metadata: %w", err)
 	}
 	changed = changed || isolationChanged
-	if !changed {
-		return nil
-	}
-	if err := a.save(); err != nil {
-		return fmt.Errorf("persist credential coordination metadata: %w", err)
-	}
-	return nil
+	return changed, nil
 }
 
 func (a *App) isolateUnverifiedCrossConnectorBindings() (bool, error) {
@@ -364,9 +373,9 @@ func (a *App) credentialBindingForCredential(credential CredentialMeta) (credent
 	return binding, nil
 }
 
-func (a *App) migrateLegacySyncModeCompatibility() {
+func (a *App) migrateLegacySyncModeCompatibility() bool {
 	if a.state.SyncModeCompatibilityVersion >= syncModeCompatibilityVersion {
-		return
+		return false
 	}
 	for connectionIndex := range a.state.Connections {
 		for streamName, stream := range a.state.Connections[connectionIndex].Streams {
@@ -377,6 +386,7 @@ func (a *App) migrateLegacySyncModeCompatibility() {
 		}
 	}
 	a.state.SyncModeCompatibilityVersion = syncModeCompatibilityVersion
+	return true
 }
 
 func (a *App) save() error {

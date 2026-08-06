@@ -52,6 +52,16 @@ func TestWebhookCommandsDeclareModesWithoutLeakingCallbacks(t *testing.T) {
 			if err := json.Unmarshal(stdout.Bytes(), &response); err != nil {
 				t.Fatal(err)
 			}
+			if tt.mode == "provider_pull_or_stream" {
+				if response["kind"] != "IngressAdapter" || response["receiver"] != nil || strings.Contains(stdout.String(), "WebhookReceiver") {
+					t.Fatalf("pull/stream response is webhook-framed: %#v", response)
+				}
+				adapter, ok := response["ingress_adapter"].(map[string]any)
+				if !ok || adapter["mode"] != tt.mode || adapter["adapter_reference"] != "provider-event-stream-v1" {
+					t.Fatalf("ingress adapter response = %#v", response)
+				}
+				return
+			}
 			status, ok := response["receiver"].(map[string]any)
 			if !ok || status["mode"] != tt.mode {
 				t.Fatalf("receiver response = %#v", response)
