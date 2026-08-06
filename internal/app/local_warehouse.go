@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -16,7 +15,6 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/durability"
-	statestore "polymetrics.ai/internal/state"
 	"polymetrics.ai/internal/synccontract"
 )
 
@@ -64,6 +62,9 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	}
 
 	dir := localWarehouseDir(destRuntime)
+	if err := os.MkdirAll(dir, 0o700); err != nil {
+		return etlExecutionResult{}, fmt.Errorf("create warehouse directory: %w", err)
+	}
 	table := stream.DestinationTable
 	if table == "" {
 		table = streamName
@@ -72,8 +73,8 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	tmpFinalPath := finalPath + "." + runID + ".tmp"
 	rawPath := localRawPath(dir, conn.Name, streamName, table)
 	tmpRawPath := rawPath + "." + runID + ".tmp"
-	if err := a.prepareLocalWarehouseDirectories(dir, filepath.Dir(rawPath)); err != nil {
-		return etlExecutionResult{}, err
+	if err := os.MkdirAll(filepath.Dir(rawPath), 0o700); err != nil {
+		return etlExecutionResult{}, fmt.Errorf("create raw directory: %w", err)
 	}
 
 	rawTarget := rawPath
@@ -262,10 +263,8 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 			return result, fmt.Errorf("replace final table: %w", err)
 		}
 	}
-	for _, outputDir := range []string{filepath.Dir(rawPath), filepath.Dir(finalPath)} {
-		if err := syncLocalWarehouseDirectory(outputDir); err != nil {
-			return result, err
-		}
+	if err := syncLocalWarehouseDirectoryChain(filepath.Dir(rawPath)); err != nil {
+		return result, err
 	}
 
 	if observedAt.IsZero() {
@@ -292,90 +291,21 @@ func syncLocalWarehouseDirectory(dir string) error {
 	return nil
 }
 
-func (a *App) prepareLocalWarehouseDirectories(warehouseDir, rawDir string) (err error) {
-	lock := statestore.FileLock{Path: a.statePath + ".warehouse.lock"}
-	unlock, err := lock.Lock()
+func syncLocalWarehouseDirectoryChain(dir string) error {
+	path, err := filepath.Abs(dir)
 	if err != nil {
-		return fmt.Errorf("lock warehouse directory setup: %w", err)
+		return fmt.Errorf("resolve warehouse directory: %w", err)
 	}
-	defer func() {
-		if unlockErr := unlock(); err == nil && unlockErr != nil {
-			err = fmt.Errorf("unlock warehouse directory setup: %w", unlockErr)
+	for {
+		if err := syncLocalWarehouseDirectory(path); err != nil {
+			return err
 		}
-	}()
-
-	warehouseCreated, err := mkdirAllTrackingCreatedDirectories(warehouseDir)
-	if err != nil {
-		return fmt.Errorf("create warehouse directory: %w", err)
-	}
-	rawCreated, err := mkdirAllTrackingCreatedDirectories(rawDir)
-	if err != nil {
-		return fmt.Errorf("create raw directory: %w", err)
-	}
-	return syncCreatedLocalWarehouseDirectoryParents(append(warehouseCreated, rawCreated...), make(map[string]struct{}))
-}
-
-// mkdirAllTrackingCreatedDirectories returns the newly created directories in
-// leaf-to-ancestor order. The parent entry for each must be synced separately
-// before a checkpoint can acknowledge the warehouse write.
-func mkdirAllTrackingCreatedDirectories(dir string) ([]string, error) {
-	if dir == "" {
-		return nil, os.MkdirAll(dir, 0o700)
-	}
-	path := filepath.Clean(dir)
-	paths := make([]string, 0)
-	for parent := filepath.Dir(path); parent != path; parent = filepath.Dir(path) {
-		paths = append(paths, path)
+		parent := filepath.Dir(path)
+		if parent == path {
+			return nil
+		}
 		path = parent
 	}
-	info, err := os.Stat(path)
-	if err != nil {
-		return nil, fmt.Errorf("inspect warehouse directory: %w", err)
-	}
-	if !info.IsDir() {
-		return nil, errors.New("warehouse directory is not a directory")
-	}
-
-	created := make([]string, 0, len(paths))
-	for index := len(paths) - 1; index >= 0; index-- {
-		path := paths[index]
-		err := os.Mkdir(path, 0o700)
-		if err == nil {
-			created = append(created, path)
-			continue
-		}
-		if !errors.Is(err, os.ErrExist) {
-			return nil, err
-		}
-		info, err := os.Stat(path)
-		if err != nil {
-			return nil, fmt.Errorf("inspect warehouse directory: %w", err)
-		}
-		if !info.IsDir() {
-			return nil, errors.New("warehouse directory is not a directory")
-		}
-	}
-	for left, right := 0, len(created)-1; left < right; left, right = left+1, right-1 {
-		created[left], created[right] = created[right], created[left]
-	}
-	return created, nil
-}
-
-// syncCreatedLocalWarehouseDirectoryParents makes every newly created
-// directory entry durable through the first ancestor that existed before
-// MkdirAll. Directories already synced after their writes are not repeated.
-func syncCreatedLocalWarehouseDirectoryParents(created []string, synced map[string]struct{}) error {
-	for _, dir := range created {
-		parent := filepath.Clean(filepath.Dir(dir))
-		if _, ok := synced[parent]; ok {
-			continue
-		}
-		if err := syncLocalWarehouseDirectory(parent); err != nil {
-			return fmt.Errorf("sync newly created warehouse directory parent: %w", err)
-		}
-		synced[parent] = struct{}{}
-	}
-	return nil
 }
 
 func checkpointForResult(result etlExecutionResult, mode SyncMode, stateKey string, state StreamState) map[string]string {
