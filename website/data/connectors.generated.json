@@ -70285,7 +70285,7 @@
   {
     "slug": "gitlab",
     "name": "GitLab",
-    "description": "Reads GitLab projects, groups, users, and issues through the GitLab REST API v4.",
+    "description": "Reads GitLab projects, groups, users, and issues through existing GitLab REST API v4 ETL streams; its provider-owned ledger records the full published surface, but G1 declares no write command.",
     "docs_url": "https://docs.gitlab.com/ee/api/rest/",
     "integration_type": "api",
     "release_stage": "ga",
@@ -70332,8 +70332,154 @@
       }
     ],
     "write_actions": [],
-    "cli_surface": null,
-    "docs_md": "# Overview\n\nReads GitLab projects, groups, users, and issues through the GitLab REST API v4.\n\nReadable streams: `projects`, `groups`, `users`, `issues`.\n\nThis connector is read-only; no write actions are declared.\n\nService API documentation: https://docs.gitlab.com/ee/api/rest/.\n\n## Auth setup\n\nConnection fields:\n\n- `access_token` (required, secret, string); GitLab personal access token or OAuth access token.\n  Used only for Bearer auth; never logged.\n- `base_url` (optional, string); default `https://gitlab.com/api/v4`; format `uri`; GitLab API base\n  URL override, e.g. https://gitlab.example.com/api/v4 for self-managed instances, or for\n  tests/proxies.\n- `mode` (optional, string).\n- `page_size` (optional, string); default `50`; Records per page (1-100).\n- `start_date` (optional, string); format `date-time`; RFC3339 lower bound applied as each stream's\n  matching since-filter (last_activity_after for projects, created_after for users, updated_after\n  for issues; groups has no since-filter upstream).\n\nSecret fields are redacted in logs and write previews: `access_token`.\n\nDefault configuration values: `base_url=https://gitlab.com/api/v4`, `page_size=50`.\n\nAuthentication behavior:\n\n- Bearer token authentication using `secrets.access_token`.\n\nRequests use the configured `base_url` value after applying defaults.\n\nConnection checks call GET `/user`.\n\n## Streams notes\n\nDefault pagination: follows RFC 5988 Link headers with rel=next.\n\n- `projects`: GET `/projects` - records at response root; query `last_activity_after` from template\n  `{{ config.start_date }}`, omitted when absent; `per_page`=`50`; follows RFC 5988 Link headers\n  with rel=next.\n- `groups`: GET `/groups` - records at response root; query `per_page`=`50`; follows RFC 5988 Link\n  headers with rel=next.\n- `users`: GET `/users` - records at response root; query `created_after` from template `{{\n  config.start_date }}`, omitted when absent; `per_page`=`50`; follows RFC 5988 Link headers with\n  rel=next.\n- `issues`: GET `/issues` - records at response root; query `per_page`=`50`; `updated_after` from\n  template `{{ config.start_date }}`, omitted when absent; follows RFC 5988 Link headers with\n  rel=next; computed output fields `author_id`.\n\n## Write actions & risks\n\nThis connector is read-only. Read behavior: external GitLab API read of projects, groups, users, and\nissues.\n\n## Known limits\n\n- Batch defaults: read_page_size=50.\n- API coverage includes 4 stream-backed endpoint group(s).\n- Other documented endpoints are not exposed by this connector where they are classified as\n  out_of_scope=7.\n",
+    "cli_surface": {
+      "tagline": "Read the four existing GitLab ETL streams through typed commands.",
+      "usage": "pm gitlab <command> [flags]",
+      "source_cli": {
+        "name": "GitLab REST API v4",
+        "docs": "https://docs.gitlab.com/api/openapi/",
+        "reference": "Official OpenAPI 3.0.0, info.version 19.3.0-pre, retrieved 2026-08-05",
+        "source": "provider_api"
+      },
+      "groups": [
+        {
+          "id": "streams",
+          "title": "ETL streams",
+          "commands": [
+            "projects",
+            "groups",
+            "users",
+            "issues"
+          ]
+        }
+      ],
+      "global_flags": [
+        {
+          "name": "credential",
+          "type": "string",
+          "summary": "Credential name to use for the GitLab request.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "connection",
+          "type": "string",
+          "summary": "Alias for --credential.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "config",
+          "type": "string_array",
+          "summary": "Connector config override as key=value; never pass secret values here.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "json",
+          "type": "boolean",
+          "summary": "Emit machine-readable JSON output.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to emit from a stream command.",
+          "values": [],
+          "maps_to": ""
+        }
+      ],
+      "commands": [
+        {
+          "path": "projects list",
+          "summary": "List GitLab projects as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "projects",
+          "write": "",
+          "source_cli_path": "GET /projects",
+          "source_url": "https://docs.gitlab.com/api/projects/",
+          "flags": [],
+          "examples": [
+            "pm gitlab projects list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "groups list",
+          "summary": "List GitLab groups as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "groups",
+          "write": "",
+          "source_cli_path": "GET /groups",
+          "source_url": "https://docs.gitlab.com/api/groups/",
+          "flags": [],
+          "examples": [
+            "pm gitlab groups list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "users list",
+          "summary": "List GitLab users as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "users",
+          "write": "",
+          "source_cli_path": "GET /users",
+          "source_url": "https://docs.gitlab.com/api/users/",
+          "flags": [],
+          "examples": [
+            "pm gitlab users list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "issues list",
+          "summary": "List GitLab issues as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "issues",
+          "write": "",
+          "source_cli_path": "GET /issues",
+          "source_url": "https://docs.gitlab.com/api/issues/",
+          "flags": [],
+          "examples": [
+            "pm gitlab issues list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        }
+      ],
+      "help_topics": [
+        {
+          "name": "authentication",
+          "summary": "Store GitLab access tokens with pm credentials; never pass secret values in command text."
+        },
+        {
+          "name": "operation-inventory",
+          "summary": "The provider-owned GitLab OpenAPI v3 ledger records all 1,745 callable operations; this wave exposes only the four existing stream reads."
+        },
+        {
+          "name": "known-limits",
+          "summary": "Of 1,745 inventoried operations, 4 are executable here; 1,618 need connector declarations, 45 need the multipart/file-upload foundation, 64 are provider-restricted, and 14 are deprecated exclusions."
+        }
+      ]
+    },
+    "docs_md": "# Overview\n\nReads GitLab projects, groups, users, and issues through the GitLab REST API v4.\n\nReadable streams: `projects`, `groups`, `users`, `issues`.\n\nThe provider-owned OpenAPI v3 inventory covers 1,745 callable GitLab operations. This G1 wave makes\nonly the four existing stream reads executable; it does not add any new provider operation.\n\nService API documentation: https://docs.gitlab.com/ee/api/rest/.\n\n## Auth setup\n\nConnection fields:\n\n- `access_token` (required, secret, string); GitLab personal access token or OAuth access token.\n  Used only for Bearer auth; never logged.\n- `base_url` (optional, string); default `https://gitlab.com/api/v4`; format `uri`; GitLab API base\n  URL override, e.g. https://gitlab.example.com/api/v4 for self-managed instances, or for\n  tests/proxies.\n- `mode` (optional, string).\n- `page_size` (optional, string); default `50`; Records per page (1-100).\n- `start_date` (optional, string); format `date-time`; RFC3339 lower bound applied as each stream's\n  matching since-filter (last_activity_after for projects, created_after for users, updated_after\n  for issues; groups has no since-filter upstream).\n\nSecret fields are protected in credential storage and never logged: `access_token`.\n\nDefault configuration values: `base_url=https://gitlab.com/api/v4`, `page_size=50`.\n\nAuthentication behavior:\n\n- Bearer token authentication using `secrets.access_token`.\n\nRequests use the configured `base_url` value after applying defaults.\n\nConnection checks call GET `/user`.\n\n## Streams notes\n\nDefault pagination: follows RFC 5988 Link headers with rel=next.\n\n- `projects`: GET `/projects` - records at response root; query `last_activity_after` from template\n  `{{ config.start_date }}`, omitted when absent; `per_page`=`50`; follows RFC 5988 Link headers\n  with rel=next.\n- `groups`: GET `/groups` - records at response root; query `per_page`=`50`; follows RFC 5988 Link\n  headers with rel=next.\n- `users`: GET `/users` - records at response root; query `created_after` from template `{{\n  config.start_date }}`, omitted when absent; `per_page`=`50`; follows RFC 5988 Link headers with\n  rel=next.\n- `issues`: GET `/issues` - records at response root; query `per_page`=`50`; `updated_after` from\n  template `{{ config.start_date }}`, omitted when absent; follows RFC 5988 Link headers with\n  rel=next; computed output fields `author_id`.\n\n## Write actions & risks\n\nThe GitLab provider inventory includes 975 writes. `capabilities.write=false` until at least one\nGitLab write action is executable; the provider inventory is not an executable capability. This G1\nbundle declares no GitLab write action.\n\nRead behavior: external GitLab API read of projects, groups, users, and issues. Any future write must\nuse plan, preview, explicit approval, and execute. Output is not redacted by this connector.\n\n## Known limits\n\n- Batch defaults: read_page_size=50.\n- Provider inventory: 1,745 callable OpenAPI operations (770 reads; 975 writes), sourced from GitLab\n  OpenAPI 3.0.0 `info.version` `19.3.0-pre`, retrieved 2026-08-05.\n- Executable in G1: 4 stream-backed reads (`GET /projects`, `GET /groups`, `GET /users`, and\n  `GET /issues`).\n- Remaining provider operations: 1,618 need connector-owned declarations; 45 are blocked on the\n  named multipart/file-upload operation foundation; 64 are provider-restricted; and 14 are deprecated\n  justified exclusions. Each disposition is in `api_surface.json`; the four G1 command citations are\n  in `cli_surface.json`.\n- The next planned wave is a bounded collaboration read slice (no more than 20 operations).\n",
     "icon": {
       "id": "gitlab",
       "path": "icons/gitlab.svg",
