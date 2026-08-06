@@ -215,6 +215,9 @@ func stageFlowRoundtrip(rc *runContext, rep *Report) error {
 		if status, _ := res.Envelope["status"].(string); status != "ok" {
 			return false, cliInfoFrom(res), fmt.Sprintf("flow_plan: status=%q, want ok", status)
 		}
+		if flow, _ := res.Envelope["flow"].(string); flow != name {
+			return false, cliInfoFrom(res), fmt.Sprintf("flow_plan: flow=%q, want %q", flow, name)
+		}
 		order, _ = res.Envelope["order"].([]any)
 		if len(order) != 2 {
 			return false, cliInfoFrom(res), fmt.Sprintf("flow_plan: order has %d steps, want 2: %v", len(order), order)
@@ -241,6 +244,9 @@ func stageFlowRoundtrip(rc *runContext, rep *Report) error {
 		}
 		if status, _ := res.Envelope["status"].(string); status != "dry_run" {
 			return false, cliInfoFrom(res), fmt.Sprintf("flow_preview: status=%q, want dry_run", status)
+		}
+		if flow, _ := res.Envelope["flow"].(string); flow != name {
+			return false, cliInfoFrom(res), fmt.Sprintf("flow_preview: flow=%q, want %q", flow, name)
 		}
 		if postSideEffect := queryTableExists(rc, queryTable); postSideEffect != preSideEffect {
 			return false, cliInfoFrom(res), fmt.Sprintf("flow_preview: dry_run had a side effect (query table existence changed: before=%v after=%v)", preSideEffect, postSideEffect)
