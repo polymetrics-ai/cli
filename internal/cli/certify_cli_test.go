@@ -111,7 +111,8 @@ func TestCertifyCLIHelpShowsProvenanceContract(t *testing.T) {
 	}
 	for _, want := range []string{
 		"pm connectors certify <connector> [--full] [--json]",
-		"provider-artifact provenance",
+		"provider-artifact",
+		"provenance evidence",
 		"legacy_unverified",
 	} {
 		if !strings.Contains(stdout, want) {
