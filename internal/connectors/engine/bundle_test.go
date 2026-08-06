@@ -434,6 +434,21 @@ func TestBundleLoadRejectsUncitedOrMalformedRateLimits(t *testing.T) {
 			want: "credential-like fragment",
 		},
 		{
+			name: "provider source cannot carry access key fragment parameters",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits#access_key=fixture", 1),
+			want: "credential-like fragment",
+		},
+		{
+			name: "provider source cannot carry hyphenated access key fragment parameters",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits#access-key=fixture", 1),
+			want: "credential-like fragment",
+		},
+		{
+			name: "provider source cannot carry dotted access key fragment parameters",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits#access.key=fixture", 1),
+			want: "credential-like fragment",
+		},
+		{
 			name: "provider source cannot carry api token fragment parameters",
 			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits#api_token=fixture", 1),
 			want: "credential-like fragment",

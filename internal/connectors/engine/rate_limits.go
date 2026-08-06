@@ -119,6 +119,7 @@ func validateRateLimitSource(source connsdk.RateLimitSource) error {
 }
 
 var credentialLikeRateLimitFragmentKeys = map[string]struct{}{
+	"accesskey":     {},
 	"accesstoken":   {},
 	"apikey":        {},
 	"apitoken":      {},
