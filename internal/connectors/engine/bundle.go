@@ -2085,23 +2085,34 @@ func surfacePathVariableName(name string) bool {
 }
 
 func hasExactlyOneWellFormedPathnameVariable(endpointPath, name string) bool {
-	pathname := endpointPath
-	if end := strings.IndexAny(pathname, "?#"); end >= 0 {
-		pathname = pathname[:end]
+	pathname := endpointPathname(endpointPath)
+	if !hasOnlyWellFormedPathVariables(pathname) {
+		return false
 	}
+	occurrences := 0
+	pathnameOccurrences := 0
+	for _, match := range surfacePathVarPattern.FindAllStringSubmatchIndex(endpointPath, -1) {
+		if endpointPath[match[2]:match[3]] != name {
+			continue
+		}
+		occurrences++
+		if match[0] < len(pathname) {
+			pathnameOccurrences++
+		}
+	}
+	return occurrences == 1 && pathnameOccurrences == 1
+}
+
+func hasOnlyWellFormedPathVariables(pathname string) bool {
 	matches := surfacePathVarPattern.FindAllStringSubmatchIndex(pathname, -1)
-	count := 0
 	last := 0
 	for _, match := range matches {
 		if strings.ContainsAny(pathname[last:match[0]], "{}") {
 			return false
 		}
-		if pathname[match[2]:match[3]] == name {
-			count++
-		}
 		last = match[1]
 	}
-	return count == 1 && !strings.ContainsAny(pathname[last:], "{}")
+	return !strings.ContainsAny(pathname[last:], "{}")
 }
 
 func validateIdentifierSetBodySchema(i int, op OperationSpec, j int, set CallerSuppliedIdentifierSetSpec) error {

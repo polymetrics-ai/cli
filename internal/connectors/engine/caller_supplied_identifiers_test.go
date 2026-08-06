@@ -296,7 +296,7 @@ func TestCallerSuppliedIdentifierSetsRejectTraversalShapedPathBeforeNetwork(t *t
 		Operations: []OperationSpec{{
 			ID: "acme.path.lookup", Kind: "rest_read", Summary: "Look up a path identifier", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
 			REST: &RESTOperationSpec{
-				Method: http.MethodGet, Path: "/lookups/path/{id}", MaxBytes: 1024,
+				Method: http.MethodGet, Path: "/lookups/path/{id}?fixed=true", MaxBytes: 1024,
 				CallerSuppliedIdentifierSets: []CallerSuppliedIdentifierSetSpec{{Name: "id", ElementShape: "opaque_string", Wire: "path_segment", MinItems: 1, MaxItems: 1}},
 			},
 		}},
@@ -417,6 +417,16 @@ func TestCallerSuppliedIdentifierSetDeclarationsRejectUnsafeContracts(t *testing
 			want: `path_segment requires exactly one well-formed {id} path variable in the pathname`,
 		},
 		{
+			name: "path set placeholder must not repeat in query",
+			rest: `{"method":"GET","path":"/lookups/{id}?mirror={id}","caller_supplied_identifier_sets":[{"name":"id","element_shape":"opaque_string","wire":"path_segment","min_items":1,"max_items":1}]}`,
+			want: `path_segment requires exactly one well-formed {id} path variable in the pathname`,
+		},
+		{
+			name: "path set placeholder must not repeat in fragment",
+			rest: `{"method":"GET","path":"/lookups/{id}#mirror={id}","caller_supplied_identifier_sets":[{"name":"id","element_shape":"opaque_string","wire":"path_segment","min_items":1,"max_items":1}]}`,
+			want: `path_segment requires exactly one well-formed {id} path variable in the pathname`,
+		},
+		{
 			name: "body schema repeats the exact bounds",
 			rest: `{"method":"POST","path":"/lookups","content_type":"application/json","body_schema":{"type":"object","required":["ids"],"properties":{"ids":{"type":"array","minItems":0,"maxItems":3,"items":{"type":"string"}}}},"caller_supplied_identifier_sets":[{"name":"ids","element_shape":"opaque_string","wire":"body_json_array","min_items":0,"max_items":2}]}`,
 			want: `matching minItems and maxItems`,
@@ -445,5 +455,41 @@ func TestCallerSuppliedIdentifierSetPathSegmentAllowsStaticQuery(t *testing.T) {
 	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{"operations":[{"id":"acme.lookup","kind":"rest_read","summary":"Lookup explicit identifiers","risk":"low","approval":"none","output_policy":"json_redacted","rest":{"method":"GET","path":"/lookups/{id}?fixed=true","caller_supplied_identifier_sets":[{"name":"id","element_shape":"opaque_string","wire":"path_segment","min_items":1,"max_items":1}]}}]}`)}
 	if _, err := Load(fsys, "acme"); err != nil {
 		t.Fatalf("Load: %v", err)
+	}
+}
+
+func TestCallerSuppliedIdentifierSetStaticQueryIsNotPathTraversal(t *testing.T) {
+	var hits int
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		hits++
+		if got := r.URL.Query().Get("fixed"); got != ".." {
+			t.Fatalf("fixed query = %q, want ..", got)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer srv.Close()
+
+	bundle := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{{
+			ID: "acme.path.lookup", Kind: "rest_read", Summary: "Look up a path identifier", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{
+				Method: http.MethodGet, Path: "/lookups/path/{id}?fixed=..", MaxBytes: 1024,
+				CallerSuppliedIdentifierSets: []CallerSuppliedIdentifierSetSpec{{Name: "id", ElementShape: "opaque_string", Wire: "path_segment", MinItems: 1, MaxItems: 1}},
+			},
+		}},
+	}
+
+	_, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{
+		Operation:      "acme.path.lookup",
+		IdentifierSets: map[string][]string{"id": {"fixture-id"}},
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	if hits != 1 {
+		t.Fatalf("server hits = %d, want 1", hits)
 	}
 }
