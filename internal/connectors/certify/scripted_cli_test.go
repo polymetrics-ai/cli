@@ -20,18 +20,20 @@ import (
 type scriptedCLI struct {
 	t *testing.T
 
-	root       string
-	calls      [][]string
-	seen       map[string]int
-	plans      map[string]scriptedReversePlan
-	previewed  map[string]bool
-	consumed   map[string]bool
-	replays    map[string]int
-	nextPlan   int
-	schedule   string
-	installed  bool
-	statusFlow string
-	protocols  []string
+	root         string
+	calls        [][]string
+	seen         map[string]int
+	plans        map[string]scriptedReversePlan
+	previewed    map[string]bool
+	consumed     map[string]bool
+	replays      map[string]int
+	nextPlan     int
+	schedule     string
+	scheduleCron string
+	scheduleFlow string
+	installed    bool
+	statusFlow   string
+	protocols    []string
 }
 
 type scriptedReversePlan struct {
@@ -51,14 +53,16 @@ const (
 func newScriptedCLI(t *testing.T, protocols ...string) *scriptedCLI {
 	t.Helper()
 	return &scriptedCLI{
-		t:          t,
-		seen:       make(map[string]int),
-		plans:      make(map[string]scriptedReversePlan),
-		previewed:  make(map[string]bool),
-		consumed:   make(map[string]bool),
-		replays:    make(map[string]int),
-		statusFlow: scriptedFlowName,
-		protocols:  protocols,
+		t:            t,
+		seen:         make(map[string]int),
+		plans:        make(map[string]scriptedReversePlan),
+		previewed:    make(map[string]bool),
+		consumed:     make(map[string]bool),
+		replays:      make(map[string]int),
+		scheduleCron: scriptedScheduleCron,
+		scheduleFlow: scriptedFlowName,
+		statusFlow:   scriptedFlowName,
+		protocols:    protocols,
 	}
 }
 
@@ -207,7 +211,11 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 			return s.protocolError(stderr, "schedule list ran before schedule create")
 		}
 		s.seen["schedule_list"]++
-		return writeScriptedEnvelope(stdout, "ScheduleList", map[string]any{"schedules": []map[string]any{{"name": s.schedule}}})
+		return writeScriptedEnvelope(stdout, "ScheduleList", map[string]any{"schedules": []map[string]any{{
+			"name": s.schedule,
+			"cron": s.scheduleCron,
+			"flow": s.scheduleFlow,
+		}}})
 	case exact(args, scriptedScheduleInstallArgs()...):
 		if s.schedule != scriptedScheduleName || s.seen["schedule_list"] == 0 {
 			return s.protocolError(stderr, "schedule install ran before schedule create and list")
