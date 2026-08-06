@@ -20,7 +20,7 @@ func (c Connector) OperationDirectRead(ctx context.Context, req connectors.Opera
 	if err := ctx.Err(); err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	maxBytes, err := c.Base.OperationDirectReadMaxBytes(req.Operation, req.MaxBytes)
+	maxBytes, err := c.OperationDirectReadMaxBytes(req.Operation, req.MaxBytes)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}

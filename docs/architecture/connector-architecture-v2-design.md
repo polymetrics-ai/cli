@@ -36,8 +36,9 @@ Follow the Ruby pattern (`connection_specification.json` / `metadata.json` / `sc
 agent-readability (a 60-line schema file, not a 4,000-line manifest), diff hygiene (one stream =
 one file; parallel authoring doesn't conflict), concern separation matching the runtime
 (`spec.json` at connection-setup time, `streams.json` at read time, `writes.json` at reverse-ETL
-time, `api_surface.json` by authoring validation, conformance, full certification, and disk-backed
-direct-write endpoint cross-checks, `certification.json` only by the certification harness). One
+time, `api_surface.json` for authoring validation, conformance, full certification, disk-backed
+direct-write endpoint cross-checks, and the generated direct-read endpoint ledger,
+`certification.json` only by the certification harness). One
 deviation from Ruby: request/pagination/cursor config is **not** code — it is `streams.json`,
 interpreted by the engine.
 
