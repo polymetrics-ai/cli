@@ -3,10 +3,12 @@ package engine
 import (
 	"encoding/json"
 	"fmt"
+	"net/url"
 	"reflect"
 	"regexp"
 	"sort"
 	"strings"
+	"unicode"
 )
 
 // Schema is a compiled instance of the engine's minimal draft-07 subset. It is
@@ -63,9 +65,9 @@ type schemaNode struct {
 	hasDefault bool
 }
 
-// annotationKeywords are accepted by the schema compiler. Format remains an
-// annotation for full JSON-instance validation, while configuration-time
-// validation evaluates a bundled spec's declared top-level format constraints.
+// annotationKeywords are accepted by the schema compiler. Supported formats
+// participate in instance validation, and configuration-time validation
+// evaluates a bundled spec's declared top-level format constraints.
 var annotationKeywords = map[string]bool{
 	"format":      true,
 	"default":     true,
@@ -192,11 +194,9 @@ func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 	}
 
 	if raw, ok := m["format"]; ok {
-		var format string
-		if err := json.Unmarshal(raw, &format); err != nil {
+		if err := json.Unmarshal(raw, &n.format); err != nil {
 			return nil, fmt.Errorf("compile schema: format: %w", err)
 		}
-		n.format = format
 	}
 
 	if raw, ok := m["minProperties"]; ok {
@@ -356,6 +356,9 @@ func (n *schemaNode) validate(v any, path string) error {
 		if n.pattern != nil && !n.pattern.MatchString(val) {
 			return fmt.Errorf("%s: value does not match pattern %q", displayPath(path), n.pattern.String())
 		}
+		if n.format == "uri" && !validURI(val) {
+			return fmt.Errorf("%s: value does not match format %q", displayPath(path), n.format)
+		}
 	case map[string]any:
 		if err := n.validateObject(val, path); err != nil {
 			return err
@@ -380,6 +383,16 @@ func (n *schemaNode) validate(v any, path string) error {
 	}
 
 	return nil
+}
+
+func validURI(value string) bool {
+	if strings.Contains(value, `\`) || strings.IndexFunc(value, func(r rune) bool {
+		return unicode.IsSpace(r) || unicode.IsControl(r)
+	}) >= 0 {
+		return false
+	}
+	parsed, err := url.Parse(value)
+	return err == nil && parsed.IsAbs()
 }
 
 func (n *schemaNode) validateArrayCardinality(count int, path string) error {

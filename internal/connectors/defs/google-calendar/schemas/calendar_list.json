@@ -3,6 +3,12 @@
   "title": "calendar_list",
   "type": "object",
   "properties": {
+    "kind": {
+      "type": "string"
+    },
+    "etag": {
+      "type": "string"
+    },
     "id": {
       "type": "string"
     },
@@ -10,34 +16,46 @@
       "type": "string"
     },
     "description": {
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "timeZone": {
       "type": "string"
     },
     "colorId": {
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "hidden": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "selected": {
+      "type": [
+        "boolean",
+        "null"
+      ]
     },
     "accessRole": {
       "type": "string"
     },
     "primary": {
-      "type": "boolean"
-    },
-    "selected": {
-      "type": "boolean"
-    },
-    "hidden": {
-      "type": "boolean"
+      "type": [
+        "boolean",
+        "null"
+      ]
     },
     "deleted": {
-      "type": "boolean"
-    },
-    "etag": {
-      "type": "string"
-    },
-    "kind": {
-      "type": "string"
+      "type": [
+        "boolean",
+        "null"
+      ]
     }
   },
   "x-primary-key": [

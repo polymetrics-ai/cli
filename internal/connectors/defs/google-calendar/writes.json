@@ -1,0 +1,519 @@
+{
+  "actions": [
+    {
+      "name": "delete_acl_rule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/calendars/{{ record.calendar_id }}/acl/{{ record.rule_id }}",
+      "path_fields": ["calendar_id", "rule_id"],
+      "redact_fields": ["calendar_id", "rule_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["calendar_id", "rule_id"],
+        "additionalProperties": false,
+        "properties": {"calendar_id": {"type": "string"}, "rule_id": {"type": "string"}}
+      },
+      "delete": {"idempotent": true, "missing_ok_status": [404]},
+      "risk": "destructive external mutation; removes a Google Calendar ACL rule; reverse-ETL approval and typed destructive confirmation required",
+      "batchable": true,
+      "confirm": "destructive"
+    },
+    {
+      "name": "insert_acl_rule",
+      "kind": "create",
+      "method": "POST",
+      "path": "/calendars/{{ record.calendar_id }}/acl",
+      "path_fields": ["calendar_id"],
+      "body_type": "json",
+      "body_fields": ["role", "scope"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["calendar_id", "role", "scope"],
+        "additionalProperties": false,
+        "properties": {
+          "calendar_id": {"type": "string"},
+          "role": {"type": "string", "enum": ["none", "freeBusyReader", "reader", "writer", "owner"]},
+          "scope": {"type": "object", "required": ["type"], "additionalProperties": false, "properties": {"type": {"type": "string", "enum": ["default", "user", "group", "domain"]}, "value": {"type": "string"}}}
+        }
+      },
+      "risk": "high-impact external mutation; grants or changes calendar sharing; requires reverse-ETL plan, preview, and explicit approval",
+      "batchable": true
+    },
+    {
+      "name": "patch_acl_rule",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/calendars/{{ record.calendar_id }}/acl/{{ record.rule_id }}",
+      "path_fields": ["calendar_id", "rule_id"],
+      "body_type": "json",
+      "body_fields": ["role", "scope"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["calendar_id", "rule_id", "role"],
+        "additionalProperties": false,
+        "properties": {
+          "calendar_id": {"type": "string"},
+          "rule_id": {"type": "string"},
+          "role": {"type": "string", "enum": ["none", "freeBusyReader", "reader", "writer", "owner"]},
+          "scope": {"type": "object", "required": ["type"], "additionalProperties": false, "properties": {"type": {"type": "string", "enum": ["default", "user", "group", "domain"]}, "value": {"type": "string"}}}
+        }
+      },
+      "risk": "high-impact external mutation; changes calendar sharing; requires reverse-ETL plan, preview, and explicit approval",
+      "batchable": true
+    },
+    {
+      "name": "update_acl_rule",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/calendars/{{ record.calendar_id }}/acl/{{ record.rule_id }}",
+      "path_fields": ["calendar_id", "rule_id"],
+      "body_type": "json",
+      "body_fields": ["role", "scope"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["calendar_id", "rule_id", "role", "scope"],
+        "additionalProperties": false,
+        "properties": {
+          "calendar_id": {"type": "string"},
+          "rule_id": {"type": "string"},
+          "role": {"type": "string", "enum": ["none", "freeBusyReader", "reader", "writer", "owner"]},
+          "scope": {"type": "object", "required": ["type"], "additionalProperties": false, "properties": {"type": {"type": "string", "enum": ["default", "user", "group", "domain"]}, "value": {"type": "string"}}}
+        }
+      },
+      "risk": "high-impact external mutation; replaces calendar sharing settings; requires reverse-ETL plan, preview, and explicit approval",
+      "batchable": true
+    },
+    {
+      "name": "watch_acl",
+      "kind": "create",
+      "method": "POST",
+      "path": "/calendars/{{ record.calendar_id }}/acl/watch",
+      "path_fields": ["calendar_id"],
+      "body_type": "json",
+      "body_fields": ["id", "type", "address", "token"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["calendar_id", "id", "type", "address"],
+        "additionalProperties": false,
+        "properties": {
+          "calendar_id": {"type": "string"},
+          "id": {"type": "string"},
+          "type": {"type": "string", "enum": ["web_hook"]},
+          "address": {"type": "string", "format": "uri", "pattern": "^https://(?:[A-Za-z0-9](?:[A-Za-z0-9.-]*[A-Za-z0-9])?|\\[[0-9A-Fa-f:.]+\\])(?::[0-9]{1,5})?(?:[/?#][^\\s]*)?$"},
+          "token": {"type": "string"}
+        }
+      },
+      "risk": "external mutation; creates an ACL notification channel; requires reverse-ETL plan, preview, and explicit approval",
+      "batchable": false
+    },
+    {
+      "name": "delete_calendar_list_entry",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/users/me/calendarList/{{ record.calendar_id }}",
+      "path_fields": ["calendar_id"],
+      "redact_fields": ["calendar_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["calendar_id"],
+        "additionalProperties": false,
+        "properties": {"calendar_id": {"type": "string"}}
+      },
+      "delete": {"idempotent": true, "missing_ok_status": [404]},
+      "risk": "destructive external mutation; removes a calendar from the authenticated user's calendar list; reverse-ETL approval and typed destructive confirmation required",
+      "batchable": true,
+      "confirm": "destructive"
+    },
+    {
+      "name": "insert_calendar_list_entry",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users/me/calendarList",
+      "body_type": "json",
+      "body_fields": ["id", "summaryOverride", "colorId", "hidden", "selected"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id"],
+        "additionalProperties": false,
+        "properties": {"id": {"type": "string"}, "summaryOverride": {"type": "string"}, "colorId": {"type": "string"}, "hidden": {"type": "boolean"}, "selected": {"type": "boolean"}}
+      },
+      "risk": "external mutation; adds a calendar to the authenticated user's calendar list; requires reverse-ETL plan, preview, and explicit approval",
+      "batchable": true
+    },
+    {
+      "name": "patch_calendar_list_entry",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/users/me/calendarList/{{ record.calendar_id }}",
+      "path_fields": ["calendar_id"],
+      "body_type": "json",
+      "body_fields": ["summaryOverride", "colorId", "hidden", "selected"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["calendar_id", "summaryOverride"],
+        "additionalProperties": false,
+        "properties": {"calendar_id": {"type": "string"}, "summaryOverride": {"type": "string"}, "colorId": {"type": "string"}, "hidden": {"type": "boolean"}, "selected": {"type": "boolean"}}
+      },
+      "risk": "external mutation; changes a calendar-list entry; requires reverse-ETL plan, preview, and explicit approval",
+      "batchable": true
+    },
+    {
+      "name": "update_calendar_list_entry",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/users/me/calendarList/{{ record.calendar_id }}",
+      "path_fields": ["calendar_id"],
+      "body_type": "json",
+      "body_fields": ["summaryOverride", "colorId", "hidden", "selected"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["calendar_id", "summaryOverride"],
+        "additionalProperties": false,
+        "properties": {"calendar_id": {"type": "string"}, "summaryOverride": {"type": "string"}, "colorId": {"type": "string"}, "hidden": {"type": "boolean"}, "selected": {"type": "boolean"}}
+      },
+      "risk": "external mutation; replaces a calendar-list entry's writable fields; requires reverse-ETL plan, preview, and explicit approval",
+      "batchable": true
+    },
+    {
+      "name": "watch_calendar_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users/me/calendarList/watch",
+      "body_type": "json",
+      "body_fields": ["id", "type", "address", "token"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "type", "address"],
+        "additionalProperties": false,
+        "properties": {"id": {"type": "string"}, "type": {"type": "string", "enum": ["web_hook"]}, "address": {"type": "string", "format": "uri", "pattern": "^https://(?:[A-Za-z0-9](?:[A-Za-z0-9.-]*[A-Za-z0-9])?|\\[[0-9A-Fa-f:.]+\\])(?::[0-9]{1,5})?(?:[/?#][^\\s]*)?$"}, "token": {"type": "string"}}
+      },
+      "risk": "external mutation; creates a calendar-list notification channel; requires reverse-ETL plan, preview, and explicit approval",
+      "batchable": false
+    },
+    {
+      "name": "clear_calendar",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/calendars/{{ record.calendar_id }}/clear",
+      "path_fields": ["calendar_id"],
+      "redact_fields": ["calendar_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["calendar_id"],
+        "additionalProperties": false,
+        "properties": {"calendar_id": {"type": "string"}}
+      },
+      "risk": "critical destructive external mutation; clears every event from a primary calendar; reverse-ETL approval and typed destructive confirmation required",
+      "batchable": false,
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_calendar",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/calendars/{{ record.calendar_id }}",
+      "path_fields": ["calendar_id"],
+      "redact_fields": ["calendar_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["calendar_id"],
+        "additionalProperties": false,
+        "properties": {"calendar_id": {"type": "string"}}
+      },
+      "delete": {"idempotent": true, "missing_ok_status": [404]},
+      "risk": "critical destructive external mutation; deletes a secondary calendar; reverse-ETL approval and typed destructive confirmation required",
+      "batchable": false,
+      "confirm": "destructive"
+    },
+    {
+      "name": "insert_calendar",
+      "kind": "create",
+      "method": "POST",
+      "path": "/calendars",
+      "body_type": "json",
+      "body_fields": ["summary", "description", "location", "timeZone"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["summary"],
+        "additionalProperties": false,
+        "properties": {"summary": {"type": "string"}, "description": {"type": "string"}, "location": {"type": "string"}, "timeZone": {"type": "string"}}
+      },
+      "risk": "high-impact external mutation; creates a secondary calendar owned by the authenticated user; requires reverse-ETL plan, preview, and explicit approval",
+      "batchable": true
+    },
+    {
+      "name": "patch_calendar",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/calendars/{{ record.calendar_id }}",
+      "path_fields": ["calendar_id"],
+      "body_type": "json",
+      "body_fields": ["summary", "description", "location", "timeZone"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["calendar_id", "summary"],
+        "additionalProperties": false,
+        "properties": {"calendar_id": {"type": "string"}, "summary": {"type": "string"}, "description": {"type": "string"}, "location": {"type": "string"}, "timeZone": {"type": "string"}}
+      },
+      "risk": "high-impact external mutation; changes calendar metadata; requires reverse-ETL plan, preview, and explicit approval",
+      "batchable": true
+    },
+    {
+      "name": "transfer_calendar_ownership",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/calendars/{{ record.calendar_id }}/transferOwnership",
+      "path_fields": ["calendar_id"],
+      "redact_fields": ["calendar_id", "new_data_owner"],
+      "query": {"newDataOwner": "{{ record.new_data_owner }}", "useAdminAccess": "{{ record.use_admin_access }}"},
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["calendar_id", "new_data_owner", "use_admin_access"],
+        "additionalProperties": false,
+        "properties": {"calendar_id": {"type": "string"}, "new_data_owner": {"type": "string", "format": "email"}, "use_admin_access": {"type": "boolean", "enum": [true]}}
+      },
+      "risk": "critical administrative external mutation; transfers secondary-calendar data ownership; reverse-ETL approval and typed destructive confirmation required",
+      "batchable": false,
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_calendar",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/calendars/{{ record.calendar_id }}",
+      "path_fields": ["calendar_id"],
+      "body_type": "json",
+      "body_fields": ["summary", "description", "location", "timeZone"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["calendar_id", "summary"],
+        "additionalProperties": false,
+        "properties": {"calendar_id": {"type": "string"}, "summary": {"type": "string"}, "description": {"type": "string"}, "location": {"type": "string"}, "timeZone": {"type": "string"}}
+      },
+      "risk": "high-impact external mutation; replaces calendar metadata; requires reverse-ETL plan, preview, and explicit approval",
+      "batchable": true
+    },
+    {
+      "name": "stop_channel",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/channels/stop",
+      "redact_fields": ["id", "resourceId"],
+      "body_type": "json",
+      "body_fields": ["id", "resourceId"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "resourceId"],
+        "additionalProperties": false,
+        "properties": {"id": {"type": "string"}, "resourceId": {"type": "string"}}
+      },
+      "risk": "external mutation; stops a Google Calendar notification channel; requires reverse-ETL plan, preview, and explicit approval",
+      "batchable": false
+    },
+    {
+      "name": "delete_event",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/calendars/{{ record.calendar_id }}/events/{{ record.event_id }}",
+      "path_fields": ["calendar_id", "event_id"],
+      "redact_fields": ["calendar_id", "event_id"],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["calendar_id", "event_id"],
+        "additionalProperties": false,
+        "properties": {"calendar_id": {"type": "string"}, "event_id": {"type": "string"}}
+      },
+      "delete": {"idempotent": true, "missing_ok_status": [404]},
+      "risk": "destructive external mutation; deletes a Google Calendar event; reverse-ETL approval and typed destructive confirmation required",
+      "batchable": true,
+      "confirm": "destructive"
+    },
+    {
+      "name": "import_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "/calendars/{{ record.calendar_id }}/events/import",
+      "path_fields": ["calendar_id"],
+      "body_type": "json",
+      "body_fields": ["iCalUID", "summary", "description", "location", "start", "end", "attendees", "recurrence", "colorId", "visibility", "transparency"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["calendar_id", "iCalUID", "summary", "start", "end"],
+        "additionalProperties": false,
+        "properties": {
+          "calendar_id": {"type": "string"}, "iCalUID": {"type": "string"}, "summary": {"type": "string"}, "description": {"type": "string"}, "location": {"type": "string"},
+          "start": {"type": "object", "minProperties": 1, "additionalProperties": false, "properties": {"date": {"type": "string"}, "dateTime": {"type": "string", "format": "date-time"}, "timeZone": {"type": "string"}}},
+          "end": {"type": "object", "minProperties": 1, "additionalProperties": false, "properties": {"date": {"type": "string"}, "dateTime": {"type": "string", "format": "date-time"}, "timeZone": {"type": "string"}}},
+          "attendees": {"type": "array", "items": {"type": "object"}}, "recurrence": {"type": "array", "items": {"type": "string"}}, "colorId": {"type": "string"}, "visibility": {"type": "string"}, "transparency": {"type": "string"}
+        }
+      },
+      "risk": "high-impact external mutation; imports a private event copy; requires reverse-ETL plan, preview, and explicit approval",
+      "batchable": true
+    },
+    {
+      "name": "insert_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "/calendars/{{ record.calendar_id }}/events",
+      "path_fields": ["calendar_id"],
+      "body_type": "json",
+      "body_fields": ["summary", "description", "location", "start", "end", "attendees", "recurrence", "colorId", "visibility", "transparency"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["calendar_id", "summary", "start", "end"],
+        "additionalProperties": false,
+        "properties": {
+          "calendar_id": {"type": "string"}, "summary": {"type": "string"}, "description": {"type": "string"}, "location": {"type": "string"},
+          "start": {"type": "object", "minProperties": 1, "additionalProperties": false, "properties": {"date": {"type": "string"}, "dateTime": {"type": "string", "format": "date-time"}, "timeZone": {"type": "string"}}},
+          "end": {"type": "object", "minProperties": 1, "additionalProperties": false, "properties": {"date": {"type": "string"}, "dateTime": {"type": "string", "format": "date-time"}, "timeZone": {"type": "string"}}},
+          "attendees": {"type": "array", "items": {"type": "object"}}, "recurrence": {"type": "array", "items": {"type": "string"}}, "colorId": {"type": "string"}, "visibility": {"type": "string"}, "transparency": {"type": "string"}
+        }
+      },
+      "risk": "high-impact external mutation; creates a Google Calendar event; requires reverse-ETL plan, preview, and explicit approval",
+      "batchable": true
+    },
+    {
+      "name": "move_event",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/calendars/{{ record.calendar_id }}/events/{{ record.event_id }}/move",
+      "path_fields": ["calendar_id", "event_id"],
+      "query": {"destination": "{{ record.destination }}"},
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["calendar_id", "event_id", "destination"],
+        "additionalProperties": false,
+        "properties": {"calendar_id": {"type": "string"}, "event_id": {"type": "string"}, "destination": {"type": "string"}}
+      },
+      "risk": "high-impact external mutation; moves an event between calendars; requires reverse-ETL plan, preview, and explicit approval",
+      "batchable": false
+    },
+    {
+      "name": "patch_event",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/calendars/{{ record.calendar_id }}/events/{{ record.event_id }}",
+      "path_fields": ["calendar_id", "event_id"],
+      "body_type": "json",
+      "body_fields": ["summary", "description", "location", "start", "end", "attendees", "recurrence", "colorId", "visibility", "transparency"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["calendar_id", "event_id", "summary", "start", "end"],
+        "additionalProperties": false,
+        "properties": {
+          "calendar_id": {"type": "string"}, "event_id": {"type": "string"}, "summary": {"type": "string"}, "description": {"type": "string"}, "location": {"type": "string"},
+          "start": {"type": "object", "minProperties": 1, "additionalProperties": false, "properties": {"date": {"type": "string"}, "dateTime": {"type": "string", "format": "date-time"}, "timeZone": {"type": "string"}}},
+          "end": {"type": "object", "minProperties": 1, "additionalProperties": false, "properties": {"date": {"type": "string"}, "dateTime": {"type": "string", "format": "date-time"}, "timeZone": {"type": "string"}}},
+          "attendees": {"type": "array", "items": {"type": "object"}}, "recurrence": {"type": "array", "items": {"type": "string"}}, "colorId": {"type": "string"}, "visibility": {"type": "string"}, "transparency": {"type": "string"}
+        }
+      },
+      "risk": "high-impact external mutation; patches a Google Calendar event; requires reverse-ETL plan, preview, and explicit approval",
+      "batchable": true
+    },
+    {
+      "name": "quick_add_event",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/calendars/{{ record.calendar_id }}/events/quickAdd",
+      "path_fields": ["calendar_id"],
+      "query": {"text": "{{ record.text }}"},
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["calendar_id", "text"],
+        "additionalProperties": false,
+        "properties": {"calendar_id": {"type": "string"}, "text": {"type": "string"}}
+      },
+      "risk": "external mutation; creates an event from natural-language text; requires reverse-ETL plan, preview, and explicit approval",
+      "batchable": false
+    },
+    {
+      "name": "update_event",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/calendars/{{ record.calendar_id }}/events/{{ record.event_id }}",
+      "path_fields": ["calendar_id", "event_id"],
+      "body_type": "json",
+      "body_fields": ["summary", "description", "location", "start", "end", "attendees", "recurrence", "colorId", "visibility", "transparency"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["calendar_id", "event_id", "summary", "start", "end"],
+        "additionalProperties": false,
+        "properties": {
+          "calendar_id": {"type": "string"}, "event_id": {"type": "string"}, "summary": {"type": "string"}, "description": {"type": "string"}, "location": {"type": "string"},
+          "start": {"type": "object", "minProperties": 1, "additionalProperties": false, "properties": {"date": {"type": "string"}, "dateTime": {"type": "string", "format": "date-time"}, "timeZone": {"type": "string"}}},
+          "end": {"type": "object", "minProperties": 1, "additionalProperties": false, "properties": {"date": {"type": "string"}, "dateTime": {"type": "string", "format": "date-time"}, "timeZone": {"type": "string"}}},
+          "attendees": {"type": "array", "items": {"type": "object"}}, "recurrence": {"type": "array", "items": {"type": "string"}}, "colorId": {"type": "string"}, "visibility": {"type": "string"}, "transparency": {"type": "string"}
+        }
+      },
+      "risk": "high-impact external mutation; replaces a Google Calendar event; requires reverse-ETL plan, preview, and explicit approval",
+      "batchable": true
+    },
+    {
+      "name": "watch_events",
+      "kind": "create",
+      "method": "POST",
+      "path": "/calendars/{{ record.calendar_id }}/events/watch",
+      "path_fields": ["calendar_id"],
+      "body_type": "json",
+      "body_fields": ["id", "type", "address", "token"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["calendar_id", "id", "type", "address"],
+        "additionalProperties": false,
+        "properties": {"calendar_id": {"type": "string"}, "id": {"type": "string"}, "type": {"type": "string", "enum": ["web_hook"]}, "address": {"type": "string", "format": "uri", "pattern": "^https://(?:[A-Za-z0-9](?:[A-Za-z0-9.-]*[A-Za-z0-9])?|\\[[0-9A-Fa-f:.]+\\])(?::[0-9]{1,5})?(?:[/?#][^\\s]*)?$"}, "token": {"type": "string"}}
+      },
+      "risk": "external mutation; creates an event notification channel; requires reverse-ETL plan, preview, and explicit approval",
+      "batchable": false
+    },
+    {
+      "name": "watch_settings",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users/me/settings/watch",
+      "body_type": "json",
+      "body_fields": ["id", "type", "address", "token"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["id", "type", "address"],
+        "additionalProperties": false,
+        "properties": {"id": {"type": "string"}, "type": {"type": "string", "enum": ["web_hook"]}, "address": {"type": "string", "format": "uri", "pattern": "^https://(?:[A-Za-z0-9](?:[A-Za-z0-9.-]*[A-Za-z0-9])?|\\[[0-9A-Fa-f:.]+\\])(?::[0-9]{1,5})?(?:[/?#][^\\s]*)?$"}, "token": {"type": "string"}}
+      },
+      "risk": "external mutation; creates a settings notification channel; requires reverse-ETL plan, preview, and explicit approval",
+      "batchable": false
+    }
+  ]
+}

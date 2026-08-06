@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users/me/settings",
+    "query": {
+      "maxResults": "250"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "calendar#settings",
+      "nextPageToken": "settings-page-2",
+      "items": [
+        {
+          "kind": "calendar#setting",
+          "etag": "etag-setting",
+          "id": "synthetic-conformance-value",
+          "value": "UTC"
+        }
+      ]
+    }
+  }
+}

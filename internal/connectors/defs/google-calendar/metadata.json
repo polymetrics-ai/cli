@@ -1,25 +1,24 @@
 {
   "name": "google-calendar",
   "display_name": "Google Calendar",
-  "description": "Reads Google Calendar calendar lists, events, settings, and access control rules through the Calendar API v3 using an OAuth2 refresh token. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+  "description": "Reads and safely reverse-ETLs Google Calendar calendars, calendar-list entries, events, ACL rules, and notification channels, plus a bounded typed free/busy query, through the Calendar API v3 using an OAuth2 refresh token.",
   "integration_type": "api",
+  "docs_url": "https://developers.google.com/workspace/calendar/api/v3/reference",
   "release_stage": "alpha",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
+  "batch": {
+    "read_page_size": 250
+  },
   "risk": {
-    "read": "external Google Calendar API reads performed by the legacy connector via a Tier-2 hook",
-    "write": "unsupported",
-    "approval": "none; read-only"
-  },
-  "conformance": {
-    "skip_dynamic": true,
-    "reason": "Tier-2 hook-owned quarantine migration: internal/connectors/hooks/google-calendar delegates Check/Read to legacy internal/connectors/google-calendar, so conformance dynamic replay of the declarative shadow path is intentionally skipped. Static schema/docs/surface checks still run; behavior is covered by the hook unit tests and the existing legacy connector tests during the pre-cutover period."
-  },
-  "docs_url": "https://developers.google.com/calendar/api/v3/reference"
+    "read": "external Google Calendar API reads for the authenticated account and configured calendar; bounded direct free/busy query responses are JSON-redacted",
+    "write": "26 typed Google Calendar reverse-ETL actions mutate sharing, calendar lists, calendars, events, or notification channels; destructive deletes, calendar clearing, and ownership transfer require typed destructive confirmation",
+    "approval": "every write uses plan, preview, explicit approval, and execute; destructive actions also require --confirm destructive"
+  }
 }

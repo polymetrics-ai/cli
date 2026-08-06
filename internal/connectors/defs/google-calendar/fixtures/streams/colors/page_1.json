@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/colors"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "calendar#colors",
+      "updated": "2020-01-01T00:00:00Z",
+      "calendar": {
+        "1": {
+          "background": "#2952a3",
+          "foreground": "#ffffff"
+        }
+      },
+      "event": {
+        "1": {
+          "background": "#a4bdfc",
+          "foreground": "#1d1d1d"
+        }
+      }
+    }
+  }
+}
