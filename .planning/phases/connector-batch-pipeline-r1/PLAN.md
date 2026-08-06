@@ -132,6 +132,11 @@ manifest-selected bundle directories.
 8. Keep `TRACE` and `OPTIONS` in the inventory while reporting them as
    method-specific protocol-metadata exclusions through the existing ledger
    vocabulary.
+9. Enforce protocol-metadata exclusions before `covered_by` at every batch
+   classification boundary, including direct standalone gate runs.
+10. Admit a gate candidate only with complete v2 provenance whose artifact and
+    endpoint citation URLs exactly match its manifest artifact; count every
+    refusal in the aggregate batch report.
 
 ## Commit checkpoints
 

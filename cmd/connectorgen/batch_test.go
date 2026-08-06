@@ -110,7 +110,7 @@ func TestBatchRejectsInvalidSubcommand(t *testing.T) {
 
 func TestBatchGateContinuesAfterConnectorFailure(t *testing.T) {
 	defsRoot := t.TempDir()
-	writeBatchBundle(t, defsRoot, cliSurfaceBundleFS(validCLISurfaceJSON()))
+	writeBatchBundle(t, defsRoot, batchGateBundleFS(t, validCLISurfaceJSON()))
 	if err := os.MkdirAll(filepath.Join(defsRoot, "broken"), 0o755); err != nil {
 		t.Fatalf("mkdir broken bundle: %v", err)
 	}
@@ -134,7 +134,7 @@ func TestBatchGateContinuesAfterConnectorFailure(t *testing.T) {
 
 func TestBatchGateUsesRuntimePreflightForEveryImplementedCommand(t *testing.T) {
 	defsRoot := t.TempDir()
-	writeBatchBundle(t, defsRoot, cliSurfaceBundleFS(validCLISurfaceJSON()))
+	writeBatchBundle(t, defsRoot, batchGateBundleFS(t, validCLISurfaceJSON()))
 	manifestPath := writeBatchManifestFixture(t, "cli-surface")
 	reportPath := filepath.Join(t.TempDir(), "report.json")
 	var stdout, stderr bytes.Buffer
@@ -151,7 +151,7 @@ func TestBatchGateUsesRuntimePreflightForEveryImplementedCommand(t *testing.T) {
 
 func TestBatchGateDropsSurfaceWithoutImplementedCommands(t *testing.T) {
 	defsRoot := t.TempDir()
-	writeBatchBundle(t, defsRoot, cliSurfaceBundleFS(strings.ReplaceAll(validCLISurfaceJSON(), `"availability": "implemented"`, `"availability": "planned"`)))
+	writeBatchBundle(t, defsRoot, batchGateBundleFS(t, strings.ReplaceAll(validCLISurfaceJSON(), `"availability": "implemented"`, `"availability": "planned"`)))
 	manifestPath := writeBatchManifestFixture(t, "cli-surface")
 	reportPath := filepath.Join(t.TempDir(), "report.json")
 	var stdout, stderr bytes.Buffer
@@ -168,7 +168,7 @@ func TestBatchGateDropsSurfaceWithoutImplementedCommands(t *testing.T) {
 
 func TestBatchGateSelectsOneManifestCandidateForIndividualPreflight(t *testing.T) {
 	defsRoot := t.TempDir()
-	writeBatchBundle(t, defsRoot, cliSurfaceBundleFS(validCLISurfaceJSON()))
+	writeBatchBundle(t, defsRoot, batchGateBundleFS(t, validCLISurfaceJSON()))
 	if err := os.MkdirAll(filepath.Join(defsRoot, "broken"), 0o755); err != nil {
 		t.Fatalf("mkdir broken bundle: %v", err)
 	}
@@ -188,7 +188,7 @@ func TestBatchGateSelectsOneManifestCandidateForIndividualPreflight(t *testing.T
 
 func TestBatchGateDropsSurfaceSyncDrift(t *testing.T) {
 	defsRoot := t.TempDir()
-	writeBatchBundle(t, defsRoot, batchSurfaceSyncDriftBundleFS())
+	writeBatchBundle(t, defsRoot, batchSurfaceSyncDriftBundleFS(t))
 	manifestPath := writeBatchManifestFixture(t, "cli-surface")
 	reportPath := filepath.Join(t.TempDir(), "report.json")
 	var stdout, stderr bytes.Buffer
@@ -205,7 +205,9 @@ func TestBatchGateDropsSurfaceSyncDrift(t *testing.T) {
 
 func TestBatchGateDropsRedactingOutputPolicy(t *testing.T) {
 	defsRoot := t.TempDir()
-	writeBatchBundle(t, defsRoot, directWriteCLISurfaceBundleFS())
+	fsys := directWriteCLISurfaceBundleFS()
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(batchGateDirectWriteSurface(t))}
+	writeBatchBundle(t, defsRoot, fsys)
 	manifestPath := writeBatchManifestFixture(t, "cli-surface")
 	reportPath := filepath.Join(t.TempDir(), "report.json")
 	var stdout, stderr bytes.Buffer
@@ -222,7 +224,7 @@ func TestBatchGateDropsRedactingOutputPolicy(t *testing.T) {
 
 func TestBatchGateDropsWriteRedactFields(t *testing.T) {
 	defsRoot := t.TempDir()
-	fsys := cliSurfaceBundleFS(validCLISurfaceJSON())
+	fsys := batchGateBundleFS(t, validCLISurfaceJSON())
 	fsys["cli-surface/writes.json"] = &fstest.MapFile{Data: []byte(strings.Replace(
 		string(fsys["cli-surface/writes.json"].Data),
 		`"risk": "creates a widget"`,
@@ -241,6 +243,173 @@ func TestBatchGateDropsWriteRedactFields(t *testing.T) {
 	report := readBatchGateReportFixture(t, reportPath)
 	if len(report.Dropped) != 1 || report.Dropped[0].Stage != "output_policy" || !strings.Contains(report.Dropped[0].Reason, `write action "create_widget" declares redact_fields`) {
 		t.Fatalf("dropped = %+v, want write redact_fields output-policy drop", report.Dropped)
+	}
+}
+
+func TestBatchGateRejectsProtocolMetadataCoverage(t *testing.T) {
+	tests := []struct {
+		name       string
+		method     string
+		wantReason string
+	}{
+		{name: http.MethodOptions, method: http.MethodOptions, wantReason: "covered_by"},
+		{name: http.MethodTrace, method: http.MethodTrace, wantReason: "covered_by"},
+		{name: "noncanonical TRACE", method: "trace", wantReason: "exact canonical TRACE"},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			defsRoot := t.TempDir()
+			endpoints := append(batchGateDefaultEndpoints(batchGateFixtureArtifactURL), engine.SurfaceEndpoint{
+				Method:     test.method,
+				Path:       "/protocol-metadata",
+				Provenance: batchGateFixtureProvenance(batchGateFixtureArtifactURL),
+				CoveredBy:  &engine.SurfaceCoverage{Stream: "widgets"},
+			})
+			writeBatchBundle(t, defsRoot, batchGateBundleFSWithSurface(t, validCLISurfaceJSON(), batchGateV2Surface(t, batchGateFixtureArtifactURL, endpoints)))
+			manifestPath := writeBatchManifestFixture(t, "cli-surface")
+			reportPath := filepath.Join(t.TempDir(), "report.json")
+			var stdout, stderr bytes.Buffer
+
+			code := run([]string{"batch", "gate", "--manifest", manifestPath, "--defs-root", defsRoot, "--report", reportPath}, &stdout, &stderr)
+			if code == 0 {
+				t.Fatalf("batch gate exit = 0, want protocol coverage rejection; stdout=%s stderr=%s", stdout.String(), stderr.String())
+			}
+			report := readBatchGateReportFixture(t, reportPath)
+			if report.ProvenanceRefusals != 0 || len(report.Included) != 0 || len(report.Dropped) != 1 || report.Dropped[0].Stage != "api_surface" || !strings.Contains(report.Dropped[0].Reason, test.method) || !strings.Contains(report.Dropped[0].Reason, test.wantReason) {
+				t.Fatalf("report = %+v, want method-specific protocol coverage drop", report)
+			}
+		})
+	}
+}
+
+func TestBatchGateClassifiesProtocolMetadataExclusions(t *testing.T) {
+	defsRoot := t.TempDir()
+	endpoints := append(batchGateDefaultEndpoints(batchGateFixtureArtifactURL),
+		engine.SurfaceEndpoint{
+			Method:     http.MethodOptions,
+			Path:       "/protocol-metadata",
+			Provenance: batchGateFixtureProvenance(batchGateFixtureArtifactURL),
+			Operation:  batchProtocolMetadataOperation(http.MethodOptions),
+		},
+		engine.SurfaceEndpoint{
+			Method:     http.MethodTrace,
+			Path:       "/protocol-metadata",
+			Provenance: batchGateFixtureProvenance(batchGateFixtureArtifactURL),
+			Operation:  batchProtocolMetadataOperation(http.MethodTrace),
+		},
+	)
+	writeBatchBundle(t, defsRoot, batchGateBundleFSWithSurface(t, validCLISurfaceJSON(), batchGateV2Surface(t, batchGateFixtureArtifactURL, endpoints)))
+	manifestPath := writeBatchManifestFixture(t, "cli-surface")
+	reportPath := filepath.Join(t.TempDir(), "report.json")
+	var stdout, stderr bytes.Buffer
+
+	code := run([]string{"batch", "gate", "--manifest", manifestPath, "--defs-root", defsRoot, "--report", reportPath}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("batch gate exit = %d, want protocol exclusions included; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	report := readBatchGateReportFixture(t, reportPath)
+	if len(report.Included) != 1 || len(report.Dropped) != 0 || report.Included[0].DeclaredOperations != 4 || report.Included[0].OperationSplit != (BatchOperationSplit{Executable: 2, Excluded: 2}) {
+		t.Fatalf("report = %+v, want two executable and two protocol-metadata exclusions", report)
+	}
+}
+
+func TestBatchGateRequiresCompleteMatchedV2Provenance(t *testing.T) {
+	tests := []struct {
+		name         string
+		bundleFS     func(t *testing.T) fstest.MapFS
+		wantReason   string
+		wantIncluded bool
+	}{
+		{
+			name: "legacy v0 surface",
+			bundleFS: func(t *testing.T) fstest.MapFS {
+				t.Helper()
+				return cliSurfaceBundleFS(validCLISurfaceJSON())
+			},
+			wantReason: "legacy v0",
+		},
+		{
+			name: "missing endpoint provenance",
+			bundleFS: func(t *testing.T) fstest.MapFS {
+				t.Helper()
+				endpoints := batchGateDefaultEndpoints(batchGateFixtureArtifactURL)
+				endpoints[0].Provenance = nil
+				return batchGateBundleFSWithSurface(t, validCLISurfaceJSON(), batchGateV2Surface(t, batchGateFixtureArtifactURL, endpoints))
+			},
+			wantReason: "provenance is required",
+		},
+		{
+			name: "mismatched artifact URL",
+			bundleFS: func(t *testing.T) fstest.MapFS {
+				t.Helper()
+				return batchGateBundleFSWithSurface(t, validCLISurfaceJSON(), batchGateV2Surface(t, "https://example.test/mismatched-artifact.json", batchGateDefaultEndpoints(batchGateFixtureArtifactURL)))
+			},
+			wantReason: "provenance artifact URL",
+		},
+		{
+			name: "mismatched endpoint source URL",
+			bundleFS: func(t *testing.T) fstest.MapFS {
+				t.Helper()
+				endpoints := batchGateDefaultEndpoints(batchGateFixtureArtifactURL)
+				endpoints[0].Provenance.SourceURL = "https://example.test/other-provider-documentation.json"
+				return batchGateBundleFSWithSurface(t, validCLISurfaceJSON(), batchGateV2Surface(t, batchGateFixtureArtifactURL, endpoints))
+			},
+			wantReason: "provenance source_url",
+		},
+		{
+			name: "matched v2 provenance",
+			bundleFS: func(t *testing.T) fstest.MapFS {
+				t.Helper()
+				return batchGateBundleFS(t, validCLISurfaceJSON())
+			},
+			wantIncluded: true,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			defsRoot := t.TempDir()
+			writeBatchBundle(t, defsRoot, test.bundleFS(t))
+			manifestPath := writeBatchManifestFixture(t, "cli-surface")
+			reportPath := filepath.Join(t.TempDir(), "report.json")
+			var stdout, stderr bytes.Buffer
+
+			code := run([]string{"batch", "gate", "--manifest", manifestPath, "--defs-root", defsRoot, "--report", reportPath}, &stdout, &stderr)
+			report := readBatchGateReportFixture(t, reportPath)
+			if test.wantIncluded {
+				if code != 0 || report.ProvenanceRefusals != 0 || len(report.Included) != 1 || len(report.Dropped) != 0 {
+					t.Fatalf("matched v2 gate = code %d report %+v, want included candidate; stdout=%s stderr=%s", code, report, stdout.String(), stderr.String())
+				}
+				return
+			}
+			if code == 0 || report.ProvenanceRefusals != 1 || len(report.Included) != 0 || len(report.Dropped) != 1 || report.Dropped[0].Stage != "provenance" || !strings.Contains(report.Dropped[0].Reason, test.wantReason) {
+				t.Fatalf("provenance gate = code %d report %+v, want %q refusal; stdout=%s stderr=%s", code, report, test.wantReason, stdout.String(), stderr.String())
+			}
+		})
+	}
+}
+
+func TestBatchGateReportsAggregateProvenanceRefusals(t *testing.T) {
+	defsRoot := t.TempDir()
+	for _, connector := range []string{"legacy-one", "legacy-two"} {
+		writeNamedBatchBundle(t, defsRoot, connector, namedBatchBundleFS(t, connector, cliSurfaceBundleFS(validCLISurfaceJSON())))
+	}
+	manifestPath := writeBatchManifestFixture(t, "legacy-one", "legacy-two")
+	reportPath := filepath.Join(t.TempDir(), "report.json")
+	var stdout, stderr bytes.Buffer
+
+	code := run([]string{"batch", "gate", "--manifest", manifestPath, "--defs-root", defsRoot, "--report", reportPath}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("batch gate exit = 0, want aggregate provenance refusals; stdout=%s stderr=%s", stdout.String(), stderr.String())
+	}
+	report := readBatchGateReportFixture(t, reportPath)
+	if report.Candidates != 2 || report.ProvenanceRefusals != 2 || len(report.Included) != 0 || len(report.Dropped) != 2 {
+		t.Fatalf("report = %+v, want two aggregate provenance refusals", report)
+	}
+	for _, drop := range report.Dropped {
+		if drop.Stage != "provenance" {
+			t.Fatalf("drop = %+v, want provenance stage", drop)
+		}
 	}
 }
 
@@ -894,9 +1063,13 @@ func writeBatchManifestFixture(t *testing.T, names ...string) string {
 }
 
 type batchGateReportFixture struct {
-	Included []struct {
-		Connector       string `json:"connector"`
-		CommandsChecked int    `json:"commands_checked"`
+	Candidates         int `json:"candidates"`
+	ProvenanceRefusals int `json:"provenance_refusals"`
+	Included           []struct {
+		Connector          string              `json:"connector"`
+		CommandsChecked    int                 `json:"commands_checked"`
+		DeclaredOperations int                 `json:"declared_operations"`
+		OperationSplit     BatchOperationSplit `json:"operation_split"`
 	} `json:"included"`
 	Dropped []struct {
 		Connector string `json:"connector"`
@@ -919,6 +1092,10 @@ func readBatchGateReportFixture(t *testing.T, path string) batchGateReportFixtur
 }
 
 func writeBatchBundle(t *testing.T, defsRoot string, fsys fstest.MapFS) string {
+	return writeNamedBatchBundle(t, defsRoot, "cli-surface", fsys)
+}
+
+func writeNamedBatchBundle(t *testing.T, defsRoot, name string, fsys fstest.MapFS) string {
 	t.Helper()
 	const fixturePrefix = "cli-surface/"
 	for source, file := range fsys {
@@ -926,7 +1103,7 @@ func writeBatchBundle(t *testing.T, defsRoot string, fsys fstest.MapFS) string {
 		if !ok {
 			t.Fatalf("fixture file %q does not start with %q", source, fixturePrefix)
 		}
-		path := filepath.Join(defsRoot, "cli-surface", filepath.FromSlash(rel))
+		path := filepath.Join(defsRoot, name, filepath.FromSlash(rel))
 		if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
 			t.Fatalf("mkdir %s: %v", filepath.Dir(path), err)
 		}
@@ -934,10 +1111,107 @@ func writeBatchBundle(t *testing.T, defsRoot string, fsys fstest.MapFS) string {
 			t.Fatalf("write %s: %v", path, err)
 		}
 	}
-	return filepath.Join(defsRoot, "cli-surface")
+	return filepath.Join(defsRoot, name)
 }
 
-func batchSurfaceSyncDriftBundleFS() fstest.MapFS {
+func namedBatchBundleFS(t *testing.T, name string, fsys fstest.MapFS) fstest.MapFS {
+	t.Helper()
+	clone := make(fstest.MapFS, len(fsys))
+	for path, file := range fsys {
+		copy := *file
+		copy.Data = append([]byte(nil), file.Data...)
+		clone[path] = &copy
+	}
+	metadata := clone["cli-surface/metadata.json"]
+	updated := strings.Replace(string(metadata.Data), `"name": "cli-surface"`, `"name": "`+name+`"`, 1)
+	if updated == string(metadata.Data) {
+		t.Fatalf("fixture metadata did not contain cli-surface name")
+	}
+	metadata.Data = []byte(updated)
+	return clone
+}
+
+const (
+	batchGateFixtureArtifactID  = "cli-surface-artifact-2026-08-06"
+	batchGateFixtureArtifactURL = "https://example.test/cli-surface.json"
+	batchGateFixtureSHA         = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+)
+
+func batchGateBundleFS(t *testing.T, cliSurface string) fstest.MapFS {
+	t.Helper()
+	return batchGateBundleFSWithSurface(t, cliSurface, batchGateV2Surface(t, batchGateFixtureArtifactURL, batchGateDefaultEndpoints(batchGateFixtureArtifactURL)))
+}
+
+func batchGateBundleFSWithSurface(t *testing.T, cliSurface, surface string) fstest.MapFS {
+	t.Helper()
+	fsys := cliSurfaceBundleFS(cliSurface)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(surface)}
+	return fsys
+}
+
+func batchGateV2Surface(t *testing.T, artifactURL string, endpoints []engine.SurfaceEndpoint) string {
+	t.Helper()
+	raw, err := json.Marshal(engine.APISurface{
+		API:                    "test API v2",
+		OperationLedgerVersion: 2,
+		Artifacts: []engine.SurfaceArtifact{{
+			ID:          batchGateFixtureArtifactID,
+			URL:         artifactURL,
+			RetrievedAt: "2026-08-06",
+			SHA256:      batchGateFixtureSHA,
+		}},
+		Endpoints: endpoints,
+	})
+	if err != nil {
+		t.Fatalf("marshal batch gate v2 surface: %v", err)
+	}
+	return string(raw)
+}
+
+func batchGateFixtureProvenance(artifactURL string) *engine.SurfaceProvenance {
+	return &engine.SurfaceProvenance{
+		Artifact:  batchGateFixtureArtifactID,
+		SourceURL: artifactURL,
+	}
+}
+
+func batchGateDefaultEndpoints(artifactURL string) []engine.SurfaceEndpoint {
+	return []engine.SurfaceEndpoint{
+		{
+			Method:     http.MethodGet,
+			Path:       "/widgets",
+			Provenance: batchGateFixtureProvenance(artifactURL),
+			CoveredBy:  &engine.SurfaceCoverage{Stream: "widgets"},
+		},
+		{
+			Method:     http.MethodPost,
+			Path:       "/widgets",
+			Provenance: batchGateFixtureProvenance(artifactURL),
+			CoveredBy:  &engine.SurfaceCoverage{Write: "create_widget"},
+		},
+	}
+}
+
+func batchGateDirectWriteSurface(t *testing.T) string {
+	t.Helper()
+	endpoints := append(batchGateDefaultEndpoints(batchGateFixtureArtifactURL), engine.SurfaceEndpoint{
+		Method:     http.MethodPost,
+		Path:       "/widgets/{id}/archive",
+		Provenance: batchGateFixtureProvenance(batchGateFixtureArtifactURL),
+		Operation: &engine.SurfaceOperation{
+			Model:            "destructive_action",
+			Status:           "blocked",
+			Risk:             "high",
+			BlockedByDefault: true,
+			Reason:           "Typed rest_write operation",
+			Notes:            "Declared only through the direct-write executor.",
+		},
+	})
+	return batchGateV2Surface(t, batchGateFixtureArtifactURL, endpoints)
+}
+
+func batchSurfaceSyncDriftBundleFS(t *testing.T) fstest.MapFS {
+	t.Helper()
 	fsys := cliSurfaceBundleFS(`{
 		"tagline": "Work with CLI Surface from the command line.",
 		"usage": "pm cli-surface <command> [flags]",
@@ -955,15 +1229,19 @@ func batchSurfaceSyncDriftBundleFS() fstest.MapFS {
 			}
 		]
 	}`)
-	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
-		"api": "test API v1",
-		"operation_ledger_version": 1,
-		"endpoints": [
-			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
-			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
-			{ "method": "GET", "path": "/artifacts/{id}", "operation": { "model": "binary_read", "status": "blocked", "risk": "low", "blocked_by_default": true, "reason": "typed binary operation metadata" } }
-		]
-	}`)}
+	endpoints := append(batchGateDefaultEndpoints(batchGateFixtureArtifactURL), engine.SurfaceEndpoint{
+		Method:     http.MethodGet,
+		Path:       "/artifacts/{id}",
+		Provenance: batchGateFixtureProvenance(batchGateFixtureArtifactURL),
+		Operation: &engine.SurfaceOperation{
+			Model:            "binary_read",
+			Status:           "blocked",
+			Risk:             "low",
+			BlockedByDefault: true,
+			Reason:           "typed binary operation metadata",
+		},
+	})
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(batchGateV2Surface(t, batchGateFixtureArtifactURL, endpoints))}
 	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(`{
 		"operations": [{
 			"id": "cli-surface.artifact.download",

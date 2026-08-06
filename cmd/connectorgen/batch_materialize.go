@@ -267,13 +267,13 @@ func materializeBatchCandidate(opts batchMaterializeOptions, candidate BatchMani
 	materializedBundle := bundle
 	materializedBundle.Surface = &surface
 	materializedBundle.CLISurface = &cli
-	checked, err := batchRuntimePreflight(materializedBundle)
-	if err != nil {
-		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, "runtime_preflight", err)
-	}
 	split, err := batchSurfaceSplit(&surface)
 	if err != nil {
 		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, "api_surface", err)
+	}
+	checked, err := batchRuntimePreflight(materializedBundle)
+	if err != nil {
+		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, "runtime_preflight", err)
 	}
 
 	surfaceRaw, err := json.MarshalIndent(surface, "", "  ")
@@ -1225,7 +1225,7 @@ func materializeAPISurface(bundle engine.Bundle, candidate BatchManifestConnecto
 				SourceURL: candidate.Artifact.URL,
 			},
 		}
-		if operation := materializedProtocolMetadataOperation(artifactEndpoint.Method); operation != nil {
+		if operation := batchProtocolMetadataOperation(artifactEndpoint.Method); operation != nil {
 			endpoint.Operation = operation
 		} else if existing, ok := existingExact[batchArtifactEndpointKey(artifactEndpoint.Method, artifactEndpoint.Path)]; ok {
 			copyMaterializedClassifier(&endpoint, existing)
@@ -1300,28 +1300,6 @@ func batchArtifactMutationMethod(method string) bool {
 		return true
 	default:
 		return false
-	}
-}
-
-func batchProtocolMetadataMethod(method string) bool {
-	switch method {
-	case http.MethodOptions, http.MethodTrace:
-		return true
-	default:
-		return false
-	}
-}
-
-func materializedProtocolMetadataOperation(method string) *engine.SurfaceOperation {
-	if !batchProtocolMetadataMethod(method) {
-		return nil
-	}
-	return &engine.SurfaceOperation{
-		Model:            "local_workflow",
-		Status:           "blocked",
-		Risk:             "low",
-		BlockedByDefault: true,
-		Reason:           fmt.Sprintf("The documented %s operation is protocol metadata, not a record-bearing read or state-changing provider mutation.", method),
 	}
 }
 

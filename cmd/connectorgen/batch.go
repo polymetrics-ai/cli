@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net/http"
 	"os"
 	"path/filepath"
 	"sort"
@@ -534,6 +535,7 @@ type BatchGateReport struct {
 	Candidates         int                  `json:"candidates"`
 	Included           []BatchGateIncluded  `json:"included"`
 	Dropped            []BatchGateDrop      `json:"dropped"`
+	ProvenanceRefusals int                  `json:"provenance_refusals"`
 	SurveyedOperations BatchOperationTotals `json:"surveyed_operations"`
 	DeclaredOperations int                  `json:"declared_operations"`
 	OperationSplit     BatchOperationSplit  `json:"operation_split"`
@@ -631,6 +633,9 @@ func runBatchGate(args []string, stdout, stderr io.Writer) int {
 		included, drop := gateBatchConnector(opts.defsRoot, candidate)
 		if drop != nil {
 			report.Dropped = append(report.Dropped, *drop)
+			if drop.Stage == "provenance" {
+				report.ProvenanceRefusals++
+			}
 			continue
 		}
 		report.Included = append(report.Included, included)
@@ -642,8 +647,8 @@ func runBatchGate(args []string, stdout, stderr io.Writer) int {
 		return 1
 	}
 
-	logf(stdout, "connectorgen batch gate: %d connector(s) included, %d dropped, %d declared operation(s); report %s\n",
-		len(report.Included), len(report.Dropped), report.DeclaredOperations, opts.reportPath)
+	logf(stdout, "connectorgen batch gate: %d connector(s) included, %d dropped (%d provenance refusal(s)), %d declared operation(s); report %s\n",
+		len(report.Included), len(report.Dropped), report.ProvenanceRefusals, report.DeclaredOperations, opts.reportPath)
 	if len(report.Dropped) > 0 {
 		return 1
 	}
@@ -784,6 +789,13 @@ func gateBatchConnector(defsRoot string, candidate BatchManifestConnector) (Batc
 	if !isBundleDir(bundleDir) {
 		return BatchGateIncluded{}, batchGateDrop(candidate.Connector, "validate", errors.New("metadata.json is required for a batch bundle"))
 	}
+	bundle, err := engine.Load(os.DirFS(filepath.Dir(bundleDir)), filepath.Base(bundleDir))
+	if err != nil {
+		return BatchGateIncluded{}, batchGateDrop(candidate.Connector, "load", err)
+	}
+	if err := batchCandidateProvenance(bundle.Surface, candidate); err != nil {
+		return BatchGateIncluded{}, batchGateDrop(candidate.Connector, "provenance", err)
+	}
 
 	validation, err := validatePath(bundleDir)
 	if err != nil {
@@ -801,27 +813,19 @@ func gateBatchConnector(defsRoot string, candidate BatchManifestConnector) (Batc
 		return BatchGateIncluded{}, batchGateDrop(candidate.Connector, "surface_sync", fmt.Errorf("derived command metadata drift: filled %s; corrected %s", syncStats.Filled, syncStats.Corrected))
 	}
 
-	bundle, err := engine.Load(os.DirFS(filepath.Dir(bundleDir)), filepath.Base(bundleDir))
-	if err != nil {
-		return BatchGateIncluded{}, batchGateDrop(candidate.Connector, "load", err)
-	}
-	if bundle.Surface == nil {
-		return BatchGateIncluded{}, batchGateDrop(candidate.Connector, "api_surface", errors.New("api_surface.json is required for batch accounting"))
-	}
 	if bundle.CLISurface == nil || len(bundle.CLISurface.Commands) == 0 {
 		return BatchGateIncluded{}, batchGateDrop(candidate.Connector, "cli_surface", errors.New("cli_surface.json with at least one reachable command is required"))
 	}
 	if err := batchNoRedactionDeclarations(bundle); err != nil {
 		return BatchGateIncluded{}, batchGateDrop(candidate.Connector, "output_policy", err)
 	}
-
-	checked, err := batchRuntimePreflight(bundle)
-	if err != nil {
-		return BatchGateIncluded{}, batchGateDrop(candidate.Connector, "runtime_preflight", err)
-	}
 	split, err := batchSurfaceSplit(bundle.Surface)
 	if err != nil {
 		return BatchGateIncluded{}, batchGateDrop(candidate.Connector, "api_surface", err)
+	}
+	checked, err := batchRuntimePreflight(bundle)
+	if err != nil {
+		return BatchGateIncluded{}, batchGateDrop(candidate.Connector, "runtime_preflight", err)
 	}
 	return BatchGateIncluded{
 		Connector:          candidate.Connector,
@@ -830,6 +834,51 @@ func gateBatchConnector(defsRoot string, candidate BatchManifestConnector) (Batc
 		OperationSplit:     split,
 		Warnings:           nonNilFindings(validation.Warnings),
 	}, nil
+}
+
+func batchCandidateProvenance(surface *engine.APISurface, candidate BatchManifestConnector) error {
+	if surface == nil {
+		return errors.New("api_surface.json with complete v2 provenance is required for a batch candidate")
+	}
+	provenance := engine.ValidateSurfaceProvenance(surface)
+	switch provenance.Status {
+	case engine.SurfaceProvenanceLegacyUnverified:
+		return fmt.Errorf("api_surface.json has legacy v%d provenance; batch candidates require complete v2 provenance matched to manifest artifact URL %q", provenance.LedgerVersion, candidate.Artifact.URL)
+	case engine.SurfaceProvenanceInvalid:
+		return fmt.Errorf("api_surface.json has incomplete v2 provenance: %s", batchProvenanceIssueSummary(provenance.Issues))
+	case engine.SurfaceProvenanceComplete:
+	default:
+		return fmt.Errorf("api_surface.json provenance status %q is not complete", provenance.Status)
+	}
+	if len(surface.Artifacts) != 1 {
+		return fmt.Errorf("api_surface.json has %d provenance artifacts; batch candidates require exactly one manifest artifact URL %q", len(surface.Artifacts), candidate.Artifact.URL)
+	}
+	artifact := surface.Artifacts[0]
+	if artifact.URL != candidate.Artifact.URL {
+		return fmt.Errorf("provenance artifact URL %q does not match manifest artifact URL %q", artifact.URL, candidate.Artifact.URL)
+	}
+	for i, endpoint := range surface.Endpoints {
+		if endpoint.Provenance == nil {
+			return fmt.Errorf("endpoint %d (%s %s) provenance is required", i, endpoint.Method, endpoint.Path)
+		}
+		if endpoint.Provenance.Artifact != artifact.ID {
+			return fmt.Errorf("endpoint %d (%s %s) provenance artifact %q does not match manifest artifact %q", i, endpoint.Method, endpoint.Path, endpoint.Provenance.Artifact, artifact.ID)
+		}
+		if endpoint.Provenance.SourceURL != candidate.Artifact.URL {
+			return fmt.Errorf("endpoint %d (%s %s) provenance source_url %q does not match manifest artifact URL %q", i, endpoint.Method, endpoint.Path, endpoint.Provenance.SourceURL, candidate.Artifact.URL)
+		}
+	}
+	return nil
+}
+
+func batchProvenanceIssueSummary(issues []engine.SurfaceProvenanceIssue) string {
+	if len(issues) == 0 {
+		return "no validation details"
+	}
+	if len(issues) == 1 {
+		return issues[0].Error()
+	}
+	return fmt.Sprintf("%s (and %d more issue(s))", issues[0], len(issues)-1)
 }
 
 func batchBundleDirectory(defsRoot, connector string) (string, error) {
@@ -917,6 +966,16 @@ func batchSurfaceSplit(surface *engine.APISurface) (BatchOperationSplit, error) 
 		if strings.TrimSpace(endpoint.Method) == "" || strings.TrimSpace(endpoint.Path) == "" {
 			return BatchOperationSplit{}, fmt.Errorf("endpoint %d lacks method or path", i)
 		}
+		if batchProtocolMetadataMethodVariant(endpoint.Method) {
+			if !batchProtocolMetadataMethod(endpoint.Method) {
+				return BatchOperationSplit{}, fmt.Errorf("endpoint %d (%s %s) protocol-metadata method must use exact canonical %s spelling", i, endpoint.Method, endpoint.Path, strings.ToUpper(strings.TrimSpace(endpoint.Method)))
+			}
+			if err := batchProtocolMetadataExclusion(endpoint); err != nil {
+				return BatchOperationSplit{}, fmt.Errorf("endpoint %d (%s %s) protocol-metadata exclusion: %w", i, endpoint.Method, endpoint.Path, err)
+			}
+			split.Excluded++
+			continue
+		}
 		switch {
 		case endpoint.CoveredBy != nil:
 			if endpoint.CoveredBy.Stream == "" && endpoint.CoveredBy.Write == "" && endpoint.CoveredBy.DirectRead == "" && len(endpoint.CoveredBy.DirectReads) == 0 {
@@ -932,7 +991,7 @@ func batchSurfaceSplit(surface *engine.APISurface) (BatchOperationSplit, error) 
 			if strings.TrimSpace(endpoint.Operation.Reason) == "" {
 				return BatchOperationSplit{}, fmt.Errorf("endpoint %d (%s %s) blocked operation lacks a reason", i, endpoint.Method, endpoint.Path)
 			}
-			if batchOperationIsExcluded(endpoint.Method, endpoint.Operation.Model) {
+			if batchOperationIsExcluded(endpoint.Operation.Model) {
 				split.Excluded++
 			} else {
 				split.ProviderBlocked++
@@ -944,10 +1003,59 @@ func batchSurfaceSplit(surface *engine.APISurface) (BatchOperationSplit, error) 
 	return split, nil
 }
 
-func batchOperationIsExcluded(method, model string) bool {
-	if batchProtocolMetadataMethod(method) {
+func batchProtocolMetadataMethod(method string) bool {
+	switch method {
+	case http.MethodOptions, http.MethodTrace:
 		return true
+	default:
+		return false
 	}
+}
+
+func batchProtocolMetadataMethodVariant(method string) bool {
+	method = strings.TrimSpace(method)
+	return strings.EqualFold(method, http.MethodOptions) || strings.EqualFold(method, http.MethodTrace)
+}
+
+func batchProtocolMetadataOperation(method string) *engine.SurfaceOperation {
+	if !batchProtocolMetadataMethod(method) {
+		return nil
+	}
+	return &engine.SurfaceOperation{
+		Model:            "local_workflow",
+		Status:           "blocked",
+		Risk:             "low",
+		BlockedByDefault: true,
+		Reason:           batchProtocolMetadataReason(method),
+	}
+}
+
+func batchProtocolMetadataReason(method string) string {
+	return fmt.Sprintf("The documented %s operation is protocol metadata, not a record-bearing read or state-changing provider mutation.", method)
+}
+
+func batchProtocolMetadataExclusion(endpoint engine.SurfaceEndpoint) error {
+	expected := batchProtocolMetadataOperation(endpoint.Method)
+	if expected == nil {
+		return errors.New("is not a protocol-metadata operation")
+	}
+	if endpoint.CoveredBy != nil {
+		return errors.New("must not use covered_by")
+	}
+	if endpoint.Excluded != nil {
+		return errors.New("must use a v2 protocol-metadata operation")
+	}
+	if endpoint.Operation == nil {
+		return errors.New("must use a method-specific protocol-metadata operation")
+	}
+	operation := endpoint.Operation
+	if operation.Model != expected.Model || operation.Status != expected.Status || operation.Risk != expected.Risk || operation.BlockedByDefault != expected.BlockedByDefault || operation.Reason != expected.Reason {
+		return fmt.Errorf("must use the method-specific protocol-metadata operation %q", expected.Reason)
+	}
+	return nil
+}
+
+func batchOperationIsExcluded(model string) bool {
 	switch model {
 	case "duplicate", "deprecated", "disallowed":
 		return true

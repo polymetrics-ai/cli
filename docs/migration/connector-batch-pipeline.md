@@ -255,21 +255,31 @@ For every candidate, the gate:
 2. Runs `syncBundle(..., true)`, the same non-mutating check behind
    `surface-sync --check`, and drops metadata drift rather than silently fixing
    it during validation.
-3. Loads that one bundle and calls the real
-   `commandrunner.Preflight` for every implemented command. It does not copy
-   the runner's rules. This is the safeguard against commands that validate but
-   fail at `pm <connector> <command>` with `connector_command_blocked`.
-4. Rejects redacting declarations before runtime preflight: no
+3. Loads that one bundle and requires exactly one complete v2 provenance
+   artifact whose URL and every endpoint-local source URL exactly match the
+   manifest's cited artifact URL. Legacy, incomplete, missing, or
+   URL-mismatched provenance is a named `provenance` drop before runtime
+   preflight; the report records its explicit `provenance_refusals` count.
+4. Rejects `TRACE` and `OPTIONS` `covered_by` bindings and accepts those methods
+   only as their method-specific protocol-metadata exclusions. They remain in
+   declared operation totals and are never counted executable or
+   provider-blocked.
+5. Calls the real `commandrunner.Preflight` for every implemented command. It
+   does not copy the runner's rules. This is the safeguard against commands
+   that validate but fail at `pm <connector> <command>` with
+   `connector_command_blocked`.
+6. Rejects redacting declarations before runtime preflight: no
    `redact_fields`, redacting output policy, or legacy repository-content
    policy can enter the batch.
-5. Requires `api_surface.json` and a non-empty `cli_surface.json`, then reports
+7. Requires `api_surface.json` and a non-empty `cli_surface.json`, then reports
    declared endpoint operations as executable, provider-blocked, or excluded.
    The shared v2 validator supplied by #3869 enforces endpoint provenance when
    the post-foundation bundle is validated.
 
 The report includes selected candidates, included candidates, named drops and
-their stage/reason, ledger surveyed operations, declared operations, and the
-executable/blocked/excluded split. It is written even when one or more
+their stage/reason, its explicit provenance-refusal count, ledger surveyed
+operations, declared operations, and the executable/blocked/excluded split. It
+is written even when one or more
 candidates fail, and the command returns nonzero only after evaluating them
 all.
 
