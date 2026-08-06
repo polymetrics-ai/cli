@@ -4,6 +4,8 @@
 
 `golang-how-to`; `golang-cli`; `golang-design-patterns`; `golang-structs-interfaces`; `golang-error-handling`; `golang-security`; `golang-safety`; `golang-testing`; `golang-context`; and `golang-concurrency` were loaded. `scripts/gsd prompt discuss-phase 3755` and `scripts/gsd prompt plan-phase 3755 --tdd` were generated and applied inline because Pi roles are unavailable and the canonical contract forbids role spawning.
 
+`scripts/gsd prompt execute-phase 3755` was generated and applied inline before the red-test and implementation slices. The same documented no-spawn fallback is used for verify-work and code-review; their evidence is recorded in `VERIFICATION.md` and `REVIEW.md`.
+
 ## TDD slices
 
 | Slice | RED proof | GREEN implementation | Guard |

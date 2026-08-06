@@ -2305,10 +2305,6 @@ func (a *App) findConnection(name string) (Connection, bool) {
 	return Connection{}, false
 }
 
-func (a *App) failRun(runID string, runErr error) (Run, error) {
-	return a.failRunWithRateLimit(runID, runErr, connectors.RateLimitSummary{})
-}
-
 func (a *App) failRunWithRateLimit(runID string, runErr error, rateLimit connectors.RateLimitSummary) (Run, error) {
 	expectedRevision := a.state.Revision
 	completedAt := time.Now().UTC()
