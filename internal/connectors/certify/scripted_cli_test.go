@@ -23,7 +23,7 @@ type scriptedCLI struct {
 	root      string
 	calls     [][]string
 	seen      map[string]int
-	plans     map[string]string
+	plans     map[string]scriptedPlan
 	previewed map[string]bool
 	consumed  map[string]bool
 	replays   map[string]int
@@ -32,12 +32,17 @@ type scriptedCLI struct {
 	protocols []string
 }
 
+type scriptedPlan struct {
+	action        string
+	approvalToken string
+}
+
 func newScriptedCLI(t *testing.T, protocols ...string) *scriptedCLI {
 	t.Helper()
 	return &scriptedCLI{
 		t:         t,
 		seen:      make(map[string]int),
-		plans:     make(map[string]string),
+		plans:     make(map[string]scriptedPlan),
 		previewed: make(map[string]bool),
 		consumed:  make(map[string]bool),
 		replays:   make(map[string]int),
@@ -207,9 +212,10 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 		}
 		s.nextPlan++
 		planID := fmt.Sprintf("scripted-plan-%d", s.nextPlan)
-		s.plans[planID] = action
+		approvalToken := fmt.Sprintf("scripted-approval-%d", s.nextPlan)
+		s.plans[planID] = scriptedPlan{action: action, approvalToken: approvalToken}
 		s.seen["reverse_plan"]++
-		_, _ = fmt.Fprintf(stdout, "Created reverse plan %s\nApproval token: scripted-approval-%d\n", planID, s.nextPlan)
+		_, _ = fmt.Fprintf(stdout, "Created reverse plan %s\nApproval token: %s\n", planID, approvalToken)
 		return 0
 	case prefix(args, "reverse", "preview") && hasJSON(args) && len(args) == 4:
 		if _, ok := s.plans[args[2]]; !ok {
@@ -230,11 +236,14 @@ func (s *scriptedCLI) runReverse(args []string, root string, stdout, stderr io.W
 		return s.protocolError(stderr, "reverse run missing plan id")
 	}
 	planID := args[2]
-	action, ok := s.plans[planID]
+	plan, ok := s.plans[planID]
 	if !ok {
 		return s.protocolError(stderr, "reverse run received an unknown plan")
 	}
-	if action == "create" && !s.previewed[planID] {
+	if approvalToken := flagValue(args, "--approve"); approvalToken != plan.approvalToken {
+		return s.protocolError(stderr, "reverse run received an invalid approval token")
+	}
+	if plan.action == "create" && !s.previewed[planID] {
 		return s.protocolError(stderr, "reverse run occurred before its preview")
 	}
 	if s.consumed[planID] {
@@ -245,7 +254,7 @@ func (s *scriptedCLI) runReverse(args []string, root string, stdout, stderr io.W
 		s.seen["reverse_replay"]++
 		return writeScriptedEnvelopeWithCode(stdout, "Error", map[string]any{"error": "synthetic consumed approval"}, 2)
 	}
-	if err := s.appendOutboxAction(root, action); err != nil {
+	if err := s.appendOutboxAction(root, plan.action); err != nil {
 		return s.protocolError(stderr, err.Error())
 	}
 	s.consumed[planID] = true

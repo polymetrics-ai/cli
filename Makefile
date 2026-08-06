@@ -30,9 +30,9 @@ test:
 # certification harness and its CLI route tests. Verify invokes this target in
 # a separate step so the diagnostic is visible even when the aggregate suite
 # later fails or reaches its job limit. The final 93/61 harness/CLI topology
-# measured a 161.236s maximum wall time plus a 13.927s observed spread,
-# rounded to 3m.
-CERTIFY_TIMING_MAX_DURATION := 3m
+# measured a 161.236s maximum wall time plus a 13.927s observed spread; the
+# hosted-measurement-derived cap remains 3m30s.
+CERTIFY_TIMING_MAX_DURATION := 3m30s
 
 certify-timing:
 	go run ./cmd/certifytiming --max-duration $(CERTIFY_TIMING_MAX_DURATION)

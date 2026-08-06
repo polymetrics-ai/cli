@@ -116,6 +116,65 @@ func outboxActionForTag(t *testing.T, root, tag string) string {
 	return last
 }
 
+func TestWriteStagesRunnerReportAndApprovalTransition(t *testing.T) {
+	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
+
+	r, driver := scriptedSampleRunner(t, certify.Options{
+		Connector: "sample",
+		Stream:    "customers",
+		Limit:     50,
+		SecretEnv: map[string]string{"token": "PM_SAMPLE_TOKEN"},
+		Write:     true,
+	})
+	rep, err := r.Run(context.Background())
+	if err != nil {
+		t.Fatalf("Run() error = %v", err)
+	}
+	driver.assertProtocol(t)
+	if !rep.Passed {
+		t.Fatalf("Report.Passed = false, want true; stages=%+v", rep.Stages)
+	}
+
+	for _, name := range []string{
+		"write_plan_preview",
+		"write_create",
+		"write_verify",
+		"write_cleanup",
+		"cleanup_verify",
+		"approval_idempotency",
+	} {
+		if stage := mustStage(t, rep, name); !stage.Passed {
+			t.Errorf("%s stage failed: %+v", name, stage)
+		}
+	}
+	if create := mustStage(t, rep, "write_create"); create.CLI.Kind != "ReverseRun" {
+		t.Errorf("write_create stage CLI.Kind = %q, want ReverseRun", create.CLI.Kind)
+	}
+
+	write, ok := rep.Capabilities.WriteActions["create"]
+	if !ok {
+		t.Fatalf("Capabilities.WriteActions = %+v, want create entry", rep.Capabilities.WriteActions)
+	}
+	if write.Result != "pass" {
+		t.Errorf("create write result = %q, want pass", write.Result)
+	}
+	if write.Cleanup != "delete" {
+		t.Errorf("create write cleanup = %q, want delete", write.Cleanup)
+	}
+	if write.Verify != "read_back" {
+		t.Errorf("create write verify = %q, want read_back", write.Verify)
+	}
+	if !strings.HasPrefix(write.Tag, "pm-cert-sample-") {
+		t.Errorf("create write tag = %q, want pm-cert-sample-*", write.Tag)
+	}
+	if write.Reason != "" {
+		t.Errorf("create write reason = %q, want empty", write.Reason)
+	}
+	if len(rep.Leaks) != 0 {
+		t.Errorf("Report.Leaks = %+v, want empty on a clean run", rep.Leaks)
+	}
+}
+
 // TestWritePlanPreviewJSONHasNoApprovalToken is the JSON token-omission assertion
 // (design §A stage 12 "assert --json output has NO approval token"): the
 // harness's own write_plan_preview stage must positively assert this on
