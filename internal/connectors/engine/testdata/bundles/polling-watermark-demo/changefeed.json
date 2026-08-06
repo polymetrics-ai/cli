@@ -1,0 +1,33 @@
+{
+  "status": "implemented",
+  "mechanism": "polling_watermark",
+  "source": {
+    "artifact_url": "https://example.test/polling-watermark",
+    "artifact_version": "test-v1",
+    "retrieved_at": "2026-08-06"
+  },
+  "executor": { "kind": "engine", "id": "polling_watermark" },
+  "checkpoint": {
+    "kind": "watermark_tuple",
+    "keys": ["updated_at", "id"],
+    "commit_after": "downstream_ack",
+    "on_invalid": "resnapshot_required"
+  },
+  "delivery": {
+    "ordering": "provider_declared_stable_order",
+    "duplicates": "at_least_once",
+    "deletes": "tombstone",
+    "dedupe_key": ["id", "updated_at"]
+  },
+  "streams": ["widgets"],
+  "polling_watermark": {
+    "watermark": { "kind": "timestamp", "path": "updated_at" },
+    "tie_breaker": { "path": "id" },
+    "boundary": "inclusive",
+    "safety_lag_seconds": 120,
+    "page_size": 2,
+    "max_pages": 3,
+    "request_budget": 3,
+    "soft_delete": { "path": "deleted" }
+  }
+}
