@@ -277,6 +277,15 @@ not a full override by default.
   "Command Surface Must Stay Executable"). The shared-code boundary guard
   (`docs/migration/connector-boundary-guard.md`) enforces this ownership rule outside connector
   defs/hooks/native escape hatches.
+- **`api_surface` operation rows are reconciled, never hand-edited**: use
+  `go run ./cmd/connectorgen surface-reconcile --check` to derive the current
+  result for direct-read operation rows. The tool loads the disk bundle and
+  calls the real `commandrunner.Preflight`; it writes `covered_by.direct_read`
+  only for a matching command that passes that runtime path. A missing,
+  planned, or preflight-failing command stays blocked with a deterministic
+  reason; unknown models are refused unchanged. Use `--reason-contains` to
+  audit a named stale-reason cohort and `--json` for a reviewable count report.
+  Run without `--check` only after reviewing the proposed reclassification.
 - **`output_policy` is intent-specific, closed, and must be chosen deliberately**: for a
   `direct_write` command whose caller needs the complete decoded JSON response, declare `"json"`;
   the engine returns that decoded body unchanged. Declare `"none"` only when the operation

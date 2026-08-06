@@ -32,6 +32,40 @@ func TestNameAndMetadata(t *testing.T) {
 	}
 }
 
+func TestOperationDirectReadPreflightUsesClosedSQSContract(t *testing.T) {
+	c := native.New()
+	tests := []struct {
+		name    string
+		op      string
+		method  string
+		path    string
+		cap     int
+		policy  string
+		wantErr string
+	}{
+		{name: "valid", op: "list_queues", method: http.MethodPost, path: "SQS.ListQueues", cap: 16 << 20, policy: "json_redacted"},
+		{name: "unknown operation", op: "raw_action", method: http.MethodPost, path: "SQS.RawAction", cap: 16 << 20, policy: "json_redacted", wantErr: "operation \"raw_action\" not found"},
+		{name: "method mismatch", op: "list_queues", method: http.MethodGet, path: "SQS.ListQueues", cap: 16 << 20, policy: "json_redacted", wantErr: "must be POST"},
+		{name: "path mismatch", op: "list_queues", method: http.MethodPost, path: "SQS.RawAction", cap: 16 << 20, policy: "json_redacted", wantErr: "does not match operation path"},
+		{name: "missing cap", op: "list_queues", method: http.MethodPost, path: "SQS.ListQueues", cap: 0, policy: "json_redacted", wantErr: "requires positive max_bytes"},
+		{name: "policy mismatch", op: "list_queues", method: http.MethodPost, path: "SQS.ListQueues", cap: 16 << 20, policy: "json", wantErr: "not supported"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := c.PreflightOperationDirectRead(tt.op, tt.method, tt.path, tt.cap, tt.policy)
+			if tt.wantErr == "" {
+				if err != nil {
+					t.Fatalf("PreflightOperationDirectRead error = %v, want nil", err)
+				}
+				return
+			}
+			if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+				t.Fatalf("PreflightOperationDirectRead error = %v, want %q", err, tt.wantErr)
+			}
+		})
+	}
+}
+
 // TestNoInitRegistration is the required grep-guard (mirrors
 // native/postgres's and native/faker's TestNoInitRegistration): the native
 // package must NOT call RegisterFactory from anywhere in

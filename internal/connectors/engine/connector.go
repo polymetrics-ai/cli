@@ -133,6 +133,13 @@ func (c *Connector) OperationDirectRead(ctx context.Context, req connectors.Oper
 	return OperationDirectRead(ctx, c.bundle, req, c.hooks)
 }
 
+// PreflightOperationDirectRead proves a command's declared binding can reach
+// this connector's bounded direct-read executor without resolving credentials
+// or making a network request.
+func (c *Connector) PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error {
+	return PreflightOperationDirectRead(c.bundle, operation, method, path, maxBytes, outputPolicy)
+}
+
 func (c *Connector) PreviewOperationDirectWrite(ctx context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
 	return PreviewOperationDirectWrite(ctx, c.bundle, req, c.hooks)
 }

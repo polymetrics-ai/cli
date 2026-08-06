@@ -165,6 +165,15 @@ type OperationDirectReader interface {
 	OperationDirectRead(context.Context, OperationDirectReadRequest) (DirectReadResult, error)
 }
 
+// OperationDirectReadPreflighter exposes the no-network metadata admission
+// check for one declared direct-read operation. Command preflight passes its
+// exact operation-to-command binding through this interface so a command cannot
+// claim availability "implemented" unless the runtime accepts its operation
+// kind, endpoint, cap, and output policy.
+type OperationDirectReadPreflighter interface {
+	PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error
+}
+
 // OperationDirectWriteRequest is one declared, typed rest_write invocation.
 //
 // A caller must obtain PreviewDigest from PreviewOperationDirectWrite before
