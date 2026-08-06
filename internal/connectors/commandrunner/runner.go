@@ -118,6 +118,9 @@ func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req 
 	if err != nil {
 		return WriteCommand{}, err
 	}
+	if err := validateCommandInputs(cmd, req.Config, mappedCommandInputs{Record: map[string]any(record)}); err != nil {
+		return WriteCommand{}, err
+	}
 	writeReq := connectors.WriteRequest{Action: cmd.Write, Config: req.Config}
 	records := []connectors.Record{record}
 	if validator, ok := connector.(connectors.WriteValidator); ok {
@@ -583,8 +586,9 @@ func runtimeConfigWithOverrides(cfg connectors.RuntimeConfig, overrides map[stri
 }
 
 type mappedCommandInputs struct {
-	Query map[string]string
-	Body  map[string]any
+	Query  map[string]string
+	Body   map[string]any
+	Record map[string]any
 }
 
 func validateCommandInputs(cmd connectors.CommandSurfaceCommand, cfg connectors.RuntimeConfig, inputs mappedCommandInputs) error {
@@ -617,9 +621,6 @@ func validateOrderConstraint(constraint connectors.CommandSurfaceConstraint, cfg
 	if !leftPresent || !rightPresent {
 		return nil
 	}
-	if constraint.Op != "lt" {
-		return &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("unsupported command constraint operator %q", constraint.Op)}
-	}
 	if constraint.ValueType != "date-time" {
 		return &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("unsupported command constraint value_type %q", constraint.ValueType)}
 	}
@@ -631,7 +632,16 @@ func validateOrderConstraint(constraint connectors.CommandSurfaceConstraint, cfg
 	if err != nil {
 		return err
 	}
-	if !left.Before(right) {
+	valid := false
+	switch constraint.Op {
+	case "lt":
+		valid = left.Before(right)
+	case "lte":
+		valid = !left.After(right)
+	default:
+		return &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("unsupported command constraint operator %q", constraint.Op)}
+	}
+	if !valid {
 		if strings.TrimSpace(constraint.Message) != "" {
 			return errors.New(constraint.Message)
 		}
@@ -656,6 +666,9 @@ func validationTargetValue(target string, cfg connectors.RuntimeConfig, inputs m
 		return strings.TrimSpace(value), present, target, nil
 	case strings.HasPrefix(target, "body."):
 		value, present := nestedBodyValue(inputs.Body, strings.TrimPrefix(target, "body."))
+		return strings.TrimSpace(fmt.Sprint(value)), present, target, nil
+	case strings.HasPrefix(target, "record."):
+		value, present := nestedBodyValue(inputs.Record, strings.TrimPrefix(target, "record."))
 		return strings.TrimSpace(fmt.Sprint(value)), present, target, nil
 	case strings.HasPrefix(target, "config."):
 		key := strings.TrimPrefix(target, "config.")

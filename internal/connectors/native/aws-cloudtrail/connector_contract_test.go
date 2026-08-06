@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 	"slices"
+	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
@@ -51,6 +52,45 @@ func TestCommandSurfaceExposesDocumentedOperations(t *testing.T) {
 		}
 		if got := command.Availability; got != wantAvailability {
 			t.Fatalf("CommandSurface %q availability = %q, want %q", path, got, wantAvailability)
+		}
+	}
+	cancel := commands["query cancel"]
+	if cancel.Intent != "reverse_etl" || cancel.Write != "cancel_query" || strings.TrimSpace(cancel.Approval) == "" {
+		t.Fatalf("query cancel command = %+v, want approval-gated cancel_query write", cancel)
+	}
+	assertCommandFlagTargets(t, commands["events lookup"], map[string]string{
+		"lookup-attribute-key":   "body.LookupAttributes.0.AttributeKey",
+		"lookup-attribute-value": "body.LookupAttributes.0.AttributeValue",
+	})
+	assertCommandFlagTargets(t, commands["import start"], map[string]string{
+		"import-source-s3-bucket-access-role-arn": "record.ImportSource.S3.S3BucketAccessRoleArn",
+		"import-source-s3-bucket-region":          "record.ImportSource.S3.S3BucketRegion",
+		"import-source-s3-location-uri":           "record.ImportSource.S3.S3LocationUri",
+	})
+	for _, command := range surface.Commands {
+		if command.Availability != "implemented" {
+			continue
+		}
+		for _, example := range command.Examples {
+			if strings.Contains(example, " value") {
+				t.Fatalf("command %q example contains placeholder input %q", command.Path, example)
+			}
+			if command.Intent == "reverse_etl" && !strings.Contains(example, "--preview") {
+				t.Fatalf("reverse ETL command %q example omits --preview: %q", command.Path, example)
+			}
+		}
+	}
+}
+
+func assertCommandFlagTargets(t *testing.T, command connectors.CommandSurfaceCommand, want map[string]string) {
+	t.Helper()
+	got := make(map[string]string, len(command.Flags))
+	for _, flag := range command.Flags {
+		got[flag.Name] = flag.MapsTo
+	}
+	for name, target := range want {
+		if got[name] != target {
+			t.Fatalf("command %q flag --%s maps to %q, want %q", command.Path, name, got[name], target)
 		}
 	}
 }

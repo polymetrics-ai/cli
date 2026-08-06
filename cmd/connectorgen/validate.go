@@ -1036,7 +1036,7 @@ func checkCLISurfaceValidationDeclarations(b engine.Bundle, i int, cmd engine.CL
 		if constraint.Kind != "order" {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d declares unsupported kind %q", i, cmd.Path, j, constraint.Kind)})
 		}
-		if constraint.Op != "lt" {
+		if constraint.Op != "lt" && constraint.Op != "lte" {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d declares unsupported op %q", i, cmd.Path, j, constraint.Op)})
 		}
 		if constraint.ValueType != "date-time" {
@@ -1084,8 +1084,10 @@ func validateCLIConstraintMappedTarget(target string) error {
 		return validateCLIConstraintPath(strings.TrimPrefix(target, "query."))
 	case strings.HasPrefix(target, "body."):
 		return validateCLIConstraintPath(strings.TrimPrefix(target, "body."))
+	case strings.HasPrefix(target, "record."):
+		return validateCLIConstraintPath(strings.TrimPrefix(target, "record."))
 	default:
-		return fmt.Errorf("must use query. or body. target")
+		return fmt.Errorf("must use query., body., or record. target")
 	}
 }
 

@@ -30,6 +30,36 @@
       ]
     },
     {
+      "name": "cancel_query",
+      "kind": "custom",
+      "method": "POST",
+      "path": "CloudTrail_20131101.CancelQuery",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "QueryId"
+        ],
+        "properties": {
+          "EventDataStore": {
+            "type": "string"
+          },
+          "EventDataStoreOwnerAccountId": {
+            "type": "string"
+          },
+          "QueryId": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "cancels a running CloudTrail Lake query",
+      "redact_fields": [
+        "EventDataStore",
+        "EventDataStoreOwnerAccountId",
+        "QueryId"
+      ]
+    },
+    {
       "name": "create_channel",
       "kind": "create",
       "method": "POST",
@@ -606,7 +636,12 @@
         "required": [],
         "properties": {
           "Destinations": {
-            "type": "array"
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+              "type": "string"
+            }
           },
           "EndEventTime": {
             "type": "string"
@@ -615,10 +650,33 @@
             "type": "string"
           },
           "ImportSource": {
-            "type": [
-              "string",
-              "object"
-            ]
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "S3"
+            ],
+            "properties": {
+              "S3": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "S3BucketAccessRoleArn",
+                  "S3BucketRegion",
+                  "S3LocationUri"
+                ],
+                "properties": {
+                  "S3BucketAccessRoleArn": {
+                    "type": "string"
+                  },
+                  "S3BucketRegion": {
+                    "type": "string"
+                  },
+                  "S3LocationUri": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
           },
           "StartEventTime": {
             "type": "string"

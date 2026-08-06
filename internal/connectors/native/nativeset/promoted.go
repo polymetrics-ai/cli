@@ -1,9 +1,6 @@
 package nativeset
 
 import (
-	"context"
-	"fmt"
-
 	"polymetrics.ai/internal/connectors"
 	alphavantage "polymetrics.ai/internal/connectors/native/alpha-vantage"
 	apifydataset "polymetrics.ai/internal/connectors/native/apify-dataset"
@@ -42,123 +39,82 @@ import (
 
 type definitionConnector struct {
 	connectors.Connector
-	base engine.Base
+	base     engine.Base
+	manifest connectors.Manifest
 }
 
 func (c definitionConnector) Definition() connectors.Definition {
 	return c.base.Definition()
 }
 
-// CommandSurface preserves a native connector's generated command surface
-// through the definition wrapper used by promoted factories. Connectors without
-// a command surface remain non-dynamic by returning nil.
-func (c definitionConnector) CommandSurface() *connectors.CommandSurface {
-	provider, ok := c.Connector.(connectors.CommandSurfaceProvider)
-	if !ok {
-		return nil
-	}
-	return provider.CommandSurface()
+func (c definitionConnector) Manifest() connectors.Manifest {
+	return c.manifest
 }
 
-// optionalRuntimeUnsupported turns an optional capability that the wrapped
-// native does not implement into an explicit execution-time refusal. A single
-// wrapper cannot conditionally preserve Go method sets, so returning a typed
-// error is safer than silently losing the capability at registration time.
-func optionalRuntimeUnsupported(c connectors.Connector, capability string) error {
-	return fmt.Errorf("native connector %q does not support %s: %w", c.Name(), capability, connectors.ErrUnsupportedOperation)
+type statefulDefinitionConnector struct {
+	definitionConnector
+	connectors.StatefulReader
 }
 
-func (c definitionConnector) DirectRead(ctx context.Context, req connectors.DirectReadRequest) (connectors.DirectReadResult, error) {
-	reader, ok := c.Connector.(connectors.DirectReader)
-	if !ok {
-		return connectors.DirectReadResult{}, optionalRuntimeUnsupported(c.Connector, "direct reads")
-	}
-	return reader.DirectRead(ctx, req)
+type cloudTrailDefinitionConnector struct {
+	definitionConnector
+	connectors.CommandSurfaceProvider
+	connectors.OperationDirectReader
+	connectors.WriteValidator
+	connectors.DryRunWriter
+	connectors.StatefulReader
 }
 
-func (c definitionConnector) OperationDirectRead(ctx context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
-	reader, ok := c.Connector.(connectors.OperationDirectReader)
-	if !ok {
-		return connectors.DirectReadResult{}, optionalRuntimeUnsupported(c.Connector, "operation direct reads")
-	}
-	return reader.OperationDirectRead(ctx, req)
-}
-
-func (c definitionConnector) OperationBinaryDownload(ctx context.Context, req connectors.OperationBinaryDownloadRequest) (connectors.OperationBinaryDownloadResult, error) {
-	downloader, ok := c.Connector.(connectors.OperationBinaryDownloader)
-	if !ok {
-		return connectors.OperationBinaryDownloadResult{}, optionalRuntimeUnsupported(c.Connector, "operation binary downloads")
-	}
-	return downloader.OperationBinaryDownload(ctx, req)
-}
-
-func (c definitionConnector) ValidateWrite(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) error {
-	validator, ok := c.Connector.(connectors.WriteValidator)
-	if !ok {
-		return optionalRuntimeUnsupported(c.Connector, "write validation")
-	}
-	return validator.ValidateWrite(ctx, req, records)
-}
-
-func (c definitionConnector) DryRunWrite(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WritePreview, error) {
-	dryRunner, ok := c.Connector.(connectors.DryRunWriter)
-	if !ok {
-		return connectors.WritePreview{}, optionalRuntimeUnsupported(c.Connector, "write dry runs")
-	}
-	return dryRunner.DryRunWrite(ctx, req, records)
-}
-
-func (c definitionConnector) Query(ctx context.Context, req connectors.QueryRequest) (connectors.QueryResult, error) {
-	querier, ok := c.Connector.(connectors.Querier)
-	if !ok {
-		return connectors.QueryResult{}, optionalRuntimeUnsupported(c.Connector, "queries")
-	}
-	return querier.Query(ctx, req)
-}
-
-func (c definitionConnector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, emit func(connectors.CDCEvent) error) error {
-	reader, ok := c.Connector.(connectors.CDCReader)
-	if !ok {
-		return optionalRuntimeUnsupported(c.Connector, "CDC reads")
-	}
-	return reader.ReadCDC(ctx, req, emit)
-}
-
-func (c definitionConnector) InitialState(ctx context.Context, stream string, cfg connectors.RuntimeConfig) (map[string]string, error) {
-	reader, ok := c.Connector.(connectors.StatefulReader)
-	if !ok {
-		return nil, optionalRuntimeUnsupported(c.Connector, "stateful reads")
-	}
-	return reader.InitialState(ctx, stream, cfg)
-}
-
-func (c definitionConnector) MapSchema(ctx context.Context, stream connectors.Stream) (connectors.Stream, error) {
-	mapper, ok := c.Connector.(connectors.SchemaMapper)
-	if !ok {
-		return connectors.Stream{}, optionalRuntimeUnsupported(c.Connector, "schema mapping")
-	}
-	return mapper.MapSchema(ctx, stream)
-}
-
-func (c definitionConnector) LiveConformanceConfig(ctx context.Context) (connectors.RuntimeConfig, bool, error) {
-	provider, ok := c.Connector.(connectors.LiveConformanceProvider)
-	if !ok {
-		return connectors.RuntimeConfig{}, false, nil
-	}
-	return provider.LiveConformanceConfig(ctx)
-}
-
-func (c definitionConnector) MaterializesLocalWarehouse() bool {
-	materializer, ok := c.Connector.(connectors.LocalWarehouseMaterializer)
-	return ok && materializer.MaterializesLocalWarehouse()
-}
-
-func withBundleDefinition(name string, c connectors.Connector) connectors.Connector {
+func bundleDefinition(name string, c connectors.Connector) definitionConnector {
 	bundle, err := engine.Load(defs.FS, name)
 	if err != nil {
 		panic("native/" + name + ": failed to load defs/" + name + " bundle: " + err.Error())
 	}
-	return definitionConnector{Connector: c, base: engine.NewBase(bundle)}
+	return definitionConnector{
+		Connector: c,
+		base:      engine.NewBase(bundle),
+		manifest:  engine.New(bundle, nil).Manifest(),
+	}
+}
+
+func withBundleDefinition(name string, c connectors.Connector) connectors.Connector {
+	wrapped := bundleDefinition(name, c)
+	if stateful, ok := c.(connectors.StatefulReader); ok {
+		return statefulDefinitionConnector{definitionConnector: wrapped, StatefulReader: stateful}
+	}
+	return wrapped
+}
+
+func withCloudTrailBundleDefinition(c connectors.Connector) connectors.Connector {
+	wrapped := bundleDefinition("aws-cloudtrail", c)
+	commandSurface, ok := c.(connectors.CommandSurfaceProvider)
+	if !ok {
+		panic("native/aws-cloudtrail: missing command surface")
+	}
+	directReader, ok := c.(connectors.OperationDirectReader)
+	if !ok {
+		panic("native/aws-cloudtrail: missing operation direct reads")
+	}
+	validator, ok := c.(connectors.WriteValidator)
+	if !ok {
+		panic("native/aws-cloudtrail: missing write validation")
+	}
+	dryRunner, ok := c.(connectors.DryRunWriter)
+	if !ok {
+		panic("native/aws-cloudtrail: missing write previews")
+	}
+	stateful, ok := c.(connectors.StatefulReader)
+	if !ok {
+		panic("native/aws-cloudtrail: missing stateful reads")
+	}
+	return cloudTrailDefinitionConnector{
+		definitionConnector:    wrapped,
+		CommandSurfaceProvider: commandSurface,
+		OperationDirectReader:  directReader,
+		WriteValidator:         validator,
+		DryRunWriter:           dryRunner,
+		StatefulReader:         stateful,
+	}
 }
 
 func promotedFactories() []Factory {
@@ -166,7 +122,7 @@ func promotedFactories() []Factory {
 		{Name: "alpha-vantage", New: func() connectors.Connector { return withBundleDefinition("alpha-vantage", alphavantage.New()) }},
 		{Name: "apify-dataset", New: func() connectors.Connector { return withBundleDefinition("apify-dataset", apifydataset.New()) }},
 		{Name: "ashby", New: func() connectors.Connector { return ashby.New() }},
-		{Name: "aws-cloudtrail", New: func() connectors.Connector { return withBundleDefinition("aws-cloudtrail", awscloudtrail.New()) }},
+		{Name: "aws-cloudtrail", New: func() connectors.Connector { return withCloudTrailBundleDefinition(awscloudtrail.New()) }},
 		{Name: "babelforce", New: func() connectors.Connector { return withBundleDefinition("babelforce", babelforce.New()) }},
 		{Name: "basecamp", New: func() connectors.Connector { return withBundleDefinition("basecamp", basecamp.New()) }},
 		{Name: "bunny-inc", New: func() connectors.Connector { return withBundleDefinition("bunny-inc", bunnyinc.New()) }},

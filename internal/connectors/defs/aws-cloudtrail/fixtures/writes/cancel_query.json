@@ -1,6 +1,6 @@
 {
   "record": {
-    "TrailName": "fixture-trail"
+    "QueryId": "11111111-1111-1111-1111-111111111111"
   },
   "expect": {
     "method": "POST",

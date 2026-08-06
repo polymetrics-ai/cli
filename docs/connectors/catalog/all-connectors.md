@@ -36,7 +36,7 @@
 | `aviationstack` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Aviationstack | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://aviationstack.com/documentation) | bundle definition |
 | `avni` | [`icons/avni.svg`](../icons/avni.svg) | Avni | `api` | alpha | check, catalog, read | 7 | 0 | [Documentation](https://avniproject.org/) | bundle definition |
 | `awin-advertiser` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Awin Advertiser | `api` | ga | check, catalog, read, write | 5 | 1 | [Documentation](https://wiki.awin.com/index.php/Advertiser_API) | bundle definition |
-| `aws-cloudtrail` | [`icons/aws-cloudtrail.svg`](../icons/aws-cloudtrail.svg) | AWS CloudTrail | `api` | alpha | check, catalog, read, write | 19 | 29 | [Documentation](https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html) | bundle definition |
+| `aws-cloudtrail` | [`icons/aws-cloudtrail.svg`](../icons/aws-cloudtrail.svg) | AWS CloudTrail | `api` | alpha | check, catalog, read, write | 19 | 30 | [Documentation](https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html) | bundle definition |
 | `babelforce` | [`icons/babelforce.svg`](../icons/babelforce.svg) | Babelforce | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://api.babelforce.com/) | bundle definition |
 | `bahmni` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Bahmni | `api` | alpha | check, catalog, read, write | 12 | 11 | [Documentation](https://rest.openmrs.org/) | bundle definition |
 | `bamboo-hr` | [`icons/bamboohr.svg`](../icons/bamboohr.svg) | BambooHR | `api` | ga | check, catalog, read, write | 84 | 101 | [Documentation](https://documentation.bamboohr.com/reference/getting-started) | bundle definition |

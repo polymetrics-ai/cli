@@ -12100,6 +12100,13 @@
         "risk": "adds tags to a CloudTrail trail, event data store, channel, or dashboard"
       },
       {
+        "name": "cancel_query",
+        "kind": "custom",
+        "method": "POST",
+        "path": "CloudTrail_20131101.CancelQuery",
+        "risk": "cancels a running CloudTrail Lake query"
+      },
+      {
         "name": "create_channel",
         "kind": "create",
         "method": "POST",

@@ -361,6 +361,22 @@ func TestCLICommandValidationDefinitionsGeneric(t *testing.T) {
 	}
 }
 
+func TestCLICommandValidationOrderAllowsEqualForLTE(t *testing.T) {
+	err := validateOrderConstraint(connectors.CommandSurfaceConstraint{
+		Kind:      "order",
+		Left:      "body.start",
+		Right:     "body.end",
+		Op:        "lte",
+		ValueType: "date-time",
+	}, connectors.RuntimeConfig{}, mappedCommandInputs{Body: map[string]any{
+		"start": "2026-07-01T00:00:00Z",
+		"end":   "2026-07-01T00:00:00Z",
+	}})
+	if err != nil {
+		t.Fatalf("validateOrderConstraint: %v", err)
+	}
+}
+
 func TestGongCallsListDateFlagsMapToQuery(t *testing.T) {
 	connector := gongCommandRunnerTestConnector(t)
 

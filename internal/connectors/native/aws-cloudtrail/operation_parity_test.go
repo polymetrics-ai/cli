@@ -26,10 +26,10 @@ func TestOperationLedgerCounts(t *testing.T) {
 	if got, want := len(bundle.Streams), 19; got != want {
 		t.Fatalf("streams = %d, want %d", got, want)
 	}
-	if got, want := len(bundle.Operations), 9; got != want {
+	if got, want := len(bundle.Operations), 8; got != want {
 		t.Fatalf("implemented direct operations = %d, want %d", got, want)
 	}
-	if got, want := len(bundle.Writes), 29; got != want {
+	if got, want := len(bundle.Writes), 30; got != want {
 		t.Fatalf("implemented write actions = %d, want %d", got, want)
 	}
 	blocked := 0
@@ -53,10 +53,10 @@ func TestOperationLedgerCounts(t *testing.T) {
 	if got, want := coveredStreams, 19; got != want {
 		t.Fatalf("stream-covered operations = %d, want %d", got, want)
 	}
-	if got, want := coveredDirectReads, 9; got != want {
+	if got, want := coveredDirectReads, 8; got != want {
 		t.Fatalf("direct-read-covered operations = %d, want %d", got, want)
 	}
-	if got, want := coveredWrites, 29; got != want {
+	if got, want := coveredWrites, 30; got != want {
 		t.Fatalf("write-covered operations = %d, want %d", got, want)
 	}
 	if got, want := blocked, 3; got != want {
@@ -634,8 +634,9 @@ func TestTrailOrEventDataStoreFanoutActionsShareErrorTolerance(t *testing.T) {
 			if !cloudTrailCanDeriveActionBody(action) {
 				t.Fatalf("%s routes through the shared fan-out but cannot derive a request body", action)
 			}
-			if _, ok := cloudTrailActionAnyOfRequiredFields[action]; !ok {
-				t.Fatalf("%s routes through the shared fan-out but has no anyOf request requirement", action)
+			rules, ok := cloudTrailActionCrossFields[action]
+			if !ok || (len(rules.anyOf) == 0 && len(rules.exactlyOneOf) == 0) {
+				t.Fatalf("%s routes through the shared fan-out but has no alternate request requirement", action)
 			}
 			for _, marker := range cloudTrailTrailOrEventDataStoreSkipMarkers {
 				err := &connsdk.HTTPError{Status: http.StatusBadRequest, Body: `{"__type":"` + marker + `"}`}
@@ -806,6 +807,25 @@ func TestNativeCloudTrailDirectReadDispatchesOperationTarget(t *testing.T) {
 	}
 }
 
+func TestNativeCloudTrailDirectReadUsesOperationResponseLimit(t *testing.T) {
+	payload := `{"payload":"` + strings.Repeat("x", 1<<20) + `"}`
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(payload))
+	}))
+	defer srv.Close()
+
+	c := Connector{Client: srv.Client()}
+	_, err := c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
+		Operation: "lookup_events",
+		Config:    fixtureRuntimeConfig(srv.URL),
+		MaxBytes:  16 << 20,
+	})
+	if !errors.Is(err, connectors.ErrReadLimitReached) {
+		t.Fatalf("OperationDirectRead error = %v, want ErrReadLimitReached", err)
+	}
+}
+
 // TestNativeCloudTrailWriteDispatchesActionTarget verifies a representative
 // write action (start_logging) dispatches through the real signed JSON-RPC
 // requester.
@@ -839,6 +859,31 @@ func TestNativeCloudTrailWriteDispatchesActionTarget(t *testing.T) {
 	}
 	if got := gotBody["Name"]; got != "trail-fixture" {
 		t.Fatalf("body[Name] = %v, want trail-fixture", got)
+	}
+}
+
+func TestNativeCloudTrailCancelQueryIsAWrite(t *testing.T) {
+	var gotTarget string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotTarget = r.Header.Get("X-Amz-Target")
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{}`))
+	}))
+	defer srv.Close()
+
+	c := Connector{Client: srv.Client()}
+	record := connectors.Record{"QueryId": "11111111-1111-1111-1111-111111111111"}
+	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "cancel_query"}, []connectors.Record{record}); err != nil {
+		t.Fatalf("ValidateWrite: %v", err)
+	}
+	if _, err := c.DryRunWrite(context.Background(), connectors.WriteRequest{Action: "cancel_query"}, []connectors.Record{record}); err != nil {
+		t.Fatalf("DryRunWrite: %v", err)
+	}
+	if _, err := c.Write(context.Background(), connectors.WriteRequest{Action: "cancel_query", Config: fixtureRuntimeConfig(srv.URL)}, []connectors.Record{record}); err != nil {
+		t.Fatalf("Write: %v", err)
+	}
+	if want := cloudTrailTarget("CancelQuery"); gotTarget != want {
+		t.Fatalf("X-Amz-Target = %q, want %q", gotTarget, want)
 	}
 }
 

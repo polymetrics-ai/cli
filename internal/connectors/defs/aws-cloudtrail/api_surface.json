@@ -3,7 +3,7 @@
   "docs": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html",
   "reviewed_at": "2026-08-04",
   "operation_ledger_version": 1,
-  "scope": "Complete AWS CloudTrail API action inventory from the official Actions page. 19 ETL/read streams, 9 typed direct-read commands, and 29 typed reverse-ETL write/admin actions are executable through the connector-local native runtime using fixed action mappings, closed per-operation request schemas, resource discovery/fan-out for stream identifiers, and provider-supported idempotency for destructive writes. Only 3 actions remain blocked: StartQuery, CreateDashboard, and UpdateDashboard, each because their request body requires an unrestricted CloudTrail Lake SQL QueryStatement, which this repository disables for every connector by policy (capabilities.query is fixed false repo-wide; no raw SQL passthrough is ever exposed). Event record fields remain payload schema evidence, not CDC operations.",
+  "scope": "Complete AWS CloudTrail API action inventory from the official Actions page. 19 ETL/read streams, 8 typed direct-read commands, and 30 typed reverse-ETL write/admin actions are executable through the connector-local native runtime using fixed action mappings, closed per-operation request schemas, resource discovery/fan-out for stream identifiers, and provider-supported idempotency for destructive writes. Only 3 actions remain blocked: StartQuery, CreateDashboard, and UpdateDashboard, each because their request body requires an unrestricted CloudTrail Lake SQL QueryStatement, which this repository disables for every connector by policy (capabilities.query is fixed false repo-wide; no raw SQL passthrough is ever exposed). Event record fields remain payload schema evidence, not CDC operations.",
   "endpoints": [
     {
       "method": "POST",
@@ -16,7 +16,7 @@
       "method": "POST",
       "path": "CloudTrail_20131101.CancelQuery",
       "covered_by": {
-        "direct_read": "query cancel"
+        "write": "cancel_query"
       }
     },
     {

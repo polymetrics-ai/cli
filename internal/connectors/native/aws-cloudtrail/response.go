@@ -12,8 +12,6 @@ import (
 	"polymetrics.ai/internal/connectors/connsdk"
 )
 
-const maxDirectReadBytes = 16 << 20
-
 func emitActionRecords(action string, decoded map[string]any, requestBody map[string]any, emit func(connectors.Record) error) error {
 	records := recordsForAction(action, decoded)
 	for _, record := range records {
@@ -210,13 +208,6 @@ func supportsField(action, name string) bool {
 		}
 	}
 	return false
-}
-
-func directMaxBytes(maxBytes int) int {
-	if maxBytes <= 0 || maxBytes > maxDirectReadBytes {
-		return maxDirectReadBytes
-	}
-	return maxBytes
 }
 
 func directRedactFields(fields []string) []string {

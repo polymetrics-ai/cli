@@ -69,11 +69,6 @@ var cloudTrailActionFields = map[string][]awsActionField{
 	"UpdateTrail":                          {{Name: "CloudWatchLogsLogGroupArn", Type: "String", Required: false}, {Name: "CloudWatchLogsRoleArn", Type: "String", Required: false}, {Name: "EnableLogFileValidation", Type: "Boolean", Required: false}, {Name: "IncludeGlobalServiceEvents", Type: "Boolean", Required: false}, {Name: "IsMultiRegionTrail", Type: "Boolean", Required: false}, {Name: "IsOrganizationTrail", Type: "Boolean", Required: false}, {Name: "KmsKeyId", Type: "String", Required: false}, {Name: "Name", Type: "String", Required: true}, {Name: "S3BucketName", Type: "String", Required: false}, {Name: "S3KeyPrefix", Type: "String", Required: false}, {Name: "SnsTopicName", Type: "String", Required: false}},
 }
 
-var cloudTrailActionAnyOfRequiredFields = map[string][]string{
-	"GetEventConfiguration": {"EventDataStore", "TrailName"},
-	"GetInsightSelectors":   {"EventDataStore", "TrailName"},
-}
-
 var cloudTrailStreamActions = map[string]string{
 	"describe_trails":         "DescribeTrails",
 	"get_channel":             "GetChannel",
@@ -119,7 +114,6 @@ var cloudTrailPublishedStreams = []string{
 }
 
 var cloudTrailDirectOperations = map[string]string{
-	"cancel_query":              "CancelQuery",
 	"describe_query":            "DescribeQuery",
 	"generate_query":            "GenerateQuery",
 	"get_query_results":         "GetQueryResults",
@@ -132,6 +126,7 @@ var cloudTrailDirectOperations = map[string]string{
 
 var cloudTrailWriteActions = map[string]string{
 	"add_tags":                                "AddTags",
+	"cancel_query":                            "CancelQuery",
 	"create_channel":                          "CreateChannel",
 	"create_event_data_store":                 "CreateEventDataStore",
 	"create_trail":                            "CreateTrail",

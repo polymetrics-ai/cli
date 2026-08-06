@@ -1,41 +1,6 @@
 {
   "operations": [
     {
-      "id": "cancel_query",
-      "kind": "rest_read",
-      "summary": "Cancel a running CloudTrail Lake query by query id.",
-      "description": "Native Tier-3 AWS CloudTrail JSON-RPC operation direct read; executed by internal/connectors/native/aws-cloudtrail, not by the declarative REST engine.",
-      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_CancelQuery.html",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json_redacted",
-      "mutation_class": "none",
-      "rest": {
-        "method": "POST",
-        "path": "CloudTrail_20131101.CancelQuery",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "QueryId"
-          ],
-          "properties": {
-            "EventDataStore": {
-              "type": "string"
-            },
-            "EventDataStoreOwnerAccountId": {
-              "type": "string"
-            },
-            "QueryId": {
-              "type": "string"
-            }
-          }
-        }
-      }
-    },
-    {
       "id": "describe_query",
       "kind": "rest_read",
       "summary": "Describe a CloudTrail Lake query's status and metadata by query id or alias.",
@@ -331,10 +296,35 @@
               "type": "string"
             },
             "LookupAttributes": {
-              "type": [
-                "string",
-                "array"
-              ]
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "AttributeKey",
+                  "AttributeValue"
+                ],
+                "properties": {
+                  "AttributeKey": {
+                    "type": "string",
+                    "enum": [
+                      "EventId",
+                      "EventName",
+                      "ReadOnly",
+                      "Username",
+                      "ResourceType",
+                      "ResourceName",
+                      "EventSource",
+                      "AccessKeyId"
+                    ]
+                  },
+                  "AttributeValue": {
+                    "type": "string"
+                  }
+                }
+              }
             },
             "MaxResults": {
               "type": "integer"

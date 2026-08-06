@@ -148,7 +148,7 @@
                 "right": { "type": "string" },
                 "op": {
                   "type": "string",
-                  "enum": ["lt"]
+                  "enum": ["lt", "lte"]
                 },
                 "value_type": {
                   "type": "string",

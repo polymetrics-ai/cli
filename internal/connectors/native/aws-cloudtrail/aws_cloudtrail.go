@@ -152,7 +152,7 @@ func (c Connector) emitActionBody(ctx context.Context, cfg connectors.RuntimeCon
 	}
 	body := copyActionBody(rawBody)
 	if supportsField(action, "MaxResults") {
-		maxItems, err := pageSize(cfg)
+		maxItems, err := pageSizeForAction(action, cfg)
 		if err != nil {
 			return err
 		}
@@ -444,7 +444,7 @@ func (c Connector) OperationDirectRead(ctx context.Context, req connectors.Opera
 		return connectors.DirectReadResult{}, err
 	}
 	if supportsField(action, "MaxResults") {
-		maxItems, err := pageSize(req.Config)
+		maxItems, err := pageSizeForAction(action, req.Config)
 		if err != nil {
 			return connectors.DirectReadResult{}, err
 		}
@@ -456,7 +456,10 @@ func (c Connector) OperationDirectRead(ctx context.Context, req connectors.Opera
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	limit := directMaxBytes(req.MaxBytes)
+	limit, err := operationReadMaxBytes(req.Operation, req.MaxBytes)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
 	resp, err := r.DoLimited(ctx, http.MethodPost, "/", nil, body, limit)
 	if err != nil {
 		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read aws-cloudtrail %s: %w", action, err)
@@ -610,6 +613,34 @@ func pageSize(cfg connectors.RuntimeConfig) (int, error) {
 		return 0, fmt.Errorf("aws-cloudtrail config page_size must be between 1 and %d", maxMaxItems)
 	}
 	return value, nil
+}
+
+func pageSizeForAction(action string, cfg connectors.RuntimeConfig) (int, error) {
+	value, err := pageSize(cfg)
+	if err != nil {
+		return 0, err
+	}
+	constraints := cloudTrailActionFieldConstraints[action]["MaxResults"]
+	if constraints.maximum > 0 && value > constraints.maximum {
+		return constraints.maximum, nil
+	}
+	return value, nil
+}
+
+func operationReadMaxBytes(operation string, requested int) (int, error) {
+	for _, candidate := range cloudTrailBundle().Operations {
+		if candidate.ID != operation {
+			continue
+		}
+		if candidate.REST == nil || candidate.REST.MaxBytes <= 0 {
+			return 0, fmt.Errorf("aws-cloudtrail operation %q has no positive response limit", operation)
+		}
+		if requested <= 0 || requested > candidate.REST.MaxBytes {
+			return candidate.REST.MaxBytes, nil
+		}
+		return requested, nil
+	}
+	return 0, fmt.Errorf("aws-cloudtrail operation %q is not declared", operation)
 }
 
 func maxPages(cfg connectors.RuntimeConfig) (int, error) {

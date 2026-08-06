@@ -1,5 +1,16 @@
 {
-  "record": {},
+  "record": {
+    "Destinations": [
+      "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/import-destination"
+    ],
+    "ImportSource": {
+      "S3": {
+        "S3BucketAccessRoleArn": "arn:aws:iam::123456789012:role/CloudTrailImport",
+        "S3BucketRegion": "us-east-1",
+        "S3LocationUri": "s3://ct-import/source/"
+      }
+    }
+  },
   "expect": {
     "method": "POST",
     "path": "/"

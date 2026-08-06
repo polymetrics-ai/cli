@@ -235,6 +235,14 @@ func TestValidate_CLISurfaceValidationDeclarationsPassCleanly(t *testing.T) {
 	}
 }
 
+func TestValidateCLIConstraintMappedTargetSupportsRecord(t *testing.T) {
+	for _, target := range []string{"query.created_after", "body.window.start", "record.window.start"} {
+		if err := validateCLIConstraintMappedTarget(target); err != nil {
+			t.Fatalf("validateCLIConstraintMappedTarget(%q): %v", target, err)
+		}
+	}
+}
+
 func TestValidate_CLISurfaceRejectsMalformedValidationDeclarations(t *testing.T) {
 	tests := []struct {
 		name string
@@ -1739,7 +1747,7 @@ func validCLISurfaceValidationJSON() string {
 					{ "name": "end", "type": "string", "summary": "End bound.", "maps_to": "query.started_before", "format": "date-time", "allow_empty": false }
 				],
 				"constraints": [
-					{ "kind": "order", "left": "query.started_after", "left_fallback": "config.default_start", "op": "lt", "right": "query.started_before", "value_type": "date-time", "message": "start must be before end" }
+					{ "kind": "order", "left": "query.started_after", "left_fallback": "config.default_start", "op": "lte", "right": "query.started_before", "value_type": "date-time", "message": "start must not be after end" }
 				],`, 1)
 }
 

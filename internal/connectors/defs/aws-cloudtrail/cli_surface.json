@@ -272,50 +272,40 @@
     {
       "path": "query cancel",
       "summary": "Cancel a running CloudTrail Lake query by query id.",
-      "intent": "direct_read",
+      "intent": "reverse_etl",
       "availability": "implemented",
-      "operation": "cancel_query",
+      "write": "cancel_query",
       "flags": [
         {
           "name": "event-data-store",
           "type": "string",
           "summary": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
-          "maps_to": "body.EventDataStore"
+          "maps_to": "record.EventDataStore"
         },
         {
           "name": "event-data-store-owner-account-id",
           "type": "string",
           "summary": "String Length Constraints: Minimum length of 12. Maximum length of 16. Pattern: \\d+",
-          "maps_to": "body.EventDataStoreOwnerAccountId"
+          "maps_to": "record.EventDataStoreOwnerAccountId"
         },
         {
           "name": "query-id",
           "type": "string",
           "summary": "String Length Constraints: Fixed length of 36. Pattern: ^[a-f0-9\\-]+$",
-          "maps_to": "body.QueryId",
+          "maps_to": "record.QueryId",
           "required": true,
           "allow_empty": false
         }
       ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "CloudTrail_20131101.CancelQuery"
-        }
-      ],
-      "output_policy": "json_redacted",
+      "risk": "cancels a running CloudTrail Lake query",
+      "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
       "redact_fields": [
-        "CloudTrailEvent",
-        "AccessKeyId",
-        "userIdentity",
-        "requestParameters",
-        "responseElements",
-        "additionalEventData",
-        "QueryStatement",
-        "Prompt"
+        "EventDataStore",
+        "EventDataStoreOwnerAccountId",
+        "QueryId"
       ],
       "examples": [
-        "pm aws-cloudtrail query cancel --credential ct-prod --query-id value"
+        "pm aws-cloudtrail query cancel --credential ct-prod --query-id 11111111-1111-1111-1111-111111111111 --preview"
       ]
     },
     {
@@ -374,7 +364,7 @@
         "Prompt"
       ],
       "examples": [
-        "pm aws-cloudtrail query describe --credential ct-prod"
+        "pm aws-cloudtrail query describe --credential ct-prod --query-id 11111111-1111-1111-1111-111111111111"
       ]
     },
     {
@@ -418,7 +408,7 @@
         "Prompt"
       ],
       "examples": [
-        "pm aws-cloudtrail query generate --credential ct-prod --event-data-stores value --prompt value"
+        "pm aws-cloudtrail query generate --credential ct-prod --event-data-stores arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example --prompt recent-events"
       ]
     },
     {
@@ -479,7 +469,7 @@
         "Prompt"
       ],
       "examples": [
-        "pm aws-cloudtrail query results --credential ct-prod --query-id value"
+        "pm aws-cloudtrail query results --credential ct-prod --query-id 11111111-1111-1111-1111-111111111111"
       ]
     },
     {
@@ -548,7 +538,7 @@
         "Prompt"
       ],
       "examples": [
-        "pm aws-cloudtrail insights data list --credential ct-prod --data-type value --insight-source value"
+        "pm aws-cloudtrail insights data list --credential ct-prod --data-type InsightsEvents --insight-source arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example"
       ]
     },
     {
@@ -649,7 +639,7 @@
         "Prompt"
       ],
       "examples": [
-        "pm aws-cloudtrail insights metric-data list --credential ct-prod --event-name value --event-source value --insight-type value"
+        "pm aws-cloudtrail insights metric-data list --credential ct-prod --event-name ConsoleLogin --event-source signin.amazonaws.com --insight-type ApiCallRateInsight"
       ]
     },
     {
@@ -716,7 +706,7 @@
         "Prompt"
       ],
       "examples": [
-        "pm aws-cloudtrail query list --credential ct-prod --event-data-store value"
+        "pm aws-cloudtrail query list --credential ct-prod --event-data-store arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example"
       ]
     },
     {
@@ -730,13 +720,40 @@
           "name": "end-time",
           "type": "string",
           "summary": "Timestamp",
-          "maps_to": "body.EndTime"
+          "maps_to": "body.EndTime",
+          "format": "date-time"
         },
         {
           "name": "event-category",
-          "type": "string",
+          "type": "enum",
           "summary": "String Valid Values: insight",
+          "values": [
+            "insight"
+          ],
           "maps_to": "body.EventCategory"
+        },
+        {
+          "name": "lookup-attribute-key",
+          "type": "enum",
+          "summary": "LookupAttribute key.",
+          "values": [
+            "EventId",
+            "EventName",
+            "ReadOnly",
+            "Username",
+            "ResourceType",
+            "ResourceName",
+            "EventSource",
+            "AccessKeyId"
+          ],
+          "maps_to": "body.LookupAttributes.0.AttributeKey"
+        },
+        {
+          "name": "lookup-attribute-value",
+          "type": "string",
+          "summary": "LookupAttribute value (1-2000 characters).",
+          "maps_to": "body.LookupAttributes.0.AttributeValue",
+          "allow_empty": false
         },
         {
           "name": "max-results",
@@ -754,7 +771,18 @@
           "name": "start-time",
           "type": "string",
           "summary": "Timestamp",
-          "maps_to": "body.StartTime"
+          "maps_to": "body.StartTime",
+          "format": "date-time"
+        }
+      ],
+      "constraints": [
+        {
+          "kind": "order",
+          "left": "body.StartTime",
+          "right": "body.EndTime",
+        "op": "lte",
+          "value_type": "date-time",
+        "message": "invalid time range: --start-time must not be after --end-time"
         }
       ],
       "api_surface": [
@@ -824,7 +852,7 @@
         "Prompt"
       ],
       "examples": [
-        "pm aws-cloudtrail query sample-search --credential ct-prod --search-phrase value"
+        "pm aws-cloudtrail query sample-search --credential ct-prod --search-phrase security-events"
       ]
     },
     {
@@ -852,7 +880,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail tags add --credential ct-prod --resource-id value --tags-list value --preview"
+        "pm aws-cloudtrail tags add --credential ct-prod --resource-id arn:aws:cloudtrail:us-east-1:123456789012:trail/example --tags-list '[{\"Key\":\"Environment\",\"Value\":\"preview\"}]' --preview"
       ],
       "risk": "adds tags to a CloudTrail trail, event data store, channel, or dashboard",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
@@ -893,7 +921,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail channel create --credential ct-prod --destinations value --name value --source value --preview"
+        "pm aws-cloudtrail channel create --credential ct-prod --destinations '[{\"Location\":\"arn:aws:lambda:us-east-1:123456789012:function:destination\"}]' --name example-channel --source aws.partner/example --preview"
       ],
       "risk": "creates a CloudTrail organization/service event channel",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
@@ -961,7 +989,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail event-data-store create --credential ct-prod --name value --preview"
+        "pm aws-cloudtrail event-data-store create --credential ct-prod --name example-store --preview"
       ],
       "risk": "creates a CloudTrail Lake event data store",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
@@ -1049,7 +1077,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail trail create --credential ct-prod --name value --s3-bucket-name value --preview"
+        "pm aws-cloudtrail trail create --credential ct-prod --name example-trail --s3-bucket-name example-cloudtrail-bucket --preview"
       ],
       "risk": "creates a CloudTrail trail that delivers log files to an S3 bucket",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
@@ -1074,7 +1102,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail channel delete --credential ct-prod --channel value --preview"
+        "pm aws-cloudtrail channel delete --credential ct-prod --channel arn:aws:cloudtrail:us-east-1:123456789012:channel/example --preview"
       ],
       "risk": "deletes a CloudTrail event channel",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive"
@@ -1096,7 +1124,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail dashboard delete --credential ct-prod --dashboard-id value --preview"
+        "pm aws-cloudtrail dashboard delete --credential ct-prod --dashboard-id arn:aws:cloudtrail:us-east-1:123456789012:dashboard/example --preview"
       ],
       "risk": "deletes a CloudTrail Lake dashboard",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive"
@@ -1118,7 +1146,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail event-data-store delete --credential ct-prod --event-data-store value --preview"
+        "pm aws-cloudtrail event-data-store delete --credential ct-prod --event-data-store arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example --preview"
       ],
       "risk": "deletes a CloudTrail Lake event data store",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive"
@@ -1140,7 +1168,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail resource-policy delete --credential ct-prod --resource-arn value --preview"
+        "pm aws-cloudtrail resource-policy delete --credential ct-prod --resource-arn arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example --preview"
       ],
       "risk": "deletes the resource-based policy attached to a CloudTrail channel or event data store",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive"
@@ -1162,7 +1190,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail trail delete --credential ct-prod --name value --preview"
+        "pm aws-cloudtrail trail delete --credential ct-prod --name example-trail --preview"
       ],
       "risk": "deletes a CloudTrail trail",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive"
@@ -1184,7 +1212,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail org delegated-admin deregister --credential ct-prod --delegated-admin-account-id value --preview"
+        "pm aws-cloudtrail org delegated-admin deregister --credential ct-prod --delegated-admin-account-id 123456789012 --preview"
       ],
       "risk": "removes an AWS account's CloudTrail delegated administrator status for the organization",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute"
@@ -1206,7 +1234,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail federation disable --credential ct-prod --event-data-store value --preview"
+        "pm aws-cloudtrail federation disable --credential ct-prod --event-data-store arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example --preview"
       ],
       "risk": "disables Lake query federation for a CloudTrail event data store",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive"
@@ -1236,7 +1264,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail federation enable --credential ct-prod --event-data-store value --federation-role-arn value --preview"
+        "pm aws-cloudtrail federation enable --credential ct-prod --event-data-store arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example --federation-role-arn arn:aws:iam::123456789012:role/CloudTrailFederation --preview"
       ],
       "risk": "enables Lake query federation for a CloudTrail event data store",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute"
@@ -1268,7 +1296,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail event-configuration set --credential ct-prod --preview"
+        "pm aws-cloudtrail event-configuration set --credential ct-prod --trail-name example-trail --preview"
       ],
       "risk": "sets the maximum event size and context key selectors for a trail or event data store",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
@@ -1294,7 +1322,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail event-selectors set --credential ct-prod --trail-name value --preview"
+        "pm aws-cloudtrail event-selectors set --credential ct-prod --trail-name example-trail --preview"
       ],
       "risk": "sets basic or advanced event selectors on a CloudTrail trail",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
@@ -1338,7 +1366,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail insight-selectors set --credential ct-prod --insight-selectors value --preview"
+        "pm aws-cloudtrail insight-selectors set --credential ct-prod --trail-name example-trail --insight-selectors '[{\"InsightType\":\"ApiCallRateInsight\"}]' --preview"
       ],
       "risk": "enables CloudTrail Insights event types on a trail or event data store",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
@@ -1371,7 +1399,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail resource-policy set --credential ct-prod --resource-arn value --resource-policy value --preview"
+        "pm aws-cloudtrail resource-policy set --credential ct-prod --resource-arn arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example --resource-policy '{\"Version\":\"2012-10-17\",\"Statement\":[]}' --preview"
       ],
       "risk": "attaches a resource-based IAM policy document to a CloudTrail channel or event data store",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
@@ -1396,7 +1424,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail org delegated-admin register --credential ct-prod --member-account-id value --preview"
+        "pm aws-cloudtrail org delegated-admin register --credential ct-prod --member-account-id 123456789012 --preview"
       ],
       "risk": "grants an AWS account CloudTrail delegated administrator status for the organization",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute"
@@ -1426,7 +1454,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail tags remove --credential ct-prod --resource-id value --tags-list value --preview"
+        "pm aws-cloudtrail tags remove --credential ct-prod --resource-id arn:aws:cloudtrail:us-east-1:123456789012:trail/example --tags-list '[{\"Key\":\"Environment\",\"Value\":\"preview\"}]' --preview"
       ],
       "risk": "removes tags from a CloudTrail trail, event data store, channel, or dashboard",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive",
@@ -1451,7 +1479,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail event-data-store restore --credential ct-prod --event-data-store value --preview"
+        "pm aws-cloudtrail event-data-store restore --credential ct-prod --event-data-store arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example --preview"
       ],
       "risk": "restores a soft-deleted CloudTrail Lake event data store",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute"
@@ -1473,7 +1501,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail dashboard refresh --credential ct-prod --dashboard-id value --preview"
+        "pm aws-cloudtrail dashboard refresh --credential ct-prod --dashboard-id arn:aws:cloudtrail:us-east-1:123456789012:dashboard/example --preview"
       ],
       "risk": "starts an on-demand refresh of a CloudTrail Lake dashboard",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
@@ -1498,7 +1526,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail event-data-store ingestion start --credential ct-prod --event-data-store value --preview"
+        "pm aws-cloudtrail event-data-store ingestion start --credential ct-prod --event-data-store arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example --preview"
       ],
       "risk": "resumes event ingestion into a stopped CloudTrail Lake event data store",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute"
@@ -1514,13 +1542,16 @@
           "name": "destinations",
           "type": "string_array",
           "summary": "Array of strings Array Members: Fixed number of 1 item. Length Constraints: Minimum length of 3. Maximum length of 25...",
-          "maps_to": "record.Destinations"
+          "maps_to": "record.Destinations",
+          "min_items": 1,
+          "max_items": 1
         },
         {
           "name": "end-event-time",
           "type": "string",
           "summary": "Timestamp",
-          "maps_to": "record.EndEventTime"
+          "maps_to": "record.EndEventTime",
+          "format": "date-time"
         },
         {
           "name": "import-id",
@@ -1529,14 +1560,46 @@
           "maps_to": "record.ImportId"
         },
         {
+          "name": "import-source-s3-bucket-access-role-arn",
+          "type": "string",
+          "summary": "IAM role ARN used to access the source S3 bucket.",
+          "maps_to": "record.ImportSource.S3.S3BucketAccessRoleArn",
+          "allow_empty": false
+        },
+        {
+          "name": "import-source-s3-bucket-region",
+          "type": "string",
+          "summary": "Source S3 bucket Region.",
+          "maps_to": "record.ImportSource.S3.S3BucketRegion",
+          "allow_empty": false
+        },
+        {
+          "name": "import-source-s3-location-uri",
+          "type": "string",
+          "summary": "Source S3 bucket URI.",
+          "maps_to": "record.ImportSource.S3.S3LocationUri",
+          "allow_empty": false
+        },
+        {
           "name": "start-event-time",
           "type": "string",
           "summary": "Timestamp",
-          "maps_to": "record.StartEventTime"
+          "maps_to": "record.StartEventTime",
+          "format": "date-time"
+        }
+      ],
+      "constraints": [
+        {
+          "kind": "order",
+          "left": "record.StartEventTime",
+          "right": "record.EndEventTime",
+        "op": "lte",
+          "value_type": "date-time",
+        "message": "invalid import time range: --start-event-time must not be after --end-event-time"
         }
       ],
       "examples": [
-        "pm aws-cloudtrail import start --credential ct-prod --preview"
+        "pm aws-cloudtrail import start --credential ct-prod --destinations arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/import-destination --import-source-s3-bucket-access-role-arn arn:aws:iam::123456789012:role/CloudTrailImport --import-source-s3-bucket-region us-east-1 --import-source-s3-location-uri s3://ct-import/source/ --preview"
       ],
       "risk": "starts or resumes a CloudTrail Lake import job from an S3 source",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
@@ -1561,7 +1624,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail trail logging start --credential ct-prod --name value --preview"
+        "pm aws-cloudtrail trail logging start --credential ct-prod --name example-trail --preview"
       ],
       "risk": "starts CloudTrail log delivery for a trail",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute"
@@ -1583,7 +1646,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail event-data-store ingestion stop --credential ct-prod --event-data-store value --preview"
+        "pm aws-cloudtrail event-data-store ingestion stop --credential ct-prod --event-data-store arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example --preview"
       ],
       "risk": "stops event ingestion into a CloudTrail Lake event data store",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive"
@@ -1605,7 +1668,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail import stop --credential ct-prod --import-id value --preview"
+        "pm aws-cloudtrail import stop --credential ct-prod --import-id 11111111-1111-1111-1111-111111111111 --preview"
       ],
       "risk": "stops an in-progress CloudTrail Lake import job",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive"
@@ -1627,7 +1690,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail trail logging stop --credential ct-prod --name value --preview"
+        "pm aws-cloudtrail trail logging stop --credential ct-prod --name example-trail --preview"
       ],
       "risk": "stops CloudTrail log delivery for a trail",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive"
@@ -1655,7 +1718,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail channel update --credential ct-prod --channel value --preview"
+        "pm aws-cloudtrail channel update --credential ct-prod --channel arn:aws:cloudtrail:us-east-1:123456789012:channel/example --preview"
       ],
       "risk": "updates a CloudTrail event channel's name or destinations",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
@@ -1722,7 +1785,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail event-data-store update --credential ct-prod --event-data-store value --preview"
+        "pm aws-cloudtrail event-data-store update --credential ct-prod --event-data-store arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example --name updated-event-data-store --preview"
       ],
       "risk": "updates a CloudTrail Lake event data store's configuration",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
@@ -1807,7 +1870,7 @@
         }
       ],
       "examples": [
-        "pm aws-cloudtrail trail update --credential ct-prod --name value --preview"
+        "pm aws-cloudtrail trail update --credential ct-prod --name example-trail --preview"
       ],
       "risk": "updates a CloudTrail trail's configuration",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute"
