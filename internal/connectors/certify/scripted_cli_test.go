@@ -20,20 +20,26 @@ import (
 type scriptedCLI struct {
 	t *testing.T
 
-	root         string
-	calls        [][]string
-	seen         map[string]int
-	plans        map[string]scriptedReversePlan
-	previewed    map[string]bool
-	consumed     map[string]bool
-	replays      map[string]int
-	nextPlan     int
-	schedule     string
-	scheduleCron string
-	scheduleFlow string
-	installed    bool
-	statusFlow   string
-	protocols    []string
+	root                  string
+	calls                 [][]string
+	seen                  map[string]int
+	plans                 map[string]scriptedReversePlan
+	previewed             map[string]bool
+	consumed              map[string]bool
+	replays               map[string]int
+	nextPlan              int
+	schedule              string
+	scheduleCron          string
+	scheduleFlow          string
+	installedScheduleCron string
+	installedScheduleFlow string
+	installed             bool
+	flowRunSteps          []any
+	flowStatusSteps       []any
+	statusFlow            string
+	reversePlanOutput     string
+	previewOutputLeak     string
+	protocols             []string
 }
 
 type scriptedReversePlan struct {
@@ -53,16 +59,26 @@ const (
 func newScriptedCLI(t *testing.T, protocols ...string) *scriptedCLI {
 	t.Helper()
 	return &scriptedCLI{
-		t:            t,
-		seen:         make(map[string]int),
-		plans:        make(map[string]scriptedReversePlan),
-		previewed:    make(map[string]bool),
-		consumed:     make(map[string]bool),
-		replays:      make(map[string]int),
-		scheduleCron: scriptedScheduleCron,
-		scheduleFlow: scriptedFlowName,
-		statusFlow:   scriptedFlowName,
-		protocols:    protocols,
+		t:                     t,
+		seen:                  make(map[string]int),
+		plans:                 make(map[string]scriptedReversePlan),
+		previewed:             make(map[string]bool),
+		consumed:              make(map[string]bool),
+		replays:               make(map[string]int),
+		scheduleCron:          scriptedScheduleCron,
+		scheduleFlow:          scriptedFlowName,
+		installedScheduleCron: scriptedScheduleCron,
+		installedScheduleFlow: scriptedFlowName,
+		flowRunSteps: []any{
+			map[string]any{"id": "cert_sync", "status": "ok"},
+			map[string]any{"id": "cert_query", "status": "ok"},
+		},
+		flowStatusSteps: []any{
+			map[string]any{"id": "cert_sync", "status": "success"},
+			map[string]any{"id": "cert_query", "status": "success"},
+		},
+		statusFlow: scriptedFlowName,
+		protocols:  protocols,
 	}
 }
 
@@ -188,17 +204,13 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 		return writeScriptedEnvelopeWithoutKind(stdout, map[string]any{"status": "dry_run"})
 	case prefix(args, "flow", "run") && hasJSON(args) && hasFlag(args, "--file") && hasFlag(args, "--flows-dir"):
 		s.seen["flow_run"]++
-		return writeScriptedEnvelopeWithoutKind(stdout, map[string]any{"status": "ok", "steps": []map[string]any{
-			{"id": "cert_sync", "status": "ok"}, {"id": "cert_query", "status": "ok"},
-		}})
+		return writeScriptedEnvelopeWithoutKind(stdout, map[string]any{"status": "ok", "steps": s.flowRunSteps})
 	case prefix(args, "flow", "status"):
 		if len(args) != 6 || args[2] != scriptedFlowName || args[3] != "--flows-dir" || args[4] == "" || args[5] != "--json" {
 			return s.protocolError(stderr, "flow status requires the sample flow name, --flows-dir, and --json")
 		}
 		s.seen["flow_status"]++
-		return writeScriptedEnvelopeWithoutKind(stdout, map[string]any{"flow": s.statusFlow, "steps": []map[string]any{
-			{"id": "cert_sync", "status": "success"}, {"id": "cert_query", "status": "success"},
-		}})
+		return writeScriptedEnvelopeWithoutKind(stdout, map[string]any{"flow": s.statusFlow, "steps": s.flowStatusSteps})
 	case exact(args, scriptedScheduleCreateArgs()...):
 		if s.schedule != "" {
 			return s.protocolError(stderr, "schedule create repeated")
@@ -253,6 +265,10 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 		plan.approvalToken = fmt.Sprintf("scripted-approval-%d", s.nextPlan)
 		s.plans[planID] = plan
 		s.seen["reverse_plan"]++
+		if s.reversePlanOutput != "" {
+			_, _ = io.WriteString(stdout, s.reversePlanOutput)
+			return 0
+		}
 		_, _ = fmt.Fprintf(stdout, "Created reverse plan %s\nApproval token: %s\n", planID, plan.approvalToken)
 		return 0
 	case prefix(args, "reverse", "preview") && hasJSON(args) && len(args) == 4:
@@ -261,7 +277,11 @@ func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 		}
 		s.previewed[args[2]] = true
 		s.seen["reverse_preview"]++
-		return writeScriptedEnvelope(stdout, "ReversePlanPreview", map[string]any{"plan": map[string]any{"id": args[2], "records": 1}})
+		fields := map[string]any{"plan": map[string]any{"id": args[2], "records": 1}}
+		if s.previewOutputLeak != "" {
+			fields["preview_token"] = s.previewOutputLeak
+		}
+		return writeScriptedEnvelope(stdout, "ReversePlanPreview", fields)
 	case prefix(args, "reverse", "run"):
 		return s.runReverse(args, root, stdout, stderr)
 	default:
@@ -360,7 +380,8 @@ func (s *scriptedCLI) writeCrontabSentinel() error {
 	if path == "" || s.schedule == "" {
 		return fmt.Errorf("scripted schedule install missing crontab path or schedule name")
 	}
-	return os.WriteFile(path, []byte("# pm-schedule-"+s.schedule+"\n"), 0o600)
+	line := fmt.Sprintf("%s  pm --root /tmp/scripted-root flow run %s --json  # pm-schedule-%s\n", s.installedScheduleCron, s.installedScheduleFlow, s.schedule)
+	return os.WriteFile(path, []byte(line), 0o600)
 }
 
 func (s *scriptedCLI) clearCrontab() error {
