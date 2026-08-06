@@ -20,8 +20,12 @@ external-review lifecycle.
 
 ## Result
 
-No critical, warning, or informational finding remains. The one planning note
-that described a discarded metadata-summary approach was corrected to the
-actual preflight interface before this review record was written. The review
-found no credential handling, network execution in preflight/reconciliation,
-connector promotion, or targeted-ledger write.
+The follow-up review confirmed F1 was legitimate: production `defs.FS` omits
+raw `api_surface.json`, so the previous optional-surface path could not prove
+the required endpoint ledger. The repair adds a generated compact root
+projection at the shared bundle-loading boundary and fails direct-read
+preflight closed when that projection is missing, unresolved, incomplete, or
+malformed. Focused engine, commandrunner, and connectorgen tests pass,
+including the unchanged runtime sweep; no credential handling, network
+execution in preflight/reconciliation, connector promotion, or targeted-ledger
+write remains.

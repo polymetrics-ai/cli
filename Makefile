@@ -92,8 +92,8 @@ agent-contract-check:
 connectorgen-validate:
 	go run ./cmd/connectorgen validate internal/connectors/defs
 
-# Fails when a bundle's derivable command metadata (api_surface, flag maps_to,
-# output_policy, rest.max_bytes) no longer matches its own operations.json.
+# Fails when derivable command metadata (api_surface, flag maps_to,
+# output_policy, rest.max_bytes) or the compact runtime endpoint ledger drifts.
 # Regenerate with `go run ./cmd/connectorgen surface-sync`.
 connectorgen-surface-sync:
 	go run ./cmd/connectorgen surface-sync --check
