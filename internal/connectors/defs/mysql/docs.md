@@ -19,8 +19,10 @@ The catalog exposes every base table in the configured database as `database.tab
 read paging requires a single-column primary key. Without `cursor_field`, a full snapshot is
 unfiltered and pages by that primary key. Set `cursor_field` only to a non-null single-column
 primary or unique key for incremental reads; pages order by `(cursor_field, primary_key)` and
-resume strictly after the stored cursor. `page_size` and `read_limit` bound every read. CDC targets
-one discovered stream and stores the last acknowledged binary-log file and position.
+resume strictly after a present stored cursor, including an empty or whitespace text value.
+`page_size` and `read_limit` bound every read. Textual and temporal wire values are emitted as
+strings, while binary values are copied before emission. CDC targets one discovered stream and stores
+the last acknowledged binary-log file and position.
 
 ## Write actions & risks
 
@@ -32,8 +34,9 @@ it does not create, alter, or delete database data.
 - CDC guarantees source ordering and at-least-once delivery. A replay at the committed binary-log
   boundary is possible; downstream consumers must use the file/position/row-ordinal dedupe
   identity.
-- CDC requires row-based binary logging and full row images. Statement-only or minimal row-image
-  binary logs are rejected before replication starts or a row is projected.
+- CDC requires row-based binary logging and full row images. Statement events, including DDL and
+  runtime binlog format or row-image changes, are rejected before a later row or checkpoint is
+  emitted.
 - TLS configuration, GTID checkpointing, schema-change event projection, and cross-database CDC
   fan-out are outside this first engine slice.
 
@@ -56,8 +59,7 @@ the generated container, named volume, and an image pulled by that run; it repor
 startup and after teardown. The reset opt-in then runs `colima delete` followed by `colima start`
 for the disposable default profile, because Docker removal frees space inside Colima but does not
 shrink its host VM disk file. It is destructive to that profile and must not be used while it holds
-other work. `POLYMETRICS_DATABASE_KEEP_IMAGE=1` is an explicit local speed opt-in and cannot be
-combined with the reset.
+other work. The harness always removes an image that it pulled for the run.
 
 Podman is not used for this harness: three task-era Podman machines on this host failed to start,
 whereas Docker via Colima was independently verified with MySQL 8.4 and row-format binary logging.

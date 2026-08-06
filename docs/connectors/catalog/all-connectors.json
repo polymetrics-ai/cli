@@ -90197,7 +90197,7 @@
         },
         "cursor_field": {
           "type": "string",
-          "description": "Optional safe, non-null, single-column primary or unique key for cursor-incremental reads."
+          "description": "Optional safe, non-null, single-column primary or unique key for cursor-incremental reads. A present cursor state, including an empty or whitespace value, is a strict resume boundary."
         },
         "page_size": {
           "type": "string",

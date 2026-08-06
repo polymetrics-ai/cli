@@ -7,7 +7,11 @@ import (
 	"strings"
 	"testing"
 
+	gomysql "github.com/go-mysql-org/go-mysql/mysql"
+	"github.com/go-mysql-org/go-mysql/replication"
+
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 )
 
 func testConfig() connectors.RuntimeConfig {
@@ -42,6 +46,40 @@ func TestNameMetadataAndExecutableChangefeed(t *testing.T) {
 	manifest := connectors.ManifestOf(c)
 	if manifest.Risk.Read == "" || len(manifest.ConfigFields) == 0 || len(manifest.SecretFields) != 1 || manifest.SecretFields[0].Name != "password" {
 		t.Fatalf("native mysql manifest = %+v, want bundle configuration and risk", manifest)
+	}
+}
+
+func TestInitialStateOmitsCursorUntilOneExists(t *testing.T) {
+	state, err := New().InitialState(context.Background(), "analytics.events", testConfig())
+	if err != nil {
+		t.Fatalf("InitialState(): %v", err)
+	}
+	if state["stream"] != "analytics.events" {
+		t.Fatalf("initial state = %#v, want stream", state)
+	}
+	if _, present := state[connsdk.CursorStateKey]; present {
+		t.Fatalf("initial state = %#v, want no cursor", state)
+	}
+}
+
+func TestRawCursorStatePreservesExplicitValues(t *testing.T) {
+	for _, tc := range []struct {
+		name    string
+		state   map[string]string
+		want    string
+		present bool
+	}{
+		{name: "missing state"},
+		{name: "missing cursor", state: map[string]string{"stream": "analytics.events"}},
+		{name: "empty cursor", state: map[string]string{connsdk.CursorStateKey: ""}, present: true},
+		{name: "whitespace cursor", state: map[string]string{connsdk.CursorStateKey: "  "}, want: "  ", present: true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			got, present := rawCursorState(tc.state)
+			if got != tc.want || present != tc.present {
+				t.Fatalf("rawCursorState(%#v) = (%q, %t), want (%q, %t)", tc.state, got, present, tc.want, tc.present)
+			}
+		})
 	}
 }
 
@@ -134,6 +172,46 @@ func TestSnapshotQueryUsesCompleteDeterministicPageBounds(t *testing.T) {
 	}
 }
 
+func TestResultRecordsNormalizesTextAndCopiesBinaryValues(t *testing.T) {
+	binaryValue := []byte{0x01, 0x02, 0x03}
+	result := &gomysql.Result{Resultset: &gomysql.Resultset{
+		Fields: []*gomysql.Field{
+			{Name: []byte("label"), Type: gomysql.MYSQL_TYPE_VAR_STRING, Charset: 45},
+			{Name: []byte("occurred_at"), Type: gomysql.MYSQL_TYPE_DATETIME, Charset: mysqlBinaryCharsetID, Flag: gomysql.BINARY_FLAG},
+			{Name: []byte("metadata"), Type: gomysql.MYSQL_TYPE_JSON, Charset: mysqlBinaryCharsetID},
+			{Name: []byte("payload"), Type: gomysql.MYSQL_TYPE_BLOB, Charset: mysqlBinaryCharsetID, Flag: gomysql.BINARY_FLAG},
+		},
+		Values: [][]gomysql.FieldValue{{
+			gomysql.NewFieldValue(gomysql.FieldValueTypeString, 0, []byte("alpha")),
+			gomysql.NewFieldValue(gomysql.FieldValueTypeString, 0, []byte("2026-08-07 12:34:56")),
+			gomysql.NewFieldValue(gomysql.FieldValueTypeString, 0, []byte(`{"enabled":true}`)),
+			gomysql.NewFieldValue(gomysql.FieldValueTypeString, 0, binaryValue),
+		}},
+	}}
+	records, err := resultRecords(result)
+	if err != nil {
+		t.Fatalf("resultRecords(): %v", err)
+	}
+	if len(records) != 1 || records[0]["label"] != "alpha" || records[0]["occurred_at"] != "2026-08-07 12:34:56" || records[0]["metadata"] != `{"enabled":true}` {
+		t.Fatalf("result records = %#v, want normalized text values", records)
+	}
+	payload, ok := records[0]["payload"].([]byte)
+	if !ok || !reflect.DeepEqual(payload, binaryValue) {
+		t.Fatalf("payload = %#v, want copied binary value %#v", records[0]["payload"], binaryValue)
+	}
+	source, ok := result.Values[0][3].Value().([]byte)
+	if !ok {
+		t.Fatal("test result did not retain binary source bytes")
+	}
+	source[0] = 0xff
+	if payload[0] != 0x01 {
+		t.Fatal("resultRecords() retained an alias to binary source bytes")
+	}
+	if _, ok := copyReadBoundaryValue(records[0]["label"]).(string); !ok {
+		t.Fatal("text cursor boundary is not a string")
+	}
+}
+
 func TestSingleColumnPrimaryKeyIsRequiredForCompletePaging(t *testing.T) {
 	for _, primaryKey := range [][]string{nil, []string{"id", "tenant_id"}, []string{"unsafe-key"}} {
 		if _, err := singleColumnPrimaryKey(primaryKey); err == nil {
@@ -222,6 +300,31 @@ func TestValidateBinlogRequirementsFailsClosed(t *testing.T) {
 			err := validateBinlogRequirementRecords(tc.records)
 			if (err != nil) != tc.wantErr {
 				t.Fatalf("validateBinlogRequirementRecords() error = %v, want error=%t", err, tc.wantErr)
+			}
+		})
+	}
+}
+
+func TestCDCQueryEventsFailClosed(t *testing.T) {
+	for _, tc := range []struct {
+		name    string
+		query   string
+		wantErr bool
+	}{
+		{name: "begin", query: "BEGIN"},
+		{name: "commit", query: "COMMIT;"},
+		{name: "rollback", query: "ROLLBACK"},
+		{name: "session metadata", query: "SET TIMESTAMP=1723034096"},
+		{name: "session binlog format", query: "SET SESSION binlog_format = 'STATEMENT'", wantErr: true},
+		{name: "session row image", query: "SET SESSION binlog_row_image = 'MINIMAL'", wantErr: true},
+		{name: "schema change", query: "ALTER TABLE events ADD COLUMN ignored INT", wantErr: true},
+		{name: "statement mutation", query: "INSERT INTO events VALUES (1)", wantErr: true},
+		{name: "empty statement", wantErr: true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			err := validateCDCQueryEvent(&replication.QueryEvent{Query: []byte(tc.query)})
+			if (err != nil) != tc.wantErr {
+				t.Fatalf("validateCDCQueryEvent(%q) error = %v, want error=%t", tc.query, err, tc.wantErr)
 			}
 		})
 	}

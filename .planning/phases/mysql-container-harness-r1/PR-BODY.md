@@ -35,8 +35,10 @@ Docker-context listing showed zero containers, volumes, and images.
 The live test uncovered and fixed Docker argument placement, MySQL protocol metadata casing, and
 MySQL 8.4's `SHOW BINARY LOG STATUS` replacement for the removed `SHOW MASTER STATUS` syntax.
 The saved live run exercised the same native implementation directly; native registry installation
-is now asserted separately by the focused bundle-registry test. A fresh opt-in Docker replay after
-the final lifecycle, paging, and row-ordinal fixes belongs to the outer test phase.
+is now asserted separately by the focused bundle-registry test. Follow-up review makes cleanup of a
+run-pulled image unconditional, preserves explicit empty and whitespace cursor state, normalizes
+text result values, and rejects unsafe statement binlog events. A fresh opt-in Docker replay after
+those final lifecycle, read, and CDC fixes belongs to the outer test phase.
 
 ## Dependency approval evidence
 
