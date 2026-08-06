@@ -246,6 +246,10 @@ func TestValidate_CLISurfaceRejectsMalformedValidationDeclarations(t *testing.T)
 			json: strings.Replace(validCLISurfaceValidationJSON(), `"type": "string", "summary": "Start bound.", "maps_to": "query.started_after", "format": "date-time"`, `"type": "integer", "summary": "Start bound.", "maps_to": "query.started_after", "format": "date-time"`, 1),
 		},
 		{
+			name: "line break control policy requires string flag",
+			json: strings.Replace(validCLISurfaceValidationJSON(), `"type": "string", "summary": "Start bound.", "maps_to": "query.started_after", "format": "date-time", "allow_empty": false, "control_policy": "reject"`, `"type": "string_array", "summary": "Start bound.", "maps_to": "query.started_after", "control_policy": "allow_line_breaks"`, 1),
+		},
+		{
 			name: "constraint requires value type",
 			json: strings.Replace(validCLISurfaceValidationJSON(), `, "value_type": "date-time"`, ``, 1),
 		},
@@ -1827,7 +1831,7 @@ func validCLISurfaceValidationJSON() string {
 					{ "method": "GET", "path": "/widgets" }
 				],
 				"flags": [
-					{ "name": "start", "type": "string", "summary": "Start bound.", "maps_to": "query.started_after", "format": "date-time", "allow_empty": false },
+					{ "name": "start", "type": "string", "summary": "Start bound.", "maps_to": "query.started_after", "format": "date-time", "allow_empty": false, "control_policy": "reject" },
 					{ "name": "end", "type": "string", "summary": "End bound.", "maps_to": "query.started_before", "format": "date-time", "allow_empty": false }
 				],
 				"constraints": [

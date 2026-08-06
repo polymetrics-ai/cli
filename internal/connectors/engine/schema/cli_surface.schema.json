@@ -55,6 +55,10 @@
             "type": "string",
             "enum": ["date-time"]
           },
+          "control_policy": {
+            "type": "string",
+            "enum": ["reject", "allow_line_breaks"]
+          },
           "allow_empty": { "type": "boolean" },
           "required": { "type": "boolean" },
           "max_items": { "type": "integer" },
@@ -125,6 +129,10 @@
                 "format": {
                   "type": "string",
                   "enum": ["date-time"]
+                },
+                "control_policy": {
+                  "type": "string",
+                  "enum": ["reject", "allow_line_breaks"]
                 },
                 "allow_empty": { "type": "boolean" },
                 "required": { "type": "boolean" },

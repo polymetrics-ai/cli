@@ -244,6 +244,78 @@ func TestMessageSendCommandBuildsTypedUnmaskedPreview(t *testing.T) {
 	}
 }
 
+func TestMessageSendCommandValidatesControlsBeforeSMTPConstruction(t *testing.T) {
+	const marker = "email-control-probe"
+	baseFlags := func() map[string][]string {
+		return map[string][]string{
+			"to":      {"to@example.invalid"},
+			"subject": {"command subject"},
+			"body":    {"command body"},
+		}
+	}
+	assertRejected := func(t *testing.T, field string, err error) {
+		t.Helper()
+		if err == nil {
+			t.Fatalf("BuildWriteCommand accepted a control character in %s", field)
+		}
+		if !strings.Contains(err.Error(), field) || !strings.Contains(strings.ToLower(err.Error()), "control") {
+			t.Fatalf("BuildWriteCommand(%s) error = %q, want field and control constraint", field, err)
+		}
+		if strings.Contains(err.Error(), marker) || strings.Contains(err.Error(), "\r") || strings.Contains(err.Error(), "\n") {
+			t.Fatalf("BuildWriteCommand(%s) error exposed supplied input: %q", field, err)
+		}
+	}
+	for _, tc := range []struct {
+		name  string
+		flag  string
+		value string
+	}{
+		{name: "primary recipient", flag: "to", value: "to@example.invalid\r\n" + marker},
+		{name: "carbon-copy recipient", flag: "cc", value: "cc@example.invalid\r\n" + marker},
+		{name: "blind-copy recipient", flag: "bcc", value: "bcc@example.invalid\r\n" + marker},
+		{name: "subject", flag: "subject", value: "subject\r\n" + marker},
+		{name: "body content type", flag: "body-content-type", value: "text/plain\r\n" + marker},
+		{name: "attachment", flag: "attachment", value: "file\r\n" + marker},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			flags := baseFlags()
+			flags[tc.flag] = []string{tc.value}
+			_, err := commandrunner.BuildWriteCommand(context.Background(), New(), commandrunner.Request{
+				Path:   []string{"message", "send"},
+				Config: testRuntimeConfig(t),
+				Flags:  flags,
+			})
+			assertRejected(t, "--"+tc.flag, err)
+		})
+	}
+
+	config := testRuntimeConfig(t)
+	config.Config["from_address"] = "from@example.invalid\r\n" + marker
+	_, err := commandrunner.BuildWriteCommand(context.Background(), New(), commandrunner.Request{
+		Path:   []string{"message", "send"},
+		Config: config,
+		Flags:  baseFlags(),
+	})
+	assertRejected(t, "from_address", err)
+
+	command, err := commandrunner.BuildWriteCommand(context.Background(), New(), commandrunner.Request{
+		Path:    []string{"message", "send"},
+		Config:  testRuntimeConfig(t),
+		Preview: true,
+		Flags: map[string][]string{
+			"to":      {"to@example.invalid"},
+			"subject": {"multiline body"},
+			"body":    {"first line\nsecond line"},
+		},
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand(multiline body): %v", err)
+	}
+	if command.Preview == nil || !strings.Contains(strings.Join(command.Preview.Warnings, "\n"), "first line\r\nsecond line") {
+		t.Fatal("BuildWriteCommand did not preserve normalized multiline body in the MIME preview")
+	}
+}
+
 func TestSendRequiresTypedApprovalBeforeSMTPDispatch(t *testing.T) {
 	address, captured := startSMTPFixture(t)
 	c := New()

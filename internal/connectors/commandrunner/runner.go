@@ -1259,7 +1259,7 @@ func setRecordValue(record connectors.Record, path string, value any) error {
 func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, error) {
 	clean := make([]string, 0, len(values))
 	for _, value := range values {
-		if err := safety.RejectDangerousChars(value, "flag value"); err != nil {
+		if err := validateFlagControlCharacters(flag, value); err != nil {
 			return nil, err
 		}
 		clean = append(clean, value)
@@ -1314,6 +1314,19 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 			Command: "unknown",
 			Reason:  fmt.Sprintf("flag --%s has unsupported type %q", flag.Name, flag.Type),
 		}
+	}
+}
+
+func validateFlagControlCharacters(flag connectors.CommandSurfaceFlag, value string) error {
+	switch flag.ControlPolicy {
+	case "":
+		return safety.RejectDangerousChars(value, "flag value")
+	case "reject":
+		return safety.RejectDangerousChars(value, "flag --"+flag.Name)
+	case "allow_line_breaks":
+		return safety.RejectDangerousCharsExceptLineBreaks(value, "flag --"+flag.Name)
+	default:
+		return &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("flag --%s has unsupported control policy %q", flag.Name, flag.ControlPolicy)}
 	}
 }
 

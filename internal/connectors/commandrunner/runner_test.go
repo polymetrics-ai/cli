@@ -51,6 +51,61 @@ type preflightFakeConnector struct {
 	preflightErr error
 }
 
+func TestCoerceFlagValueControlPolicies(t *testing.T) {
+	tests := []struct {
+		name      string
+		flag      connectors.CommandSurfaceFlag
+		value     string
+		wantErr   string
+		wantValue string
+	}{
+		{
+			name:    "default preserves generic rejection",
+			flag:    connectors.CommandSurfaceFlag{Name: "subject", Type: "string"},
+			value:   "subject\r\ncontrol-probe",
+			wantErr: "flag value contains invalid control characters",
+		},
+		{
+			name:    "named rejection identifies the declared field",
+			flag:    connectors.CommandSurfaceFlag{Name: "subject", Type: "string", ControlPolicy: "reject"},
+			value:   "subject\r\ncontrol-probe",
+			wantErr: "flag --subject contains invalid control characters",
+		},
+		{
+			name:      "multiline body preserves line breaks",
+			flag:      connectors.CommandSurfaceFlag{Name: "body", Type: "string", ControlPolicy: "allow_line_breaks"},
+			value:     "first line\r\nsecond line",
+			wantValue: "first line\r\nsecond line",
+		},
+		{
+			name:    "multiline body rejects other controls",
+			flag:    connectors.CommandSurfaceFlag{Name: "body", Type: "string", ControlPolicy: "allow_line_breaks"},
+			value:   "body\tcontrol-probe",
+			wantErr: "flag --body contains invalid control characters",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			value, err := coerceFlagValue(tt.flag, []string{tt.value})
+			if tt.wantErr != "" {
+				if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+					t.Fatalf("coerceFlagValue error = %v, want %q", err, tt.wantErr)
+				}
+				if strings.Contains(err.Error(), "control-probe") || strings.Contains(err.Error(), "\r") || strings.Contains(err.Error(), "\n") {
+					t.Fatalf("coerceFlagValue error exposed supplied input: %q", err)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("coerceFlagValue: %v", err)
+			}
+			if value != tt.wantValue {
+				t.Fatalf("coerceFlagValue value = %#v, want %#v", value, tt.wantValue)
+			}
+		})
+	}
+}
+
 func (f *preflightFakeConnector) PreflightWriteAction(string) error {
 	return f.preflightErr
 }

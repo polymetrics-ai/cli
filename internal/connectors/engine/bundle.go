@@ -860,14 +860,15 @@ type CLICommandGroup struct {
 
 // CLIFlag describes one command or global flag.
 type CLIFlag struct {
-	Name       string   `json:"name"`
-	Type       string   `json:"type"`
-	Summary    string   `json:"summary,omitempty"`
-	Values     []string `json:"values,omitempty"`
-	MapsTo     string   `json:"maps_to,omitempty"`
-	Format     string   `json:"format,omitempty"`
-	AllowEmpty *bool    `json:"allow_empty,omitempty"`
-	Required   bool     `json:"required,omitempty"`
+	Name          string   `json:"name"`
+	Type          string   `json:"type"`
+	Summary       string   `json:"summary,omitempty"`
+	Values        []string `json:"values,omitempty"`
+	MapsTo        string   `json:"maps_to,omitempty"`
+	Format        string   `json:"format,omitempty"`
+	ControlPolicy string   `json:"control_policy,omitempty"`
+	AllowEmpty    *bool    `json:"allow_empty,omitempty"`
+	Required      bool     `json:"required,omitempty"`
 	// MaxItems/MinItems bound a string_array flag's item count so a bounded
 	// provider-search list can be enforced against the flag the user typed, not
 	// only against the assembled body.
