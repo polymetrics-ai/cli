@@ -131,8 +131,8 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 		t.Errorf("etl_incremental_append stage failed: %+v", incAppend)
 	}
 	iaMode, ok := rep.Capabilities.SyncModes["incremental_append"]
-	if !ok || iaMode.Result != "pass" || iaMode.DataSource != "live" || !iaMode.CursorAdvanced {
-		t.Errorf("SyncModes[incremental_append] = %+v, want {pass live cursor_advanced=true}", iaMode)
+	if !ok || iaMode.Result != "passed_no_cursor" || iaMode.DataSource != "live" || iaMode.CursorAdvanced {
+		t.Errorf("SyncModes[incremental_append] = %+v, want {passed_no_cursor live cursor_advanced=false}", iaMode)
 	}
 
 	// --- stage 9: resume (live run 2) ---

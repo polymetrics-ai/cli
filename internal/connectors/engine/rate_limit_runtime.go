@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 	"sync"
+	"time"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
@@ -48,9 +49,13 @@ type rateLimitResolver struct {
 	coordinationIdentity connectors.CoordinationIdentity
 	policies             []connsdk.RateLimitPolicy
 	registry             *coordination.RateLimitRegistry
+	report               *connectors.RateLimitReport
 }
 
 func newRateLimitResolver(b Bundle, cfg connectors.RuntimeConfig) *rateLimitResolver {
+	if cfg.RateLimitReport != nil {
+		cfg.RateLimitReport.Declare(b.Name, rateLimitDeclaration(b.RateLimits))
+	}
 	if b.RateLimits == nil || b.RateLimits.State != connsdk.RateLimitStateDeclared || len(b.RateLimits.Policies) == 0 {
 		return nil
 	}
@@ -60,6 +65,7 @@ func newRateLimitResolver(b Bundle, cfg connectors.RuntimeConfig) *rateLimitReso
 		coordinationIdentity: cfg.CoordinationIdentity,
 		policies:             b.RateLimits.Policies,
 		registry:             currentRateLimitRegistry(),
+		report:               cfg.RateLimitReport,
 	}
 }
 
@@ -139,8 +145,13 @@ func (r *rateLimitResolver) defaultRequester(base *connsdk.Requester) (*connsdk.
 }
 
 type resolvedRateLimitPolicy struct {
-	limiter    *coordination.RateLimiter
-	costHeader string
+	limiter         *coordination.RateLimiter
+	costHeader      string
+	id              string
+	subjectKind     string
+	selectionReason string
+	report          *connectors.RateLimitReport
+	connector       string
 }
 
 func (r *rateLimitResolver) resolve(policy connsdk.RateLimitPolicy) (resolvedRateLimitPolicy, error) {
@@ -168,9 +179,50 @@ func (r *rateLimitResolver) resolve(policy connsdk.RateLimitPolicy) (resolvedRat
 		return resolvedRateLimitPolicy{}, fmt.Errorf("rate-limit policy %q: %w", policy.ID, err)
 	}
 	return resolvedRateLimitPolicy{
-		limiter:    r.registry.Limiter(coordination.RateLimitKey{Connector: r.connector, PolicyID: policy.ID, Scope: scope}, policy.Budgets),
-		costHeader: costHeader,
+		limiter:         r.registry.Limiter(coordination.RateLimitKey{Connector: r.connector, PolicyID: policy.ID, Scope: scope}, policy.Budgets),
+		costHeader:      costHeader,
+		id:              policy.ID,
+		subjectKind:     string(policy.Scope.SubjectKind),
+		selectionReason: rateLimitSelectionReason(policy.Selector),
+		report:          r.report,
+		connector:       r.connector,
 	}, nil
+}
+
+func rateLimitDeclaration(limits *connsdk.RateLimits) connectors.RateLimitDeclaration {
+	if limits == nil {
+		return connectors.RateLimitDeclarationUndeclared
+	}
+	switch limits.State {
+	case connsdk.RateLimitStateDeclared:
+		return connectors.RateLimitDeclarationDeclared
+	case connsdk.RateLimitStateUnknown:
+		return connectors.RateLimitDeclarationUnknown
+	case connsdk.RateLimitStateNotApplicable:
+		return connectors.RateLimitDeclarationNotApplicable
+	default:
+		return connectors.RateLimitDeclarationUndeclared
+	}
+}
+
+func rateLimitSelectionReason(selector connsdk.RateLimitSelector) string {
+	if selector.All {
+		return "all"
+	}
+	reasons := make([]string, 0, 3)
+	if len(selector.Endpoints) > 0 {
+		reasons = append(reasons, "endpoint")
+	}
+	if len(selector.Tiers) > 0 {
+		reasons = append(reasons, "tier")
+	}
+	if len(selector.AuthTypes) > 0 {
+		reasons = append(reasons, "auth_type")
+	}
+	if len(reasons) == 0 {
+		return "default"
+	}
+	return strings.Join(reasons, "+")
 }
 
 func coordinationRateScopeKind(subject connsdk.RateLimitScopeSubjectKind) (connectors.RateScopeKind, error) {
@@ -225,7 +277,10 @@ type resolvedRateLimitAdmission []resolvedRateLimitPolicy
 
 func (a resolvedRateLimitAdmission) Admit(ctx context.Context, request connsdk.RateLimitRequest) error {
 	for _, policy := range a {
-		if err := policy.limiter.Admit(ctx, request); err != nil {
+		policy.report.RecordPolicySelection(policy.connector, policy.id, policy.subjectKind, policy.selectionReason)
+		if err := policy.limiter.AdmitWithWaitObserver(ctx, request, func(wait time.Duration) {
+			policy.report.RecordPacingWait(policy.connector, wait)
+		}); err != nil {
 			return err
 		}
 	}
@@ -237,7 +292,38 @@ type resolvedRateLimitObserver []resolvedRateLimitPolicy
 func (o resolvedRateLimitObserver) Observe(ctx context.Context, observation connsdk.RateLimitObservation) {
 	for _, policy := range o {
 		policy.limiter.Observe(ctx, observation)
+		policy.report.RecordProviderObservation(policy.connector, policy.id, observation)
 	}
+}
+
+func AttachRateLimitActivityObserver(requester *connsdk.Requester, cfg connectors.RuntimeConfig, connector string) {
+	if requester == nil || cfg.RateLimitReport == nil || connector == "" {
+		return
+	}
+	requester.ActivityObserver = rateLimitActivityReporter{report: cfg.RateLimitReport, connector: connector}
+}
+
+type rateLimitActivityReporter struct {
+	report    *connectors.RateLimitReport
+	connector string
+}
+
+var _ connsdk.RateLimitActivityObserver = rateLimitActivityReporter{}
+
+func (r rateLimitActivityReporter) ObserveProviderRateLimit(_ context.Context, observation connsdk.RateLimitObservation) {
+	if observation.Status == 429 {
+		r.report.RecordProvider429Observed(r.connector)
+	}
+}
+
+func (r rateLimitActivityReporter) ObserveProviderRateLimitWait(_ context.Context, observation connsdk.RateLimitObservation, wait time.Duration, honored bool) {
+	if observation.Status == 429 {
+		r.report.RecordProvider429Wait(r.connector, wait, honored)
+	}
+}
+
+func (r rateLimitActivityReporter) ObserveRequestLatency(_ context.Context, latency time.Duration) {
+	r.report.RecordRequestLatency(r.connector, latency)
 }
 
 // RequesterFor returns a requester whose next logical requests are governed by

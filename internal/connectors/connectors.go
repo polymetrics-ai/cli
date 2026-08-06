@@ -109,6 +109,11 @@ type RuntimeConfig struct {
 	ConfigurationDigest   string               `json:"-"`
 	WriteApprovalScope    string               `json:"-"`
 	ApprovedPayloadSHA256 map[string]string    `json:"-"`
+	// RateLimitReport is an optional, secret-free execution collector. It is
+	// deliberately separate from CoordinationIdentity and CredentialRevision:
+	// neither identity projections nor approval/rotation evidence belong in
+	// operator output.
+	RateLimitReport *RateLimitReport `json:"-"`
 	// SecretStore, when set, persists a provider-rotated secret back to the
 	// caller's encrypted credential store. Optional; see SecretStore.
 	SecretStore SecretStore `json:"-"`

@@ -180,6 +180,10 @@ type Requester struct {
 	// Observer receives parsed response rate-limit facts synchronously. It is
 	// deliberately not an output hook; #3755 owns operator-visible events.
 	Observer RateLimitObserver
+	// ActivityObserver receives typed timing and provider-rate-limit activity
+	// for a bounded operator summary. It never receives a request URL, raw
+	// headers, body, credential, binding, scope key, or runtime subject.
+	ActivityObserver RateLimitActivityObserver
 	// RateLimitCostHeader is the one provider header named by the selected
 	// declaration that reports a request's actual point cost. It is an HTTP
 	// field name validated by the bundle loader, never a caller-provided value.
@@ -301,10 +305,27 @@ func (r *Requester) admit(ctx context.Context, method string, attempt int) error
 
 func (r *Requester) observeRateLimit(ctx context.Context, status int, header http.Header, attempt int) RateLimitObservation {
 	observation, ok := rateLimitObservation(status, header, attempt, r.now(), r.RateLimitCostHeader)
+	if ok && r.ActivityObserver != nil {
+		r.ActivityObserver.ObserveProviderRateLimit(ctx, observation)
+	}
 	if ok && r.Observer != nil {
 		r.Observer.Observe(ctx, observation)
 	}
 	return observation
+}
+
+func (r *Requester) observeRequestLatency(ctx context.Context, started time.Time) {
+	if r.ActivityObserver == nil {
+		return
+	}
+	r.ActivityObserver.ObserveRequestLatency(ctx, time.Since(started))
+}
+
+func (r *Requester) observeProviderRateLimitWait(ctx context.Context, observation RateLimitObservation, wait time.Duration, honored bool) {
+	if r.ActivityObserver == nil || observation.Status != http.StatusTooManyRequests {
+		return
+	}
+	r.ActivityObserver.ObserveProviderRateLimitWait(ctx, observation, wait, honored)
 }
 
 type rateLimitAdmissionError struct {
@@ -883,7 +904,15 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 			return nil, err
 		}
 
+		observeLatency := r.ActivityObserver != nil
+		var sendStarted time.Time
+		if observeLatency {
+			sendStarted = time.Now()
+		}
 		resp, err := client.Do(req)
+		if observeLatency {
+			r.observeRequestLatency(ctx, sendStarted)
+		}
 		if err != nil {
 			bodyErr := cleanupRequestBody(body)
 			lastErr = fmt.Errorf("send request: %w", err)
@@ -943,9 +972,12 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 
 		if !r.DisableRetries && r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {
 			lastErr = responseHTTPError(resp.StatusCode, fullURL, respBody, observation)
-			if werr := r.sleep(ctx, r.backoff(attempt, observation)); werr != nil {
+			wait := r.backoff(attempt, observation)
+			if werr := r.sleep(ctx, wait); werr != nil {
+				r.observeProviderRateLimitWait(ctx, observation, wait, false)
 				return nil, werr
 			}
+			r.observeProviderRateLimitWait(ctx, observation, wait, true)
 			continue
 		}
 

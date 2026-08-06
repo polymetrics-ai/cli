@@ -83,12 +83,14 @@ func (h *Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig,
 	if baseURL == "" {
 		baseURL = "https://api.hooray.nl"
 	}
+	login := &connsdk.Requester{
+		Client:    h.Client,
+		BaseURL:   baseURL,
+		UserAgent: "polymetrics-go-cli",
+	}
+	engine.AttachRateLimitActivityObserver(login, cfg, h.ConnectorName())
 	return &sessionTokenAuth{
-		login: &connsdk.Requester{
-			Client:    h.Client,
-			BaseURL:   baseURL,
-			UserAgent: "polymetrics-go-cli",
-		},
+		login:    login,
 		username: username,
 		password: password,
 	}, nil

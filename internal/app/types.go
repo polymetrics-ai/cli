@@ -123,20 +123,21 @@ type RunETLRequest struct {
 }
 
 type Run struct {
-	ID                 string            `json:"id"`
-	Type               string            `json:"type"`
-	Connection         string            `json:"connection,omitempty"`
-	Stream             string            `json:"stream,omitempty"`
-	Status             string            `json:"status"`
-	RecordsRead        int               `json:"records_read"`
-	RecordsTransformed int               `json:"records_transformed"`
-	RecordsLoaded      int               `json:"records_loaded"`
-	RecordsFailed      int               `json:"records_failed"`
-	BatchCount         int               `json:"batch_count,omitempty"`
-	Checkpoint         map[string]string `json:"checkpoint,omitempty"`
-	Error              string            `json:"error,omitempty"`
-	StartedAt          time.Time         `json:"started_at"`
-	CompletedAt        time.Time         `json:"completed_at,omitempty"`
+	ID                 string                      `json:"id"`
+	Type               string                      `json:"type"`
+	Connection         string                      `json:"connection,omitempty"`
+	Stream             string                      `json:"stream,omitempty"`
+	Status             string                      `json:"status"`
+	RecordsRead        int                         `json:"records_read"`
+	RecordsTransformed int                         `json:"records_transformed"`
+	RecordsLoaded      int                         `json:"records_loaded"`
+	RecordsFailed      int                         `json:"records_failed"`
+	BatchCount         int                         `json:"batch_count,omitempty"`
+	Checkpoint         map[string]string           `json:"checkpoint,omitempty"`
+	RateLimit          connectors.RateLimitSummary `json:"rate_limit"`
+	Error              string                      `json:"error,omitempty"`
+	StartedAt          time.Time                   `json:"started_at"`
+	CompletedAt        time.Time                   `json:"completed_at,omitempty"`
 }
 
 type QueryTableRequest struct {

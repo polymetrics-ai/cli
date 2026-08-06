@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
@@ -198,6 +199,117 @@ func TestRateLimitResolverConsumesDeclaredActualCostHeader(t *testing.T) {
 	}
 	if len(clock.waits) != 1 || clock.waits[0] != time.Minute {
 		t.Fatalf("actual cost did not tighten the declared fixed budget, waits = %v", clock.waits)
+	}
+}
+
+func TestRateLimitReportShowsDeclaredPolicyPacingAndProviderPushbackWithoutSecrets(t *testing.T) {
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		requests++
+		if requests == 1 {
+			w.Header().Set("RateLimit-Remaining", "0")
+			w.WriteHeader(http.StatusTooManyRequests)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	}))
+	t.Cleanup(server.Close)
+
+	clock := &engineRateLimitClock{now: time.Date(2026, 8, 6, 12, 0, 0, 0, time.UTC)}
+	restore := replaceRateLimitRegistryForTest(coordination.NewRateLimitRegistry(clock))
+	t.Cleanup(restore)
+	bundle := loadRateLimitFixture(t, "paced")
+	bundle.HTTP.URL = server.URL
+	report := connectors.NewRateLimitReport()
+	config := rateLimitTestConfigForBinding(t, "raw-binding-must-not-escape", "credential-revision-must-not-escape")
+	config.Config["base_url"] = server.URL
+	config.Config["account_id"] = "runtime-subject-must-not-escape"
+	config.Secrets = map[string]string{"token": "token-must-not-escape"}
+	config.RateLimitReport = report
+	scope, err := config.CoordinationIdentity.RateScopeKey(connectors.RateLimitScope{
+		PolicyID: "widgets-points",
+		Kind:     connectors.RateScopeKindAccount,
+		Subject:  config.Config["account_id"],
+	})
+	if err != nil {
+		t.Fatalf("RateScopeKey: %v", err)
+	}
+
+	runtime, err := newRuntime(context.Background(), bundle, config, nil)
+	if err != nil {
+		t.Fatalf("newRuntime: %v", err)
+	}
+	requester, err := runtime.RequesterFor(http.MethodGet, "/widgets")
+	if err != nil {
+		t.Fatalf("RequesterFor: %v", err)
+	}
+	requester.MaxRetries = 1
+	requester.BaseBackoff = 2 * time.Second
+	requester.MaxBackoff = 2 * time.Second
+	requester.Jitter = func(cap time.Duration) time.Duration { return cap }
+	requester.Sleep = func(context.Context, time.Duration) error { return nil }
+	if _, err := requester.Do(context.Background(), http.MethodGet, "/widgets", nil, nil); err != nil {
+		t.Fatalf("Do: %v", err)
+	}
+
+	summary := report.Snapshot()
+	if len(summary.Connectors) != 1 {
+		t.Fatalf("report connector count = %d, want 1", len(summary.Connectors))
+	}
+	got := summary.Connectors[0]
+	if got.Declaration != connectors.RateLimitDeclarationDeclared {
+		t.Fatalf("declaration = %q, want declared", got.Declaration)
+	}
+	if got.PacingWaitMS != int64(time.Minute/time.Millisecond) {
+		t.Fatalf("pacing wait = %dms, want 60000ms", got.PacingWaitMS)
+	}
+	if got.Provider429Observed != 1 || got.Provider429Honored != 1 || got.ProviderWaitMS != int64((2*time.Second)/time.Millisecond) {
+		t.Fatalf("provider pushback = observed=%d honored=%d wait=%dms, want 1/1/2000", got.Provider429Observed, got.Provider429Honored, got.ProviderWaitMS)
+	}
+	if len(got.Policies) != 1 {
+		t.Fatalf("applied policies = %d, want 1", len(got.Policies))
+	}
+	policy := got.Policies[0]
+	if policy.ID != "widgets-points" || policy.SubjectKind != "account" || policy.SelectionReason != "endpoint+tier+auth_type" {
+		t.Fatalf("policy = %+v, want declared structural selection details", policy)
+	}
+	if policy.ProviderRemaining == nil || *policy.ProviderRemaining != 0 {
+		t.Fatalf("provider remaining = %v, want 0", policy.ProviderRemaining)
+	}
+
+	encoded, err := json.Marshal(summary)
+	if err != nil {
+		t.Fatalf("marshal report: %v", err)
+	}
+	for _, forbidden := range []string{
+		"raw-binding-must-not-escape",
+		"credential-revision-must-not-escape",
+		"runtime-subject-must-not-escape",
+		"token-must-not-escape",
+		string(scope),
+	} {
+		if strings.Contains(string(encoded), forbidden) {
+			t.Fatal("rate-limit report leaked prohibited identity data")
+		}
+		if human := strings.Join(summary.HumanLines(), "\n"); strings.Contains(human, forbidden) {
+			t.Fatal("human rate-limit report leaked prohibited identity data")
+		}
+	}
+}
+
+func TestRateLimitReportCallsAbsentDeclarationUndeclared(t *testing.T) {
+	report := connectors.NewRateLimitReport()
+	runtime, err := newRuntime(context.Background(), Bundle{Name: "absent", HTTP: HTTPBase{URL: "https://example.test"}}, connectors.RuntimeConfig{RateLimitReport: report}, nil)
+	if err != nil {
+		t.Fatalf("newRuntime: %v", err)
+	}
+	if _, err := runtime.RequesterFor(http.MethodGet, "/widgets"); err != nil {
+		t.Fatalf("RequesterFor: %v", err)
+	}
+	summary := report.Snapshot()
+	if len(summary.Connectors) != 1 || summary.Connectors[0].Declaration != connectors.RateLimitDeclarationUndeclared {
+		t.Fatalf("undeclared summary = %+v", summary)
 	}
 }
 

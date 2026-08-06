@@ -97,6 +97,14 @@ pm runtime doctor --json
 pm etl run --connection my-github --stream issues --runtime --json
 ```
 
+## Rate-limit output
+
+ETL run results and status for stored runs include a bounded `run.rate_limit`
+summary. The [CLI ETL manual](https://github.com/polymetrics-ai/cli/blob/main/docs/cli/etl.md)
+is the authoritative contract for its human and JSON fields, safe failure
+carriers, and secret-free output boundary. Preflight errors before a run exists
+use the ordinary `Error` envelope and do not invent a run summary.
+
 ### JSON output
 
 ```json
@@ -108,8 +116,24 @@ pm etl run --connection my-github --stream issues --runtime --json
     "records_read": 142,
     "records_loaded": 142,
     "records_failed": 0,
-    "stream": "issues",
-    "connection": "my-github",
+    "rate_limit": {
+      "connectors": [{
+        "connector": "github",
+        "declaration": "declared",
+        "policies": [{
+          "id": "core-rest",
+          "subject_kind": "account",
+          "selection_reason": "endpoint+auth_type",
+          "provider_remaining": 4987
+        }],
+        "pacing_wait_ms": 0,
+        "provider_429_observed": 0,
+        "provider_429_honored": 0,
+        "provider_wait_ms": 0,
+        "request_latency_ms": 742,
+        "request_count": 3
+      }]
+    },
     "started_at": "2026-01-15T10:00:00Z",
     "completed_at": "2026-01-15T10:00:03Z"
   },

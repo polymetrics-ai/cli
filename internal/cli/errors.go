@@ -37,14 +37,9 @@ type cliError struct {
 	// set by any other error constructor in this package.
 	exitOverride *int
 
-	// alreadyReported suppresses writeError's own stdout/stderr output. Set
-	// only by certifyExitErrorf: `pm connectors certify` writes its
-	// ConnectorCertification/BatchCertification report envelope (or
-	// human-readable rendering) to stdout itself BEFORE returning this
-	// error, so writeError must not also emit a second, conflicting "Error"
-	// JSON envelope — cli.Run's one-envelope-per-invocation contract
-	// (json_contract stage, THREAT-MODEL.md) would otherwise be violated.
-	// writeError still returns the correct exit code either way.
+	// alreadyReported suppresses writeError's own stdout/stderr output after a
+	// command has already rendered its report, preserving one envelope per
+	// invocation while retaining the command's non-zero exit code.
 	alreadyReported bool
 }
 

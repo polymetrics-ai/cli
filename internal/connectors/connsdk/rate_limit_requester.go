@@ -38,6 +38,17 @@ type RateLimitObserver interface {
 	Observe(ctx context.Context, observation RateLimitObservation)
 }
 
+// RateLimitActivityObserver receives the small typed subset of requester
+// activity needed for a bounded operator summary. It must not retain request
+// URLs, headers, bodies, credentials, bindings, scope keys, or raw subjects.
+// The engine owns the report implementation; this package only exposes the
+// secret-free observation seam.
+type RateLimitActivityObserver interface {
+	ObserveProviderRateLimit(context.Context, RateLimitObservation)
+	ObserveProviderRateLimitWait(context.Context, RateLimitObservation, time.Duration, bool)
+	ObserveRequestLatency(context.Context, time.Duration)
+}
+
 // RateLimitObservationSource identifies the provider signal that made an
 // observation relevant. A response can carry several parsed fields; Source
 // names the most specific timing/status signal without retaining raw headers.

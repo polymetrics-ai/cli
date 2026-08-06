@@ -35,6 +35,43 @@ DESCRIPTION
   endpoints. It acquires a Dragonfly lease and appends a PostgreSQL run-ledger
   record after the local ETL completes.
 
+RATE LIMIT OUTPUT
+  Every emitted ETL run result and status for a stored run includes a bounded
+  rate-limit summary at run.rate_limit. Preflight errors that prevent creation
+  of a run use the ordinary Error output and do not invent a run summary.
+
+  Human output labels local_pacing_wait, provider_429_observed,
+  provider_429_honored, provider_429_wait, and request_latency separately so a
+  slow run does not look like one undifferentiated delay. JSON uses
+  pacing_wait_ms, provider_429_observed, provider_429_honored,
+  provider_wait_ms, request_latency_ms, and request_count.
+
+  A declared connector reports selected policy IDs, subject kinds, structural
+  selection reasons, and typed provider budget facts when available. Declaration
+  is declared, unknown, not_applicable, or undeclared. An undeclared connector
+  has no rate_limits.json; it is not a claim that provider traffic is unlimited.
+  Policies are coalesced rather than emitted per request; policies_omitted
+  reports any selected policies omitted from the bounded summary.
+
+  Rate-limit output never includes credentials, token-derived or runtime subject
+  values, raw bindings, scope values, configuration, request headers, URLs,
+  bodies, or credential revisions.
+
+  Failed pm etl run and pm etl status results emit a failed run ID and the same
+  bounded summary. Their JSON failed-run carrier contains only id, status, and
+  rate_limit; it omits error text and checkpoints.
+
+  Completed-run JSON contains only run ID and type, status, counters, timing,
+  and rate-limit facts. It omits connections, streams, error text, and
+  checkpoints.
+
+  If --runtime recording fails after ETL completes, pm still emits the completed
+  run and summary, then exits non-zero. It reports runtime_recorded=false and
+  runtime_recording=failed so incomplete runtime recording is explicit.
+
+  If completed-run state persistence fails, pm still emits the completed run and
+  summary, then exits non-zero with persistence=failed.
+
 DIRECT CONNECTOR COMMANDS
   check
     Calls the connector check operation and returns status=ok on success.
