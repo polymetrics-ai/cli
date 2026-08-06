@@ -224,6 +224,13 @@ func TestGlueStagesScheduleInstallRejectsMismatchedCommand(t *testing.T) {
 			},
 			want: "expected flow run payload",
 		},
+		{
+			name: "sentinel delimiter",
+			mutate: func(driver *scriptedCLI) {
+				driver.installedScheduleGap = ""
+			},
+			want: "sentinel must be preceded by whitespace",
+		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")

@@ -509,7 +509,11 @@ func validateInstalledScheduleLine(content, sentinel, cron, flow string) string 
 	if line == "" {
 		return fmt.Sprintf("schedule_install: sentinel %q not present in crontab after install", sentinel)
 	}
-	command := strings.TrimSpace(strings.TrimSuffix(line, sentinel))
+	prefix := strings.TrimSuffix(line, sentinel)
+	if len(prefix) == 0 || (prefix[len(prefix)-1] != ' ' && prefix[len(prefix)-1] != '\t') {
+		return "schedule_install: sentinel must be preceded by whitespace"
+	}
+	command := strings.TrimSpace(prefix)
 	if !strings.HasPrefix(command, cron+"  ") {
 		return fmt.Sprintf("schedule_install: sentinel-bearing line does not begin with cron %q", cron)
 	}
