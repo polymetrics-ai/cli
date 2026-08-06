@@ -5,11 +5,14 @@ import (
 	"io/fs"
 	"net/http"
 	"net/url"
+	"regexp"
 	"strings"
 	"time"
 
 	"polymetrics.ai/internal/connectors/connsdk"
 )
+
+var rateLimitScopeConfigKeyPattern = regexp.MustCompile(`^[A-Za-z][A-Za-z0-9_-]*$`)
 
 // loadRateLimits loads the optional, provider-cited rate_limits.json contract.
 // Absence deliberately remains valid during the fleet migration: an omitted
@@ -83,6 +86,9 @@ func validateRateLimitPolicy(policy connsdk.RateLimitPolicy) error {
 	}
 	if !validRateLimitScopeSubject(policy.Scope.SubjectKind) {
 		return fmt.Errorf("scope.subject_kind %q is not a supported non-secret subject", policy.Scope.SubjectKind)
+	}
+	if !rateLimitScopeConfigKeyPattern.MatchString(policy.Scope.SubjectConfig) {
+		return fmt.Errorf("scope.subject_config %q must name a non-secret config property", policy.Scope.SubjectConfig)
 	}
 	if len(policy.Budgets) == 0 {
 		return fmt.Errorf("budgets must contain at least one provider budget")

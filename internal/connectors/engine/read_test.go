@@ -18,6 +18,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/coordination"
 )
 
 // widgetsSchema compiles a minimal record schema with a primary key and
@@ -1971,6 +1972,47 @@ func TestReadRateLimitSleeperInvokedNMinus1Times(t *testing.T) {
 	// 3 requests total -> sleeper invoked between them: N-1 = 2 times.
 	if sleeps != 2 {
 		t.Fatalf("sleeps = %d, want 2 (N-1 for 3 requests)", sleeps)
+	}
+}
+
+func TestDeclaredRateLimitAddsToButDoesNotReplaceLegacyPageLimiter(t *testing.T) {
+	page := 0
+	srv := jsonServer(t, func(w http.ResponseWriter, _ *http.Request) {
+		page++
+		if page < 3 {
+			_, _ = fmt.Fprintf(w, `{"data":[{"id":"%d","name":"a","updated_at":"2026-01-01T00:00:00Z"}], "has_more": true}`, page)
+			return
+		}
+		_, _ = w.Write([]byte(`{"data":[], "has_more": false}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Records: RecordsSpec{Path: "data"},
+		Pagination: &PaginationSpec{
+			Type: "cursor", CursorParam: "starting_after", LastRecordField: "id", StopPath: "has_more",
+		},
+	})
+	b.HTTP.RateLimit = &RateLimitSpec{RequestsPerMinute: 600}
+	b = withAllRateLimit(b)
+	clock := &engineRateLimitClock{now: time.Date(2026, 8, 6, 12, 0, 0, 0, time.UTC)}
+	restore := replaceRateLimitRegistryForTest(coordination.NewRateLimitRegistry(clock))
+	t.Cleanup(restore)
+
+	legacyWaits := 0
+	recs, err := readAllWithSleeper(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets", Config: rateLimitTestConfig(t)}, nil, func(context.Context, time.Duration) error {
+		legacyWaits++
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if len(recs) != 2 {
+		t.Fatalf("records = %+v, want 2", recs)
+	}
+	if legacyWaits != 2 {
+		t.Fatalf("legacy page waits = %d, want 2", legacyWaits)
+	}
+	if got, want := clock.waits, []time.Duration{time.Second, time.Second}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("declared requester waits = %v, want %v", got, want)
 	}
 }
 

@@ -2,7 +2,7 @@ package connsdk
 
 // RateLimitState records whether a bundle has an enforceable provider policy.
 // Unknown and not_applicable are deliberate, honest states; only declared
-// policies are eligible for a future resolver to enforce.
+// policies are eligible for engine resolution and pacing.
 type RateLimitState string
 
 const (
@@ -12,8 +12,8 @@ const (
 )
 
 // RateLimits is the typed form of an optional bundle rate_limits.json file.
-// It contains no credential values or config templates. A future resolver may
-// use its declared selectors and scope subject kind, but must not infer scope
+// It contains no credential values or config templates. The engine resolves
+// its declared selectors and scope subject kind without inferring scope
 // identity from a secret.
 type RateLimits struct {
 	SchemaVersion int               `json:"schema_version"`
@@ -59,7 +59,7 @@ type RateLimitEndpointSelector struct {
 }
 
 // RateLimitScopeSubjectKind names the non-secret provider subject that joins
-// a policy ID and credential binding in a future coordination key. It is
+// a policy ID and credential binding in a coordination key. It is
 // intentionally a kind, not a value: raw credentials and secret-derived
 // values must never enter a rate-limit key, registry, or event.
 type RateLimitScopeSubjectKind string
@@ -73,9 +73,14 @@ const (
 )
 
 // RateLimitScope declares the one non-secret subject class for the policy.
-// #3754 owns resolving that class to an opaque local/shared scope key.
+// The engine resolves that class to an opaque registry scope key.
 type RateLimitScope struct {
 	SubjectKind RateLimitScopeSubjectKind `json:"subject_kind"`
+	// SubjectConfig names the non-secret config property that supplies this
+	// policy's runtime subject. The declaration contains only the property
+	// name; the resolved value is passed directly to CoordinationIdentity and
+	// is never retained by the registry or emitted in observations.
+	SubjectConfig string `json:"subject_config"`
 }
 
 // RateLimitBudgetModel describes how a provider replenishes capacity.
@@ -124,8 +129,8 @@ type RateLimitBudget struct {
 
 // RateLimitCost describes a cost-weighted request budget. DefaultCost applies
 // when the provider gives no per-request observation; ResponseHeader names an
-// optional provider header a future resolver may parse. Neither field carries
-// a request value or credential.
+// optional provider header parsed into a typed scalar. Neither field carries a
+// request value or credential.
 type RateLimitCost struct {
 	DefaultCost    *float64 `json:"default_cost,omitempty"`
 	ResponseHeader string   `json:"response_header,omitempty"`

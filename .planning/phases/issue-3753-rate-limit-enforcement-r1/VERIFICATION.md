@@ -1,11 +1,12 @@
 # Verification — issue-3753-rate-limit-enforcement-r1
 
-Status: **planned**.
+Status: **local verification passed; full suite remains CI-owned.**
 
-- [ ] Focused registry/resolver/path coverage tests pass without wall-clock sleeps.
-- [ ] Focused `-race` tests pass.
-- [ ] Legacy no-declaration regression proves unchanged behavior.
-- [ ] `gofmt`, targeted `go vet`, and `go build ./cmd/pm` pass.
-- [ ] `connectorgen validate` and `surface-sync --check` pass with no production declaration/embed change.
-- [ ] Individual `make verify` non-full-suite gates and `scripts/verify-gsd-workflow origin/main` pass.
-- [ ] Inline `execute-phase`, `verify-work`, and `code-review` evidence is recorded before handoff.
+- [x] Focused registry/resolver/path coverage tests pass without wall-clock sleeps: `go test ./internal/coordination ./internal/connectors/connsdk ./internal/connectors/engine -count=1`.
+- [x] Focused `-race` tests pass: `go test -race ./internal/coordination ./internal/connectors/engine -run 'Test(RateLimit|DeclaredRateLimitFixture|UnknownRateLimitFixture|AbsentRateLimit)' -count=1`.
+- [x] Legacy no-declaration regression proves unchanged behavior, and the legacy/declaration precedence test proves both limiters remain active.
+- [x] `gofmt`, targeted `go vet`, and `go build ./cmd/pm` pass.
+- [x] `connectorgen validate` and `surface-sync --check` pass with 550 production bundles and no production declaration/embed change.
+- [x] Individual non-full-suite gates pass: `tidy-check`, `lint`, `docs-check-no-build`, `smoke-no-build`, `agent-contract-check`, `connectorgen-validate`, `connectorgen-surface-sync`, `connector-boundary`, and `release-workflow-check`.
+- [ ] `scripts/verify-gsd-workflow origin/main` will run after the implementation commit so its diff contains the production changes.
+- [x] Inline `execute-phase`, `verify-work`, and `code-review` prompts were generated and followed under the documented manual-GSD fallback.

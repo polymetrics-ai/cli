@@ -318,7 +318,7 @@ const validProviderCitedRateLimits = `{
 			"tiers": ["enterprise"],
 			"auth_types": ["oauth_app"]
 		},
-		"scope": {"subject_kind": "installation"},
+		"scope": {"subject_kind": "installation", "subject_config": "installation_id"},
 		"budgets": [
 			{
 				"model": "fixed_window",
@@ -412,6 +412,11 @@ func TestBundleLoadRejectsUncitedOrMalformedRateLimits(t *testing.T) {
 			"version": "2026-08"
 		},`, "", 1),
 			want: "source",
+		},
+		{
+			name: "policy scope must name a non-secret config key",
+			data: strings.Replace(validProviderCitedRateLimits, `, "subject_config": "installation_id"`, "", 1),
+			want: "subject_config",
 		},
 		{
 			name: "retrieval date is not a date",

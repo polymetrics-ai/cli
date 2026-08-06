@@ -823,8 +823,8 @@ client-side" (see stripe's `docs.md`). Any key on `metadata.json.rate_limit` bey
 `requests_per_minute` (e.g. a `strategy` field) is not even a field on the Go type and is silently
 dropped — don't declare one.
 
-**Provider-cited `rate_limits.json` is a staged declaration, not an automatic throttle**: this
-optional, closed-schema file records a provider policy only when it can be cited. A declared policy
+**Provider-cited `rate_limits.json` is an enforced HTTP policy declaration**: this optional,
+closed-schema file records a provider policy only when it can be cited. A declared policy
 must carry an HTTPS provider artifact URL without userinfo, query parameters, or credential-like
 query-style fragment parameters (an ordinary documentation anchor fragment is allowed) and an ISO
 `retrieved_at` date. Every file starts with `schema_version: 1`; `version` is optional
@@ -836,14 +836,30 @@ provider response header that reports cost.
 
 The root state is deliberately explicit: `declared` requires one or more cited policies, while
 `unknown` and `not_applicable` require a nonblank reason and cannot carry a policy. A policy's
-`scope.subject_kind` is one of `account`, `installation`, `application`, `endpoint`, or `ip`; it
-names a non-secret subject class only. Never put a credential, token-derived value, or runtime
-subject value in the declaration. The future registry's scope key is the credential binding plus
-policy ID plus this non-secret subject, not a raw credential (#3754).
+`scope.subject_kind` is one of `account`, `installation`, `application`, `endpoint`, or `ip`, and
+`scope.subject_config` names the corresponding **non-secret** `spec.json` configuration property.
+The declaration records only that property name; it never carries a runtime subject. At runtime the
+engine gives the transient config value to `connectors.CoordinationIdentity.RateScopeKey`, so the
+registry key is the credential binding plus policy ID plus the non-secret subject as an opaque salted
+projection. Never put a credential, token-derived value, or runtime subject value in the declaration,
+logs, events, or persisted state. A subject kind outside this vocabulary is refused.
 
-This file is parsed and validated by the bundle loader, but it does not yet select, pace, or
-observe traffic. #3753 owns attaching a resolved policy to every requester path; #3754 owns scope
-registries; #3755 owns operator output. Do not use this declaration to add a `streams.json`
+For each outbound engine request, the runtime resolves every matching declared policy and admits all
+of their budgets before the logical requester send. `all` matches the whole HTTP connector; an
+endpoint selector matches its declared method/path pair; optional `tiers` and `auth_types` match the
+non-secret `config.tier` and `config.auth_type` values as additional AND conditions. Check requests,
+stream pages (including pagination), direct and operation direct reads, declarative and operation
+writes (form, JSON, and multipart), and binary downloads all use this same requester admission path.
+The process-local registry enforces each declared burst/sustained request/point budget with its
+fixed-window, sliding-window, token-bucket, or leaky-bucket model. A declared actual-cost response
+header tightens a point budget when it reports a higher cost; it never credits capacity from a lower
+or absent value. Parsed reset/remaining/429 observations likewise only tighten state. #3755 still
+owns operator-visible output; this mechanism does not emit rate-limit events itself.
+
+An absent declaration, `unknown`, `not_applicable`, or a non-matching selector leaves the requester
+unchanged. `streams.json` `base.rate_limit` remains the legacy page-loop limiter: it is neither
+created nor replaced by `rate_limits.json`, and when both apply its old wait runs independently of
+the declared requester admission. Do not use this declaration to add a `streams.json`
 `base.rate_limit` throttle or change legacy behavior. Because Go's `embed` directives reject an
 unmatched optional wildcard, `internal/connectors/defs/defs.go` intentionally adds
 `*/rate_limits.json` only with the first production declaration; include that embed update in the

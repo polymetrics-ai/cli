@@ -1,16 +1,19 @@
 # TDD ledger — issue-3753-rate-limit-enforcement-r1
 
-## Planned red/green evidence
+## Red/green evidence
 
 | Requirement | Red proof | Green proof | Status |
 | --- | --- | --- | --- |
-| Opaque local scopes | No registry exists and same policy bindings cannot share state | linked bindings share one opaque budget; copied/unlinked bindings do not; revisions do not reset | Planned |
-| Cancellable pacing | No policy limiter waits through `ctx` | injected clock wait returns `context.Canceled` without a send | Planned |
-| All budgets/cost | No dynamic budget state exists | fixed/sliding/token/leaky, burst+sustained, requests+points, and higher actual cost are enforced | Planned |
-| Selector resolution | No declared policy reaches a requester | endpoint/tier/auth selector tests show only applicable policies attach | Planned |
-| Every requester path | Engine paths make calls with no resolved admission | counter tests cover check, page read, direct read/op read, declarative + form/multipart + op writes, and binary download | Planned |
-| Legacy precedence | Read has only page-loop `base.rate_limit` pacing | matching declaration is requester admission in addition to unchanged legacy wait; absent declaration is unchanged | Planned |
+| Opaque local scopes | `go test ./internal/coordination -run 'TestRateLimitRegistry' -count=1` failed before implementation because `RateLimitKey`, `NewRateLimitRegistry`, and `RateLimitObservation.Cost` did not exist | `TestRateLimitScopeRegistrySharesLinkedBindingAndIgnoresCredentialRevision` proves linked binding shares while revision changes do not reset; an unlinked binding receives a separate budget | Green |
+| Cancellable pacing | No policy limiter or context-aware injected clock existed | `TestRateLimitRegistryWaitHonorsContextCancellation` and `TestRateLimitRegistryCancelsWhileWaiting` pass with no wall-clock sleep | Green |
+| All budgets/cost | No declaration-backed dynamic budget state existed | fixed/sliding/token/leaky tests, point-cost tightening, reset, observed limit, and concurrent burst/sustained budgets pass through the injected clock | Green |
+| Selector resolution | No declared policy reached a requester | fixture tests prove exact endpoint + tier + auth matching, unsupported scope refusal, and `unknown`/`not_applicable`/absent no-op behavior | Green |
+| Every requester path | Engine sends used `rt.Requester` directly and could bypass a resolved policy | admission tests cover check, paginated stream reads and fan-out ID fetches, direct/op reads, declarative form/multipart writes, op JSON/multipart writes, binary download, and whole-connector hook requester access | Green |
+| Legacy precedence | Read had only its page-loop `base.rate_limit` pacing | `TestDeclaredRateLimitAddsToButDoesNotReplaceLegacyPageLimiter` proves the legacy sleeps and declared admission both remain independent | Green |
 
-## Red evidence log
+## Green command log
 
-Pending: write and execute the focused tests before production implementation. No production files have changed at planning time.
+- `go test ./internal/coordination ./internal/connectors/connsdk ./internal/connectors/engine -count=1`
+- `go test -race ./internal/coordination ./internal/connectors/engine -run 'Test(RateLimit|DeclaredRateLimitFixture|UnknownRateLimitFixture|AbsentRateLimit)' -count=1`
+- `go vet ./internal/coordination ./internal/connectors/connsdk ./internal/connectors/engine`
+- `go build ./cmd/pm`

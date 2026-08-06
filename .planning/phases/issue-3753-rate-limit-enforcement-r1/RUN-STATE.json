@@ -3,7 +3,7 @@
   "issues": [3753, 3754],
   "parentIssue": 3750,
   "branch": "fm/cli-found-rate-limit-enforcement-r1",
-  "status": "planned",
+  "status": "local_verification_passed",
   "gsd": {
     "manualFallback": true,
     "fallbackReason": "Pi interactive runtime unavailable; canonical single-worker contract and task prohibit role spawning.",
@@ -15,5 +15,11 @@
       "scripts/gsd prompt code-review 3753"
     ]
   },
-  "skills": ["golang-how-to", "golang-design-patterns", "golang-structs-interfaces", "golang-error-handling", "golang-security", "golang-safety", "golang-testing", "golang-context", "golang-concurrency", "golang-documentation"]
+  "skills": ["golang-how-to", "golang-design-patterns", "golang-structs-interfaces", "golang-error-handling", "golang-security", "golang-safety", "golang-testing", "golang-context", "golang-concurrency", "golang-documentation"],
+  "execution": {
+    "inlineExecutePhase": "completed",
+    "inlineVerifyWork": "completed",
+    "inlineCodeReview": "completed",
+    "fullSuite": "CI-owned; not run locally under the repository timeout policy"
+  }
 }
