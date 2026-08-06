@@ -24,7 +24,8 @@ before its checkpoint can be acknowledged.
 2. Add an observation-based directory sync test for a warehouse root whose entire parent chain is
    absent; run it before production edits, saving the failure.
 3. Route the audited reload assignments through the existing normalizer and implement only the
-   minimum helper needed to report/sync `MkdirAll`'s created parent chain.
+   minimum parent-chain sync helper needed to establish a known durable boundary without
+   inferring which `MkdirAll` components were new.
 4. Run both red tests green, then focused app and durability tests, formatting, vet, build, and
    all separate `make verify` gates required by `AGENTS.md`.
 5. Generate and execute `verify-work` and `code-review` prompts inline. Record their evidence and

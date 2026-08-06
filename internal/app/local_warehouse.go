@@ -46,6 +46,8 @@ type localRawRecord struct {
 	Record       connectors.Record `json:"record"`
 }
 
+// syncLocalWarehouseDirectoryCommit is a test seam for the platform directory
+// sync primitive; production defaults to durability.SyncDirectory.
 var syncLocalWarehouseDirectoryCommit = durability.SyncDirectory
 
 func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
@@ -291,6 +293,10 @@ func syncLocalWarehouseDirectory(dir string) error {
 	return nil
 }
 
+// syncLocalWarehouseDirectoryChain synchronizes dir and every ancestor through
+// the filesystem root. This establishes a known durable parent boundary after
+// MkdirAll without inferring which components were new, and it must complete
+// before a downstream checkpoint is acknowledged.
 func syncLocalWarehouseDirectoryChain(dir string) error {
 	path, err := filepath.Abs(dir)
 	if err != nil {

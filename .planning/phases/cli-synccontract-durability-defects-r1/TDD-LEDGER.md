@@ -3,7 +3,7 @@
 | ID | Guarantee | Required red assertion | Green proof |
 | --- | --- | --- | --- |
 | D1 | Every state reload retains normalization | Persist current-credential, legacy `incremental_append` state; run `Open → RunReverseETL` with an unknown plan, then `RunETL`; the legacy stream must remain admitted. | Every `a.store.Load()` assignment audit entry uses the shared normalizer, and the exact sequence passes. |
-| D2 | Newly created warehouse path is durable as a chain | Start with no warehouse parent directories; perform the acknowledged write/run and observe that every new directory's own parent has been synced through the first pre-existing ancestor. | The implementation identifies `MkdirAll` creations and calls `durability.SyncDirectory` for leaf-to-ancestor directory entries before acknowledgement. |
+| D2 | Newly created warehouse path is durable as a chain | Start with no warehouse parent directories; perform the acknowledged write/run and observe that every new directory's own parent has been synced through the first pre-existing ancestor. | `syncLocalWarehouseDirectoryChain` syncs the raw directory through the filesystem root before acknowledgement, covering each new `MkdirAll` entry without pre-checking existence. |
 
 ## Red evidence
 
