@@ -158,8 +158,26 @@ jobs:
           done
           ls -R binaries
 
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.25.12'
+          cache: true
+
       - name: Install nfpm
-        run: go install github.com/goreleaser/nfpm/v2/cmd/nfpm@v2.43.0
+        run: |
+          set -euo pipefail
+          go install github.com/goreleaser/nfpm/v2/cmd/nfpm@v2.43.0
+          # setup-go does not add GOPATH/bin to PATH in this repository's jobs —
+          # verify.yml does the same thing explicitly for golangci-lint. Without
+          # this line the binary exists but is invisible, and the failure only
+          # surfaces later as "nfpm was not found on PATH" from inside the
+          # assembler, which reads like a packaging fault rather than a missing
+          # PATH entry. GoReleaser used to provide nfpm implicitly.
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+
+      - name: Confirm nfpm is on PATH
+        run: nfpm --version
 
       - name: Assemble Linux release assets
         run: |
@@ -421,7 +439,16 @@ jobs:
 
       - name: Install nfpm
         if: steps.existing-assets.outputs.skip_release_assets != 'true'
-        run: go install github.com/goreleaser/nfpm/v2/cmd/nfpm@v2.43.0
+        run: |
+          set -euo pipefail
+          go install github.com/goreleaser/nfpm/v2/cmd/nfpm@v2.43.0
+          # See the identical step in package-check: GOPATH/bin is not on PATH
+          # by default here. A release must not discover that at tag time.
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+
+      - name: Confirm nfpm is on PATH
+        if: steps.existing-assets.outputs.skip_release_assets != 'true'
+        run: nfpm --version
 
       - name: Assemble release assets
         if: steps.existing-assets.outputs.skip_release_assets != 'true'

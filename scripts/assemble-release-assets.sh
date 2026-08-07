@@ -167,7 +167,12 @@ done
 if [[ -n "$TARGETS" ]] && ! selected linux amd64 && ! selected linux arm64; then
   printf 'no Linux targets selected; skipping package assembly\n'
 elif ! command -v nfpm >/dev/null; then
-  printf 'nfpm was not found on PATH; install it before assembling Linux packages\n' >&2
+  printf 'nfpm was not found on PATH; install it before assembling Linux packages.\n' >&2
+  printf '  go install github.com/goreleaser/nfpm/v2/cmd/nfpm@v2.43.0\n' >&2
+  printf '  export PATH="$(go env GOPATH)/bin:$PATH"\n' >&2
+  printf 'The PATH line matters: go install writes to GOPATH/bin, which is not on\n' >&2
+  printf 'PATH by default in this repository CI jobs. GoReleaser used to provide\n' >&2
+  printf 'nfpm implicitly, so nothing had to install it before.\n' >&2
   exit 1
 fi
 
