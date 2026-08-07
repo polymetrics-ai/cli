@@ -34,12 +34,26 @@ Add `--connection` to pick one:
 pm query run --table records --connection acme --json
 ```
 
+A table written straight through the warehouse connector's write surface — a
+reverse ETL run whose destination is `warehouse`, or a file seeded by hand —
+lands at the warehouse root instead, because a direct write carries no
+connection identity. Such a table is listed and selected as `_unattributed`, a
+value no connection name can take:
+
+```bash
+pm query run --table records --connection _unattributed --json
+```
+
+`--connection` scopes `--table` reads. A `--sql` query names its table inside
+the statement, so an ambiguous table there points you back at the `--table`
+form.
+
 ## Flag reference
 
 | Flag | Description |
 |---|---|
 | `--table` | Table name to query. Returns all columns up to `--limit` rows. |
-| `--connection` | Connection whose table to read. Required only when several connections share the table name. |
+| `--connection` | Connection whose table to read. Required only when several connections share the table name. Use `_unattributed` for a root-level table. |
 | `--sql` | Raw SQL statement. Takes precedence over `--table` when both are provided. |
 | `--limit` | Maximum rows to return. Default is 100. |
 | `--fields` | Comma-separated projection applied before output. |

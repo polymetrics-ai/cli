@@ -383,6 +383,87 @@ func TestConnectionIdentityIsOpaqueAndNotDerivedFromNameOrCredential(t *testing.
 	}
 }
 
+// TestReversePlanPinsItsSourceConnection covers the downstream half of the
+// isolation contract. pm reverse preview and pm reverse run take no connection
+// selector, so a plan that resolved its source table by name alone would become
+// unexecutable the day a second connection materialized the same name. The
+// connection is resolved once at plan time and recorded, so the plan keeps
+// reading the table it was approved against.
+func TestReversePlanPinsItsSourceConnection(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("reverse_pinning", nil)
+	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	if _, err := a.AddCredential(ctx, AddCredentialRequest{
+		Name:      "outbox",
+		Connector: "outbox",
+		Config:    map[string]string{"path": filepath.Join(a.ProjectDir(), "outbox")},
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	source.records = []connectors.Record{
+		{"id": "a1", "name": "Acme Ada", "updated_at": "2026-08-06T00:00:00Z"},
+	}
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: "acme", Stream: "records", BatchSize: 10}); err != nil {
+		t.Fatal(err)
+	}
+
+	request := PlanReverseETLRequest{
+		Name:                  "records_to_outbox",
+		SourceTable:           "records",
+		DestinationConnector:  "outbox",
+		DestinationCredential: "outbox",
+		Action:                "upsert",
+		Mappings:              map[string]string{"id": "external_id", "name": "full_name"},
+	}
+	plan, err := a.PlanReverseETL(ctx, request)
+	if err != nil {
+		t.Fatalf("PlanReverseETL() error = %v", err)
+	}
+	if plan.SourceConnection != "acme" {
+		t.Fatalf("plan source connection = %q, want the connection it was built from", plan.SourceConnection)
+	}
+
+	// The second connection now materializes a table of the same name, which is
+	// exactly the case that used to strand the approved plan.
+	source.records = []connectors.Record{
+		{"id": "g1", "name": "Globex Grace", "updated_at": "2026-08-06T00:00:02Z"},
+	}
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: "globex", Stream: "records", BatchSize: 10}); err != nil {
+		t.Fatal(err)
+	}
+
+	run, err := a.RunReverseETL(ctx, RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken})
+	if err != nil {
+		t.Fatalf("RunReverseETL() after a colliding sync error = %v", err)
+	}
+	if run.RecordsSucceeded != 1 {
+		t.Fatalf("run wrote %d records, want the single row the plan was approved against", run.RecordsSucceeded)
+	}
+
+	// A fresh unscoped plan is refused, and the refusal names the selector this
+	// command actually accepts rather than one it does not.
+	_, err = a.PlanReverseETL(ctx, request)
+	var ambiguous *warehouse.AmbiguousTableError
+	if !errors.As(err, &ambiguous) {
+		t.Fatalf("PlanReverseETL(unscoped) error = %T %v, want *warehouse.AmbiguousTableError", err, err)
+	}
+	if !strings.Contains(ambiguous.Error(), "--connection") {
+		t.Fatalf("plan ambiguity error %q does not name the selector pm reverse plan accepts", ambiguous.Error())
+	}
+
+	scoped := request
+	scoped.Name = "globex_records_to_outbox"
+	scoped.SourceConnection = "globex"
+	globexPlan, err := a.PlanReverseETL(ctx, scoped)
+	if err != nil {
+		t.Fatalf("PlanReverseETL(--connection globex) error = %v", err)
+	}
+	if globexPlan.SourceConnection != "globex" {
+		t.Fatalf("plan source connection = %q, want %q", globexPlan.SourceConnection, "globex")
+	}
+}
+
 // setupTwoConnectionWarehouseApp builds one project with two connections that
 // share a source connector and a destination table name but hold distinct
 // credentials, which is the shape that reproduced the data loss.
