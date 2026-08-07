@@ -5,17 +5,25 @@ before it). A fresh worker continues SERIALLY on the same consolidated branch (f
 captain caps the fleet at 2–3 lanes: parallel branches would collide on the shared generated
 artifacts). Nothing is uncommitted; everything below is pushed.**
 
-> ## ⇒ START HERE: **zendesk-support 625.** workday-rest is DONE.
+> ## ⇒ START HERE: **jira 616.** zendesk-support is DONE.
 >
-> workday-rest landed at **907 operations** — not the master plan's 920, not slice 1's 916. It has
-> 911 commands, 252 write actions, 911/911 verified reachable, and a green surface test. See its
-> `SUMMARY.md` and **findings 34–38**.
+> zendesk-support landed at **625 operations** — the master plan's number, unchanged, and the
+> **first ledger in this sweep that reconciles exactly**. 509 covered, 122 blocked with a named
+> dependency each, 631→633 commands, 89→173 write actions, **511/511 verified reachable**, green
+> surface test. See its `SUMMARY.md` and **findings 39–45**.
 >
-> **The single most transferable thing I learned:** *run your derivation through the red test's own
-> rules before you trust its count.* The test already forbade `?` in a path (finding 22 put it
-> there); the derivation feeding it had never been checked against that rule, and shipped nine
-> query-string variants. Do this for zendesk-support **before** authoring a row — it is a two-line
-> check that would have saved a whole re-derivation here.
+> **The single most transferable thing I learned:** *a complete, correctly counted inventory can
+> still be a total parity failure, and no count will tell you.* zendesk-support's 631 rows were
+> already right — and 509 of them were disposed by one sentence ("blocked until shared foundation
+> #2985") with 509 `planned` command placeholders behind them. Every count assertion passed on the
+> shipped bundle; only reachability failed. **Before deriving anything for jira, check what
+> fraction of its rows are already blocked-by-blanket-sentence** — if it is high, your job is
+> promotion, not enumeration, and the count will not move.
+>
+> **The trap that nearly cost a slice:** `covered_by.write` must name a **writes.json action**, and
+> `connectorgen validate` enforces it. An operation-backed `direct_write` command has **no
+> `covered_by` representation in the schema at all**. A whole mutation slice was built the wrong way
+> before validate said so (finding 41). Decide this before you author 200 commands.
 
 ## Where the work is
 
@@ -35,13 +43,18 @@ docs) are regenerated **once at the very end**, not per connector.
 ### ⚠️ Known-red on this branch — both are expected, neither is yours to "fix"
 
 1. **The current connector's own surface test is red until its last slice lands.** Right now
-   **nothing is mid-delivery — `cmd/connectorgen` is fully green**, because workday-rest landed.
+   **nothing is mid-delivery — `cmd/connectorgen` is fully green**, because zendesk-support landed.
    The next connector's test will be red from the moment you write it until its last slice, and that
    is correct. Every *shared* gate must stay green throughout: `connectorgen validate` 551/0,
    `surface-sync --check` clean, runtime preflight passing. **Do not weaken a red test to make the
    package green** — it goes green when the connector lands.
    *Tightening* a red test's constant is not weakening it: workday-rest's went 916 → 907 **and**
    gained a new assertion, because the smaller number was the correct one (finding 34).
+   zendesk-support did the harder version — its coverage floor moved **down**, from
+   `covered >= 625` to an exact partition (509 covered / 122 blocked / per-class counts) — and that
+   is still a tightening, because the floor assumed every documented operation is reachable (false
+   for this provider) and passed on any number above it, while the partition fails on a regression
+   to blocked, an unexplained unblock, or a block naming no capability (finding 40).
 2. **`TestGoldenTranscripts` fails — ELEVEN subtests, not one**, and has since before github.
    Corrected 2026-08-07 by the workday-rest worker: this entry said `root_bare_manual`, and the
    actual failing set is `root_bare_manual`, `root_long_help`, `root_short_help`,
@@ -56,15 +69,20 @@ docs) are regenerated **once at the very end**, not per connector.
    connector** — finding F6: a per-connector `pm docs generate` run rewrites ~1,031 files of
    pre-existing `main` drift.
 
-## ⇒ RESUME POINT — **zendesk-support 625**. workday-rest is COMPLETE.
+## ⇒ RESUME POINT — **jira 616**. zendesk-support is COMPLETE.
 
-**`github` (1220) and `workday-rest` (907) are both done and pushed.** Their surface tests pass and
-the whole `cmd/connectorgen` package is green. Phase artifacts:
-`.planning/phases/github-parity-sweep-r1/` and `.planning/phases/workday-rest-parity-sweep-r1/`
-(`PLAN.md`, `RUN-STATE.json`, `TDD-LEDGER.md`, `SUMMARY.md`, `VERIFICATION.md`), plus the lifecycle
-trace `.planning/traces/gsd-top50-sweep-resume3-r1.md`.
+**`github` (1220), `workday-rest` (907) and `zendesk-support` (625) are all done and pushed.** Their
+surface tests pass and the whole `cmd/connectorgen` package is green — **nothing is mid-delivery
+right now**. Phase artifacts under `.planning/phases/<name>-parity-sweep-r1/` (`PLAN.md`,
+`RUN-STATE.json`, `TDD-LEDGER.md`, `SUMMARY.md`, `VERIFICATION.md`), plus the lifecycle traces
+`.planning/traces/gsd-top50-sweep-resume3-r1.md` and `…-resume4-r1.md`.
 
-### Start zendesk-support like this
+`tools/derive_zendesk_support.py` and `tools/gen_zendesk_support.py` are committed. The **generator
+is the closest template for a connector whose inventory already exists**: it promotes rows in place
+rather than appending, carries the schema sanitizer and the union flattener, and is re-runnable from
+a clean tree.
+
+### Start jira like this
 
 1. **Re-fetch its artifact and check the byte count** against `MASTER-PLAN.json`. Identical bytes
    prove it is the same artifact rather than a lookalike, and let you *reproduce* the derivation
@@ -116,7 +134,7 @@ others, which is why github shipped `PATCH .../issues/{issue_number} (close)` an
 variant path.** notion (merged #3894) still carries the old defect and can now be converted; that is
 deliberately not folded in here.
 
-## Done — 5 on the branch, plus 3 already resolved elsewhere
+## Done — 8 on the branch, plus 3 already resolved elsewhere
 
 | Connector | Ops | State |
 | --- | ---: | --- |
@@ -126,6 +144,7 @@ deliberately not folded in here.
 | greenhouse | 138 | ✅ on branch (127 covered + 11 blocked; `pm greenhouse` did not exist before) |
 | help-scout | **144** | ✅ on branch (139 covered + 5 blocked; ledger said 146, derivation 145 — see finding 22) |
 | **workday-rest** | **907** | ✅ **on branch** (907 covered + 0 blocked, +4 legacy /ccx/ rows counted apart; 0→911 commands, 0→252 write actions; 911/911 verified reachable; ledger 0→7) |
+| **zendesk-support** | **625** | ✅ **on branch** (509 covered + 122 blocked; 631 rows unchanged — the count never moved because the inventory was already right; 95→475 implemented commands, 89→173 write actions; 511/511 verified reachable; ledger delta zero) |
 | **github** | **1220** | ✅ **on branch** (1126 covered + 98 blocked, +4 GraphQL counted separately; 461→1147 commands, 231→553 write actions; 1079 verified reachable by running the binary) |
 | gorgias | 114 | ✅ **separate open PR #3896** — leave it alone, do not fold |
 | notion | 51 | ✅ MERGED #3894 |
@@ -161,7 +180,7 @@ Commit **and push** after every single connector, and tick it here in the same s
 > **This supersedes the smallest-first order.** The four giants land FIRST, not last. Re-sorted by
 > re-derived operation count descending from `MASTER-PLAN.json`.
 
-~~github 1220~~ ✅ · ~~workday-rest 907~~ ✅ (NOT 920, NOT 916 — re-derived twice, see findings 34-35) · `zendesk-support 625 · jira 616 · stripe 589 · linear 538 ·
+~~github 1220~~ ✅ · ~~workday-rest 907~~ ✅ (NOT 920, NOT 916 — re-derived twice, see findings 34-35) · ~~zendesk-support 625~~ ✅ (ledger reconciled exactly — a first) · `jira 616 · stripe 589 · linear 538 ·
 chargebee 438 · **marketo ~320-367 (count TBD)** · square 334 · bitbucket 331 · bamboo-hr 311 ·
 monday 292 · trello 261 · asana 249 · front 244 · xero 235 · intercom 231 · quickbooks 198 ·
 segment 197 · twilio 197 · google-ads 163`
@@ -393,6 +412,89 @@ command → one commit → push → tick.
     write actions. A generator reporting "0 partial" is indistinguishable from a generator whose
     required-field recursion is broken. Check it against the specs, not against the generator's own
     count.
+
+39. **The ledger CAN reconcile — zendesk-support is the first, with a ZERO delta.** 625 derived,
+    625 recorded, 625 in the bundle. It reconciles because Zendesk publishes a machine-readable
+    OpenAPI document keyed one operation per (method, path), not documentation pages, so there is
+    no page-to-operation collapse to get wrong. **This is evidence about this artifact and changes
+    nothing about the next ledger** — the count was still re-derived from a byte-verified re-fetch,
+    and the derivation still run through the red test's own rules before its number was adopted.
+    PyYAML cannot parse this artifact as shipped: bare `=` scalars resolve to
+    `tag:yaml.org,2002:value`, which SafeLoader has no constructor for. Register one.
+
+40. **⚠️ A COMPLETE, CORRECTLY COUNTED INVENTORY CAN STILL BE A TOTAL PARITY FAILURE, AND NO COUNT
+    WILL TELL YOU.** zendesk-support shipped 631 correct rows in #3532 — and **509 of them were
+    disposed by one sentence** ("blocked by default until shared foundation #2985") with 509
+    `availability: planned` command placeholders behind them. Every count, method-split, duplicate,
+    malformed-path and single-disposition assertion **passed on the shipped bundle**; only
+    reachability failed. `AGENTS.md` says `availability: implemented` is a claim the runtime must
+    honour; the inverse failure — a permanently-`planned` surface — is truthful and useless, and it
+    is invisible to every check the sweep had. **Check what fraction of the next connector's rows
+    are blocked-by-blanket-sentence before deriving anything.** If it is high, the job is
+    *promotion*, not enumeration, and the count will not move.
+    The corollary for the red test: a coverage assertion is not optional. Without one, this
+    connector's test would have gone green against a surface that ran nothing.
+
+41. **⚠️ `covered_by.write` MUST NAME A writes.json ACTION — an operation-backed `direct_write` has
+    NO `covered_by` representation at all.** `connectorgen validate` enforces
+    "covered_by.write %q is not a declared write action". The whole 200-command mutation slice was
+    built as `direct_write` commands over the already-declared `rest_write` operations — which
+    preflight accepts — before validate rejected the rows' disposition. **Decide this before
+    authoring, not after:** a mutation's api_surface row can only be covered by a writes.json
+    action, so the write slice's shape is forced.
+
+42. **`covered_by.writes` (plural) used for its stated purpose, on real union endpoints.**
+    `PUT /api/v2/tickets/update_many` and `PUT /api/v2/users/update_many` each document two
+    genuinely different contracts — one applies a single set of values to many ids, the other
+    carries per-record values. Each arm became its own named action on the one documented path.
+    github's foundation fix generalised; **no synthetic variant path was needed** (finding 31).
+    Zendesk writes these unions as a bare `required`-list per arm over **PARENT-level** properties,
+    so an arm read in isolation requires a field it never defines — rebuild each arm as the parent
+    shape narrowed to its own field.
+
+43. **A `oneOf` is not always a union, and the three cases are mechanically distinguishable.**
+    (a) *Label-only*: both zendesk filtered-search bodies are the SAME `{"type":"object",
+    "additionalProperties":true}` twice, differing only by `title` (Basic / Complex). Documentation
+    prose; collapse loses nothing. (b) *Type variants*: `brand_id` is `"all"` or an integer,
+    `filter` is an enum string or an object — draft-07 expresses these as a **type array**, keeping
+    every documented arm reachable instead of picking a winner. (c) *Distinct contracts*: an arm
+    with its own `required` list. Only (c) needs arm-splitting. Conflating them either ships a lie
+    or blocks an operation that was always reachable, so **refuse loudly on (c)** rather than
+    silently keeping one arm.
+    Related: `engine.CompileSchema` is a strict draft-07 **subset** and treats an unknown keyword as
+    a compile error, so a schema lifted straight out of an OpenAPI document fails on `example`,
+    `nullable`, `discriminator` and friends. Sanitize with a **denylist that raises on anything
+    unrecognised** — a keyword that constrains the payload must never be dropped silently.
+
+44. **Guard the BUILT artifact, not its inputs.** The empty-record-contract guard was first written
+    against the inputs — has a body? has a path variable? — and passed three operations that declare
+    a body schema containing **no properties**. Runtime preflight caught them
+    (`record_schema admits only an empty object ({})`). Test the schema you actually built; it is
+    the only thing the runtime ever sees. Same shape as finding 34 one connector earlier.
+
+45. **The binary trap can run BACKWARDS.** workday-rest's trap was paths that *sounded* binary and
+    declared JSON. zendesk-support's is the inverse: `PUT /api/v2/brands/{brand_id}` is the only
+    non-download operation in the spec with a non-JSON success response — it declares `image/jpg`
+    and `image/png` because updating a brand echoes back its logo. A "declares a non-JSON media
+    type" rule alone ships it as a download and **silently drops the mutation**. Binary is
+    **GET-only**; that is what makes the trap checkable rather than a matter of taste.
+
+46. **A credential in a request body is a named dependency, never a flag.**
+    `POST /api/v2/any_channel/validate_token` is read-shaped — it validates and stores nothing — but
+    its body carries a channel token. `validate`'s own rule (an implemented reverse-ETL command must
+    bind every required record field) would have authored `--token` and `--password`. **Both were
+    refused**: `validate_token` stays blocked naming the missing stdin/env secret input, and
+    `set_user_password`'s required field is redacted with the command dropped to `partial`, which is
+    the documented disposition for a required field with no bound flag. A rule that produces a
+    security violation is telling you the command is not promotable, not that you should comply.
+
+47. **`start_time` is NOT a paging parameter here, and blocking it would have been wrong.** The
+    first derivation run refused `GET /api/v2/incremental/organizations` for "authoring a paging
+    flag". Every zendesk stream declares pagination `type: next_url` over `links.next` /
+    `next_page` / `before_url`, so the foundation lane derives paging from **response links**, never
+    a request parameter; `start_time` is the export's required opening watermark (400 without it).
+    **Check the connector's declared pagination type before widening the blocklist** — an
+    over-broad blocklist makes real operations unreachable while naming paging as the reason.
 
 ## Honest note on pace
 
@@ -804,7 +906,8 @@ are regenerated **once at the very end**, not per connector.
 
 | # | Connector | Ops | Done |
 | ---: | --- | ---: | :--: |
-| 1 | **github** | **1220** | ☐ — 🐸 **the frog.** Its 270 webhook events live under `x-webhooks`, NOT the standard block (finding 13): an inventory checking only `webhooks` records zero for the largest connector. Slice it (see the work order above). |
+| 1 | **zendesk-support** | **625** | ✅ **on branch** (509 covered + 122 blocked; 631 rows unchanged — the count never moved because the inventory was already right; 95→475 implemented commands, 89→173 write actions; 511/511 verified reachable; ledger delta zero) |
+| **github** | **1220** | ☐ — 🐸 **the frog.** Its 270 webhook events live under `x-webhooks`, NOT the standard block (finding 13): an inventory checking only `webhooks` records zero for the largest connector. Slice it (see the work order above). |
 | 2 | **workday-rest** | **920** | ☐ — ledger recorded `unknown`; 920 is freshly derived, so it has no cross-check. Derive it twice by different routes before trusting it. Slice it. |
 | 3 | zendesk-support | 625 | ☐ |
 | 4 | jira | 616 | ☐ |
