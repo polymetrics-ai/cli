@@ -224,11 +224,14 @@ func operationDirectReadSpec(b Bundle, operation string) (OperationSpec, error) 
 		return OperationSpec{}, fmt.Errorf("operation direct read requires rest_read or provider_search operation, got %q", op.Kind)
 	}
 	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
-	if method != http.MethodGet && method != http.MethodPost {
-		return OperationSpec{}, fmt.Errorf("operation direct read requires GET or POST, got %s", method)
+	if method != http.MethodGet && method != http.MethodPost && method != http.MethodHead {
+		return OperationSpec{}, fmt.Errorf("operation direct read requires GET, POST, or HEAD, got %s", method)
 	}
 	if op.Kind == "provider_search" && method != http.MethodPost {
 		return OperationSpec{}, fmt.Errorf("provider search requires POST, got %s", method)
+	}
+	if op.Kind == "rest_read" && method == http.MethodHead && op.OutputPolicy != directReadPolicyJSONRedacted {
+		return OperationSpec{}, fmt.Errorf("operation direct read HEAD (status-only, no response body) requires output_policy %q, got %q", directReadPolicyJSONRedacted, op.OutputPolicy)
 	}
 	if isAbsoluteHTTPURL(op.REST.Path) {
 		return OperationSpec{}, fmt.Errorf("operation direct read endpoint must be connector-relative, got absolute URL")
@@ -550,6 +553,22 @@ func clampOperationDirectReadMaxBytes(requested, operationMax int) int {
 		return operationMax
 	}
 	return maxBytes
+}
+
+// decodeDirectReadPageBody turns one fetched page into the value the direct-read
+// pipeline works over. A HEAD response never carries a body (RFC 9110 §9.3.2) —
+// there is nothing to JSON-decode. The provider's status code is itself the
+// entire signal a status-only "check" command exists to surface;
+// operationDirectReadSpec already requires a HEAD-shaped operation to declare
+// output_policy "json_redacted", so the redaction/policy pipeline still runs
+// uniformly over this small synthetic object rather than special-casing HEAD
+// out of it. It lives beside the fetch rather than in OperationDirectRead
+// because decoding is what readDirectPage owns.
+func decodeDirectReadPageBody(method string, resp *connsdk.Response, maxBytes int) (any, error) {
+	if strings.EqualFold(strings.TrimSpace(method), http.MethodHead) {
+		return map[string]any{"status_code": resp.Status}, nil
+	}
+	return decodeDirectReadBody(resp.Body, maxBytes)
 }
 
 func decodeDirectReadBody(raw []byte, maxBytes int) (any, error) {

@@ -379,8 +379,8 @@ func checkSurfaceComplete(b engine.Bundle) error {
 					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read %q is not an implemented direct_read command", i, ep.Method, ep.Path, directRead)
 				}
 				method := strings.ToUpper(strings.TrimSpace(ep.Method))
-				if method != "GET" && method != "POST" {
-					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read must use GET or POST", i, ep.Method, ep.Path)
+				if method != "GET" && method != "POST" && method != "HEAD" {
+					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read must use GET, POST, or HEAD", i, ep.Method, ep.Path)
 				}
 			}
 			for _, operationID := range ep.CoveredBy.OperationTargets() {

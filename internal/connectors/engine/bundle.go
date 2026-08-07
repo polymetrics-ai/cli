@@ -2306,8 +2306,8 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 	switch op.Kind {
 	case "rest_read":
 		method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
-		if method != "GET" && method != "POST" {
-			return fmt.Errorf("operation %d (%q) rest_read method must be GET or POST, got %s", i, op.ID, method)
+		if method != "GET" && method != "POST" && method != "HEAD" {
+			return fmt.Errorf("operation %d (%q) rest_read method must be GET, POST, or HEAD, got %s", i, op.ID, method)
 		}
 		if method == "POST" && len(op.REST.BodySchema) == 0 {
 			return fmt.Errorf("operation %d (%q) rest_read POST must declare body_schema", i, op.ID)
@@ -2321,6 +2321,9 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 			if err := validateOperationDirectReadTextPlainContract(op); err != nil {
 				return fmt.Errorf("operation %d (%q) rest_read POST: %w", i, op.ID, err)
 			}
+		}
+		if method == "HEAD" && op.OutputPolicy != "json_redacted" {
+			return fmt.Errorf("operation %d (%q) rest_read HEAD (status-only, no response body) must declare output_policy \"json_redacted\", got %q", i, op.ID, op.OutputPolicy)
 		}
 		if strings.TrimSpace(op.MutationClass) != "" && op.MutationClass != "none" {
 			return fmt.Errorf("operation %d (%q) rest_read must not declare mutating mutation_class %q", i, op.ID, op.MutationClass)

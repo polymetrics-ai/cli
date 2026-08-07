@@ -676,8 +676,8 @@ func validateOperationDirectReadCommand(connector connectors.Connector, cmd conn
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands require exactly one api_surface endpoint"}
 	}
 	method := strings.ToUpper(strings.TrimSpace(cmd.APISurface[0].Method))
-	if method != http.MethodGet && method != http.MethodPost {
-		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct_read commands require GET or POST api_surface endpoints, got %s", method)}
+	if method != http.MethodGet && method != http.MethodPost && method != http.MethodHead {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct_read commands require GET, POST, or HEAD api_surface endpoints, got %s", method)}
 	}
 	if isAbsoluteHTTPURL(cmd.APISurface[0].Path) {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands must not reference an absolute URL"}

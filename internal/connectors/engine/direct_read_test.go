@@ -611,6 +611,125 @@ func TestOperationDirectReadAppliesDeclaredSensitiveRedactFields(t *testing.T) {
 	}
 }
 
+// --- HEAD (status-only existence check) operation direct reads ------------
+//
+// A HEAD response never carries a body (RFC 9110 §9.3.2); these commands
+// exist purely to surface the provider's status code, e.g. "does this
+// resource exist" without paying for/streaming the full GET body. See
+// operationDirectReadSpec's HEAD branch and OperationDirectRead's
+// method == http.MethodHead special case.
+
+func headCheckBundle(url string) Bundle {
+	return Bundle{
+		Name: "dockerhub",
+		HTTP: HTTPBase{URL: url},
+		Operations: []OperationSpec{{
+			ID:           "dockerhub.check_repository",
+			Kind:         "rest_read",
+			Summary:      "Check repository existence",
+			Risk:         "low",
+			Approval:     "none",
+			OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{
+				Method:   http.MethodHead,
+				Path:     "/v2/namespaces/{namespace}/repositories/{repository}",
+				MaxBytes: 1024,
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method: http.MethodHead,
+			Path:   "/v2/namespaces/{namespace}/repositories/{repository}",
+			Operation: &SurfaceOperation{
+				Model:            "direct_read",
+				Status:           "blocked",
+				Risk:             "low",
+				BlockedByDefault: true,
+				Reason:           "typed operation metadata",
+			},
+		}}},
+	}
+}
+
+func TestOperationDirectReadHEADReturnsStatusOnlyNoBodyDecode(t *testing.T) {
+	var sawMethod string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		sawMethod = r.Method
+		// A real HEAD response has no body — net/http's server strips any
+		// written body for a HEAD request automatically, but write nothing
+		// here anyway to mirror the wire behavior exactly.
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer srv.Close()
+
+	result, err := OperationDirectRead(context.Background(), headCheckBundle(srv.URL), connectors.OperationDirectReadRequest{
+		Operation:  "dockerhub.check_repository",
+		PathParams: map[string]string{"namespace": "library", "repository": "alpine"},
+		MaxBytes:   1024,
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	if sawMethod != http.MethodHead {
+		t.Fatalf("provider saw method %s, want HEAD", sawMethod)
+	}
+	if result.Status != http.StatusOK {
+		t.Fatalf("result.Status = %d, want 200", result.Status)
+	}
+	body, ok := result.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("result.Body = %#v (%T), want a status-only map", result.Body, result.Body)
+	}
+	statusCode, ok := body["status_code"]
+	if !ok {
+		t.Fatalf("result.Body missing status_code key: %+v", body)
+	}
+	if n, ok := statusCode.(int); !ok || n != http.StatusOK {
+		t.Fatalf("status_code = %#v, want int 200", statusCode)
+	}
+}
+
+func TestOperationDirectReadHEADNonSuccessStatusIsError(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotFound)
+	}))
+	defer srv.Close()
+
+	_, err := OperationDirectRead(context.Background(), headCheckBundle(srv.URL), connectors.OperationDirectReadRequest{
+		Operation:  "dockerhub.check_repository",
+		PathParams: map[string]string{"namespace": "library", "repository": "does-not-exist"},
+		MaxBytes:   1024,
+	}, nil)
+	if err == nil {
+		t.Fatal("OperationDirectRead error = nil, want an error for a 404 HEAD response (existence-check semantics match every other direct read: non-2xx is an error, not a false result)")
+	}
+}
+
+func TestOperationDirectReadSpecRejectsHEADWithoutJSONRedactedPolicy(t *testing.T) {
+	b := headCheckBundle("https://example.invalid")
+	b.Operations[0].OutputPolicy = "clinical_json_redacted"
+	if _, err := operationDirectReadSpec(b, "dockerhub.check_repository"); err == nil {
+		t.Fatal("operationDirectReadSpec error = nil, want an error for a HEAD rest_read operation not declaring output_policy json_redacted")
+	} else if !strings.Contains(err.Error(), "json_redacted") {
+		t.Fatalf("error = %q, want it to name json_redacted", err.Error())
+	}
+}
+
+func TestOperationDirectReadSpecAcceptsHEADForRestRead(t *testing.T) {
+	b := headCheckBundle("https://example.invalid")
+	if _, err := operationDirectReadSpec(b, "dockerhub.check_repository"); err != nil {
+		t.Fatalf("operationDirectReadSpec: %v", err)
+	}
+}
+
+func TestPreflightOperationDirectReadAcceptsHEAD(t *testing.T) {
+	b := headCheckBundle("https://example.invalid")
+	err := PreflightOperationDirectRead(b, "dockerhub.check_repository", "HEAD",
+		"/v2/namespaces/{namespace}/repositories/{repository}", 1024, "json_redacted")
+	if err != nil {
+		t.Fatalf("PreflightOperationDirectRead: %v", err)
+	}
+}
+
 func TestOperationDirectReadPOSTJSONBodyValidatesAndRedacts(t *testing.T) {
 	var sawBody map[string]any
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
