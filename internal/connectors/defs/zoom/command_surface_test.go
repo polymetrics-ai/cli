@@ -83,8 +83,9 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 			if endpoint.Operation != nil || endpoint.Excluded != nil {
 				t.Errorf("executable %s carries another disposition", key)
 			}
-			if endpoint.CoveredBy.Stream == "" {
-				t.Errorf("executable %s is not bound to a stream", key)
+			covering := endpoint.CoveredBy
+			if covering.Stream == "" && covering.Write == "" && covering.DirectRead == "" && len(covering.DirectReads) == 0 {
+				t.Errorf("executable %s is not bound to a stream, write, or direct_read command", key)
 			}
 			covered++
 		case endpoint.Operation != nil:
@@ -435,8 +436,12 @@ func TestCoveredStreamCommandsExecuteWithFixtures(t *testing.T) {
 // TestQSSOperationDirectReadCommandsExecuteWithFixtures runs each Wave 2 QSS
 // direct_read command through commandrunner against Zoom's committed
 // sanitized fixtures, proving the required path parameter reaches the
-// resolved request path and the decoded response body comes back unredacted
-// under the json_redacted policy (QSS summaries carry no secret fields).
+// resolved request path. The json_redacted output policy redacts any field
+// whose name contains "token" (engine/direct_read.go's shouldRedactJSONField)
+// -- including the QSS response's own pagination cursor field
+// next_page_token, which is not itself a secret -- so the assertion below
+// expects that field replaced with next_page_token_redacted: true rather
+// than the raw fixture value; every other field must survive unchanged.
 func TestQSSOperationDirectReadCommandsExecuteWithFixtures(t *testing.T) {
 	tests := []struct {
 		name        string
@@ -449,21 +454,21 @@ func TestQSSOperationDirectReadCommandsExecuteWithFixtures(t *testing.T) {
 			name:        "meeting participants",
 			path:        []string{"qss", "meeting-participants", "list"},
 			flags:       map[string][]string{"meeting-id": {"fixture-meeting"}},
-			requestPath: "/metrics/meetings/fixture-meeting/participants/qos_summary",
+			requestPath: "/v2/metrics/meetings/fixture-meeting/participants/qos_summary",
 			fixture:     "list_meeting_participants_qos_summary.json",
 		},
 		{
 			name:        "webinar participants",
 			path:        []string{"qss", "webinar-participants", "list"},
 			flags:       map[string][]string{"webinar-id": {"fixture-webinar"}},
-			requestPath: "/metrics/webinars/fixture-webinar/participants/qos_summary",
+			requestPath: "/v2/metrics/webinars/fixture-webinar/participants/qos_summary",
 			fixture:     "list_webinar_participants_qos_summary.json",
 		},
 		{
 			name:        "session users",
 			path:        []string{"qss", "session-users", "list"},
 			flags:       map[string][]string{"session-id": {"fixture-session"}},
-			requestPath: "/videosdk/sessions/fixture-session/users/qos_summary",
+			requestPath: "/v2/videosdk/sessions/fixture-session/users/qos_summary",
 			fixture:     "list_session_users_qos_summary.json",
 		},
 	}
@@ -491,7 +496,10 @@ func TestQSSOperationDirectReadCommandsExecuteWithFixtures(t *testing.T) {
 			bundle := loadZoomBundle(t)
 			connector := engine.New(bundle, engine.HooksFor(bundle.Name))
 			config := connectors.RuntimeConfig{
-				Config:  map[string]string{"base_url": server.URL},
+				// Mirror the production base_url shape (https://api.zoom.us/v2):
+				// the engine strips the base URL's own path prefix from the
+				// declared /v2/... operation path before issuing the request.
+				Config:  map[string]string{"base_url": server.URL + "/v2"},
 				Secrets: map[string]string{"access_token": "synthetic-test-token"},
 			}
 
@@ -513,19 +521,23 @@ func TestQSSOperationDirectReadCommandsExecuteWithFixtures(t *testing.T) {
 				t.Errorf("Run(%q) status = %d, want %d", strings.Join(test.path, " "), result.DirectRead.Status, wantStatus)
 			}
 
-			var wantDecoded, gotDecoded any
+			var wantDecoded map[string]any
 			if err := json.Unmarshal(wantBody, &wantDecoded); err != nil {
 				t.Fatalf("decode fixture body: %v", err)
 			}
+			delete(wantDecoded, "next_page_token")
+			wantDecoded["next_page_token_redacted"] = true
+
 			gotBody, err := json.Marshal(result.DirectRead.Body)
 			if err != nil {
 				t.Fatalf("marshal result body: %v", err)
 			}
+			var gotDecoded map[string]any
 			if err := json.Unmarshal(gotBody, &gotDecoded); err != nil {
 				t.Fatalf("decode result body: %v", err)
 			}
-			if !reflect.DeepEqual(gotDecoded, wantDecoded) {
-				t.Errorf("Run(%q) body = %s, want %s", strings.Join(test.path, " "), gotBody, wantBody)
+			if !reflect.DeepEqual(gotDecoded, map[string]any(wantDecoded)) {
+				t.Errorf("Run(%q) body = %s, want %v", strings.Join(test.path, " "), gotBody, wantDecoded)
 			}
 
 			requestsMu.Lock()

@@ -19691,40 +19691,22 @@
     {
       "method": "GET",
       "path": "/v2/metrics/meetings/{meetingId}/participants/qos_summary",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/qss.md",
-        "notes": "classification=implementable_now; provider_module=qss; operation_title=List meeting participants QoS Summary; provider_server=https://api.zoom.us/v2; provider_path=/metrics/meetings/{meetingId}/participants/qos_summary; artifact=https://developers.zoom.us/docs/api/qss.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "qss meeting-participants list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/metrics/webinars/{webinarId}/participants/qos_summary",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/qss.md",
-        "notes": "classification=implementable_now; provider_module=qss; operation_title=List webinar participants QoS Summary; provider_server=https://api.zoom.us/v2; provider_path=/metrics/webinars/{webinarId}/participants/qos_summary; artifact=https://developers.zoom.us/docs/api/qss.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "qss webinar-participants list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/videosdk/sessions/{sessionId}/users/qos_summary",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/qss.md",
-        "notes": "classification=implementable_now; provider_module=qss; operation_title=List session users QoS Summary; provider_server=https://api.zoom.us/v2; provider_path=/videosdk/sessions/{sessionId}/users/qos_summary; artifact=https://developers.zoom.us/docs/api/qss.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "qss session-users list"
       }
     },
     {

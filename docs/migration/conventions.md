@@ -313,6 +313,14 @@ not a full override by default.
   metadata, while new file/binary commands use the distinct intent below. Do not add
   provider-prefixed output-policy names in shared Go; new response families need a generic policy
   name and regression tests proving reuse by more than one connector shape.
+  `json_redacted`'s `shouldRedactJSONField` (`engine/direct_read.go`) redacts any field whose name
+  merely *contains* a marker substring (`token`, `secret`, `password`, ...) — this catches a
+  legitimate non-secret pagination cursor field named e.g. `next_page_token` in a provider's
+  response body, not just credential-shaped fields. This is intentional (erring toward caution
+  over precision) and is not something to work around per-connector; a fixture/execution test
+  asserting the exact response shape for a `json_redacted` command must account for the redacted
+  field rather than expect the raw value (see zoom's `qss` module,
+  `internal/connectors/defs/zoom/command_surface_test.go`).
 - **File/binary commands are their own intent**: declare `intent:"binary_download"` with an
   `operation` of kind `binary_download` and exactly one connector-relative GET `api_surface`
   endpoint, and leave the command's `output_policy` unset — the response becomes a file on disk,

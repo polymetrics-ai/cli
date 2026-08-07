@@ -1,11 +1,14 @@
 # Overview
 
-Reads Zoom users, meetings, and webinars through the Zoom REST API.
+Reads Zoom users, meetings, and webinars through the Zoom REST API, plus bounded Quality of Service
+(QoS) summary reads.
 
 The provider-owned inventory contains 1,913 callable REST operations from Zoom's OpenAPI 3.1.1
 reference corpus (881 reads and 1,032 writes), retrieved on 2026-08-05 from the docs static build
-`2026-08-03T14-58-19-06-00`. Wave 1 exposes only the three existing stream-backed reads:
-`pm zoom users list`, `pm zoom meetings list`, and `pm zoom webinars list`.
+`2026-08-03T14-58-19-06-00`. Wave 1 exposes the three existing stream-backed reads: `pm zoom users
+list`, `pm zoom meetings list`, and `pm zoom webinars list`. Wave 2 adds the three `qss` (Quality of
+Service Subscription) module direct-read operations: `pm zoom qss meeting-participants list`,
+`pm zoom qss webinar-participants list`, and `pm zoom qss session-users list`.
 
 No Zoom write action is implemented in this slice. The remaining provider operations stay explicitly
 disposed in `api_surface.json`; the ledger is not a claim that those operations are executable.
@@ -61,10 +64,40 @@ Default pagination is cursor pagination: send `next_page_token` and take the nex
   and `updated_at`; emits passthrough records. Provider reference:
   https://developers.zoom.us/docs/api/meetings.md.
 
+### Direct reads (qss module)
+
+Three bounded, single-request `direct_read` commands read the `qss` (Quality of Service
+Subscription) provider module. Each takes one required typed path-parameter flag and returns the
+decoded JSON response under the `json_redacted` output policy; unlike the ETL streams above these
+are not paginated by the connector — call again with a different id, there is no `--limit` or
+cursor auto-continuation. Only account/subscriptions with the QSS add-on and a subscribed QSS
+summary event receive non-empty data; see
+[Zoom's QSS product page](https://explore.zoom.us/en/qss/).
+
+- `pm zoom qss meeting-participants list --meeting-id <id>` reads GET
+  `/v2/metrics/meetings/{meetingId}/participants/qos_summary` (operation
+  `zoom.list_meeting_participants_qos_summary`). Provider reference:
+  https://developers.zoom.us/docs/api/qss.md.
+- `pm zoom qss webinar-participants list --webinar-id <id>` reads GET
+  `/v2/metrics/webinars/{webinarId}/participants/qos_summary` (operation
+  `zoom.list_webinar_participants_qos_summary`). Provider reference:
+  https://developers.zoom.us/docs/api/qss.md.
+- `pm zoom qss session-users list --session-id <id>` reads GET
+  `/v2/videosdk/sessions/{sessionId}/users/qos_summary` (operation
+  `zoom.list_session_users_qos_summary`). Provider reference:
+  https://developers.zoom.us/docs/api/qss.md.
+
+All three responses carry a `next_page_token` field in Zoom's own schema (used to fetch a further
+page of participants/users, not exposed as a command flag in this slice — see Known limits). The
+shared `json_redacted` output policy redacts any field whose name contains `token`
+(`engine/direct_read.go`'s `shouldRedactJSONField`), so `next_page_token` returns as
+`next_page_token_redacted: true` rather than its wire value even though it is a pagination cursor,
+not a credential.
+
 ## Write actions & risks
 
-This Wave 1 connector surface is read-only. Read behavior: external Zoom API read of user,
-meeting, and webinar data.
+This connector surface is read-only through Wave 2. Read behavior: external Zoom API read of user,
+meeting, webinar, and QoS summary data.
 
 The provider inventory records 1,032 documented writes, but none is a declared Zoom write action.
 The 997 write operations classified as implementable now remain blocked on connector-local typed
@@ -77,8 +110,16 @@ destructive operations additionally require the typed confirmation gate.
 
 - Batch default: `read_page_size=100`.
 - Provider inventory: 1,913 operations across 35 published modules (881 reads, 1,032 writes).
-- Executable today: 3 stream-backed GET operations (`users`, `meetings`, `webinars`).
-- Pending connector-local delivery: 1,839 operations (842 reads and 997 writes) have no shared
+- Executable today: 6 operations — 3 stream-backed GET reads (`users`, `meetings`, `webinars`) and
+  3 bounded `qss` module direct reads (`qss meeting-participants list`, `qss webinar-participants
+  list`, `qss session-users list`).
+- The `qss` direct-read commands take only a required id path parameter in this slice; Zoom's own
+  `next_page_token`/`page_size` request query parameters are not exposed as command flags because
+  the fetched `qss.md` provider artifact documents no request parameters section for these three
+  operations (only response-body pagination fields) — this is a deliberate scope-narrowing, not an
+  oversight; a future slice may add them once request-parameter support is confirmed against a
+  provider artifact that documents it.
+- Pending connector-local delivery: 1,836 operations (839 reads and 997 writes) have no shared
   foundation blocker, but still need bounded Zoom-specific contracts, schemas, safety evidence, and
   fixtures before they can become commands.
 - Provider-side restrictions: 17 operations (five Information Barriers, seven Chat migration, one

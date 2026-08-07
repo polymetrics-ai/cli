@@ -1,7 +1,7 @@
 {
   "name": "zoom",
   "display_name": "Zoom",
-  "description": "Reads Zoom users, meetings, and webinars through the Zoom REST API.",
+  "description": "Reads Zoom users, meetings, and webinars through the Zoom REST API, plus bounded Quality of Service summary reads.",
   "integration_type": "api",
   "docs_url": "https://developers.zoom.us/docs/api/",
   "release_stage": "ga",

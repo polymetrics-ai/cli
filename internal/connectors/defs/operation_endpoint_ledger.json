@@ -12423,5 +12423,24 @@
   "zoho-inventory": [],
   "zoho-invoice": [],
   "zonka-feedback": [],
-  "zoom": []
+  "zoom": [
+    {
+      "method": "GET",
+      "path": "/v2/metrics/meetings/{meetingId}/participants/qos_summary",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/metrics/webinars/{webinarId}/participants/qos_summary",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videosdk/sessions/{sessionId}/users/qos_summary",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    }
+  ]
 }
