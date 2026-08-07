@@ -21,14 +21,21 @@ import (
 // at its own base path, so an operation's identity is the resolved
 // (method, base+path) pair, never the service-relative path alone.
 //
-// 920 is the RAW row count across the 52 specs. FOUR of those rows are the same
-// endpoint documented twice — see workdayRESTDuplicatedAcrossServices below —
-// so the documented-operation count is 916.
-const workdayRESTOperations = 916
+// 920 is the RAW row count across the 52 specs, and it collapses TWICE.
+//
+//	920 raw
+//	 -4  the same endpoint published by two service modules
+//	     (workdayRESTDuplicatedAcrossServices)
+//	 -9  query-string variants of an endpoint already counted
+//	     (workdayRESTQueryStringVariants)
+//	=907 documented operations
+const workdayRESTOperations = 907
 
-// workdayRESTRawRows is the count before dedup, kept so the delta is written
-// down rather than silently absorbed. A future re-derivation that lands on 920
-// has not found four more operations; it has failed to dedup.
+// workdayRESTRawRows is the count before either dedup, kept so both deltas are
+// written down rather than silently absorbed. A future re-derivation that lands
+// on 920 has not found thirteen more operations; it has failed to dedup. One
+// that lands on 916 has deduped across services and missed the query strings —
+// which is exactly what this connector's first derivation did.
 const workdayRESTRawRows = 920
 
 // workdayRESTServiceSpecs is how many production service specs the directory
@@ -76,13 +83,46 @@ var workdayRESTLegacyCarriedRows = []string{
 	"POST /ccx/api/hcm/v1/{tenant}/workers",
 }
 
-// workdayRESTMethodSplit is the distribution of the 916 documented operations
-// after dedup, counting only rows the current directory documents. Workday is
-// read-heavy: 654 GETs against 262 mutations.
+// workdayRESTQueryStringVariants are nine rows the provider publishes as their
+// own Swagger path keys even though the path is an endpoint already counted
+// with a query string bolted on. They are the sweep's recurring double-count
+// defect (notion, lever-hiring, help-scout, github) recurring a FIFTH time, and
+// this connector's first derivation shipped all nine: it deduped across service
+// modules, which caught the four custom-object rows, and never looked for a "?".
+//
+// Two independent facts settle them as variants rather than operations:
+//
+//   - Seven carry an EMPTY summary. The provider documents them as an addendum
+//     to the base row, not as an operation in their own right. Procurement's
+//     base row says so outright — "Retrieves the metadata OR the attachment
+//     content of the specified requisition" — one endpoint, two modes.
+//   - The two staffing PATCHes carry a summary that describes a BEHAVIOUR of
+//     the base endpoint ("...to archived or un-archived"), which is sweep
+//     finding 23's shape exactly: a behaviour becomes a flag, never a path.
+//
+// Every one has its own base-path sibling documented separately, so collapsing
+// them loses no endpoint. They are pinned by name because the losing row's
+// behaviour must be re-expressed on the surviving command (--type) rather than
+// dropped, and because a re-derivation must not quietly reintroduce them.
+var workdayRESTQueryStringVariants = []string{
+	"GET /accountsPayable/v1/supplierInvoiceRequests/{ID}/attachments/{subresourceID}?type=viewContent",
+	"GET /accountsPayable/v1/supplierInvoiceRequests/{ID}/attachments?type=viewContent",
+	"GET /procurement/v5/requisitions/{ID}/attachments/{subresourceID}?type=getFileContent",
+	"GET /procurement/v5/requisitions/{ID}/attachments?type=getFileContent",
+	"GET /recruiting/v4/prospects/{ID}/resumeAttachments/{subresourceID}?type=viewFile",
+	"GET /recruiting/v4/prospects/{ID}/resumeAttachments?type=viewFile",
+	"PATCH /staffing/v7/workers/{ID}/checkInTopics/{subresourceID}?type=archive",
+	"PATCH /staffing/v7/workers/{ID}/checkIns/{subresourceID}?type=archive",
+	"POST /api/common/v1/workers/{ID}/businessTitleChanges?type=me",
+}
+
+// workdayRESTMethodSplit is the distribution of the 907 documented operations
+// after both dedups, counting only rows the current directory documents.
+// Workday is read-heavy: 648 GETs against 259 mutations.
 var workdayRESTMethodSplit = map[string]int{
-	"GET":    654,
-	"POST":   153,
-	"PATCH":  58,
+	"GET":    648,
+	"POST":   152,
+	"PATCH":  56,
 	"DELETE": 32,
 	"PUT":    19,
 }
@@ -205,8 +245,10 @@ func TestWorkdayRESTDocumentedSurfaceIsComplete(t *testing.T) {
 	}
 	if total != workdayRESTOperations {
 		t.Errorf("documented endpoints = %d, want %d (%d raw rows across %d service specs, minus %d "+
-			"documented twice; %d legacy /ccx/ row(s) counted apart)", total, workdayRESTOperations,
-			workdayRESTRawRows, workdayRESTServiceSpecs, workdayRESTRawRows-workdayRESTOperations, carried)
+			"published by two service modules, minus %d query-string variants of an endpoint already "+
+			"counted; %d legacy /ccx/ row(s) counted apart)", total, workdayRESTOperations,
+			workdayRESTRawRows, workdayRESTServiceSpecs, len(workdayRESTDuplicatedAcrossServices),
+			len(workdayRESTQueryStringVariants), carried)
 	}
 	if carried > len(workdayRESTLegacyCarriedRows) {
 		t.Errorf("legacy /ccx/ rows = %d, want at most %d — a new one is not a documented operation",
@@ -225,6 +267,21 @@ func TestWorkdayRESTDocumentedSurfaceIsComplete(t *testing.T) {
 	for _, want := range workdayRESTDuplicatedAcrossServices {
 		if !seen[want] {
 			t.Errorf("expected the collapsed custom-object row %q exactly once", want)
+		}
+	}
+
+	// Each query-string variant must be ABSENT (the malformed check above
+	// enforces that) while the endpoint it collapses into is PRESENT. Checking
+	// only absence would pass on a surface that dropped the endpoint entirely,
+	// which is how a double-count gets "fixed" into a missing operation.
+	for _, variant := range workdayRESTQueryStringVariants {
+		method, rest, ok := strings.Cut(variant, " ")
+		if !ok {
+			t.Fatalf("malformed variant pin %q", variant)
+		}
+		base := method + " " + strings.SplitN(rest, "?", 2)[0]
+		if !seen[base] {
+			t.Errorf("expected %q — the endpoint that %q collapses into", base, variant)
 		}
 	}
 

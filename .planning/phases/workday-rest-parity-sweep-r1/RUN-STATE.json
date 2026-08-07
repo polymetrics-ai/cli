@@ -22,11 +22,13 @@
       "20230712": 2,
       "20231120": 1
     },
-    "recorded_derivation_error": "the sweep's derivation note asserts EVERY spec filename is stamped 20260727. Three are not (20230712 x2, 20231120 x1), and those three are precisely the OpenAPI 3.0.1 specs that carry no basePath - the cause of the phantom duplicate count."
+    "recorded_derivation_error": "the sweep's derivation note asserts EVERY spec filename is stamped 20260727. Three are not (20230712 x2, 20231120 x1), and those three are precisely the OpenAPI 3.0.1 specs that carry no basePath - the cause of the phantom duplicate count.",
+    "re_fetched_at": "2026-08-07 by the slice-2 worker",
+    "re_fetch_result": "manifest HTTP 200, 617,538 bytes -- byte-identical to the slice-1 fetch and to the sweep derivation. All 52 service specs re-fetched (5.8 MB) and the derivation reproduced independently: 920 raw rows, GET 655/POST 154/PATCH 58/DELETE 33/PUT 20, 916 after cross-service dedup. The slice-1 derivation is confirmed exactly to that point; the query-string collapse is new."
   },
   "operations": {
     "raw_rows": 920,
-    "documented_total": 916,
+    "documented_total": 907,
     "raw_by_method": {
       "GET": 655,
       "POST": 154,
@@ -35,22 +37,23 @@
       "PUT": 20
     },
     "by_method": {
-      "GET": 654,
-      "POST": 153,
-      "PATCH": 58,
+      "GET": 648,
+      "POST": 152,
+      "PATCH": 56,
       "DELETE": 32,
       "PUT": 19
     },
     "read_write": {
-      "GET": 654,
-      "mutations": 262
+      "GET": 648,
+      "mutations": 259
     },
     "deprecated": 1,
     "webhook_events": 0,
     "services": 52,
-    "drift": "920 -> 916. Four rows are the SAME endpoint documented by two service modules that declare the IDENTICAL servers URL https://<tenantHostname>/customObject/v2 (Custom Object Data single-instance v2 and multi-instance v2). This is the fourth appearance of the sweep's recurring duplicate-row defect class and the first across two provider service modules rather than within one document.",
+    "drift": "920 -> 916 -> 907. Two independent collapses. (1) Four rows are the SAME endpoint documented by two service modules declaring the IDENTICAL servers URL https://<tenantHostname>/customObject/v2 (Custom Object Data single- and multi-instance v2). (2) NINE rows are query-string variants of an endpoint already counted, each published by the provider as its own Swagger path key with the query string baked in, and each with its base-path sibling documented separately. Finding 34: this connector's first derivation deduped on the resolved path -- which caught (1) -- and never looked for a \"?\", so it shipped all nine. Fifth appearance of the sweep's double-count defect class.",
     "ledger_carried_forward": null,
-    "ledger_verdict": "the provider ledger records no count for this connector (operations_total: null)"
+    "ledger_verdict": "the provider ledger records no count for this connector (operations_total: null)",
+    "query_string_variants_collapsed": 9
   },
   "baseline": {
     "api_surface_endpoints": 4,
@@ -64,23 +67,24 @@
     "writes": "ABSENT",
     "operations": "ABSENT",
     "capabilities_write": false,
-    "missing_documented_operations": 912,
+    "missing_documented_operations": 903,
     "note": "largest before/after gap in the sweep: 4 rows against 916 documented operations",
     "legacy_ccx_rows": "the 4 shipped rows point at /ccx/api/hcm/v1/{tenant}/... . The current service directory publishes NO 'hcm' service and NO /ccx/ path anywhere -- worker resources live under staffing/v7, absenceManagement/v5, compensation/v3, performanceEnablement/v5, timeTracking/v5 and api/common/v1. They are not in the archived list either, which holds only older versions of the 52 listed services. So they are NOT among the 916, and they cannot simply vanish: deleting them deletes three shipped, schema- and fixture-backed streams inside a parity commit."
   },
   "tdd": {
     "red_test": "cmd/connectorgen/workday_rest_documented_surface_test.go",
     "red_confirmed": true,
-    "red_failure": "=== RUN   TestWorkdayRESTDocumentedSurfaceIsComplete\n    workday_rest_documented_surface_test.go:118: operation_ledger_version = 0, want 1\n    workday_rest_documented_surface_test.go:204: 1 legacy excluded row(s) remain, want 0\n    workday_rest_documented_surface_test.go:207: documented endpoints = 0, want 916 (920 raw rows across 52 service specs, minus 4 documented twice; 4 legacy /ccx/ row(s) counted apart)\n    workday_rest_documented_surface_test.go:216: covered(3)+blocked(0) = 3, want 4 - every row needs a disposition, legacy included\n    workday_rest_documented_surface_test.go:220: byMethod = map[], want map[DELETE:32 GET:654 PATCH:58 POST:153 PUT:19]\n    workday_rest_documented_surface_test.go:227: expected the collapsed custom-object row \"POST /customObject/v2/customObjects/{customObjectAlias}\" exactly once\n    workday_rest_documented_surface_test.go:241: expected \"GET /absenceManagement/v5/workers\" - the shipped bundle enumerated only the three legacy HCM read streams\n--- FAIL: TestWorkdayRESTDocumentedSurfaceIsComplete (0.00s)\nFAIL\nFAIL\tpolymetrics.ai/cmd/connectorgen\t0.503s\nFAIL",
+    "red_failure": "--- FAIL: TestWorkdayRESTDocumentedSurfaceIsComplete (0.00s)\n    workday_rest_documented_surface_test.go:158: operation_ledger_version = 0, want 1\n    workday_rest_documented_surface_test.go:244: 1 legacy excluded row(s) remain, want 0\n    workday_rest_documented_surface_test.go:247: documented endpoints = 0, want 907 (920 raw rows across 52 service specs, minus 4 published by two service modules, minus 9 query-string variants of an endpoint already counted; 4 legacy /ccx/ row(s) counted apart)\n    workday_rest_documented_surface_test.go:258: covered(3)+blocked(0) = 3, want 4 \u2014 every row needs a disposition, legacy included\n    workday_rest_documented_surface_test.go:262: byMethod = map[], want map[DELETE:32 GET:648 PATCH:56 POST:152 PUT:19]\n    workday_rest_documented_surface_test.go:269: expected the collapsed custom-object row \"DELETE /customObject/v2/customObjects/{customObjectAlias}/{customObjectID}\" exactly once\n    workday_rest_documented_surface_test.go:269: expected the collapsed custom-object row \"GET /customObject/v2/customObjects/{customObjectAlias}/{customObjectID}\" exactly once\n    workday_rest_documented_surface_test.go:269: expected the collapsed custom-object row \"POST /customObject/v2/customObjects/{customObjectAlias}\" exactly once\n    workday_rest_documented_surface_test.go:269: expected the collapsed custom-object row \"PUT /customObject/v2/customObjects/{customObjectAlias}/{customObjectID}\" exactly once\n    workday_rest_documented_surface_test.go:284: expected \"GET /accountsPayable/v1/supplierInvoiceRequests/{ID}/attachments/{subresourceID}\" \u2014 the endpoint that \"GET /accountsPayable/v1/supplierInvoiceRequests/{ID}/attachments/{subresourceID}?type=viewContent\" collapses into\n    workday_rest_documented_surface_test.go:284: expected \"GET /accountsPayable/v1/supplierInvoiceRequests/{ID}/attachments\" \u2014 the endpoint that \"GET /accountsPayable/v1/supplierInvoiceRequests/{ID}/attachments?type=viewContent\" collapses into\n    workday_rest_documented_surface_test.go:284: expected \"GET /procurement/v5/requisitions/{ID}/attachments/{subresourceID}\" \u2014 the endpoint that \"GET /procurement/v5/requisitions/{ID}/attachments/{subresourceID}?type=getFileContent\" collapses into\n    workday_rest_documented_surface_test.go:284: expected \"GET /procurement/v5/requisitions/{ID}/attachments\" \u2014 the endpoint that \"GET /procurement/v5/requisitions/{ID}/attachments?type=getFileContent\" collapses into\n    workday_rest_documented_surface_test.go:284: expected \"GET /recruiting/v4/prospects/{ID}/resumeAttachments/{subresourceID}\" \u2014 the endpoint that \"GET /recruiting/v4/prospects/{ID}/resumeAttachments/{subresourceID}?type=viewFile\" collapses into\n    workday_rest_documented_surface_test.go:284: expected \"GET /recruiting/v4/prospects/{ID}/resumeAttachments\" \u2014 the endpoint that \"GET /recruiting/v4/prospects/{ID}/resumeAttachments?type=viewFile\" collapses into\n    workday_rest_documented_surface_test.go:284: expected \"PATCH /staffing/v7/workers/{ID}/checkInTopics/{subresourceID}\" \u2014 the endpoint that \"PATCH /staffing/v7/workers/{ID}/checkInTopics/{subresourceID}?type=archive\" collapses into\n    workday_rest_documented_surface_test.go:284: expected \"PATCH /staffing/v7/workers/{ID}/checkIns/{subresourceID}\" \u2014 the endpoint that \"PATCH /staffing/v7/workers/{ID}/checkIns/{subresourceID}?type=archive\" collapses into\n    workday_rest_documented_surface_test.go:284: expected \"POST /api/common/v1/workers/{ID}/businessTitleChanges\" \u2014 the endpoint that \"POST /api/common/v1/workers/{ID}/businessTitleChanges?type=me\" collapses into\n    workday_rest_documented_surface_test.go:298: expected \"GET /absenceManagement/v5/workers\" \u2014 the shipped bundle enumerated only the three legacy HCM read streams\n    workday_rest_documented_surface_test.go:298: expected \"GET /accountsPayable/v1/supplierInvoiceRequests\" \u2014 the shipped bundle enumerated only the three legacy HCM read streams\n    workday_rest_documented_surface_test.go:298: expected \"GET /api/prismAnalytics/v3/{tenant}/tables\" \u2014 the shipped bundle enumerated only the three legacy HCM read streams\n    workday_rest_documented_surface_test.go:298: expected \"POST /customObject/v2/customObjects/{customObjectAlias}\" \u2014 the shipped bundle enumerated only the three legacy HCM read streams\nFAIL\nFAIL\tpolymetrics.ai/cmd/connectorgen\t0.526s\nFAIL",
     "green": false,
-    "pre_existing_workday_tests": "none - no cmd/connectorgen test referenced workday-rest before this one (finding F5 check)"
+    "pre_existing_workday_tests": "none - no cmd/connectorgen test referenced workday-rest before this one (finding F5 check)",
+    "red_recaptured_at_907": "The slice-1 red was captured against a 916 constant. Correcting the constant to 907 is a TIGHTENING of the assertion (fewer rows may be claimed as covered), not a weakening: the surface must now also prove each collapsed variant's base endpoint is PRESENT, so a double-count cannot be \"fixed\" into a missing operation. Re-run and re-captured verbatim above."
   },
   "slices": {
-    "1_red_and_inventory": "done - red observed and captured",
+    "1_red_and_inventory": "done - red observed, then RE-observed at the corrected 907 after finding 34; DERIVED-OPERATIONS.json regenerated from a live re-fetch",
     "2_api_surface": "todo",
     "3_reads": "todo",
     "4_mutations_and_reachability": "todo",
     "5_summary_and_verification": "todo"
   },
-  "next_action": "SLICE 2: expand api_surface.json from 4 rows to 916 dispositioned rows carrying the RESOLVED (base+path) for each of the 52 independently-versioned services, set operation_ledger_version: 1, and remove the single legacy excluded row. Read PLAN.md hazards 1-3 first: the 4 collapsed custom-object rows, the 3 OpenAPI 3.0.1 specs with no basePath, and Prism Analytics' unique /api/<service>/<version>/{tenant} base. The bundle has NO cli_surface.json, writes.json or operations.json yet, and capabilities.write is false. ALSO: the 4 shipped /ccx/api/hcm/v1/{tenant}/ rows are NOT among the 916 and the test counts them apart. Decide deliberately whether to re-point the three legacy streams at the documented services (staffing/v7/workers, etc.) or disposition them as superseded - do NOT let the count make that call, and do NOT delete shipped streams inside a parity commit."
+  "next_action": "SLICE 2: expand api_surface.json from 4 rows to 907 dispositioned rows carrying the RESOLVED (base+path) for each of the 52 independently-versioned services, set operation_ledger_version: 1, and remove the single legacy excluded row. Read PLAN.md hazards 1-3 and 8 first. The nine query-string behaviours must be re-expressed on the surviving command (--type), never dropped (finding 23), and the six attachment-content modes are the connector's binary-download judgement -- use covered_by.direct_reads (plural, inherited from github) to hang both a metadata read and a binary download off ONE documented endpoint row rather than inventing a variant path. ALSO: the 4 shipped /ccx/api/hcm/v1/{tenant}/ rows are NOT among the 907 and the test counts them apart; decide deliberately whether to re-point or disposition as superseded."
 }

@@ -10,8 +10,8 @@ Program: `cli-top50-fixed-schema-sweep-r1` · branch `fm/cli-top50-sweep-resume2
 
 | # | Slice | State |
 | ---: | --- | --- |
-| 1 | red test + `DERIVED-OPERATIONS.json` + this plan + `RUN-STATE.json` | ✅ **done, red observed** |
-| 2 | `api_surface.json` → 916 dispositioned rows | ☐ |
+| 1 | red test + `DERIVED-OPERATIONS.json` + this plan + `RUN-STATE.json` | ✅ **done, red observed — then RE-observed at 907, see Hazard 8** |
+| 2 | `api_surface.json` → **907** dispositioned rows | ☐ |
 | 3 | reads (`direct_read` commands) | ☐ |
 | 4 | mutations (write actions) + full binary reachability sweep | ☐ |
 | 5 | `SUMMARY.md` + `VERIFICATION.md` | ☐ |
@@ -33,14 +33,18 @@ mounted at its own base. An operation's identity is therefore the **resolved `(m
 pair** — a service-relative path is ambiguous across 52 modules, and the red test rejects any row
 that is not resolved.
 
-## Derivation: 920 raw rows → **916** documented operations
+## Derivation: 920 raw rows → 916 → **907** documented operations
 
-Reproduced, not trusted: 52 specs → **920** raw method entries,
+Reproduced, not trusted, **twice** — the second time by re-fetching the manifest (HTTP 200,
+**617,538 bytes**, byte-identical) and all 52 specs: **920** raw method entries,
 `GET 655 · POST 154 · PATCH 58 · DELETE 33 · PUT 20`, matching the sweep's recorded 920 and its
 655/265 read-write split exactly.
 
-**Then it does not hold up.** Deduped on the resolved path the provider itself publishes, the count
-is **916** — `GET 654 · POST 153 · PATCH 58 · DELETE 32 · PUT 19`.
+**Then it collapses twice.** Deduped on the resolved path the provider itself publishes, the count is
+916. Deduped again on the **templated** path — dropping nine query-string variants of endpoints
+already counted — it is **907**: `GET 648 · POST 152 · PATCH 56 · DELETE 32 · PUT 19`.
+
+See Hazard 8. The `916` in slice 1 was a real derivation defect, not a rounding argument.
 
 ## Hazards, and the judgement each forces
 
@@ -130,3 +134,45 @@ arithmetic.
 **Two defensible options, both requiring evidence:** re-point the streams at the documented service
 endpoints, or disposition the legacy rows as superseded with the replacing service named. Either way,
 say which and why in `SUMMARY.md`.
+
+### 8. ⚠️ The count collapses a SECOND time: 916 → 907, and that reshapes six commands
+
+Slice 1 deduped on the resolved `(method, base+path)` pair. That caught Hazard 1's four custom-object
+rows and **never looked for a `?`**. Nine of the 916 are query-string variants of endpoints already
+counted — the provider publishes each as its own Swagger path key with the query string baked in,
+and **every one has its base-path sibling documented separately**, so collapsing them loses no
+endpoint.
+
+| Method | Variant path | Variant summary |
+| --- | --- | --- |
+| GET | `/accountsPayable/v1/supplierInvoiceRequests/{ID}/attachments?type=viewContent` | *(empty)* |
+| GET | `/accountsPayable/v1/supplierInvoiceRequests/{ID}/attachments/{subresourceID}?type=viewContent` | *(empty)* |
+| GET | `/procurement/v5/requisitions/{ID}/attachments?type=getFileContent` | *(empty)* |
+| GET | `/procurement/v5/requisitions/{ID}/attachments/{subresourceID}?type=getFileContent` | *(empty)* |
+| GET | `/recruiting/v4/prospects/{ID}/resumeAttachments?type=viewFile` | *(empty)* |
+| GET | `/recruiting/v4/prospects/{ID}/resumeAttachments/{subresourceID}?type=viewFile` | *(empty)* |
+| PATCH | `/staffing/v7/workers/{ID}/checkInTopics/{subresourceID}?type=archive` | "…to archived or un-archived" |
+| PATCH | `/staffing/v7/workers/{ID}/checkIns/{subresourceID}?type=archive` | "…to archived or un-archived" |
+| POST | `/api/common/v1/workers/{ID}/businessTitleChanges?type=me` | *(empty)* |
+
+**Seven carry an empty summary** — documented as an addendum to the base row, not as an operation.
+Procurement's base row says it outright: *"Retrieves the metadata **or the attachment content** of
+the specified requisition."* One endpoint, two modes. **The two staffing PATCHes** carry a summary
+describing a **behaviour** of the base endpoint, which is finding 23's shape exactly.
+
+#### The judgement this forces, and it is not the count
+
+Six of the nine (`viewContent` / `getFileContent` / `viewFile`) are the **binary** mode of an
+attachment endpoint whose default mode returns JSON metadata. **This is the connector's
+binary-detection judgement**, and it must not be resolved by picking one mode:
+
+- Modelling the row as `direct_read` alone silently drops the ability to fetch the file.
+- Modelling it as `binary_download` alone silently drops the metadata read.
+- Inventing a `?type=` path row is the synthetic-variant defect the sweep has now rejected five times.
+
+**Use `covered_by.direct_reads` (plural)** — the array github's foundation fix generalised — to hang
+**both** a metadata read and a binary download off **one** documented endpoint row. That is precisely
+what the plural arrays exist for.
+
+The remaining three (`?type=archive` ×2, `?type=me`) re-express as a **flag** on the surviving write
+action (help-scout's `--async` pattern), never as a second path.

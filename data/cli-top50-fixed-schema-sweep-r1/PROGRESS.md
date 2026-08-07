@@ -32,7 +32,15 @@ docs) are regenerated **once at the very end**, not per connector.
    `VERIFICATION.md`. **Do not regenerate it per connector** — finding F6: a per-connector
    `pm docs generate` run rewrites ~1,034 files of pre-existing `main` drift.
 
-## ⇒ RESUME POINT — workday-rest slice 2 of 5 (its red is observed at **916**, not 920)
+## ⇒ RESUME POINT — workday-rest slice 2 of 5 (its red is now observed at **907** — not 920, not 916)
+
+> **Updated by the slice-2 worker.** The section below is slice 1's account and is kept because its
+> reasoning about the cross-service duplication is correct and still load-bearing. **Its number is
+> not.** The artifact was re-fetched (manifest HTTP 200, **617,538 bytes**, byte-identical; all 52
+> specs re-fetched) and the derivation reproduced independently to 920 raw → 916 — confirming slice 1
+> exactly to that point — and then collapsed a **second** time to **907** on nine query-string
+> variants slice 1 never looked for. **See findings 34 and 35.** The red test now asserts 907, plus
+> the stricter requirement that each collapsed variant's base endpoint is *present*.
 
 **`github` is COMPLETE and pushed.** Its full documented surface is enumerated at **1220 REST + 4
 GraphQL**, and `TestGitHubDocumentedRESTSurfaceIsComplete` — red since slice 1 — now **passes**. The
@@ -141,7 +149,7 @@ Commit **and push** after every single connector, and tick it here in the same s
 > **This supersedes the smallest-first order.** The four giants land FIRST, not last. Re-sorted by
 > re-derived operation count descending from `MASTER-PLAN.json`.
 
-~~github 1220~~ ✅ · `workday-rest 916 (NOT 920 — re-derived, see handoff) · zendesk-support 625 · jira 616 · stripe 589 · linear 538 ·
+~~github 1220~~ ✅ · `workday-rest 907 (NOT 920, NOT 916 — re-derived twice, see findings 34-35) · zendesk-support 625 · jira 616 · stripe 589 · linear 538 ·
 chargebee 438 · **marketo ~320-367 (count TBD)** · square 334 · bitbucket 331 · bamboo-hr 311 ·
 monday 292 · trello 261 · asana 249 · front 244 · xero 235 · intercom 231 · quickbooks 198 ·
 segment 197 · twilio 197 · google-ads 163`
@@ -323,6 +331,29 @@ command → one commit → push → tick.
 33. **A `rest_read` POST needs BOTH `body_schema` and `content_type: application/json`.** Two
     separate validate rules, caught one run apart. Fix them in the generator and regenerate; never
     hand-patch a generated bundle.
+34. **⚠️⚠️ DEDUPING ON THE RESOLVED PATH IS NOT ENOUGH — DEDUP ON THE TEMPLATED PATH TOO.**
+    **workday-rest is 907, not the 916 slice 1 derived and not the 920 the master plan recorded.**
+    Slice 1 deduped on the resolved `(method, base+path)` pair, which correctly caught four
+    custom-object rows published by two service modules (920 → 916) — and **never looked for a `?`**.
+    Nine of the 916 are query-string variants of endpoints already counted, each published by
+    Workday as its own Swagger path key with the query string baked in, each with its base-path
+    sibling documented separately. **Fifth appearance of this defect class** (notion, lever-hiring,
+    help-scout, github, now workday-rest), and the first where **both** collapses were needed in one
+    connector — passing one dedup is what made the second look unnecessary. Finding 22 already said
+    "put `if strings.Contains(ep.Path, "?")` in every red test"; the test **had** that guard, and the
+    derivation feeding it did not. **Run the derivation through the red test's own rules before
+    trusting its count.**
+35. **The query-string variants ARE the binary-detection judgement in disguise.** Six of
+    workday-rest's nine (`?type=viewContent` / `getFileContent` / `viewFile`) are the **binary** mode
+    of an attachment endpoint whose default mode returns JSON metadata — Workday's own procurement
+    summary says "Retrieves the metadata **or the attachment content**". So collapsing the count is
+    not the end of it: modelling the survivor as `direct_read` alone drops the file fetch, and as
+    `binary_download` alone drops the metadata read. **Hang both off ONE row with
+    `covered_by.direct_reads` (plural)** — this is the second connector to need github's plural-array
+    foundation fix, which confirms it generalised rather than solving one connector's problem.
+    Seven of the nine carry an **empty summary**, which is the provider telling you it is an addendum
+    to the base row and not an operation; the two that carry text describe a *behaviour*
+    ("…to archived or un-archived") and become a flag, per finding 23.
 
 ## Honest note on pace
 
