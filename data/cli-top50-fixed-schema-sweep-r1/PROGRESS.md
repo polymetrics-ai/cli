@@ -18,7 +18,26 @@ worktree. Nothing is lost; nothing is uncommitted.**
 **Do NOT open the PR yet.** Shared artifacts (endpoint ledger, website catalogs, golden transcripts,
 docs) are regenerated **once at the very end**, not per connector.
 
-## Done — 3 on the branch, plus 3 already resolved elsewhere
+## ⇒ RESUME POINT — github slice 2 of 5
+
+`github` is **in progress and sliced**. Slice 1 (red test observed + `DERIVED-OPERATIONS.json` +
+`PLAN.md` + `RUN-STATE.json`) is **committed and pushed**. Pick up at
+`.planning/phases/github-parity-sweep-r1/RUN-STATE.json` → `next_action`.
+
+**Slice 2 is: expand `api_surface.json` to 1220 REST + 4 GraphQL dispositioned rows.** Three things
+must happen in it, and all three are already evidenced in the plan:
+
+1. Add the **719 missing operations**. They are missing by whole **scope** — the bundle enumerated
+   only `/repos/{owner}/{repo}/…` and its own scope text says org-, user-, enterprise- and
+   admin-level surfaces were never enumerated. `DERIVED-OPERATIONS.json` holds all 1220 with
+   `operationId`, `summary`, `tags` and `deprecated`, so nothing needs re-fetching.
+2. **Drop the 4 synthetic `(close)`/`(reopen)` path rows.** They encode a behaviour variant into the
+   path; no such path is documented. Re-express as a flag or a `duplicate` disposition.
+3. **Update `TestGitHubAPISurfaceOperationLedgerMetrics`' expected counts** (509/440/69) — and keep
+   **every** structural assertion. Changing an expected value because the truth changed is not
+   relaxing a check; removing one would be.
+
+## Done — 5 on the branch, plus 3 already resolved elsewhere
 
 | Connector | Ops | State |
 | --- | ---: | --- |
