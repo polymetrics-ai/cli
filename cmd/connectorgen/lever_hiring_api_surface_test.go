@@ -16,14 +16,14 @@ import (
 // A 2020 Wayback capture of the same page parsed with identical methodology yields ~129, and the
 // current page yields 106. Three independent derivations converged on 106:
 //
-//	 1. the sweep's HTML derivation                                        -> 106
-//	 2. this lane's own normalised extraction of the same page (108 raw,
-//	    minus 2 prose "e.g." examples that are not endpoint sections:
-//	    POST /postings/{postingId}/apply and GET /profile_forms)           -> 106
-//	 3. the preserved lever-hiring lane's bundle, once its 2 query-string
-//	    duplicates of GET /postings are collapsed and the one endpoint it
-//	    missed (GET /v1/eeo/responses, whose docs omit a leading slash)
-//	    is restored                                                        -> 106
+//  1. the sweep's HTML derivation                                        -> 106
+//  2. this lane's own normalised extraction of the same page (108 raw,
+//     minus 2 prose "e.g." examples that are not endpoint sections:
+//     POST /postings/{postingId}/apply and GET /profile_forms)           -> 106
+//  3. the preserved lever-hiring lane's bundle, once its 2 query-string
+//     duplicates of GET /postings are collapsed and the one endpoint it
+//     missed (GET /v1/eeo/responses, whose docs omit a leading slash)
+//     is restored                                                        -> 106
 //
 // Counting is normalised on method+path with `:param` unified to `{param}` and example query
 // strings dropped, because Lever's docs write the same operation several ways.
