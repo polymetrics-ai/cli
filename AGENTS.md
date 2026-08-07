@@ -206,6 +206,24 @@ Never invent an `api_surface` endpoint to make a command look implemented. If
 the endpoint is not in the connector's own `api_surface.json` and
 `operations.json`, the command is not ready.
 
+A parity count is a claim about the binary, so prove it with the binary.
+Run each `implemented`/`partial` command as `pm <connector> <path>` in an
+initialised project with **no credential configured**: a dispatchable command
+stops at `error: missing --credential`, an undispatchable one answers
+`error: unknown command "..."`. That string is the discriminator, and it is the
+only one — a bundle can validate, pass `surface-sync --check`, and still be
+unreachable. Gmail once recorded 79 parity successes while the binary rejected
+all 79. Give each parallel worker its own project directory; a shared one
+produces state-lock races that read as failures but are not.
+
+`unsafe_or_disallowed` is a safety control only when it removes a capability.
+Once the documented-surface enumeration generates a command for an endpoint,
+blocking the gh-familiar alias for that same endpoint removes nothing — it
+leaves the destructive path reachable under a name nobody would guess. Restore
+the alias onto the write action its generated twin already uses, so it inherits
+the reverse-ETL contract and, for DELETE, the typed confirmation
+`connectors.ConfirmationForWriteAction` forces regardless of metadata.
+
 ## The Table Format Is Derived; The Write-Ahead Log Is Not
 
 A table is a **single Parquet file** at `tables/<table>.parquet`, rebuilt
