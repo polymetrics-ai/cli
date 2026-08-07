@@ -833,7 +833,212 @@
   "chargedesk": [],
   "chargify": [],
   "chartmogul": [],
-  "chatwoot": [],
+  "chatwoot": [
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/agent_bots",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/agent_bots/{id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/audit_logs",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/automation_rules",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/automation_rules/{id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/branded_email_layout",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/canned_responses",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/contacts/search",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}/contactable_inboxes",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}/conversations",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}/labels",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/conversations/meta",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/labels",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/reporting_events",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/custom_filters",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/inbox_members/{inbox_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/inboxes/{id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/inboxes/{id}/agent_bot",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/inboxes/{id}/message_templates",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/integrations/apps",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/labels/{id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/portals",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/reporting_events",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/teams/{team_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/webhooks",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/contacts/filter",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/filter",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    }
+  ],
   "chift": [],
   "churnkey": [],
   "cimis": [],
