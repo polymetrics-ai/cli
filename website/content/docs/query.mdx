@@ -8,7 +8,7 @@ After an extraction lands data in the local warehouse, `pm query run` lets you i
 ## Basic usage
 
 ```bash
-pm query run --table <table> [--limit <n>] [--json]
+pm query run --table <table> [--connection <name>] [--limit <n>] [--json]
 pm query run --sql "<SQL statement>" [--limit <n>] [--json]
 pm query run --table <table> --agent-mode summary --fields id,email --sample 3
 pm query run --table <table> --agent-mode stream --fields id,email
@@ -16,11 +16,30 @@ pm query run --table <table> --agent-mode stream --fields id,email
 
 `--table` is shorthand for `SELECT * FROM <table> LIMIT <n>`. Use `--sql` for any other query.
 
+## Tables belong to a connection
+
+Every connection materializes its tables into its own directory under the
+warehouse root, so two connections can target the same table name without one
+overwriting the other. When more than one connection has a table of the
+requested name, `pm query run` refuses the read and lists the owning
+connections rather than guessing which one you meant:
+
+```
+table "records" is materialized by 2 connections (acme, globex); pass --connection to choose one
+```
+
+Add `--connection` to pick one:
+
+```bash
+pm query run --table records --connection acme --json
+```
+
 ## Flag reference
 
 | Flag | Description |
 |---|---|
 | `--table` | Table name to query. Returns all columns up to `--limit` rows. |
+| `--connection` | Connection whose table to read. Required only when several connections share the table name. |
 | `--sql` | Raw SQL statement. Takes precedence over `--table` when both are provided. |
 | `--limit` | Maximum rows to return. Default is 100. |
 | `--fields` | Comma-separated projection applied before output. |

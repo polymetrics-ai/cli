@@ -15,6 +15,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	statestore "polymetrics.ai/internal/state"
 	"polymetrics.ai/internal/synccontract"
+	"polymetrics.ai/internal/warehouse"
 )
 
 func TestLegacyScalarStreamStateRequiresRebootstrapBeforeRead(t *testing.T) {
@@ -288,6 +289,30 @@ func expectedLocalWarehouseDirectorySyncChain(t *testing.T, dir string) []string
 	}
 }
 
+func mustFindConnection(t *testing.T, a *App, name string) Connection {
+	t.Helper()
+	conn, ok := a.findConnection(name)
+	if !ok {
+		t.Fatalf("connection %q not found", name)
+	}
+	return conn
+}
+
+// expectedWarehouseRunSyncChains is the full sequence a warehouse run emits:
+// the tables directory chain, then the wal directory chain. Both walk to the
+// filesystem root, so every ancestor a materialized row depends on — including
+// the connection directory holding its ownership record — is durable before
+// the checkpoint is acknowledged.
+func expectedWarehouseRunSyncChains(t *testing.T, a *App, connection, warehouseDir string) []string {
+	t.Helper()
+	location, err := a.warehouseLocation(warehouseDir, mustFindConnection(t, a, connection))
+	if err != nil {
+		t.Fatalf("resolve warehouse location: %v", err)
+	}
+	chains := expectedLocalWarehouseDirectorySyncChain(t, filepath.Join(location.ConnectionDir, warehouse.TablesDirName))
+	return append(chains, expectedLocalWarehouseDirectorySyncChain(t, filepath.Join(location.ConnectionDir, warehouse.WALDirName))...)
+}
+
 func setLocalWarehousePath(t *testing.T, a *App, path string) {
 	t.Helper()
 	for index := range a.state.Credentials {
@@ -330,7 +355,7 @@ func TestRunWarehouseETLSyncsNewDirectoryParentChainBeforeAcknowledgement(t *tes
 		t.Fatal("successful run did not acknowledge a checkpoint")
 	}
 
-	wantSyncs := expectedLocalWarehouseDirectorySyncChain(t, filepath.Join(warehouseDir, "_pm_raw"))
+	wantSyncs := expectedWarehouseRunSyncChains(t, a, connection, warehouseDir)
 	if !reflect.DeepEqual(synced, wantSyncs) {
 		t.Fatalf("warehouse directory sync calls = %#v, want %#v", synced, wantSyncs)
 	}
@@ -363,20 +388,28 @@ func TestRunWarehouseETLSyncsExternalWarehouseChainForEachWriter(t *testing.T) {
 	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connectionA, Stream: "records", BatchSize: 1}); err != nil {
 		t.Fatalf("first RunETL() error = %v", err)
 	}
-	wantSyncs := expectedLocalWarehouseDirectorySyncChain(t, filepath.Join(warehouseDir, "_pm_raw"))
-	if !reflect.DeepEqual(synced, wantSyncs) {
-		t.Fatalf("first warehouse directory sync calls = %#v, want %#v", synced, wantSyncs)
+	wantSyncsA := expectedWarehouseRunSyncChains(t, a, connectionA, warehouseDir)
+	if !reflect.DeepEqual(synced, wantSyncsA) {
+		t.Fatalf("first warehouse directory sync calls = %#v, want %#v", synced, wantSyncsA)
 	}
-	if _, err := os.Stat(filepath.Join(warehouseDir, "_pm_raw")); err != nil {
-		t.Fatalf("first writer did not create raw directory: %v", err)
+	locationA, err := a.warehouseLocation(warehouseDir, mustFindConnection(t, a, connectionA))
+	if err != nil {
+		t.Fatalf("resolve first warehouse location: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(locationA.ConnectionDir, warehouse.WALDirName)); err != nil {
+		t.Fatalf("first writer did not create wal directory: %v", err)
 	}
 
+	// The second writer shares the warehouse root but owns a different
+	// directory, so it syncs its own chain rather than reusing the first
+	// writer's.
 	synced = nil
 	if _, err := b.RunETL(ctx, RunETLRequest{Connection: connectionB, Stream: "records", BatchSize: 1}); err != nil {
 		t.Fatalf("second RunETL() error = %v", err)
 	}
-	if !reflect.DeepEqual(synced, wantSyncs) {
-		t.Fatalf("second warehouse directory sync calls = %#v, want %#v", synced, wantSyncs)
+	wantSyncsB := expectedWarehouseRunSyncChains(t, b, connectionB, warehouseDir)
+	if !reflect.DeepEqual(synced, wantSyncsB) {
+		t.Fatalf("second warehouse directory sync calls = %#v, want %#v", synced, wantSyncsB)
 	}
 	if state := b.state.StreamStates[streamStateKey(connectionB, "records")]; state.Checkpoint == nil {
 		t.Fatal("second writer did not acknowledge a checkpoint")
@@ -391,7 +424,7 @@ func TestRunWarehouseETLResyncsDirectoryChainAfterSyncFailure(t *testing.T) {
 	a, connection := setupSyncModeApp(t, source, "incremental_append")
 	warehouseDir := filepath.Join(t.TempDir(), "new", "warehouse", "root")
 	setLocalWarehousePath(t, a, warehouseDir)
-	wantSyncs := expectedLocalWarehouseDirectorySyncChain(t, filepath.Join(warehouseDir, "_pm_raw"))
+	wantSyncs := expectedWarehouseRunSyncChains(t, a, connection, warehouseDir)
 	failingDir := filepath.Clean(filepath.Dir(warehouseDir))
 	failureIndex := -1
 	for index, dir := range wantSyncs {
@@ -425,7 +458,11 @@ func TestRunWarehouseETLResyncsDirectoryChainAfterSyncFailure(t *testing.T) {
 	if state := a.state.StreamStates[streamStateKey(connection, "records")]; state.Checkpoint != nil {
 		t.Fatalf("checkpoint acknowledged after directory sync failure: %#v", state.Checkpoint)
 	}
-	if _, err := os.Stat(filepath.Join(warehouseDir, "_pm_raw")); err != nil {
+	location, err := a.warehouseLocation(warehouseDir, mustFindConnection(t, a, connection))
+	if err != nil {
+		t.Fatalf("resolve warehouse location: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(location.ConnectionDir, warehouse.WALDirName)); err != nil {
 		t.Fatalf("failed run did not leave directory setup for retry: %v", err)
 	}
 
