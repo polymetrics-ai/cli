@@ -60,10 +60,13 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 		} `json:"operations"`
 	}](t, "../../internal/connectors/defs/gong/operations.json")
 
-	if got, want := len(writes.Actions), 26; got != want {
+	// 27 write actions and 17 operations: the Targets assignments upload
+	// (upload_target_assignments / gong.targets_assignments_upload) joined the surface when
+	// gong was brought to its full 69 documented operations. See gong_api_surface_test.go.
+	if got, want := len(writes.Actions), 27; got != want {
 		t.Fatalf("write actions = %d, want %d", got, want)
 	}
-	if got, want := len(ops.Operations), 16; got != want {
+	if got, want := len(ops.Operations), 17; got != want {
 		t.Fatalf("operations = %d, want %d", got, want)
 	}
 	for _, flag := range cli.GlobalFlags {
@@ -83,7 +86,9 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 			coverage["operation"]++
 		}
 	}
-	wantCoverage := map[string]int{"stream": 12, "direct_read": 29, "write": 26}
+	// direct_read 30 and write 27: GET /v2/targets became a bounded direct read and
+	// POST /v2/targets/{targetId}/assignments a multipart binary write.
+	wantCoverage := map[string]int{"stream": 12, "direct_read": 30, "write": 27}
 	for key, want := range wantCoverage {
 		if got := coverage[key]; got != want {
 			t.Fatalf("coverage[%s] = %d, want %d (all coverage: %+v)", key, got, want, coverage)
@@ -121,6 +126,8 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 		{path: "calls transcript", intent: "direct_read", availability: "implemented", target: "json_redacted"},
 		{path: "meetings integration-status", intent: "direct_read", availability: "implemented", target: "json_redacted"},
 		{path: "crm upload-entities", intent: "reverse_etl", availability: "implemented", target: "upload_crm_entities"},
+		{path: "targets list", intent: "direct_read", availability: "implemented", target: "json_redacted"},
+		{path: "targets upload-assignments", intent: "reverse_etl", availability: "implemented", target: "upload_target_assignments"},
 	} {
 		cmd, ok := commandsByPath[tc.path]
 		if !ok {
