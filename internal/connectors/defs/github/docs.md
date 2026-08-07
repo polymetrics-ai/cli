@@ -1,12 +1,14 @@
 # Overview
 
-GitHub reads 37 stream(s), and accounts for 231 approved or explicitly blocked write action(s).
+GitHub reads 37 stream(s), and accounts for 555 approved or explicitly blocked write action(s).
 
-Certification status: GitHub full certification passed for the current connector surface. The live
-certificate accounted for 509 API endpoints (440 covered, 69 blocked), 37 streams, 2 implemented
-direct-read command families, and 231 write actions. The safe `create_label` write lifecycle passed
-with read-back verification and cleanup. Remaining write actions are inventory-accounted as safe but
-untested pairings or blocked actions; destructive/admin/binary surfaces are not executed blindly.
+Certification status: the live certificate was run against an earlier, smaller surface. It accounted
+for 509 API endpoints (440 covered, 69 blocked), 37 streams, 2 implemented direct-read command
+families, and 231 write actions, and the safe `create_label` write lifecycle passed there with
+read-back verification and cleanup. The connector now enumerates 1224 API endpoints (1126 covered,
+98 blocked), 555 write actions, and 530 implemented direct-read commands; that enumerated surface
+has **not** been re-certified. Remaining write actions are inventory-accounted as safe but untested
+pairings or blocked actions; destructive/admin/binary surfaces are not executed blindly.
 
 The connector now declares a JSON-first command surface in `cli_surface.json`. This surface is a
 docs, validation, and safe dispatch contract for gh-inspired GitHub commands. Commands mapped to

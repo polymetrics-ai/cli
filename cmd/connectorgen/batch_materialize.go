@@ -1252,6 +1252,7 @@ func copyMaterializedClassifier(dst *engine.SurfaceEndpoint, src engine.SurfaceE
 		coverage := *src.CoveredBy
 		coverage.Writes = append([]string(nil), src.CoveredBy.Writes...)
 		coverage.DirectReads = append([]string(nil), src.CoveredBy.DirectReads...)
+		coverage.Writes = append([]string(nil), src.CoveredBy.Writes...)
 		dst.CoveredBy = &coverage
 		return
 	}

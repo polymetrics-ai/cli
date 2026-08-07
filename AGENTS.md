@@ -302,6 +302,29 @@ Never invent an `api_surface` endpoint to make a command look implemented. If
 the endpoint is not in the connector's own `api_surface.json` and
 `operations.json`, the command is not ready.
 
+## Command Surface Must Stay Executable
+
+A parity count is a claim about the binary, so prove it with the binary.
+Run each `implemented`/`partial` command as `pm <connector> <path>` in an
+initialised project with **no credential configured**. There are exactly three
+outcomes, and they are not interchangeable evidence:
+
+- `implemented` and dispatchable stops at `error: missing --credential`. This,
+  and only this, is the evidence that a command works.
+- `partial` answers with its declared block reason, e.g. `error: connector
+  command "gists create" is blocked: intent=reverse_etl: availability=partial:
+  Reverse ETL writes require plan, preview, approval, execute.`
+  `resolvePreflightCommand` gates reverse-ETL on `availability == "implemented"`
+  (`internal/connectors/commandrunner/runner.go`) and otherwise falls through to
+  a terminal `BlockedCommandError`. This is CORRECT behaviour for a `partial`
+  command — it is honestly labelled, not broken — but it must never be recorded
+  as "reachable" on the same footing as the line above.
+- `error: unknown command "..."` is the only reachability failure.
+
+A bundle can validate, pass `surface-sync --check`, and still be unreachable.
+Gmail once recorded 79 parity successes while the binary rejected all 79. Give
+each parallel worker its own project directory; a shared one produces state-lock
+races that read as failures but are not.
 ## Database Connector Container Harness
 
 `internal/connectors/native/dbtest` is the reusable, Podman-backed live-test
