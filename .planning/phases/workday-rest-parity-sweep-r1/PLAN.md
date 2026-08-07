@@ -111,3 +111,22 @@ exit code · no hand-authored paging flags · every blocked row carrying `Named 
 
 **Inherited from github, use it:** `covered_by.writes` now exists. If two write actions land on one
 endpoint, list them — do not invent a variant path.
+
+### 7. ⚠️ The four shipped rows are NOT among the 916
+
+The bundle's three legacy streams point at `/ccx/api/hcm/v1/{tenant}/workers|organizations|jobs`
+(plus one excluded POST). **The current service directory publishes no `hcm` service and no `/ccx/`
+path anywhere** — worker resources live under `staffing/v7`, `absenceManagement/v5`,
+`compensation/v3`, `performanceEnablement/v5`, `timeTracking/v5` and `api/common/v1`. They are not in
+the archived list either, which holds only older versions of the 52 listed services. This is an
+older Workday HCM REST shape that the published directory has superseded.
+
+They therefore cannot be counted as documented — and they must not simply vanish, because deleting
+them deletes three shipped, schema- and fixture-backed streams inside a parity commit (the
+greenhouse finding-21 reasoning). The red test **pins them by name and counts them apart**, and
+requires each to carry its own disposition, so the decision is made deliberately rather than by
+arithmetic.
+
+**Two defensible options, both requiring evidence:** re-point the streams at the documented service
+endpoints, or disposition the legacy rows as superseded with the replacing service named. Either way,
+say which and why in `SUMMARY.md`.

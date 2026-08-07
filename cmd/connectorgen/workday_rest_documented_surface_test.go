@@ -55,8 +55,30 @@ var workdayRESTDuplicatedAcrossServices = []string{
 	"PUT /customObject/v2/customObjects/{customObjectAlias}/{customObjectID}",
 }
 
+// workdayRESTLegacyCarriedRows are the rows the shipped bundle already holds,
+// and they are NOT among the 916. The bundle's three legacy streams point at
+// /ccx/api/hcm/v1/{tenant}/... -- an older Workday HCM REST shape. The current
+// service directory publishes no "hcm" service and no /ccx/ path anywhere: its
+// worker resources live under staffing/v7, absenceManagement/v5, compensation/v3
+// and so on. Nor are they in the archived list, which only holds older versions
+// of the 52 listed services.
+//
+// So they cannot simply be counted as documented, and they must not simply
+// vanish either: deleting them would delete three shipped, schema- and
+// fixture-backed streams inside a parity commit. They are pinned here and each
+// must carry its own disposition, so whoever authors this surface has to make
+// that call deliberately -- re-point them at the documented services, or
+// disposition them as superseded -- rather than have the count decide it.
+var workdayRESTLegacyCarriedRows = []string{
+	"GET /ccx/api/hcm/v1/{tenant}/jobs",
+	"GET /ccx/api/hcm/v1/{tenant}/organizations",
+	"GET /ccx/api/hcm/v1/{tenant}/workers",
+	"POST /ccx/api/hcm/v1/{tenant}/workers",
+}
+
 // workdayRESTMethodSplit is the distribution of the 916 documented operations
-// after dedup. Workday is read-heavy: 654 GETs against 262 mutations.
+// after dedup, counting only rows the current directory documents. Workday is
+// read-heavy: 654 GETs against 262 mutations.
 var workdayRESTMethodSplit = map[string]int{
 	"GET":    654,
 	"POST":   153,
@@ -96,10 +118,15 @@ func TestWorkdayRESTDocumentedSurfaceIsComplete(t *testing.T) {
 		t.Errorf("operation_ledger_version = %d, want 1", surface.OperationLedgerVersion)
 	}
 
+	legacy := map[string]bool{}
+	for _, row := range workdayRESTLegacyCarriedRows {
+		legacy[row] = true
+	}
+
 	byMethod := map[string]int{}
 	seen := map[string]bool{}
 	var blank, malformed []string
-	total, covered, blocked, legacyExcluded := 0, 0, 0, 0
+	total, covered, blocked, legacyExcluded, carried := 0, 0, 0, 0, 0
 
 	for _, ep := range surface.Endpoints {
 		key := ep.Method + " " + ep.Path
@@ -107,8 +134,14 @@ func TestWorkdayRESTDocumentedSurfaceIsComplete(t *testing.T) {
 			t.Errorf("duplicate endpoint %q", key)
 		}
 		seen[key] = true
-		total++
-		byMethod[ep.Method]++
+		// Legacy /ccx/ rows are counted apart from the documented surface, so
+		// carrying them can never inflate the parity number.
+		if legacy[key] || strings.HasPrefix(ep.Path, "/ccx/") {
+			carried++
+		} else {
+			total++
+			byMethod[ep.Method]++
+		}
 
 		// The defect class that has now recurred in lever-hiring, help-scout and
 		// github: a query-string variant, a wildcard family, or a behaviour
@@ -171,12 +204,17 @@ func TestWorkdayRESTDocumentedSurfaceIsComplete(t *testing.T) {
 		t.Errorf("%d legacy excluded row(s) remain, want 0", legacyExcluded)
 	}
 	if total != workdayRESTOperations {
-		t.Errorf("endpoints = %d, want %d documented operations (%d raw rows across %d service specs, "+
-			"minus %d documented twice)", total, workdayRESTOperations, workdayRESTRawRows,
-			workdayRESTServiceSpecs, workdayRESTRawRows-workdayRESTOperations)
+		t.Errorf("documented endpoints = %d, want %d (%d raw rows across %d service specs, minus %d "+
+			"documented twice; %d legacy /ccx/ row(s) counted apart)", total, workdayRESTOperations,
+			workdayRESTRawRows, workdayRESTServiceSpecs, workdayRESTRawRows-workdayRESTOperations, carried)
 	}
-	if covered+blocked != total {
-		t.Errorf("covered(%d)+blocked(%d) = %d, want %d", covered, blocked, covered+blocked, total)
+	if carried > len(workdayRESTLegacyCarriedRows) {
+		t.Errorf("legacy /ccx/ rows = %d, want at most %d — a new one is not a documented operation",
+			carried, len(workdayRESTLegacyCarriedRows))
+	}
+	if covered+blocked != total+carried {
+		t.Errorf("covered(%d)+blocked(%d) = %d, want %d — every row needs a disposition, legacy included",
+			covered, blocked, covered+blocked, total+carried)
 	}
 	if !reflect.DeepEqual(byMethod, workdayRESTMethodSplit) {
 		t.Errorf("byMethod = %+v, want %+v", byMethod, workdayRESTMethodSplit)
