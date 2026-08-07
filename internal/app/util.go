@@ -117,6 +117,103 @@ func redactReversePlanField(record connectors.Record, field string) {
 	}
 }
 
+// withholdRecordFields returns a clone of in with every declared field removed
+// outright. The key is absent rather than set to a placeholder: an absent key
+// is unambiguous, where a placeholder is indistinguishable from an operator who
+// really supplied that string and would be dispatched verbatim.
+func withholdRecordFields(in connectors.Record, fields []string) connectors.Record {
+	out := deepCloneRecord(in)
+	for _, field := range fields {
+		deleteRecordField(out, strings.TrimPrefix(strings.TrimSpace(field), "record."))
+	}
+	return out
+}
+
+func deleteRecordField(record connectors.Record, field string) {
+	if field == "" {
+		return
+	}
+	parts := strings.Split(field, ".")
+	current := map[string]any(record)
+	for _, part := range parts[:len(parts)-1] {
+		next, ok := current[part]
+		if !ok {
+			return
+		}
+		switch typed := next.(type) {
+		case map[string]any:
+			current = typed
+		case connectors.Record:
+			current = map[string]any(typed)
+		default:
+			return
+		}
+	}
+	delete(current, parts[len(parts)-1])
+}
+
+// recordHasField reports whether a dotted field is present. A plan written
+// before fields were withheld still carries them, so nothing is re-supplied for
+// it.
+func recordHasField(record connectors.Record, field string) bool {
+	trimmed := strings.TrimPrefix(strings.TrimSpace(field), "record.")
+	if trimmed == "" {
+		return false
+	}
+	parts := strings.Split(trimmed, ".")
+	current := map[string]any(record)
+	for _, part := range parts[:len(parts)-1] {
+		next, ok := current[part]
+		if !ok {
+			return false
+		}
+		nested, ok := asRecordMap(next)
+		if !ok {
+			return false
+		}
+		current = nested
+	}
+	_, ok := current[parts[len(parts)-1]]
+	return ok
+}
+
+// mergeRecordFields overlays supplied onto base, descending into nested maps so
+// a withheld leaf is restored without discarding its siblings.
+func mergeRecordFields(base, overlay connectors.Record) connectors.Record {
+	out := deepCloneRecord(base)
+	for key, value := range overlay {
+		out[key] = mergeRecordValue(out[key], value)
+	}
+	return out
+}
+
+func mergeRecordValue(existing, overlay any) any {
+	existingMap, okExisting := asRecordMap(existing)
+	overlayMap, okOverlay := asRecordMap(overlay)
+	if !okExisting || !okOverlay {
+		return overlay
+	}
+	merged := make(map[string]any, len(existingMap)+len(overlayMap))
+	for key, value := range existingMap {
+		merged[key] = value
+	}
+	for key, value := range overlayMap {
+		merged[key] = mergeRecordValue(merged[key], value)
+	}
+	return merged
+}
+
+func asRecordMap(value any) (map[string]any, bool) {
+	switch typed := value.(type) {
+	case map[string]any:
+		return typed, true
+	case connectors.Record:
+		return map[string]any(typed), true
+	default:
+		return nil, false
+	}
+}
+
 func reversePlanRedactFields(connector connectors.Connector, actionName string) []string {
 	for _, action := range connectors.ManifestOf(connector).WriteActions {
 		if action.Name == actionName {

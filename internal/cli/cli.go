@@ -1370,7 +1370,7 @@ func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connector
 		if err != nil {
 			return validationErrorf("invalid --confirm: %v", err)
 		}
-		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: approvalToken, Confirmation: confirmation})
+		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: approvalToken, Confirmation: confirmation, WithheldFlags: flags.values})
 		if err != nil {
 			return err
 		}
@@ -1381,7 +1381,7 @@ func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connector
 		return nil
 	}
 	if preview {
-		plan, writePreview, err := a.PreviewConnectorCommandPlan(ctx, plan.ID)
+		plan, writePreview, err := a.PreviewConnectorCommandPlan(ctx, plan.ID, flags.values)
 		if err != nil {
 			return err
 		}
@@ -1649,7 +1649,7 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 		}
 		var writePreview *connectors.WritePreview
 		if plan.ConnectorCommand != "" || plan.ConfirmationPolicy.Kind != "" || plan.ConfirmationChallenge != "" {
-			previewedPlan, preview, err := a.PreviewReversePlan(ctx, args[1])
+			previewedPlan, preview, err := a.PreviewReversePlan(ctx, args[1], parseFlags(args[2:]).values)
 			if err != nil {
 				return err
 			}
@@ -1683,7 +1683,7 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 		if err != nil {
 			return validationErrorf("invalid --confirm: %v", err)
 		}
-		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: args[1], ApprovalToken: flags.first("approve"), Confirmation: confirmation})
+		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: args[1], ApprovalToken: flags.first("approve"), Confirmation: confirmation, WithheldFlags: flags.values})
 		if err != nil {
 			return err
 		}

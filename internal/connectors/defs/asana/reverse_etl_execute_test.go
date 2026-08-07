@@ -269,7 +269,8 @@ func TestReverseETLWriteActionsExecute(t *testing.T) {
 				}
 				run, err := application.RunReverseETL(context.Background(), app.RunReverseETLRequest{
 					PlanID: plan.ID, ApprovalToken: plan.ApprovalToken,
-					Confirmation: connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+					Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+					WithheldFlags: flagsFromRecord(cmd, fixture.Record),
 				})
 				if err != nil {
 					t.Fatalf("RunReverseETL(%q) = %v", action.Name, err)

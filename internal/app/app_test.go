@@ -371,7 +371,7 @@ func TestBitbucketReverseETLClosedSchemasDoNotReceiveInternalPlanFields(t *testi
 		t.Fatalf("PlanReverseETL(delete issue) error = %v", err)
 	}
 	assertNoInternalReversePlanField(t, deletePlan.Sample)
-	deletePreview, _, err := a.PreviewReversePlan(ctx, deletePlan.ID)
+	deletePreview, _, err := a.PreviewReversePlan(ctx, deletePlan.ID, nil)
 	if err != nil {
 		t.Fatalf("PreviewReversePlan(delete issue) error = %v", err)
 	}

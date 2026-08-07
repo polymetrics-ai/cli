@@ -29,7 +29,7 @@ func TestRunReverseETLRejectsDestructiveConnectorCommandWithoutConfirmation(t *t
 	defer server.Close()
 
 	a, plan := setupGitHubDestructiveCommandPlan(t, ctx, server.URL)
-	plan, _, err := a.PreviewConnectorCommandPlan(ctx, plan.ID)
+	plan, _, err := a.PreviewConnectorCommandPlan(ctx, plan.ID, nil)
 	if err != nil {
 		t.Fatalf("PreviewConnectorCommandPlan() error = %v", err)
 	}
@@ -86,7 +86,7 @@ func TestDestructiveConnectorCommandMintsApprovalOnlyAfterPreview(t *testing.T) 
 	if plan.ApprovalToken != "" {
 		t.Fatal("destructive plan minted approval before preview")
 	}
-	previewed, _, err := a.PreviewConnectorCommandPlan(ctx, plan.ID)
+	previewed, _, err := a.PreviewConnectorCommandPlan(ctx, plan.ID, nil)
 	if err != nil {
 		t.Fatalf("PreviewConnectorCommandPlan() error = %v", err)
 	}
@@ -136,7 +136,7 @@ func TestGenericDestructivePlanMintsApprovalOnlyAfterPreview(t *testing.T) {
 	if plan.ApprovalToken != "" {
 		t.Fatal("generic destructive plan minted approval before preview")
 	}
-	previewed, preview, err := a.PreviewReversePlan(ctx, plan.ID)
+	previewed, preview, err := a.PreviewReversePlan(ctx, plan.ID, nil)
 	if err != nil {
 		t.Fatalf("PreviewReversePlan() error = %v", err)
 	}
@@ -273,7 +273,7 @@ func TestRunReverseETLAcceptsDestructiveConnectorCommandWithMatchingConfirmation
 	if plan.ConfirmationChallenge != "destructive" {
 		t.Fatalf("ConfirmationChallenge = %q, want destructive", plan.ConfirmationChallenge)
 	}
-	plan, _, err := a.PreviewConnectorCommandPlan(ctx, plan.ID)
+	plan, _, err := a.PreviewConnectorCommandPlan(ctx, plan.ID, nil)
 	if err != nil {
 		t.Fatalf("PreviewConnectorCommandPlan() error = %v", err)
 	}
@@ -307,7 +307,7 @@ func TestRunReverseETLRejectsGenericDestructiveActionWithoutConfirmation(t *test
 	if plan.ConfirmationChallenge != "destructive" {
 		t.Fatalf("ConfirmationChallenge = %q, want destructive", plan.ConfirmationChallenge)
 	}
-	plan, _, err := a.PreviewReversePlan(ctx, plan.ID)
+	plan, _, err := a.PreviewReversePlan(ctx, plan.ID, nil)
 	if err != nil {
 		t.Fatalf("PreviewReversePlan() error = %v", err)
 	}
@@ -358,7 +358,7 @@ func TestRunReverseETLRejectsPreviewDigestDriftBeforeNativeWrite(t *testing.T) {
 	if err != nil {
 		t.Fatalf("PlanReverseETL() error = %v", err)
 	}
-	plan, _, err = a.PreviewReversePlan(ctx, plan.ID)
+	plan, _, err = a.PreviewReversePlan(ctx, plan.ID, nil)
 	if err != nil {
 		t.Fatalf("PreviewReversePlan() error = %v", err)
 	}
@@ -390,7 +390,7 @@ func TestRunReverseETLRejectsApprovalHashStateTamper(t *testing.T) {
 	defer server.Close()
 
 	a, plan := setupGitHubDestructiveCommandPlan(t, ctx, server.URL)
-	plan, _, err := a.PreviewConnectorCommandPlan(ctx, plan.ID)
+	plan, _, err := a.PreviewConnectorCommandPlan(ctx, plan.ID, nil)
 	if err != nil {
 		t.Fatalf("PreviewConnectorCommandPlan() error = %v", err)
 	}
@@ -436,7 +436,7 @@ func TestRunReverseETLConsumesApprovalAtomicallyAcrossProcesses(t *testing.T) {
 	defer server.Close()
 
 	first, plan := setupGitHubDestructiveCommandPlan(t, ctx, server.URL)
-	plan, _, err := first.PreviewConnectorCommandPlan(ctx, plan.ID)
+	plan, _, err := first.PreviewConnectorCommandPlan(ctx, plan.ID, nil)
 	if err != nil {
 		t.Fatalf("PreviewConnectorCommandPlan() error = %v", err)
 	}
@@ -503,7 +503,7 @@ func TestRunReverseETLConsumesBulkApprovalAtomicallyAcrossProcesses(t *testing.T
 	defer server.Close()
 
 	first, plan := setupGitHubGenericDestructivePlan(t, ctx, server.URL)
-	plan, _, err := first.PreviewReversePlan(ctx, plan.ID)
+	plan, _, err := first.PreviewReversePlan(ctx, plan.ID, nil)
 	if err != nil {
 		t.Fatalf("PreviewReversePlan() error = %v", err)
 	}
@@ -557,7 +557,7 @@ func TestConsumedApprovalCannotBeResurrectedByStaleStateSave(t *testing.T) {
 	defer server.Close()
 
 	active, plan := setupGitHubDestructiveCommandPlan(t, ctx, server.URL)
-	plan, _, err := active.PreviewConnectorCommandPlan(ctx, plan.ID)
+	plan, _, err := active.PreviewConnectorCommandPlan(ctx, plan.ID, nil)
 	if err != nil {
 		t.Fatalf("PreviewConnectorCommandPlan() error = %v", err)
 	}
@@ -605,7 +605,7 @@ func TestConsumedApprovalCannotReplayFromRolledBackStateSnapshot(t *testing.T) {
 	defer server.Close()
 
 	a, plan := setupGitHubDestructiveCommandPlan(t, ctx, server.URL)
-	plan, _, err := a.PreviewConnectorCommandPlan(ctx, plan.ID)
+	plan, _, err := a.PreviewConnectorCommandPlan(ctx, plan.ID, nil)
 	if err != nil {
 		t.Fatalf("PreviewConnectorCommandPlan() error = %v", err)
 	}
@@ -628,7 +628,7 @@ func TestConsumedApprovalCannotReplayFromRolledBackStateSnapshot(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Open(rolled-back state) error = %v", err)
 	}
-	if _, _, err := rolledBack.PreviewConnectorCommandPlan(ctx, plan.ID); err == nil {
+	if _, _, err := rolledBack.PreviewConnectorCommandPlan(ctx, plan.ID, nil); err == nil {
 		t.Fatal("PreviewConnectorCommandPlan() re-approved a consumed plan from rolled-back state")
 	}
 	if _, err := rolledBack.RunReverseETL(ctx, request); err == nil {
@@ -659,7 +659,7 @@ func TestPreviewReversePlanRejectsExpiredGenericPlan(t *testing.T) {
 		t.Fatalf("Open(expired state) error = %v", err)
 	}
 
-	if _, _, err := expired.PreviewReversePlan(ctx, plan.ID); err == nil {
+	if _, _, err := expired.PreviewReversePlan(ctx, plan.ID, nil); err == nil {
 		t.Fatal("PreviewReversePlan() minted approval for an expired generic plan")
 	}
 }
@@ -679,7 +679,7 @@ func TestPreviewGrantExpiryIgnoresExtendedMutablePlanDeadline(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Open(extended state) error = %v", err)
 	}
-	previewed, _, err := extended.PreviewReversePlan(ctx, plan.ID)
+	previewed, _, err := extended.PreviewReversePlan(ctx, plan.ID, nil)
 	if err != nil {
 		t.Fatalf("PreviewReversePlan() error = %v", err)
 	}
@@ -741,7 +741,7 @@ func TestExecutedDestructivePlanCannotBeRepreviewedForReplay(t *testing.T) {
 	defer server.Close()
 
 	a, plan := setupGitHubDestructiveCommandPlan(t, ctx, server.URL)
-	plan, _, err := a.PreviewConnectorCommandPlan(ctx, plan.ID)
+	plan, _, err := a.PreviewConnectorCommandPlan(ctx, plan.ID, nil)
 	if err != nil {
 		t.Fatalf("PreviewConnectorCommandPlan() error = %v", err)
 	}
@@ -752,7 +752,7 @@ func TestExecutedDestructivePlanCannotBeRepreviewedForReplay(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("RunReverseETL() error = %v", err)
 	}
-	if _, _, err := a.PreviewConnectorCommandPlan(ctx, plan.ID); err == nil {
+	if _, _, err := a.PreviewConnectorCommandPlan(ctx, plan.ID, nil); err == nil {
 		t.Fatal("executed destructive plan was re-previewed into an approvable state")
 	}
 	if calls != 1 {
