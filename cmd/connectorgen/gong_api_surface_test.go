@@ -68,11 +68,15 @@ func TestGongAPISurfaceOperationLedger(t *testing.T) {
 		}
 	}
 
-	if len(surface.Endpoints) != 67 {
-		t.Fatalf("endpoints = %d, want 67", len(surface.Endpoints))
+	// 69 documented operations, re-derived 2026-08-07 from Gong's own OpenAPI 3.0.1 artifact at
+	// https://gong.app.gong.io/ajax/settings/api/documentation/specs?version= (info.version V2,
+	// 59 paths). The provider-artifact ledger's carried-forward 69 reconciles exactly.
+	// Method split: GET 29, POST 28, PUT 8, DELETE 3, PATCH 1.
+	if len(surface.Endpoints) != 69 {
+		t.Fatalf("endpoints = %d, want 69", len(surface.Endpoints))
 	}
-	if covered != 67 {
-		t.Fatalf("covered endpoints = %d, want 67", covered)
+	if covered != 69 {
+		t.Fatalf("covered endpoints = %d, want 69", covered)
 	}
 	if operations != 0 {
 		t.Fatalf("operation endpoints = %d, want 0", operations)
@@ -82,16 +86,16 @@ func TestGongAPISurfaceOperationLedger(t *testing.T) {
 	}
 	assertGongStringIntMap(t, "totalByMethod", totalByMethod, map[string]int{
 		"DELETE": 3,
-		"GET":    28,
+		"GET":    29,
 		"PATCH":  1,
-		"POST":   27,
+		"POST":   28,
 		"PUT":    8,
 	})
 	assertGongStringIntMap(t, "coveredByMethod", coveredByMethod, map[string]int{
 		"DELETE": 3,
-		"GET":    28,
+		"GET":    29,
 		"PATCH":  1,
-		"POST":   27,
+		"POST":   28,
 		"PUT":    8,
 	})
 	assertGongStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{})
@@ -104,6 +108,17 @@ func TestGongAPISurfaceOperationLedger(t *testing.T) {
 	} {
 		if !seen[key] {
 			t.Fatalf("expected official POST read-query endpoint %q", key)
+		}
+	}
+	// Targets: the two operations the carried-forward bundle was missing. GET /v2/targets returns an
+	// uncursored {requestId, targets} envelope so it is a direct read, not a stream; the assignments
+	// upload is multipart/form-data with a single binary file part.
+	for _, key := range []string{
+		"GET /v2/targets",
+		"POST /v2/targets/{targetId}/assignments",
+	} {
+		if !seen[key] {
+			t.Fatalf("expected documented Targets endpoint %q", key)
 		}
 	}
 	for _, key := range []string{
