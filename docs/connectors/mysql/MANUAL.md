@@ -34,6 +34,9 @@ CONFIGURATION
   port
   read_limit
   replication_server_id
+  sslmode
+  sslrootcert
+  sslservername
   username
   password (secret)
 

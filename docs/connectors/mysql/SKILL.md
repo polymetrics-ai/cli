@@ -35,6 +35,9 @@ Native MySQL source connector for wire-protocol checks, dynamic schemas, bounded
 - port
 - read_limit
 - replication_server_id
+- sslmode
+- sslrootcert
+- sslservername
 - username
 - password (secret)
 
