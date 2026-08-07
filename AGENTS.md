@@ -181,9 +181,9 @@ page (GitHub's is 30) at `status: 200` with nothing saying more remained.
   carries `complete` plus a `reason`, and `--page`/`--page-cursor` are how a
   caller reaches the rest. Strategies that address pages by number
   (`page_number`, `offset_limit` — the two whose `Next()` ignores the response)
-  accept `--page`; the cursor/`next_url`/`link_header` families hand back
-  `next_cursor` instead, and asking them for a page number is refused rather than
-  quietly answered with page one.
+  accept `--page`; every other strategy (`cursor`, `next_url`, `link_header`,
+  `start_index`) hands back `next_cursor` instead, and asking one of them for a
+  page number is refused rather than quietly answered with page one.
 
 Regression tests assert RETURNED RECORD COUNTS against a known-larger fixture, in
 `engine/direct_read_pagination_test.go`. Never assert exit status for this class:

@@ -1,7 +1,7 @@
 [
   {
     "name": "page",
-    "type": "int",
+    "type": "integer",
     "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page."
   },
   {

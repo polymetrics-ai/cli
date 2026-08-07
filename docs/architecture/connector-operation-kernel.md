@@ -78,7 +78,12 @@ rules are enforceable at load time.
 decides before any network or filesystem access:
 
 - `intent:"direct_read"` with `availability:"implemented"` executes as a bounded
-  REST read under the command's `output_policy`.
+  REST read under the command's `output_policy`. It issues exactly one request
+  and returns one page: the page size and the next-page context are derived from
+  the connector's own declared `streams.json` pagination spec, the result
+  reports whether that page is the whole collection, and the runtime-owned
+  `--page`/`--page-cursor` flags reach the rest. See AGENTS.md, "Direct Reads
+  Return One Page, And Say So".
 - `intent:"direct_write"` with `availability:"implemented"` executes one bounded
   `rest_write` only through the connector-command plan → preview → approval →
   execute lifecycle. The command and operation must declare matching, explicit

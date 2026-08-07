@@ -275,9 +275,13 @@ not a full override by default.
   required command flag mapped to `body.*`.
   `internal/connectors/engine/schema/cli_surface.schema.json` is the schema source of truth, and
   `connectorgen validate` rejects unsupported formats, operators, fallback namespaces, unmapped
-  constraint targets, missing required body mappings, and multi-line validation messages. The
-  command fields that are derivable from `operations.json` — `api_surface`, flag `maps_to`,
-  `output_policy`, and `rest.max_bytes` — are not hand-authored:
+  constraint targets, missing required body mappings, and multi-line validation messages. A
+  `direct_read` command's page-navigation flags are runtime-owned exactly as the binary-download
+  destination flags are: `--page` and `--page-cursor` are declared once in
+  `internal/connectors/direct_read_page_flags.json` and answered from the connector's own declared
+  pagination spec, so no bundle declares them (see AGENTS.md, "Direct Reads Return One Page, And
+  Say So"). The command fields that are derivable from `operations.json` — `api_surface`, flag
+  `maps_to`, `output_policy`, and `rest.max_bytes` — are not hand-authored:
   `go run ./cmd/connectorgen surface-sync` fills them and `--check` fails on drift (see AGENTS.md,
   "Command Surface Must Stay Executable"). The same command generates the embedded
   `operation_endpoint_ledger.json` runtime projection from `api_surface.json` and
