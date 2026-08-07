@@ -37,17 +37,33 @@ docs) are regenerated **once at the very end**, not per connector.
   URLs. Red test + WIP preserved on `fm/cli-mixpanel-parity-sweep-r1`. **Its WIP deletes
   `schemas/annotations.json` — that deletion is WRONG, Mixpanel still documents annotations. Do not
   fold it.**
-- **marketo (320/327/367)** — escalated to the captain; three derivations disagree and the real
-  question ("does this connector cover Adobe's v2 Asset API?") is product scope. Adopt no number.
+- ~~**marketo**~~ — **UNBLOCKED 2026-08-07 by captain ruling**, see `DECISION-marketo-scope.md`
+  (sibling of this file, now on the branch). Marketo's surface is the **full** surface **including
+  Adobe's v2 Asset API**. Two conditions both apply and are the operative test: the endpoint must
+  **genuinely belong to Marketo under Adobe** (not merely sit adjacent in Adobe's wider docs), **and**
+  it must be in the **current published spec** (retired endpoints are out regardless of history).
+  Anything failing either condition is excluded **with the reason recorded**, never silently dropped.
+  **The count is NOT settled.** The ruling resolved scope, not a number. Do **not** adopt 367 because
+  it is the largest — re-derive under the stated rule and let the count fall out, then explain the
+  delta against **all three** prior derivations (320 HTML reference · 327 earlier lane's spec ·
+  367 fresh recount; the ledger's own 322 matches none of them), saying for each whether it was
+  missing asset operations, counting retired endpoints, or double-counting query-string variants —
+  the last being exactly the error found in lever-hiring.
+  Re-entered in the work order at its size position (see the ordered list below).
 
 ## Remaining work order — 22 connectors, SMALLEST FIRST
 
 Commit **and push** after every single connector, and tick it here in the same step.
 
-`greenhouse 138 · help-scout 145 · google-ads 163 · segment 197 · twilio 197 · quickbooks 198 ·
-intercom 231 · xero 235 · front 244 · asana 249 · trello 261 · monday 292 · bamboo-hr 311 ·
-bitbucket 331 · square 334 · chargebee 438 · linear 538 · stripe 589 · jira 616 ·
-zendesk-support 625 · workday-rest 920 · github 1220`
+`~~greenhouse 138~~ ✅ · help-scout 145 · google-ads 163 · segment 197 · twilio 197 ·
+quickbooks 198 · intercom 231 · xero 235 · front 244 · asana 249 · trello 261 · monday 292 ·
+bamboo-hr 311 · bitbucket 331 · square 334 · **marketo ~320-367 (count TBD)** · chargebee 438 ·
+linear 538 · stripe 589 · jira 616 · zendesk-support 625 · workday-rest 920 · github 1220`
+
+**marketo is slotted after square 334 on its lower bound (320) rounded to its position among the
+three candidate counts.** Its true size is unknown until re-derived, so if the derivation lands well
+above 367 it should be re-slotted later rather than forced through in place — the smallest-first
+order exists so a bad day costs a small connector.
 
 Per connector: **write the red test against the REAL bundle → run it → watch it fail → record the
 verbatim failure** in `RUN-STATE.json` + `TDD-LEDGER.md` → author to green → `connectorgen validate`
@@ -550,6 +566,7 @@ are regenerated **once at the very end**, not per connector.
 | 16 | bamboo-hr | 311 | ☐ |
 | 17 | bitbucket | 331 | ☐ |
 | 18 | square | 334 | ☐ |
+| 18a | marketo | **TBD** | ☐ — **unblocked by captain ruling `DECISION-marketo-scope.md`.** Full surface incl. Adobe v2 Assets, subject to BOTH conditions. Count must be re-derived, not picked; explain the delta vs 320 / 327 / 367 and the ledger's 322. |
 | 19 | chargebee | 438 | ☐ |
 | 20 | linear | 538 | ☐ |
 | 21 | stripe | 589 | ☐ |
@@ -559,7 +576,9 @@ are regenerated **once at the very end**, not per connector.
 | 25 | github | 1220 | ☐ |
 
 Already on the branch: **chatwoot** (148, folded, verified). Separate and open: **gorgias #3896**
-(114). Merged: **notion #3894** (51), **gong #3895** (69). Excluded: **marketo** (captain's call).
+(114). Merged: **notion #3894** (51), **gong #3895** (69).
+**marketo is no longer excluded** — the captain ruled on 2026-08-07 that its surface includes Adobe's
+v2 Asset API; see `DECISION-marketo-scope.md` and row 18a. Still deferred: **mixpanel** (own task).
 
 ## ⇒ MODEL CHANGE: ONE CONSOLIDATED SWEEP PR (captain, ordered twice — 2026-08-07)
 
