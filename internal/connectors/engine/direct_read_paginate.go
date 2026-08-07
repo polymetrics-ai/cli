@@ -231,7 +231,7 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 	if len(resp.Body) > w.maxBytes {
 		return nil, connectors.DirectReadPage{}, resp, errDirectReadTooLarge{got: len(resp.Body), limit: w.maxBytes}
 	}
-	decoded, err := decodeDirectReadBody(resp.Body, w.maxBytes)
+	decoded, err := decodeDirectReadPageBody(w.method, resp, w.maxBytes)
 	if err != nil {
 		return nil, connectors.DirectReadPage{}, resp, err
 	}
