@@ -137,7 +137,8 @@
           "type": "string",
           "summary": "board_id argument",
           "maps_to": "body.variables.board_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -164,7 +165,8 @@
           "type": "string",
           "summary": "id argument",
           "maps_to": "body.variables.id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -191,14 +193,16 @@
           "type": "string",
           "summary": "app_id argument",
           "maps_to": "body.variables.app_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "account-id",
           "type": "string",
           "summary": "account_id argument",
           "maps_to": "body.variables.account_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -244,7 +248,8 @@
           "type": "string",
           "summary": "kind argument",
           "maps_to": "body.variables.kind",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -271,7 +276,8 @@
           "type": "string",
           "summary": "app_id argument",
           "maps_to": "body.variables.app_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -336,19 +342,22 @@
           "type": "string",
           "summary": "object_id argument",
           "maps_to": "body.variables.object_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "limit",
           "type": "integer",
           "summary": "limit argument",
-          "maps_to": "body.variables.limit"
+          "maps_to": "body.variables.limit",
+          "required": true
         },
         {
           "name": "page",
           "type": "integer",
           "summary": "page argument",
-          "maps_to": "body.variables.page"
+          "maps_to": "body.variables.page",
+          "required": true
         }
       ],
       "api_surface": [
@@ -387,7 +396,8 @@
           "type": "string",
           "summary": "query argument",
           "maps_to": "body.variables.query",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -464,7 +474,8 @@
           "type": "string",
           "summary": "connection_id argument",
           "maps_to": "body.variables.connection_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -522,21 +533,24 @@
           "type": "string",
           "summary": "doc_id argument",
           "maps_to": "body.variables.doc_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "date",
           "type": "string",
           "summary": "date argument",
           "maps_to": "body.variables.date",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "prev-date",
           "type": "string",
           "summary": "prev_date argument",
           "maps_to": "body.variables.prev_date",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -563,14 +577,16 @@
           "type": "string",
           "summary": "doc_id argument",
           "maps_to": "body.variables.doc_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "since",
           "type": "string",
           "summary": "since argument",
           "maps_to": "body.variables.since",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -597,7 +613,8 @@
           "type": "string",
           "summary": "ids argument",
           "maps_to": "body.variables.ids",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -655,7 +672,8 @@
           "type": "string",
           "summary": "job_id argument",
           "maps_to": "body.variables.job_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -694,7 +712,8 @@
           "type": "string",
           "summary": "formToken argument",
           "maps_to": "body.variables.formToken",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -721,14 +740,16 @@
           "type": "string",
           "summary": "app_id argument",
           "maps_to": "body.variables.app_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "version-id",
           "type": "string",
           "summary": "version_id argument",
           "maps_to": "body.variables.version_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -773,7 +794,8 @@
           "name": "limit",
           "type": "integer",
           "summary": "limit argument",
-          "maps_to": "body.variables.limit"
+          "maps_to": "body.variables.limit",
+          "required": true
         }
       ],
       "api_surface": [
@@ -799,13 +821,15 @@
           "name": "limit",
           "type": "integer",
           "summary": "limit argument",
-          "maps_to": "body.variables.limit"
+          "maps_to": "body.variables.limit",
+          "required": true
         },
         {
           "name": "page",
           "type": "integer",
           "summary": "page argument",
-          "maps_to": "body.variables.page"
+          "maps_to": "body.variables.page",
+          "required": true
         }
       ],
       "api_surface": [
@@ -863,7 +887,8 @@
           "type": "string",
           "summary": "job_id argument",
           "maps_to": "body.variables.job_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -890,13 +915,15 @@
           "type": "string",
           "summary": "query argument",
           "maps_to": "body.variables.query",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "limit",
           "type": "integer",
           "summary": "limit argument",
-          "maps_to": "body.variables.limit"
+          "maps_to": "body.variables.limit",
+          "required": true
         }
       ],
       "api_surface": [
@@ -942,7 +969,8 @@
           "type": "string",
           "summary": "app_id argument",
           "maps_to": "body.variables.app_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -1000,13 +1028,15 @@
           "type": "string",
           "summary": "cursor argument",
           "maps_to": "body.variables.cursor",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "limit",
           "type": "integer",
           "summary": "limit argument",
-          "maps_to": "body.variables.limit"
+          "maps_to": "body.variables.limit",
+          "required": true
         }
       ],
       "api_surface": [
@@ -1051,7 +1081,8 @@
           "name": "filter-read",
           "type": "boolean",
           "summary": "filter_read argument",
-          "maps_to": "body.variables.filter_read"
+          "maps_to": "body.variables.filter_read",
+          "required": true
         }
       ],
       "api_surface": [
@@ -1090,7 +1121,8 @@
           "type": "string",
           "summary": "object_id argument",
           "maps_to": "body.variables.object_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -1135,7 +1167,8 @@
           "name": "limit",
           "type": "integer",
           "summary": "limit argument",
-          "maps_to": "body.variables.limit"
+          "maps_to": "body.variables.limit",
+          "required": true
         }
       ],
       "api_surface": [
@@ -1212,7 +1245,8 @@
           "type": "string",
           "summary": "process_id argument",
           "maps_to": "body.variables.process_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -1239,7 +1273,8 @@
           "type": "string",
           "summary": "id argument",
           "maps_to": "body.variables.id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -1266,7 +1301,8 @@
           "type": "string",
           "summary": "id argument",
           "maps_to": "body.variables.id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -1292,21 +1328,24 @@
           "name": "limit",
           "type": "integer",
           "summary": "limit argument",
-          "maps_to": "body.variables.limit"
+          "maps_to": "body.variables.limit",
+          "required": true
         },
         {
           "name": "to-date",
           "type": "string",
           "summary": "to_date argument",
           "maps_to": "body.variables.to_date",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "from-date",
           "type": "string",
           "summary": "from_date argument",
           "maps_to": "body.variables.from_date",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -1352,7 +1391,8 @@
           "type": "string",
           "summary": "id argument",
           "maps_to": "body.variables.id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -1417,7 +1457,8 @@
           "type": "string",
           "summary": "board_id argument",
           "maps_to": "body.variables.board_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -1444,7 +1485,8 @@
           "type": "string",
           "summary": "ids argument",
           "maps_to": "body.variables.ids",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
