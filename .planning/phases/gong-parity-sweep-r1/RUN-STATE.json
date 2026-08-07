@@ -2,7 +2,7 @@
   "phase": "gong-parity-sweep-r1",
   "program": "cli-top50-fixed-schema-sweep-r1",
   "connector": "gong",
-  "state": "red",
+  "state": "green",
   "branch": "fm/cli-top50-fixed-schema-sweep-r1",
   "artifact": {
     "url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
@@ -48,10 +48,14 @@
     "reachable_commands": 67,
     "unreachable_commands": 0,
     "availability_implemented": 43,
-    "availability_partial": 24
+    "availability_partial": 24,
+    "api_surface_endpoints_after": 69,
+    "direct_reads_after": 30,
+    "writes_after": 27,
+    "reachable_commands_after": 69
   },
   "gap": {
-    "missing_operations": 2,
+    "missing_operations": 0,
     "stale_rows": 0,
     "detail": [
       {
@@ -72,7 +76,8 @@
     "red_test": "cmd/connectorgen/gong_api_surface_test.go",
     "red_confirmed": true,
     "red_failure": "endpoints = 67, want 69",
-    "green": false
+    "green": true,
+    "green_evidence": "TestGongAPISurfaceOperationLedger PASS at 69; runtime preflight PASS; certify-timing PASS (92 real CLI invocations at budget); conformance PASS"
   },
-  "next_action": "author the two Targets operations across api_surface.json, cli_surface.json, writes.json, operations.json and schemas, then resync the operation endpoint ledger"
+  "next_action": "open the PR stating 67 -> 69 against the ledger target of 69, then drive no-mistakes to green CI"
 }

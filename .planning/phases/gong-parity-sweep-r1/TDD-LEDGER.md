@@ -55,7 +55,70 @@ The test bites. Committed red, on purpose, before production edits.
 
 ## 4. GREEN evidence
 
-_(filled in as gates run)_
+Authored the two operations across `api_surface.json`, `cli_surface.json`, `writes.json`,
+`operations.json`. All four files round-trip exactly at `json.dumps(indent=2, ensure_ascii=False)`,
+so the bundle diff is **180 insertions / 2 deletions** with zero formatting churn — the 2 deletions
+are the `scope` and `reviewed_at` fields being updated to `59 paths / 69 operations` and `2026-08-07`.
+
+### Gates
+
+| Gate | Result |
+| --- | --- |
+| `connectorgen validate internal/connectors/defs/gong` | **0 findings** |
+| `TestGongAPISurfaceOperationLedger` | **PASS** at 69 (was the red failure) |
+| `TestEveryImplementedCommandPassesRuntimePreflight` | **PASS** — the #3890 backstop |
+| `connectorgen surface-sync --check` | clean, 551 scanned, **0 drift** |
+| conformance suite | **PASS** (17.9s) |
+| `make certify-timing` | **PASS**, exit 0, **92 real CLI invocations at budget**, total 108.6s |
+| `make connector-boundary` | **PASS**, exit 0, no gong findings |
+| `make docs-check` | **PASS** |
+| `TestGoldenTranscripts` | **PASS unchanged** |
+| `make tidy-check` / `lint` / `smoke` / `agent-contract-check` / `connectorgen-validate` / `connectorgen-surface-sync` / `release-workflow-check` | **all PASS** |
+| `gofmt -l cmd internal` / `go vet` | clean |
+
+### Trap 1 — operation endpoint ledger: does not bite here, and the reason matters
+
+`surface-sync --check` reports **0 drift** and preflight passes with **no** gong Targets entry in
+`internal/connectors/defs/operation_endpoint_ledger.json`. That is correct, not a miss: gong's 13
+ledger rows are all **POST `rest_read`** — endpoints whose method would otherwise read as a write.
+`GET /v2/targets` is an unambiguous GET, so it needs no disambiguating entry. Notion's 18 direct
+reads needed them; gong's does not.
+
+### Trap 2 — golden transcripts: read before regenerating, and no regeneration was needed
+
+`TestGoldenTranscripts` passes **unchanged**. gong was already in the root-help connector
+command-surface list, so unlike notion (which joined it) nothing moved. Nothing regenerated blindly.
+
+### Binary run — reading files is not verification
+
+```
+pm gong                              -> targets group now renders
+pm gong targets --help               -> 2 commands, both availability=implemented
+pm gong targets list --help          -> intent=direct_read, output_policy=json_redacted
+pm gong targets upload-assignments --help
+                                     -> intent=reverse_etl, write=upload_target_assignments,
+                                        destructive --confirm challenge, 4 typed flags
+pm gong targets list --workspaceId 123 --json          -> reaches runtime
+pm gong targets upload-assignments ... --preview --json -> reaches runtime, then `missing --credential`
+```
+
+Both commands route through the real runtime: in a scratch `pm init` project the write preview
+advances past project resolution to credential resolution. That is the deepest honest proof
+available without a live Gong credential, and no credential was introduced or printed.
+
+### Regenerated artifacts, each inspected by this lane before committing
+
+- **Connector docs** — `pm docs generate` rewrote **1,034 files**. Compared before accepting:
+  all non-gong churn is **pre-existing generator drift in `main`** (committed docs carry
+  `field()` with empty types; the current generator emits `field(string)`). Reverted every non-gong
+  file; kept gong's own generated output, which necessarily carries both the Targets additions and
+  the same type correction, because a hand-stripped file would disagree with its own generator.
+  Net: `docs/connectors/gong/{MANUAL.md,SKILL.md}`, 19 insertions / 12 deletions each.
+  **Recorded as a repo-wide finding, not fixed here** — see PROGRESS.md.
+- **Website catalog** — compared **by object, not by line**: 551 connectors before and after, none
+  added, none removed, **exactly one changed (`Gong`)**, in both
+  `website/data/connectors.generated.json` and `website/lib/connectors.catalog.data.generated.json`.
+  The generator's own summary independently corroborates the correction-3 audit: `"database": 2`.
 
 ## 5. Refactor / safety notes
 
