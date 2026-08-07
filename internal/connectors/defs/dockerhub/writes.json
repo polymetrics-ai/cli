@@ -1,0 +1,974 @@
+{
+  "actions": [
+    {
+      "name": "create_auth_token",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/auth/token",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "identifier",
+          "secret"
+        ],
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "description": "Username (password/PAT auth) or organization name (organization access token auth)."
+          },
+          "secret": {
+            "type": "string",
+            "description": "Password, personal access token, or organization access token."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "high: exchanges a credential for a live 10-minute access token; the token is redacted from command output; requires reverse ETL approval",
+      "redact_fields": [
+        "access_token"
+      ]
+    },
+    {
+      "name": "create_user_login",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/users/login",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "username",
+          "password"
+        ],
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "Docker Hub account username."
+          },
+          "password": {
+            "type": "string",
+            "description": "Docker Hub account password or Personal Access Token."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "high: exchanges a credential for a live session JWT; the token is redacted from command output; requires reverse ETL approval",
+      "redact_fields": [
+        "token"
+      ]
+    },
+    {
+      "name": "create_2fa_login",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/users/2fa-login",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "login_2fa_token",
+          "code"
+        ],
+        "properties": {
+          "login_2fa_token": {
+            "type": "string",
+            "description": "The intermediate 2FA token returned from `auth login create`."
+          },
+          "code": {
+            "type": "string",
+            "description": "The Time-based One-Time Password (TOTP) of the Docker Hub account."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "high: exchanges a 2FA challenge for a live session JWT; the token is redacted from command output; requires reverse ETL approval",
+      "redact_fields": [
+        "token"
+      ]
+    },
+    {
+      "name": "create_repository",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/namespaces/{namespace}/repositories",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "name",
+          "namespace"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Repository name (2-255 chars, lowercase alphanumerics/./_/-)."
+          },
+          "namespace": {
+            "type": "string",
+            "description": "Namespace to create the repository in."
+          },
+          "description": {
+            "type": "string",
+            "description": "Short description (max 100 chars)."
+          },
+          "full_description": {
+            "type": "string",
+            "description": "Detailed description (max 25000 chars)."
+          },
+          "registry": {
+            "type": "string",
+            "description": "Registry where the repository is hosted."
+          },
+          "is_private": {
+            "type": "boolean",
+            "description": "Whether the repository should be private.",
+            "default": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval"
+    },
+    {
+      "name": "update_repository_immutable_tags",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "namespace",
+          "repository",
+          "immutable_tags",
+          "immutable_tags_rules"
+        ],
+        "properties": {
+          "namespace": {
+            "type": "string",
+            "description": "Path parameter `namespace`."
+          },
+          "repository": {
+            "type": "string",
+            "description": "Path parameter `repository`."
+          },
+          "immutable_tags": {
+            "type": "boolean",
+            "description": "Whether immutable tags are enabled."
+          },
+          "immutable_tags_rules": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of immutable tag rules (e.g. glob-like patterns)."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval",
+      "path_fields": [
+        "namespace",
+        "repository"
+      ]
+    },
+    {
+      "name": "assign_repository_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/repositories/{namespace}/{repository}/groups",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "namespace",
+          "repository",
+          "group_id",
+          "permission"
+        ],
+        "properties": {
+          "namespace": {
+            "type": "string",
+            "description": "Path parameter `namespace`."
+          },
+          "repository": {
+            "type": "string",
+            "description": "Path parameter `repository`."
+          },
+          "group_id": {
+            "type": "integer",
+            "description": "The ID of the organization group to grant access to."
+          },
+          "permission": {
+            "type": "string",
+            "enum": [
+              "read",
+              "write",
+              "admin"
+            ],
+            "description": "Permission level to grant."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval",
+      "path_fields": [
+        "namespace",
+        "repository"
+      ]
+    },
+    {
+      "name": "create_access_token",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/access-tokens",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "token_label",
+          "scopes"
+        ],
+        "properties": {
+          "token_label": {
+            "type": "string",
+            "description": "Friendly name to identify the token."
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Valid scopes: \"repo:admin\", \"repo:write\", \"repo:read\", \"repo:public_read\"."
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Optional expiration date; omitted means the token never expires."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "high: creates a live Docker Hub credential; the raw token is returned once by the provider and redacted from command output; requires reverse ETL approval",
+      "redact_fields": [
+        "token"
+      ]
+    },
+    {
+      "name": "update_access_token",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/access-tokens/{uuid}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "uuid"
+        ],
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "description": "Path parameter `uuid`."
+          },
+          "token_label": {
+            "type": "string",
+            "description": "Friendly name to identify the token."
+          },
+          "is_active": {
+            "type": "boolean",
+            "description": "Whether the token is active."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval",
+      "path_fields": [
+        "uuid"
+      ],
+      "redact_fields": [
+        "token"
+      ]
+    },
+    {
+      "name": "delete_access_token",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/access-tokens/{uuid}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "uuid"
+        ],
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "description": "Path parameter `uuid`."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "high: revokes a live Docker Hub credential; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "uuid"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_org_access_token",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/orgs/{name}/access-tokens",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "name",
+          "label"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Path parameter `name` (organization name)."
+          },
+          "label": {
+            "type": "string",
+            "description": "Label for the access token."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the access token."
+          },
+          "resources": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "Resources (repo/org scopes) this token has access to."
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Expiration date for the token."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "high: creates a live Docker Hub organization credential; the raw token is returned once by the provider and redacted from command output; requires reverse ETL approval",
+      "path_fields": [
+        "name"
+      ],
+      "redact_fields": [
+        "token"
+      ]
+    },
+    {
+      "name": "update_org_access_token",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "org_name",
+          "access_token_id"
+        ],
+        "properties": {
+          "org_name": {
+            "type": "string",
+            "description": "Path parameter `org_name`."
+          },
+          "access_token_id": {
+            "type": "string",
+            "description": "Path parameter `access_token_id`."
+          },
+          "label": {
+            "type": "string",
+            "description": "Label for the access token."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the access token."
+          },
+          "resources": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "description": "Resources (repo/org scopes) this token has access to."
+          },
+          "is_active": {
+            "type": "boolean",
+            "description": "Whether the token is active."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval",
+      "path_fields": [
+        "org_name",
+        "access_token_id"
+      ],
+      "redact_fields": [
+        "token"
+      ]
+    },
+    {
+      "name": "delete_org_access_token",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "org_name",
+          "access_token_id"
+        ],
+        "properties": {
+          "org_name": {
+            "type": "string",
+            "description": "Path parameter `org_name`."
+          },
+          "access_token_id": {
+            "type": "string",
+            "description": "Path parameter `access_token_id`."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "high: revokes a live Docker Hub organization credential; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "org_name",
+        "access_token_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/orgs/{org_name}/groups",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "org_name",
+          "name"
+        ],
+        "properties": {
+          "org_name": {
+            "type": "string",
+            "description": "Path parameter `org_name`."
+          },
+          "name": {
+            "type": "string",
+            "description": "Group name."
+          },
+          "description": {
+            "type": "string",
+            "description": "Group description."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval",
+      "path_fields": [
+        "org_name"
+      ]
+    },
+    {
+      "name": "replace_group",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "org_name",
+          "group_name",
+          "name"
+        ],
+        "properties": {
+          "org_name": {
+            "type": "string",
+            "description": "Path parameter `org_name`."
+          },
+          "group_name": {
+            "type": "string",
+            "description": "Path parameter `group_name`."
+          },
+          "name": {
+            "type": "string",
+            "description": "Group name."
+          },
+          "description": {
+            "type": "string",
+            "description": "Group description."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval",
+      "path_fields": [
+        "org_name",
+        "group_name"
+      ]
+    },
+    {
+      "name": "update_group",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "org_name",
+          "group_name"
+        ],
+        "properties": {
+          "org_name": {
+            "type": "string",
+            "description": "Path parameter `org_name`."
+          },
+          "group_name": {
+            "type": "string",
+            "description": "Path parameter `group_name`."
+          },
+          "name": {
+            "type": "string",
+            "description": "Group name."
+          },
+          "description": {
+            "type": "string",
+            "description": "Group description."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval",
+      "path_fields": [
+        "org_name",
+        "group_name"
+      ]
+    },
+    {
+      "name": "delete_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "org_name",
+          "group_name"
+        ],
+        "properties": {
+          "org_name": {
+            "type": "string",
+            "description": "Path parameter `org_name`."
+          },
+          "group_name": {
+            "type": "string",
+            "description": "Path parameter `group_name`."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "high: removes an organization group and its access grants; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "org_name",
+        "group_name"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "add_group_member",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}/members",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "org_name",
+          "group_name",
+          "member"
+        ],
+        "properties": {
+          "org_name": {
+            "type": "string",
+            "description": "Path parameter `org_name`."
+          },
+          "group_name": {
+            "type": "string",
+            "description": "Path parameter `group_name`."
+          },
+          "member": {
+            "type": "string",
+            "description": "Username or email of the member to add."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval",
+      "path_fields": [
+        "org_name",
+        "group_name"
+      ]
+    },
+    {
+      "name": "remove_group_member",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}/members/{username}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "org_name",
+          "group_name",
+          "username"
+        ],
+        "properties": {
+          "org_name": {
+            "type": "string",
+            "description": "Path parameter `org_name`."
+          },
+          "group_name": {
+            "type": "string",
+            "description": "Path parameter `group_name`."
+          },
+          "username": {
+            "type": "string",
+            "description": "Path parameter `username`."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "high: removes a user's access via this group; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "org_name",
+        "group_name",
+        "username"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "bulk_create_invites",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/invites/bulk",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "org",
+          "invitees"
+        ],
+        "properties": {
+          "org": {
+            "type": "string",
+            "description": "Organization name."
+          },
+          "team": {
+            "type": "string",
+            "description": "Team name."
+          },
+          "role": {
+            "type": "string",
+            "description": "Role for invitees."
+          },
+          "invitees": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of invitee emails or Docker IDs."
+          },
+          "dry_run": {
+            "type": "boolean",
+            "description": "Run through validation without changing data."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval"
+    },
+    {
+      "name": "cancel_invite",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/invites/{id}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "medium: cancels a pending organization invite; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "resend_invite",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/invites/{id}/resend",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "update_org_settings",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/orgs/{name}/settings",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "name",
+          "restricted_images_enabled",
+          "restricted_images_allow_official",
+          "restricted_images_allow_verified_publishers"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Path parameter `name`."
+          },
+          "restricted_images_enabled": {
+            "type": "boolean",
+            "description": "Whether to restrict image usage for users in the organization."
+          },
+          "restricted_images_allow_official": {
+            "type": "boolean",
+            "description": "Allow official images if restricted_images_enabled is true."
+          },
+          "restricted_images_allow_verified_publishers": {
+            "type": "boolean",
+            "description": "Allow verified-publisher images if restricted_images_enabled is true."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval",
+      "path_fields": [
+        "name"
+      ]
+    },
+    {
+      "name": "update_org_member",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/orgs/{org_name}/members/{username}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "org_name",
+          "username",
+          "role"
+        ],
+        "properties": {
+          "org_name": {
+            "type": "string",
+            "description": "Path parameter `org_name`."
+          },
+          "username": {
+            "type": "string",
+            "description": "Path parameter `username`."
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "owner",
+              "editor",
+              "member"
+            ],
+            "description": "Role of the member."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "high: changes a member's organization role/permissions; requires reverse ETL approval",
+      "path_fields": [
+        "org_name",
+        "username"
+      ]
+    },
+    {
+      "name": "remove_org_member",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/orgs/{org_name}/members/{username}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "org_name",
+          "username"
+        ],
+        "properties": {
+          "org_name": {
+            "type": "string",
+            "description": "Path parameter `org_name`."
+          },
+          "username": {
+            "type": "string",
+            "description": "Path parameter `username`."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "high: removes a user's organization membership; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "org_name",
+        "username"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_scim_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/scim/2.0/Users",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "schemas",
+          "userName"
+        ],
+        "properties": {
+          "schemas": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "SCIM schema URNs, e.g. \"urn:ietf:params:scim:schemas:core:2.0:User\"."
+          },
+          "userName": {
+            "type": "string",
+            "description": "The user's email address; must be reachable via email."
+          },
+          "name": {
+            "type": "object",
+            "properties": {
+              "givenName": {
+                "type": "string",
+                "description": "Given (first) name."
+              },
+              "familyName": {
+                "type": "string",
+                "description": "Family (last) name."
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "high: provisions a new SCIM-managed identity; requires reverse ETL approval"
+    },
+    {
+      "name": "update_scim_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/scim/2.0/Users/{id}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "schemas",
+          "enabled"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          },
+          "schemas": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "SCIM schema URNs, e.g. \"urn:ietf:params:scim:schemas:core:2.0:User\"."
+          },
+          "name": {
+            "type": "object",
+            "properties": {
+              "givenName": {
+                "type": "string",
+                "description": "Given (first) name."
+              },
+              "familyName": {
+                "type": "string",
+                "description": "Family (last) name."
+              }
+            },
+            "additionalProperties": false
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Whether the user is active. The provider defaults a missing value to false (deactivated); this command requires it explicitly to prevent accidental deactivation."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "high: replaces a SCIM-managed identity's profile and can deactivate it; requires reverse ETL approval",
+      "path_fields": [
+        "id"
+      ]
+    }
+  ]
+}

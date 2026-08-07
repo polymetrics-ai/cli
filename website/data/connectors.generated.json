@@ -44070,14 +44070,14 @@
   {
     "slug": "dockerhub",
     "name": "Docker Hub",
-    "description": "Reads public Docker Hub repositories and image tags for a configured username or organization via the Docker Hub registry API.",
+    "description": "Reads public Docker Hub repositories and image tags for a configured username or organization, and, with an optional Personal Access Token, manages access tokens, organizations, groups/teams, invites, audit logs, and repositories via the Docker Hub API.",
     "docs_url": "https://docs.docker.com/docker-hub/api/latest/",
     "integration_type": "api",
     "release_stage": "ga",
     "capabilities": {
       "check": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false,
       "cdc": false,
       "dynamic_schema": false
@@ -44116,25 +44116,1532 @@
         "incremental": false
       }
     ],
-    "write_actions": [],
+    "write_actions": [
+      {
+        "name": "create_auth_token",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "create_user_login",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "create_2fa_login",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "create_repository",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_repository_immutable_tags",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "assign_repository_group",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "create_access_token",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_access_token",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "delete_access_token",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_org_access_token",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_org_access_token",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "delete_org_access_token",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_group",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "replace_group",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "update_group",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "delete_group",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "add_group_member",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "remove_group_member",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "bulk_create_invites",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "cancel_invite",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "resend_invite",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "update_org_settings",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "update_org_member",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "remove_org_member",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_scim_user",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_scim_user",
+        "method": "PUT",
+        "kind": "update"
+      }
+    ],
     "cli_surface": {
-      "tagline": "Run Docker Hub's declared streams and reverse-ETL actions.",
+      "tagline": "Run Docker Hub's declared streams, direct reads, and reverse-ETL actions.",
       "usage": "pm dockerhub <command> [flags]",
       "source_cli": null,
       "groups": [
         {
-          "id": "read",
-          "title": "Read streams",
+          "id": "repositories",
+          "title": "Repositories & tags",
           "commands": [
             "repositories list",
+            "repository check",
+            "repository create",
             "repository detail list",
+            "repository group assign",
+            "repository immutable-tags update",
+            "repository immutable-tags verify",
+            "repository tag check",
+            "repository tags check",
             "tag detail list",
             "tags list"
+          ]
+        },
+        {
+          "id": "access-tokens",
+          "title": "Personal access tokens",
+          "commands": [
+            "access-tokens create",
+            "access-tokens delete",
+            "access-tokens get",
+            "access-tokens list",
+            "access-tokens update"
+          ]
+        },
+        {
+          "id": "org-access-tokens",
+          "title": "Organization access tokens",
+          "commands": [
+            "org access-tokens create",
+            "org access-tokens delete",
+            "org access-tokens get",
+            "org access-tokens list",
+            "org access-tokens update"
+          ]
+        },
+        {
+          "id": "audit-logs",
+          "title": "Audit logs",
+          "commands": [
+            "audit-logs actions list",
+            "audit-logs list"
+          ]
+        },
+        {
+          "id": "auth",
+          "title": "Authentication",
+          "commands": [
+            "auth 2fa-login create",
+            "auth login create",
+            "auth token create"
+          ]
+        },
+        {
+          "id": "groups",
+          "title": "Groups (teams)",
+          "commands": [
+            "groups create",
+            "groups delete",
+            "groups get",
+            "groups list",
+            "groups members add",
+            "groups members list",
+            "groups members remove",
+            "groups replace",
+            "groups update"
+          ]
+        },
+        {
+          "id": "invites",
+          "title": "Invites",
+          "commands": [
+            "invites bulk-create",
+            "invites cancel",
+            "invites list",
+            "invites resend"
+          ]
+        },
+        {
+          "id": "orgs",
+          "title": "Organizations & settings",
+          "commands": [
+            "org members export",
+            "org members list",
+            "org members remove",
+            "org members update",
+            "org settings get",
+            "org settings update"
+          ]
+        },
+        {
+          "id": "scim",
+          "title": "SCIM",
+          "commands": [
+            "scim-resource-types get",
+            "scim-resource-types list",
+            "scim-schemas get",
+            "scim-schemas list",
+            "scim-service-provider-config get",
+            "scim-users create",
+            "scim-users get",
+            "scim-users list",
+            "scim-users update"
           ]
         }
       ],
       "global_flags": [],
       "commands": [
+        {
+          "path": "access-tokens create",
+          "summary": "Create personal access token",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_access_token",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "token-label",
+              "type": "string",
+              "summary": "Friendly name to identify the token.",
+              "values": [],
+              "maps_to": "record.token_label",
+              "required": true
+            },
+            {
+              "name": "scopes",
+              "type": "string_array",
+              "summary": "Valid scopes: repo:admin, repo:write, repo:read, repo:public_read.",
+              "values": [],
+              "maps_to": "record.scopes",
+              "required": true
+            },
+            {
+              "name": "expires-at",
+              "type": "string",
+              "summary": "Optional expiration date (RFC3339); omitted means the token never expires.",
+              "values": [],
+              "maps_to": "record.expires_at",
+              "format": "date-time"
+            }
+          ],
+          "examples": [
+            "pm dockerhub access-tokens create --token-label \"ci token\" --scopes \"repo:read\" --json"
+          ],
+          "output_policy": "",
+          "risk": "high: creates a live Docker Hub credential; the raw token is returned once by the provider and redacted from command output; requires reverse ETL approval",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": "The provider returns the raw token value once, in the create response only. This command redacts the `token` field from its own output (never printed); retrieve it from Docker Hub's own token-creation UI/flow if the value itself is needed."
+        },
+        {
+          "path": "access-tokens delete",
+          "summary": "Delete personal access token",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_access_token",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "uuid",
+              "type": "string",
+              "summary": "Path parameter `uuid`.",
+              "values": [],
+              "maps_to": "record.uuid",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub access-tokens delete --uuid \"<uuid>\" --json"
+          ],
+          "output_policy": "",
+          "risk": "high: revokes a live Docker Hub credential; requires reverse ETL approval and destructive confirmation",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": ""
+        },
+        {
+          "path": "access-tokens get",
+          "summary": "Get personal access token",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "dockerhub.get_access_token",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "uuid",
+              "type": "string",
+              "summary": "Access token UUID.",
+              "values": [],
+              "maps_to": "path.uuid",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub access-tokens get --uuid \"<value>\" --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "access-tokens list",
+          "summary": "List personal access tokens",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "dockerhub.list_access_tokens",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [],
+          "examples": [
+            "pm dockerhub access-tokens list --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "access-tokens update",
+          "summary": "Update personal access token",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_access_token",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "uuid",
+              "type": "string",
+              "summary": "Path parameter `uuid`.",
+              "values": [],
+              "maps_to": "record.uuid",
+              "required": true
+            },
+            {
+              "name": "token-label",
+              "type": "string",
+              "summary": "Friendly name to identify the token.",
+              "values": [],
+              "maps_to": "record.token_label"
+            },
+            {
+              "name": "is-active",
+              "type": "boolean",
+              "summary": "Whether the token is active.",
+              "values": [],
+              "maps_to": "record.is_active"
+            }
+          ],
+          "examples": [
+            "pm dockerhub access-tokens update --uuid \"<uuid>\" --is-active false --json"
+          ],
+          "output_policy": "",
+          "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": "The provider echoes the token's metadata (including its raw value) back on update; this command redacts the `token` field from its own output."
+        },
+        {
+          "path": "audit-logs actions list",
+          "summary": "List audit log actions",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "dockerhub.list_audit_log_actions",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "account",
+              "type": "string",
+              "summary": "Organization account name.",
+              "values": [],
+              "maps_to": "path.account",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub audit-logs actions list --account \"<value>\" --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "audit-logs list",
+          "summary": "List audit log events",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "dockerhub.list_audit_logs",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "account",
+              "type": "string",
+              "summary": "Organization account name.",
+              "values": [],
+              "maps_to": "path.account",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub audit-logs list --account \"<value>\" --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "auth 2fa-login create",
+          "summary": "Second factor authentication (completes a 2FA-challenged login)",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_2fa_login",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "login-2fa-token",
+              "type": "string",
+              "summary": "The intermediate 2FA token returned from `auth login create`.",
+              "values": [],
+              "maps_to": "record.login_2fa_token",
+              "required": true
+            },
+            {
+              "name": "code",
+              "type": "string",
+              "summary": "The Time-based One-Time Password (TOTP) of the Docker Hub account.",
+              "values": [],
+              "maps_to": "record.code",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub auth 2fa-login create --login-2fa-token \"<token>\" --code \"123456\" --json"
+          ],
+          "output_policy": "",
+          "risk": "high: exchanges a 2FA challenge for a live session JWT; the token is redacted from command output; requires reverse ETL approval",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": "The provider returns a live session JWT in the response. This command redacts the `token` field from its own output; it is never printed or logged."
+        },
+        {
+          "path": "auth login create",
+          "summary": "Create an authentication token (username+password/PAT session login)",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_user_login",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "username",
+              "type": "string",
+              "summary": "Docker Hub account username.",
+              "values": [],
+              "maps_to": "record.username",
+              "required": true
+            },
+            {
+              "name": "password",
+              "type": "string",
+              "summary": "Docker Hub account password or Personal Access Token.",
+              "values": [],
+              "maps_to": "record.password",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub auth login create --username \"myusername\" --password \"<pat-or-password>\" --json"
+          ],
+          "output_policy": "",
+          "risk": "high: exchanges a credential for a live session JWT; the token is redacted from command output; requires reverse ETL approval",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": "The provider returns a live session JWT in the response (used internally by this connector's own dockerhub AuthHook when docker_pat is configured for every other command). This command redacts the `token` field from its own output; it is never printed or logged. If the account has 2FA enabled, the response is an intermediate token consumed by `auth 2fa-login create`, not a final session token."
+        },
+        {
+          "path": "auth token create",
+          "summary": "Create access token (identifier+secret to short-lived access token exchange)",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_auth_token",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "identifier",
+              "type": "string",
+              "summary": "Username (password/PAT auth) or organization name (organization access token auth).",
+              "values": [],
+              "maps_to": "record.identifier",
+              "required": true
+            },
+            {
+              "name": "secret",
+              "type": "string",
+              "summary": "Password, personal access token, or organization access token.",
+              "values": [],
+              "maps_to": "record.secret",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub auth token create --identifier \"myusername\" --secret \"<pat-or-password>\" --json"
+          ],
+          "output_policy": "",
+          "risk": "high: exchanges a credential for a live 10-minute access token; the token is redacted from command output; requires reverse ETL approval",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": "The provider returns a live access token (10-minute lifetime) in the response. This command redacts the `access_token` field from its own output; it is never printed or logged."
+        },
+        {
+          "path": "groups create",
+          "summary": "Create a new group",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_group",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "org-name",
+              "type": "string",
+              "summary": "Organization name.",
+              "values": [],
+              "maps_to": "record.org_name",
+              "required": true
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Group name.",
+              "values": [],
+              "maps_to": "record.name",
+              "required": true
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "summary": "Group description.",
+              "values": [],
+              "maps_to": "record.description"
+            }
+          ],
+          "examples": [
+            "pm dockerhub groups create --org-name \"myorg\" --name \"developers\" --json"
+          ],
+          "output_policy": "",
+          "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": ""
+        },
+        {
+          "path": "groups delete",
+          "summary": "Delete an organization group",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_group",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "org-name",
+              "type": "string",
+              "summary": "Path parameter `org_name`.",
+              "values": [],
+              "maps_to": "record.org_name",
+              "required": true
+            },
+            {
+              "name": "group-name",
+              "type": "string",
+              "summary": "Path parameter `group_name`.",
+              "values": [],
+              "maps_to": "record.group_name",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub groups delete --org-name \"myorg\" --group-name \"developers\" --json"
+          ],
+          "output_policy": "",
+          "risk": "high: removes an organization group and its access grants; requires reverse ETL approval and destructive confirmation",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": ""
+        },
+        {
+          "path": "groups get",
+          "summary": "Get a group of an organization",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "dockerhub.get_group",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "org-name",
+              "type": "string",
+              "summary": "Organization name.",
+              "values": [],
+              "maps_to": "path.org_name",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "group-name",
+              "type": "string",
+              "summary": "Group name.",
+              "values": [],
+              "maps_to": "path.group_name",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub groups get --org-name \"<value>\" --group-name \"<value>\" --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "groups list",
+          "summary": "Get groups of an organization",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "dockerhub.list_groups",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "org-name",
+              "type": "string",
+              "summary": "Organization name.",
+              "values": [],
+              "maps_to": "path.org_name",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub groups list --org-name \"<value>\" --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "groups members add",
+          "summary": "Add a member to a group",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "add_group_member",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "org-name",
+              "type": "string",
+              "summary": "Organization name.",
+              "values": [],
+              "maps_to": "record.org_name",
+              "required": true
+            },
+            {
+              "name": "group-name",
+              "type": "string",
+              "summary": "Group name.",
+              "values": [],
+              "maps_to": "record.group_name",
+              "required": true
+            },
+            {
+              "name": "member",
+              "type": "string",
+              "summary": "Username or email of the member to add.",
+              "values": [],
+              "maps_to": "record.member",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub groups members add --org-name \"myorg\" --group-name \"developers\" --member \"jonsnow\" --json"
+          ],
+          "output_policy": "",
+          "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": ""
+        },
+        {
+          "path": "groups members list",
+          "summary": "List members of a group",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "dockerhub.list_group_members",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "org-name",
+              "type": "string",
+              "summary": "Organization name.",
+              "values": [],
+              "maps_to": "path.org_name",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "group-name",
+              "type": "string",
+              "summary": "Group name.",
+              "values": [],
+              "maps_to": "path.group_name",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub groups members list --org-name \"<value>\" --group-name \"<value>\" --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "groups members remove",
+          "summary": "Remove a user from a group",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "remove_group_member",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "org-name",
+              "type": "string",
+              "summary": "Path parameter `org_name`.",
+              "values": [],
+              "maps_to": "record.org_name",
+              "required": true
+            },
+            {
+              "name": "group-name",
+              "type": "string",
+              "summary": "Path parameter `group_name`.",
+              "values": [],
+              "maps_to": "record.group_name",
+              "required": true
+            },
+            {
+              "name": "username",
+              "type": "string",
+              "summary": "Path parameter `username`.",
+              "values": [],
+              "maps_to": "record.username",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub groups members remove --org-name \"myorg\" --group-name \"developers\" --username \"jonsnow\" --json"
+          ],
+          "output_policy": "",
+          "risk": "high: removes a user's access via this group; requires reverse ETL approval and destructive confirmation",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": ""
+        },
+        {
+          "path": "groups replace",
+          "summary": "Update the details for an organization group (full replace)",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "replace_group",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "org-name",
+              "type": "string",
+              "summary": "Path parameter `org_name`.",
+              "values": [],
+              "maps_to": "record.org_name",
+              "required": true
+            },
+            {
+              "name": "group-name",
+              "type": "string",
+              "summary": "Path parameter `group_name`.",
+              "values": [],
+              "maps_to": "record.group_name",
+              "required": true
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Group name.",
+              "values": [],
+              "maps_to": "record.name",
+              "required": true
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "summary": "Group description.",
+              "values": [],
+              "maps_to": "record.description"
+            }
+          ],
+          "examples": [
+            "pm dockerhub groups replace --org-name \"myorg\" --group-name \"developers\" --name \"developers\" --json"
+          ],
+          "output_policy": "",
+          "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": ""
+        },
+        {
+          "path": "groups update",
+          "summary": "Update some details for an organization group (partial update)",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_group",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "org-name",
+              "type": "string",
+              "summary": "Path parameter `org_name`.",
+              "values": [],
+              "maps_to": "record.org_name",
+              "required": true
+            },
+            {
+              "name": "group-name",
+              "type": "string",
+              "summary": "Path parameter `group_name`.",
+              "values": [],
+              "maps_to": "record.group_name",
+              "required": true
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Group name.",
+              "values": [],
+              "maps_to": "record.name"
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "summary": "Group description.",
+              "values": [],
+              "maps_to": "record.description"
+            }
+          ],
+          "examples": [
+            "pm dockerhub groups update --org-name \"myorg\" --group-name \"developers\" --description \"New description\" --json"
+          ],
+          "output_policy": "",
+          "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": ""
+        },
+        {
+          "path": "invites bulk-create",
+          "summary": "Bulk create invites",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "bulk_create_invites",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "org",
+              "type": "string",
+              "summary": "Organization name.",
+              "values": [],
+              "maps_to": "record.org",
+              "required": true
+            },
+            {
+              "name": "team",
+              "type": "string",
+              "summary": "Team name.",
+              "values": [],
+              "maps_to": "record.team"
+            },
+            {
+              "name": "role",
+              "type": "string",
+              "summary": "Role for invitees.",
+              "values": [],
+              "maps_to": "record.role"
+            },
+            {
+              "name": "invitees",
+              "type": "string_array",
+              "summary": "List of invitee emails or Docker IDs.",
+              "values": [],
+              "maps_to": "record.invitees",
+              "required": true
+            },
+            {
+              "name": "dry-run",
+              "type": "boolean",
+              "summary": "Run through validation without changing data.",
+              "values": [],
+              "maps_to": "record.dry_run"
+            }
+          ],
+          "examples": [
+            "pm dockerhub invites bulk-create --org \"myorg\" --invitees \"invitee@example.com\" --json"
+          ],
+          "output_policy": "",
+          "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": ""
+        },
+        {
+          "path": "invites cancel",
+          "summary": "Cancel an invite",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "cancel_invite",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Invite id.",
+              "values": [],
+              "maps_to": "record.id",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub invites cancel --id \"<id>\" --json"
+          ],
+          "output_policy": "",
+          "risk": "medium: cancels a pending organization invite; requires reverse ETL approval and destructive confirmation",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": ""
+        },
+        {
+          "path": "invites list",
+          "summary": "List org invites",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "dockerhub.list_org_invites",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "org-name",
+              "type": "string",
+              "summary": "Organization name.",
+              "values": [],
+              "maps_to": "path.org_name",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub invites list --org-name \"<value>\" --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "invites resend",
+          "summary": "Resend an invite",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "resend_invite",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Invite id.",
+              "values": [],
+              "maps_to": "record.id",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub invites resend --id \"<id>\" --json"
+          ],
+          "output_policy": "",
+          "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": ""
+        },
+        {
+          "path": "org access-tokens create",
+          "summary": "Create organization access token",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_org_access_token",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Organization name.",
+              "values": [],
+              "maps_to": "record.name",
+              "required": true
+            },
+            {
+              "name": "label",
+              "type": "string",
+              "summary": "Label for the access token.",
+              "values": [],
+              "maps_to": "record.label",
+              "required": true
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "summary": "Description of the access token.",
+              "values": [],
+              "maps_to": "record.description"
+            },
+            {
+              "name": "expires-at",
+              "type": "string",
+              "summary": "Expiration date (RFC3339).",
+              "values": [],
+              "maps_to": "record.expires_at",
+              "format": "date-time"
+            }
+          ],
+          "examples": [
+            "pm dockerhub org access-tokens create --name \"myorg\" --label \"ci token\" --json"
+          ],
+          "output_policy": "",
+          "risk": "high: creates a live Docker Hub organization credential; the raw token is returned once by the provider and redacted from command output; requires reverse ETL approval",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": "`resources` (the token's repo/org scope grants) is a required-for-meaningful-use array of objects with no typed scalar leaf, so it is not flag-mapped here; supply it via a reverse-ETL source record instead. The provider returns the raw token value once, in the create response only; this command redacts the `token` field from its own output."
+        },
+        {
+          "path": "org access-tokens delete",
+          "summary": "Delete organization access token",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_org_access_token",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "org-name",
+              "type": "string",
+              "summary": "Path parameter `org_name`.",
+              "values": [],
+              "maps_to": "record.org_name",
+              "required": true
+            },
+            {
+              "name": "access-token-id",
+              "type": "string",
+              "summary": "Path parameter `access_token_id`.",
+              "values": [],
+              "maps_to": "record.access_token_id",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub org access-tokens delete --org-name \"myorg\" --access-token-id \"<id>\" --json"
+          ],
+          "output_policy": "",
+          "risk": "high: revokes a live Docker Hub organization credential; requires reverse ETL approval and destructive confirmation",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": ""
+        },
+        {
+          "path": "org access-tokens get",
+          "summary": "Get organization access token",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "dockerhub.get_org_access_token",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "org-name",
+              "type": "string",
+              "summary": "Organization name.",
+              "values": [],
+              "maps_to": "path.org_name",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "access-token-id",
+              "type": "string",
+              "summary": "Organization access token id.",
+              "values": [],
+              "maps_to": "path.access_token_id",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub org access-tokens get --org-name \"<value>\" --access-token-id \"<value>\" --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "org access-tokens list",
+          "summary": "List organization access tokens",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "dockerhub.list_org_access_tokens",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Organization name.",
+              "values": [],
+              "maps_to": "path.name",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub org access-tokens list --name \"<value>\" --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "org access-tokens update",
+          "summary": "Update organization access token",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_org_access_token",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "org-name",
+              "type": "string",
+              "summary": "Path parameter `org_name`.",
+              "values": [],
+              "maps_to": "record.org_name",
+              "required": true
+            },
+            {
+              "name": "access-token-id",
+              "type": "string",
+              "summary": "Path parameter `access_token_id`.",
+              "values": [],
+              "maps_to": "record.access_token_id",
+              "required": true
+            },
+            {
+              "name": "label",
+              "type": "string",
+              "summary": "Label for the access token.",
+              "values": [],
+              "maps_to": "record.label"
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "summary": "Description of the access token.",
+              "values": [],
+              "maps_to": "record.description"
+            },
+            {
+              "name": "is-active",
+              "type": "boolean",
+              "summary": "Whether the token is active.",
+              "values": [],
+              "maps_to": "record.is_active"
+            }
+          ],
+          "examples": [
+            "pm dockerhub org access-tokens update --org-name \"myorg\" --access-token-id \"<id>\" --is-active false --json"
+          ],
+          "output_policy": "",
+          "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": "`resources` is a required-for-meaningful-use array of objects with no typed scalar leaf, so it is not flag-mapped here; supply it via a reverse-ETL source record instead."
+        },
+        {
+          "path": "org members export",
+          "summary": "Export org members CSV",
+          "intent": "binary_download",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "dockerhub.export_org_members",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "org-name",
+              "type": "string",
+              "summary": "Organization name.",
+              "values": [],
+              "maps_to": "path.org_name",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "dest-root",
+              "type": "string",
+              "summary": "directory the download is written beneath; traversal outside it is refused.",
+              "values": [],
+              "maps_to": "",
+              "required": true
+            },
+            {
+              "name": "file-name",
+              "type": "string",
+              "summary": "name for the downloaded file within --dest-root; must be a single path segment.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "max-bytes",
+              "type": "integer",
+              "summary": "lower the operation's declared size cap; it can never raise it.",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [
+            "pm dockerhub org members export --org-name \"myorg\""
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "org members list",
+          "summary": "List org members",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "dockerhub.list_org_members",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "org-name",
+              "type": "string",
+              "summary": "Organization name.",
+              "values": [],
+              "maps_to": "path.org_name",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub org members list --org-name \"<value>\" --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "org members remove",
+          "summary": "Remove member from org",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "remove_org_member",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "org-name",
+              "type": "string",
+              "summary": "Path parameter `org_name`.",
+              "values": [],
+              "maps_to": "record.org_name",
+              "required": true
+            },
+            {
+              "name": "username",
+              "type": "string",
+              "summary": "Path parameter `username`.",
+              "values": [],
+              "maps_to": "record.username",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub org members remove --org-name \"myorg\" --username \"jonsnow\" --json"
+          ],
+          "output_policy": "",
+          "risk": "high: removes a user's organization membership; requires reverse ETL approval and destructive confirmation",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": ""
+        },
+        {
+          "path": "org members update",
+          "summary": "Update org member (role)",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_org_member",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "org-name",
+              "type": "string",
+              "summary": "Organization name.",
+              "values": [],
+              "maps_to": "record.org_name",
+              "required": true
+            },
+            {
+              "name": "username",
+              "type": "string",
+              "summary": "Path parameter `username`.",
+              "values": [],
+              "maps_to": "record.username",
+              "required": true
+            },
+            {
+              "name": "role",
+              "type": "enum",
+              "summary": "Role of the member.",
+              "values": [
+                "owner",
+                "editor",
+                "member"
+              ],
+              "maps_to": "record.role",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub org members update --org-name \"myorg\" --username \"jonsnow\" --role member --json"
+          ],
+          "output_policy": "",
+          "risk": "high: changes a member's organization role/permissions; requires reverse ETL approval",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": ""
+        },
+        {
+          "path": "org settings get",
+          "summary": "Get organization settings",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "dockerhub.get_org_settings",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Organization name.",
+              "values": [],
+              "maps_to": "path.name",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub org settings get --name \"<value>\" --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "org settings update",
+          "summary": "Update organization settings",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_org_settings",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Organization name.",
+              "values": [],
+              "maps_to": "record.name",
+              "required": true
+            },
+            {
+              "name": "restricted-images-enabled",
+              "type": "boolean",
+              "summary": "Whether to restrict image usage for users in the organization.",
+              "values": [],
+              "maps_to": "record.restricted_images_enabled",
+              "required": true
+            },
+            {
+              "name": "restricted-images-allow-official",
+              "type": "boolean",
+              "summary": "Allow official images if restricted_images_enabled is true.",
+              "values": [],
+              "maps_to": "record.restricted_images_allow_official",
+              "required": true
+            },
+            {
+              "name": "restricted-images-allow-verified-publishers",
+              "type": "boolean",
+              "summary": "Allow verified-publisher images if restricted_images_enabled is true.",
+              "values": [],
+              "maps_to": "record.restricted_images_allow_verified_publishers",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub org settings update --name \"myorg\" --restricted-images-enabled true --restricted-images-allow-official true --restricted-images-allow-verified-publishers true --json"
+          ],
+          "output_policy": "",
+          "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": "The provider's restricted_images body is a nested object ({enabled, allow_official_images, allow_verified_publishers}); this command flattens it into three top-level scalar flags mapped by the write executor's record, matching the object's own three required booleans one-for-one."
+        },
         {
           "path": "repositories list",
           "summary": "Run the repositories ETL stream",
@@ -44154,6 +45661,107 @@
           "notes": ""
         },
         {
+          "path": "repository check",
+          "summary": "Check repository in a namespace",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "dockerhub.check_repository",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "namespace",
+              "type": "string",
+              "summary": "Path parameter `namespace`.",
+              "values": [],
+              "maps_to": "path.namespace",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "repository",
+              "type": "string",
+              "summary": "Path parameter `repository`.",
+              "values": [],
+              "maps_to": "path.repository",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub repository check --namespace \"<value>\" --repository \"<value>\" --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "repository create",
+          "summary": "Create a new repository",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_repository",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Repository name.",
+              "values": [],
+              "maps_to": "record.name",
+              "required": true
+            },
+            {
+              "name": "namespace",
+              "type": "string",
+              "summary": "Namespace to create the repository in.",
+              "values": [],
+              "maps_to": "record.namespace",
+              "required": true
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "summary": "Short description (max 100 chars).",
+              "values": [],
+              "maps_to": "record.description"
+            },
+            {
+              "name": "full-description",
+              "type": "string",
+              "summary": "Detailed description (max 25000 chars).",
+              "values": [],
+              "maps_to": "record.full_description"
+            },
+            {
+              "name": "registry",
+              "type": "string",
+              "summary": "Registry where the repository is hosted.",
+              "values": [],
+              "maps_to": "record.registry"
+            },
+            {
+              "name": "is-private",
+              "type": "boolean",
+              "summary": "Whether the repository should be private.",
+              "values": [],
+              "maps_to": "record.is_private"
+            }
+          ],
+          "examples": [
+            "pm dockerhub repository create --name \"my-app\" --namespace \"myorg\" --json"
+          ],
+          "output_policy": "",
+          "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": ""
+        },
+        {
           "path": "repository detail list",
           "summary": "Run the repository detail ETL stream",
           "intent": "etl",
@@ -44170,6 +45778,512 @@
           "risk": "",
           "approval": "",
           "notes": ""
+        },
+        {
+          "path": "repository group assign",
+          "summary": "Assign a group (Team) to a repository for access",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "assign_repository_group",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "namespace",
+              "type": "string",
+              "summary": "Path parameter `namespace`.",
+              "values": [],
+              "maps_to": "record.namespace",
+              "required": true
+            },
+            {
+              "name": "repository",
+              "type": "string",
+              "summary": "Path parameter `repository`.",
+              "values": [],
+              "maps_to": "record.repository",
+              "required": true
+            },
+            {
+              "name": "group-id",
+              "type": "integer",
+              "summary": "The ID of the organization group to grant access to.",
+              "values": [],
+              "maps_to": "record.group_id",
+              "required": true
+            },
+            {
+              "name": "permission",
+              "type": "enum",
+              "summary": "Permission level to grant.",
+              "values": [
+                "read",
+                "write",
+                "admin"
+              ],
+              "maps_to": "record.permission",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub repository group assign --namespace \"myorg\" --repository \"my-app\" --group-id 12345 --permission write --json"
+          ],
+          "output_policy": "",
+          "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": ""
+        },
+        {
+          "path": "repository immutable-tags update",
+          "summary": "Update repository immutable tags",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_repository_immutable_tags",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "namespace",
+              "type": "string",
+              "summary": "Path parameter `namespace`.",
+              "values": [],
+              "maps_to": "record.namespace",
+              "required": true
+            },
+            {
+              "name": "repository",
+              "type": "string",
+              "summary": "Path parameter `repository`.",
+              "values": [],
+              "maps_to": "record.repository",
+              "required": true
+            },
+            {
+              "name": "immutable-tags",
+              "type": "boolean",
+              "summary": "Whether immutable tags are enabled.",
+              "values": [],
+              "maps_to": "record.immutable_tags",
+              "required": true
+            },
+            {
+              "name": "immutable-tags-rules",
+              "type": "string_array",
+              "summary": "List of immutable tag rules.",
+              "values": [],
+              "maps_to": "record.immutable_tags_rules",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub repository immutable-tags update --namespace \"myorg\" --repository \"my-app\" --immutable-tags true --immutable-tags-rules \"v.*\" --json"
+          ],
+          "output_policy": "",
+          "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": ""
+        },
+        {
+          "path": "repository immutable-tags verify",
+          "summary": "Verify repository immutable tags",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "dockerhub.verify_repository_immutable_tags",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "namespace",
+              "type": "string",
+              "summary": "Path parameter `namespace`.",
+              "values": [],
+              "maps_to": "path.namespace",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "repository",
+              "type": "string",
+              "summary": "Path parameter `repository`.",
+              "values": [],
+              "maps_to": "path.repository",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "regex",
+              "type": "string",
+              "summary": "Immutable tags rule regex pattern to verify.",
+              "values": [],
+              "maps_to": "body.regex",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub repository immutable-tags verify --namespace \"myorg\" --repository \"my-app\" --regex \"v.*\" --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "repository tag check",
+          "summary": "Check repository tag",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "dockerhub.check_repository_tag",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "namespace",
+              "type": "string",
+              "summary": "Path parameter `namespace`.",
+              "values": [],
+              "maps_to": "path.namespace",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "repository",
+              "type": "string",
+              "summary": "Path parameter `repository`.",
+              "values": [],
+              "maps_to": "path.repository",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "tag",
+              "type": "string",
+              "summary": "Path parameter `tag`.",
+              "values": [],
+              "maps_to": "path.tag",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub repository tag check --namespace \"<value>\" --repository \"<value>\" --tag \"<value>\" --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "repository tags check",
+          "summary": "Check repository tags",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "dockerhub.check_repository_tags",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "namespace",
+              "type": "string",
+              "summary": "Path parameter `namespace`.",
+              "values": [],
+              "maps_to": "path.namespace",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "repository",
+              "type": "string",
+              "summary": "Path parameter `repository`.",
+              "values": [],
+              "maps_to": "path.repository",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub repository tags check --namespace \"<value>\" --repository \"<value>\" --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "scim-resource-types get",
+          "summary": "Get a resource type",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "dockerhub.get_scim_resource_type",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "SCIM resource type name.",
+              "values": [],
+              "maps_to": "path.name",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub scim-resource-types get --name \"<value>\" --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "scim-resource-types list",
+          "summary": "List resource types",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "dockerhub.list_scim_resource_types",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [],
+          "examples": [
+            "pm dockerhub scim-resource-types list --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "scim-schemas get",
+          "summary": "Get a schema",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "dockerhub.get_scim_schema",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "SCIM schema id (URN).",
+              "values": [],
+              "maps_to": "path.id",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub scim-schemas get --id \"<value>\" --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "scim-schemas list",
+          "summary": "List schemas",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "dockerhub.list_scim_schemas",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [],
+          "examples": [
+            "pm dockerhub scim-schemas list --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "scim-service-provider-config get",
+          "summary": "Get service provider config",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "dockerhub.get_scim_service_provider_config",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [],
+          "examples": [
+            "pm dockerhub scim-service-provider-config get --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "scim-users create",
+          "summary": "Create user",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_scim_user",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "schemas",
+              "type": "string_array",
+              "summary": "SCIM schema URNs, e.g. \"urn:ietf:params:scim:schemas:core:2.0:User\".",
+              "values": [],
+              "maps_to": "record.schemas",
+              "required": true
+            },
+            {
+              "name": "user-name",
+              "type": "string",
+              "summary": "The user's email address; must be reachable via email.",
+              "values": [],
+              "maps_to": "record.userName",
+              "required": true
+            },
+            {
+              "name": "given-name",
+              "type": "string",
+              "summary": "Given (first) name.",
+              "values": [],
+              "maps_to": "record.name.givenName"
+            },
+            {
+              "name": "family-name",
+              "type": "string",
+              "summary": "Family (last) name.",
+              "values": [],
+              "maps_to": "record.name.familyName"
+            }
+          ],
+          "examples": [
+            "pm dockerhub scim-users create --schemas \"urn:ietf:params:scim:schemas:core:2.0:User\" --user-name \"jon.snow@example.com\" --json"
+          ],
+          "output_policy": "",
+          "risk": "high: provisions a new SCIM-managed identity; requires reverse ETL approval",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": "The provider documents this endpoint's request/response media type as application/scim+json (RFC 7644); this bundle's write executor sends application/json, which is the widely-accepted compatible variant most SCIM 2.0 server implementations accept, but Docker Hub's own leniency here is not independently live-verified."
+        },
+        {
+          "path": "scim-users get",
+          "summary": "Get a user",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "dockerhub.get_scim_user",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "SCIM user id.",
+              "values": [],
+              "maps_to": "path.id",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub scim-users get --id \"<value>\" --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "scim-users list",
+          "summary": "List users",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "dockerhub.list_scim_users",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [],
+          "examples": [
+            "pm dockerhub scim-users list --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "scim-users update",
+          "summary": "Update a user (full replace; enabled is required here even though the provider defaults a missing value to false-deactivated, to prevent an accidental deactivation-by-omission)",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_scim_user",
+          "source_cli_path": "",
+          "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Path parameter `id`.",
+              "values": [],
+              "maps_to": "record.id",
+              "required": true
+            },
+            {
+              "name": "schemas",
+              "type": "string_array",
+              "summary": "SCIM schema URNs, e.g. \"urn:ietf:params:scim:schemas:core:2.0:User\".",
+              "values": [],
+              "maps_to": "record.schemas",
+              "required": true
+            },
+            {
+              "name": "given-name",
+              "type": "string",
+              "summary": "Given (first) name; omitted leaves the provider's stored value unchanged.",
+              "values": [],
+              "maps_to": "record.name.givenName"
+            },
+            {
+              "name": "family-name",
+              "type": "string",
+              "summary": "Family (last) name; omitted leaves the provider's stored value unchanged.",
+              "values": [],
+              "maps_to": "record.name.familyName"
+            },
+            {
+              "name": "enabled",
+              "type": "boolean",
+              "summary": "Whether the user is active (required here; the provider deactivates on a missing value).",
+              "values": [],
+              "maps_to": "record.enabled",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm dockerhub scim-users update --id \"<id>\" --schemas \"urn:ietf:params:scim:schemas:core:2.0:User\" --enabled true --json"
+          ],
+          "output_policy": "",
+          "risk": "high: replaces a SCIM-managed identity's profile and can deactivate it; requires reverse ETL approval",
+          "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
+          "notes": "The provider documents this endpoint's request/response media type as application/scim+json (RFC 7644); this bundle's write executor sends application/json, which is the widely-accepted compatible variant most SCIM 2.0 server implementations accept, but Docker Hub's own leniency here is not independently live-verified."
         },
         {
           "path": "tag detail list",
@@ -44210,7 +46324,7 @@
       ],
       "help_topics": []
     },
-    "docs_md": "# Overview\n\nReads public Docker Hub repositories and image tags for a configured username or organization via\nthe Docker Hub registry API.\n\nReadable streams: `repositories`, `tags`, `repository_detail`, `tag_detail`.\n\nThis connector is read-only; no write actions are declared.\n\nService API documentation: https://docs.docker.com/docker-hub/api/latest/.\n\n## Auth setup\n\nConnection fields:\n\n- `base_url` (optional, string); default `https://hub.docker.com/v2`; format `uri`; Docker Hub\n  registry API base URL override for tests or self-hosted proxies.\n- `docker_username` (required, string); Docker Hub username or organization namespace whose\n  repositories and tags to read. Lowercase alphanumerics, underscores, and hyphens only.\n- `page_size` (optional, integer); default `100`; Page size (1-100) for the initial request of each\n  paginated stream (Docker Hub's page_size query param); subsequent pages follow the API's own\n  absolute next URL verbatim.\n- `repository` (optional, string); Repository name (without the namespace prefix) the\n  'tags'/'repository_detail'/'tag_detail' streams are scoped to. Required only when reading one of\n  those streams.\n- `tag` (optional, string); Tag name the 'tag_detail' stream reads a single tag record for (e.g.\n  'latest'). Required only when reading the 'tag_detail' stream.\n\nDefault configuration values: `base_url=https://hub.docker.com/v2`, `page_size=100`.\n\nAuthentication behavior:\n\n- No authentication.\n\nRequests use the configured `base_url` value after applying defaults.\n\nConnection checks call GET `/namespaces/{{ config.docker_username }}/repositories`.\n\n## Streams notes\n\nDefault pagination: follows a next-page URL from the response body; URL path `next`; next URLs stay\non the configured API host.\n\nPagination by stream: next_url: `repositories`, `tags`; none: `repository_detail`, `tag_detail`.\n\n- `repositories`: GET `/namespaces/{{ config.docker_username }}/repositories` - records path\n  `results`; query `page`=`1`; `page_size`=`{{ config.page_size }}`; follows a next-page URL from\n  the response body; URL path `next`; next URLs stay on the configured API host.\n- `tags`: GET `/namespaces/{{ config.docker_username }}/repositories/{{ config.repository }}/tags`\n  - records path `results`; query `page`=`1`; `page_size`=`{{ config.page_size }}`; follows a\n  next-page URL from the response body; URL path `next`; next URLs stay on the configured API host.\n- `repository_detail`: GET `/namespaces/{{ config.docker_username }}/repositories/{{ config.repository }}` - single-object response; records at response root.\n- `tag_detail`: GET `/namespaces/{{ config.docker_username }}/repositories/{{ config.repository }}/tags/{{ config.tag }}` - single-object response; records at response root.\n\n## Write actions & risks\n\nThis connector is read-only. Read behavior: external Docker Hub API read of public repository and\ntag data.\n\n## Known limits\n\n- Batch defaults: read_page_size=100.\n- API coverage includes 4 stream-backed endpoint group(s).\n- Other cited artifact endpoints are explicitly classified in `api_surface.json`; no undocumented\n  legacy endpoint is exposed by this bundle.\n",
+    "docs_md": "# Overview\n\nReads public Docker Hub repositories and image tags for a configured username or organization via\nthe Docker Hub registry API, and, when an optional Personal Access Token is configured, manages\npersonal and organization access tokens, organizations, groups (teams), invites, audit logs,\nrepositories, and (with a second, separately-configured SCIM token) SCIM-provisioned users.\n\nReadable streams: `repositories`, `tags`, `repository_detail`, `tag_detail`.\n\nDirect reads, status-only existence checks, and reverse-ETL writes cover all 50 remaining\ndocumented Docker Hub operations: repositories, personal/organization access tokens, audit logs,\ngroups (teams), invites, organization settings/members, authentication, and SCIM. All 54\ndocumented Docker Hub API operations are implemented.\n\nService API documentation: https://docs.docker.com/docker-hub/api/latest/.\n\n## Auth setup\n\nConnection fields:\n\n- `base_url` (optional, string); default `https://hub.docker.com/v2`; format `uri`; Docker Hub\n  registry API base URL override for tests or self-hosted proxies.\n- `docker_username` (required, string); Docker Hub username or organization namespace whose\n  repositories and tags to read. Lowercase alphanumerics, underscores, and hyphens only.\n- `docker_pat` (optional, secret string); a Docker Hub Personal Access Token for `docker_username`.\n  Omitted, the connector stays exactly as before: read-only, unauthenticated, public repositories\n  and tags only. When set, it authenticates every account-scoped, organization, group/team, invite,\n  access-token, audit-log, repository-write, and authentication command below. Never printed,\n  logged, or echoed by any command.\n- `scim_bearer_token` (optional, secret string); a Docker Hub Enterprise SCIM API bearer token,\n  distinct from `docker_pat`. Docker Hub's OpenAPI document declares SCIM (`/v2/scim/2.0/**`)\n  under a separate `bearerSCIMAuth` security scheme from the rest of the API's `bearerAuth`; the\n  two credentials are never interchangeable. Required only for the `scim-*` commands.\n- `page_size` (optional, integer); default `100`; Page size (1-100) for the initial request of each\n  paginated stream (Docker Hub's page_size query param); subsequent pages follow the API's own\n  absolute next URL verbatim.\n- `repository` (optional, string); Repository name (without the namespace prefix) the\n  'tags'/'repository_detail'/'tag_detail' streams are scoped to. Required only when reading one of\n  those streams.\n- `tag` (optional, string); Tag name the 'tag_detail' stream reads a single tag record for (e.g.\n  'latest'). Required only when reading the 'tag_detail' stream.\n\nDefault configuration values: `base_url=https://hub.docker.com/v2`, `page_size=100`.\n\nAuthentication behavior:\n\n- No `docker_pat` configured: no authentication (unchanged from before this connector supported\n  writes) — only the 4 public-read streams and the 3 status-only existence checks are usable.\n- `docker_pat` configured: every non-SCIM request authenticates via a `dockerhub` AuthHook\n  (`internal/connectors/hooks/dockerhub`) that exchanges `docker_username`/`docker_pat` for a\n  short-lived session bearer JWT through Docker Hub's own `POST /v2/users/login`, caches it until\n  60s before the JWT's own `exp` claim (a conservative 4-minute cache is used if `exp` cannot be\n  parsed), and sends it as `Authorization: Bearer <jwt>` on every subsequent request. The\n  long-lived PAT itself is never sent as a static bearer token and never logged.\n- `scim_bearer_token` configured: every `/v2/scim/2.0/**` request instead sends\n  `Authorization: Bearer <scim_bearer_token>` — the same AuthHook routes by request path\n  (`dualAuth`) and never substitutes one credential for the other. A SCIM command with no\n  `scim_bearer_token` configured fails closed with a named error, even if a session JWT is already\n  cached from a prior non-SCIM command.\n\nRequests use the configured `base_url` value after applying defaults.\n\nConnection checks call GET `/namespaces/{{ config.docker_username }}/repositories`.\n\n## Streams notes\n\nDefault pagination: follows a next-page URL from the response body; URL path `next`; next URLs stay\non the configured API host.\n\nPagination by stream: next_url: `repositories`, `tags`; none: `repository_detail`, `tag_detail`.\n\n- `repositories`: GET `/namespaces/{{ config.docker_username }}/repositories` - records path\n  `results`; query `page`=`1`; `page_size`=`{{ config.page_size }}`; follows a next-page URL from\n  the response body; URL path `next`; next URLs stay on the configured API host.\n- `tags`: GET `/namespaces/{{ config.docker_username }}/repositories/{{ config.repository }}/tags`\n  - records path `results`; query `page`=`1`; `page_size`=`{{ config.page_size }}`; follows a\n  next-page URL from the response body; URL path `next`; next URLs stay on the configured API host.\n- `repository_detail`: GET `/namespaces/{{ config.docker_username }}/repositories/{{ config.repository }}` - single-object response; records at response root.\n- `tag_detail`: GET `/namespaces/{{ config.docker_username }}/repositories/{{ config.repository }}/tags/{{ config.tag }}` - single-object response; records at response root.\n\nDirect-read commands (repositories/tokens/groups/invites/orgs/audit-logs/scim listed below) are\neach a single bounded HTTP request, not a full paginated crawl — Docker Hub's own list endpoints\nreturn a provider-default first page only per command invocation (a repo-wide, currently open\nlimitation tracked separately, not specific to this connector).\n\nThe 3 `*-check` commands (`repository check`, `repository tags check`, `repository tag check`) are\nstatus-only: Docker Hub's `HEAD` existence-check endpoints never return a response body, so these\ncommands return `{\"status_code\": N}` — the HTTP status is the entire signal. This is a new runtime\ncapability (`internal/connectors/engine/direct_read.go`'s HEAD branch); no other connector's\ncommands are affected by it.\n\n## Write actions & risks\n\nRequires `docker_pat` (or, for SCIM, `scim_bearer_token`). Reverse ETL mutations require plan,\npreview, explicit approval, and execute; destructive actions (DELETE and group/org membership\nremoval) additionally require typed destructive confirmation.\n\n- Repositories: `repository create`, `repository immutable-tags update`,\n  `repository immutable-tags verify` (direct read), `repository group assign`.\n- Personal access tokens: `access-tokens list`/`get` (direct read), `access-tokens create` (the\n  provider returns the raw token value once, in the create response only; this command redacts the\n  `token` field from its own output), `access-tokens update`, `access-tokens delete` (destructive).\n- Organization access tokens: `org access-tokens list`/`get` (direct read), `org access-tokens\n  create` (redacted, same as personal tokens; `resources`, the token's repo/org scope grants, is a\n  nested array of objects with no typed scalar leaf and is not flag-mapped — supply it via a\n  reverse-ETL source record), `org access-tokens update`, `org access-tokens delete` (destructive).\n- Audit logs: `audit-logs list`, `audit-logs actions list` (both direct reads).\n- Authentication: `auth token create` (identifier+secret to short-lived access token exchange),\n  `auth login create` (username+password/PAT session login — the same exchange this connector's\n  own AuthHook performs internally when `docker_pat` is configured), `auth 2fa-login create`\n  (completes a 2FA-challenged login). All three redact the returned token from their output.\n- Groups (teams): `groups list`/`get` (direct read), `groups create`, `groups replace` (PUT, full\n  update), `groups update` (PATCH, partial update), `groups delete` (destructive), `groups members\n  list` (direct read), `groups members add`, `groups members remove` (destructive).\n- Invites: `invites bulk-create`, `invites cancel` (destructive), `invites resend`, `invites list`\n  (direct read).\n- Organizations & settings: `org settings get` (direct read), `org settings update` (the provider's\n  `restricted_images` body is a nested object with three required booleans; this command flattens\n  it into three top-level scalar flags one-for-one), `org members list` (direct read), `org members\n  export` (binary CSV download), `org members update`, `org members remove` (destructive).\n- SCIM (requires `scim_bearer_token`): `scim-resource-types list`/`get`, `scim-schemas list`/`get`,\n  `scim-service-provider-config get`, `scim-users list`/`get` (all direct reads), `scim-users\n  create`, `scim-users update` (PUT full replace; `enabled` is required by this command even though\n  the provider defaults a missing value to `false`/deactivated, to prevent accidental\n  deactivation-by-omission). The provider documents SCIM's media type as `application/scim+json`\n  (RFC 7644); this bundle's write executor sends `application/json`, the widely-accepted compatible\n  variant — not independently live-verified against Docker Hub's own leniency.\n\n## Known limits\n\n- Batch defaults: read_page_size=100.\n- API coverage: all 54 documented Docker Hub operations are implemented (4 stream-backed, 50\n  direct-read/status-check/write). Zero operations remain blocked.\n- Two independent optional credentials gate different command groups: `docker_pat` (most commands)\n  and `scim_bearer_token` (SCIM only) — Docker Hub's own OpenAPI document declares these under\n  separate security schemes (`bearerAuth` vs `bearerSCIMAuth`) and this bundle never substitutes\n  one for the other.\n- Direct-read commands are single bounded requests, not full paginated crawls (see Streams notes).\n- Other cited artifact endpoints are explicitly classified in `api_surface.json`; no undocumented\n  legacy endpoint is exposed by this bundle.\n",
     "icon": {
       "id": "dockerhub",
       "path": "icons/dockerhub.svg",
