@@ -276,3 +276,12 @@ through reverse ETL with a record payload; what is honest is the availability la
 2. **`rest_read` POST must declare `content_type: application/json`.** Caught by
    `checkCLISurfaceOperationSafety` on the next run. Both were fixed in the generator and the bundle
    regenerated from scratch, never patched by hand.
+
+---
+
+## github is complete
+
+Final shape: **1224 rows = 1220 REST + 4 GraphQL**, 1126 covered · 98 blocked · 0 excluded.
+1147 CLI commands (1042 implemented + 37 partial) · 553 write actions · 345 operations.
+1079/1079 implemented+partial commands verified reachable by running the built binary.
+Endpoint-ledger delta: github only, 162 → 164.

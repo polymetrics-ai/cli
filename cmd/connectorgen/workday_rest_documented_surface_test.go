@@ -1,0 +1,206 @@
+package main
+
+import (
+	"encoding/json"
+	"os"
+	"reflect"
+	"sort"
+	"strings"
+	"testing"
+)
+
+// workdayRESTOperations is Workday REST's documented operation count, derived
+// 2026-08-07 from Workday's own service directory manifest at
+// https://community.workday.com/sites/default/files/file-hosting/restapi/services2026.30.json
+// (HTTP 200, 617,538 bytes — byte-identical to the sweep derivation, so the
+// manifest is reproduced rather than trusted) and the 52 production service
+// specs it names, each fetched individually from the same host.
+//
+// The manifest is a DIRECTORY, not a spec. There is no single API version:
+// every service module is independently versioned (v1 through v7) and mounted
+// at its own base path, so an operation's identity is the resolved
+// (method, base+path) pair, never the service-relative path alone.
+//
+// 920 is the RAW row count across the 52 specs. FOUR of those rows are the same
+// endpoint documented twice — see workdayRESTDuplicatedAcrossServices below —
+// so the documented-operation count is 916.
+const workdayRESTOperations = 916
+
+// workdayRESTRawRows is the count before dedup, kept so the delta is written
+// down rather than silently absorbed. A future re-derivation that lands on 920
+// has not found four more operations; it has failed to dedup.
+const workdayRESTRawRows = 920
+
+// workdayRESTServiceSpecs is how many production service specs the directory
+// names. 49 are Swagger 2.0 and 3 are OpenAPI 3.0.1, which matters: the OAS3
+// specs carry no `basePath` at all. A reader that looks only at `basePath`
+// records an EMPTY base for those three, which is exactly what makes two
+// unrelated-looking services collide into four phantom duplicates.
+const workdayRESTServiceSpecs = 52
+
+// workdayRESTDuplicatedAcrossServices are the four operations that appear in
+// two service specs at once. "Custom Object Data (multi-instance) v2" and
+// "Custom Object Data (single-instance) v2" are two directory entries that
+// declare the IDENTICAL servers URL (https://<tenantHostname>/customObject/v2)
+// and publish the same paths; single- versus multi-instance is a property of
+// the custom OBJECT, not of the URL. One endpoint, two doc pages.
+//
+// They are pinned by name so a re-derivation cannot quietly reintroduce them,
+// and so whoever authors these rows re-expresses the losing page's documented
+// behaviour rather than dropping it (sweep finding 23).
+var workdayRESTDuplicatedAcrossServices = []string{
+	"DELETE /customObject/v2/customObjects/{customObjectAlias}/{customObjectID}",
+	"GET /customObject/v2/customObjects/{customObjectAlias}/{customObjectID}",
+	"POST /customObject/v2/customObjects/{customObjectAlias}",
+	"PUT /customObject/v2/customObjects/{customObjectAlias}/{customObjectID}",
+}
+
+// workdayRESTMethodSplit is the distribution of the 916 documented operations
+// after dedup. Workday is read-heavy: 654 GETs against 262 mutations.
+var workdayRESTMethodSplit = map[string]int{
+	"GET":    654,
+	"POST":   153,
+	"PATCH":  58,
+	"DELETE": 32,
+	"PUT":    19,
+}
+
+func TestWorkdayRESTDocumentedSurfaceIsComplete(t *testing.T) {
+	raw, err := os.ReadFile("../../internal/connectors/defs/workday-rest/api_surface.json")
+	if err != nil {
+		t.Fatalf("read workday-rest api_surface.json: %v", err)
+	}
+
+	var surface struct {
+		OperationLedgerVersion int `json:"operation_ledger_version"`
+		Endpoints              []struct {
+			Method    string         `json:"method"`
+			Path      string         `json:"path"`
+			CoveredBy map[string]any `json:"covered_by"`
+			Excluded  map[string]any `json:"excluded"`
+			Operation *struct {
+				Model            string `json:"model"`
+				Status           string `json:"status"`
+				BlockedByDefault bool   `json:"blocked_by_default"`
+				Reason           string `json:"reason"`
+				Notes            string `json:"notes"`
+				DuplicateOf      string `json:"duplicate_of"`
+			} `json:"operation"`
+		} `json:"endpoints"`
+	}
+	if err := json.Unmarshal(raw, &surface); err != nil {
+		t.Fatalf("unmarshal workday-rest api_surface.json: %v", err)
+	}
+
+	if surface.OperationLedgerVersion != 1 {
+		t.Errorf("operation_ledger_version = %d, want 1", surface.OperationLedgerVersion)
+	}
+
+	byMethod := map[string]int{}
+	seen := map[string]bool{}
+	var blank, malformed []string
+	total, covered, blocked, legacyExcluded := 0, 0, 0, 0
+
+	for _, ep := range surface.Endpoints {
+		key := ep.Method + " " + ep.Path
+		if seen[key] {
+			t.Errorf("duplicate endpoint %q", key)
+		}
+		seen[key] = true
+		total++
+		byMethod[ep.Method]++
+
+		// The defect class that has now recurred in lever-hiring, help-scout and
+		// github: a query-string variant, a wildcard family, or a behaviour
+		// encoded into the path is not an endpoint.
+		if strings.ContainsAny(ep.Path, " ?*") {
+			malformed = append(malformed, key)
+		}
+		// Workday mounts every service at its own base, so a service-relative
+		// path is ambiguous across 52 modules. Rows carry the resolved path.
+		if !strings.HasPrefix(ep.Path, "/") {
+			malformed = append(malformed, key+" (path is not resolved from the service base)")
+		}
+
+		dispositions := 0
+		if len(ep.CoveredBy) > 0 {
+			dispositions++
+			covered++
+		}
+		if ep.Operation != nil {
+			dispositions++
+			blocked++
+			if strings.TrimSpace(ep.Operation.Reason) == "" {
+				t.Errorf("%s: blocked row has no reason", key)
+			}
+			if !ep.Operation.BlockedByDefault {
+				t.Errorf("%s: blocked row is not blocked_by_default", key)
+			}
+			if ep.Operation.Model == "duplicate" && strings.TrimSpace(ep.Operation.DuplicateOf) == "" {
+				t.Errorf("%s: duplicate row has no duplicate_of", key)
+			}
+			named := strings.Contains(ep.Operation.Notes, "Named dependency:") ||
+				strings.Contains(ep.Operation.Reason, "Named dependency:") ||
+				ep.Operation.Model == "duplicate" ||
+				ep.Operation.Model == "deprecated"
+			if !named {
+				t.Errorf("%s: blocked row must carry a 'Named dependency:' marker", key)
+			}
+		}
+		if len(ep.Excluded) > 0 {
+			dispositions++
+			legacyExcluded++
+		}
+		if dispositions == 0 {
+			blank = append(blank, key)
+		}
+		if dispositions > 1 {
+			t.Errorf("%s: carries %d dispositions, want exactly 1", key, dispositions)
+		}
+	}
+
+	sort.Strings(malformed)
+	if len(malformed) > 0 {
+		t.Errorf("%d malformed row(s): %s", len(malformed), strings.Join(malformed, ", "))
+	}
+	sort.Strings(blank)
+	if len(blank) > 0 {
+		t.Errorf("%d endpoint(s) carry no disposition: %s", len(blank), strings.Join(blank, ", "))
+	}
+	if legacyExcluded != 0 {
+		t.Errorf("%d legacy excluded row(s) remain, want 0", legacyExcluded)
+	}
+	if total != workdayRESTOperations {
+		t.Errorf("endpoints = %d, want %d documented operations (%d raw rows across %d service specs, "+
+			"minus %d documented twice)", total, workdayRESTOperations, workdayRESTRawRows,
+			workdayRESTServiceSpecs, workdayRESTRawRows-workdayRESTOperations)
+	}
+	if covered+blocked != total {
+		t.Errorf("covered(%d)+blocked(%d) = %d, want %d", covered, blocked, covered+blocked, total)
+	}
+	if !reflect.DeepEqual(byMethod, workdayRESTMethodSplit) {
+		t.Errorf("byMethod = %+v, want %+v", byMethod, workdayRESTMethodSplit)
+	}
+
+	// Each collapsed pair must appear exactly once. Asserting presence alone
+	// would pass on a surface that reintroduced both copies.
+	for _, want := range workdayRESTDuplicatedAcrossServices {
+		if !seen[want] {
+			t.Errorf("expected the collapsed custom-object row %q exactly once", want)
+		}
+	}
+
+	// One row per service base that the legacy bundle never enumerated. The
+	// shipped surface holds four rows against three HCM streams, so a partial
+	// re-expansion cannot pass by filling the worker surface again.
+	for _, want := range []string{
+		"GET /absenceManagement/v5/workers",                       // an independently-versioned v5 service
+		"GET /accountsPayable/v1/supplierInvoiceRequests",         // a financials service, not HCM
+		"GET /api/prismAnalytics/v3/{tenant}/tables",              // the one service mounted under /api with a tenant variable
+		"POST /customObject/v2/customObjects/{customObjectAlias}", // an OAS3 service with no basePath at all
+	} {
+		if !seen[want] {
+			t.Errorf("expected %q — the shipped bundle enumerated only the three legacy HCM read streams", want)
+		}
+	}
+}
