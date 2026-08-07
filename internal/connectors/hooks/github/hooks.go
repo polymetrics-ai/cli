@@ -232,6 +232,10 @@ func (h *Hooks) ExecuteWrite(ctx context.Context, action engine.WriteAction, rec
 		return true, createLabel(ctx, rt, rec)
 	case "update_label":
 		return true, updateLabel(ctx, rt, rec)
+	case "archive_repo":
+		return true, setRepoArchived(ctx, rt, true)
+	case "unarchive_repo":
+		return true, setRepoArchived(ctx, rt, false)
 	default:
 		return false, nil
 	}
@@ -239,11 +243,23 @@ func (h *Hooks) ExecuteWrite(ctx context.Context, action engine.WriteAction, rec
 
 func (h *Hooks) HandlesWriteAction(action engine.WriteAction) bool {
 	switch action.Name {
-	case "close_issue", "close_pull_request", "reopen_issue", "reopen_pull_request", "create_pull_request", "update_pull_request", "create_label", "update_label":
+	case "close_issue", "close_pull_request", "reopen_issue", "reopen_pull_request", "create_pull_request", "update_pull_request", "create_label", "update_label", "archive_repo", "unarchive_repo":
 		return true
 	default:
 		return false
 	}
+}
+
+// setRepoArchived pins the one field that distinguishes `repo archive` from
+// `repo unarchive`. Both ride PATCH /repos/{owner}/{repo}, the same endpoint as
+// the generic `repo update`, which is why they exist as separate write actions
+// rather than as flags: a command named "archive" that only archives when the
+// caller also supplies archived=true is a command that lies. The declarative
+// path cannot pin a body constant, so this mirrors closeResource/reopenResource
+// — the same shape, for the same reason.
+func setRepoArchived(ctx context.Context, rt *engine.Runtime, archived bool) error {
+	_, err := rt.Requester.Do(ctx, http.MethodPatch, repoPath(rt), nil, map[string]any{"archived": archived})
+	return err
 }
 
 // createLabel/updateLabel reproduce githubCreateLabelPayload/
