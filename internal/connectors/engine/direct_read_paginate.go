@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -33,6 +34,7 @@ const (
 	directReadReasonNotAddressable = connectors.DirectReadPageReasonNotAddressable
 	directReadReasonInvalidSpec    = connectors.DirectReadPageReasonInvalidSpec
 	directReadReasonAmbiguous      = connectors.DirectReadPageReasonAmbiguous
+	directReadReasonSizeNotSent    = connectors.DirectReadPageReasonSizeNotRequested
 )
 
 // addressableStrategies are the declared types that have a real page NUMBER a
@@ -145,6 +147,7 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 	number := 1
 	reqPath := w.requestPath
 	query := w.query
+	callerNavigated := false
 
 	if mode.pageable {
 		if setter, ok := paginator.(baseHostSetter); ok {
@@ -162,12 +165,26 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 			number = w.page
 		}
 
+		supplied := callerPagingParams(spec, strategy, w.query)
+		if err := refuseConflictingPagingInput(supplied, w); err != nil {
+			return nil, connectors.DirectReadPage{}, nil, errDirectReadPagination{err: err}
+		}
+		callerNavigated = len(supplied) > 0
+
 		// The page a direct read returns must be the bundle's DECLARED page,
 		// not whatever default the provider applies to a request that names no
 		// size. The cursor families' paginators carry a token but never a size,
 		// so the declared size_param is applied here for every strategy that
 		// declares one.
-		query = mergeQuery(w.query, declaredSizeQuery(spec, pageSize))
+		//
+		// Every value the engine derives goes in the BASE position, so a value
+		// the CALLER named for the same parameter wins. A declared default that
+		// overwrote an explicit `--page-size 5` with the bundle's 100, or an
+		// explicit `--start-index 100` with the paginator's 0, would answer a
+		// question the caller did not ask and never say so. The one pairing
+		// that cannot be resolved this way — a raw paging parameter alongside
+		// --page/--page-cursor — is refused above rather than silently ranked.
+		query = mergeQuery(declaredSizeQuery(spec, pageSize), w.query)
 		switch {
 		case w.pageCursor != "" && (strategy == "next_url" || strategy == "link_header"):
 			// These strategies hand back an absolute next-page URL, so the
@@ -179,11 +196,15 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 				return nil, connectors.DirectReadPage{}, nil, errDirectReadPagination{err: err}
 			}
 			reqPath = admitted
-			query = nil
+			// The cursor URL carries the query of the page it continues, and
+			// the requester merges these over it. Dropping the caller's own
+			// flags here would silently narrow the next page to something the
+			// caller never asked for.
+			query = w.query
 		case w.pageCursor != "":
-			query = mergeQuery(query, cursorQuery(spec, w.pageCursor))
+			query = mergeQuery(cursorQuery(spec, w.pageCursor), query)
 		default:
-			query = mergeQuery(query, seekPageQuery(paginator, startPage, number))
+			query = mergeQuery(seekPageQuery(paginator, startPage, number), query)
 		}
 	}
 
@@ -204,8 +225,14 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 		return nil, connectors.DirectReadPage{}, resp, err
 	}
 
+	// A caller who set the strategy's own paging parameter chose this window
+	// themselves, so the engine has no page number it can honestly name: the
+	// paginator still starts at its own first page. Reporting number 1 for a
+	// request that asked for startIndex=100 is a measured-looking lie.
+	addressable := mode.pageable && isAddressableStrategy(strategy) && !callerNavigated
+
 	page := connectors.DirectReadPage{Strategy: strategy, Size: sizeSent}
-	if mode.pageable && isAddressableStrategy(strategy) {
+	if addressable {
 		page.Number = number
 	}
 	collection, isList, ambiguous := directReadCollectionKey(decoded)
@@ -249,6 +276,18 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 		}
 	}
 	if next == nil {
+		if isAddressableStrategy(strategy) && sizeSent <= 0 {
+			// page_number and offset_limit stop on a SHORT page: fewer records
+			// than the page size means the collection ended. That inference is
+			// only available when the request actually asked for a page size.
+			// When the declared spec names no size/limit param, the provider
+			// applied its own default and a "short" page proves nothing —
+			// comparing it against a size the request never sent is exactly the
+			// false completeness claim this contract exists to remove.
+			page.Complete = false
+			page.Reason = directReadReasonSizeNotSent
+			return decoded, page, resp, nil
+		}
 		page.Complete = true
 		return decoded, page, resp, nil
 	}
@@ -256,12 +295,70 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 	page.HasMore = true
 	page.Complete = false
 	page.Reason = directReadReasonMorePages
-	if isAddressableStrategy(strategy) {
+	if addressable {
 		page.NextNumber = number + 1
 	} else if token := nextCursorToken(spec, next); token != "" {
 		page.NextCursor = token
 	}
 	return decoded, page, resp, nil
+}
+
+// pagingParamsForStrategy names the query parameters the declared strategy
+// itself writes, split by role.
+//
+// The distinction is load-bearing. A SIZE parameter is a default: a caller who
+// names it is asking for a different page size, which the engine can simply
+// honour and then report back from the wire. A NAVIGATION parameter selects
+// WHICH page, so a caller naming it at the same time as --page/--page-cursor
+// has asked for two different pages in one request, and only a refusal is
+// honest.
+func pagingParamsForStrategy(spec PaginationSpec, strategy string) (navigation, size []string) {
+	switch strategy {
+	case "page_number":
+		return []string{spec.PageParam}, []string{spec.SizeParam}
+	case "offset_limit":
+		return []string{spec.OffsetParam}, []string{spec.LimitParam, spec.SizeParam}
+	case "cursor":
+		return []string{spec.CursorParam}, []string{spec.SizeParam}
+	case "start_index":
+		return []string{valueOrDefault(spec.StartIndexParam, defaultStartIndexParam)},
+			[]string{valueOrDefault(spec.CountParam, defaultStartIndexCount), spec.SizeParam}
+	default:
+		// next_url and link_header address pages by whole URL, so no query
+		// parameter of theirs can collide with a caller's flag.
+		return nil, []string{spec.SizeParam}
+	}
+}
+
+// callerPagingParams reports which of the strategy's navigation parameters the
+// caller set directly through the command's own flags.
+func callerPagingParams(spec PaginationSpec, strategy string, query url.Values) []string {
+	navigation, _ := pagingParamsForStrategy(spec, strategy)
+	var out []string
+	for _, param := range navigation {
+		if param == "" {
+			continue
+		}
+		if query.Get(param) != "" {
+			out = append(out, param)
+		}
+	}
+	sort.Strings(out)
+	return out
+}
+
+// refuseConflictingPagingInput rejects the one pairing the caller-wins rule
+// cannot resolve: a raw paging parameter set alongside --page or --page-cursor.
+// Preferring either one would answer a question the caller did not ask.
+func refuseConflictingPagingInput(supplied []string, w directReadWalk) error {
+	if len(supplied) == 0 || (w.page == 0 && w.pageCursor == "") {
+		return nil
+	}
+	flag := "--page-cursor"
+	if w.page > 0 {
+		flag = "--page"
+	}
+	return fmt.Errorf("direct read received %s and the paging parameter --%s; they select different pages, so pass one of them", flag, strings.ReplaceAll(supplied[0], "_", "-"))
 }
 
 // validateDirectReadPageRequest refuses navigation input the declared strategy
@@ -425,14 +522,8 @@ func directReadRequestedSize(spec PaginationSpec, strategy string, query url.Val
 // directReadSizeParams names every param through which a strategy can put a
 // page size on the wire, mirroring the paginators in paginate.go.
 func directReadSizeParams(spec PaginationSpec, strategy string) []string {
-	switch strategy {
-	case "offset_limit":
-		return []string{spec.LimitParam, spec.SizeParam}
-	case "start_index":
-		return []string{valueOrDefault(spec.CountParam, defaultStartIndexCount), spec.SizeParam}
-	default:
-		return []string{spec.SizeParam}
-	}
+	_, size := pagingParamsForStrategy(spec, strategy)
+	return size
 }
 
 func cursorQuery(spec PaginationSpec, token string) url.Values {

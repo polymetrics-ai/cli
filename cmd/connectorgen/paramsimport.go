@@ -22,15 +22,19 @@ import (
 //
 // Two things are deliberately NOT imported:
 //
-//   - paging parameters (page, per_page, cursor, ...). Those come from the
-//     connector's declared pagination spec and are answered by --page /
-//     --page-cursor. Importing them would let a caller bypass the paging
-//     contract by setting the raw parameter, and would double-declare a value
-//     the engine already controls.
-//   - anything the connection already supplies. A path parameter named by the
-//     connector's own config schema (github's owner/repo) resolves through
-//     templating; turning it into a flag would make every command demand a
-//     value the connection already knows.
+//   - paging parameters. Those come from the connector's declared pagination
+//     spec and are answered by --page / --page-cursor. Importing them would let
+//     a caller bypass the paging contract by setting the raw parameter, and
+//     would double-declare a value the engine already controls. The exclusion
+//     is by MEANING, not by the names one connector happens to declare: a
+//     provider's `after`/`before` cursor is a paging parameter even when the
+//     bundle's own spec calls its cursor `page`.
+//   - a path variable the connection already supplies. github's owner/repo are
+//     interpolated into the operation's own path template from config, so
+//     turning them into flags would make every command demand a value the
+//     connection already knows. It is deliberately NOT every config key:
+//     github's `since` is read only by the ETL incremental path and reaches no
+//     rest_read request, so skipping it removed a real --since filter.
 //
 // The import is a generator step, not a runtime one: it needs the artifact,
 // while `surface-sync` derives flags from the imported result and stays
@@ -162,7 +166,7 @@ func importConnectorParameters(opts paramsImportOptions) (changed, total int, er
 		return 0, 0, fmt.Errorf("parse operations.json: %w", err)
 	}
 
-	skip, err := paramsImportSkipSet(bundleDir)
+	declaredPaging, configProps, err := paramsImportSkipSets(bundleDir)
 	if err != nil {
 		return 0, 0, err
 	}
@@ -198,6 +202,19 @@ func importConnectorParameters(opts paramsImportOptions) (changed, total int, er
 		if err := json.Unmarshal(rawOp, &parsed); err != nil {
 			return 0, 0, fmt.Errorf("parse operation %s %s: %w", method, path, err)
 		}
+		skip := map[string]bool{}
+		for name := range declaredPaging {
+			skip[name] = true
+		}
+		// Only a config key this operation's own path template interpolates is
+		// already supplied by the connection. Every other config key is a key
+		// some other code path reads, and skipping it drops a parameter the
+		// caller has no other way to set.
+		for _, name := range pathTemplateVariables(path) {
+			if configProps[name] {
+				skip[name] = true
+			}
+		}
 		want := importedParameters(doc, parsed.Parameters, skip)
 		if !sameImportedParameters(rest, want) {
 			changed++
@@ -214,11 +231,16 @@ func importConnectorParameters(opts paramsImportOptions) (changed, total int, er
 	return changed, total, nil
 }
 
-// paramsImportSkipSet collects every parameter name that must never become a
-// flag for this connector: its declared paging parameters, and every path
-// variable the connection already supplies through its config schema.
-func paramsImportSkipSet(bundleDir string) (map[string]bool, error) {
-	skip := map[string]bool{}
+// paramsImportSkipSets reads the two bundle-declared name sets the import
+// consults: the paging parameters this connector's own pagination spec names,
+// and its config schema's property names.
+//
+// They are returned apart because they are applied differently. A declared
+// paging parameter is excluded everywhere; a config property is excluded only
+// where the operation's own path template actually interpolates it.
+func paramsImportSkipSets(bundleDir string) (paging, configProps map[string]bool, err error) {
+	paging = map[string]bool{}
+	configProps = map[string]bool{}
 
 	streamsRaw, err := os.ReadFile(filepath.Join(bundleDir, "streams.json"))
 	if err == nil {
@@ -228,15 +250,15 @@ func paramsImportSkipSet(bundleDir string) (map[string]bool, error) {
 			} `json:"base"`
 		}
 		if err := json.Unmarshal(streamsRaw, &streams); err != nil {
-			return nil, fmt.Errorf("parse streams.json: %w", err)
+			return nil, nil, fmt.Errorf("parse streams.json: %w", err)
 		}
 		for _, key := range []string{"page_param", "size_param", "cursor_param", "limit_param", "offset_param", "count_param", "start_index_param"} {
 			if value, ok := streams.Base.Pagination[key].(string); ok && strings.TrimSpace(value) != "" {
-				skip[value] = true
+				paging[value] = true
 			}
 		}
 	} else if !os.IsNotExist(err) {
-		return nil, err
+		return nil, nil, err
 	}
 
 	specRaw, err := os.ReadFile(filepath.Join(bundleDir, "spec.json"))
@@ -245,15 +267,83 @@ func paramsImportSkipSet(bundleDir string) (map[string]bool, error) {
 			Properties map[string]json.RawMessage `json:"properties"`
 		}
 		if err := json.Unmarshal(specRaw, &spec); err != nil {
-			return nil, fmt.Errorf("parse spec.json: %w", err)
+			return nil, nil, fmt.Errorf("parse spec.json: %w", err)
 		}
 		for name := range spec.Properties {
-			skip[name] = true
+			configProps[name] = true
 		}
 	} else if !os.IsNotExist(err) {
-		return nil, err
+		return nil, nil, err
 	}
-	return skip, nil
+	return paging, configProps, nil
+}
+
+// pathTemplateVariables lists the {name} placeholders an operation's REST path
+// interpolates — the only config keys the connection genuinely supplies to that
+// request.
+func pathTemplateVariables(path string) []string {
+	var out []string
+	for {
+		open := strings.IndexByte(path, '{')
+		if open < 0 {
+			return out
+		}
+		path = path[open+1:]
+		close := strings.IndexByte(path, '}')
+		if close < 0 {
+			return out
+		}
+		if name := strings.TrimSpace(path[:close]); name != "" {
+			out = append(out, name)
+		}
+		path = path[close+1:]
+	}
+}
+
+// providerPagingParameterNames are the parameter names that are paging
+// mechanics in any specification that uses them, whatever the connector's own
+// pagination spec happens to call its cursor. A connector declaring
+// `cursor_param: "page"` does not make a provider's `offset` a filter.
+//
+// Names that are only SOMETIMES paging — `count`, `size`, `per`, `start`,
+// `after`, `before` — are deliberately absent: github's `per` is a time frame
+// and its `before` on /notifications is an ISO 8601 timestamp filter. Those are
+// classified from the specification's own description instead, which is what
+// distinguishes that `before` from the `before` whose description opens "A
+// cursor, as given in the Link header".
+var providerPagingParameterNames = map[string]bool{
+	"page": true, "perpage": true, "pagesize": true, "pagenumber": true,
+	"pagenum": true, "pageindex": true, "pagelimit": true, "pageoffset": true,
+	"pagetoken": true, "pagecursor": true, "nextpagetoken": true,
+	"cursor": true, "nextcursor": true, "nexttoken": true, "nextpage": true,
+	"continuationtoken": true, "scrollid": true,
+	"offset": true, "startindex": true, "startcursor": true,
+	"startingafter": true, "startingbefore": true, "endingbefore": true,
+	"limit": true, "maxresults": true, "resultsperpage": true,
+}
+
+// isProviderPagingParameter reports whether the specification is describing a
+// paging mechanism, by name or by its own words.
+//
+// The contract this enforces is that there is exactly ONE way to page — the
+// connector's declared pagination spec, reached through --page/--page-cursor.
+// A derived flag for a provider cursor would be a second, unchecked channel
+// that bypasses the completeness contract entirely.
+func isProviderPagingParameter(p openAPIParameter) bool {
+	if p.In != "query" {
+		return false
+	}
+	normalized := strings.NewReplacer("_", "", "-", "", ".", "").Replace(strings.ToLower(strings.TrimSpace(p.Name)))
+	if providerPagingParameterNames[normalized] {
+		return true
+	}
+	description := strings.ToLower(p.Description)
+	for _, marker := range []string{"cursor", "used for pagination", "pagination token", "page token"} {
+		if strings.Contains(description, marker) {
+			return true
+		}
+	}
+	return false
 }
 
 func resolveOpenAPIParameter(doc openAPIDoc, p openAPIParameter) (openAPIParameter, bool) {
@@ -285,6 +375,9 @@ func importedParameters(doc openAPIDoc, params []openAPIParameter, skip map[stri
 			continue
 		}
 		if p.In != "query" && p.In != "path" {
+			continue
+		}
+		if isProviderPagingParameter(p) {
 			continue
 		}
 		seen[name] = true

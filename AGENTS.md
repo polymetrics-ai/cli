@@ -167,15 +167,16 @@ This repo uses official GSD Core workflows through a project-local Pi adapter:
 A direct read is page-wise exploration, not bulk extraction: the ETL path stores
 what it reads, a direct read does not. One request, one page.
 
-Two rules keep that honest; both exist because the direct-read executor once sent
+Four rules keep that honest; all exist because the direct-read executor once sent
 no page-size parameter at all, so every connector returned the provider's default
 page (GitHub's is 30) at `status: 200` with nothing saying more remained.
 
 - Paging is DERIVED from the connector's own declared pagination spec
   (`streams.json` `base.http.pagination`) through `engine/paginate.go`, the same
   seven strategies the ETL path consumes. Never hand-author paging params into
-  `cli_surface.json` or `operations.json`: no bundle declares `page`/`per_page`
-  today and none should. The executor is
+  `cli_surface.json` or `operations.json`. A few bundles did before the rule
+  existed — notion's `page-size`/`start-cursor`, bahmni's `start-index`, gong's
+  `cursor` — and they are damage control, not precedent. The executor is
   `internal/connectors/engine/direct_read_paginate.go`.
 - A result must never imply a completeness it cannot prove. `DirectReadPage`
   carries `complete` plus a `reason`, and `--page`/`--page-cursor` are how a
@@ -184,6 +185,21 @@ page (GitHub's is 30) at `status: 200` with nothing saying more remained.
   accept `--page`; every other strategy (`cursor`, `next_url`, `link_header`,
   `start_index`) hands back `next_cursor` instead, and asking one of them for a
   page number is refused rather than quietly answered with page one.
+  `page_number`/`offset_limit` stop on a SHORT page, so when the declared spec
+  names no size param the request carries no size, the provider chose it, and
+  `complete` stays false with reason `page_size_not_requested`. `size` reports
+  only what actually reached the wire.
+- The caller's own value always wins over a derived paging value: every engine
+  value goes in the BASE position of `mergeQuery`, so an explicit `--page-size 5`
+  is not overwritten by a declared 100. The one pairing that cannot be resolved
+  that way — a raw paging parameter alongside `--page`/`--page-cursor` — is
+  refused before the request, never ranked silently.
+- A direct-read executor that reports no page context has not navigated.
+  `commandrunner.assertDirectReadNavigated` refuses `--page`/`--page-cursor`
+  against a zero `DirectReadPage` rather than returning page one at exit 0, which
+  is what the native amazon-sqs reader used to do. That guard is on the RESULT,
+  not on an opt-in interface, so a new executor cannot regress by forgetting to
+  declare anything.
 
 Regression tests assert RETURNED RECORD COUNTS against a known-larger fixture, in
 `engine/direct_read_pagination_test.go`. Never assert exit status for this class:
@@ -213,10 +229,18 @@ hand-authored flag is left as written. The split keeps CI hermetic —
 Never hand-author a paging flag (`page`, `per_page`, `cursor`, `limit`,
 `offset`). Paging is answered by `--page`/`--page-cursor` from the declared
 pagination spec, and a hand-written paging flag is a second unchecked way to
-page that bypasses the completeness contract. `params-import` drops paging
-parameters and anything the connection already supplies through its config
-schema. The authoring rule lives in `docs/migration/conventions.md` §2.9; the
-user-facing surface is `docs/direct-read-pages-and-parameters.md`.
+page that bypasses the completeness contract.
+
+`params-import` drops a parameter by MEANING, not by the names one bundle
+declares: a well-known paging name, or any parameter whose own specification
+calls it a cursor or pagination. That is why github's `after`/`before` cursors
+are excluded while the `before` on `/repos/{owner}/{repo}/notifications`, an ISO
+8601 timestamp filter, is kept. The only config-driven exclusion is a path
+variable the operation's own `rest.path` interpolates (`{owner}`/`{repo}`);
+skipping every `spec.json` property instead dropped github's ETL-only `since`,
+a filter nothing else supplies. The authoring rule lives in
+`docs/migration/conventions.md` §2.9; the user-facing surface is
+`docs/direct-read-pages-and-parameters.md`.
 
 ## Command Surface Must Stay Executable
 

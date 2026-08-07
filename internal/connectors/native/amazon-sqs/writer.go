@@ -71,7 +71,7 @@ func (c Connector) Manifest() connectors.Manifest {
 	actions := make([]connectors.WriteActionSpec, 0, len(sqsWriteActions))
 	for _, name := range sortedWriteActionNames() {
 		def := sqsWriteActions[name]
-		actions = append(actions, connectors.WriteActionSpec{Name: def.name, RequiredFields: documentedRequiredFields(def), OptionalFields: optionalFields(def), Method: def.method, Path: def.path, RedactFields: append([]string(nil), def.redact...), Risk: def.risk, Confirm: def.confirm})
+		actions = append(actions, connectors.WriteActionSpec{Name: def.name, RequiredFields: append([]string(nil), def.required...), RequiredAnyFields: documentedRequiredAnyFields(def), OptionalFields: optionalFields(def), Method: def.method, Path: def.path, RedactFields: append([]string(nil), def.redact...), Risk: def.risk, Confirm: def.confirm})
 	}
 	return connectors.Manifest{
 		Metadata:     c.Metadata(),
@@ -88,8 +88,8 @@ func (c Connector) Manifest() connectors.Manifest {
 	}
 }
 
-// documentedRequiredFields renders a write action's required-field contract for
-// the manifest, including the requiredAny groups.
+// documentedRequiredAnyFields projects a write action's either/or requirement
+// onto the manifest.
 //
 // The manifest previously carried def.required alone, which silently dropped
 // requiredAny — so a generated manual listed set_queue_attributes's
@@ -97,16 +97,19 @@ func (c Connector) Manifest() connectors.Manifest {
 // validateSQSRequiredFields rejects a write that supplies none of them. The
 // documented contract understated the enforced one, which is the same class of
 // defect as a read that reports a completeness it does not have.
-func documentedRequiredFields(def writeActionDef) []string {
-	out := append([]string(nil), def.required...)
+//
+// It projects the GROUPS, not a rendered sentence: WriteActionSpec.RequiredFields
+// is a list of field names that `pm connectors inspect --json` publishes, and
+// the renderer composes the prose from the groups instead.
+func documentedRequiredAnyFields(def writeActionDef) [][]string {
 	if len(def.requiredAny) == 0 {
-		return out
+		return nil
 	}
-	groups := make([]string, 0, len(def.requiredAny))
+	out := make([][]string, 0, len(def.requiredAny))
 	for _, group := range def.requiredAny {
-		groups = append(groups, strings.Join(group, " + "))
+		out = append(out, append([]string(nil), group...))
 	}
-	return append(out, strings.Join(groups, " or "))
+	return out
 }
 
 func optionalFields(def writeActionDef) []string {

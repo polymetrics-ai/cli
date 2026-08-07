@@ -2556,14 +2556,7 @@
       "availability": "implemented",
       "operation": "github.actions_concurrency_groups",
       "source_cli_path": "",
-      "flags": [
-        {
-          "name": "after",
-          "type": "string",
-          "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results after this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
-          "maps_to": "query.after"
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "GET",
@@ -3278,18 +3271,6 @@
           "type": "integer",
           "summary": "run_id path parameter",
           "maps_to": "path.run_id"
-        },
-        {
-          "name": "after",
-          "type": "string",
-          "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results after this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
-          "maps_to": "query.after"
-        },
-        {
-          "name": "before",
-          "type": "string",
-          "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results before this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
-          "maps_to": "query.before"
         }
       ],
       "api_surface": [
@@ -3739,18 +3720,6 @@
           "type": "string",
           "summary": "subject_digest path parameter",
           "maps_to": "path.subject_digest"
-        },
-        {
-          "name": "after",
-          "type": "string",
-          "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results after this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
-          "maps_to": "query.after"
-        },
-        {
-          "name": "before",
-          "type": "string",
-          "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results before this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
-          "maps_to": "query.before"
         },
         {
           "name": "predicate-type",
@@ -4712,18 +4681,6 @@
       "source_cli_path": "",
       "flags": [
         {
-          "name": "after",
-          "type": "string",
-          "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results after this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
-          "maps_to": "query.after"
-        },
-        {
-          "name": "before",
-          "type": "string",
-          "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results before this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
-          "maps_to": "query.before"
-        },
-        {
           "name": "direction",
           "type": "enum",
           "summary": "The direction to sort the results by.",
@@ -5625,6 +5582,11 @@
             "completed"
           ],
           "maps_to": "query.status"
+        },
+        {
+          "name": "app-id",
+          "type": "integer",
+          "maps_to": "query.app_id"
         }
       ],
       "api_surface": [
@@ -5654,6 +5616,12 @@
           "type": "string",
           "summary": "Returns check runs with the specified `name`.",
           "maps_to": "query.check_name"
+        },
+        {
+          "name": "app-id",
+          "type": "integer",
+          "summary": "Filters check suites by GitHub App `id`.",
+          "maps_to": "query.app_id"
         }
       ],
       "api_surface": [
@@ -6657,12 +6625,6 @@
           "maps_to": "path.hook_id"
         },
         {
-          "name": "cursor",
-          "type": "string",
-          "summary": "Used for pagination: the starting delivery from which the page of deliveries is fetched. Refer to the `link` header for the next and previous page cursors.",
-          "maps_to": "query.cursor"
-        },
-        {
           "name": "status",
           "type": "enum",
           "summary": "Returns webhook deliveries filtered by delivery outcome classification based on `status_code` range. A `status` of `success` returns deliveries with a `status_code` in the 200-399 range (inclusive). A `status` of `failure` returns deliveries with a `status_code` in the 400-599 range (inclusive).",
@@ -6864,7 +6826,14 @@
       "availability": "implemented",
       "operation": "github.import_authors",
       "source_cli_path": "",
-      "flags": [],
+      "flags": [
+        {
+          "name": "since",
+          "type": "integer",
+          "summary": "A user ID. Only return users with an ID greater than this ID.",
+          "maps_to": "query.since"
+        }
+      ],
       "api_surface": [
         {
           "method": "GET",
@@ -7642,6 +7611,12 @@
           "type": "boolean",
           "summary": "If `true`, only shows notifications in which the user is directly participating or mentioned.",
           "maps_to": "query.participating"
+        },
+        {
+          "name": "since",
+          "type": "string",
+          "summary": "Only show results that were last updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`.",
+          "maps_to": "query.since"
         }
       ],
       "api_surface": [

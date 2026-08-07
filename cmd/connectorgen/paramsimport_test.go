@@ -260,3 +260,115 @@ func TestDerivedFlagTypeMapsEnumAndScalars(t *testing.T) {
 		})
 	}
 }
+
+// The exclusion has to match the claim: paging parameters are never imported.
+// It cannot be limited to the names the connector's OWN pagination spec
+// declares — github declares page/per_page and its specification still offers
+// `after`/`before` cursors, which became 7 derived flags and a second, unchecked
+// way to page. It also must not over-reach: the same `before` is an ISO 8601
+// timestamp filter on /notifications, and dropping it would remove a real flag.
+const paramsPagingFixtureOperations = `{
+  "operations": [
+    {
+      "id": "acme.list_findings",
+      "kind": "rest_read",
+      "summary": "List findings",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": { "method": "GET", "path": "/orgs/{org}/findings", "max_bytes": 1048576 }
+    }
+  ]
+}`
+
+const paramsPagingFixtureSpec = `{
+  "type": "object",
+  "properties": { "org": { "type": "string" }, "since": { "type": "string" }, "token": { "type": "string" } }
+}`
+
+const paramsPagingFixtureArtifact = `{
+  "openapi": "3.0.3",
+  "paths": {
+    "/orgs/{org}/findings": {
+      "get": {
+        "parameters": [
+          { "name": "org", "in": "path", "required": true, "schema": { "type": "string" } },
+          { "name": "after", "in": "query", "description": "A cursor, as given in the Link header.", "schema": { "type": "string" } },
+          { "name": "before", "in": "query", "description": "Only show results updated before the given time, in ISO 8601 format.", "schema": { "type": "string" } },
+          { "name": "offset", "in": "query", "schema": { "type": "integer" } },
+          { "name": "since", "in": "query", "description": "Only show results updated after the given time.", "schema": { "type": "string" } },
+          { "name": "severity", "in": "query", "schema": { "type": "string" } }
+        ]
+      }
+    }
+  }
+}`
+
+func importedPagingFixtureNames(t *testing.T) []string {
+	t.Helper()
+	root := t.TempDir()
+	defsDir := filepath.Join(root, "defs")
+	writeParamsFixture(t, filepath.Join(defsDir, "acme"), map[string]string{
+		"operations.json": paramsPagingFixtureOperations,
+		"streams.json":    paramsFixtureStreams,
+		"spec.json":       paramsPagingFixtureSpec,
+	})
+	artifact := filepath.Join(root, "artifact.json")
+	if err := os.WriteFile(artifact, []byte(paramsPagingFixtureArtifact), 0o644); err != nil {
+		t.Fatalf("write artifact: %v", err)
+	}
+	if _, _, err := importConnectorParameters(paramsImportOptions{connector: "acme", artifact: artifact, defsDir: defsDir}); err != nil {
+		t.Fatalf("importConnectorParameters: %v", err)
+	}
+	var names []string
+	for _, param := range importedFixtureParameters(t, defsDir) {
+		names = append(names, param["name"].(string))
+	}
+	return names
+}
+
+func TestParamsImportExcludesProviderPagingParametersByMeaning(t *testing.T) {
+	names := strings.Join(importedPagingFixtureNames(t), ",")
+	if names != "before,severity,since" {
+		t.Fatalf("imported parameters = %q, want \"before,severity,since\"", names)
+	}
+}
+
+// A config key is "already supplied by the connection" only where the
+// operation's own path template interpolates it. github's `since` is read by
+// the ETL incremental path alone and reaches no rest_read request, so skipping
+// every config key removed a --since filter nothing else could supply.
+func TestParamsImportSkipsOnlyPathVariablesTheConnectionSupplies(t *testing.T) {
+	names := importedPagingFixtureNames(t)
+	var sawOrg, sawSince bool
+	for _, name := range names {
+		switch name {
+		case "org":
+			sawOrg = true
+		case "since":
+			sawSince = true
+		}
+	}
+	if sawOrg {
+		t.Fatal("imported org, which the path template interpolates from config")
+	}
+	if !sawSince {
+		t.Fatalf("imported parameters = %v, want since: it is a config key no request template consumes", names)
+	}
+}
+
+func TestPathTemplateVariables(t *testing.T) {
+	for _, tc := range []struct {
+		path string
+		want string
+	}{
+		{"/repos/{owner}/{repo}/notifications", "owner,repo"},
+		{"/orgs/{org}/things", "org"},
+		{"/rate_limit", ""},
+		{"/broken/{unterminated", ""},
+	} {
+		if got := strings.Join(pathTemplateVariables(tc.path), ","); got != tc.want {
+			t.Fatalf("pathTemplateVariables(%q) = %q, want %q", tc.path, got, tc.want)
+		}
+	}
+}

@@ -611,9 +611,10 @@ func TestDirectReadFollowsCursorOntoANonFinalPage(t *testing.T) {
 // and can then type on the command line. It records every path it is asked
 // for, so a test can prove a refused cursor never reached the wire.
 type linkHeaderFixture struct {
-	mu    sync.Mutex
-	paths []string
-	base  string
+	mu      sync.Mutex
+	paths   []string
+	queries []string
+	base    string
 }
 
 const linkHeaderFixturePath = "/repos/octo/hello/issues"
@@ -624,10 +625,17 @@ func (f *linkHeaderFixture) requested() []string {
 	return append([]string(nil), f.paths...)
 }
 
+func (f *linkHeaderFixture) queried() []string {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	return append([]string(nil), f.queries...)
+}
+
 func (f *linkHeaderFixture) handler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		f.mu.Lock()
 		f.paths = append(f.paths, r.URL.Path)
+		f.queries = append(f.queries, r.URL.RawQuery)
 		f.mu.Unlock()
 
 		w.Header().Set("Content-Type", "application/json")
@@ -974,5 +982,202 @@ func TestOperationDirectReadPOSTReportsAStrategyItCannotUse(t *testing.T) {
 	}
 	if result.Page.Records != 2 {
 		t.Fatalf("page.records = %d, want 2", result.Page.Records)
+	}
+}
+
+// queriesRequested returns the raw query string of every request the fixture
+// received, so a test can assert on what actually reached the wire rather than
+// on what the executor intended to send.
+func (f *pagedFixture) queriesRequested() []string {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	out := make([]string, 0, len(f.requests))
+	for _, r := range f.requests {
+		out = append(out, r.query)
+	}
+	return out
+}
+
+// TestDirectReadCallerPageSizeWinsOverTheDeclaredDefault reproduces notion:
+// the bundle declares size_param page_size / page_size 100 and its commands
+// declare a --page-size flag mapped to query.page_size. The declared default
+// used to overwrite the caller's value, so `--page-size 5` fetched 100 rows
+// while reporting a size the caller never asked for.
+func TestDirectReadCallerPageSizeWinsOverTheDeclaredDefault(t *testing.T) {
+	fx, srv := startPagedFixture(t, "results")
+	b := paginatedDirectReadBundle(srv.URL, &PaginationSpec{
+		Type:        "cursor",
+		CursorParam: "start_cursor",
+		TokenPath:   "next_cursor",
+		StopPath:    "has_more",
+		SizeParam:   "page_size",
+		PageSize:    fixtureMaxPage,
+	}, "/v1/blocks/abc/children")
+
+	result, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/v1/blocks/abc/children",
+		Query:        map[string]string{"page_size": "5"},
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	if got := arrayAtLen(t, result.Body, "results"); got != 5 {
+		t.Fatalf("results = %d, want the 5 the caller asked for, not the declared %d", got, fixtureMaxPage)
+	}
+	if result.Page.Records != 5 {
+		t.Fatalf("page.records = %d, want 5", result.Page.Records)
+	}
+	if result.Page.Size != 5 {
+		t.Fatalf("page.size = %d, want the 5 that was actually sent", result.Page.Size)
+	}
+	for _, q := range fx.queriesRequested() {
+		if !strings.Contains(q, "page_size=5") || strings.Contains(q, "page_size=100") {
+			t.Fatalf("query sent = %q, want page_size=5", q)
+		}
+	}
+}
+
+// TestDirectReadCallerOffsetWinsOverThePaginatorStart reproduces bahmni
+// `bahmnicore patient-search`: an offset_limit connector whose command
+// declares its own offset flag. The paginator's Start() reset it to 0, so
+// asking for rows 100+ silently returned rows 0-49 at exit 0.
+func TestDirectReadCallerOffsetWinsOverThePaginatorStart(t *testing.T) {
+	fx, srv := startPagedFixture(t, "results")
+	b := paginatedDirectReadBundle(srv.URL, &PaginationSpec{
+		Type:        "offset_limit",
+		LimitParam:  "limit",
+		OffsetParam: "offset",
+		PageSize:    50,
+	}, "/openmrs/ws/rest/v1/bahmnicore/search/patient")
+
+	result, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/openmrs/ws/rest/v1/bahmnicore/search/patient",
+		Query:        map[string]string{"offset": "100"},
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	// 120 fixture records, window 100..120.
+	if got := arrayAtLen(t, result.Body, "results"); got != 20 {
+		t.Fatalf("results = %d, want the 20 records at offset 100 — offset 0 would return 50", got)
+	}
+	for _, q := range fx.queriesRequested() {
+		if !strings.Contains(q, "offset=100") || strings.Contains(q, "offset=0") {
+			t.Fatalf("query sent = %q, want offset=100", q)
+		}
+	}
+	if result.Page.Number != 0 || result.Page.NextNumber != 0 {
+		t.Fatalf("page number/next = %d/%d, want both unset: the caller chose the window, so the engine has no page number to name", result.Page.Number, result.Page.NextNumber)
+	}
+}
+
+// TestDirectReadRefusesARawPagingParameterAlongsidePageNavigation covers the
+// one pairing caller-wins cannot resolve. Preferring either value would answer
+// a question the caller did not ask, so nothing is sent at all.
+func TestDirectReadRefusesARawPagingParameterAlongsidePageNavigation(t *testing.T) {
+	fx, srv := startPagedFixture(t, "results")
+	b := paginatedDirectReadBundle(srv.URL, &PaginationSpec{
+		Type:        "offset_limit",
+		LimitParam:  "limit",
+		OffsetParam: "offset",
+		PageSize:    50,
+	}, "/openmrs/ws/rest/v1/bahmnicore/search/patient")
+
+	_, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/openmrs/ws/rest/v1/bahmnicore/search/patient",
+		Query:        map[string]string{"offset": "100"},
+		Page:         2,
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err == nil {
+		t.Fatal("--page alongside a raw offset returned no error, want a refusal")
+	}
+	if !strings.Contains(err.Error(), "--offset") || !strings.Contains(err.Error(), "--page") {
+		t.Fatalf("error = %q, want it to name both inputs", err.Error())
+	}
+	if fx.count() != 0 {
+		t.Fatalf("requests = %d, want 0 — a refused navigation must not reach the provider", fx.count())
+	}
+}
+
+// TestDirectReadCannotClaimCompletenessWithoutSendingAPageSize covers the 13
+// bundles that declare page_number or offset_limit with NO size parameter.
+// Their requests carry no page size, so the provider applies its own default
+// and the short-page heuristic is comparing that default against a page_size
+// the request never asked for. Asserting complete from it is a false claim.
+func TestDirectReadCannotClaimCompletenessWithoutSendingAPageSize(t *testing.T) {
+	fx, srv := startPagedFixture(t, "array")
+	b := paginatedDirectReadBundle(srv.URL, &PaginationSpec{
+		Type:      "page_number",
+		PageParam: "page",
+		PageSize:  fixtureMaxPage,
+	}, "/v2/logs")
+
+	result, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/v2/logs",
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	if got := rootArrayLen(t, result.Body); got != defaultFixturePage {
+		t.Fatalf("records = %d, want the provider default of %d", got, defaultFixturePage)
+	}
+	if result.Page.Complete {
+		t.Fatalf("page.complete = true while %d of %d records were returned and no page size was sent", result.Page.Records, fixtureTotalRecords)
+	}
+	if result.Page.Reason != directReadReasonSizeNotSent {
+		t.Fatalf("page.reason = %q, want %q", result.Page.Reason, directReadReasonSizeNotSent)
+	}
+	if result.Page.Size != 0 {
+		t.Fatalf("page.size = %d, want it omitted: no size reached the wire", result.Page.Size)
+	}
+	for _, q := range fx.queriesRequested() {
+		if strings.Contains(q, "per_page") || strings.Contains(q, "page_size") {
+			t.Fatalf("query sent = %q, want no size parameter — the spec declares none", q)
+		}
+	}
+}
+
+// TestDirectReadCursorURLKeepsTheCallerQuery: a next_url/link_header cursor
+// replaces the request target wholesale. Dropping the caller's own flags there
+// would narrow the next page to something they never asked for.
+func TestDirectReadCursorURLKeepsTheCallerQuery(t *testing.T) {
+	fx, srv := startLinkHeaderFixture(t)
+	b := linkHeaderBundle(srv.URL, false)
+
+	first, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         linkHeaderFixturePath,
+		Query:        map[string]string{"state": "open"},
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	if _, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         linkHeaderFixturePath,
+		Query:        map[string]string{"state": "open"},
+		PageCursor:   first.Page.NextCursor,
+		OutputPolicy: "json_redacted",
+	}, nil); err != nil {
+		t.Fatalf("DirectRead(cursor): %v", err)
+	}
+	queries := fx.queried()
+	if len(queries) != 2 {
+		t.Fatalf("requests = %d, want 2", len(queries))
+	}
+	if !strings.Contains(queries[1], "state=open") {
+		t.Fatalf("cursor request query = %q, want the caller's state=open carried onto it", queries[1])
+	}
+	if !strings.Contains(queries[1], "page=2") {
+		t.Fatalf("cursor request query = %q, want the provider's page=2 preserved", queries[1])
 	}
 }

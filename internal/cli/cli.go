@@ -1300,15 +1300,20 @@ func connectorCommandMaxBytes(flags parsedFlags) (int, error) {
 // token, never both. The engine rejects the pairing that does not match the
 // declared strategy.
 func connectorCommandPage(flags parsedFlags) (int, string, error) {
-	page, err := parseIntFlag("page", flags.first("page"), 0)
+	raw := flags.first("page")
+	page, err := parseIntFlag("page", raw, 0)
 	if err != nil {
 		return 0, "", err
 	}
-	if page < 0 {
+	// Only an absent --page means "unset". Treating an explicit --page 0 as
+	// unset returned page one for a page nobody has, and let
+	// `--page 0 --page-cursor X` slip past the mutual-exclusion check below as
+	// though only the cursor had been passed.
+	if raw != "" && page < 1 {
 		return 0, "", validationErrorf("invalid --page %d, want a positive page number", page)
 	}
 	cursor := flags.first("page-cursor")
-	if page > 0 && cursor != "" {
+	if raw != "" && cursor != "" {
 		return 0, "", validationErrorf("--page and --page-cursor are mutually exclusive; a connector addresses pages either by number or by cursor")
 	}
 	return page, cursor, nil
@@ -1920,6 +1925,10 @@ func writeDirectReadPageNotice(stderr io.Writer, page connectors.DirectReadPage)
 		_, _ = fmt.Fprintf(stderr, "note: page %d of a paged result (%d records); more remain — rerun with --page %d\n", page.Number, page.Records, page.NextNumber)
 	case page.NextCursor != "":
 		_, _ = fmt.Fprintf(stderr, "note: partial result (%d records); more remain — rerun with --page-cursor %s\n", page.Records, page.NextCursor)
+	case page.HasMore:
+		// A caller who paged by setting the connector's own paging parameter
+		// owns the position, so there is no --page or --page-cursor to offer.
+		_, _ = fmt.Fprintf(stderr, "note: partial result (%d records); more remain — advance the paging parameter you supplied\n", page.Records)
 	case page.Reason == connectors.DirectReadPageReasonAmbiguous:
 		_, _ = fmt.Fprintf(stderr, "note: %d array elements returned across more than one top-level array; the paged collection cannot be identified, so completeness cannot be confirmed\n", page.Records)
 	default:
@@ -1928,10 +1937,12 @@ func writeDirectReadPageNotice(stderr io.Writer, page connectors.DirectReadPage)
 }
 
 // directReadPageIsReported separates "this read has no page information" from
-// "this read is incomplete". A connector that is not the declarative engine
-// (amazon-sqs is one) returns a zero-value page, and printing an incompleteness
-// claim with an empty parenthetical for it says something untrue about a read
-// nothing measured.
+// "this read is incomplete". Printing an incompleteness claim with an empty
+// parenthetical for a read nothing measured says something untrue.
+//
+// It is also the invariant commandrunner enforces: a direct-read executor that
+// reports no page context has not navigated, so it may not be handed --page or
+// --page-cursor and quietly answer with page one.
 func directReadPageIsReported(page connectors.DirectReadPage) bool {
 	return page.Strategy != ""
 }
@@ -1946,6 +1957,8 @@ func directReadPageIncompleteReason(page connectors.DirectReadPage) string {
 		return fmt.Sprintf("the declared %q pagination cannot page this request, so completeness cannot be confirmed", page.Strategy)
 	case connectors.DirectReadPageReasonInvalidSpec:
 		return fmt.Sprintf("this connector's declared %q pagination is unusable, so completeness cannot be confirmed", page.Strategy)
+	case connectors.DirectReadPageReasonSizeNotRequested:
+		return fmt.Sprintf("the declared %q pagination names no page-size parameter, so the provider chose the page size and completeness cannot be confirmed", page.Strategy)
 	case "":
 		return "result is not confirmed complete"
 	default:

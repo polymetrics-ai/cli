@@ -33,6 +33,7 @@ type fakeConnector struct {
 	directWriteMetadata       connectors.OperationDirectWriteMetadata
 	binaryDownloadReq         connectors.OperationBinaryDownloadRequest
 	directReadErr             error
+	ignoresPageNavigation     bool
 	operationDirectReadErr    error
 	binaryDownloadErr         error
 	validateReq               connectors.WriteRequest
@@ -102,8 +103,20 @@ func (f *fakeConnector) DirectRead(_ context.Context, req connectors.DirectReadR
 			"name": "README.md",
 			"type": "file",
 		},
+		Page: f.directReadPage(),
 	}, nil
 }
+
+// directReadPage stands in for the page context a real direct-read executor
+// reports. ignoresPageNavigation models the executor that does not: it accepts
+// Page/PageCursor and hands back a zero page, which is what the runner refuses.
+func (f *fakeConnector) directReadPage() connectors.DirectReadPage {
+	if f.ignoresPageNavigation {
+		return connectors.DirectReadPage{}
+	}
+	return connectors.DirectReadPage{Strategy: "page_number", Complete: true}
+}
+
 func (f *fakeConnector) OperationDirectRead(_ context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
 	f.operationDirectReadReq = req
 	if f.operationDirectReadErr != nil {
@@ -115,6 +128,7 @@ func (f *fakeConnector) OperationDirectRead(_ context.Context, req connectors.Op
 		Path:      "/v2/meetings/integration/status",
 		Status:    200,
 		Body:      map[string]any{"ok": true},
+		Page:      f.directReadPage(),
 	}, nil
 }
 func (f *fakeConnector) PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error {
@@ -2901,5 +2915,52 @@ func TestRunAcceptsPageFlagsForDirectRead(t *testing.T) {
 	}
 	if connector.directReadReq.Page != 2 {
 		t.Fatalf("direct read page = %d, want 2", connector.directReadReq.Page)
+	}
+}
+
+// TestRunRefusesPageNavigationAReaderCannotHonour is the general guard behind
+// the amazon-sqs finding. Page/PageCursor are handed to whatever direct-read
+// implementation a connector supplies, and nothing in the type system makes it
+// honour them; one that does not returns a zero page, so the caller got page
+// one at status 200 with the request silently discarded.
+func TestRunRefusesPageNavigationAReaderCannotHonour(t *testing.T) {
+	surface := &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "repo read-file",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: "GET", Path: "/repos/{owner}/{repo}/contents/{path}"},
+				},
+				OutputPolicy: "repository_contents_file_metadata",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "path", Type: "string", MapsTo: "path.path"},
+				},
+			},
+		},
+	}
+	config := connectors.RuntimeConfig{Config: map[string]string{"owner": "octo", "repo": "hello"}}
+
+	for _, tc := range []struct {
+		name string
+		req  Request
+	}{
+		{name: "page", req: Request{Flags: map[string][]string{"path": {"README.md"}, "page": {"3"}}, Page: 3}},
+		{name: "page-cursor", req: Request{Flags: map[string][]string{"path": {"README.md"}, "page-cursor": {"abc"}}, PageCursor: "abc"}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			connector := &fakeConnector{surface: surface, ignoresPageNavigation: true}
+			req := tc.req
+			req.Path = []string{"repo", "read-file"}
+			req.Config = config
+			_, err := Run(context.Background(), connector, req, func(connectors.Record) error { return nil })
+			if err == nil {
+				t.Fatal("a reader that ignores page navigation returned no error, want a refusal rather than page one")
+			}
+			if !strings.Contains(err.Error(), "reported no page context") {
+				t.Fatalf("error = %q, want it to name the missing page context", err.Error())
+			}
+		})
 	}
 }

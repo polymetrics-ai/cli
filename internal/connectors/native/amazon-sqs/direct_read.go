@@ -28,6 +28,9 @@ func (c Connector) OperationDirectRead(ctx context.Context, req connectors.Opera
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
+	if err := applySQSDirectReadPageRequest(req, form); err != nil {
+		return connectors.DirectReadResult{}, err
+	}
 	resp, err := c.doService(ctx, req.Config, form, maxBytes)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
@@ -36,12 +39,99 @@ func (c Connector) OperationDirectRead(ctx context.Context, req connectors.Opera
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
+	page := sqsDirectReadPage(req.Operation, body)
 	redacted := redactDirectBody(body, req.RedactFields)
 	body, ok := redacted.(map[string]any)
 	if !ok {
 		return connectors.DirectReadResult{}, fmt.Errorf("redact sqs direct read %s: unexpected root type %T", req.Operation, redacted)
 	}
-	return connectors.DirectReadResult{Connector: c.Name(), Method: "POST", Path: "SQS." + directReadAction(req.Operation), Status: resp.status, Body: body}, nil
+	return connectors.DirectReadResult{Connector: c.Name(), Method: "POST", Path: "SQS." + directReadAction(req.Operation), Status: resp.status, Body: body, Page: page}, nil
+}
+
+// sqsDirectReadPaging declares how each SQS read operation pages, so the page
+// context this connector reports is derived from the AWS contract rather than
+// guessed per call.
+//
+// The SQS Query API pages by an opaque NextToken, which is the "cursor" family:
+// there is no addressable page number, so --page is refused rather than
+// answered with page one. Operations absent from this table return a single
+// object (GetQueueUrl, GetQueueAttributes, ListQueueTags) or a collection AWS
+// never pages (ListMessageMoveTasks).
+type sqsDirectReadPaging struct {
+	// collection is the decoded body key holding the paged rows.
+	collection string
+	// tokenField is the decoded body key holding the next-page token; empty
+	// means the operation has no next page to hand back.
+	tokenField string
+	// formField is the request form field the token is replayed through.
+	formField string
+}
+
+var sqsDirectReadPagingSpecs = map[string]sqsDirectReadPaging{
+	"list_queues":                    {collection: "queue_urls", tokenField: "next_token", formField: "NextToken"},
+	"list_dead_letter_source_queues": {collection: "queue_urls", tokenField: "next_token", formField: "NextToken"},
+	"list_message_move_tasks":        {collection: "results"},
+}
+
+// applySQSDirectReadPageRequest puts the caller's navigation input on the wire,
+// or refuses it. Accepting --page 3 and returning page one is the wrongness
+// this contract exists to remove, so an input this operation cannot honour is
+// an error, never a silently discarded field.
+func applySQSDirectReadPageRequest(req connectors.OperationDirectReadRequest, form url.Values) error {
+	spec, paged := sqsDirectReadPagingSpecs[req.Operation]
+	cursored := paged && spec.formField != ""
+	switch {
+	case req.Page > 1 && cursored:
+		return fmt.Errorf("amazon-sqs direct read %s pages by an opaque NextToken and has no addressable page number; pass the previous page's next_cursor to --page-cursor instead", req.Operation)
+	case req.Page > 1:
+		return fmt.Errorf("amazon-sqs direct read %s returns a single page and cannot address page %d", req.Operation, req.Page)
+	case req.PageCursor != "" && !cursored:
+		return fmt.Errorf("amazon-sqs direct read %s returns a single page and cannot address a page by cursor", req.Operation)
+	case req.PageCursor == "":
+		return nil
+	}
+	// The operation also declares its own next_token flag. Two navigation
+	// inputs select two different pages, so the pairing is refused rather than
+	// resolved in favour of one.
+	if form.Get(spec.formField) != "" {
+		return fmt.Errorf("amazon-sqs direct read %s received --page-cursor and --next-token; they select different pages, so pass one of them", req.Operation)
+	}
+	form.Set(spec.formField, req.PageCursor)
+	return nil
+}
+
+// sqsDirectReadPage reports where the returned page sits, from the decoded body
+// AWS actually sent. It is read BEFORE redaction so a token the redactor would
+// mask is still reported as the cursor the caller needs.
+func sqsDirectReadPage(operation string, body map[string]any) connectors.DirectReadPage {
+	spec, paged := sqsDirectReadPagingSpecs[operation]
+	if !paged {
+		// Not a collection: the single object is the whole answer.
+		return connectors.DirectReadPage{Strategy: "none", Complete: true}
+	}
+	page := connectors.DirectReadPage{Strategy: "cursor"}
+	switch rows := body[spec.collection].(type) {
+	case []any:
+		page.Records = len(rows)
+	case []string:
+		page.Records = len(rows)
+	}
+	if spec.formField == "" {
+		// AWS pages this operation not at all, so one request is everything it
+		// can offer — and that is not proof the collection ended.
+		page.Strategy = "none"
+		page.Reason = connectors.DirectReadPageReasonNoPagination
+		return page
+	}
+	token, _ := body[spec.tokenField].(string)
+	if strings.TrimSpace(token) == "" {
+		page.Complete = true
+		return page
+	}
+	page.HasMore = true
+	page.NextCursor = token
+	page.Reason = connectors.DirectReadPageReasonMorePages
+	return page
 }
 
 // PreflightOperationDirectRead proves a command can reach one of the closed

@@ -385,15 +385,7 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/concurrency_groups",
-        "max_bytes": 1048576,
-        "parameters": [
-          {
-            "name": "after",
-            "in": "query",
-            "type": "string",
-            "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results after this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
-          }
-        ]
+        "max_bytes": 1048576
       }
     },
     {
@@ -1073,18 +1065,6 @@
         "max_bytes": 1048576,
         "parameters": [
           {
-            "name": "after",
-            "in": "query",
-            "type": "string",
-            "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results after this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
-          },
-          {
-            "name": "before",
-            "in": "query",
-            "type": "string",
-            "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results before this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
-          },
-          {
             "name": "run_id",
             "in": "path",
             "type": "integer",
@@ -1489,18 +1469,6 @@
         "path": "/repos/{owner}/{repo}/attestations/{subject_digest}",
         "max_bytes": 1048576,
         "parameters": [
-          {
-            "name": "after",
-            "in": "query",
-            "type": "string",
-            "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results after this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
-          },
-          {
-            "name": "before",
-            "in": "query",
-            "type": "string",
-            "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results before this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
-          },
           {
             "name": "predicate_type",
             "in": "query",
@@ -2451,18 +2419,6 @@
         "max_bytes": 1048576,
         "parameters": [
           {
-            "name": "after",
-            "in": "query",
-            "type": "string",
-            "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results after this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
-          },
-          {
-            "name": "before",
-            "in": "query",
-            "type": "string",
-            "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results before this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
-          },
-          {
             "name": "direction",
             "in": "query",
             "type": "string",
@@ -3333,6 +3289,11 @@
         "max_bytes": 1048576,
         "parameters": [
           {
+            "name": "app_id",
+            "in": "query",
+            "type": "integer"
+          },
+          {
             "name": "check_name",
             "in": "query",
             "type": "string",
@@ -3382,6 +3343,12 @@
         "path": "/repos/{owner}/{repo}/commits/{ref}/check-suites",
         "max_bytes": 1048576,
         "parameters": [
+          {
+            "name": "app_id",
+            "in": "query",
+            "type": "integer",
+            "summary": "Filters check suites by GitHub App `id`."
+          },
           {
             "name": "check_name",
             "in": "query",
@@ -4355,12 +4322,6 @@
         "max_bytes": 1048576,
         "parameters": [
           {
-            "name": "cursor",
-            "in": "query",
-            "type": "string",
-            "summary": "Used for pagination: the starting delivery from which the page of deliveries is fetched. Refer to the `link` header for the next and previous page cursors."
-          },
-          {
             "name": "hook_id",
             "in": "path",
             "type": "integer",
@@ -4600,7 +4561,15 @@
       "rest": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/import/authors",
-        "max_bytes": 1048576
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "since",
+            "in": "query",
+            "type": "integer",
+            "summary": "A user ID. Only return users with an ID greater than this ID."
+          }
+        ]
       }
     },
     {
@@ -5451,6 +5420,12 @@
             "in": "query",
             "type": "boolean",
             "summary": "If `true`, only shows notifications in which the user is directly participating or mentioned."
+          },
+          {
+            "name": "since",
+            "in": "query",
+            "type": "string",
+            "summary": "Only show results that were last updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`."
           }
         ]
       }

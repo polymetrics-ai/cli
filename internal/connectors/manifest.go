@@ -37,11 +37,22 @@ type WriteActionSpec struct {
 	Name           string   `json:"name"`
 	Description    string   `json:"description,omitempty"`
 	RequiredFields []string `json:"required_fields,omitempty"`
-	OptionalFields []string `json:"optional_fields,omitempty"`
-	Method         string   `json:"method,omitempty"`
-	Path           string   `json:"path,omitempty"`
-	RedactFields   []string `json:"redact_fields,omitempty"`
-	Risk           string   `json:"risk,omitempty"`
+	// RequiredAnyFields carries an either/or requirement that RequiredFields
+	// cannot express: each inner slice is one group of fields that together
+	// satisfy the constraint, and a write must supply every field of at least
+	// one group. amazon-sqs set_queue_attributes is the shape it exists for —
+	// `attributes`, OR `attribute_name` together with `attribute_value`.
+	//
+	// It is a separate field because RequiredFields is a list of FIELD NAMES
+	// that `pm connectors inspect --json` publishes; folding a synthesized
+	// sentence into it would hand a machine consumer a string that is not a
+	// field.
+	RequiredAnyFields [][]string `json:"required_any_fields,omitempty"`
+	OptionalFields    []string   `json:"optional_fields,omitempty"`
+	Method            string     `json:"method,omitempty"`
+	Path              string     `json:"path,omitempty"`
+	RedactFields      []string   `json:"redact_fields,omitempty"`
+	Risk              string     `json:"risk,omitempty"`
 	// Batchable mirrors the bundle's "batchable" declaration. nil means the
 	// action never declared it and is therefore batchable; see IsBatchable for
 	// why this is a pointer rather than a bool.

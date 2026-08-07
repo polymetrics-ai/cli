@@ -335,6 +335,12 @@ const (
 	// unusable, so paging degraded to a single page for this connector alone.
 	DirectReadPageReasonInvalidSpec = "pagination_spec_invalid"
 	DirectReadPageReasonAmbiguous   = "ambiguous_collection_shape"
+	// DirectReadPageReasonSizeNotRequested: the declared strategy stops on a
+	// SHORT page, but the spec names no size/limit parameter, so the request
+	// carried no page size and the provider applied its own default. Comparing
+	// that default-sized page against a size the request never asked for would
+	// assert a completeness nothing measured.
+	DirectReadPageReasonSizeNotRequested = "page_size_not_requested"
 )
 
 // DirectReadPage is the page context of one direct read.

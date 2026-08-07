@@ -351,6 +351,13 @@ the ETL path uses. The runtime supplies `--page` (for `page_number` and
 Declaring a paging flag by hand gives a caller a second, unchecked way to page
 that bypasses the completeness contract.
 
+A handful of bundles authored one before this rule existed (notion's
+`page-size`/`start-cursor`, bahmni's `start-index`, gong's `cursor`). The
+executor honours the caller's value over the declared default rather than
+discarding it, refuses it alongside `--page`/`--page-cursor`, and reports no
+page number for a window it did not choose. That is damage control, not a
+precedent: do not add another.
+
 ### Other parameters
 
 Do not hand-author a flag for a parameter the provider specification already
@@ -369,11 +376,20 @@ network.
 
 The import deliberately drops two classes of parameter:
 
-- **paging parameters**, for the reason above;
-- **anything the connection already supplies** — a path parameter named by the
-  connector's `spec.json` config schema (github's `owner`/`repo`) resolves
-  through templating, so turning it into a flag would make every command demand
-  a value the connection already knows.
+- **paging parameters**, for the reason above. The test is the parameter's
+  MEANING, not the names your bundle happens to declare: a well-known paging
+  name (`page`, `per_page`, `cursor`, `offset`, `limit`, `start_index`, …) is
+  dropped, and so is any parameter whose own specification describes it as a
+  cursor or as pagination. github's `after`/`before` cursors are dropped that
+  way even though its spec declares `page`/`per_page`; the `before` on
+  `/repos/{owner}/{repo}/notifications` is an ISO 8601 timestamp filter and is
+  kept.
+- **a path variable the connection supplies** — `{owner}`/`{repo}` in an
+  operation's own `rest.path`, resolved from `spec.json` config through
+  templating, so turning it into a flag would make every command demand a value
+  the connection already knows. This is scoped to the path template on purpose:
+  a config key nothing interpolates into the request (github's ETL-only `since`)
+  IS imported, because no other mechanism supplies it.
 
 ### What you still author by hand
 

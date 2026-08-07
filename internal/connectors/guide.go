@@ -589,14 +589,12 @@ func syncModeSection(manifest Manifest) GuideSection {
 	return GuideSection{Title: "Sync Modes", Lines: lines}
 }
 
-// writeActionSection renders one line per required/optional field set. It
-// cannot express an either/or constraint ("A, or B together with C"), because
-// Manifest.RequiredFields is a flat list. amazon-sqs set_queue_attributes and
-// tag_queue have exactly that constraint, so their committed MANUAL.md/SKILL.md
-// carry hand-written prose the generator cannot reproduce, which is why
-// `pm docs generate --dir docs/cli` is not idempotent for that connector.
-// Leave those two files alone until the renderer learns required-field groups:
-// https://github.com/polymetrics-ai/cli/issues/3710
+// writeActionSection renders one line per required/optional field set,
+// including the either/or constraint ("A, or B together with C") that
+// Manifest.RequiredFields cannot express on its own. That shape is carried by
+// RequiredAnyFields — amazon-sqs set_queue_attributes and tag_queue are the
+// connectors that declare it — so `pm docs generate --dir docs/cli` reproduces
+// their committed MANUAL.md/SKILL.md and stays idempotent.
 func writeActionSection(manifest Manifest) GuideSection {
 	if len(manifest.WriteActions) == 0 {
 		return GuideSection{}
@@ -607,8 +605,8 @@ func writeActionSection(manifest Manifest) GuideSection {
 		if action.Method != "" || action.Path != "" {
 			lines = append(lines, "  endpoint: "+strings.TrimSpace(action.Method+" "+action.Path))
 		}
-		if len(action.RequiredFields) > 0 {
-			lines = append(lines, "  required fields: "+strings.Join(action.RequiredFields, ", "))
+		if required := requiredFieldsLine(action); required != "" {
+			lines = append(lines, "  required fields: "+required)
 		}
 		if len(action.OptionalFields) > 0 {
 			lines = append(lines, "  optional fields: "+strings.Join(action.OptionalFields, ", "))
@@ -623,6 +621,20 @@ func writeActionSection(manifest Manifest) GuideSection {
 		}
 	}
 	return GuideSection{Title: "Reverse ETL Actions", Lines: lines}
+}
+
+// requiredFieldsLine renders the full required-field contract: the always-required
+// names first, then each either/or group as "a + b", joined by " or ".
+func requiredFieldsLine(action WriteActionSpec) string {
+	parts := append([]string(nil), action.RequiredFields...)
+	if len(action.RequiredAnyFields) > 0 {
+		groups := make([]string, 0, len(action.RequiredAnyFields))
+		for _, group := range action.RequiredAnyFields {
+			groups = append(groups, strings.Join(group, " + "))
+		}
+		parts = append(parts, strings.Join(groups, " or "))
+	}
+	return strings.Join(parts, ", ")
 }
 
 func paginationSection(manifest Manifest) GuideSection {

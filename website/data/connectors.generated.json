@@ -66101,13 +66101,6 @@
           "source_url": "",
           "flags": [
             {
-              "name": "after",
-              "type": "string",
-              "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results after this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
-              "values": [],
-              "maps_to": "query.after"
-            },
-            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -67298,20 +67291,6 @@
               "maps_to": "path.run_id"
             },
             {
-              "name": "after",
-              "type": "string",
-              "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results after this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
-              "values": [],
-              "maps_to": "query.after"
-            },
-            {
-              "name": "before",
-              "type": "string",
-              "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results before this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
-              "values": [],
-              "maps_to": "query.before"
-            },
-            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -68023,20 +68002,6 @@
               "summary": "subject_digest path parameter",
               "values": [],
               "maps_to": "path.subject_digest"
-            },
-            {
-              "name": "after",
-              "type": "string",
-              "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results after this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
-              "values": [],
-              "maps_to": "query.after"
-            },
-            {
-              "name": "before",
-              "type": "string",
-              "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results before this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
-              "values": [],
-              "maps_to": "query.before"
             },
             {
               "name": "predicate-type",
@@ -69452,20 +69417,6 @@
           "source_url": "",
           "flags": [
             {
-              "name": "after",
-              "type": "string",
-              "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results after this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
-              "values": [],
-              "maps_to": "query.after"
-            },
-            {
-              "name": "before",
-              "type": "string",
-              "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results before this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
-              "values": [],
-              "maps_to": "query.before"
-            },
-            {
               "name": "direction",
               "type": "enum",
               "summary": "The direction to sort the results by.",
@@ -70872,6 +70823,13 @@
               "maps_to": "query.status"
             },
             {
+              "name": "app-id",
+              "type": "integer",
+              "summary": "",
+              "values": [],
+              "maps_to": "query.app_id"
+            },
+            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -70916,6 +70874,13 @@
               "summary": "Returns check runs with the specified `name`.",
               "values": [],
               "maps_to": "query.check_name"
+            },
+            {
+              "name": "app-id",
+              "type": "integer",
+              "summary": "Filters check suites by GitHub App `id`.",
+              "values": [],
+              "maps_to": "query.app_id"
             },
             {
               "name": "page",
@@ -72531,13 +72496,6 @@
               "maps_to": "path.hook_id"
             },
             {
-              "name": "cursor",
-              "type": "string",
-              "summary": "Used for pagination: the starting delivery from which the page of deliveries is fetched. Refer to the `link` header for the next and previous page cursors.",
-              "values": [],
-              "maps_to": "query.cursor"
-            },
-            {
               "name": "status",
               "type": "enum",
               "summary": "Returns webhook deliveries filtered by delivery outcome classification based on `status_code` range. A `status` of `success` returns deliveries with a `status_code` in the 200-399 range (inclusive). A `status` of `failure` returns deliveries with a `status_code` in the 400-599 range (inclusive).",
@@ -72848,6 +72806,13 @@
           "source_cli_path": "",
           "source_url": "",
           "flags": [
+            {
+              "name": "since",
+              "type": "integer",
+              "summary": "A user ID. Only return users with an ID greater than this ID.",
+              "values": [],
+              "maps_to": "query.since"
+            },
             {
               "name": "page",
               "type": "integer",
@@ -74021,6 +73986,13 @@
               "summary": "If `true`, only shows notifications in which the user is directly participating or mentioned.",
               "values": [],
               "maps_to": "query.participating"
+            },
+            {
+              "name": "since",
+              "type": "string",
+              "summary": "Only show results that were last updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`.",
+              "values": [],
+              "maps_to": "query.since"
             },
             {
               "name": "page",
