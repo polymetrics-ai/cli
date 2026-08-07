@@ -216,7 +216,7 @@ pagination spec, and a hand-written paging flag is a second unchecked way to
 page that bypasses the completeness contract. `params-import` drops paging
 parameters and anything the connection already supplies through its config
 schema. The authoring rule lives in `docs/migration/conventions.md` §2.9; the
-user-facing surface is `docs/cli/direct-read-pages-and-parameters.md`.
+user-facing surface is `docs/direct-read-pages-and-parameters.md`.
 
 ## Command Surface Must Stay Executable
 
