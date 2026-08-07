@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"polymetrics.ai/internal/agentmode"
 	"polymetrics.ai/internal/app"
@@ -19,6 +20,7 @@ import (
 	"polymetrics.ai/internal/perf"
 	"polymetrics.ai/internal/runtimecheck"
 	"polymetrics.ai/internal/safety"
+	"polymetrics.ai/internal/webhook"
 )
 
 type envelope map[string]any
@@ -452,6 +454,113 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 	default:
 		return errUsage
 	}
+}
+
+func runWebhooks(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
+	if len(args) == 0 {
+		return errUsage
+	}
+	switch args[0] {
+	case "configure":
+		if len(args) < 2 {
+			return errUsage
+		}
+		if err := safety.ValidateIdentifier(args[1], "webhook receiver"); err != nil {
+			return validationErrorf("%v", err)
+		}
+		flags := parseFlags(args[2:])
+		if len(flags.values["credential"]) > 0 {
+			return usageErrorf("--credential is not supported for webhooks")
+		}
+		for _, name := range []string{"mode", "callback-url", "tunnel-tool", "adapter", "heartbeat-ttl", "receipt-capacity", "allowed-public-port"} {
+			if flags.isBare(name) {
+				return usageErrorf("--%s requires a value", name)
+			}
+		}
+		capacity, err := parseIntFlag("receipt-capacity", flags.first("receipt-capacity"), 0)
+		if err != nil || capacity <= 0 {
+			return usageErrorf("--receipt-capacity must be a positive integer")
+		}
+		var heartbeatTTL time.Duration
+		if raw := flags.first("heartbeat-ttl"); raw != "" {
+			heartbeatTTL, err = time.ParseDuration(raw)
+			if err != nil || heartbeatTTL <= 0 {
+				return usageErrorf("--heartbeat-ttl must be a positive duration")
+			}
+		}
+		allowedPublicPorts, err := parseWebhookAllowedPublicPorts(flags.values["allowed-public-port"])
+		if err != nil {
+			return err
+		}
+		status, err := a.ConfigureWebhookReceiver(ctx, app.ConfigureWebhookReceiverRequest{
+			Name: args[1],
+			Exposure: webhook.ExposureConfig{
+				Mode:             webhook.ExposureMode(flags.first("mode")),
+				TunnelTool:       webhook.TunnelTool(flags.first("tunnel-tool")),
+				CallbackURL:      flags.first("callback-url"),
+				AdapterReference: flags.first("adapter"),
+				HeartbeatTTL:     heartbeatTTL,
+				ExternalTunnel: webhook.ExternalTunnelConfig{
+					AllowedPublicPorts: allowedPublicPorts,
+				},
+			},
+			ReceiptCapacity: capacity,
+		})
+		if err != nil {
+			return validationErrorf("%v", err)
+		}
+		return writeWebhookStatus(stdout, jsonOut, status)
+	case "status":
+		if len(args) != 2 {
+			return errUsage
+		}
+		status, err := a.WebhookReceiverStatus(args[1], time.Now().UTC())
+		if err != nil {
+			return err
+		}
+		return writeWebhookStatus(stdout, jsonOut, status)
+	default:
+		return errUsage
+	}
+}
+
+func writeWebhookStatus(stdout io.Writer, jsonOut bool, status app.WebhookReceiverStatus) error {
+	if status.Mode == webhook.ExposureModeProviderPullOrStream {
+		if jsonOut {
+			return writeJSON(stdout, envelope{"kind": "IngressAdapter", "ingress_adapter": status.IngressAdapterStatus()})
+		}
+		_, err := fmt.Fprintf(stdout, "%s\tmode=%s\tadapter=%s\tstatus=%s\n", status.Name, status.Mode, status.AdapterReference, status.Status)
+		return err
+	}
+	if jsonOut {
+		return writeJSON(stdout, envelope{"kind": "WebhookReceiver", "receiver": status})
+	}
+	_, err := fmt.Fprintf(stdout, "%s\tmode=%s\tlistener=%s\tstatus=%s\tgeneration=%s\trecovery_outcome=%s\treregistration_required=%t\treconciliation_required=%t\n",
+		status.Name,
+		status.Mode,
+		status.ListenerScope,
+		status.Status,
+		status.EndpointGeneration,
+		status.RecoveryOutcome,
+		status.ReregistrationRequired,
+		status.ReconciliationRequired,
+	)
+	return err
+}
+
+func parseWebhookAllowedPublicPorts(values []string) ([]int, error) {
+	if len(values) == 0 {
+		return nil, nil
+	}
+	ports := make([]int, 0, len(values))
+	for _, value := range values {
+		port, err := parseIntFlag("allowed-public-port", value, 0)
+		if err != nil || port < 1 || port > 65535 {
+			return nil, usageErrorf("--allowed-public-port must be an integer from 1 to 65535")
+		}
+		ports = append(ports, port)
+	}
+	return ports, nil
 }
 
 func credentialCoordinationInputError(err error) error {

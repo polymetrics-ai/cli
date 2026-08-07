@@ -98,6 +98,9 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 		{name: "credentials", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return withApp(root, func(a *app.App) error { return runCredentials(ctx, a, args, stdout, jsonOut) })
 		}},
+		{name: "webhooks", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
+			return withApp(root, func(a *app.App) error { return runWebhooks(ctx, a, args, stdout, jsonOut) })
+		}},
 		{name: "connections", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return withApp(root, func(a *app.App) error { return runConnections(ctx, a, args, stdout, jsonOut) })
 		}},

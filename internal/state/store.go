@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"polymetrics.ai/internal/durability"
+	"polymetrics.ai/internal/durable"
 )
 
 type Locker interface {
@@ -77,6 +77,7 @@ func CommitOutcomeForError(err error) CommitOutcome {
 // JSONStore persists a single JSON value at Path.
 type JSONStore[T any] struct {
 	Path          string
+	DirectoryRoot string
 	Initial       func() T
 	Locker        Locker
 	Redact        func(path []string, value any) any
@@ -190,7 +191,11 @@ func (s JSONStore[T]) saveNoLock(value T) (err error) {
 	data = append(data, '\n')
 
 	dir := filepath.Dir(s.Path)
-	if err := os.MkdirAll(dir, 0o700); err != nil {
+	root := s.DirectoryRoot
+	if root == "" {
+		root = dir
+	}
+	if err := durable.EnsureDirectoryTree(dir, root, 0o700); err != nil {
 		return fmt.Errorf("create state directory: %w", err)
 	}
 	tmp, err := os.CreateTemp(dir, "."+filepath.Base(s.Path)+".tmp-*")
@@ -222,7 +227,7 @@ func (s JSONStore[T]) saveNoLock(value T) (err error) {
 	}
 	syncDirectory := s.SyncDirectory
 	if syncDirectory == nil {
-		syncDirectory = durability.SyncDirectory
+		syncDirectory = durable.SyncDirectory
 	}
 	if err := syncDirectory(dir); err != nil {
 		return &CommitOutcomeError{

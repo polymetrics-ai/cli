@@ -14,7 +14,7 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
-	"polymetrics.ai/internal/durability"
+	"polymetrics.ai/internal/durable"
 	"polymetrics.ai/internal/synccontract"
 )
 
@@ -47,12 +47,12 @@ type localRawRecord struct {
 }
 
 // syncLocalWarehouseDirectoryCommit is a test seam for the platform directory
-// sync primitive; production defaults to durability.SyncDirectory.
-var syncLocalWarehouseDirectoryCommit = durability.SyncDirectory
+// sync primitive; production defaults to durable.SyncDirectory.
+var syncLocalWarehouseDirectoryCommit = durable.SyncDirectory
 
-func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
+func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destinationName string, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
 	stateKey := streamStateKey(conn.Name, streamName)
-	prior := a.state.StreamStates[stateKey]
+	prior := a.streamState(stateKey)
 	if prior.Checkpoint != nil {
 		if err := validateStreamStateResume(prior, sourceExpectation); err != nil {
 			return etlExecutionResult{}, err
@@ -64,7 +64,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	}
 
 	dir := localWarehouseDir(destRuntime)
-	if err := os.MkdirAll(dir, 0o700); err != nil {
+	if err := durable.EnsureDirectoryTree(dir, filepath.Dir(dir), 0o700); err != nil {
 		return etlExecutionResult{}, fmt.Errorf("create warehouse directory: %w", err)
 	}
 	table := stream.DestinationTable
@@ -75,7 +75,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	tmpFinalPath := finalPath + "." + runID + ".tmp"
 	rawPath := localRawPath(dir, conn.Name, streamName, table)
 	tmpRawPath := rawPath + "." + runID + ".tmp"
-	if err := os.MkdirAll(filepath.Dir(rawPath), 0o700); err != nil {
+	if err := durable.EnsureDirectoryTree(filepath.Dir(rawPath), dir, 0o700); err != nil {
 		return etlExecutionResult{}, fmt.Errorf("create raw directory: %w", err)
 	}
 
@@ -272,7 +272,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	if observedAt.IsZero() {
 		observedAt = time.Now().UTC()
 	}
-	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement(destination.Name(), time.Now().UTC())
+	acknowledgement, err := synccontract.NewDurableDownstreamAcknowledgement(destinationName, time.Now().UTC())
 	if err != nil {
 		return result, err
 	}

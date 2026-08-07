@@ -5,7 +5,6 @@ import (
 	"crypto/rand"
 	"crypto/subtle"
 	"encoding/hex"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
@@ -13,11 +12,13 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/commandrunner"
+	"polymetrics.ai/internal/durable"
 	"polymetrics.ai/internal/safety"
 	statestore "polymetrics.ai/internal/state"
 	"polymetrics.ai/internal/synccontract"
@@ -36,11 +37,70 @@ type App struct {
 	projectDir string
 	statePath  string
 	store      statestore.JSONStore[state]
+	stateMu    appStateMutex
 	state      state
 	vault      *vault.Vault
 	approval   *projectWriteApprovalAuthority
 	registry   *connectors.Registry
 	sqlEngine  sqlQueryEngine
+}
+
+type appStateMutex struct {
+	once sync.Once
+	gate chan struct{}
+	mu   sync.RWMutex
+}
+
+func (m *appStateMutex) initialize() {
+	m.once.Do(func() {
+		m.gate = make(chan struct{}, 1)
+	})
+}
+
+func (m *appStateMutex) Lock() {
+	m.initialize()
+	m.gate <- struct{}{}
+	m.mu.Lock()
+}
+
+func (m *appStateMutex) LockContext(ctx context.Context) error {
+	m.initialize()
+	select {
+	case m.gate <- struct{}{}:
+	case <-ctx.Done():
+		return ctx.Err()
+	}
+	for {
+		if m.mu.TryLock() {
+			return nil
+		}
+		timer := time.NewTimer(time.Millisecond)
+		select {
+		case <-ctx.Done():
+			if !timer.Stop() {
+				select {
+				case <-timer.C:
+				default:
+				}
+			}
+			<-m.gate
+			return ctx.Err()
+		case <-timer.C:
+		}
+	}
+}
+
+func (m *appStateMutex) Unlock() {
+	m.mu.Unlock()
+	<-m.gate
+}
+
+func (m *appStateMutex) RLock() {
+	m.mu.RLock()
+}
+
+func (m *appStateMutex) RUnlock() {
+	m.mu.RUnlock()
 }
 
 // sqlQueryEngine is the pluggable backend for App.QuerySQL. The default build
@@ -52,18 +112,20 @@ type sqlQueryEngine interface {
 }
 
 type state struct {
-	Revision                     uint64                            `json:"revision"`
-	SyncModeCompatibilityVersion uint                              `json:"sync_mode_compatibility_version,omitempty"`
-	Credentials                  []CredentialMeta                  `json:"credentials"`
-	CredentialBindings           map[string]credentialBindingState `json:"credential_bindings"`
-	CoordinationSalt             string                            `json:"coordination_salt,omitempty"`
-	Connections                  []Connection                      `json:"connections"`
-	Catalogs                     []CatalogSnapshot                 `json:"catalogs"`
-	Runs                         []Run                             `json:"runs"`
-	ReversePlans                 []ReversePlan                     `json:"reverse_plans"`
-	ReverseRuns                  []ReverseRun                      `json:"reverse_runs"`
-	Checkpoints                  map[string]map[string]string      `json:"checkpoints,omitempty"`
-	StreamStates                 map[string]StreamState            `json:"stream_states,omitempty"`
+	Revision                     uint64                              `json:"revision"`
+	SyncModeCompatibilityVersion uint                                `json:"sync_mode_compatibility_version,omitempty"`
+	Credentials                  []CredentialMeta                    `json:"credentials"`
+	CredentialBindings           map[string]credentialBindingState   `json:"credential_bindings"`
+	CoordinationSalt             string                              `json:"coordination_salt,omitempty"`
+	Connections                  []Connection                        `json:"connections"`
+	Catalogs                     []CatalogSnapshot                   `json:"catalogs"`
+	Runs                         []Run                               `json:"runs"`
+	ReversePlans                 []ReversePlan                       `json:"reverse_plans"`
+	ReverseRuns                  []ReverseRun                        `json:"reverse_runs"`
+	Checkpoints                  map[string]map[string]string        `json:"checkpoints,omitempty"`
+	StreamStates                 map[string]StreamState              `json:"stream_states,omitempty"`
+	WebhookSubscriptions         map[string]webhookSubscriptionState `json:"webhook_subscriptions,omitempty"`
+	WebhookReceipts              map[string]webhookReceiptState      `json:"webhook_receipts,omitempty"`
 }
 
 // credentialBindingState is protected project-state metadata. The raw binding
@@ -85,14 +147,16 @@ func InitProject(root string) error {
 		root = "."
 	}
 	projectDir := filepath.Join(root, ".polymetrics")
+	if err := durable.EnsureDirectoryTree(projectDir, root, 0o700); err != nil {
+		return fmt.Errorf("create %s: %w", projectDir, err)
+	}
 	for _, dir := range []string{
-		projectDir,
 		filepath.Join(projectDir, "state"),
 		filepath.Join(projectDir, "warehouse"),
 		filepath.Join(projectDir, "outbox"),
 		filepath.Join(projectDir, "logs"),
 	} {
-		if err := os.MkdirAll(dir, 0o700); err != nil {
+		if err := durable.EnsureDirectoryTree(dir, projectDir, 0o700); err != nil {
 			return fmt.Errorf("create %s: %w", dir, err)
 		}
 	}
@@ -118,8 +182,10 @@ func InitProject(root string) error {
 			CoordinationSalt:             coordinationSalt,
 			Checkpoints:                  map[string]map[string]string{},
 			StreamStates:                 map[string]StreamState{},
+			WebhookSubscriptions:         map[string]webhookSubscriptionState{},
+			WebhookReceipts:              map[string]webhookReceiptState{},
 		}
-		if err := writeJSONAtomic(statePath, initial); err != nil {
+		if err := newStateStore(statePath, root).Save(initial); err != nil {
 			return err
 		}
 	}
@@ -151,7 +217,7 @@ func Open(root string) (*App, error) {
 		root:       root,
 		projectDir: projectDir,
 		statePath:  statePath,
-		store:      newStateStore(statePath),
+		store:      newStateStore(statePath, root),
 		vault:      v,
 		approval:   approval,
 		registry:   bundleregistry.New(),
@@ -196,20 +262,42 @@ func (a *App) load() error {
 // reload. Callers must not assign a store result to a.state directly.
 func (a *App) normalizeLoadedState(loaded state) error {
 	a.state = loaded
+	changed := false
 	if a.state.Checkpoints == nil {
 		a.state.Checkpoints = map[string]map[string]string{}
+		changed = true
 	}
 	if a.state.StreamStates == nil {
 		a.state.StreamStates = map[string]StreamState{}
+		changed = true
 	}
-	a.migrateLegacySyncModeCompatibility()
-	return a.migrateCredentialCoordination()
+	if a.state.WebhookSubscriptions == nil {
+		a.state.WebhookSubscriptions = map[string]webhookSubscriptionState{}
+		changed = true
+	}
+	if a.state.WebhookReceipts == nil {
+		a.state.WebhookReceipts = map[string]webhookReceiptState{}
+		changed = true
+	}
+	changed = a.migrateLegacySyncModeCompatibility() || changed
+	changed = a.migrateWebhookRecoveryEpochs() || changed
+	coordinationChanged, err := a.migrateCredentialCoordination()
+	if err != nil {
+		return err
+	}
+	if !changed && !coordinationChanged {
+		return nil
+	}
+	if err := a.save(); err != nil {
+		return fmt.Errorf("persist project state migrations: %w", err)
+	}
+	return nil
 }
 
 // migrateCredentialCoordination gives pre-#3863 credentials an isolated
 // non-secret binding and declaration defaults. It intentionally never opens
 // the vault: coordination is an explicit relationship, not secret equality.
-func (a *App) migrateCredentialCoordination() error {
+func (a *App) migrateCredentialCoordination() (bool, error) {
 	changed := false
 	if a.state.CredentialBindings == nil {
 		a.state.CredentialBindings = map[string]credentialBindingState{}
@@ -218,7 +306,7 @@ func (a *App) migrateCredentialCoordination() error {
 	if strings.TrimSpace(a.state.CoordinationSalt) == "" {
 		salt, err := newCoordinationSalt()
 		if err != nil {
-			return err
+			return false, err
 		}
 		a.state.CoordinationSalt = salt
 		changed = true
@@ -231,7 +319,7 @@ func (a *App) migrateCredentialCoordination() error {
 			credential.AuthProfile,
 		)
 		if err != nil {
-			return fmt.Errorf("migrate credential coordination metadata: %w", err)
+			return false, fmt.Errorf("migrate credential coordination metadata: %w", err)
 		}
 		if credential.ProviderFamily != providerFamily {
 			credential.ProviderFamily = providerFamily
@@ -245,7 +333,7 @@ func (a *App) migrateCredentialCoordination() error {
 		if !ok || strings.TrimSpace(binding.BindingID) == "" {
 			bindingID, err := prefixedID("cbind")
 			if err != nil {
-				return err
+				return false, err
 			}
 			binding = credentialBindingState{BindingID: bindingID}
 			changed = true
@@ -257,22 +345,16 @@ func (a *App) migrateCredentialCoordination() error {
 			changed = true
 		}
 		a.state.CredentialBindings[credential.ID] = binding
-		if _, err := a.newCoordinationIdentity(providerFamily, authProfile, binding.BindingID); err != nil {
-			return fmt.Errorf("migrate credential coordination metadata: %w", err)
+		if _, err := newCoordinationIdentity(a.state.CoordinationSalt, providerFamily, authProfile, binding.BindingID); err != nil {
+			return false, fmt.Errorf("migrate credential coordination metadata: %w", err)
 		}
 	}
 	isolationChanged, err := a.isolateUnverifiedCrossConnectorBindings()
 	if err != nil {
-		return fmt.Errorf("migrate credential coordination metadata: %w", err)
+		return false, fmt.Errorf("migrate credential coordination metadata: %w", err)
 	}
 	changed = changed || isolationChanged
-	if !changed {
-		return nil
-	}
-	if err := a.save(); err != nil {
-		return fmt.Errorf("persist credential coordination metadata: %w", err)
-	}
-	return nil
+	return changed, nil
 }
 
 func (a *App) isolateUnverifiedCrossConnectorBindings() (bool, error) {
@@ -327,36 +409,53 @@ func newCoordinationSalt() (string, error) {
 	return salt, nil
 }
 
-func (a *App) newCoordinationIdentity(providerFamily, authProfile, bindingID string) (connectors.CoordinationIdentity, error) {
-	if strings.TrimSpace(a.state.CoordinationSalt) == "" {
+func newCoordinationIdentity(coordinationSalt, providerFamily, authProfile, bindingID string) (connectors.CoordinationIdentity, error) {
+	if strings.TrimSpace(coordinationSalt) == "" {
 		return connectors.CoordinationIdentity{}, errors.New("credential coordination identity is unavailable")
 	}
-	return connectors.NewCoordinationIdentity([]byte(a.state.CoordinationSalt), connectors.CredentialBinding{
+	return connectors.NewCoordinationIdentity([]byte(coordinationSalt), connectors.CredentialBinding{
 		BindingID:      bindingID,
 		ProviderFamily: providerFamily,
 		AuthProfile:    authProfile,
 	})
 }
 
-func (a *App) coordinationIdentityForCredential(credential CredentialMeta) (connectors.CoordinationIdentity, error) {
-	binding, err := a.credentialBindingForCredential(credential)
+func coordinationIdentityForCredential(current state, credential CredentialMeta) (connectors.CoordinationIdentity, error) {
+	binding, err := credentialBindingForCredential(current, credential)
 	if err != nil {
 		return connectors.CoordinationIdentity{}, err
 	}
-	return a.newCoordinationIdentity(credential.ProviderFamily, credential.AuthProfile, binding.BindingID)
+	return newCoordinationIdentity(current.CoordinationSalt, credential.ProviderFamily, credential.AuthProfile, binding.BindingID)
 }
 
-func (a *App) credentialBindingForCredential(credential CredentialMeta) (credentialBindingState, error) {
-	binding, ok := a.state.CredentialBindings[credential.ID]
+func (a *App) coordinationIdentityForCredential(credential CredentialMeta) (connectors.CoordinationIdentity, error) {
+	return coordinationIdentityForCredential(a.snapshotState(), credential)
+}
+
+func credentialBindingForCredential(current state, credential CredentialMeta) (credentialBindingState, error) {
+	binding, ok := current.CredentialBindings[credential.ID]
 	if !ok || strings.TrimSpace(binding.BindingID) == "" {
 		return credentialBindingState{}, errors.New("credential coordination metadata is unavailable")
 	}
 	return binding, nil
 }
 
-func (a *App) migrateLegacySyncModeCompatibility() {
+func (a *App) migrateWebhookRecoveryEpochs() bool {
+	changed := false
+	for name, entry := range a.state.WebhookSubscriptions {
+		if entry.Subscription.RecoveryEpoch != 0 {
+			continue
+		}
+		entry.Subscription.RecoveryEpoch = 1
+		a.state.WebhookSubscriptions[name] = entry
+		changed = true
+	}
+	return changed
+}
+
+func (a *App) migrateLegacySyncModeCompatibility() bool {
 	if a.state.SyncModeCompatibilityVersion >= syncModeCompatibilityVersion {
-		return
+		return false
 	}
 	for connectionIndex := range a.state.Connections {
 		for streamName, stream := range a.state.Connections[connectionIndex].Streams {
@@ -367,9 +466,16 @@ func (a *App) migrateLegacySyncModeCompatibility() {
 		}
 	}
 	a.state.SyncModeCompatibilityVersion = syncModeCompatibilityVersion
+	return true
 }
 
 func (a *App) save() error {
+	a.stateMu.Lock()
+	defer a.stateMu.Unlock()
+	return a.saveLocked()
+}
+
+func (a *App) saveLocked() error {
 	expectedRevision := a.state.Revision
 	next := a.state
 	updated, err := a.store.Update(func(current state) (state, error) {
@@ -386,10 +492,33 @@ func (a *App) save() error {
 }
 
 func (a *App) updateState(update func(state) (state, error)) (state, error) {
+	a.stateMu.Lock()
+	defer a.stateMu.Unlock()
+	return a.updateStateLocked(context.Background(), update)
+}
+
+func (a *App) updateStateContext(ctx context.Context, update func(state) (state, error)) (state, error) {
+	if err := a.stateMu.LockContext(ctx); err != nil {
+		return state{}, err
+	}
+	defer a.stateMu.Unlock()
+	if err := ctx.Err(); err != nil {
+		return state{}, err
+	}
+	return a.updateStateLocked(ctx, update)
+}
+
+func (a *App) updateStateLocked(ctx context.Context, update func(state) (state, error)) (state, error) {
 	updated, err := a.store.Update(func(current state) (state, error) {
+		if err := ctx.Err(); err != nil {
+			return current, err
+		}
 		next, updateErr := update(current)
 		if updateErr != nil {
 			return current, updateErr
+		}
+		if err := ctx.Err(); err != nil {
+			return current, err
 		}
 		next.Revision = current.Revision + 1
 		return next, nil
@@ -404,17 +533,26 @@ func stateStoreCommitMayHaveSucceeded(err error) bool {
 	return statestore.CommitOutcomeForError(err).MayHaveCommitted()
 }
 
-func newStateStore(path string) statestore.JSONStore[state] {
+func (a *App) snapshotState() state {
+	a.stateMu.RLock()
+	defer a.stateMu.RUnlock()
+	return a.state
+}
+
+func newStateStore(path, directoryRoot string) statestore.JSONStore[state] {
 	return statestore.JSONStore[state]{
-		Path: path,
+		Path:          path,
+		DirectoryRoot: directoryRoot,
 		Initial: func() state {
 			return state{
-				CredentialBindings: map[string]credentialBindingState{},
-				Checkpoints:        map[string]map[string]string{},
-				StreamStates:       map[string]StreamState{},
+				CredentialBindings:   map[string]credentialBindingState{},
+				Checkpoints:          map[string]map[string]string{},
+				StreamStates:         map[string]StreamState{},
+				WebhookSubscriptions: map[string]webhookSubscriptionState{},
+				WebhookReceipts:      map[string]webhookReceiptState{},
 			}
 		},
-		Locker: statestore.FileLock{Path: path + ".lock"},
+		Locker: statestore.FileLock{Path: path + ".lock", DirectoryRoot: directoryRoot},
 	}
 }
 
@@ -429,7 +567,8 @@ func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (Cred
 	if !ok {
 		return CredentialMeta{}, fmt.Errorf("connector %q not found", req.Connector)
 	}
-	if _, ok := a.findCredential(req.Name); ok {
+	current := a.snapshotState()
+	if _, ok := findCredentialInState(current, req.Name); ok {
 		return CredentialMeta{}, fmt.Errorf("credential %q already exists", req.Name)
 	}
 	providerFamily, authProfile, err := credentialCoordinationDeclarations(req.Connector, req.ProviderFamily, req.AuthProfile)
@@ -447,15 +586,15 @@ func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (Cred
 		DeclarationProvenanceRecorded: true,
 	}
 	if strings.TrimSpace(req.LinkCredential) != "" {
-		linked, ok := a.findCredential(req.LinkCredential)
+		linked, ok := findCredentialInState(current, req.LinkCredential)
 		if !ok {
 			return CredentialMeta{}, errors.New("link credential not found")
 		}
-		linkedBinding, err := a.credentialBindingForCredential(linked)
+		linkedBinding, err := credentialBindingForCredential(current, linked)
 		if err != nil {
 			return CredentialMeta{}, errors.New("linked credential coordination metadata is unavailable")
 		}
-		if err := a.validateCredentialLinkCohort(
+		if err := validateCredentialLinkCohort(current,
 			CredentialMeta{Connector: req.Connector, ProviderFamily: providerFamily, AuthProfile: authProfile},
 			binding,
 			linkedBinding,
@@ -464,7 +603,7 @@ func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (Cred
 		}
 		binding.BindingID = linkedBinding.BindingID
 	}
-	if _, err := a.newCoordinationIdentity(providerFamily, authProfile, binding.BindingID); err != nil {
+	if _, err := newCoordinationIdentity(current.CoordinationSalt, providerFamily, authProfile, binding.BindingID); err != nil {
 		return CredentialMeta{}, err
 	}
 	id, err := prefixedID("cred")
@@ -503,12 +642,18 @@ func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (Cred
 		CreatedAt:      now,
 		UpdatedAt:      now,
 	}
-	if a.state.CredentialBindings == nil {
-		a.state.CredentialBindings = map[string]credentialBindingState{}
-	}
-	a.state.Credentials = append(a.state.Credentials, meta)
-	a.state.CredentialBindings[id] = binding
-	if err := a.save(); err != nil {
+	_, err = a.updateState(func(current state) (state, error) {
+		if _, exists := findCredentialInState(current, req.Name); exists {
+			return current, fmt.Errorf("credential %q already exists", req.Name)
+		}
+		if current.CredentialBindings == nil {
+			current.CredentialBindings = map[string]credentialBindingState{}
+		}
+		current.Credentials = append(current.Credentials, meta)
+		current.CredentialBindings[id] = binding
+		return current, nil
+	})
+	if err != nil {
 		return CredentialMeta{}, err
 	}
 	return meta, nil
@@ -518,39 +663,40 @@ func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (Cred
 // protected non-secret binding. It never reads the vault and refuses to bridge
 // incompatible declared provider families or auth profiles.
 func (a *App) LinkCredential(name, target string) (CredentialMeta, error) {
-	sourceIndex := a.credentialIndex(name)
-	targetIndex := a.credentialIndex(target)
-	if sourceIndex < 0 || targetIndex < 0 {
-		return CredentialMeta{}, errors.New("credential link target not found")
-	}
-	if sourceIndex == targetIndex {
-		return CredentialMeta{}, errors.New("credential cannot link to itself")
-	}
-	source := a.state.Credentials[sourceIndex]
-	targetCredential := a.state.Credentials[targetIndex]
-	sourceBinding, err := a.credentialBindingForCredential(source)
+	var linked CredentialMeta
+	_, err := a.updateState(func(current state) (state, error) {
+		sourceIndex := credentialIndex(current, name)
+		targetIndex := credentialIndex(current, target)
+		if sourceIndex < 0 || targetIndex < 0 {
+			return current, errors.New("credential link target not found")
+		}
+		if sourceIndex == targetIndex {
+			return current, errors.New("credential cannot link to itself")
+		}
+		source := current.Credentials[sourceIndex]
+		targetCredential := current.Credentials[targetIndex]
+		sourceBinding, err := credentialBindingForCredential(current, source)
+		if err != nil {
+			return current, err
+		}
+		targetBinding, err := credentialBindingForCredential(current, targetCredential)
+		if err != nil {
+			return current, errors.New("credential link target coordination metadata is unavailable")
+		}
+		if err := validateCredentialLinkCohort(current, source, sourceBinding, targetBinding); err != nil {
+			return current, err
+		}
+		if _, err := newCoordinationIdentity(current.CoordinationSalt, source.ProviderFamily, source.AuthProfile, targetBinding.BindingID); err != nil {
+			return current, err
+		}
+		sourceBinding.BindingID = targetBinding.BindingID
+		current.CredentialBindings[source.ID] = sourceBinding
+		current.Credentials[sourceIndex].UpdatedAt = time.Now().UTC()
+		linked = current.Credentials[sourceIndex]
+		return current, nil
+	})
 	if err != nil {
 		return CredentialMeta{}, err
-	}
-	targetBinding, err := a.credentialBindingForCredential(targetCredential)
-	if err != nil {
-		return CredentialMeta{}, errors.New("credential link target coordination metadata is unavailable")
-	}
-	if err := a.validateCredentialLinkCohort(source, sourceBinding, targetBinding); err != nil {
-		return CredentialMeta{}, err
-	}
-	if _, err := a.newCoordinationIdentity(source.ProviderFamily, source.AuthProfile, targetBinding.BindingID); err != nil {
-		return CredentialMeta{}, err
-	}
-	sourceBinding.BindingID = targetBinding.BindingID
-	a.state.CredentialBindings[source.ID] = sourceBinding
-	a.state.Credentials[sourceIndex].UpdatedAt = time.Now().UTC()
-	if err := a.save(); err != nil {
-		return CredentialMeta{}, err
-	}
-	linked, ok := a.findCredential(name)
-	if !ok {
-		return CredentialMeta{}, errors.New("linked credential not found")
 	}
 	return linked, nil
 }
@@ -577,11 +723,11 @@ type credentialCohortMember struct {
 	binding    credentialBindingState
 }
 
-func (a *App) validateCredentialLinkCohort(source CredentialMeta, sourceBinding, targetBinding credentialBindingState) error {
-	members := make([]credentialCohortMember, 0, len(a.state.Credentials)+1)
+func validateCredentialLinkCohort(current state, source CredentialMeta, sourceBinding, targetBinding credentialBindingState) error {
+	members := make([]credentialCohortMember, 0, len(current.Credentials)+1)
 	sourceIncluded := false
-	for _, credential := range a.state.Credentials {
-		binding, err := a.credentialBindingForCredential(credential)
+	for _, credential := range current.Credentials {
+		binding, err := credentialBindingForCredential(current, credential)
 		if err != nil {
 			return err
 		}
@@ -619,8 +765,8 @@ func validateCredentialLinkPair(source, target credentialCohortMember) error {
 	return nil
 }
 
-func (a *App) credentialIndex(name string) int {
-	for index, credential := range a.state.Credentials {
+func credentialIndex(current state, name string) int {
+	for index, credential := range current.Credentials {
 		if credential.Name == name || credential.ID == name {
 			return index
 		}
@@ -629,7 +775,8 @@ func (a *App) credentialIndex(name string) int {
 }
 
 func (a *App) ListCredentials() []CredentialMeta {
-	out := append([]CredentialMeta(nil), a.state.Credentials...)
+	current := a.snapshotState()
+	out := append([]CredentialMeta(nil), current.Credentials...)
 	sort.Slice(out, func(i, j int) bool { return out[i].Name < out[j].Name })
 	return out
 }
@@ -668,31 +815,46 @@ func (a *App) TestCredential(ctx context.Context, name string) (CredentialMeta, 
 	if err := connector.Check(ctx, runtime); err != nil {
 		return CredentialMeta{}, err
 	}
-	for i := range a.state.Credentials {
-		if a.state.Credentials[i].Name == name {
-			a.state.Credentials[i].LastValidatedAt = time.Now().UTC()
-			cred = a.state.Credentials[i]
-			break
+	_, err = a.updateState(func(current state) (state, error) {
+		for i := range current.Credentials {
+			if current.Credentials[i].ID == cred.ID {
+				current.Credentials[i].LastValidatedAt = time.Now().UTC()
+				cred = current.Credentials[i]
+				return current, nil
+			}
 		}
-	}
-	if err := a.save(); err != nil {
+		return current, nil
+	})
+	if err != nil {
 		return CredentialMeta{}, err
 	}
 	return cred, nil
 }
 
 func (a *App) RemoveCredential(ctx context.Context, name string) error {
-	for i, cred := range a.state.Credentials {
-		if cred.Name == name {
-			if err := a.vault.Delete(ctx, cred.ID); err != nil {
-				return err
-			}
-			a.state.Credentials = append(a.state.Credentials[:i], a.state.Credentials[i+1:]...)
-			delete(a.state.CredentialBindings, cred.ID)
-			return a.save()
-		}
+	current := a.snapshotState()
+	credential, ok := findCredentialInState(current, name)
+	if !ok || credential.Name != name {
+		return fmt.Errorf("credential %q not found", name)
 	}
-	return fmt.Errorf("credential %q not found", name)
+	if err := a.vault.Delete(ctx, credential.ID); err != nil {
+		return err
+	}
+	_, err := a.updateState(func(current state) (state, error) {
+		for i, stored := range current.Credentials {
+			if stored.ID != credential.ID {
+				continue
+			}
+			current.Credentials = append(current.Credentials[:i], current.Credentials[i+1:]...)
+			delete(current.CredentialBindings, stored.ID)
+			return current, nil
+		}
+		return current, fmt.Errorf("credential %q not found", name)
+	})
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest) (Connection, error) {
@@ -755,15 +917,22 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 		CreatedAt:   now,
 		UpdatedAt:   now,
 	}
-	a.state.Connections = append(a.state.Connections, conn)
-	if err := a.save(); err != nil {
+	_, err = a.updateState(func(current state) (state, error) {
+		if _, exists := findConnectionInState(current, conn.Name); exists {
+			return current, fmt.Errorf("connection %q already exists", conn.Name)
+		}
+		current.Connections = append(current.Connections, conn)
+		return current, nil
+	})
+	if err != nil {
 		return Connection{}, err
 	}
 	return conn, nil
 }
 
 func (a *App) ListConnections() []Connection {
-	out := append([]Connection(nil), a.state.Connections...)
+	current := a.snapshotState()
+	out := append([]Connection(nil), current.Connections...)
 	sort.Slice(out, func(i, j int) bool { return out[i].Name < out[j].Name })
 	return out
 }
@@ -782,25 +951,25 @@ func (a *App) RefreshCatalog(ctx context.Context, connectionName string) (Catalo
 		return CatalogSnapshot{}, err
 	}
 	snapshot := CatalogSnapshot{Connection: conn.Name, Catalog: catalog, UpdatedAt: time.Now().UTC()}
-	replaced := false
-	for i := range a.state.Catalogs {
-		if a.state.Catalogs[i].Connection == conn.Name {
-			a.state.Catalogs[i] = snapshot
-			replaced = true
-			break
+	_, err = a.updateState(func(current state) (state, error) {
+		for i := range current.Catalogs {
+			if current.Catalogs[i].Connection == conn.Name {
+				current.Catalogs[i] = snapshot
+				return current, nil
+			}
 		}
-	}
-	if !replaced {
-		a.state.Catalogs = append(a.state.Catalogs, snapshot)
-	}
-	if err := a.save(); err != nil {
+		current.Catalogs = append(current.Catalogs, snapshot)
+		return current, nil
+	})
+	if err != nil {
 		return CatalogSnapshot{}, err
 	}
 	return snapshot, nil
 }
 
 func (a *App) ShowCatalog(ctx context.Context, connectionName string) (CatalogSnapshot, error) {
-	for _, snapshot := range a.state.Catalogs {
+	current := a.snapshotState()
+	for _, snapshot := range current.Catalogs {
 		if snapshot.Connection == connectionName {
 			return snapshot, nil
 		}
@@ -855,7 +1024,7 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	}
 	var result etlExecutionResult
 	if materializer, ok := destination.(connectors.LocalWarehouseMaterializer); ok && materializer.MaterializesLocalWarehouse() {
-		result, err = a.runWarehouseETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, stream, mode, batchSize)
+		result, err = a.runWarehouseETL(ctx, runID, conn, source, sourceRuntime, destination.Name(), destRuntime, sourceExpectation, req.Stream, stream, mode, batchSize)
 	} else {
 		result, err = a.runConnectorETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, stream, mode, batchSize)
 	}
@@ -874,7 +1043,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 		return etlExecutionResult{}, &synccontract.DestinationDurabilityAdmissionError{Destination: destination.Name()}
 	}
 	stateKey := streamStateKey(conn.Name, streamName)
-	prior := a.state.StreamStates[stateKey]
+	prior := a.streamState(stateKey)
 	if prior.Checkpoint != nil {
 		if err := validateStreamStateResume(prior, sourceExpectation); err != nil {
 			return etlExecutionResult{}, err
@@ -1006,12 +1175,11 @@ func validateCompleteETLBatchWrite(result connectors.WriteResult, batchSize int)
 }
 
 func (a *App) beginRun(run Run) (Run, error) {
-	previousRuns := a.state.Runs
-	a.state.Runs = append(append([]Run(nil), a.state.Runs...), run)
-	if err := a.save(); err != nil {
-		if !errors.Is(err, errStateRevisionConflict) && !stateStoreCommitMayHaveSucceeded(err) {
-			a.state.Runs = previousRuns
-		}
+	_, err := a.updateState(func(current state) (state, error) {
+		current.Runs = append(current.Runs, run)
+		return current, nil
+	})
+	if err != nil {
 		return Run{}, err
 	}
 	return run, nil
@@ -1021,13 +1189,9 @@ func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) 
 	if result.PendingStreamState == nil {
 		return Run{}, errors.New("completed ETL run is missing pending stream state")
 	}
-	expectedRevision := a.state.Revision
 	completedAt := time.Now().UTC()
-	updated, err := a.updateState(func(current state) (state, error) {
-		if current.Revision != expectedRevision {
-			return current, errStateRevisionConflict
-		}
-		found := false
+	run := Run{}
+	_, err := a.updateState(func(current state) (state, error) {
 		for i := range current.Runs {
 			if current.Runs[i].ID != runID {
 				continue
@@ -1040,35 +1204,28 @@ func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) 
 			current.Runs[i].BatchCount = result.BatchCount
 			current.Runs[i].Checkpoint = cloneStringMap(result.Checkpoint)
 			current.Runs[i].CompletedAt = completedAt
-			found = true
-			break
+			if current.Checkpoints == nil {
+				current.Checkpoints = map[string]map[string]string{}
+			}
+			current.Checkpoints[runID] = cloneStringMap(result.Checkpoint)
+			if current.StreamStates == nil {
+				current.StreamStates = map[string]StreamState{}
+			}
+			current.StreamStates[result.PendingStreamState.Key] = cloneStreamState(result.PendingStreamState.State)
+			run = current.Runs[i]
+			return current, nil
 		}
-		if !found {
-			return current, fmt.Errorf("run %q not found", runID)
-		}
-		if current.Checkpoints == nil {
-			current.Checkpoints = map[string]map[string]string{}
-		}
-		current.Checkpoints[runID] = cloneStringMap(result.Checkpoint)
-		if current.StreamStates == nil {
-			current.StreamStates = map[string]StreamState{}
-		}
-		current.StreamStates[result.PendingStreamState.Key] = cloneStreamState(result.PendingStreamState.State)
-		return current, nil
+		return current, fmt.Errorf("run %q not found", runID)
 	})
 	if err != nil {
 		return Run{}, err
 	}
-	for _, run := range updated.Runs {
-		if run.ID == runID {
-			return run, nil
-		}
-	}
-	return Run{}, fmt.Errorf("completed run %q was not stored", runID)
+	return run, nil
 }
 
 func (a *App) GetRun(id string) (Run, error) {
-	for _, run := range a.state.Runs {
+	current := a.snapshotState()
+	for _, run := range current.Runs {
 		if run.ID == id {
 			return run, nil
 		}
@@ -1220,8 +1377,11 @@ func (a *App) PlanReverseETL(ctx context.Context, req PlanReverseETLRequest) (Re
 	}
 	stored := plan
 	stored.ApprovalToken = ""
-	a.state.ReversePlans = append(a.state.ReversePlans, stored)
-	if err := a.save(); err != nil {
+	_, err = a.updateState(func(current state) (state, error) {
+		current.ReversePlans = append(current.ReversePlans, stored)
+		return current, nil
+	})
+	if err != nil {
 		return ReversePlan{}, err
 	}
 	return plan, nil
@@ -1348,8 +1508,11 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 	}
 	stored := plan
 	stored.ApprovalToken = ""
-	a.state.ReversePlans = append(a.state.ReversePlans, stored)
-	if err := a.save(); err != nil {
+	_, err = a.updateState(func(current state) (state, error) {
+		current.ReversePlans = append(current.ReversePlans, stored)
+		return current, nil
+	})
+	if err != nil {
 		return ReversePlan{}, nil, err
 	}
 	if writeCommand.Preview != nil && writeCommand.Operation != "" {
@@ -1560,7 +1723,7 @@ func (a *App) persistDestructivePreview(plan ReversePlan, preview connectors.Wri
 	}
 	now := time.Now().UTC()
 	var issued ReversePlan
-	updated, err := a.updateState(func(current state) (state, error) {
+	_, err = a.updateState(func(current state) (state, error) {
 		for i := range current.ReversePlans {
 			stored := current.ReversePlans[i]
 			if stored.ID != plan.ID {
@@ -1607,7 +1770,6 @@ func (a *App) persistDestructivePreview(plan ReversePlan, preview connectors.Wri
 	if err != nil {
 		return ReversePlan{}, err
 	}
-	a.state = updated
 	return issued, nil
 }
 
@@ -1636,7 +1798,7 @@ func (a *App) persistOperationDirectWritePreview(plan ReversePlan, preview conne
 	}
 	now := time.Now().UTC()
 	var issued ReversePlan
-	updated, err := a.updateState(func(current state) (state, error) {
+	_, err = a.updateState(func(current state) (state, error) {
 		for i := range current.ReversePlans {
 			stored := current.ReversePlans[i]
 			if stored.ID != plan.ID {
@@ -1667,7 +1829,6 @@ func (a *App) persistOperationDirectWritePreview(plan ReversePlan, preview conne
 	if err != nil {
 		return ReversePlan{}, err
 	}
-	a.state = updated
 	return issued, nil
 }
 
@@ -1815,7 +1976,8 @@ func (a *App) validatePlanConfirmation(plan ReversePlan, got connectors.WriteCon
 }
 
 func (a *App) GetReversePlan(id string) (ReversePlan, error) {
-	for _, plan := range a.state.ReversePlans {
+	current := a.snapshotState()
+	for _, plan := range current.ReversePlans {
 		if plan.ID == id {
 			return plan, nil
 		}
@@ -1824,13 +1986,15 @@ func (a *App) GetReversePlan(id string) (ReversePlan, error) {
 }
 
 func (a *App) ListReversePlans() []ReversePlan {
-	out := append([]ReversePlan(nil), a.state.ReversePlans...)
+	current := a.snapshotState()
+	out := append([]ReversePlan(nil), current.ReversePlans...)
 	sort.Slice(out, func(i, j int) bool { return out[i].CreatedAt.Before(out[j].CreatedAt) })
 	return out
 }
 
 func (a *App) GetReverseRun(id string) (ReverseRun, error) {
-	for _, run := range a.state.ReverseRuns {
+	current := a.snapshotState()
+	for _, run := range current.ReverseRuns {
 		if run.ID == id {
 			return run, nil
 		}
@@ -1839,7 +2003,8 @@ func (a *App) GetReverseRun(id string) (ReverseRun, error) {
 }
 
 func (a *App) ListReverseRuns() []ReverseRun {
-	out := append([]ReverseRun(nil), a.state.ReverseRuns...)
+	current := a.snapshotState()
+	out := append([]ReverseRun(nil), current.ReverseRuns...)
 	sort.Slice(out, func(i, j int) bool { return out[i].StartedAt.Before(out[j].StartedAt) })
 	return out
 }
@@ -2032,6 +2197,8 @@ func validateOperationDirectWritePreview(ctx context.Context, writer connectors.
 }
 
 func (a *App) loadReversePlan(id string) (ReversePlan, error) {
+	a.stateMu.Lock()
+	defer a.stateMu.Unlock()
 	loaded, err := a.store.Load()
 	if err != nil {
 		return ReversePlan{}, err
@@ -2051,7 +2218,7 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 	now := time.Now().UTC()
 	var consumed ReversePlan
 	var evidence *connectors.WriteApprovalEvidence
-	updated, err := a.updateState(func(current state) (state, error) {
+	_, err := a.updateState(func(current state) (state, error) {
 		for i := range current.ReversePlans {
 			stored := current.ReversePlans[i]
 			if stored.ID != expected.ID {
@@ -2118,7 +2285,6 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 		}
 		return nil, ReversePlan{}, err
 	}
-	a.state = updated
 	return evidence, consumed, nil
 }
 
@@ -2164,7 +2330,7 @@ func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, res
 	} else {
 		run.Status = "completed"
 	}
-	updated, persistErr := a.updateState(func(current state) (state, error) {
+	_, persistErr := a.updateState(func(current state) (state, error) {
 		current.ReverseRuns = append(current.ReverseRuns, run)
 		for i := range current.ReversePlans {
 			if current.ReversePlans[i].ID == planID && (current.ReversePlans[i].Status == "executing" || current.ReversePlans[i].Status == reversePlanStatusApprovalConsumptionUncertain) {
@@ -2175,9 +2341,6 @@ func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, res
 		}
 		return current, nil
 	})
-	if persistErr == nil {
-		a.state = updated
-	}
 	if writeErr != nil {
 		return run, writeErr
 	}
@@ -2189,7 +2352,7 @@ func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, res
 
 func (a *App) invalidateReversePlan(planID string) {
 	now := time.Now().UTC()
-	updated, err := a.updateState(func(current state) (state, error) {
+	_, _ = a.updateState(func(current state) (state, error) {
 		for i := range current.ReversePlans {
 			if current.ReversePlans[i].ID != planID {
 				continue
@@ -2202,9 +2365,6 @@ func (a *App) invalidateReversePlan(planID string) {
 		}
 		return current, nil
 	})
-	if err == nil {
-		a.state = updated
-	}
 }
 
 func constantTimeStringEqual(left, right string) bool {
@@ -2249,11 +2409,12 @@ func (a *App) ResolveConnectorCredential(ctx context.Context, connectorName, cre
 }
 
 func (a *App) resolveCredential(ctx context.Context, name string, overlay map[string]string) (CredentialMeta, connectors.RuntimeConfig, error) {
-	cred, ok := a.findCredential(name)
+	current := a.snapshotState()
+	cred, ok := findCredentialInState(current, name)
 	if !ok {
 		return CredentialMeta{}, connectors.RuntimeConfig{}, fmt.Errorf("credential %q not found", name)
 	}
-	coordinationIdentity, err := a.coordinationIdentityForCredential(cred)
+	coordinationIdentity, err := coordinationIdentityForCredential(current, cred)
 	if err != nil {
 		return CredentialMeta{}, connectors.RuntimeConfig{}, err
 	}
@@ -2289,7 +2450,11 @@ func (a *App) resolveCredential(ctx context.Context, name string, overlay map[st
 }
 
 func (a *App) findCredential(name string) (CredentialMeta, bool) {
-	for _, cred := range a.state.Credentials {
+	return findCredentialInState(a.snapshotState(), name)
+}
+
+func findCredentialInState(current state, name string) (CredentialMeta, bool) {
+	for _, cred := range current.Credentials {
 		if cred.Name == name || cred.ID == name {
 			return cred, true
 		}
@@ -2298,7 +2463,11 @@ func (a *App) findCredential(name string) (CredentialMeta, bool) {
 }
 
 func (a *App) findConnection(name string) (Connection, bool) {
-	for _, conn := range a.state.Connections {
+	return findConnectionInState(a.snapshotState(), name)
+}
+
+func findConnectionInState(current state, name string) (Connection, bool) {
+	for _, conn := range current.Connections {
 		if conn.Name == name {
 			return conn, true
 		}
@@ -2306,20 +2475,21 @@ func (a *App) findConnection(name string) (Connection, bool) {
 	return Connection{}, false
 }
 
+func (a *App) streamState(key string) StreamState {
+	return a.snapshotState().StreamStates[key]
+}
+
 func (a *App) failRun(runID string, runErr error) (Run, error) {
-	expectedRevision := a.state.Revision
-	completedAt := time.Now().UTC()
-	updated, persistErr := a.updateState(func(current state) (state, error) {
-		if current.Revision != expectedRevision {
-			return current, errStateRevisionConflict
-		}
+	failed := Run{}
+	_, persistErr := a.updateState(func(current state) (state, error) {
 		for i := range current.Runs {
 			if current.Runs[i].ID != runID {
 				continue
 			}
 			current.Runs[i].Status = "failed"
 			current.Runs[i].Error = safety.RedactErrorText(runErr.Error())
-			current.Runs[i].CompletedAt = completedAt
+			current.Runs[i].CompletedAt = time.Now().UTC()
+			failed = current.Runs[i]
 			return current, nil
 		}
 		return current, fmt.Errorf("run %q not found", runID)
@@ -2327,31 +2497,7 @@ func (a *App) failRun(runID string, runErr error) (Run, error) {
 	if persistErr != nil {
 		return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
 	}
-	for _, run := range updated.Runs {
-		if run.ID == runID {
-			return run, runErr
-		}
-	}
-	return Run{}, errors.Join(runErr, fmt.Errorf("failed run %q was not stored", runID))
-}
-
-func writeJSONAtomic(path string, v any) error {
-	if err := os.MkdirAll(filepath.Dir(path), 0o700); err != nil {
-		return err
-	}
-	tmp := path + ".tmp"
-	b, err := json.MarshalIndent(v, "", "  ")
-	if err != nil {
-		return fmt.Errorf("marshal json: %w", err)
-	}
-	b = append(b, '\n')
-	if err := os.WriteFile(tmp, b, 0o600); err != nil {
-		return fmt.Errorf("write temp json: %w", err)
-	}
-	if err := os.Rename(tmp, path); err != nil {
-		return fmt.Errorf("rename temp json: %w", err)
-	}
-	return nil
+	return failed, runErr
 }
 
 func prefixedID(prefix string) (string, error) {

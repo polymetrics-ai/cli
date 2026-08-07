@@ -240,6 +240,47 @@ func TestLegacyStateMigrationMarksExistingIncrementalAppendAdapter(t *testing.T)
 	}
 }
 
+func TestLegacyStateMigrationPersistsCompatibilityAtOpenBoundary(t *testing.T) {
+	source := newScriptedSyncSource("persisted_incremental_migration", nil)
+	a, connection := setupSyncModeApp(t, source, "incremental_append")
+	a.state.SyncModeCompatibilityVersion = 0
+	for connectionIndex := range a.state.Connections {
+		if a.state.Connections[connectionIndex].Name != connection {
+			continue
+		}
+		stream := a.state.Connections[connectionIndex].Streams["records"]
+		stream.LegacyCompatibility = false
+		a.state.Connections[connectionIndex].Streams["records"] = stream
+	}
+	if err := a.save(); err != nil {
+		t.Fatal(err)
+	}
+
+	migrated, err := Open(a.root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	stored, err := migrated.store.Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if stored.SyncModeCompatibilityVersion != syncModeCompatibilityVersion {
+		t.Fatalf("stored compatibility version = %d, want %d", stored.SyncModeCompatibilityVersion, syncModeCompatibilityVersion)
+	}
+	if !stored.Connections[0].Streams["records"].LegacyCompatibility {
+		t.Fatal("stored legacy stream is not marked as an explicit adapter")
+	}
+
+	reopened, err := Open(a.root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	conn, ok := reopened.findConnection(connection)
+	if !ok || !conn.Streams["records"].LegacyCompatibility {
+		t.Fatalf("reopened compatibility state = %+v", conn)
+	}
+}
+
 func TestFullRefreshAppendDuplicatesAcrossRuns(t *testing.T) {
 	ctx := context.Background()
 	source := newScriptedSyncSource("scripted_append", []connectors.Record{

@@ -87,6 +87,7 @@ schedule:
 | `pm init` | workspace creation | [/docs/quickstart](/docs/quickstart) |
 | `pm connectors` | `pm connectors list`, `pm connectors catalog`, `pm connectors port-plan`, `pm connectors inspect`, `pm connectors help`, `pm connectors certify` | [/docs/connectors](/docs/connectors) |
 | `pm credentials` | `pm credentials add`, `pm credentials link`, `pm credentials list`, `pm credentials inspect`, `pm credentials test`, `pm credentials remove` | this page |
+| `pm webhooks` | `pm webhooks configure`, `pm webhooks status` | [webhook manual](https://github.com/polymetrics-ai/cli/blob/main/docs/cli/webhooks.md) |
 | `pm connections` | `pm connections create`, `pm connections list` | this page |
 | `pm catalog` | `pm catalog refresh`, `pm catalog show` | this page |
 | `pm etl` | `pm etl check`, `pm etl catalog`, `pm etl read`, `pm etl run`, `pm etl status` | [/docs/etl](/docs/etl) |
@@ -167,6 +168,20 @@ JSON output expose the non-secret family/profile declarations but never the
 binding itself; internal coordination receives opaque projections only. This
 identity-only release does not change connector authentication, rate limiting,
 or transport behavior.
+
+### `pm webhooks`
+
+`pm webhooks` declares provider-neutral ingress exposure modes and reports safe
+status; it never registers provider subscriptions or operates a tunnel. The
+[webhook manual](https://github.com/polymetrics-ai/cli/blob/main/docs/cli/webhooks.md)
+is the authoritative reference for the three modes, accepted flags, declared
+port policy, safe JSON envelopes, and recovery requirements. The installed copy
+is available through `pm webhooks --help`.
+
+`tailscale_funnel` describes an operator-owned, already-running Funnel. `pm`
+does not change Tailscale Serve/Funnel mappings or claim public reachability.
+For external-tunnel setup, consult the [official Funnel
+documentation](https://tailscale.com/docs/reference/examples/funnel).
 
 Before saving a credential, `pm` checks non-secret `--config` fields against
 only the selected connector's declared string `enum`, `pattern`, and `uri`,
