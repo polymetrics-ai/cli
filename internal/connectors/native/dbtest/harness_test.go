@@ -18,11 +18,11 @@ type scriptedRunner struct {
 	runErr              error
 	images              map[string]bool
 	commands            [][]string
-	contexts            []string
+	connections         []string
 }
 
-func (r *scriptedRunner) Run(_ context.Context, dockerContext string, args ...string) (string, error) {
-	r.contexts = append(r.contexts, dockerContext)
+func (r *scriptedRunner) Run(_ context.Context, connection string, args ...string) (string, error) {
+	r.connections = append(r.connections, connection)
 	r.commands = append(r.commands, append([]string(nil), args...))
 	switch {
 	case len(args) > 0 && args[0] == "pull":
@@ -46,7 +46,7 @@ func (r *scriptedRunner) Run(_ context.Context, dockerContext string, args ...st
 		if r.volumePresent {
 			return "", nil
 		}
-		return "", errDockerResourceNotFound
+		return "", errPodmanResourceNotFound
 	case commandHasPrefix(args, "volume", "create"):
 		r.volumePresent = true
 		return "", r.volumeCreateErr
@@ -59,7 +59,7 @@ func (r *scriptedRunner) Run(_ context.Context, dockerContext string, args ...st
 		if r.containerLive {
 			return "", nil
 		}
-		return "", errDockerResourceNotFound
+		return "", errPodmanResourceNotFound
 	case len(args) > 0 && args[0] == "run":
 		r.containerLive = true
 		return "", r.runErr
@@ -99,9 +99,9 @@ func commandsContain(commands [][]string, prefix ...string) bool {
 	return false
 }
 
-type scriptedColimaRunner struct{ commands [][]string }
+type scriptedMachineRunner struct{ commands [][]string }
 
-func (r *scriptedColimaRunner) Run(_ context.Context, args ...string) error {
+func (r *scriptedMachineRunner) Run(_ context.Context, args ...string) error {
 	r.commands = append(r.commands, append([]string(nil), args...))
 	return nil
 }
@@ -112,7 +112,7 @@ func testConfig(runner CommandRunner) Config {
 		Image:          "example.invalid/mysql:8.4.11",
 		ContainerPort:  3306,
 		DataVolumePath: "/var/lib/mysql",
-		DockerContext:  "colima",
+		Connection:     "lane-machine",
 		Run:            runner,
 		DiskFree: func() (uint64, error) {
 			return 123, nil
@@ -120,12 +120,23 @@ func testConfig(runner CommandRunner) Config {
 	}
 }
 
-func TestNewRejectsUnscopedDockerContext(t *testing.T) {
-	config := testConfig(&scriptedRunner{})
-	config.DockerContext = ""
-	_, err := New(config)
-	if err == nil {
-		t.Fatal("New() succeeded without an explicit Docker context")
+func TestNewRejectsUnscopedConnection(t *testing.T) {
+	for _, tc := range []struct {
+		name       string
+		connection string
+	}{
+		{name: "empty falls back to the default connection", connection: ""},
+		{name: "whitespace only", connection: "  "},
+		{name: "argument injection", connection: "lane --remote"},
+		{name: "newline injection", connection: "lane\nmachine"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			config := testConfig(&scriptedRunner{})
+			config.Connection = tc.connection
+			if _, err := New(config); err == nil {
+				t.Fatal("New() accepted an unsafe or absent Podman connection")
+			}
+		})
 	}
 }
 
@@ -136,6 +147,7 @@ func TestNewRejectsUnpinnedImages(t *testing.T) {
 	}{
 		{name: "latest image", mutate: func(c *Config) { c.Image = "example.invalid/mysql:latest" }},
 		{name: "unversioned image", mutate: func(c *Config) { c.Image = "example.invalid/mysql" }},
+		{name: "digest form", mutate: func(c *Config) { c.Image = "example.invalid/mysql@sha256:abc" }},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			config := testConfig(&scriptedRunner{})
@@ -168,30 +180,53 @@ func TestCleanupRemovesOnlyRunOwnedResources(t *testing.T) {
 	if err := h.Close(context.Background()); err != nil {
 		t.Fatalf("Close(): %v", err)
 	}
-	if !runner.imagePresent(config.Image) || runner.imagePresent(h.runImage) {
-		t.Fatalf("images after cleanup = %#v, want shared source only", runner.images)
+	if runner.imagePresent(config.Image) || runner.imagePresent(h.runImage) {
+		t.Fatalf("images after cleanup = %#v, want every run-owned reference removed", runner.images)
 	}
 
-	var gotCleanup []string
+	var gotCleanup [][]string
 	for _, command := range runner.commands {
 		if commandHasPrefix(command, "container", "rm") || commandHasPrefix(command, "volume", "rm") || commandHasPrefix(command, "image", "rm") {
-			gotCleanup = append(gotCleanup, command[0])
+			gotCleanup = append(gotCleanup, command[:2])
 		}
 	}
-	if want := []string{"container", "volume", "image"}; !reflect.DeepEqual(gotCleanup, want) {
+	want := [][]string{{"container", "rm"}, {"volume", "rm"}, {"image", "rm"}, {"image", "rm"}}
+	if !reflect.DeepEqual(gotCleanup, want) {
 		t.Fatalf("cleanup order = %v, want %v", gotCleanup, want)
 	}
-	if commandsContain(runner.commands, "image", "rm", config.Image) || !commandsContain(runner.commands, "image", "rm", h.runImage) {
-		t.Fatalf("image cleanup commands = %v, want generated reference only", runner.commands)
-	}
-	for _, dockerContext := range runner.contexts {
-		if dockerContext != "colima" {
-			t.Fatalf("Docker command used context %q, want explicit context", dockerContext)
+	for _, connection := range runner.connections {
+		if connection != "lane-machine" {
+			t.Fatalf("podman command used connection %q, want the explicit connection", connection)
 		}
 	}
 	report := h.Report()
-	if report.DiskFreeBefore != 123 || report.DiskFreeAfter != 123 || report.ColimaReset {
-		t.Fatalf("disk report = %+v, want before/after values without reset", report)
+	if report.DiskFreeBefore != 123 || report.DiskFreeAfter != 123 || report.HostDiskReclaimed {
+		t.Fatalf("disk report = %+v, want before/after values without reclaim", report)
+	}
+}
+
+func TestCleanupKeepsSourceImageOnlyWhenOptedIn(t *testing.T) {
+	runner := &scriptedRunner{}
+	config := testConfig(runner)
+	config.KeepImage = true
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err != nil {
+		t.Fatalf("Start(): %v", err)
+	}
+	if err := h.Close(context.Background()); err != nil {
+		t.Fatalf("Close(): %v", err)
+	}
+	if !runner.imagePresent(config.Image) {
+		t.Fatalf("images after opted-in cleanup = %#v, want retained source image", runner.images)
+	}
+	if runner.imagePresent(h.runImage) {
+		t.Fatalf("images after opted-in cleanup = %#v, want generated reference removed", runner.images)
+	}
+	if commandsContain(runner.commands, "image", "rm", config.Image) {
+		t.Fatalf("commands = %v, want no source image removal when KeepImage is set", runner.commands)
 	}
 }
 
@@ -226,10 +261,37 @@ func TestStartPlacesEngineArgumentsAfterImage(t *testing.T) {
 		}
 		return
 	}
-	t.Fatal("Start did not issue a Docker run command")
+	t.Fatal("Start did not issue a podman run command")
 }
 
-func TestStartCleansResourcesAfterIndeterminateDaemonOutcomes(t *testing.T) {
+func TestStartPublishesOnlyLoopback(t *testing.T) {
+	runner := &scriptedRunner{}
+	h, err := New(testConfig(runner))
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err != nil {
+		t.Fatalf("Start(): %v", err)
+	}
+	defer func() { _ = h.Close(context.Background()) }()
+	for _, command := range runner.commands {
+		if command[0] != "run" {
+			continue
+		}
+		for index, arg := range command {
+			if arg != "--publish" {
+				continue
+			}
+			if want := "127.0.0.1::3306"; command[index+1] != want {
+				t.Fatalf("publish argument = %q, want %q", command[index+1], want)
+			}
+			return
+		}
+	}
+	t.Fatal("Start did not publish the engine port on loopback")
+}
+
+func TestStartCleansResourcesAfterIndeterminateEngineOutcomes(t *testing.T) {
 	for _, tc := range []struct {
 		name             string
 		runner           *scriptedRunner
@@ -237,12 +299,12 @@ func TestStartCleansResourcesAfterIndeterminateDaemonOutcomes(t *testing.T) {
 		wantNoImageClean bool
 	}{
 		{
-			name:             "pull returns an error before a generated reference exists",
+			name:             "pull returns an error before any reference is owned",
 			runner:           &scriptedRunner{pullErr: context.Canceled},
 			wantNoImageClean: true,
 		},
 		{
-			name:   "tag returns an error after creating the generated reference",
+			name:   "tag returns an error after the pull succeeded",
 			runner: &scriptedRunner{tagErr: context.Canceled},
 			wantClean: [][]string{
 				{"image", "rm"},
@@ -273,7 +335,7 @@ func TestStartCleansResourcesAfterIndeterminateDaemonOutcomes(t *testing.T) {
 				t.Fatalf("New(): %v", err)
 			}
 			if _, err := h.Start(context.Background()); err == nil {
-				t.Fatal("Start() succeeded after an indeterminate daemon outcome")
+				t.Fatal("Start() succeeded after an indeterminate engine outcome")
 			}
 			for _, prefix := range tc.wantClean {
 				if !commandsContain(tc.runner.commands, prefix...) {
@@ -281,13 +343,38 @@ func TestStartCleansResourcesAfterIndeterminateDaemonOutcomes(t *testing.T) {
 				}
 			}
 			if tc.wantNoImageClean && commandsContain(tc.runner.commands, "image", "rm") {
-				t.Fatalf("cleanup commands = %v, want no generated image removal", tc.runner.commands)
-			}
-			if tc.wantNoImageClean && !tc.runner.imagePresent(config.Image) {
-				t.Fatalf("images after pull error = %#v, want retained shared source cache", tc.runner.images)
+				t.Fatalf("cleanup commands = %v, want no image removal when the pull failed", tc.runner.commands)
 			}
 			if !tc.wantNoImageClean && tc.runner.imagePresent(h.runImage) {
 				t.Fatalf("images after cleanup = %#v, want generated reference removed", tc.runner.images)
+			}
+		})
+	}
+}
+
+func TestStartReleasesTheEngineSlotOnEveryExitPath(t *testing.T) {
+	// A leaked slot would deadlock the next sequential engine rather than
+	// fail it, so prove the slot returns after both outcomes.
+	for _, tc := range []struct {
+		name   string
+		runner *scriptedRunner
+	}{
+		{name: "successful run", runner: &scriptedRunner{}},
+		{name: "failed start", runner: &scriptedRunner{runErr: context.Canceled}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			h, err := New(testConfig(tc.runner))
+			if err != nil {
+				t.Fatalf("New(): %v", err)
+			}
+			if _, err := h.Start(context.Background()); err == nil {
+				_ = h.Close(context.Background())
+			}
+			select {
+			case engineSlots <- struct{}{}:
+				<-engineSlots
+			default:
+				t.Fatal("engine slot was not released after the run finished")
 			}
 		})
 	}
@@ -312,12 +399,26 @@ func TestStartUsesGeneratedImageReferenceWithoutInspectingSource(t *testing.T) {
 	}
 }
 
-func TestDockerResourceNotFoundClassifiesOnlyKnownAbsence(t *testing.T) {
-	if !dockerResourceNotFound(&exec.ExitError{Stderr: []byte("Error response from daemon: No such image")}) {
-		t.Fatal("dockerResourceNotFound() did not recognize a missing image")
+func TestPodmanResourceNotFoundClassifiesOnlyKnownAbsence(t *testing.T) {
+	for _, stderr := range []string{
+		`Error: no such container "x"`,
+		`Error: no such volume "x"`,
+		// Podman's wording where Docker says "no such image". Missing this
+		// phrasing turns an ordinary absent image into a cleanup failure.
+		"Error: x: image not known",
+		"Error response from daemon: No such image",
+	} {
+		if !podmanResourceNotFound(&exec.ExitError{Stderr: []byte(stderr)}) {
+			t.Fatalf("podmanResourceNotFound(%q) = false, want recognized absence", stderr)
+		}
 	}
-	if dockerResourceNotFound(&exec.ExitError{Stderr: []byte("Error response from daemon: access denied")}) {
-		t.Fatal("dockerResourceNotFound() classified an indeterminate inspect error as absence")
+	for _, stderr := range []string{
+		"Error response from daemon: access denied",
+		"Error: unable to connect to Podman socket",
+	} {
+		if podmanResourceNotFound(&exec.ExitError{Stderr: []byte(stderr)}) {
+			t.Fatalf("podmanResourceNotFound(%q) = true, want indeterminate error", stderr)
+		}
 	}
 }
 
@@ -335,47 +436,13 @@ func TestStartPreservesPreexistingGeneratedVolume(t *testing.T) {
 	}
 }
 
-func TestCleanupRemovesOnlyGeneratedImageReference(t *testing.T) {
-	for _, tc := range []struct {
-		name          string
-		sourcePresent bool
-	}{
-		{name: "preexisting source image", sourcePresent: true},
-		{name: "source image pulled for the run"},
-	} {
-		t.Run(tc.name, func(t *testing.T) {
-			runner := &scriptedRunner{}
-			config := testConfig(runner)
-			if tc.sourcePresent {
-				runner.setImage(config.Image, true)
-			}
-			h, err := New(config)
-			if err != nil {
-				t.Fatalf("New(): %v", err)
-			}
-			if _, err := h.Start(context.Background()); err != nil {
-				t.Fatalf("Start(): %v", err)
-			}
-			if err := h.Close(context.Background()); err != nil {
-				t.Fatalf("Close(): %v", err)
-			}
-			if !runner.imagePresent(config.Image) || runner.imagePresent(h.runImage) {
-				t.Fatalf("images after cleanup = %#v, want shared source only", runner.images)
-			}
-			if commandsContain(runner.commands, "image", "rm", config.Image) || !commandsContain(runner.commands, "image", "rm", h.runImage) {
-				t.Fatalf("image cleanup commands = %v, want generated reference only", runner.commands)
-			}
-		})
-	}
-}
-
-func TestCleanupResetsColimaOnlyAfterDockerCleanup(t *testing.T) {
+func TestCleanupReclaimsHostDiskOnlyAfterContainerCleanup(t *testing.T) {
 	runner := &scriptedRunner{}
-	colima := &scriptedColimaRunner{}
+	machine := &scriptedMachineRunner{}
 	config := testConfig(runner)
-	config.ResetColima = true
-	config.ColimaProfile = "default"
-	config.RunColima = colima
+	config.ReclaimHostDisk = true
+	config.Machine = "lane-machine"
+	config.RunMachine = machine
 	h, err := New(config)
 	if err != nil {
 		t.Fatalf("New(): %v", err)
@@ -386,19 +453,32 @@ func TestCleanupResetsColimaOnlyAfterDockerCleanup(t *testing.T) {
 	if err := h.Close(context.Background()); err != nil {
 		t.Fatalf("Close(): %v", err)
 	}
-	if want := [][]string{{"delete", "--force", "--profile", "default"}, {"start", "--profile", "default", "--runtime", "docker"}}; !reflect.DeepEqual(colima.commands, want) {
-		t.Fatalf("Colima lifecycle commands = %v, want %v", colima.commands, want)
+	// Two passes are required: one discard immediately after an image removal
+	// returns only part of the space on Podman 5.3 with applehv.
+	trim := []string{"machine", "ssh", "lane-machine", "sudo fstrim -av"}
+	if want := [][]string{trim, trim}; !reflect.DeepEqual(machine.commands, want) {
+		t.Fatalf("machine lifecycle commands = %v, want %v", machine.commands, want)
 	}
-	if !h.Report().ColimaReset {
-		t.Fatal("report did not record the completed Colima reset")
+	if !h.Report().HostDiskReclaimed {
+		t.Fatal("report did not record the completed host-disk reclaim")
 	}
-	lastDockerCleanup := -1
+	lastContainerCleanup := -1
 	for index, command := range runner.commands {
 		if len(command) > 1 && ((command[0] == "container" && command[1] == "rm") || (command[0] == "volume" && command[1] == "rm") || (command[0] == "image" && command[1] == "rm")) {
-			lastDockerCleanup = index
+			lastContainerCleanup = index
 		}
 	}
-	if lastDockerCleanup < 0 {
-		t.Fatal("Docker cleanup was not attempted before Colima reset")
+	if lastContainerCleanup < 0 {
+		t.Fatal("container cleanup was not attempted before the host-disk reclaim")
+	}
+}
+
+func TestParseMappedPortRefusesTheEngineDefaultPort(t *testing.T) {
+	if _, err := parseMappedPort("127.0.0.1:3306\n", 3306); err == nil {
+		t.Fatal("parseMappedPort() accepted the engine default host port")
+	}
+	port, err := parseMappedPort("127.0.0.1:43123\n", 3306)
+	if err != nil || port != 43123 {
+		t.Fatalf("parseMappedPort() = %d, %v, want 43123", port, err)
 	}
 }

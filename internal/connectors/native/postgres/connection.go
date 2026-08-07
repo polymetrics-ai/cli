@@ -11,6 +11,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/native/sqltls"
 )
 
 const (
@@ -22,7 +23,10 @@ const (
 	defaultReadLimit = 10000
 )
 
-// validSSLModes is the libpq sslmode allow-list pgx accepts.
+// validSSLModes is the libpq sslmode allow-list pgx accepts verbatim. A value
+// outside this set is still accepted when sqltls recognises it, so the
+// canonical vocabulary (disabled/preferred/required/verify-ca/verify-identity)
+// means the same thing here as on the MySQL connector.
 var validSSLModes = map[string]bool{
 	"disable":     true,
 	"allow":       true,
@@ -30,6 +34,21 @@ var validSSLModes = map[string]bool{
 	"require":     true,
 	"verify-ca":   true,
 	"verify-full": true,
+}
+
+// libpqSSLMode normalises one accepted spelling to what pgx expects. A libpq
+// name passes through unchanged so existing configuration keeps its exact
+// behaviour, including "allow", which sqltls folds into "preferred" and which
+// must not be rewritten here.
+func libpqSSLMode(raw string) (string, error) {
+	if validSSLModes[raw] {
+		return raw, nil
+	}
+	mode, err := sqltls.ParseMode(raw)
+	if err != nil {
+		return "", fmt.Errorf("postgres config sslmode is not one of disable/allow/prefer/require/verify-ca/verify-full or %s", sqltls.AcceptedModes)
+	}
+	return mode.LibpqSSLMode(), nil
 }
 
 // connConfig is the validated connection configuration. The password lives
@@ -115,8 +134,9 @@ func resolveConfig(cfg connectors.RuntimeConfig) (connConfig, error) {
 	if sslmode == "" {
 		sslmode = defaultSSLMode
 	}
-	if !validSSLModes[sslmode] {
-		return connConfig{}, fmt.Errorf("postgres config sslmode %q is not one of disable/allow/prefer/require/verify-ca/verify-full", sslmode)
+	sslmode, err := libpqSSLMode(sslmode)
+	if err != nil {
+		return connConfig{}, err
 	}
 
 	schema := get("schema")

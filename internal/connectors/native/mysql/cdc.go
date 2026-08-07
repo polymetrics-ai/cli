@@ -95,13 +95,21 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 		return errors.New("mysql CDC schema changed; resnapshot required")
 	}
 
+	// Replication must run under the same transport-security choice as every
+	// other statement; a syncer left at its zero value would connect in
+	// plaintext regardless of the configured mode.
+	replicationTLS, err := conn.replicationTLS(ctx)
+	if err != nil {
+		return err
+	}
 	syncer := replication.NewBinlogSyncer(replication.BinlogSyncerConfig{
-		ServerID: serverID,
-		Flavor:   gomysql.MySQLFlavor,
-		Host:     conn.host,
-		Port:     uint16(conn.port),
-		User:     conn.username,
-		Password: conn.password,
+		ServerID:  serverID,
+		Flavor:    gomysql.MySQLFlavor,
+		Host:      conn.host,
+		Port:      uint16(conn.port),
+		User:      conn.username,
+		Password:  conn.password,
+		TLSConfig: replicationTLS,
 		// The upstream library emits configuration/position diagnostics through
 		// this logger. Discard it: test and connector output must never become a
 		// credential or endpoint logging path.

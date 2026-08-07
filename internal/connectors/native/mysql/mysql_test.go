@@ -3,15 +3,18 @@ package mysql
 import (
 	"context"
 	"errors"
+	"net"
 	"reflect"
 	"strings"
 	"testing"
+	"time"
 
 	gomysql "github.com/go-mysql-org/go-mysql/mysql"
 	"github.com/go-mysql-org/go-mysql/replication"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/connectors/native/sqltls"
 )
 
 func testConfig() connectors.RuntimeConfig {
@@ -387,5 +390,142 @@ func TestWriteUnsupported(t *testing.T) {
 	_, err := New().Write(context.Background(), connectors.WriteRequest{}, nil)
 	if !errors.Is(err, connectors.ErrUnsupportedOperation) {
 		t.Fatalf("Write() = %v, want ErrUnsupportedOperation", err)
+	}
+}
+
+func TestTransportSecurityModeIsResolvedFromSharedSQLShape(t *testing.T) {
+	for _, tc := range []struct {
+		name         string
+		mode         string
+		wantMode     sqltls.Mode
+		wantEncrypt  bool
+		wantFallback bool
+	}{
+		{name: "default when unset", mode: "", wantMode: sqltls.ModePreferred, wantEncrypt: true, wantFallback: true},
+		{name: "explicit disabled", mode: "disabled", wantMode: sqltls.ModeDisabled},
+		{name: "explicit required", mode: "required", wantMode: sqltls.ModeRequired, wantEncrypt: true},
+		{name: "libpq spelling", mode: "verify-full", wantMode: sqltls.ModeVerifyIdentity, wantEncrypt: true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			cfg := testConfig()
+			if tc.mode != "" {
+				cfg.Config["sslmode"] = tc.mode
+			}
+			conn, err := resolveConfig(cfg)
+			if err != nil {
+				t.Fatalf("resolveConfig(): %v", err)
+			}
+			if conn.tls.Mode != tc.wantMode {
+				t.Fatalf("mode = %q, want %q", conn.tls.Mode, tc.wantMode)
+			}
+			if conn.tls.Encrypted() != tc.wantEncrypt {
+				t.Fatalf("Encrypted() = %t, want %t", conn.tls.Encrypted(), tc.wantEncrypt)
+			}
+			if conn.tls.MayFallBackToPlaintext() != tc.wantFallback {
+				t.Fatalf("MayFallBackToPlaintext() = %t, want %t", conn.tls.MayFallBackToPlaintext(), tc.wantFallback)
+			}
+		})
+	}
+}
+
+func TestResolveConfigRejectsUnknownTransportSecurityMode(t *testing.T) {
+	cfg := testConfig()
+	cfg.Config["sslmode"] = "definitely-not-a-mode"
+	if _, err := resolveConfig(cfg); err == nil {
+		t.Fatal("resolveConfig() accepted an unknown sslmode instead of refusing it")
+	}
+}
+
+// A server that offers no TLS is the exact situation in which a connector may
+// be tempted to downgrade. Prove that only "preferred" does.
+func TestStrictTransportSecurityIsNotDowngradedAgainstATLSLessServer(t *testing.T) {
+	listener, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatalf("listen: %v", err)
+	}
+	defer func() { _ = listener.Close() }()
+	go serveTLSLessMySQLGreeting(listener)
+
+	host, portText, err := net.SplitHostPort(listener.Addr().String())
+	if err != nil {
+		t.Fatalf("split addr: %v", err)
+	}
+
+	for _, tc := range []struct {
+		mode        string
+		wantRefusal bool
+	}{
+		{mode: "required", wantRefusal: true},
+		{mode: "verify-ca", wantRefusal: true},
+		{mode: "verify-identity", wantRefusal: true},
+		{mode: "preferred"},
+		{mode: "disabled"},
+	} {
+		t.Run(tc.mode, func(t *testing.T) {
+			cfg := testConfig()
+			cfg.Config["host"] = host
+			cfg.Config["port"] = portText
+			cfg.Config["sslmode"] = tc.mode
+			conn, err := resolveConfig(cfg)
+			if err != nil {
+				t.Fatalf("resolveConfig(): %v", err)
+			}
+			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+			defer cancel()
+			tlsConfig, err := conn.tls.TLSConfig(conn.host)
+			if err != nil {
+				t.Fatalf("TLSConfig(): %v", err)
+			}
+			_, dialErr := conn.dial(ctx, tlsConfig)
+			if tc.wantRefusal {
+				if dialErr == nil || !strings.Contains(dialErr.Error(), serverRefusedTLS) {
+					t.Fatalf("dial under %q error = %v, want the driver's TLS refusal", tc.mode, dialErr)
+				}
+				// The refusal must not be convertible into a plaintext retry.
+				if conn.tls.MayFallBackToPlaintext() {
+					t.Fatalf("mode %q permitted a plaintext fallback", tc.mode)
+				}
+				return
+			}
+			if tlsConfig != nil && !conn.tls.MayFallBackToPlaintext() {
+				t.Fatalf("mode %q would encrypt without a documented fallback", tc.mode)
+			}
+		})
+	}
+}
+
+// serveTLSLessMySQLGreeting writes a MySQL 8.4 initial handshake whose
+// capability flags omit CLIENT_SSL, then closes. That is all the client needs
+// to see to decide whether TLS is possible.
+func serveTLSLessMySQLGreeting(listener net.Listener) {
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			return
+		}
+		go func(conn net.Conn) {
+			defer func() { _ = conn.Close() }()
+			// Capabilities: CLIENT_PROTOCOL_41 (0x00000200) only. CLIENT_SSL
+			// (0x00000800) is deliberately absent.
+			const capabilities = 0x00000200
+			body := []byte{10}                                                         // protocol version
+			body = append(body, []byte("8.4.11-test")...)                              // server version
+			body = append(body, 0)                                                     // version terminator
+			body = append(body, 1, 0, 0, 0)                                            // connection id
+			body = append(body, make([]byte, 8)...)                                    // auth-plugin-data-part-1
+			body = append(body, 0)                                                     // filler
+			body = append(body, byte(capabilities&0xff), byte((capabilities>>8)&0xff)) // capability flags lower
+			body = append(body, 0xff)                                                  // charset
+			body = append(body, 2, 0)                                                  // status flags
+			body = append(body, byte((capabilities>>16)&0xff), byte((capabilities>>24)&0xff))
+			body = append(body, 21)                  // auth plugin data length
+			body = append(body, make([]byte, 10)...) // reserved
+			body = append(body, make([]byte, 13)...) // auth-plugin-data-part-2
+			body = append(body, []byte("mysql_native_password")...)
+			body = append(body, 0)
+
+			header := []byte{byte(len(body)), byte(len(body) >> 8), byte(len(body) >> 16), 0}
+			_, _ = conn.Write(append(header, body...))
+		}(conn)
 	}
 }

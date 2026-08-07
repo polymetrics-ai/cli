@@ -25,6 +25,19 @@
       "x-secret": true,
       "description": "Database password. Never logged."
     },
+    "sslmode": {
+      "type": "string",
+      "enum": ["disabled", "preferred", "required", "verify-ca", "verify-identity"],
+      "description": "Transport security. disabled never negotiates TLS; preferred (the default) encrypts when the server offers TLS and is the only mode that falls back to plaintext; required encrypts and fails when the server offers no TLS; verify-ca also verifies the server chain; verify-identity also verifies the server name. libpq spellings (disable/prefer/require/verify-full) are accepted so a value means the same thing here and on the PostgreSQL connector."
+    },
+    "sslrootcert": {
+      "type": "string",
+      "description": "Absolute path to a PEM CA bundle used by verify-ca and verify-identity. Defaults to the host trust store when omitted."
+    },
+    "sslservername": {
+      "type": "string",
+      "description": "Server name to verify under verify-identity when it differs from host, such as an IP-addressed endpoint fronting a named certificate."
+    },
     "cursor_field": {
       "type": "string",
       "description": "Optional safe, non-null, single-column primary or unique key for cursor-incremental reads. A present cursor state, including an empty or whitespace value, is a strict resume boundary."

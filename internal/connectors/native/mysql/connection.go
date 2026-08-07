@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"context"
+	"crypto/tls"
 	"errors"
 	"fmt"
 	"net"
@@ -12,11 +13,15 @@ import (
 	"github.com/go-mysql-org/go-mysql/client"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/native/sqltls"
 )
 
 const (
 	defaultPort      = 3306
 	defaultReadLimit = 10_000
+	// defaultTLSMode encrypts opportunistically. Every stricter mode is
+	// available and honestly enforced; see sqltls.
+	defaultTLSMode = sqltls.ModePreferred
 )
 
 type connConfig struct {
@@ -25,6 +30,7 @@ type connConfig struct {
 	database string
 	username string
 	password string
+	tls      sqltls.Options
 }
 
 func resolveConfig(cfg connectors.RuntimeConfig) (connConfig, error) {
@@ -49,7 +55,22 @@ func resolveConfig(cfg connectors.RuntimeConfig) (connConfig, error) {
 	if cfg.Secrets != nil {
 		password = cfg.Secrets["password"]
 	}
-	return connConfig{host: host, port: port, database: database, username: username, password: password}, nil
+	// defaultTLSMode is "preferred": a local container and a managed remote
+	// server are both ordinary here, so the connector encrypts whenever the
+	// server offers it and never refuses a server that does not. A user who
+	// needs a guarantee states "required" or a verifying mode.
+	transport, err := sqltls.Resolve(value, defaultTLSMode)
+	if err != nil {
+		return connConfig{}, fmt.Errorf("mysql config: %w", err)
+	}
+	return connConfig{
+		host:     host,
+		port:     port,
+		database: database,
+		username: username,
+		password: password,
+		tls:      transport,
+	}, nil
 }
 
 func validateHost(host string) error {
@@ -121,14 +142,70 @@ func (c connConfig) address() string {
 	return net.JoinHostPort(c.host, strconv.Itoa(c.port))
 }
 
+// serverRefusedTLS is the driver's wording when the server advertises no TLS
+// capability. It is the only failure that may trigger the "preferred"
+// plaintext retry. If a driver upgrade changes this wording the match stops
+// firing and "preferred" fails closed instead of downgrading, which is the
+// safe direction for the mismatch.
+const serverRefusedTLS = "does not support TLS"
+
+// open dials the server under the configured transport-security mode.
+//
+// A stricter-than-preferred mode is never downgraded: the tls.Config is
+// non-nil, and the driver refuses a server that advertises no TLS. Only
+// "preferred" retries in plaintext, and only for that one refusal.
 func (c connConfig) open(ctx context.Context) (*client.Conn, error) {
-	conn, err := client.ConnectWithContext(ctx, c.address(), c.username, c.password, c.database, 10*time.Second)
+	tlsConfig, err := c.tls.TLSConfig(c.host)
 	if err != nil {
+		return nil, err
+	}
+	conn, err := c.dial(ctx, tlsConfig)
+	if err == nil {
+		return conn, nil
+	}
+	if tlsConfig == nil || !c.tls.MayFallBackToPlaintext() || !strings.Contains(err.Error(), serverRefusedTLS) {
 		// Client errors can include the endpoint or authentication details. Keep
 		// configuration values out of caller-visible errors and logs.
 		return nil, errors.New("connect mysql failed")
 	}
+	if conn, err = c.dial(ctx, nil); err != nil {
+		return nil, errors.New("connect mysql failed")
+	}
 	return conn, nil
+}
+
+func (c connConfig) dial(ctx context.Context, tlsConfig *tls.Config) (*client.Conn, error) {
+	var options []client.Option
+	if tlsConfig != nil {
+		options = append(options, func(conn *client.Conn) error {
+			conn.SetTLSConfig(tlsConfig)
+			return nil
+		})
+	}
+	return client.ConnectWithContext(ctx, c.address(), c.username, c.password, c.database, 10*time.Second, options...)
+}
+
+// replicationTLS resolves the tls.Config the binary-log syncer must use, so
+// change capture runs under the same transport-security choice as every other
+// statement rather than quietly reverting to plaintext. Under "preferred" it
+// probes once, because the syncer has no opportunistic mode of its own.
+func (c connConfig) replicationTLS(ctx context.Context) (*tls.Config, error) {
+	tlsConfig, err := c.tls.TLSConfig(c.host)
+	if err != nil || tlsConfig == nil {
+		return nil, err
+	}
+	if !c.tls.MayFallBackToPlaintext() {
+		return tlsConfig, nil
+	}
+	probe, err := c.dial(ctx, tlsConfig)
+	if err != nil {
+		if strings.Contains(err.Error(), serverRefusedTLS) {
+			return nil, nil
+		}
+		return nil, errors.New("connect mysql failed")
+	}
+	_ = probe.Close()
+	return tlsConfig, nil
 }
 
 // Check opens and pings the configured server without logging configuration or
