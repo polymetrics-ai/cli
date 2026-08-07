@@ -1,6 +1,6 @@
 {
-  "tagline": "Read the currently stream-backed Zoom users, meetings, and webinars API routes.",
-  "usage": "pm zoom <users|meetings|webinars> list [flags]",
+  "tagline": "Read the currently stream-backed Zoom users, meetings, and webinars API routes, plus bounded Quality of Service summary reads.",
+  "usage": "pm zoom <users|meetings|webinars|qss> <list> [flags]",
   "source_cli": {
     "name": "Zoom API reference",
     "docs": "https://developers.zoom.us/docs/api/",
@@ -11,12 +11,24 @@
     {
       "id": "users",
       "title": "Users",
-      "commands": ["users"]
+      "commands": [
+        "users"
+      ]
     },
     {
       "id": "meetings",
       "title": "Meetings and webinars",
-      "commands": ["meetings", "webinars"]
+      "commands": [
+        "meetings",
+        "webinars"
+      ]
+    },
+    {
+      "id": "qss",
+      "title": "Quality of Service Summaries",
+      "commands": [
+        "qss"
+      ]
     }
   ],
   "global_flags": [
@@ -56,7 +68,10 @@
       "source_cli_path": "GET /v2/users",
       "source_url": "https://developers.zoom.us/docs/api/users.md",
       "api_surface": [
-        { "method": "GET", "path": "/v2/users" }
+        {
+          "method": "GET",
+          "path": "/v2/users"
+        }
       ],
       "examples": [
         "pm zoom users list --credential zoom-fixture --limit 25 --json"
@@ -80,7 +95,10 @@
         }
       ],
       "api_surface": [
-        { "method": "GET", "path": "/v2/users/{userId}/meetings" }
+        {
+          "method": "GET",
+          "path": "/v2/users/{userId}/meetings"
+        }
       ],
       "examples": [
         "pm zoom meetings list --credential zoom-fixture --user-id fixture-user --limit 25 --json"
@@ -104,17 +122,107 @@
         }
       ],
       "api_surface": [
-        { "method": "GET", "path": "/v2/users/{userId}/webinars" }
+        {
+          "method": "GET",
+          "path": "/v2/users/{userId}/webinars"
+        }
       ],
       "examples": [
         "pm zoom webinars list --credential zoom-fixture --user-id fixture-user --limit 25 --json"
       ]
+    },
+    {
+      "path": "qss meeting-participants list",
+      "summary": "List a past meeting's participants' Quality of Service summary.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_meeting_participants_qos_summary",
+      "source_url": "https://developers.zoom.us/docs/api/qss.md",
+      "flags": [
+        {
+          "name": "meeting-id",
+          "type": "string",
+          "summary": "Zoom meeting ID or UUID.",
+          "maps_to": "path.meetingId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded Zoom read; fixed method and path with a typed required meeting-id path parameter.",
+      "examples": [
+        "pm zoom qss meeting-participants list --credential zoom-fixture --meeting-id 123456789 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/metrics/meetings/{meetingId}/participants/qos_summary"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "qss webinar-participants list",
+      "summary": "List a live or past webinar's participants' Quality of Service summary.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_webinar_participants_qos_summary",
+      "source_url": "https://developers.zoom.us/docs/api/qss.md",
+      "flags": [
+        {
+          "name": "webinar-id",
+          "type": "string",
+          "summary": "Zoom webinar ID or UUID.",
+          "maps_to": "path.webinarId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded Zoom read; fixed method and path with a typed required webinar-id path parameter.",
+      "examples": [
+        "pm zoom qss webinar-participants list --credential zoom-fixture --webinar-id 123456789 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/metrics/webinars/{webinarId}/participants/qos_summary"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "qss session-users list",
+      "summary": "List a past Video SDK session's users' Quality of Service summary.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_session_users_qos_summary",
+      "source_url": "https://developers.zoom.us/docs/api/qss.md",
+      "flags": [
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "Zoom Video SDK session ID.",
+          "maps_to": "path.sessionId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded Zoom read; fixed method and path with a typed required session-id path parameter.",
+      "examples": [
+        "pm zoom qss session-users list --credential zoom-fixture --session-id abc123 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/videosdk/sessions/{sessionId}/users/qos_summary"
+        }
+      ],
+      "output_policy": "json_redacted"
     }
   ],
   "help_topics": [
     {
       "name": "provider-inventory",
-      "summary": "The Zoom provider ledger tracks 1,913 documented REST operations; Wave 1 executes only these three existing stream-backed reads."
+      "summary": "The Zoom provider ledger tracks 1,913 documented REST operations; Wave 1 executes three stream-backed reads and Wave 2 (qss) adds three bounded direct-read operations."
     }
   ]
 }

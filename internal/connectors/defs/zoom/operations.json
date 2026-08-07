@@ -1,0 +1,49 @@
+{
+  "operations": [
+    {
+      "id": "zoom.list_meeting_participants_qos_summary",
+      "kind": "rest_read",
+      "summary": "List meeting participants QoS Summary",
+      "description": "Bounded Zoom read for GET /v2/metrics/meetings/{meetingId}/participants/qos_summary; returns quality-of-service metrics for a past meeting's participants.",
+      "source_url": "https://developers.zoom.us/docs/api/qss.md",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/metrics/meetings/{meetingId}/participants/qos_summary",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_webinar_participants_qos_summary",
+      "kind": "rest_read",
+      "summary": "List webinar participants QoS Summary",
+      "description": "Bounded Zoom read for GET /v2/metrics/webinars/{webinarId}/participants/qos_summary; returns quality-of-service metrics for a live or past webinar's participants.",
+      "source_url": "https://developers.zoom.us/docs/api/qss.md",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/metrics/webinars/{webinarId}/participants/qos_summary",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_session_users_qos_summary",
+      "kind": "rest_read",
+      "summary": "List session users QoS Summary",
+      "description": "Bounded Zoom read for GET /v2/videosdk/sessions/{sessionId}/users/qos_summary; returns quality-of-service metrics for a past Video SDK session's users.",
+      "source_url": "https://developers.zoom.us/docs/api/qss.md",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/videosdk/sessions/{sessionId}/users/qos_summary",
+        "max_bytes": 1048576
+      }
+    }
+  ]
+}

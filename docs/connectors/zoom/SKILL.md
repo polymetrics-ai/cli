@@ -7,7 +7,7 @@ description: Zoom connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Zoom users, meetings, and webinars through the Zoom REST API.
+Reads Zoom users, meetings, and webinars through the Zoom REST API, plus bounded Quality of Service summary reads.
 
 ## Icon
 
@@ -59,8 +59,8 @@ Reads Zoom users, meetings, and webinars through the Zoom REST API.
 
 ## Command Surface
 
-- Read the currently stream-backed Zoom users, meetings, and webinars API routes.
-- Usage: pm zoom <users|meetings|webinars> list [flags]
+- Read the currently stream-backed Zoom users, meetings, and webinars API routes, plus bounded Quality of Service summary reads.
+- Usage: pm zoom <users|meetings|webinars|qss> <list> [flags]
 - Source CLI: Zoom API reference (OpenAPI 3.1.1; docs static build 2026-08-03T14-58-19-06-00; retrieved 2026-08-05)
 - Global flags:
   - --credential (string): Credential name to use for the Zoom request.
@@ -73,8 +73,12 @@ Reads Zoom users, meetings, and webinars through the Zoom REST API.
 - Meetings and webinars
   - meetings list - Read meetings for one Zoom user through the declared ETL stream. [intent=etl availability=implemented stream=meetings]; flags: --user-id
   - webinars list - Read webinars for one Zoom user through the declared ETL stream. [intent=etl availability=implemented stream=webinars]; flags: --user-id
+- Quality of Service Summaries
+  - qss meeting-participants list - List a past meeting's participants' Quality of Service summary. [intent=direct_read availability=implemented operation=zoom.list_meeting_participants_qos_summary]; notes: Bounded Zoom read; fixed method and path with a typed required meeting-id path parameter.; flags: --meeting-id (required)
+  - qss webinar-participants list - List a live or past webinar's participants' Quality of Service summary. [intent=direct_read availability=implemented operation=zoom.list_webinar_participants_qos_summary]; notes: Bounded Zoom read; fixed method and path with a typed required webinar-id path parameter.; flags: --webinar-id (required)
+  - qss session-users list - List a past Video SDK session's users' Quality of Service summary. [intent=direct_read availability=implemented operation=zoom.list_session_users_qos_summary]; notes: Bounded Zoom read; fixed method and path with a typed required session-id path parameter.; flags: --session-id (required)
 - Help topics:
-  - provider-inventory - The Zoom provider ledger tracks 1,913 documented REST operations; Wave 1 executes only these three existing stream-backed reads.
+  - provider-inventory - The Zoom provider ledger tracks 1,913 documented REST operations; Wave 1 executes three stream-backed reads and Wave 2 (qss) adds three bounded direct-read operations.
 
 ## Commands
 
