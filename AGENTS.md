@@ -46,8 +46,15 @@ in the binary — so **building `pm` requires cgo and a C toolchain**, and
 `CGO_ENABLED=0` no longer produces a binary that can read or write a warehouse
 table. There is deliberately no build tag and no CGO-free variant: two builds
 writing different table formats is the install-time drift *Command Surface Must
-Stay Executable* exists to prevent. `windows/arm64` is unsupported because
-go-duckdb ships no library for it; CI asserts that rather than assuming it.
+Stay Executable* exists to prevent.
+
+**Windows is not a release target.** `windows/arm64` never could be — go-duckdb
+ships no library for it — and `windows/amd64` was dropped for having no user
+asking for it, along with the Windows runner, the MSI/WiX path and the WinGet
+manifests. `scripts/tests/release-target-parity.sh` asserts Windows stays absent
+from the assembler, the verifier and the build matrix together, so it cannot
+return in one file without the rest. It returns on a customer ask, from git
+history.
 
 ## Agent Rules
 

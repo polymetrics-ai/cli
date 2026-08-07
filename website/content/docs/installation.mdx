@@ -6,7 +6,7 @@ description: Install pm from a release binary, via go install, or by building th
 `pm` ships as a single Go binary with no runtime dependencies. Pick the installation method that suits your environment.
 
 <Callout type="info">
-  **Prerequisites:** Release binary install requires the GitHub CLI (`gh`) and standard archive tools (`tar` on macOS/Linux, `unzip` for Windows archives), but does not require Go. `go install` and source builds require Go 1.25.11 or later. Source builds also need a C toolchain (gcc or clang), because DuckDB is embedded in every build.
+  **Prerequisites:** Release binary install requires the GitHub CLI (`gh`) and `tar`, but does not require Go. `go install` and source builds require Go 1.25.11 or later. Source builds also need a C toolchain (gcc or clang), because DuckDB is embedded in every build.
 </Callout>
 
 ## Installation methods
@@ -15,9 +15,13 @@ description: Install pm from a release binary, via go install, or by building th
 
 <Tab value="Release binary">
 
-Release assets are published from [`polymetrics-ai/cli`](https://github.com/polymetrics-ai/cli/releases) for Linux and macOS on amd64 and arm64, and Windows on amd64. Windows on arm64 has no prebuilt DuckDB library and is not published; the amd64 build runs there under emulation.
+Release assets are published from [`polymetrics-ai/cli`](https://github.com/polymetrics-ai/cli/releases) for Linux and macOS on amd64 and arm64.
 
-This path requires the GitHub CLI (`gh`) and standard archive tools (`tar` on macOS/Linux, `unzip` for Windows archives), but does not require Go.
+<Callout type="info">
+  **Windows is not published.** `windows/arm64` has no prebuilt DuckDB library and cannot be built at all; `windows/amd64` was dropped because pm has no Windows user asking for it. Both return if someone does — `pm` still builds from source on Windows amd64 with a C toolchain. Use WSL in the meantime.
+</Callout>
+
+This path requires the GitHub CLI (`gh`) and `tar`, but does not require Go.
 
 ```bash
 os_name="$(uname -s)"
@@ -26,7 +30,6 @@ arch_name="$(uname -m)"
 case "$os_name" in
   Darwin) os=darwin ;;
   Linux) os=linux ;;
-  MINGW*|MSYS*|CYGWIN*) os=windows ;;
   *) echo "unsupported OS: $os_name" >&2; exit 1 ;;
 esac
 
@@ -40,16 +43,8 @@ tmpdir="$(mktemp -d)"
 trap 'rm -rf "$tmpdir"' EXIT
 gh release download --repo polymetrics-ai/cli --pattern "pm_*_${os}_${arch}.*" --dir "$tmpdir"
 
-case "$os" in
-  windows)
-    unzip -q "$tmpdir"/pm_*_"${os}"_"${arch}".zip -d "$tmpdir"
-    binary_name=pm.exe
-    ;;
-  *)
-    tar -xzf "$tmpdir"/pm_*_"${os}"_"${arch}".tar.gz -C "$tmpdir"
-    binary_name=pm
-    ;;
-esac
+tar -xzf "$tmpdir"/pm_*_"${os}"_"${arch}".tar.gz -C "$tmpdir"
+binary_name=pm
 
 install_dir="${INSTALL_DIR:-$HOME/.local/bin}"
 mkdir -p "$install_dir"

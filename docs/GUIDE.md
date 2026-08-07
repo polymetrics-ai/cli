@@ -36,11 +36,11 @@ build from source below.
 
 ### Install a release binary
 
-Release assets are published from `polymetrics-ai/cli` for Linux, macOS, and
-Windows on amd64 and arm64.
+Release assets are published from `polymetrics-ai/cli` for Linux and macOS on
+amd64 and arm64. Windows is not published; see Troubleshooting.
 
 This path requires the GitHub CLI (`gh`) and standard archive tools (`tar` on
-macOS/Linux, `unzip` for Windows archives), but does not require Go.
+macOS/Linux), but does not require Go.
 
 ```bash
 os_name="$(uname -s)"
@@ -49,7 +49,6 @@ arch_name="$(uname -m)"
 case "$os_name" in
   Darwin) os=darwin ;;
   Linux) os=linux ;;
-  MINGW*|MSYS*|CYGWIN*) os=windows ;;
   *) echo "unsupported OS: $os_name" >&2; exit 1 ;;
 esac
 
@@ -59,25 +58,14 @@ case "$arch_name" in
   *) echo "unsupported architecture: $arch_name" >&2; exit 1 ;;
 esac
 
-case "$os" in
-  windows) asset_pattern="pm_*_${os}_${arch}.zip" ;;
-  *) asset_pattern="pm_*_${os}_${arch}.tar.gz" ;;
-esac
+asset_pattern="pm_*_${os}_${arch}.tar.gz"
 
 tmpdir="$(mktemp -d)"
 trap 'rm -rf "$tmpdir"' EXIT
 gh release download --repo polymetrics-ai/cli --pattern "$asset_pattern" --dir "$tmpdir"
 
-case "$os" in
-  windows)
-    unzip -q "$tmpdir"/pm_*_"${os}"_"${arch}".zip -d "$tmpdir"
-    binary_name=pm.exe
-    ;;
-  *)
-    tar -xzf "$tmpdir"/pm_*_"${os}"_"${arch}".tar.gz -C "$tmpdir"
-    binary_name=pm
-    ;;
-esac
+tar -xzf "$tmpdir"/pm_*_"${os}"_"${arch}".tar.gz -C "$tmpdir"
+binary_name=pm
 
 install_dir="${INSTALL_DIR:-$HOME/.local/bin}"
 mkdir -p "$install_dir"
@@ -360,8 +348,11 @@ Details: [docs/runtime/SETUP.md](runtime/SETUP.md).
   `GOTOOLCHAIN=auto`), or run `GOTOOLCHAIN=auto go build ./cmd/pm`, or install Go 1.25.11+.
 - **DuckDB build fails to link** — `pm` needs CGO and a C compiler (`CGO_ENABLED=1`,
   plus gcc or clang). There is no CGO-free build: DuckDB reads and writes every
-  warehouse table. `windows/arm64` has no prebuilt DuckDB library and is not supported;
-  the `windows/amd64` build runs there under emulation.
+  warehouse table.
+- **No Windows release** — `windows/arm64` has no prebuilt DuckDB library and cannot be
+  built; `windows/amd64` was dropped for having no user asking for it. `pm` still builds
+  from source on Windows amd64 with a C toolchain, and WSL works today. Both targets
+  return on a customer ask.
 - **An HTTP connector only returns one page** — connectors default to one page for safe
   local runs. Set `max_pages=0` (aliases: `all`, `unlimited`) on the credential, or
   `--source-config max_pages=0` on the connection.

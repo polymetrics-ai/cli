@@ -80,11 +80,12 @@ if [[ "$assemble_targets" != "$matrix_targets" ]]; then
   diff <(printf '%s\n' "$assemble_targets") <(printf '%s\n' "$matrix_targets") >&2 || true
 fi
 
-# windows/arm64 must stay absent everywhere until go-duckdb ships a library for
-# it. Asserting the absence keeps it from creeping back in as an untestable
-# target that cannot actually be built.
-if printf '%s\n' "$assemble_targets" "$verify_targets" "$matrix_targets" | grep -q '^windows/arm64$'; then
-  report "windows/arm64 is present, but go-duckdb ships no library for it; it cannot be built"
+# Windows must stay absent everywhere, both architectures. arm64 was never
+# buildable (go-duckdb ships no library for it) and amd64 was dropped for having
+# no customer. Asserting the absence is what stops either creeping back in
+# without the runner, the MSI path and the packaging tests coming back with it.
+if printf '%s\n' "$assemble_targets" "$verify_targets" "$matrix_targets" | grep -q '^windows/'; then
+  report "a windows target is present; Windows was dropped from the release and CI and returns only on a customer ask"
 fi
 
 if [[ "$fail" -ne 0 ]]; then

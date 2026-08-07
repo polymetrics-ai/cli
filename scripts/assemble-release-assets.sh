@@ -63,15 +63,17 @@ mkdir -p "$OUT"
 : "${SOURCE_DATE_EPOCH:=$(cd "$REPO_ROOT" && git log -1 --format=%ct)}"
 export SOURCE_DATE_EPOCH
 
-# windows/arm64 is absent on purpose: go-duckdb ships no library for it, so no
-# binary exists to package. Keep this list in step with archive_targets in
-# scripts/verify-release-assets.sh and the goos/goarch matrix in release.yml.
+# Windows is absent on purpose, both architectures. windows/arm64 was never
+# buildable — go-duckdb ships no library for it — and windows/amd64 was dropped
+# because pm has no Windows customer; it comes back on a customer ask, from git
+# history. Keep this list in step with archive_targets in
+# scripts/verify-release-assets.sh and the goos/goarch matrix in release.yml;
+# scripts/tests/release-target-parity.sh asserts they agree.
 ARCHIVE_TARGETS=(
   "darwin amd64 tar.gz pm"
   "darwin arm64 tar.gz pm"
   "linux amd64 tar.gz pm"
   "linux arm64 tar.gz pm"
-  "windows amd64 zip pm.exe"
 )
 
 # deb keeps Go's arch names; rpm uses its own. Both are what
@@ -152,9 +154,6 @@ for target in "${ARCHIVE_TARGETS[@]}"; do
           --owner=0 --group=0 --numeric-owner \
           --mtime="@$SOURCE_DATE_EPOCH" \
           -C "$work" -cf - . | gzip -9n > "$archive"
-      ;;
-    zip)
-      (cd "$work" && zip -q -X -r - . | cat) > "$archive"
       ;;
     *)
       printf 'unsupported archive format: %s\n' "$extension" >&2

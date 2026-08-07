@@ -212,9 +212,6 @@ jobs:
           - goos: darwin
             goarch: arm64
             runner: macos-latest
-          - goos: windows
-            goarch: amd64
-            runner: windows-latest
 
     steps:
       - name: Checkout release tag
@@ -241,7 +238,6 @@ jobs:
           set -euo pipefail
           version="${TAG_NAME#v}"
           binary=pm
-          [[ "$GOOS" == "windows" ]] && binary=pm.exe
           mkdir -p "binaries/${GOOS}_${GOARCH}"
           # ldflags match .goreleaser.yaml's build block exactly, so a binary
           # from this matrix reports the same version, commit and date the
@@ -458,7 +454,6 @@ jobs:
         with:
           subject-path: |
             dist/pm_*.tar.gz
-            dist/pm_*.zip
             dist/pm_*.deb
             dist/pm_*.rpm
             dist/checksums.txt
