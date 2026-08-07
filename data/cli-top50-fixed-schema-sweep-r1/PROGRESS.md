@@ -7,9 +7,9 @@ worktree. Nothing is lost; nothing is uncommitted.**
 
 | | |
 | --- | --- |
-| Worktree | `/Users/karthiksivadas/.treehouse/cli-83d592/42/cli` |
-| **Branch** | **`fm/cli-top50-sweep-consolidated`** (pushed, synced with origin, tree clean) |
-| **HEAD** | Use the **branch tip** — it is authoritative. `git fetch origin && git checkout fm/cli-top50-sweep-consolidated && git reset --hard origin/fm/cli-top50-sweep-consolidated`. This handoff was introduced by `e585b456d` (a commit cannot record its own hash, so do not treat any single sha here as the tip). Last delivered connector commit: **`0829543e6`** lever-hiring. |
+| Worktree | `/Users/karthiksivadas/.treehouse/cli-83d592/20/cli` (was `…/42/cli`) |
+| **Branch** | **`fm/cli-top50-sweep-continue-r1`** — cut from `fm/cli-top50-sweep-consolidated` @ `bedb9b0a3` and carrying it forward. The consolidated branch is unchanged at `bedb9b0a3`; the continuation branch is where the remaining connectors land, and it is what the single sweep PR will be opened from. |
+| **HEAD** | Use the **branch tip** — it is authoritative. `git fetch origin && git checkout fm/cli-top50-sweep-continue-r1 && git reset --hard origin/fm/cli-top50-sweep-continue-r1`. A commit cannot record its own hash, so do not treat any sha written here as the tip. |
 | Cut from | `origin/main` @ `5d43d7c00` (post-Mailchimp #3562) |
 | Model | **ONE consolidated sweep PR** (captain, ordered twice). PR **not yet opened.** |
 | Master plan | `MASTER-PLAN.json` (sibling of this file) — all 30 counts, hazards, issue links |
@@ -25,6 +25,7 @@ docs) are regenerated **once at the very end**, not per connector.
 | chatwoot | 148 | ✅ on branch (folded from its own lane, verified: 101 covered + 47 blocked) |
 | gmail | 79 | ✅ on branch `d1bacbfe1` (66 covered + 13 blocked; `pm gmail` did not exist before) |
 | lever-hiring | 106 | ✅ on branch `0829543e6` (60 covered + 46 blocked) |
+| greenhouse | 138 | ✅ on branch (127 covered + 11 blocked; `pm greenhouse` did not exist before) |
 | gorgias | 114 | ✅ **separate open PR #3896** — leave it alone, do not fold |
 | notion | 51 | ✅ MERGED #3894 |
 | gong | 69 | ✅ MERGED #3895 |
@@ -100,6 +101,40 @@ command → one commit → push → tick.
 14. Spend limits killed two sub-agents earlier. **Preserve and push partial work immediately** if an
     agent dies; five inherited lanes were one teardown from permanent loss before being pushed to
     `…-preserve-20260807` branches.
+15. **Re-fetch the artifact and check its BYTE COUNT against `MASTER-PLAN.json`.** greenhouse's
+    re-fetch was 1,636,662 bytes — identical to the recorded derivation, which proves it is the same
+    artifact rather than a lookalike, and lets you reproduce the derivation instead of trusting it.
+    The whole extraction reproduced to the operation, so 138 was confirmed, not adopted.
+16. **A provider's own docs markup can silently eat an operation.** greenhouse's
+    `DELETE /v1/tags/candidate/{tag id}` carries a stray unescaped `&#39;` before the URL *and* a
+    path placeholder holding a literal space. A regex ending at `[^<\s]+` truncates it to
+    `/tags/candidate/{tag`; a regex ending at `[^<]+` recovers it. **The shipped bundle had dropped
+    this row** — the count was 129, not 130 v1 rows. Terminate on `<` and strip, never on whitespace.
+17. **Counting `<h2>` headings under-counts when one heading documents two versions.** greenhouse has
+    3 sections that each declare a deprecated v1 operation *and* its v2 replacement (`Destroy
+    Openings`, `Create Scheduled Interview`, `Update Scheduled Interview`). 135 headings, 138
+    operations. Always count the `HTTP Request` **declarations**, never the section headings.
+18. **Deprecated is a disposition, not an exclusion.** greenhouse parked its 3 deprecated v1
+    mutations under a legacy `excluded` stub. The counting policy counts deprecated operations, and
+    `excluded` is not one of the three dispositions this sweep accepts. They are now `blocked` with
+    `model: deprecated`, each naming its **v2 successor** as the dependency — which is checkable, and
+    is not the same thing as "we chose not to".
+19. **`surface-sync` fills nothing for a stream+write-only connector, and that is correct.** It only
+    derives metadata for operation-backed `direct_read`/`direct_write`/`binary_download` commands.
+    greenhouse has none, so `--check` is clean and `operation_endpoint_ledger.json` is untouched —
+    which is also why greenhouse's ledger delta is trivially confined to greenhouse.
+20. **Verifying 127 commands by running the binary takes ~1.3 s each — serialise it and you time
+    out.** Fan the `--help` invocations out with `xargs -P 8`; the whole sweep then takes seconds.
+    Do not skip this step: authoring a command is not evidence that it routes.
+21. **Follow-up recorded, deliberately not done here: greenhouse models 43 singleton detail GETs as
+    config-parameterised streams** (`/candidates/{{ config.candidate_id }}`) rather than as
+    `direct_read` operations. Parity holds either way and all 43 are reachable, so converting them
+    would have deleted shipped, schema- and fixture-backed functionality inside a parity commit.
+    Instead each got a **required named flag bound to its config key**
+    (`pm greenhouse candidate list --candidate-id 42` rather than `--config candidate_id=42`), which
+    is the reachability win without the restructure. Whoever revisits greenhouse should model them as
+    direct reads. **This is the stream-vs-direct-read judgement for this connector; it is a choice,
+    not an oversight.**
 
 ## Honest note on pace
 
@@ -500,7 +535,7 @@ are regenerated **once at the very end**, not per connector.
 | 1 | gmail | 79 | ✅ `d1bacbfe1` — 79 rows, 66 covered + 13 blocked, 66 cmds all reachable |
 | — | ~~mixpanel~~ | 104 | 🛑 **DEFERRED to its own task.** Red test moved OFF the sweep branch (it would keep `cmd/connectorgen` red for a connector this PR does not deliver); preserved on `fm/cli-mixpanel-parity-sweep-r1`. |
 | 3 | lever-hiring | 106 | ✅ `0829543e6` — 117 preserved rows → **106**; 60 covered + 46 blocked; 60 cmds all reachable |
-| 4 | greenhouse | 138 | ☐ |
+| 4 | greenhouse | 138 | ✅ — 138 rows, 127 covered + 11 blocked, 127 cmds all reachable |
 | 5 | help-scout | 145 | ☐ |
 | 6 | google-ads | 163 | ☐ |
 | 7 | segment | 197 | ☐ |

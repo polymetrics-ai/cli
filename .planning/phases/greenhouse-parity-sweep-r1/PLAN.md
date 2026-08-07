@@ -83,10 +83,24 @@ classification that bit other connectors.
 
 ### 5. Stream vs direct read
 
-`GET` collection endpoints are streams (the bundle already models 69 GETs, mostly as streams).
-Detail/singleton GETs that take a required path id are **direct reads**, since a stream over a
-single fixed record is not a sync. Binary: **none** — Harvest returns JSON everywhere; attachments
-are referenced by URL, not served by the API. So there is no `binary_download` operation here.
+The shipped bundle already models **all 69 GETs as streams**, including 43 singleton detail reads
+whose path ids come from *config* (`/candidates/{{ config.candidate_id }}`), not from flags.
+
+**Judgement: keep them as streams, and fix the reachability instead of the shape.** A stream over
+one fixed record is not really a sync, and the direct-read form would read better. But those 43
+streams are shipped, schema-backed and fixture-backed, and converting them would delete working
+functionality and rewrite 43 schemas inside a commit whose job is parity. Parity is met either way —
+every documented GET is reachable. What was actually broken was that *none* of them were reachable
+at all, because `cli_surface.json` did not exist.
+
+So each singleton stream now gets a **required, named flag** bound to its config key
+(`pm greenhouse candidate list --candidate-id 42`) rather than forcing `--config candidate_id=42`.
+That is the reachability win without the restructure. **Recorded as a finding** for whoever revisits
+greenhouse: 43 singleton reads would be better modelled as `direct_read` operations, and that is a
+deliberate follow-up, not an oversight here.
+
+Binary: **none** — Harvest returns JSON everywhere; attachments are referenced by URL, not served by
+the API. So there is no `binary_download` operation in this connector.
 
 ## Work order
 

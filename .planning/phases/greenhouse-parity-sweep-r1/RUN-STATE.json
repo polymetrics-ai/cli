@@ -2,7 +2,7 @@
   "phase": "greenhouse-parity-sweep-r1",
   "program": "cli-top50-fixed-schema-sweep-r1",
   "connector": "greenhouse",
-  "state": "red",
+  "state": "green",
   "branch": "fm/cli-top50-sweep-continue-r1",
   "artifact": {
     "url": "https://developers.greenhouse.io/harvest.html",
@@ -15,7 +15,13 @@
   },
   "operations": {
     "documented_total": 138,
-    "by_method": {"GET": 69, "POST": 28, "PUT": 8, "PATCH": 19, "DELETE": 14},
+    "by_method": {
+      "GET": 69,
+      "POST": 28,
+      "PUT": 8,
+      "PATCH": 19,
+      "DELETE": 14
+    },
     "ledger_carried_forward": 138,
     "drift": "none - reconciles exactly",
     "counting_note": "one canonical '<h3>HTTP Request</h3><p><code>METHOD https://harvest.greenhouse.io/vN/path</code></p>' declaration per operation; 138 matches, 0 duplicates. Counting headings instead loses 3 rows because 3 <h2> sections each document a deprecated v1 and its v2 replacement.",
@@ -47,8 +53,30 @@
     "red_test": "cmd/connectorgen/greenhouse_api_surface_test.go",
     "red_confirmed": true,
     "red_failure": "=== RUN   TestGreenhouseAPISurfaceOperationLedger\n    greenhouse_api_surface_test.go:85: operation_ledger_version = 0, want 1\n    greenhouse_api_surface_test.go:148: 3 legacy excluded row(s) remain, want 0 (deprecated operations still count and must carry an operation disposition, not an excluded stub)\n    greenhouse_api_surface_test.go:152: endpoints = 129, want 138 documented operations\n    greenhouse_api_surface_test.go:155: covered(126)+blocked(0) = 126, want 138\n    greenhouse_api_surface_test.go:158: totalByMethod = map[DELETE:12 GET:69 PATCH:13 POST:27 PUT:8], want map[DELETE:14 GET:69 PATCH:19 POST:28 PUT:8]\n    greenhouse_api_surface_test.go:163: expected DELETE /tags/candidate/{tag_id} (its docs markup carries a stray &#39; and a placeholder with a literal space; a naive extraction drops it)\n    greenhouse_api_surface_test.go:169: expected out-of-base row \"DELETE /v2/jobs/{job_id}/openings\"\n    greenhouse_api_surface_test.go:169: expected out-of-base row \"PATCH /v2/job_posts/{job_post_id}\"\n    greenhouse_api_surface_test.go:169: expected out-of-base row \"PATCH /v2/job_posts/{job_post_id}/status\"\n    greenhouse_api_surface_test.go:169: expected out-of-base row \"PATCH /v2/scheduled_interviews/{scheduled_interview_id}\"\n    greenhouse_api_surface_test.go:169: expected out-of-base row \"PATCH /v2/users/\"\n    greenhouse_api_surface_test.go:169: expected out-of-base row \"PATCH /v2/users/disable\"\n    greenhouse_api_surface_test.go:169: expected out-of-base row \"PATCH /v2/users/enable\"\n    greenhouse_api_surface_test.go:169: expected out-of-base row \"POST /v2/scheduled_interviews\"\n--- FAIL: TestGreenhouseAPISurfaceOperationLedger (0.00s)\nFAIL\nFAIL\tpolymetrics.ai/cmd/connectorgen\t0.575s\nFAIL",
-    "green": false,
-    "pre_existing_greenhouse_tests": "none - no cmd/connectorgen test referenced greenhouse before this one (finding F5 check)"
+    "green": true,
+    "pre_existing_greenhouse_tests": "none - no cmd/connectorgen test referenced greenhouse before this one (finding F5 check)",
+    "green_evidence": {
+      "greenhouse_surface_test": "PASS",
+      "whole_cmd_connectorgen_package": "ok polymetrics.ai/cmd/connectorgen 11.372s (finding F5: the whole package, not a targeted -run)",
+      "connectorgen_validate": "1 connector(s) checked, 0 findings",
+      "connectorgen_surface_sync_check": "551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected - greenhouse declares no operation-backed commands, so there is nothing for surface-sync to derive",
+      "runtime_preflight": "TestEveryImplementedCommandPassesRuntimePreflight PASS",
+      "commands_reachable": "127/127 verified by running the built binary over every command path; 0 unreachable",
+      "per_command_paging_flags": "none authored (checked)",
+      "endpoint_ledger_delta": "none - greenhouse has no direct_read/direct_write/binary_download operations, so operation_endpoint_ledger.json is untouched"
+    }
   },
-  "next_action": "author api_surface.json to 138 dispositioned rows, add the recovered DELETE /tags/candidate/{tag_id} write, then author cli_surface.json and operations.json from scratch so every covered row is reachable"
+  "next_action": "none - greenhouse complete; continue the sweep at help-scout (145)",
+  "final": {
+    "documented_operations": 138,
+    "covered": 127,
+    "blocked": 11,
+    "excluded": 0,
+    "blank": 0,
+    "duplicates": 0,
+    "operation_ledger_version": 1,
+    "cli_commands": 127,
+    "etl_commands": 69,
+    "reverse_etl_commands": 58
+  }
 }

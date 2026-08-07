@@ -71,7 +71,22 @@ The test additionally enforces, for every row:
 
 ## 4. GREEN evidence
 
-_(not yet — authoring is the next step)_
+| Gate | Result |
+| --- | --- |
+| `TestGreenhouseAPISurfaceOperationLedger` | **PASS** |
+| **Whole** `cmd/connectorgen` package (finding F5 — never a targeted `-run`) | `ok polymetrics.ai/cmd/connectorgen 11.372s` |
+| `connectorgen validate internal/connectors/defs/greenhouse` | 1 connector checked, **0 findings** |
+| `connectorgen surface-sync --check` | 551 scanned, **0 filled / 0 corrected** — greenhouse declares no operation-backed commands, so there is nothing to derive |
+| `TestEveryImplementedCommandPassesRuntimePreflight` | **PASS** |
+| Commands reachable | **127/127**, verified by running the built binary over every command path — 0 unreachable |
+| Per-command paging flags | **none** (checked with the standing regex) |
+| Endpoint-ledger delta | **none** — greenhouse has no `direct_read`/`direct_write`/`binary_download` operation, so `operation_endpoint_ledger.json` is untouched. Delta confined to greenhouse by construction. |
+
+Final shape: **138** rows = **127 covered** + **11 blocked**, 0 excluded, 0 blank, 0 duplicates,
+`operation_ledger_version: 1`. CLI: 69 ETL + 58 reverse-ETL = **127** commands.
+Counts recomputed independently from the files themselves, not read off a generation report.
+
+`pm greenhouse` went from `error: unknown command "greenhouse"` to a full command surface.
 
 ## 5. Refactor / safety notes
 
