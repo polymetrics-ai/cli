@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/custom_fields/synthetic-conformance-value",
+    "path": "/v1/custom_fields/synthetic-conformance-value",
     "query": {
       "per_page": "synthetic-conformance-value"
     }

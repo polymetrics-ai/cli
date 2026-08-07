@@ -4,7 +4,7 @@
   },
   "expect": {
     "method": "PATCH",
-    "path": "/candidates/candidate_id_fixture"
+    "path": "/v1/candidates/candidate_id_fixture"
   },
   "response": {
     "status": 200,

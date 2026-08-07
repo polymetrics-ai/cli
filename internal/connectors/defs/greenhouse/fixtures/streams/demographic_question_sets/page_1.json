@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/demographics/question_sets",
+    "path": "/v1/demographics/question_sets",
     "query": {
       "per_page": "synthetic-conformance-value"
     }

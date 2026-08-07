@@ -4,7 +4,7 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/applications/application_id_fixture/transfer_to_job"
+    "path": "/v1/applications/application_id_fixture/transfer_to_job"
   },
   "response": {
     "status": 200,

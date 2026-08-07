@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/demographics/questions/synthetic-conformance-value"
+    "path": "/v1/demographics/questions/synthetic-conformance-value"
   },
   "response": {
     "status": 200,

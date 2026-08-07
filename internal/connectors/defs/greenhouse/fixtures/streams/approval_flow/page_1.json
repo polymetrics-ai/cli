@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/approval_flows/synthetic-conformance-value"
+    "path": "/v1/approval_flows/synthetic-conformance-value"
   },
   "response": {
     "status": 200,

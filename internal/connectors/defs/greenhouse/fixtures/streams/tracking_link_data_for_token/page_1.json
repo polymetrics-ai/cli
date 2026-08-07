@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/tracking_links/synthetic-conformance-value"
+    "path": "/v1/tracking_links/synthetic-conformance-value"
   },
   "response": {
     "status": 200,

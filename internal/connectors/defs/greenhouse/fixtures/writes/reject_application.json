@@ -4,7 +4,7 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/applications/application_id_fixture/reject"
+    "path": "/v1/applications/application_id_fixture/reject"
   },
   "response": {
     "status": 200,

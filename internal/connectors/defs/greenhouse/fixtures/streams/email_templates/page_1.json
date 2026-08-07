@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/email_templates",
+    "path": "/v1/email_templates",
     "query": {
       "per_page": "synthetic-conformance-value"
     }

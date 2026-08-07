@@ -4,7 +4,7 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/approval_flows/approval_flow_id_fixture/request_approvals"
+    "path": "/v1/approval_flows/approval_flow_id_fixture/request_approvals"
   },
   "response": {
     "status": 200,

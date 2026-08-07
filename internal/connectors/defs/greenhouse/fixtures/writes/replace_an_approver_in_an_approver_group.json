@@ -4,7 +4,7 @@
   },
   "expect": {
     "method": "PUT",
-    "path": "/approver_groups/approver_group_id_fixture/replace_approvers"
+    "path": "/v1/approver_groups/approver_group_id_fixture/replace_approvers"
   },
   "response": {
     "status": 200,

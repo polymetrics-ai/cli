@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/applications",
+    "path": "/v1/applications",
     "query": {
       "per_page": "synthetic-conformance-value"
     }

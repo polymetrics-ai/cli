@@ -1,0 +1,18 @@
+{
+  "phase": "greenhouse-parity-wave05-r1",
+  "status": "validated",
+  "branch": "fm/cli-greenhouse-parity-wave05-r1",
+  "parent_issue": 3199,
+  "child_issues": [3200, 3201, 3202, 3203, 3204, 3205, 3206],
+  "counts": {
+    "total": 135,
+    "streams": 69,
+    "writes": 64,
+    "blocked": 2,
+    "excluded": 0,
+    "certified": 0
+  },
+  "no_live_provider_calls": true,
+  "no_push_or_pr": true,
+  "make_verify": "passed"
+}

@@ -4,7 +4,7 @@
   },
   "expect": {
     "method": "PUT",
-    "path": "/jobs/job_id_fixture/approval_flows"
+    "path": "/v1/jobs/job_id_fixture/approval_flows"
   },
   "response": {
     "status": 200,

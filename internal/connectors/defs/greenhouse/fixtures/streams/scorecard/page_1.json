@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/scorecards/synthetic-conformance-value"
+    "path": "/v1/scorecards/synthetic-conformance-value"
   },
   "response": {
     "status": 200,

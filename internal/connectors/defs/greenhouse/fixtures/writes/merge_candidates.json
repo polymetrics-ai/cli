@@ -1,8 +1,15 @@
 {
-  "record": {},
+  "record": {
+    "primary_candidate_id": 73821,
+    "duplicate_candidate_id": 839283
+  },
   "expect": {
     "method": "PUT",
-    "path": "/candidates/merge"
+    "path": "/v1/candidates/merge",
+    "body": {
+      "primary_candidate_id": 73821,
+      "duplicate_candidate_id": 839283
+    }
   },
   "response": {
     "status": 200,

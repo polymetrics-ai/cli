@@ -4,7 +4,7 @@
   },
   "expect": {
     "method": "PATCH",
-    "path": "/applications/application_id_fixture/convert_prospect"
+    "path": "/v1/applications/application_id_fixture/convert_prospect"
   },
   "response": {
     "status": 200,
