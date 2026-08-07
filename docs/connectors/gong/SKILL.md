@@ -41,33 +41,33 @@ Reads Gong users, calls, scorecards, settings, flows, and related public API res
 - users:
   - primary key: id
   - cursor: created
-  - fields: active(), created(), email_address(), first_name(), id(), last_name(), manager_id(), phone_number(), title()
+  - fields: active(boolean), created(string), email_address(string), first_name(string), id(string), last_name(string), manager_id(string), phone_number(string), title(string)
 - calls:
   - primary key: id
   - cursor: started
-  - fields: direction(), duration(), id(), is_private(), language(), media(), scheduled(), scope(), started(), system(), title(), url()
+  - fields: direction(string), duration(integer), id(string), is_private(boolean), language(string), media(string), scheduled(string), scope(string), started(string), system(string), title(string), url(string)
 - scorecards:
   - primary key: scorecardId
   - cursor: updated
-  - fields: created(), enabled(), scorecardId(), scorecardName(), updated(), workspaceId()
+  - fields: created(string), enabled(boolean), scorecardId(string), scorecardName(string), updated(string), workspaceId(string)
 - crm_integrations:
-  - fields: created(), id(), name(), title(), updated()
+  - fields: created(string), id(string), name(string), title(string), updated(string)
 - workspaces:
-  - fields: created(), id(), name(), title(), updated()
+  - fields: created(string), id(string), name(string), title(string), updated(string)
 - trackers:
-  - fields: created(), id(), name(), title(), updated()
+  - fields: created(string), id(string), name(string), title(string), updated(string)
 - briefs:
-  - fields: created(), id(), name(), title(), updated()
+  - fields: created(string), id(string), name(string), title(string), updated(string)
 - library_folders:
-  - fields: created(), id(), name(), title(), updated()
+  - fields: created(string), id(string), name(string), title(string), updated(string)
 - flows:
-  - fields: created(), id(), name(), title(), updated()
+  - fields: created(string), id(string), name(string), title(string), updated(string)
 - flow_folders:
-  - fields: created(), id(), name(), title(), updated()
+  - fields: created(string), id(string), name(string), title(string), updated(string)
 - call_outcomes:
-  - fields: created(), id(), name(), title(), updated()
+  - fields: created(string), id(string), name(string), title(string), updated(string)
 - permission_profiles:
-  - fields: created(), id(), name(), title(), updated()
+  - fields: created(string), id(string), name(string), title(string), updated(string)
 
 ## Sync Modes
 
@@ -177,6 +177,10 @@ Reads Gong users, calls, scorecards, settings, flows, and related public API res
   - endpoint: POST /v2/crm/entity-schema
   - required fields: selected_fields
   - risk: high: uploads CRM entity schema as a bounded top-level JSON array; use only reviewed table mappings and reverse ETL approval
+- upload_target_assignments:
+  - endpoint: POST /v2/targets/{{ record.targetId }}/assignments
+  - required fields: targetId, workspaceId, assignments_file_path
+  - risk: high: uploads target assignments from a bounded local file path to Gong; file path/content are redacted in plans and require reverse ETL approval
 
 ## Security
 
@@ -288,6 +292,9 @@ Reads Gong users, calls, scorecards, settings, flows, and related public API res
   - call-outcomes list - List Gong call outcomes as ETL records. [intent=etl availability=implemented stream=call_outcomes]
 - Integration Settings
   - integration-settings update - administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation [intent=reverse_etl availability=partial write=integration_settings]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: high: administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.; flags: --integrationTypeSettings
+- Targets
+  - targets list - List target definitions (/v2/targets) [intent=direct_read availability=implemented]; risk: bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted; flags: --workspaceId
+  - targets upload-assignments - Upload target assignments (/v2/targets/{targetId}/assignments) [intent=reverse_etl availability=implemented write=upload_target_assignments]; approval: reverse ETL plan -> preview -> approval -> execute; destructive confirmation required; risk: high: uploads target assignments from a bounded project-local file path; file path/content are redacted in plans; notes: Uses typed multipart write support; no generic upload command is exposed.; flags: --targetId, --workspaceId, --validate-only, --assignments-file-path
 - Help topics:
   - gong-auth - Use Gong access key and access key secret via credentials; never pass secrets in command text.
   - gong-writes - Gong mutations are typed reverse-ETL actions with plan, preview, approval, execute gates.

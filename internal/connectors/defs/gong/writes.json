@@ -1737,6 +1737,64 @@
       },
       "risk": "high: uploads CRM entity schema as a bounded top-level JSON array; use only reviewed table mappings and reverse ETL approval",
       "confirm": "destructive"
+    },
+    {
+      "name": "upload_target_assignments",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/targets/{{ record.targetId }}/assignments",
+      "path_fields": [
+        "targetId"
+      ],
+      "query": {
+        "workspaceId": "{{ record.workspaceId }}",
+        "validateOnly": {
+          "template": "{{ record.validateOnly }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "multipart",
+      "multipart": {
+        "max_bytes": 10485760,
+        "parts": [
+          {
+            "name": "file",
+            "type": "file",
+            "field": "assignments_file_path",
+            "required": true,
+            "max_bytes": 10485760
+          }
+        ]
+      },
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "targetId",
+          "workspaceId",
+          "assignments_file_path"
+        ],
+        "properties": {
+          "targetId": {
+            "type": "string",
+            "description": "Unique identifier for the target (up to 20 digits)."
+          },
+          "workspaceId": {
+            "type": "string",
+            "description": "The ID of the workspace the target belongs to."
+          },
+          "validateOnly": {
+            "type": "string",
+            "description": "When \"true\", the CSV file is fully validated but no data is uploaded."
+          },
+          "assignments_file_path": {
+            "type": "string",
+            "description": "Project-relative path to the Gong target assignments CSV file."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "high: uploads target assignments from a bounded local file path to Gong; file path/content are redacted in plans and require reverse ETL approval",
+      "confirm": "destructive"
     }
   ]
 }
