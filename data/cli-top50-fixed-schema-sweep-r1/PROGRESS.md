@@ -1,30 +1,47 @@
 # ⇒⇒ HANDOFF — READ THIS FIRST, THEN THE WORK ORDER BELOW ⇒⇒
 
-**Rewritten 2026-08-07 by the worker that delivered github. A fresh worker continues SERIALLY on the
-same consolidated branch (firstmate decision, captain caps the fleet at 2–3 lanes: parallel branches
-would collide on the shared generated artifacts). Nothing is uncommitted; everything below is pushed.**
+**Updated 2026-08-07 by the worker that delivered workday-rest (the github worker wrote the version
+before it). A fresh worker continues SERIALLY on the same consolidated branch (firstmate decision,
+captain caps the fleet at 2–3 lanes: parallel branches would collide on the shared generated
+artifacts). Nothing is uncommitted; everything below is pushed.**
+
+> ## ⇒ START HERE: **zendesk-support 625.** workday-rest is DONE.
+>
+> workday-rest landed at **907 operations** — not the master plan's 920, not slice 1's 916. It has
+> 911 commands, 252 write actions, 911/911 verified reachable, and a green surface test. See its
+> `SUMMARY.md` and **findings 34–38**.
+>
+> **The single most transferable thing I learned:** *run your derivation through the red test's own
+> rules before you trust its count.* The test already forbade `?` in a path (finding 22 put it
+> there); the derivation feeding it had never been checked against that rule, and shipped nine
+> query-string variants. Do this for zendesk-support **before** authoring a row — it is a two-line
+> check that would have saved a whole re-derivation here.
 
 ## Where the work is
 
 | | |
 | --- | --- |
-| Worktree | `/Users/karthiksivadas/.treehouse/cli-83d592/20/cli` (was `…/42/cli`) |
+| Worktree | `/Users/karthiksivadas/.treehouse/cli-83d592/10/cli` (was `…/20/cli`, `…/42/cli`) — disposable, and the reason `tools/` is committed |
 | **Branch** | **`fm/cli-top50-sweep-resume2-r1`** — cut from the tip of `fm/cli-top50-sweep-continue-r1` (`b1ceedc32`), which was itself cut from `fm/cli-top50-sweep-consolidated` @ `bedb9b0a3`. **History is continuous across all three names**; only the name changed, because each dispatch scaffold named its own branch. This is the branch the single sweep PR opens from. |
 | **HEAD** | Use the **branch tip** — it is authoritative. `git fetch origin && git checkout fm/cli-top50-sweep-resume2-r1 && git reset --hard origin/fm/cli-top50-sweep-resume2-r1`. A commit cannot record its own hash, so do not treat any sha written here as the tip. |
 | Cut from | `origin/main` @ `5d43d7c00` (post-Mailchimp #3562) |
 | Model | **ONE consolidated sweep PR** (captain, ordered repeatedly; firstmate re-confirmed 2026-08-07). PR **not yet opened.** |
-| Master plan | `MASTER-PLAN.json` (sibling of this file) — all 30 counts, hazards, issue links. **Its counts are candidates, not truth**: github's 1220 held, workday-rest's 920 did not (see below). |
-| Tooling | **`tools/` (sibling) — NOW COMMITTED.** The previous worker's `tools/` was untracked and died with its worktree, so this handoff pointed at nothing and the approach was rebuilt from scratch. Read `tools/README.md` first: it holds both generators, the reachability probe, and the exact artifact re-fetch commands with their expected byte counts. |
+| Master plan | `MASTER-PLAN.json` (sibling of this file) — all 30 counts, hazards, issue links. **Its counts are candidates, not truth**: github's 1220 held; workday-rest's 920 did not, and neither did the 916 that replaced it (**907** — findings 34–35). |
+| Tooling | **`tools/` (sibling) — NOW COMMITTED.** The previous worker's `tools/` was untracked and died with its worktree, so this handoff pointed at nothing and the approach was rebuilt from scratch. Read `tools/README.md` first: it holds **three** generators (github GETs, github writes, and `gen_workday_rest.py` — the closest template for a fresh connector, since it builds api_surface + cli_surface + writes + operations from nothing), the reachability probe, and the exact artifact re-fetch commands with their expected byte counts. |
 
 **Do NOT open the PR yet.** Shared artifacts (endpoint ledger, website catalogs, golden transcripts,
 docs) are regenerated **once at the very end**, not per connector.
 
 ### ⚠️ Known-red on this branch — both are expected, neither is yours to "fix"
 
-1. **The current connector's own surface test is red until its last slice lands.** Right now that is
-   `TestWorkdayRESTDocumentedSurfaceIsComplete`. Every *shared* gate is green:
-   `connectorgen validate` 551/0, `surface-sync --check` clean, runtime preflight passing. **Do not
-   weaken a red test to make the package green** — it goes green when the connector lands.
+1. **The current connector's own surface test is red until its last slice lands.** Right now
+   **nothing is mid-delivery — `cmd/connectorgen` is fully green**, because workday-rest landed.
+   The next connector's test will be red from the moment you write it until its last slice, and that
+   is correct. Every *shared* gate must stay green throughout: `connectorgen validate` 551/0,
+   `surface-sync --check` clean, runtime preflight passing. **Do not weaken a red test to make the
+   package green** — it goes green when the connector lands.
+   *Tightening* a red test's constant is not weakening it: workday-rest's went 916 → 907 **and**
+   gained a new assertion, because the smaller number was the correct one (finding 34).
 2. **`TestGoldenTranscripts` fails — ELEVEN subtests, not one**, and has since before github.
    Corrected 2026-08-07 by the workday-rest worker: this entry said `root_bare_manual`, and the
    actual failing set is `root_bare_manual`, `root_long_help`, `root_short_help`,
@@ -41,53 +58,40 @@ docs) are regenerated **once at the very end**, not per connector.
 
 ## ⇒ RESUME POINT — **zendesk-support 625**. workday-rest is COMPLETE.
 
-> **Updated by the slice-2 worker.** The section below is slice 1's account and is kept because its
-> reasoning about the cross-service duplication is correct and still load-bearing. **Its number is
-> not.** The artifact was re-fetched (manifest HTTP 200, **617,538 bytes**, byte-identical; all 52
-> specs re-fetched) and the derivation reproduced independently to 920 raw → 916 — confirming slice 1
-> exactly to that point — and then collapsed a **second** time to **907** on nine query-string
-> variants slice 1 never looked for. **See findings 34 and 35.** The red test now asserts 907, plus
-> the stricter requirement that each collapsed variant's base endpoint is *present*.
+**`github` (1220) and `workday-rest` (907) are both done and pushed.** Their surface tests pass and
+the whole `cmd/connectorgen` package is green. Phase artifacts:
+`.planning/phases/github-parity-sweep-r1/` and `.planning/phases/workday-rest-parity-sweep-r1/`
+(`PLAN.md`, `RUN-STATE.json`, `TDD-LEDGER.md`, `SUMMARY.md`, `VERIFICATION.md`), plus the lifecycle
+trace `.planning/traces/gsd-top50-sweep-resume3-r1.md`.
 
-**`github` is COMPLETE and pushed.** Its full documented surface is enumerated at **1220 REST + 4
-GraphQL**, and `TestGitHubDocumentedRESTSurfaceIsComplete` — red since slice 1 — now **passes**. The
-whole `cmd/connectorgen` package is green. See `.planning/phases/github-parity-sweep-r1/`
-(`SUMMARY.md`, `VERIFICATION.md`, `TDD-LEDGER.md`, `RUN-STATE.json`).
+### Start zendesk-support like this
 
-**Branch note:** work continued on **`fm/cli-top50-sweep-resume2-r1`**, cut from the tip of
-`fm/cli-top50-sweep-continue-r1` (`b1ceedc32`). History is continuous, so the one consolidated PR is
-unaffected; only the branch name changed, because the dispatch scaffold named the new branch.
+1. **Re-fetch its artifact and check the byte count** against `MASTER-PLAN.json`. Identical bytes
+   prove it is the same artifact rather than a lookalike, and let you *reproduce* the derivation
+   instead of trusting it. Workday's manifest reproduced to the byte, which is exactly why the
+   divergence at 907 could be called a finding rather than a disagreement.
+2. **Derive the count, then run the derivation through the red test's own rules before adopting it.**
+   Concretely: reject any path containing `?`, `*` or a space; dedup on the **resolved** path *and*
+   on the **templated** path; count `HTTP Request` declarations, never section headings. The ledger
+   has now been wrong six times — notion +1, intercom −93, lever-hiring ~−40, help-scout's 146
+   query-string double-count, workday-rest 920→916, and workday-rest again 916→**907**.
+3. **Write the red test, RUN it, capture the failure verbatim, commit that red first.**
+   `tools/check_red_observed.py <name>` rejects placeholder text.
+4. Author from the planning slice plus the cached artifact, **reads in one commit, mutations in
+   another** — slices 2 and 3 cannot be separated, because a `covered_by` disposition must name a
+   command that already exists.
+5. **Verify every command by running the binary** (`tools/probe_reachability.sh`, `xargs -P 12`).
+   Assert the rendered `NAME` line; a namespace miss exits 0 (finding 30).
+6. Confirm the endpoint-ledger delta **by object, not by line** — connector counts equal before and
+   after, none added, none removed, exactly one changed.
 
-### workday-rest slice 1 is done, and its count is NOT the planned 920
+### `gen_workday_rest.py` is the closest template for a from-nothing connector
 
-`.planning/phases/workday-rest-parity-sweep-r1/` holds the red test, `DERIVED-OPERATIONS.json`,
-`PLAN.md` and `RUN-STATE.json`. **Read `PLAN.md`'s hazards 1–3 before authoring a single row.**
-
-**The count is 916, not 920.** The 52 service specs hold 920 raw rows, matching the master plan
-exactly — and then four of them turn out to be the *same endpoint documented twice*: `Custom Object
-Data (multi-instance) v2` and `(single-instance) v2` are two directory entries declaring the
-**identical** `servers` URL. Deduped on the resolved `(method, base+path)`, it is **916**.
-
-**Why it was missed, and why it will be missed again:** 49 of the 52 specs are Swagger 2.0 with
-`basePath`; **3 are OpenAPI 3.0.1 and have no `basePath` at all** — they carry `servers`. A reader
-that looks only at `basePath` records an EMPTY base for those three and they appear to collide.
-Those same three are the only specs *not* stamped `20260727`, so the master plan's derivation note
-("every spec filename is date-stamped 20260727") **is wrong**, and wrong exactly where it changes the
-count.
-
-**And the 4 rows it already has are NOT among the 916.** They point at
-`/ccx/api/hcm/v1/{tenant}/workers|organizations|jobs`. The current directory publishes **no `hcm`
-service and no `/ccx/` path anywhere** — worker resources live under `staffing/v7`,
-`absenceManagement/v5`, `compensation/v3`, `performanceEnablement/v5`, `timeTracking/v5` and
-`api/common/v1`. They are not in the archived list either (that holds only older *versions* of the 52
-listed services). So they cannot be counted as documented, **and they must not simply vanish** —
-deleting them deletes three shipped, schema- and fixture-backed streams inside a parity commit. The
-red test pins them by name and **counts them apart**, so the re-point-or-supersede call is made
-deliberately rather than by arithmetic. See `PLAN.md` hazard 7.
-
-`RUN-STATE.json.next_action` names the resume point. The bundle has **4 rows** and no
-`cli_surface.json`, `writes.json` or `operations.json` — the largest before/after gap in the sweep.
-`capabilities.write` is `false` and will have to become `true`.
+github's two generators *append* to an existing bundle. workday-rest had no `cli_surface.json`,
+`writes.json` or `operations.json` at all, so `tools/gen_workday_rest.py` builds all four files plus
+the `metadata.json` capability flip, and **rewrites rather than appends** so it is re-runnable from a
+clean tree. It also encodes the flag-type rules transcribed from `validate.go`. If zendesk-support
+needs a fresh surface, start there rather than from the github pair.
 
 ### Shape of the github delivery, as a template for the next 20
 
@@ -178,7 +182,7 @@ evidence under `.planning/` (`PLAN` + `RUN-STATE` + `TDD-LEDGER` + `SUMMARY` + `
 
 **Added, because the giants will not fit one context:** for a connector too large to finish in one
 context, **commit and push incremental progress inside it** rather than holding one giant
-uncommitted change. A workable slicing for github 1220 / workday-rest 920:
+uncommitted change. The slicing that worked for github 1220 and workday-rest 907:
 
 1. red test + derived-operation inventory (`DERIVED-OPERATIONS.json`) + `PLAN.md`/`RUN-STATE.json` —
    commit, push;
