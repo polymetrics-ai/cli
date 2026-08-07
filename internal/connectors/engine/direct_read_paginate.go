@@ -136,7 +136,18 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 		return nil, connectors.DirectReadPage{}, nil, err
 	}
 
-	paginator, paginatorErr := newPaginator(spec, pageSize, "")
+	// The paginator's stop rule for page_number/offset_limit is "this page held
+	// fewer records than the page size", so its threshold has to be the size
+	// that actually reaches the wire. Caller-wins means the declared size is no
+	// longer always that size: an explicit --page-size 5 against a declared 100
+	// would make every page look short and assert complete on page one. Resolve
+	// the effective size BEFORE building the paginator so the threshold and the
+	// request cannot disagree by construction.
+	pageSize = effectiveDirectReadPageSize(spec, pageSize, w.query)
+	walkSpec := spec
+	walkSpec.PageSize = pageSize
+
+	paginator, paginatorErr := newPaginator(walkSpec, pageSize, "")
 	mode := resolveDirectReadPageMode(spec, w.method, paginatorErr)
 	strategy := mode.strategy
 
@@ -166,7 +177,7 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 		}
 
 		supplied := callerPagingParams(spec, strategy, w.query)
-		if err := refuseConflictingPagingInput(supplied, w); err != nil {
+		if err := refuseConflictingPagingInput(supplied, w, strategy); err != nil {
 			return nil, connectors.DirectReadPage{}, nil, errDirectReadPagination{err: err}
 		}
 		callerNavigated = len(supplied) > 0
@@ -225,14 +236,19 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 		return nil, connectors.DirectReadPage{}, resp, err
 	}
 
-	// A caller who set the strategy's own paging parameter chose this window
-	// themselves, so the engine has no page number it can honestly name: the
-	// paginator still starts at its own first page. Reporting number 1 for a
-	// request that asked for startIndex=100 is a measured-looking lie.
-	addressable := mode.pageable && isAddressableStrategy(strategy) && !callerNavigated
+	// Two separate questions, deliberately not one boolean. Whether the
+	// strategy addresses pages by NUMBER decides which navigation field the
+	// result may carry at all — an addressable strategy never hands back a
+	// cursor, because validateDirectReadPageRequest would refuse that cursor on
+	// the way back in. Whether the CALLER chose this window decides only
+	// whether the engine may name a number for it: the paginator still starts
+	// at its own first page, so reporting number 1 for a request that asked for
+	// startIndex=100 is a measured-looking lie.
+	addressableStrategy := mode.pageable && isAddressableStrategy(strategy)
+	engineChosePage := addressableStrategy && !callerNavigated
 
 	page := connectors.DirectReadPage{Strategy: strategy, Size: sizeSent}
-	if addressable {
+	if engineChosePage {
 		page.Number = number
 	}
 	collection, isList, ambiguous := directReadCollectionKey(decoded)
@@ -276,14 +292,16 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 		}
 	}
 	if next == nil {
-		if isAddressableStrategy(strategy) && sizeSent <= 0 {
+		if isAddressableStrategy(strategy) && sizeSent != pageSize {
 			// page_number and offset_limit stop on a SHORT page: fewer records
 			// than the page size means the collection ended. That inference is
-			// only available when the request actually asked for a page size.
-			// When the declared spec names no size/limit param, the provider
-			// applied its own default and a "short" page proves nothing —
-			// comparing it against a size the request never sent is exactly the
-			// false completeness claim this contract exists to remove.
+			// only sound when the size the paginator compared against is the
+			// size the request actually carried. When the declared spec names
+			// no size/limit param nothing was sent at all (sizeSent is 0) and
+			// the provider chose the page, so a "short" page proves nothing;
+			// any other mismatch means the threshold and the wire disagree.
+			// Asserting completeness from either is the false claim this
+			// contract exists to remove.
 			page.Complete = false
 			page.Reason = directReadReasonSizeNotSent
 			return decoded, page, resp, nil
@@ -295,12 +313,34 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 	page.HasMore = true
 	page.Complete = false
 	page.Reason = directReadReasonMorePages
-	if addressable {
+	switch {
+	case engineChosePage:
 		page.NextNumber = number + 1
-	} else if token := nextCursorToken(spec, next); token != "" {
-		page.NextCursor = token
+	case addressableStrategy:
+		// The caller drives this walk through the connector's own paging
+		// parameter. The paginator's next window is computed from an offset it
+		// never advanced, so it names a page behind the caller — and a cursor
+		// is not an input this strategy accepts anyway.
+	default:
+		if token := nextCursorToken(spec, next); token != "" {
+			page.NextCursor = token
+		}
 	}
 	return decoded, page, resp, nil
+}
+
+// effectiveDirectReadPageSize resolves the page size this request will actually
+// carry, given that a caller's own size flag overrides the declared default.
+//
+// A value that is not a usable positive size leaves the declared size in place
+// for the paginator; directReadRequestedSize then reads 0 back off the wire, the
+// two disagree, and completeness is not asserted — which is the honest outcome
+// for a size nothing can interpret.
+func effectiveDirectReadPageSize(spec PaginationSpec, declared int, query url.Values) int {
+	if size := directReadRequestedSize(spec, strings.TrimSpace(spec.Type), query); size > 0 {
+		return size
+	}
+	return declared
 }
 
 // pagingParamsForStrategy names the query parameters the declared strategy
@@ -350,7 +390,12 @@ func callerPagingParams(spec PaginationSpec, strategy string, query url.Values) 
 // refuseConflictingPagingInput rejects the one pairing the caller-wins rule
 // cannot resolve: a raw paging parameter set alongside --page or --page-cursor.
 // Preferring either one would answer a question the caller did not ask.
-func refuseConflictingPagingInput(supplied []string, w directReadWalk) error {
+//
+// The parameter is named as the REQUEST PARAMETER it is, never dressed up as a
+// flag: the engine knows the query name a command's flag maps onto, not the
+// flag, and bahmni's `--start-index` maps onto `startIndex`. Rendering a flag
+// from the query name printed `--startIndex`, which no caller can type.
+func refuseConflictingPagingInput(supplied []string, w directReadWalk, strategy string) error {
 	if len(supplied) == 0 || (w.page == 0 && w.pageCursor == "") {
 		return nil
 	}
@@ -358,7 +403,7 @@ func refuseConflictingPagingInput(supplied []string, w directReadWalk) error {
 	if w.page > 0 {
 		flag = "--page"
 	}
-	return fmt.Errorf("direct read received %s and the paging parameter --%s; they select different pages, so pass one of them", flag, strings.ReplaceAll(supplied[0], "_", "-"))
+	return fmt.Errorf("direct read received %s and a command flag setting the request parameter %q, which the declared %q pagination uses to select a page; they select different pages, so pass one of them", flag, supplied[0], strategy)
 }
 
 // validateDirectReadPageRequest refuses navigation input the declared strategy

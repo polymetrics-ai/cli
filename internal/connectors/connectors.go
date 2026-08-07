@@ -336,10 +336,12 @@ const (
 	DirectReadPageReasonInvalidSpec = "pagination_spec_invalid"
 	DirectReadPageReasonAmbiguous   = "ambiguous_collection_shape"
 	// DirectReadPageReasonSizeNotRequested: the declared strategy stops on a
-	// SHORT page, but the spec names no size/limit parameter, so the request
-	// carried no page size and the provider applied its own default. Comparing
-	// that default-sized page against a size the request never asked for would
-	// assert a completeness nothing measured.
+	// SHORT page, but the size it compared against is not the size the request
+	// carried, so the comparison proves nothing. Usually the spec names no
+	// size/limit parameter at all and the provider applied its own default;
+	// it also covers a caller-supplied size the walk could not adopt as its
+	// threshold. Either way, asserting completeness would claim something
+	// nothing measured.
 	DirectReadPageReasonSizeNotRequested = "page_size_not_requested"
 )
 

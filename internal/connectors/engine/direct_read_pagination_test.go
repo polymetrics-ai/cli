@@ -84,7 +84,7 @@ func (f *pagedFixture) window(q map[string][]string) (offset, size int, explicit
 			}
 		}
 	}
-	for _, name := range []string{"cursor", "start_cursor", "offset"} {
+	for _, name := range []string{"cursor", "start_cursor", "offset", "startIndex"} {
 		if v, ok := q[name]; ok && len(v) > 0 {
 			if n, err := strconv.Atoi(v[0]); err == nil {
 				offset = n
@@ -1097,11 +1097,181 @@ func TestDirectReadRefusesARawPagingParameterAlongsidePageNavigation(t *testing.
 	if err == nil {
 		t.Fatal("--page alongside a raw offset returned no error, want a refusal")
 	}
-	if !strings.Contains(err.Error(), "--offset") || !strings.Contains(err.Error(), "--page") {
+	if !strings.Contains(err.Error(), `"offset"`) || !strings.Contains(err.Error(), "--page") {
 		t.Fatalf("error = %q, want it to name both inputs", err.Error())
 	}
 	if fx.count() != 0 {
 		t.Fatalf("requests = %d, want 0 — a refused navigation must not reach the provider", fx.count())
+	}
+}
+
+// TestDirectReadConflictRefusalNamesSomethingTheCallerCanType: the engine knows
+// the QUERY parameter a command's flag maps onto, not the flag. Rendering one
+// from the other printed "--startIndex" for bahmni, whose flag is
+// --start-index — a spelling no caller can type and the guide never showed.
+func TestDirectReadConflictRefusalNamesSomethingTheCallerCanType(t *testing.T) {
+	fx, srv := startPagedFixture(t, "results")
+	b := paginatedDirectReadBundle(srv.URL, bahmniPatientSearchPagination(), bahmniPatientSearchPath)
+
+	_, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         bahmniPatientSearchPath,
+		Query:        map[string]string{"startIndex": "100"},
+		Page:         2,
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err == nil {
+		t.Fatal("--page alongside a raw startIndex returned no error, want a refusal")
+	}
+	if strings.Contains(err.Error(), "--startIndex") {
+		t.Fatalf("error = %q, want no invented flag spelling: the real flag is --start-index", err.Error())
+	}
+	for _, want := range []string{"--page", `"startIndex"`, `"offset_limit"`} {
+		if !strings.Contains(err.Error(), want) {
+			t.Fatalf("error = %q, want it to contain %s", err.Error(), want)
+		}
+	}
+	if fx.count() != 0 {
+		t.Fatalf("requests = %d, want 0", fx.count())
+	}
+}
+
+// bahmniPatientSearchPagination is bahmni `bahmnicore patient-search` exactly as
+// the bundle declares it. The camelCase offset param matters: it collides with
+// nextCursorToken's start_index default, which is how an offset_limit read came
+// to report a cursor.
+const bahmniPatientSearchPath = "/openmrs/ws/rest/v1/bahmnicore/search/patient"
+
+func bahmniPatientSearchPagination() *PaginationSpec {
+	return &PaginationSpec{
+		Type:        "offset_limit",
+		LimitParam:  "limit",
+		OffsetParam: "startIndex",
+		PageSize:    50,
+	}
+}
+
+// TestDirectReadCallerNavigatedAddressableStrategyEmitsNoCursor: an addressable
+// strategy must never hand back next_cursor, because
+// validateDirectReadPageRequest refuses a cursor for that strategy on the way
+// back in. On bahmni the token was also WRONG — derived from a paginator whose
+// offset was never advanced, so it named the window just read.
+func TestDirectReadCallerNavigatedAddressableStrategyEmitsNoCursor(t *testing.T) {
+	fx, srv := startPagedFixture(t, "results")
+	b := paginatedDirectReadBundle(srv.URL, bahmniPatientSearchPagination(), bahmniPatientSearchPath)
+
+	result, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         bahmniPatientSearchPath,
+		Query:        map[string]string{"startIndex": "50"},
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	if got := arrayAtLen(t, result.Body, "results"); got != 50 {
+		t.Fatalf("results = %d, want the 50 records at startIndex 50", got)
+	}
+	for _, q := range fx.queriesRequested() {
+		if !strings.Contains(q, "startIndex=50") {
+			t.Fatalf("query sent = %q, want startIndex=50", q)
+		}
+	}
+	if !result.Page.HasMore || result.Page.Complete {
+		t.Fatalf("page has_more/complete = %v/%v, want true/false — 20 records remain", result.Page.HasMore, result.Page.Complete)
+	}
+	if result.Page.NextCursor != "" {
+		t.Fatalf("page.next_cursor = %q, want none: %q addresses pages by number and would refuse this cursor on the way back in", result.Page.NextCursor, result.Page.Strategy)
+	}
+	if result.Page.Number != 0 || result.Page.NextNumber != 0 {
+		t.Fatalf("page number/next = %d/%d, want both unset: the caller chose the window", result.Page.Number, result.Page.NextNumber)
+	}
+}
+
+// TestDirectReadCallerPageSizeBecomesTheCompletenessThreshold is the second way
+// into the false-completeness claim. The paginator's stop rule is
+// "recordCount < pageSize"; built from the DECLARED 100 while the wire carried
+// the caller's 5, every page looked short, so page one of 120 records was
+// reported complete with a size that had genuinely been sent.
+func TestDirectReadCallerPageSizeBecomesTheCompletenessThreshold(t *testing.T) {
+	fx, srv := startPagedFixture(t, "array")
+	b := paginatedDirectReadBundle(srv.URL, &PaginationSpec{
+		Type:      "page_number",
+		PageParam: "page",
+		SizeParam: "per_page",
+		PageSize:  fixtureMaxPage,
+	}, "/v2/logs")
+
+	result, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/v2/logs",
+		Query:        map[string]string{"per_page": "5"},
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	if got := rootArrayLen(t, result.Body); got != 5 {
+		t.Fatalf("records = %d, want the 5 the caller asked for", got)
+	}
+	for _, q := range fx.queriesRequested() {
+		if !strings.Contains(q, "per_page=5") || strings.Contains(q, "per_page=100") {
+			t.Fatalf("query sent = %q, want per_page=5", q)
+		}
+	}
+	if result.Page.Complete {
+		t.Fatalf("page.complete = true after returning %d of %d records", result.Page.Records, fixtureTotalRecords)
+	}
+	if !result.Page.HasMore || result.Page.NextNumber != 2 {
+		t.Fatalf("page has_more/next_number = %v/%d, want true/2", result.Page.HasMore, result.Page.NextNumber)
+	}
+	if result.Page.Size != 5 {
+		t.Fatalf("page.size = %d, want the 5 that was sent", result.Page.Size)
+	}
+
+	second, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/v2/logs",
+		Query:        map[string]string{"per_page": "5"},
+		Page:         result.Page.NextNumber,
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead(page=2): %v", err)
+	}
+	if got := rootArrayLen(t, second.Body); got != 5 {
+		t.Fatalf("page 2 records = %d, want 5", got)
+	}
+}
+
+// TestDirectReadCallerPageSizeAtTheDeclaredSizeStillProvesCompleteness is the
+// other side of the threshold rule: the guard must not turn every caller-sized
+// read into an unprovable one.
+func TestDirectReadCallerPageSizeAtTheDeclaredSizeStillProvesCompleteness(t *testing.T) {
+	fx := &pagedFixture{shape: "array", total: 4}
+	srv := httptest.NewServer(fx.handler())
+	t.Cleanup(srv.Close)
+	b := paginatedDirectReadBundle(srv.URL, &PaginationSpec{
+		Type:      "page_number",
+		PageParam: "page",
+		SizeParam: "per_page",
+		PageSize:  fixtureMaxPage,
+	}, "/v2/logs")
+
+	result, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/v2/logs",
+		Query:        map[string]string{"per_page": "10"},
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	if got := rootArrayLen(t, result.Body); got != 4 {
+		t.Fatalf("records = %d, want the whole 4-record collection", got)
+	}
+	if !result.Page.Complete {
+		t.Fatalf("page.complete = false (reason %q) after a genuinely short page against the size that was sent", result.Page.Reason)
 	}
 }
 

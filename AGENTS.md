@@ -185,15 +185,23 @@ page (GitHub's is 30) at `status: 200` with nothing saying more remained.
   accept `--page`; every other strategy (`cursor`, `next_url`, `link_header`,
   `start_index`) hands back `next_cursor` instead, and asking one of them for a
   page number is refused rather than quietly answered with page one.
-  `page_number`/`offset_limit` stop on a SHORT page, so when the declared spec
-  names no size param the request carries no size, the provider chose it, and
-  `complete` stays false with reason `page_size_not_requested`. `size` reports
-  only what actually reached the wire.
+  `page_number`/`offset_limit` stop on a SHORT page, so `complete` is asserted
+  only when the size the paginator compared against is the size that reached the
+  wire; otherwise it stays false with reason `page_size_not_requested`. `size`
+  reports only what actually reached the wire.
 - The caller's own value always wins over a derived paging value: every engine
   value goes in the BASE position of `mergeQuery`, so an explicit `--page-size 5`
-  is not overwritten by a declared 100. The one pairing that cannot be resolved
-  that way — a raw paging parameter alongside `--page`/`--page-cursor` — is
-  refused before the request, never ranked silently.
+  is not overwritten by a declared 100. The paginator is then BUILT from that
+  effective size (`effectiveDirectReadPageSize`), because a stop threshold of
+  100 against a 5-record page would call page one complete. The one pairing that
+  cannot be resolved that way — a raw paging parameter alongside
+  `--page`/`--page-cursor` — is refused before the request, never ranked
+  silently, and the refusal names the request parameter rather than inventing a
+  flag spelling the caller never typed.
+- Where a caller navigates through the connector's own paging parameter, the
+  result carries neither `number`/`next_number` (the engine did not choose the
+  window) nor `next_cursor` (an addressable strategy refuses cursors on the way
+  back in). `has_more` still reports whether records remain.
 - A direct-read executor that reports no page context has not navigated.
   `commandrunner.assertDirectReadNavigated` refuses `--page`/`--page-cursor`
   against a zero `DirectReadPage` rather than returning page one at exit 0, which

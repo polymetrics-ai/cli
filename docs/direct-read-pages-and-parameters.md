@@ -36,7 +36,7 @@ whole collection. When it is `false`, `reason` says why:
 | `pagination_declared_none` | the connector declares pagination type `none`; a declaration is not proof the provider agrees |
 | `pagination_not_addressable_for_request` | a strategy is declared, but it cannot page this request (a POST read carries its selection in a body) |
 | `pagination_spec_invalid` | the declared strategy's spec is unusable, so paging degraded to a single page for that connector |
-| `page_size_not_requested` | the declared strategy stops on a short page, but names no page-size parameter — the provider chose the size, so a short page proves nothing |
+| `page_size_not_requested` | the declared strategy stops on a short page, but the size it compared against is not the size the request carried — usually because the spec names no page-size parameter, so the provider chose it and a short page proves nothing |
 | `ambiguous_collection_shape` | the response holds more than one array and the paged one cannot be identified |
 
 `size` is reported only when a page-size parameter actually reached the wire. A
@@ -87,16 +87,24 @@ unset.
 A few connectors declared a paging flag by hand before the derivation existed —
 notion's `--page-size` and `--start-cursor`, bahmni's `--start-index`, gong's
 `--cursor`. Where one exists, **your value wins**: it is sent as written and the
-declared default never overwrites it. Because you chose the window yourself, the
-result reports no `number`/`next_number` — the engine has no page number it can
-honestly name for it.
+declared default never overwrites it. A size flag also becomes the page size the
+completeness check compares against, so a smaller page is not mistaken for the
+end of the collection.
+
+Where the flag selects *which* page rather than how big it is, you own the
+position: the result reports no `number`/`next_number` and no `next_cursor` —
+the engine has no page number it can honestly name for a window it did not
+choose, and a cursor is not an input these strategies accept. `has_more` still
+tells you whether records remain, and you advance your own parameter.
 
 Combining such a flag with `--page`/`--page-cursor` selects two different pages
-in one request, so it is refused before anything is sent:
+in one request, so it is refused before anything is sent (the parameter is named
+as the request parameter your flag maps onto):
 
 ```
-error: direct read received --page and the paging parameter --start-index;
-       they select different pages, so pass one of them
+error: direct read received --page and a command flag setting the request
+       parameter "startIndex", which the declared "offset_limit" pagination uses
+       to select a page; they select different pages, so pass one of them
 ```
 
 ## Where command flags come from
