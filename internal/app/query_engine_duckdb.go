@@ -138,7 +138,11 @@ func (e duckdbEngine) QuerySQL(ctx context.Context, query string, limit int) ([]
 // quote-escaped string literals — never via user SQL interpolation.
 func (e duckdbEngine) registerViews(ctx context.Context, db *sql.DB) error {
 	// A warehouse that does not exist yet has no tables and is not an error.
-	tables, err := warehouse.Tables(e.warehouseDir)
+	// Faults are deliberately not fatal here: a damaged ownership record costs
+	// its own connection's views, not every other connection's. A query naming
+	// a view that is missing for that reason fails on its own, and the JSONL
+	// path reports the fault precisely.
+	tables, _, err := warehouse.Tables(e.warehouseDir)
 	if err != nil {
 		return err
 	}

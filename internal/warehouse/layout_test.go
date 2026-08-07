@@ -317,16 +317,117 @@ func TestTablesReportsAnUnreadableOwnershipRecord(t *testing.T) {
 			if err := os.WriteFile(filepath.Join(connectionDir, OwnerFileName), []byte(tc.record), 0o600); err != nil {
 				t.Fatal(err)
 			}
-			_, err := Tables(root)
-			if err == nil {
-				t.Fatal("Tables() error = nil, want the unreadable ownership record reported")
+			_, faults, err := Tables(root)
+			if err != nil {
+				t.Fatalf("Tables() error = %v, want the fault reported beside the healthy tables", err)
+			}
+			if len(faults) != 1 {
+				t.Fatalf("Tables() faults = %#v, want the unreadable ownership record reported", faults)
 			}
 			for _, want := range []string{connectionDir, OwnerFileName, tc.wantErr} {
-				if !strings.Contains(err.Error(), want) {
-					t.Fatalf("Tables() error %q does not mention %q", err, want)
+				if !strings.Contains(faults[0].Error(), want) {
+					t.Fatalf("fault %q does not mention %q", faults[0], want)
 				}
 			}
+			// The fact still reaches the operator: a lookup that cannot be
+			// answered surfaces it rather than claiming the table is absent.
+			_, err = FindTable(root, "records", "")
+			var faulted *FaultError
+			if !errors.As(err, &faulted) {
+				t.Fatalf("FindTable() error = %T %v, want *FaultError", err, err)
+			}
+			for _, want := range []string{OwnerFileName, "Restore or remove"} {
+				if !strings.Contains(faulted.Error(), want) {
+					t.Fatalf("FindTable() error %q does not mention %q", faulted, want)
+				}
+			}
+			if strings.Contains(faulted.Error(), "run a sync to materialize it") {
+				t.Fatalf("FindTable() reported the table as absent despite a damaged record: %q", faulted)
+			}
 		})
+	}
+}
+
+// TestOneDamagedOwnershipRecordDoesNotDenyHealthyConnections is the isolation
+// contract. Nesting per connection exists so that one connection's problem
+// stays that connection's problem; a guard whose blast radius is the whole
+// project has the wrong shape, however loudly it fails.
+func TestOneDamagedOwnershipRecordDoesNotDenyHealthyConnections(t *testing.T) {
+	root := t.TempDir()
+	healthy, err := LocationFor(root, "ws_1", "hubspot", "conn_healthy", "acme")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := healthy.EnsureOwnership(); err != nil {
+		t.Fatal(err)
+	}
+	healthyTable, err := healthy.TablePath("acme_records")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(filepath.Dir(healthyTable), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(healthyTable, []byte(`{"id":"a1"}`+"\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	// A second connection's record is damaged after its table was written.
+	damaged, err := LocationFor(root, "ws_1", "hubspot", "conn_damaged", "globex")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := damaged.EnsureOwnership(); err != nil {
+		t.Fatal(err)
+	}
+	damagedTable, err := damaged.TablePath("globex_records")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(filepath.Dir(damagedTable), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(damagedTable, []byte(`{"id":"g1"}`+"\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(damaged.OwnerPath(), []byte("{not json"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	tables, faults, err := Tables(root)
+	if err != nil {
+		t.Fatalf("Tables() error = %v, want the healthy connection still listed", err)
+	}
+	if len(tables) != 1 || tables[0].Connection != "acme" || tables[0].Name != "acme_records" {
+		t.Fatalf("Tables() = %#v, want only the healthy connection's table", tables)
+	}
+	if len(faults) != 1 || faults[0].Dir != damaged.ConnectionDir {
+		t.Fatalf("Tables() faults = %#v, want the damaged directory", faults)
+	}
+
+	// The healthy connection reads normally: it does not depend on the damaged
+	// directory, so the damage costs it nothing.
+	found, err := FindTable(root, "acme_records", "acme")
+	if err != nil {
+		t.Fatalf("FindTable(healthy) error = %v, want the read to succeed", err)
+	}
+	if found.Path != healthyTable {
+		t.Fatalf("FindTable(healthy) path = %q, want %q", found.Path, healthyTable)
+	}
+	if _, err := FindTable(root, "acme_records", ""); err != nil {
+		t.Fatalf("FindTable(healthy, unscoped) error = %v, want the read to succeed", err)
+	}
+
+	// The damaged connection's own table surfaces the fault instead.
+	var faulted *FaultError
+	if _, err := FindTable(root, "globex_records", ""); !errors.As(err, &faulted) {
+		t.Fatalf("FindTable(damaged) error = %T %v, want *FaultError", err, err)
+	}
+	if !strings.Contains(faulted.Error(), damaged.OwnerPath()) {
+		t.Fatalf("fault error %q does not name the damaged record", faulted)
+	}
+	if !strings.Contains(faulted.Error(), "healthy records are unaffected") {
+		t.Fatalf("fault error %q does not say the blast radius is contained", faulted)
 	}
 }
 
@@ -359,11 +460,16 @@ func TestTablesSkipsDirectoriesWithoutAnOwnershipRecord(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(orphan, "records.jsonl"), []byte("{}\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	tables, err := Tables(root)
+	tables, faults, err := Tables(root)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if len(tables) != 0 {
 		t.Fatalf("Tables() = %#v, want nothing readable without an ownership record", tables)
+	}
+	// A wholly absent record is a skip, not a fault: an unowned directory is
+	// not damaged, it is simply not anyone's to read.
+	if len(faults) != 0 {
+		t.Fatalf("Tables() faults = %#v, want a missing record treated as a skip", faults)
 	}
 }
