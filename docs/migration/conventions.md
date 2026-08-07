@@ -334,6 +334,65 @@ not a full override by default.
   is the schema source of truth, and `connectorgen validate` scans the raw file for secret-shaped
   literals.
 
+## 2.9 Command parameters and paging are DERIVED — never hand-author them
+
+Two parts of a `direct_read` command's surface are generated from declarations
+you already own. Hand-writing either one is a bug, not a shortcut.
+
+### Paging
+
+Never declare a `page`, `per_page`, `cursor`, `limit` or `offset` flag on a
+command. Paging comes from the connector's `streams.json` `base.pagination`
+spec, which the direct-read executor consumes through the same seven strategies
+the ETL path uses. The runtime supplies `--page` (for `page_number` and
+`offset_limit`, the only strategies with an addressable page number) and
+`--page-cursor` (for `cursor`, `next_url`, `link_header`).
+
+Declaring a paging flag by hand gives a caller a second, unchecked way to page
+that bypasses the completeness contract.
+
+### Other parameters
+
+Do not hand-author a flag for a parameter the provider specification already
+documents. Import it instead:
+
+```sh
+go run ./cmd/connectorgen params-import <connector> --artifact <spec.json>
+go run ./cmd/connectorgen surface-sync internal/connectors/defs
+```
+
+`params-import` writes the accepted parameter set into `operations.json` under
+`rest.parameters` (name, location, type, requiredness, enum values, summary).
+`surface-sync` then derives the command flags from it. The split exists so CI
+stays hermetic: `surface-sync --check` verifies drift with no artifact and no
+network.
+
+The import deliberately drops two classes of parameter:
+
+- **paging parameters**, for the reason above;
+- **anything the connection already supplies** — a path parameter named by the
+  connector's `spec.json` config schema (github's `owner`/`repo`) resolves
+  through templating, so turning it into a flag would make every command demand
+  a value the connection already knows.
+
+### What you still author by hand
+
+A flag the derivation cannot know about, and a better summary or narrower type
+than the specification carries. `surface-sync` only ever **adds** derived flags;
+a flag you already declared is left exactly as written.
+
+### Verifying
+
+```sh
+go run ./cmd/connectorgen params-import <connector> --artifact <spec.json> --check
+go run ./cmd/connectorgen surface-sync --check internal/connectors/defs
+go run ./cmd/connectorgen validate internal/connectors/defs
+```
+
+`validate` rejects a malformed `rest.parameters` entry at build time — an `in`
+outside `query|path` fails with the exact JSON pointer — so a declaration that
+could not produce a valid command never reaches the runtime.
+
 ## 3. The engine dialect reference
 
 All of this is read from `internal/connectors/engine/{bundle,interpolate,paginate,read,write,

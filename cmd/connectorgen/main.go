@@ -65,6 +65,8 @@ func run(args []string, stdout, stderr io.Writer) int {
 		return runGen(args, stdout, stderr)
 	case "surface-sync":
 		return runSurfaceSync(args, stdout, stderr)
+	case "params-import":
+		return runParamsImport(args, stdout, stderr)
 	case "surface-reconcile":
 		return runSurfaceReconcile(args, stdout, stderr)
 	case "batch":

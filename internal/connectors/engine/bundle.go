@@ -736,14 +736,35 @@ func (o OperationSpec) IsBatchable() bool {
 	return o.Batchable == nil || *o.Batchable
 }
 
+// OperationParameter is one parameter a REST operation accepts, as its
+// provider specification declares it.
+type OperationParameter struct {
+	Name     string   `json:"name"`
+	In       string   `json:"in"`
+	Type     string   `json:"type,omitempty"`
+	Required bool     `json:"required,omitempty"`
+	Values   []string `json:"values,omitempty"`
+	Summary  string   `json:"summary,omitempty"`
+}
+
 type RESTOperationSpec struct {
-	Method      string            `json:"method"`
-	Path        string            `json:"path"`
-	ContentType string            `json:"content_type,omitempty"`
-	MaxBytes    int               `json:"max_bytes,omitempty"`
-	Query       map[string]string `json:"query,omitempty"`
-	Body        map[string]any    `json:"body,omitempty"`
-	BodySchema  json.RawMessage   `json:"body_schema,omitempty"`
+	Method      string `json:"method"`
+	Path        string `json:"path"`
+	ContentType string `json:"content_type,omitempty"`
+	MaxBytes    int    `json:"max_bytes,omitempty"`
+	// Parameters is the operation's accepted parameter set, imported from the
+	// connector's own provider specification by `connectorgen params-import`.
+	// It is the source command flags are DERIVED from — a command's flags are
+	// never hand-authored against an endpoint the provider documents.
+	//
+	// It deliberately carries only what a flag needs (name, location, type,
+	// requiredness, enum values, summary) and nothing about paging: page and
+	// page-size parameters are excluded at import, because paging comes from
+	// the connector's declared pagination spec instead.
+	Parameters []OperationParameter `json:"parameters,omitempty"`
+	Query      map[string]string    `json:"query,omitempty"`
+	Body       map[string]any       `json:"body,omitempty"`
+	BodySchema json.RawMessage      `json:"body_schema,omitempty"`
 	// Multipart is an opt-in, operation-level multipart/form-data contract.
 	// It deliberately reuses writes.json's bounded field/file part model; an
 	// absent block preserves metadata-only multipart rows until their connector

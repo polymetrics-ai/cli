@@ -74,22 +74,24 @@ type surfaceSyncFields struct {
 	APISurface   int
 	OutputPolicy int
 	FlagMapsTo   int
+	FlagDerived  int
 	MaxBytes     int
 }
 
 func (f surfaceSyncFields) total() int {
-	return f.APISurface + f.OutputPolicy + f.FlagMapsTo + f.MaxBytes
+	return f.APISurface + f.OutputPolicy + f.FlagMapsTo + f.FlagDerived + f.MaxBytes
 }
 
 func (f surfaceSyncFields) String() string {
-	return fmt.Sprintf("api_surface=%d output_policy=%d flag_maps_to=%d rest.max_bytes=%d",
-		f.APISurface, f.OutputPolicy, f.FlagMapsTo, f.MaxBytes)
+	return fmt.Sprintf("api_surface=%d output_policy=%d flag_maps_to=%d flag_derived=%d rest.max_bytes=%d",
+		f.APISurface, f.OutputPolicy, f.FlagMapsTo, f.FlagDerived, f.MaxBytes)
 }
 
 func (f *surfaceSyncFields) add(other surfaceSyncFields) {
 	f.APISurface += other.APISurface
 	f.OutputPolicy += other.OutputPolicy
 	f.FlagMapsTo += other.FlagMapsTo
+	f.FlagDerived += other.FlagDerived
 	f.MaxBytes += other.MaxBytes
 }
 
@@ -409,6 +411,14 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			}
 		}
 
+		// DERIVED: a direct_read command's flags come from the operation's
+		// imported parameter set, never from hand-authoring. An operation that
+		// declares no parameters leaves the command's flags untouched, so a
+		// connector whose parameters have not been imported yet is unaffected.
+		if intent == "direct_read" {
+			stats.Filled.FlagDerived += deriveCommandParameterFlags(cmd, block)
+		}
+
 		// DEFAULTED for REST direct operations: a binary_download operation
 		// must declare its own positive max_bytes at bundle load, and a
 		// positive rest.max_bytes is the operation's own declaration rather
@@ -510,4 +520,86 @@ func positiveNumber(v any) bool {
 	}
 	f, err := number.Float64()
 	return err == nil && f > 0
+}
+
+// deriveCommandParameterFlags adds a flag for every parameter the operation
+// declares that the command does not already expose, and returns how many it
+// added.
+//
+// It only ever ADDS. A flag the bundle already declares is left exactly as
+// authored, because an author may have given it a better summary or a narrower
+// type than the provider specification carries; the derivation exists to close
+// the gap where a parameter has no flag at all, not to overwrite judgement.
+//
+// Paging parameters never arrive here: params-import excludes them, because
+// paging is answered by the connector's declared pagination spec through
+// --page/--page-cursor.
+func deriveCommandParameterFlags(cmd *orderedObject, rest *orderedObject) int {
+	params := arrayField(rest, "parameters")
+	if len(params) == 0 {
+		return 0
+	}
+	declared := map[string]bool{}
+	for _, raw := range arrayField(cmd, "flags") {
+		if flag, ok := raw.(*orderedObject); ok {
+			declared[strings.ReplaceAll(stringField(flag, "name"), "-", "_")] = true
+		}
+	}
+	flags := append([]any(nil), arrayField(cmd, "flags")...)
+	added := 0
+	for _, raw := range params {
+		param, ok := raw.(*orderedObject)
+		if !ok {
+			continue
+		}
+		name := stringField(param, "name")
+		if name == "" || declared[name] {
+			continue
+		}
+		location := stringField(param, "in")
+		if location != "query" && location != "path" {
+			continue
+		}
+		flag := newOrderedObject()
+		flag.set("name", strings.ReplaceAll(name, "_", "-"))
+		flag.set("type", derivedFlagType(param))
+		if summary := stringField(param, "summary"); summary != "" {
+			flag.set("summary", summary)
+		}
+		if values := arrayField(param, "values"); len(values) > 0 {
+			flag.set("values", append([]any(nil), values...))
+		}
+		if required, _ := param.get("required"); required == true {
+			flag.set("required", true)
+		}
+		flag.set("maps_to", location+"."+name)
+		flags = append(flags, flag)
+		declared[name] = true
+		added++
+	}
+	if added > 0 {
+		cmd.set("flags", flags)
+	}
+	return added
+}
+
+// derivedFlagType maps a provider parameter type onto the command surface's own
+// flag vocabulary. An enum is expressed as type "enum" plus its values, which
+// is the form the runtime already validates before any network call.
+func derivedFlagType(param *orderedObject) string {
+	if len(arrayField(param, "values")) > 0 {
+		return "enum"
+	}
+	switch stringField(param, "type") {
+	case "integer":
+		return "integer"
+	case "number":
+		return "number"
+	case "boolean":
+		return "boolean"
+	case "array":
+		return "string_array"
+	default:
+		return "string"
+	}
 }

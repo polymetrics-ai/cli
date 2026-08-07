@@ -66010,6 +66010,41 @@
           "source_url": "",
           "flags": [
             {
+              "name": "direction",
+              "type": "enum",
+              "summary": "The direction to sort the results by.",
+              "values": [
+                "asc",
+                "desc"
+              ],
+              "maps_to": "query.direction"
+            },
+            {
+              "name": "key",
+              "type": "string",
+              "summary": "An explicit key or prefix for identifying the cache",
+              "values": [],
+              "maps_to": "query.key"
+            },
+            {
+              "name": "ref",
+              "type": "string",
+              "summary": "The full Git reference for narrowing down the cache. The `ref` for a branch should be formatted as `refs/heads/<branch name>`. To reference a pull request use `refs/pull/<number>/merge`.",
+              "values": [],
+              "maps_to": "query.ref"
+            },
+            {
+              "name": "sort",
+              "type": "enum",
+              "summary": "The property to sort the results by. `created_at` means when the cache was created. `last_accessed_at` means when the cache was last accessed. `size_in_bytes` is the size of the cache in bytes.",
+              "values": [
+                "created_at",
+                "last_accessed_at",
+                "size_in_bytes"
+              ],
+              "maps_to": "query.sort"
+            },
+            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -66066,6 +66101,13 @@
           "source_url": "",
           "flags": [
             {
+              "name": "after",
+              "type": "string",
+              "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results after this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
+              "values": [],
+              "maps_to": "query.after"
+            },
+            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -66103,6 +66145,20 @@
               "summary": "concurrency_group_name path parameter",
               "values": [],
               "maps_to": "path.concurrency_group_name"
+            },
+            {
+              "name": "ahead-of-job",
+              "type": "integer",
+              "summary": "Filter to items ahead of this job ID in the queue, plus the job itself.",
+              "values": [],
+              "maps_to": "query.ahead_of_job"
+            },
+            {
+              "name": "ahead-of-run",
+              "type": "integer",
+              "summary": "Filter to items ahead of this workflow run ID in the queue, plus the run itself.",
+              "values": [],
+              "maps_to": "query.ahead_of_run"
             },
             {
               "name": "page",
@@ -66695,6 +66751,13 @@
           "source_url": "",
           "flags": [
             {
+              "name": "name",
+              "type": "string",
+              "summary": "The name of a self-hosted runner.",
+              "values": [],
+              "maps_to": "query.name"
+            },
+            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -67089,6 +67152,13 @@
               "maps_to": "path.attempt_number"
             },
             {
+              "name": "exclude-pull-requests",
+              "type": "boolean",
+              "summary": "If `true` pull requests are omitted from the response (empty array).",
+              "values": [],
+              "maps_to": "query.exclude_pull_requests"
+            },
+            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -67228,6 +67298,20 @@
               "maps_to": "path.run_id"
             },
             {
+              "name": "after",
+              "type": "string",
+              "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results after this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
+              "values": [],
+              "maps_to": "query.after"
+            },
+            {
+              "name": "before",
+              "type": "string",
+              "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results before this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
+              "values": [],
+              "maps_to": "query.before"
+            },
+            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -67289,6 +67373,16 @@
               "summary": "run_id path parameter",
               "values": [],
               "maps_to": "path.run_id"
+            },
+            {
+              "name": "filter",
+              "type": "enum",
+              "summary": "Filters jobs by their `completed_at` timestamp. `latest` returns jobs from the most recent execution of the workflow run. `all` returns all jobs for a workflow run, including from old executions of the workflow run.",
+              "values": [
+                "latest",
+                "all"
+              ],
+              "maps_to": "query.filter"
             },
             {
               "name": "page",
@@ -67929,6 +68023,27 @@
               "summary": "subject_digest path parameter",
               "values": [],
               "maps_to": "path.subject_digest"
+            },
+            {
+              "name": "after",
+              "type": "string",
+              "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results after this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
+              "values": [],
+              "maps_to": "query.after"
+            },
+            {
+              "name": "before",
+              "type": "string",
+              "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results before this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
+              "values": [],
+              "maps_to": "query.before"
+            },
+            {
+              "name": "predicate-type",
+              "type": "string",
+              "summary": "Optional filter for fetching attestations with a given predicate type.",
+              "values": [],
+              "maps_to": "query.predicate_type"
             },
             {
               "name": "page",
@@ -69253,6 +69368,34 @@
               "maps_to": "path.check_suite_id"
             },
             {
+              "name": "check-name",
+              "type": "string",
+              "summary": "Returns check runs with the specified `name`.",
+              "values": [],
+              "maps_to": "query.check_name"
+            },
+            {
+              "name": "filter",
+              "type": "enum",
+              "summary": "Filters check runs by their `completed_at` timestamp. `latest` returns the most recent check runs.",
+              "values": [
+                "latest",
+                "all"
+              ],
+              "maps_to": "query.filter"
+            },
+            {
+              "name": "status",
+              "type": "enum",
+              "summary": "Returns check runs with the specified `status`.",
+              "values": [
+                "queued",
+                "in_progress",
+                "completed"
+              ],
+              "maps_to": "query.status"
+            },
+            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -69308,6 +69451,40 @@
           "source_cli_path": "",
           "source_url": "",
           "flags": [
+            {
+              "name": "after",
+              "type": "string",
+              "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results after this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
+              "values": [],
+              "maps_to": "query.after"
+            },
+            {
+              "name": "before",
+              "type": "string",
+              "summary": "A cursor, as given in the [Link header](https://docs.github.com/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results before this cursor. For more information, see \"[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
+              "values": [],
+              "maps_to": "query.before"
+            },
+            {
+              "name": "direction",
+              "type": "enum",
+              "summary": "The direction to sort the results by.",
+              "values": [
+                "asc",
+                "desc"
+              ],
+              "maps_to": "query.direction"
+            },
+            {
+              "name": "state",
+              "type": "enum",
+              "summary": "If specified, only code quality findings with this state will be returned.",
+              "values": [
+                "open",
+                "dismissed"
+              ],
+              "maps_to": "query.state"
+            },
             {
               "name": "page",
               "type": "integer",
@@ -69522,6 +69699,20 @@
               "maps_to": "path.alert_number"
             },
             {
+              "name": "pr",
+              "type": "integer",
+              "summary": "The number of the pull request for the results you want to list.",
+              "values": [],
+              "maps_to": "query.pr"
+            },
+            {
+              "name": "ref",
+              "type": "string",
+              "summary": "The Git reference for the results you want to list. The `ref` for a branch can be formatted either as `refs/heads/<branch name>` or simply `<branch name>`. To reference a pull request use `refs/pull/<number>/merge`.",
+              "values": [],
+              "maps_to": "query.ref"
+            },
+            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -69553,6 +69744,60 @@
           "source_cli_path": "",
           "source_url": "",
           "flags": [
+            {
+              "name": "direction",
+              "type": "enum",
+              "summary": "The direction to sort the results by.",
+              "values": [
+                "asc",
+                "desc"
+              ],
+              "maps_to": "query.direction"
+            },
+            {
+              "name": "pr",
+              "type": "integer",
+              "summary": "The number of the pull request for the results you want to list.",
+              "values": [],
+              "maps_to": "query.pr"
+            },
+            {
+              "name": "ref",
+              "type": "string",
+              "summary": "The Git reference for the analyses you want to list. The `ref` for a branch can be formatted either as `refs/heads/<branch name>` or simply `<branch name>`. To reference a pull request use `refs/pull/<number>/merge`.",
+              "values": [],
+              "maps_to": "query.ref"
+            },
+            {
+              "name": "sarif-id",
+              "type": "string",
+              "summary": "Filter analyses belonging to the same SARIF upload.",
+              "values": [],
+              "maps_to": "query.sarif_id"
+            },
+            {
+              "name": "sort",
+              "type": "enum",
+              "summary": "The property by which to sort the results.",
+              "values": [
+                "created"
+              ],
+              "maps_to": "query.sort"
+            },
+            {
+              "name": "tool-guid",
+              "type": "string",
+              "summary": "The GUID of a code scanning tool. Only results by this tool will be listed. Note that some code scanning tools may not include a GUID in their analysis data. You can specify the tool by using either `tool_guid` or `tool_name`, but not both.",
+              "values": [],
+              "maps_to": "query.tool_guid"
+            },
+            {
+              "name": "tool-name",
+              "type": "string",
+              "summary": "The name of a code scanning tool. Only results by this tool will be listed. You can specify the tool by using either `tool_name` or `tool_guid`, but not both.",
+              "values": [],
+              "maps_to": "query.tool_name"
+            },
             {
               "name": "page",
               "type": "integer",
@@ -69987,6 +70232,13 @@
           "source_url": "",
           "flags": [
             {
+              "name": "ref",
+              "type": "string",
+              "summary": "A branch, tag or commit name used to determine which version of the CODEOWNERS file to use. Default: the repository's default branch (e.g. `main`)",
+              "values": [],
+              "maps_to": "query.ref"
+            },
+            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -70099,6 +70351,27 @@
           "source_url": "",
           "flags": [
             {
+              "name": "client-ip",
+              "type": "string",
+              "summary": "IP for location auto-detection when proxying a request",
+              "values": [],
+              "maps_to": "query.client_ip"
+            },
+            {
+              "name": "location",
+              "type": "string",
+              "summary": "The location to check for available machines. Assigned by IP if not provided.",
+              "values": [],
+              "maps_to": "query.location"
+            },
+            {
+              "name": "ref",
+              "type": "string",
+              "summary": "The branch or commit to check for prebuild availability and devcontainer restrictions.",
+              "values": [],
+              "maps_to": "query.ref"
+            },
+            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -70131,6 +70404,20 @@
           "source_url": "",
           "flags": [
             {
+              "name": "client-ip",
+              "type": "string",
+              "summary": "An alternative IP for default location auto-detection, such as when proxying a request.",
+              "values": [],
+              "maps_to": "query.client_ip"
+            },
+            {
+              "name": "ref",
+              "type": "string",
+              "summary": "The branch or commit to check for a default devcontainer path. If not specified, the default branch will be checked.",
+              "values": [],
+              "maps_to": "query.ref"
+            },
+            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -70162,6 +70449,22 @@
           "source_cli_path": "",
           "source_url": "",
           "flags": [
+            {
+              "name": "devcontainer-path",
+              "type": "string",
+              "summary": "Path to the devcontainer.json configuration to use for the permission check.",
+              "values": [],
+              "maps_to": "query.devcontainer_path",
+              "required": true
+            },
+            {
+              "name": "ref",
+              "type": "string",
+              "summary": "The git reference that points to the location of the devcontainer configuration to use for the permission check. The value of `ref` will typically be a branch name (`heads/BRANCH_NAME`). For more information, see \"[Git References](https://git-scm.com/book/en/v2/Git-Internals-Git-References)\" in the Git documentation.",
+              "values": [],
+              "maps_to": "query.ref",
+              "required": true
+            },
             {
               "name": "page",
               "type": "integer",
@@ -70353,6 +70656,22 @@
               "maps_to": "path.comment_id"
             },
             {
+              "name": "content",
+              "type": "enum",
+              "summary": "Returns a single [reaction type](https://docs.github.com/rest/reactions/reactions#about-reactions). Omit this parameter to list all reactions to a commit comment.",
+              "values": [
+                "+1",
+                "-1",
+                "laugh",
+                "confused",
+                "heart",
+                "hooray",
+                "rocket",
+                "eyes"
+              ],
+              "maps_to": "query.content"
+            },
+            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -70525,6 +70844,34 @@
               "maps_to": "path.ref"
             },
             {
+              "name": "check-name",
+              "type": "string",
+              "summary": "Returns check runs with the specified `name`.",
+              "values": [],
+              "maps_to": "query.check_name"
+            },
+            {
+              "name": "filter",
+              "type": "enum",
+              "summary": "Filters check runs by their `completed_at` timestamp. `latest` returns the most recent check runs.",
+              "values": [
+                "latest",
+                "all"
+              ],
+              "maps_to": "query.filter"
+            },
+            {
+              "name": "status",
+              "type": "enum",
+              "summary": "Returns check runs with the specified `status`.",
+              "values": [
+                "queued",
+                "in_progress",
+                "completed"
+              ],
+              "maps_to": "query.status"
+            },
+            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -70562,6 +70909,13 @@
               "summary": "ref path parameter",
               "values": [],
               "maps_to": "path.ref"
+            },
+            {
+              "name": "check-name",
+              "type": "string",
+              "summary": "Returns check runs with the specified `name`.",
+              "values": [],
+              "maps_to": "query.check_name"
             },
             {
               "name": "page",
@@ -70933,6 +71287,13 @@
               "summary": "basehead path parameter",
               "values": [],
               "maps_to": "path.basehead"
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "The full path, relative to the repository root, of the dependency manifest file.",
+              "values": [],
+              "maps_to": "query.name"
             },
             {
               "name": "page",
@@ -72092,6 +72453,13 @@
               "maps_to": "path.tree_sha"
             },
             {
+              "name": "recursive",
+              "type": "string",
+              "summary": "Setting this parameter to any value returns the objects or subtrees referenced by the tree specified in `:tree_sha`. For example, setting `recursive` to any of the following will enable returning objects or subtrees: `0`, `1`, `\"true\"`, and `\"false\"`. Omit this parameter to prevent recursively returning objects or subtrees.",
+              "values": [],
+              "maps_to": "query.recursive"
+            },
+            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -72161,6 +72529,23 @@
               "summary": "hook_id path parameter",
               "values": [],
               "maps_to": "path.hook_id"
+            },
+            {
+              "name": "cursor",
+              "type": "string",
+              "summary": "Used for pagination: the starting delivery from which the page of deliveries is fetched. Refer to the `link` header for the next and previous page cursors.",
+              "values": [],
+              "maps_to": "query.cursor"
+            },
+            {
+              "name": "status",
+              "type": "enum",
+              "summary": "Returns webhook deliveries filtered by delivery outcome classification based on `status_code` range. A `status` of `success` returns deliveries with a `status_code` in the 200-399 range (inclusive). A `status` of `failure` returns deliveries with a `status_code` in the 400-599 range (inclusive).",
+              "values": [
+                "success",
+                "failure"
+              ],
+              "maps_to": "query.status"
             },
             {
               "name": "page",
@@ -72863,6 +73248,22 @@
               "maps_to": "path.comment_id"
             },
             {
+              "name": "content",
+              "type": "enum",
+              "summary": "Returns a single [reaction type](https://docs.github.com/rest/reactions/reactions#about-reactions). Omit this parameter to list all reactions to an issue comment.",
+              "values": [
+                "+1",
+                "-1",
+                "laugh",
+                "confused",
+                "heart",
+                "hooray",
+                "rocket",
+                "eyes"
+              ],
+              "maps_to": "query.content"
+            },
+            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -73293,6 +73694,22 @@
               "maps_to": "path.issue_number"
             },
             {
+              "name": "content",
+              "type": "enum",
+              "summary": "Returns a single [reaction type](https://docs.github.com/rest/reactions/reactions#about-reactions). Omit this parameter to list all reactions to an issue.",
+              "values": [
+                "+1",
+                "-1",
+                "laugh",
+                "confused",
+                "heart",
+                "hooray",
+                "rocket",
+                "eyes"
+              ],
+              "maps_to": "query.content"
+            },
+            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -73491,6 +73908,13 @@
           "source_url": "",
           "flags": [
             {
+              "name": "ref",
+              "type": "string",
+              "summary": "The Git reference for the results you want to list. The `ref` for a branch can be formatted either as `refs/heads/<branch name>` or simply `<branch name>`. To reference a pull request use `refs/pull/<number>/merge`.",
+              "values": [],
+              "maps_to": "query.ref"
+            },
+            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -73577,6 +74001,27 @@
           "source_cli_path": "",
           "source_url": "",
           "flags": [
+            {
+              "name": "all",
+              "type": "boolean",
+              "summary": "If `true`, show notifications marked as read.",
+              "values": [],
+              "maps_to": "query.all"
+            },
+            {
+              "name": "before",
+              "type": "string",
+              "summary": "Only show notifications updated before the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`.",
+              "values": [],
+              "maps_to": "query.before"
+            },
+            {
+              "name": "participating",
+              "type": "boolean",
+              "summary": "If `true`, only shows notifications in which the user is directly participating or mentioned.",
+              "values": [],
+              "maps_to": "query.participating"
+            },
             {
               "name": "page",
               "type": "integer",
@@ -74055,6 +74500,22 @@
               "maps_to": "path.comment_id"
             },
             {
+              "name": "content",
+              "type": "enum",
+              "summary": "Returns a single [reaction type](https://docs.github.com/rest/reactions/reactions#about-reactions). Omit this parameter to list all reactions to a pull request review comment.",
+              "values": [
+                "+1",
+                "-1",
+                "laugh",
+                "confused",
+                "heart",
+                "hooray",
+                "rocket",
+                "eyes"
+              ],
+              "maps_to": "query.content"
+            },
+            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -74392,6 +74853,13 @@
           "source_url": "",
           "flags": [
             {
+              "name": "ref",
+              "type": "string",
+              "summary": "The name of the commit/branch/tag. Default: the repository’s default branch.",
+              "values": [],
+              "maps_to": "query.ref"
+            },
+            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -74429,6 +74897,13 @@
               "summary": "dir path parameter",
               "values": [],
               "maps_to": "path.dir"
+            },
+            {
+              "name": "ref",
+              "type": "string",
+              "summary": "The name of the commit/branch/tag. Default: the repository’s default branch.",
+              "values": [],
+              "maps_to": "query.ref"
             },
             {
               "name": "page",
@@ -74588,6 +75063,20 @@
               "maps_to": "path.release_id"
             },
             {
+              "name": "content",
+              "type": "enum",
+              "summary": "Returns a single [reaction type](https://docs.github.com/rest/reactions/reactions#about-reactions). Omit this parameter to list all reactions to a release.",
+              "values": [
+                "+1",
+                "laugh",
+                "heart",
+                "hooray",
+                "rocket",
+                "eyes"
+              ],
+              "maps_to": "query.content"
+            },
+            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -74674,6 +75163,55 @@
           "source_cli_path": "",
           "source_url": "",
           "flags": [
+            {
+              "name": "actor-name",
+              "type": "string",
+              "summary": "The handle for the GitHub user account to filter on. When specified, only rule evaluations triggered by this actor will be returned.",
+              "values": [],
+              "maps_to": "query.actor_name"
+            },
+            {
+              "name": "evaluate-status",
+              "type": "enum",
+              "summary": "The evaluate status to filter on. When specified, only rule suites resulting from rulesets with the specified evaluate status will be returned.",
+              "values": [
+                "all",
+                "active",
+                "evaluate"
+              ],
+              "maps_to": "query.evaluate_status"
+            },
+            {
+              "name": "ref",
+              "type": "string",
+              "summary": "The name of the ref. Cannot contain wildcard characters. Optionally prefix with `refs/heads/` to limit to branches or `refs/tags/` to limit to tags. Omit the prefix to search across all refs. When specified, only rule evaluations triggered for this ref will be returned.",
+              "values": [],
+              "maps_to": "query.ref"
+            },
+            {
+              "name": "rule-suite-result",
+              "type": "enum",
+              "summary": "The rule suite results to filter on. When specified, only suites with this result will be returned.",
+              "values": [
+                "pass",
+                "fail",
+                "bypass",
+                "all"
+              ],
+              "maps_to": "query.rule_suite_result"
+            },
+            {
+              "name": "time-period",
+              "type": "enum",
+              "summary": "The time period to filter by.",
+              "values": [
+                "hour",
+                "day",
+                "week",
+                "month"
+              ],
+              "maps_to": "query.time_period"
+            },
             {
               "name": "page",
               "type": "integer",
@@ -75349,6 +75887,16 @@
           "source_url": "",
           "flags": [
             {
+              "name": "per",
+              "type": "enum",
+              "summary": "The time frame to display results for.",
+              "values": [
+                "day",
+                "week"
+              ],
+              "maps_to": "query.per"
+            },
+            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -75444,6 +75992,16 @@
           "source_cli_path": "",
           "source_url": "",
           "flags": [
+            {
+              "name": "per",
+              "type": "enum",
+              "summary": "The time frame to display results for.",
+              "values": [
+                "day",
+                "week"
+              ],
+              "maps_to": "query.per"
+            },
             {
               "name": "page",
               "type": "integer",

@@ -189,6 +189,35 @@ Regression tests assert RETURNED RECORD COUNTS against a known-larger fixture, i
 `engine/direct_read_pagination_test.go`. Never assert exit status for this class:
 the original defect exited 0 while discarding 97% of a collection.
 
+**Connector commands do not go through Cobra.** `newRootCmd` sets
+`DisableFlagParsing: true` with `ArbitraryArgs`, and `executeRootCmd`
+short-circuits to `RunE` for any argument that is not a registered top-level
+command, so every `pm <connector> ...` invocation is parsed by the hand-rolled
+`internal/cli/parse.go` instead. Cobra wraps only the legacy top-level commands.
+This is why connector commands have no shell completion and why nothing binds
+into Viper's precedence chain. It is NOT why they lack validation: required
+flags, enum values, minimums and item counts are all enforced engine-side in
+`commandrunner` (`validateRequiredCommandFlags`, `validateFlagValue`), before any
+network call, which is why they protect every caller rather than only the CLI.
+This fact explained a defect nobody could see; do not rediscover it the hard way.
+
+## Command Parameters Are Derived, Never Hand-Authored
+
+A `direct_read` command's flags come from the connector's own provider
+specification, not from authoring. `connectorgen params-import` writes the
+accepted parameter set into `operations.json` as `rest.parameters`;
+`surface-sync` derives the command flags from it and only ever ADDS, so a
+hand-authored flag is left as written. The split keeps CI hermetic —
+`surface-sync --check` needs no artifact and no network.
+
+Never hand-author a paging flag (`page`, `per_page`, `cursor`, `limit`,
+`offset`). Paging is answered by `--page`/`--page-cursor` from the declared
+pagination spec, and a hand-written paging flag is a second unchecked way to
+page that bypasses the completeness contract. `params-import` drops paging
+parameters and anything the connection already supplies through its config
+schema. The authoring rule lives in `docs/migration/conventions.md` §2.9; the
+user-facing surface is `docs/cli/direct-read-pages-and-parameters.md`.
+
 ## Command Surface Must Stay Executable
 
 `availability: implemented` is a claim the runtime has to honour. Two rules keep
