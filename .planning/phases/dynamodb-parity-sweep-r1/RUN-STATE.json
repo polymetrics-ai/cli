@@ -1,0 +1,41 @@
+{
+  "phase": "dynamodb-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "dynamodb",
+  "state": "red",
+  "branch": "fm/cli-top50-fixed-schema-sweep-r1",
+  "artifact": {
+    "url": "https://raw.githubusercontent.com/boto/botocore/develop/botocore/data/dynamodb/2012-08-10/service-2.json",
+    "kind": "aws_service_model",
+    "api_version": "2012-08-10",
+    "target_prefix": "DynamoDB_20120810",
+    "retrieved_at": "2026-08-07",
+    "corroborated_by": "https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Operations.html",
+    "stable_tag_identical": "1.43.66"
+  },
+  "operations": {
+    "documented_total": 58,
+    "read": 27,
+    "write": 31,
+    "ledger_carried_forward": 57,
+    "drift": "+1 SearchVectors; absent in botocore 1.35.0/1.38.0/1.40.0, present in current",
+    "excluded_services": {
+      "dynamodb_streams": 4,
+      "dax": 21
+    }
+  },
+  "baseline": {
+    "api_surface_endpoints": 9,
+    "covered_by": 1,
+    "legacy_excluded": 8,
+    "operation_ledger_version": null,
+    "capabilities_write": false,
+    "reachable_commands": 0
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/dynamodb_api_surface_test.go",
+    "red_confirmed": true,
+    "green": false
+  },
+  "next_action": "author the bundle to green: 58 rows keyed on POST / plus X-Amz-Target, validating the qualified-row strategy against connectorgen validate before bulk authoring"
+}
