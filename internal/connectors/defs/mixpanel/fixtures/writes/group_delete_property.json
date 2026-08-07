@@ -1,0 +1,28 @@
+{
+  "record": {
+    "updates": [
+      {
+        "$token": "fixture-token",
+        "$group_key": "fixture-group_key",
+        "$group_id": "fixture-group_id",
+        "$unset": [
+          "fixture-unset"
+        ]
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/groups#group-unset",
+    "body": [
+      {
+        "$token": "fixture-token",
+        "$group_key": "fixture-group_key",
+        "$group_id": "fixture-group_id",
+        "$unset": [
+          "fixture-unset"
+        ]
+      }
+    ]
+  }
+}

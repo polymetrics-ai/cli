@@ -1,0 +1,24 @@
+{
+  "record": {
+    "events": [
+      {
+        "event": "fixture-event",
+        "properties": {
+          "fixture_key": "fixture_value"
+        }
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/track",
+    "body": [
+      {
+        "event": "fixture-event",
+        "properties": {
+          "fixture_key": "fixture_value"
+        }
+      }
+    ]
+  }
+}

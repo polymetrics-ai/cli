@@ -1,0 +1,24 @@
+{
+  "record": {
+    "updates": [
+      {
+        "$token": "fixture-token",
+        "$distinct_id": "fixture-distinct_id",
+        "$delete": null,
+        "$ignore_alias": true
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/engage#profile-delete",
+    "body": [
+      {
+        "$token": "fixture-token",
+        "$distinct_id": "fixture-distinct_id",
+        "$delete": null,
+        "$ignore_alias": true
+      }
+    ]
+  }
+}

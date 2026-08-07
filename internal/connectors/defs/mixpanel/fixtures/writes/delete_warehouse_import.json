@@ -1,0 +1,13 @@
+{
+  "record": {
+    "import_id": "fixture-import_id",
+    "delete_data": true
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/app/projects/fixture/warehouse-sources/imports/fixture-import_id",
+    "body": {
+      "delete_data": true
+    }
+  }
+}

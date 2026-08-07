@@ -1,0 +1,47 @@
+{
+  "record": {
+    "experiment_id": "fixture-experiment_id",
+    "name": "fixture-name",
+    "hypothesis": "fixture-hypothesis",
+    "status": "fixture-status",
+    "settings": {
+      "fixture_key": "fixture_value"
+    },
+    "variants": [
+      "fixture-variants"
+    ],
+    "metrics": [
+      "fixture-metrics"
+    ],
+    "start_date": "fixture-start_date",
+    "end_date": "fixture-end_date",
+    "tags": [
+      "fixture-tags"
+    ],
+    "global_access_type": "fixture-global_access_type"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/app/workspaces/fixture/experiments/fixture-experiment_id",
+    "body": {
+      "name": "fixture-name",
+      "hypothesis": "fixture-hypothesis",
+      "status": "fixture-status",
+      "settings": {
+        "fixture_key": "fixture_value"
+      },
+      "variants": [
+        "fixture-variants"
+      ],
+      "metrics": [
+        "fixture-metrics"
+      ],
+      "start_date": "fixture-start_date",
+      "end_date": "fixture-end_date",
+      "tags": [
+        "fixture-tags"
+      ],
+      "global_access_type": "fixture-global_access_type"
+    }
+  }
+}

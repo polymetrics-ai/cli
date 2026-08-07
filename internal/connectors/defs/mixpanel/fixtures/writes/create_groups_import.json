@@ -1,0 +1,28 @@
+{
+  "record": {
+    "import_type": "groups",
+    "warehouse_source_id": 1,
+    "table_params": {
+      "fixture_key": "fixture_value"
+    },
+    "group_key": "fixture-group_key",
+    "group_id_column": "fixture-group_id_column",
+    "sync_mode": "time_based",
+    "run_every": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/app/projects/fixture/warehouse-sources/imports/groups",
+    "body": {
+      "import_type": "groups",
+      "warehouse_source_id": 1,
+      "table_params": {
+        "fixture_key": "fixture_value"
+      },
+      "group_key": "fixture-group_key",
+      "group_id_column": "fixture-group_id_column",
+      "sync_mode": "time_based",
+      "run_every": 1
+    }
+  }
+}

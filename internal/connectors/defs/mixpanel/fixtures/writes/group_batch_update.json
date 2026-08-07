@@ -1,0 +1,12 @@
+{
+  "record": {
+    "data": "fixture-data"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/groups#group-batch-update",
+    "body": {
+      "data": "fixture-data"
+    }
+  }
+}

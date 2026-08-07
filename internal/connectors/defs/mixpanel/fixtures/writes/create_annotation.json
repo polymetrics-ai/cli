@@ -1,0 +1,18 @@
+{
+  "record": {
+    "date": "fixture-date",
+    "tags": [
+      1
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/app/projects/fixture/annotations",
+    "body": {
+      "date": "fixture-date",
+      "tags": [
+        1
+      ]
+    }
+  }
+}

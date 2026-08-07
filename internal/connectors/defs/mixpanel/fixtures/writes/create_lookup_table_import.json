@@ -1,0 +1,32 @@
+{
+  "record": {
+    "import_type": "lookup_table",
+    "warehouse_source_id": 1,
+    "table_params": {
+      "fixture_key": "fixture_value"
+    },
+    "mixpanel_property": {
+      "fixture_key": "fixture_value"
+    },
+    "property_key_column_name": "fixture-property_key_column_name",
+    "sync_mode": "full_sync",
+    "run_every": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/app/projects/fixture/warehouse-sources/imports/lookup-table",
+    "body": {
+      "import_type": "lookup_table",
+      "warehouse_source_id": 1,
+      "table_params": {
+        "fixture_key": "fixture_value"
+      },
+      "mixpanel_property": {
+        "fixture_key": "fixture_value"
+      },
+      "property_key_column_name": "fixture-property_key_column_name",
+      "sync_mode": "full_sync",
+      "run_every": 1
+    }
+  }
+}

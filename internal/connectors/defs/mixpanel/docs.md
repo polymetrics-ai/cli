@@ -1,108 +1,159 @@
-# Overview
+# Mixpanel
 
-Mixpanel reads 10 stream(s).
+## Overview
 
-Readable streams: `cohorts`, `annotations`, `engage`, `saved_funnels`, `activity_stream`,
-`top_events`, `event_property_names`, `project_annotations`, `project_annotation`,
-`annotation_tags`.
+Reads and writes the full documented Mixpanel API surface: annotations, A/B experiments, feature
+flags (management and evaluation), GDPR/CCPA data-subject jobs, identity linking, event/profile/group
+ingestion, Lexicon governance schemas, the Query API's report and lookup endpoints, service accounts,
+warehouse connector imports, and warehouse export pipelines.
 
-This connector is read-only; no write actions are declared.
+The documented surface is **104 operations**, re-derived on 2026-08-07 from the 13 real OpenAPI 3.x
+documents Mixpanel publishes at `https://docs.mixpanel.com/openapi/<name>.openapi.yaml` (annotations,
+data-pipelines, experiments, export, feature-flags-management, feature-flags, gdpr, identity,
+ingestion, lexicon-schemas, query, service-accounts, warehouse-connectors — 392,835 combined bytes).
+Raw operationId count summed across the 13 files is 105, an exact match to the provider-artifact
+ledger this connector previously recorded; the -1 delta is one genuine cross-file path collision:
+`POST /import` is documented twice (`identity-merge` in identity.yaml, `import-events` in
+ingestion.yaml), which the counting policy's method+path dedup rule collapses into the single
+`import_events` write below (its `event` field accepts the literal `$merge` for identity-merge
+semantics, exactly as Mixpanel's own batch-import endpoint does).
 
-Service API documentation: https://developer.mixpanel.com/reference/overview.
+No OAS 3.1 top-level `webhooks` object exists in any of the 13 files, and the string `webhook` does
+not appear anywhere in them either — Mixpanel documents no webhook surface at all here.
+
+Every documented operation is partitioned exactly once in `api_surface.json` and carries exactly one
+disposition — executable (`covered_by`), or blocked with a named dependency and a source citation
+(`operation`). None is blank, and none uses the legacy `excluded` category.
+
+This bundle predates the 13-file ledger with 10 read-only streams covering a mix of legacy Query API
+v2.0 endpoints (not part of the 13-file ledger at all) and current-API list/detail GETs. Of those 10:
+7 already matched a documented current-API path exactly and are unchanged; the `cohorts` and `engage`
+streams keep their legacy `/api/2.0` wire calls but now also serve as this bundle's implementation of
+the documented `POST /cohorts/list` and `POST /engage` operations (the original bundle's own
+`duplicate_of` classification already established these as the same record family — see Known
+limits); and the legacy, non-project-scoped `annotations` stream was retired as redundant with the
+project-scoped `project_annotations` stream, which already implements the current, documented
+`GET /projects/{projectId}/annotations` operation.
 
 ## Auth setup
 
-Connection fields:
+Reads and admin-surface writes (annotations, experiments, feature flags, GDPR, Lexicon schemas,
+Query API, service accounts, warehouse connectors, warehouse pipelines) use the existing Basic-auth
+`mixpanel` hook — a Mixpanel service-account username plus secret (password or legacy `api_secret`),
+config-then-secrets precedence, unchanged by this sweep:
 
-- `analysis_type` (optional, string); default `unique`; Mixpanel event analysis type for event
-  breakdown streams: general, unique, or average.
-- `annotation_id` (optional, string); Annotation id for the project_annotation detail stream.
-- `api_secret` (optional, secret, string); Never logged.
-- `base_url` (optional, string); default `https://mixpanel.com/api/2.0`; format `uri`; Mixpanel
-  Query API base URL override for tests or proxies.
-- `distinct_ids` (optional, string); JSON array string of distinct ids for the activity_stream Query
-  API stream.
-- `event_name` (optional, string); Event name for event-property breakdown streams.
-- `from_date` (optional, string); Optional yyyy-mm-dd lower date bound for current Query or
-  Annotations API streams.
-- `limit` (optional, string); Optional result limit for Query API list-style streams.
-- `max_pages` (optional, string); Maximum pages; leave unset, or use all/unlimited, to exhaust the
-  stream.
-- `mode` (optional, string).
-- `page_size` (optional, string); default `1000`; Records per page (1-10000).
-- `password` (optional, secret, string); Mixpanel Query API service account secret (password). Used
-  only for Basic auth; never logged.
-- `project_id` (optional, string); Mixpanel project id used by current Query API, Annotations API,
-  and other project-scoped API endpoints.
-- `to_date` (optional, string); Optional yyyy-mm-dd upper date bound for current Query or
-  Annotations API streams.
-- `username` (optional, string).
-- `username_secret` (optional, secret, string); Never logged.
-- `workspace_id` (optional, string); Optional Mixpanel workspace id for Query API endpoints that
-  accept workspace_id.
+```
+pm credentials add mixpanel --from-env MIXPANEL_USERNAME=username MIXPANEL_PASSWORD=password
+```
 
-Secret fields are redacted in logs and write previews: `api_secret`, `password`, `username_secret`.
+Two new endpoint families need their own credential, both `x-secret`, never logged:
 
-Default configuration values: `analysis_type=unique`, `base_url=https://mixpanel.com/api/2.0`,
-`page_size=1000`.
+- `project_token` — Mixpanel project token, required by ingestion (`/track`, `/engage`, `/groups`,
+  `/import`) and feature-flag evaluation (`/flags`, `/flags/definitions`). Ingestion writes also
+  accept `$token`/`token` as an ordinary record field per Mixpanel's own token-in-body ingestion
+  design (the transport-level Basic auth above is sent regardless and is harmless alongside it, per
+  Mixpanel's documented `security: []` on these operations).
+- `gdpr_token` — a separate GDPR API token from project settings, required by
+  `POST /data-retrievals/v3.0` and `POST /data-deletions/v3.0`.
 
-Authentication behavior:
-
-- Connector-specific authentication.
-
-Requests use the configured `base_url` value after applying defaults.
-
-Connection checks call GET `/cohorts/list`.
+A further ~18 non-secret config properties (`experiment_id`, `flag_id`, `organization_id`,
+`import_id`, `pipeline_name`, `entity_type`, `schema_name`, and the Query API report filters such as
+`from_date`/`to_date`/`event_name`/`funnel_id`) name path/query parameters for the new detail-lookup
+and report streams; each is also exposed as an optional per-invocation CLI flag that overrides the
+stored connection default.
 
 ## Streams notes
 
-Default pagination: cursor pagination; cursor parameter `page`; next token from `next`.
+42 streams (9 pre-existing, 33 new); all non-paginated (`pagination: {"type": "none"}` — the base
+bundle's inherited cursor pagination does not apply to any of the endpoints below, since none of
+them return a `next`/`page` cursor). Grouped by family:
 
-- `cohorts`: GET `/cohorts/list` - records path `cohorts`; query `limit`=`{{ config.page_size }}`;
-  cursor pagination; cursor parameter `page`; next token from `next`.
-- `annotations`: GET `/annotations` - records path `annotations`; query `limit`=`{{ config.page_size
-  }}`; cursor pagination; cursor parameter `page`; next token from `next`.
-- `engage`: GET `/engage` - records path `results`; query `limit`=`{{ config.page_size }}`; cursor
-  pagination; cursor parameter `page`; next token from `next`.
-- `saved_funnels`: GET `https://mixpanel.com/api/query/funnels/list` - records path `.`; query
-  `project_id` from template `{{ config.project_id }}`, omitted when absent; `workspace_id` from
-  template `{{ config.workspace_id }}`, omitted when absent; cursor pagination; cursor parameter
-  `page`; next token from `next`.
-- `activity_stream`: GET `https://mixpanel.com/api/query/stream/query` - records path
-  `results.events`; query `distinct_ids`=`{{ config.distinct_ids }}`; `from_date`=`{{
-  config.from_date }}`; `project_id` from template `{{ config.project_id }}`, omitted when absent;
-  `to_date`=`{{ config.to_date }}`; `workspace_id` from template `{{ config.workspace_id }}`,
-  omitted when absent; cursor pagination; cursor parameter `page`; next token from `next`.
-- `top_events`: GET `https://mixpanel.com/api/query/events/top` - records path `events`; query
-  `limit` from template `{{ config.limit }}`, omitted when absent; `project_id` from template `{{
-  config.project_id }}`, omitted when absent; `type`=`{{ config.analysis_type }}`; `workspace_id`
-  from template `{{ config.workspace_id }}`, omitted when absent; cursor pagination; cursor
-  parameter `page`; next token from `next`.
-- `event_property_names`: GET `https://mixpanel.com/api/query/events/properties/top` - records path
-  `.`; flattens keyed objects; key field `name`; query `event`=`{{ config.event_name }}`; `limit`
-  from template `{{ config.limit }}`, omitted when absent; `project_id` from template `{{
-  config.project_id }}`, omitted when absent; `workspace_id` from template `{{ config.workspace_id
-  }}`, omitted when absent; cursor pagination; cursor parameter `page`; next token from `next`.
-- `project_annotations`: GET `https://mixpanel.com/api/app/projects/{{ config.project_id
-  }}/annotations` - records path `results`; query `fromDate` from template `{{ config.from_date }}`,
-  omitted when absent; `toDate` from template `{{ config.to_date }}`, omitted when absent; cursor
-  pagination; cursor parameter `page`; next token from `next`.
-- `project_annotation`: GET `https://mixpanel.com/api/app/projects/{{ config.project_id
-  }}/annotations/{{ config.annotation_id }}` - single-object response; records path `results`;
-  cursor pagination; cursor parameter `page`; next token from `next`.
-- `annotation_tags`: GET `https://mixpanel.com/api/app/projects/{{ config.project_id
-  }}/annotations/tags` - records path `.`; cursor pagination; cursor parameter `page`; next token
-  from `next`.
+- **Annotations** (unchanged): `project_annotations`, `project_annotation`, `annotation_tags`.
+- **Legacy-compatible Query API** (unchanged wire calls, now also covering documented rows):
+  `cohorts`, `engage`, `saved_funnels`, `activity_stream`, `top_events`, `event_property_names`.
+- **Experiments**: `experiments` (list), `experiment` (detail, requires `experiment_id`).
+- **Feature flag administration**: `feature_flags_admin` (list), `feature_flag` (detail, requires
+  `flag_id`).
+- **Feature flag evaluation**: `feature_flag_assignments`, `feature_flag_definitions` — hit
+  `api.mixpanel.com`, authenticated by `secrets.project_token`.
+- **GDPR jobs**: `gdpr_retrieval`, `gdpr_deletion` — job status lookups by `gdpr_tracking_id`.
+- **Lexicon governance schemas**: `lexicon_schemas`, `lexicon_schemas_for_entity`,
+  `lexicon_schema_by_name`.
+- **Query API reports** (single-object responses; primary key is a static `report` marker field
+  stamped via `computed_fields`, since Mixpanel's aggregate report bodies have no natural per-row
+  id): `insights_report`, `funnels_report`, `retention_report`, `retention_frequency_report`,
+  `segmentation_report`, `segmentation_numeric_report`, `segmentation_sum_report`,
+  `segmentation_average_report`, `events_report`, `event_names_report`, `event_properties_report`,
+  `event_property_values_report`.
+- **Service accounts**: `service_accounts_org`, `service_account`, `project_service_accounts`.
+- **Warehouse connector imports**: `warehouse_imports`, `warehouse_import`,
+  `warehouse_import_history`.
+- **Warehouse export pipelines**: `warehouse_pipeline_jobs`, `warehouse_pipeline_status`,
+  `warehouse_pipeline_timeline` — hit `data.mixpanel.com`.
+- **Ingestion**: `lookup_tables` (list only; replacing a table is blocked — see Known limits).
+
+Every stream targets an explicit absolute URL (bypassing `config.base_url`) for its real Mixpanel
+host — `mixpanel.com/api/app` (admin), `mixpanel.com/api/query` (Query API),
+`data.mixpanel.com/api/2.0` (warehouse pipelines), or `api.mixpanel.com` (ingestion, flag
+evaluation) — exactly matching the pattern 7 of the 10 pre-existing streams already used, because the
+declarative `operations.json` direct-read/direct-write/binary-download executors require a
+connector-relative path resolved against the ONE configured `base_url` and this bundle's documented
+surface spans 5 real hosts (see Known limits).
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: external Mixpanel Query/Application API read of cohort,
-annotation, profile, saved funnel, event breakdown, and annotation metadata.
+57 reverse-ETL write actions (33 `implemented`, 24 `partial` — flat CLI flags cannot express a
+required object/array-of-object field; supply those records from a typed reverse-ETL source table).
+Grouped by risk:
+
+- **critical**: `create_gdpr_deletion` (starts a GDPR/CCPA deletion job), `create_service_account`,
+  `delete_service_account`, `delete_warehouse_import` (optionally also deletes imported data).
+- **high**: destructive deletes (`delete_annotation`, `delete_experiment`, `delete_feature_flag`,
+  `delete_profile`, `delete_group`, `delete_all_schemas`, `delete_schemas_for_entity`,
+  `delete_schema_by_name`, `cancel_gdpr_deletion`, `cancel_warehouse_pipeline`), lifecycle actions
+  that change live behavior (`force_conclude_experiment`, `launch_experiment`, `update_feature_flag`),
+  identity/ingestion writes that mutate canonical identity or historical event data
+  (`create_identity`, `create_identity_alias`, `import_events`), and admin-scope creates
+  (`create_feature_flag`, `upload_schemas`, `upload_schema_by_name`,
+  `add_service_accounts_to_projects`, `remove_service_accounts_from_projects`,
+  `create_event_stream_import`, `create_people_import`, `create_groups_import`,
+  `create_lookup_table_import`, `update_warehouse_import`).
+- **medium**: ordinary create/update actions (annotations, experiment lifecycle, GDPR retrieval,
+  ingestion track/profile/group writes, warehouse pipeline pause/resume, manual import run).
+- **low**: `create_annotation_tag`.
+
+All 24 ingestion writes (`track_event`, `import_events`, the 9 `profile_*` actions, and the 7
+`group_*` actions) send Mixpanel's real wire shape — a JSON **array** of one or more event/update
+objects — via `body_type: "json_array"` with `body_field`/`body_schema` naming the wrapping array
+property (`events` or `updates`); this is why they are `partial`: no CLI flag type expresses an array
+of typed objects, so they are reachable only through a typed reverse-ETL source record, exactly like
+`profile_batch_update`/`group_batch_update` (which instead take the batch as a single
+`x-www-form-urlencoded` `data` string, per Mixpanel's own documented shape for those two operations).
 
 ## Known limits
 
-- Batch defaults: read_page_size=1000.
-- API coverage includes 10 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  binary_payload=1, destructive_admin=7, duplicate_of=1, non_data_endpoint=2, out_of_scope=1,
-  requires_elevated_scope=25.
+- **`operation_ledger_version: 1`**; `api_surface.json` carries all 104 documented rows (99
+  `covered_by`, 5 blocked). Blocked rows, each with a reason, a source citation, and a
+  `named_dependency=` note:
+  - `POST /jql` — custom JQL executes caller-provided JavaScript; this is the query-API equivalent
+    of the generic script/SQL-write tools this repository forbids outright. Permanently disallowed.
+  - `GET /export` — raw event export lives on `data.mixpanel.com`, a different host than every other
+    still-in-scope operation's chosen base, and returns newline-delimited JSON rather than one JSON
+    document or a paginated list; neither the stream reader nor the connector-relative
+    `binary_download` executor fits without a new engine capability (a per-operation base-host
+    override, or an NDJSON-aware reader).
+  - `POST /nessie/pipeline/create` and `POST /nessie/pipeline/edit` — both request bodies are
+    `oneOf`/`allOf` discriminated unions (create has 8 alternate pipeline-type shapes); no single
+    fixed `record_schema` represents either operation, so each stays non-implemented rather than
+    silently only supporting one arm (AGENTS.md's "Command Surface Must Stay Executable").
+  - `PUT /lookup-tables/{id}` — replaces a lookup table via a raw `text/csv` body; the engine's write
+    `body_type` dialect supports only json/form/none/graphql/json_array/multipart/base64_upload, none
+    of which reproduce a raw non-JSON content type.
+- `cohorts`/`engage` streams keep their pre-existing `GET /api/2.0/cohorts/list`/`GET /api/2.0/engage`
+  wire calls rather than switching to the documented `POST` current-API equivalents, matching this
+  bundle's own prior `duplicate_of` judgment that they are the same record family; a future pass could
+  additionally implement the POST shapes as their own streams if that judgment needs re-verifying
+  against live traffic.
+- Batch defaults carried over unchanged: `read_page_size=1000`.
+- `capabilities.query` remains `false` — Mixpanel has no ad hoc/custom-query capability this connector
+  exposes (JQL is the closest fit and is permanently disallowed above).

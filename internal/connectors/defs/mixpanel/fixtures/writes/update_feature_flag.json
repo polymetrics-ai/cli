@@ -1,0 +1,33 @@
+{
+  "record": {
+    "flag_id": "fixture-flag_id",
+    "name": "fixture-name",
+    "key": "fixture-key",
+    "tags": [
+      "fixture-tags"
+    ],
+    "status": "enabled",
+    "context": "fixture-context",
+    "serving_method": "client",
+    "ruleset": {
+      "fixture_key": "fixture_value"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/app/projects/fixture/workspaces/fixture/feature-flags/fixture-flag_id",
+    "body": {
+      "name": "fixture-name",
+      "key": "fixture-key",
+      "tags": [
+        "fixture-tags"
+      ],
+      "status": "enabled",
+      "context": "fixture-context",
+      "serving_method": "client",
+      "ruleset": {
+        "fixture_key": "fixture_value"
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/query/retention/addiction"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "report": "fixture-value"
+    }
+  }
+}

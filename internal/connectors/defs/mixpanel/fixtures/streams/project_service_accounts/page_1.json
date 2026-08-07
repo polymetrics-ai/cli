@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/app/projects/fixture/service-accounts"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "username": "fixture-value",
+        "role": "fixture-value"
+      }
+    ]
+  }
+}

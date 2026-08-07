@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "feature_flag_assignments",
+  "type": "object",
+  "x-primary-key": [
+    "flags"
+  ],
+  "properties": {
+    "flags": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  }
+}

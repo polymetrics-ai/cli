@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/lookup-tables"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "id": "fixture-value",
+          "name": "fixture-value"
+        }
+      ]
+    }
+  }
+}

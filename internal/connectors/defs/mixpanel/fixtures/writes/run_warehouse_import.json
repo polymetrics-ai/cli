@@ -1,0 +1,9 @@
+{
+  "record": {
+    "import_id": "fixture-import_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/app/projects/fixture/warehouse-sources/imports/fixture-import_id/manual-sync"
+  }
+}

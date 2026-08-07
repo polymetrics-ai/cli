@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "gdpr_retrieval",
+  "type": "object",
+  "x-primary-key": [
+    "tracking_id"
+  ],
+  "properties": {
+    "tracking_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "requested_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "results": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  }
+}

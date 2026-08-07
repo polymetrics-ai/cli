@@ -1,0 +1,28 @@
+{
+  "record": {
+    "updates": [
+      {
+        "$token": "fixture-token",
+        "$group_key": "fixture-group_key",
+        "$group_id": "fixture-group_id",
+        "$set_once": {
+          "fixture_key": "fixture_value"
+        }
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/groups#group-set-once",
+    "body": [
+      {
+        "$token": "fixture-token",
+        "$group_key": "fixture-group_key",
+        "$group_id": "fixture-group_id",
+        "$set_once": {
+          "fixture_key": "fixture_value"
+        }
+      }
+    ]
+  }
+}

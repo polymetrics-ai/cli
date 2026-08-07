@@ -1,0 +1,17 @@
+{
+  "record": {
+    "experiment_id": "fixture-experiment_id",
+    "success": true,
+    "variant": "fixture-variant",
+    "message": "fixture-message"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/app/workspaces/fixture/experiments/fixture-experiment_id/decide",
+    "body": {
+      "success": true,
+      "variant": "fixture-variant",
+      "message": "fixture-message"
+    }
+  }
+}

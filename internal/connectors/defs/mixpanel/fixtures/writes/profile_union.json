@@ -1,0 +1,26 @@
+{
+  "record": {
+    "updates": [
+      {
+        "$token": "fixture-token",
+        "$distinct_id": "fixture-distinct_id",
+        "$union": {
+          "fixture_key": "fixture_value"
+        }
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/engage#profile-union",
+    "body": [
+      {
+        "$token": "fixture-token",
+        "$distinct_id": "fixture-distinct_id",
+        "$union": {
+          "fixture_key": "fixture_value"
+        }
+      }
+    ]
+  }
+}

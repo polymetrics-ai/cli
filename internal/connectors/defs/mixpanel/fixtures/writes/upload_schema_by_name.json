@@ -1,0 +1,24 @@
+{
+  "record": {
+    "entity_type": "event",
+    "schema_name": "fixture-schema_name",
+    "properties": {
+      "fixture_key": "fixture_value"
+    },
+    "metadata": {
+      "fixture_key": "fixture_value"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/app/projects/fixture/schemas/event/fixture-schema_name",
+    "body": {
+      "properties": {
+        "fixture_key": "fixture_value"
+      },
+      "metadata": {
+        "fixture_key": "fixture_value"
+      }
+    }
+  }
+}

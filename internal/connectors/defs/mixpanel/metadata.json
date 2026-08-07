@@ -1,14 +1,14 @@
 {
   "name": "mixpanel",
   "display_name": "Mixpanel",
-  "description": "Reads Mixpanel legacy Query API cohorts, annotations, engage profiles, and selected current Query/Annotations API list/detail endpoints.",
+  "description": "Reads and writes the full documented Mixpanel API surface: legacy Query API cohorts/engage records, current Query/Annotations/Experiments/Feature-Flags/GDPR/Lexicon-Schemas/Service-Accounts/Warehouse-Connectors/Data-Pipelines reads, event/profile/group ingestion, and identity management, across the 13 real OpenAPI documents at docs.mixpanel.com/openapi/*.openapi.yaml.",
   "integration_type": "api",
   "docs_url": "https://developer.mixpanel.com/reference/overview",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false

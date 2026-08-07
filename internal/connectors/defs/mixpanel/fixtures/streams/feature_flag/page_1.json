@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/app/projects/fixture/workspaces/fixture/feature-flags/fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "key": "fixture-value",
+      "name": "fixture-value",
+      "status": "fixture-value"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "record": {
+    "import_type": "people",
+    "warehouse_source_id": 1,
+    "table_params": {
+      "fixture_key": "fixture_value"
+    },
+    "user_column_name": "fixture-user_column_name",
+    "sync_mode": "time_based",
+    "run_every": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/app/projects/fixture/warehouse-sources/imports/people",
+    "body": {
+      "import_type": "people",
+      "warehouse_source_id": 1,
+      "table_params": {
+        "fixture_key": "fixture_value"
+      },
+      "user_column_name": "fixture-user_column_name",
+      "sync_mode": "time_based",
+      "run_every": 1
+    }
+  }
+}

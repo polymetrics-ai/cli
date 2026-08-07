@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/flags/definitions"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "flags": [
+        "fixture-value"
+      ]
+    }
+  }
+}

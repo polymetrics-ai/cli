@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/app/projects/fixture/schemas"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "name": "fixture-value",
+        "entityType": "fixture-value",
+        "schemaJson": {}
+      }
+    ]
+  }
+}

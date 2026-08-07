@@ -1,0 +1,36 @@
+{
+  "record": {
+    "import_type": "event_stream",
+    "warehouse_source_id": 1,
+    "table_params": {
+      "fixture_key": "fixture_value"
+    },
+    "event_name": "fixture-event_name",
+    "event_column_name": "fixture-event_column_name",
+    "time_column_name": "fixture-time_column_name",
+    "user_column_name": "fixture-user_column_name",
+    "company_column_name": "fixture-company_column_name",
+    "device_column_name": "fixture-device_column_name",
+    "sync_mode": "time_based",
+    "run_every": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/app/projects/fixture/warehouse-sources/imports/event-stream",
+    "body": {
+      "import_type": "event_stream",
+      "warehouse_source_id": 1,
+      "table_params": {
+        "fixture_key": "fixture_value"
+      },
+      "event_name": "fixture-event_name",
+      "event_column_name": "fixture-event_column_name",
+      "time_column_name": "fixture-time_column_name",
+      "user_column_name": "fixture-user_column_name",
+      "company_column_name": "fixture-company_column_name",
+      "device_column_name": "fixture-device_column_name",
+      "sync_mode": "time_based",
+      "run_every": 1
+    }
+  }
+}

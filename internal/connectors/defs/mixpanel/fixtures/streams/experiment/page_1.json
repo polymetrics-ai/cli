@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/app/workspaces/fixture/experiments/fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "name": "fixture-value",
+      "status": "fixture-value",
+      "hypothesis": "fixture-value"
+    }
+  }
+}

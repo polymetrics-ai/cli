@@ -1,0 +1,9 @@
+{
+  "record": {
+    "annotation_id": "fixture-annotation_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/app/projects/fixture/annotations/fixture-annotation_id"
+  }
+}

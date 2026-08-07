@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/app/workspaces/fixture/experiments"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "experiments": [
+        {
+          "id": 1,
+          "name": "fixture-value",
+          "status": "fixture-value",
+          "hypothesis": "fixture-value",
+          "start_date": "fixture-value",
+          "end_date": "fixture-value",
+          "created_time": "fixture-value"
+        }
+      ]
+    }
+  }
+}

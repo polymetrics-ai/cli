@@ -1,0 +1,2485 @@
+{
+  "actions": [
+    {
+      "name": "create_annotation",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/annotations",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "description": "Date and time the annotation applies to (yyyy-mm-dd hh:mm:ss)."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Tag ids to attach to the annotation."
+          }
+        },
+        "required": [
+          "date"
+        ]
+      },
+      "risk": "medium: creates a project annotation marker visible to every project user"
+    },
+    {
+      "name": "update_annotation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/annotations/{{ record.annotation_id }}",
+      "path_fields": [
+        "annotation_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "annotation_id": {
+            "type": "string",
+            "description": "Annotation id to update (path parameter)."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Replacement tag ids for the annotation."
+          }
+        },
+        "required": [
+          "annotation_id"
+        ]
+      },
+      "risk": "medium: mutates an existing project annotation's tags"
+    },
+    {
+      "name": "delete_annotation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/annotations/{{ record.annotation_id }}",
+      "path_fields": [
+        "annotation_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "annotation_id": {
+            "type": "string",
+            "description": "Annotation id to delete (path parameter)."
+          }
+        },
+        "required": [
+          "annotation_id"
+        ]
+      },
+      "risk": "high: permanently deletes a project annotation",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "create_annotation_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/annotations/tags",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Tag name to create."
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "low: creates a reusable annotation tag label"
+    },
+    {
+      "name": "create_experiment",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://mixpanel.com/api/app/workspaces/{{ config.workspace_id }}/experiments",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Experiment name."
+          },
+          "hypothesis": {
+            "type": "string",
+            "description": "Experiment hypothesis."
+          },
+          "settings": {
+            "type": "object",
+            "description": "Experiment settings (provider-defined shape)."
+          },
+          "variants": {
+            "type": "array",
+            "description": "Experiment variants (provider-defined shape)."
+          },
+          "metrics": {
+            "type": "array",
+            "description": "Experiment metrics (provider-defined shape)."
+          },
+          "global_access_type": {
+            "type": "string",
+            "description": "Global access type for the experiment."
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "medium: creates a new A/B experiment definition"
+    },
+    {
+      "name": "update_experiment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "https://mixpanel.com/api/app/workspaces/{{ config.workspace_id }}/experiments/{{ record.experiment_id }}",
+      "path_fields": [
+        "experiment_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "experiment_id": {
+            "type": "string",
+            "description": "Experiment id to update (path parameter)."
+          },
+          "name": {
+            "type": "string"
+          },
+          "hypothesis": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "settings": {
+            "type": "object"
+          },
+          "variants": {
+            "type": "array"
+          },
+          "metrics": {
+            "type": "array"
+          },
+          "start_date": {
+            "type": "string"
+          },
+          "end_date": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "global_access_type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "experiment_id"
+        ]
+      },
+      "risk": "medium: mutates an existing experiment's configuration"
+    },
+    {
+      "name": "delete_experiment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "https://mixpanel.com/api/app/workspaces/{{ config.workspace_id }}/experiments/{{ record.experiment_id }}",
+      "path_fields": [
+        "experiment_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "experiment_id": {
+            "type": "string",
+            "description": "Experiment id to delete (path parameter)."
+          }
+        },
+        "required": [
+          "experiment_id"
+        ]
+      },
+      "risk": "high: permanently deletes an experiment",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "archive_experiment",
+      "kind": "update",
+      "method": "POST",
+      "path": "https://mixpanel.com/api/app/workspaces/{{ config.workspace_id }}/experiments/{{ record.experiment_id }}/archive",
+      "path_fields": [
+        "experiment_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "experiment_id": {
+            "type": "string",
+            "description": "Experiment id to archive (path parameter)."
+          }
+        },
+        "required": [
+          "experiment_id"
+        ]
+      },
+      "risk": "medium: archives an experiment, ending live traffic allocation"
+    },
+    {
+      "name": "unarchive_experiment",
+      "kind": "update",
+      "method": "DELETE",
+      "path": "https://mixpanel.com/api/app/workspaces/{{ config.workspace_id }}/experiments/{{ record.experiment_id }}/archive",
+      "path_fields": [
+        "experiment_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "experiment_id": {
+            "type": "string",
+            "description": "Experiment id to unarchive (path parameter)."
+          }
+        },
+        "required": [
+          "experiment_id"
+        ]
+      },
+      "risk": "medium: restores an archived experiment"
+    },
+    {
+      "name": "decide_experiment",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "https://mixpanel.com/api/app/workspaces/{{ config.workspace_id }}/experiments/{{ record.experiment_id }}/decide",
+      "path_fields": [
+        "experiment_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "experiment_id": {
+            "type": "string",
+            "description": "Experiment id to decide (path parameter)."
+          },
+          "success": {
+            "type": "boolean",
+            "description": "Whether the experiment succeeded."
+          },
+          "variant": {
+            "type": "string",
+            "description": "Winning variant key."
+          },
+          "message": {
+            "type": "string",
+            "description": "Decision note."
+          }
+        },
+        "required": [
+          "experiment_id",
+          "success"
+        ]
+      },
+      "risk": "medium: records the winning-variant decision for a concluded experiment"
+    },
+    {
+      "name": "force_conclude_experiment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "https://mixpanel.com/api/app/workspaces/{{ config.workspace_id }}/experiments/{{ record.experiment_id }}/force_conclude",
+      "path_fields": [
+        "experiment_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "experiment_id": {
+            "type": "string",
+            "description": "Experiment id to conclude (path parameter)."
+          },
+          "end_date": {
+            "type": "string",
+            "description": "Conclusion date."
+          }
+        },
+        "required": [
+          "experiment_id"
+        ]
+      },
+      "risk": "high: forcibly ends a live experiment and stops traffic allocation",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "launch_experiment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "https://mixpanel.com/api/app/workspaces/{{ config.workspace_id }}/experiments/{{ record.experiment_id }}/launch",
+      "path_fields": [
+        "experiment_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "experiment_id": {
+            "type": "string",
+            "description": "Experiment id to launch (path parameter)."
+          }
+        },
+        "required": [
+          "experiment_id"
+        ]
+      },
+      "risk": "high: launches an experiment, starting live traffic allocation",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "create_feature_flag",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/workspaces/{{ config.workspace_id }}/feature-flags",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "enabled",
+              "disabled",
+              "archived"
+            ]
+          },
+          "context": {
+            "type": "string"
+          },
+          "serving_method": {
+            "type": "string",
+            "enum": [
+              "client",
+              "server",
+              "remote_or_local",
+              "remote_only"
+            ]
+          },
+          "ruleset": {
+            "type": "object",
+            "description": "Variant/rollout ruleset (provider-defined nested shape)."
+          }
+        },
+        "required": [
+          "name",
+          "key",
+          "context",
+          "serving_method",
+          "ruleset"
+        ]
+      },
+      "risk": "high: creates a feature flag that controls live product behavior"
+    },
+    {
+      "name": "update_feature_flag",
+      "kind": "update",
+      "method": "PUT",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/workspaces/{{ config.workspace_id }}/feature-flags/{{ record.flag_id }}",
+      "path_fields": [
+        "flag_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "flag_id": {
+            "type": "string",
+            "description": "Feature flag id to update (path parameter)."
+          },
+          "name": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "enabled",
+              "disabled",
+              "archived"
+            ]
+          },
+          "context": {
+            "type": "string"
+          },
+          "serving_method": {
+            "type": "string",
+            "enum": [
+              "client",
+              "server",
+              "remote_or_local",
+              "remote_only"
+            ]
+          },
+          "ruleset": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "flag_id"
+        ]
+      },
+      "risk": "high: mutates a live feature flag's rollout configuration",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "delete_feature_flag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/workspaces/{{ config.workspace_id }}/feature-flags/{{ record.flag_id }}",
+      "path_fields": [
+        "flag_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "flag_id": {
+            "type": "string",
+            "description": "Feature flag id to delete (path parameter)."
+          }
+        },
+        "required": [
+          "flag_id"
+        ]
+      },
+      "risk": "high: permanently deletes a feature flag",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "create_gdpr_retrieval",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://mixpanel.com/api/app/data-retrievals/v3.0",
+      "query": {
+        "token": "{{ secrets.gdpr_token }}"
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "distinct_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Distinct ids to retrieve data for."
+          },
+          "compliance_type": {
+            "type": "string",
+            "description": "Compliance regime, e.g. GDPR or CCPA."
+          },
+          "disclosure_type": {
+            "type": "string",
+            "description": "Disclosure type for the retrieval."
+          }
+        },
+        "required": [
+          "distinct_ids"
+        ]
+      },
+      "risk": "high: starts a GDPR/CCPA personal-data retrieval job"
+    },
+    {
+      "name": "create_gdpr_deletion",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://mixpanel.com/api/app/data-deletions/v3.0",
+      "query": {
+        "token": "{{ secrets.gdpr_token }}"
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "distinct_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Distinct ids to delete data for."
+          },
+          "compliance_type": {
+            "type": "string",
+            "description": "Compliance regime, e.g. GDPR or CCPA."
+          }
+        },
+        "required": [
+          "distinct_ids"
+        ]
+      },
+      "risk": "critical: starts a GDPR/CCPA personal-data deletion job",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "cancel_gdpr_deletion",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "https://mixpanel.com/api/app/data-deletions/v3.0/{{ record.tracking_id }}",
+      "path_fields": [
+        "tracking_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "tracking_id": {
+            "type": "string",
+            "description": "Deletion job tracking id to cancel (path parameter)."
+          }
+        },
+        "required": [
+          "tracking_id"
+        ]
+      },
+      "risk": "high: cancels an in-flight GDPR/CCPA deletion job",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "create_identity",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://api.mixpanel.com/track#create-identity",
+      "body_type": "form",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "description": "JSON-encoded Event Object with event=$identify, properties.$identified_id, properties.$anon_id, properties.token."
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "high: permanently links an anonymous id to a canonical identified id"
+    },
+    {
+      "name": "create_identity_alias",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://api.mixpanel.com/track#identity-create-alias",
+      "body_type": "form",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "description": "JSON-encoded Event Object with event=$create_alias, properties.distinct_id, properties.alias, properties.token."
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "high: creates a distinct_id alias"
+    },
+    {
+      "name": "import_events",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://api.mixpanel.com/import",
+      "query": {
+        "strict": "1",
+        "project_id": {
+          "template": "{{ config.project_id }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json_array",
+      "body_field": "events",
+      "body_schema": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "properties": {
+            "event": {
+              "type": "string",
+              "description": "Event name. Use the literal $merge to invoke identity-merge semantics against $distinct_ids instead of an ordinary import."
+            },
+            "properties": {
+              "type": "object",
+              "description": "Event properties object; for an ordinary import this requires time, $insert_id, and distinct_id; for a $merge event this requires $distinct_ids (an array of exactly the two ids to merge) and token."
+            }
+          },
+          "required": [
+            "event",
+            "properties"
+          ]
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "events": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "event": {
+                  "type": "string",
+                  "description": "Event name. Use the literal $merge to invoke identity-merge semantics against $distinct_ids instead of an ordinary import."
+                },
+                "properties": {
+                  "type": "object",
+                  "description": "Event properties object; for an ordinary import this requires time, $insert_id, and distinct_id; for a $merge event this requires $distinct_ids (an array of exactly the two ids to merge) and token."
+                }
+              },
+              "required": [
+                "event",
+                "properties"
+              ]
+            },
+            "description": "One or more events to send in a single batch call."
+          }
+        },
+        "required": [
+          "events"
+        ]
+      },
+      "risk": "high: historically imports events into Mixpanel (or, with event=$merge, merges two identities)"
+    },
+    {
+      "name": "track_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://api.mixpanel.com/track",
+      "body_type": "json_array",
+      "body_field": "events",
+      "body_schema": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "properties": {
+            "event": {
+              "type": "string",
+              "description": "Event name."
+            },
+            "properties": {
+              "type": "object",
+              "description": "Event properties, including token, time, distinct_id."
+            }
+          },
+          "required": [
+            "event",
+            "properties"
+          ]
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "events": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "event": {
+                  "type": "string",
+                  "description": "Event name."
+                },
+                "properties": {
+                  "type": "object",
+                  "description": "Event properties, including token, time, distinct_id."
+                }
+              },
+              "required": [
+                "event",
+                "properties"
+              ]
+            },
+            "description": "One or more events to send in a single batch call."
+          }
+        },
+        "required": [
+          "events"
+        ]
+      },
+      "risk": "medium: sends live events to Mixpanel"
+    },
+    {
+      "name": "profile_set",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://api.mixpanel.com/engage#profile-set",
+      "body_type": "json_array",
+      "body_field": "updates",
+      "body_schema": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "description": "Mixpanel project token."
+            },
+            "$distinct_id": {
+              "type": "string",
+              "description": "Profile distinct id."
+            },
+            "$set": {
+              "type": "object",
+              "description": "Property name/value pairs to set."
+            }
+          },
+          "required": [
+            "$token",
+            "$distinct_id",
+            "$set"
+          ]
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "updates": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "description": "Mixpanel project token."
+                },
+                "$distinct_id": {
+                  "type": "string",
+                  "description": "Profile distinct id."
+                },
+                "$set": {
+                  "type": "object",
+                  "description": "Property name/value pairs to set."
+                }
+              },
+              "required": [
+                "$token",
+                "$distinct_id",
+                "$set"
+              ]
+            },
+            "description": "One or more updates to send in a single batch call."
+          }
+        },
+        "required": [
+          "updates"
+        ]
+      },
+      "risk": "medium: sets user profile properties, creating the profile if absent"
+    },
+    {
+      "name": "profile_set_once",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://api.mixpanel.com/engage#profile-set-once",
+      "body_type": "json_array",
+      "body_field": "updates",
+      "body_schema": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "description": "Mixpanel project token."
+            },
+            "$distinct_id": {
+              "type": "string",
+              "description": "Profile distinct id."
+            },
+            "$set_once": {
+              "type": "object",
+              "description": "Property name/value pairs to set only if absent."
+            }
+          },
+          "required": [
+            "$token",
+            "$distinct_id",
+            "$set_once"
+          ]
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "updates": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "description": "Mixpanel project token."
+                },
+                "$distinct_id": {
+                  "type": "string",
+                  "description": "Profile distinct id."
+                },
+                "$set_once": {
+                  "type": "object",
+                  "description": "Property name/value pairs to set only if absent."
+                }
+              },
+              "required": [
+                "$token",
+                "$distinct_id",
+                "$set_once"
+              ]
+            },
+            "description": "One or more updates to send in a single batch call."
+          }
+        },
+        "required": [
+          "updates"
+        ]
+      },
+      "risk": "medium: sets user profile properties only if not already present"
+    },
+    {
+      "name": "profile_numerical_add",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://api.mixpanel.com/engage#profile-numerical-add",
+      "body_type": "json_array",
+      "body_field": "updates",
+      "body_schema": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "description": "Mixpanel project token."
+            },
+            "$distinct_id": {
+              "type": "string",
+              "description": "Profile distinct id."
+            },
+            "$add": {
+              "type": "object",
+              "description": "Property name to numeric-increment map."
+            }
+          },
+          "required": [
+            "$token",
+            "$distinct_id",
+            "$add"
+          ]
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "updates": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "description": "Mixpanel project token."
+                },
+                "$distinct_id": {
+                  "type": "string",
+                  "description": "Profile distinct id."
+                },
+                "$add": {
+                  "type": "object",
+                  "description": "Property name to numeric-increment map."
+                }
+              },
+              "required": [
+                "$token",
+                "$distinct_id",
+                "$add"
+              ]
+            },
+            "description": "One or more updates to send in a single batch call."
+          }
+        },
+        "required": [
+          "updates"
+        ]
+      },
+      "risk": "medium: increments numeric user profile properties"
+    },
+    {
+      "name": "profile_union",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://api.mixpanel.com/engage#profile-union",
+      "body_type": "json_array",
+      "body_field": "updates",
+      "body_schema": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "description": "Mixpanel project token."
+            },
+            "$distinct_id": {
+              "type": "string",
+              "description": "Profile distinct id."
+            },
+            "$union": {
+              "type": "object",
+              "description": "Property name to array-of-values-to-union map."
+            }
+          },
+          "required": [
+            "$token",
+            "$distinct_id",
+            "$union"
+          ]
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "updates": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "description": "Mixpanel project token."
+                },
+                "$distinct_id": {
+                  "type": "string",
+                  "description": "Profile distinct id."
+                },
+                "$union": {
+                  "type": "object",
+                  "description": "Property name to array-of-values-to-union map."
+                }
+              },
+              "required": [
+                "$token",
+                "$distinct_id",
+                "$union"
+              ]
+            },
+            "description": "One or more updates to send in a single batch call."
+          }
+        },
+        "required": [
+          "updates"
+        ]
+      },
+      "risk": "medium: unions values into a list-valued user profile property"
+    },
+    {
+      "name": "profile_append_to_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://api.mixpanel.com/engage#profile-list-append",
+      "body_type": "json_array",
+      "body_field": "updates",
+      "body_schema": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "description": "Mixpanel project token."
+            },
+            "$distinct_id": {
+              "type": "string",
+              "description": "Profile distinct id."
+            },
+            "$append": {
+              "type": "object",
+              "description": "Property name to value-to-append map."
+            }
+          },
+          "required": [
+            "$token",
+            "$distinct_id",
+            "$append"
+          ]
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "updates": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "description": "Mixpanel project token."
+                },
+                "$distinct_id": {
+                  "type": "string",
+                  "description": "Profile distinct id."
+                },
+                "$append": {
+                  "type": "object",
+                  "description": "Property name to value-to-append map."
+                }
+              },
+              "required": [
+                "$token",
+                "$distinct_id",
+                "$append"
+              ]
+            },
+            "description": "One or more updates to send in a single batch call."
+          }
+        },
+        "required": [
+          "updates"
+        ]
+      },
+      "risk": "medium: appends a value to a list-valued user profile property"
+    },
+    {
+      "name": "profile_remove_from_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://api.mixpanel.com/engage#profile-list-remove",
+      "body_type": "json_array",
+      "body_field": "updates",
+      "body_schema": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "description": "Mixpanel project token."
+            },
+            "$distinct_id": {
+              "type": "string",
+              "description": "Profile distinct id."
+            },
+            "$remove": {
+              "type": "object",
+              "description": "Property name to value-to-remove map."
+            }
+          },
+          "required": [
+            "$token",
+            "$distinct_id",
+            "$remove"
+          ]
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "updates": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "description": "Mixpanel project token."
+                },
+                "$distinct_id": {
+                  "type": "string",
+                  "description": "Profile distinct id."
+                },
+                "$remove": {
+                  "type": "object",
+                  "description": "Property name to value-to-remove map."
+                }
+              },
+              "required": [
+                "$token",
+                "$distinct_id",
+                "$remove"
+              ]
+            },
+            "description": "One or more updates to send in a single batch call."
+          }
+        },
+        "required": [
+          "updates"
+        ]
+      },
+      "risk": "medium: removes a value from a list-valued user profile property"
+    },
+    {
+      "name": "profile_delete_property",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://api.mixpanel.com/engage#profile-unset",
+      "body_type": "json_array",
+      "body_field": "updates",
+      "body_schema": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "description": "Mixpanel project token."
+            },
+            "$distinct_id": {
+              "type": "string",
+              "description": "Profile distinct id."
+            },
+            "$unset": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Property names to remove."
+            }
+          },
+          "required": [
+            "$token",
+            "$distinct_id",
+            "$unset"
+          ]
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "updates": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "description": "Mixpanel project token."
+                },
+                "$distinct_id": {
+                  "type": "string",
+                  "description": "Profile distinct id."
+                },
+                "$unset": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Property names to remove."
+                }
+              },
+              "required": [
+                "$token",
+                "$distinct_id",
+                "$unset"
+              ]
+            },
+            "description": "One or more updates to send in a single batch call."
+          }
+        },
+        "required": [
+          "updates"
+        ]
+      },
+      "risk": "medium: permanently removes named properties from a user profile"
+    },
+    {
+      "name": "profile_batch_update",
+      "kind": "update",
+      "method": "POST",
+      "path": "https://api.mixpanel.com/engage#profile-batch-update",
+      "body_type": "form",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "description": "JSON-encoded array of profile update objects, each with $token, $distinct_id and one update operation."
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "medium: sends a batch of user profile updates in one request"
+    },
+    {
+      "name": "delete_profile",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://api.mixpanel.com/engage#profile-delete",
+      "body_type": "json_array",
+      "body_field": "updates",
+      "body_schema": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "description": "Mixpanel project token."
+            },
+            "$distinct_id": {
+              "type": "string",
+              "description": "Profile distinct id."
+            },
+            "$delete": {
+              "type": "null",
+              "description": "Ignored; the profile is identified by $distinct_id."
+            },
+            "$ignore_alias": {
+              "type": "boolean",
+              "description": "Set true to avoid deleting the original profile via alias resolution."
+            }
+          },
+          "required": [
+            "$token",
+            "$distinct_id"
+          ]
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "updates": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "description": "Mixpanel project token."
+                },
+                "$distinct_id": {
+                  "type": "string",
+                  "description": "Profile distinct id."
+                },
+                "$delete": {
+                  "type": "null",
+                  "description": "Ignored; the profile is identified by $distinct_id."
+                },
+                "$ignore_alias": {
+                  "type": "boolean",
+                  "description": "Set true to avoid deleting the original profile via alias resolution."
+                }
+              },
+              "required": [
+                "$token",
+                "$distinct_id"
+              ]
+            },
+            "description": "One or more updates to send in a single batch call."
+          }
+        },
+        "required": [
+          "updates"
+        ]
+      },
+      "risk": "high: permanently deletes a user profile and its properties",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "group_set_property",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://api.mixpanel.com/groups#group-set",
+      "body_type": "json_array",
+      "body_field": "updates",
+      "body_schema": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "description": "Mixpanel project token."
+            },
+            "$group_key": {
+              "type": "string",
+              "description": "Group key (property name that identifies the group type)."
+            },
+            "$group_id": {
+              "type": "string",
+              "description": "Group id."
+            },
+            "$set": {
+              "type": "object",
+              "description": "Property name/value pairs to set."
+            }
+          },
+          "required": [
+            "$token",
+            "$group_key",
+            "$group_id",
+            "$set"
+          ]
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "updates": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "description": "Mixpanel project token."
+                },
+                "$group_key": {
+                  "type": "string",
+                  "description": "Group key (property name that identifies the group type)."
+                },
+                "$group_id": {
+                  "type": "string",
+                  "description": "Group id."
+                },
+                "$set": {
+                  "type": "object",
+                  "description": "Property name/value pairs to set."
+                }
+              },
+              "required": [
+                "$token",
+                "$group_key",
+                "$group_id",
+                "$set"
+              ]
+            },
+            "description": "One or more updates to send in a single batch call."
+          }
+        },
+        "required": [
+          "updates"
+        ]
+      },
+      "risk": "medium: sets group profile properties, creating the profile if absent"
+    },
+    {
+      "name": "group_set_property_once",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://api.mixpanel.com/groups#group-set-once",
+      "body_type": "json_array",
+      "body_field": "updates",
+      "body_schema": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "description": "Mixpanel project token."
+            },
+            "$group_key": {
+              "type": "string",
+              "description": "Group key (property name that identifies the group type)."
+            },
+            "$group_id": {
+              "type": "string",
+              "description": "Group id."
+            },
+            "$set_once": {
+              "type": "object",
+              "description": "Property name/value pairs to set only if absent."
+            }
+          },
+          "required": [
+            "$token",
+            "$group_key",
+            "$group_id",
+            "$set_once"
+          ]
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "updates": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "description": "Mixpanel project token."
+                },
+                "$group_key": {
+                  "type": "string",
+                  "description": "Group key (property name that identifies the group type)."
+                },
+                "$group_id": {
+                  "type": "string",
+                  "description": "Group id."
+                },
+                "$set_once": {
+                  "type": "object",
+                  "description": "Property name/value pairs to set only if absent."
+                }
+              },
+              "required": [
+                "$token",
+                "$group_key",
+                "$group_id",
+                "$set_once"
+              ]
+            },
+            "description": "One or more updates to send in a single batch call."
+          }
+        },
+        "required": [
+          "updates"
+        ]
+      },
+      "risk": "medium: sets group profile properties only if not already present"
+    },
+    {
+      "name": "group_delete_property",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://api.mixpanel.com/groups#group-unset",
+      "body_type": "json_array",
+      "body_field": "updates",
+      "body_schema": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "description": "Mixpanel project token."
+            },
+            "$group_key": {
+              "type": "string",
+              "description": "Group key (property name that identifies the group type)."
+            },
+            "$group_id": {
+              "type": "string",
+              "description": "Group id."
+            },
+            "$unset": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Property names to remove."
+            }
+          },
+          "required": [
+            "$token",
+            "$group_key",
+            "$group_id",
+            "$unset"
+          ]
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "updates": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "description": "Mixpanel project token."
+                },
+                "$group_key": {
+                  "type": "string",
+                  "description": "Group key (property name that identifies the group type)."
+                },
+                "$group_id": {
+                  "type": "string",
+                  "description": "Group id."
+                },
+                "$unset": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Property names to remove."
+                }
+              },
+              "required": [
+                "$token",
+                "$group_key",
+                "$group_id",
+                "$unset"
+              ]
+            },
+            "description": "One or more updates to send in a single batch call."
+          }
+        },
+        "required": [
+          "updates"
+        ]
+      },
+      "risk": "medium: removes named properties from a group profile"
+    },
+    {
+      "name": "group_remove_from_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://api.mixpanel.com/groups#group-remove-from-list",
+      "body_type": "json_array",
+      "body_field": "updates",
+      "body_schema": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "description": "Mixpanel project token."
+            },
+            "$group_key": {
+              "type": "string",
+              "description": "Group key (property name that identifies the group type)."
+            },
+            "$group_id": {
+              "type": "string",
+              "description": "Group id."
+            },
+            "$remove": {
+              "type": "object",
+              "description": "Property name to value-to-remove map."
+            }
+          },
+          "required": [
+            "$token",
+            "$group_key",
+            "$group_id",
+            "$remove"
+          ]
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "updates": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "description": "Mixpanel project token."
+                },
+                "$group_key": {
+                  "type": "string",
+                  "description": "Group key (property name that identifies the group type)."
+                },
+                "$group_id": {
+                  "type": "string",
+                  "description": "Group id."
+                },
+                "$remove": {
+                  "type": "object",
+                  "description": "Property name to value-to-remove map."
+                }
+              },
+              "required": [
+                "$token",
+                "$group_key",
+                "$group_id",
+                "$remove"
+              ]
+            },
+            "description": "One or more updates to send in a single batch call."
+          }
+        },
+        "required": [
+          "updates"
+        ]
+      },
+      "risk": "medium: removes a value from a list-valued group profile property"
+    },
+    {
+      "name": "group_union",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://api.mixpanel.com/groups#group-union",
+      "body_type": "json_array",
+      "body_field": "updates",
+      "body_schema": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "description": "Mixpanel project token."
+            },
+            "$group_key": {
+              "type": "string",
+              "description": "Group key (property name that identifies the group type)."
+            },
+            "$group_id": {
+              "type": "string",
+              "description": "Group id."
+            },
+            "$union": {
+              "type": "object",
+              "description": "Property name to array-of-values-to-union map."
+            }
+          },
+          "required": [
+            "$token",
+            "$group_key",
+            "$group_id",
+            "$union"
+          ]
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "updates": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "description": "Mixpanel project token."
+                },
+                "$group_key": {
+                  "type": "string",
+                  "description": "Group key (property name that identifies the group type)."
+                },
+                "$group_id": {
+                  "type": "string",
+                  "description": "Group id."
+                },
+                "$union": {
+                  "type": "object",
+                  "description": "Property name to array-of-values-to-union map."
+                }
+              },
+              "required": [
+                "$token",
+                "$group_key",
+                "$group_id",
+                "$union"
+              ]
+            },
+            "description": "One or more updates to send in a single batch call."
+          }
+        },
+        "required": [
+          "updates"
+        ]
+      },
+      "risk": "medium: unions values into a list-valued group profile property"
+    },
+    {
+      "name": "group_batch_update",
+      "kind": "update",
+      "method": "POST",
+      "path": "https://api.mixpanel.com/groups#group-batch-update",
+      "body_type": "form",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "description": "JSON-encoded array of group profile update objects, each with $token, $group_key, $group_id and one update operation."
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "risk": "medium: sends a batch of group profile updates in one request"
+    },
+    {
+      "name": "delete_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://api.mixpanel.com/groups#group-delete",
+      "body_type": "json_array",
+      "body_field": "updates",
+      "body_schema": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "properties": {
+            "$token": {
+              "type": "string",
+              "description": "Mixpanel project token."
+            },
+            "$group_key": {
+              "type": "string",
+              "description": "Group key (property name that identifies the group type)."
+            },
+            "$group_id": {
+              "type": "string",
+              "description": "Group id."
+            },
+            "$delete": {
+              "type": "null",
+              "description": "Ignored; the profile is identified by $group_id."
+            }
+          },
+          "required": [
+            "$token",
+            "$group_key",
+            "$group_id"
+          ]
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "updates": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "$token": {
+                  "type": "string",
+                  "description": "Mixpanel project token."
+                },
+                "$group_key": {
+                  "type": "string",
+                  "description": "Group key (property name that identifies the group type)."
+                },
+                "$group_id": {
+                  "type": "string",
+                  "description": "Group id."
+                },
+                "$delete": {
+                  "type": "null",
+                  "description": "Ignored; the profile is identified by $group_id."
+                }
+              },
+              "required": [
+                "$token",
+                "$group_key",
+                "$group_id"
+              ]
+            },
+            "description": "One or more updates to send in a single batch call."
+          }
+        },
+        "required": [
+          "updates"
+        ]
+      },
+      "risk": "high: permanently deletes a group profile and its properties",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "delete_all_schemas",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/schemas",
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      },
+      "risk": "critical: permanently deletes every governance schema declared for the project",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "delete_schemas_for_entity",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/schemas/{{ record.entity_type }}",
+      "path_fields": [
+        "entity_type"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "entity_type": {
+            "type": "string",
+            "enum": [
+              "event",
+              "profile"
+            ],
+            "description": "Entity type to delete schemas for (path parameter)."
+          }
+        },
+        "required": [
+          "entity_type"
+        ]
+      },
+      "risk": "high: permanently deletes every governance schema for one entity type",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "delete_schema_by_name",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/schemas/{{ record.entity_type }}/{{ record.schema_name }}",
+      "path_fields": [
+        "entity_type",
+        "schema_name"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "entity_type": {
+            "type": "string",
+            "enum": [
+              "event",
+              "profile"
+            ],
+            "description": "Entity type (path parameter)."
+          },
+          "schema_name": {
+            "type": "string",
+            "description": "Schema name (path parameter)."
+          }
+        },
+        "required": [
+          "entity_type",
+          "schema_name"
+        ]
+      },
+      "risk": "high: permanently deletes one named governance schema",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "upload_schemas",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/schemas",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "entries": {
+            "type": "array",
+            "description": "Array of {name, entityType, schemaJson} governance schema entries to create or replace."
+          },
+          "truncate": {
+            "type": "boolean",
+            "description": "When true, delete every schema not present in entries."
+          }
+        },
+        "required": [
+          "entries"
+        ]
+      },
+      "risk": "high: creates or replaces multiple governance schemas for the project"
+    },
+    {
+      "name": "upload_schema_by_name",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/schemas/{{ record.entity_type }}/{{ record.schema_name }}",
+      "path_fields": [
+        "entity_type",
+        "schema_name"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "entity_type": {
+            "type": "string",
+            "enum": [
+              "event",
+              "profile"
+            ],
+            "description": "Entity type (path parameter)."
+          },
+          "schema_name": {
+            "type": "string",
+            "description": "Schema name (path parameter)."
+          },
+          "properties": {
+            "type": "object",
+            "description": "JSON-Schema-shaped property definitions for this entity."
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Lexicon metadata (display name, tags, contacts, etc.)."
+          }
+        },
+        "required": [
+          "entity_type",
+          "schema_name"
+        ]
+      },
+      "risk": "high: creates or replaces one named governance schema"
+    },
+    {
+      "name": "create_service_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://mixpanel.com/api/app/organizations/{{ config.organization_id }}/service-accounts",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "Service account username."
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "owner",
+              "admin",
+              "analyst",
+              "consumer"
+            ]
+          },
+          "expires": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Optional expiry timestamp."
+          },
+          "projects": {
+            "type": "array",
+            "description": "Project id/role assignments for the new service account."
+          }
+        },
+        "required": [
+          "username"
+        ]
+      },
+      "risk": "critical: creates a new organization credential principal"
+    },
+    {
+      "name": "delete_service_account",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "https://mixpanel.com/api/app/organizations/{{ config.organization_id }}/service-accounts/{{ record.service_account_id }}",
+      "path_fields": [
+        "service_account_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "service_account_id": {
+            "type": "string",
+            "description": "Service account id to delete (path parameter)."
+          }
+        },
+        "required": [
+          "service_account_id"
+        ]
+      },
+      "risk": "critical: permanently removes an organization credential principal",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "add_service_accounts_to_projects",
+      "kind": "update",
+      "method": "POST",
+      "path": "https://mixpanel.com/api/app/organizations/{{ config.organization_id }}/service-accounts/add-to-project",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "projects": {
+            "type": "array",
+            "description": "Array of {id, role} project assignments."
+          },
+          "service_account_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "Service account ids to add."
+          }
+        },
+        "required": [
+          "projects",
+          "service_account_ids"
+        ]
+      },
+      "risk": "high: grants service accounts access to additional projects"
+    },
+    {
+      "name": "remove_service_accounts_from_projects",
+      "kind": "update",
+      "method": "POST",
+      "path": "https://mixpanel.com/api/app/organizations/{{ config.organization_id }}/service-accounts/remove-from-project",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "projects": {
+            "type": "array",
+            "description": "Array of {id, service_account_ids} removal instructions."
+          }
+        },
+        "required": [
+          "projects"
+        ]
+      },
+      "risk": "high: revokes service account access from projects"
+    },
+    {
+      "name": "update_warehouse_import",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/warehouse-sources/imports/{{ record.import_id }}",
+      "path_fields": [
+        "import_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "import_id": {
+            "type": "string",
+            "description": "Warehouse import id to update (path parameter)."
+          },
+          "paused": {
+            "type": "boolean",
+            "description": "Whether the import is paused."
+          },
+          "run_every": {
+            "type": "integer",
+            "description": "Sync interval in nanoseconds (0, hourly, daily, or weekly)."
+          },
+          "databricks_params": {
+            "type": "object",
+            "description": "Databricks export cluster configuration."
+          }
+        },
+        "required": [
+          "import_id",
+          "paused",
+          "run_every"
+        ]
+      },
+      "risk": "high: mutates a warehouse import's sync schedule"
+    },
+    {
+      "name": "delete_warehouse_import",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/warehouse-sources/imports/{{ record.import_id }}",
+      "path_fields": [
+        "import_id"
+      ],
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "import_id": {
+            "type": "string",
+            "description": "Warehouse import id to delete (path parameter)."
+          },
+          "delete_data": {
+            "type": "boolean",
+            "description": "When true, also delete data already imported by this source."
+          }
+        },
+        "required": [
+          "import_id"
+        ]
+      },
+      "risk": "critical: permanently deletes a warehouse import configuration, optionally its imported data",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "create_event_stream_import",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/warehouse-sources/imports/event-stream",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "import_type": {
+            "type": "string",
+            "enum": [
+              "event_stream"
+            ]
+          },
+          "warehouse_source_id": {
+            "type": "integer"
+          },
+          "table_params": {
+            "type": "object",
+            "description": "Warehouse table/column mapping configuration."
+          },
+          "event_name": {
+            "type": "string"
+          },
+          "event_column_name": {
+            "type": "string"
+          },
+          "time_column_name": {
+            "type": "string"
+          },
+          "user_column_name": {
+            "type": "string"
+          },
+          "company_column_name": {
+            "type": "string"
+          },
+          "device_column_name": {
+            "type": "string"
+          },
+          "sync_mode": {
+            "type": "string",
+            "enum": [
+              "time_based",
+              "mirror_mode",
+              "full_sync",
+              "one_time"
+            ]
+          },
+          "run_every": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "import_type",
+          "warehouse_source_id",
+          "table_params",
+          "time_column_name",
+          "sync_mode"
+        ]
+      },
+      "risk": "high: configures a recurring warehouse-to-events import"
+    },
+    {
+      "name": "create_people_import",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/warehouse-sources/imports/people",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "import_type": {
+            "type": "string",
+            "enum": [
+              "people"
+            ]
+          },
+          "warehouse_source_id": {
+            "type": "integer"
+          },
+          "table_params": {
+            "type": "object"
+          },
+          "user_column_name": {
+            "type": "string"
+          },
+          "sync_mode": {
+            "type": "string",
+            "enum": [
+              "time_based",
+              "mirror_mode",
+              "full_sync",
+              "one_time"
+            ]
+          },
+          "run_every": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "import_type",
+          "warehouse_source_id",
+          "table_params",
+          "user_column_name",
+          "sync_mode"
+        ]
+      },
+      "risk": "high: configures a recurring warehouse-to-profiles import"
+    },
+    {
+      "name": "create_groups_import",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/warehouse-sources/imports/groups",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "import_type": {
+            "type": "string",
+            "enum": [
+              "groups"
+            ]
+          },
+          "warehouse_source_id": {
+            "type": "integer"
+          },
+          "table_params": {
+            "type": "object"
+          },
+          "group_key": {
+            "type": "string"
+          },
+          "group_id_column": {
+            "type": "string"
+          },
+          "sync_mode": {
+            "type": "string",
+            "enum": [
+              "time_based",
+              "mirror_mode",
+              "full_sync",
+              "one_time"
+            ]
+          },
+          "run_every": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "import_type",
+          "warehouse_source_id",
+          "table_params",
+          "group_key",
+          "group_id_column",
+          "sync_mode"
+        ]
+      },
+      "risk": "high: configures a recurring warehouse-to-groups import"
+    },
+    {
+      "name": "create_lookup_table_import",
+      "kind": "create",
+      "method": "POST",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/warehouse-sources/imports/lookup-table",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "import_type": {
+            "type": "string",
+            "enum": [
+              "lookup_table"
+            ]
+          },
+          "warehouse_source_id": {
+            "type": "integer"
+          },
+          "table_params": {
+            "type": "object"
+          },
+          "mixpanel_property": {
+            "type": "object",
+            "description": "{value, resourceType} target property."
+          },
+          "property_key_column_name": {
+            "type": "string"
+          },
+          "sync_mode": {
+            "type": "string",
+            "enum": [
+              "full_sync",
+              "one_time"
+            ]
+          },
+          "run_every": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "import_type",
+          "warehouse_source_id",
+          "table_params",
+          "mixpanel_property",
+          "property_key_column_name",
+          "sync_mode"
+        ]
+      },
+      "risk": "high: configures a recurring warehouse-to-lookup-table import"
+    },
+    {
+      "name": "run_warehouse_import",
+      "kind": "update",
+      "method": "PUT",
+      "path": "https://mixpanel.com/api/app/projects/{{ config.project_id }}/warehouse-sources/imports/{{ record.import_id }}/manual-sync",
+      "path_fields": [
+        "import_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "import_id": {
+            "type": "string",
+            "description": "Warehouse import id to run (path parameter)."
+          }
+        },
+        "required": [
+          "import_id"
+        ]
+      },
+      "risk": "medium: manually triggers a warehouse import sync run"
+    },
+    {
+      "name": "cancel_warehouse_pipeline",
+      "kind": "delete",
+      "method": "POST",
+      "path": "https://data.mixpanel.com/api/2.0/nessie/pipeline/cancel",
+      "body_type": "form",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Pipeline name to cancel."
+          },
+          "project_id": {
+            "type": "number",
+            "description": "Mixpanel project id."
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "high: permanently deletes a warehouse export pipeline",
+      "confirmation": {
+        "kind": "destructive"
+      }
+    },
+    {
+      "name": "pause_warehouse_pipeline",
+      "kind": "update",
+      "method": "POST",
+      "path": "https://data.mixpanel.com/api/2.0/nessie/pipeline/pause",
+      "body_type": "form",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Pipeline name to pause."
+          },
+          "project_id": {
+            "type": "number",
+            "description": "Mixpanel project id."
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "medium: pauses a scheduled warehouse export pipeline"
+    },
+    {
+      "name": "resume_warehouse_pipeline",
+      "kind": "update",
+      "method": "POST",
+      "path": "https://data.mixpanel.com/api/2.0/nessie/pipeline/resume",
+      "body_type": "form",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Pipeline name to resume."
+          },
+          "project_id": {
+            "type": "number",
+            "description": "Mixpanel project id."
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "medium: resumes a paused warehouse export pipeline"
+    }
+  ]
+}

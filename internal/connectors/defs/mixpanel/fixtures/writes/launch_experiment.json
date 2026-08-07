@@ -1,0 +1,9 @@
+{
+  "record": {
+    "experiment_id": "fixture-experiment_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/app/workspaces/fixture/experiments/fixture-experiment_id/launch"
+  }
+}

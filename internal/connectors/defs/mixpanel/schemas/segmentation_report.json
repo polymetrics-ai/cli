@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "segmentation_report",
+  "type": "object",
+  "x-primary-key": [
+    "report"
+  ],
+  "properties": {
+    "report": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "report"
+  ]
+}

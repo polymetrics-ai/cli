@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/app/projects/fixture/warehouse-sources/imports/fixture/history"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": 1,
+        "status": "fixture-value",
+        "started_at": "fixture-value",
+        "finished_at": "fixture-value"
+      }
+    ]
+  }
+}

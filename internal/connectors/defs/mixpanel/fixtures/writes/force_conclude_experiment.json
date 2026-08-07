@@ -1,0 +1,13 @@
+{
+  "record": {
+    "experiment_id": "fixture-experiment_id",
+    "end_date": "fixture-end_date"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/app/workspaces/fixture/experiments/fixture-experiment_id/force_conclude",
+    "body": {
+      "end_date": "fixture-end_date"
+    }
+  }
+}

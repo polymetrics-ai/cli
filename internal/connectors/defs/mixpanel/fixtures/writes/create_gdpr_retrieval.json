@@ -1,0 +1,23 @@
+{
+  "record": {
+    "distinct_ids": [
+      "fixture-distinct_ids"
+    ],
+    "compliance_type": "fixture-compliance_type",
+    "disclosure_type": "fixture-disclosure_type"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/app/data-retrievals/v3.0",
+    "query": {
+      "token": "fixture"
+    },
+    "body": {
+      "distinct_ids": [
+        "fixture-distinct_ids"
+      ],
+      "compliance_type": "fixture-compliance_type",
+      "disclosure_type": "fixture-disclosure_type"
+    }
+  }
+}

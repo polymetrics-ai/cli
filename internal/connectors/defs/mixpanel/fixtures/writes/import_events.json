@@ -1,0 +1,28 @@
+{
+  "record": {
+    "events": [
+      {
+        "event": "fixture-event",
+        "properties": {
+          "fixture_key": "fixture_value"
+        }
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/import",
+    "query": {
+      "strict": "1",
+      "project_id": "fixture"
+    },
+    "body": [
+      {
+        "event": "fixture-event",
+        "properties": {
+          "fixture_key": "fixture_value"
+        }
+      }
+    ]
+  }
+}

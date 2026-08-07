@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "lexicon_schemas",
+  "type": "object",
+  "x-primary-key": [
+    "name",
+    "entityType"
+  ],
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "entityType": {
+      "type": "string"
+    },
+    "schemaJson": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "name",
+    "entityType"
+  ]
+}

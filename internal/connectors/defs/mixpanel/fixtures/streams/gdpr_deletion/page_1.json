@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/app/data-deletions/v3.0/fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "tracking_id": "fixture-value",
+      "status": "fixture-value",
+      "requested_at": "fixture-value"
+    }
+  }
+}

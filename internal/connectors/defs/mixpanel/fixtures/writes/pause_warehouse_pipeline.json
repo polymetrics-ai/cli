@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "fixture-name",
+    "project_id": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/2.0/nessie/pipeline/pause",
+    "body": {
+      "name": "fixture-name",
+      "project_id": 1
+    }
+  }
+}

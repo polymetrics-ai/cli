@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/2.0/nessie/pipeline/timeline"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "date": "fixture-value",
+        "status": "fixture-value"
+      }
+    ]
+  }
+}

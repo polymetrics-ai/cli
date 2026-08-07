@@ -1,0 +1,12 @@
+{
+  "record": {
+    "data": "fixture-data"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/track#identity-create-alias",
+    "body": {
+      "data": "fixture-data"
+    }
+  }
+}

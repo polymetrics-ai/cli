@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/2.0/nessie/pipeline/jobs"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "name": "fixture-value",
+        "type": "fixture-value",
+        "status": "fixture-value"
+      }
+    ]
+  }
+}

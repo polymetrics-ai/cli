@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "retention_frequency_report",
+  "type": "object",
+  "x-primary-key": [
+    "report"
+  ],
+  "properties": {
+    "report": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "report"
+  ]
+}

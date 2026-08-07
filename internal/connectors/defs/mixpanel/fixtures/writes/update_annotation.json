@@ -1,0 +1,17 @@
+{
+  "record": {
+    "annotation_id": "fixture-annotation_id",
+    "tags": [
+      1
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/app/projects/fixture/annotations/fixture-annotation_id",
+    "body": {
+      "tags": [
+        1
+      ]
+    }
+  }
+}

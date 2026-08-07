@@ -1,0 +1,9 @@
+{
+  "record": {
+    "tracking_id": "fixture-tracking_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/app/data-deletions/v3.0/fixture-tracking_id"
+  }
+}

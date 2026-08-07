@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/query/funnels"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "report": "fixture-value"
+    }
+  }
+}

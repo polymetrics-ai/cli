@@ -1,55 +1,767 @@
 {
-  "api": "Mixpanel APIs (legacy Query API v2.0 plus current Query and Annotations API references)",
+  "api": "Mixpanel API (13 real OpenAPI 3.x documents: annotations, data-pipelines, experiments, export, feature-flags-management, feature-flags, gdpr, identity, ingestion, lexicon-schemas, query, service-accounts, warehouse-connectors)",
   "docs": "https://docs.mixpanel.com/reference/overview",
-  "reviewed_at": "2026-07-04",
-  "scope": "This bundle preserves the legacy Mixpanel Query API read contract and adds current list/detail-style GET streams that fit the existing Basic-auth Query/Application API model. It remains read-only: ingestion, identity/profile mutation, schema administration, service-account administration, feature-flag management, experiment management, warehouse connector management, GDPR jobs, raw export downloads, custom JQL, and aggregate report endpoints are documented here as excluded surface because they are mutation/admin, binary/download, custom-query, scalar-array, or aggregate-report APIs rather than finite object-record streams.",
+  "reviewed_at": "2026-08-07",
+  "operation_ledger_version": 1,
+  "scope": "Full documented-operation parity for Mixpanel. 104 documented operations, re-derived 2026-08-07 from the 13 real OpenAPI 3.x documents at https://docs.mixpanel.com/openapi/<name>.openapi.yaml (392,835 combined bytes; the provider-artifact ledger recorded https://docs.mixpanel.com/reference/overview as html_reference, which was stale -- that Mintlify-hosted page's embedded nav JSON references these 13 machine-readable files directly). Raw operationId count summed across the 13 files is 105, an exact match to the prior ledger total; the -1 delta is one genuine cross-file path collision (POST /import is documented twice: identity-merge in identity.yaml and import-events in ingestion.yaml) which the counting policy's method+path dedup rule collapses into the single import_events row below. Every endpoint is partitioned exactly once. Legacy Query API v2.0 endpoints this bundle already implemented (bare /cohorts/list, /annotations, /engage at config.base_url) predate and are not part of this 13-file ledger; the cohorts and engage streams are reused here to also deliver the current, documented POST /cohorts/list and POST /engage record families (see docs.md), and the redundant legacy /annotations stream (superseded by the project-scoped, currently-documented project_annotations stream) was retired.",
   "endpoints": [
-    { "method": "GET", "path": "/cohorts/list (legacy /api/2.0)", "covered_by": { "stream": "cohorts" } },
-    { "method": "GET", "path": "/annotations (legacy /api/2.0)", "covered_by": { "stream": "annotations" } },
-    { "method": "GET", "path": "/engage (legacy /api/2.0)", "covered_by": { "stream": "engage" } },
-    { "method": "GET", "path": "/funnels/list", "covered_by": { "stream": "saved_funnels" } },
-    { "method": "GET", "path": "/stream/query", "covered_by": { "stream": "activity_stream" } },
-    { "method": "GET", "path": "/events/top", "covered_by": { "stream": "top_events" } },
-    { "method": "GET", "path": "/events/properties/top", "covered_by": { "stream": "event_property_names" } },
-    { "method": "GET", "path": "/projects/{projectId}/annotations", "covered_by": { "stream": "project_annotations" } },
-    { "method": "GET", "path": "/projects/{projectId}/annotations/{annotationId}", "covered_by": { "stream": "project_annotation" } },
-    { "method": "GET", "path": "/projects/{projectId}/annotations/tags", "covered_by": { "stream": "annotation_tags" } },
-    { "method": "POST", "path": "/cohorts/list, /engage", "excluded": { "category": "duplicate_of", "reason": "The current Query API documents these read endpoints as form POSTs, but the legacy connector emits the same cohort/profile record families through the older /api/2.0 GET endpoints covered by cohorts and engage; exposing non-mutating POST streams would also trip the conformance write-surface gate for this read-only connector." } },
-    { "method": "GET", "path": "/insights, /funnels, /retention, /retention/addiction, /segmentation, /segmentation/numeric, /segmentation/sum, /segmentation/average, /events, /events/properties", "excluded": { "category": "non_data_endpoint", "reason": "These Query API endpoints return aggregate report objects with dynamic date/event/property maps, not stable list/detail object-record collections." } },
-    { "method": "GET", "path": "/events/names, /events/properties/values", "excluded": { "category": "out_of_scope", "reason": "These endpoints return bare scalar string arrays; the declarative stream engine emits object records and would drop scalar array elements." } },
-    { "method": "POST", "path": "/jql", "excluded": { "category": "non_data_endpoint", "reason": "Custom JQL executes caller-provided JavaScript and accepts application/x-www-form-urlencoded script bodies; it is an ad hoc query executor, not a fixed connector stream or safe write action." } },
-    { "method": "POST", "path": "/projects/{projectId}/annotations, /projects/{projectId}/annotations/tags", "excluded": { "category": "requires_elevated_scope", "reason": "Annotation and tag creation requires Analyst-or-higher project permissions and mutates project metadata; this connector remains read-only." } },
-    { "method": "PATCH", "path": "/projects/{projectId}/annotations/{annotationId}", "excluded": { "category": "requires_elevated_scope", "reason": "Annotation patching mutates project metadata and requires elevated project permissions." } },
-    { "method": "DELETE", "path": "/projects/{projectId}/annotations/{annotationId}", "excluded": { "category": "destructive_admin", "reason": "Annotation deletion removes project metadata and is intentionally not exposed as reverse ETL." } },
-    { "method": "GET", "path": "/export", "excluded": { "category": "binary_payload", "reason": "Raw event export is a bulk download/NDJSON export endpoint on the data export host, not a paginated JSON object-record stream." } },
-    { "method": "POST", "path": "/import, /track, /track#create-identity, /track#identity-create-alias, /import (identity merge)", "excluded": { "category": "requires_elevated_scope", "reason": "Ingestion and identity endpoints create historical/live events or merge identities using project-token/import credentials outside the legacy Query API credential contract." } },
-    { "method": "POST", "path": "/engage#profile-set, /engage#profile-set-once, /engage#profile-numerical-add, /engage#profile-union, /engage#profile-list-append, /engage#profile-list-remove, /engage#profile-unset, /engage#profile-batch-update, /engage#profile-delete, /groups#group-set, /groups#group-set-once, /groups#group-unset, /groups#group-remove-from-list, /groups#group-union, /groups#group-batch-update, /groups#group-delete", "excluded": { "category": "requires_elevated_scope", "reason": "User and group profile endpoints mutate Mixpanel profiles through the ingestion API and need a separate reverse-ETL design with project-token auth and approval semantics." } },
-    { "method": "GET", "path": "/lookup-tables", "excluded": { "category": "requires_elevated_scope", "reason": "Lookup table listing belongs to the ingestion/governance API, not the legacy Query API connector; access requires project-token style credentials outside this bundle's auth hook." } },
-    { "method": "PUT", "path": "/lookup-tables/{id}", "excluded": { "category": "requires_elevated_scope", "reason": "Replacing lookup tables mutates project enrichment data and uses ingestion API credentials outside the legacy Query API auth model." } },
-    { "method": "GET", "path": "/projects/{projectId}/schemas, /projects/{projectId}/schemas/{entityType}, /projects/{projectId}/schemas/{entityType}/{name}", "excluded": { "category": "requires_elevated_scope", "reason": "Lexicon schema reads are administrative data-governance endpoints requiring schema access outside the legacy Query API stream contract." } },
-    { "method": "POST", "path": "/projects/{projectId}/schemas, /projects/{projectId}/schemas/{entityType}/{name}", "excluded": { "category": "requires_elevated_scope", "reason": "Lexicon schema create/replace endpoints mutate governance metadata and require admin/owner permissions." } },
-    { "method": "DELETE", "path": "/projects/{projectId}/schemas, /projects/{projectId}/schemas/{entityType}, /projects/{projectId}/schemas/{entityType}/{name}", "excluded": { "category": "destructive_admin", "reason": "Lexicon schema deletion removes governance metadata and is intentionally not exposed as reverse ETL." } },
-    { "method": "GET", "path": "/projects/{projectId}/warehouse-sources/imports, /projects/{projectId}/warehouse-sources/imports/{importId}, /projects/{projectId}/warehouse-sources/imports/{importId}/history", "excluded": { "category": "requires_elevated_scope", "reason": "Warehouse Connector API reads expose warehouse import configuration and job history, an administrative surface outside the legacy Query API connector." } },
-    { "method": "POST", "path": "/projects/{projectId}/warehouse-sources/imports/event-stream, /projects/{projectId}/warehouse-sources/imports/people, /projects/{projectId}/warehouse-sources/imports/groups, /projects/{projectId}/warehouse-sources/imports/lookup-table", "excluded": { "category": "requires_elevated_scope", "reason": "Warehouse import creation mutates data pipeline configuration and requires an admin-scoped reverse-ETL design." } },
-    { "method": "PATCH", "path": "/projects/{projectId}/warehouse-sources/imports/{importId}", "excluded": { "category": "requires_elevated_scope", "reason": "Warehouse import updates mutate data pipeline configuration." } },
-    { "method": "PUT", "path": "/projects/{projectId}/warehouse-sources/imports/{importId}/manual-sync", "excluded": { "category": "requires_elevated_scope", "reason": "Manual warehouse import sync triggers runtime execution of an import job." } },
-    { "method": "DELETE", "path": "/projects/{projectId}/warehouse-sources/imports/{importId}", "excluded": { "category": "destructive_admin", "reason": "Warehouse import deletion can remove import configuration and optionally imported data." } },
-    { "method": "GET", "path": "/organizations/{organizationId}/service-accounts, /organizations/{organizationId}/service-accounts/{serviceAccountId}, /projects/{projectId}/service-accounts", "excluded": { "category": "requires_elevated_scope", "reason": "Service-account reads are organization/project administration endpoints and not Mixpanel analytics streams." } },
-    { "method": "POST", "path": "/organizations/{organizationId}/service-accounts, /organizations/{organizationId}/service-accounts/add-to-project, /organizations/{organizationId}/service-accounts/remove-from-project", "excluded": { "category": "requires_elevated_scope", "reason": "Service-account creation and project membership changes mutate organization access control." } },
-    { "method": "DELETE", "path": "/organizations/{organizationId}/service-accounts/{serviceAccountId}", "excluded": { "category": "destructive_admin", "reason": "Service-account deletion removes an organization credential principal." } },
-    { "method": "POST", "path": "/data-retrievals/v3.0, /data-deletions/v3.0", "excluded": { "category": "requires_elevated_scope", "reason": "GDPR retrieval/deletion endpoints create privacy jobs and require a dedicated compliance workflow." } },
-    { "method": "GET", "path": "/data-retrievals/v3.0/{tracking_id}, /data-deletions/v3.0/{tracking_id}", "excluded": { "category": "requires_elevated_scope", "reason": "GDPR job status reads are tied to privacy-job administration, not analytics record sync." } },
-    { "method": "DELETE", "path": "/data-deletions/v3.0/{tracking_id}", "excluded": { "category": "destructive_admin", "reason": "Cancelling a deletion job is a compliance workflow control and not a connector data operation." } },
-    { "method": "GET", "path": "/flags, /flags/definitions, /projects/{project_id}/workspaces/{workspace_id}/feature-flags, /projects/{project_id}/workspaces/{workspace_id}/feature-flags/{flag_id}", "excluded": { "category": "requires_elevated_scope", "reason": "Feature flag evaluation/management uses separate feature-flag API hosts and rollout permissions outside the legacy Query API credential contract." } },
-    { "method": "POST", "path": "/projects/{project_id}/workspaces/{workspace_id}/feature-flags", "excluded": { "category": "requires_elevated_scope", "reason": "Feature flag creation mutates rollout configuration." } },
-    { "method": "PUT", "path": "/projects/{project_id}/workspaces/{workspace_id}/feature-flags/{flag_id}", "excluded": { "category": "requires_elevated_scope", "reason": "Feature flag updates mutate rollout configuration." } },
-    { "method": "DELETE", "path": "/projects/{project_id}/workspaces/{workspace_id}/feature-flags/{flag_id}", "excluded": { "category": "destructive_admin", "reason": "Feature flag deletion removes rollout configuration." } },
-    { "method": "GET", "path": "/workspaces/{workspace_id}/experiments, /workspaces/{workspace_id}/experiments/{experiment_id}", "excluded": { "category": "requires_elevated_scope", "reason": "Experiments are product-management configuration objects outside the legacy Query API analytics stream contract." } },
-    { "method": "POST", "path": "/workspaces/{workspace_id}/experiments, /workspaces/{workspace_id}/experiments/{experiment_id}/archive", "excluded": { "category": "requires_elevated_scope", "reason": "Experiment creation/archive actions mutate experiment lifecycle state." } },
-    { "method": "PATCH", "path": "/workspaces/{workspace_id}/experiments/{experiment_id}, /workspaces/{workspace_id}/experiments/{experiment_id}/decide", "excluded": { "category": "requires_elevated_scope", "reason": "Experiment updates and decisions mutate experiment configuration or state." } },
-    { "method": "PUT", "path": "/workspaces/{workspace_id}/experiments/{experiment_id}/force_conclude, /workspaces/{workspace_id}/experiments/{experiment_id}/launch", "excluded": { "category": "requires_elevated_scope", "reason": "Experiment launch/conclusion changes live experiment lifecycle state." } },
-    { "method": "DELETE", "path": "/workspaces/{workspace_id}/experiments/{experiment_id}, /workspaces/{workspace_id}/experiments/{experiment_id}/archive", "excluded": { "category": "destructive_admin", "reason": "Experiment deletion/unarchive lifecycle operations are administrative controls outside reverse ETL." } },
-    { "method": "GET", "path": "/nessie/pipeline/jobs, /nessie/pipeline/status, /nessie/pipeline/timeline", "excluded": { "category": "requires_elevated_scope", "reason": "Data Pipelines reads expose export-pipeline configuration/status on the data export host rather than analytics records." } },
-    { "method": "POST", "path": "/nessie/pipeline/create, /nessie/pipeline/edit, /nessie/pipeline/cancel, /nessie/pipeline/pause, /nessie/pipeline/resume", "excluded": { "category": "requires_elevated_scope", "reason": "Data Pipeline create/edit/cancel/pause/resume endpoints mutate export pipeline configuration or execution state." } }
+    {
+      "method": "GET",
+      "path": "/projects/{projectId}/annotations",
+      "covered_by": {
+        "stream": "project_annotations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{projectId}/annotations",
+      "covered_by": {
+        "write": "create_annotation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{projectId}/annotations/{annotationId}",
+      "covered_by": {
+        "stream": "project_annotation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/projects/{projectId}/annotations/{annotationId}",
+      "covered_by": {
+        "write": "update_annotation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{projectId}/annotations/{annotationId}",
+      "covered_by": {
+        "write": "delete_annotation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{projectId}/annotations/tags",
+      "covered_by": {
+        "stream": "annotation_tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{projectId}/annotations/tags",
+      "covered_by": {
+        "write": "create_annotation_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/nessie/pipeline/jobs",
+      "covered_by": {
+        "stream": "warehouse_pipeline_jobs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/nessie/pipeline/create",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Create Pipeline's request body is a discriminated oneOf over 8 alternate pipeline shapes (gcs-raw, s3-raw, azure-raw, bigquery, snowflake, aws, azure-blob, gcs-schema), each with its own required-field set. AGENTS.md is explicit that a record_schema rooted at oneOf/anyOf is not one executable command contract and each reachable arm must become its own named action, or the operation stays non-implemented until that modeling is done; arbitrarily picking one arm would silently under-represent the other 7 as if this connector could create them too.",
+        "source_url": "https://docs.mixpanel.com/openapi/data-pipelines.openapi.yaml",
+        "notes": "named_dependency=8 separate named write actions (one per discriminated pipeline type), each with its own record_schema and CLI command, none of which are authored yet"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/nessie/pipeline/edit",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Edit Pipeline's request body is likewise a oneOf (6 arms, several allOf-composed) with no single fixed shape across pipeline types. Same AGENTS.md rule as Create Pipeline: model each reachable arm as its own named action, or leave non-implemented.",
+        "source_url": "https://docs.mixpanel.com/openapi/data-pipelines.openapi.yaml",
+        "notes": "named_dependency=per-pipeline-type named write actions for the edit endpoint's oneOf/allOf arms, none of which are authored yet"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/nessie/pipeline/cancel",
+      "covered_by": {
+        "write": "cancel_warehouse_pipeline"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/nessie/pipeline/pause",
+      "covered_by": {
+        "write": "pause_warehouse_pipeline"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/nessie/pipeline/resume",
+      "covered_by": {
+        "write": "resume_warehouse_pipeline"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/nessie/pipeline/status",
+      "covered_by": {
+        "stream": "warehouse_pipeline_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/nessie/pipeline/timeline",
+      "covered_by": {
+        "stream": "warehouse_pipeline_timeline"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/experiments",
+      "covered_by": {
+        "stream": "experiments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/experiments",
+      "covered_by": {
+        "write": "create_experiment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace_id}/experiments/{experiment_id}",
+      "covered_by": {
+        "stream": "experiment"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/workspaces/{workspace_id}/experiments/{experiment_id}",
+      "covered_by": {
+        "write": "update_experiment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace_id}/experiments/{experiment_id}",
+      "covered_by": {
+        "write": "delete_experiment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace_id}/experiments/{experiment_id}/archive",
+      "covered_by": {
+        "write": "archive_experiment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace_id}/experiments/{experiment_id}/archive",
+      "covered_by": {
+        "write": "unarchive_experiment"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/workspaces/{workspace_id}/experiments/{experiment_id}/decide",
+      "covered_by": {
+        "write": "decide_experiment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace_id}/experiments/{experiment_id}/force_conclude",
+      "covered_by": {
+        "write": "force_conclude_experiment"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace_id}/experiments/{experiment_id}/launch",
+      "covered_by": {
+        "write": "launch_experiment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Raw event export lives on data.mixpanel.com/api/2.0, a different real host than every other operation this bundle now implements, and returns newline-delimited JSON (one JSON object per line), not a single JSON document or a paginated object-record list. The declarative stream reader parses one JSON document per page and the operations.json binary_download executor requires a connector-relative path resolved against the bundle's single configured base_url (isAbsoluteHTTPURL is rejected there) -- with no per-operation base-host override, neither existing executor fits this operation without adding a new engine capability.",
+        "source_url": "https://docs.mixpanel.com/openapi/export.openapi.yaml",
+        "notes": "named_dependency=per-operation base host override for the operations.json binary_download executor (or an NDJSON-aware stream reader), neither of which exists in internal/connectors/engine today"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/workspaces/{workspace_id}/feature-flags",
+      "covered_by": {
+        "stream": "feature_flags_admin"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/workspaces/{workspace_id}/feature-flags",
+      "covered_by": {
+        "write": "create_feature_flag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/workspaces/{workspace_id}/feature-flags/{flag_id}",
+      "covered_by": {
+        "stream": "feature_flag"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{project_id}/workspaces/{workspace_id}/feature-flags/{flag_id}",
+      "covered_by": {
+        "write": "delete_feature_flag"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/projects/{project_id}/workspaces/{workspace_id}/feature-flags/{flag_id}",
+      "covered_by": {
+        "write": "update_feature_flag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/flags",
+      "covered_by": {
+        "stream": "feature_flag_assignments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/flags/definitions",
+      "covered_by": {
+        "stream": "feature_flag_definitions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/data-retrievals/v3.0",
+      "covered_by": {
+        "write": "create_gdpr_retrieval"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/data-retrievals/v3.0/{tracking_id}",
+      "covered_by": {
+        "stream": "gdpr_retrieval"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/data-deletions/v3.0",
+      "covered_by": {
+        "write": "create_gdpr_deletion"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/data-deletions/v3.0/{tracking_id}",
+      "covered_by": {
+        "stream": "gdpr_deletion"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/data-deletions/v3.0/{tracking_id}",
+      "covered_by": {
+        "write": "cancel_gdpr_deletion"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/track#create-identity",
+      "covered_by": {
+        "write": "create_identity"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/track#identity-create-alias",
+      "covered_by": {
+        "write": "create_identity_alias"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/import",
+      "covered_by": {
+        "write": "import_events"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/track",
+      "covered_by": {
+        "write": "track_event"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/engage#profile-set",
+      "covered_by": {
+        "write": "profile_set"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/engage#profile-set-once",
+      "covered_by": {
+        "write": "profile_set_once"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/engage#profile-numerical-add",
+      "covered_by": {
+        "write": "profile_numerical_add"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/engage#profile-union",
+      "covered_by": {
+        "write": "profile_union"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/engage#profile-list-append",
+      "covered_by": {
+        "write": "profile_append_to_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/engage#profile-list-remove",
+      "covered_by": {
+        "write": "profile_remove_from_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/engage#profile-unset",
+      "covered_by": {
+        "write": "profile_delete_property"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/engage#profile-batch-update",
+      "covered_by": {
+        "write": "profile_batch_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/engage#profile-delete",
+      "covered_by": {
+        "write": "delete_profile"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/groups#group-set",
+      "covered_by": {
+        "write": "group_set_property"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/groups#group-set-once",
+      "covered_by": {
+        "write": "group_set_property_once"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/groups#group-unset",
+      "covered_by": {
+        "write": "group_delete_property"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/groups#group-remove-from-list",
+      "covered_by": {
+        "write": "group_remove_from_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/groups#group-union",
+      "covered_by": {
+        "write": "group_union"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/groups#group-batch-update",
+      "covered_by": {
+        "write": "group_batch_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/groups#group-delete",
+      "covered_by": {
+        "write": "delete_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lookup-tables",
+      "covered_by": {
+        "stream": "lookup_tables"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/lookup-tables/{id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Replace a Lookup Table sends the table body as a raw text/csv request, not JSON, form, or multipart. The engine's write body_type dialect supports exactly json/form/none/graphql/json_array/multipart/base64_upload; base64_upload sends a base64 string INSIDE a JSON property rather than a raw text/csv body, so it does not reproduce this endpoint's real wire contract.",
+        "source_url": "https://docs.mixpanel.com/openapi/ingestion.openapi.yaml",
+        "notes": "named_dependency=a raw non-JSON request content-type (text/csv) in the engine's write body_type dialect, which does not exist today"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{projectId}/schemas",
+      "covered_by": {
+        "stream": "lexicon_schemas"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{projectId}/schemas",
+      "covered_by": {
+        "write": "upload_schemas"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{projectId}/schemas",
+      "covered_by": {
+        "write": "delete_all_schemas"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{projectId}/schemas/{entityType}",
+      "covered_by": {
+        "stream": "lexicon_schemas_for_entity"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{projectId}/schemas/{entityType}",
+      "covered_by": {
+        "write": "delete_schemas_for_entity"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{projectId}/schemas/{entityType}/{name}",
+      "covered_by": {
+        "stream": "lexicon_schema_by_name"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{projectId}/schemas/{entityType}/{name}",
+      "covered_by": {
+        "write": "delete_schema_by_name"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{projectId}/schemas/{entityType}/{name}",
+      "covered_by": {
+        "write": "upload_schema_by_name"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/insights",
+      "covered_by": {
+        "stream": "insights_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/funnels",
+      "covered_by": {
+        "stream": "funnels_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/funnels/list",
+      "covered_by": {
+        "stream": "saved_funnels"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/retention",
+      "covered_by": {
+        "stream": "retention_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/retention/addiction",
+      "covered_by": {
+        "stream": "retention_frequency_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segmentation",
+      "covered_by": {
+        "stream": "segmentation_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segmentation/numeric",
+      "covered_by": {
+        "stream": "segmentation_numeric_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segmentation/sum",
+      "covered_by": {
+        "stream": "segmentation_sum_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segmentation/average",
+      "covered_by": {
+        "stream": "segmentation_average_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stream/query",
+      "covered_by": {
+        "stream": "activity_stream"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cohorts/list",
+      "covered_by": {
+        "stream": "cohorts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/engage",
+      "covered_by": {
+        "stream": "engage"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events",
+      "covered_by": {
+        "stream": "events_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/top",
+      "covered_by": {
+        "stream": "top_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/names",
+      "covered_by": {
+        "stream": "event_names_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/properties",
+      "covered_by": {
+        "stream": "event_properties_report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/properties/top",
+      "covered_by": {
+        "stream": "event_property_names"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/properties/values",
+      "covered_by": {
+        "stream": "event_property_values_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/jql",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Custom JQL executes caller-provided JavaScript against raw event/profile data through Mixpanel's own script sandbox. Exposing it as a connector command would be a generic script/query executor, the exact shape AGENTS.md forbids outright (\"Do not expose or invent generic shell, generic HTTP write, or generic SQL write tools\") -- JQL is that same category for queries. No bounded, typed command can represent an arbitrary user-supplied script.",
+        "source_url": "https://docs.mixpanel.com/openapi/query.openapi.yaml",
+        "notes": "named_dependency=none - permanently disallowed by this repository's no-generic-tool-execution policy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/service-accounts",
+      "covered_by": {
+        "stream": "service_accounts_org"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/service-accounts",
+      "covered_by": {
+        "write": "create_service_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/organizations/{organizationId}/service-accounts/{serviceAccountId}",
+      "covered_by": {
+        "stream": "service_account"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/organizations/{organizationId}/service-accounts/{serviceAccountId}",
+      "covered_by": {
+        "write": "delete_service_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{projectId}/service-accounts",
+      "covered_by": {
+        "stream": "project_service_accounts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/service-accounts/add-to-project",
+      "covered_by": {
+        "write": "add_service_accounts_to_projects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/service-accounts/remove-from-project",
+      "covered_by": {
+        "write": "remove_service_accounts_from_projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{projectId}/warehouse-sources/imports",
+      "covered_by": {
+        "stream": "warehouse_imports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{projectId}/warehouse-sources/imports/{importId}",
+      "covered_by": {
+        "stream": "warehouse_import"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/projects/{projectId}/warehouse-sources/imports/{importId}",
+      "covered_by": {
+        "write": "update_warehouse_import"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{projectId}/warehouse-sources/imports/{importId}",
+      "covered_by": {
+        "write": "delete_warehouse_import"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{projectId}/warehouse-sources/imports/event-stream",
+      "covered_by": {
+        "write": "create_event_stream_import"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{projectId}/warehouse-sources/imports/people",
+      "covered_by": {
+        "write": "create_people_import"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{projectId}/warehouse-sources/imports/groups",
+      "covered_by": {
+        "write": "create_groups_import"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{projectId}/warehouse-sources/imports/lookup-table",
+      "covered_by": {
+        "write": "create_lookup_table_import"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/projects/{projectId}/warehouse-sources/imports/{importId}/manual-sync",
+      "covered_by": {
+        "write": "run_warehouse_import"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{projectId}/warehouse-sources/imports/{importId}/history",
+      "covered_by": {
+        "stream": "warehouse_import_history"
+      }
+    }
   ]
 }

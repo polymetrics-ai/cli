@@ -1,0 +1,9 @@
+{
+  "record": {
+    "entity_type": "event"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/app/projects/fixture/schemas/event"
+  }
+}

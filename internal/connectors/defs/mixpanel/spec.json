@@ -78,6 +78,88 @@
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    },
+    "organization_id": {
+      "type": "string",
+      "description": "Mixpanel organization id for organization-scoped service-account endpoints."
+    },
+    "experiment_id": {
+      "type": "string",
+      "description": "Experiment id for the experiment detail stream."
+    },
+    "flag_id": {
+      "type": "string",
+      "description": "Feature flag id for the feature flag detail stream."
+    },
+    "include_archived": {
+      "type": "string",
+      "description": "When 'true', include archived feature flags in the list stream."
+    },
+    "flag_context": {
+      "type": "string",
+      "description": "Evaluation context passed to the feature-flag assignment evaluation stream."
+    },
+    "gdpr_tracking_id": {
+      "type": "string",
+      "description": "Tracking id for the GDPR retrieval/deletion job detail streams."
+    },
+    "entity_type": {
+      "type": "string",
+      "description": "Lexicon schema entity type (event or profile) for schema streams/writes."
+    },
+    "schema_name": {
+      "type": "string",
+      "description": "Lexicon schema name for the schema-by-name detail stream."
+    },
+    "insights_bookmark_id": {
+      "type": "string",
+      "description": "Saved report bookmark id for the insights query stream."
+    },
+    "funnel_id": {
+      "type": "string",
+      "description": "Funnel id for the funnels query stream."
+    },
+    "retention_unit": {
+      "type": "string",
+      "description": "Time unit (day/week/month) for the retention frequency query stream."
+    },
+    "addiction_unit": {
+      "type": "string",
+      "description": "Frequency unit (hour/day) for the retention frequency query stream."
+    },
+    "segmentation_on": {
+      "type": "string",
+      "description": "Numeric/string property expression for numeric segmentation query streams."
+    },
+    "events_unit": {
+      "type": "string",
+      "description": "Time unit for the aggregate event-count query stream."
+    },
+    "property_name": {
+      "type": "string",
+      "description": "Event property name for event-property query streams."
+    },
+    "import_id": {
+      "type": "string",
+      "description": "Warehouse import id for warehouse import detail/history streams."
+    },
+    "pipeline_name": {
+      "type": "string",
+      "description": "Warehouse export pipeline name for pipeline status/timeline streams."
+    },
+    "service_account_id": {
+      "type": "string",
+      "description": "Service account id for the service account detail stream."
+    },
+    "project_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Mixpanel project token, used to authenticate ingestion (track/engage/groups/import) and feature-flag evaluation requests. Never logged."
+    },
+    "gdpr_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Mixpanel GDPR API token (from project settings), used to authenticate data-retrieval and data-deletion job creation. Never logged."
     }
   }
 }

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "entries": [
+      "fixture-entries"
+    ],
+    "truncate": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/app/projects/fixture/schemas",
+    "body": {
+      "entries": [
+        "fixture-entries"
+      ],
+      "truncate": true
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "import_id": "fixture-import_id",
+    "paused": true,
+    "run_every": 1,
+    "databricks_params": {
+      "fixture_key": "fixture_value"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/app/projects/fixture/warehouse-sources/imports/fixture-import_id",
+    "body": {
+      "paused": true,
+      "run_every": 1,
+      "databricks_params": {
+        "fixture_key": "fixture_value"
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "flag_id": "fixture-flag_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/app/projects/fixture/workspaces/fixture/feature-flags/fixture-flag_id"
+  }
+}

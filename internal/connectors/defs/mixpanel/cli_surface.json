@@ -1,0 +1,3416 @@
+{
+  "tagline": "Inspect, read, and safely plan typed Mixpanel operations.",
+  "usage": "pm mixpanel <command> [flags]",
+  "source_cli": {
+    "name": "Mixpanel API",
+    "docs": "https://docs.mixpanel.com/reference/overview",
+    "reference": "13 real OpenAPI 3.x documents at docs.mixpanel.com/openapi/*.openapi.yaml",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "annotations",
+      "title": "Project annotations",
+      "commands": [
+        "annotations list",
+        "annotations get",
+        "annotations tags-list",
+        "annotations create",
+        "annotations update",
+        "annotations delete",
+        "annotations create-tag"
+      ]
+    },
+    {
+      "id": "experiments",
+      "title": "A/B experiments",
+      "commands": [
+        "experiments list",
+        "experiments get",
+        "experiments create",
+        "experiments update",
+        "experiments delete",
+        "experiments archive",
+        "experiments unarchive",
+        "experiments decide",
+        "experiments force-conclude",
+        "experiments launch"
+      ]
+    },
+    {
+      "id": "feature-flags",
+      "title": "Feature flag administration",
+      "commands": [
+        "feature-flags list",
+        "feature-flags get",
+        "feature-flags create",
+        "feature-flags update",
+        "feature-flags delete"
+      ]
+    },
+    {
+      "id": "flags",
+      "title": "Feature flag evaluation",
+      "commands": [
+        "flags assignments",
+        "flags definitions"
+      ]
+    },
+    {
+      "id": "gdpr",
+      "title": "GDPR/CCPA data-subject jobs",
+      "commands": [
+        "gdpr retrieval-get",
+        "gdpr deletion-get",
+        "gdpr retrieval-create",
+        "gdpr deletion-create",
+        "gdpr deletion-cancel"
+      ]
+    },
+    {
+      "id": "identity",
+      "title": "Identity linking",
+      "commands": [
+        "identity create",
+        "identity create-alias"
+      ]
+    },
+    {
+      "id": "events",
+      "title": "Event ingestion",
+      "commands": [
+        "events import",
+        "events track"
+      ]
+    },
+    {
+      "id": "profiles",
+      "title": "User profile ingestion",
+      "commands": [
+        "profiles set",
+        "profiles set-once",
+        "profiles add",
+        "profiles union",
+        "profiles append",
+        "profiles remove",
+        "profiles unset",
+        "profiles batch-update",
+        "profiles delete"
+      ]
+    },
+    {
+      "id": "groups",
+      "title": "Group profile ingestion",
+      "commands": [
+        "groups set",
+        "groups set-once",
+        "groups unset",
+        "groups remove",
+        "groups union",
+        "groups batch-update",
+        "groups delete"
+      ]
+    },
+    {
+      "id": "lookup-tables",
+      "title": "Lookup table enrichment",
+      "commands": [
+        "lookup-tables list"
+      ]
+    },
+    {
+      "id": "schemas",
+      "title": "Lexicon governance schemas",
+      "commands": [
+        "schemas list",
+        "schemas list-for-entity",
+        "schemas get",
+        "schemas delete-all",
+        "schemas delete-for-entity",
+        "schemas delete",
+        "schemas upload",
+        "schemas upload-one"
+      ]
+    },
+    {
+      "id": "query",
+      "title": "Query API reports and lookups",
+      "commands": [
+        "query insights",
+        "query funnels",
+        "query retention",
+        "query retention-frequency",
+        "query segmentation",
+        "query segmentation-numeric",
+        "query segmentation-sum",
+        "query segmentation-average",
+        "query events",
+        "query event-names",
+        "query event-properties",
+        "query event-property-values",
+        "query cohorts-list",
+        "query engage-query",
+        "query funnels-list-saved",
+        "query activity-stream",
+        "query events-top",
+        "query event-properties-top"
+      ]
+    },
+    {
+      "id": "service-accounts",
+      "title": "Organization and project service accounts",
+      "commands": [
+        "service-accounts list",
+        "service-accounts get",
+        "service-accounts list-for-project",
+        "service-accounts create",
+        "service-accounts delete",
+        "service-accounts add-to-projects",
+        "service-accounts remove-from-projects"
+      ]
+    },
+    {
+      "id": "warehouse-imports",
+      "title": "Warehouse connector imports",
+      "commands": [
+        "warehouse-imports list",
+        "warehouse-imports get",
+        "warehouse-imports history",
+        "warehouse-imports update",
+        "warehouse-imports delete",
+        "warehouse-imports create-event-stream",
+        "warehouse-imports create-people",
+        "warehouse-imports create-groups",
+        "warehouse-imports create-lookup-table",
+        "warehouse-imports run"
+      ]
+    },
+    {
+      "id": "warehouse-pipelines",
+      "title": "Warehouse export pipelines",
+      "commands": [
+        "warehouse-pipelines list",
+        "warehouse-pipelines status",
+        "warehouse-pipelines timeline",
+        "warehouse-pipelines cancel",
+        "warehouse-pipelines pause",
+        "warehouse-pipelines resume"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "experiments list",
+      "summary": "Read experiments as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "experiments",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workspaces/{workspace_id}/experiments"
+        }
+      ],
+      "flags": [
+        {
+          "name": "workspace-id",
+          "type": "string",
+          "summary": "Path parameter (config.workspace_id).",
+          "maps_to": "config.workspace_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm mixpanel experiments list --workspace-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "experiments get",
+      "summary": "Read experiment as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "experiment",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workspaces/{workspace_id}/experiments/{experiment_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "workspace-id",
+          "type": "string",
+          "summary": "Path parameter (config.workspace_id).",
+          "maps_to": "config.workspace_id",
+          "required": true
+        },
+        {
+          "name": "experiment-id",
+          "type": "string",
+          "summary": "Path parameter (config.experiment_id).",
+          "maps_to": "config.experiment_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm mixpanel experiments get --workspace-id \"<value>\" --experiment-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "feature-flags list",
+      "summary": "Read feature flags admin as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "feature_flags_admin",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/workspaces/{workspace_id}/feature-flags"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Path parameter (config.project_id).",
+          "maps_to": "config.project_id",
+          "required": true
+        },
+        {
+          "name": "workspace-id",
+          "type": "string",
+          "summary": "Path parameter (config.workspace_id).",
+          "maps_to": "config.workspace_id",
+          "required": true
+        },
+        {
+          "name": "include-archived",
+          "type": "string",
+          "summary": "Optional filter (config.include_archived).",
+          "maps_to": "config.include_archived"
+        }
+      ],
+      "examples": [
+        "pm mixpanel feature-flags list --project-id \"<value>\" --workspace-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "feature-flags get",
+      "summary": "Read feature flag as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "feature_flag",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}/workspaces/{workspace_id}/feature-flags/{flag_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Path parameter (config.project_id).",
+          "maps_to": "config.project_id",
+          "required": true
+        },
+        {
+          "name": "workspace-id",
+          "type": "string",
+          "summary": "Path parameter (config.workspace_id).",
+          "maps_to": "config.workspace_id",
+          "required": true
+        },
+        {
+          "name": "flag-id",
+          "type": "string",
+          "summary": "Path parameter (config.flag_id).",
+          "maps_to": "config.flag_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm mixpanel feature-flags get --project-id \"<value>\" --workspace-id \"<value>\" --flag-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "flags assignments",
+      "summary": "Read feature flag assignments as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "feature_flag_assignments",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/flags"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Optional filter (config.project_id).",
+          "maps_to": "config.project_id"
+        },
+        {
+          "name": "flag-context",
+          "type": "string",
+          "summary": "Optional filter (config.flag_context).",
+          "maps_to": "config.flag_context"
+        }
+      ],
+      "examples": [
+        "pm mixpanel flags assignments --json"
+      ]
+    },
+    {
+      "path": "flags definitions",
+      "summary": "Read feature flag definitions as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "feature_flag_definitions",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/flags/definitions"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Optional filter (config.project_id).",
+          "maps_to": "config.project_id"
+        }
+      ],
+      "examples": [
+        "pm mixpanel flags definitions --json"
+      ]
+    },
+    {
+      "path": "gdpr retrieval-get",
+      "summary": "Read gdpr retrieval as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "gdpr_retrieval",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/data-retrievals/v3.0/{tracking_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "gdpr-tracking-id",
+          "type": "string",
+          "summary": "Path parameter (config.gdpr_tracking_id).",
+          "maps_to": "config.gdpr_tracking_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm mixpanel gdpr retrieval-get --gdpr-tracking-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "gdpr deletion-get",
+      "summary": "Read gdpr deletion as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "gdpr_deletion",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/data-deletions/v3.0/{tracking_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "gdpr-tracking-id",
+          "type": "string",
+          "summary": "Path parameter (config.gdpr_tracking_id).",
+          "maps_to": "config.gdpr_tracking_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm mixpanel gdpr deletion-get --gdpr-tracking-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "schemas list",
+      "summary": "Read lexicon schemas as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lexicon_schemas",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{projectId}/schemas"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Path parameter (config.project_id).",
+          "maps_to": "config.project_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm mixpanel schemas list --project-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "schemas list-for-entity",
+      "summary": "Read lexicon schemas for entity as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lexicon_schemas_for_entity",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{projectId}/schemas/{entityType}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Path parameter (config.project_id).",
+          "maps_to": "config.project_id",
+          "required": true
+        },
+        {
+          "name": "entity-type",
+          "type": "string",
+          "summary": "Path parameter (config.entity_type).",
+          "maps_to": "config.entity_type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm mixpanel schemas list-for-entity --project-id \"<value>\" --entity-type \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "schemas get",
+      "summary": "Read lexicon schema by name as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lexicon_schema_by_name",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{projectId}/schemas/{entityType}/{name}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Path parameter (config.project_id).",
+          "maps_to": "config.project_id",
+          "required": true
+        },
+        {
+          "name": "entity-type",
+          "type": "string",
+          "summary": "Path parameter (config.entity_type).",
+          "maps_to": "config.entity_type",
+          "required": true
+        },
+        {
+          "name": "schema-name",
+          "type": "string",
+          "summary": "Path parameter (config.schema_name).",
+          "maps_to": "config.schema_name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm mixpanel schemas get --project-id \"<value>\" --entity-type \"<value>\" --schema-name \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "query insights",
+      "summary": "Read insights report as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "insights_report",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/insights"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Optional filter (config.project_id).",
+          "maps_to": "config.project_id"
+        },
+        {
+          "name": "workspace-id",
+          "type": "string",
+          "summary": "Optional filter (config.workspace_id).",
+          "maps_to": "config.workspace_id"
+        },
+        {
+          "name": "insights-bookmark-id",
+          "type": "string",
+          "summary": "Optional filter (config.insights_bookmark_id).",
+          "maps_to": "config.insights_bookmark_id"
+        }
+      ],
+      "examples": [
+        "pm mixpanel query insights --json"
+      ]
+    },
+    {
+      "path": "query funnels",
+      "summary": "Read funnels report as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "funnels_report",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/funnels"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Optional filter (config.project_id).",
+          "maps_to": "config.project_id"
+        },
+        {
+          "name": "workspace-id",
+          "type": "string",
+          "summary": "Optional filter (config.workspace_id).",
+          "maps_to": "config.workspace_id"
+        },
+        {
+          "name": "funnel-id",
+          "type": "string",
+          "summary": "Optional filter (config.funnel_id).",
+          "maps_to": "config.funnel_id"
+        },
+        {
+          "name": "from-date",
+          "type": "string",
+          "summary": "Optional filter (config.from_date).",
+          "maps_to": "config.from_date"
+        },
+        {
+          "name": "to-date",
+          "type": "string",
+          "summary": "Optional filter (config.to_date).",
+          "maps_to": "config.to_date"
+        }
+      ],
+      "examples": [
+        "pm mixpanel query funnels --json"
+      ]
+    },
+    {
+      "path": "query retention",
+      "summary": "Read retention report as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "retention_report",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/retention"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Optional filter (config.project_id).",
+          "maps_to": "config.project_id"
+        },
+        {
+          "name": "workspace-id",
+          "type": "string",
+          "summary": "Optional filter (config.workspace_id).",
+          "maps_to": "config.workspace_id"
+        },
+        {
+          "name": "from-date",
+          "type": "string",
+          "summary": "Optional filter (config.from_date).",
+          "maps_to": "config.from_date"
+        },
+        {
+          "name": "to-date",
+          "type": "string",
+          "summary": "Optional filter (config.to_date).",
+          "maps_to": "config.to_date"
+        }
+      ],
+      "examples": [
+        "pm mixpanel query retention --json"
+      ]
+    },
+    {
+      "path": "query retention-frequency",
+      "summary": "Read retention frequency report as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "retention_frequency_report",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/retention/addiction"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Optional filter (config.project_id).",
+          "maps_to": "config.project_id"
+        },
+        {
+          "name": "workspace-id",
+          "type": "string",
+          "summary": "Optional filter (config.workspace_id).",
+          "maps_to": "config.workspace_id"
+        },
+        {
+          "name": "from-date",
+          "type": "string",
+          "summary": "Optional filter (config.from_date).",
+          "maps_to": "config.from_date"
+        },
+        {
+          "name": "to-date",
+          "type": "string",
+          "summary": "Optional filter (config.to_date).",
+          "maps_to": "config.to_date"
+        },
+        {
+          "name": "retention-unit",
+          "type": "string",
+          "summary": "Optional filter (config.retention_unit).",
+          "maps_to": "config.retention_unit"
+        },
+        {
+          "name": "addiction-unit",
+          "type": "string",
+          "summary": "Optional filter (config.addiction_unit).",
+          "maps_to": "config.addiction_unit"
+        }
+      ],
+      "examples": [
+        "pm mixpanel query retention-frequency --json"
+      ]
+    },
+    {
+      "path": "query segmentation",
+      "summary": "Read segmentation report as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "segmentation_report",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segmentation"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Optional filter (config.project_id).",
+          "maps_to": "config.project_id"
+        },
+        {
+          "name": "workspace-id",
+          "type": "string",
+          "summary": "Optional filter (config.workspace_id).",
+          "maps_to": "config.workspace_id"
+        },
+        {
+          "name": "event-name",
+          "type": "string",
+          "summary": "Optional filter (config.event_name).",
+          "maps_to": "config.event_name"
+        },
+        {
+          "name": "from-date",
+          "type": "string",
+          "summary": "Optional filter (config.from_date).",
+          "maps_to": "config.from_date"
+        },
+        {
+          "name": "to-date",
+          "type": "string",
+          "summary": "Optional filter (config.to_date).",
+          "maps_to": "config.to_date"
+        }
+      ],
+      "examples": [
+        "pm mixpanel query segmentation --json"
+      ]
+    },
+    {
+      "path": "query segmentation-numeric",
+      "summary": "Read segmentation numeric report as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "segmentation_numeric_report",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segmentation/numeric"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Optional filter (config.project_id).",
+          "maps_to": "config.project_id"
+        },
+        {
+          "name": "workspace-id",
+          "type": "string",
+          "summary": "Optional filter (config.workspace_id).",
+          "maps_to": "config.workspace_id"
+        },
+        {
+          "name": "event-name",
+          "type": "string",
+          "summary": "Optional filter (config.event_name).",
+          "maps_to": "config.event_name"
+        },
+        {
+          "name": "from-date",
+          "type": "string",
+          "summary": "Optional filter (config.from_date).",
+          "maps_to": "config.from_date"
+        },
+        {
+          "name": "to-date",
+          "type": "string",
+          "summary": "Optional filter (config.to_date).",
+          "maps_to": "config.to_date"
+        },
+        {
+          "name": "segmentation-on",
+          "type": "string",
+          "summary": "Optional filter (config.segmentation_on).",
+          "maps_to": "config.segmentation_on"
+        }
+      ],
+      "examples": [
+        "pm mixpanel query segmentation-numeric --json"
+      ]
+    },
+    {
+      "path": "query segmentation-sum",
+      "summary": "Read segmentation sum report as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "segmentation_sum_report",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segmentation/sum"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Optional filter (config.project_id).",
+          "maps_to": "config.project_id"
+        },
+        {
+          "name": "workspace-id",
+          "type": "string",
+          "summary": "Optional filter (config.workspace_id).",
+          "maps_to": "config.workspace_id"
+        },
+        {
+          "name": "event-name",
+          "type": "string",
+          "summary": "Optional filter (config.event_name).",
+          "maps_to": "config.event_name"
+        },
+        {
+          "name": "from-date",
+          "type": "string",
+          "summary": "Optional filter (config.from_date).",
+          "maps_to": "config.from_date"
+        },
+        {
+          "name": "to-date",
+          "type": "string",
+          "summary": "Optional filter (config.to_date).",
+          "maps_to": "config.to_date"
+        },
+        {
+          "name": "segmentation-on",
+          "type": "string",
+          "summary": "Optional filter (config.segmentation_on).",
+          "maps_to": "config.segmentation_on"
+        }
+      ],
+      "examples": [
+        "pm mixpanel query segmentation-sum --json"
+      ]
+    },
+    {
+      "path": "query segmentation-average",
+      "summary": "Read segmentation average report as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "segmentation_average_report",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segmentation/average"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Optional filter (config.project_id).",
+          "maps_to": "config.project_id"
+        },
+        {
+          "name": "workspace-id",
+          "type": "string",
+          "summary": "Optional filter (config.workspace_id).",
+          "maps_to": "config.workspace_id"
+        },
+        {
+          "name": "event-name",
+          "type": "string",
+          "summary": "Optional filter (config.event_name).",
+          "maps_to": "config.event_name"
+        },
+        {
+          "name": "from-date",
+          "type": "string",
+          "summary": "Optional filter (config.from_date).",
+          "maps_to": "config.from_date"
+        },
+        {
+          "name": "to-date",
+          "type": "string",
+          "summary": "Optional filter (config.to_date).",
+          "maps_to": "config.to_date"
+        },
+        {
+          "name": "segmentation-on",
+          "type": "string",
+          "summary": "Optional filter (config.segmentation_on).",
+          "maps_to": "config.segmentation_on"
+        }
+      ],
+      "examples": [
+        "pm mixpanel query segmentation-average --json"
+      ]
+    },
+    {
+      "path": "query events",
+      "summary": "Read events report as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "events_report",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Optional filter (config.project_id).",
+          "maps_to": "config.project_id"
+        },
+        {
+          "name": "workspace-id",
+          "type": "string",
+          "summary": "Optional filter (config.workspace_id).",
+          "maps_to": "config.workspace_id"
+        },
+        {
+          "name": "event-name",
+          "type": "string",
+          "summary": "Optional filter (config.event_name).",
+          "maps_to": "config.event_name"
+        },
+        {
+          "name": "analysis-type",
+          "type": "string",
+          "summary": "Optional filter (config.analysis_type).",
+          "maps_to": "config.analysis_type"
+        },
+        {
+          "name": "events-unit",
+          "type": "string",
+          "summary": "Optional filter (config.events_unit).",
+          "maps_to": "config.events_unit"
+        },
+        {
+          "name": "from-date",
+          "type": "string",
+          "summary": "Optional filter (config.from_date).",
+          "maps_to": "config.from_date"
+        },
+        {
+          "name": "to-date",
+          "type": "string",
+          "summary": "Optional filter (config.to_date).",
+          "maps_to": "config.to_date"
+        }
+      ],
+      "examples": [
+        "pm mixpanel query events --json"
+      ]
+    },
+    {
+      "path": "query event-names",
+      "summary": "Read event names report as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "event_names_report",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/names"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Optional filter (config.project_id).",
+          "maps_to": "config.project_id"
+        },
+        {
+          "name": "workspace-id",
+          "type": "string",
+          "summary": "Optional filter (config.workspace_id).",
+          "maps_to": "config.workspace_id"
+        },
+        {
+          "name": "analysis-type",
+          "type": "string",
+          "summary": "Optional filter (config.analysis_type).",
+          "maps_to": "config.analysis_type"
+        }
+      ],
+      "examples": [
+        "pm mixpanel query event-names --json"
+      ]
+    },
+    {
+      "path": "query event-properties",
+      "summary": "Read event properties report as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "event_properties_report",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/properties"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Optional filter (config.project_id).",
+          "maps_to": "config.project_id"
+        },
+        {
+          "name": "workspace-id",
+          "type": "string",
+          "summary": "Optional filter (config.workspace_id).",
+          "maps_to": "config.workspace_id"
+        },
+        {
+          "name": "event-name",
+          "type": "string",
+          "summary": "Optional filter (config.event_name).",
+          "maps_to": "config.event_name"
+        },
+        {
+          "name": "property-name",
+          "type": "string",
+          "summary": "Optional filter (config.property_name).",
+          "maps_to": "config.property_name"
+        },
+        {
+          "name": "analysis-type",
+          "type": "string",
+          "summary": "Optional filter (config.analysis_type).",
+          "maps_to": "config.analysis_type"
+        },
+        {
+          "name": "events-unit",
+          "type": "string",
+          "summary": "Optional filter (config.events_unit).",
+          "maps_to": "config.events_unit"
+        },
+        {
+          "name": "from-date",
+          "type": "string",
+          "summary": "Optional filter (config.from_date).",
+          "maps_to": "config.from_date"
+        },
+        {
+          "name": "to-date",
+          "type": "string",
+          "summary": "Optional filter (config.to_date).",
+          "maps_to": "config.to_date"
+        }
+      ],
+      "examples": [
+        "pm mixpanel query event-properties --json"
+      ]
+    },
+    {
+      "path": "query event-property-values",
+      "summary": "Read event property values report as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "event_property_values_report",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/properties/values"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Optional filter (config.project_id).",
+          "maps_to": "config.project_id"
+        },
+        {
+          "name": "workspace-id",
+          "type": "string",
+          "summary": "Optional filter (config.workspace_id).",
+          "maps_to": "config.workspace_id"
+        },
+        {
+          "name": "event-name",
+          "type": "string",
+          "summary": "Optional filter (config.event_name).",
+          "maps_to": "config.event_name"
+        },
+        {
+          "name": "property-name",
+          "type": "string",
+          "summary": "Optional filter (config.property_name).",
+          "maps_to": "config.property_name"
+        }
+      ],
+      "examples": [
+        "pm mixpanel query event-property-values --json"
+      ]
+    },
+    {
+      "path": "service-accounts list",
+      "summary": "Read service accounts org as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "service_accounts_org",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/service-accounts"
+        }
+      ],
+      "flags": [
+        {
+          "name": "organization-id",
+          "type": "string",
+          "summary": "Path parameter (config.organization_id).",
+          "maps_to": "config.organization_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm mixpanel service-accounts list --organization-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "service-accounts get",
+      "summary": "Read service account as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "service_account",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organizationId}/service-accounts/{serviceAccountId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "organization-id",
+          "type": "string",
+          "summary": "Path parameter (config.organization_id).",
+          "maps_to": "config.organization_id",
+          "required": true
+        },
+        {
+          "name": "service-account-id",
+          "type": "string",
+          "summary": "Path parameter (config.service_account_id).",
+          "maps_to": "config.service_account_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm mixpanel service-accounts get --organization-id \"<value>\" --service-account-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "service-accounts list-for-project",
+      "summary": "Read project service accounts as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "project_service_accounts",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{projectId}/service-accounts"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Path parameter (config.project_id).",
+          "maps_to": "config.project_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm mixpanel service-accounts list-for-project --project-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "warehouse-imports list",
+      "summary": "Read warehouse imports as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "warehouse_imports",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{projectId}/warehouse-sources/imports"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Path parameter (config.project_id).",
+          "maps_to": "config.project_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm mixpanel warehouse-imports list --project-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "warehouse-imports get",
+      "summary": "Read warehouse import as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "warehouse_import",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{projectId}/warehouse-sources/imports/{importId}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Path parameter (config.project_id).",
+          "maps_to": "config.project_id",
+          "required": true
+        },
+        {
+          "name": "import-id",
+          "type": "string",
+          "summary": "Path parameter (config.import_id).",
+          "maps_to": "config.import_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm mixpanel warehouse-imports get --project-id \"<value>\" --import-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "warehouse-imports history",
+      "summary": "Read warehouse import history as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "warehouse_import_history",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{projectId}/warehouse-sources/imports/{importId}/history"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Path parameter (config.project_id).",
+          "maps_to": "config.project_id",
+          "required": true
+        },
+        {
+          "name": "import-id",
+          "type": "string",
+          "summary": "Path parameter (config.import_id).",
+          "maps_to": "config.import_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm mixpanel warehouse-imports history --project-id \"<value>\" --import-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "warehouse-pipelines list",
+      "summary": "Read warehouse pipeline jobs as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "warehouse_pipeline_jobs",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/nessie/pipeline/jobs"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Optional filter (config.project_id).",
+          "maps_to": "config.project_id"
+        }
+      ],
+      "examples": [
+        "pm mixpanel warehouse-pipelines list --json"
+      ]
+    },
+    {
+      "path": "warehouse-pipelines status",
+      "summary": "Read warehouse pipeline status as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "warehouse_pipeline_status",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/nessie/pipeline/status"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Optional filter (config.project_id).",
+          "maps_to": "config.project_id"
+        },
+        {
+          "name": "pipeline-name",
+          "type": "string",
+          "summary": "Optional filter (config.pipeline_name).",
+          "maps_to": "config.pipeline_name"
+        }
+      ],
+      "examples": [
+        "pm mixpanel warehouse-pipelines status --json"
+      ]
+    },
+    {
+      "path": "warehouse-pipelines timeline",
+      "summary": "Read warehouse pipeline timeline as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "warehouse_pipeline_timeline",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/nessie/pipeline/timeline"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Optional filter (config.project_id).",
+          "maps_to": "config.project_id"
+        },
+        {
+          "name": "pipeline-name",
+          "type": "string",
+          "summary": "Optional filter (config.pipeline_name).",
+          "maps_to": "config.pipeline_name"
+        }
+      ],
+      "examples": [
+        "pm mixpanel warehouse-pipelines timeline --json"
+      ]
+    },
+    {
+      "path": "lookup-tables list",
+      "summary": "Read lookup tables as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lookup_tables",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lookup-tables"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Optional filter (config.project_id).",
+          "maps_to": "config.project_id"
+        }
+      ],
+      "examples": [
+        "pm mixpanel lookup-tables list --json"
+      ]
+    },
+    {
+      "path": "annotations list",
+      "summary": "Read project annotations as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "project_annotations",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{projectId}/annotations"
+        }
+      ],
+      "examples": [
+        "pm mixpanel annotations list --json"
+      ]
+    },
+    {
+      "path": "annotations get",
+      "summary": "Read project annotation as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "project_annotation",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{projectId}/annotations/{annotationId}"
+        }
+      ],
+      "examples": [
+        "pm mixpanel annotations get --json"
+      ]
+    },
+    {
+      "path": "annotations tags-list",
+      "summary": "Read annotation tags as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "annotation_tags",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{projectId}/annotations/tags"
+        }
+      ],
+      "examples": [
+        "pm mixpanel annotations tags-list --json"
+      ]
+    },
+    {
+      "path": "query cohorts-list",
+      "summary": "Read cohorts as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "cohorts",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/cohorts/list"
+        }
+      ],
+      "examples": [
+        "pm mixpanel query cohorts-list --json"
+      ]
+    },
+    {
+      "path": "query engage-query",
+      "summary": "Read engage as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "engage",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/engage"
+        }
+      ],
+      "examples": [
+        "pm mixpanel query engage-query --json"
+      ]
+    },
+    {
+      "path": "query funnels-list-saved",
+      "summary": "Read saved funnels as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "saved_funnels",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/funnels/list"
+        }
+      ],
+      "examples": [
+        "pm mixpanel query funnels-list-saved --json"
+      ]
+    },
+    {
+      "path": "query activity-stream",
+      "summary": "Read activity stream as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "activity_stream",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stream/query"
+        }
+      ],
+      "examples": [
+        "pm mixpanel query activity-stream --json"
+      ]
+    },
+    {
+      "path": "query events-top",
+      "summary": "Read top events as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "top_events",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/top"
+        }
+      ],
+      "examples": [
+        "pm mixpanel query events-top --json"
+      ]
+    },
+    {
+      "path": "query event-properties-top",
+      "summary": "Read event property names as an ETL record.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "event_property_names",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/properties/top"
+        }
+      ],
+      "examples": [
+        "pm mixpanel query event-properties-top --json"
+      ]
+    },
+    {
+      "path": "annotations create",
+      "summary": "Creates a project annotation marker visible to every project user",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_annotation",
+      "risk": "medium: creates a project annotation marker visible to every project user",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "date",
+          "type": "string",
+          "summary": "Date and time the annotation applies to (yyyy-mm-dd hh:mm:ss).",
+          "maps_to": "record.date",
+          "required": true
+        },
+        {
+          "name": "tags",
+          "type": "string_array",
+          "summary": "Tag ids to attach to the annotation.",
+          "maps_to": "record.tags"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{projectId}/annotations"
+        }
+      ],
+      "examples": [
+        "pm mixpanel annotations create --date \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "annotations update",
+      "summary": "Mutates an existing project annotation's tags",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_annotation",
+      "risk": "medium: mutates an existing project annotation's tags",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "annotation-id",
+          "type": "string",
+          "summary": "Annotation id to update (path parameter).",
+          "maps_to": "record.annotation_id",
+          "required": true
+        },
+        {
+          "name": "tags",
+          "type": "string_array",
+          "summary": "Replacement tag ids for the annotation.",
+          "maps_to": "record.tags"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/projects/{projectId}/annotations/{annotationId}"
+        }
+      ],
+      "examples": [
+        "pm mixpanel annotations update --annotation-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "annotations delete",
+      "summary": "Permanently deletes a project annotation",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_annotation",
+      "risk": "high: permanently deletes a project annotation",
+      "approval": "Destructive reverse ETL writes require plan, preview, explicit approval, destructive confirmation, and execute.",
+      "flags": [
+        {
+          "name": "annotation-id",
+          "type": "string",
+          "summary": "Annotation id to delete (path parameter).",
+          "maps_to": "record.annotation_id",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{projectId}/annotations/{annotationId}"
+        }
+      ],
+      "examples": [
+        "pm mixpanel annotations delete --annotation-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "annotations create-tag",
+      "summary": "Creates a reusable annotation tag label",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_annotation_tag",
+      "risk": "low: creates a reusable annotation tag label",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Tag name to create.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{projectId}/annotations/tags"
+        }
+      ],
+      "examples": [
+        "pm mixpanel annotations create-tag --name \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "experiments create",
+      "summary": "Creates a new a/b experiment definition",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_experiment",
+      "risk": "medium: creates a new A/B experiment definition",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Experiment name.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "hypothesis",
+          "type": "string",
+          "summary": "Experiment hypothesis.",
+          "maps_to": "record.hypothesis"
+        },
+        {
+          "name": "global-access-type",
+          "type": "string",
+          "summary": "Global access type for the experiment.",
+          "maps_to": "record.global_access_type"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workspaces/{workspace_id}/experiments"
+        }
+      ],
+      "examples": [
+        "pm mixpanel experiments create --name \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "experiments update",
+      "summary": "Mutates an existing experiment's configuration",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_experiment",
+      "risk": "medium: mutates an existing experiment's configuration",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "experiment-id",
+          "type": "string",
+          "summary": "Experiment id to update (path parameter).",
+          "maps_to": "record.experiment_id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Field name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "hypothesis",
+          "type": "string",
+          "summary": "Field hypothesis.",
+          "maps_to": "record.hypothesis"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Field status.",
+          "maps_to": "record.status"
+        },
+        {
+          "name": "start-date",
+          "type": "string",
+          "summary": "Field start_date.",
+          "maps_to": "record.start_date"
+        },
+        {
+          "name": "end-date",
+          "type": "string",
+          "summary": "Field end_date.",
+          "maps_to": "record.end_date"
+        },
+        {
+          "name": "tags",
+          "type": "string_array",
+          "summary": "Field tags.",
+          "maps_to": "record.tags"
+        },
+        {
+          "name": "global-access-type",
+          "type": "string",
+          "summary": "Field global_access_type.",
+          "maps_to": "record.global_access_type"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/workspaces/{workspace_id}/experiments/{experiment_id}"
+        }
+      ],
+      "examples": [
+        "pm mixpanel experiments update --experiment-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "experiments delete",
+      "summary": "Permanently deletes an experiment",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_experiment",
+      "risk": "high: permanently deletes an experiment",
+      "approval": "Destructive reverse ETL writes require plan, preview, explicit approval, destructive confirmation, and execute.",
+      "flags": [
+        {
+          "name": "experiment-id",
+          "type": "string",
+          "summary": "Experiment id to delete (path parameter).",
+          "maps_to": "record.experiment_id",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/workspaces/{workspace_id}/experiments/{experiment_id}"
+        }
+      ],
+      "examples": [
+        "pm mixpanel experiments delete --experiment-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "experiments archive",
+      "summary": "Archives an experiment, ending live traffic allocation",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "archive_experiment",
+      "risk": "medium: archives an experiment, ending live traffic allocation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "experiment-id",
+          "type": "string",
+          "summary": "Experiment id to archive (path parameter).",
+          "maps_to": "record.experiment_id",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/workspaces/{workspace_id}/experiments/{experiment_id}/archive"
+        }
+      ],
+      "examples": [
+        "pm mixpanel experiments archive --experiment-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "experiments unarchive",
+      "summary": "Restores an archived experiment",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "unarchive_experiment",
+      "risk": "medium: restores an archived experiment",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "experiment-id",
+          "type": "string",
+          "summary": "Experiment id to unarchive (path parameter).",
+          "maps_to": "record.experiment_id",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/workspaces/{workspace_id}/experiments/{experiment_id}/archive"
+        }
+      ],
+      "examples": [
+        "pm mixpanel experiments unarchive --experiment-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "experiments decide",
+      "summary": "Records the winning-variant decision for a concluded experiment",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "decide_experiment",
+      "risk": "medium: records the winning-variant decision for a concluded experiment",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "experiment-id",
+          "type": "string",
+          "summary": "Experiment id to decide (path parameter).",
+          "maps_to": "record.experiment_id",
+          "required": true
+        },
+        {
+          "name": "success",
+          "type": "boolean",
+          "summary": "Whether the experiment succeeded.",
+          "maps_to": "record.success",
+          "required": true
+        },
+        {
+          "name": "variant",
+          "type": "string",
+          "summary": "Winning variant key.",
+          "maps_to": "record.variant"
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "summary": "Decision note.",
+          "maps_to": "record.message"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/workspaces/{workspace_id}/experiments/{experiment_id}/decide"
+        }
+      ],
+      "examples": [
+        "pm mixpanel experiments decide --experiment-id \"<value>\" --success \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "experiments force-conclude",
+      "summary": "Forcibly ends a live experiment and stops traffic allocation",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "force_conclude_experiment",
+      "risk": "high: forcibly ends a live experiment and stops traffic allocation",
+      "approval": "Destructive reverse ETL writes require plan, preview, explicit approval, destructive confirmation, and execute.",
+      "flags": [
+        {
+          "name": "experiment-id",
+          "type": "string",
+          "summary": "Experiment id to conclude (path parameter).",
+          "maps_to": "record.experiment_id",
+          "required": true
+        },
+        {
+          "name": "end-date",
+          "type": "string",
+          "summary": "Conclusion date.",
+          "maps_to": "record.end_date"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/workspaces/{workspace_id}/experiments/{experiment_id}/force_conclude"
+        }
+      ],
+      "examples": [
+        "pm mixpanel experiments force-conclude --experiment-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "experiments launch",
+      "summary": "Launches an experiment, starting live traffic allocation",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "launch_experiment",
+      "risk": "high: launches an experiment, starting live traffic allocation",
+      "approval": "Destructive reverse ETL writes require plan, preview, explicit approval, destructive confirmation, and execute.",
+      "flags": [
+        {
+          "name": "experiment-id",
+          "type": "string",
+          "summary": "Experiment id to launch (path parameter).",
+          "maps_to": "record.experiment_id",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/workspaces/{workspace_id}/experiments/{experiment_id}/launch"
+        }
+      ],
+      "examples": [
+        "pm mixpanel experiments launch --experiment-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "feature-flags create",
+      "summary": "Creates a feature flag that controls live product behavior",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_feature_flag",
+      "risk": "high: creates a feature flag that controls live product behavior",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Field name.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "summary": "Field key.",
+          "maps_to": "record.key",
+          "required": true
+        },
+        {
+          "name": "tags",
+          "type": "string_array",
+          "summary": "Field tags.",
+          "maps_to": "record.tags"
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "summary": "Field status.",
+          "maps_to": "record.status",
+          "values": [
+            "enabled",
+            "disabled",
+            "archived"
+          ]
+        },
+        {
+          "name": "context",
+          "type": "string",
+          "summary": "Field context.",
+          "maps_to": "record.context",
+          "required": true
+        },
+        {
+          "name": "serving-method",
+          "type": "enum",
+          "summary": "Field serving_method.",
+          "maps_to": "record.serving_method",
+          "values": [
+            "client",
+            "server",
+            "remote_or_local",
+            "remote_only"
+          ],
+          "required": true
+        }
+      ],
+      "notes": "Flat CLI flags cannot express ruleset object/array-of-object field(s); supply it from a typed reverse-ETL source record.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{project_id}/workspaces/{workspace_id}/feature-flags"
+        }
+      ],
+      "examples": [
+        "pm mixpanel feature-flags create --name \"<value>\" --key \"<value>\" --context \"<value>\" --serving-method \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "feature-flags update",
+      "summary": "Mutates a live feature flag's rollout configuration",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_feature_flag",
+      "risk": "high: mutates a live feature flag's rollout configuration",
+      "approval": "Destructive reverse ETL writes require plan, preview, explicit approval, destructive confirmation, and execute.",
+      "flags": [
+        {
+          "name": "flag-id",
+          "type": "string",
+          "summary": "Feature flag id to update (path parameter).",
+          "maps_to": "record.flag_id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Field name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "summary": "Field key.",
+          "maps_to": "record.key"
+        },
+        {
+          "name": "tags",
+          "type": "string_array",
+          "summary": "Field tags.",
+          "maps_to": "record.tags"
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "summary": "Field status.",
+          "maps_to": "record.status",
+          "values": [
+            "enabled",
+            "disabled",
+            "archived"
+          ]
+        },
+        {
+          "name": "context",
+          "type": "string",
+          "summary": "Field context.",
+          "maps_to": "record.context"
+        },
+        {
+          "name": "serving-method",
+          "type": "enum",
+          "summary": "Field serving_method.",
+          "maps_to": "record.serving_method",
+          "values": [
+            "client",
+            "server",
+            "remote_or_local",
+            "remote_only"
+          ]
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/projects/{project_id}/workspaces/{workspace_id}/feature-flags/{flag_id}"
+        }
+      ],
+      "examples": [
+        "pm mixpanel feature-flags update --flag-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "feature-flags delete",
+      "summary": "Permanently deletes a feature flag",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_feature_flag",
+      "risk": "high: permanently deletes a feature flag",
+      "approval": "Destructive reverse ETL writes require plan, preview, explicit approval, destructive confirmation, and execute.",
+      "flags": [
+        {
+          "name": "flag-id",
+          "type": "string",
+          "summary": "Feature flag id to delete (path parameter).",
+          "maps_to": "record.flag_id",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{project_id}/workspaces/{workspace_id}/feature-flags/{flag_id}"
+        }
+      ],
+      "examples": [
+        "pm mixpanel feature-flags delete --flag-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "gdpr retrieval-create",
+      "summary": "Starts a gdpr/ccpa personal-data retrieval job",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_gdpr_retrieval",
+      "risk": "high: starts a GDPR/CCPA personal-data retrieval job",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "distinct-ids",
+          "type": "string_array",
+          "summary": "Distinct ids to retrieve data for.",
+          "maps_to": "record.distinct_ids",
+          "required": true
+        },
+        {
+          "name": "compliance-type",
+          "type": "string",
+          "summary": "Compliance regime, e.g. GDPR or CCPA.",
+          "maps_to": "record.compliance_type"
+        },
+        {
+          "name": "disclosure-type",
+          "type": "string",
+          "summary": "Disclosure type for the retrieval.",
+          "maps_to": "record.disclosure_type"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/data-retrievals/v3.0"
+        }
+      ],
+      "examples": [
+        "pm mixpanel gdpr retrieval-create --distinct-ids \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "gdpr deletion-create",
+      "summary": "Starts a gdpr/ccpa personal-data deletion job",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_gdpr_deletion",
+      "risk": "critical: starts a GDPR/CCPA personal-data deletion job",
+      "approval": "Destructive reverse ETL writes require plan, preview, explicit approval, destructive confirmation, and execute.",
+      "flags": [
+        {
+          "name": "distinct-ids",
+          "type": "string_array",
+          "summary": "Distinct ids to delete data for.",
+          "maps_to": "record.distinct_ids",
+          "required": true
+        },
+        {
+          "name": "compliance-type",
+          "type": "string",
+          "summary": "Compliance regime, e.g. GDPR or CCPA.",
+          "maps_to": "record.compliance_type"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/data-deletions/v3.0"
+        }
+      ],
+      "examples": [
+        "pm mixpanel gdpr deletion-create --distinct-ids \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "gdpr deletion-cancel",
+      "summary": "Cancels an in-flight gdpr/ccpa deletion job",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_gdpr_deletion",
+      "risk": "high: cancels an in-flight GDPR/CCPA deletion job",
+      "approval": "Destructive reverse ETL writes require plan, preview, explicit approval, destructive confirmation, and execute.",
+      "flags": [
+        {
+          "name": "tracking-id",
+          "type": "string",
+          "summary": "Deletion job tracking id to cancel (path parameter).",
+          "maps_to": "record.tracking_id",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/data-deletions/v3.0/{tracking_id}"
+        }
+      ],
+      "examples": [
+        "pm mixpanel gdpr deletion-cancel --tracking-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "identity create",
+      "summary": "Permanently links an anonymous id to a canonical identified id",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_identity",
+      "risk": "high: permanently links an anonymous id to a canonical identified id",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "data",
+          "type": "string",
+          "summary": "JSON-encoded Event Object with event=$identify, properties.$identified_id, properties.$anon_id, properties.token.",
+          "maps_to": "record.data",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/track#create-identity"
+        }
+      ],
+      "examples": [
+        "pm mixpanel identity create --data \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "identity create-alias",
+      "summary": "Creates a distinct_id alias",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_identity_alias",
+      "risk": "high: creates a distinct_id alias",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "data",
+          "type": "string",
+          "summary": "JSON-encoded Event Object with event=$create_alias, properties.distinct_id, properties.alias, properties.token.",
+          "maps_to": "record.data",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/track#identity-create-alias"
+        }
+      ],
+      "examples": [
+        "pm mixpanel identity create-alias --data \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "events import",
+      "summary": "Historically imports events into mixpanel (or, with event=$merge, merges two identities)",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "import_events",
+      "risk": "high: historically imports events into Mixpanel (or, with event=$merge, merges two identities)",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "notes": "Flat CLI flags cannot express events object/array-of-object field(s); supply it from a typed reverse-ETL source record.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/import"
+        }
+      ],
+      "examples": [
+        "pm mixpanel events import --json"
+      ]
+    },
+    {
+      "path": "events track",
+      "summary": "Sends live events to mixpanel",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "track_event",
+      "risk": "medium: sends live events to Mixpanel",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "notes": "Flat CLI flags cannot express events object/array-of-object field(s); supply it from a typed reverse-ETL source record.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/track"
+        }
+      ],
+      "examples": [
+        "pm mixpanel events track --json"
+      ]
+    },
+    {
+      "path": "profiles set",
+      "summary": "Sets user profile properties, creating the profile if absent",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "profile_set",
+      "risk": "medium: sets user profile properties, creating the profile if absent",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "notes": "Flat CLI flags cannot express updates object/array-of-object field(s); supply it from a typed reverse-ETL source record.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/engage#profile-set"
+        }
+      ],
+      "examples": [
+        "pm mixpanel profiles set --json"
+      ]
+    },
+    {
+      "path": "profiles set-once",
+      "summary": "Sets user profile properties only if not already present",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "profile_set_once",
+      "risk": "medium: sets user profile properties only if not already present",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "notes": "Flat CLI flags cannot express updates object/array-of-object field(s); supply it from a typed reverse-ETL source record.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/engage#profile-set-once"
+        }
+      ],
+      "examples": [
+        "pm mixpanel profiles set-once --json"
+      ]
+    },
+    {
+      "path": "profiles add",
+      "summary": "Increments numeric user profile properties",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "profile_numerical_add",
+      "risk": "medium: increments numeric user profile properties",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "notes": "Flat CLI flags cannot express updates object/array-of-object field(s); supply it from a typed reverse-ETL source record.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/engage#profile-numerical-add"
+        }
+      ],
+      "examples": [
+        "pm mixpanel profiles add --json"
+      ]
+    },
+    {
+      "path": "profiles union",
+      "summary": "Unions values into a list-valued user profile property",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "profile_union",
+      "risk": "medium: unions values into a list-valued user profile property",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "notes": "Flat CLI flags cannot express updates object/array-of-object field(s); supply it from a typed reverse-ETL source record.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/engage#profile-union"
+        }
+      ],
+      "examples": [
+        "pm mixpanel profiles union --json"
+      ]
+    },
+    {
+      "path": "profiles append",
+      "summary": "Appends a value to a list-valued user profile property",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "profile_append_to_list",
+      "risk": "medium: appends a value to a list-valued user profile property",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "notes": "Flat CLI flags cannot express updates object/array-of-object field(s); supply it from a typed reverse-ETL source record.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/engage#profile-list-append"
+        }
+      ],
+      "examples": [
+        "pm mixpanel profiles append --json"
+      ]
+    },
+    {
+      "path": "profiles remove",
+      "summary": "Removes a value from a list-valued user profile property",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "profile_remove_from_list",
+      "risk": "medium: removes a value from a list-valued user profile property",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "notes": "Flat CLI flags cannot express updates object/array-of-object field(s); supply it from a typed reverse-ETL source record.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/engage#profile-list-remove"
+        }
+      ],
+      "examples": [
+        "pm mixpanel profiles remove --json"
+      ]
+    },
+    {
+      "path": "profiles unset",
+      "summary": "Permanently removes named properties from a user profile",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "profile_delete_property",
+      "risk": "medium: permanently removes named properties from a user profile",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "notes": "Flat CLI flags cannot express updates object/array-of-object field(s); supply it from a typed reverse-ETL source record.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/engage#profile-unset"
+        }
+      ],
+      "examples": [
+        "pm mixpanel profiles unset --json"
+      ]
+    },
+    {
+      "path": "profiles batch-update",
+      "summary": "Sends a batch of user profile updates in one request",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "profile_batch_update",
+      "risk": "medium: sends a batch of user profile updates in one request",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "data",
+          "type": "string",
+          "summary": "JSON-encoded array of profile update objects, each with $token, $distinct_id and one update operation.",
+          "maps_to": "record.data",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/engage#profile-batch-update"
+        }
+      ],
+      "examples": [
+        "pm mixpanel profiles batch-update --data \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "profiles delete",
+      "summary": "Permanently deletes a user profile and its properties",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_profile",
+      "risk": "high: permanently deletes a user profile and its properties",
+      "approval": "Destructive reverse ETL writes require plan, preview, explicit approval, destructive confirmation, and execute.",
+      "notes": "Flat CLI flags cannot express updates object/array-of-object field(s); supply it from a typed reverse-ETL source record.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/engage#profile-delete"
+        }
+      ],
+      "examples": [
+        "pm mixpanel profiles delete --json"
+      ]
+    },
+    {
+      "path": "groups set",
+      "summary": "Sets group profile properties, creating the profile if absent",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "group_set_property",
+      "risk": "medium: sets group profile properties, creating the profile if absent",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "notes": "Flat CLI flags cannot express updates object/array-of-object field(s); supply it from a typed reverse-ETL source record.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/groups#group-set"
+        }
+      ],
+      "examples": [
+        "pm mixpanel groups set --json"
+      ]
+    },
+    {
+      "path": "groups set-once",
+      "summary": "Sets group profile properties only if not already present",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "group_set_property_once",
+      "risk": "medium: sets group profile properties only if not already present",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "notes": "Flat CLI flags cannot express updates object/array-of-object field(s); supply it from a typed reverse-ETL source record.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/groups#group-set-once"
+        }
+      ],
+      "examples": [
+        "pm mixpanel groups set-once --json"
+      ]
+    },
+    {
+      "path": "groups unset",
+      "summary": "Removes named properties from a group profile",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "group_delete_property",
+      "risk": "medium: removes named properties from a group profile",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "notes": "Flat CLI flags cannot express updates object/array-of-object field(s); supply it from a typed reverse-ETL source record.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/groups#group-unset"
+        }
+      ],
+      "examples": [
+        "pm mixpanel groups unset --json"
+      ]
+    },
+    {
+      "path": "groups remove",
+      "summary": "Removes a value from a list-valued group profile property",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "group_remove_from_list",
+      "risk": "medium: removes a value from a list-valued group profile property",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "notes": "Flat CLI flags cannot express updates object/array-of-object field(s); supply it from a typed reverse-ETL source record.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/groups#group-remove-from-list"
+        }
+      ],
+      "examples": [
+        "pm mixpanel groups remove --json"
+      ]
+    },
+    {
+      "path": "groups union",
+      "summary": "Unions values into a list-valued group profile property",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "group_union",
+      "risk": "medium: unions values into a list-valued group profile property",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "notes": "Flat CLI flags cannot express updates object/array-of-object field(s); supply it from a typed reverse-ETL source record.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/groups#group-union"
+        }
+      ],
+      "examples": [
+        "pm mixpanel groups union --json"
+      ]
+    },
+    {
+      "path": "groups batch-update",
+      "summary": "Sends a batch of group profile updates in one request",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "group_batch_update",
+      "risk": "medium: sends a batch of group profile updates in one request",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "data",
+          "type": "string",
+          "summary": "JSON-encoded array of group profile update objects, each with $token, $group_key, $group_id and one update operation.",
+          "maps_to": "record.data",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/groups#group-batch-update"
+        }
+      ],
+      "examples": [
+        "pm mixpanel groups batch-update --data \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "groups delete",
+      "summary": "Permanently deletes a group profile and its properties",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_group",
+      "risk": "high: permanently deletes a group profile and its properties",
+      "approval": "Destructive reverse ETL writes require plan, preview, explicit approval, destructive confirmation, and execute.",
+      "notes": "Flat CLI flags cannot express updates object/array-of-object field(s); supply it from a typed reverse-ETL source record.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/groups#group-delete"
+        }
+      ],
+      "examples": [
+        "pm mixpanel groups delete --json"
+      ]
+    },
+    {
+      "path": "schemas delete-all",
+      "summary": "Permanently deletes every governance schema declared for the project",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_all_schemas",
+      "risk": "critical: permanently deletes every governance schema declared for the project",
+      "approval": "Destructive reverse ETL writes require plan, preview, explicit approval, destructive confirmation, and execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{projectId}/schemas"
+        }
+      ],
+      "examples": [
+        "pm mixpanel schemas delete-all --json"
+      ]
+    },
+    {
+      "path": "schemas delete-for-entity",
+      "summary": "Permanently deletes every governance schema for one entity type",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_schemas_for_entity",
+      "risk": "high: permanently deletes every governance schema for one entity type",
+      "approval": "Destructive reverse ETL writes require plan, preview, explicit approval, destructive confirmation, and execute.",
+      "flags": [
+        {
+          "name": "entity-type",
+          "type": "enum",
+          "summary": "Entity type to delete schemas for (path parameter).",
+          "maps_to": "record.entity_type",
+          "values": [
+            "event",
+            "profile"
+          ],
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{projectId}/schemas/{entityType}"
+        }
+      ],
+      "examples": [
+        "pm mixpanel schemas delete-for-entity --entity-type \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "schemas delete",
+      "summary": "Permanently deletes one named governance schema",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_schema_by_name",
+      "risk": "high: permanently deletes one named governance schema",
+      "approval": "Destructive reverse ETL writes require plan, preview, explicit approval, destructive confirmation, and execute.",
+      "flags": [
+        {
+          "name": "entity-type",
+          "type": "enum",
+          "summary": "Entity type (path parameter).",
+          "maps_to": "record.entity_type",
+          "values": [
+            "event",
+            "profile"
+          ],
+          "required": true
+        },
+        {
+          "name": "schema-name",
+          "type": "string",
+          "summary": "Schema name (path parameter).",
+          "maps_to": "record.schema_name",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{projectId}/schemas/{entityType}/{name}"
+        }
+      ],
+      "examples": [
+        "pm mixpanel schemas delete --entity-type \"<value>\" --schema-name \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "schemas upload",
+      "summary": "Creates or replaces multiple governance schemas for the project",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "upload_schemas",
+      "risk": "high: creates or replaces multiple governance schemas for the project",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "truncate",
+          "type": "boolean",
+          "summary": "When true, delete every schema not present in entries.",
+          "maps_to": "record.truncate"
+        }
+      ],
+      "notes": "Flat CLI flags cannot express entries object/array-of-object field(s); supply it from a typed reverse-ETL source record.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{projectId}/schemas"
+        }
+      ],
+      "examples": [
+        "pm mixpanel schemas upload --json"
+      ]
+    },
+    {
+      "path": "schemas upload-one",
+      "summary": "Creates or replaces one named governance schema",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "upload_schema_by_name",
+      "risk": "high: creates or replaces one named governance schema",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "entity-type",
+          "type": "enum",
+          "summary": "Entity type (path parameter).",
+          "maps_to": "record.entity_type",
+          "values": [
+            "event",
+            "profile"
+          ],
+          "required": true
+        },
+        {
+          "name": "schema-name",
+          "type": "string",
+          "summary": "Schema name (path parameter).",
+          "maps_to": "record.schema_name",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{projectId}/schemas/{entityType}/{name}"
+        }
+      ],
+      "examples": [
+        "pm mixpanel schemas upload-one --entity-type \"<value>\" --schema-name \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "service-accounts create",
+      "summary": "Creates a new organization credential principal",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_service_account",
+      "risk": "critical: creates a new organization credential principal",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "username",
+          "type": "string",
+          "summary": "Service account username.",
+          "maps_to": "record.username",
+          "required": true
+        },
+        {
+          "name": "role",
+          "type": "enum",
+          "summary": "Field role.",
+          "maps_to": "record.role",
+          "values": [
+            "owner",
+            "admin",
+            "analyst",
+            "consumer"
+          ]
+        },
+        {
+          "name": "expires",
+          "type": "string",
+          "summary": "Optional expiry timestamp.",
+          "maps_to": "record.expires",
+          "format": "date-time"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/service-accounts"
+        }
+      ],
+      "examples": [
+        "pm mixpanel service-accounts create --username \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "service-accounts delete",
+      "summary": "Permanently removes an organization credential principal",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_service_account",
+      "risk": "critical: permanently removes an organization credential principal",
+      "approval": "Destructive reverse ETL writes require plan, preview, explicit approval, destructive confirmation, and execute.",
+      "flags": [
+        {
+          "name": "service-account-id",
+          "type": "string",
+          "summary": "Service account id to delete (path parameter).",
+          "maps_to": "record.service_account_id",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{organizationId}/service-accounts/{serviceAccountId}"
+        }
+      ],
+      "examples": [
+        "pm mixpanel service-accounts delete --service-account-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "service-accounts add-to-projects",
+      "summary": "Grants service accounts access to additional projects",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "add_service_accounts_to_projects",
+      "risk": "high: grants service accounts access to additional projects",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "service-account-ids",
+          "type": "string_array",
+          "summary": "Service account ids to add.",
+          "maps_to": "record.service_account_ids",
+          "required": true
+        }
+      ],
+      "notes": "Flat CLI flags cannot express projects object/array-of-object field(s); supply it from a typed reverse-ETL source record.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/service-accounts/add-to-project"
+        }
+      ],
+      "examples": [
+        "pm mixpanel service-accounts add-to-projects --service-account-ids \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "service-accounts remove-from-projects",
+      "summary": "Revokes service account access from projects",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "remove_service_accounts_from_projects",
+      "risk": "high: revokes service account access from projects",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "notes": "Flat CLI flags cannot express projects object/array-of-object field(s); supply it from a typed reverse-ETL source record.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organizationId}/service-accounts/remove-from-project"
+        }
+      ],
+      "examples": [
+        "pm mixpanel service-accounts remove-from-projects --json"
+      ]
+    },
+    {
+      "path": "warehouse-imports update",
+      "summary": "Mutates a warehouse import's sync schedule",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_warehouse_import",
+      "risk": "high: mutates a warehouse import's sync schedule",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "import-id",
+          "type": "string",
+          "summary": "Warehouse import id to update (path parameter).",
+          "maps_to": "record.import_id",
+          "required": true
+        },
+        {
+          "name": "paused",
+          "type": "boolean",
+          "summary": "Whether the import is paused.",
+          "maps_to": "record.paused",
+          "required": true
+        },
+        {
+          "name": "run-every",
+          "type": "integer",
+          "summary": "Sync interval in nanoseconds (0, hourly, daily, or weekly).",
+          "maps_to": "record.run_every",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/projects/{projectId}/warehouse-sources/imports/{importId}"
+        }
+      ],
+      "examples": [
+        "pm mixpanel warehouse-imports update --import-id \"<value>\" --paused \"<value>\" --run-every \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "warehouse-imports delete",
+      "summary": "Permanently deletes a warehouse import configuration, optionally its imported data",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_warehouse_import",
+      "risk": "critical: permanently deletes a warehouse import configuration, optionally its imported data",
+      "approval": "Destructive reverse ETL writes require plan, preview, explicit approval, destructive confirmation, and execute.",
+      "flags": [
+        {
+          "name": "import-id",
+          "type": "string",
+          "summary": "Warehouse import id to delete (path parameter).",
+          "maps_to": "record.import_id",
+          "required": true
+        },
+        {
+          "name": "delete-data",
+          "type": "boolean",
+          "summary": "When true, also delete data already imported by this source.",
+          "maps_to": "record.delete_data"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{projectId}/warehouse-sources/imports/{importId}"
+        }
+      ],
+      "examples": [
+        "pm mixpanel warehouse-imports delete --import-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "warehouse-imports create-event-stream",
+      "summary": "Configures a recurring warehouse-to-events import",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_event_stream_import",
+      "risk": "high: configures a recurring warehouse-to-events import",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "import-type",
+          "type": "enum",
+          "summary": "Field import_type.",
+          "maps_to": "record.import_type",
+          "values": [
+            "event_stream"
+          ],
+          "required": true
+        },
+        {
+          "name": "warehouse-source-id",
+          "type": "integer",
+          "summary": "Field warehouse_source_id.",
+          "maps_to": "record.warehouse_source_id",
+          "required": true
+        },
+        {
+          "name": "event-name",
+          "type": "string",
+          "summary": "Field event_name.",
+          "maps_to": "record.event_name"
+        },
+        {
+          "name": "event-column-name",
+          "type": "string",
+          "summary": "Field event_column_name.",
+          "maps_to": "record.event_column_name"
+        },
+        {
+          "name": "time-column-name",
+          "type": "string",
+          "summary": "Field time_column_name.",
+          "maps_to": "record.time_column_name",
+          "required": true
+        },
+        {
+          "name": "user-column-name",
+          "type": "string",
+          "summary": "Field user_column_name.",
+          "maps_to": "record.user_column_name"
+        },
+        {
+          "name": "company-column-name",
+          "type": "string",
+          "summary": "Field company_column_name.",
+          "maps_to": "record.company_column_name"
+        },
+        {
+          "name": "device-column-name",
+          "type": "string",
+          "summary": "Field device_column_name.",
+          "maps_to": "record.device_column_name"
+        },
+        {
+          "name": "sync-mode",
+          "type": "enum",
+          "summary": "Field sync_mode.",
+          "maps_to": "record.sync_mode",
+          "values": [
+            "time_based",
+            "mirror_mode",
+            "full_sync",
+            "one_time"
+          ],
+          "required": true
+        },
+        {
+          "name": "run-every",
+          "type": "integer",
+          "summary": "Field run_every.",
+          "maps_to": "record.run_every"
+        }
+      ],
+      "notes": "Flat CLI flags cannot express table_params object/array-of-object field(s); supply it from a typed reverse-ETL source record.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{projectId}/warehouse-sources/imports/event-stream"
+        }
+      ],
+      "examples": [
+        "pm mixpanel warehouse-imports create-event-stream --import-type \"<value>\" --warehouse-source-id \"<value>\" --time-column-name \"<value>\" --sync-mode \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "warehouse-imports create-people",
+      "summary": "Configures a recurring warehouse-to-profiles import",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_people_import",
+      "risk": "high: configures a recurring warehouse-to-profiles import",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "import-type",
+          "type": "enum",
+          "summary": "Field import_type.",
+          "maps_to": "record.import_type",
+          "values": [
+            "people"
+          ],
+          "required": true
+        },
+        {
+          "name": "warehouse-source-id",
+          "type": "integer",
+          "summary": "Field warehouse_source_id.",
+          "maps_to": "record.warehouse_source_id",
+          "required": true
+        },
+        {
+          "name": "user-column-name",
+          "type": "string",
+          "summary": "Field user_column_name.",
+          "maps_to": "record.user_column_name",
+          "required": true
+        },
+        {
+          "name": "sync-mode",
+          "type": "enum",
+          "summary": "Field sync_mode.",
+          "maps_to": "record.sync_mode",
+          "values": [
+            "time_based",
+            "mirror_mode",
+            "full_sync",
+            "one_time"
+          ],
+          "required": true
+        },
+        {
+          "name": "run-every",
+          "type": "integer",
+          "summary": "Field run_every.",
+          "maps_to": "record.run_every"
+        }
+      ],
+      "notes": "Flat CLI flags cannot express table_params object/array-of-object field(s); supply it from a typed reverse-ETL source record.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{projectId}/warehouse-sources/imports/people"
+        }
+      ],
+      "examples": [
+        "pm mixpanel warehouse-imports create-people --import-type \"<value>\" --warehouse-source-id \"<value>\" --user-column-name \"<value>\" --sync-mode \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "warehouse-imports create-groups",
+      "summary": "Configures a recurring warehouse-to-groups import",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_groups_import",
+      "risk": "high: configures a recurring warehouse-to-groups import",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "import-type",
+          "type": "enum",
+          "summary": "Field import_type.",
+          "maps_to": "record.import_type",
+          "values": [
+            "groups"
+          ],
+          "required": true
+        },
+        {
+          "name": "warehouse-source-id",
+          "type": "integer",
+          "summary": "Field warehouse_source_id.",
+          "maps_to": "record.warehouse_source_id",
+          "required": true
+        },
+        {
+          "name": "group-key",
+          "type": "string",
+          "summary": "Field group_key.",
+          "maps_to": "record.group_key",
+          "required": true
+        },
+        {
+          "name": "group-id-column",
+          "type": "string",
+          "summary": "Field group_id_column.",
+          "maps_to": "record.group_id_column",
+          "required": true
+        },
+        {
+          "name": "sync-mode",
+          "type": "enum",
+          "summary": "Field sync_mode.",
+          "maps_to": "record.sync_mode",
+          "values": [
+            "time_based",
+            "mirror_mode",
+            "full_sync",
+            "one_time"
+          ],
+          "required": true
+        },
+        {
+          "name": "run-every",
+          "type": "integer",
+          "summary": "Field run_every.",
+          "maps_to": "record.run_every"
+        }
+      ],
+      "notes": "Flat CLI flags cannot express table_params object/array-of-object field(s); supply it from a typed reverse-ETL source record.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{projectId}/warehouse-sources/imports/groups"
+        }
+      ],
+      "examples": [
+        "pm mixpanel warehouse-imports create-groups --import-type \"<value>\" --warehouse-source-id \"<value>\" --group-key \"<value>\" --group-id-column \"<value>\" --sync-mode \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "warehouse-imports create-lookup-table",
+      "summary": "Configures a recurring warehouse-to-lookup-table import",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_lookup_table_import",
+      "risk": "high: configures a recurring warehouse-to-lookup-table import",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "import-type",
+          "type": "enum",
+          "summary": "Field import_type.",
+          "maps_to": "record.import_type",
+          "values": [
+            "lookup_table"
+          ],
+          "required": true
+        },
+        {
+          "name": "warehouse-source-id",
+          "type": "integer",
+          "summary": "Field warehouse_source_id.",
+          "maps_to": "record.warehouse_source_id",
+          "required": true
+        },
+        {
+          "name": "property-key-column-name",
+          "type": "string",
+          "summary": "Field property_key_column_name.",
+          "maps_to": "record.property_key_column_name",
+          "required": true
+        },
+        {
+          "name": "sync-mode",
+          "type": "enum",
+          "summary": "Field sync_mode.",
+          "maps_to": "record.sync_mode",
+          "values": [
+            "full_sync",
+            "one_time"
+          ],
+          "required": true
+        },
+        {
+          "name": "run-every",
+          "type": "integer",
+          "summary": "Field run_every.",
+          "maps_to": "record.run_every"
+        }
+      ],
+      "notes": "Flat CLI flags cannot express table_params, mixpanel_property object/array-of-object field(s); supply it from a typed reverse-ETL source record.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/{projectId}/warehouse-sources/imports/lookup-table"
+        }
+      ],
+      "examples": [
+        "pm mixpanel warehouse-imports create-lookup-table --import-type \"<value>\" --warehouse-source-id \"<value>\" --property-key-column-name \"<value>\" --sync-mode \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "warehouse-imports run",
+      "summary": "Manually triggers a warehouse import sync run",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "run_warehouse_import",
+      "risk": "medium: manually triggers a warehouse import sync run",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "import-id",
+          "type": "string",
+          "summary": "Warehouse import id to run (path parameter).",
+          "maps_to": "record.import_id",
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/projects/{projectId}/warehouse-sources/imports/{importId}/manual-sync"
+        }
+      ],
+      "examples": [
+        "pm mixpanel warehouse-imports run --import-id \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "warehouse-pipelines cancel",
+      "summary": "Permanently deletes a warehouse export pipeline",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_warehouse_pipeline",
+      "risk": "high: permanently deletes a warehouse export pipeline",
+      "approval": "Destructive reverse ETL writes require plan, preview, explicit approval, destructive confirmation, and execute.",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Pipeline name to cancel.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "project-id",
+          "type": "number",
+          "summary": "Mixpanel project id.",
+          "maps_to": "record.project_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/nessie/pipeline/cancel"
+        }
+      ],
+      "examples": [
+        "pm mixpanel warehouse-pipelines cancel --name \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "warehouse-pipelines pause",
+      "summary": "Pauses a scheduled warehouse export pipeline",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "pause_warehouse_pipeline",
+      "risk": "medium: pauses a scheduled warehouse export pipeline",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Pipeline name to pause.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "project-id",
+          "type": "number",
+          "summary": "Mixpanel project id.",
+          "maps_to": "record.project_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/nessie/pipeline/pause"
+        }
+      ],
+      "examples": [
+        "pm mixpanel warehouse-pipelines pause --name \"<value>\" --json"
+      ]
+    },
+    {
+      "path": "warehouse-pipelines resume",
+      "summary": "Resumes a paused warehouse export pipeline",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "resume_warehouse_pipeline",
+      "risk": "medium: resumes a paused warehouse export pipeline",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Pipeline name to resume.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "project-id",
+          "type": "number",
+          "summary": "Mixpanel project id.",
+          "maps_to": "record.project_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/nessie/pipeline/resume"
+        }
+      ],
+      "examples": [
+        "pm mixpanel warehouse-pipelines resume --name \"<value>\" --json"
+      ]
+    }
+  ]
+}

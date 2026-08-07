@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/app/projects/fixture/warehouse-sources/imports/fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "import_type": "fixture-value",
+      "paused": true
+    }
+  }
+}
