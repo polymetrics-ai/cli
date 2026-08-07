@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "account_exports_exports",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "export_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "started": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "finished": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "size_in_bytes": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "download_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "_links": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "id": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    }
+  }
+}

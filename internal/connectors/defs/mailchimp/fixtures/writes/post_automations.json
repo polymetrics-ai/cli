@@ -1,0 +1,22 @@
+{
+  "record": {
+    "recipients": {},
+    "settings": {},
+    "trigger_settings": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/automations",
+    "body": {
+      "recipients": {},
+      "settings": {},
+      "trigger_settings": {}
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_post_automations"
+    }
+  }
+}

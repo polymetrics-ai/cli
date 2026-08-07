@@ -272,7 +272,7 @@
 - [lokalise](lokalise/MANUAL.md): Reads Lokalise project keys, languages, translations, contributors, and comments through the Lokalise REST API.
 - [looker](looker/MANUAL.md): Reads Looker users, groups, folders, looks, and dashboards through the Looker API 4.0.
 - [luma](luma/MANUAL.md): Reads and writes the documented Luma public API for events, calendars, guests, contacts, tags, coupons, ticket types, memberships, webhooks, and organization resources.
-- [mailchimp](mailchimp/MANUAL.md): Reads Mailchimp Marketing API audiences (lists), campaigns, reports, and automations through the datacenter-scoped REST API.
+- [mailchimp](mailchimp/MANUAL.md): Reads Mailchimp Marketing API audiences, members, campaigns, reports, automations, templates, files, batches, webhooks, ecommerce, reporting, and related resources; exposes typed approval-gated Mailchimp mutations where the declarative engine can model the documented operation safely.
 - [mailerlite](mailerlite/MANUAL.md): Reads MailerLite subscribers, campaigns, groups, segments, and automations through the MailerLite v2 REST API.
 - [mailersend](mailersend/MANUAL.md): Reads MailerSend email activity, analytics, domains, messages, recipients, templates, scheduled messages, sender identities, inbound routes, users, invites, tokens, and webhooks through the MailerSend REST API.
 - [mailgun](mailgun/MANUAL.md): Reads Mailgun sending domains, email events, mailing lists, and analytics tags through the Mailgun v3 REST API.

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/connected-sites",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "sites": [
+        {
+          "store_id": "fixture_store_id",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "foreign_id": "fixture_foreign_id",
+          "platform": "fixture_platform",
+          "domain": "fixture_domain",
+          "site_script": {},
+          "is_pixel_enabled": true,
+          "created_at": "fixture_created_at"
+        }
+      ]
+    }
+  }
+}

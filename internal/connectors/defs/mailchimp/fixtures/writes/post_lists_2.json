@@ -1,0 +1,23 @@
+{
+  "record": {
+    "list_id": "fixture_list_id",
+    "members": [],
+    "sync_tags": true,
+    "update_existing": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists/fixture_list_id",
+    "body": {
+      "members": [],
+      "sync_tags": true,
+      "update_existing": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_post_lists_2"
+    }
+  }
+}

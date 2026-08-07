@@ -1,0 +1,22 @@
+{
+  "record": {
+    "name": "fixture_name",
+    "contact": {},
+    "permission_reminder": "fixture_permission_reminder"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/lists",
+    "body": {
+      "name": "fixture_name",
+      "contact": {},
+      "permission_reminder": "fixture_permission_reminder"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_post_lists"
+    }
+  }
+}

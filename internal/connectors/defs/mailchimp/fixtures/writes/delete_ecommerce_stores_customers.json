@@ -1,0 +1,16 @@
+{
+  "record": {
+    "store_id": "fixture_store_id",
+    "customer_id": "fixture_customer_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/ecommerce/stores/fixture_store_id/customers/fixture_customer_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_delete_ecommerce_stores_customers"
+    }
+  }
+}

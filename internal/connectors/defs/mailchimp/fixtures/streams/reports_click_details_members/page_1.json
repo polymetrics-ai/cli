@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reports/synthetic-conformance-value/click-details/synthetic-conformance-value/members",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "members": [
+        {
+          "email_id": "fixture@example.invalid",
+          "campaign_id": "fixture_campaign_id",
+          "link_id": "fixture_link_id",
+          "email_address": "fixture@example.invalid",
+          "merge_fields": {},
+          "vip": true,
+          "clicks": 1,
+          "url_id": "https://example.invalid/mailchimp-fixture"
+        }
+      ]
+    }
+  }
+}

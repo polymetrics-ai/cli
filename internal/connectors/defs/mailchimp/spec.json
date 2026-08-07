@@ -2,7 +2,9 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Mailchimp Connection Specification",
   "type": "object",
-  "required": ["data_center"],
+  "required": [
+    "data_center"
+  ],
   "properties": {
     "access_token": {
       "type": "string",
@@ -12,20 +14,208 @@
     "api_key": {
       "type": "string",
       "x-secret": true,
-      "description": "Mailchimp API key (e.g. abc123-us6). Sent as HTTP Basic auth (username \"anystring\") when access_token is unset; never logged."
+      "description": "Mailchimp API key. Sent as HTTP Basic auth (username \"anystring\") when access_token is unset; never logged."
+    },
+    "app_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {app_id} operations and nested streams."
+    },
+    "audience_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {audience_id} operations and nested streams."
+    },
+    "batch_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {batch_id} operations and nested streams."
+    },
+    "batch_webhook_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {batch_webhook_id} operations and nested streams."
+    },
+    "campaign_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {campaign_id} operations and nested streams."
+    },
+    "cart_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {cart_id} operations and nested streams."
+    },
+    "connected_site_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {connected_site_id} operations and nested streams."
+    },
+    "contact_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {contact_id} operations and nested streams."
+    },
+    "conversation_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {conversation_id} operations and nested streams."
+    },
+    "customer_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {customer_id} operations and nested streams."
     },
     "data_center": {
       "type": "string",
-      "description": "Mailchimp datacenter token (e.g. \"us6\"), used to build the datacenter-scoped base URL https://<data_center>.api.mailchimp.com/3.0."
+      "description": "Mailchimp datacenter token (for example, us6) used to build https://<data_center>.api.mailchimp.com/3.0."
     },
-    "start_date": {
+    "domain_name": {
       "type": "string",
-      "format": "date-time",
-      "description": "RFC3339 lower bound; only objects created/sent at or after this time are read (per-stream since_* filter)."
+      "description": "Optional Mailchimp path identifier for {domain_name} operations and nested streams."
+    },
+    "export_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {export_id} operations and nested streams."
+    },
+    "feedback_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {feedback_id} operations and nested streams."
+    },
+    "file_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {file_id} operations and nested streams."
+    },
+    "folder_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {folder_id} operations and nested streams."
+    },
+    "image_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {image_id} operations and nested streams."
+    },
+    "interest_category_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {interest_category_id} operations and nested streams."
+    },
+    "interest_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {interest_id} operations and nested streams."
+    },
+    "journey_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {journey_id} operations and nested streams."
+    },
+    "line_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {line_id} operations and nested streams."
+    },
+    "link_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {link_id} operations and nested streams."
+    },
+    "list_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {list_id} operations and nested streams."
+    },
+    "merge_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {merge_id} operations and nested streams."
+    },
+    "message_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {message_id} operations and nested streams."
     },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+    },
+    "month": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {month} operations and nested streams."
+    },
+    "note_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {note_id} operations and nested streams."
+    },
+    "order_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {order_id} operations and nested streams."
+    },
+    "outreach_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {outreach_id} operations and nested streams."
+    },
+    "page_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {page_id} operations and nested streams."
+    },
+    "product_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {product_id} operations and nested streams."
+    },
+    "promo_code_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {promo_code_id} operations and nested streams."
+    },
+    "promo_rule_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {promo_rule_id} operations and nested streams."
+    },
+    "question_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {question_id} operations and nested streams."
+    },
+    "report_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {report_id} operations and nested streams."
+    },
+    "response_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {response_id} operations and nested streams."
+    },
+    "search_query": {
+      "type": "string",
+      "description": "Optional default search term for typed search direct-read commands."
+    },
+    "segment_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {segment_id} operations and nested streams."
+    },
+    "sms_campaign_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {sms_campaign_id} operations and nested streams."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional RFC3339 lower bound used by stream definitions that expose Mailchimp since_* filters."
+    },
+    "step_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {step_id} operations and nested streams."
+    },
+    "store_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {store_id} operations and nested streams."
+    },
+    "subscriber_hash": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {subscriber_hash} operations and nested streams."
+    },
+    "survey_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {survey_id} operations and nested streams."
+    },
+    "template_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {template_id} operations and nested streams."
+    },
+    "variant_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {variant_id} operations and nested streams."
+    },
+    "webhook_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {webhook_id} operations and nested streams."
+    },
+    "workflow_email_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {workflow_email_id} operations and nested streams."
+    },
+    "workflow_id": {
+      "type": "string",
+      "description": "Optional Mailchimp path identifier for {workflow_id} operations and nested streams."
     }
   }
 }

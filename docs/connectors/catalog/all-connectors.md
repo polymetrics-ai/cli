@@ -191,7 +191,7 @@
 | `gocardless` | [`icons/gocardless.svg`](../icons/gocardless.svg) | GoCardless | `api` | ga | check, catalog, read, write | 63 | 76 | [Documentation](https://developer.gocardless.com/api-reference/) | bundle definition |
 | `goldcast` | [`icons/goldcast.svg`](../icons/goldcast.svg) | Goldcast | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://www.goldcast.io/api-docs) | bundle definition |
 | `gologin` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | GoLogin | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://api.gologin.com/docs) | bundle definition |
-| `gong` | [`icons/gong.svg`](../icons/gong.svg) | Gong | `api` | ga | check, catalog, read, write | 12 | 26 | [Documentation](https://us-66463.app.gong.io/settings/api/documentation) | bundle definition |
+| `gong` | [`icons/gong.svg`](../icons/gong.svg) | Gong | `api` | ga | check, catalog, read, write | 12 | 27 | [Documentation](https://us-66463.app.gong.io/settings/api/documentation) | bundle definition |
 | `google-ads` | [`icons/google-adwords.svg`](../icons/google-adwords.svg) | Google Ads | `api` | ga | check, catalog, read, write | 3 | 7 | [Documentation](https://developers.google.com/google-ads/api/rest/overview) | bundle definition |
 | `google-analytics-data-api` | [`icons/google-analytics.svg`](../icons/google-analytics.svg) | Google Analytics 4 (GA4) | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://developers.google.com/analytics/devguides/reporting/data/v1/changelog) | bundle definition |
 | `google-calendar` | [`icons/simple-icons/googlecalendar.svg`](../icons/simple-icons/googlecalendar.svg) | Google Calendar | `api` | alpha | check, catalog, read, write | 11 | 26 | [Documentation](https://developers.google.com/workspace/calendar/api/v3/reference) | bundle definition |
@@ -268,7 +268,7 @@
 | `lokalise` | [`icons/lokalise.svg`](../icons/lokalise.svg) | Lokalise | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://developers.lokalise.com/reference/api-introduction) | bundle definition |
 | `looker` | [`icons/looker.svg`](../icons/looker.svg) | Looker | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://cloud.google.com/looker/docs/reference/looker-api/latest) | bundle definition |
 | `luma` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Luma | `api` | ga | check, catalog, read, write | 25 | 40 | [Documentation](https://docs.luma.com/reference/getting-started-with-your-api) | bundle definition |
-| `mailchimp` | [`icons/mailchimp.svg`](../icons/mailchimp.svg) | Mailchimp | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://mailchimp.com/developer/release-notes/) | bundle definition |
+| `mailchimp` | [`icons/mailchimp.svg`](../icons/mailchimp.svg) | Mailchimp | `api` | ga | check, catalog, read, write | 79 | 148 | [Documentation](https://api.mailchimp.com/schema/3.0/Swagger.json) | bundle definition |
 | `mailerlite` | [`icons/mailerlite.svg`](../icons/mailerlite.svg) | MailerLite | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://developers.mailerlite.com/) | bundle definition |
 | `mailersend` | [`icons/mailersend.svg`](../icons/mailersend.svg) | MailerSend | `api` | ga | check, catalog, read | 16 | 0 | [Documentation](https://developers.mailersend.com/) | bundle definition |
 | `mailgun` | [`icons/mailgun.svg`](../icons/mailgun.svg) | Mailgun | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://documentation.mailgun.com/en/latest/api_reference.html) | bundle definition |
