@@ -319,7 +319,7 @@ func checkSurfaceComplete(b engine.Bundle) error {
 	ledgerMode := b.Surface.OperationLedgerVersion > 0
 
 	for i, ep := range b.Surface.Endpoints {
-		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || ep.CoveredBy.Write != "" || len(coveredDirectReadTargets(ep.CoveredBy)) > 0)
+		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || len(ep.CoveredBy.WriteTargets()) > 0 || len(coveredDirectReadTargets(ep.CoveredBy)) > 0)
 		hasExcluded := ep.Excluded != nil
 		hasOperation := ep.Operation != nil
 
@@ -344,11 +344,13 @@ func checkSurfaceComplete(b engine.Bundle) error {
 				}
 				coveredStreams[ep.CoveredBy.Stream] = true
 			}
-			if ep.CoveredBy.Write != "" {
-				if !writes[ep.CoveredBy.Write] {
-					return fmt.Errorf("endpoint %d (%s %s) covered_by.write %q is not a declared write action", i, ep.Method, ep.Path, ep.CoveredBy.Write)
+			// Singular and plural alike: one documented endpoint may back
+			// several write contracts, and every one still has to exist.
+			for _, write := range ep.CoveredBy.WriteTargets() {
+				if !writes[write] {
+					return fmt.Errorf("endpoint %d (%s %s) covered_by.write %q is not a declared write action", i, ep.Method, ep.Path, write)
 				}
-				coveredWrites[ep.CoveredBy.Write] = true
+				coveredWrites[write] = true
 			}
 			for _, directRead := range coveredDirectReadTargets(ep.CoveredBy) {
 				if !directReads[directRead] {
@@ -362,7 +364,7 @@ func checkSurfaceComplete(b engine.Bundle) error {
 			if strings.EqualFold(ep.Method, "GET") {
 				hasNonExcludedGET = true
 			}
-			if ep.CoveredBy.Write != "" && mutationMethods[strings.ToUpper(ep.Method)] {
+			if len(ep.CoveredBy.WriteTargets()) > 0 && mutationMethods[strings.ToUpper(ep.Method)] {
 				hasNonExcludedMutation = true
 			}
 		case hasExcluded:

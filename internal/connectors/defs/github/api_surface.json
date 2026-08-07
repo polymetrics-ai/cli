@@ -2,7 +2,7 @@
   "api": "GitHub REST API (https://api.github.com) plus selected GitHub GraphQL API operations",
   "docs": "https://docs.github.com/en/rest; https://docs.github.com/en/graphql",
   "reviewed_at": "2026-07-03",
-  "scope": "Pass B full-surface expansion: every repository-scoped endpoint (/repos/{owner}/{repo}/...) in GitHub REST API v3 1.1.4 is enumerated below (500 real operations, plus close_issue/close_pull_request and reopen_issue/reopen_pull_request rows documenting write-action reuse of the update_issue/update_pull_request endpoints, plus the github_app AuthHook token-exchange endpoint). This surface also includes selected fixed GitHub GraphQL operations that back gh-inspired Projects and Discussions CLI commands. Org-level, user-level, enterprise-level, and Enterprise Cloud/Server admin surfaces remain out of scope unless represented by an explicit GraphQL command row below.",
+  "scope": "Full documented-surface expansion against GitHub's own OpenAPI description (openapi 3.0.3, info.version 1.1.4, 12,920,264 bytes): every documented REST operation is enumerated below with exactly one disposition, plus the four fixed GitHub GraphQL operations that back the Projects and Discussions streams and are counted separately from REST. Webhook EVENT payloads (270, under the x-webhooks vendor extension) are excluded from the operation surface by counting policy; the 28 webhook MANAGEMENT operations are ordinary paths entries and are included. GitHub's GraphQL schema beyond those four fixed operations is a NAMED scope gap, not a coverage claim.",
   "endpoints": [
     {
       "method": "POST",
@@ -2913,21 +2913,11 @@
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}",
       "covered_by": {
-        "write": "update_issue"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/issues/{issue_number} (close)",
-      "covered_by": {
-        "write": "close_issue"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/issues/{issue_number} (reopen)",
-      "covered_by": {
-        "write": "reopen_issue"
+        "writes": [
+          "update_issue",
+          "close_issue",
+          "reopen_issue"
+        ]
       }
     },
     {
@@ -3588,21 +3578,11 @@
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}/pulls/{pull_number}",
       "covered_by": {
-        "write": "update_pull_request"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/pulls/{pull_number} (close)",
-      "covered_by": {
-        "write": "close_pull_request"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/repos/{owner}/{repo}/pulls/{pull_number} (reopen)",
-      "covered_by": {
-        "write": "reopen_pull_request"
+        "writes": [
+          "update_pull_request",
+          "close_pull_request",
+          "reopen_pull_request"
+        ]
       }
     },
     {
