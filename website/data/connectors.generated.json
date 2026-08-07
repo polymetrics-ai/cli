@@ -74178,6 +74178,11 @@
         "name": "upload_crm_entity_schema",
         "method": "POST",
         "kind": "create"
+      },
+      {
+        "name": "upload_target_assignments",
+        "method": "POST",
+        "kind": "create"
       }
     ],
     "cli_surface": {
@@ -74328,6 +74333,13 @@
           "title": "Integration Settings",
           "commands": [
             "integration-settings"
+          ]
+        },
+        {
+          "id": "targets",
+          "title": "Targets",
+          "commands": [
+            "targets"
           ]
         }
       ],
@@ -76878,6 +76890,77 @@
           "risk": "high: uploads CRM entity schema as a top-level JSON array; no raw CLI body is exposed",
           "approval": "reverse ETL plan -> preview -> approval -> execute; destructive confirmation required",
           "notes": "Write action supports schema-gated top-level array bodies for table/reverse-ETL mappings; provider-style raw JSON CLI flags remain intentionally unavailable."
+        },
+        {
+          "path": "targets list",
+          "summary": "List target definitions (/v2/targets)",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "workspaceId",
+              "type": "string",
+              "summary": "The ID of the workspace to retrieve target definitions for. You can retrieve workspace IDs using the Workspaces API.",
+              "values": [],
+              "maps_to": "query.workspaceId"
+            }
+          ],
+          "examples": [
+            "pm gong targets list --json --max-bytes 1048576"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "targets upload-assignments",
+          "summary": "Upload target assignments (/v2/targets/{targetId}/assignments)",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "upload_target_assignments",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "targetId",
+              "type": "string",
+              "summary": "Unique identifier for the target (up to 20 digits). Retrieve this value using the List targets API.",
+              "values": [],
+              "maps_to": "record.targetId"
+            },
+            {
+              "name": "workspaceId",
+              "type": "string",
+              "summary": "The ID of the workspace the target belongs to. You can retrieve workspace IDs using the Workspaces API.",
+              "values": [],
+              "maps_to": "record.workspaceId"
+            },
+            {
+              "name": "validate-only",
+              "type": "string",
+              "summary": "(Default: false) When true, the CSV file is fully validated but no data is uploaded.",
+              "values": [],
+              "maps_to": "record.validateOnly"
+            },
+            {
+              "name": "assignments-file-path",
+              "type": "string",
+              "summary": "Project-relative target assignments CSV file path to upload.",
+              "values": [],
+              "maps_to": "record.assignments_file_path"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high: uploads target assignments from a bounded project-local file path; file path/content are redacted in plans",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; destructive confirmation required",
+          "notes": "Uses typed multipart write support; no generic upload command is exposed."
         }
       ],
       "help_topics": [
