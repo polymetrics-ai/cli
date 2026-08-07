@@ -36361,7 +36361,7 @@
   {
     "name": "dockerhub",
     "display_name": "Docker Hub",
-    "description": "Reads public Docker Hub repositories and image tags for a configured username or organization via the Docker Hub registry API.",
+    "description": "Reads public Docker Hub repositories and image tags for a configured username or organization, and, with an optional Personal Access Token, manages access tokens, organizations, groups/teams, invites, audit logs, and repositories via the Docker Hub API.",
     "integration_type": "api",
     "docs_url": "https://docs.docker.com/docker-hub/api/latest/",
     "release_stage": "ga",
@@ -36369,7 +36369,7 @@
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -36403,6 +36403,16 @@
           "type": "integer",
           "default": 100,
           "description": "Page size (1-100) for the initial request of each paginated stream (Docker Hub's page_size query param); subsequent pages follow the API's own absolute next URL verbatim."
+        },
+        "docker_pat": {
+          "type": "string",
+          "x-secret": true,
+          "description": "Docker Hub Personal Access Token for docker_username. Optional: omitted, the connector stays read-only-public exactly as before (streams.json falls back to unauthenticated requests). When set, it authenticates every account-scoped, organization, group/team, invite, access-token, audit-log, and repository-write command by exchanging it for a short-lived session bearer token via Docker Hub's own POST /v2/users/login (never sent or logged as a static bearer value itself). Never printed, logged, or echoed by any command."
+        },
+        "scim_bearer_token": {
+          "type": "string",
+          "x-secret": true,
+          "description": "A Docker Hub Enterprise SCIM API bearer token, distinct from docker_pat. Docker Hub's OpenAPI document declares SCIM (/v2/scim/2.0/**) under a separate bearerSCIMAuth security scheme from the rest of the API's bearerAuth; the two credentials are never interchangeable. Required only for the scim-users/scim-schemas/scim-resource-types commands; every other command is unaffected if this is omitted. Never printed, logged, or echoed by any command."
         }
       }
     },
@@ -36454,9 +36464,199 @@
         ]
       }
     ],
+    "write_actions": [
+      {
+        "name": "create_auth_token",
+        "kind": "create",
+        "method": "POST",
+        "path": "/auth/token",
+        "risk": "high: exchanges a credential for a live 10-minute access token; the token is redacted from command output; requires reverse ETL approval"
+      },
+      {
+        "name": "create_user_login",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/login",
+        "risk": "high: exchanges a credential for a live session JWT; the token is redacted from command output; requires reverse ETL approval"
+      },
+      {
+        "name": "create_2fa_login",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users/2fa-login",
+        "risk": "high: exchanges a 2FA challenge for a live session JWT; the token is redacted from command output; requires reverse ETL approval"
+      },
+      {
+        "name": "create_repository",
+        "kind": "create",
+        "method": "POST",
+        "path": "/namespaces/{{ record.namespace }}/repositories",
+        "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval"
+      },
+      {
+        "name": "update_repository_immutable_tags",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/namespaces/{{ record.namespace }}/repositories/{{ record.repository }}/immutabletags",
+        "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval"
+      },
+      {
+        "name": "assign_repository_group",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repositories/{{ record.namespace }}/{{ record.repository }}/groups",
+        "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval"
+      },
+      {
+        "name": "create_access_token",
+        "kind": "create",
+        "method": "POST",
+        "path": "/access-tokens",
+        "risk": "high: creates a live Docker Hub credential; the raw token is returned once by the provider and redacted from command output; requires reverse ETL approval"
+      },
+      {
+        "name": "update_access_token",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/access-tokens/{{ record.uuid }}",
+        "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval"
+      },
+      {
+        "name": "delete_access_token",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/access-tokens/{{ record.uuid }}",
+        "risk": "high: revokes a live Docker Hub credential; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_org_access_token",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.name }}/access-tokens",
+        "risk": "high: creates a live Docker Hub organization credential; the raw token is returned once by the provider and redacted from command output; requires reverse ETL approval"
+      },
+      {
+        "name": "update_org_access_token",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org_name }}/access-tokens/{{ record.access_token_id }}",
+        "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval"
+      },
+      {
+        "name": "delete_org_access_token",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org_name }}/access-tokens/{{ record.access_token_id }}",
+        "risk": "high: revokes a live Docker Hub organization credential; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_group",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org_name }}/groups",
+        "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval"
+      },
+      {
+        "name": "replace_group",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org_name }}/groups/{{ record.group_name }}",
+        "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval"
+      },
+      {
+        "name": "update_group",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org_name }}/groups/{{ record.group_name }}",
+        "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval"
+      },
+      {
+        "name": "delete_group",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org_name }}/groups/{{ record.group_name }}",
+        "risk": "high: removes an organization group and its access grants; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_group_member",
+        "kind": "create",
+        "method": "POST",
+        "path": "/orgs/{{ record.org_name }}/groups/{{ record.group_name }}/members",
+        "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval"
+      },
+      {
+        "name": "remove_group_member",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org_name }}/groups/{{ record.group_name }}/members/{{ record.username }}",
+        "risk": "high: removes a user's access via this group; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "bulk_create_invites",
+        "kind": "create",
+        "method": "POST",
+        "path": "/invites/bulk",
+        "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval"
+      },
+      {
+        "name": "cancel_invite",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/invites/{{ record.id }}",
+        "risk": "medium: cancels a pending organization invite; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "resend_invite",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/invites/{{ record.id }}/resend",
+        "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval"
+      },
+      {
+        "name": "update_org_settings",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.name }}/settings",
+        "risk": "medium: mutates Docker Hub account/organization state; requires reverse ETL approval"
+      },
+      {
+        "name": "update_org_member",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/orgs/{{ record.org_name }}/members/{{ record.username }}",
+        "risk": "high: changes a member's organization role/permissions; requires reverse ETL approval"
+      },
+      {
+        "name": "remove_org_member",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/orgs/{{ record.org_name }}/members/{{ record.username }}",
+        "risk": "high: removes a user's organization membership; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_scim_user",
+        "kind": "create",
+        "method": "POST",
+        "path": "/scim/2.0/Users",
+        "risk": "high: provisions a new SCIM-managed identity; requires reverse ETL approval"
+      },
+      {
+        "name": "update_scim_user",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/scim/2.0/Users/{{ record.id }}",
+        "risk": "high: replaces a SCIM-managed identity's profile and can deactivate it; requires reverse ETL approval"
+      }
+    ],
     "risk": {
-      "read": "external Docker Hub API read of public repository and tag data",
-      "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+      "read": "external Docker Hub API read of public repository/tag data, and, when authenticated, account-scoped access-token/org/group/invite/audit-log metadata",
+      "approval": "reverse ETL mutations (repository, access-token, group, invite, org member/settings writes) require plan, preview, explicit approval, and execute; destructive actions require typed destructive confirmation"
     },
     "icon": {
       "id": "dockerhub",

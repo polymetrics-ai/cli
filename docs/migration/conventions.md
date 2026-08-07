@@ -304,11 +304,14 @@ not a full override by default.
   `repository_contents_directory` for repository directory listings; those bounded shapes reject
   sensitive repository paths before network access and redact `content` plus download URLs from
   returned JSON. `json_redacted` and `clinical_json_redacted` remain the direct-read compatibility
-  choices for explicitly selected response contracts. `binary_file_bounded` is neither a
-  direct-read nor direct-write policy: it remains schema-valid only for existing binary-download
-  metadata, while new file/binary commands use the distinct intent below. Do not add
-  provider-prefixed output-policy names in shared Go; new response families need a generic policy
-  name and regression tests proving reuse by more than one connector shape.
+  choices for explicitly selected response contracts, and `json_redacted` is the *required* policy
+  for a `HEAD` `rest_read` status-only existence check, whose result is `{"status_code": N}`
+  because a HEAD response carries no body (see AGENTS.md, "Command Surface Must Stay Executable").
+  `binary_file_bounded` is neither a direct-read nor direct-write policy: it remains schema-valid
+  only for existing binary-download metadata, while new file/binary commands use the distinct
+  intent below. Do not add provider-prefixed output-policy names in shared Go; new response
+  families need a generic policy name and regression tests proving reuse by more than one
+  connector shape.
 - **File/binary commands are their own intent**: declare `intent:"binary_download"` with an
   `operation` of kind `binary_download` and exactly one connector-relative GET `api_surface`
   endpoint, and leave the command's `output_policy` unset — the response becomes a file on disk,
@@ -1156,7 +1159,11 @@ replay harness (the pre-R3 pattern this rule replaces):
   (`check_fixture`, every `read_fixture_nonempty:<stream>`, `pagination_terminates`,
   `records_match_schema`, `cursor_advances`) — this is gmail's shape: a sole `mode: custom` auth
   candidate with no `when`-gated non-custom fallback means literally every dynamic check that
-  resolves auth would otherwise fail identically and uninformatively.
+  resolves auth would otherwise fail identically and uninformatively. A `when`-gated custom
+  candidate does not escape this: conformance's synthetic runtime config populates EVERY `x-secret`
+  spec property unconditionally, so a `when: {{ secrets.<pat> }}` gate always evaluates true under
+  replay and every stream is forced onto the custom-hook path — dockerhub's optional-PAT shape,
+  where no synthetic-config value can exercise the unauthenticated fallback branch at all.
 - **`reason` is REQUIRED whenever `skip_dynamic` is `true`** — `connectorgen validate`'s
   `conformance_skip_reason` rule hard-fails a marker with an empty/whitespace-only reason, at
   either level. The reason MUST name the authoritative substitute that actually proves the skipped
