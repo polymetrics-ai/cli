@@ -110,6 +110,7 @@ connector-boundary:
 
 release-workflow-check:
 	./scripts/tests/homebrew-release-notify.sh
+	./scripts/tests/release-target-parity.sh
 
 verify: fmt tidy-check vet test build docs-check smoke lint agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary release-workflow-check
 

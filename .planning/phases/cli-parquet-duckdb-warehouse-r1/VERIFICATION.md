@@ -119,63 +119,49 @@ which is a materially different trade and reopens the decision.
 Verified against the binary: a planted `tables/*.jsonl` makes reads refuse and name it, the file is
 byte-identical afterwards, and removing it restores reads.
 
-## Open item — the release pipeline
+## The release pipeline — decided, and why
 
-`.goreleaser.yaml` now sets `CGO_ENABLED=1` and drops `windows/arm64`, and
-`scripts/verify-release-assets.sh` expects five archives instead of six. **The release jobs
-themselves still build all targets from one `ubuntu-latest` host**, which worked when
-`CGO_ENABLED=0` and cannot work now: cross-compiling cgo to darwin and windows from Linux needs
-toolchains the runner does not have.
+Embedding DuckDB makes every release target a cgo build, and the previous pipeline produced all of
+them from one Linux host. Three probes settled how to replace it.
 
-The obvious fix — a native build matrix feeding `goreleaser`'s `prebuilt` builder — is **not
-available**: `prebuilt` is GoReleaser **Pro** only. That leaves four routes, with genuinely
-different costs:
+**Probe 1, zig cc: 0 of 5.** Every target failed, including `linux/amd64` — the runner's own
+architecture — which is what proved the blocker was not cross-compilation. `libduckdb.a` is C++ and
+the link needs a C++ standard library ABI-compatible with an archive built by someone else's
+toolchain; zig has none (`undefined symbol: typeinfo for std::bad_weak_ptr`, and on darwin a missing
+libresolv). **That ruled out zig, not cross-compiling** — a distinction this record got wrong on the
+first pass and the captain corrected.
 
-| route | cost | risk |
-|---|---|---|
-| **A.** zig cc as a cross toolchain on the existing single Linux host | ~15 lines; the whole signed pipeline (goreleaser OSS, cosign, SLSA, nfpm, checksums) unchanged | unknown whether zig can link go-duckdb's prebuilt static libraries, especially the Mach-O ones for darwin and whichever ABI the windows library uses |
-| **B.** GoReleaser Pro + native build matrix + `prebuilt` builder | a paid licence | low — this is the shape the tool is designed for |
-| **C.** Native matrix + hand-rolled archives and `nfpm` CLI | no licence | highest — rewrites a signed, attested release path by hand |
-| **D.** Publish a smaller matrix until one of the above lands | none | a product decision about which platforms ship |
-
-### The probe answered: route A is dead
-
-CI ran the probe. **All five targets failed, including `linux/amd64` — the runner's own
-architecture**, which is the finding that settles it:
+**Probe 2, `goreleaser-cross` (real GCC + osxcross): 4 of 5.**
 
 ```
-RESULT linux/amd64:   FAILED
-RESULT linux/arm64:   FAILED    ld.lld: undefined symbol: typeinfo for std::bad_weak_ptr
-RESULT windows/amd64: FAILED    lld-link: undefined symbol: std::__cxx11::basic_string<...>::reserve()
-RESULT darwin/amd64:  FAILED    unable to find dynamic system library 'resolv'
-RESULT darwin/arm64:  FAILED    unable to find dynamic system library 'resolv'
+RESULT linux/amd64:   OK
+RESULT linux/arm64:   OK
+RESULT darwin/amd64:  OK      osxcross links go-duckdb's Mach-O archives fine
+RESULT darwin/arm64:  OK
+RESULT windows/amd64: FAILED  collect2: error: ld returned 1 exit status
 ```
 
-A native-architecture build failing proves the blocker is **not cross-compilation**. `libduckdb.a`
-is a C++ library, and the link needs a matching C++ standard library — `-lc++` on the darwin link
-line, libstdc++ symbols on the others. zig does not supply one compatible with a prebuilt archive
-built by someone else's toolchain. No flag fixes that; it is the wrong tool for linking against a
-third-party C++ static library.
+Its first run reported 0 of 5 and was a **false negative**: every target died on
+`error obtaining VCS status: exit status 128` — git refusing the bind-mounted workspace as dubious
+ownership, before any compiler ran. The compiler-path listing printed by the probe is the only
+reason that was visible rather than being read as a toolchain verdict. Fixed with
+`safe.directory` + `-buildvcs=false`, and the real answer is above.
 
-**That kills zig, not route A** — a distinction this record got wrong on the first pass and the
-captain corrected. A real GCC cross image ships precisely what was missing: matching libstdc++ for
-the linux targets, mingw-w64 for windows, and osxcross (clang + macOS SDK + libc++) for darwin. That
-is a different failure mode, so it is probed the same way before any money is spent.
+So even the best free cross image cannot produce windows/amd64, and a native Windows runner is
+required regardless. **A matrix is unavoidable, which is what option E already is.**
 
-**Probe 2 — `ghcr.io/goreleaser/goreleaser-cross:v1.25.9`**, same five targets, same
-`RESULT <target>: OK|FAILED` format, still non-blocking. It additionally prints which cross
-compilers the image actually ships, so a *missing compiler* can never be mistaken for a *link
-failure* — the distinction that made probe 1 conclusive.
+**Decision (captain): option E — a GitHub Actions native matrix.** Each target builds on a runner of
+its own OS, only on release tags so pull requests stay cheap; one publish job assembles the release
+and the existing trust steps run unchanged. No GoReleaser Pro licence.
 
-If it passes, the release runs `goreleaser` inside that container and the signed pipeline shape is
-unchanged. If it fails too, no free cross route remains and B (a paid GoReleaser Pro licence) is
-settled — a purchasing decision that is not this agent's to make.
+**Cost: zero.** The repository is public, and standard GitHub-hosted runners are free for public
+repositories on every OS. The one exclusion is *larger* runners, which are always billed — this
+matrix uses only standard labels (`ubuntu-latest`, `ubuntu-24.04-arm`, `macos-13`, `macos-latest`,
+`windows-latest`), so nothing here is billable. Pull requests never touch macOS or Windows runners.
 
-Route C (hand-rolled archives and `nfpm`) was **ruled out by the captain**: it puts the risk on the
-signed and attested path, which is the worst place for it. That ruling stands regardless of the
-probe.
-
-Until B lands, `release / package-check` fails on the PR. Deliberately visible.
+Route C, hand-rolled packaging, was ruled out by the captain and is not what this is: deb and rpm
+are still built by **nfpm, the same tool GoReleaser embeds**, from a config that mirrors the old
+`nfpms` block. Only archive and checksum assembly is done directly, and it is guarded — see below.
 
 ## Gates run
 
