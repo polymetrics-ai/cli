@@ -10,7 +10,8 @@ review was completed inline over the changed Go, bundle, test, generated-doc, an
   command remains in the harness.
 - Generated resource names are owned by the run; cleanup is idempotent, continues after an error,
   and removes only the unique image reference created for that run.
-- Colima reset follows Docker cleanup and remains an explicit destructive opt-in.
+- Host-disk reclaim follows container cleanup and remains an explicit opt-in. It trims the
+  backing machine rather than destroying it; one pass was measured insufficient, so it runs twice.
 - The native MySQL path validates identifiers, uses parameters for cursor values, never exposes
   caller configuration in identifier/connection errors, and has no write operation.
 - The binlog declaration, Go closed vocabulary, executor descriptor, checkpoint timing, and live

@@ -302,6 +302,27 @@ Never invent an `api_surface` endpoint to make a command look implemented. If
 the endpoint is not in the connector's own `api_surface.json` and
 `operations.json`, the command is not ready.
 
+## Database Connector Container Harness
+
+`internal/connectors/native/dbtest` is the reusable, Podman-backed live-test
+harness for native database connectors. MySQL's
+`internal/connectors/native/mysql/mysql_integration_test.go` is the reference
+caller; add an engine through a `dbtest.Config`, not a copied harness.
+
+- Live tests are build-tagged `databaseintegration` and opt-in: they visibly
+  skip before startup without their opt-in and explicit Podman connection, but
+  fail when enabled and the engine cannot be reached.
+- `POLYMETRICS_PODMAN_CONNECTION` is mandatory. Every Podman invocation is
+  explicitly scoped; never rely on or change the global default connection,
+  and never touch another lane's machine, container, image, or volume.
+- A harness run owns only its uniquely named container, volume, and run-specific
+  image reference. Cleanup is unconditional and idempotent, including failure
+  and interrupt paths; report free disk before and after, and keep engines
+  sequential unless bounded parallelism is explicitly opted into.
+- Native SQL connectors share `internal/connectors/native/sqltls` and its
+  `sslmode`/`sslrootcert`/`sslservername` option shape. Reuse it so transport
+  modes cannot drift, and never silently downgrade a strict TLS mode.
+
 ## The Table Format Is Derived; The Write-Ahead Log Is Not
 
 A table is a **single Parquet file** at `tables/<table>.parquet`, rebuilt

@@ -5,13 +5,18 @@
 - [x] Focused unit tests for the harness, MySQL native connector, bundle loader, and changefeed contract.
 - [x] The focused bundle-registry test asserts that the public `mysql` entry is the native connector
       and exposes its matching binlog changefeed executor.
-- [x] `go mod verify`; `govulncheck -show verbose ./internal/connectors/native/mysql` is clean after
-      upgrading the transitive `github.com/klauspost/compress` to v1.18.7.
-- [x] Documented tagged MySQL Docker/Colima test on the explicit `colima` context, with the opt-in
-      Colima reset enabled. It passed in 53.48 seconds against MySQL 8.4.11.
-- [x] The post-run Docker context had no containers, volumes, or images. The live test reported
-      before=84802707456 and after=84784943104 free bytes with `colima_reset=true`, a 17.8 MB
-      decrease that is within the test's 128 MB ordinary-build noise allowance.
+- [x] `govulncheck ./...` (scanner v1.6.0, DB vuln.go.dev): **no vulnerabilities found** across the
+      whole module, including `go-mysql` and its transitive set.
+- [x] Measured binary size delta for the new dependency: 94,191,266 -> 100,101,650 bytes
+      (+5,910,384; +5.64 MiB; +6.27 %), `go build -trimpath ./cmd/pm`, darwin/arm64.
+- [x] Documented tagged MySQL **Podman** test on an explicit `--connection`, with the host-disk
+      reclaim opt-in enabled. Passed in 33.8 s against MySQL 8.4.11, including four `sslmode`
+      subtests asserted against the server's own negotiated `Ssl_cipher`.
+- [x] The post-run Podman connection had **no containers, no volumes, and no images**. The live test
+      reported the machine's sparse disk file moving by +0.2 MiB end to end.
+- [x] Cleanup verified on the failure path too: two live runs that failed an assertion (before the
+      reserved-word fixes) still tore down every resource and reclaimed disk.
+- [x] `GOOS=windows go build ./...` passes; `-race` clean on the harness package.
 - [x] `gofmt`, scoped `go vet`, focused MySQL/bundle/command-runner/engine tests, relevant
       connector-catalog CLI tests, and `go build ./cmd/pm`.
 - [x] Full `go test ./internal/connectors/...` regression passed after the bundle-count update;

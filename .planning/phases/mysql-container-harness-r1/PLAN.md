@@ -11,11 +11,11 @@ machine scripts, or another connector.
 ## Design
 
 1. Add a small `dbtest` test-support package that runs a configured engine through an explicit
-   Docker context that points to Colima. It creates collision-resistant container/volume names,
+   Podman connection named explicitly by the caller. It creates collision-resistant container/volume names,
    records free disk before/after, chooses a Docker-assigned loopback host port, waits through a bounded probe, and
    tracks whether the image existed before the run. Cleanup is idempotent and runs via defer plus
    an interrupt handler: container removal, named-volume removal, then removal of only an image
-   pulled by this run unless the keep-image opt-in is set. An opt-in Colima reset runs only after
+   pulled by this run unless the keep-image opt-in is set. An opt-in host-disk trim of the backing machine runs only after
    Docker cleanup to reclaim host disk that Docker removal alone cannot shrink. Engines execute
    serially by default.
 2. Add the MySQL Tier-3 bundle and component split: connection validation and wire-client setup;
@@ -53,8 +53,8 @@ be added: its client package is used for normal database work as well as its rep
 3. Add the tagged real-engine test. It must fail when the engine cannot be reached, while deferred
    cleanup executes, and may only skip with a visible opt-in/scoped-connection reason before a
    live run begins.
-4. Run the documented command against the explicit Docker/Colima context. Check free-disk values,
-   Docker resource absence, and the opt-in Colima reset after the test prove no named container,
+4. Run the documented command against the explicit Podman connection. Check free-disk values,
+   Podman resource absence, and the opt-in host-disk trim after the test prove no named container,
    volume, or harness-pulled image remains and the VM disk is reclaimed.
 5. Run focused Go, format, vet/build, all non-suite verification gates, generated-surface checks,
    and inline review. Record results in `VERIFICATION.md` and exact PR material in `PR-BODY.md`.
