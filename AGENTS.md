@@ -208,13 +208,25 @@ the endpoint is not in the connector's own `api_surface.json` and
 
 A parity count is a claim about the binary, so prove it with the binary.
 Run each `implemented`/`partial` command as `pm <connector> <path>` in an
-initialised project with **no credential configured**: a dispatchable command
-stops at `error: missing --credential`, an undispatchable one answers
-`error: unknown command "..."`. That string is the discriminator, and it is the
-only one — a bundle can validate, pass `surface-sync --check`, and still be
-unreachable. Gmail once recorded 79 parity successes while the binary rejected
-all 79. Give each parallel worker its own project directory; a shared one
-produces state-lock races that read as failures but are not.
+initialised project with **no credential configured**. There are exactly three
+outcomes, and they are not interchangeable evidence:
+
+- `implemented` and dispatchable stops at `error: missing --credential`. This,
+  and only this, is the evidence that a command works.
+- `partial` answers with its declared block reason, e.g. `error: connector
+  command "gists create" is blocked: intent=reverse_etl: availability=partial:
+  Reverse ETL writes require plan, preview, approval, execute.`
+  `resolvePreflightCommand` gates reverse-ETL on `availability == "implemented"`
+  (`internal/connectors/commandrunner/runner.go`) and otherwise falls through to
+  a terminal `BlockedCommandError`. This is CORRECT behaviour for a `partial`
+  command — it is honestly labelled, not broken — but it must never be recorded
+  as "reachable" on the same footing as the line above.
+- `error: unknown command "..."` is the only reachability failure.
+
+A bundle can validate, pass `surface-sync --check`, and still be unreachable.
+Gmail once recorded 79 parity successes while the binary rejected all 79. Give
+each parallel worker its own project directory; a shared one produces state-lock
+races that read as failures but are not.
 
 `unsafe_or_disallowed` is a safety control only when it removes a capability.
 Once the documented-surface enumeration generates a command for an endpoint,

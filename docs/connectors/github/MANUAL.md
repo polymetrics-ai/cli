@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector github [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads GitHub repository, issue, pull request, code, release, collaboration, Actions, security (code scanning/dependabot/secret scanning/advisories), webhook, deploy key, environment, and ruleset data, and writes approved reverse ETL actions through the GitHub REST API (full-surface certified: 37 streams, 231 write actions accounted).
+  Reads GitHub repository, issue, pull request, code, release, collaboration, Actions, security (code scanning/dependabot/secret scanning/advisories), webhook, deploy key, environment, and ruleset data, and writes approved reverse ETL actions through the GitHub REST API (37 streams, 555 write actions accounted).
 
 ICON
   id: github
@@ -473,10 +473,10 @@ REVERSE ETL ACTIONS
     endpoint: PATCH /repos/{owner}/{repo}
     risk: high
   unarchive_repo:
-    endpoint: PATCH /repos/{owner}/{repo}
+    endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}
     risk: returns the configured repository to a writable state
   archive_repo:
-    endpoint: PATCH /repos/{owner}/{repo}
+    endpoint: PATCH /repos/{{ config.owner }}/{{ config.repo }}
     risk: archives the configured repository, making it read-only for every consumer
   actions_cache_retention_limit2:
     endpoint: PUT /repos/{owner}/{repo}/actions/cache/retention-limit
