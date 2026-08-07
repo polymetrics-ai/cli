@@ -1,0 +1,109 @@
+{
+  "phase": "github-parity-extract-r1",
+  "branch": "fm/cli-github-parity-extract-r1",
+  "base": "08cc41c87",
+  "source_branch": "origin/fm/cli-top50-sweep-resume2-r1",
+  "lifecycle": {
+    "discuss-phase": "inline; scope fixed by the task brief plus CAPTAIN-ORDER-unblock-commands.md",
+    "plan-phase --tdd": "PLAN.md",
+    "execute-phase": "TDD-LEDGER.md, two red/green cycles",
+    "verify-work": "VERIFICATION.md",
+    "code-review": "pending — runs on PR open"
+  },
+  "fallback": {
+    "used": true,
+    "reason": "GSD Pi adapter commands were not invoked; the lifecycle was executed manually with the same artifacts and red/green evidence recorded here, as AGENTS.md permits when the runtime cannot provide compatible isolated agents. The canonical parent-worker contract also forbids spawning extra roles for this job."
+  },
+  "extracted_commits": [
+    {"sha": "6848cbb2d", "subject": "test(connectors): add red github surface test at the derived 1220 (slice 1/5)"},
+    {"sha": "afa4a0fd4", "subject": "feat(connectors): enumerate github's full documented GET surface (slice 2/5)"},
+    {"sha": "60719bfbe", "subject": "fix(connectors): let one endpoint back several write actions"},
+    {"sha": "6fe60991d", "subject": "feat(connectors): bring github to documented-operation parity"}
+  ],
+  "dropped_from_pick": [
+    {
+      "path": "data/cli-top50-fixed-schema-sweep-r1/PROGRESS.md",
+      "reason": "sweep bookkeeping, absent from main, not github parity"
+    }
+  ],
+  "regenerated_artifacts": {
+    "internal/connectors/defs/operation_endpoint_ledger.json": "go run ./cmd/connectorgen surface-sync (after reset to main); byte-identical to the branch's version",
+    "docs/connectors/github/{MANUAL,SKILL}.md": "./pm docs generate --dir docs/cli",
+    "docs/skills/pm-github/SKILL.md": "./pm skills generate --dir docs/skills",
+    "website/data/connectors.generated.json": "node scripts/gen-connector-bundles.mjs",
+    "website/lib/connectors.catalog.data.generated.json": "node scripts/gen-connector-catalog.mjs",
+    "internal/cli/testdata/golden_transcripts.json": "POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test ./internal/cli/ -run GoldenTranscript"
+  },
+  "delta_confined_to_github": {
+    "operation_endpoint_ledger.json": ["github"],
+    "website/data/connectors.generated.json": ["GitHub"],
+    "website/lib/connectors.catalog.data.generated.json": ["GitHub"],
+    "golden_transcripts.json": ["connectors_inspect_github_json", "dynamic_connector_bare_json"],
+    "reverted_unrelated_churn": "551 connectors' MANUAL.md/SKILL.md and 4 pm-* skill files — pre-existing generator drift on main, not github's"
+  },
+  "reachability_sweep": {
+    "method": "invoke `pm github <path>` per command in an initialised project with no credential configured; `unknown command` is the discriminator; one project directory per parallel worker",
+    "parity_extraction_only": {"probed": 1079, "unreachable": 0},
+    "final_binary": {"probed": 1086, "unreachable": 0, "lock_races": 0},
+    "histogram_final": {
+      "error: missing --credential": 1049,
+      "declared partial block reasons": 37
+    },
+    "restored_commands_spot_check": {
+      "repo create": "error: missing --credential",
+      "repo delete": "error: missing --credential",
+      "repo archive": "error: missing --credential",
+      "repo unarchive": "error: missing --credential",
+      "cache delete": "error: missing --credential",
+      "secret set": "error: missing --credential",
+      "secret delete": "error: missing --credential"
+    }
+  },
+  "surface_totals": {
+    "commands": 1147,
+    "implemented": 1049,
+    "partial": 37,
+    "reachable": 1086,
+    "unsafe_or_disallowed": 5,
+    "unsupported_api": 27,
+    "unsupported_local": 21,
+    "planned": 8,
+    "rest_endpoint_rows": 1224,
+    "documented_rest_operations": 1220,
+    "covered_endpoints": 1126,
+    "operation_blocked_endpoints": 98,
+    "ledger_rows_github": 164
+  },
+  "classification_changes": {
+    "restored": [
+      {"command": "repo create", "write": "repos_create_for_authenticated_user", "method": "POST", "confirmation": "plan/preview/approval/execute"},
+      {"command": "repo delete", "write": "repo", "method": "DELETE", "confirmation": "plan/preview/approval/execute + typed --confirm destructive"},
+      {"command": "repo archive", "write": "archive_repo", "method": "PATCH", "confirmation": "plan/preview/approval/execute", "new_write_action": true},
+      {"command": "repo unarchive", "write": "unarchive_repo", "method": "PATCH", "confirmation": "plan/preview/approval/execute", "new_write_action": true},
+      {"command": "cache delete", "write": "actions_caches_cache_id", "method": "DELETE", "confirmation": "plan/preview/approval/execute + typed --confirm destructive"},
+      {"command": "secret set", "write": "actions_secrets_secret_name3", "method": "PUT", "confirmation": "plan/preview/approval/execute", "redact_fields": ["encrypted_value"]},
+      {"command": "secret delete", "write": "actions_secrets_secret_name", "method": "DELETE", "confirmation": "plan/preview/approval/execute + typed --confirm destructive"}
+    ],
+    "left_blocked_needs_runtime_capability": [
+      {"command": "github issue delete", "reason": "graphql_mutation; direct-write executor requires rest_write; no REST issue-delete endpoint exists"},
+      {"command": "github issue transfer", "reason": "GraphQL-only; POST /repos/{owner}/{repo}/transfer is repository transfer, a different operation"},
+      {"command": "github pr revert", "reason": "no documented REST endpoint in github's own api_surface"},
+      {"command": "bahmni documents upload", "reason": "no write action; missing file snapshot/SHA-256 approval binding named in its own notes"}
+    ],
+    "held_for_captain": [
+      {"command": "github auth token", "reason": "prints a credential; contradicts the standing never-print rule"},
+      {"command": "github api", "reason": "arbitrary-request escape hatch; no declared params, no enum validation, no required-field enforcement, no ledger entry, no api_surface row"}
+    ]
+  },
+  "downstream": {
+    "sweep_branch_rebase_required": true,
+    "detail": "fm/cli-top50-sweep-resume2-r1 carries the same four github commits; after this merges it must be rebased onto the new main before resuming — its github commits will be already-applied and its operation_endpoint_ledger.json will conflict. Paused at stripe, so cheap now."
+  },
+  "constraints_honoured": {
+    "no_test_weakened_skipped_or_deleted": true,
+    "tests_added": 3,
+    "no_credential_or_token_value_printed": true,
+    "sweep_consolidated_pr_not_opened": true,
+    "pushed_to_default_branch": false
+  }
+}
