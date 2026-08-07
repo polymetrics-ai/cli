@@ -36,11 +36,11 @@ build from source below.
 
 ### Install a release binary
 
-Release assets are published from `polymetrics-ai/cli` for Linux, macOS, and
-Windows on amd64 and arm64.
+Release assets are published from `polymetrics-ai/cli` for Linux and macOS on
+amd64 and arm64. Windows is not published; see Troubleshooting.
 
 This path requires the GitHub CLI (`gh`) and standard archive tools (`tar` on
-macOS/Linux, `unzip` for Windows archives), but does not require Go.
+macOS/Linux), but does not require Go.
 
 ```bash
 os_name="$(uname -s)"
@@ -49,7 +49,6 @@ arch_name="$(uname -m)"
 case "$os_name" in
   Darwin) os=darwin ;;
   Linux) os=linux ;;
-  MINGW*|MSYS*|CYGWIN*) os=windows ;;
   *) echo "unsupported OS: $os_name" >&2; exit 1 ;;
 esac
 
@@ -59,25 +58,14 @@ case "$arch_name" in
   *) echo "unsupported architecture: $arch_name" >&2; exit 1 ;;
 esac
 
-case "$os" in
-  windows) asset_pattern="pm_*_${os}_${arch}.zip" ;;
-  *) asset_pattern="pm_*_${os}_${arch}.tar.gz" ;;
-esac
+asset_pattern="pm_*_${os}_${arch}.tar.gz"
 
 tmpdir="$(mktemp -d)"
 trap 'rm -rf "$tmpdir"' EXIT
 gh release download --repo polymetrics-ai/cli --pattern "$asset_pattern" --dir "$tmpdir"
 
-case "$os" in
-  windows)
-    unzip -q "$tmpdir"/pm_*_"${os}"_"${arch}".zip -d "$tmpdir"
-    binary_name=pm.exe
-    ;;
-  *)
-    tar -xzf "$tmpdir"/pm_*_"${os}"_"${arch}".tar.gz -C "$tmpdir"
-    binary_name=pm
-    ;;
-esac
+tar -xzf "$tmpdir"/pm_*_"${os}"_"${arch}".tar.gz -C "$tmpdir"
+binary_name=pm
 
 install_dir="${INSTALL_DIR:-$HOME/.local/bin}"
 mkdir -p "$install_dir"
@@ -106,18 +94,16 @@ pm help
 
 ### Build with DuckDB analytics (optional)
 
-The default build ships a simple JSONL query path. For real analytical SQL
-(joins, aggregations, window functions) build the DuckDB engine — this requires
-a C toolchain (CGO):
+DuckDB is embedded in every build. It is the query engine and the only Parquet
+implementation in the binary, so building `pm` requires cgo and a C toolchain:
 
 ```bash
-CGO_ENABLED=1 go build -tags duckdb -o pm ./cmd/pm
-# or run the dedicated verification lane:
-make verify-duckdb
+CGO_ENABLED=1 go build -o pm ./cmd/pm
 ```
 
-The default (CGO-free) and `-tags duckdb` builds are interchangeable; the DuckDB
-build only changes how `pm query` is executed.
+There is no build tag and no CGO-free variant. Two builds that wrote different
+table formats would mean a query that works on one install and fails on another,
+so `pm query` supports read-only `SELECT` and `WITH` in full everywhere.
 
 ### Verify your build
 
@@ -360,8 +346,13 @@ Details: [docs/runtime/SETUP.md](runtime/SETUP.md).
 
 - **`go.mod requires go >= 1.25` / toolchain errors** — use `make` targets (they set
   `GOTOOLCHAIN=auto`), or run `GOTOOLCHAIN=auto go build ./cmd/pm`, or install Go 1.25.11+.
-- **DuckDB build fails to link** — the `-tags duckdb` build needs CGO and a C compiler
-  (`CGO_ENABLED=1`). The default build needs neither; use it if you don't need analytical SQL.
+- **DuckDB build fails to link** — `pm` needs CGO and a C compiler (`CGO_ENABLED=1`,
+  plus gcc or clang). There is no CGO-free build: DuckDB reads and writes every
+  warehouse table.
+- **No Windows release** — `windows/arm64` has no prebuilt DuckDB library and cannot be
+  built; `windows/amd64` was dropped for having no user asking for it. `pm` still builds
+  from source on Windows amd64 with a C toolchain, and WSL works today. Both targets
+  return on a customer ask.
 - **An HTTP connector only returns one page** — connectors default to one page for safe
   local runs. Set `max_pages=0` (aliases: `all`, `unlimited`) on the credential, or
   `--source-config max_pages=0` on the connection.

@@ -2,8 +2,6 @@ package app_test
 
 import (
 	"context"
-	"encoding/json"
-	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -103,7 +101,9 @@ func setupApprovedReversePlan(t *testing.T, ctx context.Context) (*app.App, app.
 
 // writeWarehouseRows rewrites the table a reader would actually read. Tables
 // are materialized inside their owning connection's directory, so the file is
-// resolved rather than assumed to sit at the warehouse root.
+// resolved rather than assumed to sit at the warehouse root, and it is written
+// through the real table writer so the fixture cannot drift from the format a
+// sync produces.
 func writeWarehouseRows(t *testing.T, a *app.App, table string, rows []connectors.Record) error {
 	t.Helper()
 	root := filepath.Join(a.ProjectDir(), "warehouse")
@@ -111,16 +111,9 @@ func writeWarehouseRows(t *testing.T, a *app.App, table string, rows []connector
 	if err != nil {
 		return err
 	}
-	file, err := os.OpenFile(located.Path, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o600)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-	encoder := json.NewEncoder(file)
+	out := make([]warehouse.Row, 0, len(rows))
 	for _, row := range rows {
-		if err := encoder.Encode(row); err != nil {
-			return err
-		}
+		out = append(out, warehouse.Row(row))
 	}
-	return nil
+	return warehouse.WriteTable(context.Background(), located.Path, out)
 }

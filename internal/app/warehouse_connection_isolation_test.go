@@ -1,7 +1,6 @@
 package app
 
 import (
-	"bufio"
 	"context"
 	"encoding/json"
 	"errors"
@@ -43,31 +42,17 @@ func readWarehouseTableRows(t *testing.T, root string) []warehouseTableRow {
 			}
 			return nil
 		}
-		if !strings.HasSuffix(path, ".jsonl") {
+		if filepath.Ext(path) != warehouse.TableFileExt {
 			return nil
 		}
-		file, err := os.Open(path)
-		if err != nil {
-			return err
+		rel, relErr := filepath.Rel(root, path)
+		if relErr != nil {
+			rel = path
 		}
-		defer func() { _ = file.Close() }()
-		scanner := bufio.NewScanner(file)
-		for scanner.Scan() {
-			line := strings.TrimSpace(scanner.Text())
-			if line == "" {
-				continue
-			}
-			var record connectors.Record
-			if err := json.Unmarshal([]byte(line), &record); err != nil {
-				return err
-			}
-			rel, relErr := filepath.Rel(root, path)
-			if relErr != nil {
-				rel = path
-			}
-			rows = append(rows, warehouseTableRow{File: rel, Record: record})
-		}
-		return scanner.Err()
+		return warehouse.ReadTable(context.Background(), path, func(row warehouse.Row) error {
+			rows = append(rows, warehouseTableRow{File: rel, Record: connectors.Record(row)})
+			return nil
+		})
 	})
 	if err != nil {
 		t.Fatalf("walk warehouse %s: %v", root, err)

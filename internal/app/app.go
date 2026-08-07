@@ -45,9 +45,9 @@ type App struct {
 	catalogs   catalogStorage
 }
 
-// sqlQueryEngine is the pluggable backend for App.QuerySQL. The default build
-// uses a JSONL engine that reproduces the historical SELECT * behavior; the
-// duckdb-tagged build swaps in an analytical DuckDB engine.
+// sqlQueryEngine is the backend for App.QuerySQL. DuckDB is the only
+// implementation; the seam remains so a query path can be substituted in tests
+// without the engine choice becoming an install-time option.
 type sqlQueryEngine interface {
 	QuerySQL(ctx context.Context, sql string, limit int) ([]connectors.Record, error)
 	Name() string
@@ -1367,8 +1367,8 @@ func reverseSourceRemedy(plan ReversePlan) string {
 	)
 }
 
-// QueryEngineName reports which SQL engine backs QuerySQL ("jsonl" by default,
-// "duckdb" when built with -tags duckdb).
+// QueryEngineName reports which SQL engine backs QuerySQL. There is one, in
+// every build: "duckdb".
 func (a *App) QueryEngineName() string {
 	return a.sqlEngine.Name()
 }

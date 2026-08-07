@@ -39,7 +39,7 @@ pm init --root ./demo --json
 | Connections | state file | References credentials by name. |
 | Catalogs | state file | Stream names and schemas only. |
 | ETL runs | state file plus warehouse files | Records are written in bounded batches. |
-| Warehouse | JSONL files by default, nested per connection | DuckDB is available through the tagged build. |
+| Warehouse | Parquet tables, nested per connection | Queried in-process by embedded DuckDB. |
 | Reverse plans | state file | Approval tokens are hashed and omitted from JSON output. |
 | Schedules | schedule manifests | Local cron/system scheduler bridge. |
 
@@ -55,8 +55,8 @@ filename:
     <connector>/
       <connection-id>/
         owner.json            identity of the connection owning this directory
-        wal/<stream>.jsonl    append-only log; the source of truth
-        tables/<table>.jsonl  derived table, rewritten wholesale
+        wal/<stream>.jsonl      append-only log; the source of truth
+        tables/<table>.parquet  derived table, rewritten wholesale
 ```
 
 Two connections can target the same table name without one overwriting the
@@ -106,7 +106,7 @@ pm query run --table customers --limit 10 --json
 pm query run --sql "SELECT * FROM customers LIMIT 10" --json
 ```
 
-The default binary uses a pure-Go local JSONL query path. It is intentionally conservative. Build with the DuckDB tag when a workflow needs richer analytical SQL such as joins, window functions, or advanced aggregation.
+DuckDB is embedded in every binary and reads the Parquet tables in-process, so joins, window functions and advanced aggregation all work without a build flag. Only read-only `SELECT` and `WITH` statements are accepted.
 
 ## Reverse-ETL gate
 

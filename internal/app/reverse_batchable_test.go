@@ -132,7 +132,7 @@ func TestPlanReverseETLRefusesNonBatchableAction(t *testing.T) {
 	defer server.Close()
 
 	a, root := setupHumanProxyApp(t, ctx, server.URL)
-	writeWarehouseJSONLRows(t, root, "saved_posts",
+	seedWarehouseTableRows(t, root, "saved_posts",
 		`{"id":"t3_abc","dir":1}`,
 		`{"id":"t3_def","dir":1}`,
 	)
@@ -184,7 +184,7 @@ func TestRunReverseETLRefusesStoredNonBatchablePlan(t *testing.T) {
 	defer server.Close()
 
 	a, root := setupHumanProxyApp(t, ctx, server.URL)
-	writeWarehouseJSONLRows(t, root, "profiles", `{"id":"u_1","display_name":"Ada"}`)
+	seedWarehouseTableRows(t, root, "profiles", `{"id":"u_1","display_name":"Ada"}`)
 
 	// Plan a batchable action, then rewrite the stored plan's action to the
 	// non-batchable one, standing in for a plan created before the declaration
@@ -286,7 +286,7 @@ func TestBatchableActionStillPlansAndExecutesInBulk(t *testing.T) {
 	defer server.Close()
 
 	a, root := setupHumanProxyApp(t, ctx, server.URL)
-	writeWarehouseJSONLRows(t, root, "profiles",
+	seedWarehouseTableRows(t, root, "profiles",
 		`{"id":"u_1","display_name":"Ada"}`,
 		`{"id":"u_2","display_name":"Grace"}`,
 	)

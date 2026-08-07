@@ -1,5 +1,3 @@
-//go:build !duckdb
-
 package app_test
 
 import (
@@ -9,10 +7,11 @@ import (
 	"polymetrics.ai/internal/app"
 )
 
-// TestQuerySQLEngineSeamPreservesSelectAll is the red-first test for the
-// pluggable query-engine seam: after introducing App.sqlEngine, the default
-// build must preserve today's `select * from <table>` behavior and report the
-// jsonl engine.
+// TestQuerySQLEngineSeamPreservesSelectAll pins the behaviour the query-engine
+// seam was introduced to preserve: `select * from <table>` still answers, and
+// still answers with the same rows. What changed is which engine answers it —
+// the JSONL engine that could express nothing else is gone, so this now runs
+// against DuckDB in the only build there is.
 func TestQuerySQLEngineSeamPreservesSelectAll(t *testing.T) {
 	ctx := context.Background()
 	root := t.TempDir()
@@ -24,8 +23,8 @@ func TestQuerySQLEngineSeamPreservesSelectAll(t *testing.T) {
 		t.Fatalf("Open: %v", err)
 	}
 
-	if got := a.QueryEngineName(); got != "jsonl" {
-		t.Fatalf("QueryEngineName() = %q, want jsonl (default build)", got)
+	if got := a.QueryEngineName(); got != "duckdb" {
+		t.Fatalf("QueryEngineName() = %q, want duckdb", got)
 	}
 
 	seedWarehouseTable(t, root, "widgets", []map[string]any{

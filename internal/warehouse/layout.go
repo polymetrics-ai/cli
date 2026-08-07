@@ -1,11 +1,11 @@
-// Package warehouse defines the on-disk layout of the local JSONL warehouse.
+// Package warehouse defines the on-disk layout of the local warehouse.
 //
 // Every materialization is nested under the identity that produced it:
 //
 //	<root>/<workspace-id>/<connector>/<connection-id>/
 //	    owner.json           identity of the connection owning this directory
-//	    wal/<stream>.jsonl   append-only log; the source of truth
-//	    tables/<table>.jsonl derived materialization, rewritten wholesale
+//	    wal/<stream>.jsonl     append-only log; the source of truth, stays JSONL
+//	    tables/<table>.parquet derived materialization, rewritten wholesale
 //
 // Two connections cannot produce the same table path because they never share
 // a parent directory, so collision is unrepresentable rather than merely
@@ -36,6 +36,16 @@ const (
 	WALDirName = "wal"
 	// TablesDirName holds a connection's derived table materializations.
 	TablesDirName = "tables"
+	// TableFileExt is the extension of a materialized table. A table is one
+	// Parquet file, never a directory of parts: a directory cannot be renamed
+	// into place over an existing one, so swapping it opens a window in which a
+	// reader sees no table at all while its rows sit intact on disk. Parts were
+	// measured and bought no read or write parallelism at our scale.
+	TableFileExt = ".parquet"
+	// LegacyTableFileExt is the extension materialized tables had before the
+	// Parquet switch. It is only ever read, as evidence that a warehouse
+	// predates this format.
+	LegacyTableFileExt = ".jsonl"
 	// LegacyRawDirName is the removed flat layout's shared raw log directory.
 	// It is only ever read, as evidence that a warehouse predates this layout.
 	LegacyRawDirName = "_pm_raw"
@@ -188,6 +198,30 @@ func (e *LegacyLayoutError) Error() string {
 	)
 }
 
+// LegacyTableFormatError reports a warehouse whose tables were materialized as
+// JSONL, before Parquet became the table format. It is not read and not
+// deleted: reading it would work today and be silently stale the moment a sync
+// writes the Parquet table beside it, leaving two files for one table name with
+// no way for a reader to tell which is current. The write-ahead log is
+// untouched, so re-running the sync rebuilds the table losslessly.
+type LegacyTableFormatError struct {
+	Files []string
+}
+
+func (e *LegacyTableFormatError) Error() string {
+	if e == nil || len(e.Files) == 0 {
+		return "warehouse table format is unavailable"
+	}
+	return fmt.Sprintf(
+		"warehouse tables are stored as Parquet, but %d table(s) are still JSONL (%s). "+
+			"These predate the Parquet format and are not read, because a sync would write the Parquet table "+
+			"beside them and leave two files for one table name. "+
+			"Delete them and re-run the owning connection's sync to rebuild each table from its write-ahead log, "+
+			"which is untouched; pm will not rewrite or delete warehouse data for you",
+		len(e.Files), strings.Join(e.Files, ", "),
+	)
+}
+
 // AmbiguousTableError reports that more than one connection materializes a
 // table of the same name, so a read must say which one it means.
 type AmbiguousTableError struct {
@@ -288,13 +322,14 @@ func (l Location) WALPath(stream string) (string, error) {
 	return filepath.Join(l.ConnectionDir, WALDirName, component+".jsonl"), nil
 }
 
-// TablePath is the derived materialization for one table.
+// TablePath is the derived materialization for one table: a single Parquet
+// file, never a directory of parts. See TableFileExt for why.
 func (l Location) TablePath(table string) (string, error) {
 	component, err := PathComponent("table", table)
 	if err != nil {
 		return "", err
 	}
-	return filepath.Join(l.ConnectionDir, TablesDirName, component+".jsonl"), nil
+	return filepath.Join(l.ConnectionDir, TablesDirName, component+TableFileExt), nil
 }
 
 // EnsureOwnership creates the connection directory and its ownership record,
@@ -400,6 +435,46 @@ func CheckLegacyLayout(root string) error {
 		return nil
 	}
 	return &LegacyLayoutError{Dir: root, Evidence: legacy}
+}
+
+// CheckLegacyTableFormat refuses a warehouse whose tables were materialized as
+// JSONL, before Parquet became the table format.
+//
+// It is a refusal rather than a silent skip for the same reason a damaged
+// ownership record is: the rows are on disk, so reporting the table as absent
+// would be a wrong answer. It is a refusal rather than a read because a sync
+// writes `<table>.parquet` beside the JSONL and never removes it — two files
+// for one table name, with nothing on disk saying which is current. Nothing is
+// deleted on the operator's behalf; the write-ahead log beside these files is
+// untouched, so a re-run rebuilds each table losslessly.
+//
+// Root-level tables are inspected too. They are the unattributed direct writes
+// no connection owns, and a stale one there is missed by exactly the same
+// Parquet-only glob, so ignoring it would report an absent table just as
+// wrongly.
+func CheckLegacyTableFormat(root string) error {
+	patterns := []string{
+		filepath.Join(root, "*", "*", "*", TablesDirName, "*"+LegacyTableFileExt),
+		filepath.Join(root, "*"+LegacyTableFileExt),
+	}
+	files := make([]string, 0)
+	for _, pattern := range patterns {
+		stale, err := filepath.Glob(pattern)
+		if err != nil {
+			return fmt.Errorf("scan warehouse tables: %w", err)
+		}
+		for _, path := range stale {
+			if info, err := os.Stat(path); err != nil || info.IsDir() {
+				continue
+			}
+			files = append(files, path)
+		}
+	}
+	if len(files) == 0 {
+		return nil
+	}
+	sort.Strings(files)
+	return &LegacyTableFormatError{Files: files}
 }
 
 // Table is one materialized table located in the nested layout.
@@ -522,10 +597,13 @@ func Tables(root string) ([]Table, []Fault, error) {
 	if err := CheckLegacyLayout(root); err != nil {
 		return nil, nil, err
 	}
+	if err := CheckLegacyTableFormat(root); err != nil {
+		return nil, nil, err
+	}
 	out := make([]Table, 0)
 	faults := make([]Fault, 0)
-	// <root>/<workspace>/<connector>/<connection>/tables/<table>.jsonl
-	matches, err := filepath.Glob(filepath.Join(root, "*", "*", "*", TablesDirName, "*.jsonl"))
+	// <root>/<workspace>/<connector>/<connection>/tables/<table>.parquet
+	matches, err := filepath.Glob(filepath.Join(root, "*", "*", "*", TablesDirName, "*"+TableFileExt))
 	if err != nil {
 		return nil, nil, fmt.Errorf("scan warehouse tables: %w", err)
 	}
@@ -535,7 +613,7 @@ func Tables(root string) ([]Table, []Fault, error) {
 		if err != nil || info.IsDir() {
 			continue
 		}
-		name := strings.TrimSuffix(filepath.Base(path), ".jsonl")
+		name := strings.TrimSuffix(filepath.Base(path), TableFileExt)
 		connectionDir := filepath.Dir(filepath.Dir(path))
 		owner, err := readOwner(connectionDir)
 		if errors.Is(err, os.ErrNotExist) {
@@ -570,7 +648,7 @@ func Tables(root string) ([]Table, []Fault, error) {
 	// identity, and none is invented for them — attributing these rows to a
 	// connection that never produced them is the very confusion this layout
 	// removes. A sync never writes here.
-	unattributed, err := filepath.Glob(filepath.Join(root, "*.jsonl"))
+	unattributed, err := filepath.Glob(filepath.Join(root, "*"+TableFileExt))
 	if err != nil {
 		return nil, nil, fmt.Errorf("scan warehouse root tables: %w", err)
 	}
@@ -580,7 +658,7 @@ func Tables(root string) ([]Table, []Fault, error) {
 		}
 		out = append(out, Table{
 			Path: path,
-			Name: strings.TrimSuffix(filepath.Base(path), ".jsonl"),
+			Name: strings.TrimSuffix(filepath.Base(path), TableFileExt),
 		})
 	}
 	sort.Slice(out, func(i, j int) bool {

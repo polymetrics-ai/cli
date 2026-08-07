@@ -252,7 +252,7 @@ pm query run --table github_pull_requests --fields id,title,state --agent-mode s
 pm query run --table github_pull_requests --fields id,title,state --agent-mode stream
 ```
 
-The default build uses the local JSONL query engine. Build with the DuckDB tag when you need richer SQL support. Agent mode adds compact summary JSON and projected NDJSON output for token-sensitive callers.
+Queries run on embedded DuckDB over the warehouse's Parquet tables, so read-only `SELECT` and `WITH` statements are supported in full. Agent mode adds compact summary JSON and projected NDJSON output for token-sensitive callers.
 
 ```bash
 pm reverse list --json

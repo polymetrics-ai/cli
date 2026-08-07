@@ -240,9 +240,7 @@ func TestRunReverseETLRejectsPreviewDigestDriftBeforeNativeWrite(t *testing.T) {
 	if err := os.MkdirAll(warehouseDir, 0o700); err != nil {
 		t.Fatalf("mkdir warehouse: %v", err)
 	}
-	if err := os.WriteFile(filepath.Join(warehouseDir, "deletes.jsonl"), []byte("{\"id\":\"42\"}\n"), 0o600); err != nil {
-		t.Fatalf("write warehouse row: %v", err)
-	}
+	seedWarehouseTableRows(t, root, "deletes", `{"id":"42"}`)
 	plan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
 		Name:                  "delete_widget",
 		SourceTable:           "deletes",
@@ -603,10 +601,7 @@ func TestRunReverseETLRejectsExpiredUnsignedPlan(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("AddCredential(outbox) error = %v", err)
 	}
-	warehouseDir := filepath.Join(root, ".polymetrics", "warehouse")
-	if err := os.WriteFile(filepath.Join(warehouseDir, "safe_rows.jsonl"), []byte("{\"id\":\"row-1\"}\n"), 0o600); err != nil {
-		t.Fatalf("WriteFile(safe rows) error = %v", err)
-	}
+	seedWarehouseTableRows(t, root, "safe_rows", `{"id":"row-1"}`)
 	plan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
 		Name: "safe_upsert", SourceTable: "safe_rows", DestinationConnector: "outbox",
 		DestinationCredential: "outbox-local", Action: "upsert", Mappings: map[string]string{"id": "id"},
@@ -735,9 +730,7 @@ func setupGitHubGenericDestructivePlan(t *testing.T, ctx context.Context, baseUR
 	if err := os.MkdirAll(warehouseDir, 0o700); err != nil {
 		t.Fatalf("mkdir warehouse: %v", err)
 	}
-	if err := os.WriteFile(filepath.Join(warehouseDir, "repo_deletes.jsonl"), []byte("{\"id\":\"row-1\"}\n"), 0o600); err != nil {
-		t.Fatalf("write warehouse row: %v", err)
-	}
+	seedWarehouseTableRows(t, root, "repo_deletes", `{"id":"row-1"}`)
 	plan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
 		Name:                  "delete_repo",
 		SourceTable:           "repo_deletes",

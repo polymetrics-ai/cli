@@ -2,6 +2,7 @@ package cli_test
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -13,6 +14,7 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/cli"
+	"polymetrics.ai/internal/warehouse"
 )
 
 func TestReverseETLCLIWorkflowIsScriptableAndApprovalBounded(t *testing.T) {
@@ -159,14 +161,14 @@ func TestReverseETLToGitHubCreatesPullRequestAfterApproval(t *testing.T) {
 		"--root", root,
 		"--json",
 	})
-	warehouseDir := filepath.Join(root, ".polymetrics", "warehouse")
-	if err := os.MkdirAll(warehouseDir, 0o700); err != nil {
-		t.Fatalf("mkdir warehouse: %v", err)
-	}
-	row := `{"title":"Ship connector writes","body":"Created by approved reverse ETL","head":"feature/github-writes","base":"main","labels":["agentic","reverse-etl"],"reviewers":["ada","grace"]}` + "\n"
-	if err := os.WriteFile(filepath.Join(warehouseDir, "github_pr_candidates.jsonl"), []byte(row), 0o600); err != nil {
-		t.Fatalf("write warehouse row: %v", err)
-	}
+	seedWarehouseTableFixture(t, root, "github_pr_candidates", map[string]any{
+		"title":     "Ship connector writes",
+		"body":      "Created by approved reverse ETL",
+		"head":      "feature/github-writes",
+		"base":      "main",
+		"labels":    []any{"agentic", "reverse-etl"},
+		"reviewers": []any{"ada", "grace"},
+	})
 
 	var planStdout, planStderr bytes.Buffer
 	code := cli.Run([]string{
@@ -341,13 +343,7 @@ func TestGitHubCommandWriteUsesReversePlanApproval(t *testing.T) {
 		"--root", root,
 		"--json",
 	})
-	warehouseDir := filepath.Join(root, ".polymetrics", "warehouse")
-	if err := os.MkdirAll(warehouseDir, 0o700); err != nil {
-		t.Fatalf("mkdir warehouse: %v", err)
-	}
-	if err := os.WriteFile(filepath.Join(warehouseDir, "not_command.jsonl"), []byte("{\"id\":\"row-1\"}\n"), 0o600); err != nil {
-		t.Fatalf("write warehouse row: %v", err)
-	}
+	seedWarehouseTableFixture(t, root, "not_command", map[string]any{"id": "row-1"})
 	var normalPlanStdout, normalPlanStderr bytes.Buffer
 	code = cli.Run([]string{
 		"reverse", "plan", "not_command",
@@ -597,4 +593,16 @@ func extractReverseField(t *testing.T, text, pattern string) string {
 		t.Fatalf("pattern %q not found in:\n%s", pattern, text)
 	}
 	return match[1]
+}
+
+// seedWarehouseTableFixture materializes an unattributed root-level warehouse
+// table the way pm itself would, through the real Parquet writer. Hand-writing
+// the file would put a fixture in a format the binary under test refuses, and
+// would drift the moment the format changes again.
+func seedWarehouseTableFixture(t *testing.T, root, table string, rows ...warehouse.Row) {
+	t.Helper()
+	path := filepath.Join(root, ".polymetrics", "warehouse", table+warehouse.TableFileExt)
+	if err := warehouse.WriteTable(context.Background(), path, rows); err != nil {
+		t.Fatalf("seed warehouse table %s: %v", table, err)
+	}
 }
