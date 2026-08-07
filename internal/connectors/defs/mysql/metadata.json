@@ -23,6 +23,6 @@
   },
   "conformance": {
     "skip_dynamic": true,
-    "reason": "native MySQL wire-protocol and Docker/Colima-backed integration tests prove dynamic catalog, reads, and binary-log CDC; fixture replay cannot exercise the protocol."
+    "reason": "native MySQL wire-protocol and Podman-backed integration tests prove dynamic catalog, reads, transport-security modes, and binary-log CDC against a live server; fixture replay cannot exercise the protocol."
   }
 }

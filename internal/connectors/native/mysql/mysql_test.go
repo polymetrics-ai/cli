@@ -529,3 +529,35 @@ func serveTLSLessMySQLGreeting(listener net.Listener) {
 		}(conn)
 	}
 }
+
+// A database almost always contains a table this connector cannot quote.
+// Discovery must stay usable for the rest, and must never advertise a stream
+// whose every read would fail.
+func TestCatalogSkipsUnreadableIdentifiersWithoutFailingDiscovery(t *testing.T) {
+	columns := []connectors.Record{
+		{"table_name": "events", "column_name": "id", "data_type": "bigint", "ordinal_position": "1"},
+		{"table_name": "events", "column_name": "label", "data_type": "varchar", "ordinal_position": "2"},
+		// Unquotable table name.
+		{"table_name": "legacy-report", "column_name": "id", "data_type": "bigint", "ordinal_position": "1"},
+		// Readable table carrying one unquotable column.
+		{"table_name": "orders", "column_name": "id", "data_type": "bigint", "ordinal_position": "1"},
+		{"table_name": "orders", "column_name": "total amount", "data_type": "decimal", "ordinal_position": "2"},
+	}
+	streams, err := catalogStreams("analytics", columns, map[string][]string{"events": {"id"}}, "", nil)
+	if err != nil {
+		t.Fatalf("catalogStreams() = %v, want the readable tables rather than a whole-database failure", err)
+	}
+	got := make([]string, 0, len(streams))
+	for _, stream := range streams {
+		got = append(got, stream.Name)
+	}
+	if want := []string{"analytics.events"}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("streams = %v, want %v", got, want)
+	}
+	// Every advertised stream must survive the reader's own parsing.
+	for _, stream := range streams {
+		if _, _, err := qualifyStream("analytics", stream.Name); err != nil {
+			t.Fatalf("catalog advertised unreadable stream %q: %v", stream.Name, err)
+		}
+	}
+}

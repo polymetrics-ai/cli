@@ -2,9 +2,11 @@ package dbtest
 
 import (
 	"context"
+	"errors"
 	"os/exec"
 	"reflect"
 	"testing"
+	"time"
 )
 
 type scriptedRunner struct {
@@ -480,5 +482,98 @@ func TestParseMappedPortRefusesTheEngineDefaultPort(t *testing.T) {
 	port, err := parseMappedPort("127.0.0.1:43123\n", 3306)
 	if err != nil || port != 43123 {
 		t.Fatalf("parseMappedPort() = %d, %v, want 43123", port, err)
+	}
+}
+
+// interruptingRunner fires Close from inside a create command, which is where
+// a real signal is most damaging: cleanup that runs between an ownership
+// claim and the command acting on it would leave the resource behind.
+type interruptingRunner struct {
+	scriptedRunner
+	harness  *Harness
+	on       string
+	fired    bool
+	done     chan struct{}
+	closeErr error
+}
+
+func (r *interruptingRunner) Run(ctx context.Context, connection string, args ...string) (string, error) {
+	if !r.fired && len(args) > 0 && args[0] == r.on {
+		r.fired = true
+		r.done = make(chan struct{})
+		go func() {
+			defer close(r.done)
+			r.closeErr = r.harness.Close(context.Background())
+		}()
+		// Cleanup must not complete while this create is still in flight.
+		// The caller waits for r.done only after Start has returned.
+		select {
+		case <-r.done:
+			r.closeErr = errors.New("Close finished while a create command was still running")
+		case <-time.After(25 * time.Millisecond):
+		}
+	}
+	return r.scriptedRunner.Run(ctx, connection, args...)
+}
+
+func TestCloseDuringCreateStillRemovesTheCreatedResource(t *testing.T) {
+	for _, step := range []string{"run", "volume"} {
+		t.Run("interrupted during "+step, func(t *testing.T) {
+			runner := &interruptingRunner{on: step}
+			config := testConfig(runner)
+			h, err := New(config)
+			if err != nil {
+				t.Fatalf("New(): %v", err)
+			}
+			runner.harness = h
+
+			if _, err := h.Start(context.Background()); err == nil {
+				t.Fatal("Start() succeeded after the harness was closed mid-startup")
+			}
+			if runner.done == nil {
+				t.Fatalf("the %q step never ran, so the race was not exercised", step)
+			}
+			select {
+			case <-runner.done:
+			case <-time.After(30 * time.Second):
+				t.Fatal("Close did not return after Start finished")
+			}
+			if runner.closeErr != nil {
+				t.Fatalf("Close() during startup: %v", runner.closeErr)
+			}
+			// Whatever the interrupted step created must have been removed.
+			if runner.containerLive {
+				t.Fatal("interrupt left the container behind")
+			}
+			if runner.volumePresent {
+				t.Fatal("interrupt left the volume behind")
+			}
+			if runner.imagePresent(h.runImage) || runner.imagePresent(config.Image) {
+				t.Fatalf("interrupt left images behind: %#v", runner.images)
+			}
+			select {
+			case engineSlots <- struct{}{}:
+				<-engineSlots
+			default:
+				t.Fatal("interrupt leaked the engine slot")
+			}
+		})
+	}
+}
+
+func TestStartRefusesToCreateAfterClose(t *testing.T) {
+	runner := &scriptedRunner{}
+	h, err := New(testConfig(runner))
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if err := h.Close(context.Background()); err != nil {
+		t.Fatalf("Close(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err == nil {
+		t.Fatal("Start() created resources after the harness was closed")
+	}
+	if commandsContain(runner.commands, "run") || commandsContain(runner.commands, "volume", "create") {
+		t.Fatalf("commands = %v, want no creates after Close", runner.commands)
 	}
 }

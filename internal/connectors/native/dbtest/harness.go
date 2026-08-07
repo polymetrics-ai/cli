@@ -133,8 +133,14 @@ type Harness struct {
 	containerKnown   bool
 	volumeKnown      bool
 	slotHeld         bool
+	closed           bool
 	report           Report
 
+	// opMu serialises the create sequence against cleanup so an interrupt
+	// can never remove a resource while the command that creates it is still
+	// in flight, which would leave the created resource behind.
+	opMu       sync.Mutex
+	runCancel  context.CancelFunc
 	closeOnce  sync.Once
 	closeErr   error
 	stopSignal chan struct{}
@@ -219,6 +225,8 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 	h.report.DiskFreeBefore = before
 	h.mu.Unlock()
 	h.installInterruptCleanup()
+	// Registered before the opMu unlock below, so on return the unlock runs
+	// first and this cleanup never calls Close while still holding opMu.
 	defer func() {
 		if startErr == nil {
 			return
@@ -230,6 +238,20 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 		}
 	}()
 
+	// Every create runs under a context Close can cancel, so an interrupt
+	// during a long pull aborts it instead of waiting for it.
+	ctx, cancelRun := context.WithCancel(ctx)
+	h.mu.Lock()
+	h.runCancel = cancelRun
+	h.mu.Unlock()
+	defer cancelRun()
+
+	h.opMu.Lock()
+	defer h.opMu.Unlock()
+	if err := h.abortIfClosed(); err != nil {
+		return Endpoint{}, err
+	}
+
 	if _, err := h.config.Run.Run(ctx, h.config.Connection, "pull", h.config.Image); err != nil {
 		return Endpoint{}, fmt.Errorf("pull %s test image: %w", h.config.Engine, err)
 	}
@@ -238,6 +260,9 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 	// Claim both references before issuing the tag. A tag that returns an
 	// error may still have created the reference, so ownership is claimed
 	// ahead of the command and cleanup tolerates absence.
+	if err := h.abortIfClosed(); err != nil {
+		return Endpoint{}, err
+	}
 	h.mu.Lock()
 	h.sourceImageKnown = true
 	h.runImageKnown = true
@@ -252,6 +277,9 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 	}
 	if !volumeAbsent {
 		return Endpoint{}, errors.New("generated database test volume already exists")
+	}
+	if err := h.abortIfClosed(); err != nil {
+		return Endpoint{}, err
 	}
 	h.mu.Lock()
 	h.volumeKnown = true
@@ -276,6 +304,9 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 	if !containerAbsent {
 		return Endpoint{}, errors.New("generated database test container already exists")
 	}
+	if err := h.abortIfClosed(); err != nil {
+		return Endpoint{}, err
+	}
 	h.mu.Lock()
 	h.containerKnown = true
 	h.mu.Unlock()
@@ -290,6 +321,12 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 	port, err := parseMappedPort(mapping, h.config.ContainerPort)
 	if err != nil {
 		return Endpoint{}, fmt.Errorf("parse %s test port: %w", h.config.Engine, err)
+	}
+	// Cleanup may have begun after the last create. Returning an endpoint now
+	// would hand the caller a container that is already being destroyed, so
+	// report failure instead and let the deferred cleanup finish the job.
+	if err := h.abortIfClosed(); err != nil {
+		return Endpoint{}, err
 	}
 	endpoint = Endpoint{Host: "127.0.0.1", Port: port}
 	h.mu.Lock()
@@ -306,6 +343,20 @@ func (h *Harness) Close(ctx context.Context) error {
 	h.closeOnce.Do(func() {
 		close(h.stopSignal)
 		defer h.releaseSlot()
+		// Refuse further creates, abort any in flight, then wait for the
+		// create sequence to settle. Without this wait, cleanup could run
+		// between an ownership claim and the command that acts on it and
+		// leave the resource behind.
+		h.mu.Lock()
+		h.closed = true
+		cancelRun := h.runCancel
+		h.mu.Unlock()
+		if cancelRun != nil {
+			cancelRun()
+		}
+		h.opMu.Lock()
+		defer h.opMu.Unlock()
+
 		var errs []error
 		if h.known(func(h *Harness) bool { return h.containerKnown }) {
 			if _, err := h.config.Run.Run(ctx, h.config.Connection, "container", "rm", "--force", h.containerName); err != nil && !errors.Is(err, errPodmanResourceNotFound) {
@@ -368,6 +419,16 @@ func (h *Harness) Report() Report {
 	h.mu.Lock()
 	defer h.mu.Unlock()
 	return h.report
+}
+
+// abortIfClosed stops the create sequence once cleanup has begun.
+func (h *Harness) abortIfClosed() error {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	if h.closed {
+		return errors.New("database test harness was closed during startup")
+	}
+	return nil
 }
 
 func (h *Harness) releaseSlot() {
@@ -465,14 +526,6 @@ func (podmanMachineRunner) Run(ctx context.Context, args ...string) error {
 		return errors.New("podman machine command failed")
 	}
 	return nil
-}
-
-func diskFreeBytes() (uint64, error) {
-	var stat syscall.Statfs_t
-	if err := syscall.Statfs(filepath.Clean("."), &stat); err != nil {
-		return 0, err
-	}
-	return uint64(stat.Bavail) * uint64(stat.Bsize), nil
 }
 
 func parseMappedPort(raw string, defaultPort int) (int, error) {

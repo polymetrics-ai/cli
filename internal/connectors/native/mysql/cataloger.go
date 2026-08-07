@@ -106,7 +106,10 @@ WHERE s.table_schema = ?
 	for _, record := range records {
 		table, ok := recordString(record["table_name"])
 		if !ok || validateIdentifier(table) != nil {
-			return nil, errors.New("catalog mysql cursor metadata is invalid")
+			// One table this connector cannot safely quote must not make the
+			// whole database undiscoverable. Skip it; catalogStreams drops it
+			// from the catalog too, so nothing unreadable is advertised.
+			continue
 		}
 		tables[table] = true
 	}
@@ -149,6 +152,7 @@ ORDER BY k.table_name, k.ordinal_position`, database)
 func catalogStreams(database string, columns []connectors.Record, pks map[string][]string, cursorField string, uniqueCursorTables map[string]bool) ([]connectors.Stream, error) {
 	byTable := make(map[string][]connectors.Field)
 	cursorByTable := make(map[string]bool)
+	skipped := make(map[string]bool)
 	for _, record := range columns {
 		table, tableOK := recordString(record["table_name"])
 		column, columnOK := recordString(record["column_name"])
@@ -156,10 +160,24 @@ func catalogStreams(database string, columns []connectors.Record, pks map[string
 		if !tableOK || !columnOK || !typeOK {
 			return nil, errors.New("catalog mysql columns returned invalid metadata")
 		}
+		// Advertise only what a Read could actually retrieve. This connector
+		// quotes identifiers it has validated, so a table or column outside
+		// that set is unreadable; listing it would promise a stream whose
+		// every read fails.
+		if validateIdentifier(table) != nil || validateIdentifier(column) != nil {
+			skipped[table] = true
+			continue
+		}
 		byTable[table] = append(byTable[table], connectors.Field{Name: column, Type: mysqlTypeToFieldType(dataType)})
 		if column == cursorField && uniqueCursorTables[table] {
 			cursorByTable[table] = true
 		}
+	}
+	// A table with even one unreadable column would yield a partial row, so
+	// drop it entirely rather than return a silently truncated record shape.
+	for table := range skipped {
+		delete(byTable, table)
+		delete(cursorByTable, table)
 	}
 	streams := make([]connectors.Stream, 0, len(byTable))
 	for table, fields := range byTable {
