@@ -10,6 +10,20 @@ DESCRIPTION
   A connection joins one source endpoint to one destination endpoint and stores
   stream-level sync settings.
 
+CONNECTION NAMES
+  A name may contain letters, digits, '-' and '_', must start with a letter or
+  digit, and is limited to 128 characters. Names that differ only by letter case
+  are refused. Ambiguous names are rejected at creation rather than rewritten,
+  because two connections that cannot be told apart cannot own separate data.
+  The name is a display value: the local warehouse keys its directories on a
+  generated identifier, so renaming is safe and never moves data.
+
+STREAM AND TABLE NAMES
+  Against the local warehouse destination, --stream and --table become path
+  components, so each may contain only letters, digits, '.', '-' and '_'. They
+  are checked when the connection is created, because a name the warehouse
+  cannot materialize would otherwise fail every sync of that connection.
+
 SYNC MODES
   full_refresh_append              read all source records and append them
   full_refresh_overwrite           read all source records and replace final output

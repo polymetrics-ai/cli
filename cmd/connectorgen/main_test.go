@@ -15,6 +15,7 @@ import (
 	"testing/fstest"
 
 	"polymetrics.ai/internal/connectors/boundary"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 // --- boundary: scans connector definition boundary --------------------------
@@ -500,6 +501,96 @@ func TestValidate_CLISurfaceImplementedDirectWritePasses(t *testing.T) {
 	}
 }
 
+func TestValidate_CLISurfaceImplementedMultipartDirectWritePasses(t *testing.T) {
+	fsys := directWriteCLISurfaceBundleFS()
+	cli := string(fsys["cli-surface/cli_surface.json"].Data)
+	originalCLI := cli
+	cli = strings.Replace(cli, `
+					{ "name": "id", "type": "string", "maps_to": "path.id" }
+				`, `
+					{ "name": "id", "type": "string", "maps_to": "path.id" },
+					{ "name": "media-file-path", "type": "string", "maps_to": "body.media_file_path", "required": true }
+				`, 1)
+	if cli == originalCLI {
+		t.Fatal("add multipart body flag to cli surface")
+	}
+	fsys["cli-surface/cli_surface.json"] = &fstest.MapFile{Data: []byte(cli)}
+
+	operations := string(fsys["cli-surface/operations.json"].Data)
+	originalOperations := operations
+	operations = strings.Replace(operations, `"max_bytes": 1024`, `"content_type": "multipart/form-data",
+					"max_bytes": 1024,
+					"body_schema": {
+						"type": "object",
+						"additionalProperties": false,
+						"required": ["media_file_path"],
+						"properties": {"media_file_path": {"type": "string"}}
+					},
+					"multipart": {
+						"max_bytes": 1024,
+						"parts": [{
+							"name": "media",
+							"type": "file",
+							"field": "media_file_path",
+							"required": true,
+							"max_bytes": 1024,
+							"content_type": "text/plain",
+							"allowed_media_types": ["text/plain"]
+						}]
+					}`, 1)
+	if operations == originalOperations {
+		t.Fatal("add typed multipart contract to operation")
+	}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for typed multipart direct_write cli surface, got %+v", report.Findings)
+	}
+}
+
+func TestSupportedDirectWriteContentTypeRequiresTypedMultipart(t *testing.T) {
+	tests := []struct {
+		name string
+		rest *engine.RESTOperationSpec
+		want bool
+	}{
+		{
+			name: "typed literal multipart",
+			rest: &engine.RESTOperationSpec{ContentType: "multipart/form-data", Multipart: &engine.MultipartSpec{}},
+			want: true,
+		},
+		{
+			name: "multipart annotation without contract",
+			rest: &engine.RESTOperationSpec{ContentType: "multipart/form-data"},
+		},
+		{
+			name: "multipart boundary is rejected",
+			rest: &engine.RESTOperationSpec{ContentType: "multipart/form-data; boundary=caller-controlled", Multipart: &engine.MultipartSpec{}},
+		},
+		{
+			name: "multipart whitespace is rejected",
+			rest: &engine.RESTOperationSpec{ContentType: " multipart/form-data ", Multipart: &engine.MultipartSpec{}},
+		},
+		{
+			name: "existing JSON content type remains supported",
+			rest: &engine.RESTOperationSpec{ContentType: "application/json"},
+			want: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := supportedDirectWriteContentType(tt.rest); got != tt.want {
+				t.Fatalf("supportedDirectWriteContentType() = %t, want %t", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestValidate_CLISurfaceImplementedDirectReadWithOutputPolicyPasses(t *testing.T) {
 	report, err := validateDir(directReadCLISurfaceBundleFS(validDirectReadCLISurfaceJSON()))
 	if err != nil {
@@ -834,6 +925,82 @@ func TestValidate_APISurfaceOperationLedgerValidRowsPassCleanly(t *testing.T) {
 	}
 	if len(report.Findings) != 0 {
 		t.Fatalf("expected zero findings for valid operation ledger, got %+v", report.Findings)
+	}
+}
+
+func TestValidate_APISurfaceV2ProvenanceUsesSharedValidation(t *testing.T) {
+	tests := []struct {
+		name          string
+		apiSurface    string
+		wantRule      string
+		wantMessage   string
+		wantCleanPass bool
+	}{
+		{
+			name:          "complete_v2",
+			apiSurface:    validV2ProvenanceAPISurface(),
+			wantCleanPass: true,
+		},
+		{
+			name:        "missing_endpoint_citation",
+			apiSurface:  strings.Replace(validV2ProvenanceAPISurface(), `"source_url": "https://docs.acme.test/api/widgets#sensitive"`, `"source_url": ""`, 1),
+			wantRule:    ruleSurfaceProvenance,
+			wantMessage: "provenance.source_url is required",
+		},
+		{
+			name:        "unknown_artifact",
+			apiSurface:  strings.Replace(validV2ProvenanceAPISurface(), `"artifact": "acme-openapi-2026-08-06"`, `"artifact": "unknown-artifact"`, 1),
+			wantRule:    ruleSurfaceProvenance,
+			wantMessage: `resolves to 0 artifacts`,
+		},
+		{
+			name: "duplicate_artifact_id",
+			apiSurface: strings.Replace(validV2ProvenanceAPISurface(), `"artifacts": [`, `"artifacts": [{
+				"id": "acme-openapi-2026-08-06",
+				"url": "https://docs.acme.test/openapi-copy.yaml",
+				"retrieved_at": "2026-08-06"
+			},`, 1),
+			wantRule:    ruleSurfaceProvenance,
+			wantMessage: `resolves to 2 artifacts`,
+		},
+		{
+			name:        "non_https_endpoint_citation",
+			apiSurface:  strings.Replace(validV2ProvenanceAPISurface(), `"source_url": "https://docs.acme.test/api/widgets#sensitive"`, `"source_url": "http://docs.acme.test/api/widgets#sensitive"`, 1),
+			wantRule:    ruleSurfaceProvenance,
+			wantMessage: "provenance.source_url must be an absolute HTTPS URL",
+		},
+		{
+			name:        "invalid_artifact_date",
+			apiSurface:  strings.Replace(validV2ProvenanceAPISurface(), `"retrieved_at": "2026-08-06"`, `"retrieved_at": "2026-08-06T12:00:00Z"`, 1),
+			wantRule:    ruleSurfaceProvenance,
+			wantMessage: "retrieved_at must be an ISO-8601 full-date",
+		},
+		{
+			name:          "v1_is_legacy_compatible",
+			apiSurface:    validOperationLedgerAPISurface(),
+			wantCleanPass: true,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			report, err := validateDir(operationLedgerBundleFS(tc.apiSurface))
+			if err != nil {
+				t.Fatalf("validateDir: %v", err)
+			}
+			if tc.wantCleanPass {
+				if len(report.Findings) != 0 {
+					t.Fatalf("findings = %+v, want none", report.Findings)
+				}
+				return
+			}
+			for _, finding := range report.Findings {
+				if finding.Connector == "cli-surface" && finding.File == "api_surface.json" && finding.Rule == tc.wantRule && strings.Contains(finding.Message, tc.wantMessage) {
+					return
+				}
+			}
+			t.Fatalf("findings = %+v, want %s containing %q", report.Findings, tc.wantRule, tc.wantMessage)
+		})
 	}
 }
 
@@ -1908,6 +2075,56 @@ func validOperationLedgerAPISurface() string {
 					"blocked_by_default": true,
 					"reason": "point lookup candidate, not yet modeled as a stream",
 					"source_url": "https://example.invalid/rest/widgets"
+				}
+			}
+		]
+	}`
+}
+
+func validV2ProvenanceAPISurface() string {
+	return `{
+		"api": "test API v2",
+		"operation_ledger_version": 2,
+		"artifacts": [
+			{
+				"id": "acme-openapi-2026-08-06",
+				"url": "https://docs.acme.test/openapi.yaml",
+				"retrieved_at": "2026-08-06",
+				"sha256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+			}
+		],
+		"endpoints": [
+			{
+				"method": "GET",
+				"path": "/widgets",
+				"provenance": {
+					"artifact": "acme-openapi-2026-08-06",
+					"source_url": "https://docs.acme.test/api/widgets"
+				},
+				"covered_by": { "stream": "widgets" }
+			},
+			{
+				"method": "POST",
+				"path": "/widgets",
+				"provenance": {
+					"artifact": "acme-openapi-2026-08-06",
+					"source_url": "https://docs.acme.test/api/widgets#create"
+				},
+				"covered_by": { "write": "create_widget" }
+			},
+			{
+				"method": "POST",
+				"path": "/widgets/sensitive",
+				"provenance": {
+					"artifact": "acme-openapi-2026-08-06",
+					"source_url": "https://docs.acme.test/api/widgets#sensitive"
+				},
+				"operation": {
+					"model": "sensitive_reverse_etl",
+					"status": "blocked",
+					"risk": "high",
+					"blocked_by_default": true,
+					"reason": "requires sensitive-data safeguards"
 				}
 			}
 		]

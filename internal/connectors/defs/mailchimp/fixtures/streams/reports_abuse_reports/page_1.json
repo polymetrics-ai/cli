@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reports/synthetic-conformance-value/abuse-reports",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "abuse_reports": [
+        {
+          "id": 1,
+          "campaign_id": "fixture_campaign_id",
+          "list_id": "fixture_list_id",
+          "list_is_active": true,
+          "email_id": "fixture@example.invalid",
+          "email_address": "fixture@example.invalid",
+          "merge_fields": {},
+          "vip": true
+        }
+      ]
+    }
+  }
+}

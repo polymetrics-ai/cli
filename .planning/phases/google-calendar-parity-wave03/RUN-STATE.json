@@ -1,0 +1,53 @@
+{
+  "phase": "google-calendar-parity-wave03",
+  "branch": "fm/cli-google-calendar-parity-resume-r1",
+  "status": "ready_for_no_mistakes",
+  "verificationPassed": false,
+  "verificationNotes": "The stale engine no-adopter guard was replaced with an exact expected batchability policy and all focused CI-remediation checks pass. Full make verify has not been rerun in this bounded phase; the outer no-mistakes executor owns that CI gate. No credentialed provider write was run.",
+  "orchestrationDecisions": [
+    {
+      "cycle": "recovery_and_plan",
+      "decision": "local_critical_path",
+      "reason": "Single connector scope in an isolated worktree; no subagent was requested and active runtime policy disallows proactive delegation."
+    },
+    {
+      "cycle": "tdd_gate",
+      "decision": "local_critical_path",
+      "reason": "The three current connector validation findings provide red evidence before connector-definition edits."
+    },
+    {
+      "cycle": "fixture_conformance_recovery",
+      "decision": "reapply_preserved_fixture_sentinel",
+      "reason": "Current conformance omitted the Google hook's fixture sentinel and safely failed against synthetic OAuth values; the preserved PR's targeted ProjectDir marker restores no-network replay behavior."
+    },
+    {
+      "cycle": "write_action_authoring",
+      "decision": "typed_writes_json_for_all_mutations",
+      "reason": "The shared-contract correction confirms reverse-ETL record actions execute today. All 26 Google Calendar mutations are record-shaped and have a typed schema, fixture, API-surface mapping, CLI command, risk/confirmation metadata, and primary-provider field citations; none needs rest_write."
+    },
+    {
+      "cycle": "ci_failure_reproduction",
+      "decision": "local_critical_path",
+      "reason": "The supplied verify log and focused engine test reproduced the obsolete no-shipped-adopter assertion against ten intentional Google Calendar non-batchable actions."
+    },
+    {
+      "cycle": "ci_remediation",
+      "decision": "local_critical_path",
+      "reason": "The smallest safe fix is an exact embedded-bundle policy guard; removing batchable:false would weaken documented bulk-write protections."
+    },
+    {
+      "cycle": "ci_focused_verification",
+      "decision": "local_critical_path",
+      "reason": "Engine, app non-batchable enforcement, Google Calendar hooks and conformance, connector validation, vet, formatting, and diff checks pass; the outer executor retains ownership of full CI."
+    }
+  ],
+  "counts": {
+    "officialTotal": 38,
+    "reachable": 38,
+    "blockedRestWrite": 0,
+    "planned": 0,
+    "writeActions": 26,
+    "citationFieldUses": 149,
+    "certified": 0
+  }
+}

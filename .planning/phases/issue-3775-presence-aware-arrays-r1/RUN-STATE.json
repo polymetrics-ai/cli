@@ -1,0 +1,8 @@
+{
+  "issue": 3775,
+  "parent": 3775,
+  "subissues": [3778, 3780, 3781, 3783],
+  "state": "review_complete",
+  "execution": "inline_manual_no_spawn",
+  "next": "commit_handoff"
+}

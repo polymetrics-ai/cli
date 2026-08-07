@@ -85,8 +85,8 @@ schedule:
 | Command | Subcommands | Primary docs |
 |---|---|---|
 | `pm init` | workspace creation | [/docs/quickstart](/docs/quickstart) |
-| `pm connectors` | `pm connectors list`, `pm connectors catalog`, `pm connectors port-plan`, `pm connectors inspect`, `pm connectors help` | [/docs/connectors](/docs/connectors) |
-| `pm credentials` | `pm credentials add`, `pm credentials list`, `pm credentials inspect`, `pm credentials test`, `pm credentials remove` | this page |
+| `pm connectors` | `pm connectors list`, `pm connectors catalog`, `pm connectors port-plan`, `pm connectors inspect`, `pm connectors help`, `pm connectors certify` | [/docs/connectors](/docs/connectors) |
+| `pm credentials` | `pm credentials add`, `pm credentials link`, `pm credentials list`, `pm credentials inspect`, `pm credentials test`, `pm credentials remove` | this page |
 | `pm connections` | `pm connections create`, `pm connections list` | this page |
 | `pm catalog` | `pm catalog refresh`, `pm catalog show` | this page |
 | `pm etl` | `pm etl check`, `pm etl catalog`, `pm etl read`, `pm etl run`, `pm etl status` | [/docs/etl](/docs/etl) |
@@ -126,9 +126,26 @@ Creates `.polymetrics/` under the selected root. The workspace stores state, enc
 ```bash
 pm credentials add github-local \
   --connector github \
+  --provider-family provider-family \
+  --auth-profile service-profile \
   --config repository=OWNER/REPO \
   --from-env token=GITHUB_TOKEN \
   --json
+
+# Explicitly join a compatible credential as it is created.
+pm credentials add provider-secondary \
+  --connector github \
+  --provider-family provider-family \
+  --auth-profile service-profile \
+  --link-credential github-local \
+  --json
+
+# Or link an existing compatible credential after creation.
+pm credentials add provider-existing \
+  --connector github \
+  --provider-family provider-family \
+  --auth-profile service-profile
+pm credentials link provider-existing --to github-local --json
 
 pm credentials list --json
 pm credentials inspect github-local --json
@@ -137,6 +154,25 @@ pm credentials remove github-local
 ```
 
 Secrets must come from environment variables or stdin. Do not pass raw token values in chat, shell history, or docs.
+
+When omitted, `--provider-family` defaults to the connector name and
+`--auth-profile` defaults to `default`. Existing credentials receive the same
+defaults when their project is opened. Each credential is isolated unless it is
+explicitly linked. A link requires matching effective declarations. For a
+cross-connector link, every credential in the resulting cohort must have both
+declarations supplied explicitly; matching defaults alone are not enough.
+
+Links only create protected local binding metadata. Credential inspection and
+JSON output expose the non-secret family/profile declarations but never the
+binding itself; internal coordination receives opaque projections only. This
+identity-only release does not change connector authentication, rate limiting,
+or transport behavior.
+
+Before saving a credential, `pm` checks non-secret `--config` fields against
+only the selected connector's declared string `enum`, `pattern`, and `uri`,
+`date`, or `date-time` format constraints. It does not add required, type,
+default, unknown-field, or bounds policy. Errors identify the field and
+violated constraint without echoing the supplied value.
 
 ### `pm connections`
 
@@ -155,6 +191,15 @@ pm connections list --json
 ```
 
 Connections bind credentials, a stream, table, sync mode, cursor, and primary key.
+
+Connection names accept letters, digits, `-` and `_`, must start with a letter or digit, and must
+differ by more than letter case. Ambiguous names are rejected at creation rather than rewritten,
+because two connections that cannot be told apart cannot own separate warehouse data. The name is a
+display value only — the warehouse keys its directories on a generated identifier.
+
+Against the local warehouse destination, `--stream` and `--table` become path components, so each
+accepts only letters, digits, `.`, `-` and `_`. Both are checked when the connection is created,
+because a name the warehouse cannot materialize would otherwise fail every sync of that connection.
 
 ### `pm catalog`
 
@@ -176,9 +221,17 @@ pm connectors port-plan --all --json
 pm connectors port-plan postgres --json
 pm connectors inspect 100ms --json
 pm connectors help 100ms
+pm connectors certify sample --full --json
 ```
 
 `pm connectors list` shows bundle-backed connectors. `pm connectors list --all` and `pm connectors catalog` expose the generated connector catalog with capability metadata, streams, write actions, and schema information.
+
+From a source checkout, `pm connectors certify <connector> --full --json` includes an API-surface
+inventory. Its `capabilities.surface.provenance` block reports provider-artifact evidence separately
+from endpoint coverage and connector capabilities: ledger version, artifact count, endpoint count,
+cited endpoint count, and a status. Existing version-1 and pre-ledger inventories report
+`legacy_unverified` during the staged migration; invalid version-2 provenance fails certification.
+Provenance never supplies a `covered_by` binding or enables a command.
 
 ## Extract, query, and write
 
@@ -209,7 +262,7 @@ pm reverse run <plan-id> --approve <approval-token> --json
 pm reverse status <run-id> --json
 ```
 
-Reverse ETL is always plan, preview, approval, run. JSON plan output redacts the approval token.
+Reverse ETL is always plan, preview, approval, run. JSON plan output omits the approval token.
 
 ## Agent and automation commands
 

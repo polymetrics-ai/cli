@@ -50,6 +50,33 @@ func TestDirectReadExecutesFixedGETOperation(t *testing.T) {
 	}
 }
 
+func TestDirectReadPreservesHTTPErrorText(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if got, want := r.URL.Query().Get("trace"), "direct-read-fixture"; got != want {
+			t.Fatalf("trace = %q, want %q", got, want)
+		}
+		w.WriteHeader(http.StatusBadRequest)
+		_, _ = w.Write([]byte(`{"diagnostic":"direct-read-fixture-body"}`))
+	}))
+	t.Cleanup(srv.Close)
+
+	_, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/items/{id}"), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/items/{id}",
+		PathParams:   map[string]string{"id": "fixture-item"},
+		Query:        map[string]string{"trace": "direct-read-fixture"},
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err == nil {
+		t.Fatal("DirectRead error = nil, want HTTP failure")
+	}
+	for _, want := range []string{"trace=direct-read-fixture", `{"diagnostic":"direct-read-fixture-body"}`} {
+		if !strings.Contains(err.Error(), want) {
+			t.Fatalf("DirectRead error = %q, want complete diagnostic %q", err.Error(), want)
+		}
+	}
+}
+
 func TestDirectReadResolvesPathWithConfigDefaults(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/repos/octo/hello/contents/README.md" {
@@ -697,6 +724,39 @@ func TestOperationDirectReadBodySchemaMinItems(t *testing.T) {
 		Body:      map[string]any{"ids": []any{"a"}},
 	}, nil); err != nil {
 		t.Fatalf("non-empty array: unexpected error: %v", err)
+	}
+}
+
+func TestOperationDirectReadPreservesHTTPErrorText(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if got, want := r.URL.Query().Get("trace"), "operation-read-fixture"; got != want {
+			t.Fatalf("trace = %q, want %q", got, want)
+		}
+		w.WriteHeader(http.StatusBadRequest)
+		_, _ = w.Write([]byte(`{"diagnostic":"operation-read-fixture-body"}`))
+	}))
+	t.Cleanup(srv.Close)
+	b := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{{
+			ID: "acme.lookup", Kind: "rest_read", Summary: "lookup", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/items", MaxBytes: 1024},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/items", Operation: &SurfaceOperation{Model: "direct_read"}}}},
+	}
+
+	_, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "acme.lookup",
+		Query:     map[string]string{"trace": "operation-read-fixture"},
+	}, nil)
+	if err == nil {
+		t.Fatal("OperationDirectRead error = nil, want HTTP failure")
+	}
+	for _, want := range []string{"trace=operation-read-fixture", `{"diagnostic":"operation-read-fixture-body"}`} {
+		if !strings.Contains(err.Error(), want) {
+			t.Fatalf("OperationDirectRead error = %q, want complete diagnostic %q", err.Error(), want)
+		}
 	}
 }
 

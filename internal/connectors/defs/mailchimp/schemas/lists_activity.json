@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "lists_activity",
+  "type": "object",
+  "x-primary-key": [
+    "list_id"
+  ],
+  "properties": {
+    "day": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "emails_sent": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "unique_opens": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "recipient_clicks": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "hard_bounce": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "soft_bounce": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "subs": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "unsubs": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "other_adds": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "other_removes": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "_links": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "list_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

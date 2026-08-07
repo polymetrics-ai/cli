@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/lists/synthetic-conformance-value/members/synthetic-conformance-value/activity",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "activity": [
+        {
+          "campaign_id": "fixture_campaign_id",
+          "list_id": "fixture_list_id",
+          "subscriber_hash": "fixture_subscriber_hash",
+          "action": "fixture_action",
+          "timestamp": "2026-01-01T00:00:00Z",
+          "url": "https://example.invalid/mailchimp-fixture",
+          "type": "fixture_type",
+          "title": "fixture_title"
+        }
+      ]
+    }
+  }
+}

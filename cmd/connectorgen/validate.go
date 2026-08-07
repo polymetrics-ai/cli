@@ -28,6 +28,7 @@ const (
 	ruleSurfaceIncomplete        = "surface_incomplete"
 	ruleSurfaceCategory          = "surface_category"
 	ruleSurfaceOperation         = "surface_operation"
+	ruleSurfaceProvenance        = "surface_provenance"
 	ruleSurfaceFailFirstRun      = "surface_fail_first_run"
 	ruleCLISurfaceUnknownTarget  = "cli_surface_unknown_target"
 	ruleCLISurfaceMissingMapping = "cli_surface_missing_mapping"
@@ -577,6 +578,14 @@ func checkAPISurface(b engine.Bundle) []Finding {
 		}}
 	}
 	var findings []Finding
+	for _, issue := range engine.ValidateSurfaceProvenance(b.Surface).Issues {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "api_surface.json",
+			Rule:      ruleSurfaceProvenance,
+			Message:   issue.Error(),
+		})
+	}
 
 	streams := map[string]bool{}
 	for _, s := range b.Streams {
@@ -678,7 +687,7 @@ func checkAPISurface(b engine.Bundle) []Finding {
 			if strings.EqualFold(ep.Method, "GET") {
 				hasNonExcludedGET = true
 			}
-			if mutationMethods[strings.ToUpper(ep.Method)] {
+			if ep.CoveredBy.Write != "" && mutationMethods[strings.ToUpper(ep.Method)] {
 				hasNonExcludedMutation = true
 			}
 		case hasExcluded:
@@ -760,7 +769,7 @@ func checkAPISurfaceOperation(b engine.Bundle, i int, ep engine.SurfaceEndpoint)
 	if op.Model == "duplicate" && strings.TrimSpace(op.DuplicateOf) == "" {
 		add("operation.duplicate_of is required for duplicate rows")
 	}
-	if sourceRequiredOperationModels[op.Model] &&
+	if b.Surface.OperationLedgerVersion < 2 && sourceRequiredOperationModels[op.Model] &&
 		strings.TrimSpace(op.SourceURL) == "" &&
 		strings.TrimSpace(op.Notes) == "" {
 		add("operation.source_url or operation.notes is required for sensitive/admin/destructive/disallowed rows")
@@ -966,8 +975,8 @@ func checkCLISurfaceDirectWriteOperationSafety(
 	if op.REST.MaxBytes <= 0 {
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) operation %q must declare positive rest.max_bytes", i, cmd.Path, cmd.Operation)})
 	}
-	if !supportedDirectWriteContentType(op.REST.ContentType) {
-		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) operation %q must use application/json, application/x-www-form-urlencoded, or no content_type", i, cmd.Path, cmd.Operation)})
+	if !supportedDirectWriteContentType(op.REST) {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) operation %q must use application/json, application/x-www-form-urlencoded, no content_type, or literal multipart/form-data with rest.multipart", i, cmd.Path, cmd.Operation)})
 	}
 	if !directWriteOutputPolicies[cmd.OutputPolicy] {
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) operation %q must declare a supported output_policy", i, cmd.Path, cmd.Operation)})
@@ -997,8 +1006,14 @@ func checkCLISurfaceDirectWriteOperationSafety(
 	return findings
 }
 
-func supportedDirectWriteContentType(raw string) bool {
-	raw = strings.TrimSpace(raw)
+func supportedDirectWriteContentType(rest *engine.RESTOperationSpec) bool {
+	if rest == nil {
+		return false
+	}
+	if rest.Multipart != nil {
+		return rest.ContentType == "multipart/form-data"
+	}
+	raw := strings.TrimSpace(rest.ContentType)
 	if raw == "" {
 		return true
 	}
@@ -2056,9 +2071,10 @@ func checkIncrementalPolicies(b engine.Bundle) []Finding {
 // all-digits value IS the correct, intended shape (no misinterpretation risk
 // at all), and rfc3339 never attempts digit parsing in the first place
 // (verbatim passthrough). Reads spec.json's per-property "format" directly from
-// b.RawSpec (F5, REVIEW.md) since the compiled *engine.Schema does not
-// expose annotation keywords like "format" through any accessor (schema.go:
-// "format" is accepted-but-only-preserved, never structurally enforced).
+// b.RawSpec (F5, REVIEW.md) since the compiled *engine.Schema does not expose
+// annotation keywords like "format" through any accessor. Schema validation
+// enforces format:uri, but date and date-time remain annotations, so this
+// validator still has to inspect the raw property declaration.
 func checkIncrementalStartDateFormat(b engine.Bundle) []Finding {
 	if len(b.RawSpec) == 0 {
 		return nil

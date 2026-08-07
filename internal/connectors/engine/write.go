@@ -95,9 +95,9 @@ func validateWriteBody(action WriteAction, rec connectors.Record) error {
 }
 
 // DryRunWrite validates and prepares every record without a network call. Its
-// warnings show the first fully resolved method/path as a redacted
-// representative, while its digest binds the complete prepared request set and
-// execution identity used by the approval gate.
+// warnings show the first fully resolved method/path that execution will send,
+// while its digest binds the complete prepared request set and execution
+// identity used by the approval gate.
 func DryRunWrite(ctx context.Context, b Bundle, req connectors.WriteRequest, records []connectors.Record, h Hooks) (connectors.WritePreview, error) {
 	prepared, err := prepareDeclarativeWrite(ctx, b, req, records, h)
 	if err != nil {
@@ -106,15 +106,10 @@ func DryRunWrite(ctx context.Context, b Bundle, req connectors.WriteRequest, rec
 	return PreviewPreparedWrite(prepared)
 }
 
-// resolveWriteRequestLine interpolates the action's base URL and path
-// against rec/cfg, redacting {{ secrets.* }} and action redaction fields so
-// previews do not expose values that must stay out of operator-visible URLs.
+// resolveWriteRequestLine interpolates the action's base URL and path against
+// the same complete runtime configuration and record that execution uses.
 func resolveWriteRequestLine(b Bundle, action WriteAction, rec connectors.Record, cfg connectors.RuntimeConfig) (method, path string, err error) {
-	redactedSecrets := make(map[string]string, len(cfg.Secrets))
-	for k := range cfg.Secrets {
-		redactedSecrets[k] = "***"
-	}
-	vars := Vars{Config: cfg.Config, Secrets: redactedSecrets, Record: previewRecordForWriteAction(rec, action.RedactFields)}
+	vars := Vars{Config: cfg.Config, Secrets: cfg.Secrets, Record: map[string]any(rec)}
 
 	baseURL, err := Interpolate(b.HTTP.URL, vars)
 	if err != nil {
@@ -125,14 +120,6 @@ func resolveWriteRequestLine(b Bundle, action WriteAction, rec connectors.Record
 		return "", "", fmt.Errorf("engine: write action %q: resolve path: %w", action.Name, err)
 	}
 	return methodOrDefault(action.Method), joinURL(baseURL, relPath), nil
-}
-
-func previewRecordForWriteAction(rec connectors.Record, redactFields []string) map[string]any {
-	out := copyRecordMap(map[string]any(rec))
-	for _, field := range redactFields {
-		redactPreviewRecordField(out, strings.TrimPrefix(strings.TrimSpace(field), "record."))
-	}
-	return out
 }
 
 func copyRecordMap(src map[string]any) map[string]any {
@@ -148,31 +135,6 @@ func copyRecordMap(src map[string]any) map[string]any {
 		}
 	}
 	return out
-}
-
-func redactPreviewRecordField(record map[string]any, field string) {
-	if field == "" {
-		return
-	}
-	parts := strings.Split(field, ".")
-	current := record
-	for _, part := range parts[:len(parts)-1] {
-		next, ok := current[part]
-		if !ok {
-			return
-		}
-		switch typed := next.(type) {
-		case map[string]any:
-			current = typed
-		case connectors.Record:
-			current = map[string]any(typed)
-		default:
-			return
-		}
-	}
-	if _, ok := current[parts[len(parts)-1]]; ok {
-		current[parts[len(parts)-1]] = "redacted"
-	}
 }
 
 type writeActionRedactedError struct {
@@ -409,7 +371,11 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 	if err != nil {
 		return err
 	}
-	requester, err := writeRequester(rt.Requester, action)
+	requesterForAction, err := rt.requesterFor(method, action.Path)
+	if err != nil {
+		return err
+	}
+	requester, err := writeRequester(requesterForAction, action)
 	if err != nil {
 		return err
 	}

@@ -8,8 +8,8 @@ Branch: `feat/connector-architecture-v2`
 The post-removal binary size increase was not caused by deleting legacy connector
 Go code. It was caused by the Wave 6 registry flip making `cmd/pm` import
 `internal/connectors/defs.FS`; the previous `//go:embed all:*` directive compiled
-the entire definition tree into the production CLI, including conformance-only
-fixtures and API coverage manifests.
+the entire definition tree into the production CLI, including conformance fixtures
+and API coverage manifests used by authoring validation and full certification.
 
 `go tool nm` showed the increase as static string/rodata, and the raw defs tree
 confirmed the same pattern: most of the added bytes were JSON/Markdown assets,
@@ -44,23 +44,27 @@ connectors:
 | `writes.json` | 223 | 6,787,703 | yes | Reverse ETL write actions |
 | `schemas/*.json` | 6,791 | 7,402,300 | yes | Stream catalog, projection, primary keys, cursors, sync modes |
 | `docs.md` | 547 | 5,304,487 | yes | Human/agent connector manuals and docs checks |
-| `api_surface.json` | 547 | 7,045,880 | no | Authoring/conformance coverage only |
+| `api_surface.json` | 547 | 7,045,880 | no | Authoring/validation, conformance, full-certification inventory, and disk-backed direct-write endpoint cross-check |
 | `fixtures/**` | 13,367 | 22,496,157 | no | Conformance replay only |
 
-Runtime raw embedded defs data is now about 23.82 MB. Conformance-only data left
-out of `cmd/pm` is about 29.54 MB. The full on-disk defs tree remains available
+Runtime raw embedded defs data is now about 23.82 MB. Non-runtime validation data
+left out of `cmd/pm` is about 29.54 MB. The full on-disk defs tree remains available
 for validation and tests.
 
 ## Validation boundary
 
-The engine loader now treats `api_surface.json` as optional at runtime. When the
-file is present, the loader still parses and validates it.
+The engine loader now treats `api_surface.json` as optional in the embedded
+runtime bundle. When the file is present in a disk-backed bundle, the loader
+parses and validates it, and direct-write preflight cross-checks the matching
+operation row. Shipped builds instead derive endpoint validation from their own
+`rest_write` declarations; the provenance limitation is documented in the
+connector authoring convention.
 
 `connectorgen validate internal/connectors/defs` remains strict: a bundle missing
-`api_surface.json` is still reported as an authoring/conformance failure. The
-conformance package now loads the real on-disk `internal/connectors/defs` tree so
-fixtures and API-surface manifests stay covered without compiling them into the
-shipping CLI.
+`api_surface.json` is still reported as an authoring validation failure. The
+conformance package and `pm connectors certify --full` load the real on-disk
+`internal/connectors/defs` tree, so fixtures and API-surface manifests stay covered
+without compiling them into the shipping CLI.
 
 ## Speed effect
 
@@ -90,4 +94,3 @@ carries fixture payloads in the executable image.
    contracts more broadly.
 5. Keep conformance fixtures out of production permanently. Re-embedding
    `fixtures/**` would add about 22.5 MB of raw JSON with no runtime value.
-

@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/verified-domains",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "domains": [
+        {
+          "domain": "fixture_domain",
+          "verified": true,
+          "authenticated": true,
+          "verification_email": "fixture@example.invalid",
+          "verification_sent": "fixture_verification_sent",
+          "status": "fixture_status",
+          "is_free_email_provider": true
+        }
+      ]
+    }
+  }
+}

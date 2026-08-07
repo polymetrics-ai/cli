@@ -7,7 +7,7 @@ SYNOPSIS
 
 USAGE
   pm reverse list [--json]
-  pm reverse plan <name> --source-table <table> --destination connector:credential --map source:dest [--json]
+  pm reverse plan <name> --source-table <table> [--connection name] --destination connector:credential --map source:dest [--json]
   pm reverse preview <plan-id> [--json]
   pm reverse run <plan-id> --approve <token> [--confirm <challenge>] [--json]
   pm reverse status <run-id> [--json]
@@ -27,8 +27,15 @@ DESCRIPTION
   The workflow is intentionally split into plan, preview, approval, and run.
   Agents can create and preview plans, but JSON plan output omits approval
   tokens so an agent cannot silently approve its own external mutation.
-  Newly created plans persist the destination write action's redact_fields
-  metadata and mask those fields in plan samples.
+  The connector command runner does not mask ETL or reverse-ETL command records
+  from declared redact_fields. Those declarations remain load-compatible metadata.
+  This runner policy does not change source-table output or other execution paths.
+  DryRunWrite engine preview warnings preserve the resolved execution request.
+  Engine direct-read, operation-direct-read, and binary-download executors
+  preserve bounded HTTP URL/query/body diagnostics before downstream rendering.
+  Declared redact_fields remain compatible metadata, but do not replace values
+  in DryRunWrite preview warnings. A stored source-table sample is an app-level
+  summary; the engine preview is authoritative for approval.
 
   Destructive plans do not receive an approval token during planning. Preview
   performs the connector's no-network dry run, persists a digest of the complete
@@ -55,26 +62,37 @@ COMMANDS
     Create a reverse ETL plan from a local warehouse table to a destination
     connector. A human-readable non-destructive plan prints an approval token;
     a destructive plan prints no token until preview succeeds. JSON output
-    always redacts tokens. A non-batchable destination action is refused here,
+    always omits tokens. A non-batchable destination action is refused here,
     before any plan or approval token exists.
+
+    Each connection materializes its tables into its own directory, so several
+    connections can hold a table of the same name. Pass --connection when they
+    do. The connection is resolved once, here, and recorded on the plan, so
+    preview and run keep reading the same table afterwards; neither takes a
+    connection selector of its own. Use --connection _unattributed for a
+    root-level table that no connection owns.
 
   preview
     Show a stored plan's mapped sample rows, action, and count. For a destructive
     plan, also materialize the request through the destination's no-network dry
     run, persist its digest, and issue the approval token in human-readable
-    output. JSON redacts the token. Plans with persisted redact_fields keep
-    connector-declared fields masked in sample rows.
+    output. JSON omits the token. DryRunWrite engine preview warnings preserve
+    the resolved execution request, including fields declared in redact_fields;
+    that preview is what the digest binds before dispatch.
 
   run
     Execute a stored plan only when --approve is supplied with the approval
     token from human-readable plan or preview output. Destructive plans require
-    a matching persisted preview and the closed --confirm destructive value.
+    a matching persisted preview and the closed --confirm destructive value. A
+    failed dispatch is recorded; pm does not automatically retry a failed dispatch.
 
   status
     Show a completed or failed reverse ETL run by run ID.
 
 FLAGS
   --source-table table         local warehouse table to read
+  --connection name            connection whose table to read; required only
+                               when several connections share the table name
   --destination connector:cred destination endpoint
   --map source:dest            field mapping, repeatable
   --action action              destination write action; inspect shows names
@@ -128,8 +146,12 @@ SECURITY
   Execution requires a time-bounded, single-use approval token. Destructive
   tokens are created only after preview; execution revalidates the preview
   digest before dispatch. JSON plan and preview output omit tokens so agents
-  cannot silently self-approve external writes. Reverse ETL never exposes raw
-  secret values and masks connector-declared sensitive record fields.
+  cannot silently self-approve external writes. DryRunWrite engine preview
+  warnings preserve the resolved execution request, including fields declared
+  in redact_fields. Engine direct-read, operation-direct-read, and binary-
+  download executors preserve bounded HTTP URL/query/body diagnostics before
+  downstream rendering. These engine-level guarantees do not establish
+  complete pm CLI output. Credential storage remains encrypted at rest.
 
 LEARN MORE
   Run pm reverse --help for this manual.

@@ -8,12 +8,15 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net/url"
 	"os"
 	"path/filepath"
 	"sort"
 	"strings"
 	"sync"
 	"time"
+
+	"polymetrics.ai/internal/warehouse"
 )
 
 var ErrUnsupportedOperation = errors.New("unsupported connector operation")
@@ -46,6 +49,7 @@ type Capabilities struct {
 	Read    bool `json:"read"`
 	Write   bool `json:"write"`
 	Query   bool `json:"query"`
+	CDC     bool `json:"cdc,omitempty"`
 }
 
 type Metadata struct {
@@ -68,11 +72,140 @@ type Stream struct {
 	Fields       []Field  `json:"fields"`
 	PrimaryKey   []string `json:"primary_key"`
 	CursorFields []string `json:"cursor_fields"`
+	// Schema is the verbatim draft-07 record schema backing this catalog
+	// stream. Static bundles and provider discovery both pass through
+	// StreamFromSchema so consumers never need a source-specific schema path.
+	Schema json.RawMessage `json:"schema,omitempty"`
 }
 
 type Catalog struct {
-	Connector string   `json:"connector"`
-	Streams   []Stream `json:"streams"`
+	Connector string           `json:"connector"`
+	Streams   []Stream         `json:"streams"`
+	Discovery *DiscoveryStatus `json:"discovery,omitempty"`
+}
+
+// DiscoveryStatus makes a provider-derived catalog's freshness and completeness
+// explicit. It intentionally carries only safe object names and lifecycle
+// facts: provider response bodies and credentials never belong in a catalog.
+type DiscoveryStatus struct {
+	Complete     bool               `json:"complete"`
+	Cached       bool               `json:"cached,omitempty"`
+	Stale        bool               `json:"stale,omitempty"`
+	UsedFallback bool               `json:"used_fallback,omitempty"`
+	RefreshedAt  time.Time          `json:"refreshed_at,omitempty"`
+	ExpiresAt    time.Time          `json:"expires_at,omitempty"`
+	Failures     []DiscoveryFailure `json:"failures,omitempty"`
+}
+
+// DiscoveryFailure records the scope of an incomplete discovery without
+// retaining an upstream error, which can contain provider-supplied data.
+type DiscoveryFailure struct {
+	Object   string `json:"object,omitempty"`
+	Stage    string `json:"stage"`
+	Attempts int    `json:"attempts,omitempty"`
+}
+
+// StreamFromSchema constructs the public catalog projection of one draft-07
+// record schema. It is the shared boundary for static bundle schemas and
+// dynamically discovered schemas: fields, primary key, cursor, and raw schema
+// must therefore agree regardless of where the schema came from.
+func StreamFromSchema(name, description string, raw json.RawMessage) (Stream, error) {
+	if strings.TrimSpace(name) == "" {
+		return Stream{}, errors.New("catalog stream name is required")
+	}
+	if len(raw) == 0 {
+		return Stream{}, fmt.Errorf("catalog stream %q schema is required", name)
+	}
+
+	var doc struct {
+		Type        string                     `json:"type"`
+		Properties  map[string]json.RawMessage `json:"properties"`
+		PrimaryKey  []string                   `json:"x-primary-key"`
+		CursorField string                     `json:"x-cursor-field"`
+	}
+	if err := json.Unmarshal(raw, &doc); err != nil {
+		return Stream{}, fmt.Errorf("catalog stream %q schema: %w", name, err)
+	}
+	if doc.Type != "object" {
+		return Stream{}, fmt.Errorf("catalog stream %q schema type must be object", name)
+	}
+
+	stream := Stream{
+		Name:        name,
+		Description: description,
+		PrimaryKey:  append([]string(nil), doc.PrimaryKey...),
+		Schema:      append(json.RawMessage(nil), raw...),
+	}
+	if doc.CursorField != "" {
+		stream.CursorFields = []string{doc.CursorField}
+	}
+
+	fieldNames := make([]string, 0, len(doc.Properties))
+	for fieldName := range doc.Properties {
+		fieldNames = append(fieldNames, fieldName)
+	}
+	sort.Strings(fieldNames)
+	for _, fieldName := range fieldNames {
+		fieldType, err := catalogFieldType(doc.Properties[fieldName])
+		if err != nil {
+			return Stream{}, fmt.Errorf("catalog stream %q field %q: %w", name, fieldName, err)
+		}
+		stream.Fields = append(stream.Fields, Field{Name: fieldName, Type: fieldType})
+	}
+
+	if err := validateCatalogSchemaContract(stream); err != nil {
+		return Stream{}, err
+	}
+	return stream, nil
+}
+
+// catalogFieldType preserves the conventional Field.Type projection while the
+// raw schema remains authoritative. A nullable schema reports its concrete
+// non-null type; an omitted type stays empty rather than being guessed.
+func catalogFieldType(raw json.RawMessage) (string, error) {
+	var property struct {
+		Type json.RawMessage `json:"type"`
+	}
+	if err := json.Unmarshal(raw, &property); err != nil {
+		return "", fmt.Errorf("invalid property schema: %w", err)
+	}
+	if len(property.Type) == 0 || string(property.Type) == "null" {
+		return "", nil
+	}
+
+	var single string
+	if err := json.Unmarshal(property.Type, &single); err == nil {
+		return single, nil
+	}
+
+	var union []string
+	if err := json.Unmarshal(property.Type, &union); err != nil {
+		return "", fmt.Errorf("type must be a string or array of strings")
+	}
+	for _, candidate := range union {
+		if candidate != "null" {
+			return candidate, nil
+		}
+	}
+	return "null", nil
+}
+
+func validateCatalogSchemaContract(stream Stream) error {
+	known := make(map[string]struct{}, len(stream.Fields))
+	for _, field := range stream.Fields {
+		known[field.Name] = struct{}{}
+	}
+	for _, field := range stream.PrimaryKey {
+		if _, ok := known[field]; !ok {
+			return fmt.Errorf("catalog stream %q primary key field %q is absent from schema", stream.Name, field)
+		}
+	}
+	for _, field := range stream.CursorFields {
+		if _, ok := known[field]; !ok {
+			return fmt.Errorf("catalog stream %q cursor field %q is absent from schema", stream.Name, field)
+		}
+	}
+	return nil
 }
 
 // SecretStore writes a single rotated secret back to the caller's credential
@@ -97,13 +230,25 @@ type SecretStore interface {
 }
 
 type RuntimeConfig struct {
-	ProjectDir            string            `json:"-"`
-	Config                map[string]string `json:"config"`
-	Secrets               map[string]string `json:"-"`
-	CredentialRevision    string            `json:"-"`
-	ConfigurationDigest   string            `json:"-"`
-	WriteApprovalScope    string            `json:"-"`
-	ApprovedPayloadSHA256 map[string]string `json:"-"`
+	ProjectDir string            `json:"-"`
+	Config     map[string]string `json:"config"`
+	Secrets    map[string]string `json:"-"`
+	// CoordinationIdentity carries opaque auth/rate inputs only. It has no
+	// credential, binding, provider, profile, or approval-revision preimage.
+	CoordinationIdentity  CoordinationIdentity `json:"-"`
+	CredentialRevision    string               `json:"-"`
+	ConfigurationDigest   string               `json:"-"`
+	WriteApprovalScope    string               `json:"-"`
+	ApprovedPayloadSHA256 map[string]string    `json:"-"`
+	// ForceCatalogRefresh bypasses an in-process discovery cache. App-level
+	// `pm catalog refresh` sets it deliberately; it is never persisted or
+	// inferred from credentials.
+	ForceCatalogRefresh bool `json:"-"`
+	// ResolvedCatalog is an already durable, account-scoped catalog supplied
+	// by the application to a connector invocation. It prevents a reader from
+	// independently rediscovering an account on every command. It contains
+	// provider schema metadata only, never connection configuration or secrets.
+	ResolvedCatalog *Catalog `json:"-"`
 	// SecretStore, when set, persists a provider-rotated secret back to the
 	// caller's encrypted credential store. Optional; see SecretStore.
 	SecretStore SecretStore `json:"-"`
@@ -160,6 +305,15 @@ type OperationDirectReader interface {
 	OperationDirectRead(context.Context, OperationDirectReadRequest) (DirectReadResult, error)
 }
 
+// OperationDirectReadPreflighter exposes the no-network metadata admission
+// check for one declared direct-read operation. Command preflight passes its
+// exact operation-to-command binding through this interface so a command cannot
+// claim availability "implemented" unless the runtime accepts its operation
+// kind, endpoint, cap, and output policy.
+type OperationDirectReadPreflighter interface {
+	PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error
+}
+
 // OperationDirectWriteRequest is one declared, typed rest_write invocation.
 //
 // A caller must obtain PreviewDigest from PreviewOperationDirectWrite before
@@ -204,6 +358,11 @@ type OperationDirectWriteMetadata struct {
 	ConfirmationChallenge string
 	OutputPolicy          string
 	Batchable             bool
+	// PayloadFileFields is nil for non-multipart operations. For a declared
+	// multipart operation it is the closed set of body paths whose local-file
+	// identities must be captured before preview, even when their names do not
+	// follow a file_path convention.
+	PayloadFileFields []string
 }
 
 // OperationDirectWriter is implemented by connectors that can preview and
@@ -365,6 +524,9 @@ type CDCReadRequest struct {
 	Stream string
 	Config RuntimeConfig
 	State  map[string]string
+	// CheckpointCommitter receives the next source state only after its page's
+	// emitted events have been durably accepted by the caller.
+	CheckpointCommitter ChangefeedCheckpointCommitter
 }
 
 type CDCEvent struct {
@@ -387,6 +549,448 @@ type Querier interface {
 
 type CDCReader interface {
 	ReadCDC(ctx context.Context, req CDCReadRequest, emit func(CDCEvent) error) error
+}
+
+// ChangefeedCheckpointCommitter persists a source position only after the
+// caller's CDC event callback has durably accepted that position's records.
+// The polling-watermark executor treats the state as opaque key/value data so
+// the durable, versioned #3810 sync envelope can replace this narrow adapter
+// without changing transport or delivery logic.
+type ChangefeedCheckpointCommitter interface {
+	CommitChangefeedCheckpoint(ctx context.Context, state map[string]string) error
+}
+
+// ChangefeedStatus is the closed lifecycle vocabulary for a declared
+// changefeed. A status is not itself an executable capability: only an
+// implemented descriptor with a matching ChangefeedExecutor is discoverable.
+type ChangefeedStatus string
+
+const (
+	ChangefeedStatusImplemented ChangefeedStatus = "implemented"
+	ChangefeedStatusPlanned     ChangefeedStatus = "planned"
+	ChangefeedStatusUnsupported ChangefeedStatus = "unsupported"
+	ChangefeedStatusUnknown     ChangefeedStatus = "unknown"
+)
+
+// ChangefeedMechanism is the closed taxonomy of consumable source mechanisms.
+// A snapshot pagination cursor is not a changefeed unless its descriptor
+// establishes one of these contracts.
+type ChangefeedMechanism string
+
+const (
+	ChangefeedMechanismLogicalReplication ChangefeedMechanism = "logical_replication"
+	ChangefeedMechanismIncrementalCursor  ChangefeedMechanism = "incremental_cursor"
+	ChangefeedMechanismWebhook            ChangefeedMechanism = "webhook"
+	ChangefeedMechanismEventStream        ChangefeedMechanism = "event_stream"
+	ChangefeedMechanismPollingWatermark   ChangefeedMechanism = "polling_watermark"
+)
+
+// ChangefeedSource records the provider artifact that supports a declared
+// changefeed contract. The retrieval date is a date-only ISO-8601 value.
+type ChangefeedSource struct {
+	ArtifactURL     string `json:"artifact_url"`
+	ArtifactVersion string `json:"artifact_version"`
+	RetrievedAt     string `json:"retrieved_at"`
+}
+
+// ChangefeedExecutorRef names the fixed executor selected by an implemented
+// descriptor. It is never supplied by a CLI caller.
+type ChangefeedExecutorRef struct {
+	Kind string `json:"kind"`
+	ID   string `json:"id"`
+}
+
+// ChangefeedCheckpoint declares the durable position and recovery contract.
+// State advances only after the descriptor's CommitAfter condition is met.
+type ChangefeedCheckpoint struct {
+	Kind        string   `json:"kind"`
+	Keys        []string `json:"keys"`
+	CommitAfter string   `json:"commit_after"`
+	OnInvalid   string   `json:"on_invalid"`
+}
+
+// ChangefeedDelivery records the source ordering, duplicate, and delete
+// guarantees. Values are provider-specific declarations rather than generic
+// promises made by the CLI.
+type ChangefeedDelivery struct {
+	Ordering   string   `json:"ordering"`
+	Duplicates string   `json:"duplicates"`
+	Deletes    string   `json:"deletes"`
+	DedupeKey  []string `json:"dedupe_key,omitempty"`
+}
+
+// PollingWatermarkField identifies a provider record value using a dotted
+// object path. The value is never supplied by a CLI caller.
+type PollingWatermarkField struct {
+	Path string `json:"path"`
+}
+
+// PollingWatermarkValue identifies the provider ordering value and its
+// lossless representation. Timestamp, monotonic sequence, and opaque cursor
+// values intentionally have different validation and safety-lag semantics.
+type PollingWatermarkValue struct {
+	Kind string `json:"kind"`
+	Path string `json:"path"`
+}
+
+// PollingWatermarkDeletionEndpoint declares a provider deletion feed that a
+// polling source adapter must fetch in addition to ordinary records. It is
+// deliberately descriptive: the shared executor owns event/checkpoint
+// semantics while a closed connector transport owns the provider request.
+type PollingWatermarkDeletionEndpoint struct {
+	Path        string `json:"path"`
+	RecordsPath string `json:"records_path"`
+}
+
+// PollingWatermarkSpec is the complete declaration consumed by the shared
+// polling-watermark executor. Inclusive boundaries deliberately replay the
+// page edge, so delivery is at-least-once rather than falsely exactly-once.
+// A timestamp safety lag of zero is an explicit opt-out and can lose late
+// arrivals whose provider clock is behind the committed watermark.
+type PollingWatermarkSpec struct {
+	Watermark        PollingWatermarkValue             `json:"watermark"`
+	TieBreaker       PollingWatermarkField             `json:"tie_breaker"`
+	Boundary         string                            `json:"boundary"`
+	SafetyLagSeconds int                               `json:"safety_lag_seconds"`
+	PageSize         int                               `json:"page_size"`
+	MaxPages         int                               `json:"max_pages"`
+	RequestBudget    int                               `json:"request_budget"`
+	SoftDelete       *PollingWatermarkField            `json:"soft_delete,omitempty"`
+	DeletionEndpoint *PollingWatermarkDeletionEndpoint `json:"deletion_endpoint,omitempty"`
+}
+
+const maxPollingWatermarkSafetyLagSeconds = int64(1<<63-1) / int64(time.Second)
+
+// ChangefeedDescriptor is the evidence-backed, declarative contract for a
+// connector changefeed. It is distinct from CDCReader because a reader method
+// can be an unsupported migration stub.
+type ChangefeedDescriptor struct {
+	Status           ChangefeedStatus       `json:"status"`
+	Mechanism        ChangefeedMechanism    `json:"mechanism"`
+	Source           ChangefeedSource       `json:"source"`
+	Reason           string                 `json:"reason,omitempty"`
+	Executor         *ChangefeedExecutorRef `json:"executor,omitempty"`
+	Checkpoint       *ChangefeedCheckpoint  `json:"checkpoint,omitempty"`
+	Delivery         *ChangefeedDelivery    `json:"delivery,omitempty"`
+	Streams          []string               `json:"streams,omitempty"`
+	PollingWatermark *PollingWatermarkSpec  `json:"polling_watermark,omitempty"`
+}
+
+// ChangefeedExecutorDescriptor is the runtime half of an implemented
+// changefeed. It intentionally omits provider evidence: that remains in the
+// bundle declaration and the runtime proves only that it implements the same
+// executable contract.
+type ChangefeedExecutorDescriptor struct {
+	Status     ChangefeedStatus      `json:"status"`
+	Mechanism  ChangefeedMechanism   `json:"mechanism"`
+	Executor   ChangefeedExecutorRef `json:"executor"`
+	Checkpoint ChangefeedCheckpoint  `json:"checkpoint"`
+}
+
+// ChangefeedDescriptorProvider is implemented only by a runnable changefeed
+// executor. It is deliberately separate from CDCReader so a legacy stub
+// cannot advertise capability through method-set coincidence.
+type ChangefeedDescriptorProvider interface {
+	ChangefeedExecutorDescriptor() ChangefeedExecutorDescriptor
+}
+
+// ChangefeedExecutor is the explicit runtime admission contract. A connector
+// must both execute the legacy migration method and report a matching modern
+// descriptor before an implemented bundle declaration becomes public CDC.
+type ChangefeedExecutor interface {
+	CDCReader
+	ChangefeedDescriptorProvider
+}
+
+// Validate verifies the descriptor's closed vocabulary and the minimum
+// evidence needed to make an implemented or unsupported claim. It is used at
+// bundle-load time and never treats an incomplete declaration as executable.
+func (d ChangefeedDescriptor) Validate() error {
+	if !d.Status.valid() {
+		return fmt.Errorf("unsupported changefeed status %q", d.Status)
+	}
+	if !d.Mechanism.valid() {
+		return fmt.Errorf("unsupported changefeed mechanism %q", d.Mechanism)
+	}
+	if strings.TrimSpace(d.Source.ArtifactURL) == "" || strings.TrimSpace(d.Source.ArtifactVersion) == "" || strings.TrimSpace(d.Source.RetrievedAt) == "" {
+		return errors.New("changefeed source requires artifact_url, artifact_version, and retrieved_at")
+	}
+	artifactURL, err := url.ParseRequestURI(d.Source.ArtifactURL)
+	if err != nil || artifactURL.Host == "" || (artifactURL.Scheme != "http" && artifactURL.Scheme != "https") {
+		return errors.New("changefeed source artifact_url must be an absolute http or https URL")
+	}
+	if _, err := time.Parse("2006-01-02", d.Source.RetrievedAt); err != nil {
+		return fmt.Errorf("changefeed source retrieved_at must be an ISO-8601 date: %w", err)
+	}
+
+	switch d.Status {
+	case ChangefeedStatusImplemented:
+		if d.Executor == nil || strings.TrimSpace(d.Executor.Kind) == "" || strings.TrimSpace(d.Executor.ID) == "" {
+			return errors.New("implemented changefeed requires a named executor")
+		}
+		if err := validateChangefeedCheckpoint(d.Checkpoint); err != nil {
+			return err
+		}
+		if err := validateChangefeedDelivery(d.Delivery); err != nil {
+			return err
+		}
+		if err := validateChangefeedKeys("streams", d.Streams); err != nil {
+			return err
+		}
+		if d.Mechanism == ChangefeedMechanismPollingWatermark {
+			if err := validatePollingWatermark(d); err != nil {
+				return err
+			}
+		} else if d.PollingWatermark != nil {
+			return errors.New("polling_watermark declaration requires polling_watermark mechanism")
+		}
+	case ChangefeedStatusUnsupported:
+		if strings.TrimSpace(d.Reason) == "" {
+			return errors.New("unsupported changefeed requires a reason")
+		}
+		if d.Executor != nil || d.Checkpoint != nil || d.Delivery != nil || d.PollingWatermark != nil {
+			return errors.New("unsupported changefeed cannot declare an executor, checkpoint, delivery, or polling watermark")
+		}
+	}
+	return nil
+}
+
+// IsImplemented reports whether the declaration is complete enough to be
+// considered for execution. A true result still needs a matching executor.
+func (d ChangefeedDescriptor) IsImplemented() bool {
+	return d.Status == ChangefeedStatusImplemented && d.Validate() == nil
+}
+
+// MatchesExecutor reports whether executor is the runtime counterpart of this
+// implemented descriptor. Matching requires the status, mechanism, named
+// executor, and checkpoint contract to agree exactly.
+func (d ChangefeedDescriptor) MatchesExecutor(executor ChangefeedExecutorDescriptor) bool {
+	if !d.IsImplemented() || executor.Status != ChangefeedStatusImplemented || d.Executor == nil || d.Checkpoint == nil {
+		return false
+	}
+	return d.Mechanism == executor.Mechanism &&
+		d.Executor.Kind == executor.Executor.Kind &&
+		d.Executor.ID == executor.Executor.ID &&
+		d.Checkpoint.Kind == executor.Checkpoint.Kind &&
+		sameStrings(d.Checkpoint.Keys, executor.Checkpoint.Keys) &&
+		d.Checkpoint.CommitAfter == executor.Checkpoint.CommitAfter &&
+		d.Checkpoint.OnInvalid == executor.Checkpoint.OnInvalid
+}
+
+// Clone returns a defensive copy suitable for a public Definition projection.
+func (d ChangefeedDescriptor) Clone() *ChangefeedDescriptor {
+	clone := d
+	clone.Streams = append([]string(nil), d.Streams...)
+	if d.Executor != nil {
+		executor := *d.Executor
+		clone.Executor = &executor
+	}
+	if d.Checkpoint != nil {
+		checkpoint := *d.Checkpoint
+		checkpoint.Keys = append([]string(nil), d.Checkpoint.Keys...)
+		clone.Checkpoint = &checkpoint
+	}
+	if d.Delivery != nil {
+		delivery := *d.Delivery
+		delivery.DedupeKey = append([]string(nil), d.Delivery.DedupeKey...)
+		clone.Delivery = &delivery
+	}
+	if d.PollingWatermark != nil {
+		polling := *d.PollingWatermark
+		if d.PollingWatermark.SoftDelete != nil {
+			softDelete := *d.PollingWatermark.SoftDelete
+			polling.SoftDelete = &softDelete
+		}
+		if d.PollingWatermark.DeletionEndpoint != nil {
+			deletionEndpoint := *d.PollingWatermark.DeletionEndpoint
+			polling.DeletionEndpoint = &deletionEndpoint
+		}
+		clone.PollingWatermark = &polling
+	}
+	return &clone
+}
+
+// HasImplementedChangefeed is the single capability projection rule. Legacy
+// CDCReader presence alone is insufficient; callers must use this helper when
+// deciding whether to expose CDC publicly.
+func HasImplementedChangefeed(c Connector, descriptor *ChangefeedDescriptor) bool {
+	if descriptor == nil || !descriptor.IsImplemented() {
+		return false
+	}
+	executor, ok := c.(ChangefeedExecutor)
+	if !ok {
+		return false
+	}
+	return descriptor.MatchesExecutor(executor.ChangefeedExecutorDescriptor())
+}
+
+func (s ChangefeedStatus) valid() bool {
+	switch s {
+	case ChangefeedStatusImplemented, ChangefeedStatusPlanned, ChangefeedStatusUnsupported, ChangefeedStatusUnknown:
+		return true
+	default:
+		return false
+	}
+}
+
+func (m ChangefeedMechanism) valid() bool {
+	switch m {
+	case ChangefeedMechanismLogicalReplication, ChangefeedMechanismIncrementalCursor, ChangefeedMechanismWebhook, ChangefeedMechanismEventStream, ChangefeedMechanismPollingWatermark:
+		return true
+	default:
+		return false
+	}
+}
+
+func validateChangefeedCheckpoint(checkpoint *ChangefeedCheckpoint) error {
+	if checkpoint == nil || strings.TrimSpace(checkpoint.Kind) == "" || strings.TrimSpace(checkpoint.CommitAfter) == "" || strings.TrimSpace(checkpoint.OnInvalid) == "" || len(checkpoint.Keys) == 0 {
+		return errors.New("implemented changefeed requires checkpoint kind, keys, commit_after, and on_invalid")
+	}
+	seen := make(map[string]struct{}, len(checkpoint.Keys))
+	for _, key := range checkpoint.Keys {
+		key = strings.TrimSpace(key)
+		if key == "" {
+			return errors.New("changefeed checkpoint keys cannot be empty")
+		}
+		if _, ok := seen[key]; ok {
+			return fmt.Errorf("changefeed checkpoint key %q is duplicated", key)
+		}
+		seen[key] = struct{}{}
+	}
+	return nil
+}
+
+func validateChangefeedDelivery(delivery *ChangefeedDelivery) error {
+	if delivery == nil || strings.TrimSpace(delivery.Ordering) == "" || strings.TrimSpace(delivery.Duplicates) == "" || strings.TrimSpace(delivery.Deletes) == "" {
+		return errors.New("implemented changefeed requires ordering, duplicates, and deletes guarantees")
+	}
+	if err := validateChangefeedKeys("delivery dedupe_key", delivery.DedupeKey); err != nil {
+		return err
+	}
+	return nil
+}
+
+func validatePollingWatermark(d ChangefeedDescriptor) error {
+	polling := d.PollingWatermark
+	if polling == nil {
+		return errors.New("implemented polling_watermark changefeed requires polling_watermark declaration")
+	}
+	if d.Executor == nil || d.Executor.Kind != "engine" || d.Executor.ID != "polling_watermark" {
+		return errors.New("implemented polling_watermark changefeed requires executor engine/polling_watermark")
+	}
+	if err := validatePollingWatermarkPath("watermark path", polling.Watermark.Path); err != nil {
+		return err
+	}
+	if err := validatePollingWatermarkPath("tie_breaker path", polling.TieBreaker.Path); err != nil {
+		return err
+	}
+	switch polling.Watermark.Kind {
+	case "timestamp", "monotonic_sequence", "opaque_cursor":
+	default:
+		return fmt.Errorf("unsupported polling watermark kind %q", polling.Watermark.Kind)
+	}
+	if polling.Boundary != "inclusive" {
+		return errors.New("polling watermark boundary must be inclusive to prevent tie loss")
+	}
+	if polling.SafetyLagSeconds < 0 {
+		return errors.New("polling watermark safety_lag_seconds cannot be negative")
+	}
+	if int64(polling.SafetyLagSeconds) > maxPollingWatermarkSafetyLagSeconds {
+		return fmt.Errorf("polling watermark safety_lag_seconds exceeds the maximum duration-safe value of %d", maxPollingWatermarkSafetyLagSeconds)
+	}
+	if polling.Watermark.Kind != "timestamp" && polling.SafetyLagSeconds != 0 {
+		return errors.New("polling watermark safety_lag_seconds is only valid for timestamp watermarks")
+	}
+	if polling.PageSize <= 0 || polling.MaxPages <= 0 || polling.RequestBudget <= 0 {
+		return errors.New("polling watermark requires positive page_size, max_pages, and request_budget")
+	}
+	if polling.DeletionEndpoint != nil && polling.RequestBudget < 2 {
+		return errors.New("polling watermark deletion_endpoint requires request_budget of at least 2")
+	}
+	if d.Checkpoint == nil || !sameStrings(d.Checkpoint.Keys, []string{polling.Watermark.Path, polling.TieBreaker.Path}) {
+		return errors.New("polling watermark checkpoint keys must be watermark path then tie_breaker path")
+	}
+	if d.Delivery == nil || d.Delivery.Duplicates != "at_least_once" {
+		return errors.New("polling watermark delivery must declare duplicates at_least_once")
+	}
+	if polling.SoftDelete != nil && polling.DeletionEndpoint != nil {
+		return errors.New("polling watermark may declare either soft_delete or deletion_endpoint, not both")
+	}
+	if polling.SoftDelete != nil {
+		if err := validatePollingWatermarkPath("soft_delete path", polling.SoftDelete.Path); err != nil {
+			return err
+		}
+	}
+	if polling.DeletionEndpoint != nil {
+		if err := validatePollingWatermarkEndpointPath(polling.DeletionEndpoint.Path); err != nil {
+			return err
+		}
+		if err := validatePollingWatermarkPath("deletion_endpoint records_path", polling.DeletionEndpoint.RecordsPath); err != nil {
+			return err
+		}
+	}
+	if polling.SoftDelete == nil && polling.DeletionEndpoint == nil && d.Delivery.Deletes != "not_available" {
+		return errors.New("polling watermark hard deletes are not observable; delivery deletes must be not_available")
+	}
+	if (polling.SoftDelete != nil || polling.DeletionEndpoint != nil) && d.Delivery.Deletes != "tombstone" {
+		return errors.New("polling watermark observable deletes must declare tombstone delivery")
+	}
+	return nil
+}
+
+func validatePollingWatermarkEndpointPath(path string) error {
+	if !strings.HasPrefix(path, "/") || strings.Contains(path, "//") || strings.Contains(path, "..") || strings.ContainsAny(path, "\r\n?#") {
+		return fmt.Errorf("polling watermark deletion_endpoint path %q is not a safe connector-relative path", path)
+	}
+	return nil
+}
+
+func validatePollingWatermarkPath(name, path string) error {
+	if strings.TrimSpace(path) == "" {
+		return fmt.Errorf("polling watermark %s is required", name)
+	}
+	for _, segment := range strings.Split(path, ".") {
+		if segment == "" {
+			return fmt.Errorf("polling watermark %s contains an empty path segment", name)
+		}
+		for index, runeValue := range segment {
+			if (runeValue >= 'a' && runeValue <= 'z') || (runeValue >= 'A' && runeValue <= 'Z') || runeValue == '_' || runeValue == '-' || (index > 0 && runeValue >= '0' && runeValue <= '9') {
+				continue
+			}
+			return fmt.Errorf("polling watermark %s contains unsafe path segment %q", name, segment)
+		}
+	}
+	return nil
+}
+
+func validateChangefeedKeys(name string, keys []string) error {
+	if len(keys) == 0 {
+		return fmt.Errorf("implemented changefeed requires %s", name)
+	}
+	seen := make(map[string]struct{}, len(keys))
+	for _, key := range keys {
+		key = strings.TrimSpace(key)
+		if key == "" {
+			return fmt.Errorf("changefeed %s cannot contain empty values", name)
+		}
+		if _, ok := seen[key]; ok {
+			return fmt.Errorf("changefeed %s value %q is duplicated", name, key)
+		}
+		seen[key] = struct{}{}
+	}
+	return nil
+}
+
+func sameStrings(left, right []string) bool {
+	if len(left) != len(right) {
+		return false
+	}
+	for i := range left {
+		if left[i] != right[i] {
+			return false
+		}
+	}
+	return true
 }
 
 type StatefulReader interface {
@@ -457,7 +1061,7 @@ func (r *Registry) Get(name string) (Connector, bool) {
 func (r *Registry) List() []Metadata {
 	out := make([]Metadata, 0, len(r.connectors))
 	for _, connector := range r.connectors {
-		out = append(out, MetadataWithIcon(connector.Metadata()))
+		out = append(out, MetadataOf(connector))
 	}
 	sort.Slice(out, func(i, j int) bool { return out[i].Name < out[j].Name })
 	return out
@@ -485,7 +1089,11 @@ func (r *Registry) CatalogEntries() []Definition {
 				Risk:            manifest.Risk,
 			}
 		}
-		def.Icon = MetadataWithIcon(connector.Metadata()).Icon
+		// Catalog is a public capability projection. The fallback definition
+		// has no changefeed descriptor, so it remains false even if a legacy
+		// connector happens to expose CDCReader or a hand-authored metadata bit.
+		def.Capabilities.CDC = HasImplementedChangefeed(connector, def.Changefeed)
+		def.Icon = MetadataOf(connector).Icon
 		out = append(out, def)
 	}
 	sort.Slice(out, func(i, j int) bool { return out[i].Name < out[j].Name })
@@ -668,29 +1276,67 @@ func (Warehouse) Check(ctx context.Context, cfg RuntimeConfig) error {
 	return os.MkdirAll(warehousePath(cfg), 0o700)
 }
 
+// Catalog lists the tables materialized under the per-connection layout. One
+// table name can belong to several connections, so it is reported once, and a
+// read that does not say which connection it means is refused rather than
+// answered from whichever file happened to be found first.
 func (w Warehouse) Catalog(ctx context.Context, cfg RuntimeConfig) (Catalog, error) {
 	if err := w.Check(ctx, cfg); err != nil {
 		return Catalog{}, err
 	}
-	entries, err := os.ReadDir(warehousePath(cfg))
+	tables, faults, err := warehouse.Tables(warehousePath(cfg))
 	if err != nil {
-		return Catalog{}, fmt.Errorf("read warehouse directory: %w", err)
+		return Catalog{}, err
 	}
-	streams := make([]Stream, 0)
-	for _, entry := range entries {
-		if entry.IsDir() || filepath.Ext(entry.Name()) != ".jsonl" {
-			continue
+	// A damaged ownership record hides only its own connection's tables. The
+	// catalog still lists every healthy connection's, because one connection's
+	// problem stays that connection's problem. It is reported only when there
+	// is nothing left to list, so an incomplete catalog is never mistaken for
+	// an empty warehouse.
+	if len(tables) == 0 && len(faults) > 0 {
+		return Catalog{}, warehouse.FaultsError("", faults)
+	}
+	owners := make(map[string][]string, len(tables))
+	for _, table := range tables {
+		// A root-level table's empty connection is kept as an entry of its
+		// own: it has no owning connection, and naming one would attribute
+		// rows to a connection that never produced them.
+		owners[table.Name] = append(owners[table.Name], table.Connection)
+	}
+	streams := make([]Stream, 0, len(owners))
+	for name, connections := range owners {
+		named := make([]string, 0, len(connections))
+		attributed := 0
+		for _, connection := range connections {
+			// A name held by a connection and by an unattributed root-level
+			// file at once is held by both. Listing only the connection would
+			// read as sole ownership and contradict the ambiguity error the
+			// very next read of that name raises, which names both.
+			if connection == "" {
+				named = append(named, warehouse.UnattributedConnection)
+				continue
+			}
+			attributed++
+			named = append(named, connection)
 		}
-		name := strings.TrimSuffix(entry.Name(), ".jsonl")
-		streams = append(streams, Stream{Name: name, Description: "Warehouse table " + name})
+		description := "Warehouse table " + name
+		if attributed > 0 {
+			description += " (connection " + strings.Join(named, ", ") + ")"
+		}
+		streams = append(streams, Stream{Name: name, Description: description})
 	}
 	sort.Slice(streams, func(i, j int) bool { return streams[i].Name < streams[j].Name })
 	return Catalog{Connector: w.Name(), Streams: streams}, nil
 }
 
+// Read resolves a table inside the per-connection layout. Config["connection"]
+// scopes the read when more than one connection materializes the same name.
 func (Warehouse) Read(ctx context.Context, req ReadRequest, emit func(Record) error) error {
-	path := tablePath(warehousePath(req.Config), req.Stream)
-	file, err := os.Open(path)
+	table, err := warehouse.FindTable(warehousePath(req.Config), req.Stream, req.Config.Config["connection"])
+	if err != nil {
+		return err
+	}
+	file, err := os.Open(table.Path)
 	if err != nil {
 		return fmt.Errorf("open warehouse table %s: %w", req.Stream, err)
 	}
@@ -698,6 +1344,32 @@ func (Warehouse) Read(ctx context.Context, req ReadRequest, emit func(Record) er
 		_ = file.Close()
 	}()
 	return readJSONL(ctx, file, emit)
+}
+
+// warehouseWriteTable is the single owner of which file a warehouse write
+// resolves to and which names it accepts. A direct connector write carries no
+// connection identity, so its rows stay at the root rather than entering a
+// connection's directory, where they would be indistinguishable from that
+// connection's own synced data. The table name is validated rather than folded
+// into a safe filename, so a write and the read that follows it always name
+// the same file. ValidateWrite exists only to predict Write, so it asks this
+// rather than restating it: a predictor that carries its own copy of the rule
+// stops predicting the moment either copy moves.
+func warehouseWriteTable(req WriteRequest) (string, error) {
+	table := req.Table
+	if table == "" {
+		table = req.Stream
+	}
+	return warehouse.PathComponent("table", table)
+}
+
+// ValidateWrite refuses a table name this connector could never write before
+// the caller commits to it. A reverse plan is stored and approved ahead of the
+// write it performs, and there is no way to edit a stored plan, so a name
+// rejected only at write time would leave an approved plan that can never run.
+func (Warehouse) ValidateWrite(_ context.Context, req WriteRequest, _ []Record) error {
+	_, err := warehouseWriteTable(req)
+	return err
 }
 
 func (Warehouse) Write(ctx context.Context, req WriteRequest, records []Record) (WriteResult, error) {
@@ -708,17 +1380,17 @@ func (Warehouse) Write(ctx context.Context, req WriteRequest, records []Record) 
 	if err := os.MkdirAll(dir, 0o700); err != nil {
 		return WriteResult{}, fmt.Errorf("create warehouse directory: %w", err)
 	}
-	table := req.Table
-	if table == "" {
-		table = req.Stream
+	component, err := warehouseWriteTable(req)
+	if err != nil {
+		return WriteResult{}, err
 	}
 	flag := os.O_CREATE | os.O_WRONLY | os.O_APPEND
 	if req.Overwrite {
 		flag = os.O_CREATE | os.O_WRONLY | os.O_TRUNC
 	}
-	file, err := os.OpenFile(tablePath(dir, table), flag, 0o600)
+	file, err := os.OpenFile(filepath.Join(dir, component+".jsonl"), flag, 0o600)
 	if err != nil {
-		return WriteResult{}, fmt.Errorf("open warehouse table %s: %w", table, err)
+		return WriteResult{}, fmt.Errorf("open warehouse table %s: %w", component, err)
 	}
 	defer func() {
 		_ = file.Close()

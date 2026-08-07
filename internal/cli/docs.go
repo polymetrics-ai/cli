@@ -24,7 +24,7 @@ DESCRIPTION
 COMMANDS
   init              create a .polymetrics project
   connectors        list and inspect connector streams and write actions
-  credentials       add, test, inspect, list, and remove credentials
+  credentials       add, link, test, inspect, list, and remove credentials
   connections       create and list source-to-destination connections
   catalog           refresh or show source catalogs
   etl               run ETL stream reads and inspect run status
@@ -248,7 +248,8 @@ const credentialsHelp = `NAME
   pm credentials - manage encrypted connector credentials
 
 SYNOPSIS
-  pm credentials add <name> --connector <connector> [--from-env field=ENV] [--value-stdin field] [--config key=value]
+  pm credentials add <name> --connector <connector> [--provider-family family] [--auth-profile profile] [--link-credential credential] [--from-env field=ENV] [--value-stdin field] [--config key=value]
+  pm credentials link <name> --to <credential> [--json]
   pm credentials list [--json]
   pm credentials inspect <name> [--json]
   pm credentials test <name> [--json]
@@ -260,8 +261,19 @@ DESCRIPTION
   arguments. Use --from-env field=ENV for non-interactive setup. Use
   --value-stdin field for multiline secrets such as GitHub App PEM keys.
 
+  Provider family defaults to the connector name and auth profile to default
+  when omitted. Existing credentials receive the same defaults when their
+  project is opened. Each unlinked credential receives an isolated protected
+  binding. Links require matching effective declarations. For a cross-connector
+  link, every credential in the resulting cohort must have both declarations
+  supplied explicitly; matching defaults alone are not enough.
+
 OPTIONS
   --connector name       connector that owns the credential
+  --provider-family id   non-secret provider family declaration
+  --auth-profile id      non-secret authentication compatibility declaration
+  --link-credential id   join a compatible credential's binding on add
+  --to credential        join a compatible credential's binding
   --from-env field=ENV   read one secret field from an environment variable
   --value-stdin field    read one secret field from standard input
   --config key=value     store non-secret connector config
@@ -271,6 +283,11 @@ OPTIONS
 SECURITY
   Secret values are encrypted with AES-GCM in .polymetrics/vault and are not
   stored in state.json. Inspection output shows only secret field names.
+  Provider family and auth profile are non-secret credential metadata. Credential
+  bindings are protected project state and are never shown in credential output;
+  internal coordination receives only opaque projections. Linking records
+  identity metadata only: it does not change connector authentication, rate
+  limits, or transport behavior.
 
 EXIT STATUS
   0 success
@@ -286,6 +303,7 @@ SYNOPSIS
   pm connectors catalog [--capability read|write|cdc|query] [--stage stage] [--json]
   pm connectors inspect <name> [--json]
   pm connectors help <name>
+  pm connectors certify <connector> [--full] [--json]
 
 DESCRIPTION
   pm ships with runnable connector definitions compiled into the binary. Most
@@ -304,7 +322,7 @@ DESCRIPTION
 
 CATALOG
   The connector catalog is generated from local connector metadata. The current
-  runtime catalog has 554 bare-name entries: 550 declarative bundles plus the
+  runtime catalog has 555 bare-name entries: 551 declarative bundles plus the
   local sample, file, warehouse, and outbox primitives. Use --all or the catalog
   subcommand when an agent needs to discover the complete connector universe.
   Use --capability read, write, cdc, or query to filter by executable surface.
@@ -376,6 +394,16 @@ ACTIONS
   help <name>
     Alias for the human connector manual.
 
+  certify <connector>
+    Runs connector certification. With --full --json from a source checkout,
+    the report includes the API-surface inventory and provider-artifact
+    provenance evidence separately from endpoint coverage and connector
+    capabilities. Version-1 and pre-ledger inventories remain legacy_unverified
+    during the staged migration. A complete version-2 ledger reports its ledger
+    version, artifact count, endpoint count, and cited endpoint count; invalid
+    version-2 provenance fails certification without enabling or changing any
+    connector capability.
+
 EXAMPLES
   pm connectors
   pm connectors --json
@@ -384,6 +412,7 @@ EXAMPLES
   pm connectors catalog --capability write --stage generally_available --json
   pm connectors inspect github
   pm connectors inspect github --json
+  pm connectors certify sample --full --json
   pm credentials add github-public --connector github --config owner=octocat --config repo=Hello-World --config auth_type=public
   pm credentials add github-token --connector github --config owner=OWNER --config repo=REPO --config auth_type=token --from-env token=GITHUB_TOKEN
   pm credentials add github-app --connector github --config owner=OWNER --config repo=REPO --config auth_type=github_app --config app_id=12345 --config installation_id=67890 --value-stdin private_key < app.pem
@@ -407,6 +436,20 @@ SYNOPSIS
 DESCRIPTION
   A connection joins one source endpoint to one destination endpoint and stores
   stream-level sync settings.
+
+CONNECTION NAMES
+  A name may contain letters, digits, '-' and '_', must start with a letter or
+  digit, and is limited to 128 characters. Names that differ only by letter case
+  are refused. Ambiguous names are rejected at creation rather than rewritten,
+  because two connections that cannot be told apart cannot own separate data.
+  The name is a display value: the local warehouse keys its directories on a
+  generated identifier, so renaming is safe and never moves data.
+
+STREAM AND TABLE NAMES
+  Against the local warehouse destination, --stream and --table become path
+  components, so each may contain only letters, digits, '.', '-' and '_'. They
+  are checked when the connection is created, because a name the warehouse
+  cannot materialize would otherwise fail every sync of that connection.
 
 SYNC MODES
   full_refresh_append              read all source records and append them
@@ -436,7 +479,11 @@ SYNOPSIS
   pm catalog show --connection <name> [--json]
 
 DESCRIPTION
-  Catalog commands call the source connector and store a local snapshot.
+  Catalog refresh calls the source connector and stores a local snapshot;
+  catalog show reads that persisted snapshot.
+  refresh deliberately fetches a new provider catalog; show reads the
+  existing snapshot and marks it stale when its discovery expiry has passed.
+  Refresh a stale catalog before relying on fields added by the provider.
 
 SECURITY
   Catalog output includes schemas and stream names, never secret values.
@@ -552,7 +599,7 @@ const queryHelp = `NAME
   pm query - inspect local warehouse data
 
 SYNOPSIS
-  pm query run --table <table> [--limit n] [--json]
+  pm query run --table <table> [--connection name] [--limit n] [--json]
   pm query run --sql "select * from <table> limit n" [--json]
   pm query run --table <table> --agent-mode summary --fields id,email --sample 3
   pm query run --table <table> --agent-mode stream --fields id,email
@@ -562,8 +609,19 @@ DESCRIPTION
   Agent mode can emit compact summary JSON or projected NDJSON rows to reduce
   token usage for external agents.
 
+  Each connection materializes its tables into its own directory, so two
+  connections can use the same table name without overwriting each other. When
+  more than one connection has a table of the requested name, the read is
+  refused and lists the owning connections; pass --connection to pick one.
+  A table at the warehouse root belongs to no connection, because a reverse ETL
+  run writing to the warehouse connector produced it rather than a sync, or it
+  was seeded by hand. It is listed and selected as _unattributed.
+
 FLAGS
   --table table              local warehouse table to scan
+  --connection name          connection whose table to read; required only when
+                             several connections share the table name; use
+                             _unattributed for a root-level table
   --sql sql                  read-only SQL query; takes precedence over --table
   --limit n                  maximum rows to read; default 100
   --fields a,b               project output to selected fields
@@ -670,7 +728,7 @@ SYNOPSIS
 
 USAGE
   pm reverse list [--json]
-  pm reverse plan <name> --source-table <table> --destination connector:credential --map source:dest [--json]
+  pm reverse plan <name> --source-table <table> [--connection name] --destination connector:credential --map source:dest [--json]
   pm reverse preview <plan-id> [--json]
   pm reverse run <plan-id> --approve <token> [--confirm <challenge>] [--json]
   pm reverse status <run-id> [--json]
@@ -690,8 +748,15 @@ DESCRIPTION
   The workflow is intentionally split into plan, preview, approval, and run.
   Agents can create and preview plans, but JSON plan output omits approval
   tokens so an agent cannot silently approve its own external mutation.
-  Newly created plans persist the destination write action's redact_fields
-  metadata and mask those fields in plan samples.
+  The connector command runner does not mask ETL or reverse-ETL command records
+  from declared redact_fields. Those declarations remain load-compatible metadata.
+  This runner policy does not change source-table output or other execution paths.
+  DryRunWrite engine preview warnings preserve the resolved execution request.
+  Engine direct-read, operation-direct-read, and binary-download executors
+  preserve bounded HTTP URL/query/body diagnostics before downstream rendering.
+  Declared redact_fields remain compatible metadata, but do not replace values
+  in DryRunWrite preview warnings. A stored source-table sample is an app-level
+  summary; the engine preview is authoritative for approval.
 
   Destructive plans do not receive an approval token during planning. Preview
   performs the connector's no-network dry run, persists a digest of the complete
@@ -718,26 +783,37 @@ COMMANDS
     Create a reverse ETL plan from a local warehouse table to a destination
     connector. A human-readable non-destructive plan prints an approval token;
     a destructive plan prints no token until preview succeeds. JSON output
-    always redacts tokens. A non-batchable destination action is refused here,
+    always omits tokens. A non-batchable destination action is refused here,
     before any plan or approval token exists.
+
+    Each connection materializes its tables into its own directory, so several
+    connections can hold a table of the same name. Pass --connection when they
+    do. The connection is resolved once, here, and recorded on the plan, so
+    preview and run keep reading the same table afterwards; neither takes a
+    connection selector of its own. Use --connection _unattributed for a
+    root-level table that no connection owns.
 
   preview
     Show a stored plan's mapped sample rows, action, and count. For a destructive
     plan, also materialize the request through the destination's no-network dry
     run, persist its digest, and issue the approval token in human-readable
-    output. JSON redacts the token. Plans with persisted redact_fields keep
-    connector-declared fields masked in sample rows.
+    output. JSON omits the token. DryRunWrite engine preview warnings preserve
+    the resolved execution request, including fields declared in redact_fields;
+    that preview is what the digest binds before dispatch.
 
   run
     Execute a stored plan only when --approve is supplied with the approval
     token from human-readable plan or preview output. Destructive plans require
-    a matching persisted preview and the closed --confirm destructive value.
+    a matching persisted preview and the closed --confirm destructive value. A
+    failed dispatch is recorded; pm does not automatically retry a failed dispatch.
 
   status
     Show a completed or failed reverse ETL run by run ID.
 
 FLAGS
   --source-table table         local warehouse table to read
+  --connection name            connection whose table to read; required only
+                               when several connections share the table name
   --destination connector:cred destination endpoint
   --map source:dest            field mapping, repeatable
   --action action              destination write action; inspect shows names
@@ -791,8 +867,12 @@ SECURITY
   Execution requires a time-bounded, single-use approval token. Destructive
   tokens are created only after preview; execution revalidates the preview
   digest before dispatch. JSON plan and preview output omit tokens so agents
-  cannot silently self-approve external writes. Reverse ETL never exposes raw
-  secret values and masks connector-declared sensitive record fields.
+  cannot silently self-approve external writes. DryRunWrite engine preview
+  warnings preserve the resolved execution request, including fields declared
+  in redact_fields. Engine direct-read, operation-direct-read, and binary-
+  download executors preserve bounded HTTP URL/query/body diagnostics before
+  downstream rendering. These engine-level guarantees do not establish
+  complete pm CLI output. Credential storage remains encrypted at rest.
 
 LEARN MORE
   Run pm reverse --help for this manual.

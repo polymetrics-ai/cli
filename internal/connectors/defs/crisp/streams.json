@@ -1,0 +1,311 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "X-Crisp-Tier": "{{ config.token_tier }}"
+    },
+    "auth": [
+      {
+        "mode": "basic",
+        "username": "{{ secrets.identifier }}",
+        "password": "{{ secrets.key }}"
+      }
+    ],
+    "check": {
+      "method": "GET",
+      "path": "/v1/website/{{ config.website_id }}/conversations/{{ config.page_number }}",
+      "query": {
+        "per_page": "20"
+      }
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "Crisp identifier or key is missing or invalid; update the credential through environment-backed secret input."
+      },
+      {
+        "status": 403,
+        "hint": "Crisp token tier or scopes do not permit this website conversation request."
+      },
+      {
+        "status": 404,
+        "hint": "Crisp website, conversation session, message, or related identifier was not found."
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "Crisp rate limit exceeded; retry after the provider's backoff period."
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "list_conversations",
+      "path": "/v1/website/{{ config.website_id }}/conversations/{{ config.page_number }}",
+      "query": {
+        "per_page": "50"
+      },
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_record.json"
+    },
+    {
+      "name": "suggested_conversation_segments",
+      "path": "/v1/website/{{ config.website_id }}/conversations/suggest/segments/{{ config.page_number }}",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_record.json"
+    },
+    {
+      "name": "suggested_conversation_data",
+      "path": "/v1/website/{{ config.website_id }}/conversations/suggest/data/{{ config.page_number }}",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_record.json"
+    },
+    {
+      "name": "spam_conversations",
+      "path": "/v1/website/{{ config.website_id }}/conversations/spams/{{ config.page_number }}",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_record.json"
+    },
+    {
+      "name": "spam_conversation_content",
+      "path": "/v1/website/{{ config.website_id }}/conversations/spam/{{ config.spam_id }}/content",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_record.json"
+    },
+    {
+      "name": "conversation",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ config.session_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_record.json"
+    },
+    {
+      "name": "conversation_messages",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ config.session_id }}/messages",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_record.json"
+    },
+    {
+      "name": "conversation_message",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ config.session_id }}/message/{{ config.fingerprint }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_record.json"
+    },
+    {
+      "name": "conversation_routing",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ config.session_id }}/routing",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_record.json"
+    },
+    {
+      "name": "conversation_meta",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ config.session_id }}/meta",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_record.json"
+    },
+    {
+      "name": "conversation_original_message",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ config.session_id }}/original/{{ config.original_id }}",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_record.json"
+    },
+    {
+      "name": "conversation_pages",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ config.session_id }}/pages/{{ config.page_number }}",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_record.json"
+    },
+    {
+      "name": "conversation_events",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ config.session_id }}/events/{{ config.page_number }}",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_record.json"
+    },
+    {
+      "name": "conversation_files",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ config.session_id }}/files/{{ config.page_number }}",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_record.json"
+    },
+    {
+      "name": "conversation_state",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ config.session_id }}/state",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_record.json"
+    },
+    {
+      "name": "conversation_relations",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ config.session_id }}/relations",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_record.json"
+    },
+    {
+      "name": "conversation_participants",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ config.session_id }}/participants",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_record.json"
+    },
+    {
+      "name": "conversation_block_status",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ config.session_id }}/block",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_record.json"
+    },
+    {
+      "name": "conversation_verify_status",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ config.session_id }}/verify",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_record.json"
+    },
+    {
+      "name": "conversation_browsing",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ config.session_id }}/browsing",
+      "records": {
+        "path": "data"
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_record.json"
+    },
+    {
+      "name": "conversation_call",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ config.session_id }}/call",
+      "records": {
+        "path": "data",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_record.json"
+    }
+  ]
+}

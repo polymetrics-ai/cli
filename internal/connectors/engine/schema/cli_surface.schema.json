@@ -56,6 +56,7 @@
             "enum": ["date-time"]
           },
           "allow_empty": { "type": "boolean" },
+          "minimum": { "type": "number" },
           "required": { "type": "boolean" },
           "max_items": { "type": "integer" },
           "min_items": { "type": "integer" }
@@ -127,6 +128,7 @@
                   "enum": ["date-time"]
                 },
                 "allow_empty": { "type": "boolean" },
+                "minimum": { "type": "number" },
                 "required": { "type": "boolean" },
                 "max_items": { "type": "integer" },
                 "min_items": { "type": "integer" }
@@ -178,7 +180,7 @@
           },
           "output_policy": {
             "type": "string",
-            "enum": ["repository_contents_file_metadata", "repository_contents_directory", "json_redacted", "clinical_json_redacted", "binary_file_bounded"]
+            "enum": ["repository_contents_file_metadata", "repository_contents_directory", "json_redacted", "clinical_json_redacted", "binary_file_bounded", "none", "json", "write_result_redacted", "gong_bounded_input_redacted"]
           },
           "redact_fields": {
             "type": "array",

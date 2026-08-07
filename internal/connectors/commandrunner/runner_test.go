@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"testing"
 
@@ -21,26 +22,38 @@ import (
 )
 
 type fakeConnector struct {
-	surface                 *connectors.CommandSurface
-	manifest                connectors.Manifest
-	readReq                 connectors.ReadRequest
-	directReadReq           connectors.DirectReadRequest
-	operationDirectReadReq  connectors.OperationDirectReadRequest
-	operationDirectWriteReq connectors.OperationDirectWriteRequest
-	directWriteMetadata     connectors.OperationDirectWriteMetadata
-	binaryDownloadReq       connectors.OperationBinaryDownloadRequest
-	binaryDownloadErr       error
-	validateReq             connectors.WriteRequest
-	dryRunReq               connectors.WriteRequest
-	writeReq                connectors.WriteRequest
-	writeRecords            []connectors.Record
-	validateErr             error
-	dryRunErr               error
-	readErr                 error
-	writeErr                error
-	readRecords             []connectors.Record
-	preview                 connectors.WritePreview
-	writeResult             connectors.WriteResult
+	surface                   *connectors.CommandSurface
+	manifest                  connectors.Manifest
+	readReq                   connectors.ReadRequest
+	directReadReq             connectors.DirectReadRequest
+	operationDirectReadReq    connectors.OperationDirectReadRequest
+	operationReadPreflight    operationDirectReadPreflightCall
+	operationReadPreflightErr error
+	operationDirectWriteReq   connectors.OperationDirectWriteRequest
+	directWriteMetadata       connectors.OperationDirectWriteMetadata
+	binaryDownloadReq         connectors.OperationBinaryDownloadRequest
+	directReadErr             error
+	operationDirectReadErr    error
+	binaryDownloadErr         error
+	validateReq               connectors.WriteRequest
+	dryRunReq                 connectors.WriteRequest
+	writeReq                  connectors.WriteRequest
+	writeRecords              []connectors.Record
+	validateErr               error
+	dryRunErr                 error
+	readErr                   error
+	writeErr                  error
+	readRecords               []connectors.Record
+	preview                   connectors.WritePreview
+	writeResult               connectors.WriteResult
+}
+
+type operationDirectReadPreflightCall struct {
+	operation    string
+	method       string
+	path         string
+	maxBytes     int
+	outputPolicy string
 }
 
 type preflightFakeConnector struct {
@@ -77,6 +90,9 @@ func (f *fakeConnector) Read(_ context.Context, req connectors.ReadRequest, emit
 }
 func (f *fakeConnector) DirectRead(_ context.Context, req connectors.DirectReadRequest) (connectors.DirectReadResult, error) {
 	f.directReadReq = req
+	if f.directReadErr != nil {
+		return connectors.DirectReadResult{}, f.directReadErr
+	}
 	return connectors.DirectReadResult{
 		Connector: "github",
 		Method:    req.Method,
@@ -90,6 +106,9 @@ func (f *fakeConnector) DirectRead(_ context.Context, req connectors.DirectReadR
 }
 func (f *fakeConnector) OperationDirectRead(_ context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
 	f.operationDirectReadReq = req
+	if f.operationDirectReadErr != nil {
+		return connectors.DirectReadResult{}, f.operationDirectReadErr
+	}
 	return connectors.DirectReadResult{
 		Connector: "gong",
 		Method:    "POST",
@@ -97,6 +116,16 @@ func (f *fakeConnector) OperationDirectRead(_ context.Context, req connectors.Op
 		Status:    200,
 		Body:      map[string]any{"ok": true},
 	}, nil
+}
+func (f *fakeConnector) PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error {
+	f.operationReadPreflight = operationDirectReadPreflightCall{
+		operation:    operation,
+		method:       method,
+		path:         path,
+		maxBytes:     maxBytes,
+		outputPolicy: outputPolicy,
+	}
+	return f.operationReadPreflightErr
 }
 func (f *fakeConnector) PreviewOperationDirectWrite(_ context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
 	f.operationDirectWriteReq = req
@@ -950,7 +979,7 @@ func TestBuildWriteCommandAllowsEmptyRecordWhenConnectorValidatorAcceptsIt(t *te
 	}
 }
 
-func TestBuildWriteCommandPreviewDryRunsAndRedactsSecretLikeFields(t *testing.T) {
+func TestBuildWriteCommandPreviewDryRunsAndPreservesDeclaredFields(t *testing.T) {
 	connector := reverseETLFakeConnector()
 	connector.preview = connectors.WritePreview{
 		Action:        "create_deploy_key",
@@ -979,70 +1008,57 @@ func TestBuildWriteCommandPreviewDryRunsAndRedactsSecretLikeFields(t *testing.T)
 	if connector.writeReq.Action != "" {
 		t.Fatalf("Write action = %q, want not called", connector.writeReq.Action)
 	}
-	if got := result.RedactedRecord["key"]; got != "***" {
-		t.Fatalf("plan record key = %#v, want redacted", got)
+	if got := result.RedactedRecord["key"]; got != "ssh-rsa AAAA-sensitive" {
+		t.Fatalf("plan record key = %#v, want complete input", got)
 	}
 }
 
-func TestRedactRecordRedactsDownloadContentAndMultipartFileFields(t *testing.T) {
-	redacted := redactRecord(connectors.Record{
+func TestRunETLCommandPreservesDeclaredAndHeuristicSensitiveFields(t *testing.T) {
+	record := connectors.Record{
 		"downloadMediaUrl": "https://media.example.test/call.mp4",
-		"content":          "sensitive body",
+		"content":          "complete body",
 		"media_file_path":  "fixtures/call.mp4",
 		"data_file_path":   "fixtures/crm.csv",
-		"title":            "visible",
+		"token":            "complete-token",
+		"patientUuid":      "patient-uuid",
+		"nested":           map[string]any{"content": "nested complete body", "key": "nested-key"},
+	}
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path:         "records list",
+		Intent:       "etl",
+		Availability: "implemented",
+		Stream:       "records",
+		RedactFields: []string{"content", "token", "nested"},
+	}}}, readRecords: []connectors.Record{record}}
+	var records []connectors.Record
+	_, err := Run(context.Background(), connector, Request{Path: []string{"records", "list"}, Limit: 1}, func(got connectors.Record) error {
+		records = append(records, got)
+		return nil
 	})
-	for _, key := range []string{"downloadMediaUrl", "content", "media_file_path", "data_file_path"} {
-		if redacted[key] != "***" {
-			t.Fatalf("redacted[%s] = %#v, want *** in %+v", key, redacted[key], redacted)
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	encoded, err := json.Marshal(records)
+	if err != nil {
+		t.Fatalf("Marshal: %v", err)
+	}
+	for _, raw := range []string{"https://media.example.test/call.mp4", "complete body", "fixtures/call.mp4", "fixtures/crm.csv", "complete-token", "patient-uuid", "nested complete body", "nested-key"} {
+		if !strings.Contains(string(encoded), raw) {
+			t.Fatalf("connector command output lost %q: %s", raw, encoded)
 		}
 	}
-	if redacted["title"] != "visible" {
-		t.Fatalf("redacted title = %v, want visible", redacted["title"])
+	if strings.Contains(string(encoded), "***") {
+		t.Fatalf("connector command output was masked: %s", encoded)
 	}
 }
 
-func TestRedactRecordKeepsClinicalLikeFieldsByDefault(t *testing.T) {
-	record := connectors.Record{
-		"patientUuid": "patient-uuid",
-		"identifier":  "SYN-12345",
-		"person":      map[string]any{"display": "Synthetic Person"},
-		"value":       "98.6",
-		"note":        "synthetic note",
-	}
-	redacted := redactRecord(record)
-	for key, want := range record {
-		if got := redacted[key]; fmt.Sprint(got) != fmt.Sprint(want) {
-			t.Fatalf("redacted[%s] = %#v, want unchanged %#v in %+v", key, got, want, redacted)
-		}
-	}
-}
-
-func TestRedactRecordWithExplicitFieldsRedactsBahmniClinicalPreviewFields(t *testing.T) {
-	redacted := redactRecordWithFields(connectors.Record{
-		"patientUuid": "patient-uuid",
-		"identifier":  "SYN-12345",
-		"person":      map[string]any{"display": "Synthetic Person"},
-		"value":       "98.6",
-		"title":       "visible",
-	}, []string{"patientUuid", "identifier", "person", "value"})
-	for _, key := range []string{"patientUuid", "identifier", "person", "value"} {
-		if redacted[key] != "***" {
-			t.Fatalf("redacted[%s] = %#v, want *** in %+v", key, redacted[key], redacted)
-		}
-	}
-	if redacted["title"] != "visible" {
-		t.Fatalf("redacted title = %v, want visible", redacted["title"])
-	}
-}
-
-func TestRunETLCommandAppliesRecursiveClinicalRedactFields(t *testing.T) {
+func TestRunETLCommandPreservesDeclaredNestedFields(t *testing.T) {
 	tests := []struct {
-		name         string
-		path         string
-		redactFields []string
-		record       connectors.Record
-		secretValues []string
+		name            string
+		path            string
+		redactFields    []string
+		record          connectors.Record
+		preservedValues []string
 	}{
 		{
 			name:         "patient",
@@ -1054,7 +1070,7 @@ func TestRunETLCommandAppliesRecursiveClinicalRedactFields(t *testing.T) {
 				"identifier": "SYN-HEN-RAW",
 				"person":     map[string]any{"givenName": "Raw", "familyName": "Name", "gender": "O"},
 			},
-			secretValues: []string{"patient-uuid-raw", "SYN-HEN-RAW", "Raw", "Name"},
+			preservedValues: []string{"patient-uuid-raw", "SYN-HEN-RAW", "Raw", "Name"},
 		},
 		{
 			name:         "encounter",
@@ -1066,7 +1082,7 @@ func TestRunETLCommandAppliesRecursiveClinicalRedactFields(t *testing.T) {
 				"patient":           map[string]any{"uuid": "patient-uuid-raw", "display": "SYN-HEN-RAW"},
 				"obs":               []any{map[string]any{"value": "fever raw"}},
 			},
-			secretValues: []string{"encounter-uuid-raw", "patient-uuid-raw", "SYN-HEN-RAW", "fever raw"},
+			preservedValues: []string{"encounter-uuid-raw", "patient-uuid-raw", "SYN-HEN-RAW", "fever raw"},
 		},
 		{
 			name:         "observation",
@@ -1079,28 +1095,28 @@ func TestRunETLCommandAppliesRecursiveClinicalRedactFields(t *testing.T) {
 				"obsDatetime": "2026-01-01T00:00:00Z",
 				"person":      map[string]any{"uuid": "patient-uuid-raw"},
 			},
-			secretValues: []string{"obs-uuid-raw", "Temperature", "38.6 raw", "patient-uuid-raw"},
+			preservedValues: []string{"obs-uuid-raw", "Temperature", "38.6 raw", "patient-uuid-raw"},
 		},
 		{
-			name:         "diagnosis",
-			path:         "diagnoses list",
-			redactFields: []string{"display", "certainty", "codedAnswer", "diagnosisDateTime", "existingObs", "order"},
-			record:       connectors.Record{"display": "raw diagnosis", "certainty": "CONFIRMED", "codedAnswer": map[string]any{"display": "Cold raw"}, "order": "PRIMARY"},
-			secretValues: []string{"raw diagnosis", "CONFIRMED", "Cold raw", "PRIMARY"},
+			name:            "diagnosis",
+			path:            "diagnoses list",
+			redactFields:    []string{"display", "certainty", "codedAnswer", "diagnosisDateTime", "existingObs", "order"},
+			record:          connectors.Record{"display": "raw diagnosis", "certainty": "CONFIRMED", "codedAnswer": map[string]any{"display": "Cold raw"}, "order": "PRIMARY"},
+			preservedValues: []string{"raw diagnosis", "CONFIRMED", "Cold raw", "PRIMARY"},
 		},
 		{
-			name:         "lab",
-			path:         "lab_results list",
-			redactFields: []string{"uuid", "display", "patient", "concept", "value", "obsDatetime"},
-			record:       connectors.Record{"uuid": "lab-uuid-raw", "concept": map[string]any{"display": "Serum glucose"}, "value": 120, "patient": map[string]any{"display": "SYN-HEN-RAW"}},
-			secretValues: []string{"lab-uuid-raw", "Serum glucose", "SYN-HEN-RAW", "120"},
+			name:            "lab",
+			path:            "lab_results list",
+			redactFields:    []string{"uuid", "display", "patient", "concept", "value", "obsDatetime"},
+			record:          connectors.Record{"uuid": "lab-uuid-raw", "concept": map[string]any{"display": "Serum glucose"}, "value": 120, "patient": map[string]any{"display": "SYN-HEN-RAW"}},
+			preservedValues: []string{"lab-uuid-raw", "Serum glucose", "SYN-HEN-RAW", "120"},
 		},
 		{
-			name:         "appointment",
-			path:         "appointments list",
-			redactFields: []string{"uuid", "patient", "providers", "startDateTime", "endDateTime", "comments", "status"},
-			record:       connectors.Record{"uuid": "appt-uuid-raw", "patient": map[string]any{"identifier": "SYN-HEN-RAW"}, "providers": []any{map[string]any{"name": "Provider Raw"}}, "comments": "raw appointment note", "status": "Scheduled"},
-			secretValues: []string{"appt-uuid-raw", "SYN-HEN-RAW", "Provider Raw", "raw appointment note", "Scheduled"},
+			name:            "appointment",
+			path:            "appointments list",
+			redactFields:    []string{"uuid", "patient", "providers", "startDateTime", "endDateTime", "comments", "status"},
+			record:          connectors.Record{"uuid": "appt-uuid-raw", "patient": map[string]any{"identifier": "SYN-HEN-RAW"}, "providers": []any{map[string]any{"name": "Provider Raw"}}, "comments": "raw appointment note", "status": "Scheduled"},
+			preservedValues: []string{"appt-uuid-raw", "SYN-HEN-RAW", "Provider Raw", "raw appointment note", "Scheduled"},
 		},
 	}
 
@@ -1126,19 +1142,19 @@ func TestRunETLCommandAppliesRecursiveClinicalRedactFields(t *testing.T) {
 				t.Fatalf("Marshal: %v", err)
 			}
 			out := string(encoded)
-			for _, raw := range tc.secretValues {
-				if strings.Contains(out, raw) {
-					t.Fatalf("redacted output leaked %q: %s", raw, out)
+			for _, raw := range tc.preservedValues {
+				if !strings.Contains(out, raw) {
+					t.Fatalf("connector command output lost %q: %s", raw, out)
 				}
 			}
-			if !strings.Contains(out, "***") {
-				t.Fatalf("redacted output %s missing redaction marker", out)
+			if strings.Contains(out, "***") {
+				t.Fatalf("connector command output was masked: %s", out)
 			}
 		})
 	}
 }
 
-func TestBuildWriteCommandRedactsClinicalNotePreviewRecord(t *testing.T) {
+func TestBuildWriteCommandPreservesClinicalNotePreviewRecord(t *testing.T) {
 	connector := &fakeConnector{
 		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
 			Path:         "notes create",
@@ -1171,15 +1187,17 @@ func TestBuildWriteCommandRedactsClinicalNotePreviewRecord(t *testing.T) {
 		t.Fatalf("Marshal: %v", err)
 	}
 	out := string(encoded)
-	if strings.Contains(out, "raw synthetic note text") || strings.Contains(out, "Consultation") {
-		t.Fatalf("note preview leaked raw note payload: %s", out)
+	for _, raw := range []string{"raw synthetic note text", "Consultation", "2026-01-01T00:00:00Z"} {
+		if !strings.Contains(out, raw) {
+			t.Fatalf("note preview lost raw note payload %q: %s", raw, out)
+		}
 	}
-	if got := cmd.RedactedRecord["notes"]; got != "***" {
-		t.Fatalf("redacted notes = %#v, want ***", got)
+	if strings.Contains(out, "***") {
+		t.Fatalf("note preview was masked: %s", out)
 	}
 }
 
-func TestRunETLCommandRedactsClinicalValuesFromErrors(t *testing.T) {
+func TestRunETLCommandPreservesClinicalValuesInErrors(t *testing.T) {
 	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
 		Path:         "observations list",
 		Intent:       "etl",
@@ -1200,12 +1218,12 @@ func TestRunETLCommandRedactsClinicalValuesFromErrors(t *testing.T) {
 	}
 	msg := err.Error()
 	for _, raw := range []string{"patient-uuid-raw", "fever raw"} {
-		if strings.Contains(msg, raw) {
-			t.Fatalf("error leaked %q: %s", raw, msg)
+		if !strings.Contains(msg, raw) {
+			t.Fatalf("error lost %q: %s", raw, msg)
 		}
 	}
-	if !strings.Contains(msg, "***") {
-		t.Fatalf("error %q missing redaction marker", msg)
+	if strings.Contains(msg, "***") {
+		t.Fatalf("error was masked: %q", msg)
 	}
 }
 
@@ -1624,6 +1642,7 @@ func TestRunImplementedDirectReadCommand(t *testing.T) {
 					{Method: "GET", Path: "/repos/{owner}/{repo}/contents/{path}"},
 				},
 				OutputPolicy: "repository_contents_file_metadata",
+				RedactFields: []string{"path"},
 				Flags: []connectors.CommandSurfaceFlag{
 					{Name: "path", Type: "string", MapsTo: "path.path"},
 				},
@@ -1657,6 +1676,9 @@ func TestRunImplementedDirectReadCommand(t *testing.T) {
 	if connector.directReadReq.OutputPolicy != "repository_contents_file_metadata" {
 		t.Fatalf("direct read output policy = %q, want repository_contents_file_metadata", connector.directReadReq.OutputPolicy)
 	}
+	if len(connector.directReadReq.RedactFields) != 0 {
+		t.Fatalf("direct read RedactFields = %#v, want empty", connector.directReadReq.RedactFields)
+	}
 }
 
 func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
@@ -1671,6 +1693,7 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 					{Method: "POST", Path: "/v2/meetings/integration/status"},
 				},
 				OutputPolicy: "json_redacted",
+				RedactFields: []string{"email"},
 				Flags: []connectors.CommandSurfaceFlag{
 					{Name: "email", Type: "string_array", MapsTo: "body.emails"},
 				},
@@ -1700,6 +1723,45 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 	emails, ok := connector.operationDirectReadReq.Body["emails"].([]string)
 	if !ok || len(emails) != 2 || emails[0] != "ada@example.com" || emails[1] != "grace@example.com" {
 		t.Fatalf("operation body = %#v, want typed emails", connector.operationDirectReadReq.Body)
+	}
+	if len(connector.operationDirectReadReq.RedactFields) != 0 {
+		t.Fatalf("operation direct read RedactFields = %#v, want empty", connector.operationDirectReadReq.RedactFields)
+	}
+}
+
+func TestPreflightOperationDirectReadRejectsNonExecutableOperationMetadata(t *testing.T) {
+	connector := &fakeConnector{
+		operationReadPreflightErr: errors.New("operation direct read requires rest_read or provider_search operation, got \"graphql_query\""),
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path:         "meetings integration-status",
+			Intent:       "direct_read",
+			Availability: "implemented",
+			Operation:    "gong.meetings_integration_status",
+			APISurface: []connectors.CommandSurfaceEndpointRef{
+				{Method: http.MethodPost, Path: "/v2/meetings/integration/status"},
+			},
+			OutputPolicy: "json_redacted",
+		}}},
+	}
+
+	err := Preflight(connector, []string{"meetings", "integration-status"})
+	if err == nil {
+		t.Fatal("Preflight error = nil, want loaded operation rejection")
+	}
+	if !strings.Contains(err.Error(), "operation direct read metadata is not executable") {
+		t.Fatalf("Preflight error = %q, want executable metadata rejection", err)
+	}
+	if got, want := connector.operationReadPreflight, (operationDirectReadPreflightCall{
+		operation:    "gong.meetings_integration_status",
+		method:       http.MethodPost,
+		path:         "/v2/meetings/integration/status",
+		maxBytes:     MaxOperationDirectReadBytes,
+		outputPolicy: "json_redacted",
+	}); got != want {
+		t.Fatalf("operation preflight = %#v, want %#v", got, want)
+	}
+	if connector.operationDirectReadReq.Operation != "" {
+		t.Fatalf("OperationDirectRead dispatched during preflight: %+v", connector.operationDirectReadReq)
 	}
 }
 
@@ -2080,6 +2142,63 @@ func TestRunDirectReadRequiresOutputPolicy(t *testing.T) {
 	}
 }
 
+func TestCLISurfaceOutputPolicyEnumMatchesRuntimePolicySets(t *testing.T) {
+	raw, err := os.ReadFile(filepath.Join("..", "engine", "schema", "cli_surface.schema.json"))
+	if err != nil {
+		t.Fatalf("read cli surface schema: %v", err)
+	}
+	type schemaNode struct {
+		Properties map[string]schemaNode `json:"properties"`
+		Items      *schemaNode           `json:"items"`
+		Enum       []string              `json:"enum"`
+	}
+	var schema schemaNode
+	if err := json.Unmarshal(raw, &schema); err != nil {
+		t.Fatalf("decode cli surface schema: %v", err)
+	}
+	commands, ok := schema.Properties["commands"]
+	if !ok || commands.Items == nil {
+		t.Fatal("cli surface schema has no commands.items")
+	}
+	outputPolicy, ok := commands.Items.Properties["output_policy"]
+	if !ok || len(outputPolicy.Enum) == 0 {
+		t.Fatal("cli surface schema has no output_policy enum")
+	}
+
+	want := make(map[string]struct{}, len(supportedDirectReadOutputPolicies)+len(supportedDirectWriteOutputPolicies)+1)
+	for policy := range supportedDirectReadOutputPolicies {
+		want[policy] = struct{}{}
+	}
+	for policy := range supportedDirectWriteOutputPolicies {
+		want[policy] = struct{}{}
+	}
+	// This legacy compatibility value belongs to binary_download metadata, not
+	// either JSON direct-read/write executor, and existing bundles still use it.
+	want["binary_file_bounded"] = struct{}{}
+
+	got := make(map[string]struct{}, len(outputPolicy.Enum))
+	for _, policy := range outputPolicy.Enum {
+		if _, duplicate := got[policy]; duplicate {
+			t.Fatalf("cli surface output_policy enum repeats %q", policy)
+		}
+		got[policy] = struct{}{}
+	}
+	if missing, unexpected := outputPolicySetDifference(want, got), outputPolicySetDifference(got, want); len(missing) > 0 || len(unexpected) > 0 {
+		t.Fatalf("cli surface output_policy enum diverges from runtime support: missing=%v unexpected=%v", missing, unexpected)
+	}
+}
+
+func outputPolicySetDifference(left, right map[string]struct{}) []string {
+	result := make([]string, 0)
+	for policy := range left {
+		if _, ok := right[policy]; !ok {
+			result = append(result, policy)
+		}
+	}
+	sort.Strings(result)
+	return result
+}
+
 // TestCoerceFlagValueBoundsStringArrayItems pins the flag-level list bound. It
 // is deliberately independent of the body schema's maxItems: the schema fires on
 // the assembled body, this fires on the flag the user typed, so the error can
@@ -2099,6 +2218,315 @@ func TestCoerceFlagValueBoundsStringArrayItems(t *testing.T) {
 	}
 	if _, err := coerceFlagValue(flag, []string{","}); err == nil {
 		t.Fatal("coerceFlagValue under the minimum = nil, want rejection")
+	}
+}
+
+func TestValidateFlagMinimumIsOptIn(t *testing.T) {
+	if err := validateFlagValue(connectors.CommandSurfaceFlag{Name: "page-number", Type: "integer"}, "0"); err != nil {
+		t.Fatalf("validateFlagValue without minimum = %v, want unchanged acceptance", err)
+	}
+
+	minimum := 1.0
+	flag := connectors.CommandSurfaceFlag{Name: "page-number", Type: "integer", Minimum: &minimum}
+	if err := validateFlagValue(flag, "1"); err != nil {
+		t.Fatalf("validateFlagValue at minimum = %v, want accepted", err)
+	}
+	err := validateFlagValue(flag, "0")
+	var minimumErr *MinimumFlagError
+	if !errors.As(err, &minimumErr) {
+		t.Fatalf("validateFlagValue below minimum error = %T %v, want MinimumFlagError", err, err)
+	}
+	if minimumErr.Parameter != "page-number" || minimumErr.Minimum != 1 {
+		t.Fatalf("MinimumFlagError = %+v, want page-number minimum 1", minimumErr)
+	}
+}
+
+func TestStreamOverridesConfigMinimumIsOptIn(t *testing.T) {
+	minimum := 1.0
+	tests := []struct {
+		name        string
+		flag        connectors.CommandSurfaceFlag
+		config      map[string]string
+		flags       map[string][]string
+		wantConfig  string
+		wantMinimum bool
+	}{
+		{
+			name:       "no declared minimum preserves config value",
+			flag:       connectors.CommandSurfaceFlag{Name: "page-number", Type: "integer", MapsTo: "config.page_number"},
+			config:     map[string]string{"page_number": "0"},
+			wantConfig: "0",
+		},
+		{
+			name:        "declared minimum rejects config value",
+			flag:        connectors.CommandSurfaceFlag{Name: "page-number", Type: "integer", MapsTo: "config.page_number", Minimum: &minimum},
+			config:      map[string]string{"page_number": "0"},
+			wantMinimum: true,
+		},
+		{
+			name:       "command flag wins over invalid config value",
+			flag:       connectors.CommandSurfaceFlag{Name: "page-number", Type: "integer", MapsTo: "config.page_number", Minimum: &minimum},
+			config:     map[string]string{"page_number": "0"},
+			flags:      map[string][]string{"page-number": {"1"}},
+			wantConfig: "1",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			cfg, _, err := streamOverrides(connectors.CommandSurfaceCommand{
+				Path:  "records list",
+				Flags: []connectors.CommandSurfaceFlag{tt.flag},
+			}, connectors.RuntimeConfig{Config: tt.config}, tt.flags)
+			if tt.wantMinimum {
+				var minimumErr *MinimumFlagError
+				if !errors.As(err, &minimumErr) {
+					t.Fatalf("streamOverrides error = %T %v, want MinimumFlagError", err, err)
+				}
+				if minimumErr.Parameter != "page-number" || minimumErr.Minimum != 1 {
+					t.Fatalf("MinimumFlagError = %+v, want page-number minimum 1", minimumErr)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("streamOverrides error = %v, want nil", err)
+			}
+			if got := cfg.Config["page_number"]; got != tt.wantConfig {
+				t.Fatalf("runtime config page_number = %q, want %q", got, tt.wantConfig)
+			}
+		})
+	}
+}
+
+func TestValidateRequiredCommandFlagsPreservesStringArrayPresence(t *testing.T) {
+	tests := []struct {
+		name    string
+		flag    connectors.CommandSurfaceFlag
+		flags   map[string][]string
+		wantErr string
+	}{
+		{
+			name:    "missing key remains missing",
+			flag:    connectors.CommandSurfaceFlag{Name: "items", Type: "string_array", Required: true},
+			flags:   map[string][]string{},
+			wantErr: "missing required flag --items",
+		},
+		{
+			name:    "raw empty values remain missing",
+			flag:    connectors.CommandSurfaceFlag{Name: "items", Type: "string_array", Required: true},
+			flags:   map[string][]string{"items": {}},
+			wantErr: "missing required flag --items",
+		},
+		{
+			name:    "required scalar blank remains missing",
+			flag:    connectors.CommandSurfaceFlag{Name: "title", Type: "string", Required: true},
+			flags:   map[string][]string{"title": {""}},
+			wantErr: "missing required flag --title",
+		},
+		{
+			name:  "explicit blank zero minimum array is supplied",
+			flag:  connectors.CommandSurfaceFlag{Name: "items", Type: "string_array", Required: true},
+			flags: map[string][]string{"items": {""}},
+		},
+		{
+			name:  "blank only csv zero minimum array is supplied",
+			flag:  connectors.CommandSurfaceFlag{Name: "items", Type: "string_array", Required: true},
+			flags: map[string][]string{"items": {", ,"}},
+		},
+		{
+			name:    "minimum one still rejects materialized empty array",
+			flag:    connectors.CommandSurfaceFlag{Name: "items", Type: "string_array", Required: true, MinItems: 1},
+			flags:   map[string][]string{"items": {""}},
+			wantErr: "below the minimum of 1",
+		},
+		{
+			name:    "maximum remains authoritative",
+			flag:    connectors.CommandSurfaceFlag{Name: "items", Type: "string_array", Required: true, MaxItems: 2},
+			flags:   map[string][]string{"items": {"one,two,three"}},
+			wantErr: "maximum of 2",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := validateRequiredCommandFlags(connectors.CommandSurfaceCommand{
+				Path:  "widgets create",
+				Flags: []connectors.CommandSurfaceFlag{tt.flag},
+			}, tt.flags)
+			if tt.wantErr == "" {
+				if err != nil {
+					t.Fatalf("validateRequiredCommandFlags error = %v, want accepted", err)
+				}
+				return
+			}
+			if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+				t.Fatalf("validateRequiredCommandFlags error = %v, want %q", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestRunOperationDirectReadPreservesExplicitEmptyRequiredStringArray(t *testing.T) {
+	tests := []struct {
+		name     string
+		flags    map[string][]string
+		minItems int
+		wantErr  string
+	}{
+		{
+			name:  "explicit blank maps to literal empty body array",
+			flags: map[string][]string{"items": {""}},
+		},
+		{
+			name:    "omitted required flag does not invoke operation",
+			flags:   map[string][]string{},
+			wantErr: "missing required flag --items",
+		},
+		{
+			name:    "raw empty values do not invoke operation",
+			flags:   map[string][]string{"items": {}},
+			wantErr: "missing required flag --items",
+		},
+		{
+			name:     "minimum one does not invoke operation",
+			flags:    map[string][]string{"items": {""}},
+			minItems: 1,
+			wantErr:  "below the minimum of 1",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+				Path:         "widgets search",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Operation:    "acme.widgets.search",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: http.MethodPost, Path: "/widgets/search"},
+				},
+				OutputPolicy: "json_redacted",
+				Flags: []connectors.CommandSurfaceFlag{{
+					Name: "items", Type: "string_array", Required: true, MinItems: tt.minItems, MapsTo: "body.items",
+				}},
+			}}}}
+
+			result, err := Run(context.Background(), connector, Request{
+				Path:  []string{"widgets", "search"},
+				Flags: tt.flags,
+			}, func(connectors.Record) error {
+				t.Fatal("emit called for operation direct-read command")
+				return nil
+			})
+			if tt.wantErr != "" {
+				if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+					t.Fatalf("Run error = %v, want %q", err, tt.wantErr)
+				}
+				if connector.operationDirectReadReq.Operation != "" {
+					t.Fatalf("operation direct read executed: %+v", connector.operationDirectReadReq)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("Run: %v", err)
+			}
+			if result.DirectRead == nil {
+				t.Fatalf("result = %+v, want direct-read result", result)
+			}
+			items, ok := connector.operationDirectReadReq.Body["items"].([]string)
+			if !ok || len(items) != 0 {
+				t.Fatalf("operation body items = %#v, want literal empty []string", connector.operationDirectReadReq.Body["items"])
+			}
+			bodyJSON, err := json.Marshal(connector.operationDirectReadReq.Body)
+			if err != nil {
+				t.Fatalf("marshal operation body: %v", err)
+			}
+			if string(bodyJSON) != `{"items":[]}` {
+				t.Fatalf("operation body JSON = %s, want literal empty array", bodyJSON)
+			}
+		})
+	}
+}
+
+func TestBuildWriteCommandPreservesExplicitEmptyRequiredStringArray(t *testing.T) {
+	tests := []struct {
+		name     string
+		flags    map[string][]string
+		minItems int
+		wantErr  string
+	}{
+		{
+			name:  "explicit blank maps to literal empty planned record array",
+			flags: map[string][]string{"items": {""}},
+		},
+		{
+			name:    "omitted required flag does not plan or execute",
+			flags:   map[string][]string{},
+			wantErr: "missing required flag --items",
+		},
+		{
+			name:    "raw empty values do not plan or execute",
+			flags:   map[string][]string{"items": {}},
+			wantErr: "missing required flag --items",
+		},
+		{
+			name:     "minimum one does not plan or execute",
+			flags:    map[string][]string{"items": {""}},
+			minItems: 1,
+			wantErr:  "below the minimum of 1",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			connector := &fakeConnector{
+				surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+					Path:         "widgets create",
+					Intent:       "reverse_etl",
+					Availability: "implemented",
+					Write:        "create_widgets",
+					Flags: []connectors.CommandSurfaceFlag{{
+						Name: "items", Type: "string_array", Required: true, MinItems: tt.minItems, MapsTo: "record.items",
+					}},
+				}}},
+				manifest: connectors.Manifest{WriteActions: []connectors.WriteActionSpec{{
+					Name: "create_widgets", Method: http.MethodPost, Path: "/widgets",
+				}}},
+			}
+
+			command, err := BuildWriteCommand(context.Background(), connector, Request{
+				Path:  []string{"widgets", "create"},
+				Flags: tt.flags,
+			})
+			if tt.wantErr != "" {
+				if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+					t.Fatalf("BuildWriteCommand error = %v, want %q", err, tt.wantErr)
+				}
+				if connector.validateReq.Action != "" || connector.writeReq.Action != "" || len(connector.writeRecords) != 0 {
+					t.Fatalf("rejected command reached write path: validate=%+v write=%+v records=%+v", connector.validateReq, connector.writeReq, connector.writeRecords)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("BuildWriteCommand: %v", err)
+			}
+			if !command.ApprovalRequired {
+				t.Fatalf("command = %+v, want approval-required reverse-ETL plan", command)
+			}
+			if connector.validateReq.Action != "create_widgets" || connector.writeReq.Action != "" || len(connector.writeRecords) != 0 {
+				t.Fatalf("plan lifecycle = validate=%+v write=%+v records=%+v, want validation only", connector.validateReq, connector.writeReq, connector.writeRecords)
+			}
+			items, ok := command.Record["items"].([]string)
+			if !ok || len(items) != 0 {
+				t.Fatalf("planned record items = %#v, want literal empty []string", command.Record["items"])
+			}
+			recordJSON, err := json.Marshal(command.Record)
+			if err != nil {
+				t.Fatalf("marshal planned record: %v", err)
+			}
+			if string(recordJSON) != `{"items":[]}` {
+				t.Fatalf("planned record JSON = %s, want literal empty array", recordJSON)
+			}
+		})
 	}
 }
 
@@ -2189,6 +2617,7 @@ func binaryDownloadTestConnector() *fakeConnector {
 					{Name: "artifact-id", Type: "string", MapsTo: "path.artifact_id"},
 					{Name: "archive-format", Type: "string", MapsTo: "path.archive_format"},
 				},
+				RedactFields: []string{"file_path"},
 			},
 		},
 	}}
@@ -2220,6 +2649,9 @@ func TestRunBinaryDownloadCommandPassesDestinationThrough(t *testing.T) {
 	}
 	if got := connector.binaryDownloadReq.PathParams["artifact_id"]; got != "42" {
 		t.Fatalf("PathParams[artifact_id] = %q, want %q", got, "42")
+	}
+	if len(connector.binaryDownloadReq.RedactFields) != 0 {
+		t.Fatalf("binary download RedactFields = %#v, want empty", connector.binaryDownloadReq.RedactFields)
 	}
 	// The response never becomes records: a download is a file, not a stream.
 	if result.Count != 0 || result.DirectRead != nil {

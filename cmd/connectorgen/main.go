@@ -12,10 +12,22 @@
 //	gen                        regenerates hooks/hookset/hookset_gen.go and
 //	                           native/nativeset/nativeset_gen.go
 //	surface-sync [dir] [--check]
-//	                           derives operation-backed direct_read and
-//	                           binary_download command metadata (api_surface,
-//	                           output_policy, flag maps_to, rest.max_bytes)
-//	                           from operations.json
+//	                           derives operation-backed command metadata
+//	                           (api_surface, output_policy, flag maps_to,
+//	                           rest.max_bytes) and the compact runtime
+//	                           direct-read endpoint ledger from bundle sources
+//	surface-reconcile [dir] [--check] [--json] [--reason-contains text]
+//	                           derives direct-read api_surface coverage and
+//	                           blocked reasons from runtime preflight
+//	batch plan --ledger <path> --out <path>
+//	                           turns provider-artifact ledger evidence into a
+//	                           deterministic, reviewable connector batch
+//	batch materialize --manifest <path> --source-defs-root <path> ...
+//	                           copies a reviewed source bundle and derives its
+//	                           cited provider-artifact inventory and CLI surface
+//	batch gate --manifest <path> --report <path>
+//	                           records independent candidate validation and
+//	                           runtime-preflight results
 //	new <name>                 scaffolds internal/connectors/defs/<name>/
 //
 // It owns bundle validation plus generated hook/native import sets for the
@@ -53,6 +65,10 @@ func run(args []string, stdout, stderr io.Writer) int {
 		return runGen(args, stdout, stderr)
 	case "surface-sync":
 		return runSurfaceSync(args, stdout, stderr)
+	case "surface-reconcile":
+		return runSurfaceReconcile(args, stdout, stderr)
+	case "batch":
+		return runBatch(args, stdout, stderr)
 	case "new":
 		return runNew(args, stdout, stderr)
 	case "-h", "--help", "help":
@@ -83,8 +99,12 @@ func usage() string {
   connectorgen validate [dir] [--json]   (default dir: internal/connectors/defs)
   connectorgen boundary [repo-root] [--json] [--base <ref>]
   connectorgen ownership [repo-root] [--json] [--base <ref>] [--scope-file <path>]
-  connectorgen gen
-  connectorgen surface-sync [dir] [--check]  (default dir: internal/connectors/defs)
+	connectorgen gen
+	connectorgen surface-sync [dir] [--check]  (default dir: internal/connectors/defs)
+	connectorgen surface-reconcile [dir] [--check] [--json] [--reason-contains text]  (default dir: internal/connectors/defs)
+	connectorgen batch plan --ledger <path> --out <path> [--size <1-40>] [--connector <name>] [--min-operations <n>] [--max-operations <n>]
+  connectorgen batch materialize --manifest <path> --source-defs-root <path> --retrieved-at <YYYY-MM-DD> --report <path> [--defs-root <path>] [--artifact-dir <path>] [--connector <name>]
+  connectorgen batch gate --manifest <path> --report <path> [--defs-root <path>] [--connector <name>]
   connectorgen new <name>`
 }
 

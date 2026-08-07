@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "manifest": "docs/migration/batches/cli-provider-artifact-sweep-r1-batch-001.json",
+  "candidates": 1,
+  "included": [
+    {
+      "connector": "flexmail",
+      "commands_checked": 5,
+      "declared_operations": 43,
+      "operation_split": {
+        "executable": 5,
+        "provider_blocked": 22,
+        "excluded": 16
+      },
+      "warnings": []
+    }
+  ],
+  "dropped": [],
+  "provenance_refusals": 0,
+  "surveyed_operations": {
+    "total": 43,
+    "read": 23,
+    "write": 20
+  },
+  "declared_operations": 43,
+  "operation_split": {
+    "executable": 5,
+    "provider_blocked": 22,
+    "excluded": 16
+  }
+}

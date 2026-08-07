@@ -11,12 +11,14 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 
 	_ "github.com/marcboeker/go-duckdb"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/warehouse"
 )
 
 // newSQLEngine returns the DuckDB-backed analytical engine (built only with
@@ -124,44 +126,59 @@ func (e duckdbEngine) QuerySQL(ctx context.Context, query string, limit int) ([]
 	return out, nil
 }
 
-// registerViews creates one DuckDB view per *.jsonl file in the warehouse dir,
-// named after the file (sans extension). View names are validated identifiers
-// and file paths are passed as quote-escaped string literals — never via user
-// SQL interpolation.
+// registerViews creates one DuckDB view per materialized warehouse table.
+//
+// Tables live inside their owning connection's directory, so the same table
+// name can belong to several connections. A name owned by exactly one
+// connection is registered bare; a name several connections share is
+// registered once per connection as <table>__<connection-id> and never bare,
+// so a query can never silently read one tenant's rows while meaning another's.
+//
+// View names are validated identifiers and file paths are passed as
+// quote-escaped string literals — never via user SQL interpolation.
 func (e duckdbEngine) registerViews(ctx context.Context, db *sql.DB) error {
-	entries, err := os.ReadDir(e.warehouseDir)
+	// A warehouse that does not exist yet has no tables and is not an error.
+	// Faults are deliberately not fatal here: a damaged ownership record costs
+	// its own connection's views, not every other connection's. A query naming
+	// a view that is missing for that reason fails on its own, and the JSONL
+	// path reports the fault precisely.
+	tables, _, err := warehouse.Tables(e.warehouseDir)
 	if err != nil {
-		if os.IsNotExist(err) {
-			return nil
-		}
-		return fmt.Errorf("read warehouse dir: %w", err)
+		return err
 	}
-	for _, entry := range entries {
-		if entry.IsDir() {
-			continue
-		}
-		name := entry.Name()
-		if !strings.HasSuffix(name, ".jsonl") {
-			continue
-		}
-		table := strings.TrimSuffix(name, ".jsonl")
-		if !identRe.MatchString(table) {
-			continue
-		}
-		abs := filepath.Join(e.warehouseDir, name)
-		info, err := os.Stat(abs)
-		if err != nil {
-			return fmt.Errorf("stat %s: %w", abs, err)
-		}
-		if info.Size() == 0 {
-			continue
-		}
-		stmt := fmt.Sprintf(
-			`CREATE VIEW "%s" AS SELECT * FROM read_ndjson_auto('%s')`,
-			table, escapeSQLLiteral(abs),
-		)
-		if _, err := db.ExecContext(ctx, stmt); err != nil {
-			return fmt.Errorf("register view %q: %w", table, err)
+	byName := make(map[string][]warehouse.Table, len(tables))
+	for _, table := range tables {
+		byName[table.Name] = append(byName[table.Name], table)
+	}
+	names := make([]string, 0, len(byName))
+	for name := range byName {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		owners := byName[name]
+		for _, table := range owners {
+			view := name
+			if len(owners) > 1 {
+				view = name + "__" + table.Owner.Connection
+			}
+			if !identRe.MatchString(view) {
+				continue
+			}
+			info, err := os.Stat(table.Path)
+			if err != nil {
+				return fmt.Errorf("stat %s: %w", table.Path, err)
+			}
+			if info.Size() == 0 {
+				continue
+			}
+			stmt := fmt.Sprintf(
+				`CREATE VIEW "%s" AS SELECT * FROM read_ndjson_auto('%s')`,
+				view, escapeSQLLiteral(table.Path),
+			)
+			if _, err := db.ExecContext(ctx, stmt); err != nil {
+				return fmt.Errorf("register view %q: %w", view, err)
+			}
 		}
 	}
 	return nil

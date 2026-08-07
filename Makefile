@@ -5,12 +5,12 @@ VERIFY_JOBS ?= 2
 # fetch the matching toolchain when the ambient one is older.
 export GOTOOLCHAIN ?= auto
 
-.PHONY: fmt vet tidy-check test build icons-generate docs-check docs-check-no-build install uninstall smoke smoke-no-build release-workflow-check verify verify-parallel verify-duckdb perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary
+.PHONY: fmt vet tidy-check test build icons-generate docs-check docs-check-no-build install uninstall smoke smoke-no-build release-workflow-check verify verify-parallel verify-duckdb perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary certify-timing
 
 # Packages covered by `lint` include declarative connector and canonical agent-contract tooling.
 # Paths are filtered to existing directories so optional local trees do not hard-fail
 # golangci-lint's arg parsing.
-LINT_CANDIDATE_DIRS := internal/connectors/engine internal/connectors/defs internal/connectors/hooks internal/connectors/native internal/connectors/conformance internal/connectors/certify internal/connectors/boundary internal/agentcontract cmd/connectorgen cmd/agentcontractgen
+LINT_CANDIDATE_DIRS := internal/connectors/engine internal/connectors/defs internal/connectors/hooks internal/connectors/native internal/connectors/conformance internal/connectors/certify internal/connectors/boundary internal/agentcontract cmd/connectorgen cmd/agentcontractgen cmd/certifytiming
 LINT_PKGS := $(foreach d,$(LINT_CANDIDATE_DIRS),$(if $(wildcard $(d)),./$(d)/...))
 
 fmt:
@@ -25,6 +25,17 @@ tidy-check:
 
 test:
 	go test -timeout 20m ./...
+
+# Emits the raw cold -json streams and a compact timing summary for only the
+# certification harness and its CLI route tests. Verify invokes this target in
+# a separate step so the diagnostic is visible even when the aggregate suite
+# later fails or reaches its job limit. The active topology budgets 25 real
+# harness calls and 92 real CLI invocations; its hosted-measurement-derived
+# cap remains 3m30s.
+CERTIFY_TIMING_MAX_DURATION := 3m30s
+
+certify-timing:
+	go run ./cmd/certifytiming --max-duration $(CERTIFY_TIMING_MAX_DURATION)
 
 build:
 	go build ./cmd/pm
@@ -65,7 +76,9 @@ smoke-no-build:
 	./pm reverse preview "$$PLAN_ID" --root "$$SMOKE_DIR" --json >/dev/null; \
 	APPROVAL=$$(printf '%s\n' "$$PLAN_OUTPUT" | awk '/Approval token:/ {print $$3}'); \
 	./pm reverse run "$$PLAN_ID" --approve "$$APPROVAL" --root "$$SMOKE_DIR" --json >/dev/null; \
-	test -s "$$SMOKE_DIR/.polymetrics/warehouse/sample_customers.jsonl"; \
+	TABLE=$$(ls "$$SMOKE_DIR"/.polymetrics/warehouse/*/*/*/tables/sample_customers.jsonl); \
+	test -s "$$TABLE"; \
+	test -s "$$(dirname "$$(dirname "$$TABLE")")/owner.json"; \
 	test -s "$$SMOKE_DIR/.polymetrics/outbox/customers_to_outbox.jsonl"; \
 	printf 'smoke ok: %s\n' "$$SMOKE_DIR"
 
@@ -81,8 +94,8 @@ agent-contract-check:
 connectorgen-validate:
 	go run ./cmd/connectorgen validate internal/connectors/defs
 
-# Fails when a bundle's derivable command metadata (api_surface, flag maps_to,
-# output_policy, rest.max_bytes) no longer matches its own operations.json.
+# Fails when derivable command metadata (api_surface, flag maps_to,
+# output_policy, rest.max_bytes) or the compact runtime endpoint ledger drifts.
 # Regenerate with `go run ./cmd/connectorgen surface-sync`.
 connectorgen-surface-sync:
 	go run ./cmd/connectorgen surface-sync --check

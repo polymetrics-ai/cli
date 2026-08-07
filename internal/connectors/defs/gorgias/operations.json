@@ -1,0 +1,703 @@
+{
+  "operations": [
+    {
+      "id": "gorgias.get_account",
+      "kind": "rest_read",
+      "summary": "Retrieve your account",
+      "description": "Bounded Gorgias read for GET /api/account.",
+      "source_url": "https://developers.gorgias.com/reference/get-account",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/account",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.list_account_settings",
+      "kind": "rest_read",
+      "summary": "List settings",
+      "description": "Bounded Gorgias read for GET /api/account/settings.",
+      "source_url": "https://developers.gorgias.com/reference/list-account-settings",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/account/settings",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.list_custom_fields",
+      "kind": "rest_read",
+      "summary": "List custom fields",
+      "description": "Bounded Gorgias read for GET /api/custom-fields.",
+      "source_url": "https://developers.gorgias.com/reference/list-custom-fields",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/custom-fields",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.get_custom_field",
+      "kind": "rest_read",
+      "summary": "Retrieve a custom field",
+      "description": "Bounded Gorgias read for GET /api/custom-fields/{id}.",
+      "source_url": "https://developers.gorgias.com/reference/get-custom-field",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/custom-fields/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.list_customer_custom_field_values",
+      "kind": "rest_read",
+      "summary": "List customer field values",
+      "description": "Bounded Gorgias read for GET /api/customers/{customer_id}/custom-fields.",
+      "source_url": "https://developers.gorgias.com/reference/list-customer-custom-fields-values",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/customers/{customer_id}/custom-fields",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.get_customer",
+      "kind": "rest_read",
+      "summary": "Retrieve a customer",
+      "description": "Bounded Gorgias read for GET /api/customers/{id}.",
+      "source_url": "https://developers.gorgias.com/reference/get-customer",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/customers/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.list_events",
+      "kind": "rest_read",
+      "summary": "List events",
+      "description": "Bounded Gorgias read for GET /api/events.",
+      "source_url": "https://developers.gorgias.com/reference/list-events",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/events",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.get_event",
+      "kind": "rest_read",
+      "summary": "Retrieve an event",
+      "description": "Bounded Gorgias read for GET /api/events/{id}.",
+      "source_url": "https://developers.gorgias.com/reference/get-event",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/events/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.list_integrations",
+      "kind": "rest_read",
+      "summary": "List integrations",
+      "description": "Bounded Gorgias read for GET /api/integrations.",
+      "source_url": "https://developers.gorgias.com/reference/list-integrations",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/integrations",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.get_integration",
+      "kind": "rest_read",
+      "summary": "Retrieve an integration",
+      "description": "Bounded Gorgias read for GET /api/integrations/{id}.",
+      "source_url": "https://developers.gorgias.com/reference/get-integration",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/integrations/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.list_jobs",
+      "kind": "rest_read",
+      "summary": "List jobs",
+      "description": "Bounded Gorgias read for GET /api/jobs.",
+      "source_url": "https://developers.gorgias.com/reference/list-jobs",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/jobs",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.get_job",
+      "kind": "rest_read",
+      "summary": "Retrieve a job",
+      "description": "Bounded Gorgias read for GET /api/jobs/{id}.",
+      "source_url": "https://developers.gorgias.com/reference/get-job",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/jobs/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.list_macros",
+      "kind": "rest_read",
+      "summary": "List macros",
+      "description": "Bounded Gorgias read for GET /api/macros.",
+      "source_url": "https://developers.gorgias.com/reference/list-macros",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/macros",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.get_macro",
+      "kind": "rest_read",
+      "summary": "Retrieve a macro",
+      "description": "Bounded Gorgias read for GET /api/macros/{id}.",
+      "source_url": "https://developers.gorgias.com/reference/get-macro",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/macros/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.search_metric_cards",
+      "kind": "rest_read",
+      "summary": "Search metric cards",
+      "description": "Bounded Gorgias read for GET /api/metric-cards.",
+      "source_url": "https://developers.gorgias.com/reference/search-metric-cards",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/metric-cards",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.get_metric_card",
+      "kind": "rest_read",
+      "summary": "Retrieve a metric card by slug",
+      "description": "Bounded Gorgias read for GET /api/metric-cards/{slug}.",
+      "source_url": "https://developers.gorgias.com/reference/get-metric-card",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/metric-cards/{slug}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.list_voice_call_events",
+      "kind": "rest_read",
+      "summary": "List voice call events",
+      "description": "Bounded Gorgias read for GET /api/phone/voice-call-events.",
+      "source_url": "https://developers.gorgias.com/reference/list-voice-call-events",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/phone/voice-call-events",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.get_voice_call_event",
+      "kind": "rest_read",
+      "summary": "Retrieve a voice call event",
+      "description": "Bounded Gorgias read for GET /api/phone/voice-call-events/{id}.",
+      "source_url": "https://developers.gorgias.com/reference/get-voice-call-event",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/phone/voice-call-events/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.list_voice_call_recordings",
+      "kind": "rest_read",
+      "summary": "List voice call recordings",
+      "description": "Bounded Gorgias read for GET /api/phone/voice-call-recordings.",
+      "source_url": "https://developers.gorgias.com/reference/list-voice-call-recordings",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/phone/voice-call-recordings",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.get_voice_call_recording",
+      "kind": "rest_read",
+      "summary": "Retrieve a voice call recording",
+      "description": "Bounded Gorgias read for GET /api/phone/voice-call-recordings/{id}.",
+      "source_url": "https://developers.gorgias.com/reference/get-voice-call-recording",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/phone/voice-call-recordings/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.list_voice_calls",
+      "kind": "rest_read",
+      "summary": "List voice calls",
+      "description": "Bounded Gorgias read for GET /api/phone/voice-calls.",
+      "source_url": "https://developers.gorgias.com/reference/list-voice-calls",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/phone/voice-calls",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.get_voice_call",
+      "kind": "rest_read",
+      "summary": "Retrieve a voice call",
+      "description": "Bounded Gorgias read for GET /api/phone/voice-calls/{id}.",
+      "source_url": "https://developers.gorgias.com/reference/get-voice-call",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/phone/voice-calls/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.list_rules",
+      "kind": "rest_read",
+      "summary": "List rules",
+      "description": "Bounded Gorgias read for GET /api/rules.",
+      "source_url": "https://developers.gorgias.com/reference/list-rules",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rules",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.get_rule",
+      "kind": "rest_read",
+      "summary": "Retrieve a rule",
+      "description": "Bounded Gorgias read for GET /api/rules/{id}.",
+      "source_url": "https://developers.gorgias.com/reference/get-rule",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rules/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.get_satisfaction_survey",
+      "kind": "rest_read",
+      "summary": "Retrieve a survey",
+      "description": "Bounded Gorgias read for GET /api/satisfaction-surveys/{id}.",
+      "source_url": "https://developers.gorgias.com/reference/get-satisfaction-survey",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/satisfaction-surveys/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.list_tags",
+      "kind": "rest_read",
+      "summary": "List tags",
+      "description": "Bounded Gorgias read for GET /api/tags.",
+      "source_url": "https://developers.gorgias.com/reference/list-tags",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/tags",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.get_tag",
+      "kind": "rest_read",
+      "summary": "Retrieve a tag",
+      "description": "Bounded Gorgias read for GET /api/tags/{id}.",
+      "source_url": "https://developers.gorgias.com/reference/get-tag",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/tags/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.list_teams",
+      "kind": "rest_read",
+      "summary": "List teams",
+      "description": "Bounded Gorgias read for GET /api/teams.",
+      "source_url": "https://developers.gorgias.com/reference/list-teams",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/teams",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.get_team",
+      "kind": "rest_read",
+      "summary": "Retrieve a team",
+      "description": "Bounded Gorgias read for GET /api/teams/{id}.",
+      "source_url": "https://developers.gorgias.com/reference/get-team",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/teams/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.get_ticket",
+      "kind": "rest_read",
+      "summary": "Retrieve a ticket",
+      "description": "Bounded Gorgias read for GET /api/tickets/{id}.",
+      "source_url": "https://developers.gorgias.com/reference/get-ticket",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/tickets/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.list_ticket_custom_fields",
+      "kind": "rest_read",
+      "summary": "List ticket field values",
+      "description": "Bounded Gorgias read for GET /api/tickets/{ticket_id}/custom-fields.",
+      "source_url": "https://developers.gorgias.com/reference/list-ticket-custom-fields",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/tickets/{ticket_id}/custom-fields",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.get_ticket_message",
+      "kind": "rest_read",
+      "summary": "Retrieve a message",
+      "description": "Bounded Gorgias read for GET /api/tickets/{ticket_id}/messages/{id}.",
+      "source_url": "https://developers.gorgias.com/reference/get-ticket-message",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/tickets/{ticket_id}/messages/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.list_ticket_tags",
+      "kind": "rest_read",
+      "summary": "List ticket tags",
+      "description": "Bounded Gorgias read for GET /api/tickets/{ticket_id}/tags.",
+      "source_url": "https://developers.gorgias.com/reference/list-ticket-tags",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/tickets/{ticket_id}/tags",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.list_users",
+      "kind": "rest_read",
+      "summary": "List users",
+      "description": "Bounded Gorgias read for GET /api/users.",
+      "source_url": "https://developers.gorgias.com/reference/list-users",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/users",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.get_user",
+      "kind": "rest_read",
+      "summary": "Retrieve a user",
+      "description": "Bounded Gorgias read for GET /api/users/{id}.",
+      "source_url": "https://developers.gorgias.com/reference/get-user",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/users/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.list_views",
+      "kind": "rest_read",
+      "summary": "List views",
+      "description": "Bounded Gorgias read for GET /api/views.",
+      "source_url": "https://developers.gorgias.com/reference/list-views",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/views",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.get_view",
+      "kind": "rest_read",
+      "summary": "Retrieve a view",
+      "description": "Bounded Gorgias read for GET /api/views/{id}.",
+      "source_url": "https://developers.gorgias.com/reference/get-view",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/views/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.list_view_items",
+      "kind": "rest_read",
+      "summary": "List view's items",
+      "description": "Bounded Gorgias read for GET /api/views/{view_id}/items.",
+      "source_url": "https://developers.gorgias.com/reference/list-view-items",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/views/{view_id}/items",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.list_widgets",
+      "kind": "rest_read",
+      "summary": "List widgets",
+      "description": "Bounded Gorgias read for GET /api/widgets.",
+      "source_url": "https://developers.gorgias.com/reference/list-widgets",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/widgets",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.get_widget",
+      "kind": "rest_read",
+      "summary": "Retrieve a widget",
+      "description": "Bounded Gorgias read for GET /api/widgets/{id}.",
+      "source_url": "https://developers.gorgias.com/reference/get-widget",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/widgets/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "gorgias.search",
+      "kind": "rest_read",
+      "summary": "Search for resources",
+      "description": "Bounded Gorgias read-query for POST /api/search.",
+      "source_url": "https://developers.gorgias.com/reference/search",
+      "risk": "low",
+      "approval": "none: read-only query with schema-gated body and bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/api/search",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "The type of search.",
+              "enum": [
+                "agent",
+                "customer",
+                "customer_profile",
+                "customer_channel",
+                "customer_channel_email",
+                "customer_channel_phone",
+                "customers_by_phone",
+                "integration",
+                "team",
+                "tag"
+              ]
+            },
+            "query": {
+              "type": "string",
+              "description": "Text query used to search for resources."
+            },
+            "size": {
+              "type": "integer",
+              "description": "Maximum number of results returned (1-50)."
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "gorgias.get_legacy_statistic",
+      "kind": "rest_read",
+      "summary": "Retrieve a statistic",
+      "description": "Bounded Gorgias read-query for POST /api/stats/{name}.",
+      "source_url": "https://developers.gorgias.com/reference/get-legacy-statistic",
+      "risk": "low",
+      "approval": "none: read-only query with schema-gated body and bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/api/stats/{name}",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "filters": {
+              "type": "object",
+              "description": "Miscellaneous criteria to define the scope of the statistic."
+            }
+          },
+          "required": [
+            "filters"
+          ],
+          "additionalProperties": false
+        },
+        "body": {
+          "filters": {}
+        }
+      }
+    },
+    {
+      "id": "gorgias.download_file",
+      "kind": "binary_download",
+      "summary": "Download a file",
+      "description": "Official Gorgias file download. The provider responds 307 redirecting to signed, cross-host file storage, so this operation declares allow_cross_host; the download credential (Basic auth) is never forwarded across that redirect by the runtime.",
+      "source_url": "https://developers.gorgias.com/reference/download-file",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "binary",
+      "binary": {
+        "method": "GET",
+        "path": "/api/{file_type}/download/{domain_hash}/{resource_name}",
+        "max_bytes": 104857600,
+        "allow_overwrite": false,
+        "extract_archives": false,
+        "allow_cross_host": true
+      }
+    }
+  ]
+}

@@ -49,7 +49,7 @@ func TestSchemaCompileKeywordMatrix(t *testing.T) {
 			raw:  `{"type":"object","additionalProperties":false,"properties":{"a":{"type":"string"}}}`,
 		},
 		{
-			name: "annotations preserved but not enforced",
+			name: "annotations compile",
 			raw:  `{"type":"string","format":"date-time","default":"x","title":"t","description":"d","$schema":"http://json-schema.org/draft-07/schema#"}`,
 		},
 		{
@@ -146,6 +146,25 @@ func TestSchemaValidateInstances(t *testing.T) {
 			instance:  `"ABC"`,
 			wantErr:   true,
 			errSubstr: "pattern",
+		},
+		{
+			name:     "absolute URI valid",
+			raw:      `{"type":"string","format":"uri"}`,
+			instance: `"https://example.invalid/calendar?channel=1#watch"`,
+		},
+		{
+			name:      "relative URI invalid",
+			raw:       `{"type":"string","format":"uri"}`,
+			instance:  `"calendar/watch"`,
+			wantErr:   true,
+			errSubstr: "format",
+		},
+		{
+			name:      "malformed URI escape invalid",
+			raw:       `{"type":"string","format":"uri"}`,
+			instance:  `"https://example.invalid/%ZZ"`,
+			wantErr:   true,
+			errSubstr: "format",
 		},
 		{
 			name:     "minProperties valid",

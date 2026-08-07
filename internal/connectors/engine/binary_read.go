@@ -17,7 +17,6 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
-	"polymetrics.ai/internal/safety"
 )
 
 const (
@@ -122,7 +121,7 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 	if isAbsoluteHTTPURL(spec.Path) {
 		return BinaryDownloadResult{}, fmt.Errorf("binary download endpoint must be connector-relative, got absolute URL")
 	}
-	if err := requireOperationDirectReadEndpoint(b, http.MethodGet, spec.Path); err != nil {
+	if err := requireOperationSurfaceEndpoint(b, http.MethodGet, spec.Path); err != nil {
 		return BinaryDownloadResult{}, err
 	}
 	if strings.TrimSpace(req.DestRoot) == "" {
@@ -153,13 +152,17 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 	}
 
 	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
-	resp, err := rt.Requester.DoStream(ctx, http.MethodGet, requestPath, query, connsdk.StreamOptions{
+	requester, err := rt.requesterFor(http.MethodGet, spec.Path)
+	if err != nil {
+		return BinaryDownloadResult{}, err
+	}
+	resp, err := requester.DoStream(ctx, http.MethodGet, requestPath, query, connsdk.StreamOptions{
 		AllowCrossHost: spec.AllowCrossHost,
 		AllowedHosts:   spec.AllowedHosts,
 	})
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
-		msg := safety.RedactErrorText(err.Error())
+		msg := completeEngineErrorText(err)
 		if hint != "" {
 			msg = msg + ": " + hint
 		}

@@ -2,17 +2,160 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "campaigns",
   "type": "object",
-  "x-primary-key": ["id"],
-  "x-cursor-field": "create_time",
-  "required": ["id"],
+  "x-primary-key": [
+    "id"
+  ],
   "properties": {
-    "id": { "type": "string" },
-    "web_id": { "type": ["integer", "null"] },
-    "type": { "type": ["string", "null"] },
-    "status": { "type": ["string", "null"] },
-    "create_time": { "type": ["string", "null"] },
-    "send_time": { "type": ["string", "null"] },
-    "emails_sent": { "type": ["integer", "null"] },
-    "archive_url": { "type": ["string", "null"] }
-  }
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "web_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "parent_campaign_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "create_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "archive_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "long_archive_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "emails_sent": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "send_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "content_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "needs_block_refresh": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "resendable": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "recipients": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "settings": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "variate_settings": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "tracking": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "rss_opts": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "ab_split_opts": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "social_card": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "report_summary": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "delivery_status": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "resend_shortcut_eligibility": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "resend_shortcut_usage": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "_links": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "x-cursor-field": "create_time"
 }

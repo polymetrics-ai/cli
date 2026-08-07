@@ -7,7 +7,11 @@ SYNOPSIS
   pm catalog show --connection <name> [--json]
 
 DESCRIPTION
-  Catalog commands call the source connector and store a local snapshot.
+  Catalog refresh calls the source connector and stores a local snapshot;
+  catalog show reads that persisted snapshot.
+  refresh deliberately fetches a new provider catalog; show reads the
+  existing snapshot and marks it stale when its discovery expiry has passed.
+  Refresh a stale catalog before relying on fields added by the provider.
 
 SECURITY
   Catalog output includes schemas and stream names, never secret values.

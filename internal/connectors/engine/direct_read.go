@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -14,6 +15,7 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/safety"
 )
 
@@ -29,43 +31,32 @@ const (
 
 var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
 
+// completeEngineErrorText preserves the bounded diagnostic content captured by
+// connsdk for direct-read callers. HTTPError.Error deliberately applies its
+// own presentation policy, so the engine reads the typed fields here to retain
+// the request URL and provider body that the operator needs to diagnose a
+// declared connector action.
+func completeEngineErrorText(err error) string {
+	var httpErr *connsdk.HTTPError
+	if !errors.As(err, &httpErr) {
+		return err.Error()
+	}
+	message := strings.TrimSpace(httpErr.Body)
+	if message == "" {
+		message = http.StatusText(httpErr.Status)
+	}
+	return fmt.Sprintf("http %d for %s: %s", httpErr.Status, httpErr.URL, message)
+}
+
 func OperationDirectRead(ctx context.Context, b Bundle, req connectors.OperationDirectReadRequest, h Hooks) (connectors.DirectReadResult, error) {
 	if err := ctx.Err(); err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	op, err := findOperation(b, req.Operation)
+	op, err := operationDirectReadSpec(b, req.Operation)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	// provider_search shares this executor deliberately: its response bounding,
-	// clamping, redaction and output-policy handling are the same as any other
-	// bounded read. What differs is the stricter front half, which is enforced at
-	// bundle load (validateProviderSearchSemantics), not here.
-	if (op.Kind != "rest_read" && op.Kind != "provider_search") || op.REST == nil {
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read requires rest_read or provider_search operation, got %q", op.Kind)
-	}
 	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
-	if method != http.MethodGet && method != http.MethodPost {
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read requires GET or POST, got %s", method)
-	}
-	if op.Kind == "provider_search" && method != http.MethodPost {
-		return connectors.DirectReadResult{}, fmt.Errorf("provider search requires POST, got %s", method)
-	}
-	if isAbsoluteHTTPURL(op.REST.Path) {
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read endpoint must be connector-relative, got absolute URL")
-	}
-	if method == http.MethodPost && !strings.EqualFold(strings.TrimSpace(op.REST.ContentType), "application/json") {
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read POST requires application/json content_type")
-	}
-	if method == http.MethodPost && len(op.REST.BodySchema) == 0 {
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read POST requires body_schema")
-	}
-	if op.REST.MaxBytes <= 0 {
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read requires positive max_bytes")
-	}
-	if err := requireOperationDirectReadEndpoint(b, method, op.REST.Path); err != nil {
-		return connectors.DirectReadResult{}, err
-	}
 	cfg := materializeConfigDefaults(b, req.Config)
 	resolvedPath, err := resolveSurfaceEndpointPath(op.REST.Path, cfg, req.PathParams)
 	if err != nil {
@@ -105,10 +96,14 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	}
 	maxBytes := clampOperationDirectReadMaxBytes(req.MaxBytes, op.REST.MaxBytes)
 	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
-	resp, err := rt.Requester.DoLimited(ctx, method, requestPath, query, body, maxBytes)
+	requester, err := rt.requesterFor(method, op.REST.Path)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	resp, err := requester.DoLimited(ctx, method, requestPath, query, body, maxBytes)
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
-		msg := safety.RedactErrorText(err.Error())
+		msg := completeEngineErrorText(err)
 		if hint != "" {
 			msg = msg + ": " + hint
 		}
@@ -136,6 +131,74 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		decoded = redactNamedJSONFields(decoded, redactFields)
 	}
 	return connectors.DirectReadResult{Connector: b.Name, Method: method, Path: resolvedPath, Status: resp.Status, Body: decoded}, nil
+}
+
+// PreflightOperationDirectRead proves a command's named operation can reach
+// the bounded direct-read executor with its declared endpoint, response cap,
+// and output policy. It shares operationDirectReadSpec with execution and is
+// deliberately no-network: preflight must be safe to run across every bundle.
+func PreflightOperationDirectRead(b Bundle, operation, method, endpointPath string, maxBytes int, outputPolicy string) error {
+	op, err := operationDirectReadSpec(b, operation)
+	if err != nil {
+		return err
+	}
+	if !strings.EqualFold(strings.TrimSpace(method), op.REST.Method) {
+		return fmt.Errorf("operation direct read method %s does not match declared operation method %s", strings.ToUpper(strings.TrimSpace(method)), strings.ToUpper(strings.TrimSpace(op.REST.Method)))
+	}
+	if endpointPath != op.REST.Path {
+		return fmt.Errorf("operation direct read path %q does not match declared operation path %q", endpointPath, op.REST.Path)
+	}
+	if maxBytes <= 0 {
+		return fmt.Errorf("operation direct read command requires positive max_bytes")
+	}
+	if clampOperationDirectReadMaxBytes(maxBytes, op.REST.MaxBytes) <= 0 {
+		return fmt.Errorf("operation direct read has no executable response cap")
+	}
+	return validateDirectReadOutputPolicy(outputPolicy, op.REST.Path, nil, connectors.RuntimeConfig{})
+}
+
+// operationDirectReadSpec is the static, no-network part of the bounded
+// direct-read executor. Both execution and command preflight call it so their
+// eligibility rules cannot drift apart.
+func operationDirectReadSpec(b Bundle, operation string) (OperationSpec, error) {
+	op, err := findOperation(b, operation)
+	if err != nil {
+		return OperationSpec{}, err
+	}
+	// provider_search shares this executor deliberately: its response bounding,
+	// clamping, redaction and output-policy handling are the same as any other
+	// bounded read. What differs is its stricter bundle-load contract.
+	if (op.Kind != "rest_read" && op.Kind != "provider_search") || op.REST == nil {
+		return OperationSpec{}, fmt.Errorf("operation direct read requires rest_read or provider_search operation, got %q", op.Kind)
+	}
+	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
+	if method != http.MethodGet && method != http.MethodPost {
+		return OperationSpec{}, fmt.Errorf("operation direct read requires GET or POST, got %s", method)
+	}
+	if op.Kind == "provider_search" && method != http.MethodPost {
+		return OperationSpec{}, fmt.Errorf("provider search requires POST, got %s", method)
+	}
+	if isAbsoluteHTTPURL(op.REST.Path) {
+		return OperationSpec{}, fmt.Errorf("operation direct read endpoint must be connector-relative, got absolute URL")
+	}
+	if method == http.MethodPost && !strings.EqualFold(strings.TrimSpace(op.REST.ContentType), "application/json") {
+		return OperationSpec{}, fmt.Errorf("operation direct read POST requires application/json content_type")
+	}
+	if method == http.MethodPost && len(op.REST.BodySchema) == 0 {
+		return OperationSpec{}, fmt.Errorf("operation direct read POST requires body_schema")
+	}
+	if method == http.MethodPost {
+		if _, err := CompileSchema(op.REST.BodySchema); err != nil {
+			return OperationSpec{}, fmt.Errorf("operation direct read body_schema: %w", err)
+		}
+	}
+	if op.REST.MaxBytes <= 0 {
+		return OperationSpec{}, fmt.Errorf("operation direct read requires positive max_bytes")
+	}
+	if err := requireOperationDirectReadLedgerEndpoint(b, op.Kind, method, op.REST.Path, op.REST.MaxBytes); err != nil {
+		return OperationSpec{}, err
+	}
+	return op, nil
 }
 
 func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest, h Hooks) (connectors.DirectReadResult, error) {
@@ -175,10 +238,14 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 
 	maxBytes := clampDirectReadMaxBytes(req.MaxBytes)
 	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
-	resp, err := rt.Requester.DoLimited(ctx, method, requestPath, query, nil, maxBytes)
+	requester, err := rt.requesterFor(method, req.Path)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	resp, err := requester.DoLimited(ctx, method, requestPath, query, nil, maxBytes)
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
-		msg := safety.RedactErrorText(err.Error())
+		msg := completeEngineErrorText(err)
 		if hint != "" {
 			msg = msg + ": " + hint
 		}
@@ -221,7 +288,7 @@ func findOperation(b Bundle, id string) (OperationSpec, error) {
 	return OperationSpec{}, fmt.Errorf("operation %q not found in bundle %q", id, b.Name)
 }
 
-func requireOperationDirectReadEndpoint(b Bundle, method, endpointPath string) error {
+func requireOperationSurfaceEndpoint(b Bundle, method, endpointPath string) error {
 	if b.Surface == nil {
 		return nil
 	}
@@ -234,6 +301,19 @@ func requireOperationDirectReadEndpoint(b Bundle, method, endpointPath string) e
 		}
 	}
 	return fmt.Errorf("api_surface endpoint %s %s not found", method, endpointPath)
+}
+
+func requireOperationDirectReadLedgerEndpoint(b Bundle, kind, method, endpointPath string, maxBytes int) error {
+	ledger := operationDirectReadEndpointLedger(b)
+	if ledger == nil {
+		return fmt.Errorf("runtime operation endpoint ledger is unavailable for bundle %q", b.Name)
+	}
+	for _, entry := range ledger.entries {
+		if strings.EqualFold(entry.Method, method) && entry.Path == endpointPath && entry.Kind == kind && entry.MaxBytes == maxBytes {
+			return nil
+		}
+	}
+	return fmt.Errorf("runtime operation endpoint ledger does not contain %s %s kind %q with max_bytes %d", method, endpointPath, kind, maxBytes)
 }
 
 // requireOperationQueryGroups enforces rest.required_query against the merged

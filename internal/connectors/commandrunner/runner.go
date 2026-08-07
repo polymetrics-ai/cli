@@ -83,6 +83,15 @@ type BlockedCommandError struct {
 	Reason       string
 }
 
+type MinimumFlagError struct {
+	Parameter string
+	Minimum   float64
+}
+
+func (e *MinimumFlagError) Error() string {
+	return fmt.Sprintf("invalid --%s: value must be at least %s", e.Parameter, strconv.FormatFloat(e.Minimum, 'f', -1, 64))
+}
+
 func (e *BlockedCommandError) Error() string {
 	parts := []string{fmt.Sprintf("connector command %q is blocked", e.Command)}
 	if e.Intent != "" {
@@ -154,7 +163,7 @@ func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req 
 		Approval:              firstNonEmpty(cmd.Approval, "reverse ETL writes require plan, preview, approval, execute"),
 		ConfirmationChallenge: string(connectors.ConfirmationForWriteAction(action).Kind),
 		Record:                cloneRecord(record),
-		RedactedRecord:        redactRecordWithFields(record, cmd.RedactFields),
+		RedactedRecord:        cloneRecord(record),
 		Batchable:             action.IsBatchable(),
 	}
 	if req.Preview {
@@ -267,10 +276,10 @@ func Run(ctx context.Context, connector connectors.Connector, req Request, emit 
 	}
 	err = connector.Read(ctx, readReq, connectors.LimitEmitter(limit, func(record connectors.Record) error {
 		result.Count++
-		return emit(redactRecordWithFields(record, cmd.RedactFields))
+		return emit(record)
 	}))
 	if err := connectors.IgnoreReadLimit(err); err != nil {
-		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+		return Result{}, err
 	}
 	return result, nil
 }
@@ -386,10 +395,10 @@ func runDirectRead(ctx context.Context, connector connectors.Connector, cmd conn
 	}
 	pathParams, query, err := directReadOverrides(cmd, req.Flags)
 	if err != nil {
-		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+		return Result{}, err
 	}
 	if err := validateCommandInputs(cmd, req.Config, mappedCommandInputs{Query: query}); err != nil {
-		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+		return Result{}, err
 	}
 	maxBytes := req.MaxBytes
 	if maxBytes <= 0 {
@@ -408,10 +417,9 @@ func runDirectRead(ctx context.Context, connector connectors.Connector, cmd conn
 		Query:        query,
 		MaxBytes:     maxBytes,
 		OutputPolicy: cmd.OutputPolicy,
-		RedactFields: cmd.RedactFields,
 	})
 	if err != nil {
-		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+		return Result{}, err
 	}
 	return Result{
 		Connector:  connector.Name(),
@@ -436,10 +444,10 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 	}
 	pathParams, query, body, err := operationDirectReadOverrides(cmd, req.Flags)
 	if err != nil {
-		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+		return Result{}, err
 	}
 	if err := validateCommandInputs(cmd, req.Config, mappedCommandInputs{Query: query, Body: body}); err != nil {
-		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+		return Result{}, err
 	}
 	maxBytes := req.MaxBytes
 	if maxBytes <= 0 {
@@ -456,10 +464,9 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 		Body:         body,
 		MaxBytes:     maxBytes,
 		OutputPolicy: cmd.OutputPolicy,
-		RedactFields: cmd.RedactFields,
 	})
 	if err != nil {
-		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+		return Result{}, err
 	}
 	return Result{Connector: connector.Name(), Command: cmd.Path, DirectRead: &direct}, nil
 }
@@ -519,6 +526,10 @@ func validateOperationDirectReadCommand(connector connectors.Connector, cmd conn
 	if _, ok := connector.(connectors.OperationDirectReader); !ok {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not support operation direct reads"}
 	}
+	preflighter, ok := connector.(connectors.OperationDirectReadPreflighter)
+	if !ok {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose operation direct-read metadata"}
+	}
 	if strings.TrimSpace(cmd.Operation) == "" {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands require operation"}
 	}
@@ -534,6 +545,9 @@ func validateOperationDirectReadCommand(connector connectors.Connector, cmd conn
 	}
 	if !isSupportedDirectReadOutputPolicy(cmd.OutputPolicy) {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands require an explicit supported output_policy"}
+	}
+	if err := preflighter.PreflightOperationDirectRead(cmd.Operation, method, cmd.APISurface[0].Path, MaxOperationDirectReadBytes, cmd.OutputPolicy); err != nil {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct read metadata is not executable: %v", err)}
 	}
 	return nil
 }
@@ -579,22 +593,33 @@ func validateOperationDirectWriteCommand(connector connectors.Connector, cmd con
 	return nil
 }
 
-func isSupportedDirectReadOutputPolicy(policy string) bool {
-	switch policy {
-	case "repository_contents_file_metadata", "repository_contents_directory", "json_redacted", "clinical_json_redacted":
-		return true
-	default:
-		return false
+// Keep these closed policy sets enumerable: the CLI schema regression test
+// compares their union with its output_policy enum so declaration and runtime
+// support cannot silently drift apart.
+var (
+	supportedDirectReadOutputPolicies = map[string]struct{}{
+		"repository_contents_file_metadata": {},
+		"repository_contents_directory":     {},
+		"json_redacted":                     {},
+		"clinical_json_redacted":            {},
 	}
+	supportedDirectWriteOutputPolicies = map[string]struct{}{
+		"none":                        {},
+		"json":                        {},
+		"json_redacted":               {},
+		"write_result_redacted":       {},
+		"gong_bounded_input_redacted": {},
+	}
+)
+
+func isSupportedDirectReadOutputPolicy(policy string) bool {
+	_, ok := supportedDirectReadOutputPolicies[policy]
+	return ok
 }
 
 func isSupportedDirectWriteOutputPolicy(policy string) bool {
-	switch policy {
-	case "none", "json", "json_redacted", "write_result_redacted", "gong_bounded_input_redacted":
-		return true
-	default:
-		return false
-	}
+	_, ok := supportedDirectWriteOutputPolicies[policy]
+	return ok
 }
 
 func isOperationDirectWriteMethod(method string) bool {
@@ -712,7 +737,11 @@ func streamOverrides(cmd connectors.CommandSurfaceCommand, cfg connectors.Runtim
 			}
 		}
 	}
-	return runtimeConfigWithOverrides(cfg, configOverrides), query, nil
+	runtimeConfig := runtimeConfigWithOverrides(cfg, configOverrides)
+	if err := validateConfiguredFlagMinimums(cmd, runtimeConfig); err != nil {
+		return connectors.RuntimeConfig{}, nil, err
+	}
+	return runtimeConfig, query, nil
 }
 
 func runtimeConfigWithOverrides(cfg connectors.RuntimeConfig, overrides map[string]string) connectors.RuntimeConfig {
@@ -728,6 +757,26 @@ func runtimeConfigWithOverrides(cfg connectors.RuntimeConfig, overrides map[stri
 		out.Config[key] = value
 	}
 	return out
+}
+
+func validateConfiguredFlagMinimums(cmd connectors.CommandSurfaceCommand, cfg connectors.RuntimeConfig) error {
+	for _, flag := range cmd.Flags {
+		if flag.Minimum == nil || !strings.HasPrefix(flag.MapsTo, "config.") {
+			continue
+		}
+		target := strings.TrimPrefix(flag.MapsTo, "config.")
+		if err := safety.ValidateIdentifier(target, "config parameter"); err != nil {
+			return err
+		}
+		value, ok := cfg.Config[target]
+		if !ok {
+			continue
+		}
+		if err := validateFlagMinimum(flag, value); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 type mappedCommandInputs struct {
@@ -871,7 +920,10 @@ func commandValueEmpty(value any) bool {
 	case string:
 		return strings.TrimSpace(typed) == ""
 	case []string:
-		return len(typed) == 0
+		// Required-flag raw presence is established before coercion. Array
+		// cardinality is enforced by coerceFlagValue's min_items validation, so
+		// an explicitly supplied, zero-minimum array may legitimately be empty.
+		return false
 	default:
 		return false
 	}
@@ -896,11 +948,11 @@ func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
 	}
 	switch flag.Type {
 	case "", "string", "boolean", "integer", "number", "string_array":
-		return nil
+		return validateFlagMinimum(flag, value)
 	case "enum":
 		for _, allowed := range flag.Values {
 			if value == allowed {
-				return nil
+				return validateFlagMinimum(flag, value)
 			}
 		}
 		values := append([]string(nil), flag.Values...)
@@ -912,6 +964,37 @@ func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
 			Reason:  fmt.Sprintf("flag --%s has unsupported type %q", flag.Name, flag.Type),
 		}
 	}
+}
+
+func validateFlagMinimum(flag connectors.CommandSurfaceFlag, value string) error {
+	if flag.Minimum == nil {
+		return nil
+	}
+	minimum := *flag.Minimum
+	if math.IsNaN(minimum) || math.IsInf(minimum, 0) {
+		return &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("flag --%s has invalid minimum", flag.Name)}
+	}
+	var parsed float64
+	switch flag.Type {
+	case "integer":
+		integer, err := strconv.ParseInt(value, 10, 64)
+		if err != nil {
+			return &MinimumFlagError{Parameter: flag.Name, Minimum: minimum}
+		}
+		parsed = float64(integer)
+	case "number":
+		number, err := strconv.ParseFloat(value, 64)
+		if err != nil || math.IsNaN(number) || math.IsInf(number, 0) {
+			return &MinimumFlagError{Parameter: flag.Name, Minimum: minimum}
+		}
+		parsed = number
+	default:
+		return &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("flag --%s minimum requires integer or number type", flag.Name)}
+	}
+	if parsed < minimum {
+		return &MinimumFlagError{Parameter: flag.Name, Minimum: minimum}
+	}
+	return nil
 }
 
 func validateFlagFormat(flag connectors.CommandSurfaceFlag, value string) error {
@@ -1278,7 +1361,7 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 		}
 		return parsed, nil
 	case "string_array":
-		var out []string
+		out := make([]string, 0)
 		for _, raw := range clean {
 			for _, item := range strings.Split(raw, ",") {
 				item = strings.TrimSpace(item)
@@ -1354,115 +1437,6 @@ func cloneStringMap(in map[string]string) map[string]string {
 	return out
 }
 
-func redactRecord(in connectors.Record) connectors.Record {
-	return redactRecordWithFields(in, nil)
-}
-
-func redactCommandError(err error, fields []string, req Request) error {
-	if err == nil {
-		return nil
-	}
-	text := safety.RedactErrorText(err.Error())
-	for _, values := range req.Flags {
-		for _, value := range values {
-			text = redactLiteral(text, value)
-		}
-	}
-	explicit := explicitRedactFieldSet(fields)
-	for key, value := range req.Config.Config {
-		if explicit[normalizeRecordFieldName(key)] || explicit[compactRecordFieldName(key)] || isSensitiveRecordField(key) || strings.Contains(compactRecordFieldName(key), "patient") {
-			text = redactLiteral(text, value)
-		}
-	}
-	return errors.New(text)
-}
-
-func redactLiteral(text, value string) string {
-	value = strings.TrimSpace(value)
-	if value == "" || value == "***" {
-		return text
-	}
-	return strings.ReplaceAll(text, value, "***")
-}
-
-func redactRecordWithFields(in connectors.Record, fields []string) connectors.Record {
-	explicit := explicitRedactFieldSet(fields)
-	out := make(connectors.Record, len(in))
-	for k, v := range in {
-		out[k] = redactValueForField(k, v, explicit)
-	}
-	return out
-}
-
-func redactValueForField(field string, value any, explicit map[string]bool) any {
-	if isSensitiveRecordField(field) || explicit[normalizeRecordFieldName(field)] || explicit[compactRecordFieldName(field)] {
-		return "***"
-	}
-	switch typed := value.(type) {
-	case map[string]any:
-		out := make(map[string]any, len(typed))
-		for k, v := range typed {
-			out[k] = redactValueForField(k, v, explicit)
-		}
-		return out
-	case connectors.Record:
-		return redactRecordWithFields(typed, redactFieldsFromSet(explicit))
-	case []any:
-		out := make([]any, len(typed))
-		for i, v := range typed {
-			out[i] = redactValueForField("", v, explicit)
-		}
-		return out
-	case []connectors.Record:
-		out := make([]connectors.Record, len(typed))
-		for i, v := range typed {
-			out[i] = redactRecordWithFields(v, redactFieldsFromSet(explicit))
-		}
-		return out
-	default:
-		return value
-	}
-}
-
-func redactFieldsFromSet(explicit map[string]bool) []string {
-	out := make([]string, 0, len(explicit))
-	for field := range explicit {
-		out = append(out, field)
-	}
-	return out
-}
-
-func explicitRedactFieldSet(fields []string) map[string]bool {
-	out := make(map[string]bool, len(fields))
-	for _, field := range fields {
-		field = strings.TrimSpace(field)
-		if field == "" {
-			continue
-		}
-		out[normalizeRecordFieldName(field)] = true
-		out[compactRecordFieldName(field)] = true
-	}
-	return out
-}
-
-func isSensitiveRecordField(name string) bool {
-	normalized := normalizeRecordFieldName(name)
-	for _, marker := range []string{"token", "secret", "password", "private_key", "api_key", "key", "body", "comment", "content", "payload", "inputs", "download", "clone", "media_url", "data_file", "media_file", "file_path"} {
-		if strings.Contains(normalized, marker) {
-			return true
-		}
-	}
-	return false
-}
-
-func normalizeRecordFieldName(name string) string {
-	return strings.ToLower(strings.NewReplacer("-", "_", " ", "_", ".", "_").Replace(name))
-}
-
-func compactRecordFieldName(name string) string {
-	return strings.ReplaceAll(normalizeRecordFieldName(name), "_", "")
-}
-
 func firstNonEmpty(values ...string) string {
 	for _, value := range values {
 		if strings.TrimSpace(value) != "" {
@@ -1520,23 +1494,22 @@ func runBinaryDownload(ctx context.Context, connector connectors.Connector, cmd 
 	}
 	pathParams, query, err := directReadOverrides(cmd, req.Flags)
 	if err != nil {
-		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+		return Result{}, err
 	}
 	if err := validateCommandInputs(cmd, req.Config, mappedCommandInputs{Query: query}); err != nil {
-		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+		return Result{}, err
 	}
 	download, err := downloader.OperationBinaryDownload(ctx, connectors.OperationBinaryDownloadRequest{
-		Operation:    cmd.Operation,
-		Config:       req.Config,
-		PathParams:   pathParams,
-		Query:        query,
-		MaxBytes:     int64(req.MaxBytes),
-		DestRoot:     req.DestRoot,
-		FileName:     req.FileName,
-		RedactFields: cmd.RedactFields,
+		Operation:  cmd.Operation,
+		Config:     req.Config,
+		PathParams: pathParams,
+		Query:      query,
+		MaxBytes:   int64(req.MaxBytes),
+		DestRoot:   req.DestRoot,
+		FileName:   req.FileName,
 	})
 	if err != nil {
-		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+		return Result{}, err
 	}
 	return Result{Connector: connector.Name(), Command: cmd.Path, BinaryDownload: &download}, nil
 }

@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector alpaca-broker-api [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Alpaca Broker API accounts, assets, market calendar, clock, country info, account activities, journals, and per-account positions/watchlists/orders/documents over the Broker REST API (read-only).
+  Reads Alpaca Broker API accounts, assets, market calendar, clock, account activities, journals, and per-account positions/watchlists/orders/documents over the Broker REST API (read-only).
 
 ICON
   id: pm-sample
@@ -45,9 +45,6 @@ ETL STREAMS
   clock:
     primary key: timestamp
     fields: is_open(), next_close(), next_open(), timestamp()
-  country_info:
-    primary key: country_code
-    fields: country_code(), country_name(), phone_calling_code()
   account_activities:
     primary key: id
     fields: account_id(), activity_sub_type(), activity_type(), cum_qty(), cusip(), date(), description(), id(), leaves_qty(), net_amount(), order_id(), per_share_amount(), price(), qty(), side(), status(), symbol(), transaction_time(), type()
@@ -73,6 +70,22 @@ SYNC MODES
 SECURITY
   read risk: external Alpaca Broker API read of account/asset/market metadata, plus per-account trading positions, orders, watchlists, and document metadata (financial PII adjacent; no document content is downloaded, only listing metadata)
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+COMMAND SURFACE
+  Run Alpaca Broker API's declared streams and reverse-ETL actions.
+  Usage: pm alpaca-broker-api <command> [flags]
+  Read streams
+  Other Commands
+    account activities list - Run the account activities ETL stream [intent=etl availability=implemented stream=account_activities]
+    accounts list - Run the accounts ETL stream [intent=etl availability=implemented stream=accounts]
+    assets list - Run the assets ETL stream [intent=etl availability=implemented stream=assets]
+    calendar list - Run the calendar ETL stream [intent=etl availability=implemented stream=calendar]
+    clock list - Run the clock ETL stream [intent=etl availability=implemented stream=clock]
+    documents list - Run the documents ETL stream [intent=etl availability=implemented stream=documents]
+    journals list - Run the journals ETL stream [intent=etl availability=implemented stream=journals]
+    orders list - Run the orders ETL stream [intent=etl availability=implemented stream=orders]
+    positions list - Run the positions ETL stream [intent=etl availability=implemented stream=positions]
+    watchlists list - Run the watchlists ETL stream [intent=etl availability=implemented stream=watchlists]
 
 EXAMPLES
   # Inspect as a manual

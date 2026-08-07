@@ -3,10 +3,12 @@ package engine
 import (
 	"encoding/json"
 	"fmt"
+	"net/url"
 	"reflect"
 	"regexp"
 	"sort"
 	"strings"
+	"unicode"
 )
 
 // Schema is a compiled instance of the engine's minimal draft-07 subset. It is
@@ -28,6 +30,7 @@ type schemaNode struct {
 	items                *schemaNode
 	enum                 []any
 	pattern              *regexp.Regexp
+	format               string
 	minProperties        int
 	hasMinProperties     bool
 	additionalProperties bool // true unless explicitly set to false
@@ -62,7 +65,9 @@ type schemaNode struct {
 	hasDefault bool
 }
 
-// annotationKeywords are accepted but only preserved, never enforced.
+// annotationKeywords are accepted by the schema compiler. Supported formats
+// participate in instance validation, and configuration-time validation
+// evaluates a bundled spec's declared top-level format constraints.
 var annotationKeywords = map[string]bool{
 	"format":      true,
 	"default":     true,
@@ -87,6 +92,17 @@ var structuralKeywords = map[string]bool{
 	"x-secret":             true,
 	"x-primary-key":        true,
 	"x-cursor-field":       true,
+	// Dynamic catalog schemas retain these provider-derived annotations. The
+	// engine's executable static sync contract remains x-primary-key and
+	// x-cursor-field, while the additional fields let catalog consumers keep
+	// the same draft-07 document regardless of schema origin.
+	"x-stream_name":                true,
+	"x-supported_sync_modes":       true,
+	"x-default_sync_mode":          true,
+	"x-source_defined_primary_key": true,
+	"x-source_defined_cursor":      true,
+	"x-default_cursor_field":       true,
+	"x-references":                 true,
 }
 
 var validTypes = map[string]bool{
@@ -186,6 +202,12 @@ func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 			return nil, fmt.Errorf("compile schema: pattern %q: %w", pat, err)
 		}
 		n.pattern = re
+	}
+
+	if raw, ok := m["format"]; ok {
+		if err := json.Unmarshal(raw, &n.format); err != nil {
+			return nil, fmt.Errorf("compile schema: format: %w", err)
+		}
 	}
 
 	if raw, ok := m["minProperties"]; ok {
@@ -345,6 +367,9 @@ func (n *schemaNode) validate(v any, path string) error {
 		if n.pattern != nil && !n.pattern.MatchString(val) {
 			return fmt.Errorf("%s: value does not match pattern %q", displayPath(path), n.pattern.String())
 		}
+		if n.format == "uri" && !validURI(val) {
+			return fmt.Errorf("%s: value does not match format %q", displayPath(path), n.format)
+		}
 	case map[string]any:
 		if err := n.validateObject(val, path); err != nil {
 			return err
@@ -369,6 +394,16 @@ func (n *schemaNode) validate(v any, path string) error {
 	}
 
 	return nil
+}
+
+func validURI(value string) bool {
+	if strings.Contains(value, `\`) || strings.IndexFunc(value, func(r rune) bool {
+		return unicode.IsSpace(r) || unicode.IsControl(r)
+	}) >= 0 {
+		return false
+	}
+	parsed, err := url.Parse(value)
+	return err == nil && parsed.IsAbs()
 }
 
 func (n *schemaNode) validateArrayCardinality(count int, path string) error {
@@ -661,4 +696,8 @@ type StreamSchema struct {
 	*Schema
 	PrimaryKey  []string // x-primary-key
 	CursorField string   // x-cursor-field
+	// Raw is the original draft-07 record contract. Catalog projections use
+	// this rather than re-deriving a lossy Stream from the compiled schema, so
+	// static and provider-discovered streams share one downstream shape.
+	Raw json.RawMessage
 }

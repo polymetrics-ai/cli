@@ -1,0 +1,21 @@
+{
+  "record": {
+    "batch_webhook_id": "fixture_batch_webhook_id",
+    "url": "https://example.invalid/mailchimp-fixture",
+    "enabled": true
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/batch-webhooks/fixture_batch_webhook_id",
+    "body": {
+      "url": "https://example.invalid/mailchimp-fixture",
+      "enabled": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_patch_batch_webhooks"
+    }
+  }
+}

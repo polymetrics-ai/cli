@@ -1,0 +1,16 @@
+{
+  "record": {
+    "list_id": "fixture_list_id",
+    "merge_id": "fixture_merge_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/lists/fixture_list_id/merge-fields/fixture_merge_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_delete_lists_merge_fields"
+    }
+  }
+}

@@ -3,11 +3,17 @@ package engine
 import (
 	"errors"
 	"fmt"
+	"io/fs"
 	"os"
+	"path"
+	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 	"testing/fstest"
 
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/defs"
 )
 
@@ -39,6 +45,7 @@ const validSpec = `{
 	"required": ["base_url"],
 	"properties": {
 		"base_url": { "type": "string" },
+		"installation_id": { "type": "string" },
 		"token": { "type": "string", "x-secret": true }
 	}
 }`
@@ -180,6 +187,57 @@ func TestBundleLoadOptionalFilesAbsent(t *testing.T) {
 	if b.Certification != nil {
 		t.Fatalf("Certification should be nil when certification.json is absent")
 	}
+	if b.Changefeed != nil {
+		t.Fatalf("Changefeed should be nil when changefeed.json is absent")
+	}
+}
+
+func TestBundleLoadParsesUnsupportedChangefeed(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/changefeed.json"] = &fstest.MapFile{Data: []byte(`{
+		"status": "unsupported",
+		"mechanism": "logical_replication",
+		"source": {
+			"artifact_url": "https://example.test/logical-replication",
+			"artifact_version": "v1",
+			"retrieved_at": "2026-08-05"
+		},
+		"reason": "the connector has no executable replication client"
+	}`)}
+
+	bundle, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if bundle.Changefeed == nil {
+		t.Fatal("Changefeed is nil")
+	}
+	if bundle.Changefeed.Status != connectors.ChangefeedStatusUnsupported {
+		t.Fatalf("Changefeed.Status = %q, want unsupported", bundle.Changefeed.Status)
+	}
+	if bundle.Changefeed.Executor != nil {
+		t.Fatalf("unsupported changefeed executor = %+v, want nil", bundle.Changefeed.Executor)
+	}
+}
+
+func TestBundleLoadRejectsUnsupportedChangefeedWithExecutor(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/changefeed.json"] = &fstest.MapFile{Data: []byte(`{
+		"status": "unsupported",
+		"mechanism": "logical_replication",
+		"source": {
+			"artifact_url": "https://example.test/logical-replication",
+			"artifact_version": "v1",
+			"retrieved_at": "2026-08-05"
+		},
+		"reason": "the connector has no executable replication client",
+		"executor": {"kind": "native", "id": "acme-logical"}
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil || !strings.Contains(err.Error(), "unsupported changefeed cannot declare an executor") {
+		t.Fatalf("Load error = %v, want unsupported executor rejection", err)
+	}
 }
 
 func TestBundleLoadParsesCertification(t *testing.T) {
@@ -244,6 +302,385 @@ func TestBundleLoadRejectsCertificationUnknownStream(t *testing.T) {
 	}
 	if !strings.Contains(err.Error(), "certification.json") || !strings.Contains(err.Error(), "default_stream") {
 		t.Fatalf("Load error = %q, want default_stream rejection", err.Error())
+	}
+}
+
+const validProviderCitedRateLimits = `{
+	"schema_version": 1,
+	"state": "declared",
+	"policies": [{
+		"id": "graphql-points",
+		"source": {
+			"url": "https://docs.example.test/rate-limits",
+			"retrieved_at": "2026-08-05",
+			"version": "2026-08"
+		},
+		"selector": {
+			"endpoints": [{"method": "POST", "path": "/graphql"}],
+			"tiers": ["enterprise"],
+			"auth_types": ["oauth_app"]
+		},
+		"scope": {"subject_kind": "installation", "subject_config": "installation_id"},
+		"budgets": [
+			{
+				"model": "fixed_window",
+				"dimension": "sustained",
+				"unit": "points",
+				"limit": 5000,
+				"window_seconds": 3600,
+				"cost": {"default_cost": 1, "response_header": "X-RateLimit-Cost"}
+			},
+			{
+				"model": "leaky_bucket",
+				"dimension": "burst",
+				"unit": "points",
+				"capacity": 40,
+				"restore_per_second": 2
+			}
+		]
+	}]
+}`
+
+func TestBundleLoadParsesProviderCitedRateLimits(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/rate_limits.json"] = &fstest.MapFile{Data: []byte(validProviderCitedRateLimits)}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if b.RateLimits == nil {
+		t.Fatal("RateLimits is nil")
+	}
+	if got, want := b.RateLimits.Policies[0].Source.RetrievedAt, "2026-08-05"; got != want {
+		t.Fatalf("retrieved_at = %q, want %q", got, want)
+	}
+	if got, want := len(b.RateLimits.Policies[0].Budgets), 2; got != want {
+		t.Fatalf("budget count = %d, want %d", got, want)
+	}
+}
+
+func TestBundleLoadAcceptsProviderArtifactURLWithAnchor(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/rate_limits.json"] = &fstest.MapFile{Data: []byte(strings.Replace(
+		validProviderCitedRateLimits,
+		"https://docs.example.test/rate-limits",
+		"https://docs.example.test/rate-limits#provider-policy",
+		1,
+	))}
+
+	if _, err := Load(fsys, "acme"); err != nil {
+		t.Fatalf("Load: provider documentation anchor must be a valid artifact URL: %v", err)
+	}
+}
+
+func TestProductionDefinitionsEmbedEveryRateLimitDeclaration(t *testing.T) {
+	_, thisFile, _, ok := runtime.Caller(0)
+	if !ok {
+		t.Fatal("runtime.Caller: locate bundle test source")
+	}
+	defsDir := filepath.Clean(filepath.Join(filepath.Dir(thisFile), "..", "defs"))
+	entries, err := os.ReadDir(defsDir)
+	if err != nil {
+		t.Fatalf("ReadDir(%s): %v", defsDir, err)
+	}
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+		name := path.Join(entry.Name(), "rate_limits.json")
+		if _, err := os.Stat(filepath.Join(defsDir, filepath.FromSlash(name))); errors.Is(err, os.ErrNotExist) {
+			continue
+		} else if err != nil {
+			t.Fatalf("Stat(%s): %v", name, err)
+		}
+		if _, err := fs.ReadFile(defs.FS, name); err != nil {
+			t.Errorf("production defs.FS omits %s: add it to defs.go's embed pattern with this declaration: %v", name, err)
+		}
+	}
+}
+
+func TestBundleLoadRejectsUncitedOrMalformedRateLimits(t *testing.T) {
+	tests := []struct {
+		name string
+		data string
+		want string
+	}{
+		{
+			name: "policy lacks provider source",
+			data: strings.Replace(validProviderCitedRateLimits, `"source": {
+			"url": "https://docs.example.test/rate-limits",
+			"retrieved_at": "2026-08-05",
+			"version": "2026-08"
+		},`, "", 1),
+			want: "source",
+		},
+		{
+			name: "policy scope must name a non-secret config key",
+			data: strings.Replace(validProviderCitedRateLimits, `, "subject_config": "installation_id"`, "", 1),
+			want: "subject_config",
+		},
+		{
+			name: "policy scope kind must be declared",
+			data: strings.Replace(validProviderCitedRateLimits, `"subject_kind": "installation"`, `"subject_kind": "outside-vocabulary"`, 1),
+			want: "subject_kind",
+		},
+		{
+			name: "policy scope config must exist in spec",
+			data: strings.Replace(validProviderCitedRateLimits, "installation_id", "missing_scope", 1),
+			want: "scope.subject_config",
+		},
+		{
+			name: "policy scope config cannot be secret",
+			data: strings.Replace(validProviderCitedRateLimits, "installation_id", "token", 1),
+			want: "non-secret",
+		},
+		{
+			name: "retrieval date is not a date",
+			data: strings.Replace(validProviderCitedRateLimits, "2026-08-05", "not-a-date", 1),
+			want: "retrieved_at",
+		},
+		{
+			name: "provider source cannot carry credentials",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://user:token@docs.example.test/rate-limits", 1),
+			want: "provider artifact URL",
+		},
+		{
+			name: "provider source cannot carry credential-like query parameters",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits?access_token=fixture", 1),
+			want: "query parameters",
+		},
+		{
+			name: "provider source cannot carry credential-like fragment parameters",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits#access_token=fixture", 1),
+			want: "credential-like fragment",
+		},
+		{
+			name: "provider source cannot carry access key fragment parameters",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits#access_key=fixture", 1),
+			want: "credential-like fragment",
+		},
+		{
+			name: "provider source cannot carry hyphenated access key fragment parameters",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits#access-key=fixture", 1),
+			want: "credential-like fragment",
+		},
+		{
+			name: "provider source cannot carry dotted access key fragment parameters",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits#access.key=fixture", 1),
+			want: "credential-like fragment",
+		},
+		{
+			name: "provider source cannot carry api token fragment parameters",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits#api_token=fixture", 1),
+			want: "credential-like fragment",
+		},
+		{
+			name: "provider source cannot carry hyphenated api token fragment parameters",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits#api-token=fixture", 1),
+			want: "credential-like fragment",
+		},
+		{
+			name: "provider source cannot carry dotted api token fragment parameters",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits#api.token=fixture", 1),
+			want: "credential-like fragment",
+		},
+		{
+			name: "provider source cannot hide credential-like fragment parameters",
+			data: strings.Replace(validProviderCitedRateLimits, "https://docs.example.test/rate-limits", "https://docs.example.test/rate-limits#api%5Fkey%3Dfixture", 1),
+			want: "credential-like fragment",
+		},
+		{
+			name: "unknown cannot publish a policy",
+			data: strings.Replace(validProviderCitedRateLimits, `"state": "declared"`, `"state": "unknown"`, 1),
+			want: "unknown",
+		},
+		{
+			name: "not applicable requires a reason",
+			data: `{"schema_version": 1, "state": "not_applicable"}`,
+			want: "reason",
+		},
+		{
+			name: "endpoint must be connector relative",
+			data: strings.Replace(validProviderCitedRateLimits, `"path": "/graphql"`, `"path": "graphql"`, 1),
+			want: "endpoints[0].path",
+		},
+		{
+			name: "endpoint path cannot carry outer whitespace",
+			data: strings.Replace(validProviderCitedRateLimits, `"path": "/graphql"`, `"path": " /graphql"`, 1),
+			want: "endpoints[0].path",
+		},
+		{
+			name: "leaky bucket needs a positive restore rate",
+			data: strings.Replace(validProviderCitedRateLimits, `"restore_per_second": 2`, `"restore_per_second": 0`, 1),
+			want: "restore_per_second",
+		},
+		{
+			name: "cost header must be an HTTP field name",
+			data: strings.Replace(validProviderCitedRateLimits, "X-RateLimit-Cost", "X Rate Limit Cost", 1),
+			want: "cost.response_header",
+		},
+		{
+			name: "cost header cannot be whitespace",
+			data: strings.Replace(validProviderCitedRateLimits, "X-RateLimit-Cost", " ", 1),
+			want: "cost.response_header",
+		},
+		{
+			name: "policy cannot declare multiple cost headers",
+			data: strings.Replace(validProviderCitedRateLimits, `"restore_per_second": 2`, `"restore_per_second": 2, "cost": {"default_cost": 1, "response_header": "X-Other-Cost"}`, 1),
+			want: "at most one header",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/rate_limits.json"] = &fstest.MapFile{Data: []byte(tt.data)}
+			_, err := Load(fsys, "acme")
+			if err == nil {
+				t.Fatal("Load: expected error")
+			}
+			if !strings.Contains(err.Error(), "rate_limits.json") || !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("Load error = %q, want rate_limits.json and %q", err, tt.want)
+			}
+		})
+	}
+}
+
+func TestBundleLoadRejectsOverlappingRateLimitCostHeaders(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/rate_limits.json"] = &fstest.MapFile{Data: []byte(`{
+		"schema_version": 1,
+		"state": "declared",
+		"policies": [
+			{
+				"id": "connector-points",
+				"source": {"url": "https://docs.example.test/rate-limits", "retrieved_at": "2026-08-05"},
+				"selector": {"all": true},
+				"scope": {"subject_kind": "installation", "subject_config": "installation_id"},
+				"budgets": [{"model": "fixed_window", "dimension": "sustained", "unit": "points", "limit": 100, "window_seconds": 60, "cost": {"default_cost": 1, "response_header": "X-Connector-Cost"}}]
+			},
+			{
+				"id": "graphql-points",
+				"source": {"url": "https://docs.example.test/rate-limits", "retrieved_at": "2026-08-05"},
+				"selector": {"endpoints": [{"method": "POST", "path": "/graphql"}]},
+				"scope": {"subject_kind": "installation", "subject_config": "installation_id"},
+				"budgets": [{"model": "fixed_window", "dimension": "sustained", "unit": "points", "limit": 100, "window_seconds": 60, "cost": {"default_cost": 1, "response_header": "X-GraphQL-Cost"}}]
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatal("Load: expected overlapping actual-cost headers to be rejected")
+	}
+	for _, want := range []string{"rate_limits.json", "connector-points", "graphql-points"} {
+		if !strings.Contains(err.Error(), want) {
+			t.Fatalf("Load error = %q, want %q", err, want)
+		}
+	}
+}
+
+func TestRateLimitSelectorsOverlap(t *testing.T) {
+	tests := []struct {
+		name  string
+		left  connsdk.RateLimitSelector
+		right connsdk.RateLimitSelector
+		want  bool
+	}{
+		{
+			name:  "all overlaps endpoint",
+			left:  connsdk.RateLimitSelector{All: true},
+			right: connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: "GET", Path: "/widgets"}}},
+			want:  true,
+		},
+		{
+			name:  "tier selector overlaps matching endpoint tier",
+			left:  connsdk.RateLimitSelector{Tiers: []string{"pro"}},
+			right: connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: "GET", Path: "/widgets"}}, Tiers: []string{"pro"}},
+			want:  true,
+		},
+		{
+			name:  "different endpoints do not overlap",
+			left:  connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: "GET", Path: "/widgets"}}},
+			right: connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: "GET", Path: "/projects"}}},
+			want:  false,
+		},
+		{
+			name:  "disjoint tiers do not overlap",
+			left:  connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: "GET", Path: "/widgets"}}, Tiers: []string{"pro"}},
+			right: connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: "GET", Path: "/widgets"}}, Tiers: []string{"free"}},
+			want:  false,
+		},
+		{
+			name:  "disjoint auth types do not overlap",
+			left:  connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: "GET", Path: "/widgets"}}, AuthTypes: []string{"oauth"}},
+			right: connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: "GET", Path: "/widgets"}}, AuthTypes: []string{"api_key"}},
+			want:  false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := rateLimitSelectorsOverlap(tt.left, tt.right); got != tt.want {
+				t.Fatalf("rateLimitSelectorsOverlap() = %t, want %t", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestBundleLoadRejectsCredentialLikeRateLimitFragmentKeyVariants(t *testing.T) {
+	keys := []string{
+		"auth_token", "auth-token", "auth.token",
+		"bearer_token", "bearer-token", "bearer.token",
+		"secret_key", "secret-key", "secret.key",
+		"private_key", "private-key", "private.key",
+	}
+	for _, key := range keys {
+		t.Run(key, func(t *testing.T) {
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/rate_limits.json"] = &fstest.MapFile{Data: []byte(strings.Replace(
+				validProviderCitedRateLimits,
+				"https://docs.example.test/rate-limits",
+				"https://docs.example.test/rate-limits#"+key+"=fixture",
+				1,
+			))}
+
+			_, err := Load(fsys, "acme")
+			if err == nil || !strings.Contains(err.Error(), "credential-like fragment") {
+				t.Fatalf("Load error = %v, want credential-like fragment rejection", err)
+			}
+		})
+	}
+}
+
+func TestBundleLoadParsesHonestRateLimitStates(t *testing.T) {
+	tests := []struct {
+		name   string
+		state  string
+		reason string
+	}{
+		{name: "unknown", state: "unknown", reason: "provider does not publish an enforceable limit"},
+		{name: "not applicable", state: "not_applicable", reason: "connector uses no provider HTTP API"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/rate_limits.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{
+				"schema_version": 1,
+				"state": %q,
+				"reason": %q
+			}`, tt.state, tt.reason))}
+
+			b, err := Load(fsys, "acme")
+			if err != nil {
+				t.Fatalf("Load: %v", err)
+			}
+			if b.RateLimits == nil || string(b.RateLimits.State) != tt.state {
+				t.Fatalf("RateLimits state = %#v, want %q", b.RateLimits, tt.state)
+			}
+		})
 	}
 }
 
@@ -713,6 +1150,52 @@ func TestBundleLoadParsesOperations(t *testing.T) {
 	}
 }
 
+func TestBundleLoadAcceptsRuntimeSupportedDirectWriteOutputPolicies(t *testing.T) {
+	for _, tt := range []struct {
+		name   string
+		policy string
+	}{
+		{name: "json complete decoded response", policy: directWritePolicyJSON},
+		{name: "none intentional no body", policy: directWritePolicyNone},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := validateOperationDirectWriteOutputPolicy(tt.policy); err != nil {
+				t.Fatalf("validateOperationDirectWriteOutputPolicy(%q): %v", tt.policy, err)
+			}
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{
+				"operations": [{
+					"id": "acme.widgets.create",
+					"kind": "rest_write",
+					"summary": "Create one widget",
+					"risk": "medium",
+					"approval": "plan, preview, approval, execute",
+					"output_policy": %q,
+					"mutation_class": "create",
+					"rest": {"method": "POST", "path": "/widgets"}
+				}]
+			}`, tt.policy))}
+			fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{
+				"tagline": "Work with Acme from the command line.",
+				"usage": "pm acme <command> [flags]",
+				"commands": [{
+					"path": "widget create",
+					"summary": "Create one widget",
+					"intent": "direct_write",
+					"availability": "implemented",
+					"operation": "acme.widgets.create",
+					"output_policy": %q,
+					"api_surface": [{"method": "POST", "path": "/widgets"}]
+				}]
+			}`, tt.policy))}
+
+			if _, err := Load(fsys, "acme"); err != nil {
+				t.Fatalf("Load runtime-supported direct_write %s policy: %v", tt.policy, err)
+			}
+		})
+	}
+}
+
 func TestBundleLoadRejectsUnsafeOperationKind(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
@@ -828,6 +1311,9 @@ func TestBundleLoadRejectsSecretOperationWithoutPolicy(t *testing.T) {
 	if !strings.Contains(err.Error(), "sensitive_policy") {
 		t.Fatalf("Load error = %q, want sensitive_policy rejection", err.Error())
 	}
+	if strings.Contains(err.Error(), "redact_fields") {
+		t.Fatalf("Load error = %q, must not require redact_fields", err.Error())
+	}
 }
 
 func TestBundleLoadRejectsInlineInputModeForSecretOperation(t *testing.T) {
@@ -844,6 +1330,42 @@ func TestBundleLoadRejectsInlineInputModeForSecretOperation(t *testing.T) {
 	}
 }
 
+func TestValidateSensitivePolicyRejectsUnknownInputModeForSecretOperation(t *testing.T) {
+	err := validateSensitivePolicy(0, OperationSpec{
+		ID:              "acme.secrets.put",
+		SecretSensitive: true,
+		SensitivePolicy: &SensitivePolicySpec{
+			InputMode:    "vault",
+			Transform:    "none",
+			ApprovalMode: "typed_confirmation",
+		},
+	})
+	if err == nil {
+		t.Fatal("validateSensitivePolicy: expected unknown input_mode for a secret operation to be rejected")
+	}
+	if !strings.Contains(err.Error(), "input_mode") || !strings.Contains(err.Error(), "known value") {
+		t.Fatalf("Load error = %q, want input_mode known-value rejection", err.Error())
+	}
+}
+
+func TestValidateSensitivePolicyRejectsUnknownTransformForSecretOperation(t *testing.T) {
+	err := validateSensitivePolicy(0, OperationSpec{
+		ID:              "acme.secrets.put",
+		SecretSensitive: true,
+		SensitivePolicy: &SensitivePolicySpec{
+			InputMode:    "env",
+			Transform:    "provider_specific",
+			ApprovalMode: "typed_confirmation",
+		},
+	})
+	if err == nil {
+		t.Fatal("validateSensitivePolicy: expected unknown transform for a secret operation to be rejected")
+	}
+	if !strings.Contains(err.Error(), "transform") || !strings.Contains(err.Error(), "known value") {
+		t.Fatalf("Load error = %q, want transform known-value rejection", err.Error())
+	}
+}
+
 func TestBundleLoadRejectsSecretOperationWithoutTypedConfirmation(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	policy := `, "sensitive_policy": {"input_mode": "env", "redact_fields": ["value"], "transform": "github_secret_encryption", "approval_mode": "none"}`
@@ -855,6 +1377,48 @@ func TestBundleLoadRejectsSecretOperationWithoutTypedConfirmation(t *testing.T) 
 	}
 	if !strings.Contains(err.Error(), "typed_confirmation") {
 		t.Fatalf("Load error = %q, want typed_confirmation rejection", err.Error())
+	}
+}
+
+func TestBundleLoadAcceptsSecretOperationWithoutRedactFields(t *testing.T) {
+	tests := []struct {
+		name      string
+		operation string
+	}{
+		{
+			name: "secret_sensitive",
+			operation: strings.Replace(
+				secretWriteOp,
+				`"mutation_class": "secret"`,
+				`"mutation_class": "update"`,
+				1,
+			),
+		},
+		{
+			name: "secret mutation class",
+			operation: strings.Replace(
+				secretWriteOp,
+				`"secret_sensitive": true`,
+				`"secret_sensitive": false`,
+				1,
+			),
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fsys := fullValidBundleFS("acme")
+			policy := `, "sensitive_policy": {"input_mode": "env", "transform": "none", "approval_mode": "typed_confirmation"}`
+			fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{"operations":[%s]}`, fmt.Sprintf(tt.operation, policy)))}
+
+			bundle, err := Load(fsys, "acme")
+			if err != nil {
+				t.Fatalf("Load() error = %v", err)
+			}
+			if got := bundle.Operations[0].SensitivePolicy.RedactFields; len(got) != 0 {
+				t.Fatalf("redact_fields = %v, want no forced fields", got)
+			}
+		})
 	}
 }
 
@@ -1268,9 +1832,9 @@ func TestBundleLoadAllDefsFS(t *testing.T) {
 	}
 }
 
-// TestBundleLoadFromOnDiskTestdata exercises the loader against a real
-// os.DirFS-backed fixture bundle (testdata/bundles/widget-demo), rather than
-// only the in-memory fstest.MapFS cases above.
+// TestBundleLoadFromOnDiskTestdata exercises the loader against real
+// os.DirFS-backed fixture bundles, rather than only the in-memory fstest.MapFS
+// cases above.
 func TestBundleLoadFromOnDiskTestdata(t *testing.T) {
 	fsys := os.DirFS("testdata/bundles")
 
@@ -1292,8 +1856,15 @@ func TestBundleLoadFromOnDiskTestdata(t *testing.T) {
 	if err != nil {
 		t.Fatalf("LoadAll(testdata/bundles): %v", err)
 	}
-	if len(bundles) != 1 {
-		t.Fatalf("LoadAll(testdata/bundles) returned %d bundles, want 1", len(bundles))
+	if len(bundles) != 2 {
+		t.Fatalf("LoadAll(testdata/bundles) returned %d bundles, want 2", len(bundles))
+	}
+	byName := make(map[string]Bundle, len(bundles))
+	for _, bundle := range bundles {
+		byName[bundle.Name] = bundle
+	}
+	if byName["polling-watermark-demo"].Changefeed == nil {
+		t.Fatalf("LoadAll(testdata/bundles) omitted polling-watermark-demo changefeed: %+v", byName)
 	}
 }
 
@@ -1845,6 +2416,211 @@ func TestBundleLoadAPISurfaceOperationLedger(t *testing.T) {
 	}
 	if !op.BlockedByDefault {
 		t.Fatalf("BlockedByDefault = false, want true")
+	}
+}
+
+// TestBundleLoadAPISurfaceV2ProvenanceContract is the #3785 red/green
+// contract: a v2 ledger carries an artifact table and endpoint-local
+// provenance without changing the endpoint's covered_by classifier.
+func TestBundleLoadAPISurfaceV2ProvenanceContract(t *testing.T) {
+	const validV2 = `{
+		"api": "test API v2",
+		"operation_ledger_version": 2,
+		"artifacts": [
+			{
+				"id": "acme-openapi-2026-08-06",
+				"url": "https://docs.acme.test/openapi.yaml",
+				"retrieved_at": "2026-08-06",
+				"sha256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+			}
+		],
+		"endpoints": [
+			{
+				"method": "GET",
+				"path": "/widgets",
+				"provenance": {
+					"artifact": "acme-openapi-2026-08-06",
+					"source_url": "https://docs.acme.test/api/widgets"
+				},
+				"covered_by": { "stream": "widgets" }
+			}
+		]
+	}`
+	const validV1 = `{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{
+				"method": "GET",
+				"path": "/widgets",
+				"covered_by": { "stream": "widgets" }
+			}
+		]
+	}`
+
+	tests := []struct {
+		name              string
+		apiSurface        string
+		wantLedgerVersion int
+		wantErrKey        string
+	}{
+		{name: "complete_v2", apiSurface: validV2, wantLedgerVersion: 2},
+		{name: "v1_ledger_compatibility", apiSurface: validV1, wantLedgerVersion: 1},
+		{
+			name:       "unknown_root_key",
+			apiSurface: strings.Replace(validV2, `"artifacts": [`, `"surprise": true, "artifacts": [`, 1),
+			wantErrKey: "surprise",
+		},
+		{
+			name:       "unknown_artifact_key",
+			apiSurface: strings.Replace(validV2, `"sha256":`, `"unexpected": true, "sha256":`, 1),
+			wantErrKey: "unexpected",
+		},
+		{
+			name:       "unknown_endpoint_key",
+			apiSurface: strings.Replace(validV2, `"covered_by": { "stream": "widgets" }`, `"covered_by": { "stream": "widgets" }, "unexpected_endpoint": true`, 1),
+			wantErrKey: "unexpected_endpoint",
+		},
+		{
+			name:       "provenance_cannot_be_a_classifier",
+			apiSurface: strings.Replace(validV2, `"source_url": "https://docs.acme.test/api/widgets"`, `"source_url": "https://docs.acme.test/api/widgets", "covered_by": { "stream": "widgets" }`, 1),
+			wantErrKey: "covered_by",
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/api_surface.json"] = &fstest.MapFile{Data: []byte(tc.apiSurface)}
+
+			bundle, err := Load(fsys, "acme")
+			if tc.wantErrKey == "" {
+				if err != nil {
+					t.Fatalf("Load complete v2 api_surface: %v", err)
+				}
+				if bundle.Surface == nil || bundle.Surface.OperationLedgerVersion != tc.wantLedgerVersion {
+					t.Fatalf("Surface = %+v, want loaded operation_ledger_version %d", bundle.Surface, tc.wantLedgerVersion)
+				}
+				if tc.wantLedgerVersion == 1 {
+					if len(bundle.Surface.Artifacts) != 0 || bundle.Surface.Endpoints[0].Provenance != nil {
+						t.Fatalf("v1 Surface = %+v, want no v2 provenance data", bundle.Surface)
+					}
+					return
+				}
+				if got := bundle.Surface.Artifacts; len(got) != 1 || got[0].ID != "acme-openapi-2026-08-06" || got[0].RetrievedAt != "2026-08-06" {
+					t.Fatalf("Surface.Artifacts = %+v, want loaded provider artifact", got)
+				}
+				if got := bundle.Surface.Endpoints[0].Provenance; got == nil || got.Artifact != "acme-openapi-2026-08-06" || got.SourceURL != "https://docs.acme.test/api/widgets" {
+					t.Fatalf("Surface.Endpoints[0].Provenance = %+v, want loaded endpoint citation", got)
+				}
+				return
+			}
+			if err == nil {
+				t.Fatalf("Load error = nil, want unknown key %q to be rejected", tc.wantErrKey)
+			}
+			if !strings.Contains(err.Error(), tc.wantErrKey) {
+				t.Fatalf("Load error = %q, want it to name unknown key %q", err.Error(), tc.wantErrKey)
+			}
+		})
+	}
+}
+
+func TestParseAPISurfaceEnforcesLedgerSchema(t *testing.T) {
+	tests := []struct {
+		name        string
+		raw         string
+		wantVersion int
+		wantErr     bool
+	}{
+		{
+			name: "pre_ledger_remains_valid",
+			raw: `{
+				"api": "test API",
+				"endpoints": []
+			}`,
+		},
+		{
+			name: "v1_remains_valid",
+			raw: `{
+				"api": "test API",
+				"operation_ledger_version": 1,
+				"endpoints": []
+			}`,
+			wantVersion: 1,
+		},
+		{
+			name: "v2_is_valid",
+			raw: `{
+				"api": "test API",
+				"operation_ledger_version": 2,
+				"endpoints": []
+			}`,
+			wantVersion: 2,
+		},
+		{
+			name: "zero_is_rejected",
+			raw: `{
+				"api": "test API",
+				"operation_ledger_version": 0,
+				"endpoints": []
+			}`,
+			wantErr: true,
+		},
+		{
+			name: "null_is_rejected",
+			raw: `{
+				"api": "test API",
+				"operation_ledger_version": null,
+				"endpoints": []
+			}`,
+			wantErr: true,
+		},
+		{
+			name: "unsupported_version_is_rejected",
+			raw: `{
+				"api": "test API",
+				"operation_ledger_version": 3,
+				"endpoints": []
+			}`,
+			wantErr: true,
+		},
+		{
+			name: "noncanonical_version_key_is_rejected",
+			raw: `{
+				"api": "test API",
+				"Operation_Ledger_Version": 1,
+				"endpoints": []
+			}`,
+			wantErr: true,
+		},
+		{
+			name:    "trailing_json_value_is_rejected",
+			raw:     `{"api":"test API","endpoints":[]}{}`,
+			wantErr: true,
+		},
+		{
+			name:    "trailing_junk_is_rejected",
+			raw:     `{"api":"test API","endpoints":[]} junk`,
+			wantErr: true,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			surface, err := ParseAPISurface([]byte(tc.raw))
+			if tc.wantErr {
+				if err == nil {
+					t.Fatal("ParseAPISurface error = nil, want schema rejection")
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("ParseAPISurface: %v", err)
+			}
+			if surface.OperationLedgerVersion != tc.wantVersion {
+				t.Fatalf("OperationLedgerVersion = %d, want %d", surface.OperationLedgerVersion, tc.wantVersion)
+			}
+		})
 	}
 }
 

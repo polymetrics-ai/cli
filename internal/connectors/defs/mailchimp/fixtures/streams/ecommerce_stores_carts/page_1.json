@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/ecommerce/stores/synthetic-conformance-value/carts",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "carts": [
+        {
+          "id": "fixture_id",
+          "store_id": "fixture_store_id",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "customer": {},
+          "campaign_id": "fixture_campaign_id",
+          "checkout_url": "https://example.invalid/mailchimp-fixture",
+          "currency_code": "fixture_currency_code",
+          "order_total": 1
+        }
+      ]
+    }
+  }
+}

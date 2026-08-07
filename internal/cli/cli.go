@@ -19,6 +19,7 @@ import (
 	"polymetrics.ai/internal/perf"
 	"polymetrics.ai/internal/runtimecheck"
 	"polymetrics.ai/internal/safety"
+	"polymetrics.ai/internal/warehouse"
 )
 
 type envelope map[string]any
@@ -194,6 +195,9 @@ func runConnectors(ctx context.Context, root string, args []string, stdout io.Wr
 	}
 	switch args[0] {
 	case "certify":
+		if len(args) == 2 && isHelpArg(args[1]) {
+			return writeManual("connectors", stdout, jsonOut)
+		}
 		return runCertify(ctx, root, args[1:], stdout, jsonOut)
 	case "list":
 		flags := parseFlags(args[1:])
@@ -243,7 +247,11 @@ func runConnectors(ctx context.Context, root string, args []string, stdout io.Wr
 		}
 		if c, ok := registry.Get(args[1]); ok {
 			if jsonOut {
-				return writeJSON(stdout, envelope{"kind": "Connector", "connector": connectors.MetadataWithIcon(c.Metadata()), "manifest": connectors.ManifestOf(c)})
+				response := envelope{"kind": "Connector", "connector": connectors.MetadataOf(c), "manifest": connectors.ManifestOf(c)}
+				if def, ok := connectors.DefinitionOf(c); ok && def.Changefeed != nil {
+					response["changefeed"] = def.Changefeed
+				}
+				return writeJSON(stdout, response)
 			}
 			_, _ = fmt.Fprint(stdout, connectors.RenderConnectorManual(c))
 			return nil
@@ -271,7 +279,7 @@ func connectorCatalogEntries(registry *connectors.Registry, flags parsedFlags) (
 		if stage != "" && def.ReleaseStage != stage {
 			continue
 		}
-		if !definitionHasCapability(registry, def, capability) {
+		if !definitionHasCapability(def, capability) {
 			continue
 		}
 		out = append(out, def)
@@ -279,7 +287,7 @@ func connectorCatalogEntries(registry *connectors.Registry, flags parsedFlags) (
 	return out, nil
 }
 
-func definitionHasCapability(registry *connectors.Registry, def connectors.Definition, capability string) bool {
+func definitionHasCapability(def connectors.Definition, capability string) bool {
 	switch capability {
 	case "":
 		return true
@@ -290,12 +298,7 @@ func definitionHasCapability(registry *connectors.Registry, def connectors.Defin
 	case "query":
 		return def.Capabilities.Query
 	case "cdc":
-		connector, ok := registry.Get(def.Name)
-		if !ok {
-			return false
-		}
-		_, ok = connector.(connectors.CDCReader)
-		return ok
+		return def.Capabilities.CDC
 	default:
 		return false
 	}
@@ -311,6 +314,15 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 			return errUsage
 		}
 		flags := parseFlags(args[2:])
+		if flags.isBare("provider-family") {
+			return usageErrorf("missing value for --provider-family")
+		}
+		if flags.isBare("auth-profile") {
+			return usageErrorf("missing value for --auth-profile")
+		}
+		if flags.isBare("link-credential") || flags.hasBlankValue("link-credential") {
+			return usageErrorf("--link-credential requires a credential identifier")
+		}
 		connector := flags.first("connector")
 		if connector == "" {
 			return errors.New("missing --connector")
@@ -350,18 +362,48 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 			return err
 		}
 		cred, err := a.AddCredential(ctx, app.AddCredentialRequest{
-			Name:      args[1],
-			Connector: connector,
-			Config:    config,
-			Secrets:   secrets,
+			Name:           args[1],
+			Connector:      connector,
+			Config:         config,
+			Secrets:        secrets,
+			ProviderFamily: flags.first("provider-family"),
+			AuthProfile:    flags.first("auth-profile"),
+			LinkCredential: flags.first("link-credential"),
 		})
 		if err != nil {
-			return err
+			return credentialCoordinationInputError(err)
 		}
 		if jsonOut {
 			return writeJSON(stdout, envelope{"kind": "Credential", "credential": cred})
 		}
 		_, _ = fmt.Fprintf(stdout, "Saved credential %s for connector %s\n", cred.Name, cred.Connector)
+		return nil
+	case "link":
+		if len(args) < 2 {
+			return errUsage
+		}
+		if err := safety.ValidateIdentifier(args[1], "credential"); err != nil {
+			return validationErrorf("%v", err)
+		}
+		flags := parseFlags(args[2:])
+		if flags.isBare("to") {
+			return usageErrorf("--to requires a credential identifier")
+		}
+		target := flags.first("to")
+		if target == "" {
+			return usageErrorf("missing --to")
+		}
+		if err := safety.ValidateIdentifier(target, "credential"); err != nil {
+			return validationErrorf("%v", err)
+		}
+		cred, err := a.LinkCredential(args[1], target)
+		if err != nil {
+			return credentialCoordinationInputError(err)
+		}
+		if jsonOut {
+			return writeJSON(stdout, envelope{"kind": "Credential", "credential": cred})
+		}
+		_, _ = fmt.Fprintf(stdout, "Linked credential %s to compatible credential %s\n", cred.Name, target)
 		return nil
 	case "list":
 		creds := a.ListCredentials()
@@ -411,6 +453,18 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 	default:
 		return errUsage
 	}
+}
+
+func credentialCoordinationInputError(err error) error {
+	var declarationErr *app.CredentialCoordinationDeclarationError
+	if errors.As(err, &declarationErr) {
+		return validationErrorf("%v", err)
+	}
+	var linkErr *app.CredentialLinkValidationError
+	if errors.As(err, &linkErr) {
+		return validationErrorf("%v", err)
+	}
+	return err
 }
 
 func runConnections(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
@@ -504,10 +558,27 @@ func runCatalog(ctx context.Context, a *app.App, args []string, stdout io.Writer
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "Catalog", "catalog": snapshot})
 	}
+	if message := catalogStatusMessage(snapshot.Catalog.Discovery); message != "" {
+		_, _ = fmt.Fprintln(stdout, message)
+	}
 	for _, stream := range snapshot.Catalog.Streams {
 		_, _ = fmt.Fprintf(stdout, "%s\t%s\n", stream.Name, stream.Description)
 	}
 	return nil
+}
+
+func catalogStatusMessage(status *connectors.DiscoveryStatus) string {
+	if status == nil {
+		return ""
+	}
+	switch {
+	case status.Stale:
+		return "catalog status: stale; run pm catalog refresh --connection <name> before using this schema"
+	case !status.Complete:
+		return "catalog status: partial; refresh after the provider issue is resolved before relying on this schema"
+	default:
+		return "catalog status: current"
+	}
 }
 
 func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool, cfg config.Config) error {
@@ -1368,8 +1439,17 @@ func runQuery(ctx context.Context, a *app.App, args []string, stdout io.Writer, 
 	var rows []connectors.Record
 	if sql := flags.first("sql"); sql != "" {
 		rows, err = a.QuerySQL(ctx, sql, limit)
+		// --connection scopes --table reads only; the SQL path names its table
+		// inside the query, so point at the surface that can resolve it rather
+		// than at a flag that would be ignored here.
+		err = warehouse.WithAmbiguityRemedy(err, "read it with `pm query run --table <table> --connection <name>`")
 	} else {
-		rows, err = a.QueryTable(ctx, app.QueryTableRequest{Table: flags.first("table"), Limit: limit})
+		rows, err = a.QueryTable(ctx, app.QueryTableRequest{
+			Table:      flags.first("table"),
+			Connection: flags.first("connection"),
+			Limit:      limit,
+		})
+		err = warehouse.WithAmbiguityRemedy(err, "pass --connection to choose one")
 	}
 	if err != nil {
 		return err
@@ -1467,6 +1547,7 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 		plan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
 			Name:                  args[1],
 			SourceTable:           flags.first("source-table"),
+			SourceConnection:      flags.first("connection"),
 			DestinationConnector:  dest.Connector,
 			DestinationCredential: dest.Credential,
 			DestinationConfig:     dest.Config,

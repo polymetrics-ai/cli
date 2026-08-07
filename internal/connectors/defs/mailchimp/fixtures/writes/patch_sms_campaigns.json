@@ -1,0 +1,23 @@
+{
+  "record": {
+    "sms_campaign_id": "fixture_sms_campaign_id",
+    "name": "fixture_name",
+    "folder_id": "fixture_folder_id",
+    "segments": []
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/sms-campaigns/fixture_sms_campaign_id",
+    "body": {
+      "name": "fixture_name",
+      "folder_id": "fixture_folder_id",
+      "segments": []
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_patch_sms_campaigns"
+    }
+  }
+}

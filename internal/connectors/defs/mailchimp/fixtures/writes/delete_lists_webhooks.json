@@ -1,0 +1,16 @@
+{
+  "record": {
+    "list_id": "fixture_list_id",
+    "webhook_id": "fixture_webhook_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/lists/fixture_list_id/webhooks/fixture_webhook_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_delete_lists_webhooks"
+    }
+  }
+}

@@ -34,6 +34,7 @@ type CommandSurfaceFlag struct {
 	MapsTo     string
 	Format     string
 	AllowEmpty *bool
+	Minimum    *float64
 	Required   bool
 	// MaxItems/MinItems bound a string_array flag's item count. This is a second,
 	// independent bound alongside the body schema's maxItems: the schema bound
@@ -69,10 +70,13 @@ type CommandSurfaceCommand struct {
 	Examples      []string
 	APISurface    []CommandSurfaceEndpointRef
 	OutputPolicy  string
-	RedactFields  []string
-	Risk          string
-	Approval      string
-	Notes         string
+	// RedactFields is retained for bundle compatibility. Commandrunner does not
+	// use it to mutate connector-command records or errors, or forward it to
+	// executor requests.
+	RedactFields []string
+	Risk         string
+	Approval     string
+	Notes        string
 }
 
 type CommandSurfaceEndpointRef struct {

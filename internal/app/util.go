@@ -229,22 +229,55 @@ func approvedPayloadSHA256(identities []PayloadIdentity) map[string]string {
 }
 
 func payloadIdentitiesForRecords(projectDir string, records []connectors.Record) ([]PayloadIdentity, error) {
-	var identities []PayloadIdentity
-	for i, record := range records {
-		keys := make([]string, 0, len(record))
+	fields := make(map[string]struct{})
+	for _, record := range records {
 		for key := range record {
-			keys = append(keys, key)
+			if isPayloadPathField(key) {
+				fields[key] = struct{}{}
+			}
 		}
-		sort.Strings(keys)
-		for _, key := range keys {
-			if !isPayloadPathField(key) {
+	}
+	return payloadIdentitiesForDeclaredFields(projectDir, records, fieldSetSlice(fields))
+}
+
+// payloadIdentitiesForConnectorCommand uses the connector's closed operation
+// metadata for multipart source fields. Older non-multipart direct writes keep
+// their established file_path discovery behavior.
+func payloadIdentitiesForConnectorCommand(projectDir string, connector connectors.Connector, operation string, record connectors.Record) ([]PayloadIdentity, error) {
+	if strings.TrimSpace(operation) == "" {
+		return payloadIdentitiesForRecords(projectDir, []connectors.Record{record})
+	}
+	provider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
+	if !ok {
+		return nil, fmt.Errorf("connector %q does not expose direct-write metadata", connector.Name())
+	}
+	metadata, err := provider.OperationDirectWriteMetadata(operation)
+	if err != nil {
+		return nil, err
+	}
+	if metadata.Operation != operation {
+		return nil, fmt.Errorf("connector %q direct-write metadata did not match operation %q", connector.Name(), operation)
+	}
+	if metadata.PayloadFileFields != nil {
+		return payloadIdentitiesForDeclaredFields(projectDir, []connectors.Record{record}, metadata.PayloadFileFields)
+	}
+	return payloadIdentitiesForRecords(projectDir, []connectors.Record{record})
+}
+
+// payloadIdentitiesForDeclaredFields captures only declaration-owned file
+// paths. It never guesses from arbitrary user fields, so multipart support
+// cannot broaden the accepted local-file input surface.
+func payloadIdentitiesForDeclaredFields(projectDir string, records []connectors.Record, declaredFields []string) ([]PayloadIdentity, error) {
+	var identities []PayloadIdentity
+	fields := fieldSetSlice(stringSliceSet(declaredFields))
+	for i, record := range records {
+		for _, field := range fields {
+			value, present := recordPathValue(record, field)
+			raw, ok := value.(string)
+			if !present || !ok || strings.TrimSpace(raw) == "" {
 				continue
 			}
-			raw, ok := record[key].(string)
-			if !ok || strings.TrimSpace(raw) == "" {
-				continue
-			}
-			identity, err := payloadIdentityForPath(projectDir, i, key, raw)
+			identity, err := payloadIdentityForPath(projectDir, i, field, raw)
 			if err != nil {
 				return nil, err
 			}
@@ -252,6 +285,49 @@ func payloadIdentitiesForRecords(projectDir string, records []connectors.Record)
 		}
 	}
 	return identities, nil
+}
+
+func stringSliceSet(values []string) map[string]struct{} {
+	set := make(map[string]struct{}, len(values))
+	for _, value := range values {
+		if value = strings.TrimSpace(value); value != "" {
+			set[value] = struct{}{}
+		}
+	}
+	return set
+}
+
+func fieldSetSlice(fields map[string]struct{}) []string {
+	keys := make([]string, 0, len(fields))
+	for field := range fields {
+		keys = append(keys, field)
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+func recordPathValue(record connectors.Record, field string) (any, bool) {
+	var current any = map[string]any(record)
+	for _, segment := range strings.Split(field, ".") {
+		if strings.TrimSpace(segment) == "" {
+			return nil, false
+		}
+		var values map[string]any
+		switch typed := current.(type) {
+		case map[string]any:
+			values = typed
+		case connectors.Record:
+			values = map[string]any(typed)
+		default:
+			return nil, false
+		}
+		value, ok := values[segment]
+		if !ok {
+			return nil, false
+		}
+		current = value
+	}
+	return current, true
 }
 
 func isPayloadPathField(name string) bool {
@@ -283,7 +359,7 @@ func digestPayloadFile(path string) (string, os.FileInfo, error) {
 	if err != nil {
 		return "", nil, err
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	before, err := file.Stat()
 	if err != nil {

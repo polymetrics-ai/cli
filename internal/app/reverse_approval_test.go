@@ -10,6 +10,7 @@ import (
 
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/warehouse"
 )
 
 func TestRunReverseETLRejectsApprovalTokenReplay(t *testing.T) {
@@ -100,10 +101,17 @@ func setupApprovedReversePlan(t *testing.T, ctx context.Context) (*app.App, app.
 	return a, plan
 }
 
+// writeWarehouseRows rewrites the table a reader would actually read. Tables
+// are materialized inside their owning connection's directory, so the file is
+// resolved rather than assumed to sit at the warehouse root.
 func writeWarehouseRows(t *testing.T, a *app.App, table string, rows []connectors.Record) error {
 	t.Helper()
-	path := filepath.Join(a.ProjectDir(), "warehouse", table+".jsonl")
-	file, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o600)
+	root := filepath.Join(a.ProjectDir(), "warehouse")
+	located, err := warehouse.FindTable(root, table, "")
+	if err != nil {
+		return err
+	}
+	file, err := os.OpenFile(located.Path, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o600)
 	if err != nil {
 		return err
 	}

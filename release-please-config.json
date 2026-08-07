@@ -9,6 +9,7 @@
     ".": {
       "package-name": "pm",
       "changelog-path": "CHANGELOG.md",
+      "bump-minor-pre-major": true,
       "exclude-paths": [
         "website"
       ]

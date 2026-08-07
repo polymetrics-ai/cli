@@ -86,6 +86,23 @@ func (c *Connector) CommandSurface() *connectors.CommandSurface {
 	return synthesizeCommandSurface(c.bundle)
 }
 
+// HasConfigurationConstraints reports whether this bundle declares
+// configuration-time constraints. It is intentionally separate from the
+// connector's optional interface presence so callers can distinguish a
+// constraint-free bundle from one whose constraints can be evaluated.
+func (c *Connector) HasConfigurationConstraints() bool {
+	return c.bundle.Spec != nil && c.bundle.Spec.HasConfigurationConstraints()
+}
+
+// ValidateConfiguration validates supplied credential configuration against
+// this bundle's declared configuration constraints.
+func (c *Connector) ValidateConfiguration(config map[string]string) error {
+	if c.bundle.Spec == nil {
+		return nil
+	}
+	return c.bundle.Spec.ValidateConfiguration(config)
+}
+
 func (c *Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) error {
 	return Check(ctx, c.bundle, cfg, c.hooks)
 }
@@ -114,6 +131,13 @@ func (c *Connector) DirectRead(ctx context.Context, req connectors.DirectReadReq
 
 func (c *Connector) OperationDirectRead(ctx context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
 	return OperationDirectRead(ctx, c.bundle, req, c.hooks)
+}
+
+// PreflightOperationDirectRead proves a command's declared binding can reach
+// this connector's bounded direct-read executor without resolving credentials
+// or making a network request.
+func (c *Connector) PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error {
+	return PreflightOperationDirectRead(c.bundle, operation, method, path, maxBytes, outputPolicy)
 }
 
 func (c *Connector) PreviewOperationDirectWrite(ctx context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
@@ -201,11 +225,11 @@ func (c *Connector) DryRunWrite(ctx context.Context, req connectors.WriteRequest
 }
 
 // Base is embedded by Tier-3 native connectors (design §B.7 Tier 3, e.g.
-// native/postgres) to serve identity/metadata/definition from their bundle
-// without duplicating the synthesis logic Connector already has. Tier-3
-// connectors are NOT declaratively read/written by the engine — they
-// implement Check/Catalog/Read/Write themselves and embed Base purely for
-// Name/Metadata/Definition.
+// native/postgres) to serve identity/metadata/definition and operation
+// direct-read preflight from their bundle without duplicating the synthesis
+// logic Connector already has. Tier-3 connectors are NOT declaratively
+// read/written by the engine — they implement Check/Catalog/Read/Write
+// themselves.
 type Base struct {
 	bundle Bundle
 }
@@ -221,12 +245,51 @@ func (b Base) Metadata() connectors.Metadata {
 	return synthesizeMetadata(b.bundle)
 }
 
+// BundleManifest gives a Tier-3 native the bundle's configuration, risk, and
+// static-stream projection when that native elects to expose a Manifest.
+// This stays explicitly named so adding a helper to Base cannot silently
+// change every existing Tier-3 connector's public manifest projection.
+func (b Base) BundleManifest() connectors.Manifest {
+	return synthesizeManifest(b.bundle)
+}
+
 func (b Base) Definition() connectors.Definition {
 	return synthesizeDefinition(b.bundle)
 }
 
 func (b Base) CommandSurface() *connectors.CommandSurface {
 	return synthesizeCommandSurface(b.bundle)
+}
+
+// PreflightOperationDirectRead validates a native connector's declared
+// operation direct-read binding without resolving credentials or network I/O.
+func (b Base) PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error {
+	return PreflightOperationDirectRead(b.bundle, operation, method, path, maxBytes, outputPolicy)
+}
+
+// OperationDirectReadMaxBytes returns the bounded response limit for a
+// declared operation direct read.
+func (b Base) OperationDirectReadMaxBytes(operation string, requested int) (int, error) {
+	op, err := operationDirectReadSpec(b.bundle, operation)
+	if err != nil {
+		return 0, err
+	}
+	return clampOperationDirectReadMaxBytes(requested, op.REST.MaxBytes), nil
+}
+
+// HasConfigurationConstraints exposes bundle-declared configuration
+// constraints to Tier-3 native connectors that embed Base.
+func (b Base) HasConfigurationConstraints() bool {
+	return b.bundle.Spec != nil && b.bundle.Spec.HasConfigurationConstraints()
+}
+
+// ValidateConfiguration validates supplied credential configuration against
+// the embedded bundle's declared configuration constraints.
+func (b Base) ValidateConfiguration(config map[string]string) error {
+	if b.bundle.Spec == nil {
+		return nil
+	}
+	return b.bundle.Spec.ValidateConfiguration(config)
 }
 
 // synthesizeMetadata is the single source of truth for bundle -> Metadata,
@@ -390,6 +453,11 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 		})
 	}
 
+	var changefeed *connectors.ChangefeedDescriptor
+	if b.Changefeed != nil {
+		changefeed = b.Changefeed.Clone()
+	}
+
 	return connectors.Definition{
 		Name:            b.Metadata.Name,
 		DisplayName:     b.Metadata.DisplayName,
@@ -398,6 +466,7 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 		DocsURL:         b.Metadata.DocsURL,
 		ReleaseStage:    b.Metadata.ReleaseStage,
 		Capabilities:    synthesizeMetadata(b).Capabilities,
+		Changefeed:      changefeed,
 		Spec:            specJSON(b),
 		Streams:         streamSummaries,
 		WriteActions:    writeActions,
@@ -492,6 +561,7 @@ func commandSurfaceFlag(flag CLIFlag) connectors.CommandSurfaceFlag {
 		MapsTo:     flag.MapsTo,
 		Format:     flag.Format,
 		AllowEmpty: cloneBoolPtr(flag.AllowEmpty),
+		Minimum:    cloneFloat64Ptr(flag.Minimum),
 		Required:   flag.Required,
 		MaxItems:   flag.MaxItems,
 		MinItems:   flag.MinItems,
@@ -516,6 +586,14 @@ func commandSurfaceConstraints(constraints []CLIConstraint) []connectors.Command
 }
 
 func cloneBoolPtr(value *bool) *bool {
+	if value == nil {
+		return nil
+	}
+	out := *value
+	return &out
+}
+
+func cloneFloat64Ptr(value *float64) *float64 {
 	if value == nil {
 		return nil
 	}
@@ -560,17 +638,23 @@ func specJSON(b Bundle) []byte {
 	return raw
 }
 
-// legacyStreamOf builds the legacy connectors.Stream shape for one
-// StreamSpec, reusing its compiled schema for PrimaryKey/CursorFields. Field
-// types are not derivable from the compiled schema (Schema only exposes
-// property names, not per-property JSON types), so Fields carries names only
-// (Type left as the zero value) — no wave0 consumer inspects Field.Type.
+// legacyStreamOf builds the shared connectors.Stream shape for one StreamSpec.
+// Bundle loading retains the original schema specifically so static catalogs
+// use the same projection as provider-discovered schemas.
 func legacyStreamOf(b Bundle, s StreamSpec) connectors.Stream {
 	sch := b.Schemas[s.Name]
 	stream := connectors.Stream{Name: s.Name}
 	if sch == nil {
 		return stream
 	}
+	if len(sch.Raw) > 0 {
+		projected, err := connectors.StreamFromSchema(s.Name, "", sch.Raw)
+		if err == nil {
+			return projected
+		}
+	}
+	// Hand-assembled test bundles predating raw-schema retention still need a
+	// useful catalog projection. Loaded bundles always take the path above.
 	stream.PrimaryKey = sch.PrimaryKey
 	if sch.CursorField != "" {
 		stream.CursorFields = []string{sch.CursorField}

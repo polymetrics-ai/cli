@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"math/rand/v2"
 	"mime"
 	"mime/multipart"
 	"net/http"
@@ -17,7 +18,6 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
-	"strconv"
 	"strings"
 	"time"
 
@@ -28,6 +28,7 @@ import (
 // maxErrorBody bounds how much of an error response body is captured in HTTPError.
 const maxErrorBody = 8 << 10 // 8 KiB
 const defaultMaxResponseBody = 64 << 20
+const maxRedirects = 10
 
 // Response is a captured HTTP response with its body already read.
 type Response struct {
@@ -149,10 +150,11 @@ type Requester struct {
 
 	// MaxRetries is the number of additional attempts after the first (default 4).
 	MaxRetries int
-	// DisableRetries prevents every automatic replay, including transient-status,
-	// transport-error, and 401 reauthentication retries. The first attempt still
-	// runs. The strict rest_write executor sets this explicitly; ordinary reads
-	// retain the default policy.
+	// DisableRetries disables Requester-managed transient-status, transport-error,
+	// and 401 reauthentication retries. Strict non-idempotent writes set it. With
+	// the standard net/http transport, those writes use a one-use HTTP/1
+	// connection so the transport cannot replay them after a reused-connection
+	// failure. Safe replayable reads can still be replayed inside net/http.
 	DisableRetries bool
 	// BaseBackoff and MaxBackoff bound exponential backoff (defaults 500ms / 30s).
 	BaseBackoff time.Duration
@@ -162,6 +164,28 @@ type Requester struct {
 	RetryStatuses map[int]bool
 	// Sleep waits for d or until ctx is cancelled. Injectable for tests.
 	Sleep func(ctx context.Context, d time.Duration) error
+	// Now supplies the clock used to interpret provider reset headers.
+	// Injectable tests can therefore prove the exact reset timestamp.
+	Now func() time.Time
+	// Jitter supplies full jitter for fallback exponential retries. It is never
+	// called for a valid provider Retry-After reset. Returned values are clamped
+	// to the fallback cap so an implementation cannot lengthen a retry.
+	Jitter func(cap time.Duration) time.Duration
+	// Admission runs immediately before each logical Requester send and permitted
+	// redirect hop. It must honor the request context; an error prevents that
+	// attempt from reaching the provider. A safe replayable read can be replayed
+	// inside net/http without another admission. The engine attaches a
+	// declaration-aware implementation where a policy matches.
+	Admission RateLimitAdmission
+	// Observer receives parsed response rate-limit facts synchronously. It is
+	// deliberately not an output hook; #3755 owns operator-visible events.
+	Observer RateLimitObserver
+	// RateLimitCostHeader is the one provider header named by the selected
+	// declaration that reports a request's actual point cost. It is an HTTP
+	// field name validated by the bundle loader, never a caller-provided value.
+	// The parsed scalar is delivered through RateLimitObservation; raw headers
+	// are never retained.
+	RateLimitCostHeader string
 }
 
 func (r *Requester) client() *http.Client {
@@ -173,6 +197,45 @@ func (r *Requester) client() *http.Client {
 
 func (r *Requester) clientFor(ctx context.Context) *http.Client {
 	return transportpolicy.HTTPClient(ctx, r.client())
+}
+
+func isSafeReplayableRead(method string) bool {
+	switch strings.ToUpper(strings.TrimSpace(method)) {
+	case http.MethodGet, http.MethodHead, http.MethodOptions, http.MethodTrace:
+		return true
+	default:
+		return false
+	}
+}
+
+func noReplayClient(client *http.Client) *http.Client {
+	clone := *client
+	clone.CheckRedirect = func(*http.Request, []*http.Request) error {
+		return transportpolicy.ErrRedirectRefused
+	}
+	transport, ok := client.Transport.(*http.Transport)
+	if client.Transport == nil {
+		transport, ok = http.DefaultTransport.(*http.Transport)
+	}
+	if !ok {
+		return &clone
+	}
+	strictTransport := transport.Clone()
+	strictTransport.DisableKeepAlives = true
+	protocols := http.Protocols{}
+	protocols.SetHTTP1(true)
+	strictTransport.Protocols = &protocols
+	clone.Transport = strictTransport
+	return &clone
+}
+
+func disableTransportReplay(req *http.Request, strictWrite bool) {
+	req.GetBody = nil
+	req.Header.Del("Idempotency-Key")
+	req.Header.Del("X-Idempotency-Key")
+	if strictWrite {
+		req.Close = true
+	}
 }
 
 func (r *Requester) maxRetries() int {
@@ -220,6 +283,73 @@ func (r *Requester) sleep(ctx context.Context, d time.Duration) error {
 		return r.Sleep(ctx, d)
 	}
 	return ctxSleep(ctx, d)
+}
+
+func (r *Requester) now() time.Time {
+	if r.Now != nil {
+		return r.Now()
+	}
+	return time.Now()
+}
+
+func (r *Requester) admit(ctx context.Context, method string, attempt int) error {
+	if r.Admission == nil {
+		return nil
+	}
+	return r.Admission.Admit(ctx, RateLimitRequest{Method: method, Attempt: attempt})
+}
+
+func (r *Requester) observeRateLimit(ctx context.Context, status int, header http.Header, attempt int) RateLimitObservation {
+	observation, ok := rateLimitObservation(status, header, attempt, r.now(), r.RateLimitCostHeader)
+	if ok && r.Observer != nil {
+		r.Observer.Observe(ctx, observation)
+	}
+	return observation
+}
+
+type rateLimitAdmissionError struct {
+	err error
+}
+
+func (e *rateLimitAdmissionError) Error() string {
+	return fmt.Sprintf("rate-limit admission: %v", e.err)
+}
+
+func (e *rateLimitAdmissionError) Unwrap() error {
+	return e.err
+}
+
+func (r *Requester) admitRequesterSend(ctx context.Context, method string, requesterAttempt *int) error {
+	nextAttempt := *requesterAttempt + 1
+	if err := r.admit(ctx, method, nextAttempt); err != nil {
+		return &rateLimitAdmissionError{err: err}
+	}
+	*requesterAttempt = nextAttempt
+	return nil
+}
+
+func (r *Requester) clientWithRateLimitAdmission(client *http.Client, requesterAttempt *int) *http.Client {
+	if r.Admission == nil && r.Observer == nil {
+		return client
+	}
+	clone := *client
+	checkRedirect := clone.CheckRedirect
+	clone.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+		if checkRedirect != nil {
+			if err := checkRedirect(req, via); err != nil {
+				return err
+			}
+		} else if len(via) >= maxRedirects {
+			return fmt.Errorf("stopped after %d redirects", maxRedirects)
+		}
+		return r.admitRequesterSend(req.Context(), req.Method, requesterAttempt)
+	}
+	return &clone
+}
+
+func isRateLimitAdmissionError(err error) bool {
+	var admissionErr *rateLimitAdmissionError
+	return errors.As(err, &admissionErr)
 }
 
 // ctxSleep waits for d or returns early if ctx is cancelled.
@@ -323,6 +453,19 @@ func (r *Requester) DoFormLimited(ctx context.Context, method, path string, quer
 // parts are opened for each retry attempt, so callers may use it with the same
 // retry policy as JSON/form requests without reusing a consumed reader.
 func (r *Requester) DoMultipart(ctx context.Context, method, path string, query url.Values, form MultipartForm) (*Response, error) {
+	return r.doMultipart(ctx, method, path, query, form, defaultMaxResponseBody)
+}
+
+// DoMultipartLimited performs DoMultipart while bounding a successful response
+// to maxBodyBytes+1. It is the multipart counterpart to DoLimited and
+// DoFormLimited: operation-level rest.max_bytes constrains capture itself,
+// rather than allowing a multipart response to fill the default 64 MiB buffer
+// before the caller can reject it.
+func (r *Requester) DoMultipartLimited(ctx context.Context, method, path string, query url.Values, form MultipartForm, maxBodyBytes int) (*Response, error) {
+	return r.doMultipart(ctx, method, path, query, form, maxBodyBytes+1)
+}
+
+func (r *Requester) doMultipart(ctx context.Context, method, path string, query url.Values, form MultipartForm, maxResponseBytes int) (*Response, error) {
 	if err := validateMultipartForm(form); err != nil {
 		return nil, err
 	}
@@ -331,7 +474,7 @@ func (r *Requester) DoMultipart(ctx context.Context, method, path string, query 
 		return nil, err
 	}
 	defer cleanup()
-	return r.doWithBody(ctx, method, path, query, defaultMaxResponseBody, func() (*requestBody, error) {
+	return r.doWithBody(ctx, method, path, query, maxResponseBytes, func() (*requestBody, error) {
 		return multipartBody(prepared)
 	})
 }
@@ -582,7 +725,15 @@ func multipartBody(form MultipartForm) (*requestBody, error) {
 		ContentType: mw.FormDataContentType(),
 		Cleanup: func() error {
 			_ = pr.Close()
-			return <-done
+			err := <-done
+			// A server can send a final response before it consumes the
+			// complete streamed upload. Closing the reader then unblocks the
+			// producer with io.ErrClosedPipe; that expected cleanup result must
+			// not hide the provider response.
+			if errors.Is(err, io.ErrClosedPipe) {
+				return nil
+			}
+			return err
 		},
 	}, nil
 }
@@ -690,6 +841,13 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 	// set before the refresh is attempted (see below), so a provider that keeps
 	// returning 401 terminates with that 401 instead of being hammered.
 	reauthAttempted := false
+	requesterAttempt := 0
+	strictWrite := r.DisableRetries && !isSafeReplayableRead(method)
+	baseClient := r.clientFor(ctx)
+	if strictWrite {
+		baseClient = noReplayClient(baseClient)
+	}
+	client := r.clientWithRateLimitAdmission(baseClient, &requesterAttempt)
 	for attempt := 0; attempt < attempts; attempt++ {
 		if err := ctx.Err(); err != nil {
 			return nil, err
@@ -718,19 +876,16 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 			}
 		}
 		if r.DisableRetries {
-			// net/http's transport may replay a request with GetBody or an
-			// Idempotency-Key after a reused-connection failure. This mode is
-			// the executor's strict single-attempt contract, not an opt-in
-			// idempotent retry policy, so remove both replay signals before the
-			// transport sees the request.
-			req.GetBody = nil
-			req.Header.Del("Idempotency-Key")
-			req.Header.Del("X-Idempotency-Key")
+			disableTransportReplay(req, strictWrite)
+		}
+		if err := r.admitRequesterSend(ctx, method, &requesterAttempt); err != nil {
+			_ = cleanupRequestBody(body)
+			return nil, err
 		}
 
-		resp, err := r.clientFor(ctx).Do(req)
-		bodyErr := cleanupRequestBody(body)
+		resp, err := client.Do(req)
 		if err != nil {
+			bodyErr := cleanupRequestBody(body)
 			lastErr = fmt.Errorf("send request: %w", err)
 			if bodyErr != nil {
 				lastErr = fmt.Errorf("send request: %w", bodyErr)
@@ -738,14 +893,19 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 			if errors.Is(err, transportpolicy.ErrRedirectRefused) {
 				return nil, lastErr
 			}
+			if isRateLimitAdmissionError(err) {
+				return nil, lastErr
+			}
 			if attempt < attempts-1 {
-				if werr := r.sleep(ctx, r.backoff(attempt, "")); werr != nil {
+				if werr := r.sleep(ctx, r.backoff(attempt, RateLimitObservation{})); werr != nil {
 					return nil, werr
 				}
 				continue
 			}
 			return nil, lastErr
 		}
+		observation := r.observeRateLimit(ctx, resp.StatusCode, resp.Header, requesterAttempt)
+		bodyErr := cleanupRequestBody(body)
 		if bodyErr != nil {
 			resp.Body.Close()
 			return nil, fmt.Errorf("send request body: %w", bodyErr)
@@ -782,15 +942,15 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 		}
 
 		if !r.DisableRetries && r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {
-			lastErr = &HTTPError{Status: resp.StatusCode, URL: fullURL, Body: truncate(respBody)}
-			if werr := r.sleep(ctx, r.backoff(attempt, resp.Header.Get("Retry-After"))); werr != nil {
+			lastErr = responseHTTPError(resp.StatusCode, fullURL, respBody, observation)
+			if werr := r.sleep(ctx, r.backoff(attempt, observation)); werr != nil {
 				return nil, werr
 			}
 			continue
 		}
 
 		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-			return nil, &HTTPError{Status: resp.StatusCode, URL: fullURL, Body: truncate(respBody)}
+			return nil, responseHTTPError(resp.StatusCode, fullURL, respBody, observation)
 		}
 
 		return &Response{Status: resp.StatusCode, Header: resp.Header, Body: respBody, requestURL: fullURL}, nil
@@ -847,44 +1007,71 @@ func (r *Requester) applyHeaders(req *http.Request, hasBody bool, contentType st
 	}
 }
 
-// backoff computes the wait before the next attempt. A Retry-After header (delay
-// seconds or HTTP date) takes precedence, otherwise exponential backoff capped at
-// MaxBackoff is used.
-func (r *Requester) backoff(attempt int, retryAfter string) time.Duration {
-	if d, ok := parseRetryAfter(retryAfter); ok {
-		if d > r.maxBackoff() {
-			return r.maxBackoff()
+// backoff computes the wait before the next attempt. A valid provider
+// Retry-After is deterministic and is honored exactly, even when it exceeds
+// MaxBackoff. Only unhinted fallback retries use bounded full jitter.
+func (r *Requester) backoff(attempt int, observation RateLimitObservation) time.Duration {
+	if observation.HasRetryAfter {
+		if observation.HasReset {
+			remaining := observation.ResetAt.Sub(r.now())
+			if remaining <= 0 {
+				return 0
+			}
+			return remaining
 		}
-		return d
+		return observation.RetryAfter
 	}
-	d := r.baseBackoff() << attempt
-	if d <= 0 || d > r.maxBackoff() {
-		return r.maxBackoff()
-	}
-	return d
+	return r.fullJitter(r.fallbackBackoff(attempt))
 }
 
-// parseRetryAfter parses a Retry-After header value as either delay-seconds or an
-// HTTP date relative to now.
-func parseRetryAfter(value string) (time.Duration, bool) {
-	value = strings.TrimSpace(value)
-	if value == "" {
-		return 0, false
+func (r *Requester) fallbackBackoff(attempt int) time.Duration {
+	delay := r.baseBackoff()
+	maximum := r.maxBackoff()
+	if delay >= maximum {
+		return maximum
 	}
-	if secs, err := strconv.Atoi(value); err == nil {
-		if secs < 0 {
-			return 0, false
+	for i := 0; i < attempt; i++ {
+		if delay > maximum/2 {
+			return maximum
 		}
-		return time.Duration(secs) * time.Second, true
+		delay *= 2
 	}
-	if t, err := http.ParseTime(value); err == nil {
-		d := time.Until(t)
-		if d < 0 {
-			return 0, true
-		}
-		return d, true
+	if delay > maximum {
+		return maximum
 	}
-	return 0, false
+	return delay
+}
+
+func (r *Requester) fullJitter(cap time.Duration) time.Duration {
+	if cap <= 0 {
+		return 0
+	}
+	if r.Jitter == nil {
+		return time.Duration(rand.Int64N(int64(cap)))
+	}
+	delay := r.Jitter(cap)
+	if delay < 0 {
+		return 0
+	}
+	if delay > cap {
+		return cap
+	}
+	return delay
+}
+
+func responseHTTPError(status int, requestURL string, body []byte, observation RateLimitObservation) error {
+	httpErr := &HTTPError{Status: status, URL: requestURL, Body: truncate(body)}
+	if status != http.StatusTooManyRequests {
+		return httpErr
+	}
+	return &RateLimitError{
+		HTTPError:     httpErr,
+		Source:        observation.Source,
+		RetryAfter:    observation.RetryAfter,
+		HasRetryAfter: observation.HasRetryAfter,
+		ResetAt:       observation.ResetAt,
+		HasReset:      observation.HasReset,
+	}
 }
 
 func truncate(body []byte) string {

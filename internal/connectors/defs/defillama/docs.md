@@ -60,5 +60,5 @@ data.
 
 - Batch defaults: read_page_size=1000.
 - API coverage includes 10 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  deprecated=1, duplicate_of=8, out_of_scope=7, requires_elevated_scope=6.
+- Other cited artifact endpoints are explicitly classified in `api_surface.json`; endpoints absent
+  from the cited artifact are not exposed by this bundle.
