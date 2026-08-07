@@ -33,9 +33,9 @@ func TestStreamFromSchemaPreservesStaticBundleShape(t *testing.T) {
 		t.Fatalf("cursor fields = %v, want %v", got, want)
 	}
 	if got, want := stream.Fields, []Field{
-		{Name: "active"},
-		{Name: "id"},
-		{Name: "updated_at"},
+		{Name: "active", Type: "boolean"},
+		{Name: "id", Type: "string"},
+		{Name: "updated_at", Type: "string"},
 	}; !sameFields(got, want) {
 		t.Fatalf("fields = %#v, want %#v", got, want)
 	}

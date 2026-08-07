@@ -144,18 +144,48 @@ func StreamFromSchema(name, description string, raw json.RawMessage) (Stream, er
 	}
 	sort.Strings(fieldNames)
 	for _, fieldName := range fieldNames {
-		// Field.Type has historically been a name-only compatibility view for
-		// static catalogs. The raw Schema above is the authoritative typed
-		// contract for both static and discovered streams, so leaving this view
-		// unchanged makes the two paths genuinely interchangeable and avoids
-		// inventing a type when a provider leaves one unspecified.
-		stream.Fields = append(stream.Fields, Field{Name: fieldName})
+		fieldType, err := catalogFieldType(doc.Properties[fieldName])
+		if err != nil {
+			return Stream{}, fmt.Errorf("catalog stream %q field %q: %w", name, fieldName, err)
+		}
+		stream.Fields = append(stream.Fields, Field{Name: fieldName, Type: fieldType})
 	}
 
 	if err := validateCatalogSchemaContract(stream); err != nil {
 		return Stream{}, err
 	}
 	return stream, nil
+}
+
+// catalogFieldType preserves the conventional Field.Type projection while the
+// raw schema remains authoritative. A nullable schema reports its concrete
+// non-null type; an omitted type stays empty rather than being guessed.
+func catalogFieldType(raw json.RawMessage) (string, error) {
+	var property struct {
+		Type json.RawMessage `json:"type"`
+	}
+	if err := json.Unmarshal(raw, &property); err != nil {
+		return "", fmt.Errorf("invalid property schema: %w", err)
+	}
+	if len(property.Type) == 0 || string(property.Type) == "null" {
+		return "", nil
+	}
+
+	var single string
+	if err := json.Unmarshal(property.Type, &single); err == nil {
+		return single, nil
+	}
+
+	var union []string
+	if err := json.Unmarshal(property.Type, &union); err != nil {
+		return "", fmt.Errorf("type must be a string or array of strings")
+	}
+	for _, candidate := range union {
+		if candidate != "null" {
+			return candidate, nil
+		}
+	}
+	return "null", nil
 }
 
 func validateCatalogSchemaContract(stream Stream) error {
