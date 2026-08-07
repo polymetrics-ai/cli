@@ -1,0 +1,2043 @@
+{
+  "actions": [
+    {
+      "name": "create_account_setting",
+      "kind": "create",
+      "method": "POST",
+      "path": "/account/settings",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "The type of setting."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "type"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+    },
+    {
+      "name": "update_account_setting",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/account/settings/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of setting."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id",
+          "type"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "create_custom_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/custom-fields",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "object_type": {
+            "type": "string",
+            "description": "The object type the custom field applies to."
+          },
+          "label": {
+            "type": "string",
+            "description": "The label of the custom field."
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the custom field."
+          },
+          "priority": {
+            "type": "integer",
+            "description": "The priority of the custom field."
+          },
+          "required": {
+            "type": "boolean",
+            "description": "Whether the custom field is required."
+          },
+          "external_id": {
+            "type": "string",
+            "description": "An external identifier for the custom field."
+          },
+          "definition": {
+            "description": "See https://developers.gorgias.com/reference/create-custom-field for the full documented shape."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "object_type",
+          "label",
+          "definition"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+    },
+    {
+      "name": "update_custom_field",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/custom-fields/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          },
+          "label": {
+            "type": "string",
+            "description": "The label of the custom field."
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the custom field."
+          },
+          "priority": {
+            "type": "integer",
+            "description": "The priority of the custom field."
+          },
+          "required": {
+            "type": "boolean",
+            "description": "Whether the custom field is required."
+          },
+          "external_id": {
+            "type": "string",
+            "description": "An external identifier for the custom field."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "update_custom_fields",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/custom-fields",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "custom_fields": {
+            "type": "array",
+            "description": "The list of custom fields to bulk update."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "custom_fields"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "body_type": "json_array",
+      "body_field": "custom_fields",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    {
+      "name": "create_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/customers",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "channels": {
+            "type": "array",
+            "description": "The customer's channels (email, phone, etc.)."
+          },
+          "email": {
+            "type": "string",
+            "description": "The customer's email address."
+          },
+          "name": {
+            "type": "string",
+            "description": "The customer's name."
+          },
+          "external_id": {
+            "type": "string",
+            "description": "An external identifier for the customer."
+          },
+          "language": {
+            "type": "string",
+            "description": "The customer's preferred language."
+          },
+          "timezone": {
+            "type": "string",
+            "description": "The customer's timezone."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "channels"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+    },
+    {
+      "name": "update_customer",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/customers/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          },
+          "email": {
+            "type": "string",
+            "description": "The customer's email address."
+          },
+          "name": {
+            "type": "string",
+            "description": "The customer's name."
+          },
+          "external_id": {
+            "type": "string",
+            "description": "An external identifier for the customer."
+          },
+          "language": {
+            "type": "string",
+            "description": "The customer's preferred language."
+          },
+          "timezone": {
+            "type": "string",
+            "description": "The customer's timezone."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "merge_customers",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/customers/merge",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "The customer's email address."
+          },
+          "name": {
+            "type": "string",
+            "description": "The customer's name."
+          },
+          "source_id": {
+            "type": "integer",
+            "description": "Query parameter `source_id`."
+          },
+          "target_id": {
+            "type": "integer",
+            "description": "Query parameter `target_id`."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "source_id",
+          "target_id"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "query": {
+        "source_id": "{{ record.source_id }}",
+        "target_id": "{{ record.target_id }}"
+      },
+      "body_fields": [
+        "email",
+        "name"
+      ]
+    },
+    {
+      "name": "update_customer_custom_field_values",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/customers/{{ record.customer_id }}/custom-fields",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": "string",
+            "description": "Path parameter `customer_id`."
+          },
+          "values": {
+            "type": "array",
+            "description": "The list of {id, value} custom field values to set."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id",
+          "values"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "path_fields": [
+        "customer_id"
+      ],
+      "body_type": "json_array",
+      "body_field": "values",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    {
+      "name": "update_customer_data",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/customers/{{ record.customer_id }}/data",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": "string",
+            "description": "Path parameter `customer_id`."
+          },
+          "data": {
+            "type": "object",
+            "description": "Arbitrary customer data (free-form key/value document)."
+          },
+          "version": {
+            "type": "string",
+            "description": "The date of the customer data being written."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id",
+          "data"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "path_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "delete_customer",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customers/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_customers",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customers",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ids": {
+            "type": "array",
+            "description": "The IDs of the customers to delete."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ids"
+        ]
+      },
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_integration",
+      "kind": "create",
+      "method": "POST",
+      "path": "/integrations",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the integration."
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of integration (e.g. `http`)."
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the integration."
+          },
+          "managed": {
+            "type": "boolean",
+            "description": "Whether the integration is managed by Gorgias."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "name",
+          "type"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+    },
+    {
+      "name": "update_integration",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/integrations/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the integration."
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the integration."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_integration",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/integrations/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_job",
+      "kind": "create",
+      "method": "POST",
+      "path": "/jobs",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "The type of the job.",
+            "enum": [
+              "applyMacro",
+              "deleteTicket",
+              "exportTicket",
+              "importMacro",
+              "exportMacro",
+              "updateTicket",
+              "exportTicketDrilldown",
+              "exportConvertCampaignSalesDrilldown"
+            ]
+          },
+          "params": {
+            "type": "object",
+            "description": "Job-type-specific parameters."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "type",
+          "params"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+    },
+    {
+      "name": "update_job",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/jobs/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          },
+          "status": {
+            "type": "string",
+            "description": "The new status of the job."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "cancel_job",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/jobs/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_macro",
+      "kind": "create",
+      "method": "POST",
+      "path": "/macros",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the macro."
+          },
+          "external_id": {
+            "type": "string",
+            "description": "An external identifier for the macro."
+          },
+          "intent": {
+            "type": "string",
+            "description": "The macro's intent."
+          },
+          "language": {
+            "type": "string",
+            "description": "The macro's language."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+    },
+    {
+      "name": "update_macro",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/macros/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the macro."
+          },
+          "intent": {
+            "type": "string",
+            "description": "The macro's intent."
+          },
+          "language": {
+            "type": "string",
+            "description": "The macro's language."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_macro",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/macros/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "bulk_archive_macros",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/macros/archive",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ids": {
+            "type": "array",
+            "description": "The IDs of the macros to archive."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ids"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+    },
+    {
+      "name": "bulk_unarchive_macros",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/macros/unarchive",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ids": {
+            "type": "array",
+            "description": "The IDs of the macros to unarchive."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ids"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+    },
+    {
+      "name": "create_metric_card_feedback",
+      "kind": "create",
+      "method": "POST",
+      "path": "/metric-cards/{{ record.slug }}/feedback",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "description": "Path parameter `slug`."
+          },
+          "disagreement_type": {
+            "type": "string",
+            "description": "The type of disagreement being reported."
+          },
+          "metric_category": {
+            "type": "string",
+            "description": "The metric category the feedback applies to."
+          },
+          "comment": {
+            "type": "string",
+            "description": "Free-text feedback comment."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "slug",
+          "disagreement_type",
+          "metric_category"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "path_fields": [
+        "slug"
+      ]
+    },
+    {
+      "name": "delete_voice_call_recording",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/phone/voice-call-recordings/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_rule",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rules",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "The rule's logic, as Gorgias rule-language source."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the rule."
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the rule."
+          },
+          "priority": {
+            "type": "integer",
+            "description": "The priority of the rule."
+          },
+          "event_types": {
+            "type": "string",
+            "description": "The event type(s) that trigger the rule."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "code",
+          "name"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+    },
+    {
+      "name": "update_rule",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/rules/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          },
+          "code": {
+            "type": "string",
+            "description": "The rule's logic, as Gorgias rule-language source."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the rule."
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the rule."
+          },
+          "priority": {
+            "type": "integer",
+            "description": "The priority of the rule."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_rule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rules/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_rules_priorities",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rules/priorities",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "priorities": {
+            "type": "array",
+            "description": "The ordered list of {id, priority} rule priorities."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "priorities"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+    },
+    {
+      "name": "create_satisfaction_survey",
+      "kind": "create",
+      "method": "POST",
+      "path": "/satisfaction-surveys",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": "integer",
+            "description": "The ID of the customer the survey is for."
+          },
+          "ticket_id": {
+            "type": "integer",
+            "description": "The ID of the ticket the survey is for."
+          },
+          "score": {
+            "type": "integer",
+            "description": "The satisfaction score."
+          },
+          "body_text": {
+            "type": "string",
+            "description": "The free-text body of the survey response."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id",
+          "ticket_id"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+    },
+    {
+      "name": "update_satisfaction_survey",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/satisfaction-surveys/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          },
+          "score": {
+            "type": "integer",
+            "description": "The satisfaction score."
+          },
+          "body_text": {
+            "type": "string",
+            "description": "The free-text body of the survey response."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "create_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tags",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the tag."
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the tag."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+    },
+    {
+      "name": "update_tag",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tags/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the tag."
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the tag."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tags/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_tags",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tags",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ids": {
+            "type": "array",
+            "description": "The IDs of the tags to delete."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ids"
+        ]
+      },
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "merge_tags",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tags/{{ record.destination_tag_id }}/merge",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "destination_tag_id": {
+            "type": "string",
+            "description": "Path parameter `destination_tag_id`."
+          },
+          "source_tags_ids": {
+            "type": "array",
+            "description": "The IDs of the tags to merge into the destination tag."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "destination_tag_id",
+          "source_tags_ids"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "path_fields": [
+        "destination_tag_id"
+      ]
+    },
+    {
+      "name": "create_team",
+      "kind": "create",
+      "method": "POST",
+      "path": "/teams",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the team."
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the team."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+    },
+    {
+      "name": "update_team",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/teams/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the team."
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the team."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_team",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/teams/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_ticket",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tickets",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "messages": {
+            "type": "array",
+            "description": "The ticket's initial messages."
+          },
+          "subject": {
+            "type": "string",
+            "description": "The subject of the ticket."
+          },
+          "status": {
+            "type": "string",
+            "description": "The status of the ticket."
+          },
+          "priority": {
+            "type": "string",
+            "description": "The priority of the ticket."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "messages"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+    },
+    {
+      "name": "update_ticket",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tickets/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          },
+          "subject": {
+            "type": "string",
+            "description": "The subject of the ticket."
+          },
+          "status": {
+            "type": "string",
+            "description": "The status of the ticket."
+          },
+          "priority": {
+            "type": "string",
+            "description": "The priority of the ticket."
+          },
+          "is_unread": {
+            "type": "boolean",
+            "description": "Whether the ticket is unread."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_ticket",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tickets/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_ticket_custom_fields",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tickets/{{ record.ticket_id }}/custom-fields",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": "string",
+            "description": "Path parameter `ticket_id`."
+          },
+          "values": {
+            "type": "array",
+            "description": "The list of {id, value} custom field values to set."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id",
+          "values"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "path_fields": [
+        "ticket_id"
+      ],
+      "body_type": "json_array",
+      "body_field": "values",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    {
+      "name": "delete_ticket_custom_field",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tickets/{{ record.ticket_id }}/custom-fields/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": "string",
+            "description": "Path parameter `ticket_id`."
+          },
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id",
+          "id"
+        ]
+      },
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "ticket_id",
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_ticket_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tickets/{{ record.ticket_id }}/messages",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": "string",
+            "description": "Path parameter `ticket_id`."
+          },
+          "channel": {
+            "type": "string",
+            "description": "The channel the message was sent through."
+          },
+          "from_agent": {
+            "type": "boolean",
+            "description": "Whether the message was sent by an agent."
+          },
+          "body_text": {
+            "type": "string",
+            "description": "The plain-text body of the message."
+          },
+          "subject": {
+            "type": "string",
+            "description": "The subject of the message."
+          },
+          "public": {
+            "type": "boolean",
+            "description": "Whether the message is public."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id",
+          "channel",
+          "from_agent"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "path_fields": [
+        "ticket_id"
+      ]
+    },
+    {
+      "name": "update_ticket_message",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tickets/{{ record.ticket_id }}/messages/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": "string",
+            "description": "Path parameter `ticket_id`."
+          },
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          },
+          "channel": {
+            "type": "string",
+            "description": "The channel the message was sent through."
+          },
+          "from_agent": {
+            "type": "boolean",
+            "description": "Whether the message was sent by an agent."
+          },
+          "body_text": {
+            "type": "string",
+            "description": "The plain-text body of the message."
+          },
+          "subject": {
+            "type": "string",
+            "description": "The subject of the message."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id",
+          "id",
+          "channel",
+          "from_agent"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "path_fields": [
+        "ticket_id",
+        "id"
+      ]
+    },
+    {
+      "name": "delete_ticket_message",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tickets/{{ record.ticket_id }}/messages/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": "string",
+            "description": "Path parameter `ticket_id`."
+          },
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id",
+          "id"
+        ]
+      },
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "ticket_id",
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_ticket_tags",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tickets/{{ record.ticket_id }}/tags",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": "string",
+            "description": "Path parameter `ticket_id`."
+          },
+          "names": {
+            "type": "array",
+            "description": "The names of the tags to add.",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "path_fields": [
+        "ticket_id"
+      ]
+    },
+    {
+      "name": "update_ticket_tags",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tickets/{{ record.ticket_id }}/tags",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": "string",
+            "description": "Path parameter `ticket_id`."
+          },
+          "names": {
+            "type": "array",
+            "description": "The names of the tags to set.",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "path_fields": [
+        "ticket_id"
+      ]
+    },
+    {
+      "name": "delete_ticket_tags",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tickets/{{ record.ticket_id }}/tags",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": "string",
+            "description": "Path parameter `ticket_id`."
+          },
+          "names": {
+            "type": "array",
+            "description": "The names of the tags to remove.",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "ticket_id"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/users",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "The user's email address."
+          },
+          "name": {
+            "type": "string",
+            "description": "The user's name."
+          },
+          "role": {
+            "type": "string",
+            "description": "The user's role."
+          },
+          "bio": {
+            "type": "string",
+            "description": "The user's bio."
+          },
+          "country": {
+            "type": "string",
+            "description": "The user's country."
+          },
+          "language": {
+            "type": "string",
+            "description": "The user's preferred language."
+          },
+          "timezone": {
+            "type": "string",
+            "description": "The user's timezone."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "email",
+          "name",
+          "role"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/users/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          },
+          "email": {
+            "type": "string",
+            "description": "The user's email address."
+          },
+          "name": {
+            "type": "string",
+            "description": "The user's name."
+          },
+          "role": {
+            "type": "string",
+            "description": "The user's role."
+          },
+          "bio": {
+            "type": "string",
+            "description": "The user's bio."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/users/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_view",
+      "kind": "create",
+      "method": "POST",
+      "path": "/views",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "description": "The unique slug of the view."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the view."
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of view."
+          },
+          "order_by": {
+            "type": "string",
+            "description": "The attribute used to order the view."
+          },
+          "order_dir": {
+            "type": "string",
+            "description": "The direction used to order the view."
+          },
+          "visibility": {
+            "type": "string",
+            "description": "The visibility of the view."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "slug"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+    },
+    {
+      "name": "update_view",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/views/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the view."
+          },
+          "order_by": {
+            "type": "string",
+            "description": "The attribute used to order the view."
+          },
+          "order_dir": {
+            "type": "string",
+            "description": "The direction used to order the view."
+          },
+          "visibility": {
+            "type": "string",
+            "description": "The visibility of the view."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_view",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/views/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_widget",
+      "kind": "create",
+      "method": "POST",
+      "path": "/widgets",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "The type of widget."
+          },
+          "template": {
+            "type": "object",
+            "description": "The widget's rendering template."
+          },
+          "integration_id": {
+            "type": "integer",
+            "description": "The ID of the integration the widget belongs to."
+          },
+          "order": {
+            "type": "integer",
+            "description": "The display order of the widget."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "type",
+          "template"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+    },
+    {
+      "name": "update_widget",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/widgets/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          },
+          "order": {
+            "type": "integer",
+            "description": "The display order of the widget."
+          },
+          "integration_id": {
+            "type": "integer",
+            "description": "The ID of the integration the widget belongs to."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "medium: mutates Gorgias API state; requires reverse ETL approval",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_widget",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/widgets/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_customer_custom_field_value",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/customers/{{ record.customer_id }}/custom-fields/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": "string",
+            "description": "Path parameter `customer_id`."
+          },
+          "id": {
+            "type": "string",
+            "description": "Path parameter `id`."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id",
+          "id"
+        ]
+      },
+      "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "customer_id",
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "upload_file",
+      "kind": "create",
+      "method": "POST",
+      "path": "/upload",
+      "query": {
+        "type": {
+          "template": "{{ record.type }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "multipart",
+      "multipart": {
+        "max_bytes": 20971520,
+        "parts": [
+          {
+            "name": "file",
+            "type": "file",
+            "field": "file_path",
+            "required": true,
+            "max_bytes": 20971520
+          }
+        ]
+      },
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "file_path"
+        ],
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "Project-relative path to the file to upload."
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of file to upload.",
+            "enum": [
+              "public_attachment",
+              "attachment",
+              "profile_picture",
+              "widget_picture"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "high: uploads a local file's bytes to Gorgias file storage; file path/content are redacted in plans and require reverse ETL approval",
+      "confirm": "destructive"
+    }
+  ]
+}
