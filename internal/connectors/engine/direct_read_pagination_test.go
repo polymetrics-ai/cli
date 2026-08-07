@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strconv"
+	"strings"
 	"sync"
 	"testing"
 
@@ -602,5 +603,376 @@ func TestDirectReadFollowsCursorOntoANonFinalPage(t *testing.T) {
 	}
 	if seen != fixtureTotalRecords {
 		t.Fatalf("records reached by following cursors = %d, want %d", seen, fixtureTotalRecords)
+	}
+}
+
+// linkHeaderFixture serves a two-page collection whose next page arrives as an
+// ABSOLUTE Link-header URL — the shape a caller is handed back as next_cursor
+// and can then type on the command line. It records every path it is asked
+// for, so a test can prove a refused cursor never reached the wire.
+type linkHeaderFixture struct {
+	mu    sync.Mutex
+	paths []string
+	base  string
+}
+
+const linkHeaderFixturePath = "/repos/octo/hello/issues"
+
+func (f *linkHeaderFixture) requested() []string {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	return append([]string(nil), f.paths...)
+}
+
+func (f *linkHeaderFixture) handler() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		f.mu.Lock()
+		f.paths = append(f.paths, r.URL.Path)
+		f.mu.Unlock()
+
+		w.Header().Set("Content-Type", "application/json")
+		if r.URL.Path != linkHeaderFixturePath {
+			// Any other same-origin path answers happily, so a test that
+			// asserts a refusal is asserting the guard and not a 404.
+			_, _ = w.Write([]byte(`[{"id":"off-endpoint"}]`))
+			return
+		}
+		if r.URL.Query().Get("page") == "2" {
+			_, _ = w.Write([]byte(`[{"id":"b-1"}]`))
+			return
+		}
+		w.Header().Set("Link", fmt.Sprintf(`<%s%s?page=2>; rel="next"`, f.base, linkHeaderFixturePath))
+		_, _ = w.Write([]byte(`[{"id":"a-1"},{"id":"a-2"}]`))
+	})
+}
+
+func startLinkHeaderFixture(t *testing.T) (*linkHeaderFixture, *httptest.Server) {
+	t.Helper()
+	fx := &linkHeaderFixture{}
+	srv := httptest.NewServer(fx.handler())
+	fx.base = srv.URL
+	t.Cleanup(srv.Close)
+	return fx, srv
+}
+
+func linkHeaderBundle(baseURL string, allowCrossHost bool) Bundle {
+	return paginatedDirectReadBundle(baseURL, &PaginationSpec{
+		Type:           "link_header",
+		AllowCrossHost: allowCrossHost,
+	}, linkHeaderFixturePath)
+}
+
+func readLinkHeaderPage(b Bundle, cursor string) (connectors.DirectReadResult, error) {
+	return DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         linkHeaderFixturePath,
+		OutputPolicy: "json_redacted",
+		PageCursor:   cursor,
+	}, nil)
+}
+
+// TestDirectReadCursorURLFollowsTheProviderToken is the working case the guard
+// below must not break: the cursor a page reported varies only the query, so
+// it is the admitted endpoint and it fetches the next page.
+func TestDirectReadCursorURLFollowsTheProviderToken(t *testing.T) {
+	fx, srv := startLinkHeaderFixture(t)
+	b := linkHeaderBundle(srv.URL, false)
+
+	first, err := readLinkHeaderPage(b, "")
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	if got := rootArrayLen(t, first.Body); got != 2 {
+		t.Fatalf("records = %d, want 2", got)
+	}
+	if first.Page.NextCursor == "" {
+		t.Fatal("page.next_cursor is empty, want the provider's Link URL")
+	}
+
+	second, err := readLinkHeaderPage(b, first.Page.NextCursor)
+	if err != nil {
+		t.Fatalf("DirectRead(cursor): %v", err)
+	}
+	if got := rootArrayLen(t, second.Body); got != 1 {
+		t.Fatalf("second page records = %d, want 1", got)
+	}
+	if !second.Page.Complete {
+		t.Fatal("final page.complete = false, want true")
+	}
+	for _, path := range fx.requested() {
+		if path != linkHeaderFixturePath {
+			t.Fatalf("requested path = %q, want only %q", path, linkHeaderFixturePath)
+		}
+	}
+}
+
+// TestDirectReadRefusesACursorURLOutsideTheAdmittedEndpoint is the security
+// guard. DirectRead rejects an absolute req.Path and admits the relative one
+// against api_surface; a typed page cursor arrives after both checks and
+// becomes the request target, so it has to clear the same admission or a
+// direct read would be a generic authenticated GET.
+func TestDirectReadRefusesACursorURLOutsideTheAdmittedEndpoint(t *testing.T) {
+	for _, allowCrossHost := range []bool{false, true} {
+		t.Run(fmt.Sprintf("allow_cross_host=%v", allowCrossHost), func(t *testing.T) {
+			fx, srv := startLinkHeaderFixture(t)
+			b := linkHeaderBundle(srv.URL, allowCrossHost)
+
+			_, err := readLinkHeaderPage(b, srv.URL+"/admin/secrets")
+			if err == nil {
+				t.Fatal("off-endpoint page cursor returned no error, want a refusal")
+			}
+			if !strings.Contains(err.Error(), "pagination") {
+				t.Fatalf("error = %q, want it reported as a pagination refusal", err.Error())
+			}
+			for _, path := range fx.requested() {
+				if path == "/admin/secrets" {
+					t.Fatal("the refused cursor still reached the provider")
+				}
+			}
+		})
+	}
+}
+
+// TestDirectReadRefusesACrossOriginCursorURLEvenWhenCrossHostIsAllowed pins the
+// asymmetry: allow_cross_host exists for a provider-supplied Link header
+// discovered during a walk. It must never widen what a caller can type.
+func TestDirectReadRefusesACrossOriginCursorURLEvenWhenCrossHostIsAllowed(t *testing.T) {
+	var elsewhereHits int
+	elsewhere := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		elsewhereHits++
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`[{"id":"leaked"}]`))
+	}))
+	t.Cleanup(elsewhere.Close)
+
+	_, srv := startLinkHeaderFixture(t)
+	b := linkHeaderBundle(srv.URL, true)
+
+	_, err := readLinkHeaderPage(b, elsewhere.URL+linkHeaderFixturePath)
+	if err == nil {
+		t.Fatal("cross-origin page cursor returned no error, want a refusal")
+	}
+	if !strings.Contains(err.Error(), "same-origin") {
+		t.Fatalf("error = %q, want a same-origin refusal", err.Error())
+	}
+	if elsewhereHits != 0 {
+		t.Fatalf("cross-origin host received %d requests, want 0", elsewhereHits)
+	}
+}
+
+// TestDirectReadPaginationGuardIsNotReportedAsADecodeFailure covers the
+// diagnosis: the body parsed fine and only the NEXT-page guard fired, so
+// "response is not JSON" would name the wrong thing entirely.
+func TestDirectReadPaginationGuardIsNotReportedAsADecodeFailure(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Link", `<https://attacker.invalid/repos/octo/hello/issues?page=2>; rel="next"`)
+		_, _ = w.Write([]byte(`[{"id":"a-1"}]`))
+	}))
+	t.Cleanup(srv.Close)
+
+	_, err := readLinkHeaderPage(linkHeaderBundle(srv.URL, false), "")
+	if err == nil {
+		t.Fatal("cross-host Link header returned no error, want a pagination guard failure")
+	}
+	if strings.Contains(err.Error(), "not JSON") {
+		t.Fatalf("error = %q, want a pagination diagnosis rather than a decode failure", err.Error())
+	}
+	if !strings.Contains(err.Error(), "pagination") {
+		t.Fatalf("error = %q, want it reported as a pagination failure", err.Error())
+	}
+}
+
+// TestDirectReadAmbiguousEnvelopeStillReportsItsRowCount: which array pages is
+// unknown, but how many rows arrived is not. Reporting 0 for a body that
+// plainly carries them is the same untruth as an unsignalled truncation.
+func TestDirectReadAmbiguousEnvelopeStillReportsItsRowCount(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"results":[{"id":1},{"id":2},{"id":3}],"links":[{"rel":"self"}]}`))
+	}))
+	t.Cleanup(srv.Close)
+
+	b := paginatedDirectReadBundle(srv.URL, &PaginationSpec{
+		Type:        "offset_limit",
+		LimitParam:  "limit",
+		OffsetParam: "startIndex",
+		PageSize:    50,
+	}, "/openmrs/ws/rest/v1/patient")
+
+	result, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/openmrs/ws/rest/v1/patient",
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	if result.Page.Reason != directReadReasonAmbiguous {
+		t.Fatalf("page.reason = %q, want %q", result.Page.Reason, directReadReasonAmbiguous)
+	}
+	if result.Page.Complete {
+		t.Fatal("page.complete = true for an unidentifiable collection, want false")
+	}
+	if result.Page.Records != 4 {
+		t.Fatalf("page.records = %d, want 4 — every top-level array element that arrived", result.Page.Records)
+	}
+	if result.Page.Number != 1 {
+		t.Fatalf("page.number = %d, want 1 — an addressable strategy keeps its page context", result.Page.Number)
+	}
+	if result.Page.Size != 50 {
+		t.Fatalf("page.size = %d, want the 50 actually requested", result.Page.Size)
+	}
+}
+
+// TestDirectReadDegradesWhenTheDeclaredPaginationSpecIsUnusable: a malformed
+// declaration is a bundle defect, not a reason to refuse a read the provider
+// would have answered. It degrades that connector's paging alone, and says so.
+func TestDirectReadDegradesWhenTheDeclaredPaginationSpecIsUnusable(t *testing.T) {
+	fx, srv := startPagedFixture(t, "array")
+	// cursor with neither token_path nor last_record_field — newPaginator
+	// rejects it, exactly as inflowinventory's streams.json declares it.
+	b := paginatedDirectReadBundle(srv.URL, &PaginationSpec{
+		Type:        "cursor",
+		CursorParam: "after",
+	}, "/v2/logs")
+
+	result, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/v2/logs",
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v — an unusable spec must not abort the read", err)
+	}
+	if fx.count() != 1 {
+		t.Fatalf("requests = %d, want the request to have been served", fx.count())
+	}
+	if got := rootArrayLen(t, result.Body); got != defaultFixturePage {
+		t.Fatalf("records = %d, want the provider default of %d", got, defaultFixturePage)
+	}
+	if result.Page.Complete {
+		t.Fatal("page.complete = true on an unusable spec, want false")
+	}
+	if result.Page.Reason != directReadReasonInvalidSpec {
+		t.Fatalf("page.reason = %q, want %q", result.Page.Reason, directReadReasonInvalidSpec)
+	}
+	if result.Page.Strategy != "cursor" {
+		t.Fatalf("page.strategy = %q, want the declared %q", result.Page.Strategy, "cursor")
+	}
+	if _, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/v2/logs",
+		OutputPolicy: "json_redacted",
+		PageCursor:   "abc",
+	}, nil); err == nil {
+		t.Fatal("navigation on an unusable spec returned no error, want a refusal")
+	}
+}
+
+// TestDirectReadOmitsAPageSizeItNeverSent covers the gong/xero/recurly shape:
+// no size param is declared, so the provider applied its own default and the
+// envelope must not claim a size that was never requested.
+func TestDirectReadOmitsAPageSizeItNeverSent(t *testing.T) {
+	_, srv := startPagedFixture(t, "nested")
+	b := paginatedDirectReadBundle(srv.URL, &PaginationSpec{
+		Type:        "cursor",
+		CursorParam: "cursor",
+		TokenPath:   "records.cursor",
+		PageSize:    fixtureMaxPage,
+	}, "/v2/logs")
+
+	result, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/v2/logs",
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	if got := arrayAtLen(t, result.Body, "logs"); got != defaultFixturePage {
+		t.Fatalf("logs = %d, want the provider default of %d — no size param is declared", got, defaultFixturePage)
+	}
+	if result.Page.Size != 0 {
+		t.Fatalf("page.size = %d, want it omitted: no size parameter was put on the wire", result.Page.Size)
+	}
+}
+
+// TestDirectReadDistinguishesDeclaredNoneFromNoDeclaration: 68 bundles declare
+// "none" outright. Telling their callers the connector declares nothing is
+// false, and a caller who reads that goes looking for a declaration to fix.
+func TestDirectReadDistinguishesDeclaredNoneFromNoDeclaration(t *testing.T) {
+	_, srv := startPagedFixture(t, "array")
+	b := paginatedDirectReadBundle(srv.URL, &PaginationSpec{Type: "none"}, "/v2/logs")
+
+	result, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/v2/logs",
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	if result.Page.Complete {
+		t.Fatal("page.complete = true, want false — a declaration is not proof")
+	}
+	if result.Page.Reason != directReadReasonDeclaredNone {
+		t.Fatalf("page.reason = %q, want %q", result.Page.Reason, directReadReasonDeclaredNone)
+	}
+}
+
+// TestOperationDirectReadPOSTReportsAStrategyItCannotUse covers the ~39 POST
+// direct reads on connectors that DO declare a strategy: the request cannot be
+// paged, but the connector declares plenty.
+func TestOperationDirectReadPOSTReportsAStrategyItCannotUse(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"calls":[{"id":"c-1"},{"id":"c-2"}]}`))
+	}))
+	t.Cleanup(srv.Close)
+
+	b := Bundle{
+		Name: "gong",
+		HTTP: HTTPBase{URL: srv.URL, Pagination: &PaginationSpec{
+			Type:        "cursor",
+			CursorParam: "cursor",
+			TokenPath:   "records.cursor",
+		}},
+		Operations: []OperationSpec{{
+			ID:           "gong.calls_extensive",
+			Kind:         "rest_read",
+			Summary:      "List calls",
+			Risk:         "low",
+			Approval:     "none",
+			OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/v2/calls/extensive",
+				ContentType: "application/json",
+				MaxBytes:    1 << 20,
+				BodySchema:  json.RawMessage(`{"type":"object","properties":{"filter":{"type":"object"}}}`),
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method:    http.MethodPost,
+			Path:      "/v2/calls/extensive",
+			Operation: &SurfaceOperation{Model: "direct_read", Status: "allowed", Risk: "low", Reason: "fixture"},
+		}}},
+	}
+
+	result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "gong.calls_extensive",
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	if result.Page.Reason != directReadReasonNotAddressable {
+		t.Fatalf("page.reason = %q, want %q — the connector declares a strategy, it just cannot page a POST", result.Page.Reason, directReadReasonNotAddressable)
+	}
+	if result.Page.Strategy != "cursor" {
+		t.Fatalf("page.strategy = %q, want the declared %q", result.Page.Strategy, "cursor")
+	}
+	if result.Page.Records != 2 {
+		t.Fatalf("page.records = %d, want 2", result.Page.Records)
 	}
 }

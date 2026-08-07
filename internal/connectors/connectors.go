@@ -313,10 +313,28 @@ type DirectReadResult struct {
 // Reasons a direct read's page is not confirmed complete. They are declared
 // beside DirectReadPage so the engine that sets them and the CLI that renders
 // them cannot drift.
+//
+// The four not-paged reasons are deliberately distinct. Telling a caller that
+// a connector "declares no pagination strategy" when it declares a working one
+// — and most of them do — is the same class of untruth as an unsignalled
+// truncation, just pointed the other way.
 const (
-	DirectReadPageReasonMorePages    = "more_pages"
+	DirectReadPageReasonMorePages = "more_pages"
+	// DirectReadPageReasonNoPagination: the bundle declares no pagination spec
+	// at all, so nothing could prove where this page sits.
 	DirectReadPageReasonNoPagination = "pagination_not_declared"
-	DirectReadPageReasonAmbiguous    = "ambiguous_collection_shape"
+	// DirectReadPageReasonDeclaredNone: the bundle explicitly declares
+	// pagination type "none". One request is the whole request it knows how to
+	// make, but the declaration is not proof that the provider agrees.
+	DirectReadPageReasonDeclaredNone = "pagination_declared_none"
+	// DirectReadPageReasonNotAddressable: a real strategy is declared, but it
+	// cannot page THIS request — a POST read carries its selection in a body
+	// no query-param strategy can express.
+	DirectReadPageReasonNotAddressable = "pagination_not_addressable_for_request"
+	// DirectReadPageReasonInvalidSpec: a strategy is declared but its spec is
+	// unusable, so paging degraded to a single page for this connector alone.
+	DirectReadPageReasonInvalidSpec = "pagination_spec_invalid"
+	DirectReadPageReasonAmbiguous   = "ambiguous_collection_shape"
 )
 
 // DirectReadPage is the page context of one direct read.
@@ -331,9 +349,13 @@ type DirectReadPage struct {
 	// declares one that cannot page (or declares nothing at all).
 	Strategy string `json:"strategy"`
 	// Records counts the rows on THIS page; 0 for a response that is not a
-	// collection.
+	// collection. When Reason is ambiguous_collection_shape it counts every
+	// top-level array element instead, because which array pages is unknown
+	// but how many rows arrived is not.
 	Records int `json:"records"`
-	// Size is the page size actually requested, taken from the declared spec.
+	// Size is the page size actually put on the wire. It is omitted when the
+	// declared spec names no size parameter, since the provider then applied
+	// its own default and no size was requested at all.
 	Size int `json:"size,omitempty"`
 	// Number is the addressable page number. Only page_number and offset_limit
 	// have one; cursor, next_url and link_header address pages by opaque token
@@ -349,8 +371,8 @@ type DirectReadPage struct {
 	NextCursor string `json:"next_cursor,omitempty"`
 	// Complete is true only when this page is provably the whole collection.
 	Complete bool `json:"complete"`
-	// Reason names why Complete is false: more pages exist, or the bundle
-	// declares no strategy that could prove otherwise.
+	// Reason names why Complete is false — one of the DirectReadPageReason
+	// constants above.
 	Reason string `json:"reason,omitempty"`
 }
 

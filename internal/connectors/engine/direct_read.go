@@ -111,6 +111,12 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		if errors.As(err, &tooLarge) {
 			return connectors.DirectReadResult{}, fmt.Errorf("operation direct read %s", tooLarge.Error())
 		}
+		// A pagination failure arrives with the response already fetched and
+		// decoded, so it must not fall through to the not-JSON branch below.
+		var pageErr errDirectReadPagination
+		if errors.As(err, &pageErr) {
+			return connectors.DirectReadResult{}, fmt.Errorf("operation direct read pagination: %w", pageErr.err)
+		}
 		if resp == nil {
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 			msg := completeEngineErrorText(err)
@@ -256,6 +262,12 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 		var tooLarge errDirectReadTooLarge
 		if errors.As(err, &tooLarge) {
 			return connectors.DirectReadResult{}, fmt.Errorf("direct read %s", tooLarge.Error())
+		}
+		// A pagination failure arrives with the response already fetched and
+		// decoded, so it must not fall through to the not-JSON branch below.
+		var pageErr errDirectReadPagination
+		if errors.As(err, &pageErr) {
+			return connectors.DirectReadResult{}, fmt.Errorf("direct read pagination: %w", pageErr.err)
 		}
 		if resp == nil {
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)

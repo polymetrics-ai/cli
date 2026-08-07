@@ -391,7 +391,25 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 	}
 }
 
+// directReadPageFlagNames are consumed as Request.Page/Request.PageCursor
+// rather than as command flags. Only this intent can honour them, so they are
+// dropped here and nowhere earlier: every other intent then keeps its existing
+// "unknown flag --page" refusal instead of accepting and ignoring them.
+var directReadPageFlagNames = []string{"page", "page-cursor"}
+
+func withoutDirectReadPageFlags(flags map[string][]string) map[string][]string {
+	out := make(map[string][]string, len(flags))
+	for name, values := range flags {
+		out[name] = values
+	}
+	for _, name := range directReadPageFlagNames {
+		delete(out, name)
+	}
+	return out
+}
+
 func runDirectRead(ctx context.Context, connector connectors.Connector, cmd connectors.CommandSurfaceCommand, req Request) (Result, error) {
+	req.Flags = withoutDirectReadPageFlags(req.Flags)
 	if cmd.Operation != "" {
 		return runOperationDirectRead(ctx, connector, cmd, req)
 	}

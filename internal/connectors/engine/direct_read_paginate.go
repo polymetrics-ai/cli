@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
@@ -26,9 +27,12 @@ import (
 // ETL path consumes. There is no second pagination implementation and no
 // per-connector hand-coding.
 const (
-	directReadReasonMorePages    = connectors.DirectReadPageReasonMorePages
-	directReadReasonNoPagination = connectors.DirectReadPageReasonNoPagination
-	directReadReasonAmbiguous    = connectors.DirectReadPageReasonAmbiguous
+	directReadReasonMorePages      = connectors.DirectReadPageReasonMorePages
+	directReadReasonNoPagination   = connectors.DirectReadPageReasonNoPagination
+	directReadReasonDeclaredNone   = connectors.DirectReadPageReasonDeclaredNone
+	directReadReasonNotAddressable = connectors.DirectReadPageReasonNotAddressable
+	directReadReasonInvalidSpec    = connectors.DirectReadPageReasonInvalidSpec
+	directReadReasonAmbiguous      = connectors.DirectReadPageReasonAmbiguous
 )
 
 // addressableStrategies are the declared types that have a real page NUMBER a
@@ -54,6 +58,65 @@ type directReadWalk struct {
 	pageCursor  string
 }
 
+// directReadPageMode is what the bundle's declared pagination can actually do
+// for THIS request. The three not-pageable cases are deliberately kept apart:
+// telling a caller that a connector "declares no pagination strategy" when it
+// declares a working one is the same class of untruth as an unsignalled
+// truncation.
+type directReadPageMode struct {
+	// strategy is reported verbatim as DirectReadPage.Strategy — the bundle's
+	// own declaration, or "none" when there is nothing (or nothing usable) to
+	// page with.
+	strategy string
+	// pageable is true only when the declared strategy built a paginator that
+	// can address another page of this request.
+	pageable bool
+	reason   string
+	// detail carries the newPaginator failure for the invalid-spec case, so
+	// the refusal names the declaration that is wrong.
+	detail string
+}
+
+// describe renders the mode as the reason half of a refusal message.
+func (m directReadPageMode) describe() string {
+	switch m.reason {
+	case directReadReasonNoPagination:
+		return "this connector declares no pagination strategy"
+	case directReadReasonDeclaredNone:
+		return `this connector declares pagination type "none"`
+	case directReadReasonNotAddressable:
+		return fmt.Sprintf("the declared %q pagination cannot page this request", m.strategy)
+	case directReadReasonInvalidSpec:
+		return fmt.Sprintf("the declared %q pagination is unusable: %s", m.strategy, m.detail)
+	default:
+		return "this read cannot be paged"
+	}
+}
+
+// resolveDirectReadPageMode decides, once, what the declared spec can do here.
+//
+// A malformed declaration degrades THAT connector to single-page behaviour
+// with a reason naming it; it must never abort a read the provider would have
+// answered, because the bundle's pagination spec is not what the caller asked
+// about.
+func resolveDirectReadPageMode(spec PaginationSpec, method string, paginatorErr error) directReadPageMode {
+	declared := strings.TrimSpace(spec.Type)
+	switch {
+	case declared == "":
+		return directReadPageMode{strategy: "none", reason: directReadReasonNoPagination}
+	case declared == "none":
+		return directReadPageMode{strategy: "none", reason: directReadReasonDeclaredNone}
+	case paginatorErr != nil:
+		return directReadPageMode{strategy: declared, reason: directReadReasonInvalidSpec, detail: paginatorErr.Error()}
+	case method != http.MethodGet:
+		// A POST read (provider_search) carries its selection in a JSON body;
+		// the query-param strategies cannot express its next page.
+		return directReadPageMode{strategy: declared, reason: directReadReasonNotAddressable}
+	default:
+		return directReadPageMode{strategy: declared, pageable: true}
+	}
+}
+
 // readDirectPage issues exactly one request for the requested page and reports
 // where that page sits in the collection.
 func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk) (any, connectors.DirectReadPage, *connsdk.Response, error) {
@@ -71,64 +134,63 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 		return nil, connectors.DirectReadPage{}, nil, err
 	}
 
-	// A POST read (provider_search) carries its selection in a JSON body; the
-	// query-param strategies cannot express its next page, so it is reported as
-	// a single unpaged request rather than implying completeness.
-	strategy := spec.Type
-	if strategy == "" {
-		strategy = "none"
-	}
-	if w.method != http.MethodGet {
-		strategy = "none"
-	}
+	paginator, paginatorErr := newPaginator(spec, pageSize, "")
+	mode := resolveDirectReadPageMode(spec, w.method, paginatorErr)
+	strategy := mode.strategy
 
-	paginator, err := newPaginator(spec, pageSize, "")
-	if err != nil {
-		return nil, connectors.DirectReadPage{}, nil, fmt.Errorf("direct read pagination: %w", err)
+	if err := validateDirectReadPageRequest(mode, w); err != nil {
+		return nil, connectors.DirectReadPage{}, nil, errDirectReadPagination{err: err}
 	}
-	if setter, ok := paginator.(baseHostSetter); ok {
-		scheme, host := requesterOrigin(requester.BaseURL)
-		setter.setBaseOrigin(scheme, host)
-	}
-
-	if err := validateDirectReadPageRequest(strategy, w); err != nil {
-		return nil, connectors.DirectReadPage{}, nil, err
-	}
-
-	// Start() is what initialises a paginator's internal state — the cursor and
-	// URL strategies allocate their loop-guard set there. It must run even when
-	// the caller supplied a cursor and this read does not need Start's query,
-	// or the later Next() call writes to a nil map.
-	startPage := paginator.Start()
 
 	number := 1
-	if isAddressableStrategy(strategy) && w.page > 0 {
-		number = w.page
+	reqPath := w.requestPath
+	query := w.query
+
+	if mode.pageable {
+		if setter, ok := paginator.(baseHostSetter); ok {
+			scheme, host := requesterOrigin(requester.BaseURL)
+			setter.setBaseOrigin(scheme, host)
+		}
+
+		// Start() is what initialises a paginator's internal state — the cursor
+		// and URL strategies allocate their loop-guard set there. It must run
+		// even when the caller supplied a cursor and this read does not need
+		// Start's query, or the later Next() call writes to a nil map.
+		startPage := paginator.Start()
+
+		if isAddressableStrategy(strategy) && w.page > 0 {
+			number = w.page
+		}
+
+		// The page a direct read returns must be the bundle's DECLARED page,
+		// not whatever default the provider applies to a request that names no
+		// size. The cursor families' paginators carry a token but never a size,
+		// so the declared size_param is applied here for every strategy that
+		// declares one.
+		query = mergeQuery(w.query, declaredSizeQuery(spec, pageSize))
+		switch {
+		case w.pageCursor != "" && (strategy == "next_url" || strategy == "link_header"):
+			// These strategies hand back an absolute next-page URL, so the
+			// token IS a URL. A caller can type one, which means it has to
+			// clear the same admission the declared endpoint cleared rather
+			// than becoming a generic authenticated GET.
+			admitted, err := admitDirectReadCursorURL(requester.BaseURL, w.requestPath, w.pageCursor)
+			if err != nil {
+				return nil, connectors.DirectReadPage{}, nil, errDirectReadPagination{err: err}
+			}
+			reqPath = admitted
+			query = nil
+		case w.pageCursor != "":
+			query = mergeQuery(query, cursorQuery(spec, w.pageCursor))
+		default:
+			query = mergeQuery(query, seekPageQuery(paginator, startPage, number))
+		}
 	}
 
-	reqPath := w.requestPath
-	// The page a direct read returns must be the bundle's DECLARED page, not
-	// whatever default the provider applies to a request that names no size.
-	// The cursor families' paginators carry a token but never a size, so the
-	// declared size_param is applied here for every strategy that declares one.
-	query := mergeQuery(w.query, declaredSizeQuery(spec, pageSize))
-	switch {
-	case strategy == "none":
-		// Nothing declared to page with: send the caller's query unchanged.
-		query = w.query
-	case w.pageCursor != "" && (strategy == "next_url" || strategy == "link_header"):
-		// These strategies hand back an absolute next-page URL; the token IS
-		// that URL, already origin-checked when it was issued below.
-		if err := checkOrigin(w.pageCursor, originOf(requester.BaseURL), spec.AllowCrossHost); err != nil {
-			return nil, connectors.DirectReadPage{}, nil, fmt.Errorf("direct read pagination: %w", err)
-		}
-		reqPath = w.pageCursor
-		query = nil
-	case w.pageCursor != "":
-		query = mergeQuery(query, cursorQuery(spec, w.pageCursor))
-	default:
-		query = mergeQuery(query, seekPageQuery(paginator, startPage, number))
-	}
+	// Only a size that is actually on the wire may be reported as the page
+	// size: 143 of the paginating bundles declare no size/limit/count param at
+	// all, and those requests still receive the provider's own default.
+	sizeSent := directReadRequestedSize(spec, strategy, query)
 
 	resp, err := requester.DoLimited(ctx, w.method, reqPath, query, w.body, w.maxBytes)
 	if err != nil {
@@ -142,31 +204,37 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 		return nil, connectors.DirectReadPage{}, resp, err
 	}
 
-	page := connectors.DirectReadPage{Strategy: strategy}
+	page := connectors.DirectReadPage{Strategy: strategy, Size: sizeSent}
+	if mode.pageable && isAddressableStrategy(strategy) {
+		page.Number = number
+	}
 	collection, isList, ambiguous := directReadCollectionKey(decoded)
+	if ambiguous {
+		// Which array pages cannot be known, so this read will not guess. What
+		// it must not do is claim zero rows for a body that plainly carries
+		// them, nor drop the page context the caller needs to ask for more.
+		page.Records = directReadAmbiguousRecordCount(decoded)
+		page.Complete = false
+		page.Reason = directReadReasonAmbiguous
+		return decoded, page, resp, nil
+	}
 	if !isList {
 		// A single object is the whole answer; there is no collection to page.
+		page.Size = 0
+		page.Number = 0
 		page.Complete = true
-		if ambiguous {
-			page.Complete = false
-			page.Reason = directReadReasonAmbiguous
-		}
 		return decoded, page, resp, nil
 	}
 	items, _ := directReadItemsAt(decoded, collection)
 	page.Records = len(items)
 
-	if strategy == "none" {
+	if !mode.pageable {
 		// One request is all the engine can honestly do, and it cannot prove
-		// this is the whole collection — so it says so instead of implying it.
+		// this is the whole collection — so it says so, naming which of the
+		// declaration states it is in.
 		page.Complete = false
-		page.Reason = directReadReasonNoPagination
+		page.Reason = mode.reason
 		return decoded, page, resp, nil
-	}
-
-	page.Size = pageSize
-	if isAddressableStrategy(strategy) {
-		page.Number = number
 	}
 
 	// The declared strategy itself decides whether another page exists: its own
@@ -177,7 +245,7 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 	next := paginator.Next(resp, len(items))
 	if guard, ok := paginator.(interface{ Err() error }); ok {
 		if err := guard.Err(); err != nil {
-			return nil, connectors.DirectReadPage{}, resp, fmt.Errorf("direct read pagination: %w", err)
+			return nil, connectors.DirectReadPage{}, resp, errDirectReadPagination{err: err}
 		}
 	}
 	if next == nil {
@@ -199,21 +267,24 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 // validateDirectReadPageRequest refuses navigation input the declared strategy
 // cannot honour, rather than accepting it and silently returning page one — the
 // same class of quiet wrongness this whole change exists to remove.
-func validateDirectReadPageRequest(strategy string, w directReadWalk) error {
+func validateDirectReadPageRequest(mode directReadPageMode, w directReadWalk) error {
 	if w.page > 0 && w.pageCursor != "" {
 		return fmt.Errorf("direct read accepts a page number or a page cursor, not both")
 	}
 	if w.page < 0 {
 		return fmt.Errorf("direct read page must be a positive page number, got %d", w.page)
 	}
-	if strategy == "none" && (w.page > 1 || w.pageCursor != "") {
-		return fmt.Errorf("direct read connector declares no pagination strategy, so it cannot address page %s", describeRequestedPage(w))
+	if !mode.pageable {
+		if w.page > 1 || w.pageCursor != "" {
+			return fmt.Errorf("direct read cannot address page %s: %s", describeRequestedPage(w), mode.describe())
+		}
+		return nil
 	}
-	if w.page > 1 && !isAddressableStrategy(strategy) {
-		return fmt.Errorf("direct read pagination strategy %q has no addressable page number; pass the previous page's next_cursor instead", strategy)
+	if w.page > 1 && !isAddressableStrategy(mode.strategy) {
+		return fmt.Errorf("direct read pagination strategy %q has no addressable page number; pass the previous page's next_cursor instead", mode.strategy)
 	}
-	if w.pageCursor != "" && isAddressableStrategy(strategy) {
-		return fmt.Errorf("direct read pagination strategy %q addresses pages by number; pass a page number instead of a cursor", strategy)
+	if w.pageCursor != "" && isAddressableStrategy(mode.strategy) {
+		return fmt.Errorf("direct read pagination strategy %q addresses pages by number; pass a page number instead of a cursor", mode.strategy)
 	}
 	return nil
 }
@@ -223,6 +294,63 @@ func describeRequestedPage(w directReadWalk) string {
 		return "by cursor"
 	}
 	return strconv.Itoa(w.page)
+}
+
+// admitDirectReadCursorURL is the endpoint admission for the one navigation
+// input that is an absolute URL.
+//
+// DirectRead rejects an absolute req.Path and admits the relative one against
+// api_surface / the operation ledger. A next_url or link_header cursor arrives
+// after both of those checks and becomes the request target, so without this
+// it would be a generic authenticated GET against any same-origin path — the
+// passthrough this connector layer deliberately does not offer.
+//
+// Two rules, both derived from the request that was already admitted: the
+// cursor must be same-origin with the resolved base URL, and it must address
+// the SAME endpoint. allow_cross_host governs a provider-supplied Link header
+// discovered during a walk; it can never widen what a caller may type, so it
+// is deliberately not consulted here.
+func admitDirectReadCursorURL(baseURL, requestPath, cursor string) (string, error) {
+	if !isAbsoluteHTTPURL(cursor) {
+		return "", fmt.Errorf("page cursor must be the absolute next-page URL a previous page reported, got %q", cursor)
+	}
+	next, err := url.Parse(cursor)
+	if err != nil {
+		return "", fmt.Errorf("page cursor %q is not a valid URL", cursor)
+	}
+	if next.User != nil {
+		return "", fmt.Errorf("page cursor must not carry userinfo")
+	}
+	target, err := directReadRequestTarget(baseURL, requestPath)
+	if err != nil || target.Host == "" {
+		return "", fmt.Errorf("page cursor cannot be admitted: this connector has no resolvable base origin to check it against")
+	}
+	if !strings.EqualFold(next.Host, target.Host) || !strings.EqualFold(next.Scheme, target.Scheme) {
+		return "", fmt.Errorf("page cursor %q is not same-origin with %s://%s", cursor, target.Scheme, target.Host)
+	}
+	if directReadPathKey(next.EscapedPath()) != directReadPathKey(target.EscapedPath()) {
+		return "", fmt.Errorf("page cursor %q addresses %q, but this command is admitted only for %q; a page cursor may vary the query, not the endpoint", cursor, directReadPathKey(next.EscapedPath()), directReadPathKey(target.EscapedPath()))
+	}
+	return cursor, nil
+}
+
+// directReadRequestTarget reproduces connsdk Requester.resolveURL's base+path
+// join, so the endpoint a cursor is compared against is exactly the one this
+// request would otherwise have hit.
+func directReadRequestTarget(baseURL, requestPath string) (*url.URL, error) {
+	raw := requestPath
+	if !isAbsoluteHTTPURL(requestPath) {
+		raw = strings.TrimRight(baseURL, "/") + "/" + strings.TrimLeft(requestPath, "/")
+	}
+	return url.Parse(raw)
+}
+
+func directReadPathKey(path string) string {
+	trimmed := strings.TrimRight(path, "/")
+	if trimmed == "" {
+		return "/"
+	}
+	return trimmed
 }
 
 // seekPageQuery advances the DECLARED paginator to the requested page without
@@ -271,6 +399,42 @@ func declaredSizeQuery(spec PaginationSpec, pageSize int) url.Values {
 	return q
 }
 
+// directReadRequestedSize reads back the page size this request actually
+// carries, from the final query rather than from the declaration.
+//
+// The declared-or-defaulted size is NOT the size on the wire: declaredSizeQuery
+// skips an empty size_param, and the page_number/offset_limit/start_index
+// paginators skip an empty size/limit/count param too. Reporting the
+// declaration for those bundles would claim a page the provider never applied.
+func directReadRequestedSize(spec PaginationSpec, strategy string, query url.Values) int {
+	for _, param := range directReadSizeParams(spec, strategy) {
+		if param == "" {
+			continue
+		}
+		raw := query.Get(param)
+		if raw == "" {
+			continue
+		}
+		if n, err := strconv.Atoi(raw); err == nil && n > 0 {
+			return n
+		}
+	}
+	return 0
+}
+
+// directReadSizeParams names every param through which a strategy can put a
+// page size on the wire, mirroring the paginators in paginate.go.
+func directReadSizeParams(spec PaginationSpec, strategy string) []string {
+	switch strategy {
+	case "offset_limit":
+		return []string{spec.LimitParam, spec.SizeParam}
+	case "start_index":
+		return []string{valueOrDefault(spec.CountParam, defaultStartIndexCount), spec.SizeParam}
+	default:
+		return []string{spec.SizeParam}
+	}
+}
+
 func cursorQuery(spec PaginationSpec, token string) url.Values {
 	q := url.Values{}
 	param := spec.CursorParam
@@ -308,11 +472,6 @@ func nextCursorToken(spec PaginationSpec, next *connsdk.NextPage) string {
 	return ""
 }
 
-func originOf(baseURL string) baseOrigin {
-	scheme, host := requesterOrigin(baseURL)
-	return baseOrigin{scheme: scheme, host: host}
-}
-
 // errDirectReadTooLarge lets the shared pager report the pre-existing
 // oversize-response failure while each executor keeps its own message prefix.
 type errDirectReadTooLarge struct {
@@ -323,6 +482,20 @@ type errDirectReadTooLarge struct {
 func (e errDirectReadTooLarge) Error() string {
 	return fmt.Sprintf("response too large: %d bytes exceeds limit %d", e.got, e.limit)
 }
+
+// errDirectReadPagination marks a failure that belongs to pagination — a
+// refused navigation input, an unadmittable page cursor, or a paginator guard
+// that fired. Both executors report it as such: a guard failure arrives with
+// the response already fetched and decoded, so without this marker it was
+// wrapped as "direct read response is not JSON", which is a wrong diagnosis of
+// a body that parsed fine.
+type errDirectReadPagination struct {
+	err error
+}
+
+func (e errDirectReadPagination) Error() string { return e.err.Error() }
+
+func (e errDirectReadPagination) Unwrap() error { return e.err }
 
 // directReadCollectionKey locates the paged collection in a decoded page. A
 // root array is the collection itself (key ""). An object is a collection only
@@ -353,6 +526,24 @@ func directReadCollectionKey(decoded any) (key string, isList bool, ambiguous bo
 	default:
 		return "", false, false
 	}
+}
+
+// directReadAmbiguousRecordCount totals every top-level array element of an
+// envelope whose paged collection could not be identified. Which array pages
+// is unknown, but how many rows came back is not — and reporting 0 for a body
+// carrying hundreds is exactly the untruth this change exists to remove.
+func directReadAmbiguousRecordCount(decoded any) int {
+	obj, ok := decoded.(map[string]any)
+	if !ok {
+		return 0
+	}
+	total := 0
+	for _, value := range obj {
+		if items, ok := value.([]any); ok {
+			total += len(items)
+		}
+	}
+	return total
 }
 
 func directReadItemsAt(decoded any, key string) ([]any, bool) {
