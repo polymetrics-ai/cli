@@ -5,7 +5,6 @@ package app
 import (
 	"context"
 	"database/sql"
-	"errors"
 	"fmt"
 	"math"
 	"math/big"
@@ -138,12 +137,9 @@ func (e duckdbEngine) QuerySQL(ctx context.Context, query string, limit int) ([]
 // View names are validated identifiers and file paths are passed as
 // quote-escaped string literals — never via user SQL interpolation.
 func (e duckdbEngine) registerViews(ctx context.Context, db *sql.DB) error {
+	// A warehouse that does not exist yet has no tables and is not an error.
 	tables, err := warehouse.Tables(e.warehouseDir)
 	if err != nil {
-		var missing *os.PathError
-		if errors.As(err, &missing) && os.IsNotExist(missing) {
-			return nil
-		}
 		return err
 	}
 	byName := make(map[string][]warehouse.Table, len(tables))

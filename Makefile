@@ -76,7 +76,9 @@ smoke-no-build:
 	./pm reverse preview "$$PLAN_ID" --root "$$SMOKE_DIR" --json >/dev/null; \
 	APPROVAL=$$(printf '%s\n' "$$PLAN_OUTPUT" | awk '/Approval token:/ {print $$3}'); \
 	./pm reverse run "$$PLAN_ID" --approve "$$APPROVAL" --root "$$SMOKE_DIR" --json >/dev/null; \
-	test -s "$$SMOKE_DIR/.polymetrics/warehouse/sample_customers.jsonl"; \
+	TABLE=$$(ls "$$SMOKE_DIR"/.polymetrics/warehouse/*/*/*/tables/sample_customers.jsonl); \
+	test -s "$$TABLE"; \
+	test -s "$$(dirname "$$(dirname "$$TABLE")")/owner.json"; \
 	test -s "$$SMOKE_DIR/.polymetrics/outbox/customers_to_outbox.jsonl"; \
 	printf 'smoke ok: %s\n' "$$SMOKE_DIR"
 

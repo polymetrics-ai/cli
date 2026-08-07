@@ -100,6 +100,21 @@ func TestEnsureOwnershipRefusesAnotherConnectionsDirectory(t *testing.T) {
 		t.Fatalf("repeat EnsureOwnership() error = %v", err)
 	}
 
+	// The same connection under a new display name keeps its directory and
+	// updates the record, so a read scoped by connection name still resolves.
+	renamed := first
+	renamed.Owner.DisplayName = "acme-renamed"
+	if err := renamed.EnsureOwnership(); err != nil {
+		t.Fatalf("renamed EnsureOwnership() error = %v", err)
+	}
+	stored, err := readOwner(first.ConnectionDir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if stored.DisplayName != "acme-renamed" || stored.Connection != "conn_first" {
+		t.Fatalf("ownership record after rename = %#v", stored)
+	}
+
 	// A second connection landing on the same directory is the regression this
 	// guard exists for: it must fail loudly rather than take the directory over.
 	hijack := first

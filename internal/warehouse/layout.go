@@ -294,6 +294,15 @@ func (l Location) EnsureOwnership() error {
 			WriterID:   l.Owner.Connection,
 		}
 	}
+	if stored.DisplayName != l.Owner.DisplayName {
+		// Same connection under a new name. The directory does not move,
+		// because it was never keyed on the name; only the record catches up,
+		// so reads that scope by connection name keep resolving.
+		stored.DisplayName = l.Owner.DisplayName
+		if err := writeJSONAtomic(l.OwnerPath(), stored); err != nil {
+			return fmt.Errorf("update warehouse ownership record: %w", err)
+		}
+	}
 	return nil
 }
 
