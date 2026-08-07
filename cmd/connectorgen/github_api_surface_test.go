@@ -70,46 +70,47 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 
 	// These are a snapshot of derived truth, not a budget. They moved when the
 	// bundle stopped enumerating only /repos/{owner}/{repo}/… and recorded the
-	// whole documented GET surface (636 of GitHub's 1220 operations). Every
-	// structural assertion below is unchanged; only the counts the surface now
-	// actually holds were re-derived.
-	if len(surface.Endpoints) != 886 {
-		t.Fatalf("endpoints = %d, want 886", len(surface.Endpoints))
+	// whole documented surface: 1220 REST operations plus the 4 fixed GraphQL
+	// rows, which are counted separately and never folded into the REST total.
+	// Every structural assertion below is unchanged; only the counts the surface
+	// now actually holds were re-derived.
+	if len(surface.Endpoints) != 1224 {
+		t.Fatalf("endpoints = %d, want 1224", len(surface.Endpoints))
 	}
-	if covered != 806 {
-		t.Fatalf("covered endpoints = %d, want 806", covered)
+	if covered != 1126 {
+		t.Fatalf("covered endpoints = %d, want 1126", covered)
 	}
-	if operations != 80 {
-		t.Fatalf("operation endpoints = %d, want 80 (duplicate/deprecated/disallowed, plus the direct reads GitHub documents with no JSON success body)", operations)
+	if operations != 98 {
+		t.Fatalf("operation endpoints = %d, want 98 (duplicate/deprecated, plus the operations no runtime component can execute)", operations)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
 	}
 	assertStringIntMap(t, "totalByMethod", totalByMethod, map[string]int{
-		"DELETE":  72,
+		"DELETE":  187,
 		"GET":     636,
 		"GRAPHQL": 4,
-		"PATCH":   36,
-		"POST":    91,
-		"PUT":     47,
+		"PATCH":   70,
+		"POST":    193,
+		"PUT":     134,
 	})
 	assertStringIntMap(t, "coveredByMethod", coveredByMethod, map[string]int{
-		"DELETE":  67,
+		"DELETE":  179,
 		"GET":     571,
 		"GRAPHQL": 4,
-		"PATCH":   34,
-		"POST":    85,
-		"PUT":     45,
+		"PATCH":   65,
+		"POST":    175,
+		"PUT":     132,
 	})
 	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{
-		"DELETE": 5,
+		"DELETE": 8,
 		"GET":    65,
-		"PATCH":  2,
-		"POST":   6,
+		"PATCH":  5,
+		"POST":   18,
 		"PUT":    2,
 	})
 	assertStringIntMap(t, "models", models, map[string]int{
-		"disallowed": 1,
+		"disallowed": 19,
 		"duplicate":  67,
 		"deprecated": 1,
 		// GETs GitHub documents with no JSON success body: 9 boolean 204 status
@@ -120,10 +121,10 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		"direct_read": 11,
 	})
 	assertStringIntMap(t, "risks", risks, map[string]int{
-		"low": 80,
+		"low": 98,
 	})
 	assertStringIntMap(t, "statuses", statuses, map[string]int{
-		"blocked": 80,
+		"blocked": 98,
 	})
 }
 
