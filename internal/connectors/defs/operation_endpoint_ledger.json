@@ -10578,7 +10578,50 @@
   "wordpress": [],
   "workable": [],
   "workday": [],
-  "workday-rest": [],
+  "workday-rest": [
+    {
+      "method": "POST",
+      "path": "/globalPayroll/v1/authorizations",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/person/v4/phoneValidation",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/skill/v1/mlSkills",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/studentAdvising/v1/hypotheticalAcademicProgress",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/studentRecruiting/v1/academicRequirementEvaluation",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/worktag/v1/validateWorktags",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/wql/v1/data",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    }
+  ],
   "workflowmax": [],
   "workramp": [],
   "wrike": [],

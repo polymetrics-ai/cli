@@ -11,10 +11,10 @@ Program: `cli-top50-fixed-schema-sweep-r1` · branch `fm/cli-top50-sweep-resume2
 | # | Slice | State |
 | ---: | --- | --- |
 | 1 | red test + `DERIVED-OPERATIONS.json` + this plan + `RUN-STATE.json` | ✅ **done, red observed — then RE-observed at 907, see Hazard 8** |
-| 2 | `api_surface.json` → **907** dispositioned rows | ☐ |
-| 3 | reads (`direct_read` commands) | ☐ |
-| 4 | mutations (write actions) + full binary reachability sweep | ☐ |
-| 5 | `SUMMARY.md` + `VERIFICATION.md` | ☐ |
+| 2 | `api_surface.json` → **907** dispositioned rows | ✅ |
+| 3 | reads (`direct_read` commands) | ✅ 654 |
+| 4 | mutations (write actions) + full binary reachability sweep | ✅ 252 writes, 911/911 reachable |
+| 5 | `SUMMARY.md` + `VERIFICATION.md` | ✅ |
 
 ## Artifact — a DIRECTORY, not a spec
 
@@ -162,9 +162,17 @@ describing a **behaviour** of the base endpoint, which is finding 23's shape exa
 
 #### The judgement this forces, and it is not the count
 
-Six of the nine (`viewContent` / `getFileContent` / `viewFile`) are the **binary** mode of an
-attachment endpoint whose default mode returns JSON metadata. **This is the connector's
-binary-detection judgement**, and it must not be resolved by picking one mode:
+> **Corrected before authoring.** My first pass wrote "six of the nine are the binary mode",
+> inferring binary from the `type=viewContent` / `getFileContent` / `viewFile` names. **That is
+> guessing from the path, which this sweep has explicitly rejected** (github's generator: "read out
+> of the artifact, never guessed from the path"). Read from `produces`, only **two** of the nine
+> declare `application/octet-stream` — both `procurement ?type=getFileContent`. The accountsPayable
+> `?type=viewContent` and recruiting `?type=viewFile` variants declare `application/json` **only**,
+> so they collapse into a plain metadata read and nothing binary is lost.
+
+**Two** of the nine (`procurement ?type=getFileContent`) are the **binary** mode of an attachment
+endpoint whose default mode returns JSON metadata. **This is the connector's binary-detection
+judgement**, and it must not be resolved by picking one mode:
 
 - Modelling the row as `direct_read` alone silently drops the ability to fetch the file.
 - Modelling it as `binary_download` alone silently drops the metadata read.
@@ -176,3 +184,29 @@ what the plural arrays exist for.
 
 The remaining three (`?type=archive` ×2, `?type=me`) re-express as a **flag** on the surviving write
 action (help-scout's `--async` pattern), never as a second path.
+
+#### The full binary surface, read from `produces` across all 52 specs
+
+Five endpoints, and every one is evidenced by a declared `application/octet-stream`:
+
+| Endpoint | `produces` | Shape |
+| --- | --- | --- |
+| `GET /api/prismAnalytics/v3/{tenant}/buckets/{id}/errorFile` | `octet-stream` only | pure `binary_download` |
+| `GET /attachments/v1/graphql/{ID}` | `json` + `octet-stream` | dual: metadata read **and** download |
+| `GET /customerAccounts/v1/invoicePDFs/{ID}` | `json` + `octet-stream` | dual |
+| `GET /procurement/v5/requisitions/{ID}/attachments` | base `json`; collapsed variant `octet-stream` + `json` | dual |
+| `GET /procurement/v5/requisitions/{ID}/attachments/{subresourceID}` | base `json`; collapsed variant `octet-stream` + `json` | dual |
+
+The four dual endpoints are exactly what `covered_by.direct_reads` (plural) is for: **one** documented
+row, **two** commands, no synthetic variant path.
+
+### 9. Two Prism Analytics GETs declare `*/*`, not `application/json`
+
+`GET /api/prismAnalytics/v3/{tenant}/dataChanges/{dataChangeID}` and `…/validate` declare their 200
+content as `*/*`. Read literally that is not `application/json`, which is github's blocking rule.
+
+**They are modelled as reads anyway, and this is a judgement, not an oversight.** OAS3's `*/*` is a
+wildcard *media type* carrying a real schema, and both point at a named component object schema
+(`dataChangeResponse`, `apiObject`) — a JSON object, not a file. Blocking them would claim the
+provider documents no response body when it documents a typed one. Contrast the errorFile endpoint
+above, which declares `octet-stream` and genuinely is a file.

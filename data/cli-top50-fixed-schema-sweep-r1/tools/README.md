@@ -79,3 +79,31 @@ name at the top before use.
 
 Expect ~1.2 s per invocation. At `-P 12` a 1000-command sweep takes several minutes — run it in the
 background, and do not run two sweeps into the same output file.
+
+## `gen_workday_rest.py`
+
+Builds workday-rest's whole surface — 907 documented rows, 911 commands, 252 write actions — from
+`.planning/phases/workday-rest-parity-sweep-r1/DERIVED-OPERATIONS.json` plus the 52 cached service
+specs. It **rewrites** rather than appends, so it is re-runnable:
+
+```bash
+python3 gen_workday_rest.py internal/connectors/defs/workday-rest --reads
+python3 gen_workday_rest.py internal/connectors/defs/workday-rest --all /path/to/specs
+go run ./cmd/connectorgen surface-sync     # fills the 7 rest_read ledger entries
+```
+
+Always regenerate from a clean tree (`git checkout -- internal/connectors/defs/`) — it was re-run
+three times that way, which is why each fix lives in the generator and not in the bundle.
+
+Rules it encodes that cost something to learn:
+
+- **Command names come from the endpoint**, because Workday declares an `operationId` on only 21 of
+  920 rows. A trailing `{var}` marks a detail read; a non-trailing one becomes a `by-<var>` word.
+  Verified to yield **907 distinct names for 907 operations** — check collisions before authoring.
+- **A read-only POST is named `read-*`, never `create-*`.** The verb is what a user reads before
+  running the command; no test can catch a name that lies.
+- **Binary is read from `produces`, never from the path.** `?type=viewContent` and `?type=viewFile`
+  sound like downloads and declare `application/json` only.
+- **A collapsed query-string behaviour uses `omit_when_absent`**, or the variant becomes the default.
+- `required_mapping_paths` is a **transcription** of `validate.go`'s recursion, not a restatement of
+  the rule — `AGENTS.md` is explicit that hand-copied runtime rules drift.

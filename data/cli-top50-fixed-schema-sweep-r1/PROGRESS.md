@@ -25,14 +25,21 @@ docs) are regenerated **once at the very end**, not per connector.
    `TestWorkdayRESTDocumentedSurfaceIsComplete`. Every *shared* gate is green:
    `connectorgen validate` 551/0, `surface-sync --check` clean, runtime preflight passing. **Do not
    weaken a red test to make the package green** — it goes green when the connector lands.
-2. **`TestGoldenTranscripts/root_bare_manual` fails**, and has since before github. Verified
-   pre-existing: chatwoot and gmail already added command surfaces the committed transcript predates,
-   and github added ~686 more commands. It is discharged by the **end-of-sweep regeneration**, which
-   must happen before the PR merges. Carried as a known-unmet item in every connector's
-   `VERIFICATION.md`. **Do not regenerate it per connector** — finding F6: a per-connector
-   `pm docs generate` run rewrites ~1,034 files of pre-existing `main` drift.
+2. **`TestGoldenTranscripts` fails — ELEVEN subtests, not one**, and has since before github.
+   Corrected 2026-08-07 by the workday-rest worker: this entry said `root_bare_manual`, and the
+   actual failing set is `root_bare_manual`, `root_long_help`, `root_short_help`,
+   `root_help_command`, `root_man_command`, `root_json_help`, `root_late_json_help`,
+   `root_equals_form`, `root_space_form`, `connectors_inspect_github_json` and
+   `dynamic_connector_bare_json`. **Prove it is pre-existing rather than assuming**:
+   `git stash push -u` your slice, re-run `go test ./internal/cli/ -run TestGoldenTranscripts`, and
+   compare the failing set. It was identical across both trees for workday-rest's 911 commands, which
+   is what makes "adds zero new failures" a measurement instead of a claim.
+   Discharged by the **end-of-sweep regeneration**, which must happen before the PR merges. Carried
+   as a known-unmet item in every connector's `VERIFICATION.md`. **Do not regenerate it per
+   connector** — finding F6: a per-connector `pm docs generate` run rewrites ~1,031 files of
+   pre-existing `main` drift.
 
-## ⇒ RESUME POINT — workday-rest slice 2 of 5 (its red is now observed at **907** — not 920, not 916)
+## ⇒ RESUME POINT — **zendesk-support 625**. workday-rest is COMPLETE.
 
 > **Updated by the slice-2 worker.** The section below is slice 1's account and is kept because its
 > reasoning about the cross-service duplication is correct and still load-bearing. **Its number is
@@ -114,6 +121,7 @@ deliberately not folded in here.
 | lever-hiring | 106 | ✅ on branch `0829543e6` (60 covered + 46 blocked) |
 | greenhouse | 138 | ✅ on branch (127 covered + 11 blocked; `pm greenhouse` did not exist before) |
 | help-scout | **144** | ✅ on branch (139 covered + 5 blocked; ledger said 146, derivation 145 — see finding 22) |
+| **workday-rest** | **907** | ✅ **on branch** (907 covered + 0 blocked, +4 legacy /ccx/ rows counted apart; 0→911 commands, 0→252 write actions; 911/911 verified reachable; ledger 0→7) |
 | **github** | **1220** | ✅ **on branch** (1126 covered + 98 blocked, +4 GraphQL counted separately; 461→1147 commands, 231→553 write actions; 1079 verified reachable by running the binary) |
 | gorgias | 114 | ✅ **separate open PR #3896** — leave it alone, do not fold |
 | notion | 51 | ✅ MERGED #3894 |
@@ -149,7 +157,7 @@ Commit **and push** after every single connector, and tick it here in the same s
 > **This supersedes the smallest-first order.** The four giants land FIRST, not last. Re-sorted by
 > re-derived operation count descending from `MASTER-PLAN.json`.
 
-~~github 1220~~ ✅ · `workday-rest 907 (NOT 920, NOT 916 — re-derived twice, see findings 34-35) · zendesk-support 625 · jira 616 · stripe 589 · linear 538 ·
+~~github 1220~~ ✅ · ~~workday-rest 907~~ ✅ (NOT 920, NOT 916 — re-derived twice, see findings 34-35) · `zendesk-support 625 · jira 616 · stripe 589 · linear 538 ·
 chargebee 438 · **marketo ~320-367 (count TBD)** · square 334 · bitbucket 331 · bamboo-hr 311 ·
 monday 292 · trello 261 · asana 249 · front 244 · xero 235 · intercom 231 · quickbooks 198 ·
 segment 197 · twilio 197 · google-ads 163`
@@ -343,17 +351,44 @@ command → one commit → push → tick.
     "put `if strings.Contains(ep.Path, "?")` in every red test"; the test **had** that guard, and the
     derivation feeding it did not. **Run the derivation through the red test's own rules before
     trusting its count.**
-35. **The query-string variants ARE the binary-detection judgement in disguise.** Six of
-    workday-rest's nine (`?type=viewContent` / `getFileContent` / `viewFile`) are the **binary** mode
-    of an attachment endpoint whose default mode returns JSON metadata — Workday's own procurement
-    summary says "Retrieves the metadata **or the attachment content**". So collapsing the count is
-    not the end of it: modelling the survivor as `direct_read` alone drops the file fetch, and as
-    `binary_download` alone drops the metadata read. **Hang both off ONE row with
-    `covered_by.direct_reads` (plural)** — this is the second connector to need github's plural-array
-    foundation fix, which confirms it generalised rather than solving one connector's problem.
+35. **Some query-string variants ARE the binary-detection judgement in disguise — but read
+    `produces`, do NOT infer binary from the `type=` name.** I got this wrong first and caught it
+    before authoring: `?type=viewContent`, `?type=getFileContent` and `?type=viewFile` all *sound*
+    like file fetches, so I recorded six of workday-rest's nine as binary. Read from the artifact,
+    **only two declare `application/octet-stream`** (both procurement `?type=getFileContent`); the
+    accountsPayable and recruiting variants declare `application/json` **only** and collapse into a
+    plain metadata read with nothing binary lost. This is github's own generator rule —
+    *"binary iff its documented success response says so; read out of the artifact, never guessed
+    from the path"* — failing on the first connector after github, because the provider's naming was
+    more suggestive than its schema.
+    Where a variant IS binary, modelling the survivor as `direct_read` alone drops the file fetch and
+    as `binary_download` alone drops the metadata read: **hang both off ONE row with
+    `covered_by.direct_reads` (plural)**. workday-rest is the second connector to need github's
+    plural-array foundation fix, which confirms it generalised rather than solving one connector's
+    problem.
     Seven of the nine carry an **empty summary**, which is the provider telling you it is an addendum
     to the base row and not an operation; the two that carry text describe a *behaviour*
     ("…to archived or un-archived") and become a flag, per finding 23.
+36. **`go test ./internal/cli/` uses the 10-MINUTE DEFAULT and dies mid-run; the project gate is
+    `-timeout 20m`.** `make verify` runs `go test -timeout 20m ./...`, but a bare
+    `go test ./internal/cli/` inherits Go's 600s default. With workday-rest's 911 commands the
+    package takes ~13 minutes, so the bare form panics with a goroutine dump in whatever unrelated
+    test held the clock — it looks exactly like a hang or a failure you caused, and is neither.
+    **Always pass `-timeout 20m` when running `internal/cli` locally.**
+37. **A collapsed query-string behaviour must be `omit_when_absent`, not a fixed `query` value.**
+    The write-action shape is
+    `query: {"<param>": {"template": "{{ record.<field> }}", "omit_when_absent": true}}` plus an
+    optional record field and flag — help-scout's `--async`. My first pass wrote
+    `query: {"type": "archive"}`, which **validates clean and passes every gate** while making every
+    `update-check-ins` call archive the record. No test catches this: the surface test counts rows,
+    validate checks schema, preflight checks executability, and the reachability probe checks
+    routing. The endpoint's default behaviour is only protected by reading what you generated.
+38. **Workday declares almost no required request-body fields — verify before trusting a zero.**
+    Only **2 of 226** mutation body schemas declare a top-level `required` array (though 105
+    component schemas declare one nested), so `availability: partial` never triggered across 252
+    write actions. A generator reporting "0 partial" is indistinguishable from a generator whose
+    required-field recursion is broken. Check it against the specs, not against the generator's own
+    count.
 
 ## Honest note on pace
 
