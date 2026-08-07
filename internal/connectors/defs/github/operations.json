@@ -5426,6 +5426,38 @@
         "allow_overwrite": false,
         "extract_archives": false
       }
+    },
+    {
+      "id": "github.migrations_download_archive_for_org",
+      "kind": "binary_download",
+      "summary": "Download an organization migration archive",
+      "source_url": "https://docs.github.com/rest/migrations/orgs#download-an-organization-migration-archive",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "binary",
+      "binary": {
+        "method": "GET",
+        "path": "/orgs/{org}/migrations/{migration_id}/archive",
+        "max_bytes": 104857600,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "github.migrations_get_archive_for_authenticated_user",
+      "kind": "binary_download",
+      "summary": "Download a user migration archive",
+      "source_url": "https://docs.github.com/rest/migrations/users#download-a-user-migration-archive",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "binary",
+      "binary": {
+        "method": "GET",
+        "path": "/user/migrations/{migration_id}/archive",
+        "max_bytes": 104857600,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
     }
   ]
 }
