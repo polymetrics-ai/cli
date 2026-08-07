@@ -90,3 +90,32 @@ func TestWarehouseValidateWriteRefusesAnUnwritableTableName(t *testing.T) {
 		t.Fatalf("ValidateWrite(usable table) error = %v, want acceptance", err)
 	}
 }
+
+// TestWarehouseValidateWriteAgreesWithWrite is the drift guard. ValidateWrite
+// exists only to predict Write, so a second copy of the table resolution or of
+// the name rule would let the predictor diverge from the thing it predicts and
+// send an approved reverse plan into a write that refuses it — the failure
+// ValidateWrite was added to prevent.
+func TestWarehouseValidateWriteAgreesWithWrite(t *testing.T) {
+	ctx := context.Background()
+	for _, req := range []WriteRequest{
+		{Stream: "records"},
+		{Stream: "records", Table: "records_copy"},
+		{Stream: "records", Table: "my table"},
+		{Stream: "my stream"},
+		{Stream: "records", Table: "../escape"},
+		{Stream: "records", Table: "."},
+		{Stream: "", Table: ""},
+		{Stream: "sub/stream", Table: ""},
+	} {
+		req.Config = RuntimeConfig{Config: map[string]string{"path": t.TempDir()}}
+		validated := (Warehouse{}).ValidateWrite(ctx, req, nil)
+		_, written := (Warehouse{}).Write(ctx, req, []Record{{"id": "a1"}})
+		if (validated == nil) != (written == nil) {
+			t.Fatalf("ValidateWrite(stream %q, table %q) = %v but Write = %v; the predictor and the write disagree", req.Stream, req.Table, validated, written)
+		}
+		if validated != nil && validated.Error() != written.Error() {
+			t.Fatalf("ValidateWrite refusal %q does not match the Write refusal %q", validated, written)
+		}
+	}
+}

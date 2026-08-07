@@ -303,6 +303,12 @@ func TestTablesReportsAnUnreadableOwnershipRecord(t *testing.T) {
 	}{
 		{name: "corrupt", record: "{not json", wantErr: "decode warehouse ownership record"},
 		{name: "unsupported version", record: `{"version":2}`, wantErr: "version 2 is unsupported"},
+		{name: "no identity", record: `{"version":1}`, wantErr: "has no workspace"},
+		{
+			name:    "no display name",
+			record:  `{"version":1,"workspace":"ws_1","connector":"hubspot","connection":"conn_a"}`,
+			wantErr: "has no display_name",
+		},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			root := t.TempDir()
@@ -428,6 +434,56 @@ func TestOneDamagedOwnershipRecordDoesNotDenyHealthyConnections(t *testing.T) {
 	}
 	if !strings.Contains(faulted.Error(), "healthy records are unaffected") {
 		t.Fatalf("fault error %q does not say the blast radius is contained", faulted)
+	}
+}
+
+// TestOwnershipRecordWithoutADisplayNameCannotPassAsUnattributed closes the
+// record side of the reservation ValidateConnectionName closes on the name
+// side. The empty connection is the sentinel for a root-level table owned by
+// nobody, so a record that cannot say which connection it belongs to must be a
+// fault rather than a value that answers to the unattributed selector.
+func TestOwnershipRecordWithoutADisplayNameCannotPassAsUnattributed(t *testing.T) {
+	root := t.TempDir()
+	connectionDir := filepath.Join(root, "ws_1", "hubspot", "conn_a")
+	tables := filepath.Join(connectionDir, TablesDirName)
+	if err := os.MkdirAll(tables, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(tables, "records.jsonl"), []byte(`{"id":"a1"}`+"\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	record := `{"version":1,"workspace":"ws_1","connector":"hubspot","connection":"conn_a"}`
+	if err := os.WriteFile(filepath.Join(connectionDir, OwnerFileName), []byte(record), 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	listed, faults, err := Tables(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(listed) != 0 {
+		t.Fatalf("Tables() = %#v, want a connection-owned table not listed as anyone's", listed)
+	}
+	if len(faults) != 1 || !faults[0].Holds("records") {
+		t.Fatalf("Tables() faults = %#v, want the record reported as damaged", faults)
+	}
+
+	var faulted *FaultError
+	if _, err := FindTable(root, "records", UnattributedConnection); !errors.As(err, &faulted) {
+		t.Fatalf("FindTable(records, %q) error = %T %v, want the damaged record reported rather than answered", UnattributedConnection, err, err)
+	}
+
+	// A genuinely unattributed table of the same name is still selectable, and
+	// it does not inherit the damaged directory's rows.
+	if err := os.WriteFile(filepath.Join(root, "records.jsonl"), []byte(`{"id":"direct"}`+"\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	found, err := FindTable(root, "records", UnattributedConnection)
+	if err != nil {
+		t.Fatalf("FindTable(records, %q) error = %v, want the root-level table", UnattributedConnection, err)
+	}
+	if found.Path != filepath.Join(root, "records.jsonl") {
+		t.Fatalf("FindTable(records, %q) path = %q, want the root-level table", UnattributedConnection, found.Path)
 	}
 }
 
