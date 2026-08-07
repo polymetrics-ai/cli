@@ -52,7 +52,6 @@ func TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints(t *testing.T) 
 	}
 }
 
-<<<<<<< HEAD
 // TestSurfaceInventoryCountsPluralOnlyWriteCoverage pins the two shipped
 // bundles whose covered_by rows use ONLY the plural `writes` spelling. github
 // cannot catch a regression here: all 231 of its write rows use the singular
