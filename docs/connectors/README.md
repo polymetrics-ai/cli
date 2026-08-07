@@ -314,7 +314,7 @@
 - [ninjaone-rmm](ninjaone-rmm/MANUAL.md): Reads NinjaOne RMM organizations, devices, locations, activities, and policies through the NinjaOne v2 REST API.
 - [nocrm](nocrm/MANUAL.md): Reads noCRM.io CRM objects and exposes declarative write actions for supported noCRM API v2 mutations.
 - [northpass-lms](northpass-lms/MANUAL.md): Reads Northpass LMS people, courses, course enrollments, and groups through the Northpass REST API. Read-only.
-- [notion](notion/MANUAL.md): Reads Notion databases, pages, and users through the Notion REST API. Read-only.
+- [notion](notion/MANUAL.md): Reads and writes Notion pages, databases, data sources, blocks, comments, views, and file uploads through the Notion REST API.
 - [nutshell](nutshell/MANUAL.md): Reads and writes documented Nutshell CRM REST resources through the Nutshell REST API.
 - [nylas](nylas/MANUAL.md): Reads Nylas calendars, contacts, messages, and events for a connected grant through the Nylas v3 REST API.
 - [nytimes](nytimes/MANUAL.md): Reads New York Times Most Popular (viewed, emailed, shared) articles via the NYTimes Developer APIs.

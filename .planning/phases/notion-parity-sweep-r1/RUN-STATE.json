@@ -1,0 +1,35 @@
+{
+  "phase": "notion-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "notion",
+  "state": "green",
+  "recorded_retrospectively": true,
+  "retrospective_note": "Phase artifacts written after implementation, per captain direction not to rebuild notion. dynamodb onward is red-first.",
+  "branch": "fm/cli-notion-parity-sweep-r1",
+  "pr": 3894,
+  "issues": { "parent": 3062, "closes": [3063, 3064, 3066, 3067, 3068], "refs": [3065, 3069] },
+  "artifact": {
+    "url": "https://developers.notion.com/openapi.json",
+    "kind": "openapi",
+    "version": "3.1.0",
+    "retrieved_at": "2026-08-07"
+  },
+  "operations": {
+    "documented_total": 51,
+    "ledger_carried_forward": 50,
+    "drift": "+1; ledger also misclassified the artifact as html_reference when a real OpenAPI document exists",
+    "webhook_events_excluded": 31,
+    "webhook_management_endpoints": 0
+  },
+  "coverage": {
+    "api_surface_rows": 54,
+    "streams": 6,
+    "direct_reads": 18,
+    "writes": 24,
+    "blocked_named_dependency": 1,
+    "not_executable": 5,
+    "blank_dispositions": 0
+  },
+  "tdd": { "count_lock_test": "cmd/connectorgen/notion_api_surface_test.go", "verified_to_fail_on_drift": true },
+  "next_action": "drive no-mistakes to green CI on PR 3894"
+}

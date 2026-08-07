@@ -310,7 +310,7 @@
 | `ninjaone-rmm` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | NinjaOne RMM | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://developer.ninjarmm.com/) | bundle definition |
 | `nocrm` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | noCRM | `api` | ga | check, catalog, read, write | 30 | 38 | [Documentation](https://www.nocrm.io/api) | bundle definition |
 | `northpass-lms` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Northpass LMS | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developers.northpass.com/) | bundle definition |
-| `notion` | [`icons/notion.svg`](../icons/notion.svg) | Notion | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://developers.notion.com/reference/intro) | bundle definition |
+| `notion` | [`icons/notion.svg`](../icons/notion.svg) | Notion | `api` | ga | check, catalog, read, write | 6 | 24 | [Documentation](https://developers.notion.com/reference/intro) | bundle definition |
 | `nutshell` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Nutshell | `api` | ga | check, catalog, read, write | 66 | 35 | [Documentation](https://developers.nutshell.com/docs/getting-started) | bundle definition |
 | `nylas` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Nylas | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developer.nylas.com/docs/api/) | bundle definition |
 | `nytimes` | [`icons/nytimes.svg`](../icons/nytimes.svg) | New York Times | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://developer.nytimes.com/apis) | bundle definition |

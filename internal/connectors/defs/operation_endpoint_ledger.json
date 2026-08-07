@@ -9472,7 +9472,116 @@
   "ninjaone-rmm": [],
   "nocrm": [],
   "northpass-lms": [],
-  "notion": [],
+  "notion": [
+    {
+      "method": "GET",
+      "path": "/v1/async_tasks/{task_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v1/blocks/{block_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v1/blocks/{block_id}/children",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v1/comments",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v1/comments/{comment_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v1/data_sources/{data_source_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v1/data_sources/{data_source_id}/templates",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v1/databases/{database_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v1/file_uploads/{file_upload_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v1/pages/{page_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v1/pages/{page_id}/markdown",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v1/pages/{page_id}/properties/{property_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v1/users/me",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v1/users/{user_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v1/views/{view_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v1/views/{view_id}/queries/{query_id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/v1/blocks/meeting_notes/query",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/v1/data_sources/{data_source_id}/query",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    }
+  ],
   "nutshell": [],
   "nylas": [],
   "nytimes": [],
