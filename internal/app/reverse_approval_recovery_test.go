@@ -5,12 +5,12 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"path/filepath"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
 	statestore "polymetrics.ai/internal/state"
+	"polymetrics.ai/internal/warehouse"
 )
 
 func TestRunReverseETLRecoversCommittedApprovalConsumptionUnlockFailure(t *testing.T) {
@@ -57,7 +57,7 @@ func testRunReverseETLRecoversUncertainApprovalConsumption(t *testing.T, configu
 	}); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(a.projectDir, "warehouse", "repo_deletes.jsonl"), []byte("{\"id\":\"row-1\"}\n"), 0o600); err != nil {
+	if err := warehouse.WriteTable(context.Background(), filepath.Join(a.projectDir, "warehouse", "repo_deletes"+warehouse.TableFileExt), []warehouse.Row{{"id": "row-1"}}); err != nil {
 		t.Fatal(err)
 	}
 

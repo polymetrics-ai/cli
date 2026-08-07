@@ -2,7 +2,6 @@ package connectors
 
 import (
 	"context"
-	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -30,18 +29,9 @@ func TestWarehouseCatalogNamesEveryHolderOfATableName(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := os.MkdirAll(filepath.Dir(owned), 0o700); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.WriteFile(owned, []byte(`{"id":"a1"}`+"\n"), 0o600); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.WriteFile(filepath.Join(root, "records.jsonl"), []byte(`{"id":"direct"}`+"\n"), 0o600); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.WriteFile(filepath.Join(root, "seeded.jsonl"), []byte(`{"id":"s1"}`+"\n"), 0o600); err != nil {
-		t.Fatal(err)
-	}
+	writeWarehouseTableFixture(t, owned, warehouse.Row{"id": "a1"})
+	writeWarehouseTableFixture(t, filepath.Join(root, "records"+warehouse.TableFileExt), warehouse.Row{"id": "direct"})
+	writeWarehouseTableFixture(t, filepath.Join(root, "seeded"+warehouse.TableFileExt), warehouse.Row{"id": "s1"})
 
 	catalog, err := Warehouse{}.Catalog(context.Background(), cfg)
 	if err != nil {
@@ -117,5 +107,15 @@ func TestWarehouseValidateWriteAgreesWithWrite(t *testing.T) {
 		if validated != nil && validated.Error() != written.Error() {
 			t.Fatalf("ValidateWrite refusal %q does not match the Write refusal %q", validated, written)
 		}
+	}
+}
+
+// writeWarehouseTableFixture materializes a table the way a sync would, so a
+// connector test exercises the real on-disk format rather than a hand-rolled
+// stand-in that could drift from it.
+func writeWarehouseTableFixture(t *testing.T, path string, rows ...warehouse.Row) {
+	t.Helper()
+	if err := warehouse.WriteTable(context.Background(), path, rows); err != nil {
+		t.Fatalf("write table fixture %s: %v", path, err)
 	}
 }

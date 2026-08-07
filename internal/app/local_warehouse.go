@@ -96,7 +96,6 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	if err := location.AssertOwnedTable(finalPath, table); err != nil {
 		return etlExecutionResult{}, err
 	}
-	tmpFinalPath := finalPath + "." + runID + ".tmp"
 	tmpRawPath := rawPath + "." + runID + ".tmp"
 	if err := os.MkdirAll(filepath.Dir(rawPath), 0o700); err != nil {
 		return etlExecutionResult{}, fmt.Errorf("create warehouse wal directory: %w", err)
@@ -117,38 +116,16 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	}
 	rawEncoder := json.NewEncoder(rawFile)
 
-	var finalFile *os.File
-	var finalEncoder *json.Encoder
-	if !mode.IsDeduped() {
-		finalTarget := finalPath
-		finalFlags := os.O_CREATE | os.O_WRONLY | os.O_APPEND
-		if mode.IsOverwrite() {
-			finalTarget = tmpFinalPath
-			finalFlags = os.O_CREATE | os.O_WRONLY | os.O_TRUNC
-		}
-		finalFile, err = os.OpenFile(finalTarget, finalFlags, 0o600)
-		if err != nil {
-			_ = rawFile.Close()
-			return etlExecutionResult{}, fmt.Errorf("open final table: %w", err)
-		}
-		finalEncoder = json.NewEncoder(finalFile)
-	}
-
 	success := false
 	defer func() {
 		_ = rawFile.Close()
-		if finalFile != nil {
-			_ = finalFile.Close()
-		}
 		if !success && mode.IsOverwrite() {
 			_ = os.Remove(tmpRawPath)
-			_ = os.Remove(tmpFinalPath)
 		}
 	}()
 
 	now := time.Now().UTC().Format(time.RFC3339Nano)
 	result := etlExecutionResult{}
-	recordBatch := make([]connectors.Record, 0, batchSize)
 	rawBatch := make([]localRawRecord, 0, batchSize)
 	priorCursor := streamStateCursor(prior)
 	nextCursor := priorCursor
@@ -167,19 +144,8 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 				return fmt.Errorf("write raw record: %w", err)
 			}
 		}
-		if finalEncoder != nil {
-			for _, record := range recordBatch {
-				if err := ctx.Err(); err != nil {
-					return err
-				}
-				if err := finalEncoder.Encode(record); err != nil {
-					return fmt.Errorf("write final record: %w", err)
-				}
-			}
-		}
 		result.BatchCount++
 		rawBatch = rawBatch[:0]
-		recordBatch = recordBatch[:0]
 		return nil
 	}
 
@@ -239,7 +205,6 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 			Record:       enriched,
 		}
 		rawBatch = append(rawBatch, raw)
-		recordBatch = append(recordBatch, enriched)
 		result.RecordsTransformed++
 		observedAt = time.Now().UTC()
 		result.RecordsLoaded++
@@ -260,37 +225,33 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	if err := rawFile.Close(); err != nil {
 		return result, fmt.Errorf("close raw table: %w", err)
 	}
-	if finalFile != nil {
-		if err := finalFile.Sync(); err != nil {
-			return result, fmt.Errorf("sync final table: %w", err)
-		}
-		if err := finalFile.Close(); err != nil {
-			return result, fmt.Errorf("close final table: %w", err)
-		}
-	}
 
-	if mode.IsDeduped() {
-		readRawPath := rawPath
-		if mode.IsOverwrite() {
-			readRawPath = tmpRawPath
-		}
-		finalCount, err := materializeDedupedFinal(ctx, readRawPath, tmpFinalPath)
-		if err != nil {
-			return result, err
-		}
-		result.RecordsLoaded = finalCount
-	}
-
+	// The write-ahead log is durable and complete, so it becomes the log of
+	// record before the table is derived from it. If materialization then
+	// fails, the next run rebuilds the table from this same log; no record is
+	// lost by the table being stale.
 	if mode.IsOverwrite() {
 		if err := os.Rename(tmpRawPath, rawPath); err != nil {
 			return result, fmt.Errorf("replace raw table: %w", err)
 		}
 	}
-	if mode.IsOverwrite() || mode.IsDeduped() {
-		if err := os.Rename(tmpFinalPath, finalPath); err != nil {
-			return result, fmt.Errorf("replace final table: %w", err)
-		}
+
+	// Every mode now materializes the table wholesale from the write-ahead
+	// log. Deduped modes already did. Append modes used to stream into the
+	// table O_APPEND, which Parquet cannot support: a Parquet file cannot be
+	// appended to once closed. Rebuilding from the log is what makes the table
+	// format a derived detail rather than a constraint on the write pattern.
+	finalCount, err := materializeFinalTable(ctx, rawPath, finalPath, mode.IsDeduped())
+	if err != nil {
+		return result, err
 	}
+	if mode.IsDeduped() {
+		// A deduped table's row count is the folded count, not the number of
+		// records this run read. An append table's stays per-run, because the
+		// table it rebuilds spans every run.
+		result.RecordsLoaded = finalCount
+	}
+
 	if err := syncLocalWarehouseDirectoryChain(filepath.Dir(finalPath)); err != nil {
 		return result, err
 	}
@@ -362,43 +323,57 @@ func checkpointForResult(result etlExecutionResult, mode SyncMode, stateKey stri
 	return checkpoint
 }
 
-func materializeDedupedFinal(ctx context.Context, rawPath, finalPath string) (int, error) {
-	best, err := readBestLocalRawRecords(ctx, rawPath)
+// materializeFinalTable rebuilds a table wholesale from its write-ahead log and
+// swaps it into place as one Parquet file.
+//
+// A deduped table folds the log by primary key, drops deletions, and emits in
+// key order. An append table replays the log in the order it was written, which
+// is the order the streaming append path produced — including across earlier
+// runs, because the log accumulates the same way the table used to.
+func materializeFinalTable(ctx context.Context, rawPath, finalPath string, deduped bool) (int, error) {
+	writer, err := warehouse.NewTableWriter(finalPath)
 	if err != nil {
 		return 0, err
 	}
-	keys := make([]string, 0, len(best))
-	for key, raw := range best {
-		if raw.Deleted {
-			continue
+	committed := false
+	defer func() {
+		if !committed {
+			writer.Abort()
 		}
-		keys = append(keys, key)
-	}
-	sort.Strings(keys)
-	file, err := os.OpenFile(finalPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o600)
-	if err != nil {
-		return 0, fmt.Errorf("open deduped final table: %w", err)
-	}
-	encoder := json.NewEncoder(file)
-	count := 0
-	for _, key := range keys {
-		if err := ctx.Err(); err != nil {
-			_ = file.Close()
-			return count, err
+	}()
+
+	if deduped {
+		best, err := readBestLocalRawRecords(ctx, rawPath)
+		if err != nil {
+			return 0, err
 		}
-		if err := encoder.Encode(best[key].Record); err != nil {
-			_ = file.Close()
-			return count, fmt.Errorf("write deduped final record: %w", err)
+		keys := make([]string, 0, len(best))
+		for key, raw := range best {
+			if raw.Deleted {
+				continue
+			}
+			keys = append(keys, key)
 		}
-		count++
+		sort.Strings(keys)
+		for _, key := range keys {
+			if err := ctx.Err(); err != nil {
+				return 0, err
+			}
+			if err := writer.Write(best[key].Record); err != nil {
+				return 0, err
+			}
+		}
+	} else if err := forEachLocalRawRecord(ctx, rawPath, func(raw localRawRecord) error {
+		return writer.Write(raw.Record)
+	}); err != nil {
+		return 0, err
 	}
-	if err := file.Sync(); err != nil {
-		_ = file.Close()
-		return count, fmt.Errorf("sync deduped final table: %w", err)
+
+	count := writer.Rows()
+	if err := writer.Commit(ctx); err != nil {
+		return 0, err
 	}
-	if err := file.Close(); err != nil {
-		return count, fmt.Errorf("close deduped final table: %w", err)
-	}
+	committed = true
 	return count, nil
 }
 
@@ -413,20 +388,40 @@ func rawRecordNewer(candidate, current localRawRecord) bool {
 }
 
 func readBestLocalRawRecords(ctx context.Context, path string) (map[string]localRawRecord, error) {
+	best := map[string]localRawRecord{}
+	err := forEachLocalRawRecord(ctx, path, func(record localRawRecord) error {
+		if record.PrimaryKey == "" {
+			return fmt.Errorf("raw record %s is missing primary key metadata", record.RawID)
+		}
+		current, ok := best[record.PrimaryKey]
+		if !ok || rawRecordNewer(record, current) {
+			best[record.PrimaryKey] = record
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return best, nil
+}
+
+// forEachLocalRawRecord streams a write-ahead log in the order it was written.
+// A log that does not exist yet is an empty log, not an error: a connection can
+// be materialized before its first record ever arrives.
+func forEachLocalRawRecord(ctx context.Context, path string, visit func(localRawRecord) error) error {
 	file, err := os.Open(path)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return map[string]localRawRecord{}, nil
+			return nil
 		}
-		return nil, fmt.Errorf("open raw table: %w", err)
+		return fmt.Errorf("open raw table: %w", err)
 	}
 	defer func() { _ = file.Close() }()
 	reader := bufio.NewScanner(file)
 	reader.Buffer(make([]byte, 0, 64*1024), 10*1024*1024)
-	best := map[string]localRawRecord{}
 	for reader.Scan() {
 		if err := ctx.Err(); err != nil {
-			return nil, err
+			return err
 		}
 		line := strings.TrimSpace(reader.Text())
 		if line == "" {
@@ -434,20 +429,16 @@ func readBestLocalRawRecords(ctx context.Context, path string) (map[string]local
 		}
 		var record localRawRecord
 		if err := json.Unmarshal([]byte(line), &record); err != nil {
-			return nil, fmt.Errorf("decode raw record: %w", err)
+			return fmt.Errorf("decode raw record: %w", err)
 		}
-		if record.PrimaryKey == "" {
-			return nil, fmt.Errorf("raw record %s is missing primary key metadata", record.RawID)
-		}
-		current, ok := best[record.PrimaryKey]
-		if !ok || rawRecordNewer(record, current) {
-			best[record.PrimaryKey] = record
+		if err := visit(record); err != nil {
+			return err
 		}
 	}
 	if err := reader.Err(); err != nil && err != io.EOF {
-		return nil, fmt.Errorf("scan raw records: %w", err)
+		return fmt.Errorf("scan raw records: %w", err)
 	}
-	return best, nil
+	return nil
 }
 
 func isDeletedRecord(record connectors.Record) bool {

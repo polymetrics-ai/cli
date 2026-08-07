@@ -1336,14 +1336,12 @@ func (Warehouse) Read(ctx context.Context, req ReadRequest, emit func(Record) er
 	if err != nil {
 		return err
 	}
-	file, err := os.Open(table.Path)
-	if err != nil {
-		return fmt.Errorf("open warehouse table %s: %w", req.Stream, err)
-	}
-	defer func() {
-		_ = file.Close()
-	}()
-	return readJSONL(ctx, file, emit)
+	// The table is Parquet, and the warehouse package holds the single Parquet
+	// implementation in the process. Reading it with a second one is how two
+	// readers of the same file come to disagree.
+	return warehouse.ReadTable(ctx, table.Path, func(row warehouse.Row) error {
+		return emit(Record(row))
+	})
 }
 
 // warehouseWriteTable is the single owner of which file a warehouse write
@@ -1384,22 +1382,34 @@ func (Warehouse) Write(ctx context.Context, req WriteRequest, records []Record) 
 	if err != nil {
 		return WriteResult{}, err
 	}
-	flag := os.O_CREATE | os.O_WRONLY | os.O_APPEND
-	if req.Overwrite {
-		flag = os.O_CREATE | os.O_WRONLY | os.O_TRUNC
+	path := filepath.Join(dir, component+warehouse.TableFileExt)
+	// A Parquet file cannot be appended to once closed, so an appending write
+	// reads the rows already there and rewrites the table with both sets. The
+	// table is derived and rewritten wholesale everywhere else in pm for the
+	// same reason; this keeps the direct write surface consistent with it.
+	rows := make([]warehouse.Row, 0, len(records))
+	if !req.Overwrite {
+		if _, err := os.Stat(path); err == nil {
+			if err := warehouse.ReadTable(ctx, path, func(row warehouse.Row) error {
+				rows = append(rows, row)
+				return nil
+			}); err != nil {
+				return WriteResult{}, err
+			}
+		} else if !os.IsNotExist(err) {
+			return WriteResult{}, fmt.Errorf("open warehouse table %s: %w", component, err)
+		}
 	}
-	file, err := os.OpenFile(filepath.Join(dir, component+".jsonl"), flag, 0o600)
-	if err != nil {
-		return WriteResult{}, fmt.Errorf("open warehouse table %s: %w", component, err)
+	for _, record := range records {
+		if err := ctx.Err(); err != nil {
+			return WriteResult{}, err
+		}
+		rows = append(rows, warehouse.Row(record))
 	}
-	defer func() {
-		_ = file.Close()
-	}()
-	n, err := writeJSONL(ctx, file, records)
-	if err != nil {
+	if err := warehouse.WriteTable(ctx, path, rows); err != nil {
 		return WriteResult{}, err
 	}
-	return WriteResult{RecordsWritten: n}, nil
+	return WriteResult{RecordsWritten: len(records)}, nil
 }
 
 type Outbox struct{}

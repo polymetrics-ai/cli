@@ -1,19 +1,14 @@
-//go:build duckdb
-
 package app
 
 import (
 	"context"
 	"database/sql"
 	"fmt"
-	"math"
-	"math/big"
 	"os"
 	"path/filepath"
 	"regexp"
 	"sort"
 	"strings"
-	"time"
 
 	_ "github.com/marcboeker/go-duckdb"
 
@@ -21,14 +16,15 @@ import (
 	"polymetrics.ai/internal/warehouse"
 )
 
-// newSQLEngine returns the DuckDB-backed analytical engine (built only with
-// -tags duckdb). It queries the JSONL warehouse files via in-memory views.
+// newSQLEngine returns the DuckDB-backed analytical engine. It is the only
+// engine: an optional one would mean two builds that write different table
+// formats, which is install-time drift rather than a build option.
 func newSQLEngine(a *App) sqlQueryEngine {
 	return duckdbEngine{warehouseDir: filepath.Join(a.projectDir, "warehouse")}
 }
 
-// duckdbEngine runs read-only analytical SQL over the JSONL warehouse using an
-// in-memory DuckDB instance. It is stateless: each query opens a fresh
+// duckdbEngine runs read-only analytical SQL over the Parquet warehouse using
+// an in-memory DuckDB instance. It is stateless: each query opens a fresh
 // connection and registers per-query views over the current warehouse files.
 type duckdbEngine struct {
 	warehouseDir string
@@ -116,7 +112,7 @@ func (e duckdbEngine) QuerySQL(ctx context.Context, query string, limit int) ([]
 		}
 		rec := make(connectors.Record, len(cols))
 		for i, col := range cols {
-			rec[col] = normalizeValue(holders[i])
+			rec[col] = warehouse.NormalizeValue(holders[i])
 		}
 		out = append(out, rec)
 	}
@@ -140,8 +136,8 @@ func (e duckdbEngine) registerViews(ctx context.Context, db *sql.DB) error {
 	// A warehouse that does not exist yet has no tables and is not an error.
 	// Faults are deliberately not fatal here: a damaged ownership record costs
 	// its own connection's views, not every other connection's. A query naming
-	// a view that is missing for that reason fails on its own, and the JSONL
-	// path reports the fault precisely.
+	// a view that is missing for that reason fails on its own, and the table
+	// read path reports the fault precisely.
 	tables, _, err := warehouse.Tables(e.warehouseDir)
 	if err != nil {
 		return err
@@ -173,8 +169,8 @@ func (e duckdbEngine) registerViews(ctx context.Context, db *sql.DB) error {
 				continue
 			}
 			stmt := fmt.Sprintf(
-				`CREATE VIEW "%s" AS SELECT * FROM read_ndjson_auto('%s')`,
-				view, escapeSQLLiteral(table.Path),
+				`CREATE VIEW "%s" AS SELECT * FROM read_parquet('%s')`,
+				view, warehouse.EscapeSQLLiteral(table.Path),
 			)
 			if _, err := db.ExecContext(ctx, stmt); err != nil {
 				return fmt.Errorf("register view %q: %w", view, err)
@@ -182,12 +178,6 @@ func (e duckdbEngine) registerViews(ctx context.Context, db *sql.DB) error {
 		}
 	}
 	return nil
-}
-
-// escapeSQLLiteral escapes single quotes for safe inclusion inside a single
-// quoted SQL string literal.
-func escapeSQLLiteral(s string) string {
-	return strings.ReplaceAll(s, "'", "''")
 }
 
 // hasTopLevelLimit reports whether the query already contains a LIMIT clause at
@@ -220,36 +210,4 @@ func isWordByte(b byte) bool {
 		(b >= 'a' && b <= 'z') ||
 		(b >= 'A' && b <= 'Z') ||
 		(b >= '0' && b <= '9')
-}
-
-// normalizeValue coerces DuckDB/driver values into the same Go types the JSONL
-// engine yields, so rows are interchangeable across engines. DuckDB returns
-// wide integers (HUGEINT, e.g. from SUM) as *big.Int; collapse those to int64
-// when they fit, else float64.
-func normalizeValue(v any) any {
-	switch val := v.(type) {
-	case []byte:
-		return string(val)
-	case time.Time:
-		return val.Format(time.RFC3339)
-	case *big.Int:
-		if val == nil {
-			return nil
-		}
-		if val.IsInt64() {
-			return val.Int64()
-		}
-		f := new(big.Float).SetInt(val)
-		out, _ := f.Float64()
-		return out
-	case big.Int:
-		return normalizeValue(&val)
-	case uint64:
-		if val <= math.MaxInt64 {
-			return int64(val)
-		}
-		return float64(val)
-	default:
-		return val
-	}
 }
