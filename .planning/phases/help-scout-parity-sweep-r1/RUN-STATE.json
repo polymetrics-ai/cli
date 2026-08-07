@@ -1,0 +1,59 @@
+{
+  "phase": "help-scout-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "help-scout",
+  "state": "red-authored-not-yet-observed",
+  "branch": "fm/cli-top50-sweep-continue-r1",
+  "artifact": {
+    "url": "https://developer.helpscout.com/mailbox-api/",
+    "kind": "html_reference",
+    "retrieved_at": "2026-08-07",
+    "http_status": 200,
+    "public_no_auth": true,
+    "note": "The ledger's recorded artifact_url (.../mailbox-api/endpoints/) 404s - it is a section prefix, not a page. The real inventory is the shared left-nav on the parent page: 146 unique /mailbox-api/endpoints/** page URLs, each fetched individually. Help Scout publishes no machine-readable spec."
+  },
+  "operations": {
+    "documented_total": 144,
+    "by_method": {"GET": 79, "POST": 21, "PUT": 20, "PATCH": 6, "DELETE": 18},
+    "ledger_carried_forward": 146,
+    "sweep_derivation": 145,
+    "drift": "-2 vs ledger, -1 vs the sweep derivation - and BOTH deltas are dedup, not missing endpoints",
+    "counting_note": "146 doc pages, each rendering exactly one METHOD+path request line (0 pages with 0 or >1). Deduped by (method, TEMPLATED path) taken from each page's own 'Path Parameters' block: 146 -> 144.",
+    "delta_explanation": {
+      "146_to_145": "GET /v2/conversations/{conversationId}/threads/{threadId}/original-source is documented on two pages, one per Accept header (application/json vs message/rfc822). Content negotiation on one endpoint. Their literal request lines are byte-identical, so the sweep derivation already caught this.",
+      "145_to_144": "DELETE /v2/customers/{customerId} is documented on two pages, 'Delete Customer' and 'Delete Customer Asynchronously'. Their literal request lines DIFFER (/v2/customers/100 vs /v2/customers/100?async=true), so deduping on the literal example path misses it. Both pages declare the SAME templated path. async=true switches the response from 204 No Content to 202 Accepted; it is a query parameter, not a second endpoint. This is the exact defect class the captain flagged on lever-hiring: double-counting query-string variants."
+    },
+    "webhook_events": 26,
+    "webhook_management_operations": 5,
+    "webhook_note": "The 26 events live at developer.helpscout.com/webhooks/, outside the Mailbox API nav, and are excluded by policy. The 5 /v2/webhooks management endpoints are ordinary operations and are counted."
+  },
+  "baseline": {
+    "api_surface_endpoints": 8,
+    "covered_by": 4,
+    "legacy_excluded": 4,
+    "blocked": 0,
+    "operation_ledger_version": null,
+    "cli_surface_present": false,
+    "operations_json_present": false,
+    "writes_present": false,
+    "streams": 4,
+    "wildcard_rows": 1,
+    "wildcard_note": "'GET /v2/reports/*' is a single excluded row standing for 33 distinct report endpoints - a wildcard is a family of operations, not an operation"
+  },
+  "adjudication_planned": {
+    "blocked_out_of_base_v3": 5,
+    "binary_download": 1,
+    "binary_note": "EXACTLY ONE. GET .../attachments/{attachmentId}/file streams the bytes (Content-Disposition: attachment, Content-Type: image/png, body 'binary_data'). Its sibling .../data returns {\"data\": \"<base64>\"} as application/hal+json and is an ORDINARY direct read. Getting that pair backwards is this connector's binary-detection trap.",
+    "post_classified_as_read": 0,
+    "post_note": "All 21 POSTs checked: Help Scout puts every filter/search on GET query parameters, so no POST is a disguised read."
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/help_scout_api_surface_test.go",
+    "red_confirmed": false,
+    "red_failure": null,
+    "red_blocker": "The shared Go build cache (/Users/karthiksivadas/Library/Caches/go-build, 55G, shared by every lane on this host) was corrupted during a host-wide disk-full window: its index still points at output files that were truncated or never written, so `go test` fails with `could not import <pkg> (open .../go-build/XX/<hash>-d: no such file or directory)` and a DIFFERENT missing entry on each retry. It is not self-healing. The test is authored and committed but has NOT been observed failing, and authoring must not begin until it has been.",
+    "green": false,
+    "pre_existing_help_scout_tests": "none - no cmd/connectorgen test referenced help-scout before this one (finding F5 check)"
+  },
+  "next_action": "Once the build cache is repaired, run TestHelpScoutAPISurfaceOperationLedger, capture the verbatim failure here and in TDD-LEDGER.md, THEN author. Do not author before observing red."
+}

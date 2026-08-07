@@ -1,0 +1,1161 @@
+{
+ "connector": "help-scout",
+ "derived_at": "2026-08-07",
+ "artifact": "https://developer.helpscout.com/mailbox-api/ left-nav (146 endpoint pages, each fetched individually)",
+ "documented_operations": 144,
+ "note": "Deduped by (method, TEMPLATED path) - the path Help Scout publishes in each page's own 'Path Parameters' block, not the example URL. 146 pages -> 144 operations: the original-source Accept-header pair collapses (identical literal request line, already caught by the sweep derivation at 145) and the sync/async customer delete pair collapses (differing literal request lines, MISSED by the derivation - ?async=true is a query parameter switching 204 to 202, not a second endpoint).",
+ "operations": [
+  {
+   "method": "GET",
+   "path": "/v2/conversations",
+   "title": "List Conversations",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/list/",
+   "example_request": "/v2/conversations",
+   "embedded_collection_key": "conversations"
+  },
+  {
+   "method": "POST",
+   "path": "/v2/conversations",
+   "title": "Create Conversation",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/create/",
+   "example_request": "/v2/conversations",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "DELETE",
+   "path": "/v2/conversations/{conversationId}",
+   "title": "Delete Conversation",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/delete/",
+   "example_request": "/v2/conversations/123",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/conversations/{conversationId}",
+   "title": "Get Conversation",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/get/",
+   "example_request": "/v2/conversations/123",
+   "embedded_collection_key": "threads"
+  },
+  {
+   "method": "PATCH",
+   "path": "/v2/conversations/{conversationId}",
+   "title": "Update Conversation",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/update/",
+   "example_request": "/v2/conversations/123",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "DELETE",
+   "path": "/v2/conversations/{conversationId}/attachments/{attachmentId}",
+   "title": "Delete Attachment",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/delete/",
+   "example_request": "/v2/conversations/100/attachments/5000",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/conversations/{conversationId}/attachments/{attachmentId}/data",
+   "title": "Get Attachment Data",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/get-data/",
+   "example_request": "/v2/conversations/100/attachments/5000/data",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/conversations/{conversationId}/attachments/{attachmentId}/file",
+   "title": "Download Attachment File",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/get-attachment-file/",
+   "example_request": "/v2/conversations/100/attachments/5000/file",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "POST",
+   "path": "/v2/conversations/{conversationId}/chats",
+   "title": "Create Chat Thread",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/chat/",
+   "example_request": "/v2/conversations/123/chats",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "POST",
+   "path": "/v2/conversations/{conversationId}/customer",
+   "title": "Create Customer Thread",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/customer/",
+   "example_request": "/v2/conversations/123/customer",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "PUT",
+   "path": "/v2/conversations/{conversationId}/fields",
+   "title": "Update Custom Fields",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/custom_fields/update/",
+   "example_request": "/v2/conversations/99/fields",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "POST",
+   "path": "/v2/conversations/{conversationId}/notes",
+   "title": "Create Note",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/note/",
+   "example_request": "/v2/conversations/123/notes",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "POST",
+   "path": "/v2/conversations/{conversationId}/phones",
+   "title": "Create Phone Thread",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/phone/",
+   "example_request": "/v2/conversations/123/phones",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "POST",
+   "path": "/v2/conversations/{conversationId}/reply",
+   "title": "Create Reply Thread",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/reply/",
+   "example_request": "/v2/conversations/123/reply",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "DELETE",
+   "path": "/v2/conversations/{conversationId}/snooze",
+   "title": "Delete Snooze",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/snooze/delete/",
+   "example_request": "/v2/conversations/99/snooze",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "PUT",
+   "path": "/v2/conversations/{conversationId}/snooze",
+   "title": "Update Snooze",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/snooze/update/",
+   "example_request": "/v2/conversations/99/snooze",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "PUT",
+   "path": "/v2/conversations/{conversationId}/tags",
+   "title": "Update Tags",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/tags/update/",
+   "example_request": "/v2/conversations/99/tags",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/conversations/{conversationId}/threads",
+   "title": "List Threads",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/list/",
+   "example_request": "/v2/conversations/123/threads",
+   "embedded_collection_key": "threads"
+  },
+  {
+   "method": "PATCH",
+   "path": "/v2/conversations/{conversationId}/threads/{threadId}",
+   "title": "Update Thread",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/update/",
+   "example_request": "/v2/conversations/123/threads/567",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "POST",
+   "path": "/v2/conversations/{conversationId}/threads/{threadId}/attachments",
+   "title": "Upload Attachment",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/create/",
+   "example_request": "/v2/conversations/100/threads/1000/attachments",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/conversations/{conversationId}/threads/{threadId}/original-source",
+   "title": "Get Thread Original Source",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/thread-source-json/",
+   "example_request": "/v2/conversations/123/threads/456/original-source",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "DELETE",
+   "path": "/v2/conversations/{conversationId}/threads/{threadId}/schedule",
+   "title": "Delete Thread Schedule",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/schedule/delete/",
+   "example_request": "/v2/conversations/99/threads/500/schedule",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "PATCH",
+   "path": "/v2/conversations/{conversationId}/threads/{threadId}/schedule",
+   "title": "Publish Thread Schedule",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/schedule/publish/",
+   "example_request": "/v2/conversations/99/threads/500/schedule",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "PUT",
+   "path": "/v2/conversations/{conversationId}/threads/{threadId}/schedule",
+   "title": "Update Thread Schedule",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/schedule/update/",
+   "example_request": "/v2/conversations/99/threads/500/schedule",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/customer-properties",
+   "title": "List Customer Property Definitions",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/properties/list/",
+   "example_request": "/v2/customer-properties",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "POST",
+   "path": "/v2/customer-properties",
+   "title": "Create Customer Property Definition",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/properties/create/",
+   "example_request": "/v2/customer-properties",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "DELETE",
+   "path": "/v2/customer-properties/{slug}",
+   "title": "Delete Customer Property Definition",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/properties/delete/",
+   "example_request": "/v2/customer-properties/property-slug",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/customers",
+   "title": "List Customers",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/list/",
+   "example_request": "/v2/customers",
+   "embedded_collection_key": "customers"
+  },
+  {
+   "method": "POST",
+   "path": "/v2/customers",
+   "title": "Create Customer",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/create/",
+   "example_request": "/v2/customers",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "DELETE",
+   "path": "/v2/customers/{customerId}",
+   "title": "Delete Customer Asynchronously",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/delete-async/",
+   "example_request": "/v2/customers/100?async=true",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/customers/{customerId}",
+   "title": "Get Customer",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/get/",
+   "example_request": "/v2/customers/100",
+   "embedded_collection_key": "emails"
+  },
+  {
+   "method": "PATCH",
+   "path": "/v2/customers/{customerId}",
+   "title": "Update Customer",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/update/",
+   "example_request": "/v2/customers/100",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "PUT",
+   "path": "/v2/customers/{customerId}",
+   "title": "Overwrite Customer",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/overwrite/",
+   "example_request": "/v2/customers/101",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "DELETE",
+   "path": "/v2/customers/{customerId}/address",
+   "title": "Delete Address",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/delete/",
+   "example_request": "/v2/customers/100/address",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/customers/{customerId}/address",
+   "title": "Get Address",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/get/",
+   "example_request": "/v2/customers/100/address",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "POST",
+   "path": "/v2/customers/{customerId}/address",
+   "title": "Create Address",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/create/",
+   "example_request": "/v2/customers/100/address",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "PUT",
+   "path": "/v2/customers/{customerId}/address",
+   "title": "Update Address",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/update/",
+   "example_request": "/v2/customers/100/address",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/customers/{customerId}/chats",
+   "title": "List Chats Handles",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/list/",
+   "example_request": "/v2/customers/100/chats",
+   "embedded_collection_key": "chats"
+  },
+  {
+   "method": "POST",
+   "path": "/v2/customers/{customerId}/chats",
+   "title": "Create Chat Handle",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/create/",
+   "example_request": "/v2/customers/100/chats",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "DELETE",
+   "path": "/v2/customers/{customerId}/chats/{chatId}",
+   "title": "Delete Chat Handle",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/delete/",
+   "example_request": "/v2/customers/100/chats/1008",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "PUT",
+   "path": "/v2/customers/{customerId}/chats/{chatId}",
+   "title": "Update Chat Handles",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/update/",
+   "example_request": "/v2/customers/100/chats/1008",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/customers/{customerId}/emails",
+   "title": "List Emails",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/list/",
+   "example_request": "/v2/customers/100/emails",
+   "embedded_collection_key": "emails"
+  },
+  {
+   "method": "POST",
+   "path": "/v2/customers/{customerId}/emails",
+   "title": "Create Email",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/create/",
+   "example_request": "/v2/customers/100/emails",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "DELETE",
+   "path": "/v2/customers/{customerId}/emails/{emailId}",
+   "title": "Delete Email",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/delete/",
+   "example_request": "/v2/customers/100/emails/1006",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "PUT",
+   "path": "/v2/customers/{customerId}/emails/{emailId}",
+   "title": "Update Email",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/update/",
+   "example_request": "/v2/customers/100/emails/1006",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/customers/{customerId}/phones",
+   "title": "List Phones",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/list/",
+   "example_request": "/v2/customers/100/phones",
+   "embedded_collection_key": "phones"
+  },
+  {
+   "method": "POST",
+   "path": "/v2/customers/{customerId}/phones",
+   "title": "Create Phone",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/create/",
+   "example_request": "/v2/customers/100/phones",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "DELETE",
+   "path": "/v2/customers/{customerId}/phones/{phoneId}",
+   "title": "Delete Phone",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/delete/",
+   "example_request": "/v2/customers/100/phones/1006",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "PUT",
+   "path": "/v2/customers/{customerId}/phones/{phoneId}",
+   "title": "Update Phone",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/update/",
+   "example_request": "/v2/customers/100/phones/1006",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "PATCH",
+   "path": "/v2/customers/{customerId}/properties",
+   "title": "Update Customer Properties",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/properties/update/",
+   "example_request": "/v2/customers/100/properties",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/customers/{customerId}/social-profiles",
+   "title": "List Social Profiles",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/list/",
+   "example_request": "/v2/customers/100/social-profiles",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "POST",
+   "path": "/v2/customers/{customerId}/social-profiles",
+   "title": "Create Social Profile",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/create/",
+   "example_request": "/v2/customers/100/social-profiles",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "DELETE",
+   "path": "/v2/customers/{customerId}/social-profiles/{socialProfileId}",
+   "title": "Delete Social Profile",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/delete/",
+   "example_request": "/v2/customers/100/social-profiles/1007",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "PUT",
+   "path": "/v2/customers/{customerId}/social-profiles/{socialProfileId}",
+   "title": "Update Social Profile",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/update/",
+   "example_request": "/v2/customers/100/social-profiles/1007",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/customers/{customerId}/websites",
+   "title": "List Websites",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/list/",
+   "example_request": "/v2/customers/100/websites",
+   "embedded_collection_key": "websites"
+  },
+  {
+   "method": "POST",
+   "path": "/v2/customers/{customerId}/websites",
+   "title": "Create Website",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/create/",
+   "example_request": "/v2/customers/100/websites",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "DELETE",
+   "path": "/v2/customers/{customerId}/websites/{websiteId}",
+   "title": "Delete Website",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/delete/",
+   "example_request": "/v2/customers/100/websites/1005",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "PUT",
+   "path": "/v2/customers/{customerId}/websites/{websiteId}",
+   "title": "Update Website",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/update/",
+   "example_request": "/v2/customers/100/websites/1005",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/mailboxes",
+   "title": "List Inboxes",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/list/",
+   "example_request": "/v2/mailboxes",
+   "embedded_collection_key": "mailboxes"
+  },
+  {
+   "method": "GET",
+   "path": "/v2/mailboxes/{mailboxId}",
+   "title": "Get Inbox",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/get/",
+   "example_request": "/v2/mailboxes/1",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/mailboxes/{mailboxId}/fields",
+   "title": "List Inbox Custom Fields",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/inbox-fields/",
+   "example_request": "/v2/mailboxes/1/fields",
+   "embedded_collection_key": "fields"
+  },
+  {
+   "method": "GET",
+   "path": "/v2/mailboxes/{mailboxId}/folders",
+   "title": "List Inbox Folders",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/inbox-folders/",
+   "example_request": "/v2/mailboxes/1/folders",
+   "embedded_collection_key": "folders"
+  },
+  {
+   "method": "GET",
+   "path": "/v2/mailboxes/{mailboxId}/routing",
+   "title": "Get Routing configuration",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/routing/routing-configuration-get/",
+   "example_request": "/v2/mailboxes/10/routing",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "PUT",
+   "path": "/v2/mailboxes/{mailboxId}/routing",
+   "title": "Update Routing configuration",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/routing/routing-configuration-update/",
+   "example_request": "/v2/mailboxes/10/routing",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/mailboxes/{mailboxId}/saved-replies",
+   "title": "List Saved Replies",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-list/",
+   "example_request": "/v2/mailboxes/100/saved-replies",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "POST",
+   "path": "/v2/mailboxes/{mailboxId}/saved-replies",
+   "title": "Create Saved Reply",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-create/",
+   "example_request": "/v2/mailboxes/100/saved-replies",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "DELETE",
+   "path": "/v2/mailboxes/{mailboxId}/saved-replies/{savedReplyId}",
+   "title": "Delete Saved Reply",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-delete/",
+   "example_request": "/v2/mailboxes/100/saved-replies/1000",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/mailboxes/{mailboxId}/saved-replies/{savedReplyId}",
+   "title": "Get Saved Reply",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-get/",
+   "example_request": "/v2/mailboxes/100/saved-replies/1000",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "PUT",
+   "path": "/v2/mailboxes/{mailboxId}/saved-replies/{savedReplyId}",
+   "title": "Update Saved Reply",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-update/",
+   "example_request": "/v2/mailboxes/100/saved-replies/15",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/organizations",
+   "title": "List Organizations",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/list/",
+   "example_request": "/v2/organizations?page=1&sort=name%2Casc",
+   "embedded_collection_key": "organizations"
+  },
+  {
+   "method": "POST",
+   "path": "/v2/organizations",
+   "title": "Create Organization",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/create/",
+   "example_request": "/v2/organizations",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/organizations/properties",
+   "title": "List Organization Property Definitions",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/list/",
+   "example_request": "/v2/organizations/properties",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "POST",
+   "path": "/v2/organizations/properties",
+   "title": "Create Organization Property Definition",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/create/",
+   "example_request": "/v2/organizations/properties",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "DELETE",
+   "path": "/v2/organizations/properties/{slug}",
+   "title": "Delete Organization Property Definition",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/delete/",
+   "example_request": "/v2/organizations/properties/customer-tier",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/organizations/properties/{slug}",
+   "title": "Get Organization Property Definition",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/get/",
+   "example_request": "/v2/organizations/properties/industry",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "PUT",
+   "path": "/v2/organizations/properties/{slug}",
+   "title": "Update Organization Property Definition",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/update/",
+   "example_request": "/v2/organizations/properties/industry",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "DELETE",
+   "path": "/v2/organizations/{organizationId}",
+   "title": "Delete Organization by ID",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/delete/",
+   "example_request": "/v2/organizations/10",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/organizations/{organizationId}",
+   "title": "Get Organization by ID",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/get/",
+   "example_request": "/v2/organizations/10?includeCounts=true&includeProperties=true",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "PUT",
+   "path": "/v2/organizations/{organizationId}",
+   "title": "Update Organization",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/update/",
+   "example_request": "/v2/organizations/10",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/organizations/{organizationId}/conversations",
+   "title": "Get Organization Conversations",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/get-conversations/",
+   "example_request": "/v2/organizations/10/conversations?page=1",
+   "embedded_collection_key": "conversations"
+  },
+  {
+   "method": "GET",
+   "path": "/v2/organizations/{organizationId}/customers",
+   "title": "Get Organization Customers",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/get-customers/",
+   "example_request": "/v2/organizations/10/customers?page=1",
+   "embedded_collection_key": "customers"
+  },
+  {
+   "method": "DELETE",
+   "path": "/v2/organizations/{organizationId}/properties/{slug}",
+   "title": "Remove Organization Property Value",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/remove-value/",
+   "example_request": "/v2/organizations/123/properties/customer-tier",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "PUT",
+   "path": "/v2/organizations/{organizationId}/properties/{slug}",
+   "title": "Set Organization Property Value",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/set-value/",
+   "example_request": "/v2/organizations/123/properties/customer-tier",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/ratings/{ratingId}",
+   "title": "Get Satisfaction Rating",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/ratings/get/",
+   "example_request": "/v2/ratings/1",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/chat",
+   "title": "Chat Report",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/chat/",
+   "example_request": "/v2/reports/chat",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/company",
+   "title": "Company Overall Report",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/reports-company-overall/",
+   "example_request": "/v2/reports/company",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/company/customers-helped",
+   "title": "Company Customers Helped",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/reports-company-customers-helped/",
+   "example_request": "/v2/reports/company/customers-helped",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/company/drilldown",
+   "title": "Company Drilldown",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/reports-company-drilldown/",
+   "example_request": "/v2/reports/company/drilldown",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/conversations",
+   "title": "Conversations - Overall Report",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-overall/",
+   "example_request": "/v2/reports/conversations",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/conversations/busy-times",
+   "title": "Conversations - Busiest Time of Day",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-busy-times/",
+   "example_request": "/v2/reports/conversations/busy-times",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/conversations/drilldown",
+   "title": "Conversations - Drilldown",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-drilldown/",
+   "example_request": "/v2/reports/conversations/drilldown",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/conversations/fields-drilldown",
+   "title": "Conversations - Drilldown by Field",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-field-drilldown/",
+   "example_request": "/v2/reports/conversations/fields-drilldown",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/conversations/new",
+   "title": "Conversations - New Conversations",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-new/",
+   "example_request": "/v2/reports/conversations/new",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/conversations/new-drilldown",
+   "title": "Conversations - New Conversations Drilldown",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-new-drilldown/",
+   "example_request": "/v2/reports/conversations/new-drilldown",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/conversations/received-messages",
+   "title": "Conversations - Received Messages Statistics",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-received-messages/",
+   "example_request": "/v2/reports/conversations/received-messages",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/conversations/volume-by-channel",
+   "title": "All Channels - Volumes by Channel",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-volume-by-channel/",
+   "example_request": "/v2/reports/conversations/volume-by-channel",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/docs",
+   "title": "Docs Overall Report",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/docs/reports-docs-overall/",
+   "example_request": "/v2/reports/docs",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/email",
+   "title": "Email Report",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/email/",
+   "example_request": "/v2/reports/email",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/happiness",
+   "title": "Happiness Overall Report",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/happiness/reports-happiness-overall/",
+   "example_request": "/v2/reports/happiness",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/happiness/ratings",
+   "title": "Happiness Ratings Report",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/happiness/reports-happiness-ratings/",
+   "example_request": "/v2/reports/happiness/ratings",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/phone",
+   "title": "Phone Report",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/phone/",
+   "example_request": "/v2/reports/phone",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/productivity",
+   "title": "Productivity Overall Report",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-overall/",
+   "example_request": "/v2/reports/productivity",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/productivity/first-response-time",
+   "title": "Productivity - First Response Time",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-first-response-time/",
+   "example_request": "/v2/reports/productivity/first-response-time",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/productivity/replies-sent",
+   "title": "Productivity - Replies Sent",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-replies-sent/",
+   "example_request": "/v2/reports/productivity/replies-sent",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/productivity/resolution-time",
+   "title": "Productivity - Resolution Time",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-resolution-time/",
+   "example_request": "/v2/reports/productivity/resolution-time",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/productivity/resolved",
+   "title": "Productivity - Resolved",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-resolved/",
+   "example_request": "/v2/reports/productivity/resolved",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/productivity/response-time",
+   "title": "Productivity - Response Time",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-respose-time/",
+   "example_request": "/v2/reports/productivity/response-time",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/user",
+   "title": "User/Team Overall Report",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user/",
+   "example_request": "/v2/reports/user",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/user/chat",
+   "title": "User/Team Chat Report",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-chat/",
+   "example_request": "/v2/reports/user/chat",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/user/conversation-history",
+   "title": "User Conversation History",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-conversation-history/",
+   "example_request": "/v2/reports/user/conversation-history",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/user/customers-helped",
+   "title": "User Customers Helped",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-customer-helped/",
+   "example_request": "/v2/reports/user/customers-helped",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/user/drilldown",
+   "title": "User Drill-down",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-drilldown/",
+   "example_request": "/v2/reports/user/drilldown",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/user/happiness",
+   "title": "User Happiness",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-happiness/",
+   "example_request": "/v2/reports/user/happiness",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/user/ratings",
+   "title": "User Happiness drilldown",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-happiness-drilldown/",
+   "example_request": "/v2/reports/user/ratings",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/user/replies",
+   "title": "User Replies",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-replies/",
+   "example_request": "/v2/reports/user/replies",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/reports/user/resolutions",
+   "title": "User Resolutions",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-resolutions/",
+   "example_request": "/v2/reports/user/resolutions",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/tags",
+   "title": "List Tags",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/tags/list/",
+   "example_request": "/v2/tags",
+   "embedded_collection_key": "tags"
+  },
+  {
+   "method": "GET",
+   "path": "/v2/tags/{tagId}",
+   "title": "Get Tag by ID",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/tags/get/",
+   "example_request": "/v2/tags/123456793",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/teams",
+   "title": "List Teams",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/teams/list-teams/",
+   "example_request": "/v2/teams",
+   "embedded_collection_key": "teams"
+  },
+  {
+   "method": "GET",
+   "path": "/v2/teams/{teamId}/members",
+   "title": "List Team Members",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/teams/list-team-members/",
+   "example_request": "/v2/teams/10/members",
+   "embedded_collection_key": "users"
+  },
+  {
+   "method": "PUT",
+   "path": "/v2/teams/{teamId}/members",
+   "title": "Update Team Members",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/teams/update-team-members/",
+   "example_request": "/v2/teams/10/members",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/users",
+   "title": "List Users",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/users/list/",
+   "example_request": "/v2/users",
+   "embedded_collection_key": "users"
+  },
+  {
+   "method": "POST",
+   "path": "/v2/users",
+   "title": "Create User",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/users/create/",
+   "example_request": "/v2/users",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/users/me",
+   "title": "Get Resource Owner",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/users/me/",
+   "example_request": "/v2/users/me",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/users/status",
+   "title": "List users statuses",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/users/status/list/",
+   "example_request": "/v2/users/status?page=1",
+   "embedded_collection_key": "userStatuses"
+  },
+  {
+   "method": "DELETE",
+   "path": "/v2/users/{userId}",
+   "title": "Delete User",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/users/delete/",
+   "example_request": "/v2/users/4",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/users/{userId}",
+   "title": "Get User",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/users/get/",
+   "example_request": "/v2/users/4",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/users/{userId}/conversation-reassignment",
+   "title": "Get Conversation Reassignment configuration",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/users/conversation reassignment/get/",
+   "example_request": "/v2/users/4/conversation-reassignment",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "PUT",
+   "path": "/v2/users/{userId}/conversation-reassignment",
+   "title": "Update Conversation Reassignment configuration",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/users/conversation reassignment/update/",
+   "example_request": "/v2/users/4/conversation-reassignment",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/users/{userId}/status",
+   "title": "Get user status",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/users/status/get/",
+   "example_request": "/v2/users/4/status",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "PUT",
+   "path": "/v2/users/{userId}/status",
+   "title": "Set user status",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/users/status/set/",
+   "example_request": "/v2/users/4/status",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/webhooks",
+   "title": "List Webhooks",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/list/",
+   "example_request": "/v2/webhooks",
+   "embedded_collection_key": "webhooks"
+  },
+  {
+   "method": "POST",
+   "path": "/v2/webhooks",
+   "title": "Create Webhook",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/create/",
+   "example_request": "/v2/webhooks",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "DELETE",
+   "path": "/v2/webhooks/{webhookId}",
+   "title": "Delete Webhook",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/delete/",
+   "example_request": "/v2/webhooks/10",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/webhooks/{webhookId}",
+   "title": "Get Webhook",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/get/",
+   "example_request": "/v2/webhooks/10",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "PUT",
+   "path": "/v2/webhooks/{webhookId}",
+   "title": "Update Webhook",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/update/",
+   "example_request": "/v2/webhooks/10",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v2/workflows",
+   "title": "List Workflows",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/workflows/list/",
+   "example_request": "/v2/workflows",
+   "embedded_collection_key": "workflows"
+  },
+  {
+   "method": "PATCH",
+   "path": "/v2/workflows/{workflowId}",
+   "title": "Update workflow status",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/workflows/update/",
+   "example_request": "/v2/workflows/20",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "POST",
+   "path": "/v2/workflows/{workflowId}/run",
+   "title": "Run Manual Workflows",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/workflows/run/",
+   "example_request": "/v2/workflows/20/run",
+   "embedded_collection_key": null
+  },
+  {
+   "method": "GET",
+   "path": "/v3/conversations/{conversationId}",
+   "title": "Get Conversation (v3)",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/get-v3/",
+   "example_request": "/v3/conversations/123",
+   "embedded_collection_key": "threads"
+  },
+  {
+   "method": "GET",
+   "path": "/v3/conversations/{conversationId}/threads",
+   "title": "List Threads (v3)",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/list-v3/",
+   "example_request": "/v3/conversations/123/threads",
+   "embedded_collection_key": "threads"
+  },
+  {
+   "method": "GET",
+   "path": "/v3/customers",
+   "title": "List Customers (v3)",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/customers/list-v3/",
+   "example_request": "/v3/customers",
+   "embedded_collection_key": "customers"
+  },
+  {
+   "method": "GET",
+   "path": "/v3/system-users",
+   "title": "List System Users",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/list-system-users/",
+   "example_request": "/v3/system-users",
+   "embedded_collection_key": "system_users"
+  },
+  {
+   "method": "GET",
+   "path": "/v3/system-users/{systemUserId}",
+   "title": "Get System User",
+   "doc_page": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/get-system-user/",
+   "example_request": "/v3/system-users/155250",
+   "embedded_collection_key": null
+  }
+ ]
+}
