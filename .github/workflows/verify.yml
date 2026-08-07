@@ -150,6 +150,17 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Trust the checkout inside the container
+        shell: bash
+        run: |
+          # The workspace is bind-mounted into the container as a different uid,
+          # so git refuses it as dubious ownership and Go's VCS stamping fails
+          # with "error obtaining VCS status" before any compiler runs. Without
+          # this the probe reports FAILED for every target and looks exactly
+          # like a toolchain verdict.
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config --global --add safe.directory '*'
+
       - name: Show which cross compilers this image actually ships
         shell: bash
         run: |
@@ -173,8 +184,9 @@ jobs:
               echo "RESULT $goos/$goarch: FAILED (compiler $cc not in image)"
               return
             fi
+            # -buildvcs=false keeps git ownership out of a toolchain question.
             if CGO_ENABLED=1 GOOS="$goos" GOARCH="$goarch" CC="$cc" CXX="$cxx" \
-               go build -o /dev/null ./cmd/pm 2>&1 | tail -20; then
+               go build -buildvcs=false -o /dev/null ./cmd/pm 2>&1 | tail -25; then
               echo "RESULT $goos/$goarch: OK"
             else
               echo "RESULT $goos/$goarch: FAILED"
