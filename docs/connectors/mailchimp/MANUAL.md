@@ -83,262 +83,262 @@ CONFIGURATION
 ETL STREAMS
   account_exports_exports:
     primary key: id
-    fields: _links(), download_url(), export_id(), finished(), id(), size_in_bytes(), started()
+    fields: _links(object), download_url(string), export_id(integer), finished(string), id(string), size_in_bytes(integer), started(string)
   activity_feed_chimp_chatter:
     primary key: campaign_id
-    fields: campaign_id(), list_id(), message(), title(), type(), update_time(), url()
+    fields: campaign_id(string), list_id(string), message(string), title(string), type(string), update_time(string), url(string)
   audiences:
     primary key: id
-    fields: enabled_channels(), id(), name(), stats()
+    fields: enabled_channels(array), id(string), name(string), stats(object)
   audiences_contacts:
     primary key: id
-    fields: audience_id(), created_at(), email_channel(), id(), language(), last_updated_at(), merge_fields(), sms_channel(), source(), status(), tags()
+    fields: audience_id(string), created_at(string), email_channel(object), id(string), language(string), last_updated_at(string), merge_fields(object), sms_channel(object), source(object), status(string), tags(array)
   authorized_apps_apps:
     primary key: id
-    fields: _links(), description(), id(), name(), users()
+    fields: _links(object), description(string), id(integer), name(string), users(array)
   automations:
     primary key: id
     cursor: create_time
-    fields: _links(), create_time(), emails_sent(), id(), recipients(), report_summary(), settings(), start_time(), status(), tracking(), trigger_settings()
+    fields: _links(object), create_time(string), emails_sent(integer), id(string), recipients(object), report_summary(object), settings(object), start_time(string), status(string), tracking(object), trigger_settings(object)
   automations_emails:
     primary key: id
     cursor: create_time
-    fields: _links(), archive_url(), content_type(), create_time(), delay(), emails_sent(), has_logo_merge_tag(), id(), needs_block_refresh(), position(), recipients(), report_summary(), send_time(), settings(), social_card(), start_time(), status(), tracking(), trigger_settings(), web_id(), workflow_id()
+    fields: _links(object), archive_url(string), content_type(string), create_time(string), delay(object), emails_sent(integer), has_logo_merge_tag(boolean), id(string), needs_block_refresh(boolean), position(integer), recipients(object), report_summary(object), send_time(string), settings(object), social_card(object), start_time(string), status(string), tracking(object), trigger_settings(object), web_id(integer), workflow_id(string)
   automations_emails_queue:
     primary key: id
-    fields: _links(), email_address(), email_id(), id(), list_id(), next_send(), workflow_email_id(), workflow_id()
+    fields: _links(object), email_address(string), email_id(string), id(string), list_id(string), next_send(string), workflow_email_id(string), workflow_id(string)
   automations_removed_subscribers_subscribers:
     primary key: id
-    fields: _links(), email_address(), id(), list_id(), workflow_id()
+    fields: _links(object), email_address(string), id(string), list_id(string), workflow_id(string)
   batch_webhooks_webhooks:
     primary key: id
-    fields: _links(), enabled(), id(), url()
+    fields: _links(object), enabled(boolean), id(string), url(string)
   batches:
     primary key: id
-    fields: _links(), completed_at(), errored_operations(), finished_operations(), id(), response_body_url(), status(), submitted_at(), total_operations()
+    fields: _links(object), completed_at(string), errored_operations(integer), finished_operations(integer), id(string), response_body_url(string), status(string), submitted_at(string), total_operations(integer)
   campaign_folders_folders:
     primary key: id
-    fields: _links(), count(), id(), name()
+    fields: _links(object), count(integer), id(string), name(string)
   campaigns:
     primary key: id
     cursor: create_time
-    fields: _links(), ab_split_opts(), archive_url(), content_type(), create_time(), delivery_status(), emails_sent(), id(), long_archive_url(), needs_block_refresh(), parent_campaign_id(), recipients(), report_summary(), resend_shortcut_eligibility(), resend_shortcut_usage(), resendable(), rss_opts(), send_time(), settings(), social_card(), status(), tracking(), type(), variate_settings(), web_id()
+    fields: _links(object), ab_split_opts(object), archive_url(string), content_type(string), create_time(string), delivery_status(object), emails_sent(integer), id(string), long_archive_url(string), needs_block_refresh(boolean), parent_campaign_id(string), recipients(object), report_summary(object), resend_shortcut_eligibility(object), resend_shortcut_usage(object), resendable(boolean), rss_opts(object), send_time(string), settings(object), social_card(object), status(object), tracking(object), type(object), variate_settings(object), web_id(integer)
   campaigns_feedback:
     primary key: campaign_id
     cursor: updated_at
-    fields: _links(), block_id(), campaign_id(), created_at(), created_by(), feedback_id(), is_complete(), message(), parent_id(), source(), updated_at()
+    fields: _links(object), block_id(integer), campaign_id(string), created_at(string), created_by(string), feedback_id(integer), is_complete(boolean), message(string), parent_id(integer), source(string), updated_at(string)
   connected_sites_sites:
     primary key: store_id
     cursor: updated_at
-    fields: _links(), created_at(), domain(), foreign_id(), is_pixel_enabled(), platform(), site_script(), store_id(), updated_at()
+    fields: _links(object), created_at(string), domain(string), foreign_id(string), is_pixel_enabled(boolean), platform(string), site_script(object), store_id(string), updated_at(string)
   conversations:
     primary key: id
-    fields: _links(), campaign_id(), from_email(), from_label(), id(), last_message(), list_id(), message_count(), subject(), unread_messages()
+    fields: _links(object), campaign_id(string), from_email(string), from_label(string), id(string), last_message(object), list_id(string), message_count(integer), subject(string), unread_messages(integer)
   conversations_messages_conversation_messages:
     primary key: id
-    fields: _links(), conversation_id(), from_email(), from_label(), id(), list_id(), message(), read(), subject(), timestamp()
+    fields: _links(object), conversation_id(string), from_email(string), from_label(string), id(string), list_id(integer), message(string), read(boolean), subject(string), timestamp(string)
   ecommerce_orders:
     primary key: id
-    fields: _links(), billing_address(), campaign_id(), cancelled_at_foreign(), cart_id(), currency_code(), customer(), discount_total(), financial_status(), fulfillment_status(), id(), landing_site(), lines(), order_total(), order_url(), outreach(), processed_at_foreign(), promos(), shipping_address(), shipping_total(), store_id(), tax_total(), tracking_carrier(), tracking_code(), tracking_number(), tracking_url(), updated_at_foreign()
+    fields: _links(object), billing_address(object), campaign_id(string), cancelled_at_foreign(string), cart_id(string), currency_code(string), customer(object), discount_total(number), financial_status(string), fulfillment_status(string), id(string), landing_site(string), lines(array), order_total(number), order_url(string), outreach(object), processed_at_foreign(string), promos(array), shipping_address(object), shipping_total(number), store_id(string), tax_total(number), tracking_carrier(string), tracking_code(string), tracking_number(string), tracking_url(string), updated_at_foreign(string)
   ecommerce_stores:
     primary key: id
     cursor: updated_at
-    fields: _links(), address(), automations(), connected_site(), created_at(), currency_code(), domain(), email_address(), id(), is_syncing(), list_id(), list_is_active(), money_format(), name(), phone(), platform(), primary_locale(), timezone(), updated_at()
+    fields: _links(object), address(object), automations(object), connected_site(object), created_at(string), currency_code(string), domain(string), email_address(string), id(string), is_syncing(boolean), list_id(string), list_is_active(boolean), money_format(string), name(string), phone(string), platform(string), primary_locale(string), timezone(string), updated_at(string)
   ecommerce_stores_carts:
     primary key: id
     cursor: updated_at
-    fields: _links(), campaign_id(), checkout_url(), created_at(), currency_code(), customer(), id(), lines(), order_total(), store_id(), tax_total(), updated_at()
+    fields: _links(object), campaign_id(string), checkout_url(string), created_at(string), currency_code(string), customer(object), id(string), lines(array), order_total(number), store_id(string), tax_total(number), updated_at(string)
   ecommerce_stores_carts_lines:
     primary key: id
-    fields: _links(), cart_id(), id(), price(), product_id(), product_title(), product_variant_id(), product_variant_title(), quantity(), store_id()
+    fields: _links(object), cart_id(string), id(string), price(number), product_id(string), product_title(string), product_variant_id(string), product_variant_title(string), quantity(integer), store_id(string)
   ecommerce_stores_customers:
     primary key: id
     cursor: updated_at
-    fields: _links(), address(), company(), created_at(), email_address(), first_name(), id(), last_name(), opt_in_status(), orders_count(), sms_phone_number(), store_id(), total_spent(), updated_at()
+    fields: _links(object), address(object), company(string), created_at(string), email_address(string), first_name(string), id(string), last_name(string), opt_in_status(boolean), orders_count(integer), sms_phone_number(string), store_id(string), total_spent(number), updated_at(string)
   ecommerce_stores_orders:
     primary key: id
-    fields: _links(), billing_address(), campaign_id(), cancelled_at_foreign(), cart_id(), currency_code(), customer(), discount_total(), financial_status(), fulfillment_status(), id(), landing_site(), lines(), order_total(), order_url(), outreach(), processed_at_foreign(), promos(), shipping_address(), shipping_total(), store_id(), tax_total(), tracking_carrier(), tracking_code(), tracking_number(), tracking_url(), updated_at_foreign()
+    fields: _links(object), billing_address(object), campaign_id(string), cancelled_at_foreign(string), cart_id(string), currency_code(string), customer(object), discount_total(number), financial_status(string), fulfillment_status(string), id(string), landing_site(string), lines(array), order_total(number), order_url(string), outreach(object), processed_at_foreign(string), promos(array), shipping_address(object), shipping_total(number), store_id(string), tax_total(number), tracking_carrier(string), tracking_code(string), tracking_number(string), tracking_url(string), updated_at_foreign(string)
   ecommerce_stores_orders_lines:
     primary key: id
-    fields: _links(), discount(), id(), image_url(), order_id(), price(), product_id(), product_title(), product_variant_id(), product_variant_title(), quantity(), store_id()
+    fields: _links(object), discount(number), id(string), image_url(string), order_id(string), price(number), product_id(string), product_title(string), product_variant_id(string), product_variant_title(string), quantity(integer), store_id(string)
   ecommerce_stores_products:
     primary key: id
-    fields: _links(), currency_code(), description(), handle(), id(), image_url(), images(), published_at_foreign(), store_id(), title(), type(), url(), variants(), vendor()
+    fields: _links(object), currency_code(string), description(string), handle(string), id(string), image_url(string), images(array), published_at_foreign(string), store_id(string), title(string), type(string), url(string), variants(array), vendor(string)
   ecommerce_stores_products_images:
     primary key: id
-    fields: _links(), id(), product_id(), store_id(), url(), variant_ids()
+    fields: _links(object), id(string), product_id(string), store_id(string), url(string), variant_ids(array)
   ecommerce_stores_products_variants:
     primary key: id
     cursor: updated_at
-    fields: _links(), backorders(), created_at(), id(), image_url(), inventory_quantity(), price(), product_id(), sku(), store_id(), title(), updated_at(), url(), visibility()
+    fields: _links(object), backorders(string), created_at(string), id(string), image_url(string), inventory_quantity(integer), price(number), product_id(string), sku(string), store_id(string), title(string), updated_at(string), url(string), visibility(string)
   ecommerce_stores_promo_rules:
     primary key: id
-    fields: _links(), amount(), created_at_foreign(), description(), enabled(), ends_at(), id(), starts_at(), store_id(), target(), title(), type(), updated_at_foreign()
+    fields: _links(object), amount(number), created_at_foreign(string), description(string), enabled(boolean), ends_at(string), id(string), starts_at(string), store_id(string), target(string), title(string), type(string), updated_at_foreign(string)
   ecommerce_stores_promo_rules_promo_codes:
     primary key: id
-    fields: _links(), code(), created_at_foreign(), enabled(), id(), promo_rule_id(), redemption_url(), store_id(), updated_at_foreign(), usage_count()
+    fields: _links(object), code(string), created_at_foreign(string), enabled(boolean), id(string), promo_rule_id(string), redemption_url(string), store_id(string), updated_at_foreign(string), usage_count(integer)
   facebook_ads:
     primary key: id
-    fields: id()
+    fields: id(string)
   file_manager_files:
     primary key: id
-    fields: _links(), created_at(), created_by(), folder_id(), full_size_url(), height(), id(), name(), size(), thumbnail_url(), type(), width()
+    fields: _links(object), created_at(string), created_by(string), folder_id(integer), full_size_url(string), height(integer), id(integer), name(string), size(integer), thumbnail_url(string), type(string), width(integer)
   file_manager_folders:
     primary key: id
-    fields: _links(), created_at(), created_by(), file_count(), id(), name()
+    fields: _links(object), created_at(string), created_by(string), file_count(integer), id(integer), name(string)
   file_manager_folders_files:
     primary key: id
-    fields: _links(), created_at(), created_by(), folder_id(), full_size_url(), height(), id(), name(), size(), thumbnail_url(), type(), width()
+    fields: _links(object), created_at(string), created_by(string), folder_id(string), full_size_url(string), height(integer), id(integer), name(string), size(integer), thumbnail_url(string), type(string), width(integer)
   landing_pages:
     primary key: id
     cursor: updated_at
-    fields: _links(), created_at(), created_by_source(), description(), id(), list_id(), name(), published_at(), status(), store_id(), template_id(), title(), tracking(), unpublished_at(), updated_at(), url(), web_id()
+    fields: _links(object), created_at(string), created_by_source(string), description(string), id(string), list_id(string), name(string), published_at(string), status(string), store_id(string), template_id(integer), title(string), tracking(object), unpublished_at(string), updated_at(string), url(string), web_id(integer)
   lists:
     primary key: id
     cursor: date_created
-    fields: _links(), beamer_address(), campaign_defaults(), contact(), date_created(), double_optin(), email_type_option(), has_welcome(), id(), list_rating(), marketing_permissions(), modules(), name(), notify_on_subscribe(), notify_on_unsubscribe(), permission_reminder(), stats(), subscribe_url_long(), subscribe_url_short(), use_archive_bar(), visibility(), web_id()
+    fields: _links(object), beamer_address(string), campaign_defaults(object), contact(object), date_created(string), double_optin(boolean), email_type_option(boolean), has_welcome(boolean), id(string), list_rating(integer), marketing_permissions(boolean), modules(array), name(string), notify_on_subscribe(string), notify_on_unsubscribe(string), permission_reminder(string), stats(object), subscribe_url_long(string), subscribe_url_short(string), use_archive_bar(boolean), visibility(string), web_id(integer)
   lists_abuse_reports:
     primary key: id
-    fields: _links(), campaign_id(), date(), email_address(), email_id(), id(), list_id(), merge_fields(), vip()
+    fields: _links(object), campaign_id(string), date(string), email_address(string), email_id(string), id(integer), list_id(string), merge_fields(object), vip(boolean)
   lists_activity:
     primary key: list_id
-    fields: _links(), day(), emails_sent(), hard_bounce(), list_id(), other_adds(), other_removes(), recipient_clicks(), soft_bounce(), subs(), unique_opens(), unsubs()
+    fields: _links(object), day(string), emails_sent(integer), hard_bounce(integer), list_id(string), other_adds(integer), other_removes(integer), recipient_clicks(integer), soft_bounce(integer), subs(integer), unique_opens(integer), unsubs(integer)
   lists_clients:
     primary key: list_id
-    fields: client(), list_id(), members()
+    fields: client(string), list_id(string), members(integer)
   lists_growth_history_history:
     primary key: list_id
-    fields: _links(), cleaned(), deleted(), existing(), imports(), list_id(), month(), optins(), pending(), reconfirm(), subscribed(), transactional(), unsubscribed()
+    fields: _links(object), cleaned(integer), deleted(integer), existing(integer), imports(integer), list_id(string), month(string), optins(integer), pending(integer), reconfirm(integer), subscribed(integer), transactional(integer), unsubscribed(integer)
   lists_interest_categories_categories:
     primary key: id
-    fields: _links(), display_order(), id(), list_id(), title(), type()
+    fields: _links(object), display_order(integer), id(string), list_id(string), title(string), type(string)
   lists_interest_categories_interests:
     primary key: id
-    fields: _links(), category_id(), display_order(), id(), interest_category_id(), list_id(), name(), subscriber_count()
+    fields: _links(object), category_id(string), display_order(integer), id(string), interest_category_id(string), list_id(string), name(string), subscriber_count(string)
   lists_locations:
     primary key: list_id
-    fields: cc(), country(), list_id(), percent(), total()
+    fields: cc(string), country(string), list_id(string), percent(number), total(integer)
   lists_members:
     primary key: id
     cursor: last_changed
-    fields: _links(), consents_to_one_to_one_messaging(), contact_id(), email_address(), email_client(), email_type(), full_name(), id(), interests(), ip_opt(), ip_signup(), language(), last_changed(), last_note(), list_id(), location(), marketing_permissions(), member_rating(), merge_fields(), sms_phone_number(), sms_subscription_last_updated(), sms_subscription_status(), source(), stats(), status(), tags(), tags_count(), timestamp_opt(), timestamp_signup(), unique_email_id(), unsubscribe_reason(), vip(), web_id()
+    fields: _links(object), consents_to_one_to_one_messaging(boolean), contact_id(string), email_address(string), email_client(string), email_type(string), full_name(string), id(string), interests(object), ip_opt(string), ip_signup(string), language(string), last_changed(string), last_note(object), list_id(string), location(object), marketing_permissions(array), member_rating(integer), merge_fields(object), sms_phone_number(string), sms_subscription_last_updated(string), sms_subscription_status(string), source(string), stats(object), status(string), tags(array), tags_count(integer), timestamp_opt(string), timestamp_signup(string), unique_email_id(string), unsubscribe_reason(string), vip(boolean), web_id(integer)
   lists_members_activity:
     primary key: campaign_id
-    fields: action(), campaign_id(), list_id(), parent_campaign(), subscriber_hash(), timestamp(), title(), type(), url()
+    fields: action(string), campaign_id(string), list_id(string), parent_campaign(string), subscriber_hash(string), timestamp(string), title(string), type(string), url(string)
   lists_members_events:
     primary key: list_id
-    fields: list_id(), name(), occurred_at(), properties(), subscriber_hash()
+    fields: list_id(string), name(string), occurred_at(string), properties(object), subscriber_hash(string)
   lists_members_goals:
     primary key: list_id
-    fields: data(), event(), goal_id(), last_visited_at(), list_id(), subscriber_hash()
+    fields: data(string), event(string), goal_id(integer), last_visited_at(string), list_id(string), subscriber_hash(string)
   lists_members_notes:
     primary key: id
     cursor: updated_at
-    fields: _links(), contact_id(), created_at(), created_by(), email_id(), id(), list_id(), note(), subscriber_hash(), updated_at()
+    fields: _links(object), contact_id(string), created_at(string), created_by(string), email_id(string), id(integer), list_id(string), note(string), subscriber_hash(string), updated_at(string)
   lists_members_tags:
     primary key: id
-    fields: date_added(), id(), list_id(), name(), subscriber_hash()
+    fields: date_added(string), id(integer), list_id(string), name(string), subscriber_hash(string)
   lists_merge_fields:
     primary key: list_id
-    fields: _links(), default_value(), display_order(), help_text(), list_id(), merge_field_limit(), merge_id(), name(), options(), public(), required(), tag(), total_items(), type()
+    fields: _links(object), default_value(string), display_order(integer), help_text(string), list_id(string), merge_field_limit(integer), merge_id(integer), name(string), options(object), public(boolean), required(boolean), tag(string), total_items(integer), type(string)
   lists_segments:
     primary key: id
     cursor: updated_at
-    fields: _links(), created_at(), id(), list_id(), member_count(), name(), options(), type(), updated_at()
+    fields: _links(object), created_at(string), id(integer), list_id(string), member_count(integer), name(string), options(object), type(string), updated_at(string)
   lists_segments_members:
     primary key: id
     cursor: last_changed
-    fields: _links(), email_address(), email_client(), email_type(), full_name(), id(), interests(), ip_opt(), ip_signup(), language(), last_changed(), last_note(), list_id(), location(), member_rating(), merge_fields(), segment_id(), stats(), status(), timestamp_opt(), timestamp_signup(), unique_email_id(), vip()
+    fields: _links(object), email_address(string), email_client(string), email_type(string), full_name(string), id(string), interests(object), ip_opt(string), ip_signup(string), language(string), last_changed(string), last_note(object), list_id(string), location(object), member_rating(integer), merge_fields(object), segment_id(string), stats(object), status(string), timestamp_opt(string), timestamp_signup(string), unique_email_id(string), vip(boolean)
   lists_signup_forms:
     primary key: list_id
-    fields: _links(), contents(), header(), list_id(), signup_form_url(), styles()
+    fields: _links(object), contents(array), header(object), list_id(string), signup_form_url(string), styles(array)
   lists_surveys:
     primary key: id
     cursor: updated_at
-    fields: _links(), created_at(), hosted_url(), id(), is_piped_to_inbox(), list_id(), published_at(), question_count(), questions(), response_count(), sections(), status(), title(), updated_at(), web_id()
+    fields: _links(object), created_at(string), hosted_url(string), id(string), is_piped_to_inbox(boolean), list_id(string), published_at(string), question_count(integer), questions(array), response_count(integer), sections(array), status(string), title(string), updated_at(string), web_id(string)
   lists_webhooks:
     primary key: id
-    fields: _links(), events(), id(), list_id(), sources(), url()
+    fields: _links(object), events(object), id(string), list_id(string), sources(object), url(string)
   reporting_facebook_ads:
     primary key: id
-    fields: id()
+    fields: id(string)
   reporting_facebook_ads_ecommerce_product_activity_products:
     primary key: outreach_id
-    fields: currency_code(), image_url(), outreach_id(), recommendation_purchased(), recommendation_total(), sku(), title(), total_purchased(), total_revenue()
+    fields: currency_code(string), image_url(string), outreach_id(string), recommendation_purchased(integer), recommendation_total(integer), sku(string), title(string), total_purchased(number), total_revenue(number)
   reporting_landing_pages:
     primary key: id
-    fields: _links(), clicks(), conversion_rate(), ecommerce(), id(), list_id(), list_name(), name(), published_at(), signup_tags(), status(), subscribes(), timeseries(), title(), unique_visits(), unpublished_at(), url(), visits(), web_id()
+    fields: _links(object), clicks(integer), conversion_rate(number), ecommerce(object), id(string), list_id(string), list_name(string), name(string), published_at(string), signup_tags(array), status(string), subscribes(integer), timeseries(object), title(string), unique_visits(integer), unpublished_at(string), url(string), visits(integer), web_id(integer)
   reporting_surveys:
     primary key: id
     cursor: updated_at
-    fields: created_at(), id(), list_id(), list_name(), published_at(), status(), title(), total_responses(), updated_at(), url(), web_id()
+    fields: created_at(string), id(string), list_id(string), list_name(string), published_at(string), status(string), title(string), total_responses(integer), updated_at(string), url(string), web_id(integer)
   reporting_surveys_questions:
     primary key: id
-    fields: average_rating(), contact_counts(), has_other(), id(), is_required(), merge_field(), options(), other_label(), placeholder_label(), query(), range_high_label(), range_low_label(), subscribe_checkbox_enabled(), subscribe_checkbox_label(), survey_id(), total_responses(), type()
+    fields: average_rating(number), contact_counts(object), has_other(boolean), id(string), is_required(boolean), merge_field(object), options(array), other_label(string), placeholder_label(string), query(string), range_high_label(string), range_low_label(string), subscribe_checkbox_enabled(boolean), subscribe_checkbox_label(string), survey_id(string), total_responses(integer), type(string)
   reporting_surveys_questions_answers:
     primary key: id
-    fields: contact(), id(), is_new_contact(), question_id(), response_id(), submitted_at(), survey_id(), value()
+    fields: contact(object), id(string), is_new_contact(boolean), question_id(string), response_id(string), submitted_at(string), survey_id(string), value(string)
   reporting_surveys_responses:
     primary key: survey_id
-    fields: contact(), is_new_contact(), response_id(), submitted_at(), survey_id()
+    fields: contact(object), is_new_contact(boolean), response_id(string), submitted_at(string), survey_id(string)
   reports:
     primary key: id
     cursor: send_time
-    fields: _links(), ab_split(), abuse_reports(), bounces(), campaign_title(), clicks(), delivery_status(), ecommerce(), emails_sent(), facebook_likes(), forwards(), id(), industry_stats(), list_id(), list_is_active(), list_name(), list_stats(), opens(), preview_text(), rss_last_send(), send_time(), share_report(), subject_line(), timeseries(), timewarp(), type(), unsubscribed()
+    fields: _links(object), ab_split(object), abuse_reports(integer), bounces(object), campaign_title(string), clicks(object), delivery_status(object), ecommerce(object), emails_sent(integer), facebook_likes(object), forwards(object), id(string), industry_stats(object), list_id(string), list_is_active(boolean), list_name(string), list_stats(object), opens(object), preview_text(string), rss_last_send(string), send_time(string), share_report(object), subject_line(string), timeseries(array), timewarp(array), type(string), unsubscribed(integer)
   reports_abuse_reports:
     primary key: id
-    fields: _links(), campaign_id(), date(), email_address(), email_id(), id(), list_id(), list_is_active(), merge_fields(), vip()
+    fields: _links(object), campaign_id(string), date(string), email_address(string), email_id(string), id(integer), list_id(string), list_is_active(boolean), merge_fields(object), vip(boolean)
   reports_advice:
     primary key: campaign_id
-    fields: _links(), campaign_id(), message(), type()
+    fields: _links(object), campaign_id(string), message(string), type(string)
   reports_click_details_urls_clicked:
     primary key: id
-    fields: _links(), ab_split(), campaign_id(), click_percentage(), id(), last_click(), total_clicks(), unique_click_percentage(), unique_clicks(), url()
+    fields: _links(object), ab_split(object), campaign_id(string), click_percentage(number), id(string), last_click(string), total_clicks(integer), unique_click_percentage(number), unique_clicks(integer), url(string)
   reports_click_details_members:
     primary key: email_id
-    fields: _links(), campaign_id(), clicks(), contact_status(), email_address(), email_id(), link_id(), list_id(), list_is_active(), merge_fields(), url_id(), vip()
+    fields: _links(object), campaign_id(string), clicks(integer), contact_status(string), email_address(string), email_id(string), link_id(string), list_id(string), list_is_active(boolean), merge_fields(object), url_id(string), vip(boolean)
   reports_domain_performance_domains:
     primary key: campaign_id
-    fields: bounces(), bounces_pct(), campaign_id(), clicks(), clicks_pct(), delivered(), domain(), emails_pct(), emails_sent(), opens(), opens_pct(), unsubs(), unsubs_pct()
+    fields: bounces(integer), bounces_pct(number), campaign_id(string), clicks(integer), clicks_pct(number), delivered(integer), domain(string), emails_pct(number), emails_sent(integer), opens(integer), opens_pct(number), unsubs(integer), unsubs_pct(number)
   reports_ecommerce_product_activity_products:
     primary key: campaign_id
-    fields: campaign_id(), currency_code(), image_url(), recommendation_purchased(), recommendation_total(), sku(), title(), total_purchased(), total_revenue()
+    fields: campaign_id(string), currency_code(string), image_url(string), recommendation_purchased(integer), recommendation_total(integer), sku(string), title(string), total_purchased(number), total_revenue(number)
   reports_eepurl_referrers:
     primary key: campaign_id
-    fields: campaign_id(), clicks(), first_click(), last_click(), referrer()
+    fields: campaign_id(string), clicks(integer), first_click(string), last_click(string), referrer(string)
   reports_email_activity_emails:
     primary key: email_id
-    fields: _links(), activity(), campaign_id(), email_address(), email_id(), list_id(), list_is_active()
+    fields: _links(object), activity(array), campaign_id(string), email_address(string), email_id(string), list_id(string), list_is_active(boolean)
   reports_locations:
     primary key: campaign_id
-    fields: campaign_id(), country_code(), opens(), proxy_excluded_opens(), region(), region_name()
+    fields: campaign_id(string), country_code(string), opens(integer), proxy_excluded_opens(integer), region(string), region_name(string)
   reports_open_details_members:
     primary key: email_id
-    fields: _links(), campaign_id(), contact_status(), email_address(), email_id(), list_id(), list_is_active(), merge_fields(), opens(), opens_count(), proxy_excluded_opens_count(), vip()
+    fields: _links(object), campaign_id(string), contact_status(string), email_address(string), email_id(string), list_id(string), list_is_active(boolean), merge_fields(object), opens(array), opens_count(integer), proxy_excluded_opens_count(integer), vip(boolean)
   reports_sent_to:
     primary key: email_id
-    fields: _links(), absplit_group(), campaign_id(), email_address(), email_id(), gmt_offset(), last_open(), list_id(), list_is_active(), merge_fields(), open_count(), status(), vip()
+    fields: _links(object), absplit_group(string), campaign_id(string), email_address(string), email_id(string), gmt_offset(integer), last_open(string), list_id(string), list_is_active(boolean), merge_fields(object), open_count(integer), status(string), vip(boolean)
   reports_sub_reports:
     primary key: id
     cursor: send_time
-    fields: _links(), ab_split(), abuse_reports(), bounces(), campaign_id(), campaign_title(), clicks(), delivery_status(), ecommerce(), emails_sent(), facebook_likes(), forwards(), id(), industry_stats(), list_id(), list_is_active(), list_name(), list_stats(), opens(), preview_text(), rss_last_send(), send_time(), share_report(), subject_line(), timeseries(), timewarp(), type(), unsubscribed()
+    fields: _links(object), ab_split(object), abuse_reports(integer), bounces(object), campaign_id(string), campaign_title(string), clicks(object), delivery_status(object), ecommerce(object), emails_sent(integer), facebook_likes(object), forwards(object), id(string), industry_stats(object), list_id(string), list_is_active(boolean), list_name(string), list_stats(object), opens(object), preview_text(string), rss_last_send(string), send_time(string), share_report(object), subject_line(string), timeseries(array), timewarp(array), type(string), unsubscribed(integer)
   reports_unsubscribed_unsubscribes:
     primary key: email_id
-    fields: _links(), campaign_id(), email_address(), email_id(), list_id(), list_is_active(), merge_fields(), reason(), timestamp(), vip()
+    fields: _links(object), campaign_id(string), email_address(string), email_id(string), list_id(string), list_is_active(boolean), merge_fields(object), reason(string), timestamp(string), vip(boolean)
   sms_campaigns:
     primary key: id
     cursor: create_time
-    fields: _links(), channel(), create_time(), excluded_segments(), expire_time(), folder_id(), id(), is_send_now(), list_id(), name(), recipient_count(), segments(), send_time(), status(), updated_at(), web_id()
+    fields: _links(object), channel(string), create_time(string), excluded_segments(array), expire_time(string), folder_id(string), id(string), is_send_now(boolean), list_id(integer), name(string), recipient_count(integer), segments(array), send_time(string), status(string), updated_at(string), web_id(string)
   template_folders_folders:
     primary key: id
-    fields: _links(), count(), id(), name()
+    fields: _links(object), count(integer), id(string), name(string)
   templates:
     primary key: id
     cursor: date_created
-    fields: _links(), active(), category(), content_type(), created_by(), date_created(), date_edited(), drag_and_drop(), edited_by(), folder_id(), id(), name(), responsive(), share_url(), thumbnail(), type()
+    fields: _links(object), active(boolean), category(string), content_type(string), created_by(string), date_created(string), date_edited(string), drag_and_drop(boolean), edited_by(string), folder_id(string), id(integer), name(string), responsive(boolean), share_url(string), thumbnail(string), type(string)
   verified_domains_domains:
     primary key: domain
-    fields: authenticated(), domain(), is_free_email_provider(), status(), verification_email(), verification_sent(), verified()
+    fields: authenticated(boolean), domain(string), is_free_email_provider(boolean), status(string), verification_email(string), verification_sent(string), verified(boolean)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
@@ -1027,85 +1027,85 @@ COMMAND SURFACE
     --confirm (string): Typed confirmation challenge for destructive reverse-ETL writes.
   ETL streams
     lists list - Get lists info as ETL records. [intent=etl availability=implemented stream=lists]
-    lists get - Get list info [intent=direct_read availability=implemented]; flags: --list-id
-    lists abuse-reports get - Get abuse report [intent=direct_read availability=implemented]; flags: --list-id, --report-id
-    lists growth-history get - Get growth history by month [intent=direct_read availability=implemented]; flags: --list-id, --month
-    lists interest-categories get - Get interest category info [intent=direct_read availability=implemented]; flags: --list-id, --interest-category-id
-    lists interest-categories interests get - Get interest in category [intent=direct_read availability=implemented]; flags: --list-id, --interest-category-id, --interest-id
-    lists members get - Get member info [intent=direct_read availability=implemented]; flags: --list-id, --subscriber-hash
-    lists members activity-feed get - View recent activity [intent=direct_read availability=implemented]; flags: --list-id, --subscriber-hash
-    lists members notes get - Get member note [intent=direct_read availability=implemented]; flags: --list-id, --subscriber-hash, --note-id
-    lists merge-fields get - Get merge field [intent=direct_read availability=implemented]; flags: --list-id, --merge-id
-    lists segments get - Get segment info [intent=direct_read availability=implemented]; flags: --list-id, --segment-id
-    lists surveys get - Get survey [intent=direct_read availability=implemented]; flags: --list-id, --survey-id
-    lists tag-search get - Search for tags on a list by name. [intent=direct_read availability=implemented]; flags: --list-id, --query
-    lists webhooks get - Get webhook info [intent=direct_read availability=implemented]; flags: --list-id, --webhook-id
+    lists get - Get list info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id]; flags: --list-id
+    lists abuse-reports get - Get abuse report [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_abuse_reports_id]; flags: --list-id, --report-id
+    lists growth-history get - Get growth history by month [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_growth_history_id]; flags: --list-id, --month
+    lists interest-categories get - Get interest category info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_interest_categories_id]; flags: --list-id, --interest-category-id
+    lists interest-categories interests get - Get interest in category [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_interest_categories_id_interests_id]; flags: --list-id, --interest-category-id, --interest-id
+    lists members get - Get member info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_members_id]; flags: --list-id, --subscriber-hash
+    lists members activity-feed get - View recent activity [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_members_id_activity_feed]; flags: --list-id, --subscriber-hash
+    lists members notes get - Get member note [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_members_id_notes_id]; flags: --list-id, --subscriber-hash, --note-id
+    lists merge-fields get - Get merge field [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_merge_fields_id]; flags: --list-id, --merge-id
+    lists segments get - Get segment info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_segments_id]; flags: --list-id, --segment-id
+    lists surveys get - Get survey [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_surveys_id]; flags: --list-id, --survey-id
+    lists tag-search get - Search for tags on a list by name. [intent=direct_read availability=implemented operation=mailchimp.search_tags_by_name]; flags: --list-id, --query
+    lists webhooks get - Get webhook info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_webhooks_id]; flags: --list-id, --webhook-id
     campaigns list - List campaigns as ETL records. [intent=etl availability=implemented stream=campaigns]
-    campaigns get - Get campaign info [intent=direct_read availability=implemented]; flags: --campaign-id
-    campaigns content get - Get campaign content [intent=direct_read availability=implemented]; flags: --campaign-id
-    campaigns feedback get - Get campaign feedback message [intent=direct_read availability=implemented]; flags: --campaign-id, --feedback-id
-    campaigns send-checklist get - Get campaign send checklist [intent=direct_read availability=implemented]; flags: --campaign-id
+    campaigns get - Get campaign info [intent=direct_read availability=implemented operation=mailchimp.get_campaigns_id]; flags: --campaign-id
+    campaigns content get - Get campaign content [intent=direct_read availability=implemented operation=mailchimp.get_campaigns_id_content]; flags: --campaign-id
+    campaigns feedback get - Get campaign feedback message [intent=direct_read availability=implemented operation=mailchimp.get_campaigns_id_feedback_id]; flags: --campaign-id, --feedback-id
+    campaigns send-checklist get - Get campaign send checklist [intent=direct_read availability=implemented operation=mailchimp.get_campaigns_id_send_checklist]; flags: --campaign-id
     reports list - List campaign reports as ETL records. [intent=etl availability=implemented stream=reports]
-    reports get - Get campaign report [intent=direct_read availability=implemented]; flags: --campaign-id
-    reports abuse-reports get - Get abuse report [intent=direct_read availability=implemented]; flags: --campaign-id, --report-id
-    reports click-details get - Get campaign link details [intent=direct_read availability=implemented]; flags: --campaign-id, --link-id
-    reports click-details members get - Get clicked link subscriber [intent=direct_read availability=implemented]; flags: --campaign-id, --link-id, --subscriber-hash
-    reports email-activity get - Get subscriber email activity [intent=direct_read availability=implemented]; flags: --campaign-id, --subscriber-hash
-    reports open-details get - Get opened campaign subscriber [intent=direct_read availability=implemented]; flags: --campaign-id, --subscriber-hash
-    reports sent-to get - Get campaign recipient info [intent=direct_read availability=implemented]; flags: --campaign-id, --subscriber-hash
-    reports unsubscribed get - Get unsubscribed member [intent=direct_read availability=implemented]; flags: --campaign-id, --subscriber-hash
+    reports get - Get campaign report [intent=direct_read availability=implemented operation=mailchimp.get_reports_id]; flags: --campaign-id
+    reports abuse-reports get - Get abuse report [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_abuse_reports_id_id]; flags: --campaign-id, --report-id
+    reports click-details get - Get campaign link details [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_click_details_id]; flags: --campaign-id, --link-id
+    reports click-details members get - Get clicked link subscriber [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_click_details_id_members_id]; flags: --campaign-id, --link-id, --subscriber-hash
+    reports email-activity get - Get subscriber email activity [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_email_activity_id]; flags: --campaign-id, --subscriber-hash
+    reports open-details get - Get opened campaign subscriber [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_open_details_id_members_id]; flags: --campaign-id, --subscriber-hash
+    reports sent-to get - Get campaign recipient info [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_sent_to_id]; flags: --campaign-id, --subscriber-hash
+    reports unsubscribed get - Get unsubscribed member [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_unsubscribed_id]; flags: --campaign-id, --subscriber-hash
     automations list - List automations as ETL records. [intent=etl availability=implemented stream=automations]
-    automations get - Get automation info [intent=direct_read availability=implemented]; flags: --workflow-id
-    automations emails get - Get workflow email info [intent=direct_read availability=implemented]; flags: --workflow-id, --workflow-email-id
-    automations emails queue get - Get automated email subscriber [intent=direct_read availability=implemented]; flags: --workflow-id, --workflow-email-id, --subscriber-hash
-    automations removed-subscribers get - Get subscriber removed from workflow [intent=direct_read availability=implemented]; flags: --workflow-id, --subscriber-hash
-    ecommerce stores get - Get store info [intent=direct_read availability=implemented]; flags: --store-id
-    ecommerce stores carts get - Get cart info [intent=direct_read availability=implemented]; flags: --store-id, --cart-id
-    ecommerce stores carts lines get - Get cart line item [intent=direct_read availability=implemented]; flags: --store-id, --cart-id, --line-id
-    ecommerce stores customers get - Get customer info [intent=direct_read availability=implemented]; flags: --store-id, --customer-id
-    ecommerce stores orders get - Get order info [intent=direct_read availability=implemented]; flags: --store-id, --order-id
-    ecommerce stores orders lines get - Get order line item [intent=direct_read availability=implemented]; flags: --store-id, --order-id, --line-id
-    ecommerce stores products get - Get product info [intent=direct_read availability=implemented]; flags: --store-id, --product-id
-    ecommerce stores products images get - Get product image info [intent=direct_read availability=implemented]; flags: --store-id, --product-id, --image-id
-    ecommerce stores products variants get - Get product variant info [intent=direct_read availability=implemented]; flags: --store-id, --product-id, --variant-id
-    ecommerce stores promo-rules get - Get promo rule [intent=direct_read availability=implemented]; flags: --store-id, --promo-rule-id
-    ecommerce stores promo-rules promo-codes get - Get promo code [intent=direct_read availability=implemented]; flags: --store-id, --promo-rule-id, --promo-code-id
+    automations get - Get automation info [intent=direct_read availability=implemented operation=mailchimp.get_automations_id]; flags: --workflow-id
+    automations emails get - Get workflow email info [intent=direct_read availability=implemented operation=mailchimp.get_automations_id_emails_id]; flags: --workflow-id, --workflow-email-id
+    automations emails queue get - Get automated email subscriber [intent=direct_read availability=implemented operation=mailchimp.get_automations_id_emails_id_queue_id]; flags: --workflow-id, --workflow-email-id, --subscriber-hash
+    automations removed-subscribers get - Get subscriber removed from workflow [intent=direct_read availability=implemented operation=mailchimp.get_automations_id_removed_subscribers_id]; flags: --workflow-id, --subscriber-hash
+    ecommerce stores get - Get store info [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id]; flags: --store-id
+    ecommerce stores carts get - Get cart info [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_carts_id]; flags: --store-id, --cart-id
+    ecommerce stores carts lines get - Get cart line item [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_carts_id_lines_id]; flags: --store-id, --cart-id, --line-id
+    ecommerce stores customers get - Get customer info [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_customers_id]; flags: --store-id, --customer-id
+    ecommerce stores orders get - Get order info [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_orders_id]; flags: --store-id, --order-id
+    ecommerce stores orders lines get - Get order line item [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_orders_id_lines_id]; flags: --store-id, --order-id, --line-id
+    ecommerce stores products get - Get product info [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_products_id]; flags: --store-id, --product-id
+    ecommerce stores products images get - Get product image info [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_products_id_images_id]; flags: --store-id, --product-id, --image-id
+    ecommerce stores products variants get - Get product variant info [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_products_id_variants_id]; flags: --store-id, --product-id, --variant-id
+    ecommerce stores promo-rules get - Get promo rule [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_promorules_id]; flags: --store-id, --promo-rule-id
+    ecommerce stores promo-rules promo-codes get - Get promo code [intent=direct_read availability=implemented operation=mailchimp.get_ecommerce_stores_id_promocodes_id]; flags: --store-id, --promo-rule-id, --promo-code-id
     templates list - List templates as ETL records. [intent=etl availability=implemented stream=templates]
-    templates get - Get template info [intent=direct_read availability=implemented]; flags: --template-id
-    templates default-content get - View default content [intent=direct_read availability=implemented]; flags: --template-id
-    file-manager files get - Get file [intent=direct_read availability=implemented]; flags: --file-id
-    file-manager folders get - Get folder [intent=direct_read availability=implemented]; flags: --folder-id
+    templates get - Get template info [intent=direct_read availability=implemented operation=mailchimp.get_templates_id]; flags: --template-id
+    templates default-content get - View default content [intent=direct_read availability=implemented operation=mailchimp.get_templates_id_default_content]; flags: --template-id
+    file-manager files get - Get file [intent=direct_read availability=implemented operation=mailchimp.get_file_manager_files_id]; flags: --file-id
+    file-manager folders get - Get folder [intent=direct_read availability=implemented operation=mailchimp.get_file_manager_folders_id]; flags: --folder-id
   Typed direct reads and search
-    search-members get - Search members [intent=direct_read availability=implemented]; flags: --query
-    search-campaigns get - Search campaigns [intent=direct_read availability=implemented]; flags: --query
+    search-members get - Search members [intent=direct_read availability=implemented operation=mailchimp.get_search_members]; flags: --query
+    search-campaigns get - Search campaigns [intent=direct_read availability=implemented operation=mailchimp.get_search_campaigns]; flags: --query
     reports list - List campaign reports as ETL records. [intent=etl availability=implemented stream=reports]
-    reports get - Get campaign report [intent=direct_read availability=implemented]; flags: --campaign-id
-    reports abuse-reports get - Get abuse report [intent=direct_read availability=implemented]; flags: --campaign-id, --report-id
-    reports click-details get - Get campaign link details [intent=direct_read availability=implemented]; flags: --campaign-id, --link-id
-    reports click-details members get - Get clicked link subscriber [intent=direct_read availability=implemented]; flags: --campaign-id, --link-id, --subscriber-hash
-    reports email-activity get - Get subscriber email activity [intent=direct_read availability=implemented]; flags: --campaign-id, --subscriber-hash
-    reports open-details get - Get opened campaign subscriber [intent=direct_read availability=implemented]; flags: --campaign-id, --subscriber-hash
-    reports sent-to get - Get campaign recipient info [intent=direct_read availability=implemented]; flags: --campaign-id, --subscriber-hash
-    reports unsubscribed get - Get unsubscribed member [intent=direct_read availability=implemented]; flags: --campaign-id, --subscriber-hash
+    reports get - Get campaign report [intent=direct_read availability=implemented operation=mailchimp.get_reports_id]; flags: --campaign-id
+    reports abuse-reports get - Get abuse report [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_abuse_reports_id_id]; flags: --campaign-id, --report-id
+    reports click-details get - Get campaign link details [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_click_details_id]; flags: --campaign-id, --link-id
+    reports click-details members get - Get clicked link subscriber [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_click_details_id_members_id]; flags: --campaign-id, --link-id, --subscriber-hash
+    reports email-activity get - Get subscriber email activity [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_email_activity_id]; flags: --campaign-id, --subscriber-hash
+    reports open-details get - Get opened campaign subscriber [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_open_details_id_members_id]; flags: --campaign-id, --subscriber-hash
+    reports sent-to get - Get campaign recipient info [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_sent_to_id]; flags: --campaign-id, --subscriber-hash
+    reports unsubscribed get - Get unsubscribed member [intent=direct_read availability=implemented operation=mailchimp.get_reports_id_unsubscribed_id]; flags: --campaign-id, --subscriber-hash
     campaigns list - List campaigns as ETL records. [intent=etl availability=implemented stream=campaigns]
-    campaigns get - Get campaign info [intent=direct_read availability=implemented]; flags: --campaign-id
-    campaigns content get - Get campaign content [intent=direct_read availability=implemented]; flags: --campaign-id
-    campaigns feedback get - Get campaign feedback message [intent=direct_read availability=implemented]; flags: --campaign-id, --feedback-id
-    campaigns send-checklist get - Get campaign send checklist [intent=direct_read availability=implemented]; flags: --campaign-id
+    campaigns get - Get campaign info [intent=direct_read availability=implemented operation=mailchimp.get_campaigns_id]; flags: --campaign-id
+    campaigns content get - Get campaign content [intent=direct_read availability=implemented operation=mailchimp.get_campaigns_id_content]; flags: --campaign-id
+    campaigns feedback get - Get campaign feedback message [intent=direct_read availability=implemented operation=mailchimp.get_campaigns_id_feedback_id]; flags: --campaign-id, --feedback-id
+    campaigns send-checklist get - Get campaign send checklist [intent=direct_read availability=implemented operation=mailchimp.get_campaigns_id_send_checklist]; flags: --campaign-id
     lists list - Get lists info as ETL records. [intent=etl availability=implemented stream=lists]
-    lists get - Get list info [intent=direct_read availability=implemented]; flags: --list-id
-    lists abuse-reports get - Get abuse report [intent=direct_read availability=implemented]; flags: --list-id, --report-id
-    lists growth-history get - Get growth history by month [intent=direct_read availability=implemented]; flags: --list-id, --month
-    lists interest-categories get - Get interest category info [intent=direct_read availability=implemented]; flags: --list-id, --interest-category-id
-    lists interest-categories interests get - Get interest in category [intent=direct_read availability=implemented]; flags: --list-id, --interest-category-id, --interest-id
-    lists members get - Get member info [intent=direct_read availability=implemented]; flags: --list-id, --subscriber-hash
-    lists members activity-feed get - View recent activity [intent=direct_read availability=implemented]; flags: --list-id, --subscriber-hash
-    lists members notes get - Get member note [intent=direct_read availability=implemented]; flags: --list-id, --subscriber-hash, --note-id
-    lists merge-fields get - Get merge field [intent=direct_read availability=implemented]; flags: --list-id, --merge-id
-    lists segments get - Get segment info [intent=direct_read availability=implemented]; flags: --list-id, --segment-id
-    lists surveys get - Get survey [intent=direct_read availability=implemented]; flags: --list-id, --survey-id
-    lists tag-search get - Search for tags on a list by name. [intent=direct_read availability=implemented]; flags: --list-id, --query
-    lists webhooks get - Get webhook info [intent=direct_read availability=implemented]; flags: --list-id, --webhook-id
+    lists get - Get list info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id]; flags: --list-id
+    lists abuse-reports get - Get abuse report [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_abuse_reports_id]; flags: --list-id, --report-id
+    lists growth-history get - Get growth history by month [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_growth_history_id]; flags: --list-id, --month
+    lists interest-categories get - Get interest category info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_interest_categories_id]; flags: --list-id, --interest-category-id
+    lists interest-categories interests get - Get interest in category [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_interest_categories_id_interests_id]; flags: --list-id, --interest-category-id, --interest-id
+    lists members get - Get member info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_members_id]; flags: --list-id, --subscriber-hash
+    lists members activity-feed get - View recent activity [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_members_id_activity_feed]; flags: --list-id, --subscriber-hash
+    lists members notes get - Get member note [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_members_id_notes_id]; flags: --list-id, --subscriber-hash, --note-id
+    lists merge-fields get - Get merge field [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_merge_fields_id]; flags: --list-id, --merge-id
+    lists segments get - Get segment info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_segments_id]; flags: --list-id, --segment-id
+    lists surveys get - Get survey [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_surveys_id]; flags: --list-id, --survey-id
+    lists tag-search get - Search for tags on a list by name. [intent=direct_read availability=implemented operation=mailchimp.search_tags_by_name]; flags: --list-id, --query
+    lists webhooks get - Get webhook info [intent=direct_read availability=implemented operation=mailchimp.get_lists_id_webhooks_id]; flags: --list-id, --webhook-id
   Approval-gated reverse ETL actions
     actions post-account-exports - Add export [intent=reverse_etl availability=implemented write=post_account_exports]; approval: reverse ETL plan -> preview -> explicit approval -> execute; risk: Externally visible Mailchimp mutation: Add export. Reverse ETL must plan, preview, receive explicit approval, and then execute.
     actions post-audiences-contacts - Add Contact [intent=reverse_etl availability=implemented write=post_audiences_contacts]; approval: reverse ETL plan -> preview -> explicit approval -> execute; risk: Externally visible Mailchimp mutation: Add Contact. Reverse ETL must plan, preview, receive explicit approval, and then execute.; flags: --audience-id
@@ -1257,30 +1257,30 @@ COMMAND SURFACE
     actions verify-verified-domains - Verify domain [intent=reverse_etl availability=implemented write=verify_verified_domains]; approval: reverse ETL plan -> preview -> explicit approval -> execute with destructive confirmation; risk: Destructive or externally visible Mailchimp mutation: Verify domain. Reverse ETL must plan, preview, receive explicit approval, and then execute.; flags: --domain-name
   Other Commands
     account-exports-exports list - List account exports as ETL records. [intent=etl availability=implemented stream=account_exports_exports]
-    account-exports get - Get account export info [intent=direct_read availability=implemented]; flags: --export-id
+    account-exports get - Get account export info [intent=direct_read availability=implemented operation=mailchimp.get_account_export_id]; flags: --export-id
     activity-feed-chimp-chatter list - Get latest chimp chatter as ETL records. [intent=etl availability=implemented stream=activity_feed_chimp_chatter]
     audiences list - Get a list of audiences as ETL records. [intent=etl availability=implemented stream=audiences]
-    audiences get - Get audience info [intent=direct_read availability=implemented]; flags: --audience-id
+    audiences get - Get audience info [intent=direct_read availability=implemented operation=mailchimp.get_audience_id]; flags: --audience-id
     audiences-contacts list - Get Contacts as ETL records. [intent=etl availability=implemented stream=audiences_contacts]
-    audiences contacts get - Get Contact [intent=direct_read availability=implemented]; flags: --audience-id, --contact-id
+    audiences contacts get - Get Contact [intent=direct_read availability=implemented operation=mailchimp.get_audience_contact]; flags: --audience-id, --contact-id
     authorized-apps-apps list - List authorized apps as ETL records. [intent=etl availability=implemented stream=authorized_apps_apps]
-    authorized-apps get - Get authorized app info [intent=direct_read availability=implemented]; flags: --app-id
+    authorized-apps get - Get authorized app info [intent=direct_read availability=implemented operation=mailchimp.get_authorized_apps_id]; flags: --app-id
     automations-emails list - List automated emails as ETL records. [intent=etl availability=implemented stream=automations_emails]
     automations-emails-queue list - List automated email subscribers as ETL records. [intent=etl availability=implemented stream=automations_emails_queue]
     automations-removed-subscribers-subscribers list - List subscribers removed from workflow as ETL records. [intent=etl availability=implemented stream=automations_removed_subscribers_subscribers]
     batch-webhooks-webhooks list - List batch webhooks as ETL records. [intent=etl availability=implemented stream=batch_webhooks_webhooks]
-    batch-webhooks get - Get batch webhook info [intent=direct_read availability=implemented]; flags: --batch-webhook-id
+    batch-webhooks get - Get batch webhook info [intent=direct_read availability=implemented operation=mailchimp.get_batch_webhook]; flags: --batch-webhook-id
     batches list - List batch requests as ETL records. [intent=etl availability=implemented stream=batches]
-    batches get - Get batch operation status [intent=direct_read availability=implemented]; flags: --batch-id
+    batches get - Get batch operation status [intent=direct_read availability=implemented operation=mailchimp.get_batches_id]; flags: --batch-id
     campaign-folders-folders list - List campaign folders as ETL records. [intent=etl availability=implemented stream=campaign_folders_folders]
-    campaign-folders get - Get campaign folder [intent=direct_read availability=implemented]; flags: --folder-id
+    campaign-folders get - Get campaign folder [intent=direct_read availability=implemented operation=mailchimp.get_campaign_folders_id]; flags: --folder-id
     campaigns-feedback list - List campaign feedback as ETL records. [intent=etl availability=implemented stream=campaigns_feedback]
     connected-sites-sites list - List connected sites as ETL records. [intent=etl availability=implemented stream=connected_sites_sites]
-    connected-sites get - Get connected site [intent=direct_read availability=implemented]; flags: --connected-site-id
+    connected-sites get - Get connected site [intent=direct_read availability=implemented operation=mailchimp.get_connected_sites_id]; flags: --connected-site-id
     conversations list - List conversations as ETL records. [intent=etl availability=implemented stream=conversations]
-    conversations get - Get conversation [intent=direct_read availability=implemented]; flags: --conversation-id
+    conversations get - Get conversation [intent=direct_read availability=implemented operation=mailchimp.get_conversations_id]; flags: --conversation-id
     conversations-messages-conversation-messages list - List messages as ETL records. [intent=etl availability=implemented stream=conversations_messages_conversation_messages]
-    conversations messages get - Get message [intent=direct_read availability=implemented]; flags: --conversation-id, --message-id
+    conversations messages get - Get message [intent=direct_read availability=implemented operation=mailchimp.get_conversations_id_messages_id]; flags: --conversation-id, --message-id
     ecommerce-orders list - List account orders as ETL records. [intent=etl availability=implemented stream=ecommerce_orders]
     ecommerce-stores list - List stores as ETL records. [intent=etl availability=implemented stream=ecommerce_stores]
     ecommerce-stores-carts list - List carts as ETL records. [intent=etl availability=implemented stream=ecommerce_stores_carts]
@@ -1294,13 +1294,13 @@ COMMAND SURFACE
     ecommerce-stores-promo-rules list - List promo rules as ETL records. [intent=etl availability=implemented stream=ecommerce_stores_promo_rules]
     ecommerce-stores-promo-rules-promo-codes list - List promo codes as ETL records. [intent=etl availability=implemented stream=ecommerce_stores_promo_rules_promo_codes]
     facebook-ads list - List facebook ads as ETL records. [intent=etl availability=implemented stream=facebook_ads]
-    facebook-ads get - Get facebook ad info [intent=direct_read availability=implemented]; flags: --outreach-id
+    facebook-ads get - Get facebook ad info [intent=direct_read availability=implemented operation=mailchimp.get_facebook_ads_id]; flags: --outreach-id
     file-manager-files list - List stored files as ETL records. [intent=etl availability=implemented stream=file_manager_files]
     file-manager-folders list - List folders as ETL records. [intent=etl availability=implemented stream=file_manager_folders]
     file-manager-folders-files list - List stored files as ETL records. [intent=etl availability=implemented stream=file_manager_folders_files]
     landing-pages list - List landing pages as ETL records. [intent=etl availability=implemented stream=landing_pages]
-    landing-pages get - Get landing page info [intent=direct_read availability=implemented]; flags: --page-id
-    landing-pages content get - Get landing page content [intent=direct_read availability=implemented]; flags: --page-id
+    landing-pages get - Get landing page info [intent=direct_read availability=implemented operation=mailchimp.get_landing_page_id]; flags: --page-id
+    landing-pages content get - Get landing page content [intent=direct_read availability=implemented operation=mailchimp.get_landing_page_id_content]; flags: --page-id
     lists-abuse-reports list - List abuse reports as ETL records. [intent=etl availability=implemented stream=lists_abuse_reports]
     lists-activity list - List recent activity as ETL records. [intent=etl availability=implemented stream=lists_activity]
     lists-clients list - List top email clients as ETL records. [intent=etl availability=implemented stream=lists_clients]
@@ -1321,17 +1321,17 @@ COMMAND SURFACE
     lists-surveys list - Get information about all surveys for a list as ETL records. [intent=etl availability=implemented stream=lists_surveys]
     lists-webhooks list - List webhooks as ETL records. [intent=etl availability=implemented stream=lists_webhooks]
     reporting-facebook-ads list - List facebook ads reports as ETL records. [intent=etl availability=implemented stream=reporting_facebook_ads]
-    reporting facebook-ads get - Get facebook ad report [intent=direct_read availability=implemented]; flags: --outreach-id
+    reporting facebook-ads get - Get facebook ad report [intent=direct_read availability=implemented operation=mailchimp.get_reporting_facebook_ads_id]; flags: --outreach-id
     reporting-facebook-ads-ecommerce-product-activity-products list - List facebook ecommerce report as ETL records. [intent=etl availability=implemented stream=reporting_facebook_ads_ecommerce_product_activity_products]
     reporting-landing-pages list - List landing pages reports as ETL records. [intent=etl availability=implemented stream=reporting_landing_pages]
-    reporting landing-pages get - Get landing page report [intent=direct_read availability=implemented]; flags: --outreach-id
+    reporting landing-pages get - Get landing page report [intent=direct_read availability=implemented operation=mailchimp.get_reporting_landing_pages_id]; flags: --outreach-id
     reporting-surveys list - List survey reports as ETL records. [intent=etl availability=implemented stream=reporting_surveys]
-    reporting surveys get - Get survey report [intent=direct_read availability=implemented]; flags: --survey-id
+    reporting surveys get - Get survey report [intent=direct_read availability=implemented operation=mailchimp.get_reporting_surveys_id]; flags: --survey-id
     reporting-surveys-questions list - List survey question reports as ETL records. [intent=etl availability=implemented stream=reporting_surveys_questions]
-    reporting surveys questions get - Get survey question report [intent=direct_read availability=implemented]; flags: --survey-id, --question-id
+    reporting surveys questions get - Get survey question report [intent=direct_read availability=implemented operation=mailchimp.get_reporting_surveys_id_questions_id]; flags: --survey-id, --question-id
     reporting-surveys-questions-answers list - List answers for question as ETL records. [intent=etl availability=implemented stream=reporting_surveys_questions_answers]
     reporting-surveys-responses list - List survey responses as ETL records. [intent=etl availability=implemented stream=reporting_surveys_responses]
-    reporting surveys responses get - Get survey response [intent=direct_read availability=implemented]; flags: --survey-id, --response-id
+    reporting surveys responses get - Get survey response [intent=direct_read availability=implemented operation=mailchimp.get_reporting_surveys_id_responses_id]; flags: --survey-id, --response-id
     reports-abuse-reports list - List abuse reports as ETL records. [intent=etl availability=implemented stream=reports_abuse_reports]
     reports-advice list - List campaign feedback as ETL records. [intent=etl availability=implemented stream=reports_advice]
     reports-click-details-urls-clicked list - List campaign details as ETL records. [intent=etl availability=implemented stream=reports_click_details_urls_clicked]
@@ -1346,12 +1346,12 @@ COMMAND SURFACE
     reports-sub-reports list - List child campaign reports as ETL records. [intent=etl availability=implemented stream=reports_sub_reports]
     reports-unsubscribed-unsubscribes list - List unsubscribed members as ETL records. [intent=etl availability=implemented stream=reports_unsubscribed_unsubscribes]
     sms-campaigns list - List SMS campaigns as ETL records. [intent=etl availability=implemented stream=sms_campaigns]
-    sms-campaigns get - Get SMS campaign info [intent=direct_read availability=implemented]; flags: --sms-campaign-id
-    sms-campaigns content get - Get SMS campaign content [intent=direct_read availability=implemented]; flags: --sms-campaign-id
+    sms-campaigns get - Get SMS campaign info [intent=direct_read availability=implemented operation=mailchimp.get_sms_campaigns_id]; flags: --sms-campaign-id
+    sms-campaigns content get - Get SMS campaign content [intent=direct_read availability=implemented operation=mailchimp.get_sms_campaigns_id_content]; flags: --sms-campaign-id
     template-folders-folders list - List template folders as ETL records. [intent=etl availability=implemented stream=template_folders_folders]
-    template-folders get - Get template folder [intent=direct_read availability=implemented]; flags: --folder-id
+    template-folders get - Get template folder [intent=direct_read availability=implemented operation=mailchimp.get_template_folders_id]; flags: --folder-id
     verified-domains-domains list - List sending domains as ETL records. [intent=etl availability=implemented stream=verified_domains_domains]
-    verified-domains get - Get domain info [intent=direct_read availability=implemented]; flags: --domain-name
+    verified-domains get - Get domain info [intent=direct_read availability=implemented operation=mailchimp.get_verified_domain]; flags: --domain-name
   Help topics:
     auth - Use access_token or api_key from environment/stdin; never paste secrets into prompts or shell history.
     safety - Writes are reverse-ETL only: plan, preview, explicit approval, execute; destructive actions require confirmation.
