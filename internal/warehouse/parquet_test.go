@@ -100,3 +100,38 @@ func TestWriteTableKeepsAColumnWhoseTypeWidensLate(t *testing.T) {
 		t.Fatalf("widened value = %v, want the string it was written as", last)
 	}
 }
+
+// TestTablePathsSurviveShellAndSQLMetacharactersInTheRoot covers the one part of
+// a table path pm does not generate: the warehouse root, which the operator
+// supplies with `--config path=...` and which SafePathPart never sees. Every
+// Windows path contains backslashes, and a root can legitimately contain a
+// quote or a space on any platform. Those reach a SQL string literal, so this
+// pins that they are carried through as data rather than interpreted.
+func TestTablePathsSurviveShellAndSQLMetacharactersInTheRoot(t *testing.T) {
+	ctx := context.Background()
+	for _, dir := range []string{
+		`back\slash`,     // every Windows path; also a legal macOS/Linux name
+		`back\the\table`, // \t, the escape sequence most likely to be mangled
+		`quo'te`,         // closes the SQL literal if not escaped
+		`with space`,
+	} {
+		t.Run(dir, func(t *testing.T) {
+			root := filepath.Join(t.TempDir(), dir)
+			path := filepath.Join(root, "records"+TableFileExt)
+			want := Row{"id": "r1", "name": "Ada"}
+			if err := WriteTable(ctx, path, []Row{want}); err != nil {
+				t.Fatalf("WriteTable() error = %v", err)
+			}
+			got := make([]Row, 0, 1)
+			if err := ReadTable(ctx, path, func(row Row) error {
+				got = append(got, row)
+				return nil
+			}); err != nil {
+				t.Fatalf("ReadTable() error = %v", err)
+			}
+			if len(got) != 1 || got[0]["id"] != "r1" || got[0]["name"] != "Ada" {
+				t.Fatalf("round trip through root %q returned %v, want %v", dir, got, want)
+			}
+		})
+	}
+}

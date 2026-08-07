@@ -118,6 +118,19 @@ would hit it. The 74-row live GitHub sync could not have.
 over a file already on disk. Row counts in both tests are deliberately past the default rather than
 round numbers, so the test fails if any bound is reintroduced at any size.
 
+### Green on arrival — the one guard that was not a fix
+
+`TestTablePathsSurviveShellAndSQLMetacharactersInTheRoot` passed the first time it ran, and is
+recorded as a guard rather than a red/green cycle so the ledger stays honest about which tests
+found something.
+
+It covers the one part of a table path pm does not generate: the **warehouse root**, supplied by the
+operator with `--config path=...`, which `SafePathPart` never sees. Every Windows path contains
+backslashes; a root can legitimately contain a quote or a space anywhere. All of those reach a SQL
+string literal. `back\slash`, `back\the\table`, `quo'te` and `with space` all round-trip
+correctly — so the literals are carried as data, not interpreted. Worth pinning precisely because
+the code is correct today and a future edit could quietly stop being.
+
 ## Tests changed, and why none was weakened
 
 | Test | Change | Intent preserved |
