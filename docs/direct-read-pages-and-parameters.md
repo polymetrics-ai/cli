@@ -62,8 +62,9 @@ pm github pulls files view --pull-number 3894 --json          # page 1, next_num
 pm github pulls files view --pull-number 3894 --page 2 --json # page 2
 ```
 
-**Forward cursors only** — `cursor`, `next_url` and `link_header` strategies
-have no page number to name. They hand back an opaque token instead:
+**Forward cursors only** — the `cursor`, `next_url`, `link_header` and
+`start_index` strategies have no page number to name. They hand back an opaque
+token instead:
 
 ```sh
 pm gong logs list --logType Info --json                    # next_cursor: "30"
@@ -92,10 +93,13 @@ completeness check compares against, so a smaller page is not mistaken for the
 end of the collection.
 
 Where the flag selects *which* page rather than how big it is, you own the
-position: the result reports no `number`/`next_number` and no `next_cursor` —
-the engine has no page number it can honestly name for a window it did not
-choose, and a cursor is not an input these strategies accept. `has_more` still
-tells you whether records remain, and you advance your own parameter.
+position: the result reports no `number`/`next_number`, because the engine has
+no page number it can honestly name for a window it did not choose. A strategy
+that addresses pages by number reports no `next_cursor` either — it would
+refuse that cursor on the way back in — so with bahmni's `--start-index` you
+advance your own parameter. The token strategies still hand back `next_cursor`,
+since it comes from the provider's own response. `has_more` tells you whether
+records remain either way.
 
 Combining such a flag with `--page`/`--page-cursor` selects two different pages
 in one request, so it is refused before anything is sent (the parameter is named
@@ -117,8 +121,8 @@ specification declares an enum, and whether it is required:
 ```
 FLAGS
   --direction (enum): The direction to sort the results by. values=asc|desc maps_to=query.direction
+  --sarif-id (string): Filter analyses belonging to the same SARIF upload. maps_to=query.sarif_id
   --sort (enum): The property by which to sort the results. values=created maps_to=query.sort
-  --tool-name (string): The name of a code scanning tool. maps_to=query.tool_name
 ```
 
 Invalid values and missing required flags are rejected **before any network

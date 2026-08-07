@@ -167,12 +167,12 @@ This repo uses official GSD Core workflows through a project-local Pi adapter:
 A direct read is page-wise exploration, not bulk extraction: the ETL path stores
 what it reads, a direct read does not. One request, one page.
 
-Four rules keep that honest; all exist because the direct-read executor once sent
+Five rules keep that honest; all exist because the direct-read executor once sent
 no page-size parameter at all, so every connector returned the provider's default
 page (GitHub's is 30) at `status: 200` with nothing saying more remained.
 
 - Paging is DERIVED from the connector's own declared pagination spec
-  (`streams.json` `base.http.pagination`) through `engine/paginate.go`, the same
+  (`streams.json` `base.pagination`) through `engine/paginate.go`, the same
   seven strategies the ETL path consumes. Never hand-author paging params into
   `cli_surface.json` or `operations.json`. A few bundles did before the rule
   existed — notion's `page-size`/`start-cursor`, bahmni's `start-index`, gong's
@@ -199,9 +199,11 @@ page (GitHub's is 30) at `status: 200` with nothing saying more remained.
   silently, and the refusal names the request parameter rather than inventing a
   flag spelling the caller never typed.
 - Where a caller navigates through the connector's own paging parameter, the
-  result carries neither `number`/`next_number` (the engine did not choose the
-  window) nor `next_cursor` (an addressable strategy refuses cursors on the way
-  back in). `has_more` still reports whether records remain.
+  result carries no `number`/`next_number`: the engine did not choose the
+  window, so it has no page number it can honestly name. An addressable
+  strategy also carries no `next_cursor`, because it would refuse that cursor
+  on the way back in; the token strategies still report the `next_cursor` their
+  own response produced. `has_more` reports whether records remain either way.
 - A direct-read executor that reports no page context has not navigated.
   `commandrunner.assertDirectReadNavigated` refuses `--page`/`--page-cursor`
   against a zero `DirectReadPage` rather than returning page one at exit 0, which
