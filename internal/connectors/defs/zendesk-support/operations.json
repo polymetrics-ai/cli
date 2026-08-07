@@ -231,22 +231,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_attachment",
-      "kind": "rest_write",
-      "summary": "Delete Attachment (DELETE /api/v2/attachments/{attachment_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/attachments/{attachment_id}"
-      }
-    },
-    {
       "id": "zendesk-support.list_audit_logs",
       "kind": "rest_read",
       "summary": "List Audit Logs (GET /api/v2/audit_logs)",
@@ -428,22 +412,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_bookmark",
-      "kind": "rest_write",
-      "summary": "Delete Bookmark (DELETE /api/v2/bookmarks/{bookmark_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/bookmarks/{bookmark_id}"
-      }
-    },
-    {
       "id": "zendesk-support.list_brand_agents",
       "kind": "rest_read",
       "summary": "List Brand Agent Memberships (GET /api/v2/brand_agents)",
@@ -474,22 +442,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_brand_agent_by_id",
-      "kind": "rest_write",
-      "summary": "Delete Brand Agent Membership (DELETE /api/v2/brand_agents/{brand_agent_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/brand_agents/{brand_agent_id}"
-      }
-    },
-    {
       "id": "zendesk-support.show_brand",
       "kind": "rest_read",
       "summary": "Show a Brand (GET /api/v2/brands/{brand_id})",
@@ -502,22 +454,6 @@
         "method": "GET",
         "path": "/api/v2/brands/{brand_id}",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "zendesk-support.delete_brand",
-      "kind": "rest_write",
-      "summary": "Delete a Brand (DELETE /api/v2/brands/{brand_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/brands/{brand_id}"
       }
     },
     {
@@ -563,22 +499,6 @@
         "direction": "upload",
         "path": "/api/v2/brands/{brand_id}/logo",
         "max_bytes": 10485760
-      }
-    },
-    {
-      "id": "zendesk-support.delete_brand_logo",
-      "kind": "rest_write",
-      "summary": "Delete a Brand Logo (DELETE /api/v2/brands/{brand_id}/logo)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/brands/{brand_id}/logo"
       }
     },
     {
@@ -810,22 +730,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_custom_object",
-      "kind": "rest_write",
-      "summary": "Delete Custom Object (DELETE /api/v2/custom_objects/{custom_object_key})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/custom_objects/{custom_object_key}"
-      }
-    },
-    {
       "id": "zendesk-support.list_access_rules",
       "kind": "rest_read",
       "summary": "List Access Rules (GET /api/v2/custom_objects/{custom_object_key}/access_rules)",
@@ -853,22 +757,6 @@
         "method": "GET",
         "path": "/api/v2/custom_objects/{custom_object_key}/access_rules/{id}",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "zendesk-support.delete_access_rule",
-      "kind": "rest_write",
-      "summary": "Delete Access Rule (DELETE /api/v2/custom_objects/{custom_object_key}/access_rules/{id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/custom_objects/{custom_object_key}/access_rules/{id}"
       }
     },
     {
@@ -928,22 +816,6 @@
       "mutation_class": "update",
       "rest": {
         "method": "PATCH",
-        "path": "/api/v2/custom_objects/{custom_object_key}/fields/{custom_object_field_key_or_id}"
-      }
-    },
-    {
-      "id": "zendesk-support.delete_custom_object_field",
-      "kind": "rest_write",
-      "summary": "Delete Custom Object Field (DELETE /api/v2/custom_objects/{custom_object_key}/fields/{custom_object_field_key_or_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
         "path": "/api/v2/custom_objects/{custom_object_key}/fields/{custom_object_field_key_or_id}"
       }
     },
@@ -1121,22 +993,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_custom_object_record_by_external_id_or_name",
-      "kind": "rest_write",
-      "summary": "Delete Custom Object Record by External Id Or Name (DELETE /api/v2/custom_objects/{custom_object_key}/records)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/custom_objects/{custom_object_key}/records"
-      }
-    },
-    {
       "id": "zendesk-support.show_custom_object_record",
       "kind": "rest_read",
       "summary": "Show Custom Object Record (GET /api/v2/custom_objects/{custom_object_key}/records/{custom_object_record_id})",
@@ -1163,22 +1019,6 @@
       "mutation_class": "update",
       "rest": {
         "method": "PATCH",
-        "path": "/api/v2/custom_objects/{custom_object_key}/records/{custom_object_record_id}"
-      }
-    },
-    {
-      "id": "zendesk-support.delete_custom_object_record",
-      "kind": "rest_write",
-      "summary": "Delete Custom Object Record (DELETE /api/v2/custom_objects/{custom_object_key}/records/{custom_object_record_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
         "path": "/api/v2/custom_objects/{custom_object_key}/records/{custom_object_record_id}"
       }
     },
@@ -1210,22 +1050,6 @@
         "direction": "upload",
         "path": "/api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments",
         "max_bytes": 10485760
-      }
-    },
-    {
-      "id": "zendesk-support.delete_custom_object_record_attachment",
-      "kind": "rest_write",
-      "summary": "Delete Custom Object Record Attachment (DELETE /api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}"
       }
     },
     {
@@ -1339,22 +1163,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_object_trigger",
-      "kind": "rest_write",
-      "summary": "Delete Object Trigger (DELETE /api/v2/custom_objects/{custom_object_key}/triggers/{trigger_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/custom_objects/{custom_object_key}/triggers/{trigger_id}"
-      }
-    },
-    {
       "id": "zendesk-support.list_active_object_triggers",
       "kind": "rest_read",
       "summary": "List Active Object Triggers (GET /api/v2/custom_objects/{custom_object_key}/triggers/active)",
@@ -1382,22 +1190,6 @@
         "method": "GET",
         "path": "/api/v2/custom_objects/{custom_object_key}/triggers/definitions",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "zendesk-support.delete_many_object_triggers",
-      "kind": "rest_write",
-      "summary": "Delete Many Object Triggers (DELETE /api/v2/custom_objects/{custom_object_key}/triggers/destroy_many)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/custom_objects/{custom_object_key}/triggers/destroy_many"
       }
     },
     {
@@ -1491,22 +1283,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_custom_role_by_id",
-      "kind": "rest_write",
-      "summary": "Delete Custom Role (DELETE /api/v2/custom_roles/{custom_role_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/custom_roles/{custom_role_id}"
-      }
-    },
-    {
       "id": "zendesk-support.list_custom_statuses",
       "kind": "rest_read",
       "summary": "List Custom Ticket Statuses (GET /api/v2/custom_statuses)",
@@ -1537,38 +1313,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_custom_status",
-      "kind": "rest_write",
-      "summary": "Delete Custom Ticket Status (DELETE /api/v2/custom_statuses/{custom_status_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/custom_statuses/{custom_status_id}"
-      }
-    },
-    {
-      "id": "zendesk-support.delete_ticket_permanently",
-      "kind": "rest_write",
-      "summary": "Delete Ticket Permanently (DELETE /api/v2/deleted_tickets/{ticket_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/deleted_tickets/{ticket_id}"
-      }
-    },
-    {
       "id": "zendesk-support.restore_deleted_ticket",
       "kind": "rest_write",
       "summary": "Restore a Previously Deleted Ticket (PUT /api/v2/deleted_tickets/{ticket_id}/restore)",
@@ -1581,22 +1325,6 @@
       "rest": {
         "method": "PUT",
         "path": "/api/v2/deleted_tickets/{ticket_id}/restore"
-      }
-    },
-    {
-      "id": "zendesk-support.bulk_permanently_delete_tickets",
-      "kind": "rest_write",
-      "summary": "Delete Multiple Tickets Permanently (DELETE /api/v2/deleted_tickets/destroy_many)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/deleted_tickets/destroy_many"
       }
     },
     {
@@ -1648,22 +1376,6 @@
       }
     },
     {
-      "id": "zendesk-support.permanently_delete_user",
-      "kind": "rest_write",
-      "summary": "Permanently Delete User (DELETE /api/v2/deleted_users/{deleted_user_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/deleted_users/{deleted_user_id}"
-      }
-    },
-    {
       "id": "zendesk-support.count_deleted_users",
       "kind": "rest_read",
       "summary": "Count Deleted Users (GET /api/v2/deleted_users/count)",
@@ -1706,22 +1418,6 @@
         "method": "GET",
         "path": "/api/v2/deletion_schedules/{deletion_schedule_id}",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "zendesk-support.delete_deletion_schedule",
-      "kind": "rest_write",
-      "summary": "Delete Deletion Schedule (DELETE /api/v2/deletion_schedules/{deletion_schedule_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/deletion_schedules/{deletion_schedule_id}"
       }
     },
     {
@@ -1785,22 +1481,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_dynamic_content_item",
-      "kind": "rest_write",
-      "summary": "Delete Item (DELETE /api/v2/dynamic_content/items/{dynamic_content_item_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/dynamic_content/items/{dynamic_content_item_id}"
-      }
-    },
-    {
       "id": "zendesk-support.dynamic_content_list_variants",
       "kind": "rest_read",
       "summary": "List Variants (GET /api/v2/dynamic_content/items/{dynamic_content_item_id}/variants)",
@@ -1857,22 +1537,6 @@
       "mutation_class": "update",
       "rest": {
         "method": "PUT",
-        "path": "/api/v2/dynamic_content/items/{dynamic_content_item_id}/variants/{dynamic_content_variant_id}"
-      }
-    },
-    {
-      "id": "zendesk-support.delete_dynamic_content_variant",
-      "kind": "rest_write",
-      "summary": "Delete Variant (DELETE /api/v2/dynamic_content/items/{dynamic_content_item_id}/variants/{dynamic_content_variant_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
         "path": "/api/v2/dynamic_content/items/{dynamic_content_item_id}/variants/{dynamic_content_variant_id}"
       }
     },
@@ -2015,22 +1679,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_end_user_identity",
-      "kind": "rest_write",
-      "summary": "Delete End User Identity (DELETE /api/v2/end_users/{user_id}/identities/{user_identity_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/end_users/{user_id}/identities/{user_identity_id}"
-      }
-    },
-    {
       "id": "zendesk-support.make_end_user_identity_primary",
       "kind": "rest_write",
       "summary": "Make End User Identity Primary (PUT /api/v2/end_users/{user_id}/identities/{user_identity_id}/make_primary)",
@@ -2073,22 +1721,6 @@
         "method": "GET",
         "path": "/api/v2/group_memberships/{group_membership_id}",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "zendesk-support.delete_group_membership",
-      "kind": "rest_write",
-      "summary": "Delete Membership (DELETE /api/v2/group_memberships/{group_membership_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/group_memberships/{group_membership_id}"
       }
     },
     {
@@ -2179,22 +1811,6 @@
       "mutation_class": "update",
       "rest": {
         "method": "PUT",
-        "path": "/api/v2/group_slas/policies/{group_sla_policy_id}"
-      }
-    },
-    {
-      "id": "zendesk-support.delete_group_slapolicy",
-      "kind": "rest_write",
-      "summary": "Delete Group SLA Policy (DELETE /api/v2/group_slas/policies/{group_sla_policy_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
         "path": "/api/v2/group_slas/policies/{group_sla_policy_id}"
       }
     },
@@ -2574,22 +2190,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_itam_asset_type",
-      "kind": "rest_write",
-      "summary": "Delete Asset Type (DELETE /api/v2/it_asset_management/asset_types/{asset_type_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/it_asset_management/asset_types/{asset_type_id}"
-      }
-    },
-    {
       "id": "zendesk-support.list_itam_asset_type_fields",
       "kind": "rest_read",
       "summary": "List Asset Fields (GET /api/v2/it_asset_management/asset_types/{asset_type_id}/fields)",
@@ -2635,22 +2235,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_itam_asset_type_field",
-      "kind": "rest_write",
-      "summary": "Delete Asset Field (DELETE /api/v2/it_asset_management/asset_types/{asset_type_id}/fields/{asset_type_field_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/it_asset_management/asset_types/{asset_type_id}/fields/{asset_type_field_id}"
-      }
-    },
-    {
       "id": "zendesk-support.list_itam_assets",
       "kind": "rest_read",
       "summary": "List Assets (GET /api/v2/it_asset_management/assets)",
@@ -2692,22 +2276,6 @@
       "mutation_class": "update",
       "rest": {
         "method": "PATCH",
-        "path": "/api/v2/it_asset_management/assets/{asset_id}"
-      }
-    },
-    {
-      "id": "zendesk-support.delete_itam_asset",
-      "kind": "rest_write",
-      "summary": "Delete Asset (DELETE /api/v2/it_asset_management/assets/{asset_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
         "path": "/api/v2/it_asset_management/assets/{asset_id}"
       }
     },
@@ -2792,22 +2360,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_itam_location",
-      "kind": "rest_write",
-      "summary": "Delete Asset Location (DELETE /api/v2/it_asset_management/locations/{location_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/it_asset_management/locations/{location_id}"
-      }
-    },
-    {
       "id": "zendesk-support.list_itam_statuses",
       "kind": "rest_read",
       "summary": "List Asset Statuses (GET /api/v2/it_asset_management/statuses)",
@@ -2835,22 +2387,6 @@
         "method": "GET",
         "path": "/api/v2/it_asset_management/statuses/{status_id}",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "zendesk-support.delete_itam_status",
-      "kind": "rest_write",
-      "summary": "Delete Asset Status (DELETE /api/v2/it_asset_management/statuses/{status_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/it_asset_management/statuses/{status_id}"
       }
     },
     {
@@ -3139,22 +2675,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_many_macros",
-      "kind": "rest_write",
-      "summary": "Bulk Delete Macros (DELETE /api/v2/macros/destroy_many)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/macros/destroy_many"
-      }
-    },
-    {
       "id": "zendesk-support.show_derived_macro",
       "kind": "rest_read",
       "summary": "Show Macro Replica (GET /api/v2/macros/new)",
@@ -3209,80 +2729,6 @@
       }
     },
     {
-      "id": "zendesk-support.create_oauth_client",
-      "kind": "rest_write",
-      "summary": "Create Client (POST /api/v2/oauth/clients)",
-      "description": "Source-backed OAuth client metadata returns generated client secrets; it remains blocked by default until credential redaction and typed confirmation are implemented.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed sensitive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "rest": {
-        "method": "POST",
-        "path": "/api/v2/oauth/clients",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "title": "OAuthClientCreateRequest",
-          "required": [
-            "client"
-          ],
-          "additionalProperties": true,
-          "properties": {
-            "client": {
-              "type": "object",
-              "additionalProperties": true,
-              "required": [
-                "identifier"
-              ],
-              "properties": {
-                "identifier": {
-                  "type": "string",
-                  "description": "Unique identifier for this client."
-                },
-                "name": {
-                  "type": "string",
-                  "description": "Name of this client."
-                },
-                "description": {
-                  "type": "string",
-                  "description": "Short description displayed to users."
-                },
-                "company": {
-                  "type": "string",
-                  "description": "Company name displayed to users."
-                },
-                "redirect_uri": {
-                  "type": "array",
-                  "description": "Valid redirect URIs for this client.",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "client_type": {
-                  "type": "string",
-                  "description": "Either public or confidential."
-                }
-              }
-            }
-          }
-        }
-      },
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "client.secret",
-          "secret",
-          "client_secret"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      }
-    },
-    {
       "id": "zendesk-support.show_client",
       "kind": "rest_read",
       "summary": "Show Client (GET /api/v2/oauth/clients/{oauth_client_id})",
@@ -3303,90 +2749,6 @@
         ],
         "transform": "none",
         "approval_mode": "none"
-      }
-    },
-    {
-      "id": "zendesk-support.update_client",
-      "kind": "rest_write",
-      "summary": "Update Client (PUT /api/v2/oauth/clients/{oauth_client_id})",
-      "description": "Source-backed OAuth client metadata includes client credential fields and responses with client secrets; it remains blocked by default until credential redaction and typed confirmation are implemented.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed sensitive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "rest": {
-        "method": "PUT",
-        "path": "/api/v2/oauth/clients/{oauth_client_id}",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "title": "OAuthClientUpdateRequest",
-          "additionalProperties": true,
-          "properties": {
-            "client": {
-              "type": "object",
-              "additionalProperties": true,
-              "properties": {
-                "identifier": {
-                  "type": "string",
-                  "description": "Unique identifier for this client."
-                },
-                "name": {
-                  "type": "string",
-                  "description": "Name of this client."
-                },
-                "description": {
-                  "type": "string",
-                  "description": "Short description displayed to users."
-                },
-                "company": {
-                  "type": "string",
-                  "description": "Company name displayed to users."
-                },
-                "redirect_uri": {
-                  "type": "array",
-                  "description": "Valid redirect URIs for this client.",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "client_type": {
-                  "type": "string",
-                  "description": "Either public or confidential."
-                }
-              }
-            }
-          }
-        }
-      },
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "client.secret",
-          "secret",
-          "client_secret"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      }
-    },
-    {
-      "id": "zendesk-support.delete_client",
-      "kind": "rest_write",
-      "summary": "Delete Client (DELETE /api/v2/oauth/clients/{oauth_client_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/oauth/clients/{oauth_client_id}"
       }
     },
     {
@@ -3487,67 +2849,6 @@
       }
     },
     {
-      "id": "zendesk-support.create_oauth_token",
-      "kind": "rest_write",
-      "summary": "Create Token (POST /api/v2/oauth/tokens)",
-      "description": "Source-backed OAuth token metadata returns access tokens and may return refresh tokens; it remains blocked by default until credential redaction and typed confirmation are implemented.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed sensitive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "rest": {
-        "method": "POST",
-        "path": "/api/v2/oauth/tokens",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "title": "OAuthTokenCreateRequest",
-          "required": [
-            "token"
-          ],
-          "additionalProperties": true,
-          "properties": {
-            "token": {
-              "type": "object",
-              "additionalProperties": true,
-              "required": [
-                "client_id",
-                "scopes"
-              ],
-              "properties": {
-                "client_id": {
-                  "type": "integer",
-                  "format": "int64",
-                  "description": "Resource id of an OAuth client."
-                },
-                "scopes": {
-                  "type": "array",
-                  "description": "Valid scopes for the token.",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "token",
-          "refresh_token",
-          "token.token",
-          "token.refresh_token"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      }
-    },
-    {
       "id": "zendesk-support.show_token",
       "kind": "rest_read",
       "summary": "Show Token (GET /api/v2/oauth/tokens/{oauth_token_id})",
@@ -3568,22 +2869,6 @@
         ],
         "transform": "none",
         "approval_mode": "none"
-      }
-    },
-    {
-      "id": "zendesk-support.revoke_oauth_token",
-      "kind": "rest_write",
-      "summary": "Revoke Token (DELETE /api/v2/oauth/tokens/{oauth_token_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/oauth/tokens/{oauth_token_id}"
       }
     },
     {
@@ -3671,22 +2956,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_organization_field",
-      "kind": "rest_write",
-      "summary": "Delete Organization Field (DELETE /api/v2/organization_fields/{organization_field_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/organization_fields/{organization_field_id}"
-      }
-    },
-    {
       "id": "zendesk-support.reorder_organization_field",
       "kind": "rest_write",
       "summary": "Reorder Organization Field (PUT /api/v2/organization_fields/reorder)",
@@ -3729,22 +2998,6 @@
         "method": "GET",
         "path": "/api/v2/organization_memberships/{organization_membership_id}",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "zendesk-support.delete_organization_membership",
-      "kind": "rest_write",
-      "summary": "Delete Membership (DELETE /api/v2/organization_memberships/{organization_membership_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/organization_memberships/{organization_membership_id}"
       }
     },
     {
@@ -3824,22 +3077,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_organization_subscription",
-      "kind": "rest_write",
-      "summary": "Delete Organization Subscription (DELETE /api/v2/organization_subscriptions/{organization_subscription_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/organization_subscriptions/{organization_subscription_id}"
-      }
-    },
-    {
       "id": "zendesk-support.show_organization",
       "kind": "rest_read",
       "summary": "Show Organization (GET /api/v2/organizations/{organization_id})",
@@ -3852,29 +3089,6 @@
         "method": "GET",
         "path": "/api/v2/organizations/{organization_id}",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "zendesk-support.create_organization_merge",
-      "kind": "rest_write",
-      "summary": "Merge Organization With Another Organization (POST /api/v2/organizations/{organization_id}/merge)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "destructive",
-      "destructive": true,
-      "rest": {
-        "method": "POST",
-        "path": "/api/v2/organizations/{organization_id}/merge",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "title": "OrganizationMergeRequest",
-          "additionalProperties": true
-        }
       }
     },
     {
@@ -3994,22 +3208,6 @@
       "mutation_class": "update",
       "rest": {
         "method": "PUT",
-        "path": "/api/v2/organizations/{organization_id}/tags"
-      }
-    },
-    {
-      "id": "zendesk-support.remove_organization_tags",
-      "kind": "rest_write",
-      "summary": "Remove Organization Tags (DELETE /api/v2/organizations/{organization_id}/tags)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
         "path": "/api/v2/organizations/{organization_id}/tags"
       }
     },
@@ -4318,22 +3516,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_queue",
-      "kind": "rest_write",
-      "summary": "Delete Queue (DELETE /api/v2/queues/{queue_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/queues/{queue_id}"
-      }
-    },
-    {
       "id": "zendesk-support.list_queue_definitions",
       "kind": "rest_read",
       "summary": "List Queue Definitions (GET /api/v2/queues/definitions)",
@@ -4420,22 +3602,6 @@
       "mutation_class": "update",
       "rest": {
         "method": "PUT",
-        "path": "/api/v2/recipient_addresses/{support_address_id}"
-      }
-    },
-    {
-      "id": "zendesk-support.delete_recipient_address",
-      "kind": "rest_write",
-      "summary": "Delete Support Address (DELETE /api/v2/recipient_addresses/{support_address_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
         "path": "/api/v2/recipient_addresses/{support_address_id}"
       }
     },
@@ -4695,22 +3861,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_resource_collection",
-      "kind": "rest_write",
-      "summary": "Delete Resource Collection (DELETE /api/v2/resource_collections/{resource_collection_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/resource_collections/{resource_collection_id}"
-      }
-    },
-    {
       "id": "zendesk-support.list_agent_attribute_values",
       "kind": "rest_read",
       "summary": "List Agent Attribute Values (GET /api/v2/routing/agents/{user_id}/instance_values)",
@@ -4879,22 +4029,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_attribute",
-      "kind": "rest_write",
-      "summary": "Delete Attribute (DELETE /api/v2/routing/attributes/{attribute_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/routing/attributes/{attribute_id}"
-      }
-    },
-    {
       "id": "zendesk-support.list_attribute_values",
       "kind": "rest_read",
       "summary": "List Attribute Values for an Attribute (GET /api/v2/routing/attributes/{attribute_id}/values)",
@@ -4951,22 +4085,6 @@
       "mutation_class": "update",
       "rest": {
         "method": "PATCH",
-        "path": "/api/v2/routing/attributes/{attribute_id}/values/{attribute_value_id}"
-      }
-    },
-    {
-      "id": "zendesk-support.delete_attribute_value",
-      "kind": "rest_write",
-      "summary": "Delete Attribute Value (DELETE /api/v2/routing/attributes/{attribute_id}/values/{attribute_value_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
         "path": "/api/v2/routing/attributes/{attribute_id}/values/{attribute_value_id}"
       }
     },
@@ -5088,22 +4206,6 @@
         "method": "GET",
         "path": "/api/v2/saved_searches",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "zendesk-support.delete_saved_search",
-      "kind": "rest_write",
-      "summary": "Delete Saved Search (DELETE /api/v2/saved_searches/{id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/saved_searches/{id}"
       }
     },
     {
@@ -5242,22 +4344,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_sharing_agreement",
-      "kind": "rest_write",
-      "summary": "Delete a Sharing Agreement (DELETE /api/v2/sharing_agreements/{sharing_agreement_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/sharing_agreements/{sharing_agreement_id}"
-      }
-    },
-    {
       "id": "zendesk-support.record_new_skip",
       "kind": "rest_write",
       "summary": "Record a New Skip for the Current User (POST /api/v2/skips)",
@@ -5314,22 +4400,6 @@
       "mutation_class": "update",
       "rest": {
         "method": "PUT",
-        "path": "/api/v2/slas/policies/{sla_policy_id}"
-      }
-    },
-    {
-      "id": "zendesk-support.delete_slapolicy",
-      "kind": "rest_write",
-      "summary": "Delete SLA Policy (DELETE /api/v2/slas/policies/{sla_policy_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
         "path": "/api/v2/slas/policies/{sla_policy_id}"
       }
     },
@@ -5394,22 +4464,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_suspended_ticket",
-      "kind": "rest_write",
-      "summary": "Delete Suspended Ticket (DELETE /api/v2/suspended_tickets/{id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/suspended_tickets/{id}"
-      }
-    },
-    {
       "id": "zendesk-support.recover_suspended_ticket",
       "kind": "rest_write",
       "summary": "Recover Suspended Ticket (PUT /api/v2/suspended_tickets/{id}/recover)",
@@ -5438,22 +4492,6 @@
         "method": "POST",
         "path": "/api/v2/suspended_tickets/attachments",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "zendesk-support.delete_suspended_tickets",
-      "kind": "rest_write",
-      "summary": "Delete Multiple Suspended Tickets (DELETE /api/v2/suspended_tickets/destroy_many)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/suspended_tickets/destroy_many"
       }
     },
     {
@@ -5597,22 +4635,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_target",
-      "kind": "rest_write",
-      "summary": "Delete Target (DELETE /api/v2/targets/{target_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/targets/{target_id}"
-      }
-    },
-    {
       "id": "zendesk-support.list_task_list_templates",
       "kind": "rest_read",
       "summary": "List Task List Templates (GET /api/v2/task_list_templates)",
@@ -5643,22 +4665,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_task_list_template",
-      "kind": "rest_write",
-      "summary": "Delete Task List Template (DELETE /api/v2/task_list_templates/{task_list_template_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/task_list_templates/{task_list_template_id}"
-      }
-    },
-    {
       "id": "zendesk-support.get_tasks_by_task_list_template_id",
       "kind": "rest_read",
       "summary": "Get Tasks by Task List Template Id (GET /api/v2/task_list_templates/{task_list_template_id}/tasks)",
@@ -5686,22 +4692,6 @@
         "method": "GET",
         "path": "/api/v2/ticket_content_pins",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "zendesk-support.delete_ticket_content_pin",
-      "kind": "rest_write",
-      "summary": "Delete Content Pin from Ticket (DELETE /api/v2/ticket_content_pins/{content_pin_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/ticket_content_pins/{content_pin_id}"
       }
     },
     {
@@ -5762,22 +4752,6 @@
         "method": "GET",
         "path": "/api/v2/ticket_fields/{ticket_field_id}/options/{ticket_field_option_id}",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "zendesk-support.delete_ticket_field_option",
-      "kind": "rest_write",
-      "summary": "Delete Ticket Field Option (DELETE /api/v2/ticket_fields/{ticket_field_id}/options/{ticket_field_option_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/ticket_fields/{ticket_field_id}/options/{ticket_field_option_id}"
       }
     },
     {
@@ -5901,22 +4875,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_ticket_form",
-      "kind": "rest_write",
-      "summary": "Delete Ticket Form (DELETE /api/v2/ticket_forms/{ticket_form_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/ticket_forms/{ticket_form_id}"
-      }
-    },
-    {
       "id": "zendesk-support.clone_ticket_form",
       "kind": "rest_write",
       "summary": "Clone an Already Existing Ticket Form (POST /api/v2/ticket_forms/{ticket_form_id}/clone)",
@@ -5944,52 +4902,6 @@
         "method": "GET",
         "path": "/api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "zendesk-support.delete_ticket_form_statuses",
-      "kind": "rest_write",
-      "summary": "Delete Ticket Form Statuses (DELETE /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "array",
-              "description": "List of ids to delete",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
-    {
-      "id": "zendesk-support.delete_ticket_form_status_by_id",
-      "kind": "rest_write",
-      "summary": "Delete Ticket Form Status By Id (DELETE /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses/{ticket_form_status_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses/{ticket_form_status_id}"
       }
     },
     {
@@ -6311,29 +5223,6 @@
       }
     },
     {
-      "id": "zendesk-support.merge_tickets_into_target_ticket",
-      "kind": "rest_write",
-      "summary": "Merge Tickets into Target Ticket (POST /api/v2/tickets/{ticket_id}/merge)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "destructive",
-      "rest": {
-        "method": "POST",
-        "path": "/api/v2/tickets/{ticket_id}/merge",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "title": "TicketMergeInput",
-          "additionalProperties": true
-        }
-      },
-      "destructive": true
-    },
-    {
       "id": "zendesk-support.show_ticket_metrics_by_ticket",
       "kind": "rest_read",
       "summary": "Show Ticket Metrics By Ticket (GET /api/v2/tickets/{ticket_id}/metrics)",
@@ -6439,22 +5328,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_tags_ticket",
-      "kind": "rest_write",
-      "summary": "Remove Tags (DELETE /api/v2/tickets/{ticket_id}/tags)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/tickets/{ticket_id}/tags"
-      }
-    },
-    {
       "id": "zendesk-support.show_task_list",
       "kind": "rest_read",
       "summary": "Show Task List (GET /api/v2/tickets/{ticket_id}/task_lists)",
@@ -6482,22 +5355,6 @@
         "method": "GET",
         "path": "/api/v2/tickets/count",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "zendesk-support.bulk_delete_tickets",
-      "kind": "rest_write",
-      "summary": "Bulk Delete Tickets (DELETE /api/v2/tickets/destroy_many)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/tickets/destroy_many"
       }
     },
     {
@@ -6562,107 +5419,6 @@
       }
     },
     {
-      "id": "zendesk-support.tickets_update_many",
-      "kind": "rest_write",
-      "summary": "Update Many Tickets (PUT /api/v2/tickets/update_many)",
-      "description": "Pinned OAS TicketsUpdateRequest has two typed oneOf arms. It remains blocked until the shared write surface can bind separate bulk and batch actions to this endpoint and can render the bulk ids array as a query parameter; no executable union-flattened command is exposed.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "medium",
-      "approval": "reverse ETL plan, preview, explicit approval, execute",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "update",
-      "rest": {
-        "method": "PUT",
-        "path": "/api/v2/tickets/update_many",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "title": "TicketsUpdateRequest",
-          "additionalProperties": false,
-          "oneOf": [
-            {
-              "required": [
-                "ticket"
-              ]
-            },
-            {
-              "required": [
-                "tickets"
-              ]
-            }
-          ],
-          "properties": {
-            "ticket": {
-              "type": "object",
-              "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketsUpdateRequest/oneOf/0/properties/ticket",
-              "additionalProperties": false,
-              "properties": {
-                "status": {
-                  "type": "string",
-                  "enum": [
-                    "new",
-                    "open",
-                    "pending",
-                    "hold",
-                    "solved",
-                    "closed"
-                  ],
-                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketObject/properties/status"
-                },
-                "subject": {
-                  "type": "string",
-                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketObject/properties/subject"
-                },
-                "tags": {
-                  "type": "array",
-                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketObject/properties/tags",
-                  "items": {
-                    "type": "string",
-                    "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketObject/properties/tags/items"
-                  }
-                }
-              }
-            },
-            "tickets": {
-              "type": "array",
-              "maxItems": 100,
-              "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketsUpdateRequest/oneOf/1/properties/tickets",
-              "items": {
-                "type": "object",
-                "required": [
-                  "id"
-                ],
-                "additionalProperties": false,
-                "properties": {
-                  "id": {
-                    "type": "integer",
-                    "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketsUpdateRequest/oneOf/1/properties/tickets/items/allOf/1/properties/id"
-                  },
-                  "status": {
-                    "type": "string",
-                    "enum": [
-                      "new",
-                      "open",
-                      "pending",
-                      "hold",
-                      "solved",
-                      "closed"
-                    ],
-                    "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketObject/properties/status"
-                  },
-                  "subject": {
-                    "type": "string",
-                    "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketObject/properties/subject"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    {
       "id": "zendesk-support.list_trigger_categories",
       "kind": "rest_read",
       "summary": "List Ticket Trigger Categories (GET /api/v2/trigger_categories)",
@@ -6690,22 +5446,6 @@
         "method": "GET",
         "path": "/api/v2/trigger_categories/{trigger_category_id}",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "zendesk-support.delete_trigger_category",
-      "kind": "rest_write",
-      "summary": "Delete Ticket Trigger Category (DELETE /api/v2/trigger_categories/{trigger_category_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/trigger_categories/{trigger_category_id}"
       }
     },
     {
@@ -6784,22 +5524,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_many_triggers",
-      "kind": "rest_write",
-      "summary": "Bulk Delete Ticket Triggers (DELETE /api/v2/triggers/destroy_many)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/triggers/destroy_many"
-      }
-    },
-    {
       "id": "zendesk-support.reorder_triggers",
       "kind": "rest_write",
       "summary": "Reorder Ticket Triggers (PUT /api/v2/triggers/reorder)",
@@ -6842,22 +5566,6 @@
         "direction": "upload",
         "path": "/api/v2/uploads",
         "max_bytes": 10485760
-      }
-    },
-    {
-      "id": "zendesk-support.delete_upload",
-      "kind": "rest_write",
-      "summary": "Delete Upload (DELETE /api/v2/uploads/{token})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/uploads/{token}"
       }
     },
     {
@@ -6906,22 +5614,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_user_field",
-      "kind": "rest_write",
-      "summary": "Delete User Field (DELETE /api/v2/user_fields/{user_field_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/user_fields/{user_field_id}"
-      }
-    },
-    {
       "id": "zendesk-support.list_user_field_options",
       "kind": "rest_read",
       "summary": "List User Field Options (GET /api/v2/user_fields/{user_field_id}/options)",
@@ -6964,22 +5656,6 @@
         "method": "GET",
         "path": "/api/v2/user_fields/{user_field_id}/options/{user_field_option_id}",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "zendesk-support.delete_user_field_option",
-      "kind": "rest_write",
-      "summary": "Delete User Field Option (DELETE /api/v2/user_fields/{user_field_id}/options/{user_field_option_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/user_fields/{user_field_id}/options/{user_field_option_id}"
       }
     },
     {
@@ -7118,22 +5794,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_user_group_membership",
-      "kind": "rest_write",
-      "summary": "Delete User's Group Membership (DELETE /api/v2/users/{user_id}/group_memberships/{group_membership_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/users/{user_id}/group_memberships/{group_membership_id}"
-      }
-    },
-    {
       "id": "zendesk-support.group_membership_set_default",
       "kind": "rest_write",
       "summary": "Set Membership as Default (PUT /api/v2/users/{user_id}/group_memberships/{group_membership_id}/make_default)",
@@ -7242,22 +5902,6 @@
       }
     },
     {
-      "id": "zendesk-support.delete_user_identity",
-      "kind": "rest_write",
-      "summary": "Delete Identity (DELETE /api/v2/users/{user_id}/identities/{user_identity_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/users/{user_id}/identities/{user_identity_id}"
-      }
-    },
-    {
       "id": "zendesk-support.make_user_identity_primary",
       "kind": "rest_write",
       "summary": "Make Identity Primary (PUT /api/v2/users/{user_id}/identities/{user_identity_id}/make_primary)",
@@ -7306,29 +5950,6 @@
       }
     },
     {
-      "id": "zendesk-support.merge_end_users",
-      "kind": "rest_write",
-      "summary": "Merge End Users (PUT /api/v2/users/{user_id}/merge)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "destructive",
-      "rest": {
-        "method": "PUT",
-        "path": "/api/v2/users/{user_id}/merge",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "title": "UserRequest",
-          "additionalProperties": true
-        }
-      },
-      "destructive": true
-    },
-    {
       "id": "zendesk-support.list_user_organization_memberships",
       "kind": "rest_read",
       "summary": "List Organization Memberships by User (GET /api/v2/users/{user_id}/organization_memberships)",
@@ -7371,22 +5992,6 @@
         "method": "GET",
         "path": "/api/v2/users/{user_id}/organization_memberships/{organization_membership_id}",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "zendesk-support.delete_user_organization_membership",
-      "kind": "rest_write",
-      "summary": "Delete Organization Membership for User (DELETE /api/v2/users/{user_id}/organization_memberships/{organization_membership_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/users/{user_id}/organization_memberships/{organization_membership_id}"
       }
     },
     {
@@ -7435,22 +6040,6 @@
       }
     },
     {
-      "id": "zendesk-support.unassign_organization",
-      "kind": "rest_write",
-      "summary": "Unassign Organization (DELETE /api/v2/users/{user_id}/organizations/{organization_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/users/{user_id}/organizations/{organization_id}"
-      }
-    },
-    {
       "id": "zendesk-support.set_organization_as_default",
       "kind": "rest_write",
       "summary": "Set Organization as Default (PUT /api/v2/users/{user_id}/organizations/{organization_id}/make_default)",
@@ -7478,102 +6067,6 @@
         "method": "GET",
         "path": "/api/v2/users/{user_id}/organizations/count",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "zendesk-support.set_user_password",
-      "kind": "rest_write",
-      "summary": "Set a User's Password (POST /api/v2/users/{user_id}/password)",
-      "description": "Source-backed password metadata carries a new password value; it remains blocked by default until non-inline credential input, redaction, and typed confirmation are implemented.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed sensitive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "rest": {
-        "method": "POST",
-        "path": "/api/v2/users/{user_id}/password",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "title": "UserPasswordSetRequest",
-          "required": [
-            "password"
-          ],
-          "additionalProperties": true,
-          "properties": {
-            "password": {
-              "type": "string",
-              "description": "New password value."
-            }
-          }
-        }
-      },
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "password",
-          "user.password"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      }
-    },
-    {
-      "id": "zendesk-support.change_own_password",
-      "kind": "rest_write",
-      "summary": "Change Your Password (PUT /api/v2/users/{user_id}/password)",
-      "description": "Source-backed password metadata carries current and new password values; it remains blocked by default until non-inline credential input, redaction, and typed confirmation are implemented.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed sensitive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "rest": {
-        "method": "PUT",
-        "path": "/api/v2/users/{user_id}/password",
-        "query": {
-          "brand_id": "{brand_id}"
-        },
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "title": "UserPasswordChangeRequest",
-          "additionalProperties": true,
-          "properties": {
-            "current_password": {
-              "type": "string",
-              "description": "Current password value."
-            },
-            "previous_password": {
-              "type": "string",
-              "description": "Previous password value."
-            },
-            "old_password": {
-              "type": "string",
-              "description": "Previous password value."
-            },
-            "password": {
-              "type": "string",
-              "description": "New password value."
-            }
-          }
-        }
-      },
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "password",
-          "current_password",
-          "previous_password",
-          "old_password"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
       }
     },
     {
@@ -7637,22 +6130,6 @@
       }
     },
     {
-      "id": "zendesk-support.bulk_delete_sessions_by_user_id",
-      "kind": "rest_write",
-      "summary": "Bulk Delete Sessions (DELETE /api/v2/users/{user_id}/sessions)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/users/{user_id}/sessions"
-      }
-    },
-    {
       "id": "zendesk-support.show_session",
       "kind": "rest_read",
       "summary": "Show Session (GET /api/v2/users/{user_id}/sessions/{session_id})",
@@ -7665,22 +6142,6 @@
         "method": "GET",
         "path": "/api/v2/users/{user_id}/sessions/{session_id}",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "zendesk-support.delete_session",
-      "kind": "rest_write",
-      "summary": "Delete Session (DELETE /api/v2/users/{user_id}/sessions/{session_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/users/{user_id}/sessions/{session_id}"
       }
     },
     {
@@ -7740,22 +6201,6 @@
       "mutation_class": "update",
       "rest": {
         "method": "PUT",
-        "path": "/api/v2/users/{user_id}/tags"
-      }
-    },
-    {
-      "id": "zendesk-support.delete_user_tags",
-      "kind": "rest_write",
-      "summary": "Remove User Tags (DELETE /api/v2/users/{user_id}/tags)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
         "path": "/api/v2/users/{user_id}/tags"
       }
     },
@@ -8027,115 +6472,6 @@
               }
             }
           }
-        }
-      }
-    },
-    {
-      "id": "zendesk-support.create_or_update_user",
-      "kind": "rest_write",
-      "summary": "Create Or Update User (POST /api/v2/users/create_or_update)",
-      "description": "Source-backed UserRequest body may include `user.password` and `user.identities[].value`; metadata remains blocked by default and redacts those fields before any future preview or execution.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed sensitive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "user.password",
-          "user.identities.value"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      },
-      "rest": {
-        "method": "POST",
-        "path": "/api/v2/users/create_or_update",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "title": "UserRequest",
-          "required": [
-            "user"
-          ],
-          "properties": {
-            "user": {
-              "type": "object",
-              "additionalProperties": true,
-              "properties": {
-                "id": {
-                  "type": "integer",
-                  "format": "int64",
-                  "description": "The user id for merge/update variants"
-                },
-                "external_id": {
-                  "type": "string",
-                  "description": "A unique identifier from another system"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "email": {
-                  "type": "string"
-                },
-                "password": {
-                  "type": "string",
-                  "description": "The user's password"
-                },
-                "identities": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "additionalProperties": true,
-                    "properties": {
-                      "type": {
-                        "type": "string",
-                        "enum": [
-                          "email",
-                          "twitter",
-                          "facebook",
-                          "google",
-                          "phone_number",
-                          "agent_forwarding",
-                          "any_channel",
-                          "foreign",
-                          "sdk",
-                          "messaging"
-                        ]
-                      },
-                      "value": {
-                        "type": "string"
-                      },
-                      "primary": {
-                        "type": "boolean"
-                      },
-                      "verification_method": {
-                        "type": "string",
-                        "enum": [
-                          "none",
-                          "low",
-                          "sso",
-                          "embed",
-                          "full"
-                        ]
-                      },
-                      "verified": {
-                        "type": "boolean"
-                      }
-                    },
-                    "required": [
-                      "type",
-                      "value"
-                    ]
-                  }
-                }
-              }
-            }
-          },
-          "additionalProperties": true
         }
       }
     },
@@ -8465,105 +6801,6 @@
       }
     },
     {
-      "id": "zendesk-support.update_many_users",
-      "kind": "rest_write",
-      "summary": "Update Many Users (PUT /api/v2/users/update_many)",
-      "description": "Pinned OAS UpdateManyUsers has typed bulk and batch oneOf arms. It remains blocked until the shared write surface can bind separate bulk and batch actions to this endpoint and can render bulk record-array selectors as query parameters; no executable union-flattened command is exposed.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "medium",
-      "approval": "reverse ETL plan, preview, explicit approval, execute",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "update",
-      "rest": {
-        "method": "PUT",
-        "path": "/api/v2/users/update_many",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "oneOf": [
-            {
-              "required": [
-                "user"
-              ]
-            },
-            {
-              "required": [
-                "users"
-              ]
-            }
-          ],
-          "properties": {
-            "user": {
-              "type": "object",
-              "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserUpdateRequest/properties/user",
-              "additionalProperties": false,
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserUpdateInput/properties/name"
-                },
-                "email": {
-                  "type": "string",
-                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserUpdateInput/properties/email"
-                },
-                "external_id": {
-                  "type": "string",
-                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserUpdateInput/properties/external_id"
-                },
-                "tags": {
-                  "type": "array",
-                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserUpdateInput/properties/tags",
-                  "items": {
-                    "type": "string",
-                    "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserUpdateInput/properties/tags/items"
-                  }
-                }
-              }
-            },
-            "users": {
-              "type": "array",
-              "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UsersRequest/properties/users",
-              "items": {
-                "type": "object",
-                "required": [
-                  "id"
-                ],
-                "additionalProperties": false,
-                "properties": {
-                  "id": {
-                    "type": "integer",
-                    "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/id"
-                  },
-                  "name": {
-                    "type": "string",
-                    "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/name"
-                  },
-                  "email": {
-                    "type": "string",
-                    "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/email"
-                  },
-                  "external_id": {
-                    "type": "string",
-                    "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/external_id"
-                  },
-                  "tags": {
-                    "type": "array",
-                    "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/tags",
-                    "items": {
-                      "type": "string",
-                      "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/tags/items"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    {
       "id": "zendesk-support.show_view",
       "kind": "rest_read",
       "summary": "Show View (GET /api/v2/views/{view_id})",
@@ -8714,22 +6951,6 @@
       }
     },
     {
-      "id": "zendesk-support.bulk_delete_views",
-      "kind": "rest_write",
-      "summary": "Bulk Delete Views (DELETE /api/v2/views/destroy_many)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/views/destroy_many"
-      }
-    },
-    {
       "id": "zendesk-support.preview_views",
       "kind": "rest_read",
       "summary": "Preview Views (POST /api/v2/views/preview)",
@@ -8842,112 +7063,6 @@
         "method": "GET",
         "path": "/api/v2/workspaces/{workspace_id}",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "zendesk-support.delete_workspace",
-      "kind": "rest_write",
-      "summary": "Delete Workspace (DELETE /api/v2/workspaces/{workspace_id})",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/workspaces/{workspace_id}"
-      }
-    },
-    {
-      "id": "zendesk-support.destroy_many_workspaces",
-      "kind": "rest_write",
-      "summary": "Bulk Delete Workspaces (DELETE /api/v2/workspaces/destroy_many)",
-      "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "delete",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/api/v2/workspaces/destroy_many"
-      }
-    },
-    {
-      "id": "zendesk-support.create_token_for_grant_type",
-      "kind": "rest_write",
-      "summary": "Create Token for Grant Type (POST /oauth/tokens)",
-      "description": "Source-backed grant-token metadata may carry client secrets, authorization codes, or refresh tokens and returns access tokens; it remains blocked by default until non-inline credential input, redaction, and typed confirmation are implemented.",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed sensitive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "rest": {
-        "method": "POST",
-        "path": "/oauth/tokens",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "title": "GrantTypeTokenRequest",
-          "additionalProperties": true,
-          "properties": {
-            "grant_type": {
-              "type": "string",
-              "enum": [
-                "authorization_code",
-                "refresh_token",
-                "client_credentials"
-              ],
-              "description": "OAuth grant type."
-            },
-            "code": {
-              "type": "string",
-              "description": "Authorization code for authorization_code grants."
-            },
-            "client_id": {
-              "type": "string",
-              "description": "OAuth client identifier."
-            },
-            "client_secret": {
-              "type": "string",
-              "description": "OAuth client secret."
-            },
-            "scope": {
-              "type": "string",
-              "description": "Space-separated token scope values."
-            },
-            "expires_in": {
-              "type": "integer",
-              "description": "Access token lifetime in seconds."
-            },
-            "refresh_token_expires_in": {
-              "type": "integer",
-              "description": "Refresh token lifetime in seconds."
-            },
-            "refresh_token": {
-              "type": "string",
-              "description": "Refresh token for refresh_token grants."
-            }
-          }
-        }
-      },
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "client_secret",
-          "refresh_token",
-          "access_token",
-          "token",
-          "code"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
       }
     }
   ]

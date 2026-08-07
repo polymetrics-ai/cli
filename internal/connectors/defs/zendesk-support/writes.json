@@ -6050,8 +6050,14 @@
                     "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionPolicyUpdateRequest/properties/policy/properties/records/properties/create",
                     "additionalProperties": false,
                     "properties": {
-                      "allowed": { "type": "boolean", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/allowed" },
-                      "rule_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/rule_id" }
+                      "allowed": {
+                        "type": "boolean",
+                        "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/allowed"
+                      },
+                      "rule_id": {
+                        "type": "integer",
+                        "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/rule_id"
+                      }
                     }
                   },
                   "read": {
@@ -6059,8 +6065,14 @@
                     "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionPolicyUpdateRequest/properties/policy/properties/records/properties/read",
                     "additionalProperties": false,
                     "properties": {
-                      "allowed": { "type": "boolean", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/allowed" },
-                      "rule_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/rule_id" }
+                      "allowed": {
+                        "type": "boolean",
+                        "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/allowed"
+                      },
+                      "rule_id": {
+                        "type": "integer",
+                        "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/rule_id"
+                      }
                     }
                   },
                   "update": {
@@ -6068,8 +6080,14 @@
                     "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionPolicyUpdateRequest/properties/policy/properties/records/properties/update",
                     "additionalProperties": false,
                     "properties": {
-                      "allowed": { "type": "boolean", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/allowed" },
-                      "rule_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/rule_id" }
+                      "allowed": {
+                        "type": "boolean",
+                        "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/allowed"
+                      },
+                      "rule_id": {
+                        "type": "integer",
+                        "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/rule_id"
+                      }
                     }
                   },
                   "delete": {
@@ -6077,8 +6095,14 @@
                     "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionPolicyUpdateRequest/properties/policy/properties/records/properties/delete",
                     "additionalProperties": false,
                     "properties": {
-                      "allowed": { "type": "boolean", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/allowed" },
-                      "rule_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/rule_id" }
+                      "allowed": {
+                        "type": "boolean",
+                        "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/allowed"
+                      },
+                      "rule_id": {
+                        "type": "integer",
+                        "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/rule_id"
+                      }
                     }
                   }
                 }
@@ -6115,7 +6139,11 @@
             "properties": {
               "action": {
                 "type": "string",
-                "enum": ["upsert", "update", "delete"],
+                "enum": [
+                  "upsert",
+                  "update",
+                  "delete"
+                ],
                 "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/BulkSkillBasedRoutingAttributeValueJob/properties/action"
               },
               "attributes": {
@@ -6130,8 +6158,14 @@
                       "type": "object",
                       "additionalProperties": false,
                       "properties": {
-                        "attribute_id": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/SkillBasedRoutingAttributeValueObject/properties/attribute_id" },
-                        "name": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/SkillBasedRoutingAttributeValueObject/properties/name" }
+                        "attribute_id": {
+                          "type": "string",
+                          "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/SkillBasedRoutingAttributeValueObject/properties/attribute_id"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/SkillBasedRoutingAttributeValueObject/properties/name"
+                        }
                       }
                     }
                   }
@@ -6140,7 +6174,10 @@
               "items": {
                 "type": "array",
                 "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/BulkSkillBasedRoutingAttributeValueJob/properties/items",
-                "items": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/BulkSkillBasedRoutingAttributeValueJob/properties/items/items" }
+                "items": {
+                  "type": "integer",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/BulkSkillBasedRoutingAttributeValueJob/properties/items/items"
+                }
               }
             }
           }
@@ -6154,11 +6191,15 @@
       "method": "POST",
       "path": "/api/v2/users/create_many",
       "body_type": "json",
-      "body_fields": ["users"],
+      "body_fields": [
+        "users"
+      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["users"],
+        "required": [
+          "users"
+        ],
         "additionalProperties": false,
         "properties": {
           "users": {
@@ -6167,21 +6208,63 @@
             "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UsersRequest/properties/users and #/paths/~1api~1v2~1users~1create_many/post/description (up to 100 users)",
             "items": {
               "type": "object",
-              "required": ["name"],
+              "required": [
+                "name"
+              ],
               "additionalProperties": false,
               "properties": {
-                "name": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/name" },
-                "email": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/email" },
-                "external_id": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/external_id" },
-                "role": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/role" },
-                "alias": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/alias" },
-                "details": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/details" },
-                "phone": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/phone" },
-                "organization_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/organization_id" },
-                "default_group_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/default_group_id" },
-                "locale": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/locale" },
-                "suspended": { "type": "boolean", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/suspended" },
-                "tags": { "type": "array", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/tags", "items": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/tags/items" } }
+                "name": {
+                  "type": "string",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/name"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/email"
+                },
+                "external_id": {
+                  "type": "string",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/external_id"
+                },
+                "role": {
+                  "type": "string",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/role"
+                },
+                "alias": {
+                  "type": "string",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/alias"
+                },
+                "details": {
+                  "type": "string",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/details"
+                },
+                "phone": {
+                  "type": "string",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/phone"
+                },
+                "organization_id": {
+                  "type": "integer",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/organization_id"
+                },
+                "default_group_id": {
+                  "type": "integer",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/default_group_id"
+                },
+                "locale": {
+                  "type": "string",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/locale"
+                },
+                "suspended": {
+                  "type": "boolean",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/suspended"
+                },
+                "tags": {
+                  "type": "array",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/tags",
+                  "items": {
+                    "type": "string",
+                    "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/tags/items"
+                  }
+                }
               }
             }
           }
@@ -6195,11 +6278,15 @@
       "method": "POST",
       "path": "/api/v2/users/create_or_update_many",
       "body_type": "json",
-      "body_fields": ["users"],
+      "body_fields": [
+        "users"
+      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["users"],
+        "required": [
+          "users"
+        ],
         "additionalProperties": false,
         "properties": {
           "users": {
@@ -6211,18 +6298,58 @@
               "minProperties": 1,
               "additionalProperties": false,
               "properties": {
-                "id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/id" },
-                "name": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/name" },
-                "email": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/email" },
-                "external_id": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/external_id" },
-                "role": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/role" },
-                "alias": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/alias" },
-                "details": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/details" },
-                "phone": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/phone" },
-                "organization_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/organization_id" },
-                "locale": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/locale" },
-                "suspended": { "type": "boolean", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/suspended" },
-                "tags": { "type": "array", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/tags", "items": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/tags/items" } }
+                "id": {
+                  "type": "integer",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/id"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/name"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/email"
+                },
+                "external_id": {
+                  "type": "string",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/external_id"
+                },
+                "role": {
+                  "type": "string",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/role"
+                },
+                "alias": {
+                  "type": "string",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/alias"
+                },
+                "details": {
+                  "type": "string",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/details"
+                },
+                "phone": {
+                  "type": "string",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/phone"
+                },
+                "organization_id": {
+                  "type": "integer",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/organization_id"
+                },
+                "locale": {
+                  "type": "string",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/locale"
+                },
+                "suspended": {
+                  "type": "boolean",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/suspended"
+                },
+                "tags": {
+                  "type": "array",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/tags",
+                  "items": {
+                    "type": "string",
+                    "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/tags/items"
+                  }
+                }
               }
             }
           }
@@ -6236,32 +6363,3307 @@
       "method": "POST",
       "path": "/api/v2/users/request_create",
       "body_type": "json",
-      "body_fields": ["user"],
+      "body_fields": [
+        "user"
+      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["user"],
+        "required": [
+          "user"
+        ],
         "additionalProperties": false,
         "properties": {
           "user": {
             "type": "object",
             "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserRequest/properties/user",
-            "required": ["name"],
+            "required": [
+              "name"
+            ],
             "additionalProperties": false,
             "properties": {
-              "name": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/name" },
-              "email": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/email" },
-              "external_id": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/external_id" },
-              "role": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/role" },
-              "phone": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/phone" },
-              "organization_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/organization_id" },
-              "locale": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/locale" },
-              "tags": { "type": "array", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/tags", "items": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/tags/items" } }
+              "name": {
+                "type": "string",
+                "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/name"
+              },
+              "email": {
+                "type": "string",
+                "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/email"
+              },
+              "external_id": {
+                "type": "string",
+                "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/external_id"
+              },
+              "role": {
+                "type": "string",
+                "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/role"
+              },
+              "phone": {
+                "type": "string",
+                "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/phone"
+              },
+              "organization_id": {
+                "type": "integer",
+                "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/organization_id"
+              },
+              "locale": {
+                "type": "string",
+                "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/locale"
+              },
+              "tags": {
+                "type": "array",
+                "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/tags",
+                "items": {
+                  "type": "string",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/tags/items"
+                }
+              }
             }
           }
         }
       },
       "risk": "requests a typed Zendesk user creation; approval is required"
+    },
+    {
+      "name": "delete_attachment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/attachments/{{ record.attachment_id }}",
+      "path_fields": [
+        "attachment_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "attachment_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "attachment_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/attachments/{attachment_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_bookmark",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/bookmarks/{{ record.bookmark_id }}",
+      "path_fields": [
+        "bookmark_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "bookmark_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "bookmark_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/bookmarks/{bookmark_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_brand_agent_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/brand_agents/{{ record.brand_agent_id }}",
+      "path_fields": [
+        "brand_agent_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "brand_agent_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "brand_agent_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/brand_agents/{brand_agent_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_brand",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/brands/{{ record.brand_id }}",
+      "path_fields": [
+        "brand_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "brand_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "brand_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/brands/{brand_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_brand_logo",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/brands/{{ record.brand_id }}/logo",
+      "path_fields": [
+        "brand_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "brand_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "brand_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/brands/{brand_id}/logo; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_custom_object",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}",
+      "path_fields": [
+        "custom_object_key"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "custom_object_key": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "custom_object_key"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/custom_objects/{custom_object_key}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_access_rule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/access_rules/{{ record.id }}",
+      "path_fields": [
+        "custom_object_key",
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "custom_object_key": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "custom_object_key",
+          "id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/custom_objects/{custom_object_key}/access_rules/{id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_custom_object_field",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/fields/{{ record.custom_object_field_key_or_id }}",
+      "path_fields": [
+        "custom_object_key",
+        "custom_object_field_key_or_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "custom_object_key": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "custom_object_field_key_or_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "custom_object_key",
+          "custom_object_field_key_or_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/custom_objects/{custom_object_key}/fields/{custom_object_field_key_or_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_custom_object_record_by_external_id_or_name",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/records",
+      "path_fields": [
+        "custom_object_key"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "custom_object_key": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "custom_object_key"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/custom_objects/{custom_object_key}/records; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_custom_object_record",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/records/{{ record.custom_object_record_id }}",
+      "path_fields": [
+        "custom_object_key",
+        "custom_object_record_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "custom_object_key": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "custom_object_record_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "custom_object_key",
+          "custom_object_record_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/custom_objects/{custom_object_key}/records/{custom_object_record_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_custom_object_record_attachment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/records/{{ record.record_id }}/attachments/{{ record.id }}",
+      "path_fields": [
+        "custom_object_key",
+        "record_id",
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "custom_object_key": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "record_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "custom_object_key",
+          "record_id",
+          "id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_object_trigger",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/triggers/{{ record.trigger_id }}",
+      "path_fields": [
+        "custom_object_key",
+        "trigger_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "custom_object_key": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "trigger_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "custom_object_key",
+          "trigger_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/custom_objects/{custom_object_key}/triggers/{trigger_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_many_object_triggers",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/triggers/destroy_many",
+      "path_fields": [
+        "custom_object_key"
+      ],
+      "body_type": "none",
+      "query": {
+        "ids": {
+          "template": "{{ record.ids }}"
+        }
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "custom_object_key": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "ids": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "custom_object_key",
+          "ids"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/custom_objects/{custom_object_key}/triggers/destroy_many; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_custom_role_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/custom_roles/{{ record.custom_role_id }}",
+      "path_fields": [
+        "custom_role_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "custom_role_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "custom_role_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/custom_roles/{custom_role_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_custom_status",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/custom_statuses/{{ record.custom_status_id }}",
+      "path_fields": [
+        "custom_status_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "custom_status_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "custom_status_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/custom_statuses/{custom_status_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_ticket_permanently",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/deleted_tickets/{{ record.ticket_id }}",
+      "path_fields": [
+        "ticket_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/deleted_tickets/{ticket_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "bulk_permanently_delete_tickets",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/deleted_tickets/destroy_many",
+      "body_type": "none",
+      "query": {
+        "ids": {
+          "template": "{{ record.ids }}"
+        }
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ids": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ids"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/deleted_tickets/destroy_many; destructive external mutation requiring approval"
+    },
+    {
+      "name": "permanently_delete_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/deleted_users/{{ record.deleted_user_id }}",
+      "path_fields": [
+        "deleted_user_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "deleted_user_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "deleted_user_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/deleted_users/{deleted_user_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_deletion_schedule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/deletion_schedules/{{ record.deletion_schedule_id }}",
+      "path_fields": [
+        "deletion_schedule_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "deletion_schedule_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "deletion_schedule_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/deletion_schedules/{deletion_schedule_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_dynamic_content_item",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/dynamic_content/items/{{ record.dynamic_content_item_id }}",
+      "path_fields": [
+        "dynamic_content_item_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "dynamic_content_item_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "dynamic_content_item_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/dynamic_content/items/{dynamic_content_item_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_dynamic_content_variant",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/dynamic_content/items/{{ record.dynamic_content_item_id }}/variants/{{ record.dynamic_content_variant_id }}",
+      "path_fields": [
+        "dynamic_content_item_id",
+        "dynamic_content_variant_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "dynamic_content_item_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "dynamic_content_variant_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "dynamic_content_item_id",
+          "dynamic_content_variant_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/dynamic_content/items/{dynamic_content_item_id}/variants/{dynamic_content_variant_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_end_user_identity",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/end_users/{{ record.user_id }}/identities/{{ record.user_identity_id }}",
+      "path_fields": [
+        "user_id",
+        "user_identity_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "user_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "user_identity_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "user_id",
+          "user_identity_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/end_users/{user_id}/identities/{user_identity_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_group_membership",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/group_memberships/{{ record.group_membership_id }}",
+      "path_fields": [
+        "group_membership_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "group_membership_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "group_membership_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/group_memberships/{group_membership_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_group_slapolicy",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/group_slas/policies/{{ record.group_sla_policy_id }}",
+      "path_fields": [
+        "group_sla_policy_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "group_sla_policy_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "group_sla_policy_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/group_slas/policies/{group_sla_policy_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_itam_asset_type",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/it_asset_management/asset_types/{{ record.asset_type_id }}",
+      "path_fields": [
+        "asset_type_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "asset_type_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "asset_type_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/it_asset_management/asset_types/{asset_type_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_itam_asset_type_field",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/it_asset_management/asset_types/{{ record.asset_type_id }}/fields/{{ record.asset_type_field_id }}",
+      "path_fields": [
+        "asset_type_id",
+        "asset_type_field_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "asset_type_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "asset_type_field_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "asset_type_id",
+          "asset_type_field_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/it_asset_management/asset_types/{asset_type_id}/fields/{asset_type_field_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_itam_asset",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/it_asset_management/assets/{{ record.asset_id }}",
+      "path_fields": [
+        "asset_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "asset_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "asset_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/it_asset_management/assets/{asset_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_itam_location",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/it_asset_management/locations/{{ record.location_id }}",
+      "path_fields": [
+        "location_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "location_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "location_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/it_asset_management/locations/{location_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_itam_status",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/it_asset_management/statuses/{{ record.status_id }}",
+      "path_fields": [
+        "status_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "status_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "status_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/it_asset_management/statuses/{status_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_many_macros",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/macros/destroy_many",
+      "body_type": "none",
+      "query": {
+        "ids": {
+          "template": "{{ record.ids }}"
+        }
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ids": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ids"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/macros/destroy_many; destructive external mutation requiring approval"
+    },
+    {
+      "name": "create_oauth_client",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/oauth/clients",
+      "body_type": "json",
+      "body_fields": [
+        "client"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "client": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "identifier"
+            ],
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "description": "Unique identifier for this client."
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of this client."
+              },
+              "description": {
+                "type": "string",
+                "description": "Short description displayed to users."
+              },
+              "company": {
+                "type": "string",
+                "description": "Company name displayed to users."
+              },
+              "redirect_uri": {
+                "type": "array",
+                "description": "Valid redirect URIs for this client.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "client_type": {
+                "type": "string",
+                "description": "Either public or confidential."
+              }
+            }
+          }
+        },
+        "required": [
+          "client"
+        ]
+      },
+      "risk": "Create Client (POST /api/v2/oauth/clients) -- external Zendesk Support mutation requiring approval"
+    },
+    {
+      "name": "update_client",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/oauth/clients/{{ record.oauth_client_id }}",
+      "path_fields": [
+        "oauth_client_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "client"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "oauth_client_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "client": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "description": "Unique identifier for this client."
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of this client."
+              },
+              "description": {
+                "type": "string",
+                "description": "Short description displayed to users."
+              },
+              "company": {
+                "type": "string",
+                "description": "Company name displayed to users."
+              },
+              "redirect_uri": {
+                "type": "array",
+                "description": "Valid redirect URIs for this client.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "client_type": {
+                "type": "string",
+                "description": "Either public or confidential."
+              }
+            }
+          }
+        },
+        "required": [
+          "oauth_client_id"
+        ]
+      },
+      "risk": "Update Client (PUT /api/v2/oauth/clients/{oauth_client_id}) -- external Zendesk Support mutation requiring approval"
+    },
+    {
+      "name": "delete_client",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/oauth/clients/{{ record.oauth_client_id }}",
+      "path_fields": [
+        "oauth_client_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "oauth_client_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "oauth_client_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/oauth/clients/{oauth_client_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "create_oauth_token",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/oauth/tokens",
+      "body_type": "json",
+      "body_fields": [
+        "token"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "token": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "client_id",
+              "scopes"
+            ],
+            "properties": {
+              "client_id": {
+                "type": "integer",
+                "format": "int64",
+                "description": "Resource id of an OAuth client."
+              },
+              "scopes": {
+                "type": "array",
+                "description": "Valid scopes for the token.",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "token"
+        ]
+      },
+      "risk": "Create Token (POST /api/v2/oauth/tokens) -- external Zendesk Support mutation requiring approval",
+      "redact_fields": [
+        "token"
+      ]
+    },
+    {
+      "name": "revoke_oauth_token",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/oauth/tokens/{{ record.oauth_token_id }}",
+      "path_fields": [
+        "oauth_token_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "oauth_token_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "oauth_token_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/oauth/tokens/{oauth_token_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_organization_field",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/organization_fields/{{ record.organization_field_id }}",
+      "path_fields": [
+        "organization_field_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "organization_field_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "organization_field_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/organization_fields/{organization_field_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_organization_membership",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/organization_memberships/{{ record.organization_membership_id }}",
+      "path_fields": [
+        "organization_membership_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "organization_membership_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "organization_membership_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/organization_memberships/{organization_membership_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_organization_subscription",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/organization_subscriptions/{{ record.organization_subscription_id }}",
+      "path_fields": [
+        "organization_subscription_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "organization_subscription_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "organization_subscription_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/organization_subscriptions/{organization_subscription_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "create_organization_merge",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/organizations/{{ record.organization_id }}/merge",
+      "path_fields": [
+        "organization_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "organization_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "organization_id"
+        ]
+      },
+      "risk": "Merge Organization With Another Organization (POST /api/v2/organizations/{organization_id}/merge) -- external Zendesk Support mutation requiring approval"
+    },
+    {
+      "name": "remove_organization_tags",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/organizations/{{ record.organization_id }}/tags",
+      "path_fields": [
+        "organization_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "organization_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "organization_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/organizations/{organization_id}/tags; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_queue",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/queues/{{ record.queue_id }}",
+      "path_fields": [
+        "queue_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "queue_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "queue_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/queues/{queue_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_recipient_address",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/recipient_addresses/{{ record.support_address_id }}",
+      "path_fields": [
+        "support_address_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "support_address_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "support_address_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/recipient_addresses/{support_address_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_resource_collection",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/resource_collections/{{ record.resource_collection_id }}",
+      "path_fields": [
+        "resource_collection_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "resource_collection_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "resource_collection_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/resource_collections/{resource_collection_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_attribute",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/routing/attributes/{{ record.attribute_id }}",
+      "path_fields": [
+        "attribute_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "attribute_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "attribute_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/routing/attributes/{attribute_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_attribute_value",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/routing/attributes/{{ record.attribute_id }}/values/{{ record.attribute_value_id }}",
+      "path_fields": [
+        "attribute_id",
+        "attribute_value_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "attribute_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "attribute_value_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "attribute_id",
+          "attribute_value_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/routing/attributes/{attribute_id}/values/{attribute_value_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_saved_search",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/saved_searches/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/saved_searches/{id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_sharing_agreement",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/sharing_agreements/{{ record.sharing_agreement_id }}",
+      "path_fields": [
+        "sharing_agreement_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "sharing_agreement_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "sharing_agreement_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/sharing_agreements/{sharing_agreement_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_slapolicy",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/slas/policies/{{ record.sla_policy_id }}",
+      "path_fields": [
+        "sla_policy_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "sla_policy_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "sla_policy_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/slas/policies/{sla_policy_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_suspended_ticket",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/suspended_tickets/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/suspended_tickets/{id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_suspended_tickets",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/suspended_tickets/destroy_many",
+      "body_type": "none",
+      "query": {
+        "ids": {
+          "template": "{{ record.ids }}"
+        }
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ids": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ids"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/suspended_tickets/destroy_many; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_target",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/targets/{{ record.target_id }}",
+      "path_fields": [
+        "target_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "target_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "target_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/targets/{target_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_task_list_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/task_list_templates/{{ record.task_list_template_id }}",
+      "path_fields": [
+        "task_list_template_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "task_list_template_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "task_list_template_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/task_list_templates/{task_list_template_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_ticket_content_pin",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/ticket_content_pins/{{ record.content_pin_id }}",
+      "path_fields": [
+        "content_pin_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "content_pin_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "content_pin_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/ticket_content_pins/{content_pin_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_ticket_field_option",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/ticket_fields/{{ record.ticket_field_id }}/options/{{ record.ticket_field_option_id }}",
+      "path_fields": [
+        "ticket_field_id",
+        "ticket_field_option_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ticket_field_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "ticket_field_option_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "ticket_field_id",
+          "ticket_field_option_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/ticket_fields/{ticket_field_id}/options/{ticket_field_option_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_ticket_form",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/ticket_forms/{{ record.ticket_form_id }}",
+      "path_fields": [
+        "ticket_form_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ticket_form_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "ticket_form_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/ticket_forms/{ticket_form_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_ticket_form_statuses",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/ticket_forms/{{ record.ticket_form_id }}/ticket_form_statuses",
+      "path_fields": [
+        "ticket_form_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "id"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ticket_form_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "id": {
+            "type": "array",
+            "description": "List of ids to delete",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "ticket_form_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_ticket_form_status_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/ticket_forms/{{ record.ticket_form_id }}/ticket_form_statuses/{{ record.ticket_form_status_id }}",
+      "path_fields": [
+        "ticket_form_id",
+        "ticket_form_status_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ticket_form_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "ticket_form_status_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "ticket_form_id",
+          "ticket_form_status_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses/{ticket_form_status_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "merge_tickets_into_target_ticket",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/tickets/{{ record.ticket_id }}/merge",
+      "path_fields": [
+        "ticket_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "Merge Tickets into Target Ticket (POST /api/v2/tickets/{ticket_id}/merge) -- external Zendesk Support mutation requiring approval"
+    },
+    {
+      "name": "delete_tags_ticket",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/tickets/{{ record.ticket_id }}/tags",
+      "path_fields": [
+        "ticket_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ticket_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/tickets/{ticket_id}/tags; destructive external mutation requiring approval"
+    },
+    {
+      "name": "bulk_delete_tickets",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/tickets/destroy_many",
+      "body_type": "none",
+      "query": {
+        "ids": {
+          "template": "{{ record.ids }}"
+        }
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ids": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ids"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/tickets/destroy_many; destructive external mutation requiring approval"
+    },
+    {
+      "name": "update_many_tickets",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/tickets/update_many",
+      "body_type": "json",
+      "body_fields": [
+        "ticket"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ticket": {
+            "type": "object",
+            "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketsUpdateRequest/oneOf/0/properties/ticket",
+            "additionalProperties": false,
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "new",
+                  "open",
+                  "pending",
+                  "hold",
+                  "solved",
+                  "closed"
+                ],
+                "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketObject/properties/status"
+              },
+              "subject": {
+                "type": "string",
+                "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketObject/properties/subject"
+              },
+              "tags": {
+                "type": "array",
+                "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketObject/properties/tags",
+                "items": {
+                  "type": "string",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketObject/properties/tags/items"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "ticket"
+        ]
+      },
+      "risk": "Apply one set of values to many tickets selected by id. -- external Zendesk Support mutation requiring approval"
+    },
+    {
+      "name": "update_many_tickets_individually",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/tickets/update_many",
+      "body_type": "json",
+      "body_fields": [
+        "tickets"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "tickets": {
+            "type": "array",
+            "maxItems": 100,
+            "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketsUpdateRequest/oneOf/1/properties/tickets",
+            "items": {
+              "type": "object",
+              "required": [
+                "id"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketsUpdateRequest/oneOf/1/properties/tickets/items/allOf/1/properties/id"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "new",
+                    "open",
+                    "pending",
+                    "hold",
+                    "solved",
+                    "closed"
+                  ],
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketObject/properties/status"
+                },
+                "subject": {
+                  "type": "string",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketObject/properties/subject"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "tickets"
+        ]
+      },
+      "risk": "Apply per-ticket values to many tickets in one request. -- external Zendesk Support mutation requiring approval"
+    },
+    {
+      "name": "delete_trigger_category",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/trigger_categories/{{ record.trigger_category_id }}",
+      "path_fields": [
+        "trigger_category_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "trigger_category_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "trigger_category_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/trigger_categories/{trigger_category_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_many_triggers",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/triggers/destroy_many",
+      "body_type": "none",
+      "query": {
+        "ids": {
+          "template": "{{ record.ids }}"
+        }
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ids": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ids"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/triggers/destroy_many; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_upload",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/uploads/{{ record.token }}",
+      "path_fields": [
+        "token"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "token": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "token"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/uploads/{token}; destructive external mutation requiring approval",
+      "redact_fields": [
+        "token"
+      ]
+    },
+    {
+      "name": "delete_user_field",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/user_fields/{{ record.user_field_id }}",
+      "path_fields": [
+        "user_field_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "user_field_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "user_field_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/user_fields/{user_field_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_user_field_option",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/user_fields/{{ record.user_field_id }}/options/{{ record.user_field_option_id }}",
+      "path_fields": [
+        "user_field_id",
+        "user_field_option_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "user_field_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "user_field_option_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "user_field_id",
+          "user_field_option_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/user_fields/{user_field_id}/options/{user_field_option_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_user_group_membership",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/users/{{ record.user_id }}/group_memberships/{{ record.group_membership_id }}",
+      "path_fields": [
+        "user_id",
+        "group_membership_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "user_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "group_membership_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "user_id",
+          "group_membership_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/users/{user_id}/group_memberships/{group_membership_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_user_identity",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/users/{{ record.user_id }}/identities/{{ record.user_identity_id }}",
+      "path_fields": [
+        "user_id",
+        "user_identity_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "user_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "user_identity_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "user_id",
+          "user_identity_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/users/{user_id}/identities/{user_identity_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "merge_end_users",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/users/{{ record.user_id }}/merge",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "user_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "Merge End Users (PUT /api/v2/users/{user_id}/merge) -- external Zendesk Support mutation requiring approval"
+    },
+    {
+      "name": "delete_user_organization_membership",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/users/{{ record.user_id }}/organization_memberships/{{ record.organization_membership_id }}",
+      "path_fields": [
+        "user_id",
+        "organization_membership_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "user_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "organization_membership_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "user_id",
+          "organization_membership_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/users/{user_id}/organization_memberships/{organization_membership_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "unassign_organization",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/users/{{ record.user_id }}/organizations/{{ record.organization_id }}",
+      "path_fields": [
+        "user_id",
+        "organization_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "user_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "organization_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "user_id",
+          "organization_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/users/{user_id}/organizations/{organization_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "set_user_password",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/users/{{ record.user_id }}/password",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "password"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "user_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "password": {
+            "type": "string",
+            "description": "New password value."
+          }
+        },
+        "required": [
+          "user_id",
+          "password"
+        ]
+      },
+      "risk": "Set a User's Password (POST /api/v2/users/{user_id}/password) -- external Zendesk Support mutation requiring approval",
+      "redact_fields": [
+        "password"
+      ]
+    },
+    {
+      "name": "change_own_password",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/users/{{ record.user_id }}/password",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "current_password",
+        "old_password",
+        "password",
+        "previous_password"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "user_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "current_password": {
+            "type": "string",
+            "description": "Current password value."
+          },
+          "previous_password": {
+            "type": "string",
+            "description": "Previous password value."
+          },
+          "old_password": {
+            "type": "string",
+            "description": "Previous password value."
+          },
+          "password": {
+            "type": "string",
+            "description": "New password value."
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "Change Your Password (PUT /api/v2/users/{user_id}/password) -- external Zendesk Support mutation requiring approval"
+    },
+    {
+      "name": "bulk_delete_sessions_by_user_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/users/{{ record.user_id }}/sessions",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "user_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/users/{user_id}/sessions; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_session",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/users/{{ record.user_id }}/sessions/{{ record.session_id }}",
+      "path_fields": [
+        "user_id",
+        "session_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "user_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "session_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "user_id",
+          "session_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/users/{user_id}/sessions/{session_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_user_tags",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/users/{{ record.user_id }}/tags",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "user_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/users/{user_id}/tags; destructive external mutation requiring approval"
+    },
+    {
+      "name": "create_or_update_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/users/create_or_update",
+      "body_type": "json",
+      "body_fields": [
+        "user"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "user": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64",
+                "description": "The user id for merge/update variants"
+              },
+              "external_id": {
+                "type": "string",
+                "description": "A unique identifier from another system"
+              },
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string",
+                "description": "The user's password"
+              },
+              "identities": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "email",
+                        "twitter",
+                        "facebook",
+                        "google",
+                        "phone_number",
+                        "agent_forwarding",
+                        "any_channel",
+                        "foreign",
+                        "sdk",
+                        "messaging"
+                      ]
+                    },
+                    "value": {
+                      "type": "string"
+                    },
+                    "primary": {
+                      "type": "boolean"
+                    },
+                    "verification_method": {
+                      "type": "string",
+                      "enum": [
+                        "none",
+                        "low",
+                        "sso",
+                        "embed",
+                        "full"
+                      ]
+                    },
+                    "verified": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "value"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "user"
+        ]
+      },
+      "risk": "Create Or Update User (POST /api/v2/users/create_or_update) -- external Zendesk Support mutation requiring approval"
+    },
+    {
+      "name": "update_many_users",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/users/update_many",
+      "body_type": "json",
+      "body_fields": [
+        "user"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "user": {
+            "type": "object",
+            "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserUpdateRequest/properties/user",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserUpdateInput/properties/name"
+              },
+              "email": {
+                "type": "string",
+                "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserUpdateInput/properties/email"
+              },
+              "external_id": {
+                "type": "string",
+                "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserUpdateInput/properties/external_id"
+              },
+              "tags": {
+                "type": "array",
+                "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserUpdateInput/properties/tags",
+                "items": {
+                  "type": "string",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserUpdateInput/properties/tags/items"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "user"
+        ]
+      },
+      "risk": "Apply one set of values to many users selected by id. -- external Zendesk Support mutation requiring approval"
+    },
+    {
+      "name": "update_many_users_individually",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/users/update_many",
+      "body_type": "json",
+      "body_fields": [
+        "users"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "users": {
+            "type": "array",
+            "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UsersRequest/properties/users",
+            "items": {
+              "type": "object",
+              "required": [
+                "id"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/id"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/name"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/email"
+                },
+                "external_id": {
+                  "type": "string",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/external_id"
+                },
+                "tags": {
+                  "type": "array",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/tags",
+                  "items": {
+                    "type": "string",
+                    "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/tags/items"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "users"
+        ]
+      },
+      "risk": "Apply per-user values to many users in one request. -- external Zendesk Support mutation requiring approval"
+    },
+    {
+      "name": "bulk_delete_views",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/views/destroy_many",
+      "body_type": "none",
+      "query": {
+        "ids": {
+          "template": "{{ record.ids }}"
+        }
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ids": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ids"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/views/destroy_many; destructive external mutation requiring approval"
+    },
+    {
+      "name": "delete_workspace",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/workspaces/{{ record.workspace_id }}",
+      "path_fields": [
+        "workspace_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "workspace_id": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          }
+        },
+        "required": [
+          "workspace_id"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/workspaces/{workspace_id}; destructive external mutation requiring approval"
+    },
+    {
+      "name": "destroy_many_workspaces",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/workspaces/destroy_many",
+      "body_type": "none",
+      "query": {
+        "ids": {
+          "template": "{{ record.ids }}"
+        }
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ids": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ids"
+        ]
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive",
+      "risk": "deletes a Zendesk Support resource via /api/v2/workspaces/destroy_many; destructive external mutation requiring approval"
+    },
+    {
+      "name": "create_token_for_grant_type",
+      "kind": "create",
+      "method": "POST",
+      "path": "/oauth/tokens",
+      "body_type": "json",
+      "body_fields": [
+        "client_id",
+        "client_secret",
+        "code",
+        "expires_in",
+        "grant_type",
+        "refresh_token",
+        "refresh_token_expires_in",
+        "scope"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "grant_type": {
+            "type": "string",
+            "enum": [
+              "authorization_code",
+              "refresh_token",
+              "client_credentials"
+            ],
+            "description": "OAuth grant type."
+          },
+          "code": {
+            "type": "string",
+            "description": "Authorization code for authorization_code grants."
+          },
+          "client_id": {
+            "type": "string",
+            "description": "OAuth client identifier."
+          },
+          "client_secret": {
+            "type": "string",
+            "description": "OAuth client secret."
+          },
+          "scope": {
+            "type": "string",
+            "description": "Space-separated token scope values."
+          },
+          "expires_in": {
+            "type": "integer",
+            "description": "Access token lifetime in seconds."
+          },
+          "refresh_token_expires_in": {
+            "type": "integer",
+            "description": "Refresh token lifetime in seconds."
+          },
+          "refresh_token": {
+            "type": "string",
+            "description": "Refresh token for refresh_token grants."
+          }
+        }
+      },
+      "risk": "Create Token for Grant Type (POST /oauth/tokens) -- external Zendesk Support mutation requiring approval"
     }
   ]
 }

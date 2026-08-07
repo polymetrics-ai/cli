@@ -1586,23 +1586,6 @@
       "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
-      "path": "operations delete_attachment",
-      "summary": "Delete Attachment",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_attachment",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/attachments/{attachment_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations list_audit_logs",
       "summary": "List Audit Logs",
       "intent": "direct_read",
@@ -1847,23 +1830,6 @@
       "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
-      "path": "operations delete_bookmark",
-      "summary": "Delete Bookmark",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_bookmark",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/bookmarks/{bookmark_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations list_brand_agents",
       "summary": "List Brand Agent Memberships",
       "intent": "direct_read",
@@ -1906,23 +1872,6 @@
           "required": true
         }
       ]
-    },
-    {
-      "path": "operations delete_brand_agent_by_id",
-      "summary": "Delete Brand Agent Membership",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_brand_agent_by_id",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/brand_agents/{brand_agent_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations create_brand",
@@ -2135,23 +2084,6 @@
       "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
-      "path": "operations delete_brand",
-      "summary": "Delete a Brand",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_brand",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/brands/{brand_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations list_brand_agents_by_brand",
       "summary": "List Agents By Brand",
       "intent": "direct_read",
@@ -2219,23 +2151,6 @@
       "risk": "high",
       "approval": "blocked pending bounded file upload approval binding",
       "notes": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes."
-    },
-    {
-      "path": "operations delete_brand_logo",
-      "summary": "Delete a Brand Logo",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_brand_logo",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/brands/{brand_id}/logo"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations check_host_mapping_validity",
@@ -2796,23 +2711,6 @@
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
     },
     {
-      "path": "operations delete_custom_object",
-      "summary": "Delete Custom Object",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_custom_object",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/custom_objects/{custom_object_key}"
-        }
-      ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations list_access_rules",
       "summary": "List Access Rules",
       "intent": "direct_read",
@@ -2960,23 +2858,6 @@
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
       "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
-    },
-    {
-      "path": "operations delete_access_rule",
-      "summary": "Delete Access Rule",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_access_rule",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/custom_objects/{custom_object_key}/access_rules/{id}"
-        }
-      ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations list_access_rule_definitions",
@@ -3277,23 +3158,6 @@
       "risk": "high",
       "approval": "reverse ETL plan, preview, explicit approval, execute",
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
-    },
-    {
-      "path": "operations delete_custom_object_field",
-      "summary": "Delete Custom Object Field",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_custom_object_field",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/custom_objects/{custom_object_key}/fields/{custom_object_field_key_or_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations reorder_custom_object_fields",
@@ -3609,23 +3473,6 @@
       "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
-      "path": "operations delete_custom_object_record_by_external_id_or_name",
-      "summary": "Delete Custom Object Record by External Id Or Name",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_custom_object_record_by_external_id_or_name",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/custom_objects/{custom_object_key}/records"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations show_custom_object_record",
       "summary": "Show Custom Object Record",
       "intent": "direct_read",
@@ -3674,23 +3521,6 @@
       "risk": "high",
       "approval": "reverse ETL plan, preview, explicit approval, execute",
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
-    },
-    {
-      "path": "operations delete_custom_object_record",
-      "summary": "Delete Custom Object Record",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_custom_object_record",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/custom_objects/{custom_object_key}/records/{custom_object_record_id}"
-        }
-      ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations list_custom_object_record_attachments",
@@ -3791,23 +3621,6 @@
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
       "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
-    },
-    {
-      "path": "operations delete_custom_object_record_attachment",
-      "summary": "Delete Custom Object Record Attachment",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_custom_object_record_attachment",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations download_custom_object_record_attachment",
@@ -4154,23 +3967,6 @@
       "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
-      "path": "operations delete_object_trigger",
-      "summary": "Delete Object Trigger",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_object_trigger",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/custom_objects/{custom_object_key}/triggers/{trigger_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations list_active_object_triggers",
       "summary": "List Active Object Triggers",
       "intent": "direct_read",
@@ -4221,23 +4017,6 @@
           "required": true
         }
       ]
-    },
-    {
-      "path": "operations delete_many_object_triggers",
-      "summary": "Delete Many Object Triggers",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_many_object_triggers",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/custom_objects/{custom_object_key}/triggers/destroy_many"
-        }
-      ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations search_object_triggers",
@@ -4405,23 +4184,6 @@
       "risk": "high",
       "approval": "reverse ETL plan, preview, explicit approval, execute",
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
-    },
-    {
-      "path": "operations delete_custom_role_by_id",
-      "summary": "Delete Custom Role",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_custom_role_by_id",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/custom_roles/{custom_role_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations bulk_update_default_custom_status",
@@ -4615,23 +4377,6 @@
       "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
-      "path": "operations delete_custom_status",
-      "summary": "Delete Custom Ticket Status",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_custom_status",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/custom_statuses/{custom_status_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations create_ticket_form_statuses_for_custom_status",
       "summary": "Create Ticket Form Statuses for a Custom Status",
       "intent": "reverse_etl",
@@ -4665,23 +4410,6 @@
       "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
-      "path": "operations delete_ticket_permanently",
-      "summary": "Delete Ticket Permanently",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_ticket_permanently",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/deleted_tickets/{ticket_id}"
-        }
-      ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations restore_deleted_ticket",
       "summary": "Restore a Previously Deleted Ticket",
       "intent": "reverse_etl",
@@ -4697,23 +4425,6 @@
       "risk": "high",
       "approval": "reverse ETL plan, preview, explicit approval, execute",
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
-    },
-    {
-      "path": "operations bulk_permanently_delete_tickets",
-      "summary": "Delete Multiple Tickets Permanently",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.bulk_permanently_delete_tickets",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/deleted_tickets/destroy_many"
-        }
-      ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations bulk_restore_deleted_tickets",
@@ -4775,23 +4486,6 @@
           "required": true
         }
       ]
-    },
-    {
-      "path": "operations permanently_delete_user",
-      "summary": "Permanently Delete User",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.permanently_delete_user",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/deleted_users/{deleted_user_id}"
-        }
-      ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations count_deleted_users",
@@ -4956,23 +4650,6 @@
       "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
-      "path": "operations delete_deletion_schedule",
-      "summary": "Delete Deletion Schedule",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_deletion_schedule",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/deletion_schedules/{deletion_schedule_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations list_dynamic_contents",
       "summary": "List Items",
       "intent": "direct_read",
@@ -5049,23 +4726,6 @@
       "risk": "high",
       "approval": "reverse ETL plan, preview, explicit approval, execute",
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
-    },
-    {
-      "path": "operations delete_dynamic_content_item",
-      "summary": "Delete Item",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_dynamic_content_item",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/dynamic_content/items/{dynamic_content_item_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations dynamic_content_list_variants",
@@ -5159,23 +4819,6 @@
       "risk": "high",
       "approval": "reverse ETL plan, preview, explicit approval, execute",
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
-    },
-    {
-      "path": "operations delete_dynamic_content_variant",
-      "summary": "Delete Variant",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_dynamic_content_variant",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/dynamic_content/items/{dynamic_content_item_id}/variants/{dynamic_content_variant_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations create_many_dynamic_content_variants",
@@ -5376,23 +5019,6 @@
       ]
     },
     {
-      "path": "operations delete_end_user_identity",
-      "summary": "Delete End User Identity",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_end_user_identity",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/end_users/{user_id}/identities/{user_identity_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations make_end_user_identity_primary",
       "summary": "Make End User Identity Primary",
       "intent": "reverse_etl",
@@ -5490,23 +5116,6 @@
           "required": true
         }
       ]
-    },
-    {
-      "path": "operations delete_group_membership",
-      "summary": "Delete Membership",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_group_membership",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/group_memberships/{group_membership_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations list_assignable_group_memberships",
@@ -5659,23 +5268,6 @@
       "risk": "high",
       "approval": "reverse ETL plan, preview, explicit approval, execute",
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
-    },
-    {
-      "path": "operations delete_group_slapolicy",
-      "summary": "Delete Group SLA Policy",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_group_slapolicy",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/group_slas/policies/{group_sla_policy_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations retrieve_group_slapolicy_filter_definition_items",
@@ -6637,23 +6229,6 @@
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
     },
     {
-      "path": "operations delete_itam_asset_type",
-      "summary": "Delete Asset Type",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_itam_asset_type",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/it_asset_management/asset_types/{asset_type_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations list_itam_asset_type_fields",
       "summary": "List Asset Fields",
       "intent": "direct_read",
@@ -6928,23 +6503,6 @@
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
     },
     {
-      "path": "operations delete_itam_asset_type_field",
-      "summary": "Delete Asset Field",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_itam_asset_type_field",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/it_asset_management/asset_types/{asset_type_id}/fields/{asset_type_field_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations list_itam_assets",
       "summary": "List Assets",
       "intent": "direct_read",
@@ -7127,23 +6685,6 @@
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
     },
     {
-      "path": "operations delete_itam_asset",
-      "summary": "Delete Asset",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_itam_asset",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/it_asset_management/assets/{asset_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations itam_asset_bulk_jobs",
       "summary": "Asset Bulk Jobs",
       "intent": "reverse_etl",
@@ -7308,23 +6849,6 @@
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
     },
     {
-      "path": "operations delete_itam_location",
-      "summary": "Delete Asset Location",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_itam_location",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/it_asset_management/locations/{location_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations list_itam_statuses",
       "summary": "List Asset Statuses",
       "intent": "direct_read",
@@ -7469,23 +6993,6 @@
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
       "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
-    },
-    {
-      "path": "operations delete_itam_status",
-      "summary": "Delete Asset Status",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_itam_status",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/it_asset_management/statuses/{status_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations list_job_statuses",
@@ -7884,23 +7391,6 @@
       "flags": []
     },
     {
-      "path": "operations delete_many_macros",
-      "summary": "Bulk Delete Macros",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_many_macros",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/macros/destroy_many"
-        }
-      ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations show_derived_macro",
       "summary": "Show Macro Replica",
       "intent": "direct_read",
@@ -8020,28 +7510,6 @@
       "flags": []
     },
     {
-      "path": "operations create_oauth_client",
-      "summary": "Create Client",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.create_oauth_client",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/api/v2/oauth/clients"
-        }
-      ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed sensitive confirmation required",
-      "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
-      "redact_fields": [
-        "client.secret",
-        "secret",
-        "client_secret"
-      ]
-    },
-    {
       "path": "operations show_client",
       "summary": "Show Client",
       "intent": "direct_read",
@@ -8070,45 +7538,6 @@
           "required": true
         }
       ]
-    },
-    {
-      "path": "operations update_client",
-      "summary": "Update Client",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.update_client",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/api/v2/oauth/clients/{oauth_client_id}"
-        }
-      ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed sensitive confirmation required",
-      "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
-      "redact_fields": [
-        "client.secret",
-        "secret",
-        "client_secret"
-      ]
-    },
-    {
-      "path": "operations delete_client",
-      "summary": "Delete Client",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_client",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/oauth/clients/{oauth_client_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations client_generate_secret",
@@ -8219,29 +7648,6 @@
       "flags": []
     },
     {
-      "path": "operations create_oauth_token",
-      "summary": "Create Token",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.create_oauth_token",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/api/v2/oauth/tokens"
-        }
-      ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed sensitive confirmation required",
-      "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
-      "redact_fields": [
-        "token",
-        "refresh_token",
-        "token.token",
-        "token.refresh_token"
-      ]
-    },
-    {
       "path": "operations show_token",
       "summary": "Show Token",
       "intent": "direct_read",
@@ -8270,23 +7676,6 @@
           "required": true
         }
       ]
-    },
-    {
-      "path": "operations revoke_oauth_token",
-      "summary": "Revoke Token",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.revoke_oauth_token",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/oauth/tokens/{oauth_token_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations show_current_token",
@@ -8388,23 +7777,6 @@
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
     },
     {
-      "path": "operations delete_organization_field",
-      "summary": "Delete Organization Field",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_organization_field",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/organization_fields/{organization_field_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations reorder_organization_field",
       "summary": "Reorder Organization Field",
       "intent": "reverse_etl",
@@ -8463,23 +7835,6 @@
           "required": true
         }
       ]
-    },
-    {
-      "path": "operations delete_organization_membership",
-      "summary": "Delete Membership",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_organization_membership",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/organization_memberships/{organization_membership_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations create_many_organization_memberships",
@@ -8617,23 +7972,6 @@
       ]
     },
     {
-      "path": "operations delete_organization_subscription",
-      "summary": "Delete Organization Subscription",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_organization_subscription",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/organization_subscriptions/{organization_subscription_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations show_organization",
       "summary": "Show Organization",
       "intent": "direct_read",
@@ -8658,23 +7996,6 @@
           "required": true
         }
       ]
-    },
-    {
-      "path": "operations create_organization_merge",
-      "summary": "Merge Organization With Another Organization",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.create_organization_merge",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/api/v2/organizations/{organization_id}/merge"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations list_organization_merges",
@@ -8865,23 +8186,6 @@
       "risk": "high",
       "approval": "reverse ETL plan, preview, explicit approval, execute",
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
-    },
-    {
-      "path": "operations remove_organization_tags",
-      "summary": "Remove Organization Tags",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.remove_organization_tags",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/organizations/{organization_id}/tags"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations list_organization_tickets",
@@ -9267,23 +8571,6 @@
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
     },
     {
-      "path": "operations delete_queue",
-      "summary": "Delete Queue",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_queue",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/queues/{queue_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations list_queue_definitions",
       "summary": "List Queue Definitions",
       "intent": "direct_read",
@@ -9395,23 +8682,6 @@
       "risk": "high",
       "approval": "reverse ETL plan, preview, explicit approval, execute",
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
-    },
-    {
-      "path": "operations delete_recipient_address",
-      "summary": "Delete Support Address",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_recipient_address",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/recipient_addresses/{support_address_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations verify_support_address_forwarding",
@@ -9762,23 +9032,6 @@
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
     },
     {
-      "path": "operations delete_resource_collection",
-      "summary": "Delete Resource Collection",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_resource_collection",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/resource_collections/{resource_collection_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations list_agent_attribute_values",
       "summary": "List Agent Attribute Values",
       "intent": "direct_read",
@@ -9960,23 +9213,6 @@
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
     },
     {
-      "path": "operations delete_attribute",
-      "summary": "Delete Attribute",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_attribute",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/routing/attributes/{attribute_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations list_attribute_values",
       "summary": "List Attribute Values for an Attribute",
       "intent": "direct_read",
@@ -10068,23 +9304,6 @@
       "risk": "high",
       "approval": "reverse ETL plan, preview, explicit approval, execute",
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
-    },
-    {
-      "path": "operations delete_attribute_value",
-      "summary": "Delete Attribute Value",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_attribute_value",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/routing/attributes/{attribute_id}/values/{attribute_value_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations list_tickets_fullfilled_by_user",
@@ -10370,23 +9589,6 @@
       "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
-      "path": "operations delete_saved_search",
-      "summary": "Delete Saved Search",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_saved_search",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/saved_searches/{id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations list_search_results",
       "summary": "List Search Results",
       "intent": "direct_read",
@@ -10579,23 +9781,6 @@
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
     },
     {
-      "path": "operations delete_sharing_agreement",
-      "summary": "Delete a Sharing Agreement",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_sharing_agreement",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/sharing_agreements/{sharing_agreement_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations record_new_skip",
       "summary": "Record a New Skip for the Current User",
       "intent": "reverse_etl",
@@ -10671,23 +9856,6 @@
       "risk": "high",
       "approval": "reverse ETL plan, preview, explicit approval, execute",
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
-    },
-    {
-      "path": "operations delete_slapolicy",
-      "summary": "Delete SLA Policy",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_slapolicy",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/slas/policies/{sla_policy_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations retrieve_slapolicy_filter_definition_items",
@@ -10769,23 +9937,6 @@
       ]
     },
     {
-      "path": "operations delete_suspended_ticket",
-      "summary": "Delete Suspended Ticket",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_suspended_ticket",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/suspended_tickets/{id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations recover_suspended_ticket",
       "summary": "Recover Suspended Ticket",
       "intent": "reverse_etl",
@@ -10853,23 +10004,6 @@
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
       "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
-    },
-    {
-      "path": "operations delete_suspended_tickets",
-      "summary": "Delete Multiple Suspended Tickets",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_suspended_tickets",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/suspended_tickets/destroy_many"
-        }
-      ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations export_suspended_tickets",
@@ -11046,23 +10180,6 @@
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
     },
     {
-      "path": "operations delete_target",
-      "summary": "Delete Target",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_target",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/targets/{target_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations list_task_list_templates",
       "summary": "List Task List Templates",
       "intent": "direct_read",
@@ -11231,23 +10348,6 @@
       "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
-      "path": "operations delete_task_list_template",
-      "summary": "Delete Task List Template",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_task_list_template",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/task_list_templates/{task_list_template_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations get_tasks_by_task_list_template_id",
       "summary": "Get Tasks by Task List Template Id",
       "intent": "direct_read",
@@ -11337,23 +10437,6 @@
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
       "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
-    },
-    {
-      "path": "operations delete_ticket_content_pin",
-      "summary": "Delete Content Pin from Ticket",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_ticket_content_pin",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/ticket_content_pins/{content_pin_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations show_ticketfield",
@@ -11456,23 +10539,6 @@
           "required": true
         }
       ]
-    },
-    {
-      "path": "operations delete_ticket_field_option",
-      "summary": "Delete Ticket Field Option",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_ticket_field_option",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/ticket_fields/{ticket_field_id}/options/{ticket_field_option_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations count_ticket_fields",
@@ -11632,23 +10698,6 @@
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
     },
     {
-      "path": "operations delete_ticket_form",
-      "summary": "Delete Ticket Form",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_ticket_form",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/ticket_forms/{ticket_form_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations clone_ticket_form",
       "summary": "Clone an Already Existing Ticket Form",
       "intent": "reverse_etl",
@@ -11773,23 +10822,6 @@
       "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
-      "path": "operations delete_ticket_form_statuses",
-      "summary": "Delete Ticket Form Statuses",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_ticket_form_statuses",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations update_ticket_form_status_by_id",
       "summary": "Update Ticket Form Status By Id",
       "intent": "reverse_etl",
@@ -11843,23 +10875,6 @@
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
       "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
-    },
-    {
-      "path": "operations delete_ticket_form_status_by_id",
-      "summary": "Delete Ticket Form Status By Id",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_ticket_form_status_by_id",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses/{ticket_form_status_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations reorder_ticket_forms",
@@ -12360,23 +11375,6 @@
       "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
-      "path": "operations merge_tickets_into_target_ticket",
-      "summary": "Merge Tickets into Target Ticket",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.merge_tickets_into_target_ticket",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/api/v2/tickets/{ticket_id}/merge"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations show_ticket_metrics_by_ticket",
       "summary": "Show Ticket Metrics By Ticket",
       "intent": "direct_read",
@@ -12530,23 +11528,6 @@
       "risk": "medium",
       "approval": "reverse ETL plan, preview, explicit approval, execute",
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
-    },
-    {
-      "path": "operations delete_tags_ticket",
-      "summary": "Remove Tags",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_tags_ticket",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/tickets/{ticket_id}/tags"
-        }
-      ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations show_task_list",
@@ -12812,23 +11793,6 @@
       "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
-      "path": "operations bulk_delete_tickets",
-      "summary": "Bulk Delete Tickets",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.bulk_delete_tickets",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/tickets/destroy_many"
-        }
-      ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations mark_many_tickets_as_spam",
       "summary": "Bulk Mark Tickets as Spam",
       "intent": "reverse_etl",
@@ -12914,23 +11878,6 @@
           "required": true
         }
       ]
-    },
-    {
-      "path": "operations tickets_update_many",
-      "summary": "Update Many Tickets",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.tickets_update_many",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/api/v2/tickets/update_many"
-        }
-      ],
-      "risk": "medium",
-      "approval": "reverse ETL plan, preview, explicit approval, execute",
-      "notes": "Pinned OAS declares typed bulk and batch oneOf arms. Promotion is deferred until one endpoint can bind separate write actions and record-array selectors can render to the ids query parameter. Intended actions: tickets_update_many_bulk and tickets_update_many_batch."
     },
     {
       "path": "operations list_trigger_categories",
@@ -13047,23 +11994,6 @@
       "risk": "high",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
       "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
-    },
-    {
-      "path": "operations delete_trigger_category",
-      "summary": "Delete Ticket Trigger Category",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_trigger_category",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/trigger_categories/{trigger_category_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations batch_operate_trigger_categories",
@@ -13213,23 +12143,6 @@
       "flags": []
     },
     {
-      "path": "operations delete_many_triggers",
-      "summary": "Bulk Delete Ticket Triggers",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_many_triggers",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/triggers/destroy_many"
-        }
-      ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations reorder_triggers",
       "summary": "Reorder Ticket Triggers",
       "intent": "reverse_etl",
@@ -13326,23 +12239,6 @@
       "notes": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes."
     },
     {
-      "path": "operations delete_upload",
-      "summary": "Delete Upload",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_upload",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/uploads/{token}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations create_user_field",
       "summary": "Create User Field",
       "intent": "reverse_etl",
@@ -13401,23 +12297,6 @@
       "risk": "high",
       "approval": "reverse ETL plan, preview, explicit approval, execute",
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
-    },
-    {
-      "path": "operations delete_user_field",
-      "summary": "Delete User Field",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_user_field",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/user_fields/{user_field_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations list_user_field_options",
@@ -13494,23 +12373,6 @@
           "required": true
         }
       ]
-    },
-    {
-      "path": "operations delete_user_field_option",
-      "summary": "Delete User Field Option",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_user_field_option",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/user_fields/{user_field_id}/options/{user_field_option_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations reorder_user_field",
@@ -13784,23 +12646,6 @@
       ]
     },
     {
-      "path": "operations delete_user_group_membership",
-      "summary": "Delete User's Group Membership",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_user_group_membership",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/users/{user_id}/group_memberships/{group_membership_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations group_membership_set_default",
       "summary": "Set Membership as Default",
       "intent": "reverse_etl",
@@ -13963,23 +12808,6 @@
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
     },
     {
-      "path": "operations delete_user_identity",
-      "summary": "Delete Identity",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_user_identity",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/users/{user_id}/identities/{user_identity_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations make_user_identity_primary",
       "summary": "Make Identity Primary",
       "intent": "reverse_etl",
@@ -14029,23 +12857,6 @@
       "risk": "high",
       "approval": "reverse ETL plan, preview, explicit approval, execute",
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
-    },
-    {
-      "path": "operations merge_end_users",
-      "summary": "Merge End Users",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.merge_end_users",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/api/v2/users/{user_id}/merge"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations list_user_organization_memberships",
@@ -14124,23 +12935,6 @@
       ]
     },
     {
-      "path": "operations delete_user_organization_membership",
-      "summary": "Delete Organization Membership for User",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_user_organization_membership",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/users/{user_id}/organization_memberships/{organization_membership_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations set_organization_membership_as_default",
       "summary": "Set Membership as Default",
       "intent": "reverse_etl",
@@ -14210,23 +13004,6 @@
       ]
     },
     {
-      "path": "operations unassign_organization",
-      "summary": "Unassign Organization",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.unassign_organization",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/users/{user_id}/organizations/{organization_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations set_organization_as_default",
       "summary": "Set Organization as Default",
       "intent": "reverse_etl",
@@ -14267,50 +13044,6 @@
           "maps_to": "path.user_id",
           "required": true
         }
-      ]
-    },
-    {
-      "path": "operations set_user_password",
-      "summary": "Set a User's Password",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.set_user_password",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/api/v2/users/{user_id}/password"
-        }
-      ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed sensitive confirmation required",
-      "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
-      "redact_fields": [
-        "password",
-        "user.password"
-      ]
-    },
-    {
-      "path": "operations change_own_password",
-      "summary": "Change Your Password",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.change_own_password",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/api/v2/users/{user_id}/password"
-        }
-      ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed sensitive confirmation required",
-      "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
-      "redact_fields": [
-        "password",
-        "current_password",
-        "previous_password",
-        "old_password"
       ]
     },
     {
@@ -14418,23 +13151,6 @@
       ]
     },
     {
-      "path": "operations bulk_delete_sessions_by_user_id",
-      "summary": "Bulk Delete Sessions",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.bulk_delete_sessions_by_user_id",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/users/{user_id}/sessions"
-        }
-      ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations show_session",
       "summary": "Show Session",
       "intent": "direct_read",
@@ -14466,23 +13182,6 @@
           "required": true
         }
       ]
-    },
-    {
-      "path": "operations delete_session",
-      "summary": "Delete Session",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_session",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/users/{user_id}/sessions/{session_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations list_ticket_skips",
@@ -14569,23 +13268,6 @@
       "risk": "medium",
       "approval": "reverse ETL plan, preview, explicit approval, execute",
       "notes": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
-    },
-    {
-      "path": "operations delete_user_tags",
-      "summary": "Remove User Tags",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_user_tags",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/users/{user_id}/tags"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations list_user_assigned_tickets",
@@ -14896,27 +13578,6 @@
       "risk": "high",
       "approval": "reverse ETL plan, preview, explicit approval, execute",
       "notes": "Typed UserCreateInput selected from the OAS UserInput union; body schema enforces the documented 100-user maximum."
-    },
-    {
-      "path": "operations create_or_update_user",
-      "summary": "Create Or Update User",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.create_or_update_user",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/api/v2/users/create_or_update"
-        }
-      ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed sensitive confirmation required",
-      "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
-      "redact_fields": [
-        "user.password",
-        "user.identities.value"
-      ]
     },
     {
       "path": "operations create_or_update_many_users",
@@ -15343,23 +14004,6 @@
       "flags": []
     },
     {
-      "path": "operations update_many_users",
-      "summary": "Update Many Users",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.update_many_users",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/api/v2/users/update_many"
-        }
-      ],
-      "risk": "medium",
-      "approval": "reverse ETL plan, preview, explicit approval, execute",
-      "notes": "Pinned OAS declares typed bulk and batch oneOf arms. Promotion is deferred until one endpoint can bind separate write actions and record-array selectors can render to ids or external_ids query parameters. Intended actions: update_many_users_bulk and update_many_users_batch."
-    },
-    {
       "path": "operations show_view",
       "summary": "Show View",
       "intent": "direct_read",
@@ -15586,23 +14230,6 @@
       "notes": "Bounded direct read of an official Zendesk Support operation. Responses are capped at the operation's declared max_bytes and redacted by its output policy; this is not a raw API passthrough.",
       "output_policy": "json_redacted",
       "flags": []
-    },
-    {
-      "path": "operations bulk_delete_views",
-      "summary": "Bulk Delete Views",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.bulk_delete_views",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/views/destroy_many"
-        }
-      ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations preview_views",
@@ -15852,40 +14479,6 @@
       "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
-      "path": "operations delete_workspace",
-      "summary": "Delete Workspace",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.delete_workspace",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/workspaces/{workspace_id}"
-        }
-      ],
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
-      "path": "operations destroy_many_workspaces",
-      "summary": "Bulk Delete Workspaces",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.destroy_many_workspaces",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/api/v2/workspaces/destroy_many"
-        }
-      ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
-    },
-    {
       "path": "operations reorder_workspaces",
       "summary": "Reorder Workspaces",
       "intent": "reverse_etl",
@@ -15911,28 +14504,1821 @@
       "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
     },
     {
-      "path": "operations create_token_for_grant_type",
-      "summary": "Create Token for Grant Type",
+      "path": "writes delete_attachment plan",
+      "summary": "Plan the delete_attachment Zendesk Support write action.",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "zendesk-support.create_token_for_grant_type",
+      "availability": "implemented",
+      "write": "delete_attachment",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "api_surface": [
+      "api_surface": [],
+      "flags": [
         {
-          "method": "POST",
-          "path": "/oauth/tokens"
+          "name": "attachment-id",
+          "type": "string",
+          "summary": "Record field attachment_id.",
+          "maps_to": "record.attachment_id",
+          "required": true
         }
       ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed sensitive confirmation required",
-      "notes": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
-      "redact_fields": [
-        "client_secret",
-        "refresh_token",
-        "access_token",
-        "token",
-        "code"
-      ]
+      "risk": "deletes a Zendesk Support resource via /api/v2/attachments/{attachment_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Attachment (DELETE /api/v2/attachments/{attachment_id})"
+    },
+    {
+      "path": "writes delete_bookmark plan",
+      "summary": "Plan the delete_bookmark Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_bookmark",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "bookmark-id",
+          "type": "string",
+          "summary": "Record field bookmark_id.",
+          "maps_to": "record.bookmark_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/bookmarks/{bookmark_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Bookmark (DELETE /api/v2/bookmarks/{bookmark_id})"
+    },
+    {
+      "path": "writes delete_brand_agent_by_id plan",
+      "summary": "Plan the delete_brand_agent_by_id Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_brand_agent_by_id",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "brand-agent-id",
+          "type": "string",
+          "summary": "Record field brand_agent_id.",
+          "maps_to": "record.brand_agent_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/brand_agents/{brand_agent_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Brand Agent Membership (DELETE /api/v2/brand_agents/{brand_agent_id})"
+    },
+    {
+      "path": "writes delete_brand plan",
+      "summary": "Plan the delete_brand Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_brand",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "brand-id",
+          "type": "string",
+          "summary": "Record field brand_id.",
+          "maps_to": "record.brand_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/brands/{brand_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete a Brand (DELETE /api/v2/brands/{brand_id})"
+    },
+    {
+      "path": "writes delete_brand_logo plan",
+      "summary": "Plan the delete_brand_logo Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_brand_logo",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "brand-id",
+          "type": "string",
+          "summary": "Record field brand_id.",
+          "maps_to": "record.brand_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/brands/{brand_id}/logo; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete a Brand Logo (DELETE /api/v2/brands/{brand_id}/logo)"
+    },
+    {
+      "path": "writes delete_custom_object plan",
+      "summary": "Plan the delete_custom_object Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_custom_object",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "custom-object-key",
+          "type": "string",
+          "summary": "Record field custom_object_key.",
+          "maps_to": "record.custom_object_key",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/custom_objects/{custom_object_key}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Custom Object (DELETE /api/v2/custom_objects/{custom_object_key})"
+    },
+    {
+      "path": "writes delete_access_rule plan",
+      "summary": "Plan the delete_access_rule Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_access_rule",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "custom-object-key",
+          "type": "string",
+          "summary": "Record field custom_object_key.",
+          "maps_to": "record.custom_object_key",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Record field id.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/custom_objects/{custom_object_key}/access_rules/{id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Access Rule (DELETE /api/v2/custom_objects/{custom_object_key}/access_rules/{id})"
+    },
+    {
+      "path": "writes delete_custom_object_field plan",
+      "summary": "Plan the delete_custom_object_field Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_custom_object_field",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "custom-object-key",
+          "type": "string",
+          "summary": "Record field custom_object_key.",
+          "maps_to": "record.custom_object_key",
+          "required": true
+        },
+        {
+          "name": "custom-object-field-key-or-id",
+          "type": "string",
+          "summary": "Record field custom_object_field_key_or_id.",
+          "maps_to": "record.custom_object_field_key_or_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/custom_objects/{custom_object_key}/fields/{custom_object_field_key_or_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Custom Object Field (DELETE /api/v2/custom_objects/{custom_object_key}/fields/{custom_object_field_key_or_id})"
+    },
+    {
+      "path": "writes delete_custom_object_record_by_external_id_or_name plan",
+      "summary": "Plan the delete_custom_object_record_by_external_id_or_name Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_custom_object_record_by_external_id_or_name",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "custom-object-key",
+          "type": "string",
+          "summary": "Record field custom_object_key.",
+          "maps_to": "record.custom_object_key",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/custom_objects/{custom_object_key}/records; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Custom Object Record by External Id Or Name (DELETE /api/v2/custom_objects/{custom_object_key}/records)"
+    },
+    {
+      "path": "writes delete_custom_object_record plan",
+      "summary": "Plan the delete_custom_object_record Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_custom_object_record",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "custom-object-key",
+          "type": "string",
+          "summary": "Record field custom_object_key.",
+          "maps_to": "record.custom_object_key",
+          "required": true
+        },
+        {
+          "name": "custom-object-record-id",
+          "type": "string",
+          "summary": "Record field custom_object_record_id.",
+          "maps_to": "record.custom_object_record_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/custom_objects/{custom_object_key}/records/{custom_object_record_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Custom Object Record (DELETE /api/v2/custom_objects/{custom_object_key}/records/{custom_object_record_id})"
+    },
+    {
+      "path": "writes delete_custom_object_record_attachment plan",
+      "summary": "Plan the delete_custom_object_record_attachment Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_custom_object_record_attachment",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "custom-object-key",
+          "type": "string",
+          "summary": "Record field custom_object_key.",
+          "maps_to": "record.custom_object_key",
+          "required": true
+        },
+        {
+          "name": "record-id",
+          "type": "string",
+          "summary": "Record field record_id.",
+          "maps_to": "record.record_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Record field id.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Custom Object Record Attachment (DELETE /api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id})"
+    },
+    {
+      "path": "writes delete_object_trigger plan",
+      "summary": "Plan the delete_object_trigger Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_object_trigger",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "custom-object-key",
+          "type": "string",
+          "summary": "Record field custom_object_key.",
+          "maps_to": "record.custom_object_key",
+          "required": true
+        },
+        {
+          "name": "trigger-id",
+          "type": "string",
+          "summary": "Record field trigger_id.",
+          "maps_to": "record.trigger_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/custom_objects/{custom_object_key}/triggers/{trigger_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Object Trigger (DELETE /api/v2/custom_objects/{custom_object_key}/triggers/{trigger_id})"
+    },
+    {
+      "path": "writes delete_many_object_triggers plan",
+      "summary": "Plan the delete_many_object_triggers Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_many_object_triggers",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "custom-object-key",
+          "type": "string",
+          "summary": "Record field custom_object_key.",
+          "maps_to": "record.custom_object_key",
+          "required": true
+        },
+        {
+          "name": "ids",
+          "type": "string",
+          "summary": "Record field ids.",
+          "maps_to": "record.ids",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/custom_objects/{custom_object_key}/triggers/destroy_many; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Many Object Triggers (DELETE /api/v2/custom_objects/{custom_object_key}/triggers/destroy_many)"
+    },
+    {
+      "path": "writes delete_custom_role_by_id plan",
+      "summary": "Plan the delete_custom_role_by_id Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_custom_role_by_id",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "custom-role-id",
+          "type": "string",
+          "summary": "Record field custom_role_id.",
+          "maps_to": "record.custom_role_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/custom_roles/{custom_role_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Custom Role (DELETE /api/v2/custom_roles/{custom_role_id})"
+    },
+    {
+      "path": "writes delete_custom_status plan",
+      "summary": "Plan the delete_custom_status Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_custom_status",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "custom-status-id",
+          "type": "string",
+          "summary": "Record field custom_status_id.",
+          "maps_to": "record.custom_status_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/custom_statuses/{custom_status_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Custom Ticket Status (DELETE /api/v2/custom_statuses/{custom_status_id})"
+    },
+    {
+      "path": "writes delete_ticket_permanently plan",
+      "summary": "Plan the delete_ticket_permanently Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_ticket_permanently",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "ticket-id",
+          "type": "string",
+          "summary": "Record field ticket_id.",
+          "maps_to": "record.ticket_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/deleted_tickets/{ticket_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Ticket Permanently (DELETE /api/v2/deleted_tickets/{ticket_id})"
+    },
+    {
+      "path": "writes bulk_permanently_delete_tickets plan",
+      "summary": "Plan the bulk_permanently_delete_tickets Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "bulk_permanently_delete_tickets",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "ids",
+          "type": "string",
+          "summary": "Record field ids.",
+          "maps_to": "record.ids",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/deleted_tickets/destroy_many; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Multiple Tickets Permanently (DELETE /api/v2/deleted_tickets/destroy_many)"
+    },
+    {
+      "path": "writes permanently_delete_user plan",
+      "summary": "Plan the permanently_delete_user Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "permanently_delete_user",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "deleted-user-id",
+          "type": "string",
+          "summary": "Record field deleted_user_id.",
+          "maps_to": "record.deleted_user_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/deleted_users/{deleted_user_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Permanently Delete User (DELETE /api/v2/deleted_users/{deleted_user_id})"
+    },
+    {
+      "path": "writes delete_deletion_schedule plan",
+      "summary": "Plan the delete_deletion_schedule Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_deletion_schedule",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "deletion-schedule-id",
+          "type": "string",
+          "summary": "Record field deletion_schedule_id.",
+          "maps_to": "record.deletion_schedule_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/deletion_schedules/{deletion_schedule_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Deletion Schedule (DELETE /api/v2/deletion_schedules/{deletion_schedule_id})"
+    },
+    {
+      "path": "writes delete_dynamic_content_item plan",
+      "summary": "Plan the delete_dynamic_content_item Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_dynamic_content_item",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "dynamic-content-item-id",
+          "type": "string",
+          "summary": "Record field dynamic_content_item_id.",
+          "maps_to": "record.dynamic_content_item_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/dynamic_content/items/{dynamic_content_item_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Item (DELETE /api/v2/dynamic_content/items/{dynamic_content_item_id})"
+    },
+    {
+      "path": "writes delete_dynamic_content_variant plan",
+      "summary": "Plan the delete_dynamic_content_variant Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_dynamic_content_variant",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "dynamic-content-item-id",
+          "type": "string",
+          "summary": "Record field dynamic_content_item_id.",
+          "maps_to": "record.dynamic_content_item_id",
+          "required": true
+        },
+        {
+          "name": "dynamic-content-variant-id",
+          "type": "string",
+          "summary": "Record field dynamic_content_variant_id.",
+          "maps_to": "record.dynamic_content_variant_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/dynamic_content/items/{dynamic_content_item_id}/variants/{dynamic_content_variant_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Variant (DELETE /api/v2/dynamic_content/items/{dynamic_content_item_id}/variants/{dynamic_content_variant_id})"
+    },
+    {
+      "path": "writes delete_end_user_identity plan",
+      "summary": "Plan the delete_end_user_identity Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_end_user_identity",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Record field user_id.",
+          "maps_to": "record.user_id",
+          "required": true
+        },
+        {
+          "name": "user-identity-id",
+          "type": "string",
+          "summary": "Record field user_identity_id.",
+          "maps_to": "record.user_identity_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/end_users/{user_id}/identities/{user_identity_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete End User Identity (DELETE /api/v2/end_users/{user_id}/identities/{user_identity_id})"
+    },
+    {
+      "path": "writes delete_group_membership plan",
+      "summary": "Plan the delete_group_membership Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_group_membership",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "group-membership-id",
+          "type": "string",
+          "summary": "Record field group_membership_id.",
+          "maps_to": "record.group_membership_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/group_memberships/{group_membership_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Membership (DELETE /api/v2/group_memberships/{group_membership_id})"
+    },
+    {
+      "path": "writes delete_group_slapolicy plan",
+      "summary": "Plan the delete_group_slapolicy Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_group_slapolicy",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "group-sla-policy-id",
+          "type": "string",
+          "summary": "Record field group_sla_policy_id.",
+          "maps_to": "record.group_sla_policy_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/group_slas/policies/{group_sla_policy_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Group SLA Policy (DELETE /api/v2/group_slas/policies/{group_sla_policy_id})"
+    },
+    {
+      "path": "writes delete_itam_asset_type plan",
+      "summary": "Plan the delete_itam_asset_type Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_itam_asset_type",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "asset-type-id",
+          "type": "string",
+          "summary": "Record field asset_type_id.",
+          "maps_to": "record.asset_type_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/it_asset_management/asset_types/{asset_type_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Asset Type (DELETE /api/v2/it_asset_management/asset_types/{asset_type_id})"
+    },
+    {
+      "path": "writes delete_itam_asset_type_field plan",
+      "summary": "Plan the delete_itam_asset_type_field Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_itam_asset_type_field",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "asset-type-id",
+          "type": "string",
+          "summary": "Record field asset_type_id.",
+          "maps_to": "record.asset_type_id",
+          "required": true
+        },
+        {
+          "name": "asset-type-field-id",
+          "type": "string",
+          "summary": "Record field asset_type_field_id.",
+          "maps_to": "record.asset_type_field_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/it_asset_management/asset_types/{asset_type_id}/fields/{asset_type_field_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Asset Field (DELETE /api/v2/it_asset_management/asset_types/{asset_type_id}/fields/{asset_type_field_id})"
+    },
+    {
+      "path": "writes delete_itam_asset plan",
+      "summary": "Plan the delete_itam_asset Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_itam_asset",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "asset-id",
+          "type": "string",
+          "summary": "Record field asset_id.",
+          "maps_to": "record.asset_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/it_asset_management/assets/{asset_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Asset (DELETE /api/v2/it_asset_management/assets/{asset_id})"
+    },
+    {
+      "path": "writes delete_itam_location plan",
+      "summary": "Plan the delete_itam_location Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_itam_location",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "location-id",
+          "type": "string",
+          "summary": "Record field location_id.",
+          "maps_to": "record.location_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/it_asset_management/locations/{location_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Asset Location (DELETE /api/v2/it_asset_management/locations/{location_id})"
+    },
+    {
+      "path": "writes delete_itam_status plan",
+      "summary": "Plan the delete_itam_status Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_itam_status",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "status-id",
+          "type": "string",
+          "summary": "Record field status_id.",
+          "maps_to": "record.status_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/it_asset_management/statuses/{status_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Asset Status (DELETE /api/v2/it_asset_management/statuses/{status_id})"
+    },
+    {
+      "path": "writes delete_many_macros plan",
+      "summary": "Plan the delete_many_macros Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_many_macros",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "ids",
+          "type": "string",
+          "summary": "Record field ids.",
+          "maps_to": "record.ids",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/macros/destroy_many; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Bulk Delete Macros (DELETE /api/v2/macros/destroy_many)"
+    },
+    {
+      "path": "writes create_oauth_client plan",
+      "summary": "Plan the create_oauth_client Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_oauth_client",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [],
+      "risk": "Create Client (POST /api/v2/oauth/clients) -- external Zendesk Support mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Create Client (POST /api/v2/oauth/clients)"
+    },
+    {
+      "path": "writes update_client plan",
+      "summary": "Plan the update_client Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_client",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "oauth-client-id",
+          "type": "string",
+          "summary": "Record field oauth_client_id.",
+          "maps_to": "record.oauth_client_id",
+          "required": true
+        }
+      ],
+      "risk": "Update Client (PUT /api/v2/oauth/clients/{oauth_client_id}) -- external Zendesk Support mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Update Client (PUT /api/v2/oauth/clients/{oauth_client_id})"
+    },
+    {
+      "path": "writes delete_client plan",
+      "summary": "Plan the delete_client Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_client",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "oauth-client-id",
+          "type": "string",
+          "summary": "Record field oauth_client_id.",
+          "maps_to": "record.oauth_client_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/oauth/clients/{oauth_client_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Client (DELETE /api/v2/oauth/clients/{oauth_client_id})"
+    },
+    {
+      "path": "writes create_oauth_token plan",
+      "summary": "Plan the create_oauth_token Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_oauth_token",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [],
+      "risk": "Create Token (POST /api/v2/oauth/tokens) -- external Zendesk Support mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Create Token (POST /api/v2/oauth/tokens)"
+    },
+    {
+      "path": "writes revoke_oauth_token plan",
+      "summary": "Plan the revoke_oauth_token Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "revoke_oauth_token",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "oauth-token-id",
+          "type": "string",
+          "summary": "Record field oauth_token_id.",
+          "maps_to": "record.oauth_token_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/oauth/tokens/{oauth_token_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Revoke Token (DELETE /api/v2/oauth/tokens/{oauth_token_id})"
+    },
+    {
+      "path": "writes delete_organization_field plan",
+      "summary": "Plan the delete_organization_field Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_organization_field",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "organization-field-id",
+          "type": "string",
+          "summary": "Record field organization_field_id.",
+          "maps_to": "record.organization_field_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/organization_fields/{organization_field_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Organization Field (DELETE /api/v2/organization_fields/{organization_field_id})"
+    },
+    {
+      "path": "writes delete_organization_membership plan",
+      "summary": "Plan the delete_organization_membership Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_organization_membership",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "organization-membership-id",
+          "type": "string",
+          "summary": "Record field organization_membership_id.",
+          "maps_to": "record.organization_membership_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/organization_memberships/{organization_membership_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Membership (DELETE /api/v2/organization_memberships/{organization_membership_id})"
+    },
+    {
+      "path": "writes delete_organization_subscription plan",
+      "summary": "Plan the delete_organization_subscription Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_organization_subscription",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "organization-subscription-id",
+          "type": "string",
+          "summary": "Record field organization_subscription_id.",
+          "maps_to": "record.organization_subscription_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/organization_subscriptions/{organization_subscription_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Organization Subscription (DELETE /api/v2/organization_subscriptions/{organization_subscription_id})"
+    },
+    {
+      "path": "writes create_organization_merge plan",
+      "summary": "Plan the create_organization_merge Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_organization_merge",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "organization-id",
+          "type": "string",
+          "summary": "Record field organization_id.",
+          "maps_to": "record.organization_id",
+          "required": true
+        }
+      ],
+      "risk": "Merge Organization With Another Organization (POST /api/v2/organizations/{organization_id}/merge) -- external Zendesk Support mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Merge Organization With Another Organization (POST /api/v2/organizations/{organization_id}/merge)"
+    },
+    {
+      "path": "writes remove_organization_tags plan",
+      "summary": "Plan the remove_organization_tags Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_organization_tags",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "organization-id",
+          "type": "string",
+          "summary": "Record field organization_id.",
+          "maps_to": "record.organization_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/organizations/{organization_id}/tags; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Remove Organization Tags (DELETE /api/v2/organizations/{organization_id}/tags)"
+    },
+    {
+      "path": "writes delete_queue plan",
+      "summary": "Plan the delete_queue Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_queue",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "queue-id",
+          "type": "string",
+          "summary": "Record field queue_id.",
+          "maps_to": "record.queue_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/queues/{queue_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Queue (DELETE /api/v2/queues/{queue_id})"
+    },
+    {
+      "path": "writes delete_recipient_address plan",
+      "summary": "Plan the delete_recipient_address Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_recipient_address",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "support-address-id",
+          "type": "string",
+          "summary": "Record field support_address_id.",
+          "maps_to": "record.support_address_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/recipient_addresses/{support_address_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Support Address (DELETE /api/v2/recipient_addresses/{support_address_id})"
+    },
+    {
+      "path": "writes delete_resource_collection plan",
+      "summary": "Plan the delete_resource_collection Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_resource_collection",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "resource-collection-id",
+          "type": "string",
+          "summary": "Record field resource_collection_id.",
+          "maps_to": "record.resource_collection_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/resource_collections/{resource_collection_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Resource Collection (DELETE /api/v2/resource_collections/{resource_collection_id})"
+    },
+    {
+      "path": "writes delete_attribute plan",
+      "summary": "Plan the delete_attribute Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_attribute",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "attribute-id",
+          "type": "string",
+          "summary": "Record field attribute_id.",
+          "maps_to": "record.attribute_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/routing/attributes/{attribute_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Attribute (DELETE /api/v2/routing/attributes/{attribute_id})"
+    },
+    {
+      "path": "writes delete_attribute_value plan",
+      "summary": "Plan the delete_attribute_value Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_attribute_value",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "attribute-id",
+          "type": "string",
+          "summary": "Record field attribute_id.",
+          "maps_to": "record.attribute_id",
+          "required": true
+        },
+        {
+          "name": "attribute-value-id",
+          "type": "string",
+          "summary": "Record field attribute_value_id.",
+          "maps_to": "record.attribute_value_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/routing/attributes/{attribute_id}/values/{attribute_value_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Attribute Value (DELETE /api/v2/routing/attributes/{attribute_id}/values/{attribute_value_id})"
+    },
+    {
+      "path": "writes delete_saved_search plan",
+      "summary": "Plan the delete_saved_search Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_saved_search",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Record field id.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/saved_searches/{id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Saved Search (DELETE /api/v2/saved_searches/{id})"
+    },
+    {
+      "path": "writes delete_sharing_agreement plan",
+      "summary": "Plan the delete_sharing_agreement Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_sharing_agreement",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "sharing-agreement-id",
+          "type": "string",
+          "summary": "Record field sharing_agreement_id.",
+          "maps_to": "record.sharing_agreement_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/sharing_agreements/{sharing_agreement_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete a Sharing Agreement (DELETE /api/v2/sharing_agreements/{sharing_agreement_id})"
+    },
+    {
+      "path": "writes delete_slapolicy plan",
+      "summary": "Plan the delete_slapolicy Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_slapolicy",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "sla-policy-id",
+          "type": "string",
+          "summary": "Record field sla_policy_id.",
+          "maps_to": "record.sla_policy_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/slas/policies/{sla_policy_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete SLA Policy (DELETE /api/v2/slas/policies/{sla_policy_id})"
+    },
+    {
+      "path": "writes delete_suspended_ticket plan",
+      "summary": "Plan the delete_suspended_ticket Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_suspended_ticket",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Record field id.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/suspended_tickets/{id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Suspended Ticket (DELETE /api/v2/suspended_tickets/{id})"
+    },
+    {
+      "path": "writes delete_suspended_tickets plan",
+      "summary": "Plan the delete_suspended_tickets Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_suspended_tickets",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "ids",
+          "type": "string",
+          "summary": "Record field ids.",
+          "maps_to": "record.ids",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/suspended_tickets/destroy_many; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Multiple Suspended Tickets (DELETE /api/v2/suspended_tickets/destroy_many)"
+    },
+    {
+      "path": "writes delete_target plan",
+      "summary": "Plan the delete_target Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_target",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "target-id",
+          "type": "string",
+          "summary": "Record field target_id.",
+          "maps_to": "record.target_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/targets/{target_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Target (DELETE /api/v2/targets/{target_id})"
+    },
+    {
+      "path": "writes delete_task_list_template plan",
+      "summary": "Plan the delete_task_list_template Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_task_list_template",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "task-list-template-id",
+          "type": "string",
+          "summary": "Record field task_list_template_id.",
+          "maps_to": "record.task_list_template_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/task_list_templates/{task_list_template_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Task List Template (DELETE /api/v2/task_list_templates/{task_list_template_id})"
+    },
+    {
+      "path": "writes delete_ticket_content_pin plan",
+      "summary": "Plan the delete_ticket_content_pin Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_ticket_content_pin",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "content-pin-id",
+          "type": "string",
+          "summary": "Record field content_pin_id.",
+          "maps_to": "record.content_pin_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/ticket_content_pins/{content_pin_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Content Pin from Ticket (DELETE /api/v2/ticket_content_pins/{content_pin_id})"
+    },
+    {
+      "path": "writes delete_ticket_field_option plan",
+      "summary": "Plan the delete_ticket_field_option Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_ticket_field_option",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "ticket-field-id",
+          "type": "string",
+          "summary": "Record field ticket_field_id.",
+          "maps_to": "record.ticket_field_id",
+          "required": true
+        },
+        {
+          "name": "ticket-field-option-id",
+          "type": "string",
+          "summary": "Record field ticket_field_option_id.",
+          "maps_to": "record.ticket_field_option_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/ticket_fields/{ticket_field_id}/options/{ticket_field_option_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Ticket Field Option (DELETE /api/v2/ticket_fields/{ticket_field_id}/options/{ticket_field_option_id})"
+    },
+    {
+      "path": "writes delete_ticket_form plan",
+      "summary": "Plan the delete_ticket_form Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_ticket_form",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "ticket-form-id",
+          "type": "string",
+          "summary": "Record field ticket_form_id.",
+          "maps_to": "record.ticket_form_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/ticket_forms/{ticket_form_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Ticket Form (DELETE /api/v2/ticket_forms/{ticket_form_id})"
+    },
+    {
+      "path": "writes delete_ticket_form_statuses plan",
+      "summary": "Plan the delete_ticket_form_statuses Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_ticket_form_statuses",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "ticket-form-id",
+          "type": "string",
+          "summary": "Record field ticket_form_id.",
+          "maps_to": "record.ticket_form_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Ticket Form Statuses (DELETE /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses)"
+    },
+    {
+      "path": "writes delete_ticket_form_status_by_id plan",
+      "summary": "Plan the delete_ticket_form_status_by_id Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_ticket_form_status_by_id",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "ticket-form-id",
+          "type": "string",
+          "summary": "Record field ticket_form_id.",
+          "maps_to": "record.ticket_form_id",
+          "required": true
+        },
+        {
+          "name": "ticket-form-status-id",
+          "type": "string",
+          "summary": "Record field ticket_form_status_id.",
+          "maps_to": "record.ticket_form_status_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses/{ticket_form_status_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Ticket Form Status By Id (DELETE /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses/{ticket_form_status_id})"
+    },
+    {
+      "path": "writes merge_tickets_into_target_ticket plan",
+      "summary": "Plan the merge_tickets_into_target_ticket Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "merge_tickets_into_target_ticket",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "ticket-id",
+          "type": "string",
+          "summary": "Record field ticket_id.",
+          "maps_to": "record.ticket_id",
+          "required": true
+        }
+      ],
+      "risk": "Merge Tickets into Target Ticket (POST /api/v2/tickets/{ticket_id}/merge) -- external Zendesk Support mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Merge Tickets into Target Ticket (POST /api/v2/tickets/{ticket_id}/merge)"
+    },
+    {
+      "path": "writes delete_tags_ticket plan",
+      "summary": "Plan the delete_tags_ticket Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_tags_ticket",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "ticket-id",
+          "type": "string",
+          "summary": "Record field ticket_id.",
+          "maps_to": "record.ticket_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/tickets/{ticket_id}/tags; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Remove Tags (DELETE /api/v2/tickets/{ticket_id}/tags)"
+    },
+    {
+      "path": "writes bulk_delete_tickets plan",
+      "summary": "Plan the bulk_delete_tickets Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "bulk_delete_tickets",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "ids",
+          "type": "string",
+          "summary": "Record field ids.",
+          "maps_to": "record.ids",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/tickets/destroy_many; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Bulk Delete Tickets (DELETE /api/v2/tickets/destroy_many)"
+    },
+    {
+      "path": "writes update_many_tickets plan",
+      "summary": "Plan the update_many_tickets Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_many_tickets",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [],
+      "risk": "Apply one set of values to many tickets selected by id. -- external Zendesk Support mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Apply one set of values to many tickets selected by id."
+    },
+    {
+      "path": "writes update_many_tickets_individually plan",
+      "summary": "Plan the update_many_tickets_individually Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_many_tickets_individually",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [],
+      "risk": "Apply per-ticket values to many tickets in one request. -- external Zendesk Support mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Apply per-ticket values to many tickets in one request."
+    },
+    {
+      "path": "writes delete_trigger_category plan",
+      "summary": "Plan the delete_trigger_category Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_trigger_category",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "trigger-category-id",
+          "type": "string",
+          "summary": "Record field trigger_category_id.",
+          "maps_to": "record.trigger_category_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/trigger_categories/{trigger_category_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Ticket Trigger Category (DELETE /api/v2/trigger_categories/{trigger_category_id})"
+    },
+    {
+      "path": "writes delete_many_triggers plan",
+      "summary": "Plan the delete_many_triggers Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_many_triggers",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "ids",
+          "type": "string",
+          "summary": "Record field ids.",
+          "maps_to": "record.ids",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/triggers/destroy_many; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Bulk Delete Ticket Triggers (DELETE /api/v2/triggers/destroy_many)"
+    },
+    {
+      "path": "writes delete_upload plan",
+      "summary": "Plan the delete_upload Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_upload",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [],
+      "risk": "deletes a Zendesk Support resource via /api/v2/uploads/{token}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Upload (DELETE /api/v2/uploads/{token})"
+    },
+    {
+      "path": "writes delete_user_field plan",
+      "summary": "Plan the delete_user_field Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_user_field",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "user-field-id",
+          "type": "string",
+          "summary": "Record field user_field_id.",
+          "maps_to": "record.user_field_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/user_fields/{user_field_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete User Field (DELETE /api/v2/user_fields/{user_field_id})"
+    },
+    {
+      "path": "writes delete_user_field_option plan",
+      "summary": "Plan the delete_user_field_option Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_user_field_option",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "user-field-id",
+          "type": "string",
+          "summary": "Record field user_field_id.",
+          "maps_to": "record.user_field_id",
+          "required": true
+        },
+        {
+          "name": "user-field-option-id",
+          "type": "string",
+          "summary": "Record field user_field_option_id.",
+          "maps_to": "record.user_field_option_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/user_fields/{user_field_id}/options/{user_field_option_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete User Field Option (DELETE /api/v2/user_fields/{user_field_id}/options/{user_field_option_id})"
+    },
+    {
+      "path": "writes delete_user_group_membership plan",
+      "summary": "Plan the delete_user_group_membership Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_user_group_membership",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Record field user_id.",
+          "maps_to": "record.user_id",
+          "required": true
+        },
+        {
+          "name": "group-membership-id",
+          "type": "string",
+          "summary": "Record field group_membership_id.",
+          "maps_to": "record.group_membership_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/users/{user_id}/group_memberships/{group_membership_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete User's Group Membership (DELETE /api/v2/users/{user_id}/group_memberships/{group_membership_id})"
+    },
+    {
+      "path": "writes delete_user_identity plan",
+      "summary": "Plan the delete_user_identity Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_user_identity",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Record field user_id.",
+          "maps_to": "record.user_id",
+          "required": true
+        },
+        {
+          "name": "user-identity-id",
+          "type": "string",
+          "summary": "Record field user_identity_id.",
+          "maps_to": "record.user_identity_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/users/{user_id}/identities/{user_identity_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Identity (DELETE /api/v2/users/{user_id}/identities/{user_identity_id})"
+    },
+    {
+      "path": "writes merge_end_users plan",
+      "summary": "Plan the merge_end_users Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "merge_end_users",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Record field user_id.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "risk": "Merge End Users (PUT /api/v2/users/{user_id}/merge) -- external Zendesk Support mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Merge End Users (PUT /api/v2/users/{user_id}/merge)"
+    },
+    {
+      "path": "writes delete_user_organization_membership plan",
+      "summary": "Plan the delete_user_organization_membership Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_user_organization_membership",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Record field user_id.",
+          "maps_to": "record.user_id",
+          "required": true
+        },
+        {
+          "name": "organization-membership-id",
+          "type": "string",
+          "summary": "Record field organization_membership_id.",
+          "maps_to": "record.organization_membership_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/users/{user_id}/organization_memberships/{organization_membership_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Organization Membership for User (DELETE /api/v2/users/{user_id}/organization_memberships/{organization_membership_id})"
+    },
+    {
+      "path": "writes unassign_organization plan",
+      "summary": "Plan the unassign_organization Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "unassign_organization",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Record field user_id.",
+          "maps_to": "record.user_id",
+          "required": true
+        },
+        {
+          "name": "organization-id",
+          "type": "string",
+          "summary": "Record field organization_id.",
+          "maps_to": "record.organization_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/users/{user_id}/organizations/{organization_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Unassign Organization (DELETE /api/v2/users/{user_id}/organizations/{organization_id})"
+    },
+    {
+      "path": "writes set_user_password plan",
+      "summary": "Plan the set_user_password Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "set_user_password",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [],
+      "risk": "Set a User's Password (POST /api/v2/users/{user_id}/password) -- external Zendesk Support mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Set a User's Password (POST /api/v2/users/{user_id}/password)"
+    },
+    {
+      "path": "writes change_own_password plan",
+      "summary": "Plan the change_own_password Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "change_own_password",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Record field user_id.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "risk": "Change Your Password (PUT /api/v2/users/{user_id}/password) -- external Zendesk Support mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Change Your Password (PUT /api/v2/users/{user_id}/password)"
+    },
+    {
+      "path": "writes bulk_delete_sessions_by_user_id plan",
+      "summary": "Plan the bulk_delete_sessions_by_user_id Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "bulk_delete_sessions_by_user_id",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Record field user_id.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/users/{user_id}/sessions; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Bulk Delete Sessions (DELETE /api/v2/users/{user_id}/sessions)"
+    },
+    {
+      "path": "writes delete_session plan",
+      "summary": "Plan the delete_session Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_session",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Record field user_id.",
+          "maps_to": "record.user_id",
+          "required": true
+        },
+        {
+          "name": "session-id",
+          "type": "string",
+          "summary": "Record field session_id.",
+          "maps_to": "record.session_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/users/{user_id}/sessions/{session_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Session (DELETE /api/v2/users/{user_id}/sessions/{session_id})"
+    },
+    {
+      "path": "writes delete_user_tags plan",
+      "summary": "Plan the delete_user_tags Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_user_tags",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Record field user_id.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/users/{user_id}/tags; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Remove User Tags (DELETE /api/v2/users/{user_id}/tags)"
+    },
+    {
+      "path": "writes create_or_update_user plan",
+      "summary": "Plan the create_or_update_user Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_or_update_user",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [],
+      "risk": "Create Or Update User (POST /api/v2/users/create_or_update) -- external Zendesk Support mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Create Or Update User (POST /api/v2/users/create_or_update)"
+    },
+    {
+      "path": "writes update_many_users plan",
+      "summary": "Plan the update_many_users Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_many_users",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [],
+      "risk": "Apply one set of values to many users selected by id. -- external Zendesk Support mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Apply one set of values to many users selected by id."
+    },
+    {
+      "path": "writes update_many_users_individually plan",
+      "summary": "Plan the update_many_users_individually Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_many_users_individually",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [],
+      "risk": "Apply per-user values to many users in one request. -- external Zendesk Support mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Apply per-user values to many users in one request."
+    },
+    {
+      "path": "writes bulk_delete_views plan",
+      "summary": "Plan the bulk_delete_views Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "bulk_delete_views",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "ids",
+          "type": "string",
+          "summary": "Record field ids.",
+          "maps_to": "record.ids",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/views/destroy_many; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Bulk Delete Views (DELETE /api/v2/views/destroy_many)"
+    },
+    {
+      "path": "writes delete_workspace plan",
+      "summary": "Plan the delete_workspace Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_workspace",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "workspace-id",
+          "type": "string",
+          "summary": "Record field workspace_id.",
+          "maps_to": "record.workspace_id",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/workspaces/{workspace_id}; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Delete Workspace (DELETE /api/v2/workspaces/{workspace_id})"
+    },
+    {
+      "path": "writes destroy_many_workspaces plan",
+      "summary": "Plan the destroy_many_workspaces Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "destroy_many_workspaces",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [
+        {
+          "name": "ids",
+          "type": "string",
+          "summary": "Record field ids.",
+          "maps_to": "record.ids",
+          "required": true
+        }
+      ],
+      "risk": "deletes a Zendesk Support resource via /api/v2/workspaces/destroy_many; destructive external mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Bulk Delete Workspaces (DELETE /api/v2/workspaces/destroy_many)"
+    },
+    {
+      "path": "writes create_token_for_grant_type plan",
+      "summary": "Plan the create_token_for_grant_type Zendesk Support write action.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_token_for_grant_type",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "api_surface": [],
+      "flags": [],
+      "risk": "Create Token for Grant Type (POST /oauth/tokens) -- external Zendesk Support mutation requiring approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "notes": "Create Token for Grant Type (POST /oauth/tokens)"
     }
   ],
   "help_topics": [

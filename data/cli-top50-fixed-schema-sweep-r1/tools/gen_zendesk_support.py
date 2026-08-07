@@ -379,6 +379,349 @@ def promote_reads(bundle, derived):
     print("total commands promoted: %d" % len(promoted_paths))
 
 
+NO_REQUEST_CONTRACT_NOTE = (
+    "Named dependency: the pinned Zendesk Support OAS declares no requestBody for this "
+    "operation, so there is no bounded record contract to derive and "
+    "connectorgen validate's checkCLISurfaceWriteFlags has no required fields to bind. "
+    "Deriving one would mean inventing a payload shape the provider never published, which is "
+    "the generic HTTP write AGENTS.md forbids. Unblocks when Zendesk publishes the request schema."
+)
+
+EMPTY_CONTRACT_NOTE = (
+    "Named dependency: engine.PreflightWriteAction refuses a write whose record_schema admits "
+    "only an empty object, and the pinned Zendesk Support OAS documents no request body, no path "
+    "variable and no required parameter for this operation, so there is nothing to bind. Zendesk "
+    "documents the selector in prose only. Unblocks when the spec declares the parameter."
+)
+
+FILE_UPLOAD_NOTE = (
+    "Named dependency: engine declares no bounded multipart file-transfer executor -- there is no "
+    "kind that can validate method, content type, multipart field names and byte caps without "
+    "accepting inline raw bytes -- so a file_upload operation has no executable command shape."
+)
+
+# The two endpoints whose request body is a union of GENUINELY DIFFERENT
+# contracts: one arm applies a single set of values to many ids, the other
+# carries per-record values. AGENTS.md's remedy for a union is to model each
+# reachable arm as a separate named action, and `covered_by.writes` (plural,
+# landed with github in this same sweep) is what lets two actions share one
+# documented endpoint without inventing a variant path. Finding 31 exists
+# precisely so this case does not reintroduce synthetic paths.
+UNION_ARM_ACTIONS = {
+    "PUT /api/v2/tickets/update_many": [
+        ("update_many_tickets", "ticket",
+         "Apply one set of values to many tickets selected by id."),
+        ("update_many_tickets_individually", "tickets",
+         "Apply per-ticket values to many tickets in one request."),
+    ],
+    "PUT /api/v2/users/update_many": [
+        ("update_many_users", "user",
+         "Apply one set of values to many users selected by id."),
+        ("update_many_users_individually", "users",
+         "Apply per-user values to many users in one request."),
+    ],
+}
+
+WRITE_KINDS = {"POST": "create", "PUT": "update", "PATCH": "update", "DELETE": "delete"}
+
+
+def action_name(operation_id):
+    return operation_id.split(".", 1)[1]
+
+
+def record_schema_for(path_vars, body_schema, body_required, where, required_query=()):
+    """A bounded record contract: path variables plus the documented body.
+
+    Path variables are required -- the operation cannot be addressed without
+    them -- and typed [integer, string] because Zendesk ids arrive as either,
+    which is the shape the bundle's own shipped delete actions already use.
+    """
+    properties, required = {}, []
+    for var in path_vars:
+        properties[var] = {"type": ["integer", "string"]}
+        required.append(var)
+    for param in required_query:
+        field = param["name"]
+        properties[field] = {"type": flag_type(param["type"]) == "integer" and "integer" or "string"}
+        if field not in required:
+            required.append(field)
+    if body_schema:
+        compiled = sanitize_schema(flatten_union(body_schema, where), where)
+        for name, schema in (compiled.get("properties") or {}).items():
+            properties[name] = schema
+        for name in compiled.get("required") or []:
+            if name not in required:
+                required.append(name)
+        # A body the provider marks required but whose own schema names no
+        # required property still needs at least one field bound, or the
+        # action would plan an empty payload.
+        if body_required and not (compiled.get("required") or []):
+            for name in (compiled.get("properties") or {}):
+                required.append(name)
+                break
+    schema = {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": False,
+        "properties": properties,
+    }
+    if required:
+        schema["required"] = required
+    return schema
+
+
+def build_action(name, method, path, path_vars, body_schema, body_required, summary, where,
+                 required_query=()):
+    templated = path
+    for var in path_vars:
+        templated = templated.replace("{%s}" % var, "{{ record.%s }}" % var)
+    action = {
+        "name": name,
+        "kind": WRITE_KINDS[method],
+        "method": method,
+        "path": templated,
+    }
+    if path_vars:
+        action["path_fields"] = list(path_vars)
+    body_fields = sorted((body_schema or {}).get("properties") or {})
+    if body_fields:
+        action["body_type"] = "json"
+        action["body_fields"] = body_fields
+    else:
+        action["body_type"] = "none"
+    if required_query:
+        # Finding 37: a behaviour carried in the query string is a template
+        # bound to a record field, never a fixed value baked into the action.
+        action["query"] = {
+            p["name"]: {"template": "{{ record.%s }}" % p["name"]} for p in required_query
+        }
+    action["record_schema"] = record_schema_for(path_vars, body_schema, body_required, where,
+                                                required_query)
+    if method == "DELETE":
+        action["delete"] = {"idempotent": True, "missing_ok_status": [404]}
+        action["confirm"] = "destructive"
+        action["risk"] = ("deletes a Zendesk Support resource via %s; destructive external "
+                          "mutation requiring approval" % path)
+    else:
+        action["risk"] = ("%s -- external Zendesk Support mutation requiring approval" % summary)
+    return action
+
+
+# Field names whose value is a credential. AGENTS.md: "Add credentials from
+# environment variables or stdin, not prompt text" and "Never request, print,
+# summarize, or store secret values". A required field on this list never
+# becomes a flag; the command drops to `partial`, which is the documented
+# disposition for a required record field with no bound flag, and the field is
+# redacted. Reverse ETL takes records from a source, so planning never needs the
+# secret inline.
+CREDENTIAL_FIELDS = {"password", "previous_password", "token", "secret", "api_token",
+                     "client_secret", "access_token", "refresh_token"}
+
+SCALAR_TYPES = {"string", "integer", "number", "boolean"}
+
+
+def write_command_flags(action):
+    """Flags for an implemented reverse-ETL command, or (None, redacted) when
+    the action cannot be fully bound.
+
+    connectorgen validate's checkCLISurfaceWriteFlags requires an implemented
+    reverse ETL command to expose a flag for EVERY required record field, and
+    finding 4 records the consequence: a required field with no scalar leaf
+    means `partial`, not `implemented`. This mirrors that rule rather than
+    restating it -- an unbindable field returns None and the caller downgrades.
+    """
+    schema = action["record_schema"]
+    required = schema.get("required") or []
+    properties = schema.get("properties") or {}
+    flags, redacted = [], []
+    for field in required:
+        if field in CREDENTIAL_FIELDS:
+            redacted.append(field)
+            return None, redacted
+        declared = (properties.get(field) or {}).get("type")
+        types = declared if isinstance(declared, list) else [declared]
+        if not types or not set(t for t in types if t).issubset(SCALAR_TYPES):
+            return None, redacted
+        kind = "integer" if types == ["integer"] else "string"
+        flags.append({
+            "name": kebab(field),
+            "type": kind,
+            "summary": "Record field %s." % field,
+            "maps_to": "record.%s" % field,
+            "required": True,
+        })
+    return flags, redacted
+
+
+def promote_writes(bundle, derived):
+    surface_path = os.path.join(bundle, "api_surface.json")
+    cli_path = os.path.join(bundle, "cli_surface.json")
+    ops_path = os.path.join(bundle, "operations.json")
+    writes_path = os.path.join(bundle, "writes.json")
+
+    surface = load(surface_path)
+    cli = load(cli_path)
+    ops_doc = load(ops_path)
+    writes_doc = load(writes_path)
+
+    by_endpoint = index_operations(ops_doc["operations"])
+    by_path = {}
+    for op in ops_doc["operations"]:
+        node = op.get("file") or {}
+        if node.get("path"):
+            by_path[node["path"]] = op
+    cmd_by_operation = {c["operation"]: c for c in cli["commands"] if c.get("operation")}
+    derived_by_key = {r["key"]: r for r in derived["operations"]}
+    existing_actions = {a["name"] for a in writes_doc["actions"]}
+
+    stats = collections.Counter()
+    retired_operations = set()
+    new_actions, new_commands, drop_commands = [], [], set()
+
+    for row in surface["endpoints"]:
+        if not row.get("operation"):
+            continue
+        key = "%s %s" % (row["method"], row["path"])
+        if key in CREDENTIAL_BODY_BLOCKED:
+            continue
+
+        op = by_endpoint.get((row["method"], row["path"])) or by_path.get(row["path"])
+        if op is None:
+            raise SystemExit("no operation declares %s" % key)
+
+        if op["kind"] == "file_upload":
+            row["operation"]["notes"] = FILE_UPLOAD_NOTE
+            stats["blocked_file_upload"] += 1
+            continue
+
+        derived_row = derived_by_key[key]
+        body_schema = (op.get("rest") or {}).get("body_schema")
+        has_body = bool(body_schema)
+        # A DELETE is addressed by its path, not by a payload: "no documented
+        # request body" is the NORMAL shape for one, not a missing contract.
+        # The bundle already ships 9 such delete actions, so blocking the other
+        # 77 would contradict its own precedent.
+        addressable = row["method"] == "DELETE"
+
+        if not (has_body or addressable):
+            row["operation"]["reason"] = (
+                "the provider's published spec documents no request contract for this operation"
+            )
+            row["operation"]["notes"] = NO_REQUEST_CONTRACT_NOTE
+            stats["blocked_no_request_contract"] += 1
+            continue
+
+        path_vars = derived_row["path_vars"]
+        summary = op.get("summary") or key
+        command = cmd_by_operation.get(op["id"])
+        if command is None:
+            raise SystemExit("no cli command declares operation %s (%s)" % (op["id"], key))
+
+        if key in UNION_ARM_ACTIONS:
+            names = []
+            for name, arm_field, arm_summary in UNION_ARM_ACTIONS[key]:
+                # Zendesk writes these unions as a bare required-list per arm
+                # over PARENT-level properties, so an arm read in isolation
+                # declares a required field it does not define. Each arm is
+                # therefore rebuilt as the parent shape narrowed to its own
+                # field: two genuinely distinct contracts, neither accepting the
+                # other's payload.
+                candidates = body_schema.get("oneOf") or body_schema.get("anyOf") or []
+                if not any(arm_field in (c.get("required") or []) for c in candidates):
+                    raise SystemExit("%s: no union arm requires %r" % (key, arm_field))
+                parent_properties = body_schema.get("properties") or {}
+                if arm_field not in parent_properties:
+                    raise SystemExit("%s: union arm field %r has no declared shape" % (key, arm_field))
+                arm = {
+                    "type": "object",
+                    "additionalProperties": False,
+                    "required": [arm_field],
+                    "properties": {arm_field: parent_properties[arm_field]},
+                }
+                new_actions.append(
+                    build_action(name, row["method"], row["path"], path_vars, arm, True,
+                                 arm_summary, key, derived_row["required_query"])
+                )
+                new_commands.append(("writes %s plan" % name, name, arm_summary,
+                                     new_actions[-1]["risk"]))
+                names.append(name)
+            row.pop("operation", None)
+            row["covered_by"] = {"writes": names}
+            drop_commands.add(command["path"])
+            retired_operations.add(op["id"])
+            stats["union_arms_split"] += len(names)
+            continue
+
+        if op["kind"] != "rest_write":
+            # Two async exports ship as kind rest_read. They enqueue a job and
+            # mail a CSV link; a bounded read must do neither.
+            stats["reclassified_async_export_as_write"] += 1
+
+        name = action_name(op["id"])
+        if name in existing_actions:
+            raise SystemExit("%s: write action %r already exists" % (key, name))
+        action = build_action(name, row["method"], row["path"], path_vars, body_schema,
+                              derived_row["request_body_required"], summary, key,
+                              derived_row["required_query"])
+
+        # engine.PreflightWriteAction refuses a write whose record_schema admits
+        # only an empty object, and it is right to: such an action plans a
+        # mutation with no inputs at all. The check is made on the BUILT schema
+        # rather than on its inputs, because a body_schema can be present and
+        # still declare no properties -- three of these were only caught at
+        # runtime preflight when the guard read the inputs instead.
+        if not action["record_schema"].get("properties"):
+            row["operation"]["reason"] = (
+                "the provider's published spec documents no bindable request field for this "
+                "operation: no properties, no path variable, no required parameter"
+            )
+            row["operation"]["notes"] = EMPTY_CONTRACT_NOTE
+            stats["blocked_empty_record_contract"] += 1
+            continue
+
+        existing_actions.add(name)
+        new_actions.append(action)
+        new_commands.append(("writes %s plan" % name, name, summary, new_actions[-1]["risk"]))
+        drop_commands.add(command["path"])
+        retired_operations.add(op["id"])
+        row.pop("operation", None)
+        row["covered_by"] = {"write": name}
+        stats["write_action_%s" % row["method"].lower()] += 1
+
+    # A row covered by a writes.json action no longer needs its blocked-metadata
+    # operation entry, and leaving one behind would ship an operation no command
+    # references.
+    ops_doc["operations"] = [o for o in ops_doc["operations"] if o["id"] not in retired_operations]
+    cli["commands"] = [c for c in cli["commands"] if c["path"] not in drop_commands]
+    actions_by_name = {a["name"]: a for a in new_actions}
+    for path, name, summary, risk in new_commands:
+        action = actions_by_name[name]
+        flags, redacted = write_command_flags(action)
+        if redacted:
+            action.setdefault("redact_fields", []).extend(redacted)
+        cli["commands"].append({
+            "path": path,
+            "summary": "Plan the %s Zendesk Support write action." % name,
+            "intent": "reverse_etl",
+            "availability": "implemented" if flags is not None else "partial",
+            "write": name,
+            "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+            "api_surface": [],
+            "flags": flags or [],
+            "risk": risk,
+            "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+            "notes": summary,
+        })
+    writes_doc["actions"].extend(new_actions)
+
+    write_json(surface_path, surface)
+    write_json(cli_path, cli)
+    write_json(ops_path, ops_doc)
+    write_json(writes_path, writes_doc)
+    print("writes: %s" % dict(sorted(stats.items())))
+    print("new actions: %d  retired operation entries: %d" % (len(new_actions), len(retired_operations)))
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("bundle")
@@ -391,7 +734,7 @@ def main():
     if args.reads:
         promote_reads(args.bundle, derived)
     if args.writes:
-        raise SystemExit("--writes is slice 3; not implemented in this commit")
+        promote_writes(args.bundle, derived)
     if not (args.reads or args.writes):
         parser.error("pass --reads or --writes")
 

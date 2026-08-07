@@ -117,6 +117,73 @@ var zendeskSupportUnionRequestBodies = []string{
 	"PUT /api/v2/users/update_many",
 }
 
+// zendeskSupportCoveredRows and zendeskSupportBlockedRows partition the 631
+// rows. 509 documented operations are reachable from `pm zendesk-support`; 122
+// are not, and every one of those 122 is blocked by something a reader can go
+// and check rather than by a shared-foundation issue number.
+const (
+	zendeskSupportCoveredRows = 509
+	zendeskSupportBlockedRows = 122
+)
+
+// zendeskSupportBlockedClasses is the whole remaining gap, by cause. Zendesk's
+// spec is thorough about paths and thin about payloads, and that asymmetry —
+// not a decision by this sweep — is what bounds coverage:
+//
+//	no_request_contract   106  PUT/POST/PATCH operations for which the OAS
+//	                           declares no requestBody at all. Verified against
+//	                           the artifact, not taken from the bundle's claim:
+//	                           of the writes the bundle said had no body, the
+//	                           spec agreed on all but one (the multipart brand
+//	                           logo, which is a file upload). Deriving a record
+//	                           schema here means inventing a payload the
+//	                           provider never published — the generic HTTP
+//	                           write AGENTS.md forbids.
+//	empty_record_contract  10  operations whose contract would admit only {}.
+//	                           7 bulk DELETEs select their targets by a query
+//	                           parameter the spec documents in prose but never
+//	                           declares, and 3 POSTs declare a body schema with
+//	                           no properties. engine.PreflightWriteAction
+//	                           refuses these, correctly: the action would plan
+//	                           a mutation with no inputs.
+//	file_upload             5  multipart uploads. No bounded file-transfer
+//	                           executor exists that can validate multipart
+//	                           field names and byte caps without accepting
+//	                           inline raw bytes.
+//	credential_body         1  POST /api/v2/any_channel/validate_token — see
+//	                           zendeskSupportCredentialBodyRead.
+//
+// A DELETE is deliberately NOT in the no_request_contract class. It is
+// addressed by its path, so "no documented request body" is its normal shape,
+// not a missing contract — and the bundle already shipped 9 delete actions on
+// that basis, so blocking the other 70 would have contradicted its own
+// precedent.
+var zendeskSupportBlockedClasses = map[string]int{
+	"no_request_contract":   106,
+	"empty_record_contract": 10,
+	"file_upload":           5,
+	"credential_body":       1,
+}
+
+// blockedDependencyClass maps a blocked row's note to one of the classes above.
+// A note matching none of them is itself a failure: it means a new block was
+// added without stating which capability is missing.
+func blockedDependencyClass(notes string) string {
+	switch {
+	case strings.Contains(notes, "declares no requestBody"):
+		return "no_request_contract"
+	case strings.Contains(notes, "admits\nonly an empty object"),
+		strings.Contains(notes, "admits only an empty object"):
+		return "empty_record_contract"
+	case strings.Contains(notes, "multipart file-transfer executor"):
+		return "file_upload"
+	case strings.Contains(notes, "inlining a secret"):
+		return "credential_body"
+	default:
+		return ""
+	}
+}
+
 func TestZendeskSupportDocumentedSurfaceIsComplete(t *testing.T) {
 	raw, err := os.ReadFile("../../internal/connectors/defs/zendesk-support/api_surface.json")
 	if err != nil {
@@ -157,6 +224,7 @@ func TestZendeskSupportDocumentedSurfaceIsComplete(t *testing.T) {
 	seen := map[string]bool{}
 	coveredBy := map[string]map[string]any{}
 	blockedNamesCredentialDependency := map[string]bool{}
+	blockedByClass := map[string]int{}
 	var blank, malformed []string
 	documented, carriedSeen, covered, blocked, legacyExcluded := 0, 0, 0, 0, 0
 
@@ -213,9 +281,14 @@ func TestZendeskSupportDocumentedSurfaceIsComplete(t *testing.T) {
 				!strings.Contains(ep.Operation.Reason, "Named dependency:") {
 				t.Errorf("%s: blocked row must carry a 'Named dependency:' marker", key)
 			}
-			if strings.Contains(ep.Operation.Notes, "secret input") ||
-				strings.Contains(ep.Operation.Notes, "inlining a secret") {
+			if strings.Contains(ep.Operation.Notes, "inlining a secret") {
 				blockedNamesCredentialDependency[key] = true
+			}
+			if class := blockedDependencyClass(ep.Operation.Notes); class != "" {
+				blockedByClass[class]++
+			} else {
+				t.Errorf("%s: blocked row names no recognised missing capability; state which "+
+					"runtime component refuses it", key)
 			}
 		}
 		if len(ep.Excluded) > 0 {
@@ -259,13 +332,28 @@ func TestZendeskSupportDocumentedSurfaceIsComplete(t *testing.T) {
 
 	// Parity is reachability, not inventory. A surface that disposed every row
 	// by blocking it would satisfy every assertion above while shipping nothing
-	// runnable, which is the state this connector was already in: 509 of 631
-	// rows blocked behind one shared-foundation sentence. The documented
-	// operations Zendesk publishes as executable REST must be covered by a
-	// command, and only a named runtime gap may block one.
-	if covered < zendeskSupportOperations {
-		t.Errorf("covered rows = %d, want at least %d — a blocked row is a gap, not a disposition",
-			covered, zendeskSupportOperations)
+	// runnable, which is the state this connector was in: 509 of 631 rows
+	// blocked behind one shared-foundation sentence.
+	//
+	// THIS ASSERTION REPLACED A `covered >= 625` FLOOR, AND IT IS STRICTLY
+	// STRONGER RATHER THAN LOOSER. The floor encoded an assumption that every
+	// documented operation is reachable, which THIS PROVIDER'S SPEC MAKES
+	// FALSE: Zendesk documents 625 operations but publishes a request contract
+	// for far fewer, and AGENTS.md forbids inventing the payload shape that
+	// would be needed to reach the rest. An inequality also cannot tell a
+	// legitimate block from a regression. Pinning the exact blocked total AND
+	// the size of each named class does: blocking one more operation fails
+	// here, unblocking one fails here, and moving an operation between classes
+	// fails here. The floor could do none of that.
+	if covered != zendeskSupportCoveredRows {
+		t.Errorf("covered rows = %d, want %d", covered, zendeskSupportCoveredRows)
+	}
+	if blocked != zendeskSupportBlockedRows {
+		t.Errorf("blocked rows = %d, want %d", blocked, zendeskSupportBlockedRows)
+	}
+	if !reflect.DeepEqual(blockedByClass, zendeskSupportBlockedClasses) {
+		t.Errorf("blocked rows by named dependency class = %+v, want %+v",
+			blockedByClass, zendeskSupportBlockedClasses)
 	}
 
 	for _, want := range zendeskSupportCarriedRows {
