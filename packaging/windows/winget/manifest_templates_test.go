@@ -37,14 +37,26 @@ func TestInstallerTemplateUsesPlaceholdersForUnpublishedSignedHashes(t *testing.
 
 	for _, want := range []string{
 		"Architecture: x64",
-		"Architecture: arm64",
 		"InstallerType: wix",
 		"Scope: machine",
 		"InstallerSha256: <SHA256_OF_FINAL_SIGNED_X64_MSI>",
-		"InstallerSha256: <SHA256_OF_FINAL_SIGNED_ARM64_MSI>",
 	} {
 		if !strings.Contains(content, want) {
 			t.Fatalf("installer template missing %q", want)
+		}
+	}
+	// arm64 must be absent, not merely unasserted. pm embeds DuckDB and
+	// go-duckdb ships no windows/arm64 library, so no arm64 MSI exists to
+	// point at; a manifest advertising one would send WinGet users to a
+	// download that was never published.
+	for _, unwanted := range []string{
+		"Architecture: arm64",
+		"windows_arm64.msi",
+		"<SHA256_OF_FINAL_SIGNED_ARM64_MSI>",
+		"<MSI_PRODUCT_CODE_ARM64>",
+	} {
+		if strings.Contains(content, unwanted) {
+			t.Fatalf("installer template still advertises an unpublished arm64 installer: %q", unwanted)
 		}
 	}
 

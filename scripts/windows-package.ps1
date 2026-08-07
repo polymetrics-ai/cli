@@ -20,16 +20,18 @@ if ($Version -notmatch $VersionInfoPattern) {
 }
 $MsiVersion = "{0}.{1}.{2}" -f $Matches[1], $Matches[2], $Matches[3]
 
+# arm64 is deliberately absent. pm embeds DuckDB as its query engine and its only
+# Parquet implementation, and go-duckdb ships no prebuilt library for
+# windows/arm64 — so an arm64 pm.exe cannot be produced at all, and one built
+# without cgo could not read or write a warehouse table. The amd64 build runs on
+# Windows-on-ARM under emulation. The UpgradeCode for arm64 is kept in the
+# comment rather than deleted, so the same MSI upgrade identity is reused if
+# go-duckdb ever ships the library: EFEAFAA1-4276-509D-945A-D4F9BF7DBA30.
 $Architectures = @(
     [pscustomobject]@{
         GoArch = 'amd64'
         WixArch = 'x64'
         UpgradeCode = '34C3F556-5634-5381-AE18-E1668FDECFA7'
-    },
-    [pscustomobject]@{
-        GoArch = 'arm64'
-        WixArch = 'arm64'
-        UpgradeCode = 'EFEAFAA1-4276-509D-945A-D4F9BF7DBA30'
     }
 )
 
@@ -61,7 +63,8 @@ try {
         try {
             $env:GOOS = 'windows'
             $env:GOARCH = $arch.GoArch
-            $env:CGO_ENABLED = '0'
+            # cgo is required, not optional: DuckDB is linked into every build.
+            $env:CGO_ENABLED = '1'
             & go build -trimpath -ldflags "-s -w -X polymetrics.ai/internal/cli.version=$MsiVersion" -o $exePath ./cmd/pm
             if ($LASTEXITCODE -ne 0) {
                 throw "go build failed for windows/$($arch.GoArch) with exit code $LASTEXITCODE"

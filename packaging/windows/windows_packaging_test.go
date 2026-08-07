@@ -49,10 +49,15 @@ func TestWindowsPackagingReadmeDocumentsStableUpgradeCodes(t *testing.T) {
 	for _, want := range []string{
 		`PolymetricsAI.PolymetricsCLI`,
 		`{34C3F556-5634-5381-AE18-E1668FDECFA7}`,
+		// The arm64 UpgradeCode stays documented even though the target is not
+		// published, so the same MSI upgrade identity is reused if it returns.
 		`{EFEAFAA1-4276-509D-945A-D4F9BF7DBA30}`,
 		`%ProgramFiles%\Polymetrics\CLI\pm.exe`,
 		`arm64`,
 		`x64`,
+		// Why arm64 is unpublished has to be written down where a packager
+		// looks, or its absence reads as an oversight.
+		`not published`,
 	} {
 		if !strings.Contains(readme, want) {
 			t.Fatalf("README.md missing %q", want)

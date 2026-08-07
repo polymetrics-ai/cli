@@ -58,8 +58,11 @@ jobs:
         shell: pwsh
         run: .\scripts\verify-windows-package.ps1 -Version '0.0.0' -DistDir 'dist\windows' -InstallX64
 
-      - name: Record arm64 publication gate
+      - name: Record the arm64 publication gate
         shell: pwsh
         run: |
-          Write-Host 'arm64 executable and MSI structure were built and verified.'
-          Write-Host 'Native Windows arm64 install/run/uninstall proof remains required before the first WinGet arm64 publication.'
+          Write-Host 'x64 executable and MSI structure were built and verified.'
+          Write-Host 'arm64 is NOT built or published: pm embeds DuckDB and go-duckdb ships no'
+          Write-Host 'windows/arm64 library, so no arm64 pm.exe can be produced. The x64 build'
+          Write-Host 'runs on Windows-on-ARM under emulation. The Verify workflow asserts the'
+          Write-Host 'library is still absent, so a go-duckdb release adding it fails loudly.'

@@ -138,15 +138,34 @@ different costs:
 | **C.** Native matrix + hand-rolled archives and `nfpm` CLI | no licence | highest — rewrites a signed, attested release path by hand |
 | **D.** Publish a smaller matrix until one of the above lands | none | a product decision about which platforms ship |
 
-Route A is the only one that costs nothing and changes nothing else, and the single thing that
-decides it cannot be established by reading or on a developer Mac. So `verify.yml` gains a
-**non-blocking `cross-toolchain-probe` job** that attempts all five targets from one Linux host with
-zig and prints a `RESULT <target>: OK|FAILED` line for each. Its output is the input to the
-decision. It is `continue-on-error: true` — it reports, it does not gate.
+### The probe answered: route A is dead
 
-Until that decision is made, `package-check` on this PR fails at the goreleaser step. That is the
-honest state: the release build genuinely cannot produce darwin and windows artifacts from a Linux
-host with cgo, and hiding it would be worse than showing it.
+CI ran the probe. **All five targets failed, including `linux/amd64` — the runner's own
+architecture**, which is the finding that settles it:
+
+```
+RESULT linux/amd64:   FAILED
+RESULT linux/arm64:   FAILED    ld.lld: undefined symbol: typeinfo for std::bad_weak_ptr
+RESULT windows/amd64: FAILED    lld-link: undefined symbol: std::__cxx11::basic_string<...>::reserve()
+RESULT darwin/amd64:  FAILED    unable to find dynamic system library 'resolv'
+RESULT darwin/arm64:  FAILED    unable to find dynamic system library 'resolv'
+```
+
+A native-architecture build failing proves the blocker is **not cross-compilation**. `libduckdb.a`
+is a C++ library, and the link needs a matching C++ standard library — `-lc++` on the darwin link
+line, libstdc++ symbols on the others. zig does not supply one compatible with a prebuilt archive
+built by someone else's toolchain. No flag fixes that; it is the wrong tool for linking against a
+third-party C++ static library.
+
+**Per the captain's ruling — A if green, B if not — this selects B: GoReleaser Pro**, with a native
+build matrix feeding the `prebuilt` builder. That is a purchasing decision and is not this agent's
+to make; it is recorded here and raised.
+
+Route C (hand-rolled archives and `nfpm`) was **ruled out by the captain**: it puts the risk on the
+signed and attested path, which is the worst place for it. That ruling stands regardless of the
+probe.
+
+Until B lands, `release / package-check` fails on the PR. Deliberately visible.
 
 ## Gates run
 

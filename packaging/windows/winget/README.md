@@ -12,7 +12,7 @@ Before the first external PR:
 
 1. Build the final Windows executable bytes.
 2. Sign and RFC 3161 timestamp the executables through the approved HSM-backed provider.
-3. Build the x64 and arm64 WiX MSIs from those signed executable bytes.
+3. Build the x64 WiX MSI from those signed executable bytes. arm64 is not published: go-duckdb ships no windows/arm64 library, so no arm64 pm.exe exists.
 4. Sign and timestamp the MSI files.
 5. Verify signatures, publisher/chain/timestamp, install, upgrade, and uninstall on Windows.
 6. Compute `InstallerSha256` from the final signed MSI bytes only after signing is complete.

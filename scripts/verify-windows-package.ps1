@@ -22,16 +22,15 @@ $MsiVersion = "{0}.{1}.{2}" -f $Matches[1], $Matches[2], $Matches[3]
 $FileVersion = "{0}.0" -f $MsiVersion
 $DistPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($DistDir)
 
+# arm64 is deliberately absent: go-duckdb ships no windows/arm64 library, so no
+# arm64 pm.exe exists to package. Its reserved UpgradeCode is
+# {EFEAFAA1-4276-509D-945A-D4F9BF7DBA30}, kept here so the same MSI upgrade
+# identity is reused if the target ever comes back.
 $Architectures = @(
     [pscustomobject]@{
         GoArch = 'amd64'
         WingetArch = 'x64'
         UpgradeCode = '{34C3F556-5634-5381-AE18-E1668FDECFA7}'
-    },
-    [pscustomobject]@{
-        GoArch = 'arm64'
-        WingetArch = 'arm64'
-        UpgradeCode = '{EFEAFAA1-4276-509D-945A-D4F9BF7DBA30}'
     }
 )
 

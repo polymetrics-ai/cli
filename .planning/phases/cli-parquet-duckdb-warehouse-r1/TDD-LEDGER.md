@@ -188,6 +188,32 @@ The live run is proof the path works; it is **not** proof it scales. At 74 rows 
 reached the schema-inference bound cycle 3 found, which is why that defect was caught by a written
 test rather than by this exercise. Both kinds of evidence were needed.
 
+### Red — cycle 4, found by CI on the pushed branch
+
+Three test fixtures hand-wrote a **root-level warehouse JSONL table**, which cycle 2's refusal
+correctly rejects. They were missed locally because `go test ./internal/connectors/` does not
+include `./internal/connectors/certify/`, and because the root-level half of the refusal landed
+after the earlier `internal/cli` run.
+
+```
+--- FAIL: TestSampleOutboxWriteLifecycleAgainstRealCLI
+    reverse plan create: exit 1 stderr=error: warehouse tables are stored as Parquet,
+    but 1 table(s) are still JSONL (.../warehouse/cert_write_seed_sample.jsonl)
+--- FAIL: TestReverseETLToGitHubCreatesPullRequestAfterApproval
+--- FAIL: TestGitHubCommandWriteUsesReversePlanApproval
+```
+
+The refusal is right and the fixtures were wrong: they wrote a format the binary under test
+refuses. All three now seed through `warehouse.WriteTable`, so a fixture can no longer drift from
+the format a sync produces — the same treatment the layout and connector fixtures already got.
+
+The lesson is recorded rather than just fixed: **`./internal/connectors/` does not cover
+`./internal/connectors/certify/`.** Scope local runs with `/...` or name the subpackage.
+
+### Green — cycle 4
+
+`internal/connectors/certify` and `internal/cli` both green.
+
 ## Local verification
 
 `gofmt` · `go vet ./...` · `go build ./cmd/pm` · `internal/app` (218s) · `internal/warehouse` ·
