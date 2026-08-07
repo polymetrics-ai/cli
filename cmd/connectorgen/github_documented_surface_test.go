@@ -182,10 +182,17 @@ func TestGitHubDocumentedRESTSurfaceIsComplete(t *testing.T) {
 	for _, want := range []string{
 		"GET /orgs/{org}", // organization scope
 		"GET /user",       // authenticated-user scope
-		"GET /enterprises/{enterprise}/copilot/billing/seats", // enterprise scope
-		"GET /app/hook/config",                                // GitHub App scope + webhook management
-		"POST /markdown",                                      // a POST that is semantically a read
-		"GET /teams/{team_id}",                                // a deprecated legacy operation, still counted
+		// Enterprise scope. This pin previously named
+		// "GET /enterprises/{enterprise}/copilot/billing/seats", which the
+		// artifact does not document at all — Copilot billing is org-scoped
+		// (/orgs/{org}/copilot/billing/seats). A pin for an endpoint the
+		// provider never published can never pass once the surface is complete,
+		// so it is replaced with a real enterprise-scope GET rather than
+		// dropped; the scope it was written to guard is still guarded.
+		"GET /enterprises/{enterprise}/code-security/configurations",
+		"GET /app/hook/config", // GitHub App scope + webhook management
+		"POST /markdown",       // a POST that is semantically a read
+		"GET /teams/{team_id}", // a deprecated legacy operation, still counted
 	} {
 		if !seen[want] {
 			t.Errorf("expected %q — the shipped bundle enumerated only /repos/{owner}/{repo}/…", want)
