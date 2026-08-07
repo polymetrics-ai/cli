@@ -36,6 +36,16 @@ const (
 	WALDirName = "wal"
 	// TablesDirName holds a connection's derived table materializations.
 	TablesDirName = "tables"
+	// TableFileExt is the extension of a materialized table. A table is one
+	// Parquet file, never a directory of parts: a directory cannot be renamed
+	// into place over an existing one, so swapping it opens a window in which a
+	// reader sees no table at all while its rows sit intact on disk. Parts were
+	// measured and bought no read or write parallelism at our scale.
+	TableFileExt = ".parquet"
+	// LegacyTableFileExt is the extension materialized tables had before the
+	// Parquet switch. It is only ever read, as evidence that a warehouse
+	// predates this format.
+	LegacyTableFileExt = ".jsonl"
 	// LegacyRawDirName is the removed flat layout's shared raw log directory.
 	// It is only ever read, as evidence that a warehouse predates this layout.
 	LegacyRawDirName = "_pm_raw"
@@ -185,6 +195,30 @@ func (e *LegacyLayoutError) Error() string {
 			"Tables are now stored per connection under <workspace-id>/<connector>/<connection-id>/%s/. "+
 			"Delete %s and re-run your syncs to rebuild it; pm will not rewrite or delete warehouse data for you",
 		e.Dir, e.Evidence, TablesDirName, e.Dir,
+	)
+}
+
+// LegacyTableFormatError reports a warehouse whose tables were materialized as
+// JSONL, before Parquet became the table format. It is not read and not
+// deleted: reading it would work today and be silently stale the moment a sync
+// writes the Parquet table beside it, leaving two files for one table name with
+// no way for a reader to tell which is current. The write-ahead log is
+// untouched, so re-running the sync rebuilds the table losslessly.
+type LegacyTableFormatError struct {
+	Files []string
+}
+
+func (e *LegacyTableFormatError) Error() string {
+	if e == nil || len(e.Files) == 0 {
+		return "warehouse table format is unavailable"
+	}
+	return fmt.Sprintf(
+		"warehouse tables are stored as Parquet, but %d table(s) are still JSONL (%s). "+
+			"These predate the Parquet format and are not read, because a sync would write the Parquet table "+
+			"beside them and leave two files for one table name. "+
+			"Delete them and re-run the owning connection's sync to rebuild each table from its write-ahead log, "+
+			"which is untouched; pm will not rewrite or delete warehouse data for you",
+		len(e.Files), strings.Join(e.Files, ", "),
 	)
 }
 
