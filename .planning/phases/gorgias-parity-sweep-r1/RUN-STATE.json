@@ -1,0 +1,49 @@
+{
+  "phase": "gorgias-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "gorgias",
+  "state": "planned",
+  "generated_from": "MASTER-PLAN.json",
+  "landing_order": 6,
+  "artifact": {
+    "url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r (gorgias-rest-api.json, OpenAPI 3.1.0, bound to the STABLE ReadMe docs version 1.5.1)",
+    "kind": "openapi",
+    "oas_version": "3.1.0",
+    "retrieved_at": "2026-08-07",
+    "bytes": 852105
+  },
+  "operations": {
+    "documented_total": 114,
+    "by_method": {
+      "GET": 46,
+      "POST": 23,
+      "PUT": 27,
+      "DELETE": 18
+    },
+    "read": 50,
+    "write": 64,
+    "deprecated": 1,
+    "ledger_total": 114,
+    "delta_vs_ledger": 0,
+    "ledger_verdict": "reconciles_exactly",
+    "webhook_events": 0
+  },
+  "hazards": {
+    "blocks_connectorgen_batch": false,
+    "path_collapse": false,
+    "nested_resources": false,
+    "spec_fragmented": false
+  },
+  "issues": {
+    "parent": 196,
+    "generation": "old",
+    "children_verified": null
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/gorgias_api_surface_test.go",
+    "red_confirmed": true,
+    "red_failure": "=== RUN   TestGorgiasAPISurfaceOperationLedger\n    gorgias_api_surface_test.go:64: operation_ledger_version = 0, want 1\n    gorgias_api_surface_test.go:67: api_surface declares 11 rows, want 114 documented operations\n    gorgias_api_surface_test.go:120: 7 legacy excluded row(s) remain; operation_ledger_version mode requires operation rows\n    gorgias_api_surface_test.go:123: covered(4)+blocked(0) = 4, want 114 rows\n    gorgias_api_surface_test.go:133: GET: 9 rows, want 46\n    gorgias_api_surface_test.go:133: POST: 1 rows, want 23\n    gorgias_api_surface_test.go:133: PUT: 1 rows, want 27\n    gorgias_api_surface_test.go:133: DELETE: 0 rows, want 18\n    gorgias_api_surface_test.go:146: expected documented endpoint \"GET /api/tickets\"\n    gorgias_api_surface_test.go:146: expected documented endpoint \"GET /api/customers\"\n    gorgias_api_surface_test.go:146: expected documented endpoint \"GET /api/messages\"\n    gorgias_api_surface_test.go:146: expected documented endpoint \"GET /api/satisfaction-surveys\"\n    gorgias_api_surface_test.go:146: expected documented endpoint \"POST /api/upload\"\n    gorgias_api_surface_test.go:146: expected documented endpoint \"GET /api/{file_type}/download/{domain_hash}/{resource_name}\"\n--- FAIL: TestGorgiasAPISurfaceOperationLedger (0.00s)\nFAIL\nFAIL\tpolymetrics.ai/cmd/connectorgen\t12.300s\nFAIL\n\nObserved via: go test ./cmd/connectorgen/ (whole package, plus a -v -run TestGorgias pass for the annotated trace above), run against the pre-implementation bundle state (git-stashed bundle authoring work, confirming a genuine failure against the disk-committed 11-row legacy-excluded api_surface.json, not a re-derivation from the plan).",
+    "green": false
+  },
+  "next_action": "author the bundle to green: operations.json, cli_surface.json, writes.json, api_surface.json (114 rows), metadata.json, docs.md"
+}
