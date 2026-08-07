@@ -26,6 +26,7 @@ docs) are regenerated **once at the very end**, not per connector.
 | gmail | 79 | ✅ on branch `d1bacbfe1` (66 covered + 13 blocked; `pm gmail` did not exist before) |
 | lever-hiring | 106 | ✅ on branch `0829543e6` (60 covered + 46 blocked) |
 | greenhouse | 138 | ✅ on branch (127 covered + 11 blocked; `pm greenhouse` did not exist before) |
+| help-scout | **144** | ✅ on branch (139 covered + 5 blocked; ledger said 146, derivation 145 — see finding 22) |
 | gorgias | 114 | ✅ **separate open PR #3896** — leave it alone, do not fold |
 | notion | 51 | ✅ MERGED #3894 |
 | gong | 69 | ✅ MERGED #3895 |
@@ -51,19 +52,49 @@ docs) are regenerated **once at the very end**, not per connector.
   the last being exactly the error found in lever-hiring.
   Re-entered in the work order at its size position (see the ordered list below).
 
-## Remaining work order — 22 connectors, SMALLEST FIRST
+## Remaining work order — 21 connectors, ⇄ LARGEST FIRST
 
 Commit **and push** after every single connector, and tick it here in the same step.
 
-`~~greenhouse 138~~ ✅ · help-scout 145 · google-ads 163 · segment 197 · twilio 197 ·
-quickbooks 198 · intercom 231 · xero 235 · front 244 · asana 249 · trello 261 · monday 292 ·
-bamboo-hr 311 · bitbucket 331 · square 334 · **marketo ~320-367 (count TBD)** · chargebee 438 ·
-linear 538 · stripe 589 · jira 616 · zendesk-support 625 · workday-rest 920 · github 1220`
+> ### ⇄ ORDER REVERSED — LARGEST FIRST (captain, 2026-08-07). Eat the frog.
+>
+> **This supersedes the smallest-first order.** The four giants land FIRST, not last. Re-sorted by
+> re-derived operation count descending from `MASTER-PLAN.json`.
 
-**marketo is slotted after square 334 on its lower bound (320) rounded to its position among the
-three candidate counts.** Its true size is unknown until re-derived, so if the derivation lands well
-above 367 it should be re-slotted later rather than forced through in place — the smallest-first
-order exists so a bad day costs a small connector.
+`github 1220 · workday-rest 920 · zendesk-support 625 · jira 616 · stripe 589 · linear 538 ·
+chargebee 438 · **marketo ~320-367 (count TBD)** · square 334 · bitbucket 331 · bamboo-hr 311 ·
+monday 292 · trello 261 · asana 249 · front 244 · xero 235 · intercom 231 · quickbooks 198 ·
+segment 197 · twilio 197 · google-ads 163`
+
+Already delivered on this branch and NOT in the order above: ~~greenhouse 138~~ ✅,
+~~help-scout 144~~ ✅ (both landed under the previous smallest-first order).
+
+**marketo is slotted on its UPPER candidate (367), between chargebee 438 and square 334.** Its true
+size is unknown until re-derived under the captain's scope ruling, and the three candidate counts
+(320 / 327 / 367) straddle that slot. If the derivation lands materially outside the range,
+**re-slot it by its real count** rather than forcing it through in place.
+
+### What largest-first changes about the method — one addition, nothing removed
+
+Every existing rule stands unchanged: red test **written AND run AND captured** before authoring ·
+one commit per connector · **push after each** · no paging flags hand-authored · GSD planning
+evidence under `.planning/` (`PLAN` + `RUN-STATE` + `TDD-LEDGER` + `SUMMARY` + `VERIFICATION`).
+
+**Added, because the giants will not fit one context:** for a connector too large to finish in one
+context, **commit and push incremental progress inside it** rather than holding one giant
+uncommitted change. A workable slicing for github 1220 / workday-rest 920:
+
+1. red test + derived-operation inventory (`DERIVED-OPERATIONS.json`) + `PLAN.md`/`RUN-STATE.json` —
+   commit, push;
+2. `api_surface.json` dispositions — commit, push;
+3. streams / writes / operations — commit, push;
+4. `cli_surface.json` + full binary reachability sweep — commit, push;
+5. `SUMMARY.md` + `VERIFICATION.md` — commit, push.
+
+Each slice must leave the tree **green on its own gates** (`connectorgen validate`, whole
+`cmd/connectorgen`, runtime preflight) — an intermediate commit may leave the connector's own red
+test still red, and that is fine and honest, but it must never leave a **different** connector or a
+shared gate broken. Say which slice you stopped on in `RUN-STATE.json.next_action`.
 
 Per connector: **write the red test against the REAL bundle → run it → watch it fail → record the
 verbatim failure** in `RUN-STATE.json` + `TDD-LEDGER.md` → author to green → `connectorgen validate`
@@ -151,6 +182,47 @@ command → one commit → push → tick.
     is the reachability win without the restructure. Whoever revisits greenhouse should model them as
     direct reads. **This is the stream-vs-direct-read judgement for this connector; it is a choice,
     not an oversight.**
+22. **⚠️ THE SWEEP'S OWN DERIVATIONS CAN DOUBLE-COUNT QUERY-STRING VARIANTS TOO.** help-scout came in
+    at 146 (ledger, = doc pages), 145 (sweep derivation) and **144** (strict policy). The derivation
+    deduped on the **literal example** path, which catches a variant only when the two example URLs
+    happen to be byte-identical. It caught `original-source` (documented once per `Accept` header,
+    same literal line) and **missed** `DELETE /v2/customers/{customerId}` vs
+    `…/100?async=true`. **Always dedup on the TEMPLATED path the provider publishes**, never on the
+    example URL. This is the lever-hiring defect class recurring in a different provider's docs, and
+    it will recur again. Put `if strings.Contains(ep.Path, "?")` in every red test.
+23. **A collapsed count can silently misname the surviving thing.** When two doc pages collapse to
+    one operation, whichever page wins the dedup also supplies the title — and therefore the write
+    action's name. help-scout's async page won, which would have shipped
+    `delete-customer-asynchronously` on a path that performs the **synchronous** delete. **Name
+    actions for the endpoint, and re-express the losing page's behaviour as a flag** (here `--async`
+    with `omit_when_absent`), so collapsing the count never loses a documented behaviour.
+24. **A wildcard row is not an operation.** help-scout shipped `GET /v2/reports/*` as one excluded
+    row standing for **33** distinct report endpoints. Add `if strings.Contains(ep.Path, "*")` to
+    every red test.
+25. **Do not assume `id` is the primary key.** help-scout's user statuses key on `userId`;
+    `connectorgen validate` rejects an assumed key as `primary_key_missing`. Take stream primary keys
+    from the record the provider actually returns.
+26. **A `direct_read` command needs NO `operations.json` entry.**
+    `commandrunner.validateDirectReadCommand` accepts exactly one GET `api_surface` endpoint plus an
+    explicit `output_policy`. Only **operation-backed** reads go through the endpoint ledger, which
+    is why help-scout's 49 direct reads add zero ledger entries. Simplest reachable shape for a
+    detail GET; gmail uses it too.
+27. **`api_surface` rows carry the DOCUMENTED path; streams/writes carry base-relative paths.**
+    `engine.normalizeDirectReadPathForBaseURL` strips a base path prefix the request path actually
+    starts with — so `/v2/…` resolves correctly against a `/v2` base, and `/v3/…` does not. That
+    asymmetry *is* the out-of-base rule, and it is worth checking rather than assuming per connector.
+28. **The GSD contract in `AGENTS.md` outranks a dispatch brief that omits it** (captain, 2026-08-07).
+    Every connector needs `PLAN.md` + `RUN-STATE.json` + `TDD-LEDGER.md` **and** `SUMMARY.md` (with
+    the `coverage:` frontmatter block) + `VERIFICATION.md`, with the lifecycle and
+    `scripts/gsd sources` provenance recorded in `.planning/traces/`. Gate:
+    `GSD_BASE_REF=origin/main ./scripts/verify-gsd-workflow`. Note `scripts/gsd` is a **Node** script
+    — `bash scripts/gsd` dies with a syntax error; use `./scripts/gsd`.
+29. **Host hazard: a full disk corrupts the SHARED 55 GB Go build cache.** `go test` then fails to
+    *build* with `could not import <pkg> (open …/go-build/XX/<hash>-d: no such file or directory)`,
+    **a different missing entry on each retry**, so it looks like a code error and is not
+    self-healing while disk is tight. It recovered on its own once space was freed. If it happens
+    mid-red, **commit the test with `red_confirmed: false` and an explicit blocker rather than
+    authoring on unobserved evidence** — that is what help-scout did.
 
 ## Honest note on pace
 
@@ -404,11 +476,14 @@ links per connector live in `MASTER-PLAN.json`.
 | 29 | quickbooks | unknown | **198** | — | planned |
 | 30 | workday-rest | unknown | **920** | — | planned |
 
-## ⇒ RESUME HERE — smallest-first work order, one commit+push per connector
+## ⇒ RESUME HERE — ⇄ LARGEST-FIRST work order, one commit+push per connector
 
-Branch: **`fm/cli-top50-sweep-consolidated`**. Order is **ascending by re-derived count** so the four
-giants land last. **Commit AND PUSH after every single connector** so a context loss costs at most
-one. Update the tick-box below in the same step.
+Branch: **`fm/cli-top50-sweep-continue-r1`** (cut from `fm/cli-top50-sweep-consolidated` @
+`bedb9b0a3`). Order is **DESCENDING by re-derived count — eat the frog** (captain, 2026-08-07,
+reversing the original smallest-first order). **github 1220 and workday-rest 920 go first.**
+**Commit AND PUSH after every single connector** so a context loss costs at most one, and **within**
+an oversized connector commit and push each slice rather than holding one giant uncommitted change.
+Update the tick-box below in the same step.
 
 ### 🛑 mixpanel (#2) — STOPPED AND RECORDED, not forced. Bigger than the plan said.
 
@@ -546,34 +621,41 @@ fail** → record the verbatim failure in `RUN-STATE.json` + `TDD-LEDGER.md` →
 **push** → update this list. Shared artifacts (endpoint ledger, website catalogs, golden transcripts)
 are regenerated **once at the very end**, not per connector.
 
+### Delivered (landed under the previous smallest-first order — not redone)
+
+| Connector | Ops | Done |
+| --- | ---: | --- |
+| gmail | 79 | ✅ `d1bacbfe1` — 79 rows, 66 covered + 13 blocked, 66 cmds all reachable |
+| lever-hiring | 106 | ✅ `0829543e6` — 117 preserved rows → **106**; 60 covered + 46 blocked; 60 cmds all reachable |
+| greenhouse | 138 | ✅ — 138 rows, 127 covered + 11 blocked, 127 cmds all reachable |
+| help-scout | **144** | ✅ — 144 rows (ledger 146, derivation 145; both deltas dedup), 139 covered + 5 blocked, 139 cmds all reachable |
+
+### ⇄ REMAINING — LARGEST FIRST (captain, 2026-08-07). Work top to bottom.
+
 | # | Connector | Ops | Done |
 | ---: | --- | ---: | :--: |
-| 1 | gmail | 79 | ✅ `d1bacbfe1` — 79 rows, 66 covered + 13 blocked, 66 cmds all reachable |
-| — | ~~mixpanel~~ | 104 | 🛑 **DEFERRED to its own task.** Red test moved OFF the sweep branch (it would keep `cmd/connectorgen` red for a connector this PR does not deliver); preserved on `fm/cli-mixpanel-parity-sweep-r1`. |
-| 3 | lever-hiring | 106 | ✅ `0829543e6` — 117 preserved rows → **106**; 60 covered + 46 blocked; 60 cmds all reachable |
-| 4 | greenhouse | 138 | ✅ — 138 rows, 127 covered + 11 blocked, 127 cmds all reachable |
-| 5 | help-scout | 145 | ☐ |
-| 6 | google-ads | 163 | ☐ |
-| 7 | segment | 197 | ☐ |
-| 8 | twilio | 197 | ☐ |
-| 9 | quickbooks | 198 | ☐ |
-| 10 | intercom | 231 | ☐ |
-| 11 | xero | 235 | ☐ |
-| 12 | front | 244 | ☐ |
-| 13 | asana | 249 | ☐ |
-| 14 | trello | 261 | ☐ |
-| 15 | monday | 292 | ☐ |
-| 16 | bamboo-hr | 311 | ☐ |
-| 17 | bitbucket | 331 | ☐ |
-| 18 | square | 334 | ☐ |
-| 18a | marketo | **TBD** | ☐ — **unblocked by captain ruling `DECISION-marketo-scope.md`.** Full surface incl. Adobe v2 Assets, subject to BOTH conditions. Count must be re-derived, not picked; explain the delta vs 320 / 327 / 367 and the ledger's 322. |
-| 19 | chargebee | 438 | ☐ |
-| 20 | linear | 538 | ☐ |
-| 21 | stripe | 589 | ☐ |
-| 22 | jira | 616 | ☐ |
-| 23 | zendesk-support | 625 | ☐ |
-| 24 | workday-rest | 920 | ☐ |
-| 25 | github | 1220 | ☐ |
+| 1 | **github** | **1220** | ☐ — 🐸 **the frog.** Its 270 webhook events live under `x-webhooks`, NOT the standard block (finding 13): an inventory checking only `webhooks` records zero for the largest connector. Slice it (see the work order above). |
+| 2 | **workday-rest** | **920** | ☐ — ledger recorded `unknown`; 920 is freshly derived, so it has no cross-check. Derive it twice by different routes before trusting it. Slice it. |
+| 3 | zendesk-support | 625 | ☐ |
+| 4 | jira | 616 | ☐ |
+| 5 | stripe | 589 | ☐ |
+| 6 | linear | 538 | ☐ — **538 vs 539**, one Mutation field (finding 11); resolve at red-test time by diffing the field-name sets. |
+| 7 | chargebee | 438 | ☐ — `connectorgen batch` blocker: OAS 3.1 + top-level `webhooks` (227 events). Hand-author around the gate; do not relax it (finding 12). |
+| 8 | marketo | **TBD** | ☐ — **unblocked by captain ruling `DECISION-marketo-scope.md`.** Full surface incl. Adobe v2 Assets, subject to BOTH conditions. Count must be **re-derived, not picked**; explain the delta vs 320 / 327 / 367 and the ledger's 322. Slotted on its upper candidate; re-slot if the real count lands outside the range. |
+| 9 | square | 334 | ☐ |
+| 10 | bitbucket | 331 | ☐ |
+| 11 | bamboo-hr | 311 | ☐ — `connectorgen batch` blocker: OAS 3.1 + top-level `webhooks` (6 events). |
+| 12 | monday | 292 | ☐ — resume from `fm/cli-monday-parity-wave02-r1-preserve-20260807`, do not restart. |
+| 13 | trello | 261 | ☐ |
+| 14 | asana | 249 | ☐ |
+| 15 | front | 244 | ☐ — ledger 255, derived 244 (−11); expect a dedup story, and check for query-string variants first (finding 22). |
+| 16 | xero | 235 | ☐ |
+| 17 | intercom | 231 | ☐ — ledger 324, derived **231** (−93), corroborated three ways. Resume from `fm/cli-intercom-parity-wave01-r1-preserve-20260807`. |
+| 18 | quickbooks | 198 | ☐ — ledger recorded `unknown`; 198 is freshly derived and has no cross-check. |
+| 19 | segment | 197 | ☐ |
+| 20 | twilio | 197 | ☐ |
+| 21 | google-ads | 163 | ☐ |
+| — | ~~mixpanel~~ | 104 | 🛑 **DEFERRED to its own task.** Red test moved OFF the sweep branch (it would keep `cmd/connectorgen` red for a connector this PR does not deliver); preserved on `fm/cli-mixpanel-parity-sweep-r1`. Its WIP deletion of `schemas/annotations.json` is **WRONG** and must never be folded in. |
 
 Already on the branch: **chatwoot** (148, folded, verified). Separate and open: **gorgias #3896**
 (114). Merged: **notion #3894** (51), **gong #3895** (69).
