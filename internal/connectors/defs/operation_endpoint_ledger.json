@@ -9617,7 +9617,140 @@
   "ip2whois": [],
   "iterable": [],
   "jamf-pro": [],
-  "jira": [],
+  "jira": [
+    {
+      "method": "POST",
+      "path": "/rest/api/3/app/field/context/configuration/list",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/changelog/bulkfetch",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/comment/list",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/expression/analyse",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/expression/eval",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/expression/evaluate",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issue/bulkfetch",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/issue/{issueIdOrKey}/changelog/list",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/jql/autocompletedata",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/jql/function/computation/search",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/jql/match",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/jql/parse",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/jql/pdcleaner",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/jql/sanitize",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/priorityscheme/mappings",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/search",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/search/approximate-count",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/search/jql",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/workflow/history/list",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/workflows/preview",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/rest/api/3/worklog/list",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/rest/atlassian-connect/1/migration/workflow/rule/search",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    }
+  ],
   "jobnimbus": [],
   "jotform": [],
   "judge-me-reviews": [],

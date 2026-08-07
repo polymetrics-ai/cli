@@ -54,13 +54,13 @@ var jiraMethodSplit = map[string]int{
 // endpoints. A wildcard row is not an operation (finding 24), so this is a
 // restructure and the count moves from 15 to 617.
 const (
-	jiraCoveredRows = 592
-	jiraBlockedRows = 25
+	jiraCoveredRows = 590
+	jiraBlockedRows = 27
 )
 
 // jiraBlockedClasses is the whole remaining gap, by cause. Jira's spec is
 // exhaustive about paths and specific about payloads, which is why the blocked
-// set is small -- and every one of the 25 is blocked by something a reader can
+// set is small -- and every one of the 27 is blocked by something a reader can
 // go and check in engine/, not by a shared-foundation issue number.
 //
 //	unbounded_body   12  bodies Atlassian declares as arbitrary JSON: nine
@@ -90,16 +90,27 @@ const (
 //	                     covers a top-level array; nothing emits a top-level
 //	                     scalar, and body_type none would send the request with
 //	                     the documented value silently dropped.
+//	unbindable_read_body
+//	                  2  read-shaped POSTs whose required body field `payload`
+//	                     is an object. cli_surface flag types are boolean,
+//	                     string, integer, number, enum and string_array, so an
+//	                     object has no flag form; validate then refuses the
+//	                     `implemented` claim and covered_by.direct_read accepts
+//	                     only an implemented command. A WRITE may be `partial`
+//	                     and still cover its row -- a read may not, which is why
+//	                     the same missing capability blocks here and downgrades
+//	                     there.
 //
 // A DELETE is deliberately NOT blocked for "no request body": it is addressed
 // by its path, so that is its normal shape, not a missing contract -- the same
 // judgement zendesk-support made for the same reason.
 var jiraBlockedClasses = map[string]int{
-	"unbounded_body":  12,
-	"dynamic_key_map": 5,
-	"raw_binary_body": 3,
-	"empty_contract":  3,
-	"scalar_body":     2,
+	"unbounded_body":       12,
+	"dynamic_key_map":      5,
+	"raw_binary_body":      3,
+	"empty_contract":       3,
+	"scalar_body":          2,
+	"unbindable_read_body": 2,
 }
 
 // jiraStreamRows are the three operations the shipped bundle already covers as
@@ -168,6 +179,24 @@ var jiraReadShapedPOSTs = []string{
 	"POST /rest/atlassian-connect/1/migration/workflow/rule/search",
 }
 
+// jiraUnbindableReadPOSTs are the two read-shaped POSTs that must stay BLOCKED,
+// and they are blocked for a reason that is not about read-versus-write at all.
+// Both /workflows/create/validation and /workflows/update/validation require a
+// body field `payload` that is an OBJECT. Every cli_surface flag type is a
+// scalar or a string array, so nothing can carry it; validate then refuses the
+// `implemented` claim, and covered_by.direct_read accepts only an implemented
+// command.
+//
+// They are pinned separately from jiraReadShapedPOSTs because the two
+// assertions differ: those 22 must be covered as reads, these 2 must be blocked
+// naming this capability, and neither may EVER be covered by a write. Folding
+// them together would let a future regeneration quietly promote a validation
+// endpoint behind a reverse-ETL approval gate, or quietly block one of the 22.
+var jiraUnbindableReadPOSTs = []string{
+	"POST /rest/api/3/workflows/create/validation",
+	"POST /rest/api/3/workflows/update/validation",
+}
+
 // jiraWriteShapedPOST is the inverse pin, and it is the one the keyword pass
 // actually got wrong. POST /rest/api/3/issue/properties matches "list" in its
 // operationId (bulkSetIssuesPropertiesList) and its description reads "Sets or
@@ -189,6 +218,8 @@ func jiraBlockedDependencyClass(notes string) string {
 		return "empty_contract"
 	case strings.Contains(notes, "unconstrained JSON value"):
 		return "unbounded_body"
+	case strings.Contains(notes, "structured-document flag type"):
+		return "unbindable_read_body"
 	default:
 		return ""
 	}
@@ -369,24 +400,42 @@ func TestJiraDocumentedSurfaceIsComplete(t *testing.T) {
 			"mutation", jiraBinaryTrap, cb)
 	}
 
-	// Read-shaped POSTs must be covered as READS. Asserting presence alone
-	// would pass on a surface that shipped a JQL search behind a reverse-ETL
-	// approval gate.
+	// Read-shaped POSTs must never be covered by a WRITE -- that holds for all
+	// 24, including the two that cannot be covered at all. Shipping any of them
+	// as a write would put a plan/preview/approval gate in front of a lookup.
+	unbindableRead := map[string]bool{}
+	for _, name := range jiraUnbindableReadPOSTs {
+		unbindableRead[name] = true
+	}
 	for _, want := range jiraReadShapedPOSTs {
 		if !seen[want] {
 			t.Errorf("expected read-shaped POST %q", want)
 			continue
 		}
 		cb := coveredBy[want]
-		if cb == nil {
-			t.Errorf("%s: read-shaped POST is not covered by a command", want)
-			continue
-		}
 		if _, ok := cb["write"]; ok {
 			t.Errorf("%s: read-shaped POST is covered by a WRITE; it queries and stores nothing", want)
 		}
 		if _, ok := cb["writes"]; ok {
 			t.Errorf("%s: read-shaped POST is covered by a WRITE; it queries and stores nothing", want)
+		}
+		if unbindableRead[want] {
+			if cb != nil {
+				t.Errorf("%s: covered by %v, but its required body field `payload` is an object and "+
+					"no cli_surface flag type can carry one", want, cb)
+			}
+			continue
+		}
+		if cb == nil {
+			t.Errorf("%s: read-shaped POST is not covered by a command", want)
+		}
+	}
+
+	// ... and the two that ARE blocked must say so for this reason, not by
+	// inheriting some other class's note.
+	for _, want := range jiraUnbindableReadPOSTs {
+		if !seen[want] {
+			t.Errorf("expected blocked read-shaped POST %q", want)
 		}
 	}
 

@@ -291,6 +291,14 @@ BLOCK_NOTES = {
         "scalar value_types only, so an object-valued map has no bounded record contract. "
         "Unblocks when dynamic_fields accepts a declared object value shape.",
     ),
+    "unbindable_read_body": (
+        "the provider declares a required request-body field for this read that has no scalar leaf",
+        "Named dependency: cli_surface flag types are boolean, string, integer, number, enum and "
+        "string_array (engine/schema/cli_surface.schema.json), so an object-valued required body "
+        "field has no flag form; connectorgen validate's checkCLISurfaceOperationBodyMappings then "
+        "refuses the 'implemented' claim, and covered_by.direct_read accepts only an implemented "
+        "command. Unblocks when a structured-document flag type exists.",
+    ),
     "empty_contract": (
         "the provider's published spec documents no bindable request field for this operation: no "
         "request body, no path variable and no required query parameter",
@@ -366,6 +374,51 @@ def body_schema_of(artifact_op, deref):
 # --------------------------------------------------------------------------
 # Emission
 # --------------------------------------------------------------------------
+
+
+def read_body_flags(body_schema):
+    """Flags binding a read-shaped POST's REQUIRED body fields, or the reason it
+    cannot be `implemented`.
+
+    connectorgen validate's checkCLISurfaceOperationBodyMappings requires an
+    implemented operation-backed direct read to bind every required body path,
+    and it uses the SAME requiredMappingPaths recursion the write side uses --
+    so this mirrors the write-side flag builder rather than restating it, and
+    binds the scalar LEAF: `body.queries.0.query`, not `body.queries`.
+    (google-calendar already ships `body.items.0.id`, so an array-element leaf
+    is a supported mapping target rather than a guess.)
+
+    A required path with no scalar leaf -- cli_surface flag types are boolean,
+    string, integer, number, enum and string_array, and none of them carries an
+    object -- returns as unbindable. `covered_by.direct_read` in turn requires
+    an IMPLEMENTED command, so such a row cannot be covered at all and the
+    caller blocks it. That is finding 4's rule reaching its stronger conclusion
+    on the read side: a write can be `partial` and still cover its row; a read
+    cannot.
+    """
+    flags, unbindable = [], []
+    for dotted in required_mapping_paths(body_schema):
+        leaf = resolve_leaf(body_schema, dotted)
+        if dotted.split(".")[-1] in CREDENTIAL_FIELDS:
+            unbindable.append(dotted)
+            continue
+        ftype = flag_type_for(leaf)
+        if ftype is None:
+            unbindable.append(dotted)
+            continue
+        flag = {
+            "name": kebab(dotted.replace(".", "-")),
+            "type": ftype,
+            "summary": first_sentence((leaf or {}).get("description"))
+            or ("Request body field %s." % dotted),
+            "maps_to": "body.%s" % dotted,
+            "required": True,
+        }
+        if ftype == "string" and (leaf or {}).get("enum"):
+            flag["type"] = "enum"
+            flag["values"] = [str(v) for v in leaf["enum"]]
+        flags.append(flag)
+    return flags, unbindable
 
 
 def path_flags(op):
@@ -517,17 +570,38 @@ def build(bundle, derived, artifact, mode):
                     "body_schema": schema,
                 },
             })
-            commands.append({
+            body_flags, unbindable = read_body_flags(schema)
+            if unbindable:
+                reason, note = BLOCK_NOTES["unbindable_read_body"]
+                rows.append({
+                    "method": op["method"],
+                    "path": op["path"],
+                    "operation": {
+                        "model": "direct_read",
+                        "status": "blocked",
+                        "risk": "low",
+                        "blocked_by_default": True,
+                        "reason": reason + " (" + ", ".join(sorted(unbindable)) + ")",
+                        "source_url": ARTIFACT,
+                        "notes": note,
+                    },
+                })
+                operations.pop()
+                stats["blocked_unbindable_read_body"] += 1
+                blocked_detail["unbindable_read_body"].append(key)
+                continue
+            command = {
                 "path": op["command"],
                 "summary": summary_of(op),
                 "intent": "direct_read",
                 "availability": "implemented",
                 "operation": oid,
                 "source_url": DOCS,
-                "flags": path_flags(op),
+                "flags": path_flags(op) + body_flags,
                 "api_surface": [{"method": op["method"], "path": op["path"]}],
                 "output_policy": "json_redacted",
-            })
+            }
+            commands.append(command)
             rows.append({"method": op["method"], "path": op["path"],
                          "covered_by": {"direct_reads": [op["command"]]}})
             stats["post_shaped_read"] += 1
