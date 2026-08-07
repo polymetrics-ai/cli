@@ -5458,6 +5458,72 @@
         "allow_overwrite": false,
         "extract_archives": false
       }
+    },
+    {
+      "id": "github.orgs_list_attestations_bulk",
+      "kind": "rest_read",
+      "summary": "List attestations by bulk subject digests",
+      "source_url": "https://docs.github.com/rest/orgs/attestations#list-attestations-by-bulk-subject-digests",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "POST",
+        "path": "/orgs/{org}/attestations/bulk-list",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "required": [
+            "subject_digests"
+          ],
+          "properties": {
+            "subject_digests": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "predicate_type": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "github.users_list_attestations_bulk",
+      "kind": "rest_read",
+      "summary": "List attestations by bulk subject digests",
+      "source_url": "https://docs.github.com/rest/users/attestations#list-attestations-by-bulk-subject-digests",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "POST",
+        "path": "/users/{username}/attestations/bulk-list",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "required": [
+            "subject_digests"
+          ],
+          "properties": {
+            "subject_digests": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "predicate_type": {
+              "type": "string"
+            }
+          }
+        }
+      }
     }
   ]
 }

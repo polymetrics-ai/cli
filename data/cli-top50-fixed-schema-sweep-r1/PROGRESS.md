@@ -18,24 +18,25 @@ worktree. Nothing is lost; nothing is uncommitted.**
 **Do NOT open the PR yet.** Shared artifacts (endpoint ledger, website catalogs, golden transcripts,
 docs) are regenerated **once at the very end**, not per connector.
 
-## ⇒ RESUME POINT — github slice 2 of 5
+## ⇒ RESUME POINT — workday-rest (920), the next connector in the largest-first order
 
-`github` is **in progress and sliced**. Slice 1 (red test observed + `DERIVED-OPERATIONS.json` +
-`PLAN.md` + `RUN-STATE.json`) is **committed and pushed**. Pick up at
-`.planning/phases/github-parity-sweep-r1/RUN-STATE.json` → `next_action`.
+**`github` is COMPLETE and pushed.** Its full documented surface is enumerated at **1220 REST + 4
+GraphQL**, and `TestGitHubDocumentedRESTSurfaceIsComplete` — red since slice 1 — now **passes**. The
+whole `cmd/connectorgen` package is green. See `.planning/phases/github-parity-sweep-r1/`
+(`SUMMARY.md`, `VERIFICATION.md`, `TDD-LEDGER.md`, `RUN-STATE.json`).
 
-**Slice 2 is: expand `api_surface.json` to 1220 REST + 4 GraphQL dispositioned rows.** Three things
-must happen in it, and all three are already evidenced in the plan:
+**Branch note:** work continued on **`fm/cli-top50-sweep-resume2-r1`**, cut from the tip of
+`fm/cli-top50-sweep-continue-r1` (`b1ceedc32`). History is continuous, so the one consolidated PR is
+unaffected; only the branch name changed, because the dispatch scaffold named the new branch.
 
-1. Add the **719 missing operations**. They are missing by whole **scope** — the bundle enumerated
-   only `/repos/{owner}/{repo}/…` and its own scope text says org-, user-, enterprise- and
-   admin-level surfaces were never enumerated. `DERIVED-OPERATIONS.json` holds all 1220 with
-   `operationId`, `summary`, `tags` and `deprecated`, so nothing needs re-fetching.
-2. **Drop the 4 synthetic `(close)`/`(reopen)` path rows.** They encode a behaviour variant into the
-   path; no such path is documented. Re-express as a flag or a `duplicate` disposition.
-3. **Update `TestGitHubAPISurfaceOperationLedgerMetrics`' expected counts** (509/440/69) — and keep
-   **every** structural assertion. Changing an expected value because the truth changed is not
-   relaxing a check; removing one would be.
+### One shared-code change landed with github, and every later connector inherits it
+
+**`covered_by.writes` now exists** — a plural array mirroring `covered_by.direct_reads`. Before it,
+a bundle modelling several write contracts over ONE documented path had nowhere to record the
+others, which is why github shipped `PATCH .../issues/{issue_number} (close)` and three siblings.
+**If a connector ahead of you has two write actions on one endpoint, use the array — do not invent a
+variant path.** notion (merged #3894) still carries the old defect and can now be converted; that is
+deliberately not folded in here.
 
 ## Done — 5 on the branch, plus 3 already resolved elsewhere
 
@@ -46,6 +47,7 @@ must happen in it, and all three are already evidenced in the plan:
 | lever-hiring | 106 | ✅ on branch `0829543e6` (60 covered + 46 blocked) |
 | greenhouse | 138 | ✅ on branch (127 covered + 11 blocked; `pm greenhouse` did not exist before) |
 | help-scout | **144** | ✅ on branch (139 covered + 5 blocked; ledger said 146, derivation 145 — see finding 22) |
+| **github** | **1220** | ✅ **on branch** (1126 covered + 98 blocked, +4 GraphQL counted separately; 461→1147 commands, 231→553 write actions; 1079 verified reachable by running the binary) |
 | gorgias | 114 | ✅ **separate open PR #3896** — leave it alone, do not fold |
 | notion | 51 | ✅ MERGED #3894 |
 | gong | 69 | ✅ MERGED #3895 |
@@ -80,7 +82,7 @@ Commit **and push** after every single connector, and tick it here in the same s
 > **This supersedes the smallest-first order.** The four giants land FIRST, not last. Re-sorted by
 > re-derived operation count descending from `MASTER-PLAN.json`.
 
-`github 1220 · workday-rest 920 · zendesk-support 625 · jira 616 · stripe 589 · linear 538 ·
+~~github 1220~~ ✅ · `workday-rest 920 · zendesk-support 625 · jira 616 · stripe 589 · linear 538 ·
 chargebee 438 · **marketo ~320-367 (count TBD)** · square 334 · bitbucket 331 · bamboo-hr 311 ·
 monday 292 · trello 261 · asana 249 · front 244 · xero 235 · intercom 231 · quickbooks 198 ·
 segment 197 · twilio 197 · google-ads 163`
