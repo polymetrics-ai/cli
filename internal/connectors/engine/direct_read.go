@@ -115,9 +115,21 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if len(resp.Body) > maxBytes {
 		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read response too large: %d bytes exceeds limit %d", len(resp.Body), maxBytes)
 	}
-	decoded, err := decodeDirectReadBody(resp.Body, maxBytes)
-	if err != nil {
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read response is not JSON: %w", err)
+	var decoded any
+	if method == http.MethodHead {
+		// HEAD responses never carry a body (RFC 9110 §9.3.2) — there is
+		// nothing to JSON-decode. The provider's status code is itself the
+		// entire signal a status-only "check" command exists to surface;
+		// operationDirectReadSpec already requires this HEAD-shaped
+		// operation to declare output_policy "json_redacted", so the
+		// redaction/policy pipeline below still runs uniformly over this
+		// small synthetic object rather than special-casing HEAD out of it.
+		decoded = map[string]any{"status_code": resp.Status}
+	} else {
+		decoded, err = decodeDirectReadBody(resp.Body, maxBytes)
+		if err != nil {
+			return connectors.DirectReadResult{}, fmt.Errorf("operation direct read response is not JSON: %w", err)
+		}
 	}
 	decoded, err = applyDirectReadOutputPolicy(policy, decoded)
 	if err != nil {
@@ -172,11 +184,14 @@ func operationDirectReadSpec(b Bundle, operation string) (OperationSpec, error) 
 		return OperationSpec{}, fmt.Errorf("operation direct read requires rest_read or provider_search operation, got %q", op.Kind)
 	}
 	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
-	if method != http.MethodGet && method != http.MethodPost {
-		return OperationSpec{}, fmt.Errorf("operation direct read requires GET or POST, got %s", method)
+	if method != http.MethodGet && method != http.MethodPost && method != http.MethodHead {
+		return OperationSpec{}, fmt.Errorf("operation direct read requires GET, POST, or HEAD, got %s", method)
 	}
 	if op.Kind == "provider_search" && method != http.MethodPost {
 		return OperationSpec{}, fmt.Errorf("provider search requires POST, got %s", method)
+	}
+	if op.Kind == "rest_read" && method == http.MethodHead && op.OutputPolicy != directReadPolicyJSONRedacted {
+		return OperationSpec{}, fmt.Errorf("operation direct read HEAD (status-only, no response body) requires output_policy %q, got %q", directReadPolicyJSONRedacted, op.OutputPolicy)
 	}
 	if isAbsoluteHTTPURL(op.REST.Path) {
 		return OperationSpec{}, fmt.Errorf("operation direct read endpoint must be connector-relative, got absolute URL")

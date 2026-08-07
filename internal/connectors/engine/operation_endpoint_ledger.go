@@ -49,7 +49,7 @@ func validateOperationEndpointLedgerEntries(entries []OperationEndpointLedgerEnt
 	seen := make(map[string]struct{}, len(entries))
 	for i, entry := range entries {
 		method := strings.ToUpper(strings.TrimSpace(entry.Method))
-		if method != entry.Method || (method != "GET" && method != "POST") {
+		if method != entry.Method || (method != "GET" && method != "POST" && method != "HEAD") {
 			return fmt.Errorf("entry %d has unsupported method %q", i+1, entry.Method)
 		}
 		if strings.TrimSpace(entry.Path) == "" || strings.TrimSpace(entry.Path) != entry.Path || isAbsoluteHTTPURL(entry.Path) || strings.HasPrefix(entry.Path, "//") {
@@ -81,7 +81,7 @@ func deriveOperationDirectReadEndpointLedger(operations []OperationSpec, surface
 			continue
 		}
 		method := strings.ToUpper(strings.TrimSpace(operation.REST.Method))
-		if (method != "GET" && method != "POST") || operation.REST.Path == "" || operation.REST.MaxBytes <= 0 {
+		if (method != "GET" && method != "POST" && method != "HEAD") || operation.REST.Path == "" || operation.REST.MaxBytes <= 0 {
 			continue
 		}
 		if !hasOperationDirectReadSurfaceEndpoint(surface, method, operation.REST.Path) {

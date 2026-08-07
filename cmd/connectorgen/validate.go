@@ -677,10 +677,10 @@ func checkAPISurface(b engine.Bundle) []Finding {
 					})
 				}
 				method := strings.ToUpper(strings.TrimSpace(ep.Method))
-				if method != "GET" && method != "POST" {
+				if method != "GET" && method != "POST" && method != "HEAD" {
 					findings = append(findings, Finding{
 						Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceCoverage,
-						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_read must use GET or POST", i, ep.Method, ep.Path),
+						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_read must use GET, POST, or HEAD", i, ep.Method, ep.Path),
 					})
 				}
 			}
@@ -905,8 +905,8 @@ func checkCLISurfaceOperationSafety(
 		return findings
 	}
 	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
-	if method != "GET" && method != "POST" {
-		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q must use GET or POST, got %s", i, cmd.Path, cmd.Operation, method)})
+	if method != "GET" && method != "POST" && method != "HEAD" {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q must use GET, POST, or HEAD, got %s", i, cmd.Path, cmd.Operation, method)})
 	}
 	if isAbsoluteHTTPURL(op.REST.Path) {
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q must use connector-relative path", i, cmd.Path, cmd.Operation)})
@@ -1533,10 +1533,11 @@ func cliFlagTypeMatchesSchema(flagType string, node *cliRecordSchemaNode) bool {
 
 // directReadMethodRequirement names the methods a direct read command may
 // reference, matching commandrunner: operation-backed commands may POST for
-// bounded read-queries, endpoint-backed commands are GET-only.
+// bounded read-queries or HEAD for a status-only existence check,
+// endpoint-backed commands are GET-only.
 func directReadMethodRequirement(cmd engine.CLICommand) string {
 	if cmd.Operation != "" {
-		return "GET or POST"
+		return "GET, POST, or HEAD"
 	}
 	return "GET"
 }
@@ -1581,10 +1582,11 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 		}
 		for _, ep := range cmd.APISurface {
 			// Operation-backed direct reads may use POST for bounded
-			// read-queries; endpoint-backed ones stay GET-only. This mirrors
-			// commandrunner exactly.
+			// read-queries or HEAD for a status-only existence check;
+			// endpoint-backed ones stay GET-only. This mirrors commandrunner
+			// exactly.
 			method := strings.ToUpper(strings.TrimSpace(ep.Method))
-			if method != "GET" && (cmd.Operation == "" || method != "POST") {
+			if method != "GET" && (cmd.Operation == "" || (method != "POST" && method != "HEAD")) {
 				findings = append(findings, Finding{
 					Connector: b.Name,
 					File:      "cli_surface.json",
