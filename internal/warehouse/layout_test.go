@@ -257,6 +257,19 @@ func TestFindTableReportsAmbiguityInsteadOfPickingAWinner(t *testing.T) {
 	if _, err := FindTable(root, "records", "unknown"); err == nil {
 		t.Fatal("FindTable(unknown connection) error = nil, want rejection")
 	}
+
+	// A root-level table shares the namespace but has no owning connection, so
+	// it is named plainly rather than rendered as an empty entry.
+	if err := os.WriteFile(filepath.Join(root, "records.jsonl"), []byte(`{"id":"direct"}`+"\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	_, err = FindTable(root, "records", "")
+	if !errors.As(err, &ambiguous) {
+		t.Fatalf("FindTable(with root table) error = %T %v, want *AmbiguousTableError", err, err)
+	}
+	if !strings.Contains(ambiguous.Error(), unattributedConnectionLabel) {
+		t.Fatalf("ambiguity error %q does not name the unattributed table", ambiguous.Error())
+	}
 	if _, err := FindTable(root, "missing", ""); err == nil {
 		t.Fatal("FindTable(missing table) error = nil, want rejection")
 	}
