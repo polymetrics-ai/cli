@@ -1,0 +1,68 @@
+{
+  "phase": "chatwoot-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "chatwoot",
+  "state": "red_confirmed",
+  "generated_from": "MASTER-PLAN.json",
+  "landing_order": 8,
+  "artifact": {
+    "url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json",
+    "kind": "openapi",
+    "oas_version": "3.1.0",
+    "retrieved_at": "2026-08-07",
+    "bytes": 488785
+  },
+  "operations": {
+    "documented_total": 148,
+    "by_method": {
+      "GET": 64,
+      "POST": 42,
+      "PATCH": 22,
+      "DELETE": 18,
+      "PUT": 2
+    },
+    "read": 64,
+    "write": 84,
+    "deprecated": 0,
+    "ledger_total": 146,
+    "delta_vs_ledger": 2,
+    "ledger_verdict": "ledger_stale",
+    "webhook_events": 10
+  },
+  "hazards": {
+    "blocks_connectorgen_batch": false,
+    "path_collapse": true,
+    "nested_resources": false,
+    "spec_fragmented": false
+  },
+  "issues": {
+    "parent": 148,
+    "generation": "old",
+    "children_verified": null
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/chatwoot_api_surface_test.go",
+    "red_confirmed": true,
+    "red_failure": "=== RUN   TestChatwootAPISurfaceOperationLedger\n    chatwoot_api_surface_test.go:59: operation_ledger_version = 0, want 1\n--- FAIL: TestChatwootAPISurfaceOperationLedger (0.00s)\nFAIL\tpolymetrics.ai/cmd/connectorgen\t0.508s\nFAIL",
+    "green": false,
+    "_note": "red_confirmed and red_failure MUST be filled from OBSERVED test output. Never pre-fill."
+  },
+  "disposition_partition": {
+    "documented_total": 148,
+    "executable": 101,
+    "blocked_with_named_dependency_or_unsupported": 47,
+    "covered_by": {
+      "stream": 7,
+      "write": 60,
+      "direct_read": 34
+    },
+    "blocked_models": {
+      "direct_read": 23,
+      "admin_reverse_etl": 13,
+      "sensitive_reverse_etl": 9,
+      "disallowed": 1,
+      "duplicate": 1
+    }
+  },
+  "next_action": "author the bundle to green: api_surface.json (148 rows), cli_surface.json + operations.json (new files), writes.json (extend 6 -> 60 actions)"
+}
