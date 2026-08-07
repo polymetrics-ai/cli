@@ -1284,9 +1284,17 @@ func (w Warehouse) Catalog(ctx context.Context, cfg RuntimeConfig) (Catalog, err
 	if err := w.Check(ctx, cfg); err != nil {
 		return Catalog{}, err
 	}
-	tables, err := warehouse.Tables(warehousePath(cfg))
+	tables, faults, err := warehouse.Tables(warehousePath(cfg))
 	if err != nil {
 		return Catalog{}, err
+	}
+	// A damaged ownership record hides only its own connection's tables. The
+	// catalog still lists every healthy connection's, because one connection's
+	// problem stays that connection's problem. It is reported only when there
+	// is nothing left to list, so an incomplete catalog is never mistaken for
+	// an empty warehouse.
+	if len(tables) == 0 && len(faults) > 0 {
+		return Catalog{}, warehouse.FaultsError("", faults)
 	}
 	owners := make(map[string][]string, len(tables))
 	for _, table := range tables {

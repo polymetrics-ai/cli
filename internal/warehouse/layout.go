@@ -410,23 +410,93 @@ type Table struct {
 	Owner      Owner
 }
 
+// Fault is a connection directory whose ownership record exists but cannot be
+// read. It is deliberately NOT an error returned from the scan: the whole point
+// of nesting per connection is that one connection's problem stays that
+// connection's problem, so a single damaged record must not deny reads of
+// tables owned by connections whose records are healthy. Callers surface a
+// fault when it could explain what they failed to find, and otherwise carry on.
+type Fault struct {
+	Dir  string
+	File string
+	Err  error
+}
+
+func (f Fault) Error() string {
+	return fmt.Sprintf("warehouse directory %s has an unreadable ownership record at %s: %v", f.Dir, f.File, f.Err)
+}
+
+func (f Fault) Unwrap() error { return f.Err }
+
+// FaultError reports that a read could not be answered while one or more
+// ownership records were unreadable. It names every damaged record and the
+// recovery step, so the operator is never told a table does not exist when a
+// damaged record is the reason it was not found.
+type FaultError struct {
+	Table  string
+	Faults []Fault
+}
+
+func (e *FaultError) Error() string {
+	if e == nil || len(e.Faults) == 0 {
+		return "warehouse ownership records are unreadable"
+	}
+	records := make([]string, 0, len(e.Faults))
+	for _, fault := range e.Faults {
+		records = append(records, fault.File)
+	}
+	subject := "the warehouse"
+	if e.Table != "" {
+		subject = fmt.Sprintf("warehouse table %q", e.Table)
+	}
+	return fmt.Sprintf(
+		"%s could not be resolved because %d ownership record(s) are unreadable (%s). "+
+			"Tables owned by connections with healthy records are unaffected. "+
+			"Restore or remove the damaged record and re-run the connection's sync to rewrite it; "+
+			"pm will not rewrite or delete warehouse data for you",
+		subject, len(e.Faults), strings.Join(records, ", "),
+	)
+}
+
+// FaultsError builds the error a caller returns when it could not answer and
+// unreadable ownership records could be the reason. It returns nil when there
+// are no faults, so callers can use it unconditionally. Every fault is
+// relevant when a lookup came back empty, because any of them could be the
+// directory the missing table lived in.
+func FaultsError(table string, faults []Fault) error {
+	if len(faults) == 0 {
+		return nil
+	}
+	return &FaultError{Table: table, Faults: faults}
+}
+
 // Tables lists every materialized table under root, sorted by table name then
-// owning connection. A connection directory with no ownership record at all is
-// skipped: an unowned directory is not a table anyone may read as if it
-// belonged to them. A record that exists but cannot be read is reported
-// instead, because the write path already refuses exactly that case; silently
-// dropping the rows here would tell the operator the table does not exist
-// while it sits intact on disk.
-func Tables(root string) ([]Table, error) {
+// owning connection, alongside any connection directories whose ownership
+// record could not be read.
+//
+// A connection directory with no ownership record at all is skipped: an unowned
+// directory is not a table anyone may read as if it belonged to them. A record
+// that exists but cannot be read is a Fault rather than a skip, because the
+// write path already refuses exactly that case; silently dropping the rows here
+// would tell the operator the table does not exist while it sits intact on disk.
+//
+// A fault is returned beside the healthy tables rather than in place of them.
+// Aborting the scan would turn one damaged file into a total outage that also
+// denied every healthy connection's tables, which is the opposite of what
+// nesting per connection is for: one connection's problem stays that
+// connection's problem.
+func Tables(root string) ([]Table, []Fault, error) {
 	if err := CheckLegacyLayout(root); err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	out := make([]Table, 0)
+	faults := make([]Fault, 0)
 	// <root>/<workspace>/<connector>/<connection>/tables/<table>.jsonl
 	matches, err := filepath.Glob(filepath.Join(root, "*", "*", "*", TablesDirName, "*.jsonl"))
 	if err != nil {
-		return nil, fmt.Errorf("scan warehouse tables: %w", err)
+		return nil, nil, fmt.Errorf("scan warehouse tables: %w", err)
 	}
+	faulted := make(map[string]struct{})
 	for _, path := range matches {
 		info, err := os.Stat(path)
 		if err != nil || info.IsDir() {
@@ -438,7 +508,16 @@ func Tables(root string) ([]Table, error) {
 			continue
 		}
 		if err != nil {
-			return nil, fmt.Errorf("warehouse directory %s has an unreadable ownership record at %s: %w", connectionDir, filepath.Join(connectionDir, OwnerFileName), err)
+			// One fault per damaged directory, however many tables it holds.
+			if _, seen := faulted[connectionDir]; !seen {
+				faulted[connectionDir] = struct{}{}
+				faults = append(faults, Fault{
+					Dir:  connectionDir,
+					File: filepath.Join(connectionDir, OwnerFileName),
+					Err:  err,
+				})
+			}
+			continue
 		}
 		out = append(out, Table{
 			Path:       path,
@@ -454,7 +533,7 @@ func Tables(root string) ([]Table, error) {
 	// removes. A sync never writes here.
 	unattributed, err := filepath.Glob(filepath.Join(root, "*.jsonl"))
 	if err != nil {
-		return nil, fmt.Errorf("scan warehouse root tables: %w", err)
+		return nil, nil, fmt.Errorf("scan warehouse root tables: %w", err)
 	}
 	for _, path := range unattributed {
 		if info, err := os.Stat(path); err != nil || info.IsDir() {
@@ -471,14 +550,15 @@ func Tables(root string) ([]Table, error) {
 		}
 		return out[i].Connection < out[j].Connection
 	})
-	return out, nil
+	sort.Slice(faults, func(i, j int) bool { return faults[i].Dir < faults[j].Dir })
+	return out, faults, nil
 }
 
 // FindTable resolves one table by name, optionally scoped to a connection
 // display name or to UnattributedConnection for the root-level tables no
 // connection owns. It reports ambiguity rather than picking a winner.
 func FindTable(root, table, connection string) (Table, error) {
-	tables, err := Tables(root)
+	tables, faults, err := Tables(root)
 	if err != nil {
 		return Table{}, err
 	}
@@ -496,6 +576,13 @@ func FindTable(root, table, connection string) (Table, error) {
 	case 1:
 		return matches[0], nil
 	case 0:
+		// A damaged ownership record could be exactly why nothing matched, so
+		// it is reported instead of claiming the table does not exist. Telling
+		// an operator a table is absent while its rows sit on disk is the
+		// silent-absence failure this layout exists to remove.
+		if err := FaultsError(table, faults); err != nil {
+			return Table{}, err
+		}
 		switch connection {
 		case "":
 			return Table{}, fmt.Errorf("no warehouse table %q; run a sync to materialize it", table)
