@@ -25,10 +25,9 @@ const sealedSentinel = "SEALED-SENTINEL-VALUE"
 // state.json and rendered by `--json`. A write action declaring
 // redact_fields:["encrypted_value"] must not have that value reproduced there.
 //
-// ConnectorCommandRecord deliberately keeps the unredacted record: approve and
-// execute read it back from the persisted plan to issue the real request, so
-// redacting it would make the plan unexecutable. That copy is nil'd at the CLI
-// boundary by safeReversePlanForOutput rather than at rest.
+// ConnectorCommandRecord withholds the same fields outright: the key is absent
+// at rest, and the operator re-supplies it from the same command flag at
+// preview/approve, where the existing plan-hash check re-binds it.
 func TestPlanConnectorCommandRedactsDeclaredWriteActionFields(t *testing.T) {
 	ctx := context.Background()
 	root := t.TempDir()
@@ -80,10 +79,13 @@ func TestPlanConnectorCommandRedactsDeclaredWriteActionFields(t *testing.T) {
 	if got := plan.Sample[0]["key_id"]; got != "568250167242549743" {
 		t.Fatalf("sample key_id = %#v, want it preserved (only declared fields are redacted)", got)
 	}
-	// The executable copy is intact, otherwise approve/execute would send
-	// the literal "redacted" to the API.
-	if got := plan.ConnectorCommandRecord["encrypted_value"]; got != sealedSentinel {
-		t.Fatalf("ConnectorCommandRecord encrypted_value = %#v, want the record still executable", got)
+	// The executable copy withholds the declared field entirely: absent, not
+	// a placeholder that execute would happily dispatch.
+	if _, present := plan.ConnectorCommandRecord["encrypted_value"]; present {
+		t.Fatalf("ConnectorCommandRecord = %#v, want encrypted_value withheld entirely", plan.ConnectorCommandRecord)
+	}
+	if got := plan.ConnectorCommandRecord["secret_name"]; got != "DEPLOY_KEY" {
+		t.Fatalf("ConnectorCommandRecord secret_name = %#v, want undeclared fields kept", got)
 	}
 
 	reopened, err := app.Open(root)
