@@ -1290,11 +1290,26 @@ func (w Warehouse) Catalog(ctx context.Context, cfg RuntimeConfig) (Catalog, err
 	}
 	owners := make(map[string][]string, len(tables))
 	for _, table := range tables {
+		// A root-level table has no owning connection; naming one would
+		// attribute rows to a connection that never produced them.
+		if table.Connection == "" {
+			owners[table.Name] = append(owners[table.Name], "")
+			continue
+		}
 		owners[table.Name] = append(owners[table.Name], table.Connection)
 	}
 	streams := make([]Stream, 0, len(owners))
 	for name, connections := range owners {
-		description := "Warehouse table " + name + " (connection " + strings.Join(connections, ", ") + ")"
+		named := make([]string, 0, len(connections))
+		for _, connection := range connections {
+			if connection != "" {
+				named = append(named, connection)
+			}
+		}
+		description := "Warehouse table " + name
+		if len(named) > 0 {
+			description += " (connection " + strings.Join(named, ", ") + ")"
+		}
 		streams = append(streams, Stream{Name: name, Description: description})
 	}
 	sort.Slice(streams, func(i, j int) bool { return streams[i].Name < streams[j].Name })
