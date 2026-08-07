@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector warehouse [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Local JSONL warehouse destination used by the dependency-free MVP.
+  Local Parquet warehouse destination queried by the embedded DuckDB engine.
 
 ICON
   id: pm-warehouse
@@ -30,7 +30,7 @@ CONFIGURATION
   path: Local warehouse directory.
 
 ETL STREAMS
-  tables: Local JSONL warehouse tables.
+  tables: Local Parquet warehouse tables.
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

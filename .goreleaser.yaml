@@ -10,11 +10,17 @@ release:
   replace_existing_artifacts: true
 
 builds:
+  # pm embeds DuckDB: it is the query engine and the only Parquet implementation
+  # in the binary, so cgo is required rather than optional. go-duckdb bundles a
+  # static library for darwin, linux/{amd64,arm64} and windows/amd64, but none
+  # for windows/arm64 — that target is therefore not buildable and is ignored
+  # below rather than silently produced without a working warehouse. The
+  # windows/amd64 build runs on Windows-on-ARM under emulation.
   - id: pm
     main: ./cmd/pm
     binary: pm
     env:
-      - CGO_ENABLED=0
+      - CGO_ENABLED=1
     mod_timestamp: "{{ .CommitTimestamp }}"
     goos:
       - linux
@@ -23,6 +29,9 @@ builds:
     goarch:
       - amd64
       - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
     ldflags:
       - -s -w
       - -X polymetrics.ai/internal/cli.version={{ .Version }}

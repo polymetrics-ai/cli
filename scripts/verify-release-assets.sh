@@ -51,13 +51,15 @@ while [[ $# -gt 0 ]]; do
   shift
 done
 
+# windows/arm64 is deliberately absent. pm embeds DuckDB, and go-duckdb ships no
+# prebuilt library for that target, so a windows/arm64 binary cannot be produced
+# at all. The windows/amd64 build runs there under emulation.
 archive_targets=(
   "darwin amd64 tar.gz pm"
   "darwin arm64 tar.gz pm"
   "linux amd64 tar.gz pm"
   "linux arm64 tar.gz pm"
   "windows amd64 zip pm.exe"
-  "windows arm64 zip pm.exe"
 )
 
 package_targets=(

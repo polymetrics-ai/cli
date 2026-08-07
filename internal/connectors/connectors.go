@@ -1264,7 +1264,7 @@ func (Warehouse) Metadata() Metadata {
 		Name:            "warehouse",
 		DisplayName:     "Local Warehouse",
 		IntegrationType: "database",
-		Description:     "Local JSONL warehouse destination used by the dependency-free MVP.",
+		Description:     "Local Parquet warehouse destination queried by the embedded DuckDB engine.",
 		Capabilities:    Capabilities{Check: true, Catalog: true, Read: true, Write: true, Query: true},
 	}
 }
@@ -1361,13 +1361,17 @@ func warehouseWriteTable(req WriteRequest) (string, error) {
 	return warehouse.PathComponent("table", table)
 }
 
-// ValidateWrite refuses a table name this connector could never write before
-// the caller commits to it. A reverse plan is stored and approved ahead of the
-// write it performs, and there is no way to edit a stored plan, so a name
-// rejected only at write time would leave an approved plan that can never run.
+// ValidateWrite refuses a write this connector could never perform before the
+// caller commits to it. A reverse plan is stored and approved ahead of the
+// write it performs, and there is no way to edit a stored plan, so a refusal
+// that only arrives at write time would leave an approved plan that can never
+// run. It asks the same two questions Write does, in the same order, rather
+// than carrying its own copy of either.
 func (Warehouse) ValidateWrite(_ context.Context, req WriteRequest, _ []Record) error {
-	_, err := warehouseWriteTable(req)
-	return err
+	if _, err := warehouseWriteTable(req); err != nil {
+		return err
+	}
+	return warehouse.CheckLegacyTableFormat(warehousePath(req.Config))
 }
 
 func (Warehouse) Write(ctx context.Context, req WriteRequest, records []Record) (WriteResult, error) {
@@ -1380,6 +1384,12 @@ func (Warehouse) Write(ctx context.Context, req WriteRequest, records []Record) 
 	}
 	component, err := warehouseWriteTable(req)
 	if err != nil {
+		return WriteResult{}, err
+	}
+	// pm does not write into a warehouse it will not read. Reads of a
+	// pre-Parquet warehouse are refused, so a write that reported success into
+	// one would tell the caller the rows landed somewhere nothing can resolve.
+	if err := warehouse.CheckLegacyTableFormat(dir); err != nil {
 		return WriteResult{}, err
 	}
 	path := filepath.Join(dir, component+warehouse.TableFileExt)

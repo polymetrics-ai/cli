@@ -68,6 +68,13 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	if err := warehouse.CheckLegacyLayout(dir); err != nil {
 		return etlExecutionResult{}, err
 	}
+	// pm does not write into a warehouse it will not read. Without this, a sync
+	// into a pre-Parquet warehouse reported records loaded and exit status 0
+	// while every read of that warehouse was refused — an operator told at once
+	// that the sync worked and that the table cannot be read.
+	if err := warehouse.CheckLegacyTableFormat(dir); err != nil {
+		return etlExecutionResult{}, err
+	}
 	if err := os.MkdirAll(dir, 0o700); err != nil {
 		return etlExecutionResult{}, fmt.Errorf("create warehouse directory: %w", err)
 	}

@@ -65,7 +65,7 @@ func Compare(ctx context.Context, req CompareRequest) (Comparison, error) {
 	comparison := Comparison{
 		DependencyFree: free,
 		Explanation: map[string]string{
-			"dependency_free": "Uses local JSON state, AES-GCM file vault, JSONL warehouse/outbox, and in-process ETL/reverse ETL. It has no database, cache, or workflow server requirement.",
+			"dependency_free": "Uses local JSON state, AES-GCM file vault, an embedded DuckDB engine over Parquet warehouse tables, a JSONL outbox, and in-process ETL/reverse ETL. It has no database, cache, or workflow server requirement.",
 			"runtime_backed":  "Uses the same local ETL path plus external runtime checks, Dragonfly lease coordination, and PostgreSQL run-ledger writes. Temporal is health-checked as the durable workflow target.",
 		},
 	}
@@ -109,7 +109,7 @@ func CompareSyncModes(ctx context.Context, req SyncModeBenchmarkRequest) (SyncMo
 	return SyncModeBenchmark{
 		Records: req.Records,
 		Results: results,
-		Explanation: "Synthetic dependency-free benchmark using local JSONL file source and local JSONL warehouse destination. " +
+		Explanation: "Synthetic dependency-free benchmark using a local JSONL file source and the local Parquet warehouse destination. " +
 			"Deduped modes include raw history and final materialization cost.",
 	}, nil
 }

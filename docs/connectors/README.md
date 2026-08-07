@@ -517,7 +517,7 @@
 - [vitally](vitally/MANUAL.md): Reads and writes Vitally customer-success accounts, users, notes, conversations, tasks, and NPS responses via the Vitally REST API.
 - [vwo](vwo/MANUAL.md): Reads and writes VWO (Visual Website Optimizer) A/B testing campaigns.
 - [waiteraid](waiteraid/MANUAL.md): Reads and writes WaiterAid restaurant reservations, meals, guests, and queue entries.
-- [warehouse](warehouse/MANUAL.md): Local JSONL warehouse destination used by the dependency-free MVP.
+- [warehouse](warehouse/MANUAL.md): Local Parquet warehouse destination queried by the embedded DuckDB engine.
 - [wasabi-stats-api](wasabi-stats-api/MANUAL.md): Reads Wasabi account and bucket storage statistics from the Wasabi Stats API.
 - [watchmode](watchmode/MANUAL.md): Reads Watchmode title search results, streaming sources, regions, networks, genres, list-titles, releases, per-title details/sources/seasons/episodes/cast-crew, and person details. Read-only.
 - [weatherstack](weatherstack/MANUAL.md): Reads current, historical, forecast, marine, and location-autocomplete weather data from Weatherstack. Read-only.

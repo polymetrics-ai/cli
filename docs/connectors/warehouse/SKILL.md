@@ -7,7 +7,7 @@ description: Local Warehouse connector knowledge and safe action guide.
 
 ## Purpose
 
-Local JSONL warehouse destination used by the dependency-free MVP.
+Local Parquet warehouse destination queried by the embedded DuckDB engine.
 
 ## Icon
 
@@ -32,7 +32,7 @@ Local JSONL warehouse destination used by the dependency-free MVP.
 
 ## ETL Streams
 
-- tables: Local JSONL warehouse tables.
+- tables: Local Parquet warehouse tables.
 
 ## Sync Modes
 

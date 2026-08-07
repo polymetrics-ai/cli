@@ -2,6 +2,7 @@ package connectors
 
 import (
 	"context"
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -97,8 +98,14 @@ func TestWarehouseValidateWriteAgreesWithWrite(t *testing.T) {
 		{Stream: "records", Table: "."},
 		{Stream: "", Table: ""},
 		{Stream: "sub/stream", Table: ""},
+		// A warehouse still holding a pre-Parquet table refuses every write.
+		// The predictor has to know that too, or a reverse plan approved
+		// against such a warehouse could never run.
+		{Stream: "records", Config: legacyFormatWarehouseConfig(t)},
 	} {
-		req.Config = RuntimeConfig{Config: map[string]string{"path": t.TempDir()}}
+		if req.Config.Config == nil {
+			req.Config = RuntimeConfig{Config: map[string]string{"path": t.TempDir()}}
+		}
 		validated := (Warehouse{}).ValidateWrite(ctx, req, nil)
 		_, written := (Warehouse{}).Write(ctx, req, []Record{{"id": "a1"}})
 		if (validated == nil) != (written == nil) {
@@ -118,4 +125,15 @@ func writeWarehouseTableFixture(t *testing.T, path string, rows ...warehouse.Row
 	if err := warehouse.WriteTable(context.Background(), path, rows); err != nil {
 		t.Fatalf("write table fixture %s: %v", path, err)
 	}
+}
+
+// legacyFormatWarehouseConfig points at a warehouse still holding a table in
+// the pre-Parquet format.
+func legacyFormatWarehouseConfig(t *testing.T) RuntimeConfig {
+	t.Helper()
+	root := t.TempDir()
+	if err := os.WriteFile(filepath.Join(root, "left_over"+warehouse.LegacyTableFileExt), []byte(`{"id":"legacy-1"}`+"\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	return RuntimeConfig{Config: map[string]string{"path": root}}
 }

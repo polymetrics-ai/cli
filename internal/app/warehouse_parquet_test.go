@@ -243,3 +243,43 @@ func TestPreParquetJSONLTableIsRefusedAndLeftOnDisk(t *testing.T) {
 		t.Fatalf("the pre-Parquet table was not left on disk: %v", err)
 	}
 }
+
+// TestSyncRefusesAPreParquetWarehouseInsteadOfReportingSuccess is the write half
+// of the same contract, and it exists because the read half alone was not
+// enough: a sync into a warehouse whose reads are refused reported records
+// loaded and exit status 0, leaving an operator told the sync worked and told
+// the table cannot be read. pm does not write into a warehouse it will not
+// read. The legacy flat layout is already refused here for the same reason.
+func TestSyncRefusesAPreParquetWarehouseInsteadOfReportingSuccess(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("parquet_write_refusal", []connectors.Record{
+		{"id": "r1", "updated_at": "2026-08-06T00:00:00Z"},
+	})
+	a, connection := setupSyncModeApp(t, source, "full_refresh_overwrite")
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 10}); err != nil {
+		t.Fatalf("first RunETL() error = %v", err)
+	}
+	located := locateTable(t, a.warehouseRoot(), "records")
+
+	stale := filepath.Join(filepath.Dir(located.Path), "left_over"+warehouse.LegacyTableFileExt)
+	if err := os.WriteFile(stale, []byte(`{"id":"legacy-1"}`+"\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	before, err := os.ReadFile(stale)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 10})
+	var legacy *warehouse.LegacyTableFormatError
+	if !errors.As(err, &legacy) {
+		t.Fatalf("RunETL() into a pre-Parquet warehouse error = %T %v, want *warehouse.LegacyTableFormatError", err, err)
+	}
+	after, err := os.ReadFile(stale)
+	if err != nil {
+		t.Fatalf("the pre-Parquet table was not left on disk: %v", err)
+	}
+	if string(before) != string(after) {
+		t.Fatalf("the pre-Parquet table was rewritten: %q -> %q", before, after)
+	}
+}
