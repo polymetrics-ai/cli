@@ -1,0 +1,92 @@
+{
+  "phase": "zendesk-support-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "zendesk-support",
+  "state": "red",
+  "branch": "fm/cli-top50-sweep-resume2-r1",
+  "landing_order": "3 of 21 under the captain's largest-first reversal, behind github (1220, done) and workday-rest (907, done)",
+  "issue": {
+    "parent": 156,
+    "children_verified": [157, 162]
+  },
+  "artifact": {
+    "url": "https://developer.zendesk.com/zendesk/oas.yaml",
+    "kind": "openapi",
+    "retrieved_at": "2026-08-07",
+    "http_status": 200,
+    "bytes": 1701930,
+    "openapi": "3.0.3",
+    "info_title": "Support API",
+    "info_version": "2.0.0",
+    "note": "byte count matches MASTER-PLAN.json exactly, so the artifact is reproduced rather than trusted, and the derivation was re-run from it",
+    "parser_hazard": "PyYAML SafeLoader raises ConstructorError on this file as shipped: bare `=` scalars resolve to tag:yaml.org,2002:value, which SafeLoader has no constructor for. A constructor treating the tag as a plain string is registered in tools/derive_zendesk_support.py."
+  },
+  "operations": {
+    "documented_total": 625,
+    "paths": 434,
+    "by_method": {"GET": 325, "POST": 111, "PUT": 89, "DELETE": 86, "PATCH": 14},
+    "reads": 333,
+    "writes": 292,
+    "read_shaped_posts": 8,
+    "binary": 1,
+    "deprecated": 0,
+    "union_request_bodies": 3,
+    "carried_non_oas_rows": 6,
+    "ledger_carried_forward": 625,
+    "ledger_verdict": "reconciles_exactly — zero delta, the first in this sweep",
+    "ledger_note": "The provider ledger has been wrong six times (notion +1, intercom -93, lever-hiring ~-40, help-scout 146 query-string double-count, workday-rest 920 -> 916 -> 907). It reconciles here because Zendesk publishes a machine-readable spec keyed one operation per (method, path) rather than documentation pages. This is evidence about this artifact, not grounds to trust the next ledger.",
+    "drift": "none. 625 derived, 625 recorded, 625 in the shipped bundle's documented rows."
+  },
+  "baseline": {
+    "api_surface_endpoints": 631,
+    "documented_rows": 625,
+    "carried_rows": 6,
+    "covered": 122,
+    "covered_breakdown": {"stream": 33, "write": 89},
+    "blocked": 509,
+    "blocked_with_named_dependency": 0,
+    "cli_commands": 631,
+    "cli_availability": {"implemented": 95, "partial": 27, "planned": 509},
+    "operations_json": {"total": 514, "rest_read": 306, "rest_write": 202, "file_upload": 5, "binary_download": 1},
+    "writes_actions": 89,
+    "streams": 33,
+    "note": "Unlike github and workday-rest this connector is NOT from-nothing. Its 631-row inventory (#3532) is complete and correctly counted; 509 rows are blocked behind one blanket shared-foundation sentence and their commands ship as `planned` placeholders. The parity job is promotion, not enumeration."
+  },
+  "tdd": {
+    "red_confirmed": true,
+    "red_test": "cmd/connectorgen/zendesk_support_documented_surface_test.go::TestZendeskSupportDocumentedSurfaceIsComplete",
+    "red_observed_at": "2026-08-07",
+    "red_failure_classes": [
+      "509 blocked rows carry no 'Named dependency:' marker",
+      "covered rows = 122, want at least 625",
+      "8 read-shaped POSTs are not covered by a command"
+    ],
+    "red_verbatim": "see TDD-LEDGER.md cycle 1",
+    "note": "Every assertion about totals, method split, duplicates, malformed paths, carried rows and single-disposition passes on the shipped bundle. The failure is exclusively reachability."
+  },
+  "judgements": {
+    "read_vs_write": "METHOD decides, with 8 pinned read-shaped POSTs (validate_token, 3 autocompletes, 2 filtered searches, 2 view previews). Inverse trap recorded: 3 POSTs match a naive read keyword via the RESOURCE name (saved_searches, task_list_templates, task_lists) and literally say 'Creates a ...' — all writes. The 2 async export POSTs create a job resource and are writes.",
+    "stream_vs_direct_read": "the 33 shipped fixture-backed streams keep their rows (greenhouse finding 21); every other read becomes a bounded direct read",
+    "binary_detection": "GET-only, read from the artifact's declared success media types. Exactly 1 application/octet-stream operation. The trap here runs BACKWARDS to workday-rest's: PUT /api/v2/brands/{brand_id} declares image/jpg and image/png because the update echoes the brand logo. A 'non-JSON media type' rule alone would ship it as a download and drop the mutation.",
+    "named_dependency": "three expected classes — a GET with no documented JSON success body (engine.decodeDirectReadBody + commandrunner.supportedDirectReadOutputPolicies), a write whose required record field has no scalar leaf (partial, mirroring validate.go checkCLISurfaceWriteFlags), and PUT /api/v2/users/update_many whose body is rooted at oneOf (AGENTS.md: not one executable command contract)",
+    "paging": "start_time is NOT treated as paging. Every stream declares pagination type next_url over links.next / next_page / before_url, so paging is derived from response links, never a request parameter. start_time on /api/v2/incremental/* is the export's required opening watermark (400 without it). The first derivation run refused it and would have made every incremental read unreachable while naming paging as the reason; the blocklist was narrowed with the reason recorded rather than the rule weakened."
+  },
+  "slices": [
+    {"n": 1, "name": "red", "state": "done", "content": "derivation tool, DERIVED-OPERATIONS.json, PLAN.md, RUN-STATE.json, TDD-LEDGER.md, red surface test run and captured"},
+    {"n": 2, "name": "reads", "state": "pending", "content": "306 rest_read promotions + 8 read-shaped POSTs (body_schema + content_type, finding 33) + 1 binary download; rows flip operation -> covered_by"},
+    {"n": 3, "name": "writes", "state": "pending", "content": "remaining mutations; oneOf arms handled explicitly"},
+    {"n": 4, "name": "reachability", "state": "pending", "content": "build the binary, assert the rendered NAME line for every command (finding 30)"},
+    {"n": 5, "name": "close", "state": "pending", "content": "SUMMARY.md + VERIFICATION.md"}
+  ],
+  "next_action": "slice 2 — promote the 306 rest_read operations to reachable direct reads",
+  "known_red_by_design": [
+    "this connector's own surface test stays red until its last slice lands; that is correct and is not to be fixed by weakening the test",
+    "TestGoldenTranscripts fails in 11 subtests and has since before github; discharged by the end-of-sweep regeneration, never per connector (finding F6)"
+  ],
+  "shared_gates_required_green": [
+    "go run ./cmd/connectorgen validate (551/0)",
+    "go run ./cmd/connectorgen surface-sync --check",
+    "the WHOLE cmd/connectorgen package (finding F5)",
+    "TestEveryImplementedCommandPassesRuntimePreflight"
+  ]
+}
