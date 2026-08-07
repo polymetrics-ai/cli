@@ -90493,7 +90493,7 @@
   {
     "name": "notion",
     "display_name": "Notion",
-    "description": "Reads Notion databases, pages, and users through the Notion REST API. Read-only.",
+    "description": "Reads and writes Notion pages, databases, data sources, blocks, comments, views, and file uploads through the Notion REST API.",
     "integration_type": "api",
     "docs_url": "https://developers.notion.com/reference/intro",
     "release_stage": "ga",
@@ -90501,7 +90501,7 @@
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -90571,6 +90571,215 @@
           "full_refresh_overwrite",
           "full_refresh_overwrite_deduped"
         ]
+      },
+      {
+        "name": "custom_emojis",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "file_uploads",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "last_edited_time",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "views",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "last_edited_time",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      }
+    ],
+    "write_actions": [
+      {
+        "name": "create_meeting_note",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v1/blocks/meeting_notes",
+        "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once."
+      },
+      {
+        "name": "update_block",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v1/blocks/{{ record.block_id }}",
+        "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once."
+      },
+      {
+        "name": "delete_block",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v1/blocks/{{ record.block_id }}",
+        "risk": "high — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "append_block_children",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v1/blocks/{{ record.block_id }}/children",
+        "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once."
+      },
+      {
+        "name": "create_comment",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v1/comments",
+        "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once."
+      },
+      {
+        "name": "update_comment",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v1/comments/{{ record.comment_id }}",
+        "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once."
+      },
+      {
+        "name": "update_comment_markdown",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v1/comments/{{ record.comment_id }}",
+        "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once."
+      },
+      {
+        "name": "delete_comment",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v1/comments/{{ record.comment_id }}",
+        "risk": "high — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_data_source",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v1/data_sources",
+        "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once."
+      },
+      {
+        "name": "update_data_source",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v1/data_sources/{{ record.data_source_id }}",
+        "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once."
+      },
+      {
+        "name": "create_database",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v1/databases",
+        "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once."
+      },
+      {
+        "name": "update_database",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v1/databases/{{ record.database_id }}",
+        "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once."
+      },
+      {
+        "name": "create_page",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v1/pages",
+        "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once."
+      },
+      {
+        "name": "update_page",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v1/pages/{{ record.page_id }}",
+        "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once."
+      },
+      {
+        "name": "update_page_markdown",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v1/pages/{{ record.page_id }}/markdown",
+        "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once."
+      },
+      {
+        "name": "move_page",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v1/pages/{{ record.page_id }}/move",
+        "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once."
+      },
+      {
+        "name": "move_page_to_data_source",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v1/pages/{{ record.page_id }}/move",
+        "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once."
+      },
+      {
+        "name": "create_view",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v1/views",
+        "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once."
+      },
+      {
+        "name": "update_view",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/v1/views/{{ record.view_id }}",
+        "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once."
+      },
+      {
+        "name": "delete_view",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v1/views/{{ record.view_id }}",
+        "risk": "high — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_view_query",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v1/views/{{ record.view_id }}/queries",
+        "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once."
+      },
+      {
+        "name": "delete_view_query",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/v1/views/{{ record.view_id }}/queries/{{ record.query_id }}",
+        "risk": "high — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_file_upload",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v1/file_uploads",
+        "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once."
+      },
+      {
+        "name": "complete_file_upload",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v1/file_uploads/{{ record.file_upload_id }}/complete",
+        "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once."
       }
     ],
     "risk": {

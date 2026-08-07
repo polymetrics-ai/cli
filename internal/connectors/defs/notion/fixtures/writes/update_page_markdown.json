@@ -1,0 +1,17 @@
+{
+  "record": {
+    "page_id": "fixture_page_id"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v1/pages/fixture_page_id/markdown",
+    "body": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "fixture_object",
+      "id": "fixture_id"
+    }
+  }
+}

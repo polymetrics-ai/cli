@@ -1,0 +1,20 @@
+{
+  "record": {
+    "block_id": "fixture_block_id",
+    "children": []
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v1/blocks/fixture_block_id/children",
+    "body": {
+      "children": []
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "fixture_object",
+      "id": "fixture_id"
+    }
+  }
+}

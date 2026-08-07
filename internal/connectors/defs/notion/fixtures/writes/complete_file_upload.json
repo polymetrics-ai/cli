@@ -1,0 +1,17 @@
+{
+  "record": {
+    "file_upload_id": "fixture_file_upload_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v1/file_uploads/fixture_file_upload_id/complete",
+    "body": {}
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "object": "fixture_object",
+      "id": "fixture_id"
+    }
+  }
+}
