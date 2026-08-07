@@ -200,6 +200,14 @@ Two notes on generated artifacts:
   the field-type rendering that landed with dynamic schema discovery (#3892). That drift is real but
   is not this change's to carry, so only the mysql bundle is regenerated here.
 
+## Pre-existing defect found, not fixed here
+
+`pm connectors list --capability <read|write|query|cdc>` **does not filter** — every value returns
+the full catalog. Verified against `origin/main` (555 of 555 for both `write` and `cdc`), so it
+predates this change. It matters now because MySQL is the first `cdc: true` connector, and
+`--capability cdc` is exactly how someone would look for it. Flagged rather than fixed: it is shared
+CLI behaviour, outside this change's scope, and worth its own issue.
+
 ## Not done
 
 - Only MySQL is landed. Four engines are scoped above but deliberately not attempted — the brief asks
