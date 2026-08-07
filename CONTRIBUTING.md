@@ -49,7 +49,7 @@ Releases are generated from Conventional Commits after changes land on `main`.
 
 - `fix(<connector>): ...` creates a patch release for connector updates, bug fixes, pagination changes, auth fixes, docs that ship with the binary, and other compatible repairs.
 - `feat(connector): add <name>` creates a minor release for a new connector or new user-facing capability.
-- Add `!` before the colon, or a `BREAKING CHANGE:` footer, for breaking changes that require a major release.
+- Add `!` before the colon, or a `BREAKING CHANGE:` footer, for breaking changes. While `pm` is pre-1.0 these create a minor release; from `1.0.0` onward they create a major release.
 - Use other Conventional Commit types such as `docs:`, `ci:`, `test:`, `refactor:`, and `chore:` when the change should be categorized without implying a feature or bug-fix release.
 
 ## Connector Contributions

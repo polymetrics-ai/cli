@@ -123,7 +123,7 @@ Non-runtime validation files are intentionally left out of the shipping binary:
 
 ## Release cadence
 
-Release PRs are generated from Conventional Commits after changes land on `main`. A connector update such as `fix(github): repair pagination` produces a patch release. A new connector such as `feat(connector): add linear` produces a minor release. Breaking changes use `!` or a `BREAKING CHANGE:` footer for a major release.
+Release PRs are generated from Conventional Commits after changes land on `main`. A connector update such as `fix(github): repair pagination` produces a patch release. A new connector such as `feat(connector): add linear` produces a minor release. Breaking changes use `!` or a `BREAKING CHANGE:` footer; while pm is pre-1.0 they produce a minor release, and from `1.0.0` onward a major release.
 
 ## Verify your installation
 
