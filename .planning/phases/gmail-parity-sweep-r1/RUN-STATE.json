@@ -1,0 +1,64 @@
+{
+  "phase": "gmail-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "gmail",
+  "state": "red",
+  "branch": "fm/cli-top50-fixed-schema-sweep-r1",
+  "artifact": {
+    "url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
+    "kind": "google_discovery",
+    "id": "gmail:v1",
+    "revision": "20260803",
+    "retrieved_at": "2026-08-07",
+    "http_status": 200,
+    "bytes": 217687,
+    "public_no_auth": true
+  },
+  "operations": {
+    "documented_total": 79,
+    "by_method": {"GET": 30, "POST": 28, "DELETE": 10, "PUT": 8, "PATCH": 3},
+    "ledger_carried_forward": 79,
+    "drift": "none - reconciles exactly",
+    "counting_note": "walked resources.*.methods.* RECURSIVELY; Gmail nests resources so a flat walk undercounts. 0 top-level methods.",
+    "webhook_events": 0,
+    "webhook_management_operations": 2
+  },
+  "baseline": {
+    "api_surface_endpoints": 79,
+    "covered_by_stream": 10,
+    "covered_by_write": 35,
+    "legacy_excluded": 34,
+    "blank_dispositions": 0,
+    "operation_ledger_version": null,
+    "cli_surface_present": false,
+    "operations_json_present": false,
+    "reachable_direct_read_commands": 0
+  },
+  "adjudication": {
+    "promote_direct_read_detail_gets": 8,
+    "promote_direct_read_settings_singletons": 5,
+    "promote_smime": 5,
+    "promote_webhook_management": 2,
+    "promote_binary_download_pending_capability_check": 1,
+    "blocked_cse_workspace_addon": 11,
+    "blocked_array_body_issue_514": 2,
+    "remaining_legacy_excluded": 0,
+    "contradicts_captain_ruling": [
+      "watch/stop excluded as non_data_endpoint, but webhook MANAGEMENT is in scope; only events defer",
+      "cse keypairs :obliterate excluded as destructive_admin, but destructive/admin ops are in scope with typed confirmation"
+    ],
+    "factually_false_exclusion": "the 5 S/MIME rows claim to need https://mail.google.com/, which gmail's own spec.json already declares"
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/gmail_api_surface_test.go",
+    "red_confirmed": true,
+    "red_failures": [
+      "operation_ledger_version = 0, want 1",
+      "34 legacy excluded row(s) remain, want 0",
+      "covered(45)+blocked(0) = 45, want 79"
+    ],
+    "green": false,
+    "note": "endpoints=79 and totalByMethod assertions already PASS; gmail's count is right, its dispositions are wrong"
+  },
+  "next_action": "author cli_surface.json and operations.json from scratch and re-disposition all 34 excluded rows per PLAN.md; check for a bounded engine binary-download capability before deciding attachments.get"
+}
