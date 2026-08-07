@@ -2,7 +2,7 @@
   "phase": "help-scout-parity-sweep-r1",
   "program": "cli-top50-fixed-schema-sweep-r1",
   "connector": "help-scout",
-  "state": "red-authored-not-yet-observed",
+  "state": "red",
   "branch": "fm/cli-top50-sweep-continue-r1",
   "artifact": {
     "url": "https://developer.helpscout.com/mailbox-api/",
@@ -14,7 +14,13 @@
   },
   "operations": {
     "documented_total": 144,
-    "by_method": {"GET": 79, "POST": 21, "PUT": 20, "PATCH": 6, "DELETE": 18},
+    "by_method": {
+      "GET": 79,
+      "POST": 21,
+      "PUT": 20,
+      "PATCH": 6,
+      "DELETE": 18
+    },
     "ledger_carried_forward": 146,
     "sweep_derivation": 145,
     "drift": "-2 vs ledger, -1 vs the sweep derivation - and BOTH deltas are dedup, not missing endpoints",
@@ -49,11 +55,11 @@
   },
   "tdd": {
     "red_test": "cmd/connectorgen/help_scout_api_surface_test.go",
-    "red_confirmed": false,
-    "red_failure": null,
-    "red_blocker": "The shared Go build cache (/Users/karthiksivadas/Library/Caches/go-build, 55G, shared by every lane on this host) was corrupted during a host-wide disk-full window: its index still points at output files that were truncated or never written, so `go test` fails with `could not import <pkg> (open .../go-build/XX/<hash>-d: no such file or directory)` and a DIFFERENT missing entry on each retry. It is not self-healing. The test is authored and committed but has NOT been observed failing, and authoring must not begin until it has been.",
+    "red_confirmed": true,
+    "red_failure": "=== RUN   TestHelpScoutAPISurfaceOperationLedger\n    help_scout_api_surface_test.go:97: operation_ledger_version = 0, want 1\n    help_scout_api_surface_test.go:128: \"GET /v2/reports/*\" is a wildcard, not an operation; enumerate the endpoints it stands for\n    help_scout_api_surface_test.go:168: 4 legacy excluded row(s) remain, want 0\n    help_scout_api_surface_test.go:171: endpoints = 8, want 144 documented operations\n    help_scout_api_surface_test.go:174: covered(4)+blocked(0) = 4, want 144\n    help_scout_api_surface_test.go:177: totalByMethod = map[GET:6 POST:2], want map[DELETE:18 GET:79 PATCH:6 POST:21 PUT:20]\n    help_scout_api_surface_test.go:182: expected DELETE /v2/customers/{customerId} (the sync and async deletes are one operation; async is a query parameter)\n    help_scout_api_surface_test.go:189: expected the attachment file download endpoint\n    help_scout_api_surface_test.go:192: expected the attachment data endpoint (base64 in JSON, NOT a binary download)\n    help_scout_api_surface_test.go:196: expected out-of-base v3 row \"GET /v3/conversations/{conversationId}\"\n    help_scout_api_surface_test.go:196: expected out-of-base v3 row \"GET /v3/conversations/{conversationId}/threads\"\n    help_scout_api_surface_test.go:196: expected out-of-base v3 row \"GET /v3/customers\"\n    help_scout_api_surface_test.go:196: expected out-of-base v3 row \"GET /v3/system-users\"\n    help_scout_api_surface_test.go:196: expected out-of-base v3 row \"GET /v3/system-users/{systemUserId}\"\n--- FAIL: TestHelpScoutAPISurfaceOperationLedger (0.00s)\nFAIL\nFAIL\tpolymetrics.ai/cmd/connectorgen\t0.581s\nFAIL",
+    "red_blocker": "CLEARED. The shared Go build cache had been corrupted by a host-wide disk-full window and `go test` failed to build with `could not import <pkg> (open .../go-build/XX/<hash>-d: no such file or directory)`, a different missing entry on each retry. Disk pressure eased (914Mi -> 56Gi free) and the cache repopulated; the red run then completed and is captured above. The test was committed before this in an explicitly red_confirmed:false state rather than claiming evidence it did not have.",
     "green": false,
     "pre_existing_help_scout_tests": "none - no cmd/connectorgen test referenced help-scout before this one (finding F5 check)"
   },
-  "next_action": "Once the build cache is repaired, run TestHelpScoutAPISurfaceOperationLedger, capture the verbatim failure here and in TDD-LEDGER.md, THEN author. Do not author before observing red."
+  "next_action": "author api_surface/streams/writes/operations/cli_surface to green"
 }
