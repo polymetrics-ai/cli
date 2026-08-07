@@ -18,6 +18,18 @@ import (
 	"polymetrics.ai/internal/synccontract"
 )
 
+const (
+	// legacyRawDirName is the flat pre-namespacing raw log directory. It is
+	// read by migration and never written by the current layout.
+	legacyRawDirName = "_pm_raw"
+	// warehouseWALDirName holds a connection's append-only stream logs, which
+	// are the source of truth the derived tables are rebuilt from.
+	warehouseWALDirName = "wal"
+	// warehouseTablesDirName holds a connection's derived table
+	// materializations.
+	warehouseTablesDirName = "tables"
+)
+
 type etlExecutionResult struct {
 	RecordsRead        int
 	RecordsTransformed int
@@ -456,7 +468,7 @@ func localWarehouseTablePath(dir, table string) string {
 
 func localRawPath(dir, connection, stream, table string) string {
 	name := localSafeName(connection + "__" + stream + "__" + table)
-	return filepath.Join(dir, "_pm_raw", name+".jsonl")
+	return filepath.Join(dir, legacyRawDirName, name+".jsonl")
 }
 
 func localSafeName(name string) string {
