@@ -44,9 +44,13 @@ value no connection name can take:
 pm query run --table records --connection _unattributed --json
 ```
 
-`--connection` scopes `--table` reads. A `--sql` query names its table inside
-the statement, so an ambiguous table there points you back at the `--table`
-form.
+`--connection` scopes `--table` reads only, because a `--sql` query names its
+table inside the statement. In the default build an ambiguous table name in
+`--sql` is refused the same way and points you back at the `--table` form. In
+the DuckDB build a shared name is instead registered once per owning
+connection as `<table>__<connection-id>` and never bare, so a join can never
+silently read one connection's rows while meaning another's; `pm connections
+list --json` reports each connection's `id`.
 
 ## Flag reference
 
