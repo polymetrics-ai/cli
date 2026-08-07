@@ -1346,16 +1346,29 @@ func (Warehouse) Read(ctx context.Context, req ReadRequest, emit func(Record) er
 	return readJSONL(ctx, file, emit)
 }
 
+// warehouseWriteTable is the single owner of which file a warehouse write
+// resolves to and which names it accepts. A direct connector write carries no
+// connection identity, so its rows stay at the root rather than entering a
+// connection's directory, where they would be indistinguishable from that
+// connection's own synced data. The table name is validated rather than folded
+// into a safe filename, so a write and the read that follows it always name
+// the same file. ValidateWrite exists only to predict Write, so it asks this
+// rather than restating it: a predictor that carries its own copy of the rule
+// stops predicting the moment either copy moves.
+func warehouseWriteTable(req WriteRequest) (string, error) {
+	table := req.Table
+	if table == "" {
+		table = req.Stream
+	}
+	return warehouse.PathComponent("table", table)
+}
+
 // ValidateWrite refuses a table name this connector could never write before
 // the caller commits to it. A reverse plan is stored and approved ahead of the
 // write it performs, and there is no way to edit a stored plan, so a name
 // rejected only at write time would leave an approved plan that can never run.
 func (Warehouse) ValidateWrite(_ context.Context, req WriteRequest, _ []Record) error {
-	table := req.Table
-	if table == "" {
-		table = req.Stream
-	}
-	_, err := warehouse.PathComponent("table", table)
+	_, err := warehouseWriteTable(req)
 	return err
 }
 
@@ -1367,16 +1380,7 @@ func (Warehouse) Write(ctx context.Context, req WriteRequest, records []Record) 
 	if err := os.MkdirAll(dir, 0o700); err != nil {
 		return WriteResult{}, fmt.Errorf("create warehouse directory: %w", err)
 	}
-	table := req.Table
-	if table == "" {
-		table = req.Stream
-	}
-	// A direct connector write carries no connection identity, so its rows stay
-	// at the root rather than entering a connection's directory, where they
-	// would be indistinguishable from that connection's own synced data. The
-	// table name is validated rather than folded into a safe filename, so a
-	// write and the read that follows it always name the same file.
-	component, err := warehouse.PathComponent("table", table)
+	component, err := warehouseWriteTable(req)
 	if err != nil {
 		return WriteResult{}, err
 	}
@@ -1386,7 +1390,7 @@ func (Warehouse) Write(ctx context.Context, req WriteRequest, records []Record) 
 	}
 	file, err := os.OpenFile(filepath.Join(dir, component+".jsonl"), flag, 0o600)
 	if err != nil {
-		return WriteResult{}, fmt.Errorf("open warehouse table %s: %w", table, err)
+		return WriteResult{}, fmt.Errorf("open warehouse table %s: %w", component, err)
 	}
 	defer func() {
 		_ = file.Close()

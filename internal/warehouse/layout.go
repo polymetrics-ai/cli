@@ -687,6 +687,13 @@ func selects(requested, owner string) bool {
 	}
 }
 
+// readOwner decodes a connection directory's ownership record, and accepts one
+// only if it says which connection it belongs to. A record missing any part of
+// its identity is damaged, not unowned: an empty DisplayName would otherwise
+// reach the read path as the sentinel for a root-level table owned by nobody,
+// and answer to UnattributedConnection. ValidateConnectionName reserves that
+// selector against every real connection name; this reserves it against every
+// record that cannot name one.
 func readOwner(connectionDir string) (Owner, error) {
 	raw, err := os.ReadFile(filepath.Join(connectionDir, OwnerFileName))
 	if err != nil {
@@ -698,6 +705,16 @@ func readOwner(connectionDir string) (Owner, error) {
 	}
 	if owner.Version != OwnerVersion {
 		return Owner{}, fmt.Errorf("warehouse ownership record version %d is unsupported", owner.Version)
+	}
+	for _, field := range []struct{ name, value string }{
+		{"workspace", owner.Workspace},
+		{"connector", owner.Connector},
+		{"connection", owner.Connection},
+		{"display_name", owner.DisplayName},
+	} {
+		if field.value == "" {
+			return Owner{}, fmt.Errorf("warehouse ownership record has no %s", field.name)
+		}
 	}
 	return owner, nil
 }
