@@ -1,13 +1,17 @@
 # Overview
 
-Reads Chatwoot Support conversations, contacts, inboxes, agents, teams, labels, and
-conversation-scoped messages, and writes contact/conversation/message/label mutations through the
-Chatwoot Application API.
+Reads and writes the full account-scoped Chatwoot Application API support-desk surface: ETL streams
+for conversations, contacts, inboxes, agents, teams, labels, and conversation-scoped messages, plus
+34 bounded direct reads and 60 reverse-ETL write actions covering agent bots, canned responses,
+custom attribute definitions, custom filters, webhooks, integration hooks, automation rules,
+help-center portals, inbox membership, and account settings. See `pm chatwoot` (bare) and
+`pm chatwoot <group> --help` for the full, current command surface, or
+`docs/connectors/chatwoot/MANUAL.md` for the generated reference.
 
 Readable streams: `conversations`, `contacts`, `inboxes`, `agents`, `teams`, `labels`, `messages`.
 
-Write actions: `create_contact`, `update_contact`, `create_conversation`, `send_message`,
-`toggle_conversation_status`, `create_label`.
+The six write actions below were this connector's original build; see `cli_surface.json` /
+`writes.json` for the other 54 reverse-ETL actions added for full documented-operation parity.
 
 Service API documentation: https://developers.chatwoot.com/api-reference.
 
@@ -102,7 +106,18 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 ## Known limits
 
 - Batch defaults: read_page_size=15.
-- API coverage includes 7 stream-backed endpoint group(s), 6 write-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  destructive_admin=6, duplicate_of=10, non_data_endpoint=2, out_of_scope=36,
-  requires_elevated_scope=4.
+- Full documented-operation parity: 148 documented operations (re-derived 2026-08-07 from
+  https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json), partitioned as
+  101 executable (7 ETL streams, 34 direct reads, 60 reverse-ETL writes) and 47
+  blocked-with-named-dependency or unsupported-with-source-citation. See
+  `internal/connectors/defs/chatwoot/api_surface.json` for the full, per-operation disposition.
+- The 47 non-executable operations fall outside this bundle's single account-scoped base URL
+  (`/api/v1/accounts/{account_id}`): Chatwoot's `/api/v2` reporting surface, `/platform/api/v1`
+  (a distinct, more-privileged credential), `/public/api/v1` (an anonymous widget-actor API),
+  `/survey`, and `/api/v1/profile`. One inbox-provisioning pair (`POST`/`PATCH .../inboxes`) is
+  blocked because its record schema is a genuine `oneOf` across ~10 channel types. One operation
+  (`GET /platform/api/v1/users/{id}/login`) is permanently unsupported because it returns a
+  credential-derived SSO/impersonation URL.
+- `conversations update-custom-attributes` has `availability: partial`: its required
+  `custom_attributes` field is an arbitrary-keyed JSON object that flat CLI flags cannot express;
+  use a reverse-ETL plan JSON record override instead.
