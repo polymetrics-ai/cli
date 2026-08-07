@@ -224,3 +224,61 @@ reverted; `operations.json` is unchanged.
 No generated artifact needed regeneration: `api_surface.json`, `operations.json`, `cli_surface.json`,
 `operation_endpoint_ledger.json`, the website catalogs and `docs/connectors/dockerhub/` all key off
 the `/v2`-prefixed documented paths, which did not change.
+
+## Review-fix round 2 — SCIM matcher over-match
+
+The round-1 fix widened the SCIM match to `strings.Contains(EscapedPath, "/scim/2.0/")` so it would
+survive a `base_url` path override. Review found that widening reaches too far in the opposite
+direction, and it is right: sending the Enterprise SCIM admin token to a non-SCIM endpoint is the
+same credential substitution as sending the session JWT to a SCIM one, and `dualAuth` documents that
+it performs neither.
+
+### Red
+
+`assign_repository_group` (`writes.json:175`,
+`/repositories/{{ record.namespace }}/{{ record.repository }}/groups`) is the bundle's only action
+with two adjacent path parameters, and its `record_schema` constrains neither to a pattern — both are
+bare `"type": "string"`. `urlencodeSegment` is `url.QueryEscape` with `+`→`%20`
+(`interpolate.go:498`), and `QueryEscape` leaves unreserved bytes — alphanumerics and `-_.~` — alone,
+so `scim` and `2.0` pass through verbatim as two already-distinct segments. Escaping therefore does
+not help here, unlike the `%2F`-encoded case round 1 relied on.
+
+Red evidence: `pm dockerhub repository group assign --namespace scim --repository 2.0 …` builds
+`/v2/repositories/scim/2.0/groups`, which satisfies the substring test, so the request is signed with
+`scim_bearer_token` instead of the account session JWT.
+
+### Green
+
+`isSCIMRequest` now compares whole segments of the escaped path, requiring the consecutive triple
+`scim` / `2.0` / *declared SCIM resource* (`Users`, `Schemas`, `ResourceTypes`,
+`ServiceProviderConfig`). The resource segment is the anchor that makes the match positional without
+depending on `base_url`'s path component: the segment following the colliding parameter pair is the
+route's own literal (`groups`), which is not a SCIM resource. All 9 declared SCIM routes still match;
+the fail-closed unconfigured-credential branch is untouched.
+
+The resource allowlist introduces its own drift risk — a SCIM resource added to the bundle but not to
+the list would fall through to the session JWT — so the fix is paired with a test that derives the
+set from the shipped bundle rather than trusting the constant:
+
+- `TestSCIMResourceSegmentsCoverEveryDeclaredSCIMRoute` loads `defs.FS`'s dockerhub bundle, collects
+  every `operations.json`/`writes.json` path carrying the `scim`/`2.0` segment pair, and asserts both
+  directions: every declared resource is listed, and every listed resource is actually used.
+- `TestAuthenticator_EveryDeclaredSCIMRouteUsesScimBearerToken` drives those same bundle-derived
+  paths through the authenticator, composed against `base_url` the way `connsdk.resolveURL` composes
+  them, asserting the SCIM token and zero login-endpoint hits — the routing contract asserted against
+  shipped declarations rather than hand-written paths.
+- `TestAuthenticator_SCIMMatchIsWholeSegmentAndEscapeSafe` gains the collision case
+  `/v2/repositories/scim/2.0/groups` (plus a deeper variant), which fails against the round-1
+  substring matcher and passes against the segment matcher.
+
+The `isSCIMRequest` doc comment's round-1 claim that "matching wider than necessary fails closed" was
+removed — it was wrong. Over-matching emits the wrong credential; neither direction is safe, which is
+why the match is now exact rather than deliberately loose.
+
+### Verification (scoped to the changed area)
+
+- `go build ./...` → clean; `gofmt -l internal/connectors/hooks/dockerhub` → clean.
+- `go test ./internal/connectors/hooks/dockerhub/... -count=1` → PASS.
+- `go run ./cmd/connectorgen validate internal/connectors/defs/dockerhub` → 0 findings.
+
+No bundle JSON changed in this round; the fix is confined to the connector-scoped hook and its tests.

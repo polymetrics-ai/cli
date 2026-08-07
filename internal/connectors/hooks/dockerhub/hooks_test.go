@@ -11,12 +11,14 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"regexp"
 	"strings"
 	"sync/atomic"
 	"testing"
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
@@ -622,15 +624,24 @@ func TestAuthenticator_SCIMRoutingFailsClosedUnderBaseURLPathOverride(t *testing
 	}
 }
 
-// TestAuthenticator_SCIMMatchIsWholeSegmentAndEscapeSafe guards the widened
-// match from over-reaching: a look-alike literal segment and a record value
-// that merely contains "/scim/2.0/" (percent-encoded by InterpolatePath) must
-// both keep using the account session JWT.
+// TestAuthenticator_SCIMMatchIsWholeSegmentAndEscapeSafe guards the match from
+// over-reaching in the other direction: sending the Enterprise SCIM admin token
+// to a non-SCIM endpoint is the same credential substitution as sending the
+// session JWT to a SCIM one. A look-alike segment, a record value that merely
+// contains "/scim/2.0/" (percent-encoded by InterpolatePath), and — the case
+// segment matching alone does not catch — two adjacent path parameters whose
+// values are exactly "scim" and "2.0" must all keep using the session JWT.
 func TestAuthenticator_SCIMMatchIsWholeSegmentAndEscapeSafe(t *testing.T) {
 	nonSCIM := []string{
 		"/v2/orgs/myscim/2.0/groups",
 		"/v2/repositories/acme/" + url.PathEscape("evil/scim/2.0/x") + "/groups",
 		"/v2/orgs/acme/access-tokens",
+		// assign_repository_group with --namespace scim --repository 2.0:
+		// both are legal, unconstrained Docker Hub identifiers.
+		"/v2/repositories/scim/2.0/groups",
+		// The same collision one segment deeper, and with a SCIM-shaped
+		// resource name that is not the segment following "scim/2.0".
+		"/v2/namespaces/scim/2.0/repositories/Users/immutabletags",
 	}
 
 	now := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
@@ -650,6 +661,111 @@ func TestAuthenticator_SCIMMatchIsWholeSegmentAndEscapeSafe(t *testing.T) {
 			req := doAuthenticatedRequestToPath(t, auth, path)
 			if got := req.Header.Get("Authorization"); got != wantToken {
 				t.Fatalf("Authorization for %s = %q, want the session JWT (path is not a SCIM route)", path, got)
+			}
+		})
+	}
+}
+
+// declaredSCIMPaths returns every path the shipped dockerhub bundle declares
+// under the "scim"/"2.0" segment pair, normalized to the base_url-relative form
+// that actually goes on the wire and with each {{ }} placeholder filled so the
+// result is a concrete request path. writes.json paths are already relative;
+// operations.json paths keep the documented "/v2" prefix that
+// normalizeDirectReadPathForBaseURL strips against base_url's own "/v2".
+func declaredSCIMPaths(t *testing.T) []string {
+	t.Helper()
+	b, err := engine.Load(defs.FS, "dockerhub")
+	if err != nil {
+		t.Fatalf("load dockerhub bundle: %v", err)
+	}
+
+	var declared []string
+	for _, op := range b.Operations {
+		if op.REST != nil {
+			declared = append(declared, op.REST.Path)
+		}
+	}
+	for _, w := range b.Writes {
+		declared = append(declared, w.Path)
+	}
+
+	placeholder := regexp.MustCompile(`\{\{[^}]*\}\}`)
+	var scim []string
+	for _, path := range declared {
+		relative := strings.TrimPrefix(path, "/v2")
+		segments := strings.Split(relative, "/")
+		for i := 0; i+1 < len(segments); i++ {
+			if segments[i] == "scim" && segments[i+1] == "2.0" {
+				scim = append(scim, placeholder.ReplaceAllString(relative, "fixture-id"))
+				break
+			}
+		}
+	}
+	if len(scim) == 0 {
+		t.Fatal("dockerhub bundle declares no scim/2.0 paths; the SCIM routing contract has nothing to pin")
+	}
+	return scim
+}
+
+// TestSCIMResourceSegmentsCoverEveryDeclaredSCIMRoute pins the hook's resource
+// allowlist to the bundle's own SCIM routes. Anchoring the match on a known
+// resource segment is what stops two adjacent path parameters resolving to
+// "scim"/"2.0" from stealing the SCIM credential — but it also means a SCIM
+// resource added to the bundle without being added here would silently fall
+// through to the account session JWT. This test is that alarm.
+func TestSCIMResourceSegmentsCoverEveryDeclaredSCIMRoute(t *testing.T) {
+	used := map[string]bool{}
+	for _, path := range declaredSCIMPaths(t) {
+		segments := strings.Split(strings.TrimPrefix(path, "/"), "/")
+		if len(segments) < 3 || segments[0] != "scim" || segments[1] != "2.0" {
+			t.Fatalf("declared SCIM path %q is not rooted at scim/2.0/<resource>", path)
+		}
+		resource := segments[2]
+		if !scimResourceSegments[resource] {
+			t.Errorf("declared SCIM path %q uses resource %q, which scimResourceSegments does not list — requests to it would be signed with the account session JWT", path, resource)
+		}
+		used[resource] = true
+	}
+	for resource := range scimResourceSegments {
+		if !used[resource] {
+			t.Errorf("scimResourceSegments lists %q, which no declared dockerhub route uses", resource)
+		}
+	}
+}
+
+// TestAuthenticator_EveryDeclaredSCIMRouteUsesScimBearerToken drives the real
+// bundle's SCIM paths through the authenticator, composed against base_url the
+// way the engine composes them, so the routing contract is asserted against the
+// shipped declarations rather than hand-written paths.
+func TestAuthenticator_EveryDeclaredSCIMRouteUsesScimBearerToken(t *testing.T) {
+	now := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
+	for _, relPath := range declaredSCIMPaths(t) {
+		full := composeRequestURL("https://hub.docker.com/v2", relPath)
+		t.Run(relPath, func(t *testing.T) {
+			var loginHits int32
+			srv, client, _ := loginHTTPSServer(t, func(map[string]string) (int, map[string]any) {
+				atomic.AddInt32(&loginHits, 1)
+				return http.StatusOK, map[string]any{"token": fakeJWT(t, now, time.Hour)}
+			})
+
+			h := newTestHooks(func() time.Time { return now }, client)
+			auth, err := h.Authenticator(context.Background(), scimCfg(), baseSpec(srv.URL))
+			if err != nil {
+				t.Fatalf("Authenticator: %v", err)
+			}
+
+			req, err := http.NewRequest(http.MethodGet, full, nil)
+			if err != nil {
+				t.Fatalf("build request: %v", err)
+			}
+			if err := auth.Apply(context.Background(), req); err != nil {
+				t.Fatalf("Apply: %v", err)
+			}
+			if got := req.Header.Get("Authorization"); got != "Bearer fixture-scim-token" {
+				t.Fatalf("Authorization for %s = %q, want the SCIM bearer token", full, got)
+			}
+			if atomic.LoadInt32(&loginHits) != 0 {
+				t.Fatalf("login endpoint hits = %d for %s, want 0", loginHits, full)
 			}
 		})
 	}

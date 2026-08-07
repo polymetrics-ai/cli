@@ -132,15 +132,32 @@ func (h *Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig,
 	}, nil
 }
 
-// scimPathSegments identifies every SCIM 2.0 endpoint documented under
-// bearerSCIMAuth (dockerhub's api_surface.json /v2/scim/2.0/** rows). It is
-// deliberately the base_url-RELATIVE segment pair rather than the absolute
-// "/v2/scim/2.0/" prefix: base_url is an operator-settable override (spec.json
-// advertises self-hosted proxies), so its path component is not necessarily
-// "/v2", and an absolute-prefix match would stop matching the moment it is not
-// — silently routing a SCIM request to the account session JWT, the exact
-// substitution this type exists to prevent.
-const scimPathSegments = "/scim/2.0/"
+// scimNamespaceSegments are the two literal path segments Docker Hub's SCIM
+// 2.0 routes are mounted under, expressed base_url-RELATIVELY. base_url is an
+// operator-settable override (spec.json advertises self-hosted proxies), so its
+// path component is not necessarily "/v2" and an absolute "/v2/scim/2.0/"
+// prefix would stop matching the moment it is not.
+var scimNamespaceSegments = [...]string{"scim", "2.0"}
+
+// scimResourceSegments are the SCIM resource collections dockerhub's bundle
+// declares under scimNamespaceSegments — operations.json's Users/Users/{id},
+// Schemas/Schemas/{id}, ResourceTypes/ResourceTypes/{name} and
+// ServiceProviderConfig reads plus writes.json's create/update Users actions.
+// Requiring one of these as the segment right after "scim/2.0" is what anchors
+// the match to a real route: without it, any two adjacent path parameters
+// resolving to "scim" and "2.0" (assign_repository_group's namespace and
+// repository are both unconstrained strings) would route a repository request
+// onto the SCIM credential.
+//
+// TestSCIMResourceSegmentsCoverEveryDeclaredSCIMRoute pins this set to the
+// bundle's own SCIM paths, so a newly declared SCIM resource fails that test
+// rather than silently falling through to the account session JWT.
+var scimResourceSegments = map[string]bool{
+	"Users":                 true,
+	"Schemas":               true,
+	"ResourceTypes":         true,
+	"ServiceProviderConfig": true,
+}
 
 // dualAuth routes each outgoing request to one of two independent
 // credentials by request path: the account session JWT (sessionLoginAuth)
@@ -154,17 +171,30 @@ type dualAuth struct {
 	scimToken string
 }
 
-// isSCIMRequest reports whether req addresses a Docker Hub SCIM 2.0 endpoint,
-// matching the "scim/2.0" segment pair anywhere in the path so any base_url
-// path component keeps routing correctly. The match runs on the ESCAPED path:
-// an interpolated path segment whose value happens to contain a literal
-// "/scim/2.0/" arrives percent-encoded (InterpolatePath urlencodes every
-// resolved segment), so a record value can never steer a non-SCIM request onto
-// the SCIM credential. Matching wider than necessary fails closed here — the
-// dangerous direction is a SCIM route missing the match and receiving the
-// account session JWT.
+// isSCIMRequest reports whether req addresses a Docker Hub SCIM 2.0 endpoint:
+// the consecutive path segments "scim", "2.0" and a declared SCIM resource,
+// anywhere in the path so that any base_url path component keeps routing
+// correctly. Both directions of a mismatch send the wrong credential, so the
+// match is deliberately neither a substring test nor an absolute prefix — it
+// compares whole segments of the ESCAPED path, which is what makes it immune
+// to both a resolved path parameter containing "/scim/2.0/" (InterpolatePath
+// percent-encodes every resolved segment, so its slashes arrive as %2F) and to
+// two adjacent parameters resolving to the literal values "scim" and "2.0".
 func (a *dualAuth) isSCIMRequest(req *http.Request) bool {
-	return strings.Contains(req.URL.EscapedPath(), scimPathSegments)
+	segments := strings.Split(req.URL.EscapedPath(), "/")
+	for i := 0; i+len(scimNamespaceSegments) < len(segments); i++ {
+		matched := true
+		for offset, want := range scimNamespaceSegments {
+			if segments[i+offset] != want {
+				matched = false
+				break
+			}
+		}
+		if matched && scimResourceSegments[segments[i+len(scimNamespaceSegments)]] {
+			return true
+		}
+	}
+	return false
 }
 
 func (a *dualAuth) Apply(ctx context.Context, req *http.Request) error {
