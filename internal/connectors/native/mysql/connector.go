@@ -37,7 +37,7 @@ func (c Connector) Metadata() connectors.Metadata {
 }
 
 func (c Connector) Manifest() connectors.Manifest {
-	return c.Base.BundleManifest()
+	return c.BundleManifest()
 }
 
 // Write is unsupported because this connector is a read-only source.
