@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -213,6 +214,46 @@ func TestBothConnectionsKeepTheirOwnRowsAndAreReadableByName(t *testing.T) {
 	}
 }
 
+// TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept guards the honesty half
+// for every surface that reads through SQL rather than through a table
+// selector — flow query steps and an action step's source table both reach the
+// warehouse this way, and a flow manifest step carries no connection field.
+// Those surfaces cannot resolve the ambiguity today, so the refusal must not
+// promise a flag they do not have. Naming one would be worse than naming none.
+func TestQuerySQLAmbiguityNamesNoSelectorItCannotAccept(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("flow_query_ambiguity", nil)
+	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+
+	source.records = []connectors.Record{{"id": "a1", "updated_at": "2026-08-06T00:00:00Z"}}
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: "acme", Stream: "records", BatchSize: 10}); err != nil {
+		t.Fatal(err)
+	}
+	source.records = []connectors.Record{{"id": "g1", "updated_at": "2026-08-06T00:00:02Z"}}
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: "globex", Stream: "records", BatchSize: 10}); err != nil {
+		t.Fatal(err)
+	}
+
+	_, err := a.QuerySQL(ctx, "SELECT * FROM records", 0)
+	if err == nil {
+		t.Fatal("QuerySQL(shared table name) error = nil, want the read refused rather than answered from one tenant")
+	}
+	if strings.Contains(err.Error(), "--") {
+		t.Fatalf("QuerySQL refusal %q names a flag this surface does not accept", err)
+	}
+	if a.QueryEngineName() == "jsonl" {
+		var ambiguous *warehouse.AmbiguousTableError
+		if !errors.As(err, &ambiguous) {
+			t.Fatalf("QuerySQL() error = %T %v, want *warehouse.AmbiguousTableError", err, err)
+		}
+		for _, want := range []string{"acme", "globex"} {
+			if !strings.Contains(ambiguous.Error(), want) {
+				t.Fatalf("ambiguity error %q does not name %q", ambiguous.Error(), want)
+			}
+		}
+	}
+}
+
 // TestSyncRefusesWhenAnotherConnectionOwnsTheDirectory keeps the ownership
 // assertion honest independently of directory nesting: if a connection ever
 // resolves to a directory another connection owns, the run fails loudly rather
@@ -328,6 +369,97 @@ func TestCreateConnectionRejectsAmbiguousNames(t *testing.T) {
 	}
 	if _, err := a.CreateConnection(ctx, request("acme_staging")); err != nil {
 		t.Fatalf("CreateConnection(acme_staging) error = %v, want acceptance", err)
+	}
+}
+
+// TestCreateConnectionRejectsStreamAndTableNamesItCouldNeverMaterialize
+// extends reject-at-creation to the other two names that became warehouse path
+// components. A stream or destination table pm cannot turn into a path fails
+// every sync at the same place, and a connection can be neither edited nor
+// deleted, so accepting one and refusing it later strands it permanently.
+func TestCreateConnectionRejectsStreamAndTableNamesItCouldNeverMaterialize(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("stream_name_validation", nil)
+	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+
+	request := func(name, stream, table string) CreateConnectionRequest {
+		return CreateConnectionRequest{
+			Name:        name,
+			Source:      EndpointConfig{Connector: source.Name(), Credential: "acme-source"},
+			Destination: EndpointConfig{Connector: "warehouse", Credential: "warehouse"},
+			Streams: map[string]StreamConfig{
+				stream: {SyncMode: "incremental_append_deduped", CursorField: "updated_at", PrimaryKey: []string{"id"}, DestinationTable: table},
+			},
+		}
+	}
+	for index, tc := range []struct{ stream, table string }{
+		{stream: "my stream", table: "records"},
+		{stream: "records", table: "my table"},
+		{stream: "records", table: "../escape"},
+		{stream: "records", table: "."},
+		{stream: "sub/stream", table: "records"},
+	} {
+		name := fmt.Sprintf("unusable_%d", index)
+		_, err := a.CreateConnection(ctx, request(name, tc.stream, tc.table))
+		if err == nil {
+			t.Fatalf("CreateConnection(stream %q, table %q) error = nil, want rejection at creation", tc.stream, tc.table)
+		}
+		if !strings.Contains(err.Error(), "use only letters, digits") {
+			t.Fatalf("rejection %q does not say which characters are acceptable", err)
+		}
+		if _, ok := a.findConnection(name); ok {
+			t.Fatalf("CreateConnection(stream %q, table %q) stored a connection that can never sync", tc.stream, tc.table)
+		}
+	}
+
+	// The table name defaults to the stream name, so an unusable stream is
+	// caught even when no destination table was given.
+	defaulted := request("unusable_default", "my stream", "")
+	if _, err := a.CreateConnection(ctx, defaulted); err == nil {
+		t.Fatal("CreateConnection(stream \"my stream\", no table) error = nil, want rejection at creation")
+	}
+	if _, err := a.CreateConnection(ctx, request("usable", "records", "acme.records-1")); err != nil {
+		t.Fatalf("CreateConnection(usable names) error = %v, want acceptance", err)
+	}
+}
+
+// TestReversePlanRefusesAnUnwritableWarehouseTableAtPlanTime keeps the same
+// rule on the reverse side: a plan is approved before it is written, and a
+// stored plan cannot be edited, so a table name the warehouse could never
+// write is refused before the plan exists rather than at execution.
+func TestReversePlanRefusesAnUnwritableWarehouseTableAtPlanTime(t *testing.T) {
+	ctx := context.Background()
+	source := newScriptedSyncSource("reverse_table_validation", []connectors.Record{
+		{"id": "a1", "name": "Acme Ada", "updated_at": "2026-08-06T00:00:00Z"},
+	})
+	a, _ := setupTwoConnectionWarehouseApp(t, source, "incremental_append_deduped")
+	if _, err := a.RunETL(ctx, RunETLRequest{Connection: "acme", Stream: "records", BatchSize: 10}); err != nil {
+		t.Fatal(err)
+	}
+
+	request := PlanReverseETLRequest{
+		Name:                  "records copy",
+		SourceTable:           "records",
+		SourceConnection:      "acme",
+		DestinationConnector:  "warehouse",
+		DestinationCredential: "warehouse",
+		Action:                "upsert",
+		Mappings:              map[string]string{"id": "external_id"},
+	}
+	_, err := a.PlanReverseETL(ctx, request)
+	if err == nil {
+		t.Fatal("PlanReverseETL(unwritable table name) error = nil, want rejection before the plan is stored")
+	}
+	if !strings.Contains(err.Error(), "use only letters, digits") {
+		t.Fatalf("rejection %q does not say which characters are acceptable", err)
+	}
+	if plans := a.ListReversePlans(); len(plans) != 0 {
+		t.Fatalf("refused plan was still stored: %#v", plans)
+	}
+
+	request.Name = "records_copy"
+	if _, err := a.PlanReverseETL(ctx, request); err != nil {
+		t.Fatalf("PlanReverseETL(usable table name) error = %v, want acceptance", err)
 	}
 }
 

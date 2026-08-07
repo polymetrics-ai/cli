@@ -786,8 +786,13 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 	if err != nil {
 		return Connection{}, fmt.Errorf("resolve source: %w", err)
 	}
-	if _, _, err := a.resolveEndpoint(ctx, req.Destination); err != nil {
+	destination, _, err := a.resolveEndpoint(ctx, req.Destination)
+	if err != nil {
 		return Connection{}, fmt.Errorf("resolve destination: %w", err)
+	}
+	materializesWarehouse := false
+	if materializer, ok := destination.(connectors.LocalWarehouseMaterializer); ok {
+		materializesWarehouse = materializer.MaterializesLocalWarehouse()
 	}
 	catalog, catalogErr := a.catalogForEndpoint(ctx, source, sourceRuntime, false)
 	if errors.Is(catalogErr, errCatalogStale) {
@@ -820,6 +825,20 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 		}
 		if stream.DestinationTable == "" {
 			stream.DestinationTable = name
+		}
+		// Against the local warehouse the stream and table names are path
+		// components, so they are held to the same rule as the connection
+		// name: rejected at creation rather than coerced into something that
+		// resolves. Creation is the only moment this can honestly be caught —
+		// every sync of a connection carrying an unusable name fails at the
+		// same place, and a connection can be neither edited nor deleted.
+		if materializesWarehouse {
+			if _, err := warehouse.PathComponent("stream", name); err != nil {
+				return Connection{}, err
+			}
+			if _, err := warehouse.PathComponent("table", stream.DestinationTable); err != nil {
+				return Connection{}, err
+			}
 		}
 		if err := ValidateStreamSyncConfig(stream); err != nil {
 			return Connection{}, fmt.Errorf("validate stream %q: %w", name, err)

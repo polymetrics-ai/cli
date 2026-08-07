@@ -415,11 +415,28 @@ type Table struct {
 // of nesting per connection is that one connection's problem stays that
 // connection's problem, so a single damaged record must not deny reads of
 // tables owned by connections whose records are healthy. Callers surface a
-// fault when it could explain what they failed to find, and otherwise carry on.
+// fault when it could explain what they failed to find, or when it could hide
+// a second holder of what they did find, and otherwise carry on.
 type Fault struct {
 	Dir  string
 	File string
 	Err  error
+	// Tables names the tables materialized in the damaged directory. A table
+	// file is named after the table, so which names a directory holds is
+	// readable without its ownership record — and it has to be, because those
+	// names are candidates a lookup would otherwise never learn about.
+	Tables []string
+}
+
+// Holds reports whether the damaged directory materializes a table of this
+// name, and so could be a candidate a lookup cannot see.
+func (f Fault) Holds(table string) bool {
+	for _, name := range f.Tables {
+		if name == table {
+			return true
+		}
+	}
+	return false
 }
 
 func (f Fault) Error() string {
@@ -435,6 +452,14 @@ func (f Fault) Unwrap() error { return f.Err }
 type FaultError struct {
 	Table  string
 	Faults []Fault
+	// Undecided reports that the table did resolve to exactly one healthy
+	// connection and was refused anyway, because a damaged directory
+	// materializes the same name and so may be the connection the read meant.
+	// An unreadable ownership record must never be what decides which
+	// connection's rows an unscoped read returns: dropping a hidden candidate
+	// turns an ambiguous question into a confidently wrong answer, which is
+	// the failure this layout exists to remove.
+	Undecided bool
 }
 
 func (e *FaultError) Error() string {
@@ -449,12 +474,20 @@ func (e *FaultError) Error() string {
 	if e.Table != "" {
 		subject = fmt.Sprintf("warehouse table %q", e.Table)
 	}
+	recovery := "Restore or remove the damaged record and re-run the connection's sync to rewrite it; " +
+		"pm will not rewrite or delete warehouse data for you"
+	if e.Undecided {
+		return fmt.Sprintf(
+			"%s is materialized by one connection with a healthy ownership record and by %d whose record is unreadable (%s), "+
+				"so which connection an unscoped read means cannot be decided. "+
+				"Name the connection to read one of them now. %s",
+			subject, len(e.Faults), strings.Join(records, ", "), recovery,
+		)
+	}
 	return fmt.Sprintf(
 		"%s could not be resolved because %d ownership record(s) are unreadable (%s). "+
-			"Tables owned by connections with healthy records are unaffected. "+
-			"Restore or remove the damaged record and re-run the connection's sync to rewrite it; "+
-			"pm will not rewrite or delete warehouse data for you",
-		subject, len(e.Faults), strings.Join(records, ", "),
+			"Tables owned by connections with healthy records are unaffected. %s",
+		subject, len(e.Faults), strings.Join(records, ", "), recovery,
 	)
 }
 
@@ -496,32 +529,38 @@ func Tables(root string) ([]Table, []Fault, error) {
 	if err != nil {
 		return nil, nil, fmt.Errorf("scan warehouse tables: %w", err)
 	}
-	faulted := make(map[string]struct{})
+	faulted := make(map[string]int)
 	for _, path := range matches {
 		info, err := os.Stat(path)
 		if err != nil || info.IsDir() {
 			continue
 		}
+		name := strings.TrimSuffix(filepath.Base(path), ".jsonl")
 		connectionDir := filepath.Dir(filepath.Dir(path))
 		owner, err := readOwner(connectionDir)
 		if errors.Is(err, os.ErrNotExist) {
 			continue
 		}
 		if err != nil {
-			// One fault per damaged directory, however many tables it holds.
-			if _, seen := faulted[connectionDir]; !seen {
-				faulted[connectionDir] = struct{}{}
+			// One fault per damaged directory, however many tables it holds,
+			// but every one of those tables is recorded on it: a name a lookup
+			// cannot see is exactly what makes an answer unsafe to give.
+			index, seen := faulted[connectionDir]
+			if !seen {
+				index = len(faults)
+				faulted[connectionDir] = index
 				faults = append(faults, Fault{
 					Dir:  connectionDir,
 					File: filepath.Join(connectionDir, OwnerFileName),
 					Err:  err,
 				})
 			}
+			faults[index].Tables = append(faults[index].Tables, name)
 			continue
 		}
 		out = append(out, Table{
 			Path:       path,
-			Name:       strings.TrimSuffix(filepath.Base(path), ".jsonl"),
+			Name:       name,
 			Connection: owner.DisplayName,
 			Owner:      owner,
 		})
@@ -556,7 +595,9 @@ func Tables(root string) ([]Table, []Fault, error) {
 
 // FindTable resolves one table by name, optionally scoped to a connection
 // display name or to UnattributedConnection for the root-level tables no
-// connection owns. It reports ambiguity rather than picking a winner.
+// connection owns. It reports ambiguity rather than picking a winner, and
+// treats a table it cannot see behind a damaged ownership record as ambiguity
+// too.
 func FindTable(root, table, connection string) (Table, error) {
 	tables, faults, err := Tables(root)
 	if err != nil {
@@ -574,6 +615,25 @@ func FindTable(root, table, connection string) (Table, error) {
 	}
 	switch len(matches) {
 	case 1:
+		// One match is only an unambiguous answer if nothing could have been
+		// missed. The empty selector means "any connection", so it is decided
+		// by every directory under the root — including one whose ownership
+		// record cannot be read, whose tables Tables() therefore had to drop.
+		// A damaged record that hides a competing candidate would otherwise
+		// silently turn an ambiguous question into one tenant's rows.
+		//
+		// Only the damaged directories that hold a table of this name can be
+		// that candidate, and a table file is named after its table, so this
+		// stays precise: a read that genuinely does not depend on a damaged
+		// directory is still answered. A named connection selector is answered
+		// too, because it says which connection it means, and the unattributed
+		// selector reaches only root-level files, which no connection
+		// directory can hold.
+		if connection == "" {
+			if hidden := faultsHolding(table, faults); len(hidden) > 0 {
+				return Table{}, &FaultError{Table: table, Faults: hidden, Undecided: true}
+			}
+		}
 		return matches[0], nil
 	case 0:
 		// A damaged ownership record could be exactly why nothing matched, so
@@ -598,6 +658,18 @@ func FindTable(root, table, connection string) (Table, error) {
 		}
 		return Table{}, &AmbiguousTableError{Table: table, Connections: names}
 	}
+}
+
+// faultsHolding returns the damaged directories that materialize a table of
+// this name, and so could each be a candidate a lookup cannot see.
+func faultsHolding(table string, faults []Fault) []Fault {
+	hidden := make([]Fault, 0, len(faults))
+	for _, fault := range faults {
+		if fault.Holds(table) {
+			hidden = append(hidden, fault)
+		}
+	}
+	return hidden
 }
 
 // selects reports whether a requested connection selector matches a candidate
