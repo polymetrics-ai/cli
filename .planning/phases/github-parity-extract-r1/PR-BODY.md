@@ -1,0 +1,192 @@
+# feat(connectors)!: bring github to documented-operation parity and restore its blocked writes
+
+Extracts GitHub's full documented-operation parity from the paused sweep branch
+`fm/cli-top50-sweep-resume2-r1` and lands it on `main` on its own, so live end-to-end testing
+can run against the complete surface. Then folds in the captain's order to restore the commands
+that shipped `unsafe_or_disallowed` without his authorisation.
+
+**461 commands → 1147.** 505 REST endpoint rows → 1224 (1220 documented + 4 synthetic
+close/reopen). 1126 endpoints covered, 98 operation-blocked. **1086 commands reachable, every
+one verified by running the binary.**
+
+## What was extracted, and how
+
+Four commits, cherry-picked in TDD order:
+
+| commit | |
+| --- | --- |
+| `6848cbb2d` | red surface test at the derived 1220 (slice 1/5) |
+| `afa4a0fd4` | enumerate github's full documented GET surface (slice 2/5) |
+| `60719bfbe` | **`fix(connectors): let one endpoint back several write actions`** — a foundation fix, not github-specific |
+| `6fe60991d` | bring github to documented-operation parity |
+
+The foundation fix lands here because github is its first consumer, and it is what lets
+`repo update`, `archive_repo` and `unarchive_repo` share one `PATCH /repos/{owner}/{repo}` row.
+
+The sweep's `data/cli-top50-fixed-schema-sweep-r1/PROGRESS.md` was dropped — sweep bookkeeping,
+not github parity.
+
+### Shared artifacts were regenerated, not hand-merged
+
+The cherry-pick auto-merged `operation_endpoint_ledger.json`. **That merged blob was
+discarded**: the file was reset to `main` and rebuilt with `go run ./cmd/connectorgen
+surface-sync`. It came back **byte-identical** to the branch's version, which independently
+confirms the branch derived it correctly. Website catalogs, connector docs and golden
+transcripts were likewise rebuilt from their own generators.
+
+Every delta was diffed **per connector and per transcript**, not eyeballed:
+
+```
+website/data/connectors.generated.json                  -> ['GitHub']
+website/lib/connectors.catalog.data.generated.json      -> ['GitHub']
+internal/connectors/defs/operation_endpoint_ledger.json -> ['github']  (162 -> 164 rows)
+golden transcripts -> ['connectors_inspect_github_json', 'dynamic_connector_bare_json']
+```
+
+`dynamic_connector_bare_json` is not a stray — its `args` are `["github", "--json"]`.
+
+The doc generators additionally wanted to rewrite all 551 connectors' `MANUAL.md`/`SKILL.md`
+and four `pm-*` skill files. That is **pre-existing drift on `main`** (type annotations
+rendering as `created_at()` instead of `created_at(string)`, and a missing `## Icon` section),
+not github's. It is reverted here and flagged as a follow-up rather than smuggled into a github
+diff.
+
+### Reachability was re-derived, not inherited
+
+A prior worker found gmail answering `unknown command` for all 79 operations while our records
+claimed success. So the 1079 figure was not taken on trust. Each of the 1086
+`implemented`/`partial` commands was invoked as `pm github <path>` in an initialised project
+with **no credential configured** — a dispatchable command stops at `error: missing
+--credential`, an undispatchable one answers `error: unknown command "..."`:
+
+```
+connector=github probed=1079 unreachable=0     (parity extraction, pre-unblock)
+connector=github probed=1086 unreachable=0     (final binary)
+```
+
+No network call is made; every command stops at the credential gate ahead of any request.
+
+## The `repo create` classification — and the captain's order
+
+The brief asked whether creating a repository is defensible when `issue create` is already
+`implemented`. **That turned out not to be the deciding question.**
+
+The parity enumeration already makes every one of these capabilities reachable under a
+generated name: `repos create-for-authenticated-user`, `repo delete-2`, `repo update`,
+`secret set-2`, `secret delete-2`, `actions caches delete-2` are all `implemented`. So
+`unsafe_or_disallowed` on the gh-familiar name was **not a safety control** — it removed no
+capability. It only guaranteed the destructive path is the one an operator reaches by accident,
+through a generated name, rather than on purpose.
+
+That is why `repo delete` is restored here despite the brief saying to keep it disallowed:
+blocking the name while `repo delete-2` runs the same `DELETE` is a naming accident, not a
+safety property. The captain's later order asks for it explicitly, and the typed confirmation
+is unchanged either way.
+
+### Restored — 7 commands, on the gate the write path already imposed
+
+All become `intent: reverse_etl`, `availability: implemented`, pointed at the write action
+their twin already uses, inheriting **plan → preview → approval → execute** unchanged. No gate
+was invented; none was relaxed.
+
+| command | write action | method | confirmation now required |
+| --- | --- | --- | --- |
+| `repo create` | `repos_create_for_authenticated_user` | POST | plan → preview → approval token → execute |
+| `repo delete` | `repo` | DELETE | + closed typed `--confirm destructive`, digest recomputed at execution |
+| `repo archive` | `archive_repo` *(new)* | PATCH | plan → preview → approval token → execute |
+| `repo unarchive` | `unarchive_repo` *(new)* | PATCH | plan → preview → approval token → execute |
+| `cache delete` | `actions_caches_cache_id` | DELETE | + closed typed `--confirm destructive` |
+| `secret set` | `actions_secrets_secret_name3` | PUT | plan → preview → approval token → execute; `encrypted_value` redacted |
+| `secret delete` | `actions_secrets_secret_name` | DELETE | + closed typed `--confirm destructive` |
+
+`connectors.ConfirmationForWriteAction` returns `destructive` for **any** DELETE regardless of
+metadata, and the new test asserts through that same resolver — so a future edit that severs
+the confirmation fails.
+
+**Two needed more than a classification change.** `repo archive`/`repo unarchive` ride the same
+endpoint as the generic `repo update`, and the declarative path cannot pin a body constant — a
+"archive" command that only archives when the caller separately remembers `archived: true` is a
+command that lies. They are pinned in the github hook exactly as `close_issue`/`reopen_issue`
+already pin `state` (~5 lines of Go).
+
+**`secret set` exposed a live defect.** The already-`implemented` `secret set-2` had a
+`record_schema` of just the path parameter, so it could only ever send an empty PUT and take a
+422. `encrypted_value` and `key_id` are now declared and flagged on both commands.
+`pm` does not encrypt and does not store the value — the caller seals it with the repository
+public key, as the API requires — and `encrypted_value` is in `redact_fields`.
+
+### Not restored — 3 commands, each needs a runtime capability this PR does not add
+
+Marking any of these `implemented` would fail at runtime. That is the claim-before-establish
+defect this project keeps finding, so they stay blocked and are reported instead.
+
+| command | why |
+| --- | --- |
+| `issue delete` | Declared as `kind: graphql_mutation`; `engine.operationDirectWriteSpec` requires `rest_write`. GitHub has no REST issue-delete endpoint — `deleteIssue` is GraphQL-only and takes a node ID. Needs a GraphQL write executor plus node-ID resolution. |
+| `issue transfer` | GraphQL-only. `POST /repos/{owner}/{repo}/transfer` is **repository** transfer — wiring it there would be a different operation wearing this command's name. |
+| `pr revert` | No documented REST endpoint at all; absent from github's own `api_surface.json`. `AGENTS.md`: never invent an endpoint to make a command look implemented. |
+
+**bahmni `documents upload`** is the same category and also stays blocked: it has no write
+action, and its own notes name the missing capability — "current inline JSON content surface
+lacks the claimed file snapshot/SHA-256 approval binding".
+
+### Held for the captain
+
+**`auth token` — held, as ordered.** It prints a credential; runtime output is never stripped,
+so a printed token stays printed. That contradicts a rule the captain set, so it waits on him.
+
+**`api` — reported, not acted on.** Unblocking the arbitrary authenticated-request escape hatch
+means: no declared parameters, no enum validation, no required-field enforcement, no operation
+ledger entry (so no `kind`, no `max_bytes`, nothing bounding the response), and no `api_surface`
+row — bypassing the very 1220-endpoint surface this PR exists to enumerate, and every gate keyed
+on it, including the destructive-write confirmation. One `pm github api` call reaches every
+endpoint the other 1146 commands model, under none of their controls. **The captain's call.**
+
+`TestGitHubHeldCommandsStayBlocked` pins both so neither drifts to `implemented` by accident.
+
+## ⚠️ The sweep branch needs a rebase after this merges
+
+`fm/cli-top50-sweep-resume2-r1` carries these same four github commits. Once this lands, that
+branch **must be rebased onto the new `main` before it resumes** — its github commits will be
+already-applied, and its `operation_endpoint_ledger.json` will conflict against the regenerated
+one. The sweep is paused at stripe, so this is cheap now. Flagging it so it is not a surprise.
+
+## Follow-ups deliberately not fixed here
+
+1. **Repo-wide doc drift on `main`** — `pm docs generate`/`pm skills generate` want to rewrite
+   all 551 connectors' docs plus four `pm-*` skill files. Needs its own PR.
+2. **Thin `record_schema`s on generated write actions** — `secret set-2` was `implemented`
+   while able only to send an empty body. That is the shape issue #3899 exists to fix; only
+   the one blocking this order was fixed. `repo2` and others are worth a sweep.
+
+## Verification
+
+```
+gofmt -l cmd internal                                          clean
+go vet ./...                                                   clean
+go test ./cmd/connectorgen/                                    ok
+go test ./internal/connectors/engine/                          ok
+go test ./internal/connectors/conformance/                     ok
+go test ./internal/connectors/commandrunner/                   ok   (incl. TestEveryImplementedCommandPassesRuntimePreflight)
+go test ./internal/connectors/hooks/github/                    ok
+go test ./internal/cli/                                        ok
+go run ./cmd/connectorgen validate internal/connectors/defs    551 checked, 0 findings
+go run ./cmd/connectorgen surface-sync --check                 no drift
+make lint                                                      0 issues
+make connector-boundary                                        ok
+make agent-contract-check                                      contract and projections current
+make docs-check                                                ok
+go build ./cmd/pm                                              ok
+binary reachability sweep                                      1086 probed, 0 unreachable
+```
+
+`go test ./...` and `make verify` were not run as single commands: per `AGENTS.md` the full
+suite spans 551 connectors and routinely exceeds an agent's per-command timeout, where a cutoff
+is indistinguishable from a hang. Scoped package runs plus each `make verify` gate individually
+were run instead; CI carries the whole suite.
+
+**No test was weakened, skipped, or deleted. Three were added.**
+
+GSD evidence: `.planning/phases/github-parity-extract-r1/` — `PLAN.md`, `TDD-LEDGER.md`
+(both red/green cycles with observed output), `VERIFICATION.md`, `SUMMARY.md`,
+`CLASSIFICATION-REPORT.md`, `RUN-STATE.json`.
