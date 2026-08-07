@@ -1329,7 +1329,7 @@ func coerceRecordParentIndexes(flag connectors.CommandSurfaceFlag, values []stri
 	return indexes, nil
 }
 
-func nestedRepeatableParentCount(target string, applications []recordFlagApplication) int {
+func nestedRepeatableParentCount(target string, applications []recordFlagApplication, parentIndexes []int) int {
 	parts, err := validateDottedTargetPath(target, "record field")
 	if err != nil {
 		return 0
@@ -1374,7 +1374,45 @@ func nestedRepeatableParentCount(target string, applications []recordFlagApplica
 			parentCount = len(application.values)
 		}
 	}
+	for _, parentIndex := range parentIndexes {
+		if parentIndex+1 > parentCount {
+			parentCount = parentIndex + 1
+		}
+	}
 	return parentCount
+}
+
+func materializeNestedRepeatableParents(record connectors.Record, applications []recordFlagApplication, parentIndexesForChild map[string][]int) error {
+	parentCounts := map[string]int{}
+	for _, application := range applications {
+		parentIndexes := parentIndexesForChild[application.name]
+		if len(parentIndexes) == 0 {
+			continue
+		}
+		parentPrefix, err := repeatableRecordParentPrefix(application.target)
+		if err != nil {
+			return err
+		}
+		for _, parentIndex := range parentIndexes {
+			if parentIndex+1 > parentCounts[parentPrefix] {
+				parentCounts[parentPrefix] = parentIndex + 1
+			}
+		}
+	}
+	parentPrefixes := make([]string, 0, len(parentCounts))
+	for parentPrefix := range parentCounts {
+		parentPrefixes = append(parentPrefixes, parentPrefix)
+	}
+	sort.Strings(parentPrefixes)
+	for _, parentPrefix := range parentPrefixes {
+		for parentIndex := 0; parentIndex < parentCounts[parentPrefix]; parentIndex++ {
+			target := strings.Replace(parentPrefix, "[]", strconv.Itoa(parentIndex), 1)
+			if err := setRecordValue(record, target, map[string]any{}); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 
 func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (connectors.Record, error) {
@@ -1460,6 +1498,9 @@ func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]st
 		}
 	}
 	record := connectors.Record{}
+	if err := materializeNestedRepeatableParents(record, applications, parentIndexesForChild); err != nil {
+		return nil, err
+	}
 	for _, app := range applications {
 		if app.flag.MapKey != "" {
 			repeatable, err := repeatableRecordTarget(app.target)
@@ -1483,8 +1524,8 @@ func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]st
 			return nil, err
 		}
 		if repeatable {
-			parentCount := nestedRepeatableParentCount(app.target, applications)
 			parentIndexes := parentIndexesForChild[app.name]
+			parentCount := nestedRepeatableParentCount(app.target, applications, parentIndexes)
 			if parentIndexFlag, hasParentIndexFlag := parentIndexFlagForChild[app.name]; hasParentIndexFlag && len(parentIndexes) == 0 && parentCount > 1 {
 				return nil, fmt.Errorf("flag --%s requires --%s when multiple parent records are present", app.name, parentIndexFlag)
 			}

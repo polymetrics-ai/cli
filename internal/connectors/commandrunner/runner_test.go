@@ -1347,6 +1347,44 @@ func TestRecordOverridesPairsNonUniformNestedRepeatableCollections(t *testing.T)
 	}
 }
 
+func TestRecordOverridesMaterializesNestedParentsFromExplicitIndexes(t *testing.T) {
+	record, err := recordOverrides(connectors.CommandSurfaceCommand{
+		Path:         "selectors set",
+		Intent:       "reverse_etl",
+		Availability: "implemented",
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "child-kind", Type: "string", MapsTo: "record.selectors.[].children.[].kind"},
+			{Name: "child-value", Type: "string", MapsTo: "record.selectors.[].children.[].value"},
+			{Name: "child-parent-index", Type: "integer", ParentIndexFor: []string{"child-kind", "child-value"}},
+		},
+	}, map[string][]string{
+		"child-kind":         {"first-kind", "second-kind"},
+		"child-value":        {"first-value", "second-value"},
+		"child-parent-index": {"1", "2"},
+	})
+	if err != nil {
+		t.Fatalf("recordOverrides: %v", err)
+	}
+	selectors, ok := record["selectors"].([]any)
+	if !ok || len(selectors) != 2 {
+		t.Fatalf("selectors = %#v, want two materialized records", record["selectors"])
+	}
+	for index, want := range [][]string{{"first-kind", "first-value"}, {"second-kind", "second-value"}} {
+		selector, ok := selectors[index].(map[string]any)
+		if !ok {
+			t.Fatalf("selector %d = %#v, want object", index, selectors[index])
+		}
+		children, ok := selector["children"].([]any)
+		if !ok || len(children) != 1 {
+			t.Fatalf("selector %d children = %#v, want one child", index, selector["children"])
+		}
+		child, ok := children[0].(map[string]any)
+		if !ok || child["kind"] != want[0] || child["value"] != want[1] {
+			t.Fatalf("selector %d child = %#v, want kind=%q value=%q", index, children[0], want[0], want[1])
+		}
+	}
+}
+
 func TestRecordOverridesRejectsUnassociatedNestedRepeatableCollections(t *testing.T) {
 	_, err := recordOverrides(connectors.CommandSurfaceCommand{
 		Path:         "selectors set",

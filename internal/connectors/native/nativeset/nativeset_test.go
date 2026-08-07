@@ -276,10 +276,11 @@ func TestCloudTrailNestedWriteFlagsBuildClosedRecords(t *testing.T) {
 	basicPlan, err := commandrunner.BuildWriteCommand(t.Context(), cloudTrail, commandrunner.Request{
 		Path: []string{"event-selectors", "set"},
 		Flags: map[string][]string{
-			"trail-name":                         {"example-trail"},
-			"event-selector-read-write-type":     {"All", "ReadOnly"},
-			"event-selector-data-resource-type":  {"AWS::S3::Object", "AWS::Lambda::Function"},
-			"event-selector-data-resource-value": {"arn:aws:s3:::example-bucket/", "arn:aws:lambda:us-east-1:123456789012:function:example"},
+			"trail-name":                                {"example-trail"},
+			"event-selector-read-write-type":            {"All", "ReadOnly"},
+			"event-selector-data-resource-type":         {"AWS::S3::Object", "AWS::Lambda::Function"},
+			"event-selector-data-resource-value":        {"arn:aws:s3:::example-bucket/", "arn:aws:lambda:us-east-1:123456789012:function:example"},
+			"event-selector-data-resource-parent-index": {"1", "2"},
 		},
 		Preview: true,
 	})
@@ -290,17 +291,24 @@ func TestCloudTrailNestedWriteFlagsBuildClosedRecords(t *testing.T) {
 	if !ok || len(basicSelectors) != 2 {
 		t.Fatalf("EventSelectors = %#v, want two repeatable selectors", basicPlan.Record["EventSelectors"])
 	}
-	resources, ok := basicSelectors[0].(map[string]any)["DataResources"].([]any)
-	if !ok || len(resources) != 2 {
-		t.Fatalf("EventSelectors[0].DataResources = %#v, want two repeatable resources", basicSelectors[0])
+	for index, wantType := range []string{"AWS::S3::Object", "AWS::Lambda::Function"} {
+		resources, ok := basicSelectors[index].(map[string]any)["DataResources"].([]any)
+		if !ok || len(resources) != 1 {
+			t.Fatalf("EventSelectors[%d].DataResources = %#v, want one paired resource", index, basicSelectors[index])
+		}
+		resource, ok := resources[0].(map[string]any)
+		if !ok || resource["Type"] != wantType {
+			t.Fatalf("EventSelectors[%d].DataResources[0] = %#v, want type %q", index, resources[0], wantType)
+		}
 	}
 
 	insightsPlan, err := commandrunner.BuildWriteCommand(t.Context(), cloudTrail, commandrunner.Request{
 		Path: []string{"insight-selectors", "set"},
 		Flags: map[string][]string{
-			"trail-name":             {"example-trail"},
-			"insight-type":           {"ApiCallRateInsight", "ApiErrorRateInsight"},
-			"insight-event-category": {"Management", "Data"},
+			"trail-name":                          {"example-trail"},
+			"insight-type":                        {"ApiCallRateInsight", "ApiErrorRateInsight"},
+			"insight-event-category":              {"Management", "Data"},
+			"insight-event-category-parent-index": {"1", "2"},
 		},
 		Preview: true,
 	})
@@ -311,9 +319,11 @@ func TestCloudTrailNestedWriteFlagsBuildClosedRecords(t *testing.T) {
 	if !ok || len(insightSelectors) != 2 {
 		t.Fatalf("InsightSelectors = %#v, want two repeatable selectors", insightsPlan.Record["InsightSelectors"])
 	}
-	categories, ok := insightSelectors[0].(map[string]any)["EventCategories"].([]any)
-	if !ok || len(categories) != 2 {
-		t.Fatalf("InsightSelectors[0].EventCategories = %#v, want two repeatable categories", insightSelectors[0])
+	for index, wantCategory := range []string{"Management", "Data"} {
+		categories, ok := insightSelectors[index].(map[string]any)["EventCategories"].([]any)
+		if !ok || len(categories) != 1 || categories[0] != wantCategory {
+			t.Fatalf("InsightSelectors[%d].EventCategories = %#v, want %q", index, insightSelectors[index], wantCategory)
+		}
 	}
 
 	channelPlan, err := commandrunner.BuildWriteCommand(t.Context(), cloudTrail, commandrunner.Request{
@@ -322,7 +332,7 @@ func TestCloudTrailNestedWriteFlagsBuildClosedRecords(t *testing.T) {
 			"destination-location": {"arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/one", "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/two"},
 			"destination-type":     {"EVENT_DATA_STORE", "EVENT_DATA_STORE"},
 			"name":                 {"example-channel"},
-			"source":               {"aws.partner/example"},
+			"source":               {"Custom"},
 			"tag-key":              {"Environment", "Team"},
 			"tag-value":            {"preview", "platform"},
 		},
