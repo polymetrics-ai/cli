@@ -1,0 +1,84 @@
+{
+  "phase": "jira-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "jira",
+  "state": "red",
+  "branch": "fm/cli-top50-sweep-resume2-r1",
+  "landing_order": "4 of 21 under the captain's largest-first reversal, behind github (1220), workday-rest (907) and zendesk-support (625)",
+  "issue": {
+    "parent": 81,
+    "children_verified": null
+  },
+  "artifact": {
+    "url": "https://dac-static.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+    "kind": "openapi",
+    "retrieved_at": "2026-08-07",
+    "http_status": 200,
+    "bytes": 2449760,
+    "sha256": "5a51740d7ab3c77c521fc8895a7a58b4ff684bc0d2ebeb830135e8320b063ced",
+    "openapi": "3.0.1",
+    "info_version": "1001.0.0-SNAPSHOT-5a5e48e6afe6af917438fab9030fd20c4392b55e",
+    "byte_check": "NOT AVAILABLE, and that is a finding rather than a gap. The ledger's version-pinned URL (?_v=1.8516.72) returns 404. The unpinned URL serves a ROLLING SNAPSHOT: between MASTER-PLAN.json's derivation and this one, on the same calendar day, the document went 2,445,625 -> 2,449,760 bytes, 420 -> 421 path keys and 616 -> 617 operations (+1 GET), with a different git sha in info.version. The sha256 above replaces the byte count as the artifact's identity.",
+    "delta_unnameable": "The +1 GET cannot be named: naming it requires the prior artifact, which was never cached -- only its aggregate counts survive in MASTER-PLAN.json. Guessing which endpoint appeared would be an invention, so it is not guessed."
+  },
+  "operations": {
+    "documented_total": 617,
+    "paths": 421,
+    "by_method": {
+      "GET": 276,
+      "POST": 134,
+      "PUT": 118,
+      "DELETE": 89
+    },
+    "reads": 300,
+    "writes": 317,
+    "read_shaped_posts": 24,
+    "binary_downloads": 3,
+    "deprecated": 29,
+    "ledger_recorded": 616,
+    "delta_vs_ledger": 1,
+    "ledger_verdict": "does_not_reconcile_because_the_artifact_moved",
+    "derivation_run_through_red_test_rules": {
+      "paths_with_question_mark": 0,
+      "paths_with_wildcard": 0,
+      "paths_with_space": 0,
+      "duplicate_templated_method_path": 0,
+      "duplicate_normalised_method_path": 0
+    }
+  },
+  "coverage_plan": {
+    "covered": 592,
+    "blocked": 25,
+    "streams_kept": 3,
+    "direct_reads": 270,
+    "binary_downloads": 3,
+    "post_shaped_reads": 24,
+    "write_actions_implemented": 286,
+    "write_actions_partial": 6,
+    "blocked_classes": {
+      "unbounded_body": 12,
+      "dynamic_key_map": 5,
+      "raw_binary_body": 3,
+      "empty_contract": 3,
+      "scalar_body": 2
+    }
+  },
+  "starting_state": {
+    "api_surface_rows": 15,
+    "wildcard_or_comma_joined_rows": 12,
+    "cli_surface_json": "absent",
+    "writes_json": "absent",
+    "operations_json": "absent",
+    "note": "Twelve of fifteen rows are comma-joined or wildcard 'and similar' families standing for 602 endpoints. A wildcard row is not an operation (finding 24), so this is a restructure, not an extension."
+  },
+  "red_confirmed": true,
+  "red_command": "go test ./cmd/connectorgen/ -run TestJiraDocumentedSurfaceIsComplete",
+  "red_failure": "--- FAIL: TestJiraDocumentedSurfaceIsComplete (0.00s)\n    jira_documented_surface_test.go:225: operation_ledger_version = 0, want 1\n    jira_documented_surface_test.go:301: 10 malformed row(s): DELETE /rest/api/3/issue*, /comment*, /worklog*, /attachment*, /project*, /filter*, /workflow* and related delete actions, GET /rest/api/3/attachment/content/{id}, /attachment/thumbnail/{id}, GET /rest/api/3/auditing/record, /events, /field, /issuetype, /priority, /resolution, /status, /workflow*, /screen*, /permission*, /configuration and other platform/admin metadata, GET /rest/api/3/filter*, /dashboard*, /jql*, /label, /group*, /applicationrole*, /license*, /serverInfo, GET /rest/api/3/issue/{issueIdOrKey}/comment, /worklog, /watchers, /votes, /remotelink, /properties and similar issue subresources, GET /rest/api/3/project/{projectIdOrKey}, /rest/api/3/user, GET /rest/api/3/project/{projectIdOrKey}/components, /versions, /role, /properties and project metadata subresources, POST /rest/api/3/issue, /issue/bulk, /issue/{issueIdOrKey}/comment, /transitions, /worklog, /remotelink and related create actions, POST /rest/api/3/search and /rest/api/3/search/jql, PUT /rest/api/3/issue/{issueIdOrKey}, /comment/{id}, /worklog/{id}, /project/*, /filter/*, /workflow* and related update actions\n    jira_documented_surface_test.go:311: 12 legacy excluded row(s) remain, want 0\n    jira_documented_surface_test.go:314: documented endpoints = 15, want 617\n    jira_documented_surface_test.go:317: covered(3)+blocked(0) = 3, want 15 \u2014 every row needs a disposition\n    jira_documented_surface_test.go:321: byMethod = map[DELETE:1 GET:11 POST:2 PUT:1], want map[DELETE:89 GET:276 POST:134 PUT:118]\n    jira_documented_surface_test.go:328: covered rows = 3, want 592\n    jira_documented_surface_test.go:331: blocked rows = 0, want 25\n    jira_documented_surface_test.go:334: blocked rows by named dependency class = map[], want map[dynamic_key_map:5 empty_contract:3 raw_binary_body:3 scalar_body:2 unbounded_body:12]\n    jira_documented_surface_test.go:356: GET /rest/api/3/universal_avatar/view/type/{type}: avatar image read is not covered\n    jira_documented_surface_test.go:356: GET /rest/api/3/universal_avatar/view/type/{type}/avatar/{id}: avatar image read is not covered\n    jira_documented_surface_test.go:356: GET /rest/api/3/universal_avatar/view/type/{type}/owner/{entityId}: avatar image read is not covered\n    jira_documented_surface_test.go:364: expected \"POST /rest/api/3/universal_avatar/type/{type}/owner/{entityId}\" \u2014 the avatar UPLOAD, whose raw image body must never be modelled as a download\n    jira_documented_surface_test.go:377: expected read-shaped POST \"POST /rest/api/3/app/field/context/configuration/list\"\n    jira_documented_surface_test.go:377: expected read-shaped POST \"POST /rest/api/3/changelog/bulkfetch\"\n    jira_documented_surface_test.go:377: expected read-shaped POST \"POST /rest/api/3/comment/list\"\n    jira_documented_surface_test.go:377: expected read-shaped POST \"POST /rest/api/3/expression/analyse\"\n    jira_documented_surface_test.go:377: expected read-shaped POST \"POST /rest/api/3/expression/eval\"\n    jira_documented_surface_test.go:377: expected read-shaped POST \"POST /rest/api/3/expression/evaluate\"\n    jira_documented_surface_test.go:377: expected read-shaped POST \"POST /rest/api/3/issue/bulkfetch\"\n    jira_documented_surface_test.go:377: expected read-shaped POST \"POST /rest/api/3/issue/{issueIdOrKey}/changelog/list\"\n    jira_documented_surface_test.go:377: expected read-shaped POST \"POST /rest/api/3/jql/autocompletedata\"\n    jira_documented_surface_test.go:377: expected read-shaped POST \"POST /rest/api/3/jql/function/computation/search\"\n    jira_documented_surface_test.go:377: expected read-shaped POST \"POST /rest/api/3/jql/match\"\n    jira_documented_surface_test.go:377: expected read-shaped POST \"POST /rest/api/3/jql/parse\"\n    jira_documented_surface_test.go:377: expected read-shaped POST \"POST /rest/api/3/jql/pdcleaner\"\n    jira_documented_surface_test.go:377: expected read-shaped POST \"POST /rest/api/3/jql/sanitize\"\n    jira_documented_surface_test.go:377: expected read-shaped POST \"POST /rest/api/3/priorityscheme/mappings\"\n    jira_documented_surface_test.go:377: expected read-shaped POST \"POST /rest/api/3/search\"\n    jira_documented_surface_test.go:377: expected read-shaped POST \"POST /rest/api/3/search/approximate-count\"\n    jira_documented_surface_test.go:377: expected read-shaped POST \"POST /rest/api/3/search/jql\"\n    jira_documented_surface_test.go:377: expected read-shaped POST \"POST /rest/api/3/workflow/history/list\"\n    jira_documented_surface_test.go:377: expected read-shaped POST \"POST /rest/api/3/workflows/create/validation\"\n    jira_documented_surface_test.go:377: expected read-shaped POST \"POST /rest/api/3/workflows/preview\"\n    jira_documented_surface_test.go:377: expected read-shaped POST \"POST /rest/api/3/workflows/update/validation\"\n    jira_documented_surface_test.go:377: expected read-shaped POST \"POST /rest/api/3/worklog/list\"\n    jira_documented_surface_test.go:377: expected read-shaped POST \"POST /rest/atlassian-connect/1/migration/workflow/rule/search\"\n    jira_documented_surface_test.go:396: POST /rest/api/3/issue/properties: expected a covered write\nFAIL\nFAIL\tpolymetrics.ai/cmd/connectorgen\t0.546s\nFAIL\n",
+  "next_action": "slice 2 -- run tools/gen_jira.py ... all to rewrite api_surface.json to 617 rows and generate cli_surface.json, operations.json and writes.json; then connectorgen validate + surface-sync + the whole cmd/connectorgen package.",
+  "gsd": {
+    "lifecycle": "discuss-phase -> plan-phase --tdd -> execute-phase -> verify-work -> code-review",
+    "sources_resolved_with": "./scripts/gsd sources <command>",
+    "trace": ".planning/traces/gsd-top50-sweep-resume5-r1.md",
+    "execution_mode": "inline/manual -- recorded per the canonical contract; the runtime provides no isolated agent able to hold a 617-operation derivation plus its artifact, and the parent-orchestrator contract forbids spawning extra roles."
+  }
+}

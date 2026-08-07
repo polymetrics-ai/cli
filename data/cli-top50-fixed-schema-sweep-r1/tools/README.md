@@ -107,3 +107,60 @@ Rules it encodes that cost something to learn:
 - **A collapsed query-string behaviour uses `omit_when_absent`**, or the variant becomes the default.
 - `required_mapping_paths` is a **transcription** of `validate.go`'s recursion, not a restatement of
   the rule — `AGENTS.md` is explicit that hand-copied runtime rules drift.
+
+## `derive_jira.py` / `gen_jira.py`
+
+jira is a **from-nothing** connector in workday-rest's sense: 15 `api_surface` rows, twelve of them
+comma-joined or wildcard "and similar" families standing for 602 endpoints, and no
+`cli_surface.json`, `writes.json` or `operations.json` at all. A wildcard row is not an operation
+(finding 24), so this is a restructure and the count moves 15 → 617.
+
+```bash
+curl -sS -o /tmp/sweep/jira.json \
+  'https://dac-static.atlassian.com/cloud/jira/platform/swagger-v3.v3.json'
+python3 derive_jira.py /tmp/sweep/jira.json > \
+  .planning/phases/jira-parity-sweep-r1/DERIVED-OPERATIONS.json
+python3 gen_jira.py internal/connectors/defs/jira \
+  .planning/phases/jira-parity-sweep-r1/DERIVED-OPERATIONS.json /tmp/sweep/jira.json classify
+python3 gen_jira.py ... all
+go run ./cmd/connectorgen surface-sync
+```
+
+**⚠️ THE BYTE-COUNT CHECK DOES NOT WORK FOR THIS ARTIFACT, AND THAT IS A FINDING.** The ledger's
+version-pinned URL (`?_v=1.8516.72`) returns 404; the unpinned URL serves a **rolling snapshot**
+whose `info.version` is `1001.0.0-SNAPSHOT-<git sha>`. On one calendar day it went 2,445,625 →
+2,449,760 bytes, 420 → 421 path keys, 616 → 617 operations. The derivation therefore records the
+artifact's **sha256** instead, which identifies the document even after the URL has moved on. Any
+connector whose artifact URL is unpinned needs the same treatment — check `info.version` for a
+snapshot marker before trusting a recorded byte count.
+
+Rules `gen_jira.py` encodes that cost something to learn:
+
+- **"No schema declared" and "declared as a string" must stay distinguishable.** Jira spells the
+  first two ways — an absent `schema` key on a `*/*` avatar upload and a literal `"schema": {}` on
+  the entity-property PUTs — and a deref that falls through to `type: string` collapses them into
+  the second. That misfiled 12 blocked rows into the wrong class on the first run.
+- **Binary is GET-only and read from 2xx responses only.** Atlassian attaches the same content map
+  to every response code, so the avatar reads declare `image/png` on their 401/403/404 as well; and
+  the avatar *upload* sits in the same resource family, so a rule keyed on the path or on "declares
+  a non-JSON media type" ships a mutation as a download.
+- **Command names come from `operationId`**, the opposite of workday-rest: Jira declares one on all
+  617 and they are collision-free after kebab-casing. Thirteen legacy Connect/Forge ids carry a
+  `SomeResource.` prefix and a `_get` suffix; both are stripped and the result is asserted unique.
+
+## `check_red_observed.py`
+
+**PROGRESS.md has referenced this tool since github, and it was never committed** — running it
+raised `No such file or directory`, so three workers were told an enforcement existed that did not.
+It now does:
+
+```bash
+python3 check_red_observed.py --all          # every *-parity-sweep-r1 phase
+python3 check_red_observed.py jira
+```
+
+It fails a connector whose `RUN-STATE.json` claims `red_confirmed: true` without output that could
+only have come from a real `go test` run: a `--- FAIL:` line, a `<file>_test.go:<line>:` assertion
+location, a `want <expected>` clause, and no placeholder text. Placeholders are matched with
+**anchored** boundaries — a bare substring search flags `n/a` inside `expression/analyse`, a real
+Jira endpoint, and a check that cries wolf gets disabled.
