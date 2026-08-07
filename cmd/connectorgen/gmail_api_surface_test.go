@@ -109,9 +109,13 @@ func TestGmailAPISurfaceOperationLedger(t *testing.T) {
 			if strings.TrimSpace(ep.Operation.SourceURL) == "" && strings.TrimSpace(ep.Operation.Notes) == "" {
 				t.Errorf("%s: blocked row has no source citation", key)
 			}
+			// A dependency is "named" when it identifies the specific thing being waited on:
+			// an issue reference, an explicit "Named dependency:" marker, or a concrete engine
+			// symbol. Prose alone ("not supported yet") is not enough.
 			named := strings.TrimSpace(ep.Operation.Dependency) != "" ||
 				strings.Contains(ep.Operation.Reason, "#") ||
-				strings.Contains(ep.Operation.Notes, "#")
+				strings.Contains(ep.Operation.Notes, "#") ||
+				strings.Contains(ep.Operation.Notes, "Named dependency:")
 			if !named {
 				t.Errorf("%s: blocked row must name its dependency (issue ref or explicit dependency field)", key)
 			}
