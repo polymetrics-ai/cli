@@ -22,6 +22,7 @@ import (
 	statestore "polymetrics.ai/internal/state"
 	"polymetrics.ai/internal/synccontract"
 	"polymetrics.ai/internal/vault"
+	"polymetrics.ai/internal/warehouse"
 )
 
 const (
@@ -53,18 +54,21 @@ type sqlQueryEngine interface {
 }
 
 type state struct {
-	Revision                     uint64                            `json:"revision"`
-	SyncModeCompatibilityVersion uint                              `json:"sync_mode_compatibility_version,omitempty"`
-	Credentials                  []CredentialMeta                  `json:"credentials"`
-	CredentialBindings           map[string]credentialBindingState `json:"credential_bindings"`
-	CoordinationSalt             string                            `json:"coordination_salt,omitempty"`
-	Connections                  []Connection                      `json:"connections"`
-	Catalogs                     []catalogReference                `json:"catalogs"`
-	Runs                         []Run                             `json:"runs"`
-	ReversePlans                 []ReversePlan                     `json:"reverse_plans"`
-	ReverseRuns                  []ReverseRun                      `json:"reverse_runs"`
-	Checkpoints                  map[string]map[string]string      `json:"checkpoints,omitempty"`
-	StreamStates                 map[string]StreamState            `json:"stream_states,omitempty"`
+	Revision                     uint64 `json:"revision"`
+	SyncModeCompatibilityVersion uint   `json:"sync_mode_compatibility_version,omitempty"`
+	// WorkspaceID is the opaque generated identifier that forms the first
+	// component of every warehouse path. It is never a user-supplied name.
+	WorkspaceID        string                            `json:"workspace_id,omitempty"`
+	Credentials        []CredentialMeta                  `json:"credentials"`
+	CredentialBindings map[string]credentialBindingState `json:"credential_bindings"`
+	CoordinationSalt   string                            `json:"coordination_salt,omitempty"`
+	Connections        []Connection                      `json:"connections"`
+	Catalogs           []catalogReference                `json:"catalogs"`
+	Runs               []Run                             `json:"runs"`
+	ReversePlans       []ReversePlan                     `json:"reverse_plans"`
+	ReverseRuns        []ReverseRun                      `json:"reverse_runs"`
+	Checkpoints        map[string]map[string]string      `json:"checkpoints,omitempty"`
+	StreamStates       map[string]StreamState            `json:"stream_states,omitempty"`
 }
 
 // credentialBindingState is protected project-state metadata. The raw binding
@@ -113,8 +117,13 @@ func InitProject(root string) error {
 		if err != nil {
 			return err
 		}
+		workspaceID, err := prefixedID("ws")
+		if err != nil {
+			return err
+		}
 		initial := state{
 			SyncModeCompatibilityVersion: syncModeCompatibilityVersion,
+			WorkspaceID:                  workspaceID,
 			CredentialBindings:           map[string]credentialBindingState{},
 			CoordinationSalt:             coordinationSalt,
 			Checkpoints:                  map[string]map[string]string{},
@@ -209,12 +218,44 @@ func (a *App) normalizeLoadedState(loaded state) error {
 	if err := a.migrateCredentialCoordination(); err != nil {
 		return err
 	}
-	if catalogRefsChanged {
+	identityChanged, err := a.migrateWarehouseIdentity()
+	if err != nil {
+		return err
+	}
+	if catalogRefsChanged || identityChanged {
 		if err := a.save(); err != nil {
-			return fmt.Errorf("remove obsolete catalog snapshots: %w", err)
+			return fmt.Errorf("persist project identity: %w", err)
 		}
 	}
 	return nil
+}
+
+// migrateWarehouseIdentity gives a project and its connections the opaque
+// identifiers that form warehouse path components. They are generated once and
+// persisted, so a connection's directory is stable across runs and independent
+// of its display name.
+func (a *App) migrateWarehouseIdentity() (bool, error) {
+	changed := false
+	if strings.TrimSpace(a.state.WorkspaceID) == "" {
+		workspaceID, err := prefixedID("ws")
+		if err != nil {
+			return false, err
+		}
+		a.state.WorkspaceID = workspaceID
+		changed = true
+	}
+	for index := range a.state.Connections {
+		if strings.TrimSpace(a.state.Connections[index].ID) != "" {
+			continue
+		}
+		connectionID, err := prefixedID("conn")
+		if err != nil {
+			return false, err
+		}
+		a.state.Connections[index].ID = connectionID
+		changed = true
+	}
+	return changed, nil
 }
 
 func (a *App) dropInvalidCatalogReferences() bool {
@@ -720,12 +761,23 @@ func (a *App) RemoveCredential(ctx context.Context, name string) error {
 	return fmt.Errorf("credential %q not found", name)
 }
 
+// ValidateConnectionName rejects connection names that two distinct
+// connections could not be told apart by once folded into a path. See
+// warehouse.ValidateConnectionName for the rule and why it rejects rather than
+// rewrites.
+func ValidateConnectionName(name string) error {
+	return warehouse.ValidateConnectionName(name)
+}
+
 func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest) (Connection, error) {
-	if strings.TrimSpace(req.Name) == "" {
-		return Connection{}, errors.New("connection name is required")
+	if err := ValidateConnectionName(req.Name); err != nil {
+		return Connection{}, err
 	}
 	if _, ok := a.findConnection(req.Name); ok {
 		return Connection{}, fmt.Errorf("connection %q already exists", req.Name)
+	}
+	if existing, ok := a.findConnectionFold(req.Name); ok {
+		return Connection{}, fmt.Errorf("connection %q is ambiguous with existing connection %q: connection names must differ by more than letter case", req.Name, existing.Name)
 	}
 	if len(req.Streams) == 0 {
 		return Connection{}, errors.New("at least one stream is required")
@@ -734,8 +786,13 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 	if err != nil {
 		return Connection{}, fmt.Errorf("resolve source: %w", err)
 	}
-	if _, _, err := a.resolveEndpoint(ctx, req.Destination); err != nil {
+	destination, _, err := a.resolveEndpoint(ctx, req.Destination)
+	if err != nil {
 		return Connection{}, fmt.Errorf("resolve destination: %w", err)
+	}
+	materializesWarehouse := false
+	if materializer, ok := destination.(connectors.LocalWarehouseMaterializer); ok {
+		materializesWarehouse = materializer.MaterializesLocalWarehouse()
 	}
 	catalog, catalogErr := a.catalogForEndpoint(ctx, source, sourceRuntime, false)
 	if errors.Is(catalogErr, errCatalogStale) {
@@ -769,13 +826,32 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 		if stream.DestinationTable == "" {
 			stream.DestinationTable = name
 		}
+		// Against the local warehouse the stream and table names are path
+		// components, so they are held to the same rule as the connection
+		// name: rejected at creation rather than coerced into something that
+		// resolves. Creation is the only moment this can honestly be caught —
+		// every sync of a connection carrying an unusable name fails at the
+		// same place, and a connection can be neither edited nor deleted.
+		if materializesWarehouse {
+			if _, err := warehouse.PathComponent("stream", name); err != nil {
+				return Connection{}, err
+			}
+			if _, err := warehouse.PathComponent("table", stream.DestinationTable); err != nil {
+				return Connection{}, err
+			}
+		}
 		if err := ValidateStreamSyncConfig(stream); err != nil {
 			return Connection{}, fmt.Errorf("validate stream %q: %w", name, err)
 		}
 		req.Streams[name] = stream
 	}
+	connectionID, err := prefixedID("conn")
+	if err != nil {
+		return Connection{}, err
+	}
 	now := time.Now().UTC()
 	conn := Connection{
+		ID:          connectionID,
 		Name:        req.Name,
 		Source:      req.Source,
 		Destination: req.Destination,
@@ -1225,15 +1301,25 @@ func (a *App) QueryTable(ctx context.Context, req QueryTableRequest) ([]connecto
 	cfg := connectors.RuntimeConfig{
 		ProjectDir: a.projectDir,
 		Config: map[string]string{
-			"path": filepath.Join(a.projectDir, "warehouse"),
+			"path": a.warehouseRoot(),
 		},
 	}
-	warehouse, ok := a.registry.Get("warehouse")
+	if req.Connection != "" {
+		// The unattributed selector names the root-level tables no connection
+		// owns, so it deliberately does not resolve through findConnection.
+		if req.Connection != warehouse.UnattributedConnection {
+			if _, ok := a.findConnection(req.Connection); !ok {
+				return nil, fmt.Errorf("connection %q not found", req.Connection)
+			}
+		}
+		cfg.Config["connection"] = req.Connection
+	}
+	warehouseConnector, ok := a.registry.Get("warehouse")
 	if !ok {
 		return nil, errors.New("warehouse connector not registered")
 	}
 	rows := make([]connectors.Record, 0)
-	err := warehouse.Read(ctx, connectors.ReadRequest{Stream: req.Table, Config: cfg, Limit: req.Limit}, connectors.LimitEmitter(req.Limit, func(record connectors.Record) error {
+	err := warehouseConnector.Read(ctx, connectors.ReadRequest{Stream: req.Table, Config: cfg, Limit: req.Limit}, connectors.LimitEmitter(req.Limit, func(record connectors.Record) error {
 		rows = append(rows, record)
 		return nil
 	}))
@@ -1245,6 +1331,40 @@ func (a *App) QueryTable(ctx context.Context, req QueryTableRequest) ([]connecto
 
 func (a *App) QuerySQL(ctx context.Context, sql string, limit int) ([]connectors.Record, error) {
 	return a.sqlEngine.QuerySQL(ctx, sql, limit)
+}
+
+// warehouseRoot is this project's local warehouse root.
+func (a *App) warehouseRoot() string {
+	return filepath.Join(a.projectDir, "warehouse")
+}
+
+// pinReverseSourceConnection resolves which connection's table a reverse plan
+// is built from, and returns a selector that keeps resolving to that same table
+// afterwards. Pinning it at plan time is what stops an approved plan becoming
+// unexecutable the day a second connection materializes the same table name:
+// preview and run take no connection selector of their own, so without a pin
+// they would fall back to an unscoped read and be refused as ambiguous.
+func (a *App) pinReverseSourceConnection(table, connection string) (string, error) {
+	found, err := warehouse.FindTable(a.warehouseRoot(), table, connection)
+	if err != nil {
+		return "", err
+	}
+	if found.Connection == "" {
+		return warehouse.UnattributedConnection, nil
+	}
+	return found.Connection, nil
+}
+
+// reverseSourceRemedy states the recovery available to a stored plan whose
+// source table has become ambiguous. Only plans created before the owning
+// connection was pinned can reach this, and preview and run accept no
+// connection selector, so re-planning is the honest answer rather than naming a
+// flag those commands do not have.
+func reverseSourceRemedy(plan ReversePlan) string {
+	return fmt.Sprintf(
+		"reverse plan %q records no source connection, so re-create it with `pm reverse plan %s --source-table %s --connection <name>` and approve the new plan",
+		plan.ID, plan.Name, plan.SourceTable,
+	)
 }
 
 // QueryEngineName reports which SQL engine backs QuerySQL ("jsonl" by default,
@@ -1272,7 +1392,11 @@ func (a *App) PlanReverseETL(ctx context.Context, req PlanReverseETLRequest) (Re
 	if err := a.guardBatchableAction(req.DestinationConnector, req.Action, req.SourceTable); err != nil {
 		return ReversePlan{}, err
 	}
-	records, err := a.QueryTable(ctx, QueryTableRequest{Table: req.SourceTable, Limit: req.Limit})
+	sourceConnection, err := a.pinReverseSourceConnection(req.SourceTable, req.SourceConnection)
+	if err != nil {
+		return ReversePlan{}, warehouse.WithAmbiguityRemedy(err, "pass --connection to choose one")
+	}
+	records, err := a.QueryTable(ctx, QueryTableRequest{Table: req.SourceTable, Connection: sourceConnection, Limit: req.Limit})
 	if err != nil {
 		return ReversePlan{}, err
 	}
@@ -1333,6 +1457,7 @@ func (a *App) PlanReverseETL(ctx context.Context, req PlanReverseETLRequest) (Re
 		Name:                  req.Name,
 		Status:                "planned",
 		SourceTable:           req.SourceTable,
+		SourceConnection:      sourceConnection,
 		DestinationConnector:  req.DestinationConnector,
 		DestinationCredential: req.DestinationCredential,
 		DestinationConfig:     cloneStringMap(req.DestinationConfig),
@@ -1646,9 +1771,9 @@ func (a *App) PreviewReversePlan(ctx context.Context, id string) (ReversePlan, c
 	if err := a.verifyPlanSealForRuntime(plan, runtime); err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
-	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Limit: max(1, plan.RecordCount+1)})
+	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Connection: plan.SourceConnection, Limit: max(1, plan.RecordCount+1)})
 	if err != nil {
-		return ReversePlan{}, connectors.WritePreview{}, err
+		return ReversePlan{}, connectors.WritePreview{}, warehouse.WithAmbiguityRemedy(err, reverseSourceRemedy(plan))
 	}
 	mapped := mapReverseRecords(records, plan.Mappings)
 	payloadIdentity, err := payloadIdentitiesForRecords(runtime.ProjectDir, mapped)
@@ -2016,9 +2141,9 @@ func (a *App) runBulkReversePlan(ctx context.Context, plan ReversePlan, req RunR
 	if err := a.guardBatchableAction(plan.DestinationConnector, plan.Action, plan.SourceTable); err != nil {
 		return ReverseRun{}, err
 	}
-	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Limit: max(1, plan.RecordCount+1)})
+	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Connection: plan.SourceConnection, Limit: max(1, plan.RecordCount+1)})
 	if err != nil {
-		return ReverseRun{}, err
+		return ReverseRun{}, warehouse.WithAmbiguityRemedy(err, reverseSourceRemedy(plan))
 	}
 	mappedForHash := mapReverseRecords(records, plan.Mappings)
 	dest := EndpointConfig{Connector: plan.DestinationConnector, Credential: plan.DestinationCredential, Config: plan.DestinationConfig}
@@ -2439,6 +2564,18 @@ func (a *App) findCredential(name string) (CredentialMeta, bool) {
 func (a *App) findConnection(name string) (Connection, bool) {
 	for _, conn := range a.state.Connections {
 		if conn.Name == name {
+			return conn, true
+		}
+	}
+	return Connection{}, false
+}
+
+// findConnectionFold finds a connection whose name differs from name only by
+// letter case. Case alone is too weak a distinction to hang two tenants'
+// warehouse data on, so creation refuses it.
+func (a *App) findConnectionFold(name string) (Connection, bool) {
+	for _, conn := range a.state.Connections {
+		if strings.EqualFold(conn.Name, name) {
 			return conn, true
 		}
 	}

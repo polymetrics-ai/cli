@@ -102,6 +102,9 @@ type CreateConnectionRequest struct {
 }
 
 type Connection struct {
+	// ID is the opaque generated identifier used as a warehouse path
+	// component. Name is a display value and never becomes a path.
+	ID          string                  `json:"id,omitempty"`
 	Name        string                  `json:"name"`
 	Source      EndpointConfig          `json:"source"`
 	Destination EndpointConfig          `json:"destination"`
@@ -151,12 +154,18 @@ type Run struct {
 
 type QueryTableRequest struct {
 	Table string `json:"table"`
-	Limit int    `json:"limit"`
+	// Connection scopes the read to one connection's tables. It is required
+	// only when more than one connection materializes the same table name.
+	Connection string `json:"connection,omitempty"`
+	Limit      int    `json:"limit"`
 }
 
 type PlanReverseETLRequest struct {
-	Name                  string            `json:"name"`
-	SourceTable           string            `json:"source_table"`
+	Name        string `json:"name"`
+	SourceTable string `json:"source_table"`
+	// SourceConnection scopes the source table to one connection. It is
+	// required only when several connections materialize the same table name.
+	SourceConnection      string            `json:"source_connection,omitempty"`
 	DestinationConnector  string            `json:"destination_connector"`
 	DestinationCredential string            `json:"destination_credential"`
 	DestinationConfig     map[string]string `json:"destination_config,omitempty"`
@@ -185,11 +194,16 @@ type PayloadIdentity struct {
 }
 
 type ReversePlan struct {
-	ID                    string            `json:"id"`
-	Name                  string            `json:"name"`
-	Status                string            `json:"status"`
-	Mode                  string            `json:"mode,omitempty"`
-	SourceTable           string            `json:"source_table"`
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Status      string `json:"status"`
+	Mode        string `json:"mode,omitempty"`
+	SourceTable string `json:"source_table"`
+	// SourceConnection is the connection the plan was built against, resolved
+	// once at plan time. Preview and run scope their reads by it so a plan
+	// keeps resolving to the same table after another connection materializes
+	// one of the same name.
+	SourceConnection      string            `json:"source_connection,omitempty"`
 	DestinationConnector  string            `json:"destination_connector"`
 	DestinationCredential string            `json:"destination_credential"`
 	DestinationConfig     map[string]string `json:"destination_config,omitempty"`

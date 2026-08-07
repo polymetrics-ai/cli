@@ -437,6 +437,20 @@ DESCRIPTION
   A connection joins one source endpoint to one destination endpoint and stores
   stream-level sync settings.
 
+CONNECTION NAMES
+  A name may contain letters, digits, '-' and '_', must start with a letter or
+  digit, and is limited to 128 characters. Names that differ only by letter case
+  are refused. Ambiguous names are rejected at creation rather than rewritten,
+  because two connections that cannot be told apart cannot own separate data.
+  The name is a display value: the local warehouse keys its directories on a
+  generated identifier, so renaming is safe and never moves data.
+
+STREAM AND TABLE NAMES
+  Against the local warehouse destination, --stream and --table become path
+  components, so each may contain only letters, digits, '.', '-' and '_'. They
+  are checked when the connection is created, because a name the warehouse
+  cannot materialize would otherwise fail every sync of that connection.
+
 SYNC MODES
   full_refresh_append              read all source records and append them
   full_refresh_overwrite           read all source records and replace final output
@@ -585,7 +599,7 @@ const queryHelp = `NAME
   pm query - inspect local warehouse data
 
 SYNOPSIS
-  pm query run --table <table> [--limit n] [--json]
+  pm query run --table <table> [--connection name] [--limit n] [--json]
   pm query run --sql "select * from <table> limit n" [--json]
   pm query run --table <table> --agent-mode summary --fields id,email --sample 3
   pm query run --table <table> --agent-mode stream --fields id,email
@@ -595,8 +609,19 @@ DESCRIPTION
   Agent mode can emit compact summary JSON or projected NDJSON rows to reduce
   token usage for external agents.
 
+  Each connection materializes its tables into its own directory, so two
+  connections can use the same table name without overwriting each other. When
+  more than one connection has a table of the requested name, the read is
+  refused and lists the owning connections; pass --connection to pick one.
+  A table at the warehouse root belongs to no connection, because a reverse ETL
+  run writing to the warehouse connector produced it rather than a sync, or it
+  was seeded by hand. It is listed and selected as _unattributed.
+
 FLAGS
   --table table              local warehouse table to scan
+  --connection name          connection whose table to read; required only when
+                             several connections share the table name; use
+                             _unattributed for a root-level table
   --sql sql                  read-only SQL query; takes precedence over --table
   --limit n                  maximum rows to read; default 100
   --fields a,b               project output to selected fields
@@ -703,7 +728,7 @@ SYNOPSIS
 
 USAGE
   pm reverse list [--json]
-  pm reverse plan <name> --source-table <table> --destination connector:credential --map source:dest [--json]
+  pm reverse plan <name> --source-table <table> [--connection name] --destination connector:credential --map source:dest [--json]
   pm reverse preview <plan-id> [--json]
   pm reverse run <plan-id> --approve <token> [--confirm <challenge>] [--json]
   pm reverse status <run-id> [--json]
@@ -761,6 +786,13 @@ COMMANDS
     always omits tokens. A non-batchable destination action is refused here,
     before any plan or approval token exists.
 
+    Each connection materializes its tables into its own directory, so several
+    connections can hold a table of the same name. Pass --connection when they
+    do. The connection is resolved once, here, and recorded on the plan, so
+    preview and run keep reading the same table afterwards; neither takes a
+    connection selector of its own. Use --connection _unattributed for a
+    root-level table that no connection owns.
+
   preview
     Show a stored plan's mapped sample rows, action, and count. For a destructive
     plan, also materialize the request through the destination's no-network dry
@@ -780,6 +812,8 @@ COMMANDS
 
 FLAGS
   --source-table table         local warehouse table to read
+  --connection name            connection whose table to read; required only
+                               when several connections share the table name
   --destination connector:cred destination endpoint
   --map source:dest            field mapping, repeatable
   --action action              destination write action; inspect shows names

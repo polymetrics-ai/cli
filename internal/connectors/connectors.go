@@ -15,6 +15,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"polymetrics.ai/internal/warehouse"
 )
 
 var ErrUnsupportedOperation = errors.New("unsupported connector operation")
@@ -1274,29 +1276,67 @@ func (Warehouse) Check(ctx context.Context, cfg RuntimeConfig) error {
 	return os.MkdirAll(warehousePath(cfg), 0o700)
 }
 
+// Catalog lists the tables materialized under the per-connection layout. One
+// table name can belong to several connections, so it is reported once, and a
+// read that does not say which connection it means is refused rather than
+// answered from whichever file happened to be found first.
 func (w Warehouse) Catalog(ctx context.Context, cfg RuntimeConfig) (Catalog, error) {
 	if err := w.Check(ctx, cfg); err != nil {
 		return Catalog{}, err
 	}
-	entries, err := os.ReadDir(warehousePath(cfg))
+	tables, faults, err := warehouse.Tables(warehousePath(cfg))
 	if err != nil {
-		return Catalog{}, fmt.Errorf("read warehouse directory: %w", err)
+		return Catalog{}, err
 	}
-	streams := make([]Stream, 0)
-	for _, entry := range entries {
-		if entry.IsDir() || filepath.Ext(entry.Name()) != ".jsonl" {
-			continue
+	// A damaged ownership record hides only its own connection's tables. The
+	// catalog still lists every healthy connection's, because one connection's
+	// problem stays that connection's problem. It is reported only when there
+	// is nothing left to list, so an incomplete catalog is never mistaken for
+	// an empty warehouse.
+	if len(tables) == 0 && len(faults) > 0 {
+		return Catalog{}, warehouse.FaultsError("", faults)
+	}
+	owners := make(map[string][]string, len(tables))
+	for _, table := range tables {
+		// A root-level table's empty connection is kept as an entry of its
+		// own: it has no owning connection, and naming one would attribute
+		// rows to a connection that never produced them.
+		owners[table.Name] = append(owners[table.Name], table.Connection)
+	}
+	streams := make([]Stream, 0, len(owners))
+	for name, connections := range owners {
+		named := make([]string, 0, len(connections))
+		attributed := 0
+		for _, connection := range connections {
+			// A name held by a connection and by an unattributed root-level
+			// file at once is held by both. Listing only the connection would
+			// read as sole ownership and contradict the ambiguity error the
+			// very next read of that name raises, which names both.
+			if connection == "" {
+				named = append(named, warehouse.UnattributedConnection)
+				continue
+			}
+			attributed++
+			named = append(named, connection)
 		}
-		name := strings.TrimSuffix(entry.Name(), ".jsonl")
-		streams = append(streams, Stream{Name: name, Description: "Warehouse table " + name})
+		description := "Warehouse table " + name
+		if attributed > 0 {
+			description += " (connection " + strings.Join(named, ", ") + ")"
+		}
+		streams = append(streams, Stream{Name: name, Description: description})
 	}
 	sort.Slice(streams, func(i, j int) bool { return streams[i].Name < streams[j].Name })
 	return Catalog{Connector: w.Name(), Streams: streams}, nil
 }
 
+// Read resolves a table inside the per-connection layout. Config["connection"]
+// scopes the read when more than one connection materializes the same name.
 func (Warehouse) Read(ctx context.Context, req ReadRequest, emit func(Record) error) error {
-	path := tablePath(warehousePath(req.Config), req.Stream)
-	file, err := os.Open(path)
+	table, err := warehouse.FindTable(warehousePath(req.Config), req.Stream, req.Config.Config["connection"])
+	if err != nil {
+		return err
+	}
+	file, err := os.Open(table.Path)
 	if err != nil {
 		return fmt.Errorf("open warehouse table %s: %w", req.Stream, err)
 	}
@@ -1304,6 +1344,32 @@ func (Warehouse) Read(ctx context.Context, req ReadRequest, emit func(Record) er
 		_ = file.Close()
 	}()
 	return readJSONL(ctx, file, emit)
+}
+
+// warehouseWriteTable is the single owner of which file a warehouse write
+// resolves to and which names it accepts. A direct connector write carries no
+// connection identity, so its rows stay at the root rather than entering a
+// connection's directory, where they would be indistinguishable from that
+// connection's own synced data. The table name is validated rather than folded
+// into a safe filename, so a write and the read that follows it always name
+// the same file. ValidateWrite exists only to predict Write, so it asks this
+// rather than restating it: a predictor that carries its own copy of the rule
+// stops predicting the moment either copy moves.
+func warehouseWriteTable(req WriteRequest) (string, error) {
+	table := req.Table
+	if table == "" {
+		table = req.Stream
+	}
+	return warehouse.PathComponent("table", table)
+}
+
+// ValidateWrite refuses a table name this connector could never write before
+// the caller commits to it. A reverse plan is stored and approved ahead of the
+// write it performs, and there is no way to edit a stored plan, so a name
+// rejected only at write time would leave an approved plan that can never run.
+func (Warehouse) ValidateWrite(_ context.Context, req WriteRequest, _ []Record) error {
+	_, err := warehouseWriteTable(req)
+	return err
 }
 
 func (Warehouse) Write(ctx context.Context, req WriteRequest, records []Record) (WriteResult, error) {
@@ -1314,17 +1380,17 @@ func (Warehouse) Write(ctx context.Context, req WriteRequest, records []Record) 
 	if err := os.MkdirAll(dir, 0o700); err != nil {
 		return WriteResult{}, fmt.Errorf("create warehouse directory: %w", err)
 	}
-	table := req.Table
-	if table == "" {
-		table = req.Stream
+	component, err := warehouseWriteTable(req)
+	if err != nil {
+		return WriteResult{}, err
 	}
 	flag := os.O_CREATE | os.O_WRONLY | os.O_APPEND
 	if req.Overwrite {
 		flag = os.O_CREATE | os.O_WRONLY | os.O_TRUNC
 	}
-	file, err := os.OpenFile(tablePath(dir, table), flag, 0o600)
+	file, err := os.OpenFile(filepath.Join(dir, component+".jsonl"), flag, 0o600)
 	if err != nil {
-		return WriteResult{}, fmt.Errorf("open warehouse table %s: %w", table, err)
+		return WriteResult{}, fmt.Errorf("open warehouse table %s: %w", component, err)
 	}
 	defer func() {
 		_ = file.Close()

@@ -19,6 +19,7 @@ import (
 	"polymetrics.ai/internal/perf"
 	"polymetrics.ai/internal/runtimecheck"
 	"polymetrics.ai/internal/safety"
+	"polymetrics.ai/internal/warehouse"
 )
 
 type envelope map[string]any
@@ -1438,8 +1439,17 @@ func runQuery(ctx context.Context, a *app.App, args []string, stdout io.Writer, 
 	var rows []connectors.Record
 	if sql := flags.first("sql"); sql != "" {
 		rows, err = a.QuerySQL(ctx, sql, limit)
+		// --connection scopes --table reads only; the SQL path names its table
+		// inside the query, so point at the surface that can resolve it rather
+		// than at a flag that would be ignored here.
+		err = warehouse.WithAmbiguityRemedy(err, "read it with `pm query run --table <table> --connection <name>`")
 	} else {
-		rows, err = a.QueryTable(ctx, app.QueryTableRequest{Table: flags.first("table"), Limit: limit})
+		rows, err = a.QueryTable(ctx, app.QueryTableRequest{
+			Table:      flags.first("table"),
+			Connection: flags.first("connection"),
+			Limit:      limit,
+		})
+		err = warehouse.WithAmbiguityRemedy(err, "pass --connection to choose one")
 	}
 	if err != nil {
 		return err
@@ -1537,6 +1547,7 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 		plan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
 			Name:                  args[1],
 			SourceTable:           flags.first("source-table"),
+			SourceConnection:      flags.first("connection"),
 			DestinationConnector:  dest.Connector,
 			DestinationCredential: dest.Credential,
 			DestinationConfig:     dest.Config,

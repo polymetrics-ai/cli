@@ -33,6 +33,8 @@ pm reverse plan sync \
 
 The `plan` subcommand reads from the named table, maps columns to action fields, and returns a plan ID. Non-destructive plans also return an approval token in plain-text mode. Destructive plans deliberately do not: their token is issued only after preview succeeds. DryRunWrite engine preview warnings preserve the resolved execution request; `redact_fields` still masks fields in stored source-table samples and write errors, but does not replace values in those warnings. Engine direct-read, operation-direct-read, and binary-download executors preserve bounded HTTP URL/query/body diagnostics before downstream rendering. The stored source-table sample is an app-level summary, not a substitute for that engine preview.
 
+Each connection materializes its tables into its own directory, so several connections can hold a table of the same name. Pass `--connection <name>` when they do, or `--connection _unattributed` for a root-level table that no connection owns. The connection is resolved once here and recorded on the plan, so `preview` and `run` keep reading the table the plan was built against even after another connection materializes one of the same name; neither takes a connection selector of its own.
+
 JSON output:
 
 ```json
