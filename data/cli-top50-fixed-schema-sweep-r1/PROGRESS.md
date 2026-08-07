@@ -18,7 +18,7 @@ worktree. Nothing is lost; nothing is uncommitted.**
 **Do NOT open the PR yet.** Shared artifacts (endpoint ledger, website catalogs, golden transcripts,
 docs) are regenerated **once at the very end**, not per connector.
 
-## ⇒ RESUME POINT — workday-rest (920), the next connector in the largest-first order
+## ⇒ RESUME POINT — workday-rest slice 2 of 5 (its red is observed at **916**, not 920)
 
 **`github` is COMPLETE and pushed.** Its full documented surface is enumerated at **1220 REST + 4
 GraphQL**, and `TestGitHubDocumentedRESTSurfaceIsComplete` — red since slice 1 — now **passes**. The
@@ -28,6 +28,26 @@ whole `cmd/connectorgen` package is green. See `.planning/phases/github-parity-s
 **Branch note:** work continued on **`fm/cli-top50-sweep-resume2-r1`**, cut from the tip of
 `fm/cli-top50-sweep-continue-r1` (`b1ceedc32`). History is continuous, so the one consolidated PR is
 unaffected; only the branch name changed, because the dispatch scaffold named the new branch.
+
+### workday-rest slice 1 is done, and its count is NOT the planned 920
+
+`.planning/phases/workday-rest-parity-sweep-r1/` holds the red test, `DERIVED-OPERATIONS.json`,
+`PLAN.md` and `RUN-STATE.json`. **Read `PLAN.md`'s hazards 1–3 before authoring a single row.**
+
+**The count is 916, not 920.** The 52 service specs hold 920 raw rows, matching the master plan
+exactly — and then four of them turn out to be the *same endpoint documented twice*: `Custom Object
+Data (multi-instance) v2` and `(single-instance) v2` are two directory entries declaring the
+**identical** `servers` URL. Deduped on the resolved `(method, base+path)`, it is **916**.
+
+**Why it was missed, and why it will be missed again:** 49 of the 52 specs are Swagger 2.0 with
+`basePath`; **3 are OpenAPI 3.0.1 and have no `basePath` at all** — they carry `servers`. A reader
+that looks only at `basePath` records an EMPTY base for those three and they appear to collide.
+Those same three are the only specs *not* stamped `20260727`, so the master plan's derivation note
+("every spec filename is date-stamped 20260727") **is wrong**, and wrong exactly where it changes the
+count.
+
+`RUN-STATE.json.next_action` names the resume point. The bundle has **4 rows** and no
+`cli_surface.json`, `writes.json` or `operations.json` — the largest before/after gap in the sweep.
 
 ### One shared-code change landed with github, and every later connector inherits it
 
@@ -244,6 +264,26 @@ command → one commit → push → tick.
     self-healing while disk is tight. It recovered on its own once space was freed. If it happens
     mid-red, **commit the test with `red_confirmed: false` and an explicit blocker rather than
     authoring on unobserved evidence** — that is what help-scout did.
+
+30. **A namespace miss exits 0.** `pm <connector> <nonsense> --help` renders the connector's group
+    help and **succeeds**, which is the documented namespace behaviour. **Exit status therefore
+    proves nothing about reachability.** The first github probe checked only the exit code and passed
+    749 commands it had not actually verified. Assert the rendered `NAME` line reads
+    `pm <connector> <path> - …`. This is the gmail lesson in a form that silently passes.
+31. **`covered_by.write` was singular, and that is what forced synthetic variant paths.**
+    `covered_by.writes` (plural) now exists, mirroring `direct_reads`. Use it when two write actions
+    land on one documented endpoint. Deleting the extra actions is usually NOT available: github's
+    close/reopen bodies are assembled by a Go hook switching on the action **name**, and certify's
+    create/cleanup pairing binds `create_issue` to `close_issue`. **notion (merged #3894) still ships
+    the old defect** (`(body=markdown)`, `(parent=data_source_id)`) and can now be converted.
+32. **A spot-pin can name an endpoint the provider does not document.** github's slice-1 red test
+    pinned `GET /enterprises/{enterprise}/copilot/billing/seats`; Copilot billing is org-scoped and
+    that path is nowhere in the artifact. Once the GET surface was complete the pin could never pass.
+    **Replace such a pin with a real endpoint from the same scope — never delete it** — and write the
+    substitution into the test. Check every spot-pin against the artifact when you write it.
+33. **A `rest_read` POST needs BOTH `body_schema` and `content_type: application/json`.** Two
+    separate validate rules, caught one run apart. Fix them in the generator and regenerate; never
+    hand-patch a generated bundle.
 
 ## Honest note on pace
 
