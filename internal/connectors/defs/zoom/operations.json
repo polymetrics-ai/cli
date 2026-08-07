@@ -44,6 +44,21 @@
         "path": "/v2/videosdk/sessions/{sessionId}/users/qos_summary",
         "max_bytes": 1048576
       }
+    },
+    {
+      "id": "zoom.get_ai_companion_conversation_archives",
+      "kind": "rest_read",
+      "summary": "Get AI Companion conversation archives",
+      "description": "Bounded Zoom read for GET /v2/aic/users/{userId}/conversation_archive; returns AI Companion conversation archive metadata and download URLs for a user.",
+      "source_url": "https://developers.zoom.us/docs/api/ai-companion.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/aic/users/{userId}/conversation_archive",
+        "max_bytes": 1048576
+      }
     }
   ]
 }

@@ -29,6 +29,13 @@
       "commands": [
         "qss"
       ]
+    },
+    {
+      "id": "ai-companion",
+      "title": "AI Companion",
+      "commands": [
+        "ai-companion"
+      ]
     }
   ],
   "global_flags": [
@@ -217,12 +224,41 @@
         }
       ],
       "output_policy": "json_redacted"
+    },
+    {
+      "path": "ai-companion conversation-archive get",
+      "summary": "Get a user's AI Companion conversation archive.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_ai_companion_conversation_archives",
+      "source_url": "https://developers.zoom.us/docs/api/ai-companion.md",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Zoom user ID or email.",
+          "maps_to": "path.userId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded Zoom read; fixed method and path with a typed required user-id path parameter. Response download-URL fields are redacted by the json_redacted output policy.",
+      "examples": [
+        "pm zoom ai-companion conversation-archive get --credential zoom-fixture --user-id fixture-user --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/aic/users/{userId}/conversation_archive"
+        }
+      ],
+      "output_policy": "json_redacted"
     }
   ],
   "help_topics": [
     {
       "name": "provider-inventory",
-      "summary": "The Zoom provider ledger tracks 1,913 documented REST operations; Wave 1 executes three stream-backed reads and Wave 2 (qss) adds three bounded direct-read operations."
+      "summary": "The Zoom provider ledger tracks 1,913 documented REST operations; Wave 1 executes three stream-backed reads; Wave 2+ adds bounded direct-read/write operations module by module (see #3915)."
     }
   ]
 }

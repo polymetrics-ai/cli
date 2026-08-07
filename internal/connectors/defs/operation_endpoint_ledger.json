@@ -12426,6 +12426,12 @@
   "zoom": [
     {
       "method": "GET",
+      "path": "/v2/aic/users/{userId}/conversation_archive",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/v2/metrics/meetings/{meetingId}/participants/qos_summary",
       "kind": "rest_read",
       "max_bytes": 1048576

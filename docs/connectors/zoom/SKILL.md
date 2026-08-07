@@ -77,8 +77,10 @@ Reads Zoom users, meetings, and webinars through the Zoom REST API, plus bounded
   - qss meeting-participants list - List a past meeting's participants' Quality of Service summary. [intent=direct_read availability=implemented operation=zoom.list_meeting_participants_qos_summary]; notes: Bounded Zoom read; fixed method and path with a typed required meeting-id path parameter.; flags: --meeting-id (required)
   - qss webinar-participants list - List a live or past webinar's participants' Quality of Service summary. [intent=direct_read availability=implemented operation=zoom.list_webinar_participants_qos_summary]; notes: Bounded Zoom read; fixed method and path with a typed required webinar-id path parameter.; flags: --webinar-id (required)
   - qss session-users list - List a past Video SDK session's users' Quality of Service summary. [intent=direct_read availability=implemented operation=zoom.list_session_users_qos_summary]; notes: Bounded Zoom read; fixed method and path with a typed required session-id path parameter.; flags: --session-id (required)
+- AI Companion
+  - ai-companion conversation-archive get - Get a user's AI Companion conversation archive. [intent=direct_read availability=implemented operation=zoom.get_ai_companion_conversation_archives]; notes: Bounded Zoom read; fixed method and path with a typed required user-id path parameter. Response download-URL fields are redacted by the json_redacted output policy.; flags: --user-id (required)
 - Help topics:
-  - provider-inventory - The Zoom provider ledger tracks 1,913 documented REST operations; Wave 1 executes three stream-backed reads and Wave 2 (qss) adds three bounded direct-read operations.
+  - provider-inventory - The Zoom provider ledger tracks 1,913 documented REST operations; Wave 1 executes three stream-backed reads; Wave 2+ adds bounded direct-read/write operations module by module (see #3915).
 
 ## Commands
 
