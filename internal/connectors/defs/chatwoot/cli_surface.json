@@ -627,14 +627,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.audit_logs_list",
-      "flags": [
-        {
-          "name": "page",
-          "type": "integer",
-          "summary": "Page number for pagination",
-          "maps_to": "query.page"
-        }
-      ],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -751,14 +743,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.automation_rules_list",
-      "flags": [
-        {
-          "name": "page",
-          "type": "integer",
-          "summary": "The page parameter",
-          "maps_to": "query.page"
-        }
-      ],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -1075,14 +1059,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.contacts_filter",
-      "flags": [
-        {
-          "name": "page",
-          "type": "number",
-          "summary": "Query parameter `page`.",
-          "maps_to": "query.page"
-        }
-      ],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -1271,12 +1247,6 @@
           "type": "string",
           "summary": "The attribute by which list should be sorted",
           "maps_to": "query.sort"
-        },
-        {
-          "name": "page",
-          "type": "integer",
-          "summary": "The page parameter",
-          "maps_to": "query.page"
         }
       ],
       "source_url": "https://developers.chatwoot.com/api-reference",
@@ -1524,14 +1494,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.conversations_filter",
-      "flags": [
-        {
-          "name": "page",
-          "type": "number",
-          "summary": "Query parameter `page`.",
-          "maps_to": "query.page"
-        }
-      ],
       "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
@@ -3268,12 +3230,6 @@
       "availability": "implemented",
       "operation": "chatwoot.reporting_events_list",
       "flags": [
-        {
-          "name": "page",
-          "type": "integer",
-          "summary": "The page parameter",
-          "maps_to": "query.page"
-        },
         {
           "name": "since",
           "type": "string",
