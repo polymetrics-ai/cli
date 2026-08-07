@@ -1,22 +1,36 @@
 # ⇒⇒ HANDOFF — READ THIS FIRST, THEN THE WORK ORDER BELOW ⇒⇒
 
-**Written 2026-08-07 by the outgoing worker at ~79% context. A fresh worker continues in the same
-worktree. Nothing is lost; nothing is uncommitted.**
+**Rewritten 2026-08-07 by the worker that delivered github. A fresh worker continues SERIALLY on the
+same consolidated branch (firstmate decision, captain caps the fleet at 2–3 lanes: parallel branches
+would collide on the shared generated artifacts). Nothing is uncommitted; everything below is pushed.**
 
 ## Where the work is
 
 | | |
 | --- | --- |
 | Worktree | `/Users/karthiksivadas/.treehouse/cli-83d592/20/cli` (was `…/42/cli`) |
-| **Branch** | **`fm/cli-top50-sweep-continue-r1`** — cut from `fm/cli-top50-sweep-consolidated` @ `bedb9b0a3` and carrying it forward. The consolidated branch is unchanged at `bedb9b0a3`; the continuation branch is where the remaining connectors land, and it is what the single sweep PR will be opened from. |
-| **HEAD** | Use the **branch tip** — it is authoritative. `git fetch origin && git checkout fm/cli-top50-sweep-continue-r1 && git reset --hard origin/fm/cli-top50-sweep-continue-r1`. A commit cannot record its own hash, so do not treat any sha written here as the tip. |
+| **Branch** | **`fm/cli-top50-sweep-resume2-r1`** — cut from the tip of `fm/cli-top50-sweep-continue-r1` (`b1ceedc32`), which was itself cut from `fm/cli-top50-sweep-consolidated` @ `bedb9b0a3`. **History is continuous across all three names**; only the name changed, because each dispatch scaffold named its own branch. This is the branch the single sweep PR opens from. |
+| **HEAD** | Use the **branch tip** — it is authoritative. `git fetch origin && git checkout fm/cli-top50-sweep-resume2-r1 && git reset --hard origin/fm/cli-top50-sweep-resume2-r1`. A commit cannot record its own hash, so do not treat any sha written here as the tip. |
 | Cut from | `origin/main` @ `5d43d7c00` (post-Mailchimp #3562) |
-| Model | **ONE consolidated sweep PR** (captain, ordered twice). PR **not yet opened.** |
-| Master plan | `MASTER-PLAN.json` (sibling of this file) — all 30 counts, hazards, issue links |
-| Tooling | `tools/` (sibling) — assembler, slice generator, red-test guard, all cached artifacts |
+| Model | **ONE consolidated sweep PR** (captain, ordered repeatedly; firstmate re-confirmed 2026-08-07). PR **not yet opened.** |
+| Master plan | `MASTER-PLAN.json` (sibling of this file) — all 30 counts, hazards, issue links. **Its counts are candidates, not truth**: github's 1220 held, workday-rest's 920 did not (see below). |
+| Tooling | **`tools/` (sibling) — NOW COMMITTED.** The previous worker's `tools/` was untracked and died with its worktree, so this handoff pointed at nothing and the approach was rebuilt from scratch. Read `tools/README.md` first: it holds both generators, the reachability probe, and the exact artifact re-fetch commands with their expected byte counts. |
 
 **Do NOT open the PR yet.** Shared artifacts (endpoint ledger, website catalogs, golden transcripts,
 docs) are regenerated **once at the very end**, not per connector.
+
+### ⚠️ Known-red on this branch — both are expected, neither is yours to "fix"
+
+1. **The current connector's own surface test is red until its last slice lands.** Right now that is
+   `TestWorkdayRESTDocumentedSurfaceIsComplete`. Every *shared* gate is green:
+   `connectorgen validate` 551/0, `surface-sync --check` clean, runtime preflight passing. **Do not
+   weaken a red test to make the package green** — it goes green when the connector lands.
+2. **`TestGoldenTranscripts/root_bare_manual` fails**, and has since before github. Verified
+   pre-existing: chatwoot and gmail already added command surfaces the committed transcript predates,
+   and github added ~686 more commands. It is discharged by the **end-of-sweep regeneration**, which
+   must happen before the PR merges. Carried as a known-unmet item in every connector's
+   `VERIFICATION.md`. **Do not regenerate it per connector** — finding F6: a per-connector
+   `pm docs generate` run rewrites ~1,034 files of pre-existing `main` drift.
 
 ## ⇒ RESUME POINT — workday-rest slice 2 of 5 (its red is observed at **916**, not 920)
 
@@ -46,8 +60,33 @@ Those same three are the only specs *not* stamped `20260727`, so the master plan
 ("every spec filename is date-stamped 20260727") **is wrong**, and wrong exactly where it changes the
 count.
 
+**And the 4 rows it already has are NOT among the 916.** They point at
+`/ccx/api/hcm/v1/{tenant}/workers|organizations|jobs`. The current directory publishes **no `hcm`
+service and no `/ccx/` path anywhere** — worker resources live under `staffing/v7`,
+`absenceManagement/v5`, `compensation/v3`, `performanceEnablement/v5`, `timeTracking/v5` and
+`api/common/v1`. They are not in the archived list either (that holds only older *versions* of the 52
+listed services). So they cannot be counted as documented, **and they must not simply vanish** —
+deleting them deletes three shipped, schema- and fixture-backed streams inside a parity commit. The
+red test pins them by name and **counts them apart**, so the re-point-or-supersede call is made
+deliberately rather than by arithmetic. See `PLAN.md` hazard 7.
+
 `RUN-STATE.json.next_action` names the resume point. The bundle has **4 rows** and no
 `cli_surface.json`, `writes.json` or `operations.json` — the largest before/after gap in the sweep.
+`capabilities.write` is `false` and will have to become `true`.
+
+### Shape of the github delivery, as a template for the next 20
+
+Slices that actually worked, against the 5-slice plan that did not survive contact: **slice 2 and 3
+cannot be separated.** An `api_surface` row needs a disposition, and a `covered_by` disposition must
+name a command that already exists, so rows and commands land together. What worked was
+**reads in one commit, then mutations in another**, each green on all shared gates:
+
+| | rows | commands |
+| --- | ---: | ---: |
+| GETs | 377 new | 364 direct reads + 2 binary downloads + 11 blocked |
+| mutations | 342 new | 322 write actions + 2 POST-shaped reads + 18 blocked |
+
+Budget honestly: **github alone consumed most of one worker context**, and it is one of 21.
 
 ### One shared-code change landed with github, and every later connector inherits it
 
@@ -102,7 +141,7 @@ Commit **and push** after every single connector, and tick it here in the same s
 > **This supersedes the smallest-first order.** The four giants land FIRST, not last. Re-sorted by
 > re-derived operation count descending from `MASTER-PLAN.json`.
 
-~~github 1220~~ ✅ · `workday-rest 920 · zendesk-support 625 · jira 616 · stripe 589 · linear 538 ·
+~~github 1220~~ ✅ · `workday-rest 916 (NOT 920 — re-derived, see handoff) · zendesk-support 625 · jira 616 · stripe 589 · linear 538 ·
 chargebee 438 · **marketo ~320-367 (count TBD)** · square 334 · bitbucket 331 · bamboo-hr 311 ·
 monday 292 · trello 261 · asana 249 · front 244 · xero 235 · intercom 231 · quickbooks 198 ·
 segment 197 · twilio 197 · google-ads 163`
