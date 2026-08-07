@@ -199,10 +199,14 @@ Use local gates before handing off code:
 ```bash
 gofmt -w cmd internal
 go vet ./...
-go test ./...
+go test -timeout 20m ./...
 go build ./cmd/pm
 make verify
 ```
+
+Always pass `-timeout 20m`, as the `test` Makefile target does. `internal/cli` exceeds Go's 10-minute
+default on a loaded machine, and the timeout panic it produces is a goroutine dump that reads exactly
+like a hang in whichever test happened to be running.
 
 Agents running under a per-command timeout should not run `go test ./...` or `make verify` (which
 includes it) as a single command: the suite spans 550+ connectors and `internal/cli` alone takes
