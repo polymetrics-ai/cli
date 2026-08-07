@@ -17,11 +17,15 @@ DESCRIPTION
   connections can use the same table name without overwriting each other. When
   more than one connection has a table of the requested name, the read is
   refused and lists the owning connections; pass --connection to pick one.
+  A table at the warehouse root belongs to no connection, because a reverse ETL
+  run writing to the warehouse connector produced it rather than a sync, or it
+  was seeded by hand. It is listed and selected as _unattributed.
 
 FLAGS
   --table table              local warehouse table to scan
   --connection name          connection whose table to read; required only when
-                             several connections share the table name
+                             several connections share the table name; use
+                             _unattributed for a root-level table
   --sql sql                  read-only SQL query; takes precedence over --table
   --limit n                  maximum rows to read; default 100
   --fields a,b               project output to selected fields

@@ -42,10 +42,13 @@ const (
 	// MaxConnectionNameLength bounds a connection name so it stays usable in
 	// errors, state keys, and CLI output.
 	MaxConnectionNameLength = 128
-	// unattributedConnectionLabel names a root-level table in diagnostics. Such
-	// a table was written straight through the connector Write surface and has
-	// no owning connection; it is never given one.
-	unattributedConnectionLabel = "<no connection>"
+	// UnattributedConnection selects the root-level tables that no connection
+	// owns: those written straight through the connector Write surface, or
+	// seeded by hand. It is never given a real connection identity, but it does
+	// need a selector, because the empty string already means "any connection"
+	// and so can never name it. ValidateConnectionName rejects a leading '_',
+	// so no real connection can ever answer to this value.
+	UnattributedConnection = "_unattributed"
 )
 
 // SafePathPart reports whether value is safe to use verbatim as a single path
@@ -190,6 +193,12 @@ func (e *LegacyLayoutError) Error() string {
 type AmbiguousTableError struct {
 	Table       string
 	Connections []string
+	// Remedy states what the operator can do on the surface that raised this
+	// error. It is filled in by that surface rather than hardcoded here,
+	// because this package cannot know which command is running and an error
+	// naming a flag the command does not accept is worse than one naming none.
+	// The default says only what is true everywhere.
+	Remedy string
 }
 
 func (e *AmbiguousTableError) Error() string {
@@ -197,20 +206,36 @@ func (e *AmbiguousTableError) Error() string {
 		return "warehouse table is ambiguous"
 	}
 	// A table written straight through the connector Write surface has no
-	// owning connection. Naming it plainly is better than printing an empty
-	// entry, and better than quietly dropping it from the count.
+	// owning connection. Naming it by the selector that reaches it is better
+	// than printing an empty entry, and better than quietly dropping it from
+	// the count.
 	named := make([]string, 0, len(e.Connections))
 	for _, connection := range e.Connections {
 		if connection == "" {
-			named = append(named, unattributedConnectionLabel)
+			named = append(named, UnattributedConnection)
 			continue
 		}
 		named = append(named, connection)
 	}
+	remedy := e.Remedy
+	if remedy == "" {
+		remedy = "the read must name the connection it means"
+	}
 	return fmt.Sprintf(
-		"table %q is materialized by %d connections (%s); pass --connection to choose one",
-		e.Table, len(named), strings.Join(named, ", "),
+		"table %q is materialized by %d connections (%s); %s",
+		e.Table, len(named), strings.Join(named, ", "), remedy,
 	)
+}
+
+// WithAmbiguityRemedy tells a table-ambiguity error what the calling surface
+// can actually offer, and returns err untouched when it is not one. Callers use
+// it so the advice matches the command the operator just ran.
+func WithAmbiguityRemedy(err error, remedy string) error {
+	var ambiguous *AmbiguousTableError
+	if errors.As(err, &ambiguous) {
+		ambiguous.Remedy = remedy
+	}
+	return err
 }
 
 // Location is one connection's private region of a warehouse root.
@@ -386,9 +411,12 @@ type Table struct {
 }
 
 // Tables lists every materialized table under root, sorted by table name then
-// owning connection. A connection directory without a readable ownership
-// record is skipped: an unowned directory is not a table anyone may read as if
-// it belonged to them.
+// owning connection. A connection directory with no ownership record at all is
+// skipped: an unowned directory is not a table anyone may read as if it
+// belonged to them. A record that exists but cannot be read is reported
+// instead, because the write path already refuses exactly that case; silently
+// dropping the rows here would tell the operator the table does not exist
+// while it sits intact on disk.
 func Tables(root string) ([]Table, error) {
 	if err := CheckLegacyLayout(root); err != nil {
 		return nil, err
@@ -406,8 +434,11 @@ func Tables(root string) ([]Table, error) {
 		}
 		connectionDir := filepath.Dir(filepath.Dir(path))
 		owner, err := readOwner(connectionDir)
-		if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
 			continue
+		}
+		if err != nil {
+			return nil, fmt.Errorf("warehouse directory %s has an unreadable ownership record at %s: %w", connectionDir, filepath.Join(connectionDir, OwnerFileName), err)
 		}
 		out = append(out, Table{
 			Path:       path,
@@ -444,7 +475,8 @@ func Tables(root string) ([]Table, error) {
 }
 
 // FindTable resolves one table by name, optionally scoped to a connection
-// display name. It reports ambiguity rather than picking a winner.
+// display name or to UnattributedConnection for the root-level tables no
+// connection owns. It reports ambiguity rather than picking a winner.
 func FindTable(root, table, connection string) (Table, error) {
 	tables, err := Tables(root)
 	if err != nil {
@@ -455,7 +487,7 @@ func FindTable(root, table, connection string) (Table, error) {
 		if candidate.Name != table {
 			continue
 		}
-		if connection != "" && candidate.Connection != connection {
+		if !selects(connection, candidate.Connection) {
 			continue
 		}
 		matches = append(matches, candidate)
@@ -464,16 +496,35 @@ func FindTable(root, table, connection string) (Table, error) {
 	case 1:
 		return matches[0], nil
 	case 0:
-		if connection != "" {
+		switch connection {
+		case "":
+			return Table{}, fmt.Errorf("no warehouse table %q; run a sync to materialize it", table)
+		case UnattributedConnection:
+			return Table{}, fmt.Errorf("no unattributed warehouse table %q at the warehouse root", table)
+		default:
 			return Table{}, fmt.Errorf("connection %q has no warehouse table %q", connection, table)
 		}
-		return Table{}, fmt.Errorf("no warehouse table %q; run a sync to materialize it", table)
 	default:
 		names := make([]string, 0, len(matches))
 		for _, match := range matches {
 			names = append(names, match.Connection)
 		}
 		return Table{}, &AmbiguousTableError{Table: table, Connections: names}
+	}
+}
+
+// selects reports whether a requested connection selector matches a candidate
+// table's owning connection. The empty selector means "any", so it can never
+// name the unattributed tables; UnattributedConnection is the selector that
+// does.
+func selects(requested, owner string) bool {
+	switch requested {
+	case "":
+		return true
+	case UnattributedConnection:
+		return owner == ""
+	default:
+		return owner == requested
 	}
 }
 

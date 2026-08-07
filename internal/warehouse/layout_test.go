@@ -261,7 +261,8 @@ func TestFindTableReportsAmbiguityInsteadOfPickingAWinner(t *testing.T) {
 	}
 
 	// A root-level table shares the namespace but has no owning connection, so
-	// it is named plainly rather than rendered as an empty entry.
+	// it is named by the selector that reaches it rather than rendered as an
+	// empty entry — an entry no value could select would be a false promise.
 	if err := os.WriteFile(filepath.Join(root, "records.jsonl"), []byte(`{"id":"direct"}`+"\n"), 0o600); err != nil {
 		t.Fatal(err)
 	}
@@ -269,11 +270,83 @@ func TestFindTableReportsAmbiguityInsteadOfPickingAWinner(t *testing.T) {
 	if !errors.As(err, &ambiguous) {
 		t.Fatalf("FindTable(with root table) error = %T %v, want *AmbiguousTableError", err, err)
 	}
-	if !strings.Contains(ambiguous.Error(), unattributedConnectionLabel) {
+	if !strings.Contains(ambiguous.Error(), UnattributedConnection) {
 		t.Fatalf("ambiguity error %q does not name the unattributed table", ambiguous.Error())
+	}
+	unattributed, err := FindTable(root, "records", UnattributedConnection)
+	if err != nil {
+		t.Fatalf("FindTable(%q) error = %v, want the root-level table", UnattributedConnection, err)
+	}
+	if unattributed.Path != filepath.Join(root, "records.jsonl") {
+		t.Fatalf("FindTable(%q) path = %q, want the root-level table", UnattributedConnection, unattributed.Path)
+	}
+	if err := ValidateConnectionName(UnattributedConnection); err == nil {
+		t.Fatalf("ValidateConnectionName(%q) error = nil, want the selector reserved against real connections", UnattributedConnection)
 	}
 	if _, err := FindTable(root, "missing", ""); err == nil {
 		t.Fatal("FindTable(missing table) error = nil, want rejection")
+	}
+	if _, err := FindTable(root, "missing", UnattributedConnection); err == nil {
+		t.Fatalf("FindTable(missing, %q) error = nil, want rejection", UnattributedConnection)
+	}
+}
+
+// A missing ownership record and an unreadable one are different facts. The
+// write path already refuses both loudly; a read that answered "no such table"
+// while the rows sat intact on disk would send the operator to re-sync data
+// that already exists.
+func TestTablesReportsAnUnreadableOwnershipRecord(t *testing.T) {
+	for _, tc := range []struct {
+		name    string
+		record  string
+		wantErr string
+	}{
+		{name: "corrupt", record: "{not json", wantErr: "decode warehouse ownership record"},
+		{name: "unsupported version", record: `{"version":2}`, wantErr: "version 2 is unsupported"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			root := t.TempDir()
+			connectionDir := filepath.Join(root, "ws_1", "hubspot", "conn_a")
+			tables := filepath.Join(connectionDir, TablesDirName)
+			if err := os.MkdirAll(tables, 0o700); err != nil {
+				t.Fatal(err)
+			}
+			if err := os.WriteFile(filepath.Join(tables, "records.jsonl"), []byte("{}\n"), 0o600); err != nil {
+				t.Fatal(err)
+			}
+			if err := os.WriteFile(filepath.Join(connectionDir, OwnerFileName), []byte(tc.record), 0o600); err != nil {
+				t.Fatal(err)
+			}
+			_, err := Tables(root)
+			if err == nil {
+				t.Fatal("Tables() error = nil, want the unreadable ownership record reported")
+			}
+			for _, want := range []string{connectionDir, OwnerFileName, tc.wantErr} {
+				if !strings.Contains(err.Error(), want) {
+					t.Fatalf("Tables() error %q does not mention %q", err, want)
+				}
+			}
+		})
+	}
+}
+
+// internal/warehouse cannot know which command is running, so it must not name
+// a flag the caller may not accept. The surface that raised the error supplies
+// the remedy it can actually honour.
+func TestAmbiguityRemedyComesFromTheCallingSurface(t *testing.T) {
+	err := error(&AmbiguousTableError{Table: "records", Connections: []string{"acme", ""}})
+	if strings.Contains(err.Error(), "--connection") {
+		t.Fatalf("default ambiguity error %q names a flag no caller promised", err)
+	}
+	if !strings.Contains(err.Error(), UnattributedConnection) {
+		t.Fatalf("default ambiguity error %q does not name the unattributed table", err)
+	}
+	if got := WithAmbiguityRemedy(err, "re-create the plan"); !strings.Contains(got.Error(), "re-create the plan") {
+		t.Fatalf("WithAmbiguityRemedy() error = %q, want the caller's remedy", got)
+	}
+	other := errors.New("unrelated")
+	if got := WithAmbiguityRemedy(other, "re-create the plan"); got != other {
+		t.Fatalf("WithAmbiguityRemedy(unrelated) = %v, want it returned untouched", got)
 	}
 }
 
