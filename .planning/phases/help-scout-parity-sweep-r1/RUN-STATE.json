@@ -2,7 +2,7 @@
   "phase": "help-scout-parity-sweep-r1",
   "program": "cli-top50-fixed-schema-sweep-r1",
   "connector": "help-scout",
-  "state": "red",
+  "state": "green",
   "branch": "fm/cli-top50-sweep-continue-r1",
   "artifact": {
     "url": "https://developer.helpscout.com/mailbox-api/",
@@ -58,8 +58,40 @@
     "red_confirmed": true,
     "red_failure": "=== RUN   TestHelpScoutAPISurfaceOperationLedger\n    help_scout_api_surface_test.go:97: operation_ledger_version = 0, want 1\n    help_scout_api_surface_test.go:128: \"GET /v2/reports/*\" is a wildcard, not an operation; enumerate the endpoints it stands for\n    help_scout_api_surface_test.go:168: 4 legacy excluded row(s) remain, want 0\n    help_scout_api_surface_test.go:171: endpoints = 8, want 144 documented operations\n    help_scout_api_surface_test.go:174: covered(4)+blocked(0) = 4, want 144\n    help_scout_api_surface_test.go:177: totalByMethod = map[GET:6 POST:2], want map[DELETE:18 GET:79 PATCH:6 POST:21 PUT:20]\n    help_scout_api_surface_test.go:182: expected DELETE /v2/customers/{customerId} (the sync and async deletes are one operation; async is a query parameter)\n    help_scout_api_surface_test.go:189: expected the attachment file download endpoint\n    help_scout_api_surface_test.go:192: expected the attachment data endpoint (base64 in JSON, NOT a binary download)\n    help_scout_api_surface_test.go:196: expected out-of-base v3 row \"GET /v3/conversations/{conversationId}\"\n    help_scout_api_surface_test.go:196: expected out-of-base v3 row \"GET /v3/conversations/{conversationId}/threads\"\n    help_scout_api_surface_test.go:196: expected out-of-base v3 row \"GET /v3/customers\"\n    help_scout_api_surface_test.go:196: expected out-of-base v3 row \"GET /v3/system-users\"\n    help_scout_api_surface_test.go:196: expected out-of-base v3 row \"GET /v3/system-users/{systemUserId}\"\n--- FAIL: TestHelpScoutAPISurfaceOperationLedger (0.00s)\nFAIL\nFAIL\tpolymetrics.ai/cmd/connectorgen\t0.581s\nFAIL",
     "red_blocker": "CLEARED. The shared Go build cache had been corrupted by a host-wide disk-full window and `go test` failed to build with `could not import <pkg> (open .../go-build/XX/<hash>-d: no such file or directory)`, a different missing entry on each retry. Disk pressure eased (914Mi -> 56Gi free) and the cache repopulated; the red run then completed and is captured above. The test was committed before this in an explicitly red_confirmed:false state rather than claiming evidence it did not have.",
-    "green": false,
-    "pre_existing_help_scout_tests": "none - no cmd/connectorgen test referenced help-scout before this one (finding F5 check)"
+    "green": true,
+    "pre_existing_help_scout_tests": "none - no cmd/connectorgen test referenced help-scout before this one (finding F5 check)",
+    "green_evidence": {
+      "help_scout_surface_test": "PASS",
+      "whole_cmd_connectorgen_package": "ok polymetrics.ai/cmd/connectorgen 12.059s (finding F5: whole package, not a targeted -run)",
+      "connectorgen_validate": "1 connector(s) checked, 0 findings",
+      "connectorgen_surface_sync_check": "551 scanned, 0 filled / 0 corrected",
+      "runtime_preflight": "TestEveryImplementedCommandPassesRuntimePreflight PASS",
+      "commands_reachable": "139/139 verified by running the built binary over every command path; 0 unreachable",
+      "per_command_paging_flags": "none authored (checked)",
+      "endpoint_ledger_delta": "none - the only operation is a binary_download, and deriveOperationDirectReadEndpointLedger only ledgers rest_read/provider_search kinds"
+    }
   },
-  "next_action": "author api_surface/streams/writes/operations/cli_surface to green"
+  "next_action": "none - help-scout complete; continue the sweep at google-ads (163)",
+  "final": {
+    "documented_operations": 144,
+    "covered": 139,
+    "blocked": 5,
+    "excluded": 0,
+    "blank": 0,
+    "duplicates": 0,
+    "operation_ledger_version": 1,
+    "streams": 24,
+    "direct_reads": 49,
+    "binary_downloads": 1,
+    "write_actions": 65,
+    "cli_commands": 139,
+    "capabilities_write": "false -> true"
+  },
+  "findings": [
+    "The sync/async customer delete collapse had a second-order trap: whichever page survives the dedup also names the write action. The async page won, which would have shipped a command called 'delete customer asynchronously' whose path performs the SYNC delete. The action is named for the ENDPOINT (delete_customer) and the async behaviour is exposed as an optional --async query flag with omit_when_absent, so collapsing the count loses no documented behaviour.",
+    "Not every Help Scout collection keys on 'id' - user statuses key on userId - so stream primary keys are taken from the record the provider actually returns. connectorgen validate caught the assumed 'id' as primary_key_missing.",
+    "'GET /v2/reports/*' was a single excluded wildcard row standing for 33 distinct report endpoints. All 33 are now enumerated as direct reads: a report is an aggregate over a time window, not a record collection, so modelling it as a stream would turn a bounded fixed-target read into an ETL.",
+    "A direct_read command needs NO operations.json entry: commandrunner.validateDirectReadCommand accepts exactly one GET api_surface endpoint plus an explicit output_policy. Only operation-backed reads go through the endpoint ledger. That is why 49 direct reads add zero ledger entries.",
+    "api_surface rows carry the DOCUMENTED path (/v2/...) while streams and writes carry base-relative paths. engine.normalizeDirectReadPathForBaseURL strips the base path prefix from a direct-read path, so /v2/... resolves correctly against a /v2 base - and /v3/... does not, which is exactly why the five v3 rows are blocked."
+  ]
 }
