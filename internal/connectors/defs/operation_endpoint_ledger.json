@@ -2156,7 +2156,260 @@
   ],
   "google-tasks": [],
   "google-webfonts": [],
-  "gorgias": [],
+  "gorgias": [
+    {
+      "method": "GET",
+      "path": "/api/account",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/account/settings",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/custom-fields",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/custom-fields/{id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/customers/{customer_id}/custom-fields",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/customers/{id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/events",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/events/{id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/integrations",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/integrations/{id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/jobs",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/jobs/{id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/macros",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/macros/{id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/metric-cards",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/metric-cards/{slug}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/phone/voice-call-events",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/phone/voice-call-events/{id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/phone/voice-call-recordings",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/phone/voice-call-recordings/{id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/phone/voice-calls",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/phone/voice-calls/{id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/rules",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/rules/{id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/satisfaction-surveys/{id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/tags",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/tags/{id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/teams",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/teams/{id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets/{id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets/{ticket_id}/custom-fields",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets/{ticket_id}/messages/{id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets/{ticket_id}/tags",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/users",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/users/{id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/views",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/views/{id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/views/{view_id}/items",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/widgets",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/api/widgets/{id}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/api/search",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/api/stats/{name}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    }
+  ],
   "grafana": [],
   "granola": [],
   "greenhouse": [],

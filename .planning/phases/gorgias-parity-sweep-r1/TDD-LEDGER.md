@@ -85,5 +85,50 @@ work continued toward GREEN.
 
 ## GREEN
 
-Recorded once `go test ./cmd/connectorgen/` (whole package) passes with the authored bundle in place;
-see `RUN-STATE.json`'s `tdd.green` field and the final report for the gate run transcript.
+`go test ./cmd/connectorgen/ -run TestGorgias -v` now passes on the first run against the authored
+bundle:
+
+```
+=== RUN   TestGorgiasAPISurfaceOperationLedger
+--- PASS: TestGorgiasAPISurfaceOperationLedger (0.00s)
+PASS
+ok  	polymetrics.ai/cmd/connectorgen	0.487s
+```
+
+Full gate transcript (all whole-package, never a targeted `-run`, per the plan):
+
+- `go run ./cmd/connectorgen validate internal/connectors/defs/gorgias` → 0 findings (one fix round:
+  `update_custom_fields`/`update_customer_custom_field_values`/`update_ticket_custom_fields` needed a
+  `body_schema` alongside `body_type: "json_array"`).
+- `go test ./cmd/connectorgen/` (whole package) → PASS.
+- `go run ./cmd/connectorgen surface-sync` (write mode, then `--check`) → regenerated
+  `internal/connectors/defs/operation_endpoint_ledger.json` (purely additive, gorgias-only content
+  verified by object diff), 0 field(s) filled/corrected in `cli_surface.json`/`operations.json`
+  (the hand-authored content already matched what the tool derives).
+- `go test ./internal/connectors/commandrunner/ -run TestEveryImplementedCommandPassesRuntimePreflight`
+  → PASS across all 1483 implemented commands repo-wide (this failed with 42 gorgias findings before
+  `surface-sync` regenerated the endpoint ledger — expected, since the ledger is what the runtime
+  checks against).
+- `go test ./internal/connectors/conformance/` (whole package) → PASS.
+- `make connector-boundary` → `"outcome": "clean"`.
+- `make docs-check`, `make lint` (0 issues), `make tidy-check`, `make agent-contract-check`,
+  `make smoke-no-build`, `make release-workflow-check` → all pass.
+- `gofmt -l cmd internal` and `go vet ./cmd/connectorgen/ ./internal/connectors/...` → clean.
+- Full `go test ./internal/cli/...` → PASS (589.9s), including `TestGoldenTranscripts` after
+  regenerating `testdata/golden_transcripts.json` with `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1`
+  (diff read first: the only change across 9 subtests was the new `pm gorgias <command> - Gorgias:
+  ...` line appearing in the root "CONNECTOR COMMANDS" listing now that gorgias has a
+  `cli_surface.json`; verified word-diff-clean of anything else).
+- Binary built and exercised: `pm connectors inspect gorgias --json`, bare `pm gorgias`, and
+  `--help` on a stream/direct-read/write/binary-download command all exit 0; a scripted pass over
+  all 108 `cli_surface.json` commands confirmed every one resolves `--help` with exit 0.
+- Website catalog regenerated (`gen-connector-bundles.mjs`, `gen-connector-catalog.mjs`,
+  `gen-connectors.mjs`); the 3 touched files' diffs were checked **by object**, not by line — only
+  the `gorgias` entry differs in `connectors.generated.json` and
+  `connectors.catalog.data.generated.json`; `connectors.catalog.generated.ts`'s single-line diff is
+  the aggregate write-capability counter (234→235).
+- `docs/cli` and `docs/connectors` regenerated via `./pm docs generate --dir docs/cli`; reverted
+  every non-gorgias path under `docs/connectors/` (1031 files of pre-existing `main` drift, matching
+  the plan's ~1,034-file warning), keeping only `docs/connectors/gorgias/{MANUAL.md,SKILL.md}`.
+
+See `RUN-STATE.json`'s `tdd.green`/`tdd.green_evidence` fields for the compact form.
