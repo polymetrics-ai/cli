@@ -166,6 +166,32 @@ Never invent an `api_surface` endpoint to make a command look implemented. If
 the endpoint is not in the connector's own `api_surface.json` and
 `operations.json`, the command is not ready.
 
+## Warehouse Paths Are Structural, Never Conventional
+
+`internal/warehouse/layout.go` owns the local warehouse layout. It exists
+because a shared final-table path silently destroyed one connection's rows with
+another's: state was namespaced per connection, the data it described was not.
+Three rules keep that from returning.
+
+- **Identity is a path component, not a name fragment.** A table lives inside
+  `<workspace-id>/<connector>/<connection-id>/tables/`. Two connections cannot
+  collide because they never share a parent directory. Do not reintroduce a
+  path built by concatenating names; `Location.AssertOwnedTable` exists to fail
+  loudly if anyone does, and `owner.json` is asserted before every write.
+- **Reject, never rewrite.** `warehouse.SafePathPart` is the single guard for
+  every generated path component, shared with the #3892 catalog storage — do
+  not restate its rule anywhere. A name that cannot be a safe path component is
+  an error, never something to fold into one. The removed folding mapped `.`,
+  `/`, ` ` and `:` all to `_` and dropped everything else, so five distinct
+  connection names resolved to one file. `warehouse.ValidateConnectionName`
+  enforces this at creation.
+- **Never key a warehouse path on a raw credential.** Where account identity is
+  genuinely needed, use `CoordinationIdentity.AuthCohortKey()`.
+
+A warehouse written by the removed flat layout is refused, not migrated: which
+connection owns a flat table is unknowable, so guessing would compound the data
+loss. Nothing is deleted or rewritten on the operator's behalf.
+
 ## Verification
 
 Use local gates before handing off code:
