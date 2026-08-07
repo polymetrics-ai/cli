@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/website/fixture_website/conversations/1",
+    "query": {
+      "per_page": "20"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "error": false,
+      "reason": "resolved",
+      "data": []
+    }
+  }
+}

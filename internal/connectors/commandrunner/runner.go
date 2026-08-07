@@ -83,6 +83,15 @@ type BlockedCommandError struct {
 	Reason       string
 }
 
+type MinimumFlagError struct {
+	Parameter string
+	Minimum   float64
+}
+
+func (e *MinimumFlagError) Error() string {
+	return fmt.Sprintf("invalid --%s: value must be at least %s", e.Parameter, strconv.FormatFloat(e.Minimum, 'f', -1, 64))
+}
+
 func (e *BlockedCommandError) Error() string {
 	parts := []string{fmt.Sprintf("connector command %q is blocked", e.Command)}
 	if e.Intent != "" {
@@ -728,7 +737,11 @@ func streamOverrides(cmd connectors.CommandSurfaceCommand, cfg connectors.Runtim
 			}
 		}
 	}
-	return runtimeConfigWithOverrides(cfg, configOverrides), query, nil
+	runtimeConfig := runtimeConfigWithOverrides(cfg, configOverrides)
+	if err := validateConfiguredFlagMinimums(cmd, runtimeConfig); err != nil {
+		return connectors.RuntimeConfig{}, nil, err
+	}
+	return runtimeConfig, query, nil
 }
 
 func runtimeConfigWithOverrides(cfg connectors.RuntimeConfig, overrides map[string]string) connectors.RuntimeConfig {
@@ -744,6 +757,26 @@ func runtimeConfigWithOverrides(cfg connectors.RuntimeConfig, overrides map[stri
 		out.Config[key] = value
 	}
 	return out
+}
+
+func validateConfiguredFlagMinimums(cmd connectors.CommandSurfaceCommand, cfg connectors.RuntimeConfig) error {
+	for _, flag := range cmd.Flags {
+		if flag.Minimum == nil || !strings.HasPrefix(flag.MapsTo, "config.") {
+			continue
+		}
+		target := strings.TrimPrefix(flag.MapsTo, "config.")
+		if err := safety.ValidateIdentifier(target, "config parameter"); err != nil {
+			return err
+		}
+		value, ok := cfg.Config[target]
+		if !ok {
+			continue
+		}
+		if err := validateFlagMinimum(flag, value); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 type mappedCommandInputs struct {
@@ -915,11 +948,11 @@ func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
 	}
 	switch flag.Type {
 	case "", "string", "boolean", "integer", "number", "string_array":
-		return nil
+		return validateFlagMinimum(flag, value)
 	case "enum":
 		for _, allowed := range flag.Values {
 			if value == allowed {
-				return nil
+				return validateFlagMinimum(flag, value)
 			}
 		}
 		values := append([]string(nil), flag.Values...)
@@ -931,6 +964,37 @@ func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
 			Reason:  fmt.Sprintf("flag --%s has unsupported type %q", flag.Name, flag.Type),
 		}
 	}
+}
+
+func validateFlagMinimum(flag connectors.CommandSurfaceFlag, value string) error {
+	if flag.Minimum == nil {
+		return nil
+	}
+	minimum := *flag.Minimum
+	if math.IsNaN(minimum) || math.IsInf(minimum, 0) {
+		return &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("flag --%s has invalid minimum", flag.Name)}
+	}
+	var parsed float64
+	switch flag.Type {
+	case "integer":
+		integer, err := strconv.ParseInt(value, 10, 64)
+		if err != nil {
+			return &MinimumFlagError{Parameter: flag.Name, Minimum: minimum}
+		}
+		parsed = float64(integer)
+	case "number":
+		number, err := strconv.ParseFloat(value, 64)
+		if err != nil || math.IsNaN(number) || math.IsInf(number, 0) {
+			return &MinimumFlagError{Parameter: flag.Name, Minimum: minimum}
+		}
+		parsed = number
+	default:
+		return &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("flag --%s minimum requires integer or number type", flag.Name)}
+	}
+	if parsed < minimum {
+		return &MinimumFlagError{Parameter: flag.Name, Minimum: minimum}
+	}
+	return nil
 }
 
 func validateFlagFormat(flag connectors.CommandSurfaceFlag, value string) error {

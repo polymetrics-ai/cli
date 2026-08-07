@@ -56,6 +56,7 @@
             "enum": ["date-time"]
           },
           "allow_empty": { "type": "boolean" },
+          "minimum": { "type": "number" },
           "required": { "type": "boolean" },
           "max_items": { "type": "integer" },
           "min_items": { "type": "integer" }
@@ -127,6 +128,7 @@
                   "enum": ["date-time"]
                 },
                 "allow_empty": { "type": "boolean" },
+                "minimum": { "type": "number" },
                 "required": { "type": "boolean" },
                 "max_items": { "type": "integer" },
                 "min_items": { "type": "integer" }

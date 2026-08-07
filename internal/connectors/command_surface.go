@@ -34,6 +34,7 @@ type CommandSurfaceFlag struct {
 	MapsTo     string
 	Format     string
 	AllowEmpty *bool
+	Minimum    *float64
 	Required   bool
 	// MaxItems/MinItems bound a string_array flag's item count. This is a second,
 	// independent bound alongside the body schema's maxItems: the schema bound
