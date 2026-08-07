@@ -49,12 +49,14 @@ const (
 )
 
 // SafePathPart reports whether value is safe to use verbatim as a single path
-// component. It rejects `..` and any character outside [A-Za-z0-9._-] rather
-// than silently rewriting it, which is the property the whole layout rests on.
+// component. It rejects `.`, `..` and any character outside [A-Za-z0-9._-]
+// rather than silently rewriting them, which is the property the whole layout
+// rests on. `.` is rejected on its own because filepath.Join collapses it, so
+// it would silently resolve to its parent instead of to a directory of its own.
 // It is the single implementation shared by warehouse paths and the catalog
 // storage introduced in #3892; do not restate this rule elsewhere.
 func SafePathPart(value string) bool {
-	if value == "" || len(value) > 256 || strings.Contains(value, "..") {
+	if value == "" || value == "." || len(value) > 256 || strings.Contains(value, "..") {
 		return false
 	}
 	for _, r := range value {

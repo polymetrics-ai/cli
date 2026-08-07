@@ -51,7 +51,9 @@ func TestValidateConnectionName(t *testing.T) {
 }
 
 func TestSafePathPartRejectsRatherThanRewrites(t *testing.T) {
-	for _, value := range []string{"", "..", "a/b", "a b", "a:b", "a#b", "..hidden/../x", strings.Repeat("a", 257)} {
+	// "." is rejected on its own: filepath.Join collapses it, so it would
+	// resolve to its parent rather than to a directory of its own.
+	for _, value := range []string{"", ".", "..", "a/b", "a b", "a:b", "a#b", "..hidden/../x", strings.Repeat("a", 257)} {
 		if SafePathPart(value) {
 			t.Fatalf("SafePathPart(%q) = true, want rejection", value)
 		}
