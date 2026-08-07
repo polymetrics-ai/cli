@@ -607,11 +607,15 @@ DESCRIPTION
   connections can use the same table name without overwriting each other. When
   more than one connection has a table of the requested name, the read is
   refused and lists the owning connections; pass --connection to pick one.
+  A table at the warehouse root belongs to no connection, because a reverse ETL
+  run writing to the warehouse connector produced it rather than a sync, or it
+  was seeded by hand. It is listed and selected as _unattributed.
 
 FLAGS
   --table table              local warehouse table to scan
   --connection name          connection whose table to read; required only when
-                             several connections share the table name
+                             several connections share the table name; use
+                             _unattributed for a root-level table
   --sql sql                  read-only SQL query; takes precedence over --table
   --limit n                  maximum rows to read; default 100
   --fields a,b               project output to selected fields
@@ -718,7 +722,7 @@ SYNOPSIS
 
 USAGE
   pm reverse list [--json]
-  pm reverse plan <name> --source-table <table> --destination connector:credential --map source:dest [--json]
+  pm reverse plan <name> --source-table <table> [--connection name] --destination connector:credential --map source:dest [--json]
   pm reverse preview <plan-id> [--json]
   pm reverse run <plan-id> --approve <token> [--confirm <challenge>] [--json]
   pm reverse status <run-id> [--json]
@@ -776,6 +780,13 @@ COMMANDS
     always omits tokens. A non-batchable destination action is refused here,
     before any plan or approval token exists.
 
+    Each connection materializes its tables into its own directory, so several
+    connections can hold a table of the same name. Pass --connection when they
+    do. The connection is resolved once, here, and recorded on the plan, so
+    preview and run keep reading the same table afterwards; neither takes a
+    connection selector of its own. Use --connection _unattributed for a
+    root-level table that no connection owns.
+
   preview
     Show a stored plan's mapped sample rows, action, and count. For a destructive
     plan, also materialize the request through the destination's no-network dry
@@ -795,6 +806,8 @@ COMMANDS
 
 FLAGS
   --source-table table         local warehouse table to read
+  --connection name            connection whose table to read; required only
+                               when several connections share the table name
   --destination connector:cred destination endpoint
   --map source:dest            field mapping, repeatable
   --action action              destination write action; inspect shows names

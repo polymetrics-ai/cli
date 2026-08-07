@@ -1279,16 +1279,19 @@ func (a *App) QueryTable(ctx context.Context, req QueryTableRequest) ([]connecto
 	if req.Limit <= 0 {
 		req.Limit = 100
 	}
-	root := filepath.Join(a.projectDir, "warehouse")
 	cfg := connectors.RuntimeConfig{
 		ProjectDir: a.projectDir,
 		Config: map[string]string{
-			"path": root,
+			"path": a.warehouseRoot(),
 		},
 	}
 	if req.Connection != "" {
-		if _, ok := a.findConnection(req.Connection); !ok {
-			return nil, fmt.Errorf("connection %q not found", req.Connection)
+		// The unattributed selector names the root-level tables no connection
+		// owns, so it deliberately does not resolve through findConnection.
+		if req.Connection != warehouse.UnattributedConnection {
+			if _, ok := a.findConnection(req.Connection); !ok {
+				return nil, fmt.Errorf("connection %q not found", req.Connection)
+			}
 		}
 		cfg.Config["connection"] = req.Connection
 	}
@@ -1309,6 +1312,40 @@ func (a *App) QueryTable(ctx context.Context, req QueryTableRequest) ([]connecto
 
 func (a *App) QuerySQL(ctx context.Context, sql string, limit int) ([]connectors.Record, error) {
 	return a.sqlEngine.QuerySQL(ctx, sql, limit)
+}
+
+// warehouseRoot is this project's local warehouse root.
+func (a *App) warehouseRoot() string {
+	return filepath.Join(a.projectDir, "warehouse")
+}
+
+// pinReverseSourceConnection resolves which connection's table a reverse plan
+// is built from, and returns a selector that keeps resolving to that same table
+// afterwards. Pinning it at plan time is what stops an approved plan becoming
+// unexecutable the day a second connection materializes the same table name:
+// preview and run take no connection selector of their own, so without a pin
+// they would fall back to an unscoped read and be refused as ambiguous.
+func (a *App) pinReverseSourceConnection(table, connection string) (string, error) {
+	found, err := warehouse.FindTable(a.warehouseRoot(), table, connection)
+	if err != nil {
+		return "", err
+	}
+	if found.Connection == "" {
+		return warehouse.UnattributedConnection, nil
+	}
+	return found.Connection, nil
+}
+
+// reverseSourceRemedy states the recovery available to a stored plan whose
+// source table has become ambiguous. Only plans created before the owning
+// connection was pinned can reach this, and preview and run accept no
+// connection selector, so re-planning is the honest answer rather than naming a
+// flag those commands do not have.
+func reverseSourceRemedy(plan ReversePlan) string {
+	return fmt.Sprintf(
+		"reverse plan %q records no source connection, so re-create it with `pm reverse plan %s --source-table %s --connection <name>` and approve the new plan",
+		plan.ID, plan.Name, plan.SourceTable,
+	)
 }
 
 // QueryEngineName reports which SQL engine backs QuerySQL ("jsonl" by default,
@@ -1336,7 +1373,11 @@ func (a *App) PlanReverseETL(ctx context.Context, req PlanReverseETLRequest) (Re
 	if err := a.guardBatchableAction(req.DestinationConnector, req.Action, req.SourceTable); err != nil {
 		return ReversePlan{}, err
 	}
-	records, err := a.QueryTable(ctx, QueryTableRequest{Table: req.SourceTable, Limit: req.Limit})
+	sourceConnection, err := a.pinReverseSourceConnection(req.SourceTable, req.SourceConnection)
+	if err != nil {
+		return ReversePlan{}, warehouse.WithAmbiguityRemedy(err, "pass --connection to choose one")
+	}
+	records, err := a.QueryTable(ctx, QueryTableRequest{Table: req.SourceTable, Connection: sourceConnection, Limit: req.Limit})
 	if err != nil {
 		return ReversePlan{}, err
 	}
@@ -1397,6 +1438,7 @@ func (a *App) PlanReverseETL(ctx context.Context, req PlanReverseETLRequest) (Re
 		Name:                  req.Name,
 		Status:                "planned",
 		SourceTable:           req.SourceTable,
+		SourceConnection:      sourceConnection,
 		DestinationConnector:  req.DestinationConnector,
 		DestinationCredential: req.DestinationCredential,
 		DestinationConfig:     cloneStringMap(req.DestinationConfig),
@@ -1710,9 +1752,9 @@ func (a *App) PreviewReversePlan(ctx context.Context, id string) (ReversePlan, c
 	if err := a.verifyPlanSealForRuntime(plan, runtime); err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
-	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Limit: max(1, plan.RecordCount+1)})
+	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Connection: plan.SourceConnection, Limit: max(1, plan.RecordCount+1)})
 	if err != nil {
-		return ReversePlan{}, connectors.WritePreview{}, err
+		return ReversePlan{}, connectors.WritePreview{}, warehouse.WithAmbiguityRemedy(err, reverseSourceRemedy(plan))
 	}
 	mapped := mapReverseRecords(records, plan.Mappings)
 	payloadIdentity, err := payloadIdentitiesForRecords(runtime.ProjectDir, mapped)
@@ -2080,9 +2122,9 @@ func (a *App) runBulkReversePlan(ctx context.Context, plan ReversePlan, req RunR
 	if err := a.guardBatchableAction(plan.DestinationConnector, plan.Action, plan.SourceTable); err != nil {
 		return ReverseRun{}, err
 	}
-	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Limit: max(1, plan.RecordCount+1)})
+	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Connection: plan.SourceConnection, Limit: max(1, plan.RecordCount+1)})
 	if err != nil {
-		return ReverseRun{}, err
+		return ReverseRun{}, warehouse.WithAmbiguityRemedy(err, reverseSourceRemedy(plan))
 	}
 	mappedForHash := mapReverseRecords(records, plan.Mappings)
 	dest := EndpointConfig{Connector: plan.DestinationConnector, Credential: plan.DestinationCredential, Config: plan.DestinationConfig}

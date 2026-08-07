@@ -161,8 +161,11 @@ type QueryTableRequest struct {
 }
 
 type PlanReverseETLRequest struct {
-	Name                  string            `json:"name"`
-	SourceTable           string            `json:"source_table"`
+	Name        string `json:"name"`
+	SourceTable string `json:"source_table"`
+	// SourceConnection scopes the source table to one connection. It is
+	// required only when several connections materialize the same table name.
+	SourceConnection      string            `json:"source_connection,omitempty"`
 	DestinationConnector  string            `json:"destination_connector"`
 	DestinationCredential string            `json:"destination_credential"`
 	DestinationConfig     map[string]string `json:"destination_config,omitempty"`
@@ -191,11 +194,16 @@ type PayloadIdentity struct {
 }
 
 type ReversePlan struct {
-	ID                    string            `json:"id"`
-	Name                  string            `json:"name"`
-	Status                string            `json:"status"`
-	Mode                  string            `json:"mode,omitempty"`
-	SourceTable           string            `json:"source_table"`
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Status      string `json:"status"`
+	Mode        string `json:"mode,omitempty"`
+	SourceTable string `json:"source_table"`
+	// SourceConnection is the connection the plan was built against, resolved
+	// once at plan time. Preview and run scope their reads by it so a plan
+	// keeps resolving to the same table after another connection materializes
+	// one of the same name.
+	SourceConnection      string            `json:"source_connection,omitempty"`
 	DestinationConnector  string            `json:"destination_connector"`
 	DestinationCredential string            `json:"destination_credential"`
 	DestinationConfig     map[string]string `json:"destination_config,omitempty"`
