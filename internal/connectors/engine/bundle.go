@@ -669,10 +669,33 @@ type SurfaceProvenance struct {
 
 // SurfaceCoverage names the executable connector surface that covers an endpoint.
 type SurfaceCoverage struct {
-	Stream      string   `json:"stream,omitempty"`
-	Write       string   `json:"write,omitempty"`
+	Stream string `json:"stream,omitempty"`
+	Write  string `json:"write,omitempty"`
+	// Writes names every write action an endpoint backs when it backs more than
+	// one. A provider documents one path per operation, but a bundle may model
+	// several distinct write contracts over that one path -- github's
+	// update_issue, close_issue and reopen_issue all PATCH the same endpoint
+	// with different bodies. Without a plural, the only way to reference the
+	// others was to invent a variant path such as ".../issues/{n} (close)",
+	// which is not an endpoint any provider publishes and which inflates every
+	// documented-operation count taken from api_surface.json.
+	Writes      []string `json:"writes,omitempty"`
 	DirectRead  string   `json:"direct_read,omitempty"`
 	DirectReads []string `json:"direct_reads,omitempty"`
+}
+
+// WriteTargets returns every write action a coverage entry names, singular and
+// plural together, so callers never have to remember that both spellings exist.
+func (c *SurfaceCoverage) WriteTargets() []string {
+	if c == nil {
+		return nil
+	}
+	targets := make([]string, 0, len(c.Writes)+1)
+	if c.Write != "" {
+		targets = append(targets, c.Write)
+	}
+	targets = append(targets, c.Writes...)
+	return targets
 }
 
 // SurfaceExclusion names why an endpoint is intentionally out of scope.
