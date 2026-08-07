@@ -9625,7 +9625,134 @@
   "leadfeeder": [],
   "lemlist": [],
   "less-annoying-crm": [],
-  "lever-hiring": [],
+  "lever-hiring": [
+    {
+      "method": "GET",
+      "path": "/archive_reasons/{archive_reason}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/feedback_templates/{feedback_template}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/form_templates/{form_template}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/applications/{application}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/feedback/{feedback}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/forms/{form}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/interviews/{interview}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/notes/{note}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/panels/{panel}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/opportunities/{opportunity}/referrals/{referral}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/postings/{posting}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/postings/{posting}/apply",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/requisition_fields/{requisition_field}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/requisitions/{requisition}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/stages/{stage}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/surveys/diversity/{posting}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/tags",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/users/{user}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v1/eeo/responses/pii",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    }
+  ],
   "lightspeed-retail": [],
   "linear": [],
   "linkedin-ads": [],
