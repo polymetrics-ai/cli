@@ -68,6 +68,7 @@ var (
 	cloudTrailContextKeyTypeConstraints      = awsStringConstraints{values: map[string]struct{}{"TagContext": {}, "RequestContext": {}}, valueList: "TagContext | RequestContext"}
 	cloudTrailTrailNamePattern               = regexp.MustCompile(`^[A-Za-z0-9._-]+$`)
 	cloudTrailARNPartitionPattern            = regexp.MustCompile(`^aws(?:-[a-z0-9-]+)?$`)
+	cloudTrailResourceARNIDPattern           = regexp.MustCompile(`^[a-zA-Z0-9._/\-:]+$`)
 )
 
 func buildActionFieldConstraints(actions map[string][]awsActionField) map[string]map[string]awsFieldConstraints {
@@ -218,6 +219,8 @@ func validateActionField(action string, field awsActionField, value any) error {
 	}
 
 	switch {
+	case action == "ListTags" && field.Name == "ResourceIdList":
+		return validateListTagsResourceIDList(value)
 	case action == "LookupEvents" && field.Name == "LookupAttributes":
 		return validateLookupAttributes(value)
 	case action == "StartImport" && field.Name == "ImportSource":
@@ -491,34 +494,62 @@ func validateClassicTrailName(name string) error {
 }
 
 func validTrailARN(value string) bool {
-	parts := strings.SplitN(value, ":", 6)
-	if len(parts) != 6 || parts[0] != "arn" || !cloudTrailARNPartitionPattern.MatchString(parts[1]) || parts[2] != "cloudtrail" || strings.TrimSpace(parts[3]) == "" || len(parts[4]) != 12 {
-		return false
-	}
-	for _, character := range parts[4] {
-		if character < '0' || character > '9' {
-			return false
-		}
-	}
-	trailName, ok := strings.CutPrefix(parts[5], "trail/")
-	if !ok {
-		return false
-	}
-	return validateClassicTrailName(trailName) == nil
+	trailName, ok := cloudTrailResourceARNID(value, "trail")
+	return ok && validateClassicTrailName(trailName) == nil
 }
 
 func validEventDataStoreARN(value string) bool {
+	_, ok := cloudTrailResourceARNID(value, "eventdatastore")
+	return ok
+}
+
+func cloudTrailResourceARNID(value, resourceType string) (string, bool) {
 	parts := strings.SplitN(value, ":", 6)
 	if len(parts) != 6 || parts[0] != "arn" || !cloudTrailARNPartitionPattern.MatchString(parts[1]) || parts[2] != "cloudtrail" || strings.TrimSpace(parts[3]) == "" || len(parts[4]) != 12 {
-		return false
+		return "", false
 	}
 	for _, character := range parts[4] {
 		if character < '0' || character > '9' {
-			return false
+			return "", false
 		}
 	}
-	eventDataStore, ok := strings.CutPrefix(parts[5], "eventdatastore/")
-	return ok && strings.TrimSpace(eventDataStore) != ""
+	resourceID, ok := strings.CutPrefix(parts[5], resourceType+"/")
+	if !ok || !cloudTrailResourceARNIDPattern.MatchString(resourceID) {
+		return "", false
+	}
+	return resourceID, true
+}
+
+func validListTagsResourceARN(value string) bool {
+	if validTrailARN(value) || validEventDataStoreARN(value) {
+		return true
+	}
+	for _, resourceType := range []string{"dashboard", "channel"} {
+		if _, ok := cloudTrailResourceARNID(value, resourceType); ok {
+			return true
+		}
+	}
+	return false
+}
+
+func validateListTagsResourceIDList(value any) error {
+	resourceIDs, ok := actionArray(value)
+	if !ok {
+		return fmt.Errorf("want array")
+	}
+	if len(resourceIDs) == 0 {
+		return fmt.Errorf("must contain at least one CloudTrail resource ARN")
+	}
+	if len(resourceIDs) > 20 {
+		return fmt.Errorf("must contain at most 20 CloudTrail resource ARNs")
+	}
+	for index, resourceID := range resourceIDs {
+		resourceARN, ok := actionString(resourceID)
+		if !ok || !validListTagsResourceARN(resourceARN) {
+			return fmt.Errorf("item %d must be a CloudTrail trail, event data store, dashboard, or channel ARN", index)
+		}
+	}
+	return nil
 }
 
 func trailNameAlphaNumeric(character rune) bool {

@@ -182,6 +182,44 @@ func TestBuildActionBodyValidatesClosedNestedRequests(t *testing.T) {
 	}
 }
 
+func TestBuildActionBodyValidatesListTagsResourceIDList(t *testing.T) {
+	validResourceIDs := []string{
+		"arn:aws:cloudtrail:us-east-1:123456789012:trail/example-trail",
+		"arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/example-store",
+		"arn:aws:cloudtrail:us-east-1:123456789012:dashboard/example-dashboard",
+		"arn:aws:cloudtrail:us-east-1:123456789012:channel/example-channel",
+	}
+	body, err := buildActionBody("ListTags", map[string]any{"ResourceIdList": validResourceIDs}, true)
+	if err != nil {
+		t.Fatalf("build ListTags body: %v", err)
+	}
+	if got := len(body["ResourceIdList"].([]string)); got != len(validResourceIDs) {
+		t.Fatalf("ListTags resource IDs = %d, want %d", got, len(validResourceIDs))
+	}
+
+	tooManyResourceIDs := make([]string, 21)
+	for index := range tooManyResourceIDs {
+		tooManyResourceIDs[index] = validResourceIDs[0]
+	}
+	for _, test := range []struct {
+		name    string
+		value   []string
+		wantErr string
+	}{
+		{name: "empty", value: []string{}, wantErr: "must contain at least one CloudTrail resource ARN"},
+		{name: "too many", value: tooManyResourceIDs, wantErr: "must contain at most 20 CloudTrail resource ARNs"},
+		{name: "non ARN", value: []string{"not-an-arn"}, wantErr: "must be a CloudTrail trail, event data store, dashboard, or channel ARN"},
+		{name: "unsupported ARN type", value: []string{"arn:aws:cloudtrail:us-east-1:123456789012:query/example"}, wantErr: "must be a CloudTrail trail, event data store, dashboard, or channel ARN"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			_, err := buildActionBody("ListTags", map[string]any{"ResourceIdList": test.value}, true)
+			if err == nil || !strings.Contains(err.Error(), test.wantErr) {
+				t.Fatalf("build ListTags body error = %v, want %q", err, test.wantErr)
+			}
+		})
+	}
+}
+
 func TestBuildActionBodyAllowsEmptyRequiredInsightSelectors(t *testing.T) {
 	body, err := buildActionBody("PutInsightSelectors", map[string]any{
 		"InsightSelectors": []any{},
