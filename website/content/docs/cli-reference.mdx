@@ -197,6 +197,10 @@ differ by more than letter case. Ambiguous names are rejected at creation rather
 because two connections that cannot be told apart cannot own separate warehouse data. The name is a
 display value only — the warehouse keys its directories on a generated identifier.
 
+Against the local warehouse destination, `--stream` and `--table` become path components, so each
+accepts only letters, digits, `.`, `-` and `_`. Both are checked when the connection is created,
+because a name the warehouse cannot materialize would otherwise fail every sync of that connection.
+
 ### `pm catalog`
 
 ```bash

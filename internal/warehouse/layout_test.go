@@ -431,6 +431,108 @@ func TestOneDamagedOwnershipRecordDoesNotDenyHealthyConnections(t *testing.T) {
 	}
 }
 
+// TestDamagedRecordCannotDecideWhichConnectionAnUnscopedReadReturns is the
+// other half of the isolation contract. Making a fault non-fatal so healthy
+// connections keep reading is right, but the dropped directory is still a
+// candidate: if it holds the same table name, an unscoped read that answered
+// from the single healthy match would let a corrupted ownership file decide
+// which tenant's rows the operator receives. That is a confident wrong answer
+// to an ambiguous question, which is the defect this whole layout removes.
+func TestDamagedRecordCannotDecideWhichConnectionAnUnscopedReadReturns(t *testing.T) {
+	root := t.TempDir()
+	write := func(location Location, table, id string) string {
+		t.Helper()
+		path, err := location.TablePath(table)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := os.MkdirAll(filepath.Dir(path), 0o700); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(path, []byte(`{"id":"`+id+`"}`+"\n"), 0o600); err != nil {
+			t.Fatal(err)
+		}
+		return path
+	}
+
+	healthy, err := LocationFor(root, "ws_1", "hubspot", "conn_healthy", "acme")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := healthy.EnsureOwnership(); err != nil {
+		t.Fatal(err)
+	}
+	healthyTable := write(healthy, "records", "a1")
+	write(healthy, "acme_only", "a2")
+
+	damaged, err := LocationFor(root, "ws_1", "hubspot", "conn_damaged", "globex")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := damaged.EnsureOwnership(); err != nil {
+		t.Fatal(err)
+	}
+	write(damaged, "records", "g1")
+	write(damaged, "globex_only", "g2")
+	if err := os.WriteFile(damaged.OwnerPath(), []byte("{not json"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	// The damaged directory reports the table names it holds, because a name a
+	// lookup cannot see is exactly what makes an answer unsafe to give.
+	_, faults, err := Tables(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(faults) != 1 {
+		t.Fatalf("Tables() faults = %#v, want the damaged directory", faults)
+	}
+	if !faults[0].Holds("records") || !faults[0].Holds("globex_only") {
+		t.Fatalf("fault tables = %v, want both tables the damaged directory holds", faults[0].Tables)
+	}
+	if faults[0].Holds("acme_only") {
+		t.Fatalf("fault tables = %v, want only the damaged directory's own tables", faults[0].Tables)
+	}
+
+	_, err = FindTable(root, "records", "")
+	var faulted *FaultError
+	if !errors.As(err, &faulted) {
+		t.Fatalf("FindTable(records, unscoped) error = %T %v, want the read refused rather than answered from one tenant", err, err)
+	}
+	if !faulted.Undecided {
+		t.Fatalf("FindTable(records, unscoped) error = %q, want it reported as undecided rather than absent", faulted)
+	}
+	for _, want := range []string{"records", damaged.OwnerPath(), "Name the connection", "Restore or remove"} {
+		if !strings.Contains(faulted.Error(), want) {
+			t.Fatalf("undecided fault error %q does not mention %q", faulted, want)
+		}
+	}
+	if strings.Contains(faulted.Error(), "--") {
+		t.Fatalf("undecided fault error %q names a flag no caller promised", faulted)
+	}
+
+	// Isolation is intact: naming the connection answers, and a table the
+	// damaged directory does not hold is answered unscoped as before.
+	found, err := FindTable(root, "records", "acme")
+	if err != nil {
+		t.Fatalf("FindTable(records, acme) error = %v, want the scoped read to succeed", err)
+	}
+	if found.Path != healthyTable {
+		t.Fatalf("FindTable(records, acme) path = %q, want %q", found.Path, healthyTable)
+	}
+	if _, err := FindTable(root, "acme_only", ""); err != nil {
+		t.Fatalf("FindTable(acme_only, unscoped) error = %v, want a read that does not depend on the damaged directory to succeed", err)
+	}
+
+	// A root-level file the damaged directory cannot hold stays selectable.
+	if err := os.WriteFile(filepath.Join(root, "direct.jsonl"), []byte(`{"id":"d1"}`+"\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := FindTable(root, "direct", UnattributedConnection); err != nil {
+		t.Fatalf("FindTable(direct, %q) error = %v, want the unattributed read to succeed", UnattributedConnection, err)
+	}
+}
+
 // internal/warehouse cannot know which command is running, so it must not name
 // a flag the caller may not accept. The surface that raised the error supplies
 // the remedy it can actually honour.

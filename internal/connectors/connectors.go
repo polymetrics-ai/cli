@@ -1298,24 +1298,29 @@ func (w Warehouse) Catalog(ctx context.Context, cfg RuntimeConfig) (Catalog, err
 	}
 	owners := make(map[string][]string, len(tables))
 	for _, table := range tables {
-		// A root-level table has no owning connection; naming one would
-		// attribute rows to a connection that never produced them.
-		if table.Connection == "" {
-			owners[table.Name] = append(owners[table.Name], "")
-			continue
-		}
+		// A root-level table's empty connection is kept as an entry of its
+		// own: it has no owning connection, and naming one would attribute
+		// rows to a connection that never produced them.
 		owners[table.Name] = append(owners[table.Name], table.Connection)
 	}
 	streams := make([]Stream, 0, len(owners))
 	for name, connections := range owners {
 		named := make([]string, 0, len(connections))
+		attributed := 0
 		for _, connection := range connections {
-			if connection != "" {
-				named = append(named, connection)
+			// A name held by a connection and by an unattributed root-level
+			// file at once is held by both. Listing only the connection would
+			// read as sole ownership and contradict the ambiguity error the
+			// very next read of that name raises, which names both.
+			if connection == "" {
+				named = append(named, warehouse.UnattributedConnection)
+				continue
 			}
+			attributed++
+			named = append(named, connection)
 		}
 		description := "Warehouse table " + name
-		if len(named) > 0 {
+		if attributed > 0 {
 			description += " (connection " + strings.Join(named, ", ") + ")"
 		}
 		streams = append(streams, Stream{Name: name, Description: description})
@@ -1339,6 +1344,19 @@ func (Warehouse) Read(ctx context.Context, req ReadRequest, emit func(Record) er
 		_ = file.Close()
 	}()
 	return readJSONL(ctx, file, emit)
+}
+
+// ValidateWrite refuses a table name this connector could never write before
+// the caller commits to it. A reverse plan is stored and approved ahead of the
+// write it performs, and there is no way to edit a stored plan, so a name
+// rejected only at write time would leave an approved plan that can never run.
+func (Warehouse) ValidateWrite(_ context.Context, req WriteRequest, _ []Record) error {
+	table := req.Table
+	if table == "" {
+		table = req.Stream
+	}
+	_, err := warehouse.PathComponent("table", table)
+	return err
 }
 
 func (Warehouse) Write(ctx context.Context, req WriteRequest, records []Record) (WriteResult, error) {
