@@ -946,16 +946,24 @@ func ReconstituteWithheldFields(connector connectors.Connector, path []string, f
 	if err != nil {
 		return nil, nil, err
 	}
+	// A direct_write command's record IS its body, so its fields are declared
+	// as body.<path>; a reverse_etl command declares record.<path>. Dispatch on
+	// mode rather than trying both, so a plan can never resolve a field through
+	// the other namespace.
+	prefix := "record."
+	if strings.TrimSpace(cmd.Operation) != "" {
+		prefix = "body."
+	}
 	byTarget := map[string]connectors.CommandSurfaceFlag{}
 	for _, flag := range cmd.Flags {
-		if target, ok := strings.CutPrefix(flag.MapsTo, "record."); ok && target != "" {
+		if target, ok := strings.CutPrefix(flag.MapsTo, prefix); ok && target != "" {
 			byTarget[target] = flag
 		}
 	}
 	record := connectors.Record{}
 	missing := make([]string, 0, len(fields))
 	for _, field := range fields {
-		target := strings.TrimPrefix(strings.TrimSpace(field), "record.")
+		target := strings.TrimPrefix(strings.TrimSpace(field), prefix)
 		if target == "" {
 			continue
 		}

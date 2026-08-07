@@ -73,6 +73,13 @@ type CommandSurfaceCommand struct {
 	// RedactFields is retained for bundle compatibility. Commandrunner does not
 	// use it to mutate connector-command records or errors, or forward it to
 	// executor requests.
+	//
+	// It is also the third declaration site for a redact list, alongside a
+	// write action's redact_fields and an operation's
+	// sensitive_policy.redact_fields. Reverse-plan withholding deliberately
+	// consults neither this field nor a merge of the three: two sources
+	// feeding one path is how a withhold set silently resolves to the wrong
+	// list. Wiring it in needs a deliberate decision, not a default.
 	RedactFields []string
 	Risk         string
 	Approval     string

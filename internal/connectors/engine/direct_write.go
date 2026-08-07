@@ -202,7 +202,15 @@ func OperationDirectWriteMetadata(b Bundle, operation string) (connectors.Operat
 		OutputPolicy:          op.OutputPolicy,
 		Batchable:             op.IsBatchable(),
 		PayloadFileFields:     operationDirectWritePayloadFileFields(op),
+		RedactFields:          operationDirectWriteRedactFields(op),
 	}, nil
+}
+
+func operationDirectWriteRedactFields(op OperationSpec) []string {
+	if op.SensitivePolicy == nil {
+		return nil
+	}
+	return append([]string(nil), op.SensitivePolicy.RedactFields...)
 }
 
 // operationDirectWritePayloadFileFields keeps multipart file identity
