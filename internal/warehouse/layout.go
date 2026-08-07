@@ -42,6 +42,10 @@ const (
 	// MaxConnectionNameLength bounds a connection name so it stays usable in
 	// errors, state keys, and CLI output.
 	MaxConnectionNameLength = 128
+	// unattributedConnectionLabel names a root-level table in diagnostics. Such
+	// a table was written straight through the connector Write surface and has
+	// no owning connection; it is never given one.
+	unattributedConnectionLabel = "<no connection>"
 )
 
 // SafePathPart reports whether value is safe to use verbatim as a single path
@@ -190,9 +194,20 @@ func (e *AmbiguousTableError) Error() string {
 	if e == nil {
 		return "warehouse table is ambiguous"
 	}
+	// A table written straight through the connector Write surface has no
+	// owning connection. Naming it plainly is better than printing an empty
+	// entry, and better than quietly dropping it from the count.
+	named := make([]string, 0, len(e.Connections))
+	for _, connection := range e.Connections {
+		if connection == "" {
+			named = append(named, unattributedConnectionLabel)
+			continue
+		}
+		named = append(named, connection)
+	}
 	return fmt.Sprintf(
 		"table %q is materialized by %d connections (%s); pass --connection to choose one",
-		e.Table, len(e.Connections), strings.Join(e.Connections, ", "),
+		e.Table, len(named), strings.Join(named, ", "),
 	)
 }
 
