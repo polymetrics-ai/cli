@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/safety"
 )
@@ -1162,11 +1163,26 @@ func callerSuppliedIdentifierSetReservedTarget(mapsTo string, reservedTargets ma
 func hasIndependentCLISurfacePathBinding(cmd engine.CLICommand, name string) bool {
 	target := "path." + name
 	for index, flag := range cmd.Flags {
-		if flag.Name != name && flag.MapsTo == target && viableCLISurfaceForwardedFlag(cmd, index) {
+		if flag.Name != name && flag.MapsTo == target && viableCLISurfaceForwardedFlag(cmd, index) && commandrunner.ViableOperationDirectReadPathBinding(commandSurfaceFlag(flag), name) {
 			return true
 		}
 	}
 	return false
+}
+
+func commandSurfaceFlag(flag engine.CLIFlag) connectors.CommandSurfaceFlag {
+	return connectors.CommandSurfaceFlag{
+		Name:       flag.Name,
+		Type:       flag.Type,
+		Summary:    flag.Summary,
+		Values:     flag.Values,
+		MapsTo:     flag.MapsTo,
+		Format:     flag.Format,
+		AllowEmpty: flag.AllowEmpty,
+		Required:   flag.Required,
+		MaxItems:   flag.MaxItems,
+		MinItems:   flag.MinItems,
+	}
 }
 
 func hasViableCLISurfaceRequiredQuerySource(rest *engine.RESTOperationSpec, cmd engine.CLICommand, group engine.RequiredQueryGroup) bool {
@@ -2239,58 +2255,7 @@ func requestTargetPathname(path string) string {
 }
 
 func canonicalStaticRequestTargetPath(path string) string {
-	path = "/" + strings.TrimLeft(path, "/")
-	if len(path) > 1 {
-		path = strings.TrimRight(path, "/")
-	}
-	var canonical strings.Builder
-	canonical.Grow(len(path))
-	for i := 0; i < len(path); i++ {
-		if path[i] != '%' || i+2 >= len(path) {
-			canonical.WriteByte(path[i])
-			continue
-		}
-		high, highOK := staticRequestTargetHexValue(path[i+1])
-		low, lowOK := staticRequestTargetHexValue(path[i+2])
-		if !highOK || !lowOK {
-			canonical.WriteByte(path[i])
-			continue
-		}
-		value := high<<4 | low
-		if isStaticRequestTargetUnreserved(value) {
-			canonical.WriteByte(value)
-		} else {
-			canonical.WriteByte('%')
-			canonical.WriteByte(uppercaseStaticRequestTargetHex(path[i+1]))
-			canonical.WriteByte(uppercaseStaticRequestTargetHex(path[i+2]))
-		}
-		i += 2
-	}
-	return canonical.String()
-}
-
-func staticRequestTargetHexValue(value byte) (byte, bool) {
-	switch {
-	case value >= '0' && value <= '9':
-		return value - '0', true
-	case value >= 'a' && value <= 'f':
-		return value - 'a' + 10, true
-	case value >= 'A' && value <= 'F':
-		return value - 'A' + 10, true
-	default:
-		return 0, false
-	}
-}
-
-func isStaticRequestTargetUnreserved(value byte) bool {
-	return (value >= 'a' && value <= 'z') || (value >= 'A' && value <= 'Z') || (value >= '0' && value <= '9') || strings.ContainsRune("-._~", rune(value))
-}
-
-func uppercaseStaticRequestTargetHex(value byte) byte {
-	if value >= 'a' && value <= 'f' {
-		return value - ('a' - 'A')
-	}
-	return value
+	return connectors.CanonicalRequestTargetPathIdentity(path)
 }
 
 func requestTargetPathsOverlap(left, right string) bool {

@@ -294,6 +294,13 @@ func TestCallerSuppliedIdentifierSetsRedactMixedJSONAndPercentForms(t *testing.T
 	}
 }
 
+func TestCallerSuppliedIdentifierSetsRedactPercentEncodedJSONEscapeForms(t *testing.T) {
+	message := redactSensitiveLiterals(`provider rejected %5Cu0061%62%63`, []string{"abc"})
+	if message != "provider rejected redacted" {
+		t.Fatal("percent-encoded JSON escape identifier was not redacted")
+	}
+}
+
 func TestCallerSuppliedIdentifierSetsRedactTruncatedJSONEscapedPrefixes(t *testing.T) {
 	const identifier = "id/é"
 	message := completeOperationDirectReadErrorText(
@@ -330,6 +337,26 @@ func TestCallerSuppliedIdentifierSetsRedactTruncatedMixedJSONAndPercentPrefixes(
 	}
 	if !strings.Contains(message, "provider rejected redacted") {
 		t.Fatal("truncated mixed identifier prefix was not redacted")
+	}
+}
+
+func TestCallerSuppliedIdentifierSetsRedactTruncatedPercentEncodedJSONEscapePrefixes(t *testing.T) {
+	message := completeOperationDirectReadErrorText(
+		&connsdk.HTTPError{
+			Status:        http.StatusBadRequest,
+			URL:           "https://api.example.test/lookups",
+			Body:          `provider rejected %5Cu0061%62`,
+			BodyTruncated: true,
+		},
+		map[string][]string{"ids": {"abc"}},
+	)
+	for _, leaked := range []string{"%5C", "u0061", "%62"} {
+		if strings.Contains(message, leaked) {
+			t.Fatal("truncated percent-encoded JSON escape identifier prefix leaked")
+		}
+	}
+	if !strings.Contains(message, "provider rejected redacted") {
+		t.Fatal("truncated percent-encoded JSON escape identifier prefix was not redacted")
 	}
 }
 

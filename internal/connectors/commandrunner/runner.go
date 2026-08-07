@@ -1342,6 +1342,55 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 	return coerceFlagValueWithStringArrayCommaSplit(flag, values, true, false)
 }
 
+func ViableOperationDirectReadPathBinding(flag connectors.CommandSurfaceFlag, target string) bool {
+	if safety.ValidateIdentifier(flag.Name, "flag name") != nil || safety.ValidateIdentifier(target, "path parameter") != nil {
+		return false
+	}
+	for _, values := range operationDirectReadPathBindingProbeValues(flag) {
+		value, err := coerceFlagValue(flag, values)
+		if err != nil {
+			continue
+		}
+		if _, err := connectors.EncodePathParameter(target, stringifyCommandValue(value)); err == nil {
+			return true
+		}
+	}
+	return false
+}
+
+func operationDirectReadPathBindingProbeValues(flag connectors.CommandSurfaceFlag) [][]string {
+	probe := "path-value"
+	if flag.Format == "date-time" {
+		probe = "2024-01-02T03:04:05Z"
+	}
+	switch flag.Type {
+	case "", "string":
+		return [][]string{{probe}}
+	case "enum":
+		values := make([][]string, 0, len(flag.Values))
+		for _, value := range flag.Values {
+			values = append(values, []string{value})
+		}
+		return values
+	case "boolean":
+		return [][]string{{"true"}}
+	case "integer", "number":
+		return [][]string{{"1"}}
+	case "string_array":
+		count := max(1, flag.MinItems)
+		if flag.MaxItems > 0 && count > flag.MaxItems {
+			return nil
+		}
+		values := make([]string, count)
+		for i := range values {
+			values[i] = probe
+		}
+		return [][]string{values}
+	default:
+		return nil
+	}
+}
+
 func coerceFlagValueWithStringArrayCommaSplit(flag connectors.CommandSurfaceFlag, values []string, splitCommas, preserveExplicitEmpty bool) (any, error) {
 	clean := make([]string, 0, len(values))
 	for _, value := range values {
@@ -1377,14 +1426,12 @@ func coerceFlagValueWithStringArrayCommaSplit(flag connectors.CommandSurfaceFlag
 		return parsed, nil
 	case "string_array":
 		out := make([]string, 0)
-		if splitCommas && preserveExplicitEmpty && len(clean) == 1 && clean[0] == "" {
+		if len(clean) == 1 && clean[0] == "" && (splitCommas && preserveExplicitEmpty || !splitCommas) {
 			return out, nil
 		}
 		for _, raw := range clean {
 			if !splitCommas {
-				if raw != "" {
-					out = append(out, raw)
-				}
+				out = append(out, raw)
 				continue
 			}
 			for _, item := range strings.Split(raw, ",") {

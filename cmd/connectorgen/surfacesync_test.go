@@ -238,6 +238,36 @@ func TestSyncBundleRejectsIdentifierSetPathVariableCollision(t *testing.T) {
 	}
 }
 
+func TestSyncBundleRejectsUnrunnableIndependentIdentifierSetPathBinding(t *testing.T) {
+	cli := map[string]any{"usage": "pm acme <command>", "commands": []any{map[string]any{
+		"path":          "ids lookup",
+		"intent":        "direct_read",
+		"availability":  "implemented",
+		"operation":     "acme.ids.lookup",
+		"output_policy": "json_redacted",
+		"flags": []any{
+			map[string]any{"name": "ids", "type": "string_array", "required": true},
+			map[string]any{"name": "lookup-id", "type": "string_array", "maps_to": "path.ids"},
+		},
+	}}}
+	ops := map[string]any{"operations": []any{map[string]any{
+		"id":   "acme.ids.lookup",
+		"kind": "rest_read",
+		"rest": map[string]any{
+			"method": "GET", "path": "/lookups/{ids}", "max_bytes": 1024,
+			"caller_supplied_identifier_sets": []any{map[string]any{
+				"name": "ids", "element_shape": "opaque_string", "wire": "query_comma_separated", "min_items": 1, "max_items": 2,
+			}},
+		},
+	}}}
+	dir := writeSyncBundle(t, cli, ops)
+
+	_, err := syncBundle(dir, true)
+	if err == nil || !strings.Contains(err.Error(), "independent flag mapped to path.ids") {
+		t.Fatalf("syncBundle error = %v, want runtime-viable independent path binding rejection", err)
+	}
+}
+
 // A rest_write command has no author-selected output policy: its declared
 // operation is the one source of truth for both the response contract and the
 // endpoint the executor will call. Keeping either hand-edited means a command

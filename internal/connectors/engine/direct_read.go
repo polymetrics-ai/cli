@@ -846,7 +846,7 @@ func normalizedRequesterTargetPath(baseURL, requestPath string) (string, error) 
 	if containsDotPathSegment(path) {
 		return "", errors.New("request target path contains path traversal")
 	}
-	target := canonicalizeRequesterTargetPath(path)
+	target := connectors.CanonicalRequestTargetPath(path)
 	if parsed.Scheme == "" && parsed.Host == "" {
 		return target, nil
 	}
@@ -869,73 +869,11 @@ func canonicalRequesterTargetHost(parsed *url.URL) string {
 	return host + ":" + port
 }
 
-func canonicalizeRequesterTargetPath(path string) string {
-	for decodedPasses := 0; decodedPasses < 8; decodedPasses++ {
-		decoded, err := url.PathUnescape(path)
-		if err != nil || decoded == path {
-			break
-		}
-		path = decoded
-	}
-	return canonicalizeRequestTargetPercentEscapes(strings.ReplaceAll(path, "\\", "/"))
-}
-
 func callerSuppliedIdentifierSetTargetMatches(pattern, target string) bool {
 	expression := regexp.QuoteMeta(pattern)
 	expression = strings.ReplaceAll(expression, regexp.QuoteMeta(callerSuppliedIdentifierSetTargetSegmentMarker), `[^/]+`)
 	expression = strings.ReplaceAll(expression, regexp.QuoteMeta(callerSuppliedIdentifierSetTargetPathMarker), `.+`)
 	return regexp.MustCompile("^" + expression + "$").MatchString(target)
-}
-
-func canonicalizeRequestTargetPercentEscapes(path string) string {
-	var canonical strings.Builder
-	canonical.Grow(len(path))
-	for i := 0; i < len(path); i++ {
-		if path[i] != '%' || i+2 >= len(path) {
-			canonical.WriteByte(path[i])
-			continue
-		}
-		high, highOK := requestTargetHexValue(path[i+1])
-		low, lowOK := requestTargetHexValue(path[i+2])
-		if !highOK || !lowOK {
-			canonical.WriteByte(path[i])
-			continue
-		}
-		value := high<<4 | low
-		if isRequestTargetUnreserved(value) {
-			canonical.WriteByte(value)
-		} else {
-			canonical.WriteByte('%')
-			canonical.WriteByte(uppercaseRequestTargetHex(path[i+1]))
-			canonical.WriteByte(uppercaseRequestTargetHex(path[i+2]))
-		}
-		i += 2
-	}
-	return canonical.String()
-}
-
-func requestTargetHexValue(value byte) (byte, bool) {
-	switch {
-	case value >= '0' && value <= '9':
-		return value - '0', true
-	case value >= 'a' && value <= 'f':
-		return value - 'a' + 10, true
-	case value >= 'A' && value <= 'F':
-		return value - 'A' + 10, true
-	default:
-		return 0, false
-	}
-}
-
-func isRequestTargetUnreserved(value byte) bool {
-	return (value >= 'a' && value <= 'z') || (value >= 'A' && value <= 'Z') || (value >= '0' && value <= '9') || strings.ContainsRune("-._~", rune(value))
-}
-
-func uppercaseRequestTargetHex(value byte) byte {
-	if value >= 'a' && value <= 'f' {
-		return value - ('a' - 'A')
-	}
-	return value
 }
 
 func redactJSONValue(value any) any {
@@ -1132,7 +1070,7 @@ func resolveSurfaceEndpointPathWithIdentifierSets(template string, cfg connector
 			firstErr = fmt.Errorf("missing path variable %q", name)
 			return ""
 		}
-		encoded, err := encodeSurfacePathValue(name, value)
+		encoded, err := connectors.EncodePathParameter(name, value)
 		if identifierSetPathNames[name] {
 			encoded = url.PathEscape(value)
 			err = nil
@@ -1153,30 +1091,6 @@ func resolveSurfaceEndpointPathWithIdentifierSets(template string, cfg connector
 		return "", errors.New("direct read endpoint path contains path traversal")
 	}
 	return resolved, nil
-}
-
-func encodeSurfacePathValue(name, value string) (string, error) {
-	if name == "path" {
-		if strings.Contains(value, "\\") {
-			return "", fmt.Errorf("path variable %q must use forward slashes", name)
-		}
-		if err := safety.ValidateRelativePath(value, "path variable "+name); err != nil {
-			return "", err
-		}
-		clean := stdpath.Clean(value)
-		if clean == "." {
-			return "", fmt.Errorf("path variable %q is required", name)
-		}
-		parts := strings.Split(clean, "/")
-		for i, part := range parts {
-			parts[i] = url.PathEscape(part)
-		}
-		return strings.Join(parts, "/"), nil
-	}
-	if err := safety.ValidateIdentifier(value, "path variable "+name); err != nil {
-		return "", err
-	}
-	return url.PathEscape(value), nil
 }
 
 func directReadQuery(query map[string]string) (url.Values, error) {

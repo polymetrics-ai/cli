@@ -10,6 +10,9 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/commandrunner"
 )
 
 // surfaceSync derives the command-surface metadata that operation-backed
@@ -403,11 +406,54 @@ func hasIndependentSurfacePathBinding(cmd *orderedObject, name string) bool {
 		if !ok {
 			continue
 		}
-		if stringField(flag, "name") != name && stringField(flag, "maps_to") == target {
+		if stringField(flag, "name") != name && stringField(flag, "maps_to") == target && commandrunner.ViableOperationDirectReadPathBinding(surfaceCommandFlag(flag), name) {
 			return true
 		}
 	}
 	return false
+}
+
+func surfaceCommandFlag(flag *orderedObject) connectors.CommandSurfaceFlag {
+	result := connectors.CommandSurfaceFlag{
+		Name:     stringField(flag, "name"),
+		Type:     stringField(flag, "type"),
+		Summary:  stringField(flag, "summary"),
+		MapsTo:   stringField(flag, "maps_to"),
+		Format:   stringField(flag, "format"),
+		Required: surfaceBoolField(flag, "required"),
+		MaxItems: surfaceIntField(flag, "max_items"),
+		MinItems: surfaceIntField(flag, "min_items"),
+	}
+	for _, raw := range arrayField(flag, "values") {
+		if value, ok := raw.(string); ok {
+			result.Values = append(result.Values, value)
+		}
+	}
+	if value, ok := flag.get("allow_empty"); ok {
+		if allowed, ok := value.(bool); ok {
+			result.AllowEmpty = &allowed
+		}
+	}
+	return result
+}
+
+func surfaceBoolField(object *orderedObject, key string) bool {
+	value, _ := object.get(key)
+	result, _ := value.(bool)
+	return result
+}
+
+func surfaceIntField(object *orderedObject, key string) int {
+	value, _ := object.get(key)
+	number, ok := value.(json.Number)
+	if !ok {
+		return 0
+	}
+	parsed, err := number.Int64()
+	if err != nil || parsed < 0 || int64(int(parsed)) != parsed {
+		return 0
+	}
+	return int(parsed)
 }
 
 // derivedAPISurface builds the single-endpoint api_surface an operation-backed

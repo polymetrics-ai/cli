@@ -774,6 +774,14 @@ func TestValidate_CallerSuppliedIdentifierSetRequiresIndependentPathBinding(t *t
 			},
 			want: "requires an independent flag mapped to path.ids",
 		},
+		{
+			name: "array independent path binding is not runtime viable",
+			flags: []engine.CLIFlag{
+				{Name: "ids", Type: "string_array", Required: true, MapsTo: "identifier_set.ids"},
+				{Name: "lookup-id", Type: "string_array", MapsTo: "path.ids"},
+			},
+			want: "requires an independent flag mapped to path.ids",
+		},
 	}
 
 	for _, tt := range tests {
@@ -996,6 +1004,48 @@ func TestValidate_CallerSuppliedIdentifierSetRejectsMaterializedGenericDirectRea
 		}
 	}
 	t.Fatalf("findings = %+v, want materialized generic direct-read endpoint rejection", findings)
+}
+
+func TestValidate_CallerSuppliedIdentifierSetRejectsCanonicalStaticTargetAliases(t *testing.T) {
+	for _, target := range []string{"/v1%2Fcoins", "/v1%5Ccoins", "/safe%2F..%2Fv1%2Fcoins"} {
+		t.Run(target, func(t *testing.T) {
+			op := engine.OperationSpec{
+				ID:   "acme.coins.lookup",
+				Kind: "rest_read",
+				REST: &engine.RESTOperationSpec{
+					Method:   "GET",
+					Path:     "/v1/coins",
+					MaxBytes: 1024,
+					CallerSuppliedIdentifierSets: []engine.CallerSuppliedIdentifierSetSpec{{
+						Name: "coins", ElementShape: "opaque_string", Wire: "query_comma_separated", MinItems: 1, MaxItems: 2,
+					}},
+				},
+			}
+			bundle := engine.Bundle{
+				Name:       "acme",
+				Operations: []engine.OperationSpec{op},
+				CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{
+					{
+						Path: "coins lookup", Intent: "direct_read", Availability: "implemented", Operation: op.ID, OutputPolicy: "json_redacted",
+						APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: "/v1/coins"}},
+						Flags:      []engine.CLIFlag{{Name: "coins", Type: "string_array", Required: true, MapsTo: "identifier_set.coins"}},
+					},
+					{
+						Path: "coins generic", Intent: "direct_read", Availability: "implemented", OutputPolicy: "json_redacted",
+						APISurface: []engine.CLISurfaceEndpointRef{{Method: "GET", Path: target}},
+					},
+				}},
+			}
+
+			findings := checkCLISurface(bundle)
+			for _, finding := range findings {
+				if strings.Contains(finding.Message, "references caller-supplied identifier-set operation") {
+					return
+				}
+			}
+			t.Fatalf("findings = %+v, want static target alias rejection", findings)
+		})
+	}
 }
 
 func TestValidate_CallerSuppliedIdentifierSetRejectsDynamicBaseGenericDirectRead(t *testing.T) {

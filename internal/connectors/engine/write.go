@@ -370,31 +370,36 @@ func sensitiveRedactionUnits(value string) []sensitiveRedactionUnit {
 	units := make([]sensitiveRedactionUnit, 0, len(value))
 	for _, current := range value {
 		raw := string(current)
-		rawPercent := make([]sensitiveRedactionComponent, 0, len(raw))
-		for position := 0; position < len(raw); position++ {
-			byteValue := raw[position]
-			tokens := []sensitiveRedactionToken{
-				{literal: string([]byte{byteValue})},
-				percentSensitiveRedactionToken(byteValue),
-			}
-			if byteValue == ' ' {
-				tokens = append(tokens, sensitiveRedactionToken{literal: "+"})
-			}
-			rawPercent = append(rawPercent, sensitiveRedactionComponent{tokens: tokens})
-		}
 		forms := [][]sensitiveRedactionComponent{
-			rawPercent,
-			{{tokens: []sensitiveRedactionToken{jsonUnicodeSensitiveRedactionToken(current)}}},
+			sensitiveRedactionPercentComponents(sensitiveRedactionToken{literal: raw}, true),
+			sensitiveRedactionPercentComponents(jsonUnicodeSensitiveRedactionToken(current), false),
 		}
 		if encoded, err := json.Marshal(raw); err == nil && len(encoded) >= 2 {
-			forms = append(forms, []sensitiveRedactionComponent{{tokens: []sensitiveRedactionToken{{literal: string(encoded[1 : len(encoded)-1])}}}})
+			forms = append(forms, sensitiveRedactionPercentComponents(sensitiveRedactionToken{literal: string(encoded[1 : len(encoded)-1])}, false))
 		}
 		if current == '/' {
-			forms = append(forms, []sensitiveRedactionComponent{{tokens: []sensitiveRedactionToken{{literal: `\/`}}}})
+			forms = append(forms, sensitiveRedactionPercentComponents(sensitiveRedactionToken{literal: `\/`}, false))
 		}
 		units = append(units, sensitiveRedactionUnit{forms: forms})
 	}
 	return units
+}
+
+func sensitiveRedactionPercentComponents(token sensitiveRedactionToken, spaceAsPlus bool) []sensitiveRedactionComponent {
+	components := make([]sensitiveRedactionComponent, 0, len(token.literal))
+	for position := 0; position < len(token.literal); position++ {
+		byteValue := token.literal[position]
+		raw := sensitiveRedactionToken{literal: string([]byte{byteValue})}
+		if token.hexadecimal != nil && token.hexadecimal[position] {
+			raw.hexadecimal = []bool{true}
+		}
+		tokens := []sensitiveRedactionToken{raw, percentSensitiveRedactionToken(byteValue)}
+		if spaceAsPlus && byteValue == ' ' {
+			tokens = append(tokens, sensitiveRedactionToken{literal: "+"})
+		}
+		components = append(components, sensitiveRedactionComponent{tokens: tokens})
+	}
+	return components
 }
 
 func percentSensitiveRedactionToken(value byte) sensitiveRedactionToken {

@@ -2410,6 +2410,46 @@ func TestOperationDirectReadOverridesCoercesIdentifierSetsByWire(t *testing.T) {
 	}
 }
 
+func TestOperationDirectReadOverridesPreservesMixedEmptyNonCommaIdentifierValues(t *testing.T) {
+	for _, wire := range []string{"query_repeated", "body_json_array"} {
+		t.Run(wire, func(t *testing.T) {
+			cmd := connectors.CommandSurfaceCommand{
+				Path: "lookup identifiers", Intent: "direct_read", Availability: "implemented",
+				Flags: []connectors.CommandSurfaceFlag{{Name: "ids", Type: "string_array", Required: true, MapsTo: "identifier_set.ids"}},
+			}
+			_, _, _, sets, err := operationDirectReadOverrides(
+				cmd,
+				map[string][]string{"ids": {"opaque-id", ""}},
+				map[string]string{"ids": wire},
+			)
+			if err != nil {
+				t.Fatalf("operationDirectReadOverrides: %v", err)
+			}
+			if got := sets["ids"]; !slices.Equal(got, []string{"opaque-id", ""}) {
+				t.Fatalf("identifier set = %#v, want mixed empty values", got)
+			}
+		})
+	}
+}
+
+func TestViableOperationDirectReadPathBinding(t *testing.T) {
+	tests := []struct {
+		name string
+		flag connectors.CommandSurfaceFlag
+		want bool
+	}{
+		{name: "string", flag: connectors.CommandSurfaceFlag{Name: "lookup-id", Type: "string"}, want: true},
+		{name: "string array", flag: connectors.CommandSurfaceFlag{Name: "lookup-id", Type: "string_array"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := ViableOperationDirectReadPathBinding(tt.flag, "ids"); got != tt.want {
+				t.Fatalf("ViableOperationDirectReadPathBinding(%+v) = %t, want %t", tt.flag, got, tt.want)
+			}
+		})
+	}
+}
+
 func TestOperationDirectReadOverridesKeepsIdentifierSetAndPathBindingsSeparate(t *testing.T) {
 	cmd := connectors.CommandSurfaceCommand{
 		Path: "lookup identifiers", Intent: "direct_read", Availability: "implemented",
@@ -2527,6 +2567,26 @@ func TestRunCallerSuppliedIdentifierSetCommandsEndToEnd(t *testing.T) {
 				t.Fatalf("result = %+v, want direct read", result)
 			}
 		})
+	}
+}
+
+func TestRunCallerSuppliedIdentifierSetRejectsMixedEmptyNonCommaIdentifierValue(t *testing.T) {
+	bundle, err := engine.Load(os.DirFS(filepath.Join("..", "engine", "testdata")), "caller-supplied-identifiers")
+	if err != nil {
+		t.Fatalf("load caller-supplied identifier test bundle: %v", err)
+	}
+	connector := engine.New(bundle, nil)
+	_, err = Run(context.Background(), connector, Request{
+		Path:   []string{"lookup", "body"},
+		Flags:  map[string][]string{"ids": {"fixture-id-a", ""}},
+		Config: connectors.RuntimeConfig{Config: map[string]string{"base_url": "https://api.example.test"}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for rejected caller-supplied identifier lookup")
+		return nil
+	})
+	var rejection *engine.CallerSuppliedIdentifierSetError
+	if !errors.As(err, &rejection) || rejection.Parameter != "ids" || rejection.Reason != engine.CallerSuppliedIdentifierSetMalformed {
+		t.Fatalf("Run error = %v, want redacted malformed identifier-set rejection", err)
 	}
 }
 
