@@ -20,7 +20,7 @@
 - [airtable](airtable/MANUAL.md): Reads Airtable bases, tables, records, webhooks, and record comments, and writes record/table/field/comment/webhook mutations, through the Airtable Web API.
 - [akeneo](akeneo/MANUAL.md): Reads Akeneo PIM products, categories, families, attributes, channels, product models, family variants, attribute groups, association types, locales, currencies, and measure families, and writes create-or-update upserts for the 9 catalog-structure resources, through the Akeneo REST API (OAuth2 password grant).
 - [algolia](algolia/MANUAL.md): Reads Algolia indices, API keys, index settings, dictionaries, security sources, and logs, and writes index settings/API keys, through the Algolia Search REST API.
-- [alpaca-broker-api](alpaca-broker-api/MANUAL.md): Reads Alpaca Broker API accounts, assets, market calendar, clock, country info, account activities, journals, and per-account positions/watchlists/orders/documents over the Broker REST API (read-only).
+- [alpaca-broker-api](alpaca-broker-api/MANUAL.md): Reads Alpaca Broker API accounts, assets, market calendar, clock, account activities, journals, and per-account positions/watchlists/orders/documents over the Broker REST API (read-only).
 - [alpha-vantage](alpha-vantage/MANUAL.md): Reads Alpha Vantage daily, weekly, monthly, and intraday OHLCV time series plus the latest global quote for a configured stock symbol.
 - [amazon-ads](amazon-ads/MANUAL.md): Reads Amazon Advertising profiles, Sponsored Products campaigns, ad groups, product ads, keywords, negative keywords, and portfolios via the Amazon Ads API using a Login with Amazon (LWA) refresh-token grant. Read-only.
 - [amazon-seller-partner](amazon-seller-partner/MANUAL.md): Reads Amazon Selling Partner API orders, inventory, finance, catalog, listings, fulfillment, reports, feeds, seller, shipping, vendor, and supporting JSON resources via Login with Amazon (LWA) authentication; exposes declarative writes for SP-API mutations that fit path/body JSON requests.
@@ -111,6 +111,7 @@
 - [convex](convex/MANUAL.md): Reads Convex tables and documents through the deployment HTTP API.
 - [copper](copper/MANUAL.md): Reads Copper CRM people, companies, opportunities, leads, and tasks through the Copper REST API.
 - [countercyclical](countercyclical/MANUAL.md): Reads Countercyclical investments, valuations, research memos, teams, assumptions, and pipelines, and creates investments, through the Countercyclical REST API.
+- [crisp](crisp/MANUAL.md): Reads the first Wave 1 set of Crisp REST API conversation resources through HTTP Basic authentication.
 - [criteo-marketing](criteo-marketing/MANUAL.md): Reads Criteo Marketing Solutions ad sets, advertisers, campaigns, audiences, ad spend statistics, and Marketplace Performance Outcomes (MPO) advertisers/sellers/budgets/seller-campaigns through the Criteo REST API using OAuth2 client-credentials auth.
 - [customer-io](customer-io/MANUAL.md): Reads Customer.io campaigns, newsletters, segments, broadcasts, activities, messages, exports, transactional templates, object types, reporting webhooks, sender identities, snippets, subscription channels/topics, workspaces, and collections; writes snippet/webhook/segment mutations and can send transactional email or trigger broadcasts, through the Customer.io App API.
 - [customerly](customerly/MANUAL.md): Reads Customerly users, leads, and accounts, and writes user/lead/tag/message/attribute/company mutations through the Customerly v1 REST API.
@@ -124,7 +125,7 @@
 - [ding-connect](ding-connect/MANUAL.md): Reads DingConnect reference catalogs (countries, currencies, regions, providers, products, product descriptions, promotions, provider status, error code descriptions, account balance) through the DingConnect REST API, and sends real-money mobile top-up transfers.
 - [discord](discord/MANUAL.md): Reads Discord guild, channel, and role data through the Discord REST API using a bot token. The members stream is out of scope for this migration (see docs.md's Known limits).
 - [dixa](dixa/MANUAL.md): Reads Dixa conversations (and their queue, rating, and assignment projections) from the Dixa conversation_export API.
-- [dockerhub](dockerhub/MANUAL.md): Reads public Docker Hub repositories, image tags, and namespace profiles for a configured username or organization via the Docker Hub registry API.
+- [dockerhub](dockerhub/MANUAL.md): Reads public Docker Hub repositories and image tags for a configured username or organization via the Docker Hub registry API.
 - [docuseal](docuseal/MANUAL.md): Reads DocuSeal templates, submissions, and submitters, and writes submission/submitter/template mutations through the DocuSeal REST API.
 - [dolibarr](dolibarr/MANUAL.md): Reads and writes Dolibarr ERP/CRM third parties, contacts, products, customer invoices, and orders through the Dolibarr REST API.
 - [dremio](dremio/MANUAL.md): Reads and writes Dremio catalog entries, reflections, sources, users, and roles through the Dremio REST API.
@@ -221,7 +222,7 @@
 - [high-level](high-level/MANUAL.md): Reads HighLevel (Go HighLevel / LeadConnector) contacts, opportunities, pipelines, custom fields, and form submissions for a location through the HighLevel REST API.
 - [hoorayhr](hoorayhr/MANUAL.md): Reads HoorayHR users, time-off, leave-types, and sick-leave records through the HoorayHR REST API using session-token authentication.
 - [hubplanner](hubplanner/MANUAL.md): Reads Hubplanner scheduling, project, resource, client, billing, time, vacation, custom-field, and webhook-subscription data and exposes typed reverse-ETL writes for documented Hubplanner REST resources.
-- [hubspot](hubspot/MANUAL.md): Connector-local HubSpot official API operation ledger and planned typed command surface.
+- [hubspot](hubspot/MANUAL.md): Discovers each HubSpot account's CRM object/property schema and reads its provider-described object collections. Other documented operations remain blocked.
 - [hugging-face-datasets](hugging-face-datasets/MANUAL.md): Reads dataset splits and per-split sizes from the Hugging Face dataset-viewer REST API. Read-only; an optional user access token unlocks gated and private datasets.
 - [humanitix](humanitix/MANUAL.md): Reads Humanitix events, orders, tickets, and tags through the Humanitix public REST API.
 - [huntr](huntr/MANUAL.md): Reads Huntr organization members, candidates, activities, notes, and actions through the Huntr REST API.
@@ -271,7 +272,7 @@
 - [lokalise](lokalise/MANUAL.md): Reads Lokalise project keys, languages, translations, contributors, and comments through the Lokalise REST API.
 - [looker](looker/MANUAL.md): Reads Looker users, groups, folders, looks, and dashboards through the Looker API 4.0.
 - [luma](luma/MANUAL.md): Reads and writes the documented Luma public API for events, calendars, guests, contacts, tags, coupons, ticket types, memberships, webhooks, and organization resources.
-- [mailchimp](mailchimp/MANUAL.md): Reads Mailchimp Marketing API audiences (lists), campaigns, reports, and automations through the datacenter-scoped REST API.
+- [mailchimp](mailchimp/MANUAL.md): Reads Mailchimp Marketing API audiences, members, campaigns, reports, automations, templates, files, batches, webhooks, ecommerce, reporting, and related resources; exposes typed approval-gated Mailchimp mutations where the declarative engine can model the documented operation safely.
 - [mailerlite](mailerlite/MANUAL.md): Reads MailerLite subscribers, campaigns, groups, segments, and automations through the MailerLite v2 REST API.
 - [mailersend](mailersend/MANUAL.md): Reads MailerSend email activity, analytics, domains, messages, recipients, templates, scheduled messages, sender identities, inbound routes, users, invites, tokens, and webhooks through the MailerSend REST API.
 - [mailgun](mailgun/MANUAL.md): Reads Mailgun sending domains, email events, mailing lists, and analytics tags through the Mailgun v3 REST API.
@@ -313,7 +314,7 @@
 - [ninjaone-rmm](ninjaone-rmm/MANUAL.md): Reads NinjaOne RMM organizations, devices, locations, activities, and policies through the NinjaOne v2 REST API.
 - [nocrm](nocrm/MANUAL.md): Reads noCRM.io CRM objects and exposes declarative write actions for supported noCRM API v2 mutations.
 - [northpass-lms](northpass-lms/MANUAL.md): Reads Northpass LMS people, courses, course enrollments, and groups through the Northpass REST API. Read-only.
-- [notion](notion/MANUAL.md): Reads Notion databases, pages, and users through the Notion REST API. Read-only.
+- [notion](notion/MANUAL.md): Reads and writes Notion pages, databases, data sources, blocks, comments, views, and file uploads through the Notion REST API.
 - [nutshell](nutshell/MANUAL.md): Reads and writes documented Nutshell CRM REST resources through the Nutshell REST API.
 - [nylas](nylas/MANUAL.md): Reads Nylas calendars, contacts, messages, and events for a connected grant through the Nylas v3 REST API.
 - [nytimes](nytimes/MANUAL.md): Reads New York Times Most Popular (viewed, emailed, shared) articles via the NYTimes Developer APIs.

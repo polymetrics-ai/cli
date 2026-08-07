@@ -7,7 +7,7 @@ description: HubSpot connector knowledge and safe action guide.
 
 ## Purpose
 
-Connector-local HubSpot official API operation ledger and planned typed command surface.
+Discovers each HubSpot account's CRM object/property schema and reads its provider-described object collections. Other documented operations remain blocked.
 
 ## Icon
 
@@ -19,7 +19,7 @@ Connector-local HubSpot official API operation ledger and planned typed command 
 
 ## Capabilities
 
-- check=false catalog=true read=false write=false query=false
+- check=false catalog=true read=true write=false query=false
 - Integration type: api
 
 ## Authentication
@@ -34,7 +34,7 @@ Connector-local HubSpot official API operation ledger and planned typed command 
 
 ## Security
 
-- read risk: No HubSpot read execution is enabled in this connector-local ledger slice; official read operations are inventoried as blocked/planned rows.
+- read risk: Catalog and stream reads call only the discovered HubSpot CRM object collection route. Discovery may be partial and must be refreshed when stale; every other documented HubSpot read remains blocked.
 - write risk: No HubSpot write execution is enabled in this connector-local ledger slice; DELETE/destructive writes are included as typed destructive-confirmation candidates, not exclusions.
 - approval: Future reverse ETL actions must use plan -> preview -> explicit approval -> execute; destructive actions must require typed destructive confirmation.
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

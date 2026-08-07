@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "reports_sent_to",
+  "type": "object",
+  "x-primary-key": [
+    "email_id"
+  ],
+  "properties": {
+    "email_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "email_address": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "merge_fields": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "vip": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "open_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "last_open": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "absplit_group": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "gmt_offset": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "campaign_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "list_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "list_is_active": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "_links": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  }
+}

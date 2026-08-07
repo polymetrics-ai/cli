@@ -39,9 +39,38 @@ pm init --root ./demo --json
 | Connections | state file | References credentials by name. |
 | Catalogs | state file | Stream names and schemas only. |
 | ETL runs | state file plus warehouse files | Records are written in bounded batches. |
-| Warehouse | JSONL files by default | DuckDB is available through the tagged build. |
+| Warehouse | JSONL files by default, nested per connection | DuckDB is available through the tagged build. |
 | Reverse plans | state file | Approval tokens are hashed and omitted from JSON output. |
 | Schedules | schedule manifests | Local cron/system scheduler bridge. |
+
+### Warehouse layout
+
+Every materialized table lives inside the directory of the connection that
+produced it, so identity is a path component rather than a fragment of a
+filename:
+
+```
+.polymetrics/warehouse/
+  <workspace-id>/
+    <connector>/
+      <connection-id>/
+        owner.json            identity of the connection owning this directory
+        wal/<stream>.jsonl    append-only log; the source of truth
+        tables/<table>.jsonl  derived table, rewritten wholesale
+```
+
+Two connections can target the same table name without one overwriting the
+other, because they never share a parent directory. Path components are opaque
+generated identifiers, never display names and never anything derived from a
+credential; the human-readable connection name is kept in `owner.json`, which is
+also asserted before every write. Connection names are validated at creation and
+ambiguous ones are refused rather than rewritten.
+
+A warehouse written by the earlier flat layout, in which every connection shared
+one table file, is refused on read and on write rather than migrated: which
+connection owned a flat table is unknowable, so guessing would recreate the data
+loss the nesting prevents. Delete the warehouse directory and re-run your syncs
+to rebuild it. `pm` never rewrites or deletes warehouse data on your behalf.
 
 ## Connector registry
 

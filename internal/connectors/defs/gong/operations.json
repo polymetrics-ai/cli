@@ -945,6 +945,44 @@
           "additionalProperties": false
         }
       }
+    },
+    {
+      "id": "gong.targets_assignments_upload",
+      "kind": "rest_write",
+      "summary": "Upload target assignments (/v2/targets/{targetId}/assignments)",
+      "description": "Typed Gong multipart target-assignments CSV upload operation. Executable through the `upload_target_assignments` reverse-ETL write action; no generic upload command is exposed.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, approval, execute; destructive confirmation required",
+      "output_policy": "gong_bounded_input_redacted",
+      "mutation_class": "create",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "file",
+        "redact_fields": [
+          "file"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/v2/targets/{targetId}/assignments",
+        "content_type": "multipart/form-data",
+        "max_bytes": 10485760,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "file": {
+              "type": "string",
+              "description": "CSV file of target assignments. Maximum 10,000 data rows (excluding header)."
+            }
+          },
+          "required": [
+            "file"
+          ]
+        }
+      }
     }
   ]
 }

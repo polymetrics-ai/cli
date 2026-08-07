@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/reporting/facebook-ads/synthetic-conformance-value/ecommerce-product-activity",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "products": [
+        {
+          "outreach_id": "fixture_outreach_id",
+          "title": "fixture_title",
+          "sku": "fixture_sku",
+          "image_url": "https://example.invalid/mailchimp-fixture",
+          "total_revenue": 1,
+          "total_purchased": 1,
+          "currency_code": "fixture_currency_code",
+          "recommendation_total": 1
+        }
+      ]
+    }
+  }
+}

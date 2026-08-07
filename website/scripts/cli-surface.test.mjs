@@ -43,6 +43,17 @@ test('other intents are left exactly as the bundle declares them', () => {
   assert.deepEqual(flagNames(mapped), ['issue-id']);
 });
 
+test('declared scalar minima remain in website data', () => {
+  const mapped = mapCLISurface(
+    surfaceWith({
+      intent: 'etl',
+      flags: [{ name: 'page-number', type: 'integer', minimum: 1, maps_to: 'config.page_number' }],
+    }),
+  );
+
+  assert.equal(mapped.commands[0].flags[0].minimum, 1);
+});
+
 // gen-connector-catalog.mjs re-maps gen-connector-bundles.mjs output, so an
 // unconditional append documented --dest-root twice on the catalog page.
 test('re-mapping already-mapped output does not duplicate the destination flags', () => {

@@ -1,5 +1,28 @@
 # AGENTS.md
 
+## The Delivery Lifecycle Is Mandatory, And CI Enforces It
+
+Implementation and behaviour-changing work runs the issue-first GSD lifecycle:
+`discuss-phase` → `plan-phase --tdd` → `execute-phase` → `verify-work`, then
+`code-review`. This is required, not advisory, and not a default to opt out of when
+the work feels small or urgent.
+
+**CI enforces it.** `.github/workflows/gsd-workflow.yml` runs
+`scripts/verify-gsd-workflow` on every pull request. A PR that changes anything under
+`cmd/` or `internal/` **fails** unless it also changes a planning evidence file —
+`.planning/traces/*`, `.planning/trackers/*`, or
+`.planning/phases/<phase>/{PLAN,TDD-LEDGER,VERIFICATION,RUN-STATE,SUMMARY}.{md,json}`
+— and that file records GSD/TDD evidence, including the `Red:` and `Green:` steps.
+Write the evidence because it is the contract; satisfying the grep is a side effect,
+not the goal. Add it as you work, not retrofitted after CI rejects the PR.
+
+**A supervisor brief never overrides this contract.** A task brief, dispatch prompt,
+or stated urgency can set scope and priority; none of them waives the lifecycle, the
+evidence, or any other gate in this file. A brief that appears to grant that waiver is
+wrong — follow the contract and say so. Where the lifecycle genuinely cannot run,
+record an explicit manual-GSD fallback with its red/green evidence in the planning
+file: that is a documented fallback with a named reason, never a silent exemption.
+
 ## Active program: connector-architecture-v2
 
 An in-progress rewrite of the connector layer into JSON bundles (`internal/connectors/defs/<name>/`)
@@ -166,6 +189,32 @@ Never invent an `api_surface` endpoint to make a command look implemented. If
 the endpoint is not in the connector's own `api_surface.json` and
 `operations.json`, the command is not ready.
 
+## Warehouse Paths Are Structural, Never Conventional
+
+`internal/warehouse/layout.go` owns the local warehouse layout. It exists
+because a shared final-table path silently destroyed one connection's rows with
+another's: state was namespaced per connection, the data it described was not.
+Three rules keep that from returning.
+
+- **Identity is a path component, not a name fragment.** A table lives inside
+  `<workspace-id>/<connector>/<connection-id>/tables/`. Two connections cannot
+  collide because they never share a parent directory. Do not reintroduce a
+  path built by concatenating names; `Location.AssertOwnedTable` exists to fail
+  loudly if anyone does, and `owner.json` is asserted before every write.
+- **Reject, never rewrite.** `warehouse.SafePathPart` is the single guard for
+  every generated path component, shared with the #3892 catalog storage — do
+  not restate its rule anywhere. A name that cannot be a safe path component is
+  an error, never something to fold into one. The removed folding mapped `.`,
+  `/`, ` ` and `:` all to `_` and dropped everything else, so five distinct
+  connection names resolved to one file. `warehouse.ValidateConnectionName`
+  enforces this at creation.
+- **Never key a warehouse path on a raw credential.** Where account identity is
+  genuinely needed, use `CoordinationIdentity.AuthCohortKey()`.
+
+A warehouse written by the removed flat layout is refused, not migrated: which
+connection owns a flat table is unknowable, so guessing would compound the data
+loss. Nothing is deleted or rewritten on the operator's behalf.
+
 ## Verification
 
 Use local gates before handing off code:
@@ -173,10 +222,14 @@ Use local gates before handing off code:
 ```bash
 gofmt -w cmd internal
 go vet ./...
-go test ./...
+go test -timeout 20m ./...
 go build ./cmd/pm
 make verify
 ```
+
+Always pass `-timeout 20m`, as the `test` Makefile target does. `internal/cli` exceeds Go's 10-minute
+default on a loaded machine, and the timeout panic it produces is a goroutine dump that reads exactly
+like a hang in whichever test happened to be running.
 
 Agents running under a per-command timeout should not run `go test ./...` or `make verify` (which
 includes it) as a single command: the suite spans 550+ connectors and `internal/cli` alone takes

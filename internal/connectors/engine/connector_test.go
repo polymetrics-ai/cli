@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"testing"
 	"testing/fstest"
 
@@ -12,6 +13,30 @@ import (
 )
 
 // --- compile-time interface assertions (design §B.7, API-CONTRACT.md §2) ---
+
+func TestCatalogStaticSchemaMatchesDiscoveredSchemaProjection(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	bundle, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+
+	staticCatalog, err := New(bundle, nil).Catalog(context.Background(), connectors.RuntimeConfig{})
+	if err != nil {
+		t.Fatalf("static Catalog: %v", err)
+	}
+	if len(staticCatalog.Streams) != 1 {
+		t.Fatalf("static Catalog streams = %d, want 1", len(staticCatalog.Streams))
+	}
+
+	discovered, err := connectors.StreamFromSchema("widgets", "", fsys["acme/schemas/widgets.json"].Data)
+	if err != nil {
+		t.Fatalf("StreamFromSchema: %v", err)
+	}
+	if !reflect.DeepEqual(staticCatalog.Streams[0], discovered) {
+		t.Fatalf("static stream = %#v, discovered stream = %#v; catalog consumers must not need separate paths", staticCatalog.Streams[0], discovered)
+	}
+}
 
 var (
 	_ connectors.Connector          = (*Connector)(nil)
@@ -23,13 +48,15 @@ var (
 )
 
 // Base itself is NOT asserted against connectors.Connector or
-// connectors.ManifestProvider: per API-CONTRACT.md §2 it only serves
-// Name/Metadata/Definition (identity, catalog-adjacent metadata, and docs) —
-// Tier-3 natives that embed it supply Check/Catalog/Read/Write themselves,
-// and are not required to also provide a legacy Manifest(). tier3FakeConnector
-// below is the compile-time proof that Base + those four methods together
-// satisfy connectors.Connector.
-var _ connectors.DefinitionProvider = Base{}
+// connectors.ManifestProvider: per API-CONTRACT.md §2, Tier-3 natives that
+// embed it supply Check/Catalog/Read/Write themselves and are not required to
+// also provide a legacy Manifest(). tier3FakeConnector below is the
+// compile-time proof that Base + those four methods together satisfy
+// connectors.Connector.
+var (
+	_ connectors.DefinitionProvider             = Base{}
+	_ connectors.OperationDirectReadPreflighter = Base{}
+)
 
 // --- test fixtures ---
 

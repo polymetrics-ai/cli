@@ -1,0 +1,17 @@
+{
+  "record": {
+    "list_id": "fixture_list_id",
+    "segment_id": "fixture_segment_id",
+    "subscriber_hash": "fixture_subscriber_hash"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/lists/fixture_list_id/segments/fixture_segment_id/members/fixture_subscriber_hash"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_delete_lists_segments_members"
+    }
+  }
+}

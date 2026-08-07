@@ -1,0 +1,22 @@
+{
+  "record": {
+    "type": "fixture_type",
+    "recipients": {},
+    "settings": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/campaigns",
+    "body": {
+      "type": "fixture_type",
+      "recipients": {},
+      "settings": {}
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "fixture_post_campaigns"
+    }
+  }
+}

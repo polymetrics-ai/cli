@@ -39,6 +39,7 @@ type Bundle struct {
 	Schemas            map[string]*StreamSchema         // stream name -> compiled schema + PK/cursor
 	Surface            *APISurface                      // api_surface.json, when available on disk
 	directWriteSurface *APISurface                      // runtime projection from shipped rest_write declarations
+	directReadLedger   *operationEndpointLedger         // generated direct-read endpoint projection
 	CLISurface         *CLISurface                      // cli_surface.json
 	RawCLISurface      json.RawMessage                  // verbatim cli_surface.json bytes; nil when absent
 	Certification      *CertificationSpec               // certification.json; nil when absent
@@ -888,6 +889,7 @@ type CLIFlag struct {
 	MapsTo     string   `json:"maps_to,omitempty"`
 	Format     string   `json:"format,omitempty"`
 	AllowEmpty *bool    `json:"allow_empty,omitempty"`
+	Minimum    *float64 `json:"minimum,omitempty"`
 	Required   bool     `json:"required,omitempty"`
 	// MaxItems/MinItems bound a string_array flag's item count so a bounded
 	// provider-search list can be enforced against the flag the user typed, not
@@ -1110,6 +1112,10 @@ func (e *LoadAllError) Error() string {
 // the currently-loadable subset (this package's and conformance's
 // fleet-wide tests) can proceed with the returned bundles regardless.
 func LoadAll(fsys fs.FS) ([]Bundle, error) {
+	operationEndpointLedgers, err := loadOperationEndpointLedgers(fsys)
+	if err != nil {
+		return nil, fmt.Errorf("load runtime operation endpoint ledger: %w", err)
+	}
 	entries, err := fs.ReadDir(fsys, ".")
 	if err != nil {
 		return nil, fmt.Errorf("load all bundles: read root: %w", err)
@@ -1127,7 +1133,7 @@ func LoadAll(fsys fs.FS) ([]Bundle, error) {
 	bundles := make([]Bundle, 0, len(names))
 	var loadErr LoadAllError
 	for _, name := range names {
-		b, err := Load(fsys, name)
+		b, err := loadBundle(fsys, name, operationEndpointLedgers)
 		if err != nil {
 			loadErr.Failures = append(loadErr.Failures, BundleLoadFailure{Name: name, Err: err})
 			continue
@@ -1143,6 +1149,14 @@ func LoadAll(fsys fs.FS) ([]Bundle, error) {
 // Load loads and structurally validates a single bundle directory named
 // dirName at the root of fsys.
 func Load(fsys fs.FS, dirName string) (Bundle, error) {
+	operationEndpointLedgers, err := loadOperationEndpointLedgers(fsys)
+	if err != nil {
+		return Bundle{}, fmt.Errorf("load runtime operation endpoint ledger: %w", err)
+	}
+	return loadBundle(fsys, dirName, operationEndpointLedgers)
+}
+
+func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]*operationEndpointLedger) (Bundle, error) {
 	if metaSchemas.err != nil {
 		return Bundle{}, fmt.Errorf("load bundle %s: meta-schemas failed to compile: %w", dirName, metaSchemas.err)
 	}
@@ -1197,6 +1211,10 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 	if err != nil {
 		return Bundle{}, err
 	}
+	directReadLedger := deriveOperationDirectReadEndpointLedger(operations, surface)
+	if directReadLedger == nil && operationEndpointLedgers != nil {
+		directReadLedger = operationEndpointLedgers[dirName]
+	}
 
 	cliSurface, rawCLISurface, err := loadCLISurface(sub, dirName)
 	if err != nil {
@@ -1234,6 +1252,7 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 		Schemas:            schemas,
 		Surface:            surface,
 		directWriteSurface: directWriteSurface,
+		directReadLedger:   directReadLedger,
 		CLISurface:         cliSurface,
 		RawCLISurface:      rawCLISurface,
 		Certification:      certification,
@@ -2300,6 +2319,7 @@ func loadStreamSchemas(sub fs.FS, dirName string, streams []StreamSpec) (map[str
 			Schema:      sch,
 			PrimaryKey:  sch.PrimaryKeys(),
 			CursorField: sch.CursorFieldName(),
+			Raw:         append(json.RawMessage(nil), raw...),
 		}
 	}
 	return out, nil

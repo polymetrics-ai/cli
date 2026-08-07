@@ -3,69 +3,874 @@
     "url": "https://{{ config.data_center }}.api.mailchimp.com/3.0",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" },
-      { "mode": "basic", "username": "anystring", "password": "{{ secrets.api_key }}", "when": "{{ secrets.api_key }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}",
+        "when": "{{ secrets.access_token }}"
+      },
+      {
+        "mode": "basic",
+        "username": "anystring",
+        "password": "{{ secrets.api_key }}",
+        "when": "{{ secrets.api_key }}"
+      }
     ],
     "pagination": {
       "type": "offset_limit",
       "limit_param": "count",
       "offset_param": "offset",
-      "page_size": 100
+      "page_size": 100,
+      "max_pages": 5
     },
-    "check": { "method": "GET", "path": "/lists", "query": { "count": "1" } },
+    "check": {
+      "method": "GET",
+      "path": "/lists",
+      "query": {
+        "count": "1"
+      }
+    },
     "error_map": [
-      { "status": 401, "hint": "mailchimp credentials are missing or invalid; re-run pm credentials add mailchimp" },
-      { "status": 429, "class": "rate_limited", "hint": "mailchimp rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "mailchimp credentials are missing or invalid; re-run pm credentials add mailchimp"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "mailchimp rate limit exceeded; retry later or lower the request rate"
+      }
     ]
   },
   "streams": [
     {
+      "name": "account_exports_exports",
+      "path": "/account-exports",
+      "records": {
+        "path": "exports"
+      },
+      "schema": "schemas/account_exports_exports.json"
+    },
+    {
+      "name": "activity_feed_chimp_chatter",
+      "path": "/activity-feed/chimp-chatter",
+      "records": {
+        "path": "chimp_chatter"
+      },
+      "schema": "schemas/activity_feed_chimp_chatter.json"
+    },
+    {
+      "name": "audiences",
+      "path": "/audiences",
+      "records": {
+        "path": "audiences"
+      },
+      "schema": "schemas/audiences.json"
+    },
+    {
+      "name": "audiences_contacts",
+      "path": "/audiences/{{ config.audience_id }}/contacts",
+      "records": {
+        "path": "contacts"
+      },
+      "computed_fields": {
+        "audience_id": "{{ config.audience_id }}"
+      },
+      "schema": "schemas/audiences_contacts.json"
+    },
+    {
+      "name": "authorized_apps_apps",
+      "path": "/authorized-apps",
+      "records": {
+        "path": "apps"
+      },
+      "schema": "schemas/authorized_apps_apps.json"
+    },
+    {
+      "name": "automations",
+      "path": "/automations",
+      "records": {
+        "path": "automations"
+      },
+      "schema": "schemas/automations.json",
+      "incremental": {
+        "cursor_field": "create_time",
+        "request_param": "since_create_time",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      }
+    },
+    {
+      "name": "automations_emails",
+      "path": "/automations/{{ config.workflow_id }}/emails",
+      "records": {
+        "path": "emails"
+      },
+      "computed_fields": {
+        "workflow_id": "{{ config.workflow_id }}"
+      },
+      "schema": "schemas/automations_emails.json"
+    },
+    {
+      "name": "automations_emails_queue",
+      "path": "/automations/{{ config.workflow_id }}/emails/{{ config.workflow_email_id }}/queue",
+      "records": {
+        "path": "queue"
+      },
+      "computed_fields": {
+        "workflow_id": "{{ config.workflow_id }}",
+        "workflow_email_id": "{{ config.workflow_email_id }}"
+      },
+      "schema": "schemas/automations_emails_queue.json"
+    },
+    {
+      "name": "automations_removed_subscribers_subscribers",
+      "path": "/automations/{{ config.workflow_id }}/removed-subscribers",
+      "records": {
+        "path": "subscribers"
+      },
+      "computed_fields": {
+        "workflow_id": "{{ config.workflow_id }}"
+      },
+      "schema": "schemas/automations_removed_subscribers_subscribers.json"
+    },
+    {
+      "name": "batch_webhooks_webhooks",
+      "path": "/batch-webhooks",
+      "records": {
+        "path": "webhooks"
+      },
+      "schema": "schemas/batch_webhooks_webhooks.json"
+    },
+    {
+      "name": "batches",
+      "path": "/batches",
+      "records": {
+        "path": "batches"
+      },
+      "schema": "schemas/batches.json"
+    },
+    {
+      "name": "campaign_folders_folders",
+      "path": "/campaign-folders",
+      "records": {
+        "path": "folders"
+      },
+      "schema": "schemas/campaign_folders_folders.json"
+    },
+    {
+      "name": "campaigns",
+      "path": "/campaigns",
+      "records": {
+        "path": "campaigns"
+      },
+      "schema": "schemas/campaigns.json",
+      "incremental": {
+        "cursor_field": "create_time",
+        "request_param": "since_create_time",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      }
+    },
+    {
+      "name": "campaigns_feedback",
+      "path": "/campaigns/{{ config.campaign_id }}/feedback",
+      "records": {
+        "path": "feedback"
+      },
+      "computed_fields": {
+        "campaign_id": "{{ config.campaign_id }}"
+      },
+      "schema": "schemas/campaigns_feedback.json"
+    },
+    {
+      "name": "connected_sites_sites",
+      "path": "/connected-sites",
+      "records": {
+        "path": "sites"
+      },
+      "schema": "schemas/connected_sites_sites.json"
+    },
+    {
+      "name": "conversations",
+      "path": "/conversations",
+      "records": {
+        "path": "conversations"
+      },
+      "schema": "schemas/conversations.json"
+    },
+    {
+      "name": "conversations_messages_conversation_messages",
+      "path": "/conversations/{{ config.conversation_id }}/messages",
+      "records": {
+        "path": "conversation_messages"
+      },
+      "computed_fields": {
+        "conversation_id": "{{ config.conversation_id }}"
+      },
+      "schema": "schemas/conversations_messages_conversation_messages.json"
+    },
+    {
+      "name": "ecommerce_orders",
+      "path": "/ecommerce/orders",
+      "records": {
+        "path": "orders"
+      },
+      "schema": "schemas/ecommerce_orders.json"
+    },
+    {
+      "name": "ecommerce_stores",
+      "path": "/ecommerce/stores",
+      "records": {
+        "path": "stores"
+      },
+      "schema": "schemas/ecommerce_stores.json"
+    },
+    {
+      "name": "ecommerce_stores_carts",
+      "path": "/ecommerce/stores/{{ config.store_id }}/carts",
+      "records": {
+        "path": "carts"
+      },
+      "computed_fields": {
+        "store_id": "{{ config.store_id }}"
+      },
+      "schema": "schemas/ecommerce_stores_carts.json"
+    },
+    {
+      "name": "ecommerce_stores_carts_lines",
+      "path": "/ecommerce/stores/{{ config.store_id }}/carts/{{ config.cart_id }}/lines",
+      "records": {
+        "path": "lines"
+      },
+      "computed_fields": {
+        "store_id": "{{ config.store_id }}",
+        "cart_id": "{{ config.cart_id }}"
+      },
+      "schema": "schemas/ecommerce_stores_carts_lines.json"
+    },
+    {
+      "name": "ecommerce_stores_customers",
+      "path": "/ecommerce/stores/{{ config.store_id }}/customers",
+      "records": {
+        "path": "customers"
+      },
+      "computed_fields": {
+        "store_id": "{{ config.store_id }}"
+      },
+      "schema": "schemas/ecommerce_stores_customers.json"
+    },
+    {
+      "name": "ecommerce_stores_orders",
+      "path": "/ecommerce/stores/{{ config.store_id }}/orders",
+      "records": {
+        "path": "orders"
+      },
+      "computed_fields": {
+        "store_id": "{{ config.store_id }}"
+      },
+      "schema": "schemas/ecommerce_stores_orders.json"
+    },
+    {
+      "name": "ecommerce_stores_orders_lines",
+      "path": "/ecommerce/stores/{{ config.store_id }}/orders/{{ config.order_id }}/lines",
+      "records": {
+        "path": "lines"
+      },
+      "computed_fields": {
+        "store_id": "{{ config.store_id }}",
+        "order_id": "{{ config.order_id }}"
+      },
+      "schema": "schemas/ecommerce_stores_orders_lines.json"
+    },
+    {
+      "name": "ecommerce_stores_products",
+      "path": "/ecommerce/stores/{{ config.store_id }}/products",
+      "records": {
+        "path": "products"
+      },
+      "computed_fields": {
+        "store_id": "{{ config.store_id }}"
+      },
+      "schema": "schemas/ecommerce_stores_products.json"
+    },
+    {
+      "name": "ecommerce_stores_products_images",
+      "path": "/ecommerce/stores/{{ config.store_id }}/products/{{ config.product_id }}/images",
+      "records": {
+        "path": "images"
+      },
+      "computed_fields": {
+        "store_id": "{{ config.store_id }}",
+        "product_id": "{{ config.product_id }}"
+      },
+      "schema": "schemas/ecommerce_stores_products_images.json"
+    },
+    {
+      "name": "ecommerce_stores_products_variants",
+      "path": "/ecommerce/stores/{{ config.store_id }}/products/{{ config.product_id }}/variants",
+      "records": {
+        "path": "variants"
+      },
+      "computed_fields": {
+        "store_id": "{{ config.store_id }}",
+        "product_id": "{{ config.product_id }}"
+      },
+      "schema": "schemas/ecommerce_stores_products_variants.json"
+    },
+    {
+      "name": "ecommerce_stores_promo_rules",
+      "path": "/ecommerce/stores/{{ config.store_id }}/promo-rules",
+      "records": {
+        "path": "promo_rules"
+      },
+      "computed_fields": {
+        "store_id": "{{ config.store_id }}"
+      },
+      "schema": "schemas/ecommerce_stores_promo_rules.json"
+    },
+    {
+      "name": "ecommerce_stores_promo_rules_promo_codes",
+      "path": "/ecommerce/stores/{{ config.store_id }}/promo-rules/{{ config.promo_rule_id }}/promo-codes",
+      "records": {
+        "path": "promo_codes"
+      },
+      "computed_fields": {
+        "store_id": "{{ config.store_id }}",
+        "promo_rule_id": "{{ config.promo_rule_id }}"
+      },
+      "schema": "schemas/ecommerce_stores_promo_rules_promo_codes.json"
+    },
+    {
+      "name": "facebook_ads",
+      "path": "/facebook-ads",
+      "records": {
+        "path": "facebook_ads"
+      },
+      "schema": "schemas/facebook_ads.json"
+    },
+    {
+      "name": "file_manager_files",
+      "path": "/file-manager/files",
+      "records": {
+        "path": "files"
+      },
+      "schema": "schemas/file_manager_files.json"
+    },
+    {
+      "name": "file_manager_folders",
+      "path": "/file-manager/folders",
+      "records": {
+        "path": "folders"
+      },
+      "schema": "schemas/file_manager_folders.json"
+    },
+    {
+      "name": "file_manager_folders_files",
+      "path": "/file-manager/folders/{{ config.folder_id }}/files",
+      "records": {
+        "path": "files"
+      },
+      "computed_fields": {
+        "folder_id": "{{ config.folder_id }}"
+      },
+      "schema": "schemas/file_manager_folders_files.json"
+    },
+    {
+      "name": "landing_pages",
+      "path": "/landing-pages",
+      "records": {
+        "path": "landing_pages"
+      },
+      "schema": "schemas/landing_pages.json"
+    },
+    {
       "name": "lists",
       "path": "/lists",
-      "records": { "path": "lists" },
+      "records": {
+        "path": "lists"
+      },
+      "schema": "schemas/lists.json",
       "incremental": {
         "cursor_field": "date_created",
         "request_param": "since_date_created",
         "param_format": "rfc3339",
         "start_config_key": "start_date"
-      },
-      "schema": "schemas/lists.json"
+      }
     },
     {
-      "name": "campaigns",
-      "path": "/campaigns",
-      "records": { "path": "campaigns" },
-      "incremental": {
-        "cursor_field": "create_time",
-        "request_param": "since_create_time",
-        "param_format": "rfc3339",
-        "start_config_key": "start_date"
+      "name": "lists_abuse_reports",
+      "path": "/lists/{{ config.list_id }}/abuse-reports",
+      "records": {
+        "path": "abuse_reports"
       },
-      "schema": "schemas/campaigns.json"
+      "computed_fields": {
+        "list_id": "{{ config.list_id }}"
+      },
+      "schema": "schemas/lists_abuse_reports.json"
+    },
+    {
+      "name": "lists_activity",
+      "path": "/lists/{{ config.list_id }}/activity",
+      "records": {
+        "path": "activity"
+      },
+      "computed_fields": {
+        "list_id": "{{ config.list_id }}"
+      },
+      "schema": "schemas/lists_activity.json"
+    },
+    {
+      "name": "lists_clients",
+      "path": "/lists/{{ config.list_id }}/clients",
+      "records": {
+        "path": "clients"
+      },
+      "computed_fields": {
+        "list_id": "{{ config.list_id }}"
+      },
+      "schema": "schemas/lists_clients.json"
+    },
+    {
+      "name": "lists_growth_history_history",
+      "path": "/lists/{{ config.list_id }}/growth-history",
+      "records": {
+        "path": "history"
+      },
+      "computed_fields": {
+        "list_id": "{{ config.list_id }}"
+      },
+      "schema": "schemas/lists_growth_history_history.json"
+    },
+    {
+      "name": "lists_interest_categories_categories",
+      "path": "/lists/{{ config.list_id }}/interest-categories",
+      "records": {
+        "path": "categories"
+      },
+      "computed_fields": {
+        "list_id": "{{ config.list_id }}"
+      },
+      "schema": "schemas/lists_interest_categories_categories.json"
+    },
+    {
+      "name": "lists_interest_categories_interests",
+      "path": "/lists/{{ config.list_id }}/interest-categories/{{ config.interest_category_id }}/interests",
+      "records": {
+        "path": "interests"
+      },
+      "computed_fields": {
+        "list_id": "{{ config.list_id }}",
+        "interest_category_id": "{{ config.interest_category_id }}"
+      },
+      "schema": "schemas/lists_interest_categories_interests.json"
+    },
+    {
+      "name": "lists_locations",
+      "path": "/lists/{{ config.list_id }}/locations",
+      "records": {
+        "path": "locations"
+      },
+      "computed_fields": {
+        "list_id": "{{ config.list_id }}"
+      },
+      "schema": "schemas/lists_locations.json"
+    },
+    {
+      "name": "lists_members",
+      "path": "/lists/{{ config.list_id }}/members",
+      "records": {
+        "path": "members"
+      },
+      "computed_fields": {
+        "list_id": "{{ config.list_id }}"
+      },
+      "schema": "schemas/lists_members.json"
+    },
+    {
+      "name": "lists_members_activity",
+      "path": "/lists/{{ config.list_id }}/members/{{ config.subscriber_hash }}/activity",
+      "records": {
+        "path": "activity"
+      },
+      "computed_fields": {
+        "list_id": "{{ config.list_id }}",
+        "subscriber_hash": "{{ config.subscriber_hash }}"
+      },
+      "schema": "schemas/lists_members_activity.json"
+    },
+    {
+      "name": "lists_members_events",
+      "path": "/lists/{{ config.list_id }}/members/{{ config.subscriber_hash }}/events",
+      "records": {
+        "path": "events"
+      },
+      "computed_fields": {
+        "list_id": "{{ config.list_id }}",
+        "subscriber_hash": "{{ config.subscriber_hash }}"
+      },
+      "schema": "schemas/lists_members_events.json"
+    },
+    {
+      "name": "lists_members_goals",
+      "path": "/lists/{{ config.list_id }}/members/{{ config.subscriber_hash }}/goals",
+      "records": {
+        "path": "goals"
+      },
+      "computed_fields": {
+        "list_id": "{{ config.list_id }}",
+        "subscriber_hash": "{{ config.subscriber_hash }}"
+      },
+      "schema": "schemas/lists_members_goals.json"
+    },
+    {
+      "name": "lists_members_notes",
+      "path": "/lists/{{ config.list_id }}/members/{{ config.subscriber_hash }}/notes",
+      "records": {
+        "path": "notes"
+      },
+      "computed_fields": {
+        "list_id": "{{ config.list_id }}",
+        "subscriber_hash": "{{ config.subscriber_hash }}"
+      },
+      "schema": "schemas/lists_members_notes.json"
+    },
+    {
+      "name": "lists_members_tags",
+      "path": "/lists/{{ config.list_id }}/members/{{ config.subscriber_hash }}/tags",
+      "records": {
+        "path": "tags"
+      },
+      "computed_fields": {
+        "list_id": "{{ config.list_id }}",
+        "subscriber_hash": "{{ config.subscriber_hash }}"
+      },
+      "schema": "schemas/lists_members_tags.json"
+    },
+    {
+      "name": "lists_merge_fields",
+      "path": "/lists/{{ config.list_id }}/merge-fields",
+      "records": {
+        "path": "merge_fields"
+      },
+      "computed_fields": {
+        "list_id": "{{ config.list_id }}"
+      },
+      "schema": "schemas/lists_merge_fields.json"
+    },
+    {
+      "name": "lists_segments",
+      "path": "/lists/{{ config.list_id }}/segments",
+      "records": {
+        "path": "segments"
+      },
+      "computed_fields": {
+        "list_id": "{{ config.list_id }}"
+      },
+      "schema": "schemas/lists_segments.json"
+    },
+    {
+      "name": "lists_segments_members",
+      "path": "/lists/{{ config.list_id }}/segments/{{ config.segment_id }}/members",
+      "records": {
+        "path": "members"
+      },
+      "computed_fields": {
+        "list_id": "{{ config.list_id }}",
+        "segment_id": "{{ config.segment_id }}"
+      },
+      "schema": "schemas/lists_segments_members.json"
+    },
+    {
+      "name": "lists_signup_forms",
+      "path": "/lists/{{ config.list_id }}/signup-forms",
+      "records": {
+        "path": "signup_forms"
+      },
+      "computed_fields": {
+        "list_id": "{{ config.list_id }}"
+      },
+      "schema": "schemas/lists_signup_forms.json"
+    },
+    {
+      "name": "lists_surveys",
+      "path": "/lists/{{ config.list_id }}/surveys",
+      "records": {
+        "path": "surveys"
+      },
+      "computed_fields": {
+        "list_id": "{{ config.list_id }}"
+      },
+      "schema": "schemas/lists_surveys.json"
+    },
+    {
+      "name": "lists_webhooks",
+      "path": "/lists/{{ config.list_id }}/webhooks",
+      "records": {
+        "path": "webhooks"
+      },
+      "computed_fields": {
+        "list_id": "{{ config.list_id }}"
+      },
+      "schema": "schemas/lists_webhooks.json"
+    },
+    {
+      "name": "reporting_facebook_ads",
+      "path": "/reporting/facebook-ads",
+      "records": {
+        "path": "facebook_ads"
+      },
+      "schema": "schemas/reporting_facebook_ads.json"
+    },
+    {
+      "name": "reporting_facebook_ads_ecommerce_product_activity_products",
+      "path": "/reporting/facebook-ads/{{ config.outreach_id }}/ecommerce-product-activity",
+      "records": {
+        "path": "products"
+      },
+      "computed_fields": {
+        "outreach_id": "{{ config.outreach_id }}"
+      },
+      "schema": "schemas/reporting_facebook_ads_ecommerce_product_activity_products.json"
+    },
+    {
+      "name": "reporting_landing_pages",
+      "path": "/reporting/landing-pages",
+      "records": {
+        "path": "landing_pages"
+      },
+      "schema": "schemas/reporting_landing_pages.json"
+    },
+    {
+      "name": "reporting_surveys",
+      "path": "/reporting/surveys",
+      "records": {
+        "path": "surveys"
+      },
+      "schema": "schemas/reporting_surveys.json"
+    },
+    {
+      "name": "reporting_surveys_questions",
+      "path": "/reporting/surveys/{{ config.survey_id }}/questions",
+      "records": {
+        "path": "questions"
+      },
+      "computed_fields": {
+        "survey_id": "{{ config.survey_id }}"
+      },
+      "schema": "schemas/reporting_surveys_questions.json"
+    },
+    {
+      "name": "reporting_surveys_questions_answers",
+      "path": "/reporting/surveys/{{ config.survey_id }}/questions/{{ config.question_id }}/answers",
+      "records": {
+        "path": "answers"
+      },
+      "computed_fields": {
+        "survey_id": "{{ config.survey_id }}",
+        "question_id": "{{ config.question_id }}"
+      },
+      "schema": "schemas/reporting_surveys_questions_answers.json"
+    },
+    {
+      "name": "reporting_surveys_responses",
+      "path": "/reporting/surveys/{{ config.survey_id }}/responses",
+      "records": {
+        "path": "responses"
+      },
+      "computed_fields": {
+        "survey_id": "{{ config.survey_id }}"
+      },
+      "schema": "schemas/reporting_surveys_responses.json"
     },
     {
       "name": "reports",
       "path": "/reports",
-      "records": { "path": "reports" },
+      "records": {
+        "path": "reports"
+      },
+      "schema": "schemas/reports.json",
       "incremental": {
         "cursor_field": "send_time",
         "request_param": "since_send_time",
         "param_format": "rfc3339",
         "start_config_key": "start_date"
-      },
-      "schema": "schemas/reports.json"
+      }
     },
     {
-      "name": "automations",
-      "path": "/automations",
-      "records": { "path": "automations" },
-      "incremental": {
-        "cursor_field": "create_time",
-        "request_param": "since_create_time",
-        "param_format": "rfc3339",
-        "start_config_key": "start_date"
+      "name": "reports_abuse_reports",
+      "path": "/reports/{{ config.campaign_id }}/abuse-reports",
+      "records": {
+        "path": "abuse_reports"
       },
-      "schema": "schemas/automations.json"
+      "computed_fields": {
+        "campaign_id": "{{ config.campaign_id }}"
+      },
+      "schema": "schemas/reports_abuse_reports.json"
+    },
+    {
+      "name": "reports_advice",
+      "path": "/reports/{{ config.campaign_id }}/advice",
+      "records": {
+        "path": "advice"
+      },
+      "computed_fields": {
+        "campaign_id": "{{ config.campaign_id }}"
+      },
+      "schema": "schemas/reports_advice.json"
+    },
+    {
+      "name": "reports_click_details_urls_clicked",
+      "path": "/reports/{{ config.campaign_id }}/click-details",
+      "records": {
+        "path": "urls_clicked"
+      },
+      "computed_fields": {
+        "campaign_id": "{{ config.campaign_id }}"
+      },
+      "schema": "schemas/reports_click_details_urls_clicked.json"
+    },
+    {
+      "name": "reports_click_details_members",
+      "path": "/reports/{{ config.campaign_id }}/click-details/{{ config.link_id }}/members",
+      "records": {
+        "path": "members"
+      },
+      "computed_fields": {
+        "campaign_id": "{{ config.campaign_id }}",
+        "link_id": "{{ config.link_id }}"
+      },
+      "schema": "schemas/reports_click_details_members.json"
+    },
+    {
+      "name": "reports_domain_performance_domains",
+      "path": "/reports/{{ config.campaign_id }}/domain-performance",
+      "records": {
+        "path": "domains"
+      },
+      "computed_fields": {
+        "campaign_id": "{{ config.campaign_id }}"
+      },
+      "schema": "schemas/reports_domain_performance_domains.json"
+    },
+    {
+      "name": "reports_ecommerce_product_activity_products",
+      "path": "/reports/{{ config.campaign_id }}/ecommerce-product-activity",
+      "records": {
+        "path": "products"
+      },
+      "computed_fields": {
+        "campaign_id": "{{ config.campaign_id }}"
+      },
+      "schema": "schemas/reports_ecommerce_product_activity_products.json"
+    },
+    {
+      "name": "reports_eepurl_referrers",
+      "path": "/reports/{{ config.campaign_id }}/eepurl",
+      "records": {
+        "path": "referrers"
+      },
+      "computed_fields": {
+        "campaign_id": "{{ config.campaign_id }}"
+      },
+      "schema": "schemas/reports_eepurl_referrers.json"
+    },
+    {
+      "name": "reports_email_activity_emails",
+      "path": "/reports/{{ config.campaign_id }}/email-activity",
+      "records": {
+        "path": "emails"
+      },
+      "computed_fields": {
+        "campaign_id": "{{ config.campaign_id }}"
+      },
+      "schema": "schemas/reports_email_activity_emails.json"
+    },
+    {
+      "name": "reports_locations",
+      "path": "/reports/{{ config.campaign_id }}/locations",
+      "records": {
+        "path": "locations"
+      },
+      "computed_fields": {
+        "campaign_id": "{{ config.campaign_id }}"
+      },
+      "schema": "schemas/reports_locations.json"
+    },
+    {
+      "name": "reports_open_details_members",
+      "path": "/reports/{{ config.campaign_id }}/open-details",
+      "records": {
+        "path": "members"
+      },
+      "computed_fields": {
+        "campaign_id": "{{ config.campaign_id }}"
+      },
+      "schema": "schemas/reports_open_details_members.json"
+    },
+    {
+      "name": "reports_sent_to",
+      "path": "/reports/{{ config.campaign_id }}/sent-to",
+      "records": {
+        "path": "sent_to"
+      },
+      "computed_fields": {
+        "campaign_id": "{{ config.campaign_id }}"
+      },
+      "schema": "schemas/reports_sent_to.json"
+    },
+    {
+      "name": "reports_sub_reports",
+      "path": "/reports/{{ config.campaign_id }}/sub-reports",
+      "records": {
+        "path": "reports"
+      },
+      "computed_fields": {
+        "campaign_id": "{{ config.campaign_id }}"
+      },
+      "schema": "schemas/reports_sub_reports.json"
+    },
+    {
+      "name": "reports_unsubscribed_unsubscribes",
+      "path": "/reports/{{ config.campaign_id }}/unsubscribed",
+      "records": {
+        "path": "unsubscribes"
+      },
+      "computed_fields": {
+        "campaign_id": "{{ config.campaign_id }}"
+      },
+      "schema": "schemas/reports_unsubscribed_unsubscribes.json"
+    },
+    {
+      "name": "sms_campaigns",
+      "path": "/sms-campaigns",
+      "records": {
+        "path": "sms_campaigns"
+      },
+      "schema": "schemas/sms_campaigns.json"
+    },
+    {
+      "name": "template_folders_folders",
+      "path": "/template-folders",
+      "records": {
+        "path": "folders"
+      },
+      "schema": "schemas/template_folders_folders.json"
+    },
+    {
+      "name": "templates",
+      "path": "/templates",
+      "records": {
+        "path": "templates"
+      },
+      "schema": "schemas/templates.json"
+    },
+    {
+      "name": "verified_domains_domains",
+      "path": "/verified-domains",
+      "records": {
+        "path": "domains"
+      },
+      "schema": "schemas/verified_domains_domains.json"
     }
   ]
 }

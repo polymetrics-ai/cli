@@ -1,0 +1,24 @@
+{
+  "record": {
+    "list_id": "fixture_list_id",
+    "interest_category_id": "fixture_interest_category_id",
+    "title": "fixture_title",
+    "display_order": 1,
+    "type": "fixture_type"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/lists/fixture_list_id/interest-categories/fixture_interest_category_id",
+    "body": {
+      "title": "fixture_title",
+      "display_order": 1,
+      "type": "fixture_type"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_patch_lists_interest_categories"
+    }
+  }
+}

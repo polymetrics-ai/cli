@@ -196,6 +196,54 @@ not a full override by default.
   delivery contract. An absent descriptor is unknown and non-capable. The structural schema is
   `internal/connectors/engine/schema/changefeed.schema.json`; runtime semantic checks live on
   `connectors.ChangefeedDescriptor`.
+- **`polling_watermark` is bounded replay, not a hard-delete feed**: an implemented polling
+  declaration uses the fixed executor `{"kind":"engine","id":"polling_watermark"}` and must
+  supply `polling_watermark` beside the normal evidence/checkpoint/delivery fields. Its
+  `watermark` declares `{kind, path}` where kind is exactly `timestamp`,
+  `monotonic_sequence`, or `opaque_cursor`; `tie_breaker.path` names the stable secondary order
+  value. Each timestamp or monotonic-sequence source page must be ordered ascending by that tuple;
+  an unordered page is refused before delivery or checkpoint advancement. `checkpoint.keys` must
+  list those paths in that order. The only supported `boundary` is
+  `inclusive`: the next read starts at `>=` the committed boundary and therefore deliberately
+  replays the edge record. Set `delivery.duplicates` to `at_least_once`; `>` would silently lose
+  tied timestamps and is not an allowed substitute. Declare positive `safety_lag_seconds` for a
+  timestamp source whose provider can publish late/clock-skewed records; the executor rereads that
+  overlap on the next run. An unfinished bounded overlap persists an internal scan tuple separately
+  from the durable high-water tuple, retaining the provider's exact tie-breaker text and numeric
+  ordering metadata when applicable; it resumes after restart and clears once the overlap is
+  exhausted so later polls begin at the lag boundary again. `0` is an explicit no-lag opt-out and
+  can lose such records. Non-time watermark kinds must declare `0` because a timestamp lag has no
+  honest meaning for them.
+  `page_size`, `max_pages`, and `request_budget` are all positive required bounds. Each physical
+  declared-source request consumes the one shared request budget: the source adapter must consume
+  a budget token before its primary read and before every additional fixed read, including a
+  declared deletion endpoint. A deletion endpoint requires `request_budget >= 2`, and the executor
+  does not start a primary read unless both its primary and deletion tokens remain. Each primary or
+  deletion physical page must contain no more than `page_size` records; an overflow is a typed,
+  non-advancing refusal. Timestamp and monotonic-sequence sources merge primary and deletion
+  records through a safe shared tuple boundary while preserving independent durable frontiers, so
+  one source cannot skip the other source's page. A declared deletion endpoint also persists its
+  own query/start frontier from the first checkpoint, before any tombstone is accepted. Once a
+  deletion source has a durable timestamp tuple, restart derives that source's cursor and safety
+  overlap from the tuple and scan, never from primary progress. An uninitialized opaque deletion
+  source starts without a primary cursor. Opaque cursor sources retain each source cursor
+  verbatim and promise only provider-local ordering; they do not claim a cross-source tuple merge.
+  Reaching `max_pages` or exhausting that budget returns a typed,
+  resumable stop after only the last durably accepted position; it is never a successful silent
+  truncation. The executor checks cancellation between source fetch, delivery, and checkpoint
+  commit. It advances the tuple only after every emitted record in its page is durably accepted by
+  the destination and the checkpoint committer succeeds; a failure in either step replays the
+  page. The committer is a consumer-facing adapter for the durable database sync contract rather
+  than a second checkpoint store.
+
+  A polling scan cannot see a hard delete after the record disappears. With no delete source,
+  declare `delivery.deletes: "not_available"`; inspect/catalog output carries that exact truth and
+  must not describe the stream as delete-aware. To advertise `"tombstone"`, declare exactly one
+  of `soft_delete: {"path":"..."}` (a truthy provider field becomes a delete event) or
+  `deletion_endpoint: {"path":"/fixed/provider/path","records_path":"..."}` (the closed
+  source adapter returns its records as delete events). A soft-delete field or deletion endpoint
+  must itself carry the declared watermark and tie-breaker values so it participates in the same
+  ordered, replay-safe checkpoint. Do not use a generic endpoint, SQL, or caller-provided path.
 - **`api_surface.json` v2 provenance**: follow the authoritative
   [provider-artifact contract](../architecture/connector-architecture-v2-design.md#version-2-provider-artifact-provenance).
   Upgrade only bundles in the dedicated provider-artifact sweep; do not bulk-edit unrelated bundles
@@ -214,7 +262,12 @@ not a full override by default.
   `flags[].allow_empty:false` to reject present blank string flags, `flags[].required:true` for
   command inputs that must be present before execution, `flags[].max_items`/`flags[].min_items`
   to bound a `string_array` flag's item count against the flag the user typed (before the
-  assembled body is validated), and `constraints[]` `kind:"order"` /
+  assembled body is validated), and optional `flags[].minimum` on `integer` or `number` flags to
+  enforce a provider-cited numeric lower bound. A declared minimum rejects a supplied value below
+  the bound; for an ETL flag mapped to `config.*`, it also checks the effective configured value
+  when the command flag is absent. Omit `minimum` rather than inferring a bound from a parameter
+  name or schema default, so existing command behavior stays unchanged. Use
+  `constraints[]` `kind:"order"` /
   `op:"lt"` / `value_type:"date-time"` over mapped `query.*` or `body.*` targets for provider
   date-range rules. Optional `config.*` fallbacks preserve connection-level defaults when the
   command flag is absent. For implemented direct-read POST operations, every required
@@ -226,9 +279,21 @@ not a full override by default.
   command fields that are derivable from `operations.json` — `api_surface`, flag `maps_to`,
   `output_policy`, and `rest.max_bytes` — are not hand-authored:
   `go run ./cmd/connectorgen surface-sync` fills them and `--check` fails on drift (see AGENTS.md,
-  "Command Surface Must Stay Executable"). The shared-code boundary guard
+  "Command Surface Must Stay Executable"). The same command generates the embedded
+  `operation_endpoint_ledger.json` runtime projection from `api_surface.json` and
+  `operations.json`; it contains only direct-read method, path, operation kind, and response cap,
+  so preflight fails closed if a shipped bundle has no matching projection entry. The shared-code boundary guard
   (`docs/migration/connector-boundary-guard.md`) enforces this ownership rule outside connector
   defs/hooks/native escape hatches.
+- **`api_surface` operation rows are reconciled, never hand-edited**: use
+  `go run ./cmd/connectorgen surface-reconcile --check` to derive the current
+  result for direct-read operation rows. The tool loads the disk bundle and
+  calls the real `commandrunner.Preflight`; it writes `covered_by.direct_read`
+  only for a matching command that passes that runtime path. A missing,
+  planned, or preflight-failing command stays blocked with a deterministic
+  reason; unknown models are refused unchanged. Use `--reason-contains` to
+  audit a named stale-reason cohort and `--json` for a reviewable count report.
+  Run without `--check` only after reviewing the proposed reclassification.
 - **`output_policy` is intent-specific, closed, and must be chosen deliberately**: for a
   `direct_write` command whose caller needs the complete decoded JSON response, declare `"json"`;
   the engine returns that decoded body unchanged. Declare `"none"` only when the operation

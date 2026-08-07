@@ -1,23 +1,28 @@
 {
   "name": "mailchimp",
   "display_name": "Mailchimp",
-  "description": "Reads Mailchimp Marketing API audiences (lists), campaigns, reports, and automations through the datacenter-scoped REST API.",
+  "description": "Reads Mailchimp Marketing API audiences, members, campaigns, reports, automations, templates, files, batches, webhooks, ecommerce, reporting, and related resources; exposes typed approval-gated Mailchimp mutations where the declarative engine can model the documented operation safely.",
   "integration_type": "api",
-  "docs_url": "https://mailchimp.com/developer/release-notes/",
+  "docs_url": "https://api.mailchimp.com/schema/3.0/Swagger.json",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 100
+    "read_page_size": 100,
+    "write_batch_size": 1
+  },
+  "rate_limit": {
+    "requests_per_minute": 10
   },
   "risk": {
-    "read": "external Mailchimp API read of audience, campaign, report, and automation data",
-    "approval": "none; read-only"
+    "read": "external Mailchimp Marketing API reads using configured datacenter credentials; nested streams may require operation-specific identifier config",
+    "write": "approval-gated Mailchimp mutations against audiences, campaigns, automations, templates, files, webhooks, ecommerce, and related resources",
+    "approval": "reverse ETL writes require plan, preview, explicit approval, and destructive confirmation where declared"
   }
 }

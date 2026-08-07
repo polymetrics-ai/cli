@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/campaigns/synthetic-conformance-value/feedback",
+    "query": {
+      "count": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total_items": 2,
+      "feedback": [
+        {
+          "campaign_id": "fixture_campaign_id",
+          "updated_at": "2026-01-01T00:00:00Z",
+          "feedback_id": 1,
+          "parent_id": 1,
+          "block_id": 1,
+          "message": "fixture_message",
+          "is_complete": true,
+          "created_by": "fixture_created_by"
+        }
+      ]
+    }
+  }
+}

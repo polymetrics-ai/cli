@@ -1,9 +1,11 @@
 package app
 
 import (
+	"fmt"
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/synccontract"
 )
 
 type AddCredentialRequest struct {
@@ -32,6 +34,29 @@ func (e *CredentialLinkValidationError) Error() string { return e.err.Error() }
 
 func (e *CredentialLinkValidationError) Unwrap() error { return e.err }
 
+// ApprovalConsumptionUncertainError stops a reverse plan when its single-use
+// approval may have been consumed but the durability result is uncertain.
+// Callers must create a new plan rather than retrying the old approval.
+type ApprovalConsumptionUncertainError struct {
+	PlanID     string
+	ConsumedAt time.Time
+	err        error
+}
+
+func (e *ApprovalConsumptionUncertainError) Error() string {
+	if e == nil {
+		return "reverse plan approval consumption transition is uncertain; create a new reverse plan and obtain a fresh preview and approval before retrying"
+	}
+	return fmt.Sprintf("reverse plan %q approval consumption transition is uncertain; create a new reverse plan and obtain a fresh preview and approval before retrying", e.PlanID)
+}
+
+func (e *ApprovalConsumptionUncertainError) Unwrap() error {
+	if e == nil {
+		return nil
+	}
+	return e.err
+}
+
 type CredentialMeta struct {
 	ID              string            `json:"id"`
 	Name            string            `json:"name"`
@@ -52,20 +77,21 @@ type EndpointConfig struct {
 }
 
 type StreamConfig struct {
-	SyncMode         string   `json:"sync_mode"`
-	CursorField      string   `json:"cursor_field,omitempty"`
-	PrimaryKey       []string `json:"primary_key,omitempty"`
-	DestinationTable string   `json:"destination_table,omitempty"`
+	SyncMode            string   `json:"sync_mode"`
+	LegacyCompatibility bool     `json:"legacy_compatibility,omitempty"`
+	CursorField         string   `json:"cursor_field,omitempty"`
+	PrimaryKey          []string `json:"primary_key,omitempty"`
+	DestinationTable    string   `json:"destination_table,omitempty"`
 }
 
 type StreamState struct {
-	Connection          string    `json:"connection"`
-	Stream              string    `json:"stream"`
-	Cursor              string    `json:"cursor,omitempty"`
-	GenerationID        int64     `json:"generation_id"`
-	LastSuccessfulRunID string    `json:"last_successful_run_id,omitempty"`
-	RecordsLoaded       int       `json:"records_loaded,omitempty"`
-	UpdatedAt           time.Time `json:"updated_at"`
+	Connection          string                           `json:"connection"`
+	Stream              string                           `json:"stream"`
+	Checkpoint          *synccontract.CheckpointEnvelope `json:"checkpoint,omitempty"`
+	GenerationID        int64                            `json:"generation_id"`
+	LastSuccessfulRunID string                           `json:"last_successful_run_id,omitempty"`
+	RecordsLoaded       int                              `json:"records_loaded,omitempty"`
+	UpdatedAt           time.Time                        `json:"updated_at"`
 }
 
 type CreateConnectionRequest struct {
@@ -76,6 +102,9 @@ type CreateConnectionRequest struct {
 }
 
 type Connection struct {
+	// ID is the opaque generated identifier used as a warehouse path
+	// component. Name is a display value and never becomes a path.
+	ID          string                  `json:"id,omitempty"`
 	Name        string                  `json:"name"`
 	Source      EndpointConfig          `json:"source"`
 	Destination EndpointConfig          `json:"destination"`
@@ -88,6 +117,16 @@ type CatalogSnapshot struct {
 	Connection string             `json:"connection"`
 	Catalog    connectors.Catalog `json:"catalog"`
 	UpdatedAt  time.Time          `json:"updated_at"`
+}
+
+// catalogReference is the compact state.json index for an account catalog.
+// AccountKey is an opaque CoordinationIdentity projection; it is never a
+// credential value and is intentionally kept out of CatalogSnapshot and CLI
+// output. The referenced file contains schemas only, never this key.
+type catalogReference struct {
+	Connector  string                   `json:"connector"`
+	AccountKey connectors.AuthCohortKey `json:"account_key"`
+	File       string                   `json:"file"`
 }
 
 type RunETLRequest struct {
@@ -115,12 +154,18 @@ type Run struct {
 
 type QueryTableRequest struct {
 	Table string `json:"table"`
-	Limit int    `json:"limit"`
+	// Connection scopes the read to one connection's tables. It is required
+	// only when more than one connection materializes the same table name.
+	Connection string `json:"connection,omitempty"`
+	Limit      int    `json:"limit"`
 }
 
 type PlanReverseETLRequest struct {
-	Name                  string            `json:"name"`
-	SourceTable           string            `json:"source_table"`
+	Name        string `json:"name"`
+	SourceTable string `json:"source_table"`
+	// SourceConnection scopes the source table to one connection. It is
+	// required only when several connections materialize the same table name.
+	SourceConnection      string            `json:"source_connection,omitempty"`
 	DestinationConnector  string            `json:"destination_connector"`
 	DestinationCredential string            `json:"destination_credential"`
 	DestinationConfig     map[string]string `json:"destination_config,omitempty"`
@@ -149,11 +194,16 @@ type PayloadIdentity struct {
 }
 
 type ReversePlan struct {
-	ID                    string            `json:"id"`
-	Name                  string            `json:"name"`
-	Status                string            `json:"status"`
-	Mode                  string            `json:"mode,omitempty"`
-	SourceTable           string            `json:"source_table"`
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Status      string `json:"status"`
+	Mode        string `json:"mode,omitempty"`
+	SourceTable string `json:"source_table"`
+	// SourceConnection is the connection the plan was built against, resolved
+	// once at plan time. Preview and run scope their reads by it so a plan
+	// keeps resolving to the same table after another connection materializes
+	// one of the same name.
+	SourceConnection      string            `json:"source_connection,omitempty"`
 	DestinationConnector  string            `json:"destination_connector"`
 	DestinationCredential string            `json:"destination_credential"`
 	DestinationConfig     map[string]string `json:"destination_config,omitempty"`
@@ -181,6 +231,7 @@ type ReversePlan struct {
 	ApprovalGrant              *connectors.WriteApprovalGrant `json:"approval_grant,omitempty"`
 	ApprovalToken              string                         `json:"approval_token,omitempty"`
 	ApprovalConsumedAt         time.Time                      `json:"approval_consumed_at,omitempty"`
+	ApprovalUncertainAt        time.Time                      `json:"approval_consumption_uncertain_at,omitempty"`
 	CreatedAt                  time.Time                      `json:"created_at"`
 	ExpiresAt                  time.Time                      `json:"expires_at"`
 }

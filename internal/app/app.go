@@ -20,10 +20,15 @@ import (
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/safety"
 	statestore "polymetrics.ai/internal/state"
+	"polymetrics.ai/internal/synccontract"
 	"polymetrics.ai/internal/vault"
+	"polymetrics.ai/internal/warehouse"
 )
 
-const reversePlanModeConnectorCommand = "connector_command"
+const (
+	reversePlanModeConnectorCommand               = "connector_command"
+	reversePlanStatusApprovalConsumptionUncertain = "approval_consumption_uncertain"
+)
 
 var errStateRevisionConflict = errors.New("project state changed in another process")
 
@@ -37,6 +42,7 @@ type App struct {
 	approval   *projectWriteApprovalAuthority
 	registry   *connectors.Registry
 	sqlEngine  sqlQueryEngine
+	catalogs   catalogStorage
 }
 
 // sqlQueryEngine is the pluggable backend for App.QuerySQL. The default build
@@ -48,12 +54,16 @@ type sqlQueryEngine interface {
 }
 
 type state struct {
-	Revision           uint64                            `json:"revision"`
+	Revision                     uint64 `json:"revision"`
+	SyncModeCompatibilityVersion uint   `json:"sync_mode_compatibility_version,omitempty"`
+	// WorkspaceID is the opaque generated identifier that forms the first
+	// component of every warehouse path. It is never a user-supplied name.
+	WorkspaceID        string                            `json:"workspace_id,omitempty"`
 	Credentials        []CredentialMeta                  `json:"credentials"`
 	CredentialBindings map[string]credentialBindingState `json:"credential_bindings"`
 	CoordinationSalt   string                            `json:"coordination_salt,omitempty"`
 	Connections        []Connection                      `json:"connections"`
-	Catalogs           []CatalogSnapshot                 `json:"catalogs"`
+	Catalogs           []catalogReference                `json:"catalogs"`
 	Runs               []Run                             `json:"runs"`
 	ReversePlans       []ReversePlan                     `json:"reverse_plans"`
 	ReverseRuns        []ReverseRun                      `json:"reverse_runs"`
@@ -107,11 +117,17 @@ func InitProject(root string) error {
 		if err != nil {
 			return err
 		}
+		workspaceID, err := prefixedID("ws")
+		if err != nil {
+			return err
+		}
 		initial := state{
-			CredentialBindings: map[string]credentialBindingState{},
-			CoordinationSalt:   coordinationSalt,
-			Checkpoints:        map[string]map[string]string{},
-			StreamStates:       map[string]StreamState{},
+			SyncModeCompatibilityVersion: syncModeCompatibilityVersion,
+			WorkspaceID:                  workspaceID,
+			CredentialBindings:           map[string]credentialBindingState{},
+			CoordinationSalt:             coordinationSalt,
+			Checkpoints:                  map[string]map[string]string{},
+			StreamStates:                 map[string]StreamState{},
 		}
 		if err := writeJSONAtomic(statePath, initial); err != nil {
 			return err
@@ -149,6 +165,7 @@ func Open(root string) (*App, error) {
 		vault:      v,
 		approval:   approval,
 		registry:   bundleregistry.New(),
+		catalogs:   newCatalogStorage(projectDir),
 	}
 	a.sqlEngine = newSQLEngine(a)
 	if err := a.load(); err != nil {
@@ -183,6 +200,12 @@ func (a *App) load() error {
 	if err != nil {
 		return err
 	}
+	return a.normalizeLoadedState(loaded)
+}
+
+// normalizeLoadedState applies every compatibility invariant after a state
+// reload. Callers must not assign a store result to a.state directly.
+func (a *App) normalizeLoadedState(loaded state) error {
 	a.state = loaded
 	if a.state.Checkpoints == nil {
 		a.state.Checkpoints = map[string]map[string]string{}
@@ -190,7 +213,63 @@ func (a *App) load() error {
 	if a.state.StreamStates == nil {
 		a.state.StreamStates = map[string]StreamState{}
 	}
-	return a.migrateCredentialCoordination()
+	catalogRefsChanged := a.dropInvalidCatalogReferences()
+	a.migrateLegacySyncModeCompatibility()
+	if err := a.migrateCredentialCoordination(); err != nil {
+		return err
+	}
+	identityChanged, err := a.migrateWarehouseIdentity()
+	if err != nil {
+		return err
+	}
+	if catalogRefsChanged || identityChanged {
+		if err := a.save(); err != nil {
+			return fmt.Errorf("persist project identity: %w", err)
+		}
+	}
+	return nil
+}
+
+// migrateWarehouseIdentity gives a project and its connections the opaque
+// identifiers that form warehouse path components. They are generated once and
+// persisted, so a connection's directory is stable across runs and independent
+// of its display name.
+func (a *App) migrateWarehouseIdentity() (bool, error) {
+	changed := false
+	if strings.TrimSpace(a.state.WorkspaceID) == "" {
+		workspaceID, err := prefixedID("ws")
+		if err != nil {
+			return false, err
+		}
+		a.state.WorkspaceID = workspaceID
+		changed = true
+	}
+	for index := range a.state.Connections {
+		if strings.TrimSpace(a.state.Connections[index].ID) != "" {
+			continue
+		}
+		connectionID, err := prefixedID("conn")
+		if err != nil {
+			return false, err
+		}
+		a.state.Connections[index].ID = connectionID
+		changed = true
+	}
+	return changed, nil
+}
+
+func (a *App) dropInvalidCatalogReferences() bool {
+	kept := a.state.Catalogs[:0]
+	changed := false
+	for _, reference := range a.state.Catalogs {
+		if !validCatalogReference(reference) {
+			changed = true
+			continue
+		}
+		kept = append(kept, reference)
+	}
+	a.state.Catalogs = kept
+	return changed
 }
 
 // migrateCredentialCoordination gives pre-#3863 credentials an isolated
@@ -341,6 +420,21 @@ func (a *App) credentialBindingForCredential(credential CredentialMeta) (credent
 	return binding, nil
 }
 
+func (a *App) migrateLegacySyncModeCompatibility() {
+	if a.state.SyncModeCompatibilityVersion >= syncModeCompatibilityVersion {
+		return
+	}
+	for connectionIndex := range a.state.Connections {
+		for streamName, stream := range a.state.Connections[connectionIndex].Streams {
+			if isLegacySyncModeName(stream.SyncMode) {
+				stream.LegacyCompatibility = true
+				a.state.Connections[connectionIndex].Streams[streamName] = stream
+			}
+		}
+	}
+	a.state.SyncModeCompatibilityVersion = syncModeCompatibilityVersion
+}
+
 func (a *App) save() error {
 	expectedRevision := a.state.Revision
 	next := a.state
@@ -351,7 +445,7 @@ func (a *App) save() error {
 		next.Revision = current.Revision + 1
 		return next, nil
 	})
-	if err == nil || errors.Is(err, errStateRevisionConflict) {
+	if err == nil || errors.Is(err, errStateRevisionConflict) || stateStoreCommitMayHaveSucceeded(err) {
 		a.state = updated
 	}
 	return err
@@ -366,10 +460,14 @@ func (a *App) updateState(update func(state) (state, error)) (state, error) {
 		next.Revision = current.Revision + 1
 		return next, nil
 	})
-	if err == nil {
+	if err == nil || stateStoreCommitMayHaveSucceeded(err) {
 		a.state = updated
 	}
 	return updated, err
+}
+
+func stateStoreCommitMayHaveSucceeded(err error) bool {
+	return statestore.CommitOutcomeForError(err).MayHaveCommitted()
 }
 
 func newStateStore(path string) statestore.JSONStore[state] {
@@ -663,12 +761,23 @@ func (a *App) RemoveCredential(ctx context.Context, name string) error {
 	return fmt.Errorf("credential %q not found", name)
 }
 
+// ValidateConnectionName rejects connection names that two distinct
+// connections could not be told apart by once folded into a path. See
+// warehouse.ValidateConnectionName for the rule and why it rejects rather than
+// rewrites.
+func ValidateConnectionName(name string) error {
+	return warehouse.ValidateConnectionName(name)
+}
+
 func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest) (Connection, error) {
-	if strings.TrimSpace(req.Name) == "" {
-		return Connection{}, errors.New("connection name is required")
+	if err := ValidateConnectionName(req.Name); err != nil {
+		return Connection{}, err
 	}
 	if _, ok := a.findConnection(req.Name); ok {
 		return Connection{}, fmt.Errorf("connection %q already exists", req.Name)
+	}
+	if existing, ok := a.findConnectionFold(req.Name); ok {
+		return Connection{}, fmt.Errorf("connection %q is ambiguous with existing connection %q: connection names must differ by more than letter case", req.Name, existing.Name)
 	}
 	if len(req.Streams) == 0 {
 		return Connection{}, errors.New("at least one stream is required")
@@ -677,19 +786,33 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 	if err != nil {
 		return Connection{}, fmt.Errorf("resolve source: %w", err)
 	}
-	if _, _, err := a.resolveEndpoint(ctx, req.Destination); err != nil {
+	destination, _, err := a.resolveEndpoint(ctx, req.Destination)
+	if err != nil {
 		return Connection{}, fmt.Errorf("resolve destination: %w", err)
 	}
-	catalog, catalogErr := source.Catalog(ctx, sourceRuntime)
+	materializesWarehouse := false
+	if materializer, ok := destination.(connectors.LocalWarehouseMaterializer); ok {
+		materializesWarehouse = materializer.MaterializesLocalWarehouse()
+	}
+	catalog, catalogErr := a.catalogForEndpoint(ctx, source, sourceRuntime, false)
+	if errors.Is(catalogErr, errCatalogStale) {
+		return Connection{}, catalogErr
+	}
 	for name, stream := range req.Streams {
 		if stream.SyncMode == "" {
 			stream.SyncMode = DefaultUserFacingSyncMode
 		}
-		mode, err := ParseSyncMode(stream.SyncMode)
+		if isLegacySyncModeName(stream.SyncMode) {
+			stream.LegacyCompatibility = true
+		}
+		mode, err := ParseStreamSyncMode(stream)
 		if err != nil {
 			return Connection{}, err
 		}
 		stream.SyncMode = mode.Name
+		if mode.LegacyCompatibility {
+			stream.LegacyCompatibility = true
+		}
 		if catalogErr == nil {
 			if sourceStream, ok := findCatalogStream(catalog, name); ok {
 				if stream.CursorField == "" && len(sourceStream.CursorFields) > 0 {
@@ -703,13 +826,32 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 		if stream.DestinationTable == "" {
 			stream.DestinationTable = name
 		}
+		// Against the local warehouse the stream and table names are path
+		// components, so they are held to the same rule as the connection
+		// name: rejected at creation rather than coerced into something that
+		// resolves. Creation is the only moment this can honestly be caught —
+		// every sync of a connection carrying an unusable name fails at the
+		// same place, and a connection can be neither edited nor deleted.
+		if materializesWarehouse {
+			if _, err := warehouse.PathComponent("stream", name); err != nil {
+				return Connection{}, err
+			}
+			if _, err := warehouse.PathComponent("table", stream.DestinationTable); err != nil {
+				return Connection{}, err
+			}
+		}
 		if err := ValidateStreamSyncConfig(stream); err != nil {
 			return Connection{}, fmt.Errorf("validate stream %q: %w", name, err)
 		}
 		req.Streams[name] = stream
 	}
+	connectionID, err := prefixedID("conn")
+	if err != nil {
+		return Connection{}, err
+	}
 	now := time.Now().UTC()
 	conn := Connection{
+		ID:          connectionID,
 		Name:        req.Name,
 		Source:      req.Source,
 		Destination: req.Destination,
@@ -739,35 +881,141 @@ func (a *App) RefreshCatalog(ctx context.Context, connectionName string) (Catalo
 	if err != nil {
 		return CatalogSnapshot{}, err
 	}
-	catalog, err := source.Catalog(ctx, runtime)
+	catalog, err := a.catalogForEndpoint(ctx, source, runtime, true)
 	if err != nil {
 		return CatalogSnapshot{}, err
 	}
-	snapshot := CatalogSnapshot{Connection: conn.Name, Catalog: catalog, UpdatedAt: time.Now().UTC()}
-	replaced := false
-	for i := range a.state.Catalogs {
-		if a.state.Catalogs[i].Connection == conn.Name {
-			a.state.Catalogs[i] = snapshot
-			replaced = true
-			break
+	return CatalogSnapshot{Connection: conn.Name, Catalog: catalog, UpdatedAt: time.Now().UTC()}, nil
+}
+
+var errCatalogStale = errors.New("cached catalog is stale; run pm catalog refresh --connection <name> before using this schema")
+
+// catalogForEndpoint is the only application-level catalog cache boundary.
+// It is intentionally endpoint-shaped rather than source-shaped: source
+// refresh is implemented today, and a future dynamic destination can use the
+// same connector/account store without a second persistence model. Dynamic
+// catalogs are persisted after the file reaches durability; static catalogs
+// retain their existing cheap in-memory behavior unless explicitly refreshed.
+func (a *App) catalogForEndpoint(ctx context.Context, connector connectors.Connector, runtime connectors.RuntimeConfig, forceRefresh bool) (connectors.Catalog, error) {
+	reference, err := a.catalogReference(connector.Name(), runtime)
+	if err != nil {
+		return connectors.Catalog{}, err
+	}
+	if !forceRefresh {
+		if reference, ok := a.accountCatalogReference(reference); ok {
+			stored, err := a.catalogs.read(reference)
+			if err != nil {
+				return connectors.Catalog{}, fmt.Errorf("read cached catalog: %w", err)
+			}
+			snapshot := catalogSnapshotWithStaleness(CatalogSnapshot{Catalog: stored.Catalog, UpdatedAt: stored.UpdatedAt}, time.Now().UTC())
+			if snapshot.Catalog.Discovery != nil && snapshot.Catalog.Discovery.Stale {
+				return connectors.Catalog{}, errCatalogStale
+			}
+			return snapshot.Catalog, nil
 		}
 	}
-	if !replaced {
-		a.state.Catalogs = append(a.state.Catalogs, snapshot)
+	runtime.ForceCatalogRefresh = forceRefresh
+	catalog, err := connector.Catalog(ctx, runtime)
+	if err != nil {
+		return connectors.Catalog{}, err
 	}
-	if err := a.save(); err != nil {
-		return CatalogSnapshot{}, err
+	if catalog.Discovery == nil && !forceRefresh {
+		return catalog, nil
 	}
-	return snapshot, nil
+	if err := a.persistAccountCatalog(reference, catalog, time.Now().UTC()); err != nil {
+		return connectors.Catalog{}, err
+	}
+	return catalog, nil
+}
+
+// persistAccountCatalog is the catalog durability boundary. The file is fully
+// synced before the state pointer can be written. A failed state commit can
+// leave only an unreferenced durable file, never a state reference to a
+// missing or unsynced catalog.
+func (a *App) persistAccountCatalog(reference catalogReference, catalog connectors.Catalog, updatedAt time.Time) error {
+	if err := a.catalogs.write(reference, catalog, updatedAt); err != nil {
+		return err
+	}
+	return a.putCatalogReference(reference)
+}
+
+// putCatalogReference is the sole state.json write boundary for account
+// catalogs. Connection callers derive this reference from their connector and
+// opaque coordination identity, so multiple connections to one account share
+// a single catalog file.
+func (a *App) putCatalogReference(reference catalogReference) error {
+	for i := range a.state.Catalogs {
+		if a.state.Catalogs[i].Connector == reference.Connector && a.state.Catalogs[i].AccountKey == reference.AccountKey {
+			if a.state.Catalogs[i] == reference {
+				return nil
+			}
+			a.state.Catalogs[i] = reference
+			return a.save()
+		}
+	}
+	a.state.Catalogs = append(a.state.Catalogs, reference)
+	return a.save()
 }
 
 func (a *App) ShowCatalog(ctx context.Context, connectionName string) (CatalogSnapshot, error) {
-	for _, snapshot := range a.state.Catalogs {
-		if snapshot.Connection == connectionName {
-			return snapshot, nil
+	conn, ok := a.findConnection(connectionName)
+	if !ok {
+		return CatalogSnapshot{}, fmt.Errorf("connection %q not found", connectionName)
+	}
+	reference, err := a.catalogReferenceForEndpoint(conn.Source)
+	if err != nil {
+		return CatalogSnapshot{}, err
+	}
+	if reference, ok := a.accountCatalogReference(reference); ok {
+		stored, err := a.catalogs.read(reference)
+		if err != nil {
+			return CatalogSnapshot{}, fmt.Errorf("read cached catalog: %w", err)
 		}
+		return catalogSnapshotWithStaleness(CatalogSnapshot{Connection: conn.Name, Catalog: stored.Catalog, UpdatedAt: stored.UpdatedAt}, time.Now().UTC()), nil
 	}
 	return a.RefreshCatalog(ctx, connectionName)
+}
+
+// catalogReferenceForEndpoint derives the account partition without opening
+// the vault. A schema-only cache can therefore be inspected even when a
+// caller is not about to perform an authenticated provider request.
+func (a *App) catalogReferenceForEndpoint(endpoint EndpointConfig) (catalogReference, error) {
+	if err := connectors.RejectLegacyConnectorName(endpoint.Connector); err != nil {
+		return catalogReference{}, err
+	}
+	credential, ok := a.findCredential(endpoint.Credential)
+	if !ok {
+		return catalogReference{}, errors.New("configured credential not found")
+	}
+	if endpoint.Connector != "" && endpoint.Connector != credential.Connector {
+		return catalogReference{}, fmt.Errorf("connector configuration does not match its credential")
+	}
+	identity, err := a.coordinationIdentityForCredential(credential)
+	if err != nil {
+		return catalogReference{}, err
+	}
+	return a.catalogReference(credential.Connector, connectors.RuntimeConfig{CoordinationIdentity: identity})
+}
+
+func (a *App) accountCatalogReference(want catalogReference) (catalogReference, bool) {
+	for _, reference := range a.state.Catalogs {
+		if reference.Connector == want.Connector && reference.AccountKey == want.AccountKey {
+			return reference, true
+		}
+	}
+	return catalogReference{}, false
+}
+
+func catalogSnapshotWithStaleness(snapshot CatalogSnapshot, now time.Time) CatalogSnapshot {
+	if snapshot.Catalog.Discovery == nil {
+		return snapshot
+	}
+	status := *snapshot.Catalog.Discovery
+	status.Failures = append([]connectors.DiscoveryFailure(nil), status.Failures...)
+	status.Cached = true
+	status.Stale = !status.ExpiresAt.IsZero() && !now.Before(status.ExpiresAt)
+	snapshot.Catalog.Discovery = &status
+	return snapshot
 }
 
 func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
@@ -784,13 +1032,34 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		return Run{}, err
 	}
 	run := Run{ID: runID, Type: "etl", Connection: req.Connection, Stream: req.Stream, Status: "running", StartedAt: time.Now().UTC()}
-	a.state.Runs = append(a.state.Runs, run)
-	_ = a.save()
+	if _, err := a.beginRun(run); err != nil {
+		return Run{}, fmt.Errorf("start ETL run: %w", err)
+	}
 
-	source, sourceRuntime, err := a.resolveEndpoint(ctx, conn.Source)
+	mode, err := ParseStreamSyncMode(stream)
 	if err != nil {
 		return a.failRun(runID, err)
 	}
+	stream.SyncMode = mode.Name
+	if err := ValidateStreamSyncConfig(stream); err != nil {
+		return a.failRun(runID, err)
+	}
+	if mode.IsContractMode() {
+		return a.failRun(runID, &synccontract.ModeNotExecutableError{
+			Mode:   mode.ContractMode,
+			Reason: "no matching native executor has completed the shared conformance corpus",
+		})
+	}
+	source, sourceCredential, sourceRuntime, err := a.resolveEndpointWithCredential(ctx, conn.Source)
+	if err != nil {
+		return a.failRun(runID, err)
+	}
+	catalog, err := a.catalogForEndpoint(ctx, source, sourceRuntime, false)
+	if err != nil {
+		return a.failRun(runID, err)
+	}
+	sourceRuntime.ResolvedCatalog = &catalog
+	sourceExpectation := streamResumeExpectation(source, sourceCredential, sourceRuntime, req.Stream)
 	destination, destRuntime, err := a.resolveEndpoint(ctx, conn.Destination)
 	if err != nil {
 		return a.failRun(runID, err)
@@ -799,19 +1068,11 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	if batchSize <= 0 {
 		batchSize = 1000
 	}
-	mode, err := ParseSyncMode(stream.SyncMode)
-	if err != nil {
-		return a.failRun(runID, err)
-	}
-	stream.SyncMode = mode.Name
-	if err := ValidateStreamSyncConfig(stream); err != nil {
-		return a.failRun(runID, err)
-	}
 	var result etlExecutionResult
 	if materializer, ok := destination.(connectors.LocalWarehouseMaterializer); ok && materializer.MaterializesLocalWarehouse() {
-		result, err = a.runWarehouseETL(ctx, runID, conn, source, sourceRuntime, destRuntime, req.Stream, stream, mode, batchSize)
+		result, err = a.runWarehouseETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, stream, mode, batchSize)
 	} else {
-		result, err = a.runConnectorETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, req.Stream, stream, mode, batchSize)
+		result, err = a.runConnectorETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, sourceExpectation, req.Stream, stream, mode, batchSize)
 	}
 	if err != nil {
 		return a.failRun(runID, err)
@@ -819,15 +1080,21 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	return a.completeRun(runID, result)
 }
 
-func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
+func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, sourceExpectation synccontract.ResumeExpectation, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
 	if mode.IsDeduped() {
 		return etlExecutionResult{}, fmt.Errorf("sync mode %s requires the local warehouse destination in this dependency-free implementation", mode.Name)
 	}
-	if a.state.StreamStates == nil {
-		a.state.StreamStates = map[string]StreamState{}
+	durableDestination, ok := destination.(synccontract.DurableETLDestination)
+	if !ok {
+		return etlExecutionResult{}, &synccontract.DestinationDurabilityAdmissionError{Destination: destination.Name()}
 	}
 	stateKey := streamStateKey(conn.Name, streamName)
 	prior := a.state.StreamStates[stateKey]
+	if prior.Checkpoint != nil {
+		if err := validateStreamStateResume(prior, sourceExpectation); err != nil {
+			return etlExecutionResult{}, err
+		}
+	}
 	generationID := prior.GenerationID
 	if generationID == 0 || mode.IsOverwrite() {
 		generationID++
@@ -836,12 +1103,14 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 	result := etlExecutionResult{}
 	batch := make([]connectors.Record, 0, batchSize)
 	firstWrite := true
-	nextCursor := prior.Cursor
+	priorCursor := streamStateCursor(prior)
+	nextCursor := priorCursor
+	observedAt := time.Time{}
 
 	flush := func(force bool) error {
 		if len(batch) == 0 {
 			if force && mode.IsOverwrite() && firstWrite {
-				_, err := destination.Write(ctx, connectors.WriteRequest{
+				writeResult, err := destination.Write(ctx, connectors.WriteRequest{
 					Stream:     streamName,
 					Table:      stream.DestinationTable,
 					Action:     "upsert",
@@ -850,7 +1119,10 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 					PrimaryKey: stream.PrimaryKey,
 				}, nil)
 				firstWrite = false
-				return err
+				if err != nil {
+					return err
+				}
+				return validateCompleteETLBatchWrite(writeResult, 0)
 			}
 			return nil
 		}
@@ -866,6 +1138,9 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 		if err != nil {
 			return err
 		}
+		if err := validateCompleteETLBatchWrite(writeResult, len(batch)); err != nil {
+			return err
+		}
 		result.RecordsLoaded += writeResult.RecordsWritten
 		result.RecordsFailed += writeResult.RecordsFailed
 		result.BatchCount++
@@ -875,13 +1150,13 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 
 	readConfig := sourceRuntime
 	readConfig.Config = cloneStringMap(sourceRuntime.Config)
-	if prior.Cursor != "" {
-		readConfig.Config["since"] = prior.Cursor
+	if priorCursor != "" {
+		readConfig.Config["since"] = priorCursor
 	}
 	err := source.Read(ctx, connectors.ReadRequest{
 		Stream: streamName,
 		Config: readConfig,
-		State:  map[string]string{"cursor": prior.Cursor, "generation_id": strconv.FormatInt(generationID, 10)},
+		State:  map[string]string{"cursor": priorCursor, "generation_id": strconv.FormatInt(generationID, 10)},
 	}, func(record connectors.Record) error {
 		result.RecordsRead++
 		cursor := ""
@@ -891,7 +1166,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 			if err != nil {
 				return err
 			}
-			if mode.Source == SourceSyncIncremental && prior.Cursor != "" && compareCursor(cursor, prior.Cursor) < 0 {
+			if mode.Source == SourceSyncIncremental && priorCursor != "" && compareCursor(cursor, priorCursor) < 0 {
 				return nil
 			}
 			if nextCursor == "" || compareCursor(cursor, nextCursor) > 0 {
@@ -906,6 +1181,7 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 			r["_polymetrics_cursor"] = cursor
 		}
 		result.RecordsTransformed++
+		observedAt = time.Now().UTC()
 		batch = append(batch, r)
 		if len(batch) >= batchSize {
 			return flush(false)
@@ -918,44 +1194,92 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 	if err := flush(true); err != nil {
 		return result, err
 	}
-	updated := StreamState{
-		Connection:          conn.Name,
-		Stream:              streamName,
-		Cursor:              nextCursor,
-		GenerationID:        generationID,
-		LastSuccessfulRunID: runID,
-		RecordsLoaded:       result.RecordsLoaded,
-		UpdatedAt:           time.Now().UTC(),
+	if observedAt.IsZero() {
+		observedAt = time.Now().UTC()
 	}
-	a.state.StreamStates[stateKey] = updated
+	acknowledgement, err := durableDestination.AcknowledgeETLDurability(ctx, runID)
+	if err != nil {
+		return result, err
+	}
+	if acknowledgement.Sink != destination.Name() {
+		return result, fmt.Errorf("durable downstream acknowledgement sink %q does not match destination %q", acknowledgement.Sink, destination.Name())
+	}
+	updated, err := committedLegacyStreamState(conn, sourceExpectation, streamName, stream, runID, nextCursor, generationID, result.RecordsLoaded, observedAt, acknowledgement)
+	if err != nil {
+		return result, err
+	}
 	result.Checkpoint = checkpointForResult(result, mode, stateKey, updated)
+	result.PendingStreamState = &pendingStreamState{Key: stateKey, State: updated}
 	return result, nil
 }
 
-func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) {
-	run := Run{}
-	for i := range a.state.Runs {
-		if a.state.Runs[i].ID == runID {
-			a.state.Runs[i].Status = "completed"
-			a.state.Runs[i].RecordsRead = result.RecordsRead
-			a.state.Runs[i].RecordsTransformed = result.RecordsTransformed
-			a.state.Runs[i].RecordsLoaded = result.RecordsLoaded
-			a.state.Runs[i].RecordsFailed = result.RecordsFailed
-			a.state.Runs[i].BatchCount = result.BatchCount
-			a.state.Runs[i].Checkpoint = result.Checkpoint
-			a.state.Runs[i].CompletedAt = time.Now().UTC()
-			run = a.state.Runs[i]
-			break
-		}
+func validateCompleteETLBatchWrite(result connectors.WriteResult, batchSize int) error {
+	if result.RecordsWritten != batchSize || result.RecordsFailed != 0 {
+		return fmt.Errorf("destination write reported %d records written and %d failed for batch of %d", result.RecordsWritten, result.RecordsFailed, batchSize)
 	}
-	if a.state.Checkpoints == nil {
-		a.state.Checkpoints = map[string]map[string]string{}
-	}
-	a.state.Checkpoints[runID] = cloneStringMap(result.Checkpoint)
+	return nil
+}
+
+func (a *App) beginRun(run Run) (Run, error) {
+	previousRuns := a.state.Runs
+	a.state.Runs = append(append([]Run(nil), a.state.Runs...), run)
 	if err := a.save(); err != nil {
+		if !errors.Is(err, errStateRevisionConflict) && !stateStoreCommitMayHaveSucceeded(err) {
+			a.state.Runs = previousRuns
+		}
 		return Run{}, err
 	}
 	return run, nil
+}
+
+func (a *App) completeRun(runID string, result etlExecutionResult) (Run, error) {
+	if result.PendingStreamState == nil {
+		return Run{}, errors.New("completed ETL run is missing pending stream state")
+	}
+	expectedRevision := a.state.Revision
+	completedAt := time.Now().UTC()
+	updated, err := a.updateState(func(current state) (state, error) {
+		if current.Revision != expectedRevision {
+			return current, errStateRevisionConflict
+		}
+		found := false
+		for i := range current.Runs {
+			if current.Runs[i].ID != runID {
+				continue
+			}
+			current.Runs[i].Status = "completed"
+			current.Runs[i].RecordsRead = result.RecordsRead
+			current.Runs[i].RecordsTransformed = result.RecordsTransformed
+			current.Runs[i].RecordsLoaded = result.RecordsLoaded
+			current.Runs[i].RecordsFailed = result.RecordsFailed
+			current.Runs[i].BatchCount = result.BatchCount
+			current.Runs[i].Checkpoint = cloneStringMap(result.Checkpoint)
+			current.Runs[i].CompletedAt = completedAt
+			found = true
+			break
+		}
+		if !found {
+			return current, fmt.Errorf("run %q not found", runID)
+		}
+		if current.Checkpoints == nil {
+			current.Checkpoints = map[string]map[string]string{}
+		}
+		current.Checkpoints[runID] = cloneStringMap(result.Checkpoint)
+		if current.StreamStates == nil {
+			current.StreamStates = map[string]StreamState{}
+		}
+		current.StreamStates[result.PendingStreamState.Key] = cloneStreamState(result.PendingStreamState.State)
+		return current, nil
+	})
+	if err != nil {
+		return Run{}, err
+	}
+	for _, run := range updated.Runs {
+		if run.ID == runID {
+			return run, nil
+		}
+	}
+	return Run{}, fmt.Errorf("completed run %q was not stored", runID)
 }
 
 func (a *App) GetRun(id string) (Run, error) {
@@ -977,15 +1301,25 @@ func (a *App) QueryTable(ctx context.Context, req QueryTableRequest) ([]connecto
 	cfg := connectors.RuntimeConfig{
 		ProjectDir: a.projectDir,
 		Config: map[string]string{
-			"path": filepath.Join(a.projectDir, "warehouse"),
+			"path": a.warehouseRoot(),
 		},
 	}
-	warehouse, ok := a.registry.Get("warehouse")
+	if req.Connection != "" {
+		// The unattributed selector names the root-level tables no connection
+		// owns, so it deliberately does not resolve through findConnection.
+		if req.Connection != warehouse.UnattributedConnection {
+			if _, ok := a.findConnection(req.Connection); !ok {
+				return nil, fmt.Errorf("connection %q not found", req.Connection)
+			}
+		}
+		cfg.Config["connection"] = req.Connection
+	}
+	warehouseConnector, ok := a.registry.Get("warehouse")
 	if !ok {
 		return nil, errors.New("warehouse connector not registered")
 	}
 	rows := make([]connectors.Record, 0)
-	err := warehouse.Read(ctx, connectors.ReadRequest{Stream: req.Table, Config: cfg, Limit: req.Limit}, connectors.LimitEmitter(req.Limit, func(record connectors.Record) error {
+	err := warehouseConnector.Read(ctx, connectors.ReadRequest{Stream: req.Table, Config: cfg, Limit: req.Limit}, connectors.LimitEmitter(req.Limit, func(record connectors.Record) error {
 		rows = append(rows, record)
 		return nil
 	}))
@@ -997,6 +1331,40 @@ func (a *App) QueryTable(ctx context.Context, req QueryTableRequest) ([]connecto
 
 func (a *App) QuerySQL(ctx context.Context, sql string, limit int) ([]connectors.Record, error) {
 	return a.sqlEngine.QuerySQL(ctx, sql, limit)
+}
+
+// warehouseRoot is this project's local warehouse root.
+func (a *App) warehouseRoot() string {
+	return filepath.Join(a.projectDir, "warehouse")
+}
+
+// pinReverseSourceConnection resolves which connection's table a reverse plan
+// is built from, and returns a selector that keeps resolving to that same table
+// afterwards. Pinning it at plan time is what stops an approved plan becoming
+// unexecutable the day a second connection materializes the same table name:
+// preview and run take no connection selector of their own, so without a pin
+// they would fall back to an unscoped read and be refused as ambiguous.
+func (a *App) pinReverseSourceConnection(table, connection string) (string, error) {
+	found, err := warehouse.FindTable(a.warehouseRoot(), table, connection)
+	if err != nil {
+		return "", err
+	}
+	if found.Connection == "" {
+		return warehouse.UnattributedConnection, nil
+	}
+	return found.Connection, nil
+}
+
+// reverseSourceRemedy states the recovery available to a stored plan whose
+// source table has become ambiguous. Only plans created before the owning
+// connection was pinned can reach this, and preview and run accept no
+// connection selector, so re-planning is the honest answer rather than naming a
+// flag those commands do not have.
+func reverseSourceRemedy(plan ReversePlan) string {
+	return fmt.Sprintf(
+		"reverse plan %q records no source connection, so re-create it with `pm reverse plan %s --source-table %s --connection <name>` and approve the new plan",
+		plan.ID, plan.Name, plan.SourceTable,
+	)
 }
 
 // QueryEngineName reports which SQL engine backs QuerySQL ("jsonl" by default,
@@ -1024,7 +1392,11 @@ func (a *App) PlanReverseETL(ctx context.Context, req PlanReverseETLRequest) (Re
 	if err := a.guardBatchableAction(req.DestinationConnector, req.Action, req.SourceTable); err != nil {
 		return ReversePlan{}, err
 	}
-	records, err := a.QueryTable(ctx, QueryTableRequest{Table: req.SourceTable, Limit: req.Limit})
+	sourceConnection, err := a.pinReverseSourceConnection(req.SourceTable, req.SourceConnection)
+	if err != nil {
+		return ReversePlan{}, warehouse.WithAmbiguityRemedy(err, "pass --connection to choose one")
+	}
+	records, err := a.QueryTable(ctx, QueryTableRequest{Table: req.SourceTable, Connection: sourceConnection, Limit: req.Limit})
 	if err != nil {
 		return ReversePlan{}, err
 	}
@@ -1085,6 +1457,7 @@ func (a *App) PlanReverseETL(ctx context.Context, req PlanReverseETLRequest) (Re
 		Name:                  req.Name,
 		Status:                "planned",
 		SourceTable:           req.SourceTable,
+		SourceConnection:      sourceConnection,
 		DestinationConnector:  req.DestinationConnector,
 		DestinationCredential: req.DestinationCredential,
 		DestinationConfig:     cloneStringMap(req.DestinationConfig),
@@ -1265,6 +1638,9 @@ func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string) (Rever
 	if plan.Mode != reversePlanModeConnectorCommand {
 		return ReversePlan{}, connectors.WritePreview{}, fmt.Errorf("reverse plan %q is not a connector command plan", id)
 	}
+	if err := approvalConsumptionUncertainError(plan, nil); err != nil {
+		return ReversePlan{}, connectors.WritePreview{}, err
+	}
 	if err := a.previewabilityError(plan, time.Now().UTC()); err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
@@ -1372,6 +1748,9 @@ func (a *App) PreviewReversePlan(ctx context.Context, id string) (ReversePlan, c
 	if err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
+	if err := approvalConsumptionUncertainError(plan, nil); err != nil {
+		return ReversePlan{}, connectors.WritePreview{}, err
+	}
 	if plan.Mode == reversePlanModeConnectorCommand {
 		return a.PreviewConnectorCommandPlan(ctx, id)
 	}
@@ -1392,9 +1771,9 @@ func (a *App) PreviewReversePlan(ctx context.Context, id string) (ReversePlan, c
 	if err := a.verifyPlanSealForRuntime(plan, runtime); err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
-	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Limit: max(1, plan.RecordCount+1)})
+	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Connection: plan.SourceConnection, Limit: max(1, plan.RecordCount+1)})
 	if err != nil {
-		return ReversePlan{}, connectors.WritePreview{}, err
+		return ReversePlan{}, connectors.WritePreview{}, warehouse.WithAmbiguityRemedy(err, reverseSourceRemedy(plan))
 	}
 	mapped := mapReverseRecords(records, plan.Mappings)
 	payloadIdentity, err := payloadIdentitiesForRecords(runtime.ProjectDir, mapped)
@@ -1450,6 +1829,9 @@ func (a *App) persistDestructivePreview(plan ReversePlan, preview connectors.Wri
 			stored := current.ReversePlans[i]
 			if stored.ID != plan.ID {
 				continue
+			}
+			if err := approvalConsumptionUncertainError(stored, nil); err != nil {
+				return current, err
 			}
 			if err := a.previewabilityError(stored, now); err != nil {
 				return current, err
@@ -1523,6 +1905,9 @@ func (a *App) persistOperationDirectWritePreview(plan ReversePlan, preview conne
 			stored := current.ReversePlans[i]
 			if stored.ID != plan.ID {
 				continue
+			}
+			if err := approvalConsumptionUncertainError(stored, nil); err != nil {
+				return current, err
 			}
 			if err := a.previewabilityError(stored, now); err != nil {
 				return current, err
@@ -1728,6 +2113,9 @@ func (a *App) RunReverseETL(ctx context.Context, req RunReverseETLRequest) (Reve
 	if err != nil {
 		return ReverseRun{}, err
 	}
+	if err := approvalConsumptionUncertainError(plan, nil); err != nil {
+		return ReverseRun{}, err
+	}
 	if err := a.previewabilityError(plan, time.Now().UTC()); err != nil {
 		return ReverseRun{}, err
 	}
@@ -1753,9 +2141,9 @@ func (a *App) runBulkReversePlan(ctx context.Context, plan ReversePlan, req RunR
 	if err := a.guardBatchableAction(plan.DestinationConnector, plan.Action, plan.SourceTable); err != nil {
 		return ReverseRun{}, err
 	}
-	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Limit: max(1, plan.RecordCount+1)})
+	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Connection: plan.SourceConnection, Limit: max(1, plan.RecordCount+1)})
 	if err != nil {
-		return ReverseRun{}, err
+		return ReverseRun{}, warehouse.WithAmbiguityRemedy(err, reverseSourceRemedy(plan))
 	}
 	mappedForHash := mapReverseRecords(records, plan.Mappings)
 	dest := EndpointConfig{Connector: plan.DestinationConnector, Credential: plan.DestinationCredential, Config: plan.DestinationConfig}
@@ -1912,8 +2300,10 @@ func (a *App) loadReversePlan(id string) (ReversePlan, error) {
 	if err != nil {
 		return ReversePlan{}, err
 	}
-	a.state = loaded
-	for _, plan := range loaded.ReversePlans {
+	if err := a.normalizeLoadedState(loaded); err != nil {
+		return ReversePlan{}, err
+	}
+	for _, plan := range a.state.ReversePlans {
 		if plan.ID == id {
 			return plan, nil
 		}
@@ -1930,6 +2320,9 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 			stored := current.ReversePlans[i]
 			if stored.ID != expected.ID {
 				continue
+			}
+			if err := approvalConsumptionUncertainError(stored, nil); err != nil {
+				return current, err
 			}
 			if err := a.previewabilityError(stored, now); err != nil {
 				return current, err
@@ -1972,10 +2365,11 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 				}
 				evidence = verified
 			}
-			stored.Status = "executing"
+			stored.Status = reversePlanStatusApprovalConsumptionUncertain
 			stored.ApprovalTokenHash = ""
 			stored.ApprovalGrant = nil
 			stored.ApprovalConsumedAt = now
+			stored.ApprovalUncertainAt = now
 			current.ReversePlans[i] = stored
 			consumed = stored
 			return current, nil
@@ -1983,10 +2377,24 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 		return current, fmt.Errorf("reverse plan %q not found", expected.ID)
 	})
 	if err != nil {
+		if stateStoreCommitMayHaveSucceeded(err) {
+			return nil, ReversePlan{}, approvalConsumptionUncertainError(consumed, err)
+		}
 		return nil, ReversePlan{}, err
 	}
 	a.state = updated
 	return evidence, consumed, nil
+}
+
+func approvalConsumptionUncertainError(plan ReversePlan, cause error) error {
+	if plan.Status != reversePlanStatusApprovalConsumptionUncertain {
+		return nil
+	}
+	return &ApprovalConsumptionUncertainError{
+		PlanID:     plan.ID,
+		ConsumedAt: plan.ApprovalConsumedAt,
+		err:        cause,
+	}
 }
 
 func (a *App) finishReverseWrite(planID string, run ReverseRun, result connectors.WriteResult, staged int, writeErr error) (ReverseRun, error) {
@@ -2023,8 +2431,9 @@ func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, res
 	updated, persistErr := a.updateState(func(current state) (state, error) {
 		current.ReverseRuns = append(current.ReverseRuns, run)
 		for i := range current.ReversePlans {
-			if current.ReversePlans[i].ID == planID && current.ReversePlans[i].Status == "executing" {
+			if current.ReversePlans[i].ID == planID && (current.ReversePlans[i].Status == "executing" || current.ReversePlans[i].Status == reversePlanStatusApprovalConsumptionUncertain) {
 				current.ReversePlans[i].Status = planStatus
+				current.ReversePlans[i].ApprovalUncertainAt = time.Time{}
 				break
 			}
 		}
@@ -2067,24 +2476,29 @@ func constantTimeStringEqual(left, right string) bool {
 }
 
 func (a *App) resolveEndpoint(ctx context.Context, endpoint EndpointConfig) (connectors.Connector, connectors.RuntimeConfig, error) {
+	connector, _, runtime, err := a.resolveEndpointWithCredential(ctx, endpoint)
+	return connector, runtime, err
+}
+
+func (a *App) resolveEndpointWithCredential(ctx context.Context, endpoint EndpointConfig) (connectors.Connector, CredentialMeta, connectors.RuntimeConfig, error) {
 	if err := connectors.RejectLegacyConnectorName(endpoint.Connector); err != nil {
-		return nil, connectors.RuntimeConfig{}, err
+		return nil, CredentialMeta{}, connectors.RuntimeConfig{}, err
 	}
 	cred, runtime, err := a.resolveCredential(ctx, endpoint.Credential, endpoint.Config)
 	if err != nil {
-		return nil, connectors.RuntimeConfig{}, err
+		return nil, CredentialMeta{}, connectors.RuntimeConfig{}, err
 	}
 	if err := connectors.RejectLegacyConnectorName(cred.Connector); err != nil {
-		return nil, connectors.RuntimeConfig{}, err
+		return nil, CredentialMeta{}, connectors.RuntimeConfig{}, err
 	}
 	if endpoint.Connector != "" && endpoint.Connector != cred.Connector {
-		return nil, connectors.RuntimeConfig{}, fmt.Errorf("credential %q is for connector %q, not %q", endpoint.Credential, cred.Connector, endpoint.Connector)
+		return nil, CredentialMeta{}, connectors.RuntimeConfig{}, fmt.Errorf("credential %q is for connector %q, not %q", endpoint.Credential, cred.Connector, endpoint.Connector)
 	}
 	connector, ok := a.registry.Get(cred.Connector)
 	if !ok {
-		return nil, connectors.RuntimeConfig{}, fmt.Errorf("connector %q not found", cred.Connector)
+		return nil, CredentialMeta{}, connectors.RuntimeConfig{}, fmt.Errorf("connector %q not found", cred.Connector)
 	}
-	return connector, runtime, nil
+	return connector, cred, runtime, nil
 }
 
 func (a *App) ResolveConnectorCredential(ctx context.Context, connectorName, credentialName string, overlay map[string]string) (connectors.Connector, connectors.RuntimeConfig, error) {
@@ -2156,18 +2570,45 @@ func (a *App) findConnection(name string) (Connection, bool) {
 	return Connection{}, false
 }
 
-func (a *App) failRun(runID string, err error) (Run, error) {
-	for i := range a.state.Runs {
-		if a.state.Runs[i].ID == runID {
-			a.state.Runs[i].Status = "failed"
-			a.state.Runs[i].Error = safety.RedactErrorText(err.Error())
-			a.state.Runs[i].CompletedAt = time.Now().UTC()
-			run := a.state.Runs[i]
-			_ = a.save()
-			return run, err
+// findConnectionFold finds a connection whose name differs from name only by
+// letter case. Case alone is too weak a distinction to hang two tenants'
+// warehouse data on, so creation refuses it.
+func (a *App) findConnectionFold(name string) (Connection, bool) {
+	for _, conn := range a.state.Connections {
+		if strings.EqualFold(conn.Name, name) {
+			return conn, true
 		}
 	}
-	return Run{}, err
+	return Connection{}, false
+}
+
+func (a *App) failRun(runID string, runErr error) (Run, error) {
+	expectedRevision := a.state.Revision
+	completedAt := time.Now().UTC()
+	updated, persistErr := a.updateState(func(current state) (state, error) {
+		if current.Revision != expectedRevision {
+			return current, errStateRevisionConflict
+		}
+		for i := range current.Runs {
+			if current.Runs[i].ID != runID {
+				continue
+			}
+			current.Runs[i].Status = "failed"
+			current.Runs[i].Error = safety.RedactErrorText(runErr.Error())
+			current.Runs[i].CompletedAt = completedAt
+			return current, nil
+		}
+		return current, fmt.Errorf("run %q not found", runID)
+	})
+	if persistErr != nil {
+		return Run{}, errors.Join(runErr, fmt.Errorf("persist failed ETL run: %w", persistErr))
+	}
+	for _, run := range updated.Runs {
+		if run.ID == runID {
+			return run, runErr
+		}
+	}
+	return Run{}, errors.Join(runErr, fmt.Errorf("failed run %q was not stored", runID))
 }
 
 func writeJSONAtomic(path string, v any) error {

@@ -20,6 +20,19 @@ func TestConnectorContract(t *testing.T) {
 	assertConnectorContract(t, New(), "ashby")
 }
 
+func TestOperationDirectReadPreflightDelegatesToDeclaredAshbyOperation(t *testing.T) {
+	preflighter, ok := New().(connectors.OperationDirectReadPreflighter)
+	if !ok {
+		t.Fatal("Ashby connector does not expose operation direct-read preflight")
+	}
+	if err := preflighter.PreflightOperationDirectRead("ashby.direct.candidate.search", http.MethodPost, "/candidate.search", 16<<20, "json_redacted"); err != nil {
+		t.Fatalf("PreflightOperationDirectRead valid command: %v", err)
+	}
+	if err := preflighter.PreflightOperationDirectRead("ashby.direct.candidate.search", http.MethodGet, "/candidate.search", 16<<20, "json_redacted"); err == nil || !strings.Contains(err.Error(), "does not match declared operation method") {
+		t.Fatalf("PreflightOperationDirectRead method mismatch = %v, want declared operation rejection", err)
+	}
+}
+
 func TestOperationClassificationsMatchAshbySemantics(t *testing.T) {
 	bundle, err := engine.Load(os.DirFS("../../defs"), "ashby")
 	if err != nil {
@@ -274,6 +287,9 @@ func assertConnectorContract(t *testing.T, c connectors.Connector, wantName stri
 	}
 	if _, ok := c.(connectors.OperationDirectReader); !ok {
 		t.Fatalf("%s must expose bounded operation direct reads", wantName)
+	}
+	if _, ok := c.(connectors.OperationDirectReadPreflighter); !ok {
+		t.Fatalf("%s must expose operation direct-read preflight", wantName)
 	}
 	cfg := connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture"}}
 	if err := c.Check(context.Background(), cfg); err != nil {

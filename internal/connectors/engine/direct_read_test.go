@@ -743,7 +743,7 @@ func TestOperationDirectReadPreservesHTTPErrorText(t *testing.T) {
 			ID: "acme.lookup", Kind: "rest_read", Summary: "lookup", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
 			REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/items", MaxBytes: 1024},
 		}},
-		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/items", Operation: &SurfaceOperation{}}}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/items", Operation: &SurfaceOperation{Model: "direct_read"}}}},
 	}
 
 	_, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{

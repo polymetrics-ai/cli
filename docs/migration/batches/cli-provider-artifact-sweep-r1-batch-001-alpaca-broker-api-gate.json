@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "manifest": "docs/migration/batches/cli-provider-artifact-sweep-r1-batch-001.json",
+  "candidates": 1,
+  "included": [
+    {
+      "connector": "alpaca-broker-api",
+      "commands_checked": 10,
+      "declared_operations": 52,
+      "operation_split": {
+        "executable": 10,
+        "provider_blocked": 5,
+        "excluded": 37
+      },
+      "warnings": []
+    }
+  ],
+  "dropped": [],
+  "provenance_refusals": 0,
+  "surveyed_operations": {
+    "total": 52,
+    "read": 28,
+    "write": 24
+  },
+  "declared_operations": 52,
+  "operation_split": {
+    "executable": 10,
+    "provider_blocked": 5,
+    "excluded": 37
+  }
+}

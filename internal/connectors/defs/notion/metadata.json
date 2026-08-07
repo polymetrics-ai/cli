@@ -1,14 +1,14 @@
 {
   "name": "notion",
   "display_name": "Notion",
-  "description": "Reads Notion databases, pages, and users through the Notion REST API. Read-only.",
+  "description": "Reads and writes Notion pages, databases, data sources, blocks, comments, views, and file uploads through the Notion REST API.",
   "integration_type": "api",
   "docs_url": "https://developers.notion.com/reference/intro",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false

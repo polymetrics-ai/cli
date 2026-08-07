@@ -36,8 +36,9 @@ Follow the Ruby pattern (`connection_specification.json` / `metadata.json` / `sc
 agent-readability (a 60-line schema file, not a 4,000-line manifest), diff hygiene (one stream =
 one file; parallel authoring doesn't conflict), concern separation matching the runtime
 (`spec.json` at connection-setup time, `streams.json` at read time, `writes.json` at reverse-ETL
-time, `api_surface.json` by authoring validation, conformance, full certification, and disk-backed
-direct-write endpoint cross-checks, `certification.json` only by the certification harness). One
+time, `api_surface.json` for authoring validation, conformance, full certification, disk-backed
+direct-write endpoint cross-checks, and the generated direct-read endpoint ledger,
+`certification.json` only by the certification harness). One
 deviation from Ruby: request/pagination/cursor config is **not** code — it is `streams.json`,
 interpreted by the engine.
 
@@ -46,6 +47,7 @@ interpreted by the engine.
 ```
 internal/connectors/defs/
   defs.go                     // package defs; //go:embed runtime bundle files
+  operation_endpoint_ledger.json // generated compact direct-read runtime ledger
   github/
     metadata.json             // identity, capabilities, informational rate-limit metadata, risk
     changefeed.json           // optional evidence-backed changefeed declaration
@@ -72,14 +74,17 @@ package defs
 
 import "embed"
 
-//go:embed */metadata.json */changefeed.json */spec.json */streams.json */writes.json */schemas/* */docs.md */operations.json */cli_surface.json */certification.json
+//go:embed operation_endpoint_ledger.json */metadata.json */changefeed.json */spec.json */streams.json */writes.json */schemas/* */docs.md */operations.json */cli_surface.json */certification.json
 var FS embed.FS
 ```
 
 (`changefeed.json`, `writes.json`, `operations.json`, `cli_surface.json`, and `certification.json`
 are optional per connector; the loader tolerates absence. `api_surface.json` and `fixtures/` stay
 on disk for authoring/conformance validation and are not embedded in the production `defs.FS`, which keeps
-tens of megabytes of inert replay JSON out of every shipped binary. A connector whose `spec.json`
+tens of megabytes of inert replay JSON out of every shipped binary. The generated root
+`operation_endpoint_ledger.json` is the narrow exception for operation-backed direct reads: it embeds only
+method, path, operation kind, and response cap so runtime preflight can prove the API-surface binding without
+embedding provider prose, citations, or blocked reasons. A connector whose `spec.json`
 publishes a fixture-replay `mode` as a documented connection-spec property is the one exception: it
 adds its own `defs/<name>/fixtures_embed.go` embedding only that connector's `fixtures/` tree, so
 the documented mode also resolves from an installed binary rather than only from a source checkout

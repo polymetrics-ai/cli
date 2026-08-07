@@ -8,11 +8,13 @@ The reconciled lane allocation matches the parent issue counts: ETL/read 925, re
 
 ## Auth setup
 
-Future executable HubSpot commands should use a credential profile containing a private app or OAuth access token. Do not pass token values in prompt text, command examples, issue bodies, fixtures, or logs. The optional `access_token` field is marked `x-secret` in `spec.json`; this ledger slice does not perform authenticated provider calls.
+HubSpot catalog and object reads use a credential profile containing a private app or OAuth access token. Do not pass token values in prompt text, command examples, issue bodies, fixtures, logs, schemas, or catalog caches. The optional `access_token` field is marked `x-secret` in `spec.json` and is used only by the runtime requester.
 
 ## Streams notes
 
-No HubSpot ETL streams are enabled yet. The 925 ETL/read operations are represented in `api_surface.json`, `operations.json`, and planned command metadata as blocked rows until future connector-local lanes add named streams, schemas, pagination/cursor policy, sanitized fixtures, and conformance evidence. Provider search/query operations remain blocked pending shared foundation #2985 and must stay distinct from warehouse-focused `pm query`.
+At catalog time, the native adapter lists custom CRM schemas, combines them with a declared standard-object baseline, then asks HubSpot for every object's properties. The result is one dynamic stream per object type, including an account-created type the code has never named. Each stream schema contains only provider-described properties; a collection read requests and emits only those fields through `/crm/v3/objects/{objectType}`. Discovery uses a ten-worker bounded pool, provider-rate-limit retry/backoff, progress heartbeats, declared fallback, partial-status reporting, and an account-scoped cache keyed by connector plus opaque coordination identity. `pm catalog refresh` explicitly replaces that account catalog; multiple connections to the same account reuse it.
+
+The 925 ETL/read operations are still represented in `api_surface.json`, `operations.json`, and planned command metadata as blocked rows unless covered by that narrow discovered object collection route. Provider search/query operations remain blocked pending shared foundation #2985 and must stay distinct from warehouse-focused `pm query`.
 
 ## Write actions & risks
 
@@ -22,8 +24,8 @@ Binary/file operations are also blocked until a connector-owned fixed-target pol
 
 ## Known limits
 
-- This is a complete documented operation ledger, not completed runtime parity. `metadata.json` keeps `read`, `write`, `query`, and `cdc` false until executable evidence exists.
+- This is a complete documented operation ledger, not completed runtime parity. `metadata.json` enables only dynamic CRM object catalog/read; write, query, and CDC remain false until executable evidence exists.
 - Shared provider search/query foundation #2985 is open, so search/query/direct commands remain planned and blocked.
 - CDC truth/lab foundations #2986 and #2988 are open; HubSpot has no counted CDC operations in parent #132 and this bundle claims no CDC capability.
 - The generated operation body schemas intentionally avoid examples/default values and preserve only structural OpenAPI type/ref information to prevent secret-like fixture/doc literals.
-- No live credentials, live provider calls, live writes, or certification were used to produce this bundle. Fixture-backed dynamic conformance skips because no stream or write action is executable in this wave.
+- No live credentials, live provider calls, live writes, or certification were used to produce this bundle. Fixture-backed native tests prove discovery and read mechanics, not a live account's provider behavior.

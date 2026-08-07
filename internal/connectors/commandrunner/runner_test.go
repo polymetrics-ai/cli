@@ -22,28 +22,38 @@ import (
 )
 
 type fakeConnector struct {
-	surface                 *connectors.CommandSurface
-	manifest                connectors.Manifest
-	readReq                 connectors.ReadRequest
-	directReadReq           connectors.DirectReadRequest
-	operationDirectReadReq  connectors.OperationDirectReadRequest
-	operationDirectWriteReq connectors.OperationDirectWriteRequest
-	directWriteMetadata     connectors.OperationDirectWriteMetadata
-	binaryDownloadReq       connectors.OperationBinaryDownloadRequest
-	directReadErr           error
-	operationDirectReadErr  error
-	binaryDownloadErr       error
-	validateReq             connectors.WriteRequest
-	dryRunReq               connectors.WriteRequest
-	writeReq                connectors.WriteRequest
-	writeRecords            []connectors.Record
-	validateErr             error
-	dryRunErr               error
-	readErr                 error
-	writeErr                error
-	readRecords             []connectors.Record
-	preview                 connectors.WritePreview
-	writeResult             connectors.WriteResult
+	surface                   *connectors.CommandSurface
+	manifest                  connectors.Manifest
+	readReq                   connectors.ReadRequest
+	directReadReq             connectors.DirectReadRequest
+	operationDirectReadReq    connectors.OperationDirectReadRequest
+	operationReadPreflight    operationDirectReadPreflightCall
+	operationReadPreflightErr error
+	operationDirectWriteReq   connectors.OperationDirectWriteRequest
+	directWriteMetadata       connectors.OperationDirectWriteMetadata
+	binaryDownloadReq         connectors.OperationBinaryDownloadRequest
+	directReadErr             error
+	operationDirectReadErr    error
+	binaryDownloadErr         error
+	validateReq               connectors.WriteRequest
+	dryRunReq                 connectors.WriteRequest
+	writeReq                  connectors.WriteRequest
+	writeRecords              []connectors.Record
+	validateErr               error
+	dryRunErr                 error
+	readErr                   error
+	writeErr                  error
+	readRecords               []connectors.Record
+	preview                   connectors.WritePreview
+	writeResult               connectors.WriteResult
+}
+
+type operationDirectReadPreflightCall struct {
+	operation    string
+	method       string
+	path         string
+	maxBytes     int
+	outputPolicy string
 }
 
 type preflightFakeConnector struct {
@@ -106,6 +116,16 @@ func (f *fakeConnector) OperationDirectRead(_ context.Context, req connectors.Op
 		Status:    200,
 		Body:      map[string]any{"ok": true},
 	}, nil
+}
+func (f *fakeConnector) PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error {
+	f.operationReadPreflight = operationDirectReadPreflightCall{
+		operation:    operation,
+		method:       method,
+		path:         path,
+		maxBytes:     maxBytes,
+		outputPolicy: outputPolicy,
+	}
+	return f.operationReadPreflightErr
 }
 func (f *fakeConnector) PreviewOperationDirectWrite(_ context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
 	f.operationDirectWriteReq = req
@@ -1709,6 +1729,42 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 	}
 }
 
+func TestPreflightOperationDirectReadRejectsNonExecutableOperationMetadata(t *testing.T) {
+	connector := &fakeConnector{
+		operationReadPreflightErr: errors.New("operation direct read requires rest_read or provider_search operation, got \"graphql_query\""),
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path:         "meetings integration-status",
+			Intent:       "direct_read",
+			Availability: "implemented",
+			Operation:    "gong.meetings_integration_status",
+			APISurface: []connectors.CommandSurfaceEndpointRef{
+				{Method: http.MethodPost, Path: "/v2/meetings/integration/status"},
+			},
+			OutputPolicy: "json_redacted",
+		}}},
+	}
+
+	err := Preflight(connector, []string{"meetings", "integration-status"})
+	if err == nil {
+		t.Fatal("Preflight error = nil, want loaded operation rejection")
+	}
+	if !strings.Contains(err.Error(), "operation direct read metadata is not executable") {
+		t.Fatalf("Preflight error = %q, want executable metadata rejection", err)
+	}
+	if got, want := connector.operationReadPreflight, (operationDirectReadPreflightCall{
+		operation:    "gong.meetings_integration_status",
+		method:       http.MethodPost,
+		path:         "/v2/meetings/integration/status",
+		maxBytes:     MaxOperationDirectReadBytes,
+		outputPolicy: "json_redacted",
+	}); got != want {
+		t.Fatalf("operation preflight = %#v, want %#v", got, want)
+	}
+	if connector.operationDirectReadReq.Operation != "" {
+		t.Fatalf("OperationDirectRead dispatched during preflight: %+v", connector.operationDirectReadReq)
+	}
+}
+
 func TestBuildOperationDirectWriteCommandUsesTypedInputsAndPlanLifecycle(t *testing.T) {
 	connector := &fakeConnector{
 		directWriteMetadata: connectors.OperationDirectWriteMetadata{
@@ -2162,6 +2218,82 @@ func TestCoerceFlagValueBoundsStringArrayItems(t *testing.T) {
 	}
 	if _, err := coerceFlagValue(flag, []string{","}); err == nil {
 		t.Fatal("coerceFlagValue under the minimum = nil, want rejection")
+	}
+}
+
+func TestValidateFlagMinimumIsOptIn(t *testing.T) {
+	if err := validateFlagValue(connectors.CommandSurfaceFlag{Name: "page-number", Type: "integer"}, "0"); err != nil {
+		t.Fatalf("validateFlagValue without minimum = %v, want unchanged acceptance", err)
+	}
+
+	minimum := 1.0
+	flag := connectors.CommandSurfaceFlag{Name: "page-number", Type: "integer", Minimum: &minimum}
+	if err := validateFlagValue(flag, "1"); err != nil {
+		t.Fatalf("validateFlagValue at minimum = %v, want accepted", err)
+	}
+	err := validateFlagValue(flag, "0")
+	var minimumErr *MinimumFlagError
+	if !errors.As(err, &minimumErr) {
+		t.Fatalf("validateFlagValue below minimum error = %T %v, want MinimumFlagError", err, err)
+	}
+	if minimumErr.Parameter != "page-number" || minimumErr.Minimum != 1 {
+		t.Fatalf("MinimumFlagError = %+v, want page-number minimum 1", minimumErr)
+	}
+}
+
+func TestStreamOverridesConfigMinimumIsOptIn(t *testing.T) {
+	minimum := 1.0
+	tests := []struct {
+		name        string
+		flag        connectors.CommandSurfaceFlag
+		config      map[string]string
+		flags       map[string][]string
+		wantConfig  string
+		wantMinimum bool
+	}{
+		{
+			name:       "no declared minimum preserves config value",
+			flag:       connectors.CommandSurfaceFlag{Name: "page-number", Type: "integer", MapsTo: "config.page_number"},
+			config:     map[string]string{"page_number": "0"},
+			wantConfig: "0",
+		},
+		{
+			name:        "declared minimum rejects config value",
+			flag:        connectors.CommandSurfaceFlag{Name: "page-number", Type: "integer", MapsTo: "config.page_number", Minimum: &minimum},
+			config:      map[string]string{"page_number": "0"},
+			wantMinimum: true,
+		},
+		{
+			name:       "command flag wins over invalid config value",
+			flag:       connectors.CommandSurfaceFlag{Name: "page-number", Type: "integer", MapsTo: "config.page_number", Minimum: &minimum},
+			config:     map[string]string{"page_number": "0"},
+			flags:      map[string][]string{"page-number": {"1"}},
+			wantConfig: "1",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			cfg, _, err := streamOverrides(connectors.CommandSurfaceCommand{
+				Path:  "records list",
+				Flags: []connectors.CommandSurfaceFlag{tt.flag},
+			}, connectors.RuntimeConfig{Config: tt.config}, tt.flags)
+			if tt.wantMinimum {
+				var minimumErr *MinimumFlagError
+				if !errors.As(err, &minimumErr) {
+					t.Fatalf("streamOverrides error = %T %v, want MinimumFlagError", err, err)
+				}
+				if minimumErr.Parameter != "page-number" || minimumErr.Minimum != 1 {
+					t.Fatalf("MinimumFlagError = %+v, want page-number minimum 1", minimumErr)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("streamOverrides error = %v, want nil", err)
+			}
+			if got := cfg.Config["page_number"]; got != tt.wantConfig {
+				t.Fatalf("runtime config page_number = %q, want %q", got, tt.wantConfig)
+			}
+		})
 	}
 }
 
