@@ -463,6 +463,12 @@ type OperationDirectWriteMetadata struct {
 	// identities must be captured before preview, even when their names do not
 	// follow a file_path convention.
 	PayloadFileFields []string
+	// RedactFields is the operation's declared sensitive_policy.redact_fields.
+	// It is the ONLY redaction source for an operation-backed reverse plan:
+	// operation IDs and write-action names are separate namespaces that
+	// collide by name in at least one bundle, so resolving one against the
+	// other would withhold an unrelated set.
+	RedactFields []string
 }
 
 // OperationDirectWriter is implemented by connectors that can preview and
