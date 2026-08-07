@@ -866,14 +866,8 @@
     {
       "method": "GET",
       "path": "/v2/aic/users/{userId}/conversation_archive",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/ai-companion.md",
-        "notes": "classification=implementable_now; provider_module=ai-companion; operation_title=Get AI Companion conversation archives; provider_server=https://api.zoom.us/v2; provider_path=/aic/users/{userId}/conversation_archive; artifact=https://developers.zoom.us/docs/api/ai-companion.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "ai-companion conversation-archive get"
       }
     },
     {
