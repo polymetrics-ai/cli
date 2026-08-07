@@ -22,6 +22,17 @@ import (
 
 const zoomBundleName = "zoom"
 
+// wantModuleOperationCommandCount is the running total of implemented
+// direct_read/direct_write operation commands across all landed modules
+// (Wave 2+, one Zoom provider module at a time; see issue #3915 and
+// .planning/phases/cli-zoom-parity-wave2-qss-r1/). Bump this FIRST when
+// starting a new module's red/green cycle -- that bump is what makes
+// TestCoveredStreamsHaveReachableCommands fail red before the module's
+// operations.json/cli_surface.json entries exist.
+//
+// Landed modules: qss (3), ai-companion (1).
+const wantModuleOperationCommandCount = 4
+
 func loadZoomBundle(t *testing.T) engine.Bundle {
 	t.Helper()
 	bundle, err := engine.Load(os.DirFS(".."), zoomBundleName)
@@ -122,11 +133,11 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 			t.Errorf("provider inventory %s rows = %d, want %d", method, got, want)
 		}
 	}
-	if got := covered; got != 6 {
-		t.Errorf("executable stream-backed rows = %d, want 6", got)
+	if got := covered; got != 7 {
+		t.Errorf("executable stream-backed rows = %d, want 7", got)
 	}
-	if got := implementableNow; got != 1836 {
-		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1836", got)
+	if got := implementableNow; got != 1835 {
+		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1835", got)
 	}
 	if got := providerRestricted; got != 17 {
 		t.Errorf("provider-restricted operations = %d, want 17", got)
@@ -181,148 +192,123 @@ func TestCoveredStreamsHaveReachableCommands(t *testing.T) {
 		},
 	}
 
-	type operationWant struct {
-		path      string
-		operation string
-		apiMethod string
-		apiPath   string
-		pathFlag  string
-	}
-	operationWants := []operationWant{
-		{
-			path:      "qss meeting-participants list",
-			operation: "zoom.list_meeting_participants_qos_summary",
-			apiMethod: http.MethodGet,
-			apiPath:   "/v2/metrics/meetings/{meetingId}/participants/qos_summary",
-			pathFlag:  "meeting-id",
-		},
-		{
-			path:      "qss webinar-participants list",
-			operation: "zoom.list_webinar_participants_qos_summary",
-			apiMethod: http.MethodGet,
-			apiPath:   "/v2/metrics/webinars/{webinarId}/participants/qos_summary",
-			pathFlag:  "webinar-id",
-		},
-		{
-			path:      "qss session-users list",
-			operation: "zoom.list_session_users_qos_summary",
-			apiMethod: http.MethodGet,
-			apiPath:   "/v2/videosdk/sessions/{sessionId}/users/qos_summary",
-			pathFlag:  "session-id",
-		},
-	}
-
-	wantCommandCount := len(wants) + len(operationWants)
-	if got := len(surface.Commands); got != wantCommandCount {
-		t.Fatalf("Zoom cli_surface commands = %d, want exactly %d (Wave 1 streams + Wave 2 qss operations)", got, wantCommandCount)
-	}
-
-	commands := make(map[string]struct {
-		stream       string
-		intent       string
-		available    string
-		operation    string
-		apiMethod    string
-		apiPath      string
-		sourceURL    string
-		outputPolicy string
-		userIDFlag   bool
-		requiredFlag string
-	}, len(surface.Commands))
-	for _, command := range surface.Commands {
-		entry := struct {
-			stream       string
-			intent       string
-			available    string
-			operation    string
-			apiMethod    string
-			apiPath      string
-			sourceURL    string
-			outputPolicy string
-			userIDFlag   bool
-			requiredFlag string
-		}{
-			stream:       command.Stream,
-			intent:       command.Intent,
-			available:    command.Availability,
-			operation:    command.Operation,
-			sourceURL:    command.SourceURL,
-			outputPolicy: command.OutputPolicy,
+	for _, want := range wants {
+		var found *connectors.CommandSurfaceCommand
+		for i := range surface.Commands {
+			if surface.Commands[i].Path == want.path {
+				found = &surface.Commands[i]
+				break
+			}
 		}
+		if found == nil {
+			t.Errorf("missing reachable command %q", want.path)
+			continue
+		}
+		command := *found
+		var apiMethod, apiPath string
 		if len(command.APISurface) == 1 {
-			entry.apiMethod = command.APISurface[0].Method
-			entry.apiPath = command.APISurface[0].Path
+			apiMethod, apiPath = command.APISurface[0].Method, command.APISurface[0].Path
 		}
+		userIDFlag := false
 		for _, flag := range command.Flags {
 			if flag.Name == "user-id" && flag.MapsTo == "config.user_id" && !flag.Required {
-				entry.userIDFlag = true
-			}
-			if strings.HasPrefix(flag.MapsTo, "path.") && flag.Required {
-				entry.requiredFlag = flag.Name
+				userIDFlag = true
 			}
 		}
-		commands[command.Path] = entry
-	}
-
-	for _, want := range wants {
-		command, ok := commands[want.path]
-		if !ok {
-			t.Errorf("missing reachable command %q", want.path)
-			continue
+		if command.Intent != "etl" || command.Availability != "implemented" || command.Stream != want.stream {
+			t.Errorf("command %q = intent=%q availability=%q stream=%q, want implemented ETL stream %q", want.path, command.Intent, command.Availability, command.Stream, want.stream)
 		}
-		if command.intent != "etl" || command.available != "implemented" || command.stream != want.stream {
-			t.Errorf("command %q = intent=%q availability=%q stream=%q, want implemented ETL stream %q", want.path, command.intent, command.available, command.stream, want.stream)
+		if apiMethod != http.MethodGet || apiPath != want.apiPath {
+			t.Errorf("command %q api_surface = %s %s, want GET %s", want.path, apiMethod, apiPath, want.apiPath)
 		}
-		if command.apiMethod != http.MethodGet || command.apiPath != want.apiPath {
-			t.Errorf("command %q api_surface = %s %s, want GET %s", want.path, command.apiMethod, command.apiPath, want.apiPath)
+		if command.SourceURL != want.sourceURL {
+			t.Errorf("command %q source_url = %q, want %q", want.path, command.SourceURL, want.sourceURL)
 		}
-		if command.sourceURL != want.sourceURL {
-			t.Errorf("command %q source_url = %q, want %q", want.path, command.sourceURL, want.sourceURL)
-		}
-		if command.userIDFlag != want.userScoped {
-			t.Errorf("command %q optional --user-id config override = %t, want %t", want.path, command.userIDFlag, want.userScoped)
+		if userIDFlag != want.userScoped {
+			t.Errorf("command %q optional --user-id config override = %t, want %t", want.path, userIDFlag, want.userScoped)
 		}
 		if err := commandrunner.Preflight(connector, strings.Fields(want.path)); err != nil {
 			t.Errorf("Preflight(%q) = %v, want nil", want.path, err)
 		}
 	}
 
-	for _, want := range operationWants {
-		command, ok := commands[want.path]
-		if !ok {
-			t.Errorf("missing reachable command %q", want.path)
-			continue
-		}
-		if command.intent != "direct_read" || command.available != "implemented" || command.operation != want.operation {
-			t.Errorf("command %q = intent=%q availability=%q operation=%q, want implemented direct_read operation %q", want.path, command.intent, command.available, command.operation, want.operation)
-		}
-		if command.apiMethod != want.apiMethod || command.apiPath != want.apiPath {
-			t.Errorf("command %q api_surface = %s %s, want %s %s", want.path, command.apiMethod, command.apiPath, want.apiMethod, want.apiPath)
-		}
-		if command.outputPolicy != "json_redacted" {
-			t.Errorf("command %q output_policy = %q, want json_redacted", want.path, command.outputPolicy)
-		}
-		if command.requiredFlag != want.pathFlag {
-			t.Errorf("command %q required path flag = %q, want %q", want.path, command.requiredFlag, want.pathFlag)
-		}
-		if err := commandrunner.Preflight(connector, strings.Fields(want.path)); err != nil {
-			t.Errorf("Preflight(%q) = %v, want nil", want.path, err)
-		}
+	verifyOperationCommands(t, bundle, connector, surface, wantModuleOperationCommandCount)
+}
+
+// verifyOperationCommands generically verifies every reachable operation
+// command (direct_read today; direct_write once zoom declares writes.json)
+// against its own operations.json entry, rather than hand-duplicating each
+// command's expected method/path/flags in Go -- that duplication does not
+// scale to zoom's 1,913-operation surface. It still proves real per-command
+// correctness: every operation command must resolve to a declared
+// operations.json entry whose rest.method/path match cli_surface.json's
+// api_surface exactly, every required path-mapped flag must name a real
+// {placeholder} in that path, output_policy must be a supported direct-read
+// policy, and the real command-runner Preflight must pass -- the same bar
+// TestEveryImplementedCommandPassesRuntimePreflight enforces repo-wide.
+func verifyOperationCommands(t *testing.T, bundle engine.Bundle, connector connectors.Connector, surface *connectors.CommandSurface, wantCount int) {
+	t.Helper()
+	ops := make(map[string]engine.OperationSpec, len(bundle.Operations))
+	for _, op := range bundle.Operations {
+		ops[op.ID] = op
 	}
 
-	allowed := map[string]struct{}{
-		"users list":                    {},
-		"meetings list":                 {},
-		"webinars list":                 {},
-		"qss meeting-participants list": {},
-		"qss webinar-participants list": {},
-		"qss session-users list":        {},
-	}
-	for path := range commands {
-		if _, ok := allowed[path]; !ok {
-			t.Errorf("Wave 1/Wave 2 must not promote additional Zoom operations; found %q", path)
+	got := 0
+	for _, command := range surface.Commands {
+		if command.Intent != "direct_read" {
+			continue
+		}
+		got++
+		if command.Availability != "implemented" {
+			t.Errorf("operation command %q availability = %q, want implemented", command.Path, command.Availability)
+			continue
+		}
+		op, ok := ops[command.Operation]
+		if !ok {
+			t.Errorf("operation command %q references operation %q, not found in operations.json", command.Path, command.Operation)
+			continue
+		}
+		if op.REST == nil {
+			t.Errorf("operation %q has no rest spec", op.ID)
+			continue
+		}
+		if len(command.APISurface) != 1 || command.APISurface[0].Method != op.REST.Method || command.APISurface[0].Path != op.REST.Path {
+			t.Errorf("operation command %q api_surface = %+v, want exactly [%s %s] matching operations.json", command.Path, command.APISurface, op.REST.Method, op.REST.Path)
+		}
+		if command.OutputPolicy != op.OutputPolicy {
+			t.Errorf("operation command %q output_policy = %q, want %q (from operations.json)", command.Path, command.OutputPolicy, op.OutputPolicy)
+		}
+		if !supportedDirectReadOutputPolicies[command.OutputPolicy] {
+			t.Errorf("operation command %q output_policy = %q, not a supported direct-read policy", command.Path, command.OutputPolicy)
+		}
+		for _, flag := range command.Flags {
+			if !strings.HasPrefix(flag.MapsTo, "path.") || !flag.Required {
+				continue
+			}
+			placeholder := "{" + strings.TrimPrefix(flag.MapsTo, "path.") + "}"
+			if !strings.Contains(op.REST.Path, placeholder) {
+				t.Errorf("operation command %q required flag --%s maps_to %q, but %q is not present in path %q", command.Path, flag.Name, flag.MapsTo, placeholder, op.REST.Path)
+			}
+		}
+		if err := commandrunner.Preflight(connector, strings.Fields(command.Path)); err != nil {
+			t.Errorf("Preflight(%q) = %v, want nil", command.Path, err)
 		}
 	}
+	if got != wantCount {
+		t.Errorf("reachable direct_read operation commands = %d, want %d", got, wantCount)
+	}
+}
+
+// supportedDirectReadOutputPolicies mirrors commandrunner's closed policy set
+// (internal/connectors/commandrunner/runner.go) so this test fails loudly if
+// a zoom command ever declares an output_policy the runtime cannot execute --
+// duplicated here deliberately (small, closed, rarely-changing set) rather
+// than exporting the unexported runner map across package boundaries.
+var supportedDirectReadOutputPolicies = map[string]bool{
+	"repository_contents_file_metadata": true,
+	"repository_contents_directory":     true,
+	"json_redacted":                     true,
+	"clinical_json_redacted":            true,
 }
 
 // TestCoveredStreamCommandsExecuteWithFixtures runs each Wave 1 command
