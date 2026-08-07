@@ -10,6 +10,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"sync"
 	"testing"
@@ -120,11 +121,11 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 			t.Errorf("provider inventory %s rows = %d, want %d", method, got, want)
 		}
 	}
-	if got := covered; got != 3 {
-		t.Errorf("executable stream-backed rows = %d, want 3", got)
+	if got := covered; got != 6 {
+		t.Errorf("executable stream-backed rows = %d, want 6", got)
 	}
-	if got := implementableNow; got != 1839 {
-		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1839", got)
+	if got := implementableNow; got != 1836 {
+		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1836", got)
 	}
 	if got := providerRestricted; got != 17 {
 		t.Errorf("provider-restricted operations = %d, want 17", got)
@@ -178,33 +179,74 @@ func TestCoveredStreamsHaveReachableCommands(t *testing.T) {
 			userScoped: true,
 		},
 	}
-	if got := len(surface.Commands); got != len(wants) {
-		t.Fatalf("Zoom cli_surface commands = %d, want exactly %d in Wave 1", got, len(wants))
+
+	type operationWant struct {
+		path      string
+		operation string
+		apiMethod string
+		apiPath   string
+		pathFlag  string
+	}
+	operationWants := []operationWant{
+		{
+			path:      "qss meeting-participants list",
+			operation: "zoom.list_meeting_participants_qos_summary",
+			apiMethod: http.MethodGet,
+			apiPath:   "/v2/metrics/meetings/{meetingId}/participants/qos_summary",
+			pathFlag:  "meeting-id",
+		},
+		{
+			path:      "qss webinar-participants list",
+			operation: "zoom.list_webinar_participants_qos_summary",
+			apiMethod: http.MethodGet,
+			apiPath:   "/v2/metrics/webinars/{webinarId}/participants/qos_summary",
+			pathFlag:  "webinar-id",
+		},
+		{
+			path:      "qss session-users list",
+			operation: "zoom.list_session_users_qos_summary",
+			apiMethod: http.MethodGet,
+			apiPath:   "/v2/videosdk/sessions/{sessionId}/users/qos_summary",
+			pathFlag:  "session-id",
+		},
+	}
+
+	wantCommandCount := len(wants) + len(operationWants)
+	if got := len(surface.Commands); got != wantCommandCount {
+		t.Fatalf("Zoom cli_surface commands = %d, want exactly %d (Wave 1 streams + Wave 2 qss operations)", got, wantCommandCount)
 	}
 
 	commands := make(map[string]struct {
-		stream     string
-		intent     string
-		available  string
-		apiMethod  string
-		apiPath    string
-		sourceURL  string
-		userIDFlag bool
+		stream       string
+		intent       string
+		available    string
+		operation    string
+		apiMethod    string
+		apiPath      string
+		sourceURL    string
+		outputPolicy string
+		userIDFlag   bool
+		requiredFlag string
 	}, len(surface.Commands))
 	for _, command := range surface.Commands {
 		entry := struct {
-			stream     string
-			intent     string
-			available  string
-			apiMethod  string
-			apiPath    string
-			sourceURL  string
-			userIDFlag bool
+			stream       string
+			intent       string
+			available    string
+			operation    string
+			apiMethod    string
+			apiPath      string
+			sourceURL    string
+			outputPolicy string
+			userIDFlag   bool
+			requiredFlag string
 		}{
-			stream:    command.Stream,
-			intent:    command.Intent,
-			available: command.Availability,
-			sourceURL: command.SourceURL,
+			stream:       command.Stream,
+			intent:       command.Intent,
+			available:    command.Availability,
+			operation:    command.Operation,
+			sourceURL:    command.SourceURL,
+			outputPolicy: command.OutputPolicy,
 		}
 		if len(command.APISurface) == 1 {
 			entry.apiMethod = command.APISurface[0].Method
@@ -213,6 +255,9 @@ func TestCoveredStreamsHaveReachableCommands(t *testing.T) {
 		for _, flag := range command.Flags {
 			if flag.Name == "user-id" && flag.MapsTo == "config.user_id" && !flag.Required {
 				entry.userIDFlag = true
+			}
+			if strings.HasPrefix(flag.MapsTo, "path.") && flag.Required {
+				entry.requiredFlag = flag.Name
 			}
 		}
 		commands[command.Path] = entry
@@ -241,16 +286,42 @@ func TestCoveredStreamsHaveReachableCommands(t *testing.T) {
 		}
 	}
 
-	for path := range commands {
-		if _, ok := map[string]struct{}{
-			"users list":    {},
-			"meetings list": {},
-			"webinars list": {},
-		}[path]; !ok {
-			t.Errorf("Wave 1 must not promote additional Zoom operations; found %q", path)
+	for _, want := range operationWants {
+		command, ok := commands[want.path]
+		if !ok {
+			t.Errorf("missing reachable command %q", want.path)
+			continue
+		}
+		if command.intent != "direct_read" || command.available != "implemented" || command.operation != want.operation {
+			t.Errorf("command %q = intent=%q availability=%q operation=%q, want implemented direct_read operation %q", want.path, command.intent, command.available, command.operation, want.operation)
+		}
+		if command.apiMethod != want.apiMethod || command.apiPath != want.apiPath {
+			t.Errorf("command %q api_surface = %s %s, want %s %s", want.path, command.apiMethod, command.apiPath, want.apiMethod, want.apiPath)
+		}
+		if command.outputPolicy != "json_redacted" {
+			t.Errorf("command %q output_policy = %q, want json_redacted", want.path, command.outputPolicy)
+		}
+		if command.requiredFlag != want.pathFlag {
+			t.Errorf("command %q required path flag = %q, want %q", want.path, command.requiredFlag, want.pathFlag)
+		}
+		if err := commandrunner.Preflight(connector, strings.Fields(want.path)); err != nil {
+			t.Errorf("Preflight(%q) = %v, want nil", want.path, err)
 		}
 	}
 
+	allowed := map[string]struct{}{
+		"users list":                    {},
+		"meetings list":                 {},
+		"webinars list":                 {},
+		"qss meeting-participants list": {},
+		"qss webinar-participants list": {},
+		"qss session-users list":        {},
+	}
+	for path := range commands {
+		if _, ok := allowed[path]; !ok {
+			t.Errorf("Wave 1/Wave 2 must not promote additional Zoom operations; found %q", path)
+		}
+	}
 }
 
 // TestCoveredStreamCommandsExecuteWithFixtures runs each Wave 1 command
@@ -359,6 +430,130 @@ func TestCoveredStreamCommandsExecuteWithFixtures(t *testing.T) {
 			t.Errorf("fixture requests for %s = %d, want 1", path, got)
 		}
 	}
+}
+
+// TestQSSOperationDirectReadCommandsExecuteWithFixtures runs each Wave 2 QSS
+// direct_read command through commandrunner against Zoom's committed
+// sanitized fixtures, proving the required path parameter reaches the
+// resolved request path and the decoded response body comes back unredacted
+// under the json_redacted policy (QSS summaries carry no secret fields).
+func TestQSSOperationDirectReadCommandsExecuteWithFixtures(t *testing.T) {
+	tests := []struct {
+		name        string
+		path        []string
+		flags       map[string][]string
+		requestPath string
+		fixture     string
+	}{
+		{
+			name:        "meeting participants",
+			path:        []string{"qss", "meeting-participants", "list"},
+			flags:       map[string][]string{"meeting-id": {"fixture-meeting"}},
+			requestPath: "/metrics/meetings/fixture-meeting/participants/qos_summary",
+			fixture:     "list_meeting_participants_qos_summary.json",
+		},
+		{
+			name:        "webinar participants",
+			path:        []string{"qss", "webinar-participants", "list"},
+			flags:       map[string][]string{"webinar-id": {"fixture-webinar"}},
+			requestPath: "/metrics/webinars/fixture-webinar/participants/qos_summary",
+			fixture:     "list_webinar_participants_qos_summary.json",
+		},
+		{
+			name:        "session users",
+			path:        []string{"qss", "session-users", "list"},
+			flags:       map[string][]string{"session-id": {"fixture-session"}},
+			requestPath: "/videosdk/sessions/fixture-session/users/qos_summary",
+			fixture:     "list_session_users_qos_summary.json",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			wantStatus, wantBody := zoomDirectReadFixture(t, test.fixture)
+
+			var requestsMu sync.Mutex
+			requests := make(map[string]int)
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+				requestsMu.Lock()
+				requests[request.URL.Path]++
+				requestsMu.Unlock()
+				if request.URL.Path != test.requestPath {
+					http.NotFound(w, request)
+					return
+				}
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(wantStatus)
+				_, _ = w.Write(wantBody)
+			}))
+			defer server.Close()
+
+			bundle := loadZoomBundle(t)
+			connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+			config := connectors.RuntimeConfig{
+				Config:  map[string]string{"base_url": server.URL},
+				Secrets: map[string]string{"access_token": "synthetic-test-token"},
+			}
+
+			result, err := commandrunner.Run(context.Background(), connector, commandrunner.Request{
+				Path:   test.path,
+				Flags:  test.flags,
+				Config: config,
+			}, func(connectors.Record) error {
+				t.Fatal("emit called for a direct_read command")
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Run(%q) = %v", strings.Join(test.path, " "), err)
+			}
+			if result.DirectRead == nil {
+				t.Fatalf("Run(%q) DirectRead = nil, want a result", strings.Join(test.path, " "))
+			}
+			if result.DirectRead.Status != wantStatus {
+				t.Errorf("Run(%q) status = %d, want %d", strings.Join(test.path, " "), result.DirectRead.Status, wantStatus)
+			}
+
+			var wantDecoded, gotDecoded any
+			if err := json.Unmarshal(wantBody, &wantDecoded); err != nil {
+				t.Fatalf("decode fixture body: %v", err)
+			}
+			gotBody, err := json.Marshal(result.DirectRead.Body)
+			if err != nil {
+				t.Fatalf("marshal result body: %v", err)
+			}
+			if err := json.Unmarshal(gotBody, &gotDecoded); err != nil {
+				t.Fatalf("decode result body: %v", err)
+			}
+			if !reflect.DeepEqual(gotDecoded, wantDecoded) {
+				t.Errorf("Run(%q) body = %s, want %s", strings.Join(test.path, " "), gotBody, wantBody)
+			}
+
+			requestsMu.Lock()
+			defer requestsMu.Unlock()
+			if got := requests[test.requestPath]; got != 1 {
+				t.Errorf("fixture requests for %s = %d, want 1", test.requestPath, got)
+			}
+		})
+	}
+}
+
+func zoomDirectReadFixture(t *testing.T, file string) (int, json.RawMessage) {
+	t.Helper()
+	raw, err := os.ReadFile(filepath.Join("fixtures", "direct_reads", file))
+	if err != nil {
+		t.Fatalf("read direct_reads fixture %s: %v", file, err)
+	}
+	var fixture struct {
+		Status int             `json:"status"`
+		Body   json.RawMessage `json:"body"`
+	}
+	if err := json.Unmarshal(raw, &fixture); err != nil {
+		t.Fatalf("decode direct_reads fixture %s: %v", file, err)
+	}
+	if len(fixture.Body) == 0 {
+		t.Fatalf("direct_reads fixture %s has no body", file)
+	}
+	return fixture.Status, fixture.Body
 }
 
 func zoomFixtureResponseBody(t *testing.T, stream, file string) json.RawMessage {
