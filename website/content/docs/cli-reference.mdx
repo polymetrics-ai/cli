@@ -192,6 +192,11 @@ pm connections list --json
 
 Connections bind credentials, a stream, table, sync mode, cursor, and primary key.
 
+Connection names accept letters, digits, `-` and `_`, must start with a letter or digit, and must
+differ by more than letter case. Ambiguous names are rejected at creation rather than rewritten,
+because two connections that cannot be told apart cannot own separate warehouse data. The name is a
+display value only — the warehouse keys its directories on a generated identifier.
+
 ### `pm catalog`
 
 ```bash
