@@ -546,3 +546,62 @@ func TestConnectorName(t *testing.T) {
 		t.Fatalf("ConnectorName() = %q, want %q", got, "github")
 	}
 }
+
+// archive_repo and unarchive_repo share PATCH /repos/{owner}/{repo} with the
+// generic repo update, so the only thing separating them is the body the hook
+// pins. These two tests are what stop them collapsing back into "PATCH
+// whatever the caller sent" — a `repo unarchive` that forwards an empty body
+// silently does nothing while reporting success.
+func TestExecuteWrite_ArchiveRepoPinsArchivedTrue(t *testing.T) {
+	srv, reqs := newWriteCaptureServer(t, nil)
+	h := githubhooks.New()
+	rt := newTestRuntime(srv.URL, newRuntimeConfig(srv.URL, nil, nil))
+
+	action := engine.WriteAction{Name: "archive_repo", Method: "PATCH", Path: "/repos/{owner}/{repo}"}
+
+	handled, err := h.ExecuteWrite(context.Background(), action, connectors.Record{}, rt)
+	if err != nil {
+		t.Fatalf("ExecuteWrite() error = %v", err)
+	}
+	if !handled {
+		t.Fatal("ExecuteWrite() handled = false, want true for archive_repo")
+	}
+	if len(*reqs) != 1 {
+		t.Fatalf("requests = %d, want 1, got %+v", len(*reqs), *reqs)
+	}
+	got := (*reqs)[0]
+	if got.Method != http.MethodPatch || got.Path != "/repos/octocat/hello-world" {
+		t.Fatalf("archive request = %+v, want PATCH /repos/octocat/hello-world", got)
+	}
+	if got.Body["archived"] != true {
+		t.Fatalf("archive body = %+v, want archived=true", got.Body)
+	}
+}
+
+func TestExecuteWrite_UnarchiveRepoPinsArchivedFalse(t *testing.T) {
+	srv, reqs := newWriteCaptureServer(t, nil)
+	h := githubhooks.New()
+	rt := newTestRuntime(srv.URL, newRuntimeConfig(srv.URL, nil, nil))
+
+	action := engine.WriteAction{Name: "unarchive_repo", Method: "PATCH", Path: "/repos/{owner}/{repo}"}
+
+	// A caller-supplied archived=true must not survive: the command name is the
+	// instruction, not the record.
+	handled, err := h.ExecuteWrite(context.Background(), action, connectors.Record{"archived": true}, rt)
+	if err != nil {
+		t.Fatalf("ExecuteWrite() error = %v", err)
+	}
+	if !handled {
+		t.Fatal("ExecuteWrite() handled = false, want true for unarchive_repo")
+	}
+	if len(*reqs) != 1 {
+		t.Fatalf("requests = %d, want 1, got %+v", len(*reqs), *reqs)
+	}
+	got := (*reqs)[0]
+	if got.Method != http.MethodPatch || got.Path != "/repos/octocat/hello-world" {
+		t.Fatalf("unarchive request = %+v, want PATCH /repos/octocat/hello-world", got)
+	}
+	if got.Body["archived"] != false {
+		t.Fatalf("unarchive body = %+v, want archived=false", got.Body)
+	}
+}

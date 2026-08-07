@@ -2467,6 +2467,38 @@
       "risk": "high"
     },
     {
+      "name": "unarchive_repo",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "returns the configured repository to a writable state",
+      "hook": "github"
+    },
+    {
+      "name": "archive_repo",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {}
+      },
+      "risk": "archives the configured repository, making it read-only for every consumer",
+      "hook": "github"
+    },
+    {
       "name": "actions_cache_retention_limit2",
       "kind": "update",
       "method": "PUT",
@@ -2971,15 +3003,26 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "secret_name"
+          "secret_name",
+          "encrypted_value",
+          "key_id"
         ],
         "properties": {
           "secret_name": {
             "type": "string"
+          },
+          "encrypted_value": {
+            "type": "string"
+          },
+          "key_id": {
+            "type": "string"
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "redact_fields": [
+        "encrypted_value"
+      ]
     },
     {
       "name": "actions_variables2",

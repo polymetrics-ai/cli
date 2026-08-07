@@ -976,34 +976,96 @@
     {
       "path": "repo create",
       "summary": "Create a repository",
-      "intent": "direct_write",
-      "availability": "unsafe_or_disallowed",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "repos_create_for_authenticated_user",
       "source_cli_path": "gh repo create",
-      "notes": "Repository creation is outside the repository-scoped connector and requires explicit product policy before modeling."
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Repository name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Repository description.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "private",
+          "type": "boolean",
+          "summary": "Create the repository private.",
+          "maps_to": "record.private"
+        },
+        {
+          "name": "auto-init",
+          "type": "boolean",
+          "summary": "Initialise with a README commit.",
+          "maps_to": "record.auto_init"
+        },
+        {
+          "name": "gitignore-template",
+          "type": "string",
+          "summary": "Name of a .gitignore template.",
+          "maps_to": "record.gitignore_template"
+        },
+        {
+          "name": "license-template",
+          "type": "string",
+          "summary": "Name of a license template.",
+          "maps_to": "record.license_template"
+        },
+        {
+          "name": "has-issues",
+          "type": "boolean",
+          "summary": "Enable issues on the new repository.",
+          "maps_to": "record.has_issues"
+        },
+        {
+          "name": "has-wiki",
+          "type": "boolean",
+          "summary": "Enable the wiki on the new repository.",
+          "maps_to": "record.has_wiki"
+        }
+      ]
     },
     {
       "path": "repo delete",
       "summary": "Delete a repository",
-      "intent": "direct_write",
-      "availability": "unsafe_or_disallowed",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "repo",
       "source_cli_path": "gh repo delete",
-      "notes": "Repository deletion is classified as destructive admin and is not exposed as a connector write."
+      "risk": "critical",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [],
+      "notes": "destructive; requires --allow-destructive + typed confirmation"
     },
     {
       "path": "repo archive",
       "summary": "Archive a repository",
-      "intent": "direct_write",
-      "availability": "unsafe_or_disallowed",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "archive_repo",
       "source_cli_path": "gh repo archive",
-      "notes": "Destructive or admin repository lifecycle changes are not exposed by this slice."
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
     },
     {
       "path": "repo unarchive",
       "summary": "Unarchive a repository",
-      "intent": "direct_write",
-      "availability": "unsafe_or_disallowed",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "unarchive_repo",
       "source_cli_path": "gh repo unarchive",
-      "notes": "Admin repository lifecycle changes require explicit policy before modeling."
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
     },
     {
       "path": "repo fork",
@@ -1679,10 +1741,21 @@
     {
       "path": "cache delete",
       "summary": "Delete GitHub Actions caches",
-      "intent": "direct_write",
-      "availability": "unsafe_or_disallowed",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_caches_cache_id",
       "source_cli_path": "gh cache delete",
-      "notes": "Cache deletion is not exposed by the connector write surface."
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "cache-id",
+          "type": "integer",
+          "summary": "Actions cache id to delete.",
+          "maps_to": "record.cache_id"
+        }
+      ],
+      "notes": "destructive; requires --allow-destructive + typed confirmation"
     },
     {
       "path": "label list",
@@ -1972,18 +2045,51 @@
     {
       "path": "secret set",
       "summary": "Create or update a secret",
-      "intent": "direct_write",
-      "availability": "unsafe_or_disallowed",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_secrets_secret_name3",
       "source_cli_path": "gh secret set",
-      "notes": "Secret writes require encryption and strict scope policy; not exposed as connector writes."
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "secret-name",
+          "type": "string",
+          "summary": "Repository Actions secret name.",
+          "maps_to": "record.secret_name"
+        },
+        {
+          "name": "encrypted-value",
+          "type": "string",
+          "summary": "Value already sealed with the repository public key; pm never encrypts or stores it.",
+          "maps_to": "record.encrypted_value"
+        },
+        {
+          "name": "key-id",
+          "type": "string",
+          "summary": "Id of the public key the value was sealed with.",
+          "maps_to": "record.key_id"
+        }
+      ]
     },
     {
       "path": "secret delete",
       "summary": "Delete a secret",
-      "intent": "direct_write",
-      "availability": "unsafe_or_disallowed",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_secrets_secret_name",
       "source_cli_path": "gh secret delete",
-      "notes": "Secret deletion is not exposed as a connector write."
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "secret-name",
+          "type": "string",
+          "summary": "Repository Actions secret name.",
+          "maps_to": "record.secret_name"
+        }
+      ],
+      "notes": "destructive; requires --allow-destructive + typed confirmation"
     },
     {
       "path": "variable list",
@@ -3520,6 +3626,18 @@
           "type": "string",
           "summary": "secret_name path parameter",
           "maps_to": "record.secret_name"
+        },
+        {
+          "name": "encrypted-value",
+          "type": "string",
+          "summary": "Value already sealed with the repository public key; pm never encrypts or stores it.",
+          "maps_to": "record.encrypted_value"
+        },
+        {
+          "name": "key-id",
+          "type": "string",
+          "summary": "Id of the public key the value was sealed with.",
+          "maps_to": "record.key_id"
         }
       ]
     },

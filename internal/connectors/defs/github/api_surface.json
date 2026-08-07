@@ -35,7 +35,11 @@
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}",
       "covered_by": {
-        "write": "repo2"
+        "writes": [
+          "repo2",
+          "archive_repo",
+          "unarchive_repo"
+        ]
       }
     },
     {
