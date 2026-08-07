@@ -16,18 +16,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/durability"
 	"polymetrics.ai/internal/synccontract"
-)
-
-const (
-	// legacyRawDirName is the flat pre-namespacing raw log directory. It is
-	// read by migration and never written by the current layout.
-	legacyRawDirName = "_pm_raw"
-	// warehouseWALDirName holds a connection's append-only stream logs, which
-	// are the source of truth the derived tables are rebuilt from.
-	warehouseWALDirName = "wal"
-	// warehouseTablesDirName holds a connection's derived table
-	// materializations.
-	warehouseTablesDirName = "tables"
+	"polymetrics.ai/internal/warehouse"
 )
 
 type etlExecutionResult struct {
@@ -76,6 +65,9 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	}
 
 	dir := localWarehouseDir(destRuntime)
+	if err := warehouse.CheckLegacyLayout(dir); err != nil {
+		return etlExecutionResult{}, err
+	}
 	if err := os.MkdirAll(dir, 0o700); err != nil {
 		return etlExecutionResult{}, fmt.Errorf("create warehouse directory: %w", err)
 	}
@@ -83,12 +75,34 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	if table == "" {
 		table = streamName
 	}
-	finalPath := localWarehouseTablePath(dir, table)
+	location, err := a.warehouseLocation(dir, conn)
+	if err != nil {
+		return etlExecutionResult{}, err
+	}
+	if err := location.EnsureOwnership(); err != nil {
+		return etlExecutionResult{}, err
+	}
+	finalPath, err := location.TablePath(table)
+	if err != nil {
+		return etlExecutionResult{}, err
+	}
+	rawPath, err := location.WALPath(streamName)
+	if err != nil {
+		return etlExecutionResult{}, err
+	}
+	// Directory nesting already makes a shared table path unrepresentable.
+	// Re-deriving ownership from the table path is the independent check that
+	// fails loudly if a future change ever reintroduces a shared path.
+	if err := location.AssertOwnedTable(finalPath, table); err != nil {
+		return etlExecutionResult{}, err
+	}
 	tmpFinalPath := finalPath + "." + runID + ".tmp"
-	rawPath := localRawPath(dir, conn.Name, streamName, table)
 	tmpRawPath := rawPath + "." + runID + ".tmp"
 	if err := os.MkdirAll(filepath.Dir(rawPath), 0o700); err != nil {
-		return etlExecutionResult{}, fmt.Errorf("create raw directory: %w", err)
+		return etlExecutionResult{}, fmt.Errorf("create warehouse wal directory: %w", err)
+	}
+	if err := os.MkdirAll(filepath.Dir(finalPath), 0o700); err != nil {
+		return etlExecutionResult{}, fmt.Errorf("create warehouse tables directory: %w", err)
 	}
 
 	rawTarget := rawPath
@@ -277,6 +291,9 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 			return result, fmt.Errorf("replace final table: %w", err)
 		}
 	}
+	if err := syncLocalWarehouseDirectoryChain(filepath.Dir(finalPath)); err != nil {
+		return result, err
+	}
 	if err := syncLocalWarehouseDirectoryChain(filepath.Dir(rawPath)); err != nil {
 		return result, err
 	}
@@ -462,32 +479,9 @@ func localWarehouseDir(cfg connectors.RuntimeConfig) string {
 	return filepath.Join(cfg.ProjectDir, "warehouse")
 }
 
-func localWarehouseTablePath(dir, table string) string {
-	return filepath.Join(dir, localSafeName(table)+".jsonl")
-}
-
-func localRawPath(dir, connection, stream, table string) string {
-	name := localSafeName(connection + "__" + stream + "__" + table)
-	return filepath.Join(dir, legacyRawDirName, name+".jsonl")
-}
-
-func localSafeName(name string) string {
-	name = strings.TrimSpace(strings.ToLower(name))
-	var b strings.Builder
-	for _, r := range name {
-		switch {
-		case r >= 'a' && r <= 'z':
-			b.WriteRune(r)
-		case r >= '0' && r <= '9':
-			b.WriteRune(r)
-		case r == '_' || r == '-':
-			b.WriteRune(r)
-		case r == '.' || r == '/' || r == ' ' || r == ':':
-			b.WriteRune('_')
-		}
-	}
-	if b.Len() == 0 {
-		return "records"
-	}
-	return b.String()
+// warehouseLocation resolves the directory conn owns inside a warehouse root.
+// The connection's opaque ID is the path component, never its display name,
+// and never anything derived from a credential.
+func (a *App) warehouseLocation(dir string, conn Connection) (warehouse.Location, error) {
+	return warehouse.LocationFor(dir, a.state.WorkspaceID, conn.Source.Connector, conn.ID, conn.Name)
 }

@@ -12,6 +12,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/durability"
+	"polymetrics.ai/internal/warehouse"
 )
 
 const catalogFileVersion = 1
@@ -74,17 +75,11 @@ func validCatalogReference(reference catalogReference) bool {
 	return err == nil && reference.File == path
 }
 
+// safeCatalogPathPart is the #3892 guard, now shared with the warehouse layout
+// so one rule governs every generated path component. Restating it here would
+// let the two drift apart.
 func safeCatalogPathPart(value string) bool {
-	if value == "" || len(value) > 256 || strings.Contains(value, "..") {
-		return false
-	}
-	for _, r := range value {
-		if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') || (r >= '0' && r <= '9') || r == '-' || r == '_' || r == '.' {
-			continue
-		}
-		return false
-	}
-	return true
+	return warehouse.SafePathPart(value)
 }
 
 func (s catalogStorage) write(reference catalogReference, catalog connectors.Catalog, updatedAt time.Time) (err error) {

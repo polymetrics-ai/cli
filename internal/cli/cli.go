@@ -1439,7 +1439,11 @@ func runQuery(ctx context.Context, a *app.App, args []string, stdout io.Writer, 
 	if sql := flags.first("sql"); sql != "" {
 		rows, err = a.QuerySQL(ctx, sql, limit)
 	} else {
-		rows, err = a.QueryTable(ctx, app.QueryTableRequest{Table: flags.first("table"), Limit: limit})
+		rows, err = a.QueryTable(ctx, app.QueryTableRequest{
+			Table:      flags.first("table"),
+			Connection: flags.first("connection"),
+			Limit:      limit,
+		})
 	}
 	if err != nil {
 		return err

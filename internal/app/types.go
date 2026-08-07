@@ -102,6 +102,9 @@ type CreateConnectionRequest struct {
 }
 
 type Connection struct {
+	// ID is the opaque generated identifier used as a warehouse path
+	// component. Name is a display value and never becomes a path.
+	ID          string                  `json:"id,omitempty"`
 	Name        string                  `json:"name"`
 	Source      EndpointConfig          `json:"source"`
 	Destination EndpointConfig          `json:"destination"`
@@ -151,7 +154,10 @@ type Run struct {
 
 type QueryTableRequest struct {
 	Table string `json:"table"`
-	Limit int    `json:"limit"`
+	// Connection scopes the read to one connection's tables. It is required
+	// only when more than one connection materializes the same table name.
+	Connection string `json:"connection,omitempty"`
+	Limit      int    `json:"limit"`
 }
 
 type PlanReverseETLRequest struct {

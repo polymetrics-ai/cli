@@ -15,6 +15,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"polymetrics.ai/internal/warehouse"
 )
 
 var ErrUnsupportedOperation = errors.New("unsupported connector operation")
@@ -1274,29 +1276,39 @@ func (Warehouse) Check(ctx context.Context, cfg RuntimeConfig) error {
 	return os.MkdirAll(warehousePath(cfg), 0o700)
 }
 
+// Catalog lists the tables materialized under the per-connection layout. One
+// table name can belong to several connections, so it is reported once, and a
+// read that does not say which connection it means is refused rather than
+// answered from whichever file happened to be found first.
 func (w Warehouse) Catalog(ctx context.Context, cfg RuntimeConfig) (Catalog, error) {
 	if err := w.Check(ctx, cfg); err != nil {
 		return Catalog{}, err
 	}
-	entries, err := os.ReadDir(warehousePath(cfg))
+	tables, err := warehouse.Tables(warehousePath(cfg))
 	if err != nil {
-		return Catalog{}, fmt.Errorf("read warehouse directory: %w", err)
+		return Catalog{}, err
 	}
-	streams := make([]Stream, 0)
-	for _, entry := range entries {
-		if entry.IsDir() || filepath.Ext(entry.Name()) != ".jsonl" {
-			continue
-		}
-		name := strings.TrimSuffix(entry.Name(), ".jsonl")
-		streams = append(streams, Stream{Name: name, Description: "Warehouse table " + name})
+	owners := make(map[string][]string, len(tables))
+	for _, table := range tables {
+		owners[table.Name] = append(owners[table.Name], table.Connection)
+	}
+	streams := make([]Stream, 0, len(owners))
+	for name, connections := range owners {
+		description := "Warehouse table " + name + " (connection " + strings.Join(connections, ", ") + ")"
+		streams = append(streams, Stream{Name: name, Description: description})
 	}
 	sort.Slice(streams, func(i, j int) bool { return streams[i].Name < streams[j].Name })
 	return Catalog{Connector: w.Name(), Streams: streams}, nil
 }
 
+// Read resolves a table inside the per-connection layout. Config["connection"]
+// scopes the read when more than one connection materializes the same name.
 func (Warehouse) Read(ctx context.Context, req ReadRequest, emit func(Record) error) error {
-	path := tablePath(warehousePath(req.Config), req.Stream)
-	file, err := os.Open(path)
+	table, err := warehouse.FindTable(warehousePath(req.Config), req.Stream, req.Config.Config["connection"])
+	if err != nil {
+		return err
+	}
+	file, err := os.Open(table.Path)
 	if err != nil {
 		return fmt.Errorf("open warehouse table %s: %w", req.Stream, err)
 	}
@@ -1318,11 +1330,20 @@ func (Warehouse) Write(ctx context.Context, req WriteRequest, records []Record) 
 	if table == "" {
 		table = req.Stream
 	}
+	// A direct connector write carries no connection identity, so its rows stay
+	// at the root rather than entering a connection's directory, where they
+	// would be indistinguishable from that connection's own synced data. The
+	// table name is validated rather than folded into a safe filename, so a
+	// write and the read that follows it always name the same file.
+	component, err := warehouse.PathComponent("table", table)
+	if err != nil {
+		return WriteResult{}, err
+	}
 	flag := os.O_CREATE | os.O_WRONLY | os.O_APPEND
 	if req.Overwrite {
 		flag = os.O_CREATE | os.O_WRONLY | os.O_TRUNC
 	}
-	file, err := os.OpenFile(tablePath(dir, table), flag, 0o600)
+	file, err := os.OpenFile(filepath.Join(dir, component+".jsonl"), flag, 0o600)
 	if err != nil {
 		return WriteResult{}, fmt.Errorf("open warehouse table %s: %w", table, err)
 	}
