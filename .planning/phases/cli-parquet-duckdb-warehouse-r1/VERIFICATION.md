@@ -171,13 +171,28 @@ are still built by **nfpm, the same tool GoReleaser embeds**, from a config that
 `make connectorgen-validate` · `make connectorgen-surface-sync` · `make connector-boundary` ·
 `make release-workflow-check` · `make docs-check` · `make smoke` · `make lint`.
 
-## Handoff — outstanding verification
+## Full-tree verification — done, and green
 
-**State at `ebaf1701d`:** the three CI failures are fixed and their two packages pass locally.
-**A full-tree `go test ./...` has not been run against this commit.** That is the one thing
-outstanding, and it must be run with its output read *in full*.
+`CGO_ENABLED=1 go test -timeout 20m ./...` against `111a8cdcb`, output written to a file and
+grepped whole rather than tailed:
 
-### The mistake that caused two extra CI rounds
+```
+EXITCODE=0
+161 packages ok, 3 with no test files, 0 FAIL lines
+internal/cli                              ok  665.437s
+internal/app                              ok  219.625s
+internal/connectors/certify               ok   59.614s
+internal/connectors/defs/zendesk-support  ok   14.689s
+internal/warehouse                        ok    2.744s
+```
+
+Seven packages came back `(cached)` on the first pass, so they were re-run with `-count=1` — all
+seven pass fresh. No result in the statement above rests on a cached one.
+
+**Nothing outstanding.** The section below is kept because the mistakes it records are the reason
+this took three CI rounds, and they are worth not repeating.
+
+## What caused three CI rounds
 
 Every failure since the first green has been the **same fixture defect** — a test hand-writing a
 root-level warehouse table as JSONL, a format `pm` now refuses — and each round found more of them
@@ -189,10 +204,11 @@ because my local sweeps were not authoritative:
    `TestQueryRunAgentModeSummaryProjectsFields` and `TestQueryRunAgentModeStreamProjectsNDJSON`
    were truncated out of view in exactly that way.
 
-**Next session: run `CGO_ENABLED=1 go test -timeout 20m ./... 2>&1 | tee` to a file and grep the
-file for `^(FAIL|--- FAIL)`. Do not pipe the run through `tail`.**
+**The rule that follows: run `CGO_ENABLED=1 go test -timeout 20m ./...` to a file and grep the file
+for `^(FAIL|--- FAIL)`. Never pipe the run through `tail`, and never scope a sweep with a package
+path that lacks `/...`.**
 
-### If more fixtures turn up
+### If more fixtures ever turn up
 
 They will look identical. The fix is always the same: replace the hand-written JSONL with
 `warehouse.WriteTable(ctx, <path>+warehouse.TableFileExt, []warehouse.Row{...})`. Already converted:
