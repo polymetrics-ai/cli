@@ -3,7 +3,7 @@ NAME
   pm query - inspect local warehouse data
 
 SYNOPSIS
-  pm query run --table <table> [--limit n] [--json]
+  pm query run --table <table> [--connection name] [--limit n] [--json]
   pm query run --sql "select * from <table> limit n" [--json]
   pm query run --table <table> --agent-mode summary --fields id,email --sample 3
   pm query run --table <table> --agent-mode stream --fields id,email
@@ -13,8 +13,15 @@ DESCRIPTION
   Agent mode can emit compact summary JSON or projected NDJSON rows to reduce
   token usage for external agents.
 
+  Each connection materializes its tables into its own directory, so two
+  connections can use the same table name without overwriting each other. When
+  more than one connection has a table of the requested name, the read is
+  refused and lists the owning connections; pass --connection to pick one.
+
 FLAGS
   --table table              local warehouse table to scan
+  --connection name          connection whose table to read; required only when
+                             several connections share the table name
   --sql sql                  read-only SQL query; takes precedence over --table
   --limit n                  maximum rows to read; default 100
   --fields a,b               project output to selected fields
