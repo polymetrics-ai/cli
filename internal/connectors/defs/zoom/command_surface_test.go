@@ -30,8 +30,8 @@ const zoomBundleName = "zoom"
 // TestCoveredStreamsHaveReachableCommands fail red before the module's
 // operations.json/cli_surface.json entries exist.
 //
-// Landed modules: qss (3), ai-companion (1).
-const wantModuleOperationCommandCount = 4
+// Landed modules: qss (3), ai-companion (1), my-notes (2).
+const wantModuleOperationCommandCount = 6
 
 func loadZoomBundle(t *testing.T) engine.Bundle {
 	t.Helper()
@@ -133,11 +133,11 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 			t.Errorf("provider inventory %s rows = %d, want %d", method, got, want)
 		}
 	}
-	if got := covered; got != 7 {
-		t.Errorf("executable stream-backed rows = %d, want 7", got)
+	if got := covered; got != 9 {
+		t.Errorf("executable stream-backed rows = %d, want 9", got)
 	}
-	if got := implementableNow; got != 1835 {
-		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1835", got)
+	if got := implementableNow; got != 1833 {
+		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1833", got)
 	}
 	if got := providerRestricted; got != 17 {
 		t.Errorf("provider-restricted operations = %d, want 17", got)
