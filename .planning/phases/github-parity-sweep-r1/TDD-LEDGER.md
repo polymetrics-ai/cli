@@ -179,3 +179,100 @@ that both spellings exist; connectorgen validate, `conformance/static`, `batch` 
 (body=markdown)` and `POST /v1/pages/{page_id}/move (parent=data_source_id)`) and is already merged
 as #3894. It can now adopt `covered_by.writes`, but converting a merged connector is not this
 connector's parity commit. **Recorded, not folded in.**
+
+---
+
+## Slice 3b — the documented mutation surface (584 of 1220), and the surface closes
+
+342 documented mutations were missing (POST 102 · PUT 87 · DELETE 115 · PATCH 38). All 342 are now
+enumerated: **322 new write actions**, **2 POST-shaped reads**, **18 blocked**.
+
+### 3b.1 GREEN — the red test from slice 1 finally passes
+
+```
+ok  	polymetrics.ai/cmd/connectorgen	11.290s
+```
+
+`TestGitHubDocumentedRESTSurfaceIsComplete` and `TestGitHubAPISurfaceOperationLedgerMetrics` both
+pass. The surface is **1224 rows = 1220 REST + 4 GraphQL**, reconciling exactly with the artifact:
+`GET 636 · POST 193 · PUT 134 · DELETE 187 · PATCH 70`. 1126 covered · 98 blocked · 0 excluded ·
+0 blank · 0 duplicates · no query-string rows · no wildcard rows.
+
+### 3b.2 read vs write, decided per operation and not per method
+
+Five POSTs are semantically reads. They are **not** all treated the same way, because the reason each
+one is a read differs:
+
+| Operation | Disposition | Why |
+| --- | --- | --- |
+| `POST /orgs/{org}/attestations/bulk-list` | **implemented read** | returns JSON; uses a body only because the subject list is too long for a query string |
+| `POST /users/{username}/attestations/bulk-list` | **implemented read** | same |
+| `POST /markdown` | **blocked** | returns `text/html` |
+| `POST /markdown/raw` | **blocked** | returns `text/html`, and its request body is `text/plain` |
+| `POST /applications/{client_id}/token` | **blocked** | its request body carries an OAuth `access_token` |
+
+The two bulk-lists are the only new **operation-backed** direct reads in the whole github delivery,
+and they are the reason the shared `operation_endpoint_ledger.json` moves at all: **162 → 164**,
+under the `github` key and nowhere else. Verified by diffing the ledger object-by-object against
+`HEAD`: exactly one connector's list changed.
+
+`POST /applications/{client_id}/token` was recorded in slice 1 as "classified as read". That
+classification is **corrected here**: a read whose input is a live credential cannot be a command,
+because AGENTS.md forbids taking credentials as command arguments. Its three siblings
+(`PATCH`/`DELETE .../token`, `DELETE .../grant`) are blocked for the same reason.
+
+### 3b.3 The 18 blocked mutations, each naming a checkable blocker
+
+| Count | Blocker |
+| ---: | --- |
+| 12 | request body rooted at `oneOf`/`anyOf`. AGENTS.md: "A declarative reverse-ETL `record_schema` rooted at `oneOf` or `anyOf` is not one executable command contract… model each reachable arm as a separate named action, or leave it non-implemented." This takes the second option and names it. |
+| 4 | request body carries an OAuth `access_token` |
+| 2 | documented success response is `text/html` |
+
+Not counted above: the pre-existing `POST /app/installations/{installation_id}/access_tokens`
+(github_app AuthHook), which also gained a named dependency in slice 2.
+
+**One of the 12 is worth calling out as tractable follow-up:** `POST`/`DELETE /user/emails` are
+`oneOf` only because GitHub accepts three spellings of the same input — `{emails: [...]}`, a bare
+array, and a bare string. One arm is the documented canonical shape and the others are conveniences,
+so a single action on the object arm would cover the operation. `POST .../projectsV2/{n}/items`
+(`{id}` vs `{owner, repo, number}`) is a genuine two-action split. The
+`secret-scanning/custom-patterns` `anyOf` is an at-least-one-of constraint rather than alternative
+contracts. **Recorded, not done**, because splitting arms is per-operation judgement and belongs in
+its own change with its own red test.
+
+### 3b.4 One out-of-base operation
+
+`POST /repos/{owner}/{repo}/releases/{release_id}/assets` is the **only** operation in the artifact
+carrying an operation-level `servers` override (`https://uploads.github.com`). Blocked, naming
+`engine.normalizeDirectReadPathForBaseURL` and the single configured `base_url` — the same
+out-of-base rule that produced chatwoot's 47 blocks and help-scout's 5.
+
+### 3b.5 31 commands are `partial`, and that is the rule working
+
+`checkCLISurfaceWriteFlags` requires a flag for **every** required record field, recursing into
+nested required objects. Where a required field has no scalar leaf — `gists create` requires `files`,
+a map of file objects — no flag can carry it from a command line. Those commands are `partial`, not
+`implemented`, with a note naming the field. The write action is still declared and still reachable
+through reverse ETL with a record payload; what is honest is the availability label.
+
+### 3b.6 GREEN evidence for slice 3
+
+| Gate | Result |
+| --- | --- |
+| **Whole** `cmd/connectorgen` package (finding F5 — github has two surface tests) | **ok** 11.290s |
+| `connectorgen validate` | 551 connectors, **0 findings** |
+| `connectorgen surface-sync` | ledger synced; `--check` clean afterwards |
+| Endpoint-ledger delta | **github only**, 162 → 164 |
+| `internal/connectors/commandrunner` (incl. the runtime preflight sweep) | **ok** 8.461s |
+| Blocked rows missing a `Named dependency:` marker | **0 of 98** |
+| Per-command paging flags authored | **zero** |
+
+### 3b.7 Two schema rejections the gates caught, recorded because both were mine
+
+1. **`rest_read` POST must declare `body_schema`.** The first generator emitted a POST read with a
+   body and no schema; `connectorgen validate` refused it at bundle load. The engine compiles and
+   validates that schema before the request leaves, so an absent one is a real gap, not ceremony.
+2. **`rest_read` POST must declare `content_type: application/json`.** Caught by
+   `checkCLISurfaceOperationSafety` on the next run. Both were fixed in the generator and the bundle
+   regenerated from scratch, never patched by hand.

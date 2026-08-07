@@ -2,7 +2,7 @@
   "phase": "github-parity-sweep-r1",
   "program": "cli-top50-fixed-schema-sweep-r1",
   "connector": "github",
-  "state": "red",
+  "state": "green",
   "branch": "fm/cli-top50-sweep-resume2-r1 (cut at b1ceedc32, the tip of fm/cli-top50-sweep-continue-r1; same consolidated history)",
   "landing_order": "1 of 21 under the captain's largest-first reversal (2026-08-07)",
   "artifact": {
@@ -62,20 +62,22 @@
     "red_test": "cmd/connectorgen/github_documented_surface_test.go",
     "red_confirmed": true,
     "red_failure": "=== RUN   TestGitHubDocumentedRESTSurfaceIsComplete\n    github_documented_surface_test.go:138: POST /app/installations/{installation_id}/access_tokens: blocked row must carry a 'Named dependency:' marker\n    github_documented_surface_test.go:156: 4 synthetic path row(s) are not documented endpoints: PATCH /repos/{owner}/{repo}/issues/{issue_number} (close), PATCH /repos/{owner}/{repo}/issues/{issue_number} (reopen), PATCH /repos/{owner}/{repo}/pulls/{pull_number} (close), PATCH /repos/{owner}/{repo}/pulls/{pull_number} (reopen)\n    github_documented_surface_test.go:167: REST endpoints = 505, want 1220 documented operations\n    github_documented_surface_test.go:176: restByMethod = map[DELETE:72 GET:259 PATCH:36 POST:91 PUT:47], want map[DELETE:187 GET:636 PATCH:70 POST:193 PUT:134]\n    github_documented_surface_test.go:190: expected \"GET /orgs/{org}\" \u2014 the shipped bundle enumerated only /repos/{owner}/{repo}/\u2026\n    github_documented_surface_test.go:190: expected \"GET /user\" \u2014 the shipped bundle enumerated only /repos/{owner}/{repo}/\u2026\n    github_documented_surface_test.go:190: expected \"GET /enterprises/{enterprise}/copilot/billing/seats\" \u2014 the shipped bundle enumerated only /repos/{owner}/{repo}/\u2026\n    github_documented_surface_test.go:190: expected \"GET /app/hook/config\" \u2014 the shipped bundle enumerated only /repos/{owner}/{repo}/\u2026\n    github_documented_surface_test.go:190: expected \"POST /markdown\" \u2014 the shipped bundle enumerated only /repos/{owner}/{repo}/\u2026\n    github_documented_surface_test.go:190: expected \"GET /teams/{team_id}\" \u2014 the shipped bundle enumerated only /repos/{owner}/{repo}/\u2026\n--- FAIL: TestGitHubDocumentedRESTSurfaceIsComplete (0.00s)\nFAIL\nFAIL\tpolymetrics.ai/cmd/connectorgen\t0.525s\nFAIL",
-    "green": false,
+    "green": true,
     "pre_existing_github_tests": "YES - cmd/connectorgen/github_api_surface_test.go (TestGitHubAPISurfaceOperationLedgerMetrics) pins 509/440/69 with t.Fatalf. This is finding F5 in the flesh: ALWAYS run the whole cmd/connectorgen package. It still PASSES at slice 1 because the bundle is unmodified; it will need its expected COUNTS updated in slice 2, with every structural assertion kept.",
     "red_still_red_after_slice_2": "    github_documented_surface_test.go:157: 4 synthetic path row(s) are not documented endpoints: PATCH /repos/{owner}/{repo}/issues/{issue_number} (close), PATCH /repos/{owner}/{repo}/issues/{issue_number} (reopen), PATCH /repos/{owner}/{repo}/pulls/{pull_number} (close), PATCH /repos/{owner}/{repo}/pulls/{pull_number} (reopen)\n    github_documented_surface_test.go:168: REST endpoints = 882, want 1220 documented operations\n    github_documented_surface_test.go:177: restByMethod = map[DELETE:72 GET:636 PATCH:36 POST:91 PUT:47], want map[DELETE:187 GET:636 PATCH:70 POST:193 PUT:134]\n    github_documented_surface_test.go:198: expected \"POST /markdown\" - the shipped bundle enumerated only /repos/{owner}/{repo}/...",
     "spot_pin_correction": "the slice-1 spot-pin \"GET /enterprises/{enterprise}/copilot/billing/seats\" names an endpoint the artifact does not document at all (Copilot billing is org-scoped). With GET complete at 636/636 it could never pass, so it was REPLACED - not deleted - with the real \"GET /enterprises/{enterprise}/code-security/configurations\". Pin count unchanged, enterprise scope still guarded, substitution written into the test.",
-    "ledger_metrics_test": "counts updated 509->886 / 440->806 / 69->80 and GET 259->636; every structural assertion kept byte-for-byte"
+    "ledger_metrics_test": "counts updated 509->886 / 440->806 / 69->80 and GET 259->636; every structural assertion kept byte-for-byte",
+    "green_evidence": "ok  polymetrics.ai/cmd/connectorgen  11.290s - whole package, both github surface tests passing"
   },
   "slices": {
     "1_red_and_inventory": "done - committed and pushed",
-    "2_api_surface": "PARTIAL - the documented GET surface is complete (636/636) and committed; the non-GET rows are slice 3",
-    "3_streams_writes_operations": "todo",
-    "4_cli_surface_and_reachability": "todo",
-    "5_summary_and_verification": "todo"
+    "2_api_surface_gets": "done - all 636 documented GET operations enumerated (afa4a0fd4)",
+    "2b_covered_by_writes": "done - covered_by.writes added, 4 synthetic path rows folded away (60719bfbe)",
+    "3_mutations": "done - all 342 missing mutations enumerated; TestGitHubDocumentedRESTSurfaceIsComplete PASSES",
+    "4_cli_surface_and_reachability": "done - folded into slices 2 and 3; 1079 commands swept through the binary",
+    "5_summary_and_verification": "done - SUMMARY.md and VERIFICATION.md written"
   },
-  "next_action": "SLICE 3: the 342 missing non-GET operations (POST 102, PUT 87, DELETE 115, PATCH 38) as write actions, plus the 4 synthetic (close)/(reopen) rows. THE SYNTHETIC ROWS NEED A DECISION FIRST and it is recorded in PLAN.md: covered_by.write is a single string, so two of the three write actions on PATCH .../issues/{issue_number} cannot be referenced without either (a) adding a covered_by.writes ARRAY mirroring the existing direct_reads array, or (b) deleting shipped write actions. Do not delete shipped functionality inside a parity commit.",
+  "next_action": "github is COMPLETE. Next connector in the largest-first order is workday-rest (920). Shared generated artifacts (docs/cli, website, golden transcripts) are still deliberately NOT regenerated - that happens once at the end of the sweep, before the single consolidated PR.",
   "slice_2": {
     "rows_added": 377,
     "breakdown": {
@@ -108,5 +110,26 @@
       "paging_flags_authored": 0,
       "endpoint_ledger_delta": "none - plain direct reads are not operation-backed"
     }
+  },
+  "final_surface": {
+    "endpoints": 1224,
+    "rest": 1220,
+    "graphql": 4,
+    "covered": 1126,
+    "blocked": 98,
+    "excluded": 0,
+    "by_method": {
+      "GET": 636,
+      "POST": 193,
+      "PUT": 134,
+      "DELETE": 187,
+      "PATCH": 70
+    },
+    "cli_commands": 1147,
+    "implemented": 1042,
+    "partial": 37,
+    "write_actions": 553,
+    "operations": 345,
+    "endpoint_ledger": "github 162 -> 164, no other connector key changed"
   }
 }
