@@ -66,6 +66,12 @@ credential; the human-readable connection name is kept in `owner.json`, which is
 also asserted before every write. Connection names are validated at creation and
 ambiguous ones are refused rather than rewritten.
 
+A warehouse written by the earlier flat layout, in which every connection shared
+one table file, is refused on read and on write rather than migrated: which
+connection owned a flat table is unknowable, so guessing would recreate the data
+loss the nesting prevents. Delete the warehouse directory and re-run your syncs
+to rebuild it. `pm` never rewrites or deletes warehouse data on your behalf.
+
 ## Connector registry
 
 ```bash
