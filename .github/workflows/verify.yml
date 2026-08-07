@@ -119,58 +119,77 @@ jobs:
 
   # NOT a release path, and deliberately non-blocking. Embedding DuckDB makes the
   # release build a cgo build, and `.goreleaser.yaml` still produces every target
-  # from one Linux host — which worked at CGO_ENABLED=0 and cannot now. The
-  # cheapest fix that keeps the whole signed pipeline intact is a cross
-  # toolchain, and zig cc is the only one that plausibly covers all three
-  # operating systems. Whether it can actually link go-duckdb's prebuilt static
-  # libraries is a question no amount of reading settles, and it cannot be
-  # answered on a developer Mac. So it is asked here, once, and the answer
-  # decides the release orchestration instead of a guess doing it.
+  # from one Linux host — which worked at CGO_ENABLED=0 and cannot now.
+  #
+  # A first probe tried zig cc and failed on ALL five targets including
+  # linux/amd64, the runner's own architecture. That ruled out zig rather than
+  # cross-compiling: `libduckdb.a` is a C++ library, and the link needs a C++
+  # standard library ABI-compatible with an archive built by someone else's
+  # toolchain. zig supplies none such — hence `undefined symbol: typeinfo for
+  # std::bad_weak_ptr` and, on darwin, a missing libresolv.
+  #
+  # goreleaser-cross is the other free option and a genuinely different failure
+  # mode: real GCC cross toolchains with matching libstdc++ for linux, mingw-w64
+  # for windows, and osxcross (clang + macOS SDK + libc++) for darwin — exactly
+  # the thing that was missing. If this passes, the release stays on goreleaser
+  # OSS with a container. If it fails too, no free route remains.
   cross-toolchain-probe:
     name: cross-toolchain-probe (informational)
     runs-on: ubuntu-latest
     continue-on-error: true
+    container:
+      # Go 1.25.9 here vs the repo's pinned 1.25.12; GOTOOLCHAIN=auto fetches the
+      # pinned toolchain inside the container. The C toolchains are what is under
+      # test, and they are unaffected by which Go runs.
+      image: ghcr.io/goreleaser/goreleaser-cross:v1.25.9
+    env:
+      GOTOOLCHAIN: auto
     steps:
       - name: Checkout
         uses: actions/checkout@v7
         with:
           persist-credentials: false
 
-      - name: Set up Go
-        uses: actions/setup-go@v6
-        with:
-          go-version: '1.25.12'
-          cache: true
-
-      - name: Install zig
-        uses: mlugg/setup-zig@v2
-        with:
-          version: 0.14.0
+      - name: Show which cross compilers this image actually ships
+        shell: bash
+        run: |
+          set -uo pipefail
+          # Printed so a MISSING compiler is never mistaken for a link failure —
+          # the distinction that made the zig probe conclusive.
+          for cc in x86_64-linux-gnu-gcc aarch64-linux-gnu-gcc \
+                    x86_64-w64-mingw32-gcc o64-clang oa64-clang; do
+            printf '%-28s %s\n' "$cc" "$(command -v "$cc" || echo MISSING)"
+          done
+          go version
 
       - name: Probe each release target from this one Linux host
         shell: bash
         run: |
           set -uo pipefail
           probe() {
-            local goos=$1 goarch=$2 target=$3
-            echo "--- $goos/$goarch via zig cc -target $target"
-            if CGO_ENABLED=1 GOOS="$goos" GOARCH="$goarch" \
-               CC="zig cc -target $target" CXX="zig c++ -target $target" \
+            local goos=$1 goarch=$2 cc=$3 cxx=$4
+            echo "--- $goos/$goarch via $cc"
+            if ! command -v "$cc" >/dev/null; then
+              echo "RESULT $goos/$goarch: FAILED (compiler $cc not in image)"
+              return
+            fi
+            if CGO_ENABLED=1 GOOS="$goos" GOARCH="$goarch" CC="$cc" CXX="$cxx" \
                go build -o /dev/null ./cmd/pm 2>&1 | tail -20; then
               echo "RESULT $goos/$goarch: OK"
             else
               echo "RESULT $goos/$goarch: FAILED"
             fi
           }
-          probe linux   amd64 x86_64-linux-gnu
-          probe linux   arm64 aarch64-linux-gnu
-          probe windows amd64 x86_64-windows-gnu
-          probe darwin  amd64 x86_64-macos-none
-          probe darwin  arm64 aarch64-macos-none
+          probe linux   amd64 x86_64-linux-gnu-gcc   x86_64-linux-gnu-g++
+          probe linux   arm64 aarch64-linux-gnu-gcc  aarch64-linux-gnu-g++
+          probe windows amd64 x86_64-w64-mingw32-gcc x86_64-w64-mingw32-g++
+          probe darwin  amd64 o64-clang              o64-clang++
+          probe darwin  arm64 oa64-clang             oa64-clang++
           echo
           echo "Every RESULT line above is the input to the release-pipeline decision."
-          echo "All OK  -> add zig to the release job and keep goreleaser as it is."
-          echo "Any FAIL -> that target needs a native runner, and goreleaser OSS cannot"
-          echo "            assemble archives from prebuilt binaries (the prebuilt builder"
-          echo "            is Pro-only), so the choice is Pro, hand-rolled packaging, or"
-          echo "            a smaller published matrix."
+          echo "All OK  -> run goreleaser inside this image; the release stays on"
+          echo "           goreleaser OSS and the signed pipeline shape is unchanged."
+          echo "Any FAIL -> no free cross route remains. goreleaser OSS cannot assemble"
+          echo "           archives from prebuilt binaries (the prebuilt builder is"
+          echo "           Pro-only), so the remaining choice is a paid licence or a"
+          echo "           smaller published matrix."

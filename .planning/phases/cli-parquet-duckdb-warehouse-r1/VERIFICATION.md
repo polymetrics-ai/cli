@@ -157,9 +157,19 @@ line, libstdc++ symbols on the others. zig does not supply one compatible with a
 built by someone else's toolchain. No flag fixes that; it is the wrong tool for linking against a
 third-party C++ static library.
 
-**Per the captain's ruling — A if green, B if not — this selects B: GoReleaser Pro**, with a native
-build matrix feeding the `prebuilt` builder. That is a purchasing decision and is not this agent's
-to make; it is recorded here and raised.
+**That kills zig, not route A** — a distinction this record got wrong on the first pass and the
+captain corrected. A real GCC cross image ships precisely what was missing: matching libstdc++ for
+the linux targets, mingw-w64 for windows, and osxcross (clang + macOS SDK + libc++) for darwin. That
+is a different failure mode, so it is probed the same way before any money is spent.
+
+**Probe 2 — `ghcr.io/goreleaser/goreleaser-cross:v1.25.9`**, same five targets, same
+`RESULT <target>: OK|FAILED` format, still non-blocking. It additionally prints which cross
+compilers the image actually ships, so a *missing compiler* can never be mistaken for a *link
+failure* — the distinction that made probe 1 conclusive.
+
+If it passes, the release runs `goreleaser` inside that container and the signed pipeline shape is
+unchanged. If it fails too, no free cross route remains and B (a paid GoReleaser Pro licence) is
+settled — a purchasing decision that is not this agent's to make.
 
 Route C (hand-rolled archives and `nfpm`) was **ruled out by the captain**: it puts the risk on the
 signed and attested path, which is the worst place for it. That ruling stands regardless of the
