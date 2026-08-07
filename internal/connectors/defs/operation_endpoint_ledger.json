@@ -9439,7 +9439,176 @@
   "mailosaur": [],
   "mailtrap": [],
   "mantle": [],
-  "marketo": [],
+  "marketo": [
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/channel/byName.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/email/byName.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/email/{id}/content.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/email/{id}/dynamicContent/{contentId}.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/email/{id}/fullContent.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/emailTemplate/byName.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/emailTemplate/{id}/content",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/file/byName.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/folder/byName.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/form/byName.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/landingPage/byName.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/landingPage/{id}/content.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/landingPage/{id}/dynamicContent/{contentId}.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/landingPage/{id}/fullContent.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/landingPageTemplate/byName.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/landingPageTemplate/{id}/content.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/program/byName.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/smartCampaign/byName.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/smartList/byName.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/snippet/{id}/dynamicContent.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/staticList/byName.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/asset/v1/tagType/byName.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/companies/schema/fields/{fieldApiName}.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/leads/schema/fields/{fieldApiName}.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/lists/{listId}/leads/ismember.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/namedaccounts/schema/fields/{fieldApiName}.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/opportunities/schema/fields/{fieldApiName}.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/rest/v1/programs/members/schema/fields/{fieldApiName}.json",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    }
+  ],
   "marketstack": [],
   "mendeley": [],
   "mention": [],
