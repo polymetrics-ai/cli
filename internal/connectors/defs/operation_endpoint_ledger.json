@@ -1910,6 +1910,18 @@
       "path": "/repos/{owner}/{repo}/vulnerability-alerts",
       "kind": "rest_read",
       "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/orgs/{org}/attestations/bulk-list",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "POST",
+      "path": "/users/{username}/attestations/bulk-list",
+      "kind": "rest_read",
+      "max_bytes": 1048576
     }
   ],
   "gitlab": [],
