@@ -147,3 +147,80 @@ Full gate transcript:
   regeneration pass) — kept only `docs/connectors/dockerhub/{MANUAL.md,SKILL.md}`.
 
 See `RUN-STATE.json`'s `tdd.green`/`tdd.green_evidence` fields for the compact form.
+
+## Review-fix round — write-action request line and SCIM auth routing
+
+Automated review found the 26 new `writes.json` actions unreachable and the SCIM auth route
+base-URL-fragile. Both were confirmed against the real execution paths before any edit.
+
+### Red
+
+- **Write paths never substituted, and doubled the base path.** `engine.InterpolatePath`'s
+  `templatePattern` (`internal/connectors/engine/interpolate.go:54`) only expands `{{ … }}`, so the
+  single-brace `{namespace}` form copied from Docker Hub's API surface survived verbatim;
+  `path_fields` only *excludes* keys from the JSON body (`write.go:437`), it substitutes nothing.
+  Separately, the write path has no `normalizeDirectReadPathForBaseURL` equivalent — `joinURL`
+  (`write.go:268`) and `connsdk`'s `resolveURL` (`connsdk/http.go:371`) both concatenate — so the
+  `/v2`-prefixed action paths doubled against `base_url`'s own `/v2`.
+  Red evidence: resolving every action through the real `resolveWriteRequestLine` against the
+  disk-committed bundle produced e.g.
+  `POST https://hub.docker.com/v2/v2/namespaces/{namespace}/repositories` — a literal brace pair in
+  a doubled path, for all 26 actions.
+- **SCIM routing failed open.** `dualAuth.Apply` matched the absolute `req.URL.Path` against the
+  hardcoded `"/v2/scim/2.0/"`. That prefix only holds while `base_url`'s path is exactly `/v2` —
+  and `spec.json` advertises `base_url` as a self-hosted-proxy override. Under any other path the
+  match misses and the request silently falls through to the account session JWT, the exact
+  credential substitution the type exists to prevent. Red evidence: a request composed the way
+  `connsdk.resolveURL` composes one, from base `https://proxy.internal/dockerhub/api/v2` plus
+  `/scim/2.0/Users`, took the session-JWT branch.
+
+### Green
+
+- `writes.json`: all 26 paths rewritten to the base-relative `{{ record.<field> }}` form used by the
+  other 219 connectors with write actions, matching `streams.json`'s existing `/namespaces/…`
+  convention in this same bundle. Every referenced field was already declared in that action's
+  `record_schema` (and, where the API omits it from the body, in `path_fields`), so no schema
+  changed. Re-resolving through `resolveWriteRequestLine` now yields fully-substituted, single-`/v2`
+  URLs for all 26 — e.g. `PATCH https://hub.docker.com/v2/orgs/acme/access-tokens/t9`,
+  `DELETE https://hub.docker.com/v2/orgs/acme/groups/devs/members/bob`.
+- `hooks.go`: `dualAuth` now matches the base-relative `"/scim/2.0/"` segment pair anywhere in
+  `req.URL.EscapedPath()`, so any `base_url` path component keeps routing SCIM to
+  `scim_bearer_token`. Matching on the *escaped* path is what keeps the widened match safe:
+  `InterpolatePath` urlencodes every resolved segment, so a record value containing a literal
+  `/scim/2.0/` arrives percent-encoded and cannot steer a non-SCIM request onto the SCIM credential.
+  Widening also fails closed by construction — the dangerous direction is a SCIM route *missing* the
+  match. The fail-closed unconfigured-credential branch is unchanged.
+- `hooks_test.go`: 3 new tests — `TestAuthenticator_SCIMRoutingSurvivesBaseURLPathOverride` (16
+  subtests: 4 `base_url` values × 4 SCIM paths, composed the way `connsdk.resolveURL` composes them,
+  each asserting the SCIM token and zero login-endpoint hits),
+  `TestAuthenticator_SCIMRoutingFailsClosedUnderBaseURLPathOverride`, and
+  `TestAuthenticator_SCIMMatchIsWholeSegmentAndEscapeSafe` (look-alike `/orgs/myscim/2.0/groups`
+  and a percent-encoded `evil/scim/2.0/x` path segment both keep the session JWT).
+
+**`operations.json` deliberately keeps its `/v2` prefix.** The review's suggestion to strip it there
+too was tested and rejected on evidence: operation `rest.path` is the join key to
+`api_surface.json`'s provenance rows, which must stay at Docker Hub's real `/v2/…` paths. Stripping
+it produced `connectorgen surface-sync --check` → *"1 connector(s) out of sync … 23 field(s)
+divergent, runtime endpoint ledger drift=true"*, which after a sync would fail `validate`'s
+`cli_surface_unknown_target` rule and drop every dockerhub row from the operation endpoint ledger.
+Operation direct reads do not have the write path's defect: they route through
+`normalizeDirectReadPathForBaseURL` (`direct_read.go:507`), which strips `base_url`'s own path
+prefix before the request — the same reason `gong` and `notion` carry the prefix. The experiment was
+reverted; `operations.json` is unchanged.
+
+### Verification (scoped to the changed area)
+
+- `go build ./...` → clean; `gofmt -l internal/connectors/hooks/dockerhub` → clean.
+- `go test ./internal/connectors/hooks/dockerhub/...` → PASS (now 25 tests).
+- `go test ./internal/connectors/engine/...` → PASS.
+- `go test ./internal/connectors/commandrunner/...` → PASS, including
+  `TestEveryImplementedCommandPassesRuntimePreflight` across all 551 connectors.
+- `go test ./internal/connectors/conformance/...` → PASS.
+- `go test ./cmd/connectorgen/...` → PASS.
+- `go run ./cmd/connectorgen validate internal/connectors/defs/dockerhub` → 0 findings.
+- `go run ./cmd/connectorgen surface-sync --check` → 551 scanned, 0 corrections, no ledger drift.
+- `make docs-check` → `Validated connector docs in docs/connectors`.
+
+No generated artifact needed regeneration: `api_surface.json`, `operations.json`, `cli_surface.json`,
+`operation_endpoint_ledger.json`, the website catalogs and `docs/connectors/dockerhub/` all key off
+the `/v2`-prefixed documented paths, which did not change.

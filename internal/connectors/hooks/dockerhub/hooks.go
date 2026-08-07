@@ -132,14 +132,20 @@ func (h *Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig,
 	}, nil
 }
 
-// scimPathPrefix identifies every SCIM 2.0 endpoint documented under
-// bearerSCIMAuth (dockerhub's api_surface.json /v2/scim/2.0/** rows).
-const scimPathPrefix = "/v2/scim/2.0/"
+// scimPathSegments identifies every SCIM 2.0 endpoint documented under
+// bearerSCIMAuth (dockerhub's api_surface.json /v2/scim/2.0/** rows). It is
+// deliberately the base_url-RELATIVE segment pair rather than the absolute
+// "/v2/scim/2.0/" prefix: base_url is an operator-settable override (spec.json
+// advertises self-hosted proxies), so its path component is not necessarily
+// "/v2", and an absolute-prefix match would stop matching the moment it is not
+// — silently routing a SCIM request to the account session JWT, the exact
+// substitution this type exists to prevent.
+const scimPathSegments = "/scim/2.0/"
 
 // dualAuth routes each outgoing request to one of two independent
 // credentials by request path: the account session JWT (sessionLoginAuth)
 // for everything else, or a static SCIM-scoped bearer token for
-// /v2/scim/2.0/** requests. It never falls back from one credential to the
+// SCIM 2.0 requests. It never falls back from one credential to the
 // other — a SCIM request with no scimToken configured fails closed with a
 // named error rather than silently sending the account session JWT to an
 // endpoint Docker Hub documents as requiring a different credential.
@@ -148,10 +154,23 @@ type dualAuth struct {
 	scimToken string
 }
 
+// isSCIMRequest reports whether req addresses a Docker Hub SCIM 2.0 endpoint,
+// matching the "scim/2.0" segment pair anywhere in the path so any base_url
+// path component keeps routing correctly. The match runs on the ESCAPED path:
+// an interpolated path segment whose value happens to contain a literal
+// "/scim/2.0/" arrives percent-encoded (InterpolatePath urlencodes every
+// resolved segment), so a record value can never steer a non-SCIM request onto
+// the SCIM credential. Matching wider than necessary fails closed here — the
+// dangerous direction is a SCIM route missing the match and receiving the
+// account session JWT.
+func (a *dualAuth) isSCIMRequest(req *http.Request) bool {
+	return strings.Contains(req.URL.EscapedPath(), scimPathSegments)
+}
+
 func (a *dualAuth) Apply(ctx context.Context, req *http.Request) error {
-	if strings.HasPrefix(req.URL.Path, scimPathPrefix) {
+	if a.isSCIMRequest(req) {
 		if strings.TrimSpace(a.scimToken) == "" {
-			return errors.New("dockerhub auth: scim_bearer_token is required for /v2/scim/2.0/** commands")
+			return errors.New("dockerhub auth: scim_bearer_token is required for scim/2.0 commands")
 		}
 		req.Header.Set("Authorization", "Bearer "+a.scimToken)
 		return nil

@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"strings"
 	"sync/atomic"
 	"testing"
@@ -536,5 +537,120 @@ func TestAuthenticator_SCIMPathNeverFallsBackToSessionJWT(t *testing.T) {
 	}
 	if req.Header.Get("Authorization") != "" {
 		t.Fatalf("Authorization = %q, want empty (must not fall back to the cached session JWT)", req.Header.Get("Authorization"))
+	}
+}
+
+// composeRequestURL mirrors connsdk.Requester.resolveURL: the engine joins the
+// interpolated base_url with the bundle's base-RELATIVE path, so the absolute
+// path dualAuth sees carries whatever path component base_url happens to have.
+func composeRequestURL(baseURL, relPath string) string {
+	return strings.TrimRight(baseURL, "/") + "/" + strings.TrimLeft(relPath, "/")
+}
+
+// TestAuthenticator_SCIMRoutingSurvivesBaseURLPathOverride pins the routing
+// contract to the base_url-relative path rather than a hardcoded "/v2" prefix:
+// spec.json advertises base_url as an override for self-hosted proxies, and a
+// SCIM request that misses the match would silently receive the account
+// session JWT instead of the SCIM credential.
+func TestAuthenticator_SCIMRoutingSurvivesBaseURLPathOverride(t *testing.T) {
+	// The base-relative SCIM paths dockerhub's writes.json/operations.json
+	// declare, against base_url values with differing path components.
+	baseURLs := []string{
+		"https://hub.docker.com/v2",
+		"https://hub.docker.com/v2/",
+		"https://proxy.internal/dockerhub/api/v2",
+		"https://proxy.internal",
+	}
+	relPaths := []string{"/scim/2.0/Users", "/scim/2.0/Users/abc123", "/scim/2.0/Schemas", "/scim/2.0/ServiceProviderConfig"}
+
+	now := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
+	for _, baseURL := range baseURLs {
+		for _, relPath := range relPaths {
+			full := composeRequestURL(baseURL, relPath)
+			t.Run(full, func(t *testing.T) {
+				var loginHits int32
+				srv, client, _ := loginHTTPSServer(t, func(map[string]string) (int, map[string]any) {
+					atomic.AddInt32(&loginHits, 1)
+					return http.StatusOK, map[string]any{"token": fakeJWT(t, now, time.Hour)}
+				})
+
+				h := newTestHooks(func() time.Time { return now }, client)
+				auth, err := h.Authenticator(context.Background(), scimCfg(), baseSpec(srv.URL))
+				if err != nil {
+					t.Fatalf("Authenticator: %v", err)
+				}
+
+				req, err := http.NewRequest(http.MethodGet, full, nil)
+				if err != nil {
+					t.Fatalf("build request: %v", err)
+				}
+				if err := auth.Apply(context.Background(), req); err != nil {
+					t.Fatalf("Apply: %v", err)
+				}
+				if got := req.Header.Get("Authorization"); got != "Bearer fixture-scim-token" {
+					t.Fatalf("Authorization for %s = %q, want the SCIM bearer token, not the session JWT", full, got)
+				}
+				if atomic.LoadInt32(&loginHits) != 0 {
+					t.Fatalf("login endpoint hits = %d for %s, want 0", loginHits, full)
+				}
+			})
+		}
+	}
+}
+
+// TestAuthenticator_SCIMRoutingFailsClosedUnderBaseURLPathOverride proves the
+// fail-closed branch travels with the match: an unconfigured SCIM credential
+// must still error rather than fall through to the session JWT when base_url
+// carries a non-default path.
+func TestAuthenticator_SCIMRoutingFailsClosedUnderBaseURLPathOverride(t *testing.T) {
+	h := newClientHooks(nil)
+	auth, err := h.Authenticator(context.Background(), baseCfg(), baseSpec("https://example.invalid"))
+	if err != nil {
+		t.Fatalf("Authenticator: %v", err)
+	}
+
+	full := composeRequestURL("https://proxy.internal/dockerhub/api/v2", "/scim/2.0/Users")
+	req, err := http.NewRequest(http.MethodGet, full, nil)
+	if err != nil {
+		t.Fatalf("build request: %v", err)
+	}
+	if err := auth.Apply(context.Background(), req); err == nil {
+		t.Fatalf("Apply() error = nil for %s with no scim_bearer_token, want a fail-closed error", full)
+	}
+	if got := req.Header.Get("Authorization"); got != "" {
+		t.Fatalf("Authorization = %q, want empty (no fallback to the session JWT)", got)
+	}
+}
+
+// TestAuthenticator_SCIMMatchIsWholeSegmentAndEscapeSafe guards the widened
+// match from over-reaching: a look-alike literal segment and a record value
+// that merely contains "/scim/2.0/" (percent-encoded by InterpolatePath) must
+// both keep using the account session JWT.
+func TestAuthenticator_SCIMMatchIsWholeSegmentAndEscapeSafe(t *testing.T) {
+	nonSCIM := []string{
+		"/v2/orgs/myscim/2.0/groups",
+		"/v2/repositories/acme/" + url.PathEscape("evil/scim/2.0/x") + "/groups",
+		"/v2/orgs/acme/access-tokens",
+	}
+
+	now := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
+	wantToken := "Bearer " + fakeJWT(t, now, time.Hour)
+	for _, path := range nonSCIM {
+		t.Run(path, func(t *testing.T) {
+			srv, client, _ := loginHTTPSServer(t, func(map[string]string) (int, map[string]any) {
+				return http.StatusOK, map[string]any{"token": fakeJWT(t, now, time.Hour)}
+			})
+
+			h := newTestHooks(func() time.Time { return now }, client)
+			auth, err := h.Authenticator(context.Background(), scimCfg(), baseSpec(srv.URL))
+			if err != nil {
+				t.Fatalf("Authenticator: %v", err)
+			}
+
+			req := doAuthenticatedRequestToPath(t, auth, path)
+			if got := req.Header.Get("Authorization"); got != wantToken {
+				t.Fatalf("Authorization for %s = %q, want the session JWT (path is not a SCIM route)", path, got)
+			}
+		})
 	}
 }

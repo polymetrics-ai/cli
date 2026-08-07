@@ -4,7 +4,7 @@
       "name": "create_auth_token",
       "kind": "create",
       "method": "POST",
-      "path": "/v2/auth/token",
+      "path": "/auth/token",
       "record_schema": {
         "type": "object",
         "required": [
@@ -32,7 +32,7 @@
       "name": "create_user_login",
       "kind": "create",
       "method": "POST",
-      "path": "/v2/users/login",
+      "path": "/users/login",
       "record_schema": {
         "type": "object",
         "required": [
@@ -60,7 +60,7 @@
       "name": "create_2fa_login",
       "kind": "create",
       "method": "POST",
-      "path": "/v2/users/2fa-login",
+      "path": "/users/2fa-login",
       "record_schema": {
         "type": "object",
         "required": [
@@ -88,7 +88,7 @@
       "name": "create_repository",
       "kind": "create",
       "method": "POST",
-      "path": "/v2/namespaces/{namespace}/repositories",
+      "path": "/namespaces/{{ record.namespace }}/repositories",
       "record_schema": {
         "type": "object",
         "required": [
@@ -130,7 +130,7 @@
       "name": "update_repository_immutable_tags",
       "kind": "update",
       "method": "PATCH",
-      "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags",
+      "path": "/namespaces/{{ record.namespace }}/repositories/{{ record.repository }}/immutabletags",
       "record_schema": {
         "type": "object",
         "required": [
@@ -172,7 +172,7 @@
       "name": "assign_repository_group",
       "kind": "create",
       "method": "POST",
-      "path": "/v2/repositories/{namespace}/{repository}/groups",
+      "path": "/repositories/{{ record.namespace }}/{{ record.repository }}/groups",
       "record_schema": {
         "type": "object",
         "required": [
@@ -216,7 +216,7 @@
       "name": "create_access_token",
       "kind": "create",
       "method": "POST",
-      "path": "/v2/access-tokens",
+      "path": "/access-tokens",
       "record_schema": {
         "type": "object",
         "required": [
@@ -252,7 +252,7 @@
       "name": "update_access_token",
       "kind": "update",
       "method": "PATCH",
-      "path": "/v2/access-tokens/{uuid}",
+      "path": "/access-tokens/{{ record.uuid }}",
       "record_schema": {
         "type": "object",
         "required": [
@@ -286,7 +286,7 @@
       "name": "delete_access_token",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/v2/access-tokens/{uuid}",
+      "path": "/access-tokens/{{ record.uuid }}",
       "record_schema": {
         "type": "object",
         "required": [
@@ -317,7 +317,7 @@
       "name": "create_org_access_token",
       "kind": "create",
       "method": "POST",
-      "path": "/v2/orgs/{name}/access-tokens",
+      "path": "/orgs/{{ record.name }}/access-tokens",
       "record_schema": {
         "type": "object",
         "required": [
@@ -364,7 +364,7 @@
       "name": "update_org_access_token",
       "kind": "update",
       "method": "PATCH",
-      "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+      "path": "/orgs/{{ record.org_name }}/access-tokens/{{ record.access_token_id }}",
       "record_schema": {
         "type": "object",
         "required": [
@@ -415,7 +415,7 @@
       "name": "delete_org_access_token",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+      "path": "/orgs/{{ record.org_name }}/access-tokens/{{ record.access_token_id }}",
       "record_schema": {
         "type": "object",
         "required": [
@@ -452,7 +452,7 @@
       "name": "create_group",
       "kind": "create",
       "method": "POST",
-      "path": "/v2/orgs/{org_name}/groups",
+      "path": "/orgs/{{ record.org_name }}/groups",
       "record_schema": {
         "type": "object",
         "required": [
@@ -484,7 +484,7 @@
       "name": "replace_group",
       "kind": "update",
       "method": "PUT",
-      "path": "/v2/orgs/{org_name}/groups/{group_name}",
+      "path": "/orgs/{{ record.org_name }}/groups/{{ record.group_name }}",
       "record_schema": {
         "type": "object",
         "required": [
@@ -522,7 +522,7 @@
       "name": "update_group",
       "kind": "update",
       "method": "PATCH",
-      "path": "/v2/orgs/{org_name}/groups/{group_name}",
+      "path": "/orgs/{{ record.org_name }}/groups/{{ record.group_name }}",
       "record_schema": {
         "type": "object",
         "required": [
@@ -559,7 +559,7 @@
       "name": "delete_group",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/v2/orgs/{org_name}/groups/{group_name}",
+      "path": "/orgs/{{ record.org_name }}/groups/{{ record.group_name }}",
       "record_schema": {
         "type": "object",
         "required": [
@@ -596,7 +596,7 @@
       "name": "add_group_member",
       "kind": "create",
       "method": "POST",
-      "path": "/v2/orgs/{org_name}/groups/{group_name}/members",
+      "path": "/orgs/{{ record.org_name }}/groups/{{ record.group_name }}/members",
       "record_schema": {
         "type": "object",
         "required": [
@@ -630,7 +630,7 @@
       "name": "remove_group_member",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/v2/orgs/{org_name}/groups/{group_name}/members/{username}",
+      "path": "/orgs/{{ record.org_name }}/groups/{{ record.group_name }}/members/{{ record.username }}",
       "record_schema": {
         "type": "object",
         "required": [
@@ -673,7 +673,7 @@
       "name": "bulk_create_invites",
       "kind": "create",
       "method": "POST",
-      "path": "/v2/invites/bulk",
+      "path": "/invites/bulk",
       "record_schema": {
         "type": "object",
         "required": [
@@ -713,7 +713,7 @@
       "name": "cancel_invite",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/v2/invites/{id}",
+      "path": "/invites/{{ record.id }}",
       "record_schema": {
         "type": "object",
         "required": [
@@ -744,7 +744,7 @@
       "name": "resend_invite",
       "kind": "update",
       "method": "PATCH",
-      "path": "/v2/invites/{id}/resend",
+      "path": "/invites/{{ record.id }}/resend",
       "record_schema": {
         "type": "object",
         "required": [
@@ -768,7 +768,7 @@
       "name": "update_org_settings",
       "kind": "update",
       "method": "PUT",
-      "path": "/v2/orgs/{name}/settings",
+      "path": "/orgs/{{ record.name }}/settings",
       "record_schema": {
         "type": "object",
         "required": [
@@ -806,7 +806,7 @@
       "name": "update_org_member",
       "kind": "update",
       "method": "PUT",
-      "path": "/v2/orgs/{org_name}/members/{username}",
+      "path": "/orgs/{{ record.org_name }}/members/{{ record.username }}",
       "record_schema": {
         "type": "object",
         "required": [
@@ -845,7 +845,7 @@
       "name": "remove_org_member",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/v2/orgs/{org_name}/members/{username}",
+      "path": "/orgs/{{ record.org_name }}/members/{{ record.username }}",
       "record_schema": {
         "type": "object",
         "required": [
@@ -882,7 +882,7 @@
       "name": "create_scim_user",
       "kind": "create",
       "method": "POST",
-      "path": "/v2/scim/2.0/Users",
+      "path": "/scim/2.0/Users",
       "record_schema": {
         "type": "object",
         "required": [
@@ -924,7 +924,7 @@
       "name": "update_scim_user",
       "kind": "update",
       "method": "PUT",
-      "path": "/v2/scim/2.0/Users/{id}",
+      "path": "/scim/2.0/Users/{{ record.id }}",
       "record_schema": {
         "type": "object",
         "required": [
