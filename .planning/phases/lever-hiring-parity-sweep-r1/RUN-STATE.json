@@ -1,0 +1,50 @@
+{
+  "phase": "lever-hiring-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "lever-hiring",
+  "state": "planned",
+  "generated_from": "MASTER-PLAN.json",
+  "landing_order": 2,
+  "artifact": {
+    "url": "https://hire.lever.co/developer/documentation",
+    "kind": "html_reference",
+    "oas_version": null,
+    "retrieved_at": "2026-08-07",
+    "bytes": 1203890
+  },
+  "operations": {
+    "documented_total": 106,
+    "by_method": {
+      "GET": 55,
+      "POST": 26,
+      "PUT": 14,
+      "DELETE": 11
+    },
+    "read": 55,
+    "write": 51,
+    "deprecated": 2,
+    "ledger_total": 67,
+    "delta_vs_ledger": 39,
+    "ledger_verdict": "ledger_stale",
+    "webhook_events": 10
+  },
+  "hazards": {
+    "blocks_connectorgen_batch": false,
+    "path_collapse": false,
+    "nested_resources": false,
+    "spec_fragmented": false
+  },
+  "issues": {
+    "parent": 3223,
+    "generation": "new",
+    "children_verified": null
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/lever-hiring_api_surface_test.go",
+    "red_confirmed": false,
+    "red_failure": null,
+    "green": false,
+    "_note": "red_confirmed and red_failure MUST be filled from OBSERVED test output. Never pre-fill."
+  },
+  "next_action": "write the red test against the real bundle and watch it fail"
+}

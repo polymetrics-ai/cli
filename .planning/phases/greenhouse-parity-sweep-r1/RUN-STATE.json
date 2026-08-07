@@ -1,0 +1,51 @@
+{
+  "phase": "greenhouse-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "greenhouse",
+  "state": "planned",
+  "generated_from": "MASTER-PLAN.json",
+  "landing_order": 7,
+  "artifact": {
+    "url": "https://developers.greenhouse.io/harvest.html",
+    "kind": "html_reference",
+    "oas_version": null,
+    "retrieved_at": "2026-08-07",
+    "bytes": 1636662
+  },
+  "operations": {
+    "documented_total": 138,
+    "by_method": {
+      "GET": 69,
+      "POST": 28,
+      "PUT": 8,
+      "PATCH": 19,
+      "DELETE": 14
+    },
+    "read": 69,
+    "write": 69,
+    "deprecated": 3,
+    "ledger_total": 138,
+    "delta_vs_ledger": 0,
+    "ledger_verdict": "reconciles_exactly",
+    "webhook_events": 0
+  },
+  "hazards": {
+    "blocks_connectorgen_batch": false,
+    "path_collapse": false,
+    "nested_resources": false,
+    "spec_fragmented": false
+  },
+  "issues": {
+    "parent": 3199,
+    "generation": "new",
+    "children_verified": null
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/greenhouse_api_surface_test.go",
+    "red_confirmed": false,
+    "red_failure": null,
+    "green": false,
+    "_note": "red_confirmed and red_failure MUST be filled from OBSERVED test output. Never pre-fill."
+  },
+  "next_action": "write the red test against the real bundle and watch it fail"
+}

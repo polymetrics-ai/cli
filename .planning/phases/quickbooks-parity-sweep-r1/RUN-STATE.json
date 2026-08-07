@@ -1,0 +1,45 @@
+{
+  "phase": "quickbooks-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "quickbooks",
+  "state": "planned",
+  "generated_from": "MASTER-PLAN.json",
+  "landing_order": 29,
+  "artifact": {
+    "url": "same base path, expanded to all 74 sibling pages under .../api/accounting/all-entities/<entity-slug> (the page's own left-nav enumerates them; see derivation_note)",
+    "kind": "html_reference",
+    "oas_version": null,
+    "retrieved_at": "2026-08-07",
+    "bytes": 1806305
+  },
+  "operations": {
+    "documented_total": 198,
+    "by_method": null,
+    "read": 122,
+    "write": 76,
+    "deprecated": null,
+    "ledger_total": null,
+    "delta_vs_ledger": null,
+    "ledger_verdict": "undetermined",
+    "webhook_events": null
+  },
+  "hazards": {
+    "blocks_connectorgen_batch": false,
+    "path_collapse": true,
+    "nested_resources": false,
+    "spec_fragmented": false
+  },
+  "issues": {
+    "parent": 3094,
+    "generation": "new",
+    "children_verified": null
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/quickbooks_api_surface_test.go",
+    "red_confirmed": false,
+    "red_failure": null,
+    "green": false,
+    "_note": "red_confirmed and red_failure MUST be filled from OBSERVED test output. Never pre-fill."
+  },
+  "next_action": "write the red test against the real bundle and watch it fail"
+}

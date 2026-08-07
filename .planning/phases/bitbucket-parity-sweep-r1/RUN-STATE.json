@@ -1,0 +1,50 @@
+{
+  "phase": "bitbucket-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "bitbucket",
+  "state": "planned",
+  "generated_from": "MASTER-PLAN.json",
+  "landing_order": 21,
+  "artifact": {
+    "url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+    "kind": "openapi",
+    "oas_version": "3.0.0",
+    "retrieved_at": "2026-08-07",
+    "bytes": 1485564
+  },
+  "operations": {
+    "documented_total": 331,
+    "by_method": {
+      "DELETE": 54,
+      "PUT": 48,
+      "GET": 179,
+      "POST": 50
+    },
+    "read": 181,
+    "write": 150,
+    "deprecated": 52,
+    "ledger_total": 331,
+    "delta_vs_ledger": 0,
+    "ledger_verdict": "reconciles_exactly",
+    "webhook_events": 0
+  },
+  "hazards": {
+    "blocks_connectorgen_batch": false,
+    "path_collapse": false,
+    "nested_resources": false,
+    "spec_fragmented": false
+  },
+  "issues": {
+    "parent": 79,
+    "generation": "old",
+    "children_verified": null
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/bitbucket_api_surface_test.go",
+    "red_confirmed": false,
+    "red_failure": null,
+    "green": false,
+    "_note": "red_confirmed and red_failure MUST be filled from OBSERVED test output. Never pre-fill."
+  },
+  "next_action": "write the red test against the real bundle and watch it fail"
+}

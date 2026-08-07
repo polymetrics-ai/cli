@@ -1,0 +1,49 @@
+{
+  "phase": "google-ads-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "google-ads",
+  "state": "planned",
+  "generated_from": "MASTER-PLAN.json",
+  "landing_order": 10,
+  "artifact": {
+    "url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+    "kind": "google_discovery",
+    "oas_version": "discovery (discoveryVersion=v1)",
+    "retrieved_at": "2026-08-07",
+    "bytes": 2936865
+  },
+  "operations": {
+    "documented_total": 163,
+    "by_method": {
+      "POST": 151,
+      "GET": 11,
+      "DELETE": 1
+    },
+    "read": 45,
+    "write": 118,
+    "deprecated": 0,
+    "ledger_total": 163,
+    "delta_vs_ledger": 0,
+    "ledger_verdict": "reconciles_exactly",
+    "webhook_events": 0
+  },
+  "hazards": {
+    "blocks_connectorgen_batch": false,
+    "path_collapse": true,
+    "nested_resources": true,
+    "spec_fragmented": false
+  },
+  "issues": {
+    "parent": 3021,
+    "generation": "new",
+    "children_verified": null
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/google-ads_api_surface_test.go",
+    "red_confirmed": false,
+    "red_failure": null,
+    "green": false,
+    "_note": "red_confirmed and red_failure MUST be filled from OBSERVED test output. Never pre-fill."
+  },
+  "next_action": "write the red test against the real bundle and watch it fail"
+}

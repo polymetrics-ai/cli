@@ -1,0 +1,54 @@
+{
+  "phase": "square-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "square",
+  "state": "planned",
+  "generated_from": "MASTER-PLAN.json",
+  "landing_order": 22,
+  "artifact": {
+    "url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json",
+    "kind": "openapi",
+    "oas_version": "3.0.0",
+    "retrieved_at": "2026-08-07",
+    "bytes": 3269568
+  },
+  "operations": {
+    "documented_total": 334,
+    "by_method": {
+      "DELETE": 27,
+      "OPTIONS": 0,
+      "POST": 150,
+      "HEAD": 0,
+      "TRACE": 0,
+      "PATCH": 0,
+      "PUT": 36,
+      "GET": 121
+    },
+    "read": 158,
+    "write": 176,
+    "deprecated": 26,
+    "ledger_total": 334,
+    "delta_vs_ledger": 0,
+    "ledger_verdict": "reconciles_exactly",
+    "webhook_events": 0
+  },
+  "hazards": {
+    "blocks_connectorgen_batch": false,
+    "path_collapse": false,
+    "nested_resources": false,
+    "spec_fragmented": false
+  },
+  "issues": {
+    "parent": 3191,
+    "generation": "new",
+    "children_verified": null
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/square_api_surface_test.go",
+    "red_confirmed": false,
+    "red_failure": null,
+    "green": false,
+    "_note": "red_confirmed and red_failure MUST be filled from OBSERVED test output. Never pre-fill."
+  },
+  "next_action": "write the red test against the real bundle and watch it fail"
+}

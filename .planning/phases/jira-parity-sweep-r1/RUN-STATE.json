@@ -1,0 +1,54 @@
+{
+  "phase": "jira-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "jira",
+  "state": "planned",
+  "generated_from": "MASTER-PLAN.json",
+  "landing_order": 25,
+  "artifact": {
+    "url": "https://dac-static.atlassian.com/cloud/jira/platform/swagger-v3.v3.json?_v=1.8516.72",
+    "kind": "openapi",
+    "oas_version": "3.0.1",
+    "retrieved_at": "2026-08-07",
+    "bytes": 2445625
+  },
+  "operations": {
+    "documented_total": 616,
+    "by_method": {
+      "GET": 275,
+      "PUT": 118,
+      "POST": 134,
+      "DELETE": 89,
+      "PATCH": 0,
+      "HEAD": 0,
+      "OPTIONS": 0,
+      "TRACE": 0
+    },
+    "read": 299,
+    "write": 317,
+    "deprecated": 29,
+    "ledger_total": 616,
+    "delta_vs_ledger": 0,
+    "ledger_verdict": "reconciles_exactly",
+    "webhook_events": 0
+  },
+  "hazards": {
+    "blocks_connectorgen_batch": false,
+    "path_collapse": false,
+    "nested_resources": false,
+    "spec_fragmented": false
+  },
+  "issues": {
+    "parent": 81,
+    "generation": "old",
+    "children_verified": null
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/jira_api_surface_test.go",
+    "red_confirmed": false,
+    "red_failure": null,
+    "green": false,
+    "_note": "red_confirmed and red_failure MUST be filled from OBSERVED test output. Never pre-fill."
+  },
+  "next_action": "write the red test against the real bundle and watch it fail"
+}

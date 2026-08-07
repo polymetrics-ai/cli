@@ -1,0 +1,51 @@
+{
+  "phase": "front-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "front",
+  "state": "planned",
+  "generated_from": "MASTER-PLAN.json",
+  "landing_order": 15,
+  "artifact": {
+    "url": "https://raw.githubusercontent.com/frontapp/front-api-specs/main/core-api/core-api.json",
+    "kind": "openapi",
+    "oas_version": "3.0.0",
+    "retrieved_at": "2026-08-07",
+    "bytes": 500400
+  },
+  "operations": {
+    "documented_total": 244,
+    "by_method": {
+      "GET": 123,
+      "POST": 70,
+      "PATCH": 23,
+      "DELETE": 27,
+      "PUT": 1
+    },
+    "read": 123,
+    "write": 121,
+    "deprecated": 11,
+    "ledger_total": 255,
+    "delta_vs_ledger": -11,
+    "ledger_verdict": "ledger_stale",
+    "webhook_events": 0
+  },
+  "hazards": {
+    "blocks_connectorgen_batch": false,
+    "path_collapse": false,
+    "nested_resources": false,
+    "spec_fragmented": true
+  },
+  "issues": {
+    "parent": 188,
+    "generation": "old",
+    "children_verified": null
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/front_api_surface_test.go",
+    "red_confirmed": false,
+    "red_failure": null,
+    "green": false,
+    "_note": "red_confirmed and red_failure MUST be filled from OBSERVED test output. Never pre-fill."
+  },
+  "next_action": "write the red test against the real bundle and watch it fail"
+}

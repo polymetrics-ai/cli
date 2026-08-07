@@ -1,0 +1,51 @@
+{
+  "phase": "help-scout-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "help-scout",
+  "state": "planned",
+  "generated_from": "MASTER-PLAN.json",
+  "landing_order": 9,
+  "artifact": {
+    "url": "https://developer.helpscout.com/mailbox-api/endpoints/",
+    "kind": "html_reference",
+    "oas_version": "n/a (no machine-readable spec found)",
+    "retrieved_at": "2026-08-07",
+    "bytes": 60307
+  },
+  "operations": {
+    "documented_total": 145,
+    "by_method": {
+      "POST": 21,
+      "DELETE": 19,
+      "GET": 79,
+      "PUT": 20,
+      "PATCH": 6
+    },
+    "read": 79,
+    "write": 66,
+    "deprecated": 0,
+    "ledger_total": 146,
+    "delta_vs_ledger": -1,
+    "ledger_verdict": "ledger_correct_when_taken",
+    "webhook_events": 26
+  },
+  "hazards": {
+    "blocks_connectorgen_batch": false,
+    "path_collapse": true,
+    "nested_resources": false,
+    "spec_fragmented": false
+  },
+  "issues": {
+    "parent": 212,
+    "generation": "old",
+    "children_verified": null
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/help-scout_api_surface_test.go",
+    "red_confirmed": false,
+    "red_failure": null,
+    "green": false,
+    "_note": "red_confirmed and red_failure MUST be filled from OBSERVED test output. Never pre-fill."
+  },
+  "next_action": "write the red test against the real bundle and watch it fail"
+}

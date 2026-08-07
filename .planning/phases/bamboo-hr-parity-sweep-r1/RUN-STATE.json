@@ -1,0 +1,51 @@
+{
+  "phase": "bamboo-hr-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "bamboo-hr",
+  "state": "planned",
+  "generated_from": "MASTER-PLAN.json",
+  "landing_order": 18,
+  "artifact": {
+    "url": "https://dash.readme.com/api/v1/api-registry/fdj6s2umsezc7dn (bamboohr-api-1.yaml, OpenAPI 3.1.0) \u2014 the live spec backing documentation.bamboohr.com/reference/*",
+    "kind": "openapi",
+    "oas_version": "3.1.0",
+    "retrieved_at": "2026-08-07",
+    "bytes": 992202
+  },
+  "operations": {
+    "documented_total": 311,
+    "by_method": {
+      "GET": 148,
+      "POST": 77,
+      "PUT": 45,
+      "DELETE": 31,
+      "PATCH": 10
+    },
+    "read": 154,
+    "write": 157,
+    "deprecated": 17,
+    "ledger_total": 311,
+    "delta_vs_ledger": 0,
+    "ledger_verdict": "reconciles_exactly",
+    "webhook_events": 6
+  },
+  "hazards": {
+    "blocks_connectorgen_batch": true,
+    "path_collapse": false,
+    "nested_resources": false,
+    "spec_fragmented": false
+  },
+  "issues": {
+    "parent": 3215,
+    "generation": "new",
+    "children_verified": null
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/bamboo-hr_api_surface_test.go",
+    "red_confirmed": false,
+    "red_failure": null,
+    "green": false,
+    "_note": "red_confirmed and red_failure MUST be filled from OBSERVED test output. Never pre-fill."
+  },
+  "next_action": "write the red test against the real bundle and watch it fail"
+}

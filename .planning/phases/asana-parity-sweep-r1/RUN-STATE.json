@@ -1,0 +1,50 @@
+{
+  "phase": "asana-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "asana",
+  "state": "planned",
+  "generated_from": "MASTER-PLAN.json",
+  "landing_order": 14,
+  "artifact": {
+    "url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
+    "kind": "openapi",
+    "oas_version": "3.0.0",
+    "retrieved_at": "2026-08-07",
+    "bytes": 3066750
+  },
+  "operations": {
+    "documented_total": 249,
+    "by_method": {
+      "GET": 119,
+      "POST": 81,
+      "PUT": 26,
+      "DELETE": 23
+    },
+    "read": 119,
+    "write": 130,
+    "deprecated": 0,
+    "ledger_total": 249,
+    "delta_vs_ledger": 0,
+    "ledger_verdict": "reconciles_exactly",
+    "webhook_events": 0
+  },
+  "hazards": {
+    "blocks_connectorgen_batch": false,
+    "path_collapse": false,
+    "nested_resources": false,
+    "spec_fragmented": false
+  },
+  "issues": {
+    "parent": 380,
+    "generation": "old",
+    "children_verified": null
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/asana_api_surface_test.go",
+    "red_confirmed": false,
+    "red_failure": null,
+    "green": false,
+    "_note": "red_confirmed and red_failure MUST be filled from OBSERVED test output. Never pre-fill."
+  },
+  "next_action": "write the red test against the real bundle and watch it fail"
+}

@@ -1,0 +1,50 @@
+{
+  "phase": "gorgias-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "gorgias",
+  "state": "planned",
+  "generated_from": "MASTER-PLAN.json",
+  "landing_order": 6,
+  "artifact": {
+    "url": "https://dash.readme.com/api/v1/api-registry/1qfhqbgmshn434r (gorgias-rest-api.json, OpenAPI 3.1.0, bound to the STABLE ReadMe docs version 1.5.1)",
+    "kind": "openapi",
+    "oas_version": "3.1.0",
+    "retrieved_at": "2026-08-07",
+    "bytes": 852105
+  },
+  "operations": {
+    "documented_total": 114,
+    "by_method": {
+      "GET": 46,
+      "POST": 23,
+      "PUT": 27,
+      "DELETE": 18
+    },
+    "read": 50,
+    "write": 64,
+    "deprecated": 1,
+    "ledger_total": 114,
+    "delta_vs_ledger": 0,
+    "ledger_verdict": "reconciles_exactly",
+    "webhook_events": 0
+  },
+  "hazards": {
+    "blocks_connectorgen_batch": false,
+    "path_collapse": false,
+    "nested_resources": false,
+    "spec_fragmented": false
+  },
+  "issues": {
+    "parent": 196,
+    "generation": "old",
+    "children_verified": null
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/gorgias_api_surface_test.go",
+    "red_confirmed": false,
+    "red_failure": null,
+    "green": false,
+    "_note": "red_confirmed and red_failure MUST be filled from OBSERVED test output. Never pre-fill."
+  },
+  "next_action": "write the red test against the real bundle and watch it fail"
+}

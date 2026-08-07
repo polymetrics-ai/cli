@@ -1,0 +1,51 @@
+{
+  "phase": "mixpanel-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "mixpanel",
+  "state": "planned",
+  "generated_from": "MASTER-PLAN.json",
+  "landing_order": 5,
+  "artifact": {
+    "url": "https://docs.mixpanel.com/openapi/{annotations,data-pipelines,experiments,export,feature-flags-management,feature-flags,gdpr,identity,ingestion,lexicon-schemas,query,service-accounts,warehouse-connectors}.openapi.yaml (13 real OpenAPI files, discovered via the Mintlify nav JSON embedded in the recorded overview page)",
+    "kind": "openapi",
+    "oas_version": "mixed: 3.0.2 x9 files, 3.0.3 x1 (query.yaml), 3.1.0 x3 (experiments.yaml, feature-flags-management.yaml, feature-flags.yaml)",
+    "retrieved_at": "2026-08-07",
+    "bytes": 392835
+  },
+  "operations": {
+    "documented_total": 104,
+    "by_method": {
+      "GET": 41,
+      "POST": 44,
+      "PUT": 5,
+      "PATCH": 4,
+      "DELETE": 10
+    },
+    "read": 44,
+    "write": 60,
+    "deprecated": 0,
+    "ledger_total": 105,
+    "delta_vs_ledger": -1,
+    "ledger_verdict": "ledger_correct_when_taken",
+    "webhook_events": 0
+  },
+  "hazards": {
+    "blocks_connectorgen_batch": false,
+    "path_collapse": true,
+    "nested_resources": false,
+    "spec_fragmented": false
+  },
+  "issues": {
+    "parent": 3158,
+    "generation": "new",
+    "children_verified": null
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/mixpanel_api_surface_test.go",
+    "red_confirmed": false,
+    "red_failure": null,
+    "green": false,
+    "_note": "red_confirmed and red_failure MUST be filled from OBSERVED test output. Never pre-fill."
+  },
+  "next_action": "write the red test against the real bundle and watch it fail"
+}

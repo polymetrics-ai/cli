@@ -1,0 +1,54 @@
+{
+  "phase": "chargebee-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "chargebee",
+  "state": "planned",
+  "generated_from": "MASTER-PLAN.json",
+  "landing_order": 23,
+  "artifact": {
+    "url": "https://raw.githubusercontent.com/chargebee/openapi/main/spec/chargebee_api_v2_pc_v2_spec.json",
+    "kind": "openapi",
+    "oas_version": "3.1.0",
+    "retrieved_at": "2026-08-07",
+    "bytes": 14552466
+  },
+  "operations": {
+    "documented_total": 438,
+    "by_method": {
+      "DELETE": 0,
+      "TRACE": 0,
+      "OPTIONS": 0,
+      "PUT": 0,
+      "PATCH": 0,
+      "HEAD": 0,
+      "GET": 135,
+      "POST": 303
+    },
+    "read": 171,
+    "write": 267,
+    "deprecated": 0,
+    "ledger_total": 438,
+    "delta_vs_ledger": 0,
+    "ledger_verdict": "reconciles_exactly",
+    "webhook_events": 227
+  },
+  "hazards": {
+    "blocks_connectorgen_batch": true,
+    "path_collapse": false,
+    "nested_resources": false,
+    "spec_fragmented": false
+  },
+  "issues": {
+    "parent": 3175,
+    "generation": "new",
+    "children_verified": null
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/chargebee_api_surface_test.go",
+    "red_confirmed": false,
+    "red_failure": null,
+    "green": false,
+    "_note": "red_confirmed and red_failure MUST be filled from OBSERVED test output. Never pre-fill."
+  },
+  "next_action": "write the red test against the real bundle and watch it fail"
+}

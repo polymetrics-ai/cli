@@ -1,0 +1,54 @@
+{
+  "phase": "github-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "github",
+  "state": "planned",
+  "generated_from": "MASTER-PLAN.json",
+  "landing_order": 27,
+  "artifact": {
+    "url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+    "kind": "openapi",
+    "oas_version": "3.0.3",
+    "retrieved_at": "2026-08-07",
+    "bytes": 12920264
+  },
+  "operations": {
+    "documented_total": 1220,
+    "by_method": {
+      "GET": 636,
+      "PUT": 134,
+      "POST": 193,
+      "DELETE": 187,
+      "PATCH": 70,
+      "HEAD": 0,
+      "OPTIONS": 0,
+      "TRACE": 0
+    },
+    "read": 641,
+    "write": 579,
+    "deprecated": 37,
+    "ledger_total": 1220,
+    "delta_vs_ledger": 0,
+    "ledger_verdict": "reconciles_exactly",
+    "webhook_events": 270
+  },
+  "hazards": {
+    "blocks_connectorgen_batch": false,
+    "path_collapse": false,
+    "nested_resources": false,
+    "spec_fragmented": false
+  },
+  "issues": {
+    "parent": 2989,
+    "generation": "new",
+    "children_verified": null
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/github_api_surface_test.go",
+    "red_confirmed": false,
+    "red_failure": null,
+    "green": false,
+    "_note": "red_confirmed and red_failure MUST be filled from OBSERVED test output. Never pre-fill."
+  },
+  "next_action": "write the red test against the real bundle and watch it fail"
+}

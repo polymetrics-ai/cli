@@ -1,0 +1,45 @@
+{
+  "phase": "linear-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "linear",
+  "state": "planned",
+  "generated_from": "MASTER-PLAN.json",
+  "landing_order": 28,
+  "artifact": {
+    "url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+    "kind": "graphql_sdl",
+    "oas_version": null,
+    "retrieved_at": "2026-08-07",
+    "bytes": 1270042
+  },
+  "operations": {
+    "documented_total": 538,
+    "by_method": null,
+    "read": 165,
+    "write": 373,
+    "deprecated": 17,
+    "ledger_total": null,
+    "delta_vs_ledger": null,
+    "ledger_verdict": "undetermined",
+    "webhook_events": 22
+  },
+  "hazards": {
+    "blocks_connectorgen_batch": false,
+    "path_collapse": true,
+    "nested_resources": false,
+    "spec_fragmented": false
+  },
+  "issues": {
+    "parent": 80,
+    "generation": "old",
+    "children_verified": null
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/linear_api_surface_test.go",
+    "red_confirmed": false,
+    "red_failure": null,
+    "green": false,
+    "_note": "red_confirmed and red_failure MUST be filled from OBSERVED test output. Never pre-fill."
+  },
+  "next_action": "write the red test against the real bundle and watch it fail"
+}

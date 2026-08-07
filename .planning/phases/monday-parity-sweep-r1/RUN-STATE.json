@@ -1,0 +1,45 @@
+{
+  "phase": "monday-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "monday",
+  "state": "planned",
+  "generated_from": "MASTER-PLAN.json",
+  "landing_order": 17,
+  "artifact": {
+    "url": "https://api.monday.com/v2/get_schema?format=sdl",
+    "kind": "graphql_sdl",
+    "oas_version": null,
+    "retrieved_at": "2026-08-07",
+    "bytes": 542501
+  },
+  "operations": {
+    "documented_total": 292,
+    "by_method": null,
+    "read": 96,
+    "write": 196,
+    "deprecated": 2,
+    "ledger_total": 280,
+    "delta_vs_ledger": 12,
+    "ledger_verdict": "ledger_stale",
+    "webhook_events": 21
+  },
+  "hazards": {
+    "blocks_connectorgen_batch": false,
+    "path_collapse": true,
+    "nested_resources": false,
+    "spec_fragmented": false
+  },
+  "issues": {
+    "parent": 82,
+    "generation": "old",
+    "children_verified": null
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/monday_api_surface_test.go",
+    "red_confirmed": false,
+    "red_failure": null,
+    "green": false,
+    "_note": "red_confirmed and red_failure MUST be filled from OBSERVED test output. Never pre-fill."
+  },
+  "next_action": "write the red test against the real bundle and watch it fail"
+}

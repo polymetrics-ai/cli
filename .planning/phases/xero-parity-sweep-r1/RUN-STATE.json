@@ -1,0 +1,50 @@
+{
+  "phase": "xero-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "xero",
+  "state": "planned",
+  "generated_from": "MASTER-PLAN.json",
+  "landing_order": 13,
+  "artifact": {
+    "url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+    "kind": "openapi",
+    "oas_version": "3.0.0",
+    "retrieved_at": "2026-08-07",
+    "bytes": 927540
+  },
+  "operations": {
+    "documented_total": 235,
+    "by_method": {
+      "GET": 126,
+      "PUT": 53,
+      "POST": 46,
+      "DELETE": 10
+    },
+    "read": 126,
+    "write": 109,
+    "deprecated": 0,
+    "ledger_total": 235,
+    "delta_vs_ledger": 0,
+    "ledger_verdict": "reconciles_exactly",
+    "webhook_events": 0
+  },
+  "hazards": {
+    "blocks_connectorgen_batch": false,
+    "path_collapse": false,
+    "nested_resources": false,
+    "spec_fragmented": false
+  },
+  "issues": {
+    "parent": 3102,
+    "generation": "new",
+    "children_verified": null
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/xero_api_surface_test.go",
+    "red_confirmed": false,
+    "red_failure": null,
+    "green": false,
+    "_note": "red_confirmed and red_failure MUST be filled from OBSERVED test output. Never pre-fill."
+  },
+  "next_action": "write the red test against the real bundle and watch it fail"
+}

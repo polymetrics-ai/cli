@@ -1,0 +1,49 @@
+{
+  "phase": "twilio-parity-sweep-r1",
+  "program": "cli-top50-fixed-schema-sweep-r1",
+  "connector": "twilio",
+  "state": "planned",
+  "generated_from": "MASTER-PLAN.json",
+  "landing_order": 12,
+  "artifact": {
+    "url": "https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json",
+    "kind": "openapi",
+    "oas_version": "3.0.1",
+    "retrieved_at": "2026-08-07",
+    "bytes": 1869905
+  },
+  "operations": {
+    "documented_total": 197,
+    "by_method": {
+      "GET": 103,
+      "POST": 62,
+      "DELETE": 32
+    },
+    "read": 103,
+    "write": 94,
+    "deprecated": 0,
+    "ledger_total": 197,
+    "delta_vs_ledger": 0,
+    "ledger_verdict": "reconciles_exactly",
+    "webhook_events": 0
+  },
+  "hazards": {
+    "blocks_connectorgen_batch": false,
+    "path_collapse": false,
+    "nested_resources": false,
+    "spec_fragmented": false
+  },
+  "issues": {
+    "parent": 3167,
+    "generation": "new",
+    "children_verified": null
+  },
+  "tdd": {
+    "red_test": "cmd/connectorgen/twilio_api_surface_test.go",
+    "red_confirmed": false,
+    "red_failure": null,
+    "green": false,
+    "_note": "red_confirmed and red_failure MUST be filled from OBSERVED test output. Never pre-fill."
+  },
+  "next_action": "write the red test against the real bundle and watch it fail"
+}
