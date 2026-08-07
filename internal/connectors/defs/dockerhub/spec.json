@@ -27,6 +27,16 @@
       "type": "integer",
       "default": 100,
       "description": "Page size (1-100) for the initial request of each paginated stream (Docker Hub's page_size query param); subsequent pages follow the API's own absolute next URL verbatim."
+    },
+    "docker_pat": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Docker Hub Personal Access Token for docker_username. Optional: omitted, the connector stays read-only-public exactly as before (streams.json falls back to unauthenticated requests). When set, it authenticates every account-scoped, organization, group/team, invite, access-token, audit-log, and repository-write command by exchanging it for a short-lived session bearer token via Docker Hub's own POST /v2/users/login (never sent or logged as a static bearer value itself). Never printed, logged, or echoed by any command."
+    },
+    "scim_bearer_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "A Docker Hub Enterprise SCIM API bearer token, distinct from docker_pat. Docker Hub's OpenAPI document declares SCIM (/v2/scim/2.0/**) under a separate bearerSCIMAuth security scheme from the rest of the API's bearerAuth; the two credentials are never interchangeable. Required only for the scim-users/scim-schemas/scim-resource-types commands; every other command is unaffected if this is omitted. Never printed, logged, or echoed by any command."
     }
   }
 }

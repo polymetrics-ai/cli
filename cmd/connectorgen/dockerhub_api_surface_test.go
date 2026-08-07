@@ -190,17 +190,24 @@ func TestDockerhubAPISurfaceOperationLedger(t *testing.T) {
 		}
 	}
 
-	// Target disposition counts once the phase is GREEN: 4 pre-existing
-	// streams + 35 newly implemented (rest_read/write) = 39 covered; 15
-	// blocked-with-named-dependency (3 structurally-unexecutable HEAD rows,
-	// 3 auth-exchange rows consumed internally by the new dockerhub
-	// AuthHook, 9 SCIM rows pending a second SCIM-scoped credential).
-	const wantCovered = 39
-	const wantBlocked = 15
+	// Target disposition counts once the phase is GREEN: all 54 documented
+	// operations are covered_by a stream, direct read, or write action.
+	// Zero blocked rows: the 3 HEAD existence checks are implemented via a
+	// new runtime foundation (a status-only HEAD branch in
+	// internal/connectors/engine/direct_read.go, mirrored across every
+	// method-allowlist site — commandrunner/runner.go, engine/bundle.go,
+	// engine/operation_endpoint_ledger.go, cmd/connectorgen/validate.go,
+	// internal/connectors/conformance/static.go); the 3 auth-exchange
+	// commands are implemented with redacted token output; and all 9 SCIM
+	// operations are implemented via the dockerhub AuthHook's dualAuth
+	// second-credential (scim_bearer_token) foundation. Zero rows carry
+	// operation.model "disallowed" or any other blocked disposition.
+	const wantCovered = 54
+	const wantBlocked = 0
 	if covered != wantCovered {
-		t.Errorf("covered = %d, want %d (4 pre-existing streams + 35 newly implemented operations)", covered, wantCovered)
+		t.Errorf("covered = %d, want %d (all 54 documented operations implemented)", covered, wantCovered)
 	}
 	if blocked != wantBlocked {
-		t.Errorf("blocked = %d, want %d (3 HEAD + 3 auth-exchange + 9 SCIM, each carrying a named_dependency= note)", blocked, wantBlocked)
+		t.Errorf("blocked = %d, want %d (every operation is implemented; no named-dependency rows remain)", blocked, wantBlocked)
 	}
 }
