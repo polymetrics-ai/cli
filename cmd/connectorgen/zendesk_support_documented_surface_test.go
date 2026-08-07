@@ -58,6 +58,20 @@ var zendeskSupportCarriedRows = []string{
 	"GET /api/v2/help_center/sections",
 }
 
+// zendeskSupportCredentialBodyRead is the one read-shaped POST that must stay
+// BLOCKED, and it is blocked for a reason no shared foundation will clear.
+// POST /api/v2/any_channel/validate_token validates and stores nothing, so it
+// classifies as a read — but its documented request body carries a channel
+// token and an account push id. Promoting it means authoring a --token flag,
+// which is precisely the inline-credential input AGENTS.md forbids ("Add
+// credentials from environment variables or stdin, not prompt text"; "Never
+// request, print, summarize, or store secret values").
+//
+// This test therefore requires it to be blocked AND to name the missing
+// runtime capability, rather than exempting it. A row that became covered here
+// would mean a secret had been turned into a command-line flag.
+const zendeskSupportCredentialBodyRead = "POST /api/v2/any_channel/validate_token"
+
 // zendeskSupportReadShapedPOSTs are the eight POSTs that READ. Each queries,
 // validates or previews and creates no stored resource, so modelling them as
 // reverse-ETL writes would put a plan/preview/approval gate in front of a
@@ -142,6 +156,7 @@ func TestZendeskSupportDocumentedSurfaceIsComplete(t *testing.T) {
 	byMethod := map[string]int{}
 	seen := map[string]bool{}
 	coveredBy := map[string]map[string]any{}
+	blockedNamesCredentialDependency := map[string]bool{}
 	var blank, malformed []string
 	documented, carriedSeen, covered, blocked, legacyExcluded := 0, 0, 0, 0, 0
 
@@ -197,6 +212,10 @@ func TestZendeskSupportDocumentedSurfaceIsComplete(t *testing.T) {
 			if !strings.Contains(ep.Operation.Notes, "Named dependency:") &&
 				!strings.Contains(ep.Operation.Reason, "Named dependency:") {
 				t.Errorf("%s: blocked row must carry a 'Named dependency:' marker", key)
+			}
+			if strings.Contains(ep.Operation.Notes, "secret input") ||
+				strings.Contains(ep.Operation.Notes, "inlining a secret") {
+				blockedNamesCredentialDependency[key] = true
 			}
 		}
 		if len(ep.Excluded) > 0 {
@@ -264,6 +283,19 @@ func TestZendeskSupportDocumentedSurfaceIsComplete(t *testing.T) {
 			continue
 		}
 		cb := coveredBy[want]
+		if want == zendeskSupportCredentialBodyRead {
+			// The security judgement, asserted rather than assumed. Covering
+			// this row would mean a channel token became a CLI flag.
+			if cb != nil {
+				t.Errorf("%s: covered by a command, but its request body carries a channel token; "+
+					"promoting it authors an inline --token flag", want)
+			}
+			if !blockedNamesCredentialDependency[want] {
+				t.Errorf("%s: must stay blocked naming the missing secret-input capability, "+
+					"not a shared-foundation issue number", want)
+			}
+			continue
+		}
 		if cb == nil {
 			t.Errorf("%s: read-shaped POST is not covered by a command", want)
 			continue
