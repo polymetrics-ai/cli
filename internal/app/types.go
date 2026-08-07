@@ -240,6 +240,9 @@ type RunReverseETLRequest struct {
 	PlanID        string                       `json:"plan_id"`
 	ApprovalToken string                       `json:"-"`
 	Confirmation  connectors.WriteConfirmation `json:"-"`
+	// WithheldFlags carries the command flags an operator re-supplies for
+	// fields the plan withheld from disk. It is never persisted.
+	WithheldFlags map[string][]string `json:"-"`
 }
 
 type ReverseRun struct {

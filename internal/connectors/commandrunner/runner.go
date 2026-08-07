@@ -988,6 +988,53 @@ func missingRequiredFlagError(cmd connectors.CommandSurfaceCommand, name string)
 	return fmt.Errorf("missing required flag --%s for command %q", name, cmd.Path)
 }
 
+// ReconstituteWithheldFields rebuilds the record fragment for fields a reverse
+// plan withheld from disk. Values are read from the same command flags the plan
+// accepted and coerced by the same rules, so a reconstituted record hashes
+// identically to the record the plan bound. Fields with no supplied value are
+// returned as operator-facing flag names rather than silently dropped.
+func ReconstituteWithheldFields(connector connectors.Connector, path []string, fields []string, flags map[string][]string) (connectors.Record, []string, error) {
+	if len(fields) == 0 {
+		return connectors.Record{}, nil, nil
+	}
+	cmd, _, err := resolvePreflightCommand(connector, path)
+	if err != nil {
+		return nil, nil, err
+	}
+	byTarget := map[string]connectors.CommandSurfaceFlag{}
+	for _, flag := range cmd.Flags {
+		if target, ok := strings.CutPrefix(flag.MapsTo, "record."); ok && target != "" {
+			byTarget[target] = flag
+		}
+	}
+	record := connectors.Record{}
+	missing := make([]string, 0, len(fields))
+	for _, field := range fields {
+		target := strings.TrimPrefix(strings.TrimSpace(field), "record.")
+		if target == "" {
+			continue
+		}
+		flag, ok := byTarget[target]
+		if !ok {
+			missing = append(missing, target)
+			continue
+		}
+		values := flags[flag.Name]
+		if len(values) == 0 {
+			missing = append(missing, "--"+flag.Name)
+			continue
+		}
+		value, err := coerceFlagValue(flag, values)
+		if err != nil {
+			return nil, nil, err
+		}
+		if err := setRecordValue(record, target, value); err != nil {
+			return nil, nil, err
+		}
+	}
+	return record, missing, nil
+}
+
 func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
 	trimmed := strings.TrimSpace(value)
 	if flag.AllowEmpty != nil {

@@ -73,7 +73,7 @@ func testRunReverseETLRecoversUncertainApprovalConsumption(t *testing.T, configu
 	if err != nil {
 		t.Fatal(err)
 	}
-	plan, _, err = a.PreviewReversePlan(ctx, plan.ID)
+	plan, _, err = a.PreviewReversePlan(ctx, plan.ID, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -127,7 +127,7 @@ func testRunReverseETLRecoversUncertainApprovalConsumption(t *testing.T, configu
 	if _, err := a.RunReverseETL(ctx, request); !errors.As(err, &recovery) {
 		t.Fatalf("RunReverseETL() retry error = %T %v, want ApprovalConsumptionUncertainError", err, err)
 	}
-	if _, _, err := a.PreviewReversePlan(ctx, plan.ID); !errors.As(err, &recovery) {
+	if _, _, err := a.PreviewReversePlan(ctx, plan.ID, nil); !errors.As(err, &recovery) {
 		t.Fatalf("PreviewReversePlan() error = %T %v, want ApprovalConsumptionUncertainError", err, err)
 	}
 	if writes != 0 {
@@ -139,7 +139,7 @@ func testRunReverseETLRecoversUncertainApprovalConsumption(t *testing.T, configu
 	if err != nil {
 		t.Fatal(err)
 	}
-	freshPlan, _, err = a.PreviewReversePlan(ctx, freshPlan.ID)
+	freshPlan, _, err = a.PreviewReversePlan(ctx, freshPlan.ID, nil)
 	if err != nil {
 		t.Fatal(err)
 	}

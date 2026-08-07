@@ -281,7 +281,7 @@ func TestReverseETLWriteActionsExecute(t *testing.T) {
 				if err != nil {
 					t.Fatalf("PlanReverseETL(%q) = %v", action.Name, err)
 				}
-				plan, preview, err := application.PreviewReversePlan(context.Background(), plan.ID)
+				plan, preview, err := application.PreviewReversePlan(context.Background(), plan.ID, nil)
 				if err != nil {
 					t.Fatalf("PreviewReversePlan(%q) = %v", action.Name, err)
 				}
