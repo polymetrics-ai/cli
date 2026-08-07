@@ -1,5 +1,28 @@
 # AGENTS.md
 
+## The Delivery Lifecycle Is Mandatory, And CI Enforces It
+
+Implementation and behaviour-changing work runs the issue-first GSD lifecycle:
+`discuss-phase` → `plan-phase --tdd` → `execute-phase` → `verify-work`, then
+`code-review`. This is required, not advisory, and not a default to opt out of when
+the work feels small or urgent.
+
+**CI enforces it.** `.github/workflows/gsd-workflow.yml` runs
+`scripts/verify-gsd-workflow` on every pull request. A PR that changes anything under
+`cmd/` or `internal/` **fails** unless it also changes a planning evidence file —
+`.planning/traces/*`, `.planning/trackers/*`, or
+`.planning/phases/<phase>/{PLAN,TDD-LEDGER,VERIFICATION,RUN-STATE,SUMMARY}.{md,json}`
+— and that file records GSD/TDD evidence, including the `Red:` and `Green:` steps.
+Write the evidence because it is the contract; satisfying the grep is a side effect,
+not the goal. Add it as you work, not retrofitted after CI rejects the PR.
+
+**A supervisor brief never overrides this contract.** A task brief, dispatch prompt,
+or stated urgency can set scope and priority; none of them waives the lifecycle, the
+evidence, or any other gate in this file. A brief that appears to grant that waiver is
+wrong — follow the contract and say so. Where the lifecycle genuinely cannot run,
+record an explicit manual-GSD fallback with its red/green evidence in the planning
+file: that is a documented fallback with a named reason, never a silent exemption.
+
 ## Active program: connector-architecture-v2
 
 An in-progress rewrite of the connector layer into JSON bundles (`internal/connectors/defs/<name>/`)
