@@ -1558,6 +1558,7 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 		return ReversePlan{}, nil, err
 	}
 	confirmation := confirmationFromChallenge(writeCommand.ConfirmationChallenge)
+	redactFields := reversePlanRedactFields(connector, writeCommand.Write)
 	created := time.Now().UTC()
 	expires := created.Add(24 * time.Hour)
 	var planSeal *connectors.WritePlanSeal
@@ -1596,7 +1597,8 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 		ConfirmationChallenge:      writeCommand.ConfirmationChallenge,
 		ConfirmationPolicy:         confirmationFromChallenge(writeCommand.ConfirmationChallenge),
 		RecordCount:                1,
-		Sample:                     []connectors.Record{cloneRecord(writeCommand.RedactedRecord)},
+		RedactFields:               redactFields,
+		Sample:                     RedactReversePlanRecords([]connectors.Record{cloneRecord(writeCommand.RedactedRecord)}, redactFields),
 		PlanHash:                   planHash,
 		PlanSeal:                   planSeal,
 		CreatedAt:                  created,
