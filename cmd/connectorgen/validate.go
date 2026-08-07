@@ -672,6 +672,9 @@ func checkAPISurface(b engine.Bundle) []Finding {
 					coveredStreams[ep.CoveredBy.Stream] = true
 				}
 			}
+			// Singular and plural are checked identically: one endpoint may
+			// back several distinct write contracts, but every one of them
+			// still has to be a write action the bundle actually declares.
 			for _, write := range ep.CoveredBy.WriteTargets() {
 				if !writes[write] {
 					findings = append(findings, Finding{
@@ -1828,6 +1831,8 @@ func checkCLISurfaceEndpointCoverage(
 				Message:   fmt.Sprintf("command %d (%q) references api_surface endpoint %s %s covered by stream %q, want %q", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path, state.coveredBy.Stream, cmd.Stream),
 			})
 		}
+		// The endpoint may back several write actions; the command has to be
+		// one of them, not necessarily the first one listed.
 		if cmd.Write != "" && !slices.Contains(state.coveredBy.WriteTargets(), cmd.Write) {
 			findings = append(findings, Finding{
 				Connector: b.Name,

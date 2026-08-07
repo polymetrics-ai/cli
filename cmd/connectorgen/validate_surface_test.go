@@ -35,6 +35,19 @@ func TestCheckAPISurface_POSTDirectReadDoesNotRequireWriteCapability(t *testing.
 	}
 }
 
+// One endpoint can back more than one write action, and covered_by.write is a
+// single string. github ships three actions on PATCH /repos/{owner}/{repo}/issues/
+// {issue_number} -- update_issue, close_issue and reopen_issue -- because the
+// close and reopen bodies are distinct contracts assembled by a Go hook that
+// switches on the action NAME (internal/connectors/hooks/github/hooks.go), and
+// certify's create/cleanup pairing binds create_issue to close_issue.
+//
+// Before covered_by.writes existed, the only way to reference all three was to
+// invent a second path -- "PATCH .../issues/{issue_number} (close)" -- encoding
+// a behaviour variant into the path. No such path is documented by any provider,
+// and it corrupts every documented-operation count taken from api_surface.json.
+// The plural array mirrors covered_by.direct_reads, which already solved exactly
+// this shape for reads.
 func TestCheckAPISurface_EndpointMayBackMultipleWriteActions(t *testing.T) {
 	b := engine.Bundle{
 		Name: "acme",
@@ -60,6 +73,8 @@ func TestCheckAPISurface_EndpointMayBackMultipleWriteActions(t *testing.T) {
 	}
 }
 
+// A plural entry naming a write action the bundle does not declare is still a
+// finding: widening the shape must not widen what goes unchecked.
 func TestCheckAPISurface_PluralWriteCoverageStillRejectsUnknownTargets(t *testing.T) {
 	b := engine.Bundle{
 		Name: "acme",

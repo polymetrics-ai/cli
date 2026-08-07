@@ -360,6 +360,8 @@ func checkSurfaceComplete(b engine.Bundle) error {
 				}
 				coveredStreams[ep.CoveredBy.Stream] = true
 			}
+			// Singular and plural alike: one documented endpoint may back
+			// several write contracts, and every one still has to exist.
 			for _, write := range ep.CoveredBy.WriteTargets() {
 				if !writes[write] {
 					return fmt.Errorf("endpoint %d (%s %s) covered_by.write %q is not a declared write action", i, ep.Method, ep.Path, write)
