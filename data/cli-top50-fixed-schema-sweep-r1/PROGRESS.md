@@ -1,29 +1,40 @@
 # ⇒⇒ HANDOFF — READ THIS FIRST, THEN THE WORK ORDER BELOW ⇒⇒
 
-**Updated 2026-08-07 by the worker that delivered workday-rest (the github worker wrote the version
-before it). A fresh worker continues SERIALLY on the same consolidated branch (firstmate decision,
-captain caps the fleet at 2–3 lanes: parallel branches would collide on the shared generated
-artifacts). Nothing is uncommitted; everything below is pushed.**
+**Updated 2026-08-07 by the worker that delivered jira (the workday-rest and zendesk-support workers
+wrote the versions before it). ⛔ THE SWEEP IS PAUSED BY CAPTAIN ORDER, mid-lane, with jira
+COMPLETE and pushed. Nothing is uncommitted; everything below is on
+`origin/fm/cli-top50-sweep-resume2-r1`.**
 
-> ## ⇒ START HERE: **jira 616.** zendesk-support is DONE.
+> ## ⇒ START HERE: **stripe 589.** jira is DONE.
 >
-> zendesk-support landed at **625 operations** — the master plan's number, unchanged, and the
-> **first ledger in this sweep that reconciles exactly**. 509 covered, 122 blocked with a named
-> dependency each, 631→633 commands, 89→173 write actions, **511/511 verified reachable**, green
-> surface test. See its `SUMMARY.md` and **findings 39–45**.
+> jira landed at **617 operations** — **NOT the 616 the master plan recorded**, and the reason is
+> the single most transferable thing this connector produced. 590 covered / 27 blocked,
+> **15 api_surface rows → 617**, 0 → 590 commands, 0 → 292 write actions,
+> **590/590 verified reachable**, green surface test, ledger delta confined to jira (0 → 22).
+> See its `SUMMARY.md` (findings **48–53**) and `VERIFICATION.md`.
 >
-> **The single most transferable thing I learned:** *a complete, correctly counted inventory can
-> still be a total parity failure, and no count will tell you.* zendesk-support's 631 rows were
-> already right — and 509 of them were disposed by one sentence ("blocked until shared foundation
-> #2985") with 509 `planned` command placeholders behind them. Every count assertion passed on the
-> shipped bundle; only reachability failed. **Before deriving anything for jira, check what
-> fraction of its rows are already blocked-by-blanket-sentence** — if it is high, your job is
-> promotion, not enumeration, and the count will not move.
+> ### ⚠️ THE BYTE-COUNT ARTIFACT CHECK DOES NOT WORK ON EVERY PROVIDER, AND JIRA IS THE FIRST PROOF
 >
-> **The trap that nearly cost a slice:** `covered_by.write` must name a **writes.json action**, and
-> `connectorgen validate` enforces it. An operation-backed `direct_write` command has **no
-> `covered_by` representation in the schema at all**. A whole mutation slice was built the wrong way
-> before validate said so (finding 41). Decide this before you author 200 commands.
+> Every connector before jira proved its artifact by **re-fetching identical bytes**. Atlassian's
+> version-pinned URL (`?_v=1.8516.72`) **404s**, the unpinned URL serves a **rolling snapshot**, and
+> `info.version` is `1001.0.0-SNAPSHOT-<git sha>`. Between the master plan's derivation and jira's —
+> **the same calendar day** — the document went 2,445,625 → 2,449,760 bytes, 420 → 421 path keys and
+> **616 → 617** operations, gaining exactly one GET. **The +1 GET could not be named**: naming it
+> needs the prior artifact, which was never cached, and guessing would be an invention.
+>
+> **Before trusting any recorded byte count, check `info.version` for a snapshot marker.** Where the
+> artifact moves, record its **sha256** instead — jira's is
+> `5a51740d7ab3c77c521fc8895a7a58b4ff684bc0d2ebeb830135e8320b063ced`, carried in
+> `DERIVED-OPERATIONS.json`, `RUN-STATE.json` and `api_surface.json`'s own scope prose. 17
+> connectors remain; Atlassian will not be the only vendor serving a moving document.
+>
+> ### The other thing that will bite the next worker immediately
+>
+> **`tools/check_red_observed.py` DID NOT EXIST.** This handoff has claimed since github that it
+> "enforces this and rejects placeholder text"; running it raised `No such file or directory`.
+> **Three workers were told an enforcement existed that did not.** It is now committed and passes
+> all ten phases. Same failure mode as the `tools/` directory that died with its worktree — a claim
+> is not a check.
 
 ## Where the work is
 
@@ -40,68 +51,91 @@ artifacts). Nothing is uncommitted; everything below is pushed.**
 **Do NOT open the PR yet.** Shared artifacts (endpoint ledger, website catalogs, golden transcripts,
 docs) are regenerated **once at the very end**, not per connector.
 
-### ⚠️ Known-red on this branch — both are expected, neither is yours to "fix"
+### ⚠️ Known-red on this branch — FOUR items now, and the previous list was incomplete
 
-1. **The current connector's own surface test is red until its last slice lands.** Right now
-   **nothing is mid-delivery — `cmd/connectorgen` is fully green**, because zendesk-support landed.
-   The next connector's test will be red from the moment you write it until its last slice, and that
-   is correct. Every *shared* gate must stay green throughout: `connectorgen validate` 551/0,
-   `surface-sync --check` clean, runtime preflight passing. **Do not weaken a red test to make the
-   package green** — it goes green when the connector lands.
-   *Tightening* a red test's constant is not weakening it: workday-rest's went 916 → 907 **and**
-   gained a new assertion, because the smaller number was the correct one (finding 34).
-   zendesk-support did the harder version — its coverage floor moved **down**, from
-   `covered >= 625` to an exact partition (509 covered / 122 blocked / per-class counts) — and that
-   is still a tightening, because the floor assumed every documented operation is reachable (false
-   for this provider) and passed on any number above it, while the partition fails on a regression
-   to blocked, an unexplained unblock, or a block naming no capability (finding 40).
-2. **`TestGoldenTranscripts` fails — ELEVEN subtests, not one**, and has since before github.
-   Corrected 2026-08-07 by the workday-rest worker: this entry said `root_bare_manual`, and the
-   actual failing set is `root_bare_manual`, `root_long_help`, `root_short_help`,
-   `root_help_command`, `root_man_command`, `root_json_help`, `root_late_json_help`,
-   `root_equals_form`, `root_space_form`, `connectors_inspect_github_json` and
-   `dynamic_connector_bare_json`. **Prove it is pre-existing rather than assuming**:
-   `git stash push -u` your slice, re-run `go test ./internal/cli/ -run TestGoldenTranscripts`, and
-   compare the failing set. It was identical across both trees for workday-rest's 911 commands, which
-   is what makes "adds zero new failures" a measurement instead of a claim.
-   Discharged by the **end-of-sweep regeneration**, which must happen before the PR merges. Carried
-   as a known-unmet item in every connector's `VERIFICATION.md`. **Do not regenerate it per
-   connector** — finding F6: a per-connector `pm docs generate` run rewrites ~1,031 files of
-   pre-existing `main` drift.
+**Corrected 2026-08-07 by the jira worker.** The list below said two things were red. Three
+*packages* are, and two of them were never recorded. Every one was measured, not assumed:
+`git stash push -u` the slice, re-run, diff the failing set — identical with and without jira, only
+durations differ. That is what makes "adds zero new failures" a measurement.
 
-## ⇒ RESUME POINT — **jira 616**. zendesk-support is COMPLETE.
+1. **The current connector's own surface test.** Right now **nothing is mid-delivery — the whole
+   `cmd/connectorgen` package is green**, because jira landed. The next connector's test will be red
+   from the moment you write it until its last slice, and that is correct.
+   **Do not weaken a red test to make the package green.**
+   *Tightening* is not weakening: workday-rest went 916 → 907 and gained an assertion;
+   zendesk-support replaced a `covered >= 625` floor with an exact partition; jira's blocked-class
+   map gained a sixth class mid-slice when the truth turned out to be 27 blocks, not 25.
+2. **`TestGoldenTranscripts` — ELEVEN subtests**, since before github: `root_bare_manual`,
+   `root_long_help`, `root_short_help`, `root_help_command`, `root_man_command`, `root_json_help`,
+   `root_late_json_help`, `root_equals_form`, `root_space_form`, `connectors_inspect_github_json`,
+   `dynamic_connector_bare_json`. Discharged by the **end-of-sweep regeneration**, never per
+   connector (finding F6: a per-connector `pm docs generate` rewrites ~1,031 files of pre-existing
+   `main` drift).
+3. **`internal/connectors/certify` — NEWLY RECORDED.**
+   `TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints` ("api_surface endpoint 335 is
+   neither covered nor blocked with typed reason") and
+   `TestGithubWriteActionInventoryAccountsForAllDeclaredActions` (`len(items) = 553, want 231`).
+   Both are about **github** and both predate jira. They were not in this list; a worker who ran
+   `go test ./internal/connectors/...` would have spent a context deciding whether they caused them.
+4. **`internal/connectors/defs/zendesk-support` — NEWLY RECORDED.**
+   `TestReverseETLLedgerReconciles`, `TestDestructiveOperationsStayBlocked` and
+   `TestReverseETLWriteActionsExecute` (missing `fixtures/writes/*.json`). These test the state
+   zendesk-support was in **before** its parity work and have not been updated to the delivered
+   shape. **This is real follow-up work someone owes**, not merely noise — a connector's own
+   reverse-ETL ledger test disagreeing with its shipped bundle is exactly the drift this programme
+   exists to eliminate. It is recorded rather than fixed because fixing it inside jira's commit
+   would have been an unrelated change.
 
-**`github` (1220), `workday-rest` (907) and `zendesk-support` (625) are all done and pushed.** Their
-surface tests pass and the whole `cmd/connectorgen` package is green — **nothing is mid-delivery
-right now**. Phase artifacts under `.planning/phases/<name>-parity-sweep-r1/` (`PLAN.md`,
+## ⇒ RESUME POINT — **stripe 589**. jira is COMPLETE. ⛔ THE LANE IS PAUSED.
+
+**`github` (1220), `workday-rest` (907), `zendesk-support` (625) and `jira` (617) are all done and
+pushed.** Their surface tests pass and the whole `cmd/connectorgen` package is green — **nothing is
+mid-delivery**. Phase artifacts under `.planning/phases/<name>-parity-sweep-r1/` (`PLAN.md`,
 `RUN-STATE.json`, `TDD-LEDGER.md`, `SUMMARY.md`, `VERIFICATION.md`), plus the lifecycle traces
-`.planning/traces/gsd-top50-sweep-resume3-r1.md` and `…-resume4-r1.md`.
+`.planning/traces/gsd-top50-sweep-resume3-r1.md`, `…-resume4-r1.md` and `…-resume5-r1.md`.
 
-`tools/derive_zendesk_support.py` and `tools/gen_zendesk_support.py` are committed. The **generator
-is the closest template for a connector whose inventory already exists**: it promotes rows in place
-rather than appending, carries the schema sanitizer and the union flattener, and is re-runnable from
-a clean tree.
+### ⛔ Paused by captain order, 2026-08-07 — what that means concretely
 
-### Start jira like this
+The pause landed **after** jira's implementation slices went green and were pushed, so there is no
+partial connector to recover. **Do not restart jira.** What jira still owes, and what the whole
+sweep still owes, is listed in its `VERIFICATION.md` under "NOT RUN at the pause":
 
-1. **Re-fetch its artifact and check the byte count** against `MASTER-PLAN.json`. Identical bytes
-   prove it is the same artifact rather than a lookalike, and let you *reproduce* the derivation
-   instead of trusting it. Workday's manifest reproduced to the byte, which is exactly why the
-   divergence at 907 could be called a finding rather than a disagreement.
-2. **Derive the count, then run the derivation through the red test's own rules before adopting it.**
-   Concretely: reject any path containing `?`, `*` or a space; dedup on the **resolved** path *and*
-   on the **templated** path; count `HTTP Request` declarations, never section headings. The ledger
-   has now been wrong six times — notion +1, intercom −93, lever-hiring ~−40, help-scout's 146
-   query-string double-count, workday-rest 920→916, and workday-rest again 916→**907**.
-3. **Write the red test, RUN it, capture the failure verbatim, commit that red first.**
-   `tools/check_red_observed.py <name>` rejects placeholder text.
-4. Author from the planning slice plus the cached artifact, **reads in one commit, mutations in
-   another** — slices 2 and 3 cannot be separated, because a `covered_by` disposition must name a
-   command that already exists.
-5. **Verify every command by running the binary** (`tools/probe_reachability.sh`, `xargs -P 12`).
-   Assert the rendered `NAME` line; a namespace miss exits 0 (finding 30).
-6. Confirm the endpoint-ledger delta **by object, not by line** — connector counts equal before and
-   after, none added, none removed, exactly one changed.
+- **`go test -timeout 20m ./internal/cli/` was NOT run for jira.** Run it before the sweep PR opens.
+  **Never the bare form** — it inherits Go's 600s default, dies mid-run, and looks exactly like a
+  hang you caused (finding 36).
+- `make verify`'s other gates were not run individually. `connectorgen-validate` and
+  `connectorgen-surface-sync` were run directly and are green.
+- CLI help / docs / website parity regeneration is **still owed for the whole sweep** and is
+  deliberately done **once at the end**, not per connector (finding F6).
+
+### `tools/` — now four generators, a probe, and a red-first enforcer
+
+`derive_jira.py` + `gen_jira.py` are committed and re-runnable from a clean tree. **`gen_jira.py` is
+now the closest template for a from-nothing connector whose provider publishes an OpenAPI document**
+— it derives command names from `operationId` (Jira declares one on all 617, collision-free after
+kebab-casing, the opposite of Workday's 21-of-920), classifies every write body into a covered shape
+or a named blocked class, and binds read-body flags to the **scalar leaf**.
+`check_red_observed.py` is finally real; run `python3 tools/check_red_observed.py --all` before
+believing any `red_confirmed: true`.
+
+### Three things jira taught that generalise to the remaining 17
+
+1. **"No schema declared" and "declared as a string" must stay distinguishable.** Jira spells
+   "unconstrained body" two ways — an absent `schema` key and a literal `"schema": {}` — and a
+   dereferencer that falls through to `type: string` collapses them. The first classification run
+   put **14** rows in the wrong class and **0** in the right one. Same shape as finding 44: test the
+   artifact you built, not its inputs.
+2. **A WRITE may be `partial` and still cover its row; a READ may not.** `covered_by.direct_read`
+   accepts only an `implemented` command, so a read-shaped POST with an unbindable required body
+   field must be **blocked**, not downgraded. Two of jira's 24 are.
+   The corollary that saved a third: `commandBodyFlagCoveringRequiredPath` binds the **scalar leaf**
+   (`body.queries.0.query`), not the container — google-calendar already ships `body.items.0.id`.
+   Binding the container would have blocked a reachable operation.
+3. **The binary trap can sit on the same resource family as the binary reads.** jira's three
+   `image/png` GETs are avatar reads; `POST /universal_avatar/type/{type}/owner/{entityId}` **uploads**
+   one. A rule keyed on the path word or on "declares a non-JSON media type anywhere" ships the
+   mutation as a download. Binary is **GET-only**, and read success media from **2xx only** —
+   Atlassian attaches the same content map to 401/403/404 too.
 
 ### `gen_workday_rest.py` is the closest template for a from-nothing connector
 
@@ -145,6 +179,7 @@ deliberately not folded in here.
 | help-scout | **144** | ✅ on branch (139 covered + 5 blocked; ledger said 146, derivation 145 — see finding 22) |
 | **workday-rest** | **907** | ✅ **on branch** (907 covered + 0 blocked, +4 legacy /ccx/ rows counted apart; 0→911 commands, 0→252 write actions; 911/911 verified reachable; ledger 0→7) |
 | **zendesk-support** | **625** | ✅ **on branch** (509 covered + 122 blocked; 631 rows unchanged — the count never moved because the inventory was already right; 95→475 implemented commands, 89→173 write actions; 511/511 verified reachable; ledger delta zero) |
+| **jira** | **617** | ✅ **on branch** (590 covered + 27 blocked; **15 rows → 617** — twelve of the fifteen were comma-joined/wildcard families standing for 602 endpoints; 0→590 commands, 0→292 write actions; 590/590 verified reachable; ledger 0→22. **617, NOT the ledger's 616** — the artifact is a rolling snapshot and moved mid-sweep) |
 | **github** | **1220** | ✅ **on branch** (1126 covered + 98 blocked, +4 GraphQL counted separately; 461→1147 commands, 231→553 write actions; 1079 verified reachable by running the binary) |
 | gorgias | 114 | ✅ **separate open PR #3896** — leave it alone, do not fold |
 | notion | 51 | ✅ MERGED #3894 |
@@ -180,7 +215,7 @@ Commit **and push** after every single connector, and tick it here in the same s
 > **This supersedes the smallest-first order.** The four giants land FIRST, not last. Re-sorted by
 > re-derived operation count descending from `MASTER-PLAN.json`.
 
-~~github 1220~~ ✅ · ~~workday-rest 907~~ ✅ (NOT 920, NOT 916 — re-derived twice, see findings 34-35) · ~~zendesk-support 625~~ ✅ (ledger reconciled exactly — a first) · `jira 616 · stripe 589 · linear 538 ·
+~~github 1220~~ ✅ · ~~workday-rest 907~~ ✅ (NOT 920, NOT 916 — re-derived twice, see findings 34-35) · ~~zendesk-support 625~~ ✅ (ledger reconciled exactly — a first) · ~~jira 617~~ ✅ (NOT 616 — the artifact is a rolling snapshot and moved mid-sweep, see finding 48) · `stripe 589 · linear 538 ·
 chargebee 438 · **marketo ~320-367 (count TBD)** · square 334 · bitbucket 331 · bamboo-hr 311 ·
 monday 292 · trello 261 · asana 249 · front 244 · xero 235 · intercom 231 · quickbooks 198 ·
 segment 197 · twilio 197 · google-ads 163`
@@ -496,12 +531,65 @@ command → one commit → push → tick.
     **Check the connector's declared pagination type before widening the blocklist** — an
     over-broad blocklist makes real operations unreachable while naming paging as the reason.
 
+48. **⚠️ A ROLLING-SNAPSHOT ARTIFACT DEFEATS THE BYTE-COUNT CHECK, AND THAT IS A FINDING RATHER
+    THAN A GAP.** jira is 617, not the master plan's 616. Atlassian's version-pinned URL 404s and the
+    unpinned URL serves whatever is current; `info.version` is `1001.0.0-SNAPSHOT-<git sha>`. On ONE
+    calendar day the document went 2,445,625 → 2,449,760 bytes, 420 → 421 path keys and 616 → 617
+    operations. **The +1 GET could not be named** — naming it needs the prior artifact, which was
+    never cached, and a guess would be an invention. Record the artifact's **sha256** instead, and
+    **check `info.version` for a snapshot marker before trusting any recorded byte count.**
+
+49. **"No schema declared" and "declared as a string" must stay distinguishable.** Jira spells
+    "the body is unconstrained" two ways — an absent `schema` key on the `*/*` avatar uploads and a
+    literal `"schema": {}` on the entity-property PUTs — and a dereferencer that falls through to
+    `type: string` collapses them into "documented scalar body". The first classification run put
+    **14** rows in `scalar_body` and **0** in `raw_binary_body`; the truth is 2 and 3, with 12 in
+    `unbounded_body`. Finding 44's shape again: test what you actually built.
+
+50. **A WRITE may be `partial` and still cover its row; a READ may not.** `connectorgen validate`
+    requires an implemented operation-backed direct read to bind every required request-body path,
+    and `covered_by.direct_read` accepts only an **implemented** command — so a read-shaped POST
+    whose required body field has no scalar leaf must be **blocked**, not downgraded. Two of jira's
+    24 are (`/workflows/create/validation`, `/workflows/update/validation`: required `payload` is an
+    object, and no cli_surface flag type carries one).
+    **The corollary saved a third row:** `commandBodyFlagCoveringRequiredPath` binds the **scalar
+    leaf**, not the container. `POST /rest/api/3/jql/sanitize` requires `queries.0.query` and a flag
+    `maps_to: body.queries.0.query` covers it — google-calendar already ships `body.items.0.id`, so
+    an array-element leaf is a supported target rather than a guess. Binding the container would
+    have blocked a reachable operation.
+
+51. **The binary trap can sit on the SAME resource family as the binary reads.** jira's three
+    `image/png` GETs are avatar reads whose own summaries say so;
+    `POST /rest/api/3/universal_avatar/type/{type}/owner/{entityId}` **uploads** an avatar. A rule
+    keyed on the path word "avatar", or on "declares a non-JSON media type anywhere in the
+    operation", ships the mutation as a download. Binary is **GET-only** (finding 45) and success
+    media must be read from **2xx responses only** — Atlassian attaches the same content map to
+    every response code, so the avatar reads declare `image/png` on their 401, 403 and 404 too.
+
+52. **`tools/check_red_observed.py` DID NOT EXIST.** This file has claimed since github that it
+    "enforces this and rejects placeholder text", and the limits table names it as *the* enforcement
+    for red-first. Running it raised `No such file or directory`. **Three workers were told an
+    enforcement existed that did not** — the same failure mode as the `tools/` directory that died
+    with its worktree. It is now committed and passes all ten phases. Its placeholder matching is
+    **anchored**, because a bare substring search flags `n/a` inside `expression/analyse`, a real
+    Jira endpoint: a check that cries wolf gets disabled.
+
+53. **Two failing packages this file never listed.** `internal/connectors/certify` (two github
+    inventory tests) and `internal/connectors/defs/zendesk-support` (three reverse-ETL tests plus
+    missing `fixtures/writes/*.json`) fail on this branch **before** any jira change. Measured, not
+    assumed. The zendesk-support ones are **real follow-up work someone owes**: a connector's own
+    reverse-ETL ledger test disagreeing with its shipped bundle is precisely the drift this
+    programme exists to eliminate. Recorded rather than fixed, because fixing it inside jira's
+    commit would have been an unrelated change.
+
+
 ## Honest note on pace
 
 Each of the three delivered connectors hit real structural surprises well beyond "mechanical
 generation" — gmail's six schema rejections, chatwoot's ledger constraint, lever-hiring's
 simultaneous double-count and missed endpoint. Budget for that residue; it is not going away, and
-github (1220), zendesk-support (625), jira (616) and stripe (589) are still ahead.
+stripe (589), linear (538) and chargebee (438) are still ahead; github (1220), workday-rest (907),
+zendesk-support (625) and jira (617) are behind us.
 
 ---
 
@@ -907,6 +995,7 @@ are regenerated **once at the very end**, not per connector.
 | # | Connector | Ops | Done |
 | ---: | --- | ---: | :--: |
 | 1 | **zendesk-support** | **625** | ✅ **on branch** (509 covered + 122 blocked; 631 rows unchanged — the count never moved because the inventory was already right; 95→475 implemented commands, 89→173 write actions; 511/511 verified reachable; ledger delta zero) |
+| **jira** | **617** | ✅ **on branch** (590 covered + 27 blocked; **15 rows → 617** — twelve of the fifteen were comma-joined/wildcard families standing for 602 endpoints; 0→590 commands, 0→292 write actions; 590/590 verified reachable; ledger 0→22. **617, NOT the ledger's 616** — the artifact is a rolling snapshot and moved mid-sweep) |
 | **github** | **1220** | ☐ — 🐸 **the frog.** Its 270 webhook events live under `x-webhooks`, NOT the standard block (finding 13): an inventory checking only `webhooks` records zero for the largest connector. Slice it (see the work order above). |
 | 2 | **workday-rest** | **920** | ☐ — ledger recorded `unknown`; 920 is freshly derived, so it has no cross-check. Derive it twice by different routes before trusting it. Slice it. |
 | 3 | zendesk-support | 625 | ☐ |
