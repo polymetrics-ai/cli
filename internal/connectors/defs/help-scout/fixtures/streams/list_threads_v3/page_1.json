@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v3/conversations/{{ config.conversation_id }}/threads",
+    "query": {
+      "page": "1",
+      "size": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": {
+        "number": 1,
+        "size": 50,
+        "totalElements": 1,
+        "totalPages": 1
+      },
+      "_embedded": {
+        "threads": [
+          {
+            "id": "fixture_list_threads_v3_1",
+            "name": "Fixture List Threads (v3)",
+            "createdAt": "2026-01-01T00:00:00Z"
+          }
+        ]
+      }
+    }
+  }
+}

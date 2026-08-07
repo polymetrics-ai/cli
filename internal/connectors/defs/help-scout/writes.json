@@ -1,0 +1,2413 @@
+{
+  "actions": [
+    {
+      "name": "upload_attachment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/conversations/{{ record.conversation_id }}/threads/{{ record.thread_id }}/attachments",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout conversationId path identifier."
+          },
+          "thread_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout threadId path identifier."
+          },
+          "attachment_file": {
+            "type": "string",
+            "description": "Project-local file path approved by reverse ETL preview before upload."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id",
+          "thread_id",
+          "attachment_file"
+        ]
+      },
+      "risk": "External Help Scout mutation (Upload Attachment); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "conversation_id",
+        "thread_id"
+      ],
+      "redact_fields": [
+        "attachment_file",
+        "conversation_id",
+        "thread_id"
+      ],
+      "body_type": "multipart",
+      "multipart": {
+        "max_bytes": 26214400,
+        "parts": [
+          {
+            "name": "file",
+            "type": "file",
+            "field": "attachment_file",
+            "required": true,
+            "max_bytes": 26214400
+          }
+        ]
+      }
+    },
+    {
+      "name": "delete_attachment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/conversations/{{ record.conversation_id }}/attachments/{{ record.attachment_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout conversationId path identifier."
+          },
+          "attachment_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout attachmentId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id",
+          "attachment_id"
+        ]
+      },
+      "risk": "Destructive/admin Help Scout mutation (Delete Attachment); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "conversation_id",
+        "attachment_id"
+      ],
+      "redact_fields": [
+        "conversation_id",
+        "attachment_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/conversations",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "External Help Scout mutation (Create Conversation); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_custom_fields",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/conversations/{{ record.conversation_id }}/fields",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout conversationId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Update Custom Fields); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "redact_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "delete_conversation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/conversations/{{ record.conversation_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout conversationId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id"
+        ]
+      },
+      "risk": "Destructive/admin Help Scout mutation (Delete Conversation); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "redact_fields": [
+        "conversation_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_snooze",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/conversations/{{ record.conversation_id }}/snooze",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout conversationId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id"
+        ]
+      },
+      "risk": "Destructive/admin Help Scout mutation (Delete Snooze); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "redact_fields": [
+        "conversation_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_snooze",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/conversations/{{ record.conversation_id }}/snooze",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout conversationId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Update Snooze); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "redact_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "update_tags",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/conversations/{{ record.conversation_id }}/tags",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout conversationId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Update Tags); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "redact_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "create_chat_thread",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/conversations/{{ record.conversation_id }}/chats",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout conversationId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Create Chat Thread); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "redact_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "create_customer_thread",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/conversations/{{ record.conversation_id }}/customer",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout conversationId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Create Customer Thread); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "redact_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "create_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/conversations/{{ record.conversation_id }}/notes",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout conversationId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Create Note); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "redact_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "create_phone_thread",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/conversations/{{ record.conversation_id }}/phones",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout conversationId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Create Phone Thread); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "redact_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "create_reply_thread",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/conversations/{{ record.conversation_id }}/reply",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout conversationId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Create Reply Thread); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "redact_fields": [
+        "conversation_id"
+      ]
+    },
+    {
+      "name": "delete_thread_schedule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/conversations/{{ record.conversation_id }}/threads/{{ record.thread_id }}/schedule",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout conversationId path identifier."
+          },
+          "thread_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout threadId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id",
+          "thread_id"
+        ]
+      },
+      "risk": "Destructive/admin Help Scout mutation (Delete Thread Schedule); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "conversation_id",
+        "thread_id"
+      ],
+      "redact_fields": [
+        "conversation_id",
+        "thread_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "publish_thread_schedule",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/conversations/{{ record.conversation_id }}/threads/{{ record.thread_id }}/schedule",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout conversationId path identifier."
+          },
+          "thread_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout threadId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id",
+          "thread_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Publish Thread Schedule); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "conversation_id",
+        "thread_id"
+      ],
+      "redact_fields": [
+        "conversation_id",
+        "thread_id"
+      ]
+    },
+    {
+      "name": "update_thread_schedule",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/conversations/{{ record.conversation_id }}/threads/{{ record.thread_id }}/schedule",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout conversationId path identifier."
+          },
+          "thread_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout threadId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id",
+          "thread_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Update Thread Schedule); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "conversation_id",
+        "thread_id"
+      ],
+      "redact_fields": [
+        "conversation_id",
+        "thread_id"
+      ]
+    },
+    {
+      "name": "update_thread",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/conversations/{{ record.conversation_id }}/threads/{{ record.thread_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout conversationId path identifier."
+          },
+          "thread_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout threadId path identifier."
+          },
+          "patch": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "JSON Patch operations reviewed during reverse ETL preview."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id",
+          "thread_id",
+          "patch"
+        ]
+      },
+      "risk": "External Help Scout mutation (Update Thread); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "conversation_id",
+        "thread_id"
+      ],
+      "redact_fields": [
+        "conversation_id",
+        "thread_id"
+      ],
+      "body_type": "json_array",
+      "body_field": "patch",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    {
+      "name": "update_conversation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/conversations/{{ record.conversation_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout conversationId path identifier."
+          },
+          "patch": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "JSON Patch operations reviewed during reverse ETL preview."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "conversation_id",
+          "patch"
+        ]
+      },
+      "risk": "External Help Scout mutation (Update Conversation); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "redact_fields": [
+        "conversation_id"
+      ],
+      "body_type": "json_array",
+      "body_field": "patch",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    {
+      "name": "create_address",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/customers/{{ record.customer_id }}/address",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout customerId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Create Address); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "customer_id"
+      ],
+      "redact_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "delete_address",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/customers/{{ record.customer_id }}/address",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout customerId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id"
+        ]
+      },
+      "risk": "Destructive/admin Help Scout mutation (Delete Address); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "customer_id"
+      ],
+      "redact_fields": [
+        "customer_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_address",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/customers/{{ record.customer_id }}/address",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout customerId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Update Address); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "customer_id"
+      ],
+      "redact_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "create_chat_handle",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/customers/{{ record.customer_id }}/chats",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout customerId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Create Chat Handle); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "customer_id"
+      ],
+      "redact_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "delete_chat_handle",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/customers/{{ record.customer_id }}/chats/{{ record.chat_handle_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout customerId path identifier."
+          },
+          "chat_handle_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout chatHandleId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id",
+          "chat_handle_id"
+        ]
+      },
+      "risk": "Destructive/admin Help Scout mutation (Delete Chat Handle); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "customer_id",
+        "chat_handle_id"
+      ],
+      "redact_fields": [
+        "customer_id",
+        "chat_handle_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_chat_handles",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/customers/{{ record.customer_id }}/chats/{{ record.chat_handle_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout customerId path identifier."
+          },
+          "chat_handle_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout chatHandleId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id",
+          "chat_handle_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Update Chat Handles); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "customer_id",
+        "chat_handle_id"
+      ],
+      "redact_fields": [
+        "customer_id",
+        "chat_handle_id"
+      ]
+    },
+    {
+      "name": "create_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/customers",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "External Help Scout mutation (Create Customer); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_customer",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/customers/{{ record.customer_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout customerId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id"
+        ]
+      },
+      "risk": "Destructive/admin Help Scout mutation (Delete Customer); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "customer_id"
+      ],
+      "redact_fields": [
+        "customer_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_email",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/customers/{{ record.customer_id }}/emails",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout customerId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Create Email); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "customer_id"
+      ],
+      "redact_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "delete_email",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/customers/{{ record.customer_id }}/emails/{{ record.email_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout customerId path identifier."
+          },
+          "email_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout emailId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id",
+          "email_id"
+        ]
+      },
+      "risk": "Destructive/admin Help Scout mutation (Delete Email); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "customer_id",
+        "email_id"
+      ],
+      "redact_fields": [
+        "customer_id",
+        "email_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_email",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/customers/{{ record.customer_id }}/emails/{{ record.email_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout customerId path identifier."
+          },
+          "email_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout emailId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id",
+          "email_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Update Email); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "customer_id",
+        "email_id"
+      ],
+      "redact_fields": [
+        "customer_id",
+        "email_id"
+      ]
+    },
+    {
+      "name": "overwrite_customer",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/customers/{{ record.customer_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout customerId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Overwrite Customer); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "customer_id"
+      ],
+      "redact_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "create_phone",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/customers/{{ record.customer_id }}/phones",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout customerId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Create Phone); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "customer_id"
+      ],
+      "redact_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "delete_phone",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/customers/{{ record.customer_id }}/phones/{{ record.phone_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout customerId path identifier."
+          },
+          "phone_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout phoneId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id",
+          "phone_id"
+        ]
+      },
+      "risk": "Destructive/admin Help Scout mutation (Delete Phone); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "customer_id",
+        "phone_id"
+      ],
+      "redact_fields": [
+        "customer_id",
+        "phone_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_phone",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/customers/{{ record.customer_id }}/phones/{{ record.phone_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout customerId path identifier."
+          },
+          "phone_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout phoneId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id",
+          "phone_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Update Phone); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "customer_id",
+        "phone_id"
+      ],
+      "redact_fields": [
+        "customer_id",
+        "phone_id"
+      ]
+    },
+    {
+      "name": "create_social_profile",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/customers/{{ record.customer_id }}/social-profiles",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout customerId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Create Social Profile); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "customer_id"
+      ],
+      "redact_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "delete_social_profile",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/customers/{{ record.customer_id }}/social-profiles/{{ record.social_profile_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout customerId path identifier."
+          },
+          "social_profile_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout socialProfileId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id",
+          "social_profile_id"
+        ]
+      },
+      "risk": "Destructive/admin Help Scout mutation (Delete Social Profile); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "customer_id",
+        "social_profile_id"
+      ],
+      "redact_fields": [
+        "customer_id",
+        "social_profile_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_social_profile",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/customers/{{ record.customer_id }}/social-profiles/{{ record.social_profile_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout customerId path identifier."
+          },
+          "social_profile_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout socialProfileId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id",
+          "social_profile_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Update Social Profile); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "customer_id",
+        "social_profile_id"
+      ],
+      "redact_fields": [
+        "customer_id",
+        "social_profile_id"
+      ]
+    },
+    {
+      "name": "update_customer",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/customers/{{ record.customer_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout customerId path identifier."
+          },
+          "patch": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "JSON Patch operations reviewed during reverse ETL preview."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id",
+          "patch"
+        ]
+      },
+      "risk": "External Help Scout mutation (Update Customer); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "customer_id"
+      ],
+      "redact_fields": [
+        "customer_id"
+      ],
+      "body_type": "json_array",
+      "body_field": "patch",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    {
+      "name": "create_website",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/customers/{{ record.customer_id }}/websites",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout customerId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Create Website); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "customer_id"
+      ],
+      "redact_fields": [
+        "customer_id"
+      ]
+    },
+    {
+      "name": "delete_website",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/customers/{{ record.customer_id }}/websites/{{ record.website_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout customerId path identifier."
+          },
+          "website_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout websiteId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id",
+          "website_id"
+        ]
+      },
+      "risk": "Destructive/admin Help Scout mutation (Delete Website); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "customer_id",
+        "website_id"
+      ],
+      "redact_fields": [
+        "customer_id",
+        "website_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_website",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/customers/{{ record.customer_id }}/websites/{{ record.website_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout customerId path identifier."
+          },
+          "website_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout websiteId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id",
+          "website_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Update Website); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "customer_id",
+        "website_id"
+      ],
+      "redact_fields": [
+        "customer_id",
+        "website_id"
+      ]
+    },
+    {
+      "name": "update_routing_configuration",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/mailboxes/{{ record.mailbox_id }}/routing",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "mailbox_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout mailboxId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "mailbox_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Update Routing configuration); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "mailbox_id"
+      ],
+      "redact_fields": [
+        "mailbox_id"
+      ]
+    },
+    {
+      "name": "create_saved_reply",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/mailboxes/{{ record.mailbox_id }}/saved-replies",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "mailbox_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout mailboxId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "mailbox_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Create Saved Reply); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "mailbox_id"
+      ],
+      "redact_fields": [
+        "mailbox_id"
+      ]
+    },
+    {
+      "name": "delete_saved_reply",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/mailboxes/{{ record.mailbox_id }}/saved-replies/{{ record.saved_reply_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "mailbox_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout mailboxId path identifier."
+          },
+          "saved_reply_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout savedReplyId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "mailbox_id",
+          "saved_reply_id"
+        ]
+      },
+      "risk": "Destructive/admin Help Scout mutation (Delete Saved Reply); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "mailbox_id",
+        "saved_reply_id"
+      ],
+      "redact_fields": [
+        "mailbox_id",
+        "saved_reply_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_saved_reply",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/mailboxes/{{ record.mailbox_id }}/saved-replies/{{ record.saved_reply_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "mailbox_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout mailboxId path identifier."
+          },
+          "saved_reply_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout savedReplyId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "mailbox_id",
+          "saved_reply_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Update Saved Reply); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "mailbox_id",
+        "saved_reply_id"
+      ],
+      "redact_fields": [
+        "mailbox_id",
+        "saved_reply_id"
+      ]
+    },
+    {
+      "name": "create_organization",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/organizations",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "External Help Scout mutation (Create Organization); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_organization_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/organizations/{{ record.organization_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "organization_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout organizationId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "organization_id"
+        ]
+      },
+      "risk": "Destructive/admin Help Scout mutation (Delete Organization by ID); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "organization_id"
+      ],
+      "redact_fields": [
+        "organization_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_organization_property_definition",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/organizations/properties",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "External Help Scout mutation (Create Organization Property Definition); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_organization_property_definition",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/organizations/properties/{{ record.property_slug }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "property_slug": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout propertySlug path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "property_slug"
+        ]
+      },
+      "risk": "Destructive/admin Help Scout mutation (Delete Organization Property Definition); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "property_slug"
+      ],
+      "redact_fields": [
+        "property_slug"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "remove_organization_property_value",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/organizations/{{ record.organization_id }}/properties/{{ record.property_slug }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "organization_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout organizationId path identifier."
+          },
+          "property_slug": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout propertySlug path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "organization_id",
+          "property_slug"
+        ]
+      },
+      "risk": "Destructive/admin Help Scout mutation (Remove Organization Property Value); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "organization_id",
+        "property_slug"
+      ],
+      "redact_fields": [
+        "organization_id",
+        "property_slug"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "set_organization_property_value",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/organizations/{{ record.organization_id }}/properties/{{ record.property_slug }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "organization_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout organizationId path identifier."
+          },
+          "property_slug": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout propertySlug path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "organization_id",
+          "property_slug"
+        ]
+      },
+      "risk": "External Help Scout mutation (Set Organization Property Value); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "organization_id",
+        "property_slug"
+      ],
+      "redact_fields": [
+        "organization_id",
+        "property_slug"
+      ]
+    },
+    {
+      "name": "update_organization_property_definition",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/organizations/properties/{{ record.property_slug }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "property_slug": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout propertySlug path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "property_slug"
+        ]
+      },
+      "risk": "External Help Scout mutation (Update Organization Property Definition); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "property_slug"
+      ],
+      "redact_fields": [
+        "property_slug"
+      ]
+    },
+    {
+      "name": "update_organization",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/organizations/{{ record.organization_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "organization_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout organizationId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "organization_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Update Organization); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "organization_id"
+      ],
+      "redact_fields": [
+        "organization_id"
+      ]
+    },
+    {
+      "name": "create_customer_property_definition",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/customer-properties",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "External Help Scout mutation (Create Customer Property Definition); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_customer_property_definition",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/customer-properties/{{ record.property_slug }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "property_slug": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout propertySlug path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "property_slug"
+        ]
+      },
+      "risk": "Destructive/admin Help Scout mutation (Delete Customer Property Definition); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "property_slug"
+      ],
+      "redact_fields": [
+        "property_slug"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_customer_properties",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/customers/{{ record.customer_id }}/properties",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout customerId path identifier."
+          },
+          "patch": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "JSON Patch operations reviewed during reverse ETL preview."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "customer_id",
+          "patch"
+        ]
+      },
+      "risk": "External Help Scout mutation (Update Customer Properties); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "customer_id"
+      ],
+      "redact_fields": [
+        "customer_id"
+      ],
+      "body_type": "json_array",
+      "body_field": "patch",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    {
+      "name": "update_team_members",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/teams/{{ record.team_id }}/members",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "team_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout teamId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "team_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Update Team Members); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "team_id"
+      ],
+      "redact_fields": [
+        "team_id"
+      ]
+    },
+    {
+      "name": "update_conversation_reassignment_configuration",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/users/{{ record.user_id }}/conversation-reassignment",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout userId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Update Conversation Reassignment configuration); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "user_id"
+      ],
+      "redact_fields": [
+        "user_id"
+      ]
+    },
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/users",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "External Help Scout mutation (Create User); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/users/{{ record.user_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout userId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "Destructive/admin Help Scout mutation (Delete User); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "user_id"
+      ],
+      "redact_fields": [
+        "user_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "set_user_status",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/users/{{ record.user_id }}/status",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout userId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Set user status); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "user_id"
+      ],
+      "redact_fields": [
+        "user_id"
+      ]
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/webhooks",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "risk": "External Help Scout mutation (Create Webhook); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/webhooks/{{ record.webhook_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "webhook_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout webhookId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "webhook_id"
+        ]
+      },
+      "risk": "Destructive/admin Help Scout mutation (Delete Webhook); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "webhook_id"
+      ],
+      "redact_fields": [
+        "webhook_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/webhooks/{{ record.webhook_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "webhook_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout webhookId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "webhook_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Update Webhook); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "webhook_id"
+      ],
+      "redact_fields": [
+        "webhook_id"
+      ]
+    },
+    {
+      "name": "run_manual_workflows",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/workflows/{{ record.workflow_id }}/run",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "workflow_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout workflowId path identifier."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "workflow_id"
+        ]
+      },
+      "risk": "External Help Scout mutation (Run Manual Workflows); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "workflow_id"
+      ],
+      "redact_fields": [
+        "workflow_id"
+      ]
+    },
+    {
+      "name": "update_workflow_status",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/workflows/{{ record.workflow_id }}",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "workflow_id": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "pattern": "^[^/\\r\\n]+$",
+            "description": "Help Scout workflowId path identifier."
+          },
+          "patch": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "JSON Patch operations reviewed during reverse ETL preview."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "workflow_id",
+          "patch"
+        ]
+      },
+      "risk": "External Help Scout mutation (Update workflow status); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "confirm": "destructive",
+      "path_fields": [
+        "workflow_id"
+      ],
+      "redact_fields": [
+        "workflow_id"
+      ],
+      "body_type": "json_array",
+      "body_field": "patch",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    }
+  ]
+}

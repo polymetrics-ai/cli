@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/conversations/{{ config.conversation_id }}/threads/{{ config.thread_id }}/original-source",
+    "query": {
+      "page": "1",
+      "size": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_get_thread_original_source_1",
+      "name": "Fixture Get Thread Original Source",
+      "createdAt": "2026-01-01T00:00:00Z"
+    }
+  }
+}

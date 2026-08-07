@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/teams/{{ config.team_id }}/members",
+    "query": {
+      "page": "1",
+      "size": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": {
+        "number": 1,
+        "size": 50,
+        "totalElements": 1,
+        "totalPages": 1
+      },
+      "_embedded": {
+        "members": [
+          {
+            "id": "fixture_list_team_members_1",
+            "name": "Fixture List Team Members",
+            "createdAt": "2026-01-01T00:00:00Z"
+          }
+        ]
+      }
+    }
+  }
+}

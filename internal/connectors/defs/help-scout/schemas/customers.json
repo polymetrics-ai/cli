@@ -2,19 +2,72 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "customers",
   "type": "object",
-  "x-primary-key": ["id"],
-  "x-cursor-field": "updatedAt",
-  "required": ["id"],
+  "x-primary-key": [
+    "id"
+  ],
   "properties": {
-    "id": { "type": "integer" },
-    "firstName": { "type": ["string", "null"] },
-    "lastName": { "type": ["string", "null"] },
-    "gender": { "type": ["string", "null"] },
-    "jobTitle": { "type": ["string", "null"] },
-    "organization": { "type": ["string", "null"] },
-    "photoUrl": { "type": ["string", "null"] },
-    "age": { "type": ["string", "null"] },
-    "createdAt": { "type": ["string", "null"] },
-    "updatedAt": { "type": ["string", "null"] }
-  }
+    "id": {
+      "type": [
+        "integer",
+        "string",
+        "null"
+      ]
+    },
+    "number": {
+      "type": [
+        "integer",
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "email": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "createdAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updatedAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "modifiedAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
 }

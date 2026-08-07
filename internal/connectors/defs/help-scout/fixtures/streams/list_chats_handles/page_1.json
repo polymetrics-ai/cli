@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/customers/{{ config.customer_id }}/chats",
+    "query": {
+      "page": "1",
+      "size": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": {
+        "number": 1,
+        "size": 50,
+        "totalElements": 1,
+        "totalPages": 1
+      },
+      "_embedded": {
+        "chats": [
+          {
+            "id": "fixture_list_chats_handles_1",
+            "name": "Fixture List Chats Handles",
+            "createdAt": "2026-01-01T00:00:00Z"
+          }
+        ]
+      }
+    }
+  }
+}

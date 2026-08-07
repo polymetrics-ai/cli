@@ -2,23 +2,26 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Help Scout Connection Specification",
   "type": "object",
-  "required": ["client_id", "client_secret"],
+  "required": [
+    "client_id",
+    "client_secret"
+  ],
   "properties": {
     "client_id": {
       "type": "string",
       "x-secret": true,
-      "description": "Help Scout OAuth2 application client id, used for the client-credentials token exchange. Never logged."
+      "description": "Help Scout OAuth2 application client id. Never pass or store raw values in task text."
     },
     "client_secret": {
       "type": "string",
       "x-secret": true,
-      "description": "Help Scout OAuth2 application client secret, used for the client-credentials token exchange. Never logged."
+      "description": "Help Scout OAuth2 application client secret. Never pass or store raw values in task text."
     },
     "base_url": {
       "type": "string",
       "format": "uri",
-      "default": "https://api.helpscout.net/v2",
-      "description": "Help Scout Mailbox API base URL override for tests or proxies."
+      "default": "https://api.helpscout.net",
+      "description": "Help Scout API origin. Paths in this bundle include /v2 or /v3 explicitly."
     },
     "token_url": {
       "type": "string",
@@ -29,7 +32,72 @@
     "start_date": {
       "type": "string",
       "format": "date-time",
-      "description": "RFC3339 lower bound; sent as modifiedSince to scope conversations/customers to records changed at or after this time."
+      "description": "RFC3339 lower bound sent as modifiedSince on supported list streams."
+    },
+    "conversation_id": {
+      "type": "string",
+      "pattern": "^[^/\\r\\n]+$",
+      "description": "Help Scout conversation_id used by parameterized stream paths."
+    },
+    "customer_id": {
+      "type": "string",
+      "pattern": "^[^/\\r\\n]+$",
+      "description": "Help Scout customer_id used by parameterized stream paths."
+    },
+    "mailbox_id": {
+      "type": "string",
+      "pattern": "^[^/\\r\\n]+$",
+      "description": "Help Scout mailbox_id used by parameterized stream paths."
+    },
+    "organization_id": {
+      "type": "string",
+      "pattern": "^[^/\\r\\n]+$",
+      "description": "Help Scout organization_id used by parameterized stream paths."
+    },
+    "property_slug": {
+      "type": "string",
+      "pattern": "^[^/\\r\\n]+$",
+      "description": "Help Scout property_slug used by parameterized stream paths."
+    },
+    "rating_id": {
+      "type": "string",
+      "pattern": "^[^/\\r\\n]+$",
+      "description": "Help Scout rating_id used by parameterized stream paths."
+    },
+    "saved_reply_id": {
+      "type": "string",
+      "pattern": "^[^/\\r\\n]+$",
+      "description": "Help Scout saved_reply_id used by parameterized stream paths."
+    },
+    "system_user_id": {
+      "type": "string",
+      "pattern": "^[^/\\r\\n]+$",
+      "description": "Help Scout system_user_id used by parameterized stream paths."
+    },
+    "tag_id": {
+      "type": "string",
+      "pattern": "^[^/\\r\\n]+$",
+      "description": "Help Scout tag_id used by parameterized stream paths."
+    },
+    "team_id": {
+      "type": "string",
+      "pattern": "^[^/\\r\\n]+$",
+      "description": "Help Scout team_id used by parameterized stream paths."
+    },
+    "thread_id": {
+      "type": "string",
+      "pattern": "^[^/\\r\\n]+$",
+      "description": "Help Scout thread_id used by parameterized stream paths."
+    },
+    "user_id": {
+      "type": "string",
+      "pattern": "^[^/\\r\\n]+$",
+      "description": "Help Scout user_id used by parameterized stream paths."
+    },
+    "webhook_id": {
+      "type": "string",
+      "pattern": "^[^/\\r\\n]+$",
+      "description": "Help Scout webhook_id used by parameterized stream paths."
     }
   }
 }

@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/mailboxes/{{ config.mailbox_id }}/fields",
+    "query": {
+      "page": "1",
+      "size": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": {
+        "number": 1,
+        "size": 50,
+        "totalElements": 1,
+        "totalPages": 1
+      },
+      "_embedded": {
+        "fields": [
+          {
+            "id": "fixture_list_inbox_custom_fields_1",
+            "name": "Fixture List Inbox Custom Fields",
+            "createdAt": "2026-01-01T00:00:00Z"
+          }
+        ]
+      }
+    }
+  }
+}

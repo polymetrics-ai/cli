@@ -1,0 +1,13 @@
+{
+  "record": {
+    "organization_id": 123
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/organizations/123"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

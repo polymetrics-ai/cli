@@ -1,0 +1,17 @@
+{
+  "record": {
+    "workflow_id": 123,
+    "value": "fixture-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/workflows/123/run",
+    "body": {
+      "value": "fixture-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

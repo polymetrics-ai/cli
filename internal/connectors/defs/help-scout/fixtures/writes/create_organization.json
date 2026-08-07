@@ -1,0 +1,16 @@
+{
+  "record": {
+    "value": "fixture-value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/organizations",
+    "body": {
+      "value": "fixture-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

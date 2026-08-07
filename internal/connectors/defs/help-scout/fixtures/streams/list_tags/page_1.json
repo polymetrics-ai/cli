@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/tags",
+    "query": {
+      "page": "1",
+      "size": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "page": {
+        "number": 1,
+        "size": 50,
+        "totalElements": 1,
+        "totalPages": 1
+      },
+      "_embedded": {
+        "tags": [
+          {
+            "id": "fixture_list_tags_1",
+            "name": "Fixture List Tags",
+            "createdAt": "2026-01-01T00:00:00Z"
+          }
+        ]
+      }
+    }
+  }
+}

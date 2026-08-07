@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/organizations/properties/{{ config.property_slug }}",
+    "query": {
+      "page": "1",
+      "size": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_get_organization_property_definition_1",
+      "name": "Fixture Get Organization Property Definition",
+      "createdAt": "2026-01-01T00:00:00Z"
+    }
+  }
+}

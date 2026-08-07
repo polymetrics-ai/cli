@@ -1,0 +1,27 @@
+{
+  "record": {
+    "customer_id": 123,
+    "patch": [
+      {
+        "op": "replace",
+        "path": "/status",
+        "value": "active"
+      }
+    ]
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/customers/123/properties",
+    "body": [
+      {
+        "op": "replace",
+        "path": "/status",
+        "value": "active"
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

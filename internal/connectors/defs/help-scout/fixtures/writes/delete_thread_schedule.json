@@ -1,0 +1,14 @@
+{
+  "record": {
+    "conversation_id": 123,
+    "thread_id": 123
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/conversations/123/threads/123/schedule"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

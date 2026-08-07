@@ -1,0 +1,3561 @@
+{
+  "tagline": "Work with typed Help Scout Inbox API surfaces without exposing raw HTTP or provider-query escape hatches.",
+  "usage": "pm help-scout <resource> <operation> [flags]",
+  "source_cli": {
+    "name": "Help Scout Inbox API",
+    "docs": "https://developer.helpscout.com/mailbox-api/",
+    "reference": "https://developer.helpscout.com/mailbox-api/endpoints/",
+    "source": "provider_api"
+  },
+  "groups": [
+    {
+      "id": "conversations",
+      "title": "Conversations",
+      "commands": [
+        "conversations"
+      ]
+    },
+    {
+      "id": "customers",
+      "title": "Customers and organizations",
+      "commands": [
+        "customers",
+        "organizations",
+        "customer-properties"
+      ]
+    },
+    {
+      "id": "inbox-admin",
+      "title": "Inbox administration",
+      "commands": [
+        "mailboxes",
+        "users",
+        "teams",
+        "webhooks",
+        "workflows"
+      ]
+    },
+    {
+      "id": "reports",
+      "title": "Reports and blocked direct reads",
+      "commands": [
+        "reports",
+        "binary"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Credential profile name; never pass secret values as flags.",
+      "allow_empty": false
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for --credential.",
+      "allow_empty": false
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum ETL records to emit; provider pages remain bounded by connector metadata."
+    },
+    {
+      "name": "preview",
+      "type": "boolean",
+      "summary": "Preview a reverse-ETL write command without making a network mutation."
+    },
+    {
+      "name": "approve",
+      "type": "string",
+      "summary": "Approval token required to execute a reverse-ETL plan.",
+      "allow_empty": false
+    },
+    {
+      "name": "confirm",
+      "type": "string",
+      "summary": "Typed destructive confirmation challenge required by Help Scout write actions.",
+      "allow_empty": false
+    }
+  ],
+  "commands": [
+    {
+      "path": "conversations get",
+      "summary": "Get Conversation (v3) as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_conversation_v3",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/get-v3/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversationId value.",
+          "maps_to": "config.conversation_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations get --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/conversations/{conversationId}"
+        }
+      ]
+    },
+    {
+      "path": "conversations get 2",
+      "summary": "Get Conversation as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_conversation",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/get/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversationId value.",
+          "maps_to": "config.conversation_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations get 2 --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/conversations/{conversationId}"
+        }
+      ]
+    },
+    {
+      "path": "conversations list",
+      "summary": "List Conversations as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "conversations",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/list/",
+      "flags": [
+        {
+          "name": "start-date",
+          "type": "string",
+          "summary": "RFC3339 modifiedSince lower bound.",
+          "maps_to": "config.start_date",
+          "format": "date-time",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/conversations"
+        }
+      ]
+    },
+    {
+      "path": "conversations threads list",
+      "summary": "List Threads (v3) as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_threads_v3",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/list-v3/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversationId value.",
+          "maps_to": "config.conversation_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations threads list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/conversations/{conversationId}/threads"
+        }
+      ]
+    },
+    {
+      "path": "conversations threads list 2",
+      "summary": "List Threads as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_threads",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/list/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversationId value.",
+          "maps_to": "config.conversation_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations threads list 2 --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/conversations/{conversationId}/threads"
+        }
+      ]
+    },
+    {
+      "path": "conversations threads original-source get",
+      "summary": "Get Thread Original Source as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_thread_original_source",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/thread-source-json/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversationId value.",
+          "maps_to": "config.conversation_id",
+          "allow_empty": false
+        },
+        {
+          "name": "thread-id",
+          "type": "string",
+          "summary": "Help Scout threadId value.",
+          "maps_to": "config.thread_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations threads original-source get --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/conversations/{conversationId}/threads/{threadId}/original-source"
+        }
+      ]
+    },
+    {
+      "path": "customers address get",
+      "summary": "Get Address as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_address",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/get/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customerId value.",
+          "maps_to": "config.customer_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout customers address get --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/customers/{customerId}/address"
+        }
+      ]
+    },
+    {
+      "path": "customers chats list",
+      "summary": "List Chats Handles as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_chats_handles",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/list/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customerId value.",
+          "maps_to": "config.customer_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout customers chats list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/customers/{customerId}/chats"
+        }
+      ]
+    },
+    {
+      "path": "customers emails list",
+      "summary": "List Emails as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_emails",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/list/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customerId value.",
+          "maps_to": "config.customer_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout customers emails list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/customers/{customerId}/emails"
+        }
+      ]
+    },
+    {
+      "path": "customers get",
+      "summary": "Get Customer as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_customer",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/get/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customerId value.",
+          "maps_to": "config.customer_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout customers get --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/customers/{customerId}"
+        }
+      ]
+    },
+    {
+      "path": "customers list",
+      "summary": "List Customers (v3) as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_customers_v3",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/list-v3/",
+      "flags": [],
+      "examples": [
+        "pm help-scout customers list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/customers"
+        }
+      ]
+    },
+    {
+      "path": "customers list 2",
+      "summary": "List Customers as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customers",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/list/",
+      "flags": [
+        {
+          "name": "start-date",
+          "type": "string",
+          "summary": "RFC3339 modifiedSince lower bound.",
+          "maps_to": "config.start_date",
+          "format": "date-time",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout customers list 2 --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/customers"
+        }
+      ]
+    },
+    {
+      "path": "customers phones list",
+      "summary": "List Phones as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_phones",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/list/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customerId value.",
+          "maps_to": "config.customer_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout customers phones list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/customers/{customerId}/phones"
+        }
+      ]
+    },
+    {
+      "path": "customers social-profiles list",
+      "summary": "List Social Profiles as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_social_profiles",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/list/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customerId value.",
+          "maps_to": "config.customer_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout customers social-profiles list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/customers/{customerId}/social-profiles"
+        }
+      ]
+    },
+    {
+      "path": "customers websites list",
+      "summary": "List Websites as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_websites",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/list/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customerId value.",
+          "maps_to": "config.customer_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout customers websites list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/customers/{customerId}/websites"
+        }
+      ]
+    },
+    {
+      "path": "mailboxes get",
+      "summary": "Get Inbox as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_inbox",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/get/",
+      "flags": [
+        {
+          "name": "mailbox-id",
+          "type": "string",
+          "summary": "Help Scout mailboxId value.",
+          "maps_to": "config.mailbox_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout mailboxes get --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/mailboxes/{mailboxId}"
+        }
+      ]
+    },
+    {
+      "path": "mailboxes fields list",
+      "summary": "List Inbox Custom Fields as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_inbox_custom_fields",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/inbox-fields/",
+      "flags": [
+        {
+          "name": "mailbox-id",
+          "type": "string",
+          "summary": "Help Scout mailboxId value.",
+          "maps_to": "config.mailbox_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout mailboxes fields list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/mailboxes/{mailboxId}/fields"
+        }
+      ]
+    },
+    {
+      "path": "mailboxes folders list",
+      "summary": "List Inbox Folders as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_inbox_folders",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/inbox-folders/",
+      "flags": [
+        {
+          "name": "mailbox-id",
+          "type": "string",
+          "summary": "Help Scout mailboxId value.",
+          "maps_to": "config.mailbox_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout mailboxes folders list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/mailboxes/{mailboxId}/folders"
+        }
+      ]
+    },
+    {
+      "path": "mailboxes list",
+      "summary": "List Inboxes as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "mailboxes",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/list/",
+      "flags": [],
+      "examples": [
+        "pm help-scout mailboxes list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/mailboxes"
+        }
+      ]
+    },
+    {
+      "path": "mailboxes routing get",
+      "summary": "Get Routing configuration as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_routing_configuration",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/routing/routing-configuration-get/",
+      "flags": [
+        {
+          "name": "mailbox-id",
+          "type": "string",
+          "summary": "Help Scout mailboxId value.",
+          "maps_to": "config.mailbox_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout mailboxes routing get --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/mailboxes/{mailboxId}/routing"
+        }
+      ]
+    },
+    {
+      "path": "mailboxes saved-replies get",
+      "summary": "Get Saved Reply as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_saved_reply",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-get/",
+      "flags": [
+        {
+          "name": "mailbox-id",
+          "type": "string",
+          "summary": "Help Scout mailboxId value.",
+          "maps_to": "config.mailbox_id",
+          "allow_empty": false
+        },
+        {
+          "name": "saved-reply-id",
+          "type": "string",
+          "summary": "Help Scout savedReplyId value.",
+          "maps_to": "config.saved_reply_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout mailboxes saved-replies get --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/mailboxes/{mailboxId}/saved-replies/{savedReplyId}"
+        }
+      ]
+    },
+    {
+      "path": "mailboxes saved-replies list",
+      "summary": "List Saved Replies as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_saved_replies",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-list/",
+      "flags": [
+        {
+          "name": "mailbox-id",
+          "type": "string",
+          "summary": "Help Scout mailboxId value.",
+          "maps_to": "config.mailbox_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout mailboxes saved-replies list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/mailboxes/{mailboxId}/saved-replies"
+        }
+      ]
+    },
+    {
+      "path": "organizations conversations get",
+      "summary": "Get Organization Conversations as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_organization_conversations",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/get-conversations/",
+      "flags": [
+        {
+          "name": "organization-id",
+          "type": "string",
+          "summary": "Help Scout organizationId value.",
+          "maps_to": "config.organization_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout organizations conversations get --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/organizations/{organizationId}/conversations"
+        }
+      ]
+    },
+    {
+      "path": "organizations customers get",
+      "summary": "Get Organization Customers as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_organization_customers",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/get-customers/",
+      "flags": [
+        {
+          "name": "organization-id",
+          "type": "string",
+          "summary": "Help Scout organizationId value.",
+          "maps_to": "config.organization_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout organizations customers get --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/organizations/{organizationId}/customers"
+        }
+      ]
+    },
+    {
+      "path": "organizations get",
+      "summary": "Get Organization by ID as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_organization_by_id",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/get/",
+      "flags": [
+        {
+          "name": "organization-id",
+          "type": "string",
+          "summary": "Help Scout organizationId value.",
+          "maps_to": "config.organization_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout organizations get --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/organizations/{organizationId}"
+        }
+      ]
+    },
+    {
+      "path": "organizations list",
+      "summary": "List Organizations as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_organizations",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/list/",
+      "flags": [],
+      "examples": [
+        "pm help-scout organizations list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/organizations"
+        }
+      ]
+    },
+    {
+      "path": "organizations properties get",
+      "summary": "Get Organization Property Definition as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_organization_property_definition",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/get/",
+      "flags": [
+        {
+          "name": "property-slug",
+          "type": "string",
+          "summary": "Help Scout propertySlug value.",
+          "maps_to": "config.property_slug",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout organizations properties get --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/organizations/properties/{propertySlug}"
+        }
+      ]
+    },
+    {
+      "path": "organizations properties list",
+      "summary": "List Organization Property Definitions as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_organization_property_definitions",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/list/",
+      "flags": [],
+      "examples": [
+        "pm help-scout organizations properties list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/organizations/properties"
+        }
+      ]
+    },
+    {
+      "path": "customer-properties list",
+      "summary": "List Customer Property Definitions as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_customer_property_definitions",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/properties/list/",
+      "flags": [],
+      "examples": [
+        "pm help-scout customer-properties list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/customer-properties"
+        }
+      ]
+    },
+    {
+      "path": "ratings get",
+      "summary": "Get Satisfaction Rating as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_satisfaction_rating",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/ratings/get/",
+      "flags": [
+        {
+          "name": "rating-id",
+          "type": "string",
+          "summary": "Help Scout ratingId value.",
+          "maps_to": "config.rating_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout ratings get --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/ratings/{ratingId}"
+        }
+      ]
+    },
+    {
+      "path": "system-users get",
+      "summary": "Get System User as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_system_user",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/get-system-user/",
+      "flags": [
+        {
+          "name": "system-user-id",
+          "type": "string",
+          "summary": "Help Scout systemUserId value.",
+          "maps_to": "config.system_user_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout system-users get --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/system-users/{systemUserId}"
+        }
+      ]
+    },
+    {
+      "path": "system-users list",
+      "summary": "List System Users as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_system_users",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/list-system-users/",
+      "flags": [],
+      "examples": [
+        "pm help-scout system-users list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/system-users"
+        }
+      ]
+    },
+    {
+      "path": "tags get",
+      "summary": "Get Tag by ID as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_tag_by_id",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/tags/get/",
+      "flags": [
+        {
+          "name": "tag-id",
+          "type": "string",
+          "summary": "Help Scout tagId value.",
+          "maps_to": "config.tag_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout tags get --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/tags/{tagId}"
+        }
+      ]
+    },
+    {
+      "path": "tags list",
+      "summary": "List Tags as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_tags",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/tags/list/",
+      "flags": [],
+      "examples": [
+        "pm help-scout tags list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/tags"
+        }
+      ]
+    },
+    {
+      "path": "teams members list",
+      "summary": "List Team Members as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_team_members",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/teams/list-team-members/",
+      "flags": [
+        {
+          "name": "team-id",
+          "type": "string",
+          "summary": "Help Scout teamId value.",
+          "maps_to": "config.team_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout teams members list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/teams/{teamId}/members"
+        }
+      ]
+    },
+    {
+      "path": "teams list",
+      "summary": "List Teams as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_teams",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/teams/list-teams/",
+      "flags": [],
+      "examples": [
+        "pm help-scout teams list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/teams"
+        }
+      ]
+    },
+    {
+      "path": "users conversation-reassignment get",
+      "summary": "Get Conversation Reassignment configuration as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_conversation_reassignment_configuration",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/conversation reassignment/get/",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Help Scout userId value.",
+          "maps_to": "config.user_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout users conversation-reassignment get --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users/{userId}/conversation-reassignment"
+        }
+      ]
+    },
+    {
+      "path": "users get",
+      "summary": "Get User as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_user",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/get/",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Help Scout userId value.",
+          "maps_to": "config.user_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout users get --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users/{userId}"
+        }
+      ]
+    },
+    {
+      "path": "users list",
+      "summary": "List Users as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/list/",
+      "flags": [],
+      "examples": [
+        "pm help-scout users list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users"
+        }
+      ]
+    },
+    {
+      "path": "users me get",
+      "summary": "Get Resource Owner as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_resource_owner",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/me/",
+      "flags": [],
+      "examples": [
+        "pm help-scout users me get --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users/me"
+        }
+      ]
+    },
+    {
+      "path": "users status get",
+      "summary": "Get user status as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_user_status",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/status/get/",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Help Scout userId value.",
+          "maps_to": "config.user_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout users status get --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users/{userId}/status"
+        }
+      ]
+    },
+    {
+      "path": "users status list",
+      "summary": "List users statuses as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_users_statuses",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/status/list/",
+      "flags": [],
+      "examples": [
+        "pm help-scout users status list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users/status"
+        }
+      ]
+    },
+    {
+      "path": "webhooks get",
+      "summary": "Get Webhook as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_webhook",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/get/",
+      "flags": [
+        {
+          "name": "webhook-id",
+          "type": "string",
+          "summary": "Help Scout webhookId value.",
+          "maps_to": "config.webhook_id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm help-scout webhooks get --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/webhooks/{webhookId}"
+        }
+      ]
+    },
+    {
+      "path": "webhooks list",
+      "summary": "List Webhooks as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_webhooks",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/list/",
+      "flags": [],
+      "examples": [
+        "pm help-scout webhooks list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/webhooks"
+        }
+      ]
+    },
+    {
+      "path": "workflows list",
+      "summary": "List Workflows as Help Scout ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_workflows",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/workflows/list/",
+      "flags": [],
+      "examples": [
+        "pm help-scout workflows list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workflows"
+        }
+      ]
+    },
+    {
+      "path": "conversations threads attachments upload",
+      "summary": "Upload Attachment",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "upload_attachment",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/create/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation_id path identifier.",
+          "maps_to": "record.conversation_id",
+          "allow_empty": false
+        },
+        {
+          "name": "thread-id",
+          "type": "string",
+          "summary": "Help Scout thread_id path identifier.",
+          "maps_to": "record.thread_id",
+          "allow_empty": false
+        },
+        {
+          "name": "attachment-file",
+          "type": "string",
+          "summary": "Project-local file path approved by preview before upload.",
+          "maps_to": "record.attachment_file",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Upload Attachment); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout conversations threads attachments upload --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/conversations/{conversationId}/threads/{threadId}/attachments"
+        }
+      ]
+    },
+    {
+      "path": "conversations attachments delete",
+      "summary": "Delete Attachment",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_attachment",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/delete/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation_id path identifier.",
+          "maps_to": "record.conversation_id",
+          "allow_empty": false
+        },
+        {
+          "name": "attachment-id",
+          "type": "string",
+          "summary": "Help Scout attachment_id path identifier.",
+          "maps_to": "record.attachment_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "Destructive/admin Help Scout mutation (Delete Attachment); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout conversations attachments delete --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/conversations/{conversationId}/attachments/{attachmentId}"
+        }
+      ]
+    },
+    {
+      "path": "conversations create",
+      "summary": "Create Conversation",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_conversation",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/create/",
+      "flags": [],
+      "risk": "External Help Scout mutation (Create Conversation); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout conversations create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/conversations"
+        }
+      ]
+    },
+    {
+      "path": "conversations fields update",
+      "summary": "Update Custom Fields",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_custom_fields",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/custom_fields/update/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation_id path identifier.",
+          "maps_to": "record.conversation_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Update Custom Fields); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout conversations fields update --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/conversations/{conversationId}/fields"
+        }
+      ]
+    },
+    {
+      "path": "conversations delete",
+      "summary": "Delete Conversation",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_conversation",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/delete/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation_id path identifier.",
+          "maps_to": "record.conversation_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "Destructive/admin Help Scout mutation (Delete Conversation); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout conversations delete --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/conversations/{conversationId}"
+        }
+      ]
+    },
+    {
+      "path": "conversations snooze delete",
+      "summary": "Delete Snooze",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_snooze",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/snooze/delete/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation_id path identifier.",
+          "maps_to": "record.conversation_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "Destructive/admin Help Scout mutation (Delete Snooze); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout conversations snooze delete --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/conversations/{conversationId}/snooze"
+        }
+      ]
+    },
+    {
+      "path": "conversations snooze update",
+      "summary": "Update Snooze",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_snooze",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/snooze/update/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation_id path identifier.",
+          "maps_to": "record.conversation_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Update Snooze); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout conversations snooze update --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/conversations/{conversationId}/snooze"
+        }
+      ]
+    },
+    {
+      "path": "conversations tags update",
+      "summary": "Update Tags",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_tags",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/tags/update/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation_id path identifier.",
+          "maps_to": "record.conversation_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Update Tags); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout conversations tags update --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/conversations/{conversationId}/tags"
+        }
+      ]
+    },
+    {
+      "path": "conversations chats create",
+      "summary": "Create Chat Thread",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_chat_thread",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/chat/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation_id path identifier.",
+          "maps_to": "record.conversation_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Create Chat Thread); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout conversations chats create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/conversations/{conversationId}/chats"
+        }
+      ]
+    },
+    {
+      "path": "conversations customer create",
+      "summary": "Create Customer Thread",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_customer_thread",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/customer/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation_id path identifier.",
+          "maps_to": "record.conversation_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Create Customer Thread); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout conversations customer create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/conversations/{conversationId}/customer"
+        }
+      ]
+    },
+    {
+      "path": "conversations notes create",
+      "summary": "Create Note",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_note",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/note/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation_id path identifier.",
+          "maps_to": "record.conversation_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Create Note); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout conversations notes create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/conversations/{conversationId}/notes"
+        }
+      ]
+    },
+    {
+      "path": "conversations phones create",
+      "summary": "Create Phone Thread",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_phone_thread",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/phone/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation_id path identifier.",
+          "maps_to": "record.conversation_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Create Phone Thread); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout conversations phones create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/conversations/{conversationId}/phones"
+        }
+      ]
+    },
+    {
+      "path": "conversations reply create",
+      "summary": "Create Reply Thread",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_reply_thread",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/reply/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation_id path identifier.",
+          "maps_to": "record.conversation_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Create Reply Thread); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout conversations reply create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/conversations/{conversationId}/reply"
+        }
+      ]
+    },
+    {
+      "path": "conversations threads schedule delete",
+      "summary": "Delete Thread Schedule",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_thread_schedule",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/schedule/delete/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation_id path identifier.",
+          "maps_to": "record.conversation_id",
+          "allow_empty": false
+        },
+        {
+          "name": "thread-id",
+          "type": "string",
+          "summary": "Help Scout thread_id path identifier.",
+          "maps_to": "record.thread_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "Destructive/admin Help Scout mutation (Delete Thread Schedule); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout conversations threads schedule delete --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/conversations/{conversationId}/threads/{threadId}/schedule"
+        }
+      ]
+    },
+    {
+      "path": "conversations threads schedule publish",
+      "summary": "Publish Thread Schedule",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "publish_thread_schedule",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/schedule/publish/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation_id path identifier.",
+          "maps_to": "record.conversation_id",
+          "allow_empty": false
+        },
+        {
+          "name": "thread-id",
+          "type": "string",
+          "summary": "Help Scout thread_id path identifier.",
+          "maps_to": "record.thread_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Publish Thread Schedule); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout conversations threads schedule publish --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/conversations/{conversationId}/threads/{threadId}/schedule"
+        }
+      ]
+    },
+    {
+      "path": "conversations threads schedule update",
+      "summary": "Update Thread Schedule",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_thread_schedule",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/schedule/update/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation_id path identifier.",
+          "maps_to": "record.conversation_id",
+          "allow_empty": false
+        },
+        {
+          "name": "thread-id",
+          "type": "string",
+          "summary": "Help Scout thread_id path identifier.",
+          "maps_to": "record.thread_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Update Thread Schedule); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout conversations threads schedule update --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/conversations/{conversationId}/threads/{threadId}/schedule"
+        }
+      ]
+    },
+    {
+      "path": "conversations threads update",
+      "summary": "Update Thread",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_thread",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/update/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation_id path identifier.",
+          "maps_to": "record.conversation_id",
+          "allow_empty": false
+        },
+        {
+          "name": "thread-id",
+          "type": "string",
+          "summary": "Help Scout thread_id path identifier.",
+          "maps_to": "record.thread_id",
+          "allow_empty": false
+        },
+        {
+          "name": "patch",
+          "type": "string_array",
+          "summary": "JSON Patch operation objects supplied by the reverse-ETL record source.",
+          "maps_to": "record.patch"
+        }
+      ],
+      "risk": "External Help Scout mutation (Update Thread); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout conversations threads update --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/conversations/{conversationId}/threads/{threadId}"
+        }
+      ]
+    },
+    {
+      "path": "conversations update",
+      "summary": "Update Conversation",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_conversation",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/update/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversation_id path identifier.",
+          "maps_to": "record.conversation_id",
+          "allow_empty": false
+        },
+        {
+          "name": "patch",
+          "type": "string_array",
+          "summary": "JSON Patch operation objects supplied by the reverse-ETL record source.",
+          "maps_to": "record.patch"
+        }
+      ],
+      "risk": "External Help Scout mutation (Update Conversation); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout conversations update --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/conversations/{conversationId}"
+        }
+      ]
+    },
+    {
+      "path": "customers address create",
+      "summary": "Create Address",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_address",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/create/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer_id path identifier.",
+          "maps_to": "record.customer_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Create Address); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customers address create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/customers/{customerId}/address"
+        }
+      ]
+    },
+    {
+      "path": "customers address delete",
+      "summary": "Delete Address",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_address",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/delete/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer_id path identifier.",
+          "maps_to": "record.customer_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "Destructive/admin Help Scout mutation (Delete Address); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customers address delete --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/customers/{customerId}/address"
+        }
+      ]
+    },
+    {
+      "path": "customers address update",
+      "summary": "Update Address",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_address",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/update/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer_id path identifier.",
+          "maps_to": "record.customer_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Update Address); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customers address update --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/customers/{customerId}/address"
+        }
+      ]
+    },
+    {
+      "path": "customers chats create",
+      "summary": "Create Chat Handle",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_chat_handle",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/create/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer_id path identifier.",
+          "maps_to": "record.customer_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Create Chat Handle); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customers chats create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/customers/{customerId}/chats"
+        }
+      ]
+    },
+    {
+      "path": "customers chats delete",
+      "summary": "Delete Chat Handle",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_chat_handle",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/delete/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer_id path identifier.",
+          "maps_to": "record.customer_id",
+          "allow_empty": false
+        },
+        {
+          "name": "chat-handle-id",
+          "type": "string",
+          "summary": "Help Scout chat_handle_id path identifier.",
+          "maps_to": "record.chat_handle_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "Destructive/admin Help Scout mutation (Delete Chat Handle); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customers chats delete --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/customers/{customerId}/chats/{chatHandleId}"
+        }
+      ]
+    },
+    {
+      "path": "customers chats update",
+      "summary": "Update Chat Handles",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_chat_handles",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/update/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer_id path identifier.",
+          "maps_to": "record.customer_id",
+          "allow_empty": false
+        },
+        {
+          "name": "chat-handle-id",
+          "type": "string",
+          "summary": "Help Scout chat_handle_id path identifier.",
+          "maps_to": "record.chat_handle_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Update Chat Handles); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customers chats update --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/customers/{customerId}/chats/{chatHandleId}"
+        }
+      ]
+    },
+    {
+      "path": "customers create",
+      "summary": "Create Customer",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_customer",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/create/",
+      "flags": [],
+      "risk": "External Help Scout mutation (Create Customer); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customers create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/customers"
+        }
+      ]
+    },
+    {
+      "path": "customers delete",
+      "summary": "Delete Customer",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_customer",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/delete/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer_id path identifier.",
+          "maps_to": "record.customer_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "Destructive/admin Help Scout mutation (Delete Customer); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customers delete --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/customers/{customerId}"
+        }
+      ]
+    },
+    {
+      "path": "customers emails create",
+      "summary": "Create Email",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_email",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/create/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer_id path identifier.",
+          "maps_to": "record.customer_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Create Email); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customers emails create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/customers/{customerId}/emails"
+        }
+      ]
+    },
+    {
+      "path": "customers emails delete",
+      "summary": "Delete Email",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_email",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/delete/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer_id path identifier.",
+          "maps_to": "record.customer_id",
+          "allow_empty": false
+        },
+        {
+          "name": "email-id",
+          "type": "string",
+          "summary": "Help Scout email_id path identifier.",
+          "maps_to": "record.email_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "Destructive/admin Help Scout mutation (Delete Email); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customers emails delete --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/customers/{customerId}/emails/{emailId}"
+        }
+      ]
+    },
+    {
+      "path": "customers emails update",
+      "summary": "Update Email",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_email",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/update/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer_id path identifier.",
+          "maps_to": "record.customer_id",
+          "allow_empty": false
+        },
+        {
+          "name": "email-id",
+          "type": "string",
+          "summary": "Help Scout email_id path identifier.",
+          "maps_to": "record.email_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Update Email); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customers emails update --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/customers/{customerId}/emails/{emailId}"
+        }
+      ]
+    },
+    {
+      "path": "customers overwrite",
+      "summary": "Overwrite Customer",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "overwrite_customer",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/overwrite/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer_id path identifier.",
+          "maps_to": "record.customer_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Overwrite Customer); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customers overwrite --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/customers/{customerId}"
+        }
+      ]
+    },
+    {
+      "path": "customers phones create",
+      "summary": "Create Phone",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_phone",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/create/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer_id path identifier.",
+          "maps_to": "record.customer_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Create Phone); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customers phones create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/customers/{customerId}/phones"
+        }
+      ]
+    },
+    {
+      "path": "customers phones delete",
+      "summary": "Delete Phone",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_phone",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/delete/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer_id path identifier.",
+          "maps_to": "record.customer_id",
+          "allow_empty": false
+        },
+        {
+          "name": "phone-id",
+          "type": "string",
+          "summary": "Help Scout phone_id path identifier.",
+          "maps_to": "record.phone_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "Destructive/admin Help Scout mutation (Delete Phone); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customers phones delete --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/customers/{customerId}/phones/{phoneId}"
+        }
+      ]
+    },
+    {
+      "path": "customers phones update",
+      "summary": "Update Phone",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_phone",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/update/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer_id path identifier.",
+          "maps_to": "record.customer_id",
+          "allow_empty": false
+        },
+        {
+          "name": "phone-id",
+          "type": "string",
+          "summary": "Help Scout phone_id path identifier.",
+          "maps_to": "record.phone_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Update Phone); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customers phones update --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/customers/{customerId}/phones/{phoneId}"
+        }
+      ]
+    },
+    {
+      "path": "customers social-profiles create",
+      "summary": "Create Social Profile",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_social_profile",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/create/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer_id path identifier.",
+          "maps_to": "record.customer_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Create Social Profile); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customers social-profiles create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/customers/{customerId}/social-profiles"
+        }
+      ]
+    },
+    {
+      "path": "customers social-profiles delete",
+      "summary": "Delete Social Profile",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_social_profile",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/delete/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer_id path identifier.",
+          "maps_to": "record.customer_id",
+          "allow_empty": false
+        },
+        {
+          "name": "social-profile-id",
+          "type": "string",
+          "summary": "Help Scout social_profile_id path identifier.",
+          "maps_to": "record.social_profile_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "Destructive/admin Help Scout mutation (Delete Social Profile); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customers social-profiles delete --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/customers/{customerId}/social-profiles/{socialProfileId}"
+        }
+      ]
+    },
+    {
+      "path": "customers social-profiles update",
+      "summary": "Update Social Profile",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_social_profile",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/update/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer_id path identifier.",
+          "maps_to": "record.customer_id",
+          "allow_empty": false
+        },
+        {
+          "name": "social-profile-id",
+          "type": "string",
+          "summary": "Help Scout social_profile_id path identifier.",
+          "maps_to": "record.social_profile_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Update Social Profile); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customers social-profiles update --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/customers/{customerId}/social-profiles/{socialProfileId}"
+        }
+      ]
+    },
+    {
+      "path": "customers update",
+      "summary": "Update Customer",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_customer",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/update/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer_id path identifier.",
+          "maps_to": "record.customer_id",
+          "allow_empty": false
+        },
+        {
+          "name": "patch",
+          "type": "string_array",
+          "summary": "JSON Patch operation objects supplied by the reverse-ETL record source.",
+          "maps_to": "record.patch"
+        }
+      ],
+      "risk": "External Help Scout mutation (Update Customer); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customers update --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/customers/{customerId}"
+        }
+      ]
+    },
+    {
+      "path": "customers websites create",
+      "summary": "Create Website",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_website",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/create/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer_id path identifier.",
+          "maps_to": "record.customer_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Create Website); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customers websites create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/customers/{customerId}/websites"
+        }
+      ]
+    },
+    {
+      "path": "customers websites delete",
+      "summary": "Delete Website",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_website",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/delete/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer_id path identifier.",
+          "maps_to": "record.customer_id",
+          "allow_empty": false
+        },
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Help Scout website_id path identifier.",
+          "maps_to": "record.website_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "Destructive/admin Help Scout mutation (Delete Website); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customers websites delete --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/customers/{customerId}/websites/{websiteId}"
+        }
+      ]
+    },
+    {
+      "path": "customers websites update",
+      "summary": "Update Website",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_website",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/update/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer_id path identifier.",
+          "maps_to": "record.customer_id",
+          "allow_empty": false
+        },
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Help Scout website_id path identifier.",
+          "maps_to": "record.website_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Update Website); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customers websites update --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/customers/{customerId}/websites/{websiteId}"
+        }
+      ]
+    },
+    {
+      "path": "mailboxes routing update",
+      "summary": "Update Routing configuration",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_routing_configuration",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/routing/routing-configuration-update/",
+      "flags": [
+        {
+          "name": "mailbox-id",
+          "type": "string",
+          "summary": "Help Scout mailbox_id path identifier.",
+          "maps_to": "record.mailbox_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Update Routing configuration); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout mailboxes routing update --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/mailboxes/{mailboxId}/routing"
+        }
+      ]
+    },
+    {
+      "path": "mailboxes saved-replies create",
+      "summary": "Create Saved Reply",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_saved_reply",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-create/",
+      "flags": [
+        {
+          "name": "mailbox-id",
+          "type": "string",
+          "summary": "Help Scout mailbox_id path identifier.",
+          "maps_to": "record.mailbox_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Create Saved Reply); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout mailboxes saved-replies create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/mailboxes/{mailboxId}/saved-replies"
+        }
+      ]
+    },
+    {
+      "path": "mailboxes saved-replies delete",
+      "summary": "Delete Saved Reply",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_saved_reply",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-delete/",
+      "flags": [
+        {
+          "name": "mailbox-id",
+          "type": "string",
+          "summary": "Help Scout mailbox_id path identifier.",
+          "maps_to": "record.mailbox_id",
+          "allow_empty": false
+        },
+        {
+          "name": "saved-reply-id",
+          "type": "string",
+          "summary": "Help Scout saved_reply_id path identifier.",
+          "maps_to": "record.saved_reply_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "Destructive/admin Help Scout mutation (Delete Saved Reply); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout mailboxes saved-replies delete --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/mailboxes/{mailboxId}/saved-replies/{savedReplyId}"
+        }
+      ]
+    },
+    {
+      "path": "mailboxes saved-replies update",
+      "summary": "Update Saved Reply",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_saved_reply",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-update/",
+      "flags": [
+        {
+          "name": "mailbox-id",
+          "type": "string",
+          "summary": "Help Scout mailbox_id path identifier.",
+          "maps_to": "record.mailbox_id",
+          "allow_empty": false
+        },
+        {
+          "name": "saved-reply-id",
+          "type": "string",
+          "summary": "Help Scout saved_reply_id path identifier.",
+          "maps_to": "record.saved_reply_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Update Saved Reply); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout mailboxes saved-replies update --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/mailboxes/{mailboxId}/saved-replies/{savedReplyId}"
+        }
+      ]
+    },
+    {
+      "path": "organizations create",
+      "summary": "Create Organization",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_organization",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/create/",
+      "flags": [],
+      "risk": "External Help Scout mutation (Create Organization); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout organizations create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/organizations"
+        }
+      ]
+    },
+    {
+      "path": "organizations delete",
+      "summary": "Delete Organization by ID",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_organization_by_id",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/delete/",
+      "flags": [
+        {
+          "name": "organization-id",
+          "type": "string",
+          "summary": "Help Scout organization_id path identifier.",
+          "maps_to": "record.organization_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "Destructive/admin Help Scout mutation (Delete Organization by ID); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout organizations delete --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/organizations/{organizationId}"
+        }
+      ]
+    },
+    {
+      "path": "organizations properties create",
+      "summary": "Create Organization Property Definition",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_organization_property_definition",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/create/",
+      "flags": [],
+      "risk": "External Help Scout mutation (Create Organization Property Definition); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout organizations properties create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/organizations/properties"
+        }
+      ]
+    },
+    {
+      "path": "organizations properties delete",
+      "summary": "Delete Organization Property Definition",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_organization_property_definition",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/delete/",
+      "flags": [
+        {
+          "name": "property-slug",
+          "type": "string",
+          "summary": "Help Scout property_slug path identifier.",
+          "maps_to": "record.property_slug",
+          "allow_empty": false
+        }
+      ],
+      "risk": "Destructive/admin Help Scout mutation (Delete Organization Property Definition); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout organizations properties delete --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/organizations/properties/{propertySlug}"
+        }
+      ]
+    },
+    {
+      "path": "organizations properties remove",
+      "summary": "Remove Organization Property Value",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_organization_property_value",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/remove-value/",
+      "flags": [
+        {
+          "name": "organization-id",
+          "type": "string",
+          "summary": "Help Scout organization_id path identifier.",
+          "maps_to": "record.organization_id",
+          "allow_empty": false
+        },
+        {
+          "name": "property-slug",
+          "type": "string",
+          "summary": "Help Scout property_slug path identifier.",
+          "maps_to": "record.property_slug",
+          "allow_empty": false
+        }
+      ],
+      "risk": "Destructive/admin Help Scout mutation (Remove Organization Property Value); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout organizations properties remove --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/organizations/{organizationId}/properties/{propertySlug}"
+        }
+      ]
+    },
+    {
+      "path": "organizations properties set",
+      "summary": "Set Organization Property Value",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "set_organization_property_value",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/set-value/",
+      "flags": [
+        {
+          "name": "organization-id",
+          "type": "string",
+          "summary": "Help Scout organization_id path identifier.",
+          "maps_to": "record.organization_id",
+          "allow_empty": false
+        },
+        {
+          "name": "property-slug",
+          "type": "string",
+          "summary": "Help Scout property_slug path identifier.",
+          "maps_to": "record.property_slug",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Set Organization Property Value); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout organizations properties set --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/organizations/{organizationId}/properties/{propertySlug}"
+        }
+      ]
+    },
+    {
+      "path": "organizations properties update",
+      "summary": "Update Organization Property Definition",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_organization_property_definition",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/update/",
+      "flags": [
+        {
+          "name": "property-slug",
+          "type": "string",
+          "summary": "Help Scout property_slug path identifier.",
+          "maps_to": "record.property_slug",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Update Organization Property Definition); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout organizations properties update --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/organizations/properties/{propertySlug}"
+        }
+      ]
+    },
+    {
+      "path": "organizations update",
+      "summary": "Update Organization",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_organization",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/update/",
+      "flags": [
+        {
+          "name": "organization-id",
+          "type": "string",
+          "summary": "Help Scout organization_id path identifier.",
+          "maps_to": "record.organization_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Update Organization); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout organizations update --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/organizations/{organizationId}"
+        }
+      ]
+    },
+    {
+      "path": "customer-properties create",
+      "summary": "Create Customer Property Definition",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_customer_property_definition",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/properties/create/",
+      "flags": [],
+      "risk": "External Help Scout mutation (Create Customer Property Definition); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customer-properties create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/customer-properties"
+        }
+      ]
+    },
+    {
+      "path": "customer-properties delete",
+      "summary": "Delete Customer Property Definition",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_customer_property_definition",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/properties/delete/",
+      "flags": [
+        {
+          "name": "property-slug",
+          "type": "string",
+          "summary": "Help Scout property_slug path identifier.",
+          "maps_to": "record.property_slug",
+          "allow_empty": false
+        }
+      ],
+      "risk": "Destructive/admin Help Scout mutation (Delete Customer Property Definition); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customer-properties delete --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/customer-properties/{propertySlug}"
+        }
+      ]
+    },
+    {
+      "path": "customers properties update",
+      "summary": "Update Customer Properties",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_customer_properties",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/properties/update/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Help Scout customer_id path identifier.",
+          "maps_to": "record.customer_id",
+          "allow_empty": false
+        },
+        {
+          "name": "patch",
+          "type": "string_array",
+          "summary": "JSON Patch operation objects supplied by the reverse-ETL record source.",
+          "maps_to": "record.patch"
+        }
+      ],
+      "risk": "External Help Scout mutation (Update Customer Properties); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout customers properties update --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/customers/{customerId}/properties"
+        }
+      ]
+    },
+    {
+      "path": "teams members update",
+      "summary": "Update Team Members",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_team_members",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/teams/update-team-members/",
+      "flags": [
+        {
+          "name": "team-id",
+          "type": "string",
+          "summary": "Help Scout team_id path identifier.",
+          "maps_to": "record.team_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Update Team Members); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout teams members update --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/teams/{teamId}/members"
+        }
+      ]
+    },
+    {
+      "path": "users conversation-reassignment update",
+      "summary": "Update Conversation Reassignment configuration",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_conversation_reassignment_configuration",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/conversation reassignment/update/",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Help Scout user_id path identifier.",
+          "maps_to": "record.user_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Update Conversation Reassignment configuration); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout users conversation-reassignment update --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/users/{userId}/conversation-reassignment"
+        }
+      ]
+    },
+    {
+      "path": "users create",
+      "summary": "Create User",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_user",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/create/",
+      "flags": [],
+      "risk": "External Help Scout mutation (Create User); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout users create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/users"
+        }
+      ]
+    },
+    {
+      "path": "users delete",
+      "summary": "Delete User",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_user",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/delete/",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Help Scout user_id path identifier.",
+          "maps_to": "record.user_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "Destructive/admin Help Scout mutation (Delete User); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout users delete --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/users/{userId}"
+        }
+      ]
+    },
+    {
+      "path": "users status set",
+      "summary": "Set user status",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "set_user_status",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/status/set/",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Help Scout user_id path identifier.",
+          "maps_to": "record.user_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Set user status); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout users status set --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/users/{userId}/status"
+        }
+      ]
+    },
+    {
+      "path": "webhooks create",
+      "summary": "Create Webhook",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_webhook",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/create/",
+      "flags": [],
+      "risk": "External Help Scout mutation (Create Webhook); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout webhooks create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/webhooks"
+        }
+      ]
+    },
+    {
+      "path": "webhooks delete",
+      "summary": "Delete Webhook",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_webhook",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/delete/",
+      "flags": [
+        {
+          "name": "webhook-id",
+          "type": "string",
+          "summary": "Help Scout webhook_id path identifier.",
+          "maps_to": "record.webhook_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "Destructive/admin Help Scout mutation (Delete Webhook); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout webhooks delete --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/webhooks/{webhookId}"
+        }
+      ]
+    },
+    {
+      "path": "webhooks update",
+      "summary": "Update Webhook",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_webhook",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/update/",
+      "flags": [
+        {
+          "name": "webhook-id",
+          "type": "string",
+          "summary": "Help Scout webhook_id path identifier.",
+          "maps_to": "record.webhook_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Update Webhook); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout webhooks update --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/webhooks/{webhookId}"
+        }
+      ]
+    },
+    {
+      "path": "workflows run run",
+      "summary": "Run Manual Workflows",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "run_manual_workflows",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/workflows/run/",
+      "flags": [
+        {
+          "name": "workflow-id",
+          "type": "string",
+          "summary": "Help Scout workflow_id path identifier.",
+          "maps_to": "record.workflow_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "External Help Scout mutation (Run Manual Workflows); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout workflows run run --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/workflows/{workflowId}/run"
+        }
+      ]
+    },
+    {
+      "path": "workflows update",
+      "summary": "Update workflow status",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_workflow_status",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/workflows/update/",
+      "flags": [
+        {
+          "name": "workflow-id",
+          "type": "string",
+          "summary": "Help Scout workflow_id path identifier.",
+          "maps_to": "record.workflow_id",
+          "allow_empty": false
+        },
+        {
+          "name": "patch",
+          "type": "string_array",
+          "summary": "JSON Patch operation objects supplied by the reverse-ETL record source.",
+          "maps_to": "record.patch"
+        }
+      ],
+      "risk": "External Help Scout mutation (Update workflow status); reverse ETL plan, preview, explicit approval, and typed destructive confirmation are required.",
+      "approval": "Reverse ETL plan -> preview -> explicit approval token -> execute; typed --confirm destructive challenge required.",
+      "examples": [
+        "pm help-scout workflows update --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/workflows/{workflowId}"
+        }
+      ]
+    },
+    {
+      "path": "reports chat-report",
+      "summary": "Chat Report",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.chat_report",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/chat/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/chat; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports company-customers-helped",
+      "summary": "Company Customers Helped",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.company_customers_helped",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/reports-company-customers-helped/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/company/customers-helped; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports company-drilldown",
+      "summary": "Company Drilldown",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.company_drilldown",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/reports-company-drilldown/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/company/drilldown; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports company-overall-report",
+      "summary": "Company Overall Report",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.company_overall_report",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/reports-company-overall/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/company; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports conversations-busiest-time-of-day",
+      "summary": "Conversations - Busiest Time of Day",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.conversations_busiest_time_of_day",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-busy-times/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/conversations/busy-times; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports conversations-drilldown",
+      "summary": "Conversations - Drilldown",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.conversations_drilldown",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-drilldown/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/conversations/drilldown; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports conversations-drilldown-by-field",
+      "summary": "Conversations - Drilldown by Field",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.conversations_drilldown_by_field",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-field-drilldown/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/conversations/fields-drilldown; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports conversations-new-conversations-drilldown",
+      "summary": "Conversations - New Conversations Drilldown",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.conversations_new_conversations_drilldown",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-new-drilldown/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/conversations/new-drilldown; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports conversations-new-conversations",
+      "summary": "Conversations - New Conversations",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.conversations_new_conversations",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-new/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/conversations/new; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports conversations-overall-report",
+      "summary": "Conversations - Overall Report",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.conversations_overall_report",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-overall/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/conversations; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports conversations-received-messages-statistics",
+      "summary": "Conversations - Received Messages Statistics",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.conversations_received_messages_statistics",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-received-messages/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/conversations/received-messages; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports all-channels-volumes-by-channel",
+      "summary": "All Channels - Volumes by Channel",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.all_channels_volumes_by_channel",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-volume-by-channel/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/conversations/volume-by-channel; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports docs-overall-report",
+      "summary": "Docs Overall Report",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.docs_overall_report",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/docs/reports-docs-overall/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/docs; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports email-report",
+      "summary": "Email Report",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.email_report",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/email/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/email; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports happiness-overall-report",
+      "summary": "Happiness Overall Report",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.happiness_overall_report",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/happiness/reports-happiness-overall/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/happiness; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports happiness-ratings-report",
+      "summary": "Happiness Ratings Report",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.happiness_ratings_report",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/happiness/reports-happiness-ratings/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/happiness/ratings; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports phone-report",
+      "summary": "Phone Report",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.phone_report",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/phone/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/phone; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports productivity-first-response-time",
+      "summary": "Productivity - First Response Time",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.productivity_first_response_time",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-first-response-time/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/productivity/first-response-time; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports productivity-overall-report",
+      "summary": "Productivity Overall Report",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.productivity_overall_report",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-overall/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/productivity; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports productivity-replies-sent",
+      "summary": "Productivity - Replies Sent",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.productivity_replies_sent",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-replies-sent/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/productivity/replies-sent; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports productivity-resolution-time",
+      "summary": "Productivity - Resolution Time",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.productivity_resolution_time",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-resolution-time/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/productivity/resolution-time; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports productivity-resolved",
+      "summary": "Productivity - Resolved",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.productivity_resolved",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-resolved/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/productivity/resolved; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports productivity-response-time",
+      "summary": "Productivity - Response Time",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.productivity_response_time",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-respose-time/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/productivity/response-time; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports user-team-chat-report",
+      "summary": "User/Team Chat Report",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.user_team_chat_report",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-chat/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/user/chat; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports user-conversation-history",
+      "summary": "User Conversation History",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.user_conversation_history",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-conversation-history/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/user/conversation-history; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports user-customers-helped",
+      "summary": "User Customers Helped",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.user_customers_helped",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-customer-helped/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/user/customers-helped; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports user-drill-down",
+      "summary": "User Drill-down",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.user_drill_down",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-drilldown/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/user/drilldown; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports user-happiness-drilldown",
+      "summary": "User Happiness drilldown",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.user_happiness_drilldown",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-happiness-drilldown/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/user/ratings; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports user-happiness",
+      "summary": "User Happiness",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.user_happiness",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-happiness/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/user/happiness; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports user-replies",
+      "summary": "User Replies",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.user_replies",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-replies/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/user/replies; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports user-resolutions",
+      "summary": "User Resolutions",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.user_resolutions",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-resolutions/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/user/resolutions; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "reports user-team-overall-report",
+      "summary": "User/Team Overall Report",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.user_team_overall_report",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user/",
+      "flags": [],
+      "risk": "medium",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/reports/user; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "binary download-attachment-file",
+      "summary": "Download Attachment File",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.download_attachment_file",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/get-attachment-file/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversationId value.",
+          "maps_to": "path.conversation_id",
+          "allow_empty": false
+        },
+        {
+          "name": "attachment-id",
+          "type": "string",
+          "summary": "Help Scout attachmentId value.",
+          "maps_to": "path.attachment_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "high",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/conversations/{conversationId}/attachments/{attachmentId}/file; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    },
+    {
+      "path": "binary get-attachment-data",
+      "summary": "Get Attachment Data",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "help-scout.get_attachment_data",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/get-data/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Help Scout conversationId value.",
+          "maps_to": "path.conversation_id",
+          "allow_empty": false
+        },
+        {
+          "name": "attachment-id",
+          "type": "string",
+          "summary": "Help Scout attachmentId value.",
+          "maps_to": "path.attachment_id",
+          "allow_empty": false
+        }
+      ],
+      "risk": "high",
+      "approval": "Blocked/planned; no execution until the shared bounded provider-query or binary/file foundation is available.",
+      "notes": "GET /v2/conversations/{conversationId}/attachments/{attachmentId}/data; fixed Help Scout endpoint metadata only, not a raw API escape hatch."
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "safety",
+      "summary": "Help Scout writes require reverse ETL plan, preview, approval, execute, and typed destructive confirmation."
+    },
+    {
+      "name": "blocked-foundations",
+      "summary": "Report/provider-query and binary download operations remain blocked until shared bounded foundations land."
+    }
+  ]
+}
