@@ -1,0 +1,14 @@
+{
+  "record": {
+    "template": {},
+    "type": "bigcommerce"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/widgets",
+    "body": {
+      "template": {},
+      "type": "bigcommerce"
+    }
+  }
+}

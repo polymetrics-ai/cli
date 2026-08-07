@@ -1,0 +1,14 @@
+{
+  "record": {
+    "params": {},
+    "type": "applyMacro"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/jobs",
+    "body": {
+      "params": {},
+      "type": "applyMacro"
+    }
+  }
+}

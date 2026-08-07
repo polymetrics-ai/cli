@@ -3,7 +3,11 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "basic", "username": "{{ config.username }}", "password": "{{ secrets.password }}" }
+      {
+        "mode": "basic",
+        "username": "{{ config.username }}",
+        "password": "{{ secrets.password }}"
+      }
     ],
     "pagination": {
       "type": "cursor",
@@ -13,42 +17,542 @@
     "check": {
       "method": "GET",
       "path": "/tickets",
-      "query": { "limit": "1" }
+      "query": {
+        "limit": "1"
+      }
     },
     "error_map": [
-      { "status": 401, "hint": "gorgias username/password is missing or invalid; re-run pm credentials add gorgias" },
-      { "status": 403, "hint": "gorgias account lacks access for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "gorgias rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "gorgias username/password is missing or invalid; re-run pm credentials add gorgias"
+      },
+      {
+        "status": 403,
+        "hint": "gorgias account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "gorgias rate limit exceeded; retry after the provider window clears"
+      }
     ]
   },
   "streams": [
     {
       "name": "tickets",
       "path": "/tickets",
-      "query": { "limit": { "template": "{{ config.page_size }}", "default": "100" } },
-      "records": { "path": "data" },
-      "schema": "schemas/tickets.json"
+      "records": {
+        "path": "data",
+        "single_object": false
+      },
+      "schema": "schemas/tickets.json",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "account",
+      "path": "/account",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/account.json"
+    },
+    {
+      "name": "account_settings",
+      "path": "/account/settings",
+      "records": {
+        "path": "data",
+        "single_object": false
+      },
+      "schema": "schemas/account_settings.json",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "custom_fields",
+      "path": "/custom-fields",
+      "records": {
+        "path": "data",
+        "single_object": false
+      },
+      "schema": "schemas/custom_fields.json",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "custom_field",
+      "path": "/custom-fields/{{ config.custom_field_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/custom_field.json"
     },
     {
       "name": "customers",
       "path": "/customers",
-      "query": { "limit": { "template": "{{ config.page_size }}", "default": "100" } },
-      "records": { "path": "data" },
-      "schema": "schemas/customers.json"
+      "records": {
+        "path": "data",
+        "single_object": false
+      },
+      "schema": "schemas/customers.json",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "customer_custom_fields_values",
+      "path": "/customers/{{ config.customer_id }}/custom-fields",
+      "records": {
+        "path": "data",
+        "single_object": false
+      },
+      "schema": "schemas/customer_custom_fields_values.json",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "customer",
+      "path": "/customers/{{ config.customer_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/customer.json"
+    },
+    {
+      "name": "events",
+      "path": "/events",
+      "records": {
+        "path": "data",
+        "single_object": false
+      },
+      "schema": "schemas/events.json",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "event",
+      "path": "/events/{{ config.event_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/event.json"
+    },
+    {
+      "name": "integrations",
+      "path": "/integrations",
+      "records": {
+        "path": "data",
+        "single_object": false
+      },
+      "schema": "schemas/integrations.json",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "integration",
+      "path": "/integrations/{{ config.integration_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/integration.json"
+    },
+    {
+      "name": "jobs",
+      "path": "/jobs",
+      "records": {
+        "path": "data",
+        "single_object": false
+      },
+      "schema": "schemas/jobs.json",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "job",
+      "path": "/jobs/{{ config.job_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/job.json"
+    },
+    {
+      "name": "macros",
+      "path": "/macros",
+      "records": {
+        "path": "data",
+        "single_object": false
+      },
+      "schema": "schemas/macros.json",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "macro",
+      "path": "/macros/{{ config.macro_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/macro.json"
     },
     {
       "name": "messages",
       "path": "/messages",
-      "query": { "limit": { "template": "{{ config.page_size }}", "default": "100" } },
-      "records": { "path": "data" },
-      "schema": "schemas/messages.json"
+      "records": {
+        "path": "data",
+        "single_object": false
+      },
+      "schema": "schemas/messages.json",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "metric_card",
+      "path": "/metric-cards/{{ config.slug }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/metric_card.json"
+    },
+    {
+      "name": "voice_call_events",
+      "path": "/phone/voice-call-events",
+      "records": {
+        "path": "data",
+        "single_object": false
+      },
+      "schema": "schemas/voice_call_events.json",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "voice_call_event",
+      "path": "/phone/voice-call-events/{{ config.voice_call_event_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/voice_call_event.json"
+    },
+    {
+      "name": "voice_calls",
+      "path": "/phone/voice-calls",
+      "records": {
+        "path": "data",
+        "single_object": false
+      },
+      "schema": "schemas/voice_calls.json",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "voice_call",
+      "path": "/phone/voice-calls/{{ config.voice_call_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/voice_call.json"
+    },
+    {
+      "name": "rules",
+      "path": "/rules",
+      "records": {
+        "path": "data",
+        "single_object": false
+      },
+      "schema": "schemas/rules.json",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "rule",
+      "path": "/rules/{{ config.rule_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/rule.json"
     },
     {
       "name": "satisfaction_surveys",
       "path": "/satisfaction-surveys",
-      "query": { "limit": { "template": "{{ config.page_size }}", "default": "100" } },
-      "records": { "path": "data" },
-      "schema": "schemas/satisfaction_surveys.json"
+      "records": {
+        "path": "data",
+        "single_object": false
+      },
+      "schema": "schemas/satisfaction_surveys.json",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "satisfaction_survey",
+      "path": "/satisfaction-surveys/{{ config.satisfaction_survey_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/satisfaction_survey.json"
+    },
+    {
+      "name": "tags",
+      "path": "/tags",
+      "records": {
+        "path": "data",
+        "single_object": false
+      },
+      "schema": "schemas/tags.json",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "tag",
+      "path": "/tags/{{ config.tag_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/tag.json"
+    },
+    {
+      "name": "teams",
+      "path": "/teams",
+      "records": {
+        "path": "data",
+        "single_object": false
+      },
+      "schema": "schemas/teams.json",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "team",
+      "path": "/teams/{{ config.team_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/team.json"
+    },
+    {
+      "name": "ticket",
+      "path": "/tickets/{{ config.ticket_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/ticket.json"
+    },
+    {
+      "name": "ticket_custom_fields",
+      "path": "/tickets/{{ config.ticket_id }}/custom-fields",
+      "records": {
+        "path": "data",
+        "single_object": false
+      },
+      "schema": "schemas/ticket_custom_fields.json",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "ticket_messages",
+      "path": "/tickets/{{ config.ticket_id }}/messages",
+      "records": {
+        "path": "data",
+        "single_object": false
+      },
+      "schema": "schemas/ticket_messages.json",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "ticket_message",
+      "path": "/tickets/{{ config.ticket_id }}/messages/{{ config.ticket_message_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/ticket_message.json"
+    },
+    {
+      "name": "ticket_tags",
+      "path": "/tickets/{{ config.ticket_id }}/tags",
+      "records": {
+        "path": "data",
+        "single_object": false
+      },
+      "schema": "schemas/ticket_tags.json",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "records": {
+        "path": "data",
+        "single_object": false
+      },
+      "schema": "schemas/users.json",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "user",
+      "path": "/users/{{ config.user_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/user.json"
+    },
+    {
+      "name": "views",
+      "path": "/views",
+      "records": {
+        "path": "data",
+        "single_object": false
+      },
+      "schema": "schemas/views.json",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "view",
+      "path": "/views/{{ config.view_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/view.json"
+    },
+    {
+      "name": "view_items",
+      "path": "/views/{{ config.view_id }}/items",
+      "records": {
+        "path": "data",
+        "single_object": false
+      },
+      "schema": "schemas/view_items.json",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "widgets",
+      "path": "/widgets",
+      "records": {
+        "path": "data",
+        "single_object": false
+      },
+      "schema": "schemas/widgets.json",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      }
+    },
+    {
+      "name": "widget",
+      "path": "/widgets/{{ config.widget_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "schema": "schemas/widget.json"
     }
   ]
 }

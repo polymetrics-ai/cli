@@ -1,0 +1,16 @@
+{
+  "record": {
+    "object_type": "fixture_object_type",
+    "label": "fixture_label",
+    "definition": "fixture_definition"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/custom-fields",
+    "body": {
+      "object_type": "fixture_object_type",
+      "label": "fixture_label",
+      "definition": "fixture_definition"
+    }
+  }
+}

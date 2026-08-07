@@ -1,0 +1,16 @@
+{
+  "record": {
+    "channel": "aircall",
+    "from_agent": false,
+    "ticket_id": 123,
+    "id": 123
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/tickets/123/messages/123",
+    "body": {
+      "channel": "aircall",
+      "from_agent": false
+    }
+  }
+}

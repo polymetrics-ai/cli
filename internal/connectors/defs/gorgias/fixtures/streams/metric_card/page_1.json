@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/metric-cards/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "slug": "fixture_slug",
+      "operation_id": "get-metric-card",
+      "summary": "Retrieve a metric card by slug",
+      "created_datetime": "2026-01-01T00:00:01Z",
+      "updated_datetime": "2026-01-02T00:00:01Z",
+      "name": "Fixture metric_card",
+      "title": "Retrieve a metric card by slug",
+      "status": "active",
+      "type": "Metric Cards",
+      "data": {
+        "source": "fixture"
+      }
+    }
+  }
+}

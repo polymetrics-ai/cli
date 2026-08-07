@@ -1,0 +1,16 @@
+{
+  "record": {
+    "ids": [
+      123
+    ]
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/tags",
+    "body": {
+      "ids": [
+        123
+      ]
+    }
+  }
+}

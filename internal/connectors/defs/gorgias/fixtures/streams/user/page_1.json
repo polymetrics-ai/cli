@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "operation_id": "get-user",
+      "summary": "Retrieve a user",
+      "created_datetime": "2026-01-01T00:00:01Z",
+      "updated_datetime": "2026-01-02T00:00:01Z",
+      "name": "Fixture user",
+      "title": "Retrieve a user",
+      "status": "active",
+      "type": "Users",
+      "data": {
+        "source": "fixture"
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/phone/voice-call-events",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1,
+          "operation_id": "list-voice-call-events",
+          "summary": "List voice call events",
+          "created_datetime": "2026-01-01T00:00:01Z",
+          "updated_datetime": "2026-01-02T00:00:01Z",
+          "name": "Fixture voice_call_events",
+          "title": "List voice call events",
+          "status": "active",
+          "type": "Voice Call Events",
+          "data": {
+            "source": "fixture"
+          }
+        }
+      ],
+      "meta": {
+        "next_cursor": null
+      }
+    }
+  }
+}

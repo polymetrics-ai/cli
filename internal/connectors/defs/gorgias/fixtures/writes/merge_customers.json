@@ -1,0 +1,14 @@
+{
+  "record": {
+    "source_customer_id": 123,
+    "target_customer_id": 123
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/customers/merge",
+    "body": {
+      "source_customer_id": 123,
+      "target_customer_id": 123
+    }
+  }
+}

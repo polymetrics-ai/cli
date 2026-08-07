@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/integrations/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "operation_id": "get-integration",
+      "summary": "Retrieve an integration",
+      "created_datetime": "2026-01-01T00:00:01Z",
+      "updated_datetime": "2026-01-02T00:00:01Z",
+      "name": "Fixture integration",
+      "title": "Retrieve an integration",
+      "status": "active",
+      "type": "Integrations",
+      "data": {
+        "source": "fixture"
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "record": {
+    "slug": "fixture_slug"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/views",
+    "body": {
+      "slug": "fixture_slug"
+    }
+  }
+}

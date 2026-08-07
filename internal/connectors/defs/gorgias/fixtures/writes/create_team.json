@@ -1,0 +1,12 @@
+{
+  "record": {
+    "name": "fixture_name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/teams",
+    "body": {
+      "name": "fixture_name"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/custom-fields/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "operation_id": "get-custom-field",
+      "summary": "Retrieve a custom field",
+      "created_datetime": "2026-01-01T00:00:01Z",
+      "updated_datetime": "2026-01-02T00:00:01Z",
+      "name": "Fixture custom_field",
+      "title": "Retrieve a custom field",
+      "status": "active",
+      "type": "Custom Fields",
+      "data": {
+        "source": "fixture"
+      }
+    }
+  }
+}

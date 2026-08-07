@@ -1,22 +1,25 @@
 {
   "name": "gorgias",
   "display_name": "Gorgias",
-  "description": "Reads Gorgias helpdesk tickets, customers, messages, and satisfaction surveys through the Gorgias REST API (read-only).",
+  "description": "Reads and safely plans documented Gorgias REST API operations through connector-owned streams, bounded direct reads, and approval-gated reverse ETL actions.",
   "integration_type": "api",
   "docs_url": "https://developers.gorgias.com/reference",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 100
+    "read_page_size": 100,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external Gorgias API read of helpdesk tickets, customers, messages, and satisfaction surveys"
+    "read": "external Gorgias API reads for helpdesk, account, customer, ticket, event, phone, automation, and configuration records",
+    "write": "approval-gated reverse ETL mutations and provider-side POST computations for documented create, update, merge, delete, admin, and statistic retrieval actions",
+    "approval": "all write actions use reverse ETL plan -> preview -> explicit approval -> execute; destructive actions additionally require typed confirmation"
   }
 }

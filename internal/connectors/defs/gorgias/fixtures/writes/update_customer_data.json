@@ -1,0 +1,13 @@
+{
+  "record": {
+    "data": "fixture_data",
+    "customer_id": 123
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/customers/123/data",
+    "body": {
+      "data": "fixture_data"
+    }
+  }
+}

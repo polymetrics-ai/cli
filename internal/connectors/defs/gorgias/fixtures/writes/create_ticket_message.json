@@ -1,0 +1,15 @@
+{
+  "record": {
+    "channel": "fixture_channel",
+    "from_agent": false,
+    "ticket_id": 123
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tickets/123/messages",
+    "body": {
+      "channel": "fixture_channel",
+      "from_agent": false
+    }
+  }
+}

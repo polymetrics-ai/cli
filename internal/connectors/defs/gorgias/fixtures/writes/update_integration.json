@@ -1,0 +1,13 @@
+{
+  "record": {
+    "name": "fixture_name",
+    "id": 123
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/integrations/123",
+    "body": {
+      "name": "fixture_name"
+    }
+  }
+}

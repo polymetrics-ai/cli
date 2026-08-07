@@ -1,14 +1,43 @@
 {
-  "api": "Gorgias REST API (https://<domain>.gorgias.com/api)",
-  "docs": "https://developers.gorgias.com/reference",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (tickets, customers, messages, satisfaction-surveys); the full Gorgias surface (ticket create/update, tags, teams, views, macros, integrations, rules, etc.) is out of scope outside this connector's current declared surface",
+  "api": "Gorgias REST API",
+  "docs": "https://developers.gorgias.com/llms.txt",
+  "reviewed_at": "2026-07-31",
+  "operation_ledger_version": 1,
+  "scope": "Complete official Gorgias llms.txt/reference/*.md inventory: 114 operations. Connector paths are API-root relative because spec.base_url includes /api. Streams cover durable GET/changefeed reads, writes cover official reverse-ETL lanes through approval gates, supported provider queries are bounded direct reads, and remaining binary/non-mutating PUT gaps are blocked with source evidence.",
   "endpoints": [
     {
       "method": "GET",
-      "path": "/tickets",
+      "path": "/account",
       "covered_by": {
-        "stream": "tickets"
+        "stream": "account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/account/settings",
+      "covered_by": {
+        "stream": "account_settings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/account/settings",
+      "covered_by": {
+        "write": "create_account_setting"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/account/settings/{id}",
+      "covered_by": {
+        "write": "update_account_setting"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customers",
+      "covered_by": {
+        "write": "delete_customers"
       }
     },
     {
@@ -19,10 +48,328 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/messages",
+      "method": "POST",
+      "path": "/customers",
       "covered_by": {
-        "stream": "messages"
+        "write": "create_customer"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customers/merge",
+      "covered_by": {
+        "write": "merge_customers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{customer_id}/custom-fields",
+      "covered_by": {
+        "stream": "customer_custom_fields_values"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customers/{customer_id}/custom-fields",
+      "covered_by": {
+        "write": "update_customer_custom_field_values"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customers/{customer_id}/custom-fields/{id}",
+      "covered_by": {
+        "write": "delete_customer_custom_field_value"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customers/{customer_id}/custom-fields/{id}",
+      "covered_by": {
+        "write": "update_customer_custom_field_value"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customers/{customer_id}/data",
+      "covered_by": {
+        "write": "update_customer_data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customers/{id}",
+      "covered_by": {
+        "write": "delete_customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{id}",
+      "covered_by": {
+        "stream": "customer"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customers/{id}",
+      "covered_by": {
+        "write": "update_customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom-fields",
+      "covered_by": {
+        "stream": "custom_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/custom-fields",
+      "covered_by": {
+        "write": "create_custom_field"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/custom-fields",
+      "covered_by": {
+        "write": "update_custom_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom-fields/{id}",
+      "covered_by": {
+        "stream": "custom_field"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/custom-fields/{id}",
+      "covered_by": {
+        "write": "update_custom_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events",
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{id}",
+      "covered_by": {
+        "stream": "event"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/upload",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Binary/file or voice-recording operation requires a bounded binary/file executor, explicit output/payload policy, byte limits, digest/approval evidence, and no generic passthrough.",
+        "source_url": "https://developers.gorgias.com/reference/post_api-upload.md"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{file_type}/download/{domain_hash}/{resource_name}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Binary/file or voice-recording operation requires a bounded binary/file executor, explicit output/payload policy, byte limits, digest/approval evidence, and no generic passthrough.",
+        "source_url": "https://developers.gorgias.com/reference/download-file.md"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations",
+      "covered_by": {
+        "stream": "integrations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integrations",
+      "covered_by": {
+        "write": "create_integration"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/integrations/{id}",
+      "covered_by": {
+        "write": "delete_integration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/{id}",
+      "covered_by": {
+        "stream": "integration"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/integrations/{id}",
+      "covered_by": {
+        "write": "update_integration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs",
+      "covered_by": {
+        "stream": "jobs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/jobs",
+      "covered_by": {
+        "write": "create_job"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/jobs/{id}",
+      "covered_by": {
+        "write": "cancel_job"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/{id}",
+      "covered_by": {
+        "stream": "job"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/jobs/{id}",
+      "covered_by": {
+        "write": "update_job"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/macros",
+      "covered_by": {
+        "stream": "macros"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/macros",
+      "covered_by": {
+        "write": "create_macro"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/macros/archive",
+      "covered_by": {
+        "write": "bulk_archive_macros"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/macros/unarchive",
+      "covered_by": {
+        "write": "bulk_unarchive_macros"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/macros/{id}",
+      "covered_by": {
+        "write": "delete_macro"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/macros/{id}",
+      "covered_by": {
+        "stream": "macro"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/macros/{id}",
+      "covered_by": {
+        "write": "update_macro"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metric-cards/{slug}",
+      "covered_by": {
+        "stream": "metric_card"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metric-cards",
+      "covered_by": {
+        "direct_read": "metric-cards search"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/metric-cards/{slug}/feedback",
+      "covered_by": {
+        "write": "create_metric_card_feedback"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rules",
+      "covered_by": {
+        "stream": "rules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rules",
+      "covered_by": {
+        "write": "create_rule"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rules/priorities",
+      "covered_by": {
+        "write": "update_rules_priorities"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rules/{id}",
+      "covered_by": {
+        "write": "delete_rule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rules/{id}",
+      "covered_by": {
+        "stream": "rule"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rules/{id}",
+      "covered_by": {
+        "write": "update_rule"
       }
     },
     {
@@ -34,58 +381,461 @@
     },
     {
       "method": "POST",
-      "path": "/tickets",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      "path": "/satisfaction-surveys",
+      "covered_by": {
+        "write": "create_satisfaction_survey"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/satisfaction-surveys/{id}",
+      "covered_by": {
+        "stream": "satisfaction_survey"
       }
     },
     {
       "method": "PUT",
-      "path": "/tickets/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      "path": "/satisfaction-surveys/{id}",
+      "covered_by": {
+        "write": "update_satisfaction_survey"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/search",
+      "covered_by": {
+        "direct_read": "search"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stats/{name}",
+      "covered_by": {
+        "write": "get_legacy_statistic"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stats/{name}/download",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Binary/file or voice-recording operation requires a bounded binary/file executor, explicit output/payload policy, byte limits, digest/approval evidence, and no generic passthrough.",
+        "source_url": "https://developers.gorgias.com/reference/download-legacy-statistic.md"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tags",
+      "covered_by": {
+        "write": "delete_tags"
       }
     },
     {
       "method": "GET",
       "path": "/tags",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "covered_by": {
+        "stream": "tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tags",
+      "covered_by": {
+        "write": "create_tag"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tags/{destination_tag_id}/merge",
+      "covered_by": {
+        "write": "merge_tags"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tags/{id}",
+      "covered_by": {
+        "write": "delete_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags/{id}",
+      "covered_by": {
+        "stream": "tag"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tags/{id}",
+      "covered_by": {
+        "write": "update_tag"
       }
     },
     {
       "method": "GET",
       "path": "/teams",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams",
+      "covered_by": {
+        "write": "create_team"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/teams/{id}",
+      "covered_by": {
+        "write": "delete_team"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{id}",
+      "covered_by": {
+        "stream": "team"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/teams/{id}",
+      "covered_by": {
+        "write": "update_team"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets",
+      "covered_by": {
+        "stream": "tickets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets",
+      "covered_by": {
+        "write": "create_ticket"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{id}",
+      "covered_by": {
+        "write": "delete_ticket"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{id}",
+      "covered_by": {
+        "stream": "ticket"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/{id}",
+      "covered_by": {
+        "write": "update_ticket"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{ticket_id}/custom-fields",
+      "covered_by": {
+        "stream": "ticket_custom_fields"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/{ticket_id}/custom-fields",
+      "covered_by": {
+        "write": "update_ticket_custom_fields"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{ticket_id}/custom-fields/{id}",
+      "covered_by": {
+        "write": "delete_ticket_custom_field"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/{ticket_id}/custom-fields/{id}",
+      "covered_by": {
+        "write": "update_ticket_custom_field"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{ticket_id}/tags",
+      "covered_by": {
+        "write": "delete_ticket_tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{ticket_id}/tags",
+      "covered_by": {
+        "write": "create_ticket_tags"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/{ticket_id}/tags",
+      "covered_by": {
+        "write": "update_ticket_tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{ticket_id}/tags",
+      "covered_by": {
+        "stream": "ticket_tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messages",
+      "covered_by": {
+        "stream": "messages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{ticket_id}/messages",
+      "covered_by": {
+        "stream": "ticket_messages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{ticket_id}/messages",
+      "covered_by": {
+        "write": "create_ticket_message"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{ticket_id}/messages/{id}",
+      "covered_by": {
+        "write": "delete_ticket_message"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{ticket_id}/messages/{id}",
+      "covered_by": {
+        "stream": "ticket_message"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/{ticket_id}/messages/{id}",
+      "covered_by": {
+        "write": "update_ticket_message"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "covered_by": {
+        "stream": "users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users",
+      "covered_by": {
+        "write": "create_user"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{id}",
+      "covered_by": {
+        "write": "delete_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{id}",
+      "covered_by": {
+        "stream": "user"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{id}",
+      "covered_by": {
+        "write": "update_user"
       }
     },
     {
       "method": "GET",
       "path": "/views",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "covered_by": {
+        "stream": "views"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/views",
+      "covered_by": {
+        "write": "create_view"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/views/{id}",
+      "covered_by": {
+        "write": "delete_view"
       }
     },
     {
       "method": "GET",
-      "path": "/rules",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/views/{id}",
+      "covered_by": {
+        "stream": "view"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/views/{id}",
+      "covered_by": {
+        "write": "update_view"
       }
     },
     {
       "method": "GET",
-      "path": "/integrations",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/views/{view_id}/items",
+      "covered_by": {
+        "stream": "view_items"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/views/{view_id}/items",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Gorgias documents this as a search-style provider query over PUT; connector-local execution is blocked until provider search/query foundation #2985 supports non-mutating PUT bodies without a generic HTTP passthrough.",
+        "source_url": "https://developers.gorgias.com/reference/update-view-items.md"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/phone/voice-calls",
+      "covered_by": {
+        "stream": "voice_calls"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/phone/voice-calls/{id}",
+      "covered_by": {
+        "stream": "voice_call"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/phone/voice-call-recordings",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Binary/file or voice-recording operation requires a bounded binary/file executor, explicit output/payload policy, byte limits, digest/approval evidence, and no generic passthrough.",
+        "source_url": "https://developers.gorgias.com/reference/list-voice-call-recordings.md"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/phone/voice-call-recordings/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Binary/file or voice-recording operation requires a bounded binary/file executor, explicit output/payload policy, byte limits, digest/approval evidence, and no generic passthrough.",
+        "source_url": "https://developers.gorgias.com/reference/delete-voice-call-recording.md"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/phone/voice-call-recordings/{id}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Binary/file or voice-recording operation requires a bounded binary/file executor, explicit output/payload policy, byte limits, digest/approval evidence, and no generic passthrough.",
+        "source_url": "https://developers.gorgias.com/reference/get-voice-call-recording.md"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/phone/voice-call-events",
+      "covered_by": {
+        "stream": "voice_call_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/phone/voice-call-events/{id}",
+      "covered_by": {
+        "stream": "voice_call_event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/widgets",
+      "covered_by": {
+        "stream": "widgets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/widgets",
+      "covered_by": {
+        "write": "create_widget"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/widgets/{id}",
+      "covered_by": {
+        "write": "delete_widget"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/widgets/{id}",
+      "covered_by": {
+        "stream": "widget"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/widgets/{id}",
+      "covered_by": {
+        "write": "update_widget"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reporting/stats",
+      "covered_by": {
+        "write": "get_statistic"
       }
     }
   ]

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "type": "fixture_type",
+    "id": 123
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/account/settings/123",
+    "body": {
+      "type": "fixture_type"
+    }
+  }
+}
