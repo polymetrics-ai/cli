@@ -15,6 +15,7 @@ on:
       - "internal/connectors/icon_data.json"
       - "docs/connectors/icons/**"
       - ".github/workflows/website-data.yml"
+      - ".github/workflows/runner-selection.yml"
   push:
     branches:
       - main
@@ -24,6 +25,7 @@ on:
       - "internal/connectors/icon_data.json"
       - "docs/connectors/icons/**"
       - ".github/workflows/website-data.yml"
+      - ".github/workflows/runner-selection.yml"
   workflow_dispatch:
 
 permissions:
@@ -33,9 +35,13 @@ env:
   NODE_VERSION: "22"
 
 jobs:
+  select-runner:
+    uses: ./.github/workflows/runner-selection.yml
+
   generated-data:
     name: Website generated data
-    runs-on: ubuntu-latest
+    needs: select-runner
+    runs-on: ${{ needs.select-runner.outputs.runner }}
 
     steps:
       - name: Configure git defaults

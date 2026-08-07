@@ -7,8 +7,12 @@ permissions:
   contents: read
 
 jobs:
+  select-runner:
+    uses: ./.github/workflows/runner-selection.yml
+
   gsd-workflow-evidence:
-    runs-on: ubuntu-latest
+    needs: select-runner
+    runs-on: ${{ needs.select-runner.outputs.runner }}
     steps:
       - uses: actions/checkout@v4
         with:

@@ -87,7 +87,7 @@ require("echo \"release_component=pm-cli\"" in release_assets, "release metadata
 require("source_run_id: ${{ steps.homebrew-source-run.outputs.source_run_id }}" in release_assets, "release-assets must not hard-code current run id for existing assets")
 require("source_run_id: ${{ github.run_id }}" not in release_assets, "existing-asset notifications must not claim the current run signed old assets")
 require("SKIP_RELEASE_ASSETS" in release_assets and "source_run_id=" in release_assets, "existing verified assets must omit mismatched source run id")
-require("needs: release-assets" in notify, "notify-homebrew-tap must depend on release-assets")
+require("needs: [select-runner, release-assets]" in notify, "notify-homebrew-tap must depend on release-assets and the shared runner selector")
 require("homebrew_notification_ready" in notify, "notify-homebrew-tap must require verified release-assets output")
 require("needs.release-assets.outputs.release_component == 'pm-cli'" in notify, "notify job must require PM CLI release component")
 require("concurrency:" in notify and "homebrew-tap-notify-${{ needs.release-assets.outputs.tag_name }}" in notify, "notify job must serialize duplicate tag notifications")

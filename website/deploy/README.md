@@ -1,23 +1,39 @@
 # Website Deployment
 
-The website pipelines build and test the Next.js app on pull requests and pushes that touch `website/`. Production deployment is limited to `main` and runs on the Polymetrics origin VPS through a Tailscale-connected self-hosted GitHub runner.
+The website pipelines build and test the Next.js app on pull requests and
+pushes that touch `website/`. Production deployment is limited to `main`; the
+shared selector routes its non-pull-request GitHub deploy job to GitHub-hosted
+`ubuntu-latest`, not the former Tailscale-connected self-hosted origin runner.
+See the [self-hosted CI runner policy](../../docs/security/self-hosted-ci-runner-policy.md)
+for the routing contract.
 
 ## Flow
 
 - GitHub Actions runs the website checks defined in `.github/workflows/website.yml`, builds the Docker image, and publishes `ghcr.io/<owner>/<repo>/website:<sha>` plus `:main` on pushes to `main`.
 - GitLab CI runs the website checks defined in `.gitlab-ci.yml`, builds the Docker image, and pushes `$CI_REGISTRY_IMAGE/website:<sha>` plus `:main` only on `main`.
-- Deployment runs `website/deploy/deploy-podman-quadlet.sh` on the origin runner. The script pulls the CI-built GHCR tag, resolves it to an immutable digest, updates the rootless Quadlet `Image=...@sha256:...`, restarts `cli-polymetrics.service`, checks loopback health, and verifies the public Cloudflare Tunnel URL.
+- `website/deploy/deploy-podman-quadlet.sh` changes local Podman and user
+  systemd state on the origin host: it pulls the CI-built GHCR tag, resolves it
+  to an immutable digest, updates the rootless Quadlet `Image=...@sha256:...`,
+  restarts `cli-polymetrics.service`, checks loopback health, and verifies the
+  public Cloudflare Tunnel URL. A GitHub-hosted runner does not have that local
+  state, so `WEBSITE_DEPLOY_ENABLED` must remain disabled until the workflow has
+  a remote deployment transport; the script remains usable for manual
+  deployment on the origin host.
 - `website/deploy/deploy-image.sh` and the Kubernetes manifests are retained for future Kubernetes environments, but they are not the active Polymetrics origin path.
 
-## Runner Assumptions
+## Execution Assumptions
 
-GitHub deploy runner:
+GitHub deploy job:
 
-- Labels: `self-hosted`, `linux`, `tailscale`, `polymetrics-website`.
-- Runs on the origin VPS as the `deploy` user.
-- Joined to the tailnet.
+- Resolves to GitHub-hosted `ubuntu-latest` for its non-pull-request triggers.
+- Does not require the former self-hosted, Tailscale, or `polymetrics-website` runner labels.
+- Requires a remote deployment transport before it can run the origin-local Quadlet script.
+
+Origin host for manual deployment:
+
+- Runs the script as the `deploy` user.
 - Has rootless Podman, `curl`, and user systemd available.
-- Has linger enabled for `deploy` so `systemctl --user` can restart the Quadlet from CI.
+- Has linger enabled for `deploy` so `systemctl --user` can restart the Quadlet.
 
 GitLab deploy runner:
 

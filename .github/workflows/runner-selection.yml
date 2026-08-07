@@ -1,0 +1,29 @@
+name: Runner selection
+
+on:
+  workflow_call:
+    outputs:
+      runner:
+        description: Selected runner label for a caller job.
+        value: ${{ jobs.select-runner.outputs.runner }}
+
+jobs:
+  select-runner:
+    runs-on: ubuntu-latest
+    outputs:
+      runner: ${{ steps.select.outputs.runner }}
+    steps:
+      - id: select
+        env:
+          TRUSTED_SAME_REPOSITORY_PR: >-
+            ${{ github.event_name == 'pull_request' &&
+                github.event.pull_request.head.repo.full_name == github.repository &&
+                (github.event.pull_request.user.login == 'karthik-sivadas' ||
+                 github.event.pull_request.user.login == 'alfred-polymetrics-ai') }}
+        run: |
+          if [[ "$TRUSTED_SAME_REPOSITORY_PR" == "true" ]]; then
+            echo "runner=polymetrics-cli" >> "$GITHUB_OUTPUT"
+          else
+            # Fork PRs and all non-PR triggers fail closed to GitHub-hosted.
+            echo "runner=ubuntu-latest" >> "$GITHUB_OUTPUT"
+          fi

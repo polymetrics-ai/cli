@@ -14,9 +14,13 @@ permissions:
   pull-requests: read
 
 jobs:
+  select-runner:
+    uses: ./.github/workflows/runner-selection.yml
+
   branch-name:
     name: branch-name
-    runs-on: ubuntu-latest
+    needs: select-runner
+    runs-on: ${{ needs.select-runner.outputs.runner }}
 
     steps:
       - name: Validate branch name
@@ -41,9 +45,16 @@ jobs:
             exit 1
           fi
 
+      - name: Checkout routing contract
+        uses: actions/checkout@v7
+
+      - name: Verify CI runner routing contract
+        run: ./scripts/tests/verify-ci-runner-routing.sh
+
   pr-title:
     name: pr-title
-    runs-on: ubuntu-latest
+    needs: select-runner
+    runs-on: ${{ needs.select-runner.outputs.runner }}
 
     steps:
       - name: Validate PR title
