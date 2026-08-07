@@ -2,7 +2,7 @@
   "phase": "chatwoot-parity-sweep-r1",
   "program": "cli-top50-fixed-schema-sweep-r1",
   "connector": "chatwoot",
-  "state": "red_confirmed",
+  "state": "green",
   "generated_from": "MASTER-PLAN.json",
   "landing_order": 8,
   "artifact": {
@@ -44,7 +44,7 @@
     "red_test": "cmd/connectorgen/chatwoot_api_surface_test.go",
     "red_confirmed": true,
     "red_failure": "=== RUN   TestChatwootAPISurfaceOperationLedger\n    chatwoot_api_surface_test.go:59: operation_ledger_version = 0, want 1\n--- FAIL: TestChatwootAPISurfaceOperationLedger (0.00s)\nFAIL\tpolymetrics.ai/cmd/connectorgen\t0.508s\nFAIL",
-    "green": false,
+    "green": true,
     "_note": "red_confirmed and red_failure MUST be filled from OBSERVED test output. Never pre-fill."
   },
   "disposition_partition": {
@@ -64,5 +64,9 @@
       "duplicate": 1
     }
   },
-  "next_action": "author the bundle to green: api_surface.json (148 rows), cli_surface.json + operations.json (new files), writes.json (extend 6 -> 60 actions)"
+  "next_action": "done: gates green, binary verified, docs/website regenerated and scoped to chatwoot, committed and pushed on fm/cli-chatwoot-parity-sweep-r1",
+  "engine_finding": {
+    "summary": "streams.json's base.url bakes in /api/v1/accounts/{account_id}; the engine binds exactly one HTTPBase per bundle and rejects an absolute-path override for rest_read/rest_write operations, so every documented operation outside that prefix (v2 reports incl. both trailing-slash rows, platform API, public/widget API, survey, profile) is architecturally unreachable through this bundle without restructuring every existing stream/write path in lockstep -- these are blocked-with-named-dependency or unsupported-with-source-citation, not under-effort.",
+    "trailing_slash_pair_disposition": "both GET /api/v2/accounts/{account_id}/reports/conversations (get-account-conversation-metrics) and its trailing-slash sibling (get-agent-conversation-metrics) are distinct, correctly-keyed api_surface.json rows, both operation-blocked (model=direct_read) for the same base-URL reason as the other 9 /api/v2 report rows -- not executable CLI commands. Verified structurally (four independent exact-match code paths, see TDD-LEDGER.md) and by test."
+  }
 }
