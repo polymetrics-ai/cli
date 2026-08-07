@@ -264,13 +264,15 @@ pm connectors inspect stripe --json
 The generated connector catalog is the source of truth for current connector counts and
 capabilities. A few examples:
 
-- **GitHub** (`github`) — full certification passed for the current connector surface:
-  509 API endpoints accounted, 37 catalog streams, 2 direct-read command families, and
-  231 write actions accounted. Public reads need no token; private/higher-rate-limit
-  reads use a classic/fine-grained PAT, OAuth token, Actions `GITHUB_TOKEN`, an
-  installation token, or a GitHub App (auto-signs a JWT → installation token). The
-  safe `create_label` write lifecycle passed with read-back and cleanup; other writes
-  remain approval-gated and are either safe untested pairings or blocked by policy.
+- **GitHub** (`github`) — 1224 API endpoints accounted (1126 covered, 98 blocked), 37
+  catalog streams, 530 implemented direct-read commands, and 555 write actions
+  accounted. Public reads need no token; private/higher-rate-limit reads use a
+  classic/fine-grained PAT, OAuth token, Actions `GITHUB_TOKEN`, an installation
+  token, or a GitHub App (auto-signs a JWT → installation token). The live certificate
+  ran against an earlier 509-endpoint surface, where the safe `create_label` write
+  lifecycle passed with read-back and cleanup; it has not been re-run at the enumerated
+  size. Writes remain approval-gated and are either safe untested pairings or blocked
+  by policy.
 - **Stripe** (`stripe`) — Bearer (secret key) auth, cursor pagination, core CRM/billing
   streams, plus approval-gated customer create/update/delete writes. Run
   `pm connectors inspect stripe --json` for the current action list and destructive confirmation notes.
