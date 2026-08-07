@@ -214,6 +214,31 @@ func asRecordMap(value any) (map[string]any, bool) {
 	}
 }
 
+// connectorCommandRedactFields answers "what does this plan withhold?" for a
+// connector-command plan. It dispatches on mode and never falls back between
+// the two branches: operation IDs and write-action names are separate
+// namespaces that collide by name in at least one bundle, so a fallback could
+// withhold an unrelated action's fields. An operation whose metadata cannot be
+// resolved is an error, never an empty withhold set.
+func connectorCommandRedactFields(connector connectors.Connector, operation, actionName string) ([]string, error) {
+	operation = strings.TrimSpace(operation)
+	if operation == "" {
+		return reversePlanRedactFields(connector, actionName), nil
+	}
+	provider, ok := connector.(connectors.OperationDirectWriteMetadataProvider)
+	if !ok {
+		return nil, fmt.Errorf("connector %q does not expose direct-write metadata for operation %q", connector.Name(), operation)
+	}
+	metadata, err := provider.OperationDirectWriteMetadata(operation)
+	if err != nil {
+		return nil, err
+	}
+	if metadata.Operation != operation {
+		return nil, fmt.Errorf("connector %q direct-write metadata did not match operation %q", connector.Name(), operation)
+	}
+	return append([]string(nil), metadata.RedactFields...), nil
+}
+
 func reversePlanRedactFields(connector connectors.Connector, actionName string) []string {
 	for _, action := range connectors.ManifestOf(connector).WriteActions {
 		if action.Name == actionName {
