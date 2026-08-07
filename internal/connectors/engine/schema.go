@@ -92,6 +92,17 @@ var structuralKeywords = map[string]bool{
 	"x-secret":             true,
 	"x-primary-key":        true,
 	"x-cursor-field":       true,
+	// Dynamic catalog schemas retain these provider-derived annotations. The
+	// engine's executable static sync contract remains x-primary-key and
+	// x-cursor-field, while the additional fields let catalog consumers keep
+	// the same draft-07 document regardless of schema origin.
+	"x-stream_name":                true,
+	"x-supported_sync_modes":       true,
+	"x-default_sync_mode":          true,
+	"x-source_defined_primary_key": true,
+	"x-source_defined_cursor":      true,
+	"x-default_cursor_field":       true,
+	"x-references":                 true,
 }
 
 var validTypes = map[string]bool{
@@ -685,4 +696,8 @@ type StreamSchema struct {
 	*Schema
 	PrimaryKey  []string // x-primary-key
 	CursorField string   // x-cursor-field
+	// Raw is the original draft-07 record contract. Catalog projections use
+	// this rather than re-deriving a lossy Stream from the compiled schema, so
+	// static and provider-discovered streams share one downstream shape.
+	Raw json.RawMessage
 }

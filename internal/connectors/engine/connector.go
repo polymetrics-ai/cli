@@ -245,6 +245,14 @@ func (b Base) Metadata() connectors.Metadata {
 	return synthesizeMetadata(b.bundle)
 }
 
+// BundleManifest gives a Tier-3 native the bundle's configuration, risk, and
+// static-stream projection when that native elects to expose a Manifest.
+// This stays explicitly named so adding a helper to Base cannot silently
+// change every existing Tier-3 connector's public manifest projection.
+func (b Base) BundleManifest() connectors.Manifest {
+	return synthesizeManifest(b.bundle)
+}
+
 func (b Base) Definition() connectors.Definition {
 	return synthesizeDefinition(b.bundle)
 }
@@ -630,17 +638,23 @@ func specJSON(b Bundle) []byte {
 	return raw
 }
 
-// legacyStreamOf builds the legacy connectors.Stream shape for one
-// StreamSpec, reusing its compiled schema for PrimaryKey/CursorFields. Field
-// types are not derivable from the compiled schema (Schema only exposes
-// property names, not per-property JSON types), so Fields carries names only
-// (Type left as the zero value) — no wave0 consumer inspects Field.Type.
+// legacyStreamOf builds the shared connectors.Stream shape for one StreamSpec.
+// Bundle loading retains the original schema specifically so static catalogs
+// use the same projection as provider-discovered schemas.
 func legacyStreamOf(b Bundle, s StreamSpec) connectors.Stream {
 	sch := b.Schemas[s.Name]
 	stream := connectors.Stream{Name: s.Name}
 	if sch == nil {
 		return stream
 	}
+	if len(sch.Raw) > 0 {
+		projected, err := connectors.StreamFromSchema(s.Name, "", sch.Raw)
+		if err == nil {
+			return projected
+		}
+	}
+	// Hand-assembled test bundles predating raw-schema retention still need a
+	// useful catalog projection. Loaded bundles always take the path above.
 	stream.PrimaryKey = sch.PrimaryKey
 	if sch.CursorField != "" {
 		stream.CursorFields = []string{sch.CursorField}

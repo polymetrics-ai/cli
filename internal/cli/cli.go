@@ -557,10 +557,27 @@ func runCatalog(ctx context.Context, a *app.App, args []string, stdout io.Writer
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "Catalog", "catalog": snapshot})
 	}
+	if message := catalogStatusMessage(snapshot.Catalog.Discovery); message != "" {
+		_, _ = fmt.Fprintln(stdout, message)
+	}
 	for _, stream := range snapshot.Catalog.Streams {
 		_, _ = fmt.Fprintf(stdout, "%s\t%s\n", stream.Name, stream.Description)
 	}
 	return nil
+}
+
+func catalogStatusMessage(status *connectors.DiscoveryStatus) string {
+	if status == nil {
+		return ""
+	}
+	switch {
+	case status.Stale:
+		return "catalog status: stale; run pm catalog refresh --connection <name> before using this schema"
+	case !status.Complete:
+		return "catalog status: partial; refresh after the provider issue is resolved before relying on this schema"
+	default:
+		return "catalog status: current"
+	}
 }
 
 func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool, cfg config.Config) error {

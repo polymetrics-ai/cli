@@ -70,11 +70,140 @@ type Stream struct {
 	Fields       []Field  `json:"fields"`
 	PrimaryKey   []string `json:"primary_key"`
 	CursorFields []string `json:"cursor_fields"`
+	// Schema is the verbatim draft-07 record schema backing this catalog
+	// stream. Static bundles and provider discovery both pass through
+	// StreamFromSchema so consumers never need a source-specific schema path.
+	Schema json.RawMessage `json:"schema,omitempty"`
 }
 
 type Catalog struct {
-	Connector string   `json:"connector"`
-	Streams   []Stream `json:"streams"`
+	Connector string           `json:"connector"`
+	Streams   []Stream         `json:"streams"`
+	Discovery *DiscoveryStatus `json:"discovery,omitempty"`
+}
+
+// DiscoveryStatus makes a provider-derived catalog's freshness and completeness
+// explicit. It intentionally carries only safe object names and lifecycle
+// facts: provider response bodies and credentials never belong in a catalog.
+type DiscoveryStatus struct {
+	Complete     bool               `json:"complete"`
+	Cached       bool               `json:"cached,omitempty"`
+	Stale        bool               `json:"stale,omitempty"`
+	UsedFallback bool               `json:"used_fallback,omitempty"`
+	RefreshedAt  time.Time          `json:"refreshed_at,omitempty"`
+	ExpiresAt    time.Time          `json:"expires_at,omitempty"`
+	Failures     []DiscoveryFailure `json:"failures,omitempty"`
+}
+
+// DiscoveryFailure records the scope of an incomplete discovery without
+// retaining an upstream error, which can contain provider-supplied data.
+type DiscoveryFailure struct {
+	Object   string `json:"object,omitempty"`
+	Stage    string `json:"stage"`
+	Attempts int    `json:"attempts,omitempty"`
+}
+
+// StreamFromSchema constructs the public catalog projection of one draft-07
+// record schema. It is the shared boundary for static bundle schemas and
+// dynamically discovered schemas: fields, primary key, cursor, and raw schema
+// must therefore agree regardless of where the schema came from.
+func StreamFromSchema(name, description string, raw json.RawMessage) (Stream, error) {
+	if strings.TrimSpace(name) == "" {
+		return Stream{}, errors.New("catalog stream name is required")
+	}
+	if len(raw) == 0 {
+		return Stream{}, fmt.Errorf("catalog stream %q schema is required", name)
+	}
+
+	var doc struct {
+		Type        string                     `json:"type"`
+		Properties  map[string]json.RawMessage `json:"properties"`
+		PrimaryKey  []string                   `json:"x-primary-key"`
+		CursorField string                     `json:"x-cursor-field"`
+	}
+	if err := json.Unmarshal(raw, &doc); err != nil {
+		return Stream{}, fmt.Errorf("catalog stream %q schema: %w", name, err)
+	}
+	if doc.Type != "object" {
+		return Stream{}, fmt.Errorf("catalog stream %q schema type must be object", name)
+	}
+
+	stream := Stream{
+		Name:        name,
+		Description: description,
+		PrimaryKey:  append([]string(nil), doc.PrimaryKey...),
+		Schema:      append(json.RawMessage(nil), raw...),
+	}
+	if doc.CursorField != "" {
+		stream.CursorFields = []string{doc.CursorField}
+	}
+
+	fieldNames := make([]string, 0, len(doc.Properties))
+	for fieldName := range doc.Properties {
+		fieldNames = append(fieldNames, fieldName)
+	}
+	sort.Strings(fieldNames)
+	for _, fieldName := range fieldNames {
+		fieldType, err := catalogFieldType(doc.Properties[fieldName])
+		if err != nil {
+			return Stream{}, fmt.Errorf("catalog stream %q field %q: %w", name, fieldName, err)
+		}
+		stream.Fields = append(stream.Fields, Field{Name: fieldName, Type: fieldType})
+	}
+
+	if err := validateCatalogSchemaContract(stream); err != nil {
+		return Stream{}, err
+	}
+	return stream, nil
+}
+
+// catalogFieldType preserves the conventional Field.Type projection while the
+// raw schema remains authoritative. A nullable schema reports its concrete
+// non-null type; an omitted type stays empty rather than being guessed.
+func catalogFieldType(raw json.RawMessage) (string, error) {
+	var property struct {
+		Type json.RawMessage `json:"type"`
+	}
+	if err := json.Unmarshal(raw, &property); err != nil {
+		return "", fmt.Errorf("invalid property schema: %w", err)
+	}
+	if len(property.Type) == 0 || string(property.Type) == "null" {
+		return "", nil
+	}
+
+	var single string
+	if err := json.Unmarshal(property.Type, &single); err == nil {
+		return single, nil
+	}
+
+	var union []string
+	if err := json.Unmarshal(property.Type, &union); err != nil {
+		return "", fmt.Errorf("type must be a string or array of strings")
+	}
+	for _, candidate := range union {
+		if candidate != "null" {
+			return candidate, nil
+		}
+	}
+	return "null", nil
+}
+
+func validateCatalogSchemaContract(stream Stream) error {
+	known := make(map[string]struct{}, len(stream.Fields))
+	for _, field := range stream.Fields {
+		known[field.Name] = struct{}{}
+	}
+	for _, field := range stream.PrimaryKey {
+		if _, ok := known[field]; !ok {
+			return fmt.Errorf("catalog stream %q primary key field %q is absent from schema", stream.Name, field)
+		}
+	}
+	for _, field := range stream.CursorFields {
+		if _, ok := known[field]; !ok {
+			return fmt.Errorf("catalog stream %q cursor field %q is absent from schema", stream.Name, field)
+		}
+	}
+	return nil
 }
 
 // SecretStore writes a single rotated secret back to the caller's credential
@@ -109,6 +238,15 @@ type RuntimeConfig struct {
 	ConfigurationDigest   string               `json:"-"`
 	WriteApprovalScope    string               `json:"-"`
 	ApprovedPayloadSHA256 map[string]string    `json:"-"`
+	// ForceCatalogRefresh bypasses an in-process discovery cache. App-level
+	// `pm catalog refresh` sets it deliberately; it is never persisted or
+	// inferred from credentials.
+	ForceCatalogRefresh bool `json:"-"`
+	// ResolvedCatalog is an already durable, account-scoped catalog supplied
+	// by the application to a connector invocation. It prevents a reader from
+	// independently rediscovering an account on every command. It contains
+	// provider schema metadata only, never connection configuration or secrets.
+	ResolvedCatalog *Catalog `json:"-"`
 	// SecretStore, when set, persists a provider-rotated secret back to the
 	// caller's encrypted credential store. Optional; see SecretStore.
 	SecretStore SecretStore `json:"-"`

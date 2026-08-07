@@ -41,6 +41,7 @@ type App struct {
 	approval   *projectWriteApprovalAuthority
 	registry   *connectors.Registry
 	sqlEngine  sqlQueryEngine
+	catalogs   catalogStorage
 }
 
 // sqlQueryEngine is the pluggable backend for App.QuerySQL. The default build
@@ -58,7 +59,7 @@ type state struct {
 	CredentialBindings           map[string]credentialBindingState `json:"credential_bindings"`
 	CoordinationSalt             string                            `json:"coordination_salt,omitempty"`
 	Connections                  []Connection                      `json:"connections"`
-	Catalogs                     []CatalogSnapshot                 `json:"catalogs"`
+	Catalogs                     []catalogReference                `json:"catalogs"`
 	Runs                         []Run                             `json:"runs"`
 	ReversePlans                 []ReversePlan                     `json:"reverse_plans"`
 	ReverseRuns                  []ReverseRun                      `json:"reverse_runs"`
@@ -155,6 +156,7 @@ func Open(root string) (*App, error) {
 		vault:      v,
 		approval:   approval,
 		registry:   bundleregistry.New(),
+		catalogs:   newCatalogStorage(projectDir),
 	}
 	a.sqlEngine = newSQLEngine(a)
 	if err := a.load(); err != nil {
@@ -202,8 +204,31 @@ func (a *App) normalizeLoadedState(loaded state) error {
 	if a.state.StreamStates == nil {
 		a.state.StreamStates = map[string]StreamState{}
 	}
+	catalogRefsChanged := a.dropInvalidCatalogReferences()
 	a.migrateLegacySyncModeCompatibility()
-	return a.migrateCredentialCoordination()
+	if err := a.migrateCredentialCoordination(); err != nil {
+		return err
+	}
+	if catalogRefsChanged {
+		if err := a.save(); err != nil {
+			return fmt.Errorf("remove obsolete catalog snapshots: %w", err)
+		}
+	}
+	return nil
+}
+
+func (a *App) dropInvalidCatalogReferences() bool {
+	kept := a.state.Catalogs[:0]
+	changed := false
+	for _, reference := range a.state.Catalogs {
+		if !validCatalogReference(reference) {
+			changed = true
+			continue
+		}
+		kept = append(kept, reference)
+	}
+	a.state.Catalogs = kept
+	return changed
 }
 
 // migrateCredentialCoordination gives pre-#3863 credentials an isolated
@@ -712,7 +737,10 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 	if _, _, err := a.resolveEndpoint(ctx, req.Destination); err != nil {
 		return Connection{}, fmt.Errorf("resolve destination: %w", err)
 	}
-	catalog, catalogErr := source.Catalog(ctx, sourceRuntime)
+	catalog, catalogErr := a.catalogForEndpoint(ctx, source, sourceRuntime, false)
+	if errors.Is(catalogErr, errCatalogStale) {
+		return Connection{}, catalogErr
+	}
 	for name, stream := range req.Streams {
 		if stream.SyncMode == "" {
 			stream.SyncMode = DefaultUserFacingSyncMode
@@ -777,35 +805,141 @@ func (a *App) RefreshCatalog(ctx context.Context, connectionName string) (Catalo
 	if err != nil {
 		return CatalogSnapshot{}, err
 	}
-	catalog, err := source.Catalog(ctx, runtime)
+	catalog, err := a.catalogForEndpoint(ctx, source, runtime, true)
 	if err != nil {
 		return CatalogSnapshot{}, err
 	}
-	snapshot := CatalogSnapshot{Connection: conn.Name, Catalog: catalog, UpdatedAt: time.Now().UTC()}
-	replaced := false
-	for i := range a.state.Catalogs {
-		if a.state.Catalogs[i].Connection == conn.Name {
-			a.state.Catalogs[i] = snapshot
-			replaced = true
-			break
+	return CatalogSnapshot{Connection: conn.Name, Catalog: catalog, UpdatedAt: time.Now().UTC()}, nil
+}
+
+var errCatalogStale = errors.New("cached catalog is stale; run pm catalog refresh --connection <name> before using this schema")
+
+// catalogForEndpoint is the only application-level catalog cache boundary.
+// It is intentionally endpoint-shaped rather than source-shaped: source
+// refresh is implemented today, and a future dynamic destination can use the
+// same connector/account store without a second persistence model. Dynamic
+// catalogs are persisted after the file reaches durability; static catalogs
+// retain their existing cheap in-memory behavior unless explicitly refreshed.
+func (a *App) catalogForEndpoint(ctx context.Context, connector connectors.Connector, runtime connectors.RuntimeConfig, forceRefresh bool) (connectors.Catalog, error) {
+	reference, err := a.catalogReference(connector.Name(), runtime)
+	if err != nil {
+		return connectors.Catalog{}, err
+	}
+	if !forceRefresh {
+		if reference, ok := a.accountCatalogReference(reference); ok {
+			stored, err := a.catalogs.read(reference)
+			if err != nil {
+				return connectors.Catalog{}, fmt.Errorf("read cached catalog: %w", err)
+			}
+			snapshot := catalogSnapshotWithStaleness(CatalogSnapshot{Catalog: stored.Catalog, UpdatedAt: stored.UpdatedAt}, time.Now().UTC())
+			if snapshot.Catalog.Discovery != nil && snapshot.Catalog.Discovery.Stale {
+				return connectors.Catalog{}, errCatalogStale
+			}
+			return snapshot.Catalog, nil
 		}
 	}
-	if !replaced {
-		a.state.Catalogs = append(a.state.Catalogs, snapshot)
+	runtime.ForceCatalogRefresh = forceRefresh
+	catalog, err := connector.Catalog(ctx, runtime)
+	if err != nil {
+		return connectors.Catalog{}, err
 	}
-	if err := a.save(); err != nil {
-		return CatalogSnapshot{}, err
+	if catalog.Discovery == nil && !forceRefresh {
+		return catalog, nil
 	}
-	return snapshot, nil
+	if err := a.persistAccountCatalog(reference, catalog, time.Now().UTC()); err != nil {
+		return connectors.Catalog{}, err
+	}
+	return catalog, nil
+}
+
+// persistAccountCatalog is the catalog durability boundary. The file is fully
+// synced before the state pointer can be written. A failed state commit can
+// leave only an unreferenced durable file, never a state reference to a
+// missing or unsynced catalog.
+func (a *App) persistAccountCatalog(reference catalogReference, catalog connectors.Catalog, updatedAt time.Time) error {
+	if err := a.catalogs.write(reference, catalog, updatedAt); err != nil {
+		return err
+	}
+	return a.putCatalogReference(reference)
+}
+
+// putCatalogReference is the sole state.json write boundary for account
+// catalogs. Connection callers derive this reference from their connector and
+// opaque coordination identity, so multiple connections to one account share
+// a single catalog file.
+func (a *App) putCatalogReference(reference catalogReference) error {
+	for i := range a.state.Catalogs {
+		if a.state.Catalogs[i].Connector == reference.Connector && a.state.Catalogs[i].AccountKey == reference.AccountKey {
+			if a.state.Catalogs[i] == reference {
+				return nil
+			}
+			a.state.Catalogs[i] = reference
+			return a.save()
+		}
+	}
+	a.state.Catalogs = append(a.state.Catalogs, reference)
+	return a.save()
 }
 
 func (a *App) ShowCatalog(ctx context.Context, connectionName string) (CatalogSnapshot, error) {
-	for _, snapshot := range a.state.Catalogs {
-		if snapshot.Connection == connectionName {
-			return snapshot, nil
+	conn, ok := a.findConnection(connectionName)
+	if !ok {
+		return CatalogSnapshot{}, fmt.Errorf("connection %q not found", connectionName)
+	}
+	reference, err := a.catalogReferenceForEndpoint(conn.Source)
+	if err != nil {
+		return CatalogSnapshot{}, err
+	}
+	if reference, ok := a.accountCatalogReference(reference); ok {
+		stored, err := a.catalogs.read(reference)
+		if err != nil {
+			return CatalogSnapshot{}, fmt.Errorf("read cached catalog: %w", err)
 		}
+		return catalogSnapshotWithStaleness(CatalogSnapshot{Connection: conn.Name, Catalog: stored.Catalog, UpdatedAt: stored.UpdatedAt}, time.Now().UTC()), nil
 	}
 	return a.RefreshCatalog(ctx, connectionName)
+}
+
+// catalogReferenceForEndpoint derives the account partition without opening
+// the vault. A schema-only cache can therefore be inspected even when a
+// caller is not about to perform an authenticated provider request.
+func (a *App) catalogReferenceForEndpoint(endpoint EndpointConfig) (catalogReference, error) {
+	if err := connectors.RejectLegacyConnectorName(endpoint.Connector); err != nil {
+		return catalogReference{}, err
+	}
+	credential, ok := a.findCredential(endpoint.Credential)
+	if !ok {
+		return catalogReference{}, errors.New("configured credential not found")
+	}
+	if endpoint.Connector != "" && endpoint.Connector != credential.Connector {
+		return catalogReference{}, fmt.Errorf("connector configuration does not match its credential")
+	}
+	identity, err := a.coordinationIdentityForCredential(credential)
+	if err != nil {
+		return catalogReference{}, err
+	}
+	return a.catalogReference(credential.Connector, connectors.RuntimeConfig{CoordinationIdentity: identity})
+}
+
+func (a *App) accountCatalogReference(want catalogReference) (catalogReference, bool) {
+	for _, reference := range a.state.Catalogs {
+		if reference.Connector == want.Connector && reference.AccountKey == want.AccountKey {
+			return reference, true
+		}
+	}
+	return catalogReference{}, false
+}
+
+func catalogSnapshotWithStaleness(snapshot CatalogSnapshot, now time.Time) CatalogSnapshot {
+	if snapshot.Catalog.Discovery == nil {
+		return snapshot
+	}
+	status := *snapshot.Catalog.Discovery
+	status.Failures = append([]connectors.DiscoveryFailure(nil), status.Failures...)
+	status.Cached = true
+	status.Stale = !status.ExpiresAt.IsZero() && !now.Before(status.ExpiresAt)
+	snapshot.Catalog.Discovery = &status
+	return snapshot
 }
 
 func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
@@ -844,6 +978,11 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	if err != nil {
 		return a.failRun(runID, err)
 	}
+	catalog, err := a.catalogForEndpoint(ctx, source, sourceRuntime, false)
+	if err != nil {
+		return a.failRun(runID, err)
+	}
+	sourceRuntime.ResolvedCatalog = &catalog
 	sourceExpectation := streamResumeExpectation(source, sourceCredential, sourceRuntime, req.Stream)
 	destination, destRuntime, err := a.resolveEndpoint(ctx, conn.Destination)
 	if err != nil {
