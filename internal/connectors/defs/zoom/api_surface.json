@@ -14212,27 +14212,15 @@
     {
       "method": "GET",
       "path": "/v2/my_notes/notes",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/my-notes.md",
-        "notes": "classification=implementable_now; provider_module=my-notes; operation_title=List my notes; provider_server=https://api.zoom.us/v2; provider_path=/my_notes/notes; artifact=https://developers.zoom.us/docs/api/my-notes.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "my-notes list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/my_notes/notes/{noteId}/content",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/my-notes.md",
-        "notes": "classification=implementable_now; provider_module=my-notes; operation_title=Get My Notes content and transcript; provider_server=https://api.zoom.us/v2; provider_path=/my_notes/notes/{noteId}/content; artifact=https://developers.zoom.us/docs/api/my-notes.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "my-notes content get"
       }
     },
     {
