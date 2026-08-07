@@ -68,21 +68,26 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		}
 	}
 
-	if len(surface.Endpoints) != 509 {
-		t.Fatalf("endpoints = %d, want 509", len(surface.Endpoints))
+	// These are a snapshot of derived truth, not a budget. They moved when the
+	// bundle stopped enumerating only /repos/{owner}/{repo}/… and recorded the
+	// whole documented GET surface (636 of GitHub's 1220 operations). Every
+	// structural assertion below is unchanged; only the counts the surface now
+	// actually holds were re-derived.
+	if len(surface.Endpoints) != 886 {
+		t.Fatalf("endpoints = %d, want 886", len(surface.Endpoints))
 	}
-	if covered != 440 {
-		t.Fatalf("covered endpoints = %d, want 440", covered)
+	if covered != 806 {
+		t.Fatalf("covered endpoints = %d, want 806", covered)
 	}
-	if operations != 69 {
-		t.Fatalf("operation endpoints = %d, want 69 (only duplicate/deprecated/disallowed remain unconverted)", operations)
+	if operations != 80 {
+		t.Fatalf("operation endpoints = %d, want 80 (duplicate/deprecated/disallowed, plus the direct reads GitHub documents with no JSON success body)", operations)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
 	}
 	assertStringIntMap(t, "totalByMethod", totalByMethod, map[string]int{
 		"DELETE":  72,
-		"GET":     259,
+		"GET":     636,
 		"GRAPHQL": 4,
 		"PATCH":   36,
 		"POST":    91,
@@ -90,7 +95,7 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	})
 	assertStringIntMap(t, "coveredByMethod", coveredByMethod, map[string]int{
 		"DELETE":  67,
-		"GET":     205,
+		"GET":     571,
 		"GRAPHQL": 4,
 		"PATCH":   34,
 		"POST":    85,
@@ -98,7 +103,7 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	})
 	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{
 		"DELETE": 5,
-		"GET":    54,
+		"GET":    65,
 		"PATCH":  2,
 		"POST":   6,
 		"PUT":    2,
@@ -107,12 +112,18 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		"disallowed": 1,
 		"duplicate":  67,
 		"deprecated": 1,
+		// GETs GitHub documents with no JSON success body: 9 boolean 204 status
+		// checks plus /zen and /octocat, which return text/plain and
+		// application/octocat-stream. engine.decodeDirectReadBody json-decodes
+		// every direct-read body, so these are blocked with that dependency
+		// named rather than shipped as commands that always fail.
+		"direct_read": 11,
 	})
 	assertStringIntMap(t, "risks", risks, map[string]int{
-		"low": 69,
+		"low": 80,
 	})
 	assertStringIntMap(t, "statuses", statuses, map[string]int{
-		"blocked": 69,
+		"blocked": 80,
 	})
 }
 
