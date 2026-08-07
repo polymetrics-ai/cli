@@ -38,15 +38,15 @@ Reads and writes ServiceNow incident, user, and group table data through the Ser
 - incidents:
   - primary key: sys_id
   - cursor: updated_on
-  - fields: name(), number(), priority(), short_description(), state(), sys_created_on(), sys_id(), updated_on()
+  - fields: name(string), number(string), priority(string), short_description(string), state(string), sys_created_on(string), sys_id(string), updated_on(string)
 - users:
   - primary key: sys_id
   - cursor: updated_on
-  - fields: active(), email(), name(), number(), sys_id(), updated_on(), user_name()
+  - fields: active(string), email(string), name(string), number(string), sys_id(string), updated_on(string), user_name(string)
 - groups:
   - primary key: sys_id
   - cursor: updated_on
-  - fields: active(), description(), name(), number(), sys_id(), updated_on()
+  - fields: active(string), description(string), name(string), number(string), sys_id(string), updated_on(string)
 
 ## Sync Modes
 

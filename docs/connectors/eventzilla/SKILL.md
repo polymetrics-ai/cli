@@ -36,22 +36,22 @@ Reads Eventzilla events, categories, users, attendees, ticket types, and transac
 
 - events:
   - primary key: id
-  - fields: categories(), currency(), end_date(), end_time(), id(), start_date(), start_time(), status(), tickets_sold(), tickets_total(), time_zone(), title(), url(), venue()
+  - fields: categories(string), currency(string), end_date(string), end_time(string), id(integer), start_date(string), start_time(string), status(string), tickets_sold(integer), tickets_total(integer), time_zone(string), title(string), url(string), venue(string)
 - categories:
   - primary key: category
-  - fields: category()
+  - fields: category(string)
 - users:
   - primary key: id
-  - fields: company(), email(), first_name(), id(), last_name(), last_seen(), phone_primary(), timezone(), user_type(), username()
+  - fields: company(string), email(string), first_name(string), id(integer), last_name(string), last_seen(string), phone_primary(string), timezone(string), user_type(string), username(string)
 - attendees:
   - primary key: id
-  - fields: email(), event_id(), first_name(), id(), is_attended(), last_name(), refno(), ticket_type(), transaction_amount(), transaction_date(), transaction_status()
+  - fields: email(string), event_id(integer), first_name(string), id(integer), is_attended(string), last_name(string), refno(string), ticket_type(string), transaction_amount(number), transaction_date(string), transaction_status(string)
 - tickets:
   - primary key: id
-  - fields: event_id(), id(), is_visible(), price(), quantity_total(), sales_end_date(), sales_start_date(), ticket_type(), title()
+  - fields: event_id(integer), id(integer), is_visible(boolean), price(number), quantity_total(integer), sales_end_date(string), sales_start_date(string), ticket_type(string), title(string)
 - transactions:
   - primary key: checkout_id
-  - fields: buyer_first_name(), buyer_last_name(), checkout_id(), comments(), email(), event_date(), event_id(), payment_type(), promo_code(), tickets_in_transaction(), title(), transaction_amount(), transaction_date(), transaction_ref(), transaction_status(), user_id()
+  - fields: buyer_first_name(string), buyer_last_name(string), checkout_id(integer), comments(string), email(string), event_date(string), event_id(integer), payment_type(string), promo_code(string), tickets_in_transaction(string), title(string), transaction_amount(string), transaction_date(string), transaction_ref(string), transaction_status(string), user_id(integer)
 
 ## Sync Modes
 

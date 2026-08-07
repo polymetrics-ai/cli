@@ -41,46 +41,46 @@ CONFIGURATION
 ETL STREAMS
   users:
     primary key: id
-    fields: email(), first_name(), id(), last_name()
+    fields: email(string), first_name(string), id(integer), last_name(string)
   locations:
     primary key: id
-    fields: address(), id(), name()
+    fields: address(string), id(integer), name(string)
   positions:
     primary key: id
-    fields: color(), id(), name()
+    fields: color(string), id(integer), name(string)
   shifts:
     primary key: id
-    fields: end_time(), id(), start_time(), user_id()
+    fields: end_time(string), id(integer), start_time(string), user_id(integer)
   sites:
     primary key: id
-    fields: address(), id(), is_deleted(), location_id(), name()
+    fields: address(string), id(integer), is_deleted(boolean), location_id(integer), name(string)
   blocks:
     primary key: id
-    fields: end_time(), id(), location_id(), position_id(), start_time()
+    fields: end_time(string), id(integer), location_id(integer), position_id(integer), start_time(string)
   annotations:
     primary key: id
-    fields: end_date(), id(), message(), start_date(), title()
+    fields: end_date(string), id(integer), message(string), start_date(string), title(string)
   availabilityevents:
     primary key: id
-    fields: end_time(), id(), start_time(), type(), user_id()
+    fields: end_time(string), id(integer), start_time(string), type(integer), user_id(integer)
   requesttypes:
     primary key: id
-    fields: built_in(), enabled(), id(), is_deleted(), name()
+    fields: built_in(boolean), enabled(boolean), id(integer), is_deleted(boolean), name(string)
   times:
     primary key: id
-    fields: end_time(), id(), is_approved(), shift_id(), start_time(), user_id()
+    fields: end_time(string), id(integer), is_approved(boolean), shift_id(integer), start_time(string), user_id(integer)
   timezones:
     primary key: timezone_id
-    fields: offset(), olson_id(), timezone_id(), timezone_name()
+    fields: offset(number), olson_id(string), timezone_id(integer), timezone_name(string)
   payrolls:
     primary key: id
-    fields: end_date(), id(), is_closed(), is_finalized(), start_date()
+    fields: end_date(string), id(integer), is_closed(boolean), is_finalized(boolean), start_date(string)
   openshiftapprovalrequests:
     primary key: id
-    fields: created_at(), id(), shift_id(), status()
+    fields: created_at(string), id(integer), shift_id(integer), status(integer)
   swaps:
     primary key: id
-    fields: id(), shift_id(), status(), type(), user_id()
+    fields: id(integer), shift_id(integer), status(integer), type(integer), user_id(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

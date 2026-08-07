@@ -35,16 +35,16 @@ CONFIGURATION
 ETL STREAMS
   sobjects:
     primary key: qualified_api_name
-    fields: label(), qualified_api_name()
+    fields: label(string), qualified_api_name(string)
   accounts:
     primary key: id
-    fields: email(), id(), last_modified_date(), name()
+    fields: email(string), id(string), last_modified_date(string), name(string)
   contacts:
     primary key: id
-    fields: email(), id(), last_modified_date(), name()
+    fields: email(string), id(string), last_modified_date(string), name(string)
   leads:
     primary key: id
-    fields: email(), id(), last_modified_date(), name()
+    fields: email(string), id(string), last_modified_date(string), name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

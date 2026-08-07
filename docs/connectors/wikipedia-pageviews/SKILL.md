@@ -45,10 +45,10 @@ Reads Wikimedia pageview metrics for articles and top-article reports through th
 - pageviews:
   - primary key: id
   - cursor: timestamp
-  - fields: access(), agent(), article(), granularity(), id(), project(), timestamp(), views()
+  - fields: access(string), agent(string), article(string), granularity(string), id(string), project(string), timestamp(string), views(integer)
 - top_articles:
   - primary key: id
-  - fields: access(), articles(), country(), day(), id(), month(), project(), year()
+  - fields: access(string), articles(array), country(string), day(string), id(string), month(string), project(string), year(string)
 
 ## Sync Modes
 

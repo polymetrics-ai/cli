@@ -39,37 +39,37 @@ CONFIGURATION
 ETL STREAMS
   users:
     primary key: id
-    fields: email(), id(), name(), role(), status(), updated()
+    fields: email(string), id(integer), name(string), role(string), status(string), updated(string)
   app_collections:
     primary key: id
-    fields: count_apps(), countries(), created(), id(), languages(), title(), title_normalized()
+    fields: count_apps(integer), countries(string), created(string), id(integer), languages(string), title(string), title_normalized(string)
   app_lists:
     primary key: app_id
-    fields: app_collection_id(), app_id(), count_reviews(), count_whatsnew(), created(), ext_id(), is_favorite(), store(), watch_url()
+    fields: app_collection_id(string), app_id(integer), count_reviews(integer), count_whatsnew(integer), created(string), ext_id(string), is_favorite(integer), store(string), watch_url(string)
   ratings:
     primary key: ext_id, date, country
-    fields: country(), date(), ext_id(), rating(), stars1(), stars2(), stars3(), stars4(), stars5(), stars_total(), store(), version()
+    fields: country(string), date(string), ext_id(string), rating(number), stars1(integer), stars2(integer), stars3(integer), stars4(integer), stars5(integer), stars_total(integer), store(string), version(string)
   reviews:
     primary key: id
-    fields: app_id(), app_version(), author(), content(), created(), date(), dt(), ext_id(), id(), is_answer(), locale(), rating(), rating_prev(), review_id(), store(), time(), title(), updated(), user_id(), was_changed()
+    fields: app_id(integer), app_version(string), author(string), content(string), created(string), date(string), dt(string), ext_id(string), id(integer), is_answer(boolean), locale(string), rating(integer), rating_prev(integer), review_id(string), store(string), time(string), title(string), updated(string), user_id(string), was_changed(boolean)
   reviews_summary:
     primary key: ext_id, date, country
-    fields: avg_rating(), country(), date(), ext_id(), stars1(), stars2(), stars3(), stars4(), stars5(), total(), version()
+    fields: avg_rating(number), country(string), date(string), ext_id(string), stars1(integer), stars2(integer), stars3(integer), stars4(integer), stars5(integer), total(integer), version(string)
   keywords:
     primary key: ext_id, country, device, date
-    fields: country(), date(), device(), ext_id(), keyword(), no_pos(), page(), popularity(), pos(), store(), total()
+    fields: country(string), date(string), device(string), ext_id(string), keyword(string), no_pos(boolean), page(integer), popularity(integer), pos(integer), store(string), total(integer)
   rankings:
     primary key: ext_id, country, device, genre_id, date
-    fields: category(), country(), date(), device(), ext_id(), genre_id(), position()
+    fields: category(string), country(string), date(string), device(string), ext_id(string), genre_id(string), position(integer)
   versions:
     primary key: ext_id, version, country
-    fields: country(), ext_id(), release_date(), size(), version(), whats_new()
+    fields: country(string), ext_id(string), release_date(string), size(integer), version(string), whats_new(string)
   versions_whatsnew:
     primary key: ext_id, version, country
-    fields: country(), ext_id(), last_modified(), version(), whats_new()
+    fields: country(string), ext_id(string), last_modified(string), version(string), whats_new(string)
   ratings_history:
     primary key: ext_id, date, country, version
-    fields: avg_rating(), country(), date(), ext_id(), period(), stars(), stars1(), stars2(), stars3(), stars4(), stars5(), store(), total(), version()
+    fields: avg_rating(number), country(string), date(string), ext_id(string), period(string), stars(integer), stars1(integer), stars2(integer), stars3(integer), stars4(integer), stars5(integer), store(string), total(integer), version(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

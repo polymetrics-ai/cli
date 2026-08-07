@@ -40,10 +40,10 @@ Reads PostHog events and persons for a project via the PostHog REST API. Read-on
 - events:
   - primary key: id
   - cursor: timestamp
-  - fields: distinct_id(), event(), id(), properties(), timestamp()
+  - fields: distinct_id(string), event(string), id(string), properties(object), timestamp(string)
 - persons:
   - primary key: id
-  - fields: created_at(), distinct_id(), id(), properties()
+  - fields: created_at(string), distinct_id(string), id(string), properties(object)
 
 ## Sync Modes
 

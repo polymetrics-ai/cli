@@ -37,19 +37,19 @@ CONFIGURATION
 ETL STREAMS
   bases:
     primary key: id
-    fields: id(), name(), permissionLevel()
+    fields: id(string), name(string), permissionLevel(string)
   tables:
     primary key: id
-    fields: description(), fields(), id(), name(), primaryFieldId(), views()
+    fields: description(string), fields(array), id(string), name(string), primaryFieldId(string), views(array)
   records:
     primary key: id
-    fields: createdTime(), fields(), id()
+    fields: createdTime(string), fields(object), id(string)
   webhooks:
     primary key: id
-    fields: areNotificationsEnabled(), cursorForNextPayload(), expirationTime(), id(), isHookEnabled(), lastSuccessfulNotificationTime(), notificationUrl(), specification()
+    fields: areNotificationsEnabled(boolean), cursorForNextPayload(integer), expirationTime(string), id(string), isHookEnabled(boolean), lastSuccessfulNotificationTime(string), notificationUrl(string), specification(object)
   comments:
     primary key: id
-    fields: author(), createdTime(), id(), lastUpdatedTime(), parentCommentId(), record_id(), text()
+    fields: author(object), createdTime(string), id(string), lastUpdatedTime(string), parentCommentId(string), record_id(string), text(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

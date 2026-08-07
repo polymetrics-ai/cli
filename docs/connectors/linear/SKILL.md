@@ -46,19 +46,19 @@ Reads Linear issues, teams, projects, and users through the Linear GraphQL API. 
 - issues:
   - primary key: id
   - cursor: updated_at
-  - fields: assignee_email(), assignee_id(), branch_name(), canceled_at(), completed_at(), createdAt(), created_at(), creator_id(), description(), estimate(), id(), identifier(), priority(), state_id(), state_name(), state_type(), team_id(), team_key(), title(), updatedAt(), updated_at(), url()
+  - fields: assignee_email(string), assignee_id(string), branch_name(string), canceled_at(string), completed_at(string), createdAt(string), created_at(string), creator_id(string), description(string), estimate(number), id(string), identifier(string), priority(integer), state_id(string), state_name(string), state_type(string), team_id(string), team_key(string), title(string), updatedAt(string), updated_at(string), url(string)
 - teams:
   - primary key: id
   - cursor: updated_at
-  - fields: createdAt(), created_at(), description(), id(), key(), name(), private(), updatedAt(), updated_at()
+  - fields: createdAt(string), created_at(string), description(string), id(string), key(string), name(string), private(boolean), updatedAt(string), updated_at(string)
 - projects:
   - primary key: id
   - cursor: updated_at
-  - fields: canceled_at(), completed_at(), createdAt(), created_at(), description(), id(), name(), progress(), started_at(), state(), updatedAt(), updated_at(), url()
+  - fields: canceled_at(string), completed_at(string), createdAt(string), created_at(string), description(string), id(string), name(string), progress(number), started_at(string), state(string), updatedAt(string), updated_at(string), url(string)
 - users:
   - primary key: id
   - cursor: updated_at
-  - fields: active(), admin(), createdAt(), created_at(), display_name(), email(), id(), name(), updatedAt(), updated_at()
+  - fields: active(boolean), admin(boolean), createdAt(string), created_at(string), display_name(string), email(string), id(string), name(string), updatedAt(string), updated_at(string)
 
 ## Sync Modes
 

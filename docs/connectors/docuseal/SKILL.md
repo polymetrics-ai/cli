@@ -38,19 +38,19 @@ Reads DocuSeal templates, submissions, and submitters, and writes submission/sub
 - templates:
   - primary key: id
   - cursor: updated_at
-  - fields: archived_at(), author_id(), created_at(), external_id(), folder_name(), id(), name(), slug(), updated_at()
+  - fields: archived_at(string), author_id(integer), created_at(string), external_id(string), folder_name(string), id(integer), name(string), slug(string), updated_at(string)
 - submissions:
   - primary key: id
   - cursor: updated_at
-  - fields: archived_at(), audit_log_url(), combined_document_url(), completed_at(), created_at(), expire_at(), id(), name(), slug(), source(), status(), template_id(), template_name(), updated_at()
+  - fields: archived_at(string), audit_log_url(string), combined_document_url(string), completed_at(string), created_at(string), expire_at(string), id(integer), name(string), slug(string), source(string), status(string), template_id(integer), template_name(string), updated_at(string)
 - submitters:
   - primary key: id
   - cursor: updated_at
-  - fields: completed_at(), created_at(), email(), external_id(), id(), name(), opened_at(), phone(), role(), sent_at(), slug(), status(), submission_id(), updated_at(), uuid()
+  - fields: completed_at(string), created_at(string), email(string), external_id(string), id(integer), name(string), opened_at(string), phone(string), role(string), sent_at(string), slug(string), status(string), submission_id(integer), updated_at(string), uuid(string)
 - template_detail:
   - primary key: id
   - cursor: updated_at
-  - fields: archived_at(), author(), author_id(), created_at(), documents(), external_id(), fields(), folder_id(), folder_name(), id(), name(), preferences(), schema(), slug(), source(), submitters(), updated_at()
+  - fields: archived_at(string), author(object), author_id(integer), created_at(string), documents(array), external_id(string), fields(array), folder_id(integer), folder_name(string), id(integer), name(string), preferences(object), schema(array), slug(string), source(string), submitters(array), updated_at(string)
 
 ## Sync Modes
 

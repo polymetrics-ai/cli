@@ -46,15 +46,15 @@ Reads Zoho Desk tickets, contacts, and accounts through the Zoho Desk REST API.
 - tickets:
   - primary key: id
   - cursor: updated_at
-  - fields: channel(), createdTime(), email(), id(), modifiedTime(), name(), priority(), status(), subject(), ticketNumber(), updated_at()
+  - fields: channel(string), createdTime(string), email(string), id(string), modifiedTime(string), name(string), priority(string), status(string), subject(string), ticketNumber(string), updated_at(string)
 - contacts:
   - primary key: id
   - cursor: updated_at
-  - fields: accountId(), createdTime(), email(), firstName(), id(), lastName(), modifiedTime(), name(), phone(), updated_at()
+  - fields: accountId(string), createdTime(string), email(string), firstName(string), id(string), lastName(string), modifiedTime(string), name(string), phone(string), updated_at(string)
 - accounts:
   - primary key: id
   - cursor: updated_at
-  - fields: accountName(), createdTime(), id(), modifiedTime(), name(), phone(), updated_at(), website()
+  - fields: accountName(string), createdTime(string), id(string), modifiedTime(string), name(string), phone(string), updated_at(string), website(string)
 
 ## Sync Modes
 

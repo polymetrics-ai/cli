@@ -36,13 +36,13 @@ ETL STREAMS
   reservations:
     primary key: id
     cursor: date
-    fields: date(), guest_name(), id(), status()
+    fields: date(string), guest_name(string), id(string), status(string)
   meals:
     primary key: id
-    fields: id(), max_end(), min_start(), name()
+    fields: id(string), max_end(string), min_start(string), name(string)
   queue:
     primary key: queue_id
-    fields: added_date(), amount(), comment(), cust_id(), firstname(), lastname(), mobile(), queue_id()
+    fields: added_date(string), amount(string), comment(string), cust_id(string), firstname(string), lastname(string), mobile(string), queue_id(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

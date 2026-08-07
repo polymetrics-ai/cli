@@ -43,10 +43,10 @@ ETL STREAMS
   pageviews:
     primary key: id
     cursor: timestamp
-    fields: access(), agent(), article(), granularity(), id(), project(), timestamp(), views()
+    fields: access(string), agent(string), article(string), granularity(string), id(string), project(string), timestamp(string), views(integer)
   top_articles:
     primary key: id
-    fields: access(), articles(), country(), day(), id(), month(), project(), year()
+    fields: access(string), articles(array), country(string), day(string), id(string), month(string), project(string), year(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

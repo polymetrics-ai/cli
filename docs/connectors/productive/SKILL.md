@@ -37,19 +37,19 @@ Reads Productive projects, people, companies, and tasks through the Productive J
 - projects:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), type(), updated_at()
+  - fields: created_at(string), id(string), name(string), type(string), updated_at(string)
 - people:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), type(), updated_at()
+  - fields: created_at(string), id(string), name(string), type(string), updated_at(string)
 - companies:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), type(), updated_at()
+  - fields: created_at(string), id(string), name(string), type(string), updated_at(string)
 - tasks:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), type(), updated_at()
+  - fields: created_at(string), id(string), name(string), type(string), updated_at(string)
 
 ## Sync Modes
 

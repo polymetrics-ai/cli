@@ -43,46 +43,46 @@ Reads SparkPost recipient lists, templates, sending domains, transmissions, supp
 
 - recipient_lists:
   - primary key: id
-  - fields: attributes(), description(), id(), name(), total_accepted_recipients()
+  - fields: attributes(object), description(string), id(string), name(string), total_accepted_recipients(integer)
 - templates:
   - primary key: id
-  - fields: has_draft(), has_published(), id(), last_update_time(), last_use(), name(), published()
+  - fields: has_draft(boolean), has_published(boolean), id(string), last_update_time(string), last_use(string), name(string), published(boolean)
 - sending_domains:
   - primary key: domain
-  - fields: domain(), is_default_bounce_domain(), shared_with_subaccounts(), status(), tracking_domain()
+  - fields: domain(string), is_default_bounce_domain(boolean), shared_with_subaccounts(boolean), status(object), tracking_domain(string)
 - transmissions:
   - primary key: id
-  - fields: campaign_id(), description(), generation_end_time(), generation_start_time(), id(), num_failed_gen(), num_generated(), num_rcpts(), state()
+  - fields: campaign_id(string), description(string), generation_end_time(string), generation_start_time(string), id(string), num_failed_gen(integer), num_generated(integer), num_rcpts(integer), state(string)
 - suppression_list:
   - primary key: recipient
-  - fields: created(), description(), list_id(), non_transactional(), recipient(), source(), transactional(), type(), updated()
+  - fields: created(string), description(string), list_id(string), non_transactional(boolean), recipient(string), source(string), transactional(boolean), type(string), updated(string)
 - ip_pools:
   - primary key: id
-  - fields: auto_warmup_overflow_pool(), fbl_signing_domain(), id(), ips(), name(), signing_domain()
+  - fields: auto_warmup_overflow_pool(string), fbl_signing_domain(string), id(string), ips(array), name(string), signing_domain(string)
 - webhooks:
   - primary key: id
-  - fields: active(), auth_type(), events(), id(), name(), target()
+  - fields: active(boolean), auth_type(string), events(array), id(string), name(string), target(string)
 - subaccounts:
   - primary key: id
-  - fields: compliance_status(), id(), ip_pool(), name(), status()
+  - fields: compliance_status(string), id(integer), ip_pool(string), name(string), status(string)
 - tracking_domains:
   - primary key: domain
-  - fields: default(), domain(), port(), secure(), status(), subaccount_id()
+  - fields: default(boolean), domain(string), port(integer), secure(boolean), status(object), subaccount_id(integer)
 - inbound_domains:
   - primary key: domain
-  - fields: domain()
+  - fields: domain(string)
 - relay_webhooks:
   - primary key: id
-  - fields: auth_type(), id(), match(), name(), target()
+  - fields: auth_type(string), id(string), match(object), name(string), target(string)
 - sending_ips:
   - primary key: external_ip
-  - fields: auto_warmup_enabled(), auto_warmup_stage(), customer_provided(), external_ip(), hostname(), ip_pool()
+  - fields: auto_warmup_enabled(boolean), auto_warmup_stage(integer), customer_provided(boolean), external_ip(string), hostname(string), ip_pool(string)
 - ab_tests:
   - primary key: id
-  - fields: created_at(), id(), metric(), name(), status(), updated_at(), version()
+  - fields: created_at(string), id(string), metric(string), name(string), status(string), updated_at(string), version(integer)
 - account:
   - primary key: customer_id
-  - fields: company_name(), country_code(), created(), customer_id(), status(), updated()
+  - fields: company_name(string), country_code(string), created(string), customer_id(integer), status(string), updated(string)
 
 ## Sync Modes
 

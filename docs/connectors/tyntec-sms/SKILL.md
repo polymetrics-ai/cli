@@ -36,17 +36,17 @@ Reads tyntec SMS messages, templates, sender IDs, and delivery reports through A
 - messages:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), from(), id(), status(), to()
+  - fields: created_at(string), from(string), id(string), status(string), to(string)
 - templates:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - sender_ids:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - delivery_reports:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), from(), id(), status(), to()
+  - fields: created_at(string), from(string), id(string), status(string), to(string)
 
 ## Sync Modes
 

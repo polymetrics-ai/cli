@@ -40,25 +40,25 @@ Reads Auth0 users, clients, connections, roles, organizations, role assignments,
 - users:
   - primary key: user_id
   - cursor: updated_at
-  - fields: blocked(), created_at(), email(), email_verified(), family_name(), given_name(), last_login(), logins_count(), name(), nickname(), picture(), updated_at(), user_id(), username()
+  - fields: blocked(boolean), created_at(string), email(string), email_verified(boolean), family_name(string), given_name(string), last_login(string), logins_count(integer), name(string), nickname(string), picture(string), updated_at(string), user_id(string), username(string)
 - clients:
   - primary key: client_id
-  - fields: app_type(), client_id(), description(), global(), is_first_party(), name(), oidc_conformant()
+  - fields: app_type(string), client_id(string), description(string), global(boolean), is_first_party(boolean), name(string), oidc_conformant(boolean)
 - connections:
   - primary key: id
-  - fields: display_name(), id(), is_domain_connection(), name(), strategy()
+  - fields: display_name(string), id(string), is_domain_connection(boolean), name(string), strategy(string)
 - roles:
   - primary key: id
-  - fields: description(), id(), name()
+  - fields: description(string), id(string), name(string)
 - organizations:
   - primary key: id
-  - fields: display_name(), id(), name()
+  - fields: display_name(string), id(string), name(string)
 - role_users:
   - primary key: role_id, user_id
-  - fields: email(), name(), picture(), role_id(), user_id()
+  - fields: email(string), name(string), picture(string), role_id(string), user_id(string)
 - organization_members:
   - primary key: organization_id, user_id
-  - fields: email(), name(), organization_id(), picture(), user_id()
+  - fields: email(string), name(string), organization_id(string), picture(string), user_id(string)
 
 ## Sync Modes
 

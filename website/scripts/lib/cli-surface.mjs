@@ -18,6 +18,16 @@ const BINARY_DOWNLOAD_FLAGS = JSON.parse(
   ),
 );
 
+const DIRECT_READ_PAGE_FLAGS = JSON.parse(
+  readFileSync(
+    resolve(
+      dirname(fileURLToPath(import.meta.url)),
+      '../../../internal/connectors/direct_read_page_flags.json',
+    ),
+    'utf8',
+  ),
+);
+
 const keyNames = (keyStyle) => {
   if (keyStyle === 'camel') {
     return {
@@ -57,9 +67,15 @@ const keyNames = (keyStyle) => {
 // --dest-root twice on the catalog page.
 function withBinaryDownloadFlags(flags, intent) {
   const declared = Array.isArray(flags) ? flags : [];
-  if (intent !== 'binary_download') return declared;
+  const runtimeFlags =
+    intent === 'binary_download'
+      ? BINARY_DOWNLOAD_FLAGS
+      : intent === 'direct_read'
+        ? DIRECT_READ_PAGE_FLAGS
+        : null;
+  if (!runtimeFlags) return declared;
   const names = new Set(declared.map((flag) => trim(flag?.name)));
-  return [...declared, ...BINARY_DOWNLOAD_FLAGS.filter((flag) => !names.has(flag.name))];
+  return [...declared, ...runtimeFlags.filter((flag) => !names.has(flag.name))];
 }
 
 export function mapFlags(flags, options = {}) {

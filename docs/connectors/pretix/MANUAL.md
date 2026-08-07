@@ -35,16 +35,16 @@ CONFIGURATION
 ETL STREAMS
   organizers:
     primary key: id
-    fields: id(), name(), slug()
+    fields: id(string), name(object), slug(string)
   events:
     primary key: id
-    fields: id(), name(), slug(), updated_at()
+    fields: id(string), name(object), slug(string), updated_at(string)
   items:
     primary key: id
-    fields: code(), id(), name(), slug()
+    fields: code(string), id(integer), name(object), slug(string)
   orders:
     primary key: id
-    fields: code(), id(), name()
+    fields: code(string), id(string), name(object)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

@@ -41,7 +41,7 @@ Reads Taboola campaigns through the Backstage API. Read-only.
 - campaigns:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), id(), name()
+  - fields: created_at(string), id(string), name(string)
 
 ## Sync Modes
 

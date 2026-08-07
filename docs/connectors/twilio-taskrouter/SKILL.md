@@ -37,19 +37,19 @@ Reads Twilio TaskRouter workers, tasks, activities, task queues, and workflows f
 
 - workers:
   - primary key: sid
-  - fields: activity_name(), available(), friendly_name(), sid()
+  - fields: activity_name(string), available(boolean), friendly_name(string), sid(string)
 - tasks:
   - primary key: sid
-  - fields: assignment_status(), sid(), workflow_sid()
+  - fields: assignment_status(string), sid(string), workflow_sid(string)
 - activities:
   - primary key: sid
-  - fields: friendly_name(), sid()
+  - fields: friendly_name(string), sid(string)
 - task_queues:
   - primary key: sid
-  - fields: friendly_name(), sid()
+  - fields: friendly_name(string), sid(string)
 - workflows:
   - primary key: sid
-  - fields: friendly_name(), sid()
+  - fields: friendly_name(string), sid(string)
 
 ## Sync Modes
 

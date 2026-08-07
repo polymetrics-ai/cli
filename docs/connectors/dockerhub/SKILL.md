@@ -39,17 +39,17 @@ Reads public Docker Hub repositories and image tags for a configured username or
 - repositories:
   - primary key: name
   - cursor: last_updated
-  - fields: date_registered(), description(), is_private(), last_modified(), last_updated(), name(), namespace(), pull_count(), repository_type(), star_count(), status(), status_description(), storage_size()
+  - fields: date_registered(string), description(string), is_private(boolean), last_modified(string), last_updated(string), name(string), namespace(string), pull_count(integer), repository_type(string), star_count(integer), status(integer), status_description(string), storage_size(integer)
 - tags:
   - primary key: id
   - cursor: last_updated
-  - fields: content_type(), digest(), full_size(), id(), last_pushed(), last_updated(), last_updater_username(), media_type(), name(), repository(), tag_status()
+  - fields: content_type(string), digest(string), full_size(integer), id(integer), last_pushed(string), last_updated(string), last_updater_username(string), media_type(string), name(string), repository(integer), tag_status(string)
 - repository_detail:
   - primary key: name
-  - fields: collaborator_count(), date_registered(), description(), full_description(), has_starred(), hub_user(), is_automated(), is_private(), last_updated(), name(), namespace(), pull_count(), repository_type(), star_count(), status(), status_description(), storage_size()
+  - fields: collaborator_count(integer), date_registered(string), description(string), full_description(string), has_starred(boolean), hub_user(string), is_automated(boolean), is_private(boolean), last_updated(string), name(string), namespace(string), pull_count(integer), repository_type(string), star_count(integer), status(integer), status_description(string), storage_size(integer)
 - tag_detail:
   - primary key: id
-  - fields: creator(), full_size(), id(), last_updated(), last_updater(), last_updater_username(), name(), repository(), status(), tag_last_pulled(), tag_last_pushed(), v2()
+  - fields: creator(integer), full_size(integer), id(integer), last_updated(string), last_updater(integer), last_updater_username(string), name(string), repository(integer), status(string), tag_last_pulled(string), tag_last_pushed(string), v2(string)
 
 ## Sync Modes
 

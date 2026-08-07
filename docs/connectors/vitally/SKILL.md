@@ -37,27 +37,27 @@ Reads and writes Vitally customer-success accounts, users, notes, conversations,
 
 - accounts:
   - primary key: id
-  - fields: id(), name(), traits()
+  - fields: id(string), name(string), traits(object)
 - users:
   - primary key: id
   - cursor: updatedAt
-  - fields: accounts(), avatar(), createdAt(), deactivatedAt(), email(), externalId(), firstKnown(), id(), lastInboundMessageTimestamp(), lastOutboundMessageTimestamp(), lastSeenTimestamp(), name(), npsLastFeedback(), npsLastRespondedAt(), npsLastScore(), organizations(), segments(), traits(), unsubscribedFromConversations(), unsubscribedFromConversationsAt(), updatedAt()
+  - fields: accounts(array), avatar(string), createdAt(string), deactivatedAt(string), email(string), externalId(string), firstKnown(string), id(string), lastInboundMessageTimestamp(string), lastOutboundMessageTimestamp(string), lastSeenTimestamp(string), name(string), npsLastFeedback(string), npsLastRespondedAt(string), npsLastScore(integer), organizations(array), segments(array), traits(object), unsubscribedFromConversations(boolean), unsubscribedFromConversationsAt(string), updatedAt(string)
 - notes:
   - primary key: id
   - cursor: updated_at
-  - fields: account_id(), archived_at(), author_id(), category_id(), created_at(), external_id(), id(), note(), note_date(), organization_id(), source(), subject(), tags(), traits(), updated_at()
+  - fields: account_id(string), archived_at(string), author_id(string), category_id(string), created_at(string), external_id(string), id(string), note(string), note_date(string), organization_id(string), source(string), subject(string), tags(array), traits(object), updated_at(string)
 - conversations:
   - primary key: id
   - cursor: updated_at
-  - fields: accounts(), admins(), created_at(), external_id(), id(), rating(), source(), status(), subject(), traits(), updated_at(), users()
+  - fields: accounts(array), admins(array), created_at(string), external_id(string), id(string), rating(string), source(string), status(string), subject(string), traits(object), updated_at(string), users(array)
 - tasks:
   - primary key: id
   - cursor: updated_at
-  - fields: account_id(), archived_at(), assigned_to_id(), category_id(), completed_at(), completed_by_id(), created_at(), description(), due_date(), external_id(), id(), meeting_id(), name(), organization_id(), source(), tags(), traits(), updated_at()
+  - fields: account_id(string), archived_at(string), assigned_to_id(string), category_id(string), completed_at(string), completed_by_id(string), created_at(string), description(string), due_date(string), external_id(string), id(string), meeting_id(string), name(string), organization_id(string), source(string), tags(array), traits(object), updated_at(string)
 - nps_responses:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), external_id(), feedback(), id(), responded_at(), score(), updated_at(), user_id()
+  - fields: created_at(string), external_id(string), feedback(string), id(string), responded_at(string), score(integer), updated_at(string), user_id(string)
 
 ## Sync Modes
 

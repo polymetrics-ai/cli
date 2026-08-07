@@ -37,19 +37,19 @@ Reads Paddle customers, subscriptions, transactions, and products through the Pa
 - transactions:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), currency_code(), customer_id(), id(), status(), subscription_id()
+  - fields: created_at(string), currency_code(string), customer_id(string), id(string), status(string), subscription_id(string)
 - customers:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), email(), id(), name()
+  - fields: created_at(string), email(string), id(string), name(string)
 - subscriptions:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), customer_id(), id(), status()
+  - fields: created_at(string), customer_id(string), id(string), status(string)
 - products:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), id(), name(), status()
+  - fields: created_at(string), id(string), name(string), status(string)
 
 ## Sync Modes
 

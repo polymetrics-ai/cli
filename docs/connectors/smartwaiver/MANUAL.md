@@ -36,22 +36,22 @@ CONFIGURATION
 ETL STREAMS
   waivers:
     primary key: waiverId
-    fields: createdOn(), email(), expirationDate(), expired(), firstName(), lastName(), templateId(), title(), verified(), waiverId()
+    fields: createdOn(string), email(string), expirationDate(string), expired(boolean), firstName(string), lastName(string), templateId(string), title(string), verified(boolean), waiverId(string)
   checkins:
     primary key: checkinId
-    fields: checkinId(), date(), dateSigned(), firstName(), lastName(), templateId(), waiverId()
+    fields: checkinId(string), date(string), dateSigned(string), firstName(string), lastName(string), templateId(string), waiverId(string)
   templates:
     primary key: templateId
-    fields: kioskUrl(), publishedOn(), publishedVersion(), templateId(), title(), webUrl()
+    fields: kioskUrl(string), publishedOn(string), publishedVersion(integer), templateId(string), title(string), webUrl(string)
   published_keys:
     primary key: key
-    fields: createdAt(), key(), label()
+    fields: createdAt(string), key(string), label(string)
   user_info:
     primary key: username
-    fields: email(), ipAddress(), signupDate(), username()
+    fields: email(string), ipAddress(string), signupDate(string), username(string)
   settings:
     primary key: type
-    fields: settings(), type()
+    fields: settings(object), type(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

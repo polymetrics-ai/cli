@@ -42,27 +42,27 @@ ETL STREAMS
   conversations:
     primary key: id
     cursor: updated_at
-    fields: account_id(), additional_attributes(), agent_last_seen_at(), assignee_last_seen_at(), can_reply(), contact_last_seen_at(), created_at(), custom_attributes(), first_reply_created_at(), id(), inbox_id(), labels(), last_activity_at(), muted(), priority(), sla_policy_id(), snoozed_until(), status(), timestamp(), unread_count(), updated_at(), uuid(), waiting_since()
+    fields: account_id(integer), additional_attributes(object), agent_last_seen_at(integer), assignee_last_seen_at(integer), can_reply(boolean), contact_last_seen_at(integer), created_at(integer), custom_attributes(object), first_reply_created_at(integer), id(integer), inbox_id(integer), labels(array), last_activity_at(integer), muted(boolean), priority(string), sla_policy_id(integer), snoozed_until(integer), status(string), timestamp(integer), unread_count(integer), updated_at(integer), uuid(string), waiting_since(integer)
   contacts:
     primary key: id
     cursor: last_activity_at
-    fields: additional_attributes(), availability_status(), blocked(), contact_inboxes(), created_at(), custom_attributes(), email(), id(), identifier(), last_activity_at(), name(), phone_number(), thumbnail()
+    fields: additional_attributes(object), availability_status(string), blocked(boolean), contact_inboxes(array), created_at(integer), custom_attributes(object), email(string), id(integer), identifier(string), last_activity_at(integer), name(string), phone_number(string), thumbnail(string)
   inboxes:
     primary key: id
-    fields: allow_messages_after_resolved(), avatar_url(), business_name(), callback_webhook_url(), channel_id(), channel_type(), csat_survey_enabled(), enable_auto_assignment(), enable_email_collect(), greeting_enabled(), greeting_message(), id(), lock_to_single_conversation(), medium(), name(), out_of_office_message(), phone_number(), provider(), timezone(), website_token(), website_url(), welcome_tagline(), welcome_title(), widget_color(), working_hours_enabled()
+    fields: allow_messages_after_resolved(boolean), avatar_url(string), business_name(string), callback_webhook_url(string), channel_id(integer), channel_type(string), csat_survey_enabled(boolean), enable_auto_assignment(boolean), enable_email_collect(boolean), greeting_enabled(boolean), greeting_message(string), id(integer), lock_to_single_conversation(boolean), medium(string), name(string), out_of_office_message(string), phone_number(string), provider(string), timezone(string), website_token(string), website_url(string), welcome_tagline(string), welcome_title(string), widget_color(string), working_hours_enabled(boolean)
   agents:
     primary key: id
-    fields: account_id(), auto_offline(), availability_status(), available_name(), confirmed(), custom_role_id(), email(), id(), name(), role(), thumbnail()
+    fields: account_id(integer), auto_offline(boolean), availability_status(string), available_name(string), confirmed(boolean), custom_role_id(integer), email(string), id(integer), name(string), role(string), thumbnail(string)
   teams:
     primary key: id
-    fields: account_id(), allow_auto_assign(), description(), id(), is_member(), name()
+    fields: account_id(integer), allow_auto_assign(boolean), description(string), id(integer), is_member(boolean), name(string)
   labels:
     primary key: id
-    fields: color(), description(), id(), show_on_sidebar(), title()
+    fields: color(string), description(string), id(integer), show_on_sidebar(boolean), title(string)
   messages:
     primary key: id
     cursor: created_at
-    fields: account_id(), attachment(), content(), content_attributes(), content_type(), conversation_id(), created_at(), id(), inbox_id(), message_type(), private(), sender(), sender_id(), sender_type(), source_id(), status(), updated_at()
+    fields: account_id(integer), attachment(object), content(string), content_attributes(object), content_type(string), conversation_id(string), created_at(integer), id(integer), inbox_id(integer), message_type(integer), private(boolean), sender(object), sender_id(integer), sender_type(string), source_id(string), status(string), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

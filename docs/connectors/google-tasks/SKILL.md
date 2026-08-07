@@ -44,11 +44,11 @@ Reads Google task lists and tasks through the Google Tasks REST API.
 - tasklists:
   - primary key: id
   - cursor: updated
-  - fields: etag(), id(), kind(), self_link(), title(), updated()
+  - fields: etag(string), id(string), kind(string), self_link(string), title(string), updated(string)
 - tasks:
   - primary key: id
   - cursor: updated
-  - fields: completed(), deleted(), due(), etag(), hidden(), id(), kind(), notes(), parent(), position(), self_link(), status(), tasklist_id(), title(), updated()
+  - fields: completed(string), deleted(boolean), due(string), etag(string), hidden(boolean), id(string), kind(string), notes(string), parent(string), position(string), self_link(string), status(string), tasklist_id(string), title(string), updated(string)
 
 ## Sync Modes
 

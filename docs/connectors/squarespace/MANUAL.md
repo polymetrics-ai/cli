@@ -40,29 +40,29 @@ ETL STREAMS
   orders:
     primary key: id
     cursor: modifiedOn
-    fields: createdOn(), id(), modifiedOn(), orderNumber()
+    fields: createdOn(string), id(string), modifiedOn(string), orderNumber(string)
   products:
     primary key: id
     cursor: modifiedOn
-    fields: createdOn(), id(), modifiedOn(), name()
+    fields: createdOn(string), id(string), modifiedOn(string), name(string)
   inventory:
     primary key: sku
-    fields: modifiedOn(), quantity(), sku()
+    fields: modifiedOn(string), quantity(integer), sku(string)
   profiles:
     primary key: id
-    fields: createdOn(), id(), modifiedOn(), name()
+    fields: createdOn(string), id(string), modifiedOn(string), name(string)
   transactions:
     primary key: id
-    fields: createdOn(), customerEmail(), discounts(), id(), modifiedOn(), payments(), salesLineItems(), salesOrderId(), shippingLineItems(), total(), totalNetPayment(), totalNetSales(), totalNetShipping(), totalSales(), totalTaxes(), voided()
+    fields: createdOn(string), customerEmail(string), discounts(array), id(string), modifiedOn(string), payments(array), salesLineItems(array), salesOrderId(string), shippingLineItems(array), total(object), totalNetPayment(object), totalNetSales(object), totalNetShipping(object), totalSales(object), totalTaxes(object), voided(boolean)
   store_pages:
     primary key: id
-    fields: id(), isEnabled(), title(), urlSlug()
+    fields: id(string), isEnabled(boolean), title(string), urlSlug(string)
   webhook_subscriptions:
     primary key: id
-    fields: clientId(), createdOn(), endpointUrl(), id(), topics(), updatedOn(), websiteId()
+    fields: clientId(string), createdOn(string), endpointUrl(string), id(string), topics(array), updatedOn(string), websiteId(string)
   contacts:
     primary key: id
-    fields: createdOn(), defaultShippingAddress(), firstName(), id(), lastName(), locale(), primaryEmail()
+    fields: createdOn(string), defaultShippingAddress(object), firstName(string), id(string), lastName(string), locale(string), primaryEmail(object)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

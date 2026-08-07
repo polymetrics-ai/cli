@@ -41,94 +41,94 @@ CONFIGURATION
 ETL STREAMS
   leads:
     primary key: id
-    fields: amount(), client_folder_id(), closed_at(), created_at(), currency(), id(), pipeline(), pipeline_id(), probability(), remind_date(), status(), step(), step_id(), title(), updated_at(), user_id()
+    fields: amount(number), client_folder_id(integer), closed_at(string), created_at(string), currency(string), id(integer), pipeline(string), pipeline_id(integer), probability(integer), remind_date(string), status(string), step(string), step_id(integer), title(string), updated_at(string), user_id(integer)
   pipelines:
     primary key: id
-    fields: created_at(), default(), id(), name(), position(), updated_at()
+    fields: created_at(string), default(boolean), id(integer), name(string), position(integer), updated_at(string)
   users:
     primary key: id
-    fields: active(), admin(), created_at(), email(), firstname(), id(), lastname(), team_id(), updated_at()
+    fields: active(boolean), admin(boolean), created_at(string), email(string), firstname(string), id(integer), lastname(string), team_id(integer), updated_at(string)
   teams:
     primary key: id
-    fields: created_at(), id(), name(), updated_at()
+    fields: created_at(string), id(integer), name(string), updated_at(string)
   prospecting_lists:
     primary key: id
-    fields: archived(), created_at(), id(), prospects_count(), title(), updated_at(), user_id()
+    fields: archived(boolean), created_at(string), id(integer), prospects_count(integer), title(string), updated_at(string), user_id(integer)
   steps:
     primary key: id
-    fields: created_at(), id(), name(), pipeline_id(), position(), updated_at()
+    fields: created_at(string), id(integer), name(string), pipeline_id(integer), position(integer), updated_at(string)
   step:
     primary key: id
-    fields: created_at(), id(), name(), pipeline_id(), position(), updated_at()
+    fields: created_at(string), id(integer), name(string), pipeline_id(integer), position(integer), updated_at(string)
   client_folders:
     primary key: id
-    fields: created_at(), description(), id(), name(), updated_at(), user_id()
+    fields: created_at(string), description(string), id(integer), name(string), updated_at(string), user_id(integer)
   client_folder:
     primary key: id
-    fields: created_at(), description(), id(), name(), updated_at(), user_id()
+    fields: created_at(string), description(string), id(integer), name(string), updated_at(string), user_id(integer)
   categories:
     primary key: id
-    fields: id(), name(), tags()
+    fields: id(integer), name(string), tags(array)
   predefined_tags:
     primary key: id
-    fields: category_id(), id(), name()
+    fields: category_id(integer), id(integer), name(string)
   fields:
     primary key: id
-    fields: id(), key(), name(), type()
+    fields: id(integer), key(string), name(string), type(string)
   activities:
     primary key: id
-    fields: created_at(), id(), name(), updated_at()
+    fields: created_at(string), id(integer), name(string), updated_at(string)
   lead:
     primary key: id
-    fields: created_at(), id(), status(), title(), updated_at()
+    fields: created_at(string), id(integer), status(string), title(string), updated_at(string)
   unassigned_leads:
     primary key: id
-    fields: created_at(), id(), status(), title(), updated_at()
+    fields: created_at(string), id(integer), status(string), title(string), updated_at(string)
   lead_comments:
     primary key: id
-    fields: content(), created_at(), id(), updated_at(), user_id()
+    fields: content(string), created_at(string), id(integer), updated_at(string), user_id(integer)
   lead_duplicates:
     primary key: id
-    fields: id(), status(), title()
+    fields: id(integer), status(string), title(string)
   lead_attachments:
     primary key: id
-    fields: created_at(), id(), name(), url()
+    fields: created_at(string), id(integer), name(string), url(string)
   lead_attachment:
     primary key: id
-    fields: created_at(), id(), name(), url()
+    fields: created_at(string), id(integer), name(string), url(string)
   lead_action_histories:
     primary key: id
-    fields: action(), created_at(), id(), user_id()
+    fields: action(string), created_at(string), id(integer), user_id(integer)
   post_sales_tasks:
     primary key: id
-    fields: created_at(), id(), status(), title(), updated_at()
+    fields: created_at(string), id(integer), status(string), title(string), updated_at(string)
   spreadsheets:
     primary key: id
-    fields: created_at(), id(), title(), updated_at(), user_id()
+    fields: created_at(string), id(integer), title(string), updated_at(string), user_id(integer)
   spreadsheet:
     primary key: id
-    fields: created_at(), id(), title(), updated_at(), user_id()
+    fields: created_at(string), id(integer), title(string), updated_at(string), user_id(integer)
   prospects:
     primary key: id
-    fields: created_at(), id(), spreadsheet_id(), updated_at()
+    fields: created_at(string), id(integer), spreadsheet_id(integer), updated_at(string)
   prospects_called:
     primary key: id
-    fields: created_at(), id(), spreadsheet_id(), updated_at()
+    fields: created_at(string), id(integer), spreadsheet_id(integer), updated_at(string)
   user:
     primary key: id
-    fields: active(), email(), firstname(), id(), lastname()
+    fields: active(boolean), email(string), firstname(string), id(integer), lastname(string)
   team:
     primary key: id
-    fields: created_at(), id(), name(), updated_at()
+    fields: created_at(string), id(integer), name(string), updated_at(string)
   webhooks:
     primary key: id
-    fields: active(), event(), id(), target()
+    fields: active(boolean), event(string), id(integer), target(string)
   webhook_events:
     primary key: id
-    fields: data(), event(), has_succeeded(), id()
+    fields: data(object), event(string), has_succeeded(boolean), id(integer)
   webhook_event:
     primary key: id
-    fields: data(), event(), has_succeeded(), id()
+    fields: data(object), event(string), has_succeeded(boolean), id(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

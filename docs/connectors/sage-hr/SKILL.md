@@ -35,46 +35,46 @@ Reads Sage HR employees, teams, time off, recruitment, and onboarding/offboardin
 
 - employees:
   - primary key: id
-  - fields: first_name(), id(), last_name()
+  - fields: first_name(string), id(integer), last_name(string)
 - teams:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(integer), name(string)
 - timeoff_requests:
   - primary key: id
-  - fields: id()
+  - fields: id(integer)
 - terminated_employees:
   - primary key: id
-  - fields: email(), employee_number(), employment_start_date(), first_name(), id(), last_name(), position(), termination_date()
+  - fields: email(string), employee_number(string), employment_start_date(string), first_name(string), id(integer), last_name(string), position(string), termination_date(string)
 - positions:
   - primary key: id
-  - fields: code(), description(), id(), title()
+  - fields: code(string), description(string), id(integer), title(string)
 - termination_reasons:
   - primary key: id
-  - fields: code(), id(), name(), type()
+  - fields: code(string), id(integer), name(string), type(string)
 - leave_policies:
   - primary key: id
-  - fields: accrue_type(), color(), default_allowance(), do_not_accrue(), id(), max_carryover(), name(), unit()
+  - fields: accrue_type(string), color(string), default_allowance(string), do_not_accrue(boolean), id(integer), max_carryover(string), name(string), unit(string)
 - out_of_office_today:
   - primary key: id
-  - fields: details(), employee_id(), end_date(), hours(), id(), policy_id(), start_date()
+  - fields: details(string), employee_id(integer), end_date(string), hours(number), id(integer), policy_id(integer), start_date(string)
 - individual_allowances:
   - primary key: id
-  - fields: eligibilities(), full_name(), id()
+  - fields: eligibilities(array), full_name(string), id(integer)
 - recruitment_positions:
   - primary key: id
-  - fields: applicants_count(), applicants_required(), created_at(), employment_type(), group(), group_id(), id(), location(), location_id(), status(), team(), title(), visibility()
+  - fields: applicants_count(integer), applicants_required(integer), created_at(string), employment_type(string), group(string), group_id(integer), id(integer), location(string), location_id(integer), status(string), team(string), title(string), visibility(string)
 - recruitment_applicants:
   - primary key: id
-  - fields: created_at(), disqualified_date(), email(), first_name(), full_name(), hired_date(), id(), last_name(), position_id(), source(), stage()
+  - fields: created_at(string), disqualified_date(string), email(string), first_name(string), full_name(string), hired_date(string), id(integer), last_name(string), position_id(string), source(string), stage(object)
 - onboarding_categories:
   - primary key: id
-  - fields: id(), title()
+  - fields: id(integer), title(string)
 - offboarding_categories:
   - primary key: id
-  - fields: id(), title()
+  - fields: id(integer), title(string)
 - document_categories:
   - primary key: id
-  - fields: documents_count(), id(), name()
+  - fields: documents_count(integer), id(integer), name(string)
 
 ## Sync Modes
 

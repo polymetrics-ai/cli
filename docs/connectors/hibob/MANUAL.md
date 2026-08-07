@@ -34,13 +34,13 @@ CONFIGURATION
 ETL STREAMS
   profiles:
     primary key: id
-    fields: displayName(), email(), firstName(), fullName(), id(), personal_pronouns(), surname(), work_department(), work_isManager(), work_site(), work_startDate(), work_title()
+    fields: displayName(string), email(string), firstName(string), fullName(string), id(string), personal_pronouns(string), surname(string), work_department(string), work_isManager(boolean), work_site(string), work_startDate(string), work_title(string)
   named_lists:
     primary key: id
-    fields: archived(), children(), id(), name(), parentId(), value()
+    fields: archived(boolean), children(object), id(string), name(string), parentId(string), value(string)
   company_lists:
     primary key: id
-    fields: category(), description(), id(), name(), type()
+    fields: category(string), description(string), id(string), name(string), type(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

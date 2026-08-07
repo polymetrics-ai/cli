@@ -40,16 +40,16 @@ Reads Kissmetrics products, reports, events, and properties through the Kissmetr
 
 - products:
   - primary key: id
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(string), name(string), updated_at(string)
 - reports:
   - primary key: id
-  - fields: created_at(), id(), name(), product_id(), type(), updated_at()
+  - fields: created_at(string), id(string), name(string), product_id(string), type(string), updated_at(string)
 - events:
   - primary key: id
-  - fields: created_at(), display_name(), id(), name(), product_id()
+  - fields: created_at(string), display_name(string), id(string), name(string), product_id(string)
 - properties:
   - primary key: id
-  - fields: created_at(), display_name(), id(), name(), product_id(), type()
+  - fields: created_at(string), display_name(string), id(string), name(string), product_id(string), type(string)
 
 ## Sync Modes
 

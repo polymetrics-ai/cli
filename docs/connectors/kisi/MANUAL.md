@@ -36,19 +36,19 @@ CONFIGURATION
 ETL STREAMS
   members:
     primary key: id
-    fields: access_enabled(), confirmed(), created_at(), email(), id(), name(), role_id(), updated_at()
+    fields: access_enabled(boolean), confirmed(boolean), created_at(string), email(string), id(integer), name(string), role_id(integer), updated_at(string)
   locks:
     primary key: id
-    fields: created_at(), description(), geofence_restriction_enabled(), id(), name(), online(), place_id(), updated_at()
+    fields: created_at(string), description(string), geofence_restriction_enabled(boolean), id(integer), name(string), online(boolean), place_id(integer), updated_at(string)
   groups:
     primary key: id
-    fields: created_at(), description(), id(), login_count(), name(), place_id(), updated_at()
+    fields: created_at(string), description(string), id(integer), login_count(integer), name(string), place_id(integer), updated_at(string)
   users:
     primary key: id
-    fields: confirmed(), created_at(), email(), id(), name(), updated_at()
+    fields: confirmed(boolean), created_at(string), email(string), id(integer), name(string), updated_at(string)
   logins:
     primary key: id
-    fields: created_at(), id(), last_used_at(), name(), type(), updated_at(), user_id()
+    fields: created_at(string), id(integer), last_used_at(string), name(string), type(string), updated_at(string), user_id(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

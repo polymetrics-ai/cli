@@ -34,13 +34,13 @@ CONFIGURATION
 ETL STREAMS
   workers:
     primary key: id
-    fields: id(), name(), status(), stream()
+    fields: id(string), name(string), status(string), stream(string)
   job_postings:
     primary key: id
-    fields: id(), name(), status(), stream()
+    fields: id(string), name(string), status(string), stream(string)
   time_sheets:
     primary key: id
-    fields: id(), name(), status(), stream()
+    fields: id(string), name(string), status(string), stream(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

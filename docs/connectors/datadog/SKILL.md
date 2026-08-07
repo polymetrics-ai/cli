@@ -37,54 +37,54 @@ Reads Datadog monitors, dashboards, dashboard lists, users, SLOs, SLO correction
 - monitors:
   - primary key: id
   - cursor: modified
-  - fields: created(), id(), message(), modified(), name(), overall_state(), priority(), query(), type()
+  - fields: created(string), id(integer), message(string), modified(string), name(string), overall_state(string), priority(integer), query(string), type(string)
 - dashboards:
   - primary key: id
-  - fields: author_handle(), created_at(), description(), id(), is_read_only(), layout_type(), modified_at(), title(), url()
+  - fields: author_handle(string), created_at(string), description(string), id(string), is_read_only(boolean), layout_type(string), modified_at(string), title(string), url(string)
 - users:
   - primary key: id
-  - fields: created_at(), disabled(), email(), handle(), id(), name(), status(), type(), verified()
+  - fields: created_at(string), disabled(boolean), email(string), handle(string), id(string), name(string), status(string), type(string), verified(boolean)
 - slo:
   - primary key: id
-  - fields: created_at(), description(), id(), modified_at(), name(), type()
+  - fields: created_at(integer), description(string), id(string), modified_at(integer), name(string), type(string)
 - downtimes:
   - primary key: id
-  - fields: active(), disabled(), end(), id(), message(), monitor_id(), scope(), start()
+  - fields: active(boolean), disabled(boolean), end(integer), id(integer), message(string), monitor_id(integer), scope(string), start(integer)
 - dashboard_lists:
   - primary key: id
   - cursor: modified
-  - fields: created(), dashboard_count(), id(), is_favorite(), modified(), name(), type()
+  - fields: created(string), dashboard_count(integer), id(integer), is_favorite(boolean), modified(string), name(string), type(string)
 - notebooks:
   - primary key: id
   - cursor: modified
-  - fields: author_handle(), created(), id(), modified(), name(), type()
+  - fields: author_handle(string), created(string), id(integer), modified(string), name(string), type(string)
 - organizations:
   - primary key: public_id
-  - fields: created(), description(), name(), public_id(), trial()
+  - fields: created(string), description(string), name(string), public_id(string), trial(boolean)
 - hosts:
   - primary key: id
   - cursor: last_reported_time
-  - fields: aliases(), apps(), aws_name(), host_name(), id(), is_muted(), last_reported_time(), mute_timeout(), name(), sources(), up()
+  - fields: aliases(array), apps(array), aws_name(string), host_name(string), id(integer), is_muted(boolean), last_reported_time(integer), mute_timeout(integer), name(string), sources(array), up(boolean)
 - slo_corrections:
   - primary key: id
   - cursor: modified_at
-  - fields: category(), created_at(), description(), duration(), end(), id(), modified_at(), slo_id(), start(), timezone(), type()
+  - fields: category(string), created_at(integer), description(string), duration(integer), end(integer), id(string), modified_at(integer), slo_id(string), start(integer), timezone(string), type(string)
 - synthetics_tests:
   - primary key: public_id
-  - fields: locations(), message(), monitor_id(), name(), public_id(), status(), subtype(), tags(), type()
+  - fields: locations(array), message(string), monitor_id(integer), name(string), public_id(string), status(string), subtype(string), tags(array), type(string)
 - synthetics_locations:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - synthetics_variables:
   - primary key: id
-  - fields: description(), id(), is_fido(), is_totp(), name(), parse_test_public_id(), tags()
+  - fields: description(string), id(string), is_fido(boolean), is_totp(boolean), name(string), parse_test_public_id(string), tags(array)
 - api_keys:
   - primary key: key
   - cursor: created
-  - fields: created(), created_by(), key(), name()
+  - fields: created(string), created_by(string), key(string), name(string)
 - application_keys:
   - primary key: hash
-  - fields: hash(), name(), owner()
+  - fields: hash(string), name(string), owner(string)
 
 ## Sync Modes
 

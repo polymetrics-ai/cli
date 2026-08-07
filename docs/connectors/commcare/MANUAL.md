@@ -51,131 +51,131 @@ ETL STREAMS
   forms:
     primary key: id
     cursor: received_on
-    fields: id(), received_on(), server_modified_on()
+    fields: id(string), received_on(string), server_modified_on(string)
   cases:
     primary key: id
     cursor: server_modified_on
-    fields: id(), received_on(), server_modified_on()
+    fields: id(string), received_on(string), server_modified_on(string)
   applications:
     primary key: id
-    fields: id(), is_released(), modules(), name(), version(), versions()
+    fields: id(string), is_released(boolean), modules(array), name(string), version(integer), versions(array)
   application:
     primary key: id
-    fields: id(), is_released(), modules(), name(), version(), versions()
+    fields: id(string), is_released(boolean), modules(array), name(string), version(integer), versions(array)
   multimedia_upload_status:
     primary key: processing_id
-    fields: complete(), errors(), in_celery(), processing_id(), progress(), success()
+    fields: complete(boolean), errors(array), in_celery(boolean), processing_id(string), progress(object), success(boolean)
   forms_v1:
     primary key: id
     cursor: received_on
-    fields: id(), received_on(), server_modified_on()
+    fields: id(string), received_on(string), server_modified_on(string)
   form:
     primary key: id
     cursor: received_on
-    fields: id(), received_on(), server_modified_on()
+    fields: id(string), received_on(string), server_modified_on(string)
   cases_v1:
     primary key: case_id
     cursor: server_date_modified
-    fields: case_id(), closed(), date_modified(), domain(), indices(), properties(), server_date_modified(), user_id(), xform_ids()
+    fields: case_id(string), closed(boolean), date_modified(string), domain(string), indices(object), properties(object), server_date_modified(string), user_id(string), xform_ids(array)
   case_v1:
     primary key: case_id
     cursor: server_date_modified
-    fields: case_id(), closed(), date_modified(), domain(), indices(), properties(), server_date_modified(), user_id(), xform_ids()
+    fields: case_id(string), closed(boolean), date_modified(string), domain(string), indices(object), properties(object), server_date_modified(string), user_id(string), xform_ids(array)
   cases_v2:
     primary key: case_id
     cursor: indexed_on
-    fields: case_id(), case_name(), case_type(), closed(), date_closed(), date_opened(), domain(), error(), external_id(), indexed_on(), indices(), last_modified(), owner_id(), properties(), server_last_modified()
+    fields: case_id(string), case_name(string), case_type(string), closed(boolean), date_closed(string), date_opened(string), domain(string), error(string), external_id(string), indexed_on(string), indices(object), last_modified(string), owner_id(string), properties(object), server_last_modified(string)
   case_v2:
     primary key: case_id
     cursor: indexed_on
-    fields: case_id(), case_name(), case_type(), closed(), date_closed(), date_opened(), domain(), error(), external_id(), indexed_on(), indices(), last_modified(), owner_id(), properties(), server_last_modified()
+    fields: case_id(string), case_name(string), case_type(string), closed(boolean), date_closed(string), date_opened(string), domain(string), error(string), external_id(string), indexed_on(string), indices(object), last_modified(string), owner_id(string), properties(object), server_last_modified(string)
   case_v2_by_external_id:
     primary key: case_id
     cursor: indexed_on
-    fields: case_id(), case_name(), case_type(), closed(), date_closed(), date_opened(), domain(), error(), external_id(), indexed_on(), indices(), last_modified(), owner_id(), properties(), server_last_modified()
+    fields: case_id(string), case_name(string), case_type(string), closed(boolean), date_closed(string), date_opened(string), domain(string), error(string), external_id(string), indexed_on(string), indices(object), last_modified(string), owner_id(string), properties(object), server_last_modified(string)
   case_v2_bulk_by_ids:
     primary key: case_id
     cursor: indexed_on
-    fields: case_id(), case_name(), case_type(), closed(), date_closed(), date_opened(), domain(), error(), external_id(), indexed_on(), indices(), last_modified(), owner_id(), properties(), server_last_modified()
+    fields: case_id(string), case_name(string), case_type(string), closed(boolean), date_closed(string), date_opened(string), domain(string), error(string), external_id(string), indexed_on(string), indices(object), last_modified(string), owner_id(string), properties(object), server_last_modified(string)
   case_v2_index_children:
     primary key: case_id
     cursor: indexed_on
-    fields: case_id(), case_name(), case_type(), closed(), date_closed(), date_opened(), domain(), error(), external_id(), indexed_on(), indices(), last_modified(), owner_id(), properties(), server_last_modified()
+    fields: case_id(string), case_name(string), case_type(string), closed(boolean), date_closed(string), date_opened(string), domain(string), error(string), external_id(string), indexed_on(string), indices(object), last_modified(string), owner_id(string), properties(object), server_last_modified(string)
   mobile_workers:
     primary key: id
-    fields: default_phone_number(), email(), first_name(), groups(), id(), last_name(), locations(), phone_numbers(), primary_location(), type(), user_data(), username()
+    fields: default_phone_number(string), email(string), first_name(string), groups(array), id(string), last_name(string), locations(array), phone_numbers(array), primary_location(string), type(string), user_data(object), username(string)
   mobile_worker:
     primary key: id
-    fields: default_phone_number(), email(), first_name(), groups(), id(), last_name(), locations(), phone_numbers(), primary_location(), type(), user_data(), username()
+    fields: default_phone_number(string), email(string), first_name(string), groups(array), id(string), last_name(string), locations(array), phone_numbers(array), primary_location(string), type(string), user_data(object), username(string)
   bulk_users:
     primary key: id
-    fields: email(), first_name(), id(), last_name(), phone_numbers(), resource_uri(), username()
+    fields: email(string), first_name(string), id(string), last_name(string), phone_numbers(array), resource_uri(string), username(string)
   web_users:
     primary key: id
-    fields: default_phone_number(), email(), first_name(), id(), is_admin(), last_name(), permissions(), phone_numbers(), resource_uri(), role(), username()
+    fields: default_phone_number(string), email(string), first_name(string), id(string), is_admin(boolean), last_name(string), permissions(object), phone_numbers(array), resource_uri(string), role(string), username(string)
   web_user:
     primary key: id
-    fields: default_phone_number(), email(), first_name(), id(), is_admin(), last_name(), permissions(), phone_numbers(), resource_uri(), role(), username()
+    fields: default_phone_number(string), email(string), first_name(string), id(string), is_admin(boolean), last_name(string), permissions(object), phone_numbers(array), resource_uri(string), role(string), username(string)
   user_domains:
     primary key: domain_name
-    fields: domain_name(), project_name()
+    fields: domain_name(string), project_name(string)
   user_identity:
     primary key: id
-    fields: email(), first_name(), id(), last_name(), username()
+    fields: email(string), first_name(string), id(string), last_name(string), username(string)
   groups:
     primary key: id
-    fields: case_sharing(), domain(), id(), metadata(), name(), path(), reporting(), users()
+    fields: case_sharing(boolean), domain(string), id(string), metadata(object), name(string), path(array), reporting(boolean), users(array)
   group:
     primary key: id
-    fields: case_sharing(), domain(), id(), metadata(), name(), path(), reporting(), users()
+    fields: case_sharing(boolean), domain(string), id(string), metadata(object), name(string), path(array), reporting(boolean), users(array)
   reports:
     primary key: id
-    fields: columns(), filters(), id(), resource_uri(), title()
+    fields: columns(array), filters(array), id(string), resource_uri(string), title(string)
   report_data:
   locations_v1:
     primary key: location_id
     cursor: last_modified
-    fields: created_at(), domain(), external_id(), id(), last_modified(), latitude(), location_data(), location_id(), location_type(), longitude(), name(), parent(), resource_uri(), site_code()
+    fields: created_at(string), domain(string), external_id(string), id(integer), last_modified(string), latitude(string), location_data(object), location_id(string), location_type(string), longitude(string), name(string), parent(string), resource_uri(string), site_code(string)
   location_v1:
     primary key: location_id
     cursor: last_modified
-    fields: created_at(), domain(), external_id(), id(), last_modified(), latitude(), location_data(), location_id(), location_type(), longitude(), name(), parent(), resource_uri(), site_code()
+    fields: created_at(string), domain(string), external_id(string), id(integer), last_modified(string), latitude(string), location_data(object), location_id(string), location_type(string), longitude(string), name(string), parent(string), resource_uri(string), site_code(string)
   locations_v2:
     primary key: location_id
     cursor: last_modified
-    fields: domain(), last_modified(), latitude(), location_data(), location_id(), location_type_code(), location_type_name(), longitude(), name(), parent_location_id(), site_code()
+    fields: domain(string), last_modified(string), latitude(string), location_data(object), location_id(string), location_type_code(string), location_type_name(string), longitude(string), name(string), parent_location_id(string), site_code(string)
   location_v2:
     primary key: location_id
     cursor: last_modified
-    fields: domain(), last_modified(), latitude(), location_data(), location_id(), location_type_code(), location_type_name(), longitude(), name(), parent_location_id(), site_code()
+    fields: domain(string), last_modified(string), latitude(string), location_data(object), location_id(string), location_type_code(string), location_type_name(string), longitude(string), name(string), parent_location_id(string), site_code(string)
   location_types:
     primary key: id
-    fields: administrative(), code(), domain(), id(), name(), parent(), resource_uri(), shares_cases(), view_descendants()
+    fields: administrative(boolean), code(string), domain(string), id(integer), name(string), parent(integer), resource_uri(string), shares_cases(boolean), view_descendants(boolean)
   location_type:
     primary key: id
-    fields: administrative(), code(), domain(), id(), name(), parent(), resource_uri(), shares_cases(), view_descendants()
+    fields: administrative(boolean), code(string), domain(string), id(integer), name(string), parent(integer), resource_uri(string), shares_cases(boolean), view_descendants(boolean)
   fixtures:
     primary key: id
-    fields: fields(), fixture_type(), id(), resource_uri()
+    fields: fields(object), fixture_type(string), id(string), resource_uri(string)
   fixture_table_items:
     primary key: id
-    fields: fields(), fixture_type(), id(), resource_uri()
+    fields: fields(object), fixture_type(string), id(string), resource_uri(string)
   fixture_item:
     primary key: id
-    fields: fields(), fixture_type(), id(), resource_uri()
+    fields: fields(object), fixture_type(string), id(string), resource_uri(string)
   lookup_tables:
     primary key: id
-    fields: fields(), id(), is_global(), resource_uri(), tag()
+    fields: fields(array), id(string), is_global(boolean), resource_uri(string), tag(string)
   lookup_table_rows:
     primary key: id
-    fields: data_type_id(), fields(), id(), sort_key()
+    fields: data_type_id(string), fields(object), id(string), sort_key(integer)
   det_exports:
     primary key: id
-    fields: case_type(), det_config_url(), export_format(), id(), is_deidentified(), name(), type(), xmlns()
+    fields: case_type(string), det_config_url(string), export_format(string), id(string), is_deidentified(boolean), name(string), type(string), xmlns(string)
   messaging_events:
     primary key: id
     cursor: date
-    fields: case_id(), content_type(), date(), date_last_activity(), domain(), error(), form(), id(), messages(), recipient(), source(), status()
+    fields: case_id(string), content_type(string), date(string), date_last_activity(string), domain(string), error(string), form(string), id(integer), messages(array), recipient(object), source(object), status(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

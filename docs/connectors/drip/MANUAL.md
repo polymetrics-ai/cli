@@ -36,28 +36,28 @@ ETL STREAMS
   subscribers:
     primary key: id
     cursor: created_at
-    fields: created_at(), custom_fields(), email(), id(), ip_address(), lifetime_value(), status(), tags(), time_zone(), user_agent(), utc_offset()
+    fields: created_at(string), custom_fields(object), email(string), id(string), ip_address(string), lifetime_value(integer), status(string), tags(array), time_zone(string), user_agent(string), utc_offset(integer)
   campaigns:
     primary key: id
     cursor: created_at
-    fields: created_at(), email_count(), from_email(), from_name(), id(), name(), status(), subscriber_count()
+    fields: created_at(string), email_count(integer), from_email(string), from_name(string), id(string), name(string), status(string), subscriber_count(integer)
   broadcasts:
     primary key: id
     cursor: created_at
-    fields: created_at(), from_email(), from_name(), id(), name(), send_at(), status(), subject()
+    fields: created_at(string), from_email(string), from_name(string), id(string), name(string), send_at(string), status(string), subject(string)
   accounts:
     primary key: id
     cursor: created_at
-    fields: created_at(), id(), name()
+    fields: created_at(string), id(string), name(string)
   workflows:
     primary key: id
-    fields: id(), name(), status()
+    fields: id(string), name(string), status(string)
   forms:
     primary key: id
-    fields: button_text(), confirmation_heading(), confirmation_text(), description(), headline(), href(), id()
+    fields: button_text(string), confirmation_heading(string), confirmation_text(string), description(string), headline(string), href(string), id(string)
   webhooks:
     primary key: id
-    fields: event_types(), id(), post_url()
+    fields: event_types(array), id(string), post_url(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

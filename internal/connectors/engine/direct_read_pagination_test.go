@@ -1,0 +1,606 @@
+package engine
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"strconv"
+	"sync"
+	"testing"
+
+	"polymetrics.ai/internal/connectors"
+)
+
+// Direct reads used to issue exactly one request and never ask for a full
+// page, so any collection larger than the provider's DEFAULT page size came
+// back truncated with status 200 and no signal of any kind. These tests assert
+// on RETURNED RECORD COUNTS against a fixture that holds a known-larger
+// collection — never on exit status, which was already 0 while data was being
+// discarded.
+//
+// The fixture models the shape that produced the live GitHub finding: a
+// provider that serves defaultFixturePage items when the client sends no
+// page-size parameter, and up to fixtureMaxPage when it does.
+const (
+	fixtureTotalRecords = 120
+	defaultFixturePage  = 30
+	fixtureMaxPage      = 100
+)
+
+// pagedFixture is a provider with a default page size. It records every
+// request it receives so a test can prove how many pages the executor walked
+// and whether it ever asked for a full page.
+type pagedFixture struct {
+	mu       sync.Mutex
+	requests []fixtureRequest
+
+	// shape selects the response envelope: "array" (bare JSON array, github
+	// pulls-files shape), "results" (object with a results array plus
+	// has_more/next_cursor, notion shape), or "nested" (object whose
+	// continuation token lives at a dotted path, gong shape).
+	shape string
+	total int
+}
+
+type fixtureRequest struct {
+	path  string
+	query string
+	size  string
+}
+
+func (f *pagedFixture) count() int {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	return len(f.requests)
+}
+
+func (f *pagedFixture) sizesRequested() []string {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	out := make([]string, 0, len(f.requests))
+	for _, r := range f.requests {
+		out = append(out, r.size)
+	}
+	return out
+}
+
+func (f *pagedFixture) total_() int {
+	if f.total > 0 {
+		return f.total
+	}
+	return fixtureTotalRecords
+}
+
+func (f *pagedFixture) window(q map[string][]string) (offset, size int, explicit string) {
+	size = defaultFixturePage
+	for _, name := range []string{"per_page", "page_size", "count", "limit"} {
+		if v, ok := q[name]; ok && len(v) > 0 {
+			explicit = v[0]
+			if n, err := strconv.Atoi(v[0]); err == nil && n > 0 {
+				size = min(n, fixtureMaxPage)
+			}
+		}
+	}
+	for _, name := range []string{"cursor", "start_cursor", "offset"} {
+		if v, ok := q[name]; ok && len(v) > 0 {
+			if n, err := strconv.Atoi(v[0]); err == nil {
+				offset = n
+			}
+		}
+	}
+	if v, ok := q["page"]; ok && len(v) > 0 {
+		if n, err := strconv.Atoi(v[0]); err == nil && n > 0 {
+			offset = (n - 1) * size
+		}
+	}
+	return offset, size, explicit
+}
+
+func (f *pagedFixture) handler() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		offset, size, explicit := f.window(q)
+		f.mu.Lock()
+		f.requests = append(f.requests, fixtureRequest{path: r.URL.Path, query: r.URL.RawQuery, size: explicit})
+		f.mu.Unlock()
+
+		end := min(offset+size, f.total_())
+		if offset > f.total_() {
+			offset = f.total_()
+		}
+		if end < offset {
+			end = offset
+		}
+		items := make([]any, 0, end-offset)
+		for i := offset; i < end; i++ {
+			items = append(items, map[string]any{"id": fmt.Sprintf("rec-%03d", i)})
+		}
+		more := end < f.total_()
+		next := strconv.Itoa(end)
+
+		var body any
+		switch f.shape {
+		case "results":
+			envelope := map[string]any{
+				"object":   "list",
+				"results":  items,
+				"has_more": more,
+			}
+			if more {
+				envelope["next_cursor"] = next
+			} else {
+				envelope["next_cursor"] = nil
+			}
+			body = envelope
+		case "nested":
+			records := map[string]any{"totalRecords": f.total_()}
+			if more {
+				records["cursor"] = next
+			}
+			body = map[string]any{"logs": items, "records": records}
+		default:
+			body = items
+		}
+
+		raw, err := json.Marshal(body)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		if f.shape == "array" && more {
+			w.Header().Set("Link", fmt.Sprintf(`<%s?page=%d>; rel="next"`, r.URL.Path, offset/max(size, 1)+2))
+		}
+		_, _ = w.Write(raw)
+	})
+}
+
+func startPagedFixture(t *testing.T, shape string) (*pagedFixture, *httptest.Server) {
+	t.Helper()
+	fx := &pagedFixture{shape: shape}
+	srv := httptest.NewServer(fx.handler())
+	t.Cleanup(srv.Close)
+	return fx, srv
+}
+
+// paginatedOperationBundle wires a rest_read operation onto a bundle that
+// declares connector-level pagination — exactly the declaration the ETL path
+// already consumes, which direct reads used to ignore.
+func paginatedOperationBundle(baseURL string, pagination *PaginationSpec, endpointPath string) Bundle {
+	return Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: baseURL, Pagination: pagination},
+		Operations: []OperationSpec{{
+			ID:           "acme.list",
+			Kind:         "rest_read",
+			Summary:      "List",
+			Risk:         "low",
+			Approval:     "none",
+			OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{
+				Method:   http.MethodGet,
+				Path:     endpointPath,
+				MaxBytes: 1 << 20,
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method:    http.MethodGet,
+			Path:      endpointPath,
+			Operation: &SurfaceOperation{Model: "direct_read", Status: "allowed", Risk: "low", Reason: "fixture"},
+		}}},
+	}
+}
+
+func paginatedDirectReadBundle(baseURL string, pagination *PaginationSpec, endpointPath string) Bundle {
+	b := directReadBundle(baseURL, http.MethodGet, endpointPath)
+	b.HTTP.Pagination = pagination
+	return b
+}
+
+func rootArrayLen(t *testing.T, body any) int {
+	t.Helper()
+	items, ok := body.([]any)
+	if !ok {
+		t.Fatalf("body type = %T, want JSON array", body)
+	}
+	return len(items)
+}
+
+func arrayAtLen(t *testing.T, body any, key string) int {
+	t.Helper()
+	obj, ok := body.(map[string]any)
+	if !ok {
+		t.Fatalf("body type = %T, want JSON object", body)
+	}
+	items, ok := obj[key].([]any)
+	if !ok {
+		t.Fatalf("body[%q] type = %T, want JSON array", key, obj[key])
+	}
+	return len(items)
+}
+
+// TestOperationDirectReadPageOneUsesDeclaredPageSize is the direct
+// reproduction of the live GitHub finding. The read must return the bundle's
+// DECLARED page, not the provider's default of 30, and must say that more
+// records exist.
+func TestOperationDirectReadPageOneUsesDeclaredPageSize(t *testing.T) {
+	fx, srv := startPagedFixture(t, "array")
+	b := paginatedOperationBundle(srv.URL, &PaginationSpec{
+		Type:      "page_number",
+		PageParam: "page",
+		SizeParam: "per_page",
+		PageSize:  fixtureMaxPage,
+	}, "/repos/octo/hello/pulls/1/files")
+
+	result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "acme.list",
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	if got := rootArrayLen(t, result.Body); got != fixtureMaxPage {
+		t.Fatalf("records = %d, want the declared page of %d (provider default is %d)", got, fixtureMaxPage, defaultFixturePage)
+	}
+	if result.Page.Records != fixtureMaxPage {
+		t.Fatalf("page.records = %d, want %d", result.Page.Records, fixtureMaxPage)
+	}
+	if result.Page.Complete {
+		t.Fatalf("page.complete = true while %d of %d records were returned", result.Page.Records, fixtureTotalRecords)
+	}
+	if !result.Page.HasMore {
+		t.Fatal("page.has_more = false, want true")
+	}
+	if result.Page.Reason != directReadReasonMorePages {
+		t.Fatalf("page.reason = %q, want %q", result.Page.Reason, directReadReasonMorePages)
+	}
+	if result.Page.Number != 1 || result.Page.NextNumber != 2 {
+		t.Fatalf("page number/next = %d/%d, want 1/2", result.Page.Number, result.Page.NextNumber)
+	}
+	if fx.count() != 1 {
+		t.Fatalf("requests = %d, want exactly 1 — a direct read is one page", fx.count())
+	}
+	for _, size := range fx.sizesRequested() {
+		if size != strconv.Itoa(fixtureMaxPage) {
+			t.Fatalf("page size requested = %q, want the declared %d", size, fixtureMaxPage)
+		}
+	}
+}
+
+// TestOperationDirectReadReachesEveryRecordByPageNumber proves the collection
+// is fully reachable through the reported page context: the record counts of
+// the pages a caller is told to fetch must add up to the whole fixture.
+func TestOperationDirectReadReachesEveryRecordByPageNumber(t *testing.T) {
+	_, srv := startPagedFixture(t, "array")
+	b := paginatedOperationBundle(srv.URL, &PaginationSpec{
+		Type:      "page_number",
+		PageParam: "page",
+		SizeParam: "per_page",
+		PageSize:  fixtureMaxPage,
+	}, "/repos/octo/hello/pulls/1/files")
+
+	seen := 0
+	page := 1
+	for pages := 0; pages < 10; pages++ {
+		result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+			Operation: "acme.list",
+			Page:      page,
+		}, nil)
+		if err != nil {
+			t.Fatalf("OperationDirectRead(page=%d): %v", page, err)
+		}
+		seen += rootArrayLen(t, result.Body)
+		if result.Page.Complete {
+			break
+		}
+		if result.Page.NextNumber <= page {
+			t.Fatalf("next_number = %d does not advance past %d", result.Page.NextNumber, page)
+		}
+		page = result.Page.NextNumber
+	}
+	if seen != fixtureTotalRecords {
+		t.Fatalf("records reached across pages = %d, want %d", seen, fixtureTotalRecords)
+	}
+}
+
+// TestOperationDirectReadCursorStrategyHandsBackNextCursor covers the notion
+// shape: no addressable page number, so the caller is given a token instead —
+// and following it reaches every record.
+func TestOperationDirectReadCursorStrategyHandsBackNextCursor(t *testing.T) {
+	_, srv := startPagedFixture(t, "results")
+	b := paginatedOperationBundle(srv.URL, &PaginationSpec{
+		Type:        "cursor",
+		CursorParam: "start_cursor",
+		TokenPath:   "next_cursor",
+		StopPath:    "has_more",
+		SizeParam:   "page_size",
+		PageSize:    fixtureMaxPage,
+	}, "/v1/comments")
+
+	result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "acme.list",
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	if got := arrayAtLen(t, result.Body, "results"); got != fixtureMaxPage {
+		t.Fatalf("results = %d, want the declared page of %d", got, fixtureMaxPage)
+	}
+	if result.Page.Complete || !result.Page.HasMore {
+		t.Fatalf("page complete/has_more = %v/%v, want false/true", result.Page.Complete, result.Page.HasMore)
+	}
+	if result.Page.Number != 0 {
+		t.Fatalf("page.number = %d, want 0 — a cursor strategy has no addressable page number", result.Page.Number)
+	}
+	if result.Page.NextCursor == "" {
+		t.Fatal("page.next_cursor is empty, want the provider's continuation token")
+	}
+
+	seen := arrayAtLen(t, result.Body, "results")
+	next, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation:  "acme.list",
+		PageCursor: result.Page.NextCursor,
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead(cursor): %v", err)
+	}
+	seen += arrayAtLen(t, next.Body, "results")
+	if seen != fixtureTotalRecords {
+		t.Fatalf("records reached across pages = %d, want %d", seen, fixtureTotalRecords)
+	}
+	if !next.Page.Complete {
+		t.Fatal("final page.complete = false, want true once the collection is exhausted")
+	}
+}
+
+// TestDirectReadNestedCursorHandsBackNextCursor covers the legacy
+// (non-operation) executor and the gong shape, whose token sits at a dotted
+// body path.
+func TestDirectReadNestedCursorHandsBackNextCursor(t *testing.T) {
+	_, srv := startPagedFixture(t, "nested")
+	b := paginatedDirectReadBundle(srv.URL, &PaginationSpec{
+		Type:        "cursor",
+		CursorParam: "cursor",
+		TokenPath:   "records.cursor",
+		SizeParam:   "limit",
+		PageSize:    fixtureMaxPage,
+	}, "/v2/logs")
+
+	result, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/v2/logs",
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	if got := arrayAtLen(t, result.Body, "logs"); got != fixtureMaxPage {
+		t.Fatalf("logs = %d, want the declared page of %d", got, fixtureMaxPage)
+	}
+	if result.Page.NextCursor == "" {
+		t.Fatal("page.next_cursor is empty, want the provider's continuation token")
+	}
+
+	seen := arrayAtLen(t, result.Body, "logs")
+	next, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/v2/logs",
+		OutputPolicy: "json_redacted",
+		PageCursor:   result.Page.NextCursor,
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead(cursor): %v", err)
+	}
+	seen += arrayAtLen(t, next.Body, "logs")
+	if seen != fixtureTotalRecords {
+		t.Fatalf("records reached across pages = %d, want %d", seen, fixtureTotalRecords)
+	}
+	if !next.Page.Complete {
+		t.Fatal("final page.complete = false, want true")
+	}
+}
+
+// TestOperationDirectReadOffsetLimitIsAddressableByNumber covers the mailchimp
+// shape: offset_limit has a real page number, so --page must work on it.
+func TestOperationDirectReadOffsetLimitIsAddressableByNumber(t *testing.T) {
+	_, srv := startPagedFixture(t, "results")
+	b := paginatedOperationBundle(srv.URL, &PaginationSpec{
+		Type:        "offset_limit",
+		LimitParam:  "count",
+		OffsetParam: "offset",
+		PageSize:    fixtureMaxPage,
+	}, "/3.0/lists")
+
+	first, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{Operation: "acme.list"}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	if got := arrayAtLen(t, first.Body, "results"); got != fixtureMaxPage {
+		t.Fatalf("results = %d, want %d", got, fixtureMaxPage)
+	}
+	if first.Page.NextNumber != 2 {
+		t.Fatalf("next_number = %d, want 2", first.Page.NextNumber)
+	}
+
+	second, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "acme.list",
+		Page:      first.Page.NextNumber,
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead(page=2): %v", err)
+	}
+	seen := arrayAtLen(t, first.Body, "results") + arrayAtLen(t, second.Body, "results")
+	if seen != fixtureTotalRecords {
+		t.Fatalf("records reached across pages = %d, want %d", seen, fixtureTotalRecords)
+	}
+	if !second.Page.Complete {
+		t.Fatal("final page.complete = false, want true")
+	}
+}
+
+// TestOperationDirectReadSingleObjectIsComplete guards the reads that return
+// one object: they stay a single request and are reported as complete, not as
+// an incomplete collection.
+func TestOperationDirectReadSingleObjectIsComplete(t *testing.T) {
+	var hits int
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		hits++
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"name":"hello","stars":7}`))
+	}))
+	t.Cleanup(srv.Close)
+
+	b := paginatedOperationBundle(srv.URL, &PaginationSpec{
+		Type:      "page_number",
+		PageParam: "page",
+		SizeParam: "per_page",
+		PageSize:  fixtureMaxPage,
+	}, "/repos/octo/hello")
+
+	result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{Operation: "acme.list"}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	if hits != 1 {
+		t.Fatalf("requests = %d, want exactly 1", hits)
+	}
+	if !result.Page.Complete {
+		t.Fatal("page.complete = false, want true for a single-object read")
+	}
+	obj, ok := result.Body.(map[string]any)
+	if !ok || obj["name"] != "hello" {
+		t.Fatalf("body = %#v, want the unmodified object", result.Body)
+	}
+}
+
+// TestOperationDirectReadWithoutDeclaredPaginationIsReportedIncomplete covers a
+// bundle that declares no strategy: one request is all the engine can honestly
+// do, so the result must say so instead of implying completeness.
+func TestOperationDirectReadWithoutDeclaredPaginationIsReportedIncomplete(t *testing.T) {
+	fx, srv := startPagedFixture(t, "array")
+	b := paginatedOperationBundle(srv.URL, nil, "/repos/octo/hello/pulls/1/files")
+
+	result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{Operation: "acme.list"}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	if got := rootArrayLen(t, result.Body); got != defaultFixturePage {
+		t.Fatalf("records = %d, want the provider default of %d", got, defaultFixturePage)
+	}
+	if fx.count() != 1 {
+		t.Fatalf("requests = %d, want exactly 1", fx.count())
+	}
+	if result.Page.Complete {
+		t.Fatal("page.complete = true without a declared strategy, want false")
+	}
+	if result.Page.Reason != directReadReasonNoPagination {
+		t.Fatalf("page.reason = %q, want %q", result.Page.Reason, directReadReasonNoPagination)
+	}
+}
+
+// TestOperationDirectReadRefusesNavigationTheStrategyCannotHonour is the
+// anti-silence guard: an unsupported page request must fail loudly rather than
+// quietly returning page one, which is the very failure mode being fixed.
+func TestOperationDirectReadRefusesNavigationTheStrategyCannotHonour(t *testing.T) {
+	_, srv := startPagedFixture(t, "results")
+	cursorBundle := paginatedOperationBundle(srv.URL, &PaginationSpec{
+		Type:        "cursor",
+		CursorParam: "start_cursor",
+		TokenPath:   "next_cursor",
+		StopPath:    "has_more",
+		SizeParam:   "page_size",
+		PageSize:    fixtureMaxPage,
+	}, "/v1/comments")
+
+	if _, err := OperationDirectRead(context.Background(), cursorBundle, connectors.OperationDirectReadRequest{
+		Operation: "acme.list",
+		Page:      3,
+	}, nil); err == nil {
+		t.Fatal("page 3 on a cursor strategy returned no error, want a refusal instead of a silent page one")
+	}
+
+	_, arraySrv := startPagedFixture(t, "array")
+	numbered := paginatedOperationBundle(arraySrv.URL, &PaginationSpec{
+		Type:      "page_number",
+		PageParam: "page",
+		SizeParam: "per_page",
+		PageSize:  fixtureMaxPage,
+	}, "/repos/octo/hello/pulls/1/files")
+
+	if _, err := OperationDirectRead(context.Background(), numbered, connectors.OperationDirectReadRequest{
+		Operation:  "acme.list",
+		PageCursor: "abc",
+	}, nil); err == nil {
+		t.Fatal("cursor on a page_number strategy returned no error, want a refusal")
+	}
+}
+
+// TestDirectReadFollowsCursorOntoANonFinalPage guards the paginator state a
+// cursor-supplied read depends on. The cursor strategies allocate their
+// loop-guard set in Start(), so a read that jumps straight to a cursor and
+// then lands on a page that still has successors must not fault — the case an
+// exhausting fixture hides, because its followed page is always the last one.
+func TestDirectReadFollowsCursorOntoANonFinalPage(t *testing.T) {
+	const declaredPage = 30
+	_, srv := startPagedFixture(t, "nested")
+	b := paginatedDirectReadBundle(srv.URL, &PaginationSpec{
+		Type:        "cursor",
+		CursorParam: "cursor",
+		TokenPath:   "records.cursor",
+		SizeParam:   "limit",
+		PageSize:    declaredPage,
+	}, "/v2/logs")
+
+	first, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/v2/logs",
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	if got := arrayAtLen(t, first.Body, "logs"); got != declaredPage {
+		t.Fatalf("logs = %d, want the declared page of %d", got, declaredPage)
+	}
+
+	// Page two of four: it has successors, so Next() runs its loop guard.
+	second, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/v2/logs",
+		OutputPolicy: "json_redacted",
+		PageCursor:   first.Page.NextCursor,
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead(cursor): %v", err)
+	}
+	if got := arrayAtLen(t, second.Body, "logs"); got != declaredPage {
+		t.Fatalf("second page logs = %d, want %d", got, declaredPage)
+	}
+	if !second.Page.HasMore || second.Page.Complete {
+		t.Fatalf("second page has_more/complete = %v/%v, want true/false", second.Page.HasMore, second.Page.Complete)
+	}
+	if second.Page.NextCursor == "" {
+		t.Fatal("second page next_cursor is empty, want a further continuation token")
+	}
+
+	// And the whole collection stays reachable by following the tokens.
+	seen := arrayAtLen(t, first.Body, "logs") + arrayAtLen(t, second.Body, "logs")
+	cursor := second.Page.NextCursor
+	for i := 0; i < 10 && cursor != ""; i++ {
+		next, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+			Method:       http.MethodGet,
+			Path:         "/v2/logs",
+			OutputPolicy: "json_redacted",
+			PageCursor:   cursor,
+		}, nil)
+		if err != nil {
+			t.Fatalf("DirectRead(cursor=%s): %v", cursor, err)
+		}
+		seen += arrayAtLen(t, next.Body, "logs")
+		cursor = next.Page.NextCursor
+	}
+	if seen != fixtureTotalRecords {
+		t.Fatalf("records reached by following cursors = %d, want %d", seen, fixtureTotalRecords)
+	}
+}

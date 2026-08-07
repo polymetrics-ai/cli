@@ -41,23 +41,23 @@ Reads Rocketlane projects, tasks, customers, users, and time entries through the
 - projects:
   - primary key: id
   - cursor: updated_at
-  - fields: customer_id(), id(), name(), status(), stream(), updated_at()
+  - fields: customer_id(string), id(string), name(string), status(string), stream(string), updated_at(string)
 - tasks:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), project_id(), status(), stream(), updated_at()
+  - fields: id(string), name(string), project_id(string), status(string), stream(string), updated_at(string)
 - customers:
   - primary key: id
   - cursor: updated_at
-  - fields: domain(), id(), name(), stream(), updated_at()
+  - fields: domain(string), id(string), name(string), stream(string), updated_at(string)
 - users:
   - primary key: id
   - cursor: updated_at
-  - fields: email(), id(), name(), status(), stream(), updated_at()
+  - fields: email(string), id(string), name(string), status(string), stream(string), updated_at(string)
 - time_entries:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), minutes(), project_id(), stream(), task_id(), updated_at(), user_id()
+  - fields: id(string), minutes(integer), project_id(string), stream(string), task_id(string), updated_at(string), user_id(string)
 
 ## Sync Modes
 

@@ -35,19 +35,19 @@ CONFIGURATION
 ETL STREAMS
   addressbooks:
     primary key: id
-    fields: all_email_qty(), id(), name()
+    fields: all_email_qty(integer), id(integer), name(string)
   campaigns:
     primary key: id
-    fields: id(), name(), status()
+    fields: id(integer), name(string), status(string)
   senders:
     primary key: email
-    fields: email(), name()
+    fields: email(string), name(string)
   blacklist:
     primary key: email
-    fields: comment(), email()
+    fields: comment(string), email(string)
   emails_in_book:
     primary key: email
-    fields: book_id(), email(), status()
+    fields: book_id(string), email(string), status(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

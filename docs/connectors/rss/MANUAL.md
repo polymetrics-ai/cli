@@ -32,10 +32,10 @@ ETL STREAMS
   items:
     primary key: id
     cursor: published_at
-    fields: description(), id(), link(), published_at(), title()
+    fields: description(string), id(string), link(string), published_at(string), title(string)
   channel:
     primary key: id
-    fields: description(), id(), link(), title(), updated_at()
+    fields: description(string), id(string), link(string), title(string), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

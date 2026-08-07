@@ -48,14 +48,14 @@ Reads Google Forms metadata, form items, and submitted responses through the Goo
 
 - forms:
   - primary key: form_id
-  - fields: description(), document_title(), form_id(), item_count(), responder_uri(), revision_id(), title()
+  - fields: description(string), document_title(string), form_id(string), item_count(integer), responder_uri(string), revision_id(string), title(string)
 - form_items:
   - primary key: form_id, item_id
-  - fields: description(), form_id(), item_id(), question_id(), title()
+  - fields: description(string), form_id(string), item_id(string), question_id(string), title(string)
 - responses:
   - primary key: response_id
   - cursor: last_submitted_time
-  - fields: answers(), create_time(), form_id(), last_submitted_time(), respondent_email(), response_id(), total_score()
+  - fields: answers(object), create_time(string), form_id(string), last_submitted_time(string), respondent_email(string), response_id(string), total_score(number)
 
 ## Sync Modes
 

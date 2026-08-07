@@ -41,36 +41,36 @@ CONFIGURATION
 ETL STREAMS
   projects:
     primary key: id
-    fields: favorite(), id(), pipelines_number(), project_name(), updated_at()
+    fields: favorite(boolean), id(string), pipelines_number(integer), project_name(string), updated_at(string)
   pipelines:
     primary key: id
-    fields: created_at(), id(), is_public(), name(), project(), updated_at()
+    fields: created_at(string), id(string), is_public(boolean), name(string), project(string), updated_at(string)
   agents:
     primary key: id
-    fields: created_at(), id(), name(), status(), version()
+    fields: created_at(string), id(string), name(string), status(string), version(string)
   contexts:
     primary key: id
-    fields: id(), name(), owner(), type()
+    fields: id(string), name(string), owner(string), type(string)
   builds:
     primary key: id
     cursor: created
-    fields: branch_name(), commit_message(), committer(), created(), finished(), id(), pipeline_name(), progress(), project(), project_id(), provider(), repo_name(), repo_owner(), revision(), status(), trigger(), trigger_type(), triggered_by()
+    fields: branch_name(string), commit_message(string), committer(string), created(string), finished(string), id(string), pipeline_name(string), progress(string), project(string), project_id(string), provider(string), repo_name(string), repo_owner(string), revision(string), status(string), trigger(string), trigger_type(string), triggered_by(string)
   images:
     primary key: id
     cursor: created
-    fields: branch(), commit(), commit_url(), created(), id(), image_display_name(), image_name(), repo(), sha(), size()
+    fields: branch(string), commit(string), commit_url(string), created(string), id(string), image_display_name(string), image_name(string), repo(string), sha(string), size(integer)
   registries:
     primary key: id
-    fields: behind_firewall(), default(), domain(), id(), internal(), kind(), name(), primary(), provider()
+    fields: behind_firewall(boolean), default(boolean), domain(string), id(string), internal(boolean), kind(string), name(string), primary(boolean), provider(string)
   triggers:
     primary key: event, pipeline
-    fields: event(), event_description(), event_status(), event_type(), filter_tag(), pipeline()
+    fields: event(string), event_description(string), event_status(string), event_type(string), filter_tag(string), pipeline(string)
   trigger_events:
     primary key: uri
-    fields: account(), description(), endpoint(), kind(), status(), type(), uri()
+    fields: account(string), description(string), endpoint(string), kind(string), status(string), type(string), uri(string)
   annotations:
     primary key: id
-    fields: account_id(), entity_id(), entity_type(), id(), key(), type(), value()
+    fields: account_id(string), entity_id(string), entity_type(string), id(string), key(string), type(string), value(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

@@ -37,17 +37,17 @@ Reads GoLogin browser profiles, folders, tags, and account information through t
 - profiles:
   - primary key: id
   - cursor: updatedAt
-  - fields: browserType(), createdAt(), folderName(), id(), name(), notes(), os(), role(), updatedAt()
+  - fields: browserType(string), createdAt(string), folderName(string), id(string), name(string), notes(string), os(string), role(string), updatedAt(string)
 - folders:
   - primary key: id
-  - fields: id(), name(), profilesCount()
+  - fields: id(string), name(string), profilesCount(integer)
 - user:
   - primary key: _id
   - cursor: createdAt
-  - fields: _id(), createdAt(), email(), firstName(), lastName(), plan(), profilesCount()
+  - fields: _id(string), createdAt(string), email(string), firstName(string), lastName(string), plan(string), profilesCount(integer)
 - tags:
   - primary key: _id
-  - fields: _id(), color(), field(), title()
+  - fields: _id(string), color(string), field(string), title(string)
 
 ## Sync Modes
 

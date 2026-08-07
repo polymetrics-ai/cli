@@ -39,10 +39,10 @@ ETL STREAMS
   campaigns:
     primary key: id
     cursor: created_at
-    fields: created_at(), id(), name(), status()
+    fields: created_at(string), id(string), name(string), status(string)
   campaign_variations:
     primary key: campaign_id, id
-    fields: campaign_id(), id(), is_control(), is_disabled(), name(), percent_split(), platform()
+    fields: campaign_id(string), id(integer), is_control(boolean), is_disabled(boolean), name(string), percent_split(integer), platform(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

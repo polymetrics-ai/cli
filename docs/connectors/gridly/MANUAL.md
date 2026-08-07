@@ -37,13 +37,13 @@ CONFIGURATION
 ETL STREAMS
   views:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   records:
     primary key: view_id, id
-    fields: cells(), id(), path(), view_id()
+    fields: cells(array), id(string), path(string), view_id(string)
   branches:
     primary key: view_id, id
-    fields: id(), name(), view_id()
+    fields: id(string), name(string), view_id(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

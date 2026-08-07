@@ -41,72 +41,72 @@ ETL STREAMS
   models:
     primary key: id
     cursor: created
-    fields: created(), id(), object(), owned_by()
+    fields: created(integer), id(string), object(string), owned_by(string)
   files:
     primary key: id
     cursor: created_at
-    fields: bytes(), created_at(), filename(), id(), object(), purpose(), status()
+    fields: bytes(integer), created_at(integer), filename(string), id(string), object(string), purpose(string), status(string)
   batches:
     primary key: id
     cursor: created_at
-    fields: completed_at(), created_at(), endpoint(), error_file_id(), id(), input_file_id(), object(), output_file_id(), status()
+    fields: completed_at(integer), created_at(integer), endpoint(string), error_file_id(string), id(string), input_file_id(string), object(string), output_file_id(string), status(string)
   files_file_id:
     primary key: id
-    fields: bytes(), created_at(), filename(), id(), object(), purpose(), status(), status_details()
+    fields: bytes(integer), created_at(integer), filename(string), id(string), object(string), purpose(string), status(string), status_details(string)
   files_file_id_content:
   files_file_id_link:
-    fields: url()
+    fields: url(string)
   fine_tuning_jobs:
     primary key: id
-    fields: created_at(), error(), estimated_finish(), finished_at(), from_checkpoint(), hyperparameters(), id(), integrations(), method(), model(), object(), organization_id(), result_files(), seed(), status(), suffix(), total_steps(), trained_steps(), trained_tokens(), training_file(), validation_file()
+    fields: created_at(integer), error(object), estimated_finish(integer), finished_at(integer), from_checkpoint(object), hyperparameters(object), id(string), integrations(array), method(object), model(string), object(string), organization_id(string), result_files(array), seed(integer), status(string), suffix(string), total_steps(integer), trained_steps(integer), trained_tokens(integer), training_file(string), validation_file(string)
   fine_tuning_jobs_job_id:
     primary key: id
-    fields: created_at(), error(), estimated_finish(), finished_at(), from_checkpoint(), hyperparameters(), id(), integrations(), method(), model(), object(), organization_id(), result_files(), seed(), status(), suffix(), total_steps(), trained_steps(), trained_tokens(), training_file(), validation_file()
+    fields: created_at(integer), error(object), estimated_finish(integer), finished_at(integer), from_checkpoint(object), hyperparameters(object), id(string), integrations(array), method(object), model(string), object(string), organization_id(string), result_files(array), seed(integer), status(string), suffix(string), total_steps(integer), trained_steps(integer), trained_tokens(integer), training_file(string), validation_file(string)
   fine_tuning_jobs_job_id_events:
     primary key: id
-    fields: created_at(), data(), id(), level(), message(), object(), type()
+    fields: created_at(integer), data(object), id(string), level(string), message(string), object(string), type(string)
   fine_tuning_jobs_job_id_checkpoints:
     primary key: id
-    fields: created_at(), fine_tuned_model_checkpoint(), fine_tuning_job_id(), id(), metrics(), object(), result_files(), step_number()
+    fields: created_at(integer), fine_tuned_model_checkpoint(string), fine_tuning_job_id(string), id(string), metrics(object), object(string), result_files(array), step_number(integer)
   fine_tuning_jobs_job_id_checkpoints_checkpoint_id:
     primary key: id
-    fields: created_at(), fine_tuned_model_checkpoint(), fine_tuning_job_id(), id(), metrics(), object(), step_number()
+    fields: created_at(integer), fine_tuned_model_checkpoint(string), fine_tuning_job_id(string), id(string), metrics(object), object(string), step_number(integer)
   fine_tuning_models_spec_draft:
-    fields: hf_repo_name(), price()
+    fields: hf_repo_name(string), price(object)
   fine_tuning_models_spec_draft_2:
-    fields: hf_repo_name(), price()
+    fields: hf_repo_name(string), price(object)
   dedicated_endpoints_templates:
-    fields: flavors(), metadata(), name(), type()
+    fields: flavors(object), metadata(object), name(string), type(string)
   dedicated_endpoints:
     primary key: id
-    fields: created_at(), custom_weights_id(), deployment(), description(), enabled(), flavor_name(), gpu_count(), gpu_type(), id(), model_name(), name(), region(), routing_key(), scaling()
+    fields: created_at(string), custom_weights_id(string), deployment(object), description(string), enabled(boolean), flavor_name(string), gpu_count(integer), gpu_type(string), id(string), model_name(string), name(string), region(string), routing_key(string), scaling(object)
   datasets:
     primary key: id
-    fields: ai_project_id(), created_at(), current_version(), current_version_origin(), error(), folder(), id(), metadata(), name(), schema(), status(), type()
+    fields: ai_project_id(string), created_at(integer), current_version(string), current_version_origin(object), error(string), folder(string), id(string), metadata(object), name(string), schema(array), status(string), type(string)
   datasets_dataset_id:
     primary key: id
-    fields: ai_project_id(), created_at(), current_version(), current_version_origin(), error(), folder(), id(), metadata(), name(), schema(), status(), type()
+    fields: ai_project_id(string), created_at(integer), current_version(string), current_version_origin(object), error(string), folder(string), id(string), metadata(object), name(string), schema(array), status(string), type(string)
   datasets_dataset_id_query_templates:
-    fields: yql()
+    fields: yql(string)
   datasets_dataset_id_content:
   datasets_dataset_id_export:
   datasets_uploads_upload_id_parts:
     primary key: id
-    fields: created_at(), id(), status(), upload_id()
+    fields: created_at(integer), id(string), status(string), upload_id(string)
   datasets_uploads_upload_id:
     primary key: id
-    fields: id(), upload_info()
+    fields: id(string), upload_info(object)
   operations:
     primary key: id
-    fields: ai_project_id(), created_at(), dst(), finished_at(), id(), in_progress_at(), params(), src(), status(), type()
+    fields: ai_project_id(string), created_at(integer), dst(array), finished_at(integer), id(string), in_progress_at(integer), params(object), src(array), status(string), type(string)
   operations_operation_id:
     primary key: id
-    fields: ai_project_id(), created_at(), dst(), finished_at(), id(), in_progress_at(), params(), src(), status(), type()
+    fields: ai_project_id(string), created_at(integer), dst(array), finished_at(integer), id(string), in_progress_at(integer), params(object), src(array), status(string), type(string)
   operations_operation_id_results:
     primary key: id
-    fields: created_at(), fine_tuned_model_checkpoint(), fine_tuning_job_id(), id(), metrics(), object(), result_files(), step_number()
+    fields: created_at(integer), fine_tuned_model_checkpoint(string), fine_tuning_job_id(string), id(string), metrics(object), object(string), result_files(array), step_number(integer)
   operations_operation_id_errors:
-    fields: data(), object()
+    fields: data(array), object(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

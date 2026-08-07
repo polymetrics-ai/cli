@@ -38,15 +38,15 @@ Reads OPUSWatch monitors, incidents, and checks.
 - monitors:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), message(), name(), status(), updated_at()
+  - fields: created_at(string), id(string), message(string), name(string), status(string), updated_at(string)
 - incidents:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), message(), name(), status(), updated_at()
+  - fields: created_at(string), id(string), message(string), name(string), status(string), updated_at(string)
 - checks:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), message(), name(), status(), updated_at()
+  - fields: created_at(string), id(string), message(string), name(string), status(string), updated_at(string)
 
 ## Sync Modes
 

@@ -37,25 +37,25 @@ CONFIGURATION
 ETL STREAMS
   time_entries:
     primary key: id
-    fields: at(), billable(), created_with(), description(), duration(), duronly(), id(), pid(), project_id(), server_deleted_at(), start(), stop(), tag_ids(), tags(), task_id(), tid(), uid(), user_id(), wid(), workspace_id()
+    fields: at(string), billable(boolean), created_with(string), description(string), duration(integer), duronly(boolean), id(integer), pid(integer), project_id(integer), server_deleted_at(string), start(string), stop(string), tag_ids(array), tags(array), task_id(integer), tid(integer), uid(integer), user_id(integer), wid(integer), workspace_id(integer)
   projects:
     primary key: id
-    fields: active(), actual_hours(), at(), auto_estimates(), billable(), cid(), client_id(), color(), created_at(), currency(), estimated_hours(), fixed_fee(), id(), is_private(), name(), rate(), rate_last_updated(), recurring(), recurring_parameters(), server_deleted_at(), template(), wid(), workspace_id()
+    fields: active(boolean), actual_hours(integer), at(string), auto_estimates(boolean), billable(boolean), cid(integer), client_id(integer), color(string), created_at(string), currency(string), estimated_hours(integer), fixed_fee(number), id(integer), is_private(boolean), name(string), rate(number), rate_last_updated(string), recurring(boolean), recurring_parameters(object), server_deleted_at(string), template(boolean), wid(integer), workspace_id(integer)
   clients:
     primary key: id
-    fields: archived(), at(), id(), name(), server_deleted_at(), wid(), workspace_id()
+    fields: archived(boolean), at(string), id(integer), name(string), server_deleted_at(string), wid(integer), workspace_id(integer)
   workspace_users:
     primary key: id
-    fields: active(), admin(), at(), avatar_file_name(), email(), group_ids(), id(), inactive(), invitation_code(), invite_url(), is_direct(), labour_cost(), name(), organization_admin(), rate(), rate_last_updated(), timezone(), user_id(), workspace_admin(), workspace_id()
+    fields: active(boolean), admin(boolean), at(string), avatar_file_name(string), email(string), group_ids(array), id(integer), inactive(boolean), invitation_code(string), invite_url(string), is_direct(boolean), labour_cost(number), name(string), organization_admin(boolean), rate(number), rate_last_updated(string), timezone(string), user_id(integer), workspace_admin(boolean), workspace_id(integer)
   organization_users:
     primary key: id
-    fields: admin(), avatar_url(), can_edit_email(), email(), groups(), id(), inactive(), invitation_code(), joined(), name(), owner(), user_id(), workspaces()
+    fields: admin(boolean), avatar_url(string), can_edit_email(boolean), email(string), groups(array), id(integer), inactive(boolean), invitation_code(string), joined(boolean), name(string), owner(boolean), user_id(integer), workspaces(array)
   tags:
     primary key: id
-    fields: at(), creator_id(), deleted_at(), id(), name(), workspace_id()
+    fields: at(string), creator_id(integer), deleted_at(string), id(integer), name(string), workspace_id(integer)
   tasks:
     primary key: id
-    fields: active(), at(), client_id(), client_name(), estimated_seconds(), external_reference(), id(), name(), project_billable(), project_color(), project_id(), project_is_private(), project_name(), rate(), rate_last_updated(), recurring(), tracked_seconds(), user_id(), user_name(), workspace_id()
+    fields: active(boolean), at(string), client_id(integer), client_name(string), estimated_seconds(integer), external_reference(string), id(integer), name(string), project_billable(boolean), project_color(string), project_id(integer), project_is_private(boolean), project_name(string), rate(number), rate_last_updated(string), recurring(boolean), tracked_seconds(integer), user_id(integer), user_name(string), workspace_id(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

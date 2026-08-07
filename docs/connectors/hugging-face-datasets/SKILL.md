@@ -44,10 +44,10 @@ Reads dataset splits and per-split sizes from the Hugging Face dataset-viewer RE
 
 - splits:
   - primary key: dataset, config, split
-  - fields: config(), dataset(), split()
+  - fields: config(string), dataset(string), split(string)
 - sizes:
   - primary key: dataset, config, split
-  - fields: config(), dataset(), num_bytes_memory(), num_bytes_parquet_files(), num_columns(), num_rows(), split()
+  - fields: config(string), dataset(string), num_bytes_memory(integer), num_bytes_parquet_files(integer), num_columns(integer), num_rows(integer), split(string)
 
 ## Sync Modes
 

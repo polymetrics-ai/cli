@@ -35,11 +35,11 @@ Reads Poplar campaigns and orders through read-only REST list endpoints.
 
 - campaigns:
   - primary key: id
-  - fields: created_at(), id(), name(), status()
+  - fields: created_at(string), id(string), name(string), status(string)
 - orders:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), id(), name(), status()
+  - fields: created_at(string), id(string), name(string), status(string)
 
 ## Sync Modes
 

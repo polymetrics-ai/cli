@@ -37,13 +37,13 @@ Reads Oveit events, orders, and attendees.
 
 - events:
   - primary key: id
-  - fields: created_at(), email(), id(), name(), starts_at(), status(), total()
+  - fields: created_at(string), email(string), id(string), name(string), starts_at(string), status(string), total(integer)
 - orders:
   - primary key: id
-  - fields: created_at(), email(), id(), name(), starts_at(), status(), total()
+  - fields: created_at(string), email(string), id(string), name(string), starts_at(string), status(string), total(integer)
 - attendees:
   - primary key: id
-  - fields: created_at(), email(), id(), name(), starts_at(), status(), total()
+  - fields: created_at(string), email(string), id(string), name(string), starts_at(string), status(string), total(integer)
 
 ## Sync Modes
 

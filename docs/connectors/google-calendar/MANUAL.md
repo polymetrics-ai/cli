@@ -46,38 +46,38 @@ CONFIGURATION
 ETL STREAMS
   calendar_list:
     primary key: id
-    fields: accessRole(), colorId(), deleted(), description(), etag(), hidden(), id(), kind(), primary(), selected(), summary(), timeZone()
+    fields: accessRole(string), colorId(string), deleted(boolean), description(string), etag(string), hidden(boolean), id(string), kind(string), primary(boolean), selected(boolean), summary(string), timeZone(string)
   calendar_list_entry:
     primary key: id
-    fields: accessRole(), backgroundColor(), colorId(), conferenceProperties(), defaultReminders(), deleted(), description(), etag(), foregroundColor(), hidden(), id(), kind(), location(), notificationSettings(), primary(), selected(), summary(), summaryOverride(), timeZone()
+    fields: accessRole(string), backgroundColor(string), colorId(string), conferenceProperties(object), defaultReminders(array), deleted(boolean), description(string), etag(string), foregroundColor(string), hidden(boolean), id(string), kind(string), location(string), notificationSettings(object), primary(boolean), selected(boolean), summary(string), summaryOverride(string), timeZone(string)
   calendar:
     primary key: id
-    fields: conferenceProperties(), description(), etag(), id(), kind(), location(), summary(), timeZone()
+    fields: conferenceProperties(object), description(string), etag(string), id(string), kind(string), location(string), summary(string), timeZone(string)
   colors:
     primary key: kind
-    fields: calendar(), event(), kind(), updated()
+    fields: calendar(object), event(object), kind(string), updated(string)
   events:
     primary key: id
     cursor: updated
-    fields: attendees(), created(), creator(), description(), end(), etag(), htmlLink(), iCalUID(), id(), kind(), location(), organizer(), recurringEventId(), start(), status(), summary(), updated()
+    fields: attendees(array), created(string), creator(object), description(string), end(object), etag(string), htmlLink(string), iCalUID(string), id(string), kind(string), location(string), organizer(object), recurringEventId(string), start(object), status(string), summary(string), updated(string)
   event:
     primary key: id
-    fields: anyoneCanAddSelf(), attachments(), attendees(), attendeesOmitted(), birthdayProperties(), colorId(), conferenceData(), created(), creator(), description(), end(), endTimeUnspecified(), etag(), eventType(), extendedProperties(), focusTimeProperties(), gadget(), guestsCanInviteOthers(), guestsCanModify(), guestsCanSeeOtherGuests(), hangoutLink(), htmlLink(), iCalUID(), id(), kind(), location(), locked(), organizer(), originalStartTime(), outOfOfficeProperties(), privateCopy(), recurrence(), recurringEventId(), reminders(), sequence(), source(), start(), status(), summary(), transparency(), updated(), visibility(), workingLocationProperties()
+    fields: anyoneCanAddSelf(boolean), attachments(array), attendees(array), attendeesOmitted(boolean), birthdayProperties(object), colorId(string), conferenceData(object), created(string), creator(object), description(string), end(object), endTimeUnspecified(boolean), etag(string), eventType(string), extendedProperties(object), focusTimeProperties(object), gadget(object), guestsCanInviteOthers(boolean), guestsCanModify(boolean), guestsCanSeeOtherGuests(boolean), hangoutLink(string), htmlLink(string), iCalUID(string), id(string), kind(string), location(string), locked(boolean), organizer(object), originalStartTime(object), outOfOfficeProperties(object), privateCopy(boolean), recurrence(array), recurringEventId(string), reminders(object), sequence(integer), source(object), start(object), status(string), summary(string), transparency(string), updated(string), visibility(string), workingLocationProperties(object)
   event_instances:
     primary key: id
-    fields: anyoneCanAddSelf(), attachments(), attendees(), attendeesOmitted(), birthdayProperties(), colorId(), conferenceData(), created(), creator(), description(), end(), endTimeUnspecified(), etag(), eventType(), extendedProperties(), focusTimeProperties(), gadget(), guestsCanInviteOthers(), guestsCanModify(), guestsCanSeeOtherGuests(), hangoutLink(), htmlLink(), iCalUID(), id(), kind(), location(), locked(), organizer(), originalStartTime(), outOfOfficeProperties(), privateCopy(), recurrence(), recurringEventId(), reminders(), sequence(), source(), start(), status(), summary(), transparency(), updated(), visibility(), workingLocationProperties()
+    fields: anyoneCanAddSelf(boolean), attachments(array), attendees(array), attendeesOmitted(boolean), birthdayProperties(object), colorId(string), conferenceData(object), created(string), creator(object), description(string), end(object), endTimeUnspecified(boolean), etag(string), eventType(string), extendedProperties(object), focusTimeProperties(object), gadget(object), guestsCanInviteOthers(boolean), guestsCanModify(boolean), guestsCanSeeOtherGuests(boolean), hangoutLink(string), htmlLink(string), iCalUID(string), id(string), kind(string), location(string), locked(boolean), organizer(object), originalStartTime(object), outOfOfficeProperties(object), privateCopy(boolean), recurrence(array), recurringEventId(string), reminders(object), sequence(integer), source(object), start(object), status(string), summary(string), transparency(string), updated(string), visibility(string), workingLocationProperties(object)
   settings:
     primary key: id
-    fields: etag(), id(), kind(), value()
+    fields: etag(string), id(string), kind(string), value(string)
   setting:
     primary key: id
-    fields: etag(), id(), kind(), value()
+    fields: etag(string), id(string), kind(string), value(string)
   acl:
     primary key: id
-    fields: etag(), id(), kind(), role(), scope()
+    fields: etag(string), id(string), kind(string), role(string), scope(object)
   acl_rule:
     primary key: id
-    fields: etag(), id(), kind(), role(), scope()
+    fields: etag(string), id(string), kind(string), role(string), scope(object)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
@@ -275,7 +275,7 @@ COMMAND SURFACE
     events update - Plan replacement of a Google Calendar event. [intent=reverse_etl availability=implemented write=update_event]; approval: Plan first, inspect preview output, then execute only with the generated approval token.; risk: Replaces a calendar event; requires plan, preview, approval, and execute.; flags: --calendar-id (required), --event-id (required), --summary (required), --start-date-time (required), --end-date-time (required), --description, --location, --color-id
     events watch - Plan creation of an event notification channel. [intent=reverse_etl availability=implemented write=watch_events]; approval: Plan first, inspect preview output, then execute only with the generated approval token.; risk: Creates an event notification channel; requires plan, preview, approval, and execute.; flags: --calendar-id (required), --channel-id (required), --channel-type (required), --channel-address (required), --channel-token
   Typed direct reads
-    freebusy query - Run a bounded typed free/busy query for one calendar and time range. [intent=direct_read availability=implemented operation=google-calendar.freebusy.query]; approval: No write approval required; bounded direct read validates typed inputs.; risk: medium; flags: --calendar (required), --time-min (required), --time-max (required), --time-zone
+    freebusy query - Run a bounded typed free/busy query for one calendar and time range. [intent=direct_read availability=implemented operation=google-calendar.freebusy.query]; approval: No write approval required; bounded direct read validates typed inputs.; risk: medium; flags: --calendar (required), --time-min (required), --time-max (required), --time-zone, --page, --page-cursor
   Settings reads and reverse-ETL actions
     settings list - List user Calendar settings. [intent=etl availability=implemented stream=settings]
     settings get - Read one user Calendar setting. [intent=etl availability=implemented stream=setting]

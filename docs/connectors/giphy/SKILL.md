@@ -48,16 +48,16 @@ Reads GIFs, stickers, and clips from the Giphy search and trending REST endpoint
 
 - gif_search:
   - primary key: id
-  - fields: bitly_url(), content_url(), embed_url(), id(), import_datetime(), rating(), slug(), source(), source_tld(), title(), trending_datetime(), type(), url(), username()
+  - fields: bitly_url(string), content_url(string), embed_url(string), id(string), import_datetime(string), rating(string), slug(string), source(string), source_tld(string), title(string), trending_datetime(string), type(string), url(string), username(string)
 - sticker_search:
   - primary key: id
-  - fields: bitly_url(), content_url(), embed_url(), id(), import_datetime(), rating(), slug(), source(), source_tld(), title(), trending_datetime(), type(), url(), username()
+  - fields: bitly_url(string), content_url(string), embed_url(string), id(string), import_datetime(string), rating(string), slug(string), source(string), source_tld(string), title(string), trending_datetime(string), type(string), url(string), username(string)
 - clip_search:
   - primary key: id
-  - fields: bitly_url(), content_url(), embed_url(), id(), import_datetime(), rating(), slug(), source(), source_tld(), title(), trending_datetime(), type(), url(), username()
+  - fields: bitly_url(string), content_url(string), embed_url(string), id(string), import_datetime(string), rating(string), slug(string), source(string), source_tld(string), title(string), trending_datetime(string), type(string), url(string), username(string)
 - trending_gifs:
   - primary key: id
-  - fields: bitly_url(), content_url(), embed_url(), id(), import_datetime(), rating(), slug(), source(), source_tld(), title(), trending_datetime(), type(), url(), username()
+  - fields: bitly_url(string), content_url(string), embed_url(string), id(string), import_datetime(string), rating(string), slug(string), source(string), source_tld(string), title(string), trending_datetime(string), type(string), url(string), username(string)
 
 ## Sync Modes
 

@@ -37,13 +37,13 @@ Reads Ruddr clients, projects, and time entries through the Ruddr API. Read-only
 
 - clients:
   - primary key: id
-  - fields: id(), name(), stream()
+  - fields: id(string), name(string), stream(string)
 - projects:
   - primary key: id
-  - fields: id(), name(), project_id(), stream()
+  - fields: id(string), name(string), project_id(string), stream(string)
 - time_entries:
   - primary key: id
-  - fields: hours(), id(), name(), project_id(), stream()
+  - fields: hours(number), id(string), name(string), project_id(string), stream(string)
 
 ## Sync Modes
 

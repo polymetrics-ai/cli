@@ -169,7 +169,13 @@ func renderCommandSurfaceFlag(flag CommandSurfaceFlag) string {
 // only the bundle's own flags documents a command that cannot be run as
 // written. A flag the bundle already declares is never repeated.
 func commandSurfaceRenderedFlags(cmd CommandSurfaceCommand) []CommandSurfaceFlag {
-	if cmd.Intent != "binary_download" {
+	var runtimeFlags []CommandSurfaceFlag
+	switch cmd.Intent {
+	case "binary_download":
+		runtimeFlags = BinaryDownloadFlags()
+	case "direct_read":
+		runtimeFlags = DirectReadPageFlags()
+	default:
 		return cmd.Flags
 	}
 	declared := make(map[string]bool, len(cmd.Flags))
@@ -177,7 +183,7 @@ func commandSurfaceRenderedFlags(cmd CommandSurfaceCommand) []CommandSurfaceFlag
 		declared[flag.Name] = true
 	}
 	rendered := append([]CommandSurfaceFlag(nil), cmd.Flags...)
-	for _, flag := range BinaryDownloadFlags() {
+	for _, flag := range runtimeFlags {
 		if !declared[flag.Name] {
 			rendered = append(rendered, flag)
 		}

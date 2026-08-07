@@ -35,23 +35,23 @@ ETL STREAMS
   users:
     primary key: id
     cursor: updatedAt
-    fields: alias(), availability(), avatarUrl(), bot(), createdAt(), email(), id(), locale(), name(), orgId(), phone(), role(), timeZone(), updatedAt(), verified()
+    fields: alias(string), availability(string), avatarUrl(string), bot(boolean), createdAt(integer), email(string), id(integer), locale(string), name(string), orgId(integer), phone(string), role(string), timeZone(string), updatedAt(integer), verified(boolean)
   accounts:
     primary key: account_id
     cursor: updateDateTime
-    fields: account_id(), createDateTime(), customProperties(), deleted(), domain(), name(), ownerId(), targeted(), updateDateTime()
+    fields: account_id(string), createDateTime(integer), customProperties(array), deleted(boolean), domain(string), name(string), ownerId(integer), targeted(boolean), updateDateTime(integer)
   conversations:
     primary key: id
     cursor: updatedAt
-    fields: contactId(), conversationTags(), createdAt(), id(), inboxId(), orgId(), participants(), relatedPlaybookId(), status(), updatedAt()
+    fields: contactId(integer), conversationTags(array), createdAt(integer), id(integer), inboxId(integer), orgId(integer), participants(array), relatedPlaybookId(integer), status(string), updatedAt(integer)
   contacts:
     primary key: id
     cursor: updatedAt
-    fields: attributes(), createdAt(), id(), updatedAt()
+    fields: attributes(object), createdAt(integer), id(integer), updatedAt(integer)
   teams:
     primary key: id
     cursor: updatedAt
-    fields: autoOffline(), id(), main(), members(), name(), orgId(), owner(), responseTimerEnabled(), status(), teamAvailabilityMode(), updatedAt(), workspaceId()
+    fields: autoOffline(boolean), id(integer), main(boolean), members(array), name(string), orgId(integer), owner(integer), responseTimerEnabled(boolean), status(string), teamAvailabilityMode(string), updatedAt(integer), workspaceId(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

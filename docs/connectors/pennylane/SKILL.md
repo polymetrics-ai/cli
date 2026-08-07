@@ -40,32 +40,32 @@ Reads Pennylane v2 customers, customer invoices, suppliers, supplier invoices, p
 - customers:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - customer_invoices:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - suppliers:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - products:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - categories:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(integer), name(string), updated_at(string)
 - supplier_invoices:
   - primary key: id
-  - fields: created_at(), date(), id(), invoice_number(), supplier_id(), updated_at()
+  - fields: created_at(string), date(string), id(integer), invoice_number(string), supplier_id(integer), updated_at(string)
 - transactions:
   - primary key: id
-  - fields: attachment_required(), date(), id(), label(), outstanding_balance()
+  - fields: attachment_required(boolean), date(string), id(integer), label(string), outstanding_balance(string)
 - bank_accounts:
   - primary key: id
-  - fields: created_at(), currency(), id(), name(), updated_at()
+  - fields: created_at(string), currency(string), id(integer), name(string), updated_at(string)
 
 ## Sync Modes
 

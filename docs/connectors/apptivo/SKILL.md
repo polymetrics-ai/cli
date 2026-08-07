@@ -36,16 +36,16 @@ Reads Apptivo CRM customers, contacts, leads, and opportunities through the Appt
 
 - customers:
   - primary key: customerId
-  - fields: creationDate(), currencyCode(), customerId(), customerName(), customerNumber(), emailAddress(), lastUpdateDate(), phoneNumber(), statusName(), website()
+  - fields: creationDate(string), currencyCode(string), customerId(string), customerName(string), customerNumber(string), emailAddress(string), lastUpdateDate(string), phoneNumber(string), statusName(string), website(string)
 - contacts:
   - primary key: contactId
-  - fields: companyName(), contactId(), creationDate(), emailAddress(), firstName(), fullName(), lastName(), lastUpdateDate(), phoneNumber()
+  - fields: companyName(string), contactId(string), creationDate(string), emailAddress(string), firstName(string), fullName(string), lastName(string), lastUpdateDate(string), phoneNumber(string)
 - leads:
   - primary key: id
-  - fields: companyName(), creationDate(), emailAddress(), firstName(), id(), lastName(), leadId(), leadSource(), phoneNumber(), statusName()
+  - fields: companyName(string), creationDate(string), emailAddress(string), firstName(string), id(string), lastName(string), leadId(string), leadSource(string), phoneNumber(string), statusName(string)
 - opportunities:
   - primary key: opportunityId
-  - fields: closingDate(), creationDate(), currencyCode(), customerName(), lastUpdateDate(), opportunityAmount(), opportunityId(), opportunityName(), salesStageName()
+  - fields: closingDate(string), creationDate(string), currencyCode(string), customerName(string), lastUpdateDate(string), opportunityAmount(string), opportunityId(string), opportunityName(string), salesStageName(string)
 
 ## Sync Modes
 

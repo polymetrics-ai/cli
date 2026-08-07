@@ -48,35 +48,35 @@ CONFIGURATION
 ETL STREAMS
   messages:
     primary key: id
-    fields: id(), thread_id()
+    fields: id(string), thread_id(string)
   threads:
     primary key: id
-    fields: history_id(), id(), snippet()
+    fields: history_id(string), id(string), snippet(string)
   drafts:
     primary key: id
-    fields: id(), message_id(), thread_id()
+    fields: id(string), message_id(string), thread_id(string)
   labels:
     primary key: id
-    fields: id(), label_list_visibility(), message_list_visibility(), messages_total(), messages_unread(), name(), threads_total(), threads_unread(), type()
+    fields: id(string), label_list_visibility(string), message_list_visibility(string), messages_total(integer), messages_unread(integer), name(string), threads_total(integer), threads_unread(integer), type(string)
   history:
     primary key: id
     cursor: id
-    fields: id(), labels_added(), labels_removed(), messages_added(), messages_deleted()
+    fields: id(string), labels_added(array), labels_removed(array), messages_added(array), messages_deleted(array)
   filters:
     primary key: id
-    fields: action(), criteria(), id()
+    fields: action(object), criteria(object), id(string)
   send_as:
     primary key: send_as_email
-    fields: display_name(), is_default(), is_primary(), reply_to_address(), send_as_email(), signature(), smtpMsa(), treat_as_alias(), verification_status()
+    fields: display_name(string), is_default(boolean), is_primary(boolean), reply_to_address(string), send_as_email(string), signature(string), smtpMsa(object), treat_as_alias(boolean), verification_status(string)
   delegates:
     primary key: delegate_email
-    fields: delegate_email(), verification_status()
+    fields: delegate_email(string), verification_status(string)
   forwarding_addresses:
     primary key: forwarding_email
-    fields: forwarding_email(), verification_status()
+    fields: forwarding_email(string), verification_status(string)
   profile:
     primary key: email_address
-    fields: email_address(), history_id(), messages_total(), threads_total()
+    fields: email_address(string), history_id(string), messages_total(integer), threads_total(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

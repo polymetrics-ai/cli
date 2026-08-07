@@ -43,19 +43,19 @@ Reads Awin advertiser transactions, publisher-aggregated performance reports, pu
 - transactions:
   - primary key: id
   - cursor: transactionDate
-  - fields: advertiserId(), clickDate(), clickRefs(), commissionAmount(), commissionSharingPublisherId(), customParameters(), id(), publisherId(), saleAmount(), siteName(), transactionDate(), transactionStatus(), type(), url(), validationDate()
+  - fields: advertiserId(integer), clickDate(string), clickRefs(object), commissionAmount(object), commissionSharingPublisherId(integer), customParameters(object), id(integer), publisherId(integer), saleAmount(object), siteName(string), transactionDate(string), transactionStatus(string), type(string), url(string), validationDate(string)
 - campaign_performance:
   - primary key: publisherId
-  - fields: advertiserId(), clicks(), confirmedNo(), currency(), declinedNo(), impressions(), pendingNo(), publisherId(), publisherName(), region(), totalComm(), totalNo(), totalSaleAmount()
+  - fields: advertiserId(integer), clicks(integer), confirmedNo(integer), currency(string), declinedNo(integer), impressions(integer), pendingNo(integer), publisherId(integer), publisherName(string), region(string), totalComm(number), totalNo(integer), totalSaleAmount(object)
 - publishers:
   - primary key: id
-  - fields: displayUrl(), id(), kind(), name(), status()
+  - fields: displayUrl(string), id(integer), kind(string), name(string), status(string)
 - publisher_performance:
   - primary key: publisherId
-  - fields: advertiserId(), advertiserName(), bonusComm(), bonusNo(), bonusValue(), clicks(), confirmedComm(), confirmedNo(), confirmedValue(), currency(), declinedComm(), declinedNo(), declinedValue(), impressions(), pendingComm(), pendingNo(), pendingValue(), publisherId(), publisherName(), region(), tags(), totalComm(), totalNo(), totalValue()
+  - fields: advertiserId(integer), advertiserName(string), bonusComm(number), bonusNo(integer), bonusValue(number), clicks(integer), confirmedComm(number), confirmedNo(integer), confirmedValue(number), currency(string), declinedComm(number), declinedNo(integer), declinedValue(number), impressions(integer), pendingComm(number), pendingNo(integer), pendingValue(number), publisherId(integer), publisherName(string), region(string), tags(array), totalComm(number), totalNo(integer), totalValue(number)
 - creative_performance:
   - primary key: creativeId, publisherId
-  - fields: advertiserId(), advertiserName(), bonusComm(), bonusNo(), bonusValue(), clicks(), confirmedComm(), confirmedNo(), confirmedValue(), creativeId(), creativeName(), currency(), declinedComm(), declinedNo(), declinedValue(), impressions(), pendingComm(), pendingNo(), pendingValue(), publisherId(), publisherName(), region(), tagName(), totalComm(), totalNo(), totalValue()
+  - fields: advertiserId(integer), advertiserName(string), bonusComm(number), bonusNo(integer), bonusValue(number), clicks(integer), confirmedComm(number), confirmedNo(integer), confirmedValue(number), creativeId(integer), creativeName(string), currency(string), declinedComm(number), declinedNo(integer), declinedValue(number), impressions(integer), pendingComm(number), pendingNo(integer), pendingValue(number), publisherId(integer), publisherName(string), region(string), tagName(string), totalComm(number), totalNo(integer), totalValue(number)
 
 ## Sync Modes
 

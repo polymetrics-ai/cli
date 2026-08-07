@@ -206,7 +206,7 @@
 - [google-search-console](google-search-console/MANUAL.md): Reads Google Search Console sites, sitemaps, and Search Analytics performance reports (by date, query, page, country, and device) through the Search Console v3 REST API; submits/removes sites and sitemaps through explicit write actions.
 - [google-tasks](google-tasks/MANUAL.md): Reads Google task lists and tasks through the Google Tasks REST API.
 - [google-webfonts](google-webfonts/MANUAL.md): Reads Google Web Fonts families (default, popular, trending, newest, and alphabetical views) through the Google Fonts Developer API. Read-only.
-- [gorgias](gorgias/MANUAL.md): Reads Gorgias helpdesk tickets, customers, messages, and satisfaction surveys through the Gorgias REST API (read-only).
+- [gorgias](gorgias/MANUAL.md): Reads Gorgias helpdesk tickets, customers, messages, and satisfaction surveys through the Gorgias REST API; executes bounded direct reads and a file download across the account, custom fields, events, integrations, jobs, macros, metric cards, phone, rules, search, statistics, tags, teams, users, views, and widgets surface; models Gorgias mutations and a multipart file upload as typed reverse-ETL actions.
 - [grafana](grafana/MANUAL.md): Reads Grafana dashboards, folders, data sources, organization users, and provisioned alert rules through the Grafana REST API (read-only).
 - [granola](granola/MANUAL.md): Reads Granola meeting notes metadata and full note detail (summary, owner, attendees, calendar event) through the Granola public API (read-only).
 - [greenhouse](greenhouse/MANUAL.md): Reads and writes documented Greenhouse Harvest REST API resources through the declarative connector engine.

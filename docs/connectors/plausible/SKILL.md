@@ -43,16 +43,16 @@ Reads Plausible Analytics sites and stats reports through the Stats API.
 
 - sites:
   - primary key: site_id
-  - fields: domain(), site_id()
+  - fields: domain(string), site_id(string)
 - aggregate:
   - primary key: site_id
-  - fields: bounce_rate(), events(), pageviews(), site_id(), visit_duration(), visitors(), visits()
+  - fields: bounce_rate(number), events(integer), pageviews(integer), site_id(string), visit_duration(number), visitors(integer), visits(integer)
 - timeseries:
   - primary key: date
-  - fields: bounce_rate(), date(), events(), pageviews(), site_id(), visit_duration(), visitors(), visits()
+  - fields: bounce_rate(number), date(string), events(integer), pageviews(integer), site_id(string), visit_duration(number), visitors(integer), visits(integer)
 - breakdown:
   - primary key: property_value
-  - fields: bounce_rate(), events(), pageviews(), property_value(), site_id(), visit_duration(), visitors(), visits()
+  - fields: bounce_rate(number), events(integer), pageviews(integer), property_value(string), site_id(string), visit_duration(number), visitors(integer), visits(integer)
 
 ## Sync Modes
 

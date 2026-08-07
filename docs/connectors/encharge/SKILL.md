@@ -35,19 +35,19 @@ Reads Encharge people, segments, fields, account tags, and schemas through the E
 
 - peoples:
   - primary key: id
-  - fields: company(), country(), createdAt(), email(), firstName(), id(), lastName(), name(), phone(), title(), updatedAt(), userId()
+  - fields: company(string), country(string), createdAt(string), email(string), firstName(string), id(string), lastName(string), name(string), phone(string), title(string), updatedAt(string), userId(string)
 - segments:
   - primary key: id
-  - fields: createdAt(), id(), name(), type(), updatedAt()
+  - fields: createdAt(string), id(string), name(string), type(string), updatedAt(string)
 - fields:
   - primary key: name
-  - fields: format(), name(), title(), type()
+  - fields: format(string), name(string), title(string), type(string)
 - account_tags:
   - primary key: tag
-  - fields: createdAt(), id(), tag()
+  - fields: createdAt(string), id(string), tag(string)
 - schemas:
   - primary key: name
-  - fields: name(), title(), type()
+  - fields: name(string), title(string), type(string)
 
 ## Sync Modes
 

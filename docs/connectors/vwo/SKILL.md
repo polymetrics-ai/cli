@@ -41,10 +41,10 @@ Reads and writes VWO (Visual Website Optimizer) A/B testing campaigns.
 - campaigns:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), id(), name(), status()
+  - fields: created_at(string), id(string), name(string), status(string)
 - campaign_variations:
   - primary key: campaign_id, id
-  - fields: campaign_id(), id(), is_control(), is_disabled(), name(), percent_split(), platform()
+  - fields: campaign_id(string), id(integer), is_control(boolean), is_disabled(boolean), name(string), percent_split(integer), platform(string)
 
 ## Sync Modes
 

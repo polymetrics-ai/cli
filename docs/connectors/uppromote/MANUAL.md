@@ -35,24 +35,24 @@ ETL STREAMS
   affiliates:
     primary key: id
     cursor: created_at
-    fields: created_at(), email(), id(), status()
+    fields: created_at(string), email(string), id(string), status(string)
   programs:
     primary key: id
-    fields: commission_amount(), commission_type(), created_at(), description(), exclude_product_tax(), exclude_self_referral(), exclude_shipping(), exclude_shipping_tax(), exclude_tip(), id(), is_default(), name(), payment_default(), payment_methods(), rule(), status()
+    fields: commission_amount(string), commission_type(string), created_at(string), description(string), exclude_product_tax(boolean), exclude_self_referral(boolean), exclude_shipping(boolean), exclude_shipping_tax(boolean), exclude_tip(boolean), id(integer), is_default(string), name(string), payment_default(string), payment_methods(array), rule(string), status(string)
   coupons:
     primary key: id
     cursor: created_at
-    fields: affiliate_email(), affiliate_id(), coupon(), created_at(), description(), id()
+    fields: affiliate_email(string), affiliate_id(integer), coupon(string), created_at(string), description(string), id(integer)
   referrals:
     primary key: id
-    fields: commission(), commission_adjustment(), customer_id(), id(), order_id(), order_number(), quantity(), status(), total_sales(), tracking_type()
+    fields: commission(string), commission_adjustment(string), customer_id(string), id(integer), order_id(integer), order_number(integer), quantity(integer), status(string), total_sales(string), tracking_type(string)
   unpaid_payments:
     primary key: affiliate_id
-    fields: affiliate_email(), affiliate_id(), payment_method(), total_commission(), total_products(), total_referrals(), total_sales()
+    fields: affiliate_email(string), affiliate_id(integer), payment_method(string), total_commission(number), total_products(integer), total_referrals(integer), total_sales(number)
   paid_payments:
     primary key: payment_id
     cursor: processed_at
-    fields: affiliate_email(), affiliate_id(), payment_id(), payment_method(), processed_at(), status(), total_processed(), total_referrals()
+    fields: affiliate_email(string), affiliate_id(integer), payment_id(integer), payment_method(string), processed_at(string), status(string), total_processed(number), total_referrals(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

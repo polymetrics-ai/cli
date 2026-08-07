@@ -40,23 +40,23 @@ Reads Freshdesk tickets, contacts, companies, agents, and groups through the Fre
 - tickets:
   - primary key: id
   - cursor: updated_at
-  - fields: company_id(), created_at(), due_by(), group_id(), id(), priority(), requester_id(), responder_id(), source(), spam(), status(), subject(), type(), updated_at()
+  - fields: company_id(integer), created_at(string), due_by(string), group_id(integer), id(integer), priority(integer), requester_id(integer), responder_id(integer), source(integer), spam(boolean), status(integer), subject(string), type(string), updated_at(string)
 - contacts:
   - primary key: id
   - cursor: updated_at
-  - fields: active(), company_id(), created_at(), email(), id(), mobile(), name(), phone(), updated_at()
+  - fields: active(boolean), company_id(integer), created_at(string), email(string), id(integer), mobile(string), name(string), phone(string), updated_at(string)
 - companies:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), description(), id(), name(), note(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), note(string), updated_at(string)
 - agents:
   - primary key: id
   - cursor: updated_at
-  - fields: available(), created_at(), id(), occasional(), ticket_scope(), updated_at()
+  - fields: available(boolean), created_at(string), id(integer), occasional(boolean), ticket_scope(integer), updated_at(string)
 - groups:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), description(), id(), name(), updated_at()
+  - fields: created_at(string), description(string), id(integer), name(string), updated_at(string)
 
 ## Sync Modes
 

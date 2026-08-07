@@ -35,7 +35,7 @@ Reads records from a configured Senseforce dataset through the Senseforce API.
 
 - records:
   - primary key: id
-  - fields: Timestamp(), id(), value()
+  - fields: Timestamp(string), id(string), value(number)
 
 ## Sync Modes
 

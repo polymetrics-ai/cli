@@ -37,31 +37,31 @@ Reads orders, products, customers, warehouses, suppliers, purchase orders, sales
 - orders:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), id(), number(), status()
+  - fields: created_at(string), id(string), number(string), status(string)
 - products:
   - primary key: id
-  - fields: created_at(), id(), notes(), title(), updated_at()
+  - fields: created_at(string), id(string), notes(string), title(string), updated_at(string)
 - customers:
   - primary key: id
-  - fields: email(), id(), notes(), phone()
+  - fields: email(string), id(string), notes(string), phone(string)
 - warehouses:
   - primary key: id
-  - fields: city(), country(), id(), name(), post_code()
+  - fields: city(string), country(string), id(string), name(string), post_code(string)
 - suppliers:
   - primary key: id
-  - fields: created_at(), currency_code(), id(), name(), updated_at()
+  - fields: created_at(string), currency_code(string), id(string), name(string), updated_at(string)
 - purchase_orders:
   - primary key: id
-  - fields: completed_at(), created_at(), destination_warehouse_id(), id()
+  - fields: completed_at(string), created_at(string), destination_warehouse_id(integer), id(string)
 - channels:
   - primary key: id
-  - fields: id(), name(), state(), type_code()
+  - fields: id(string), name(string), state(string), type_code(string)
 - delivery_methods:
   - primary key: id
-  - fields: cost(), created_at(), id(), name()
+  - fields: cost(string), created_at(string), id(string), name(string)
 - tags:
   - primary key: id
-  - fields: colour(), id(), name(), taggings_count()
+  - fields: colour(string), id(string), name(string), taggings_count(integer)
 
 ## Sync Modes
 

@@ -35,20 +35,20 @@ Reads Recreation.gov RIDB facilities, campsites, activities, organizations, and 
 - facilities:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), type(), updated_at()
+  - fields: id(string), name(string), type(string), updated_at(string)
 - campsites:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), type(), updated_at()
+  - fields: id(string), name(string), type(string), updated_at(string)
 - activities:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - organizations:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - recareas:
   - primary key: id
-  - fields: id(), name(), updated_at()
+  - fields: id(string), name(string), updated_at(string)
 
 ## Sync Modes
 

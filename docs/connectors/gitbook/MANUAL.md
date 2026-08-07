@@ -91,559 +91,559 @@ CONFIGURATION
 ETL STREAMS
   users:
     primary key: id
-    fields: display_name(), email(), id(), photo_url()
+    fields: display_name(string), email(string), id(string), photo_url(string)
   organizations:
     primary key: id
-    fields: created_at(), id(), title(), type(), url()
+    fields: created_at(string), id(string), title(string), type(string), url(object)
   org_members:
     primary key: id
-    fields: display_name(), email(), id(), role()
+    fields: display_name(string), email(string), id(string), role(string)
   content:
     primary key: id
-    fields: id(), kind(), path(), slug(), title(), type()
+    fields: id(string), kind(string), path(string), slug(string), title(string), type(string)
   get_api_information:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_user_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_space_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_embed_by_url_in_space:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   search_space_content:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_space_git_info:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_user_permissions_in_space:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_team_permissions_in_space:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_current_revision:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_files:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_file_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_space_file_backlinks:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_page_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_page_links_in_space:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_space_page_backlinks:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_space_page_meta_links:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_page_by_path:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_reusable_content_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_document_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_change_requests_for_space:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_change_request_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_reviews_by_change_request_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_change_request_review_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_requested_reviewers_by_change_request_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_change_request_conversations:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_change_request_links:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_comments_in_change_request:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_comment_in_change_request:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_comment_replies_in_change_request:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_comment_reply_in_change_request:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_contributors_by_change_request_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_revision_of_change_request_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_pages_in_change_request:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_files_in_change_request_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_file_in_change_request_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_change_request_file_backlinks:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_page_in_change_request_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_page_links_in_change_request:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_change_request_page_backlinks:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_change_request_page_meta_links:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_reusable_content_in_change_request_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_change_request_changes:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_change_request_pdf:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_revision_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_revision_semantic_changes:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_pages_in_revision_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_files_in_revision_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_file_in_revision_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_page_in_revision_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_page_document_in_revision_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_page_in_revision_by_path:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_revision_page_meta_links:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_page_in_change_request_by_path:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_reusable_content_in_revision_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_reusable_content_document_in_revision_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_comments_in_space:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_comment_in_space:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_comment_replies_in_space:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_comment_reply_in_space:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_commenters_in_space:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_commenters_in_change_request:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_permissions_aggregate_in_space:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_space_integrations:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_space_integrations_blocks:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_space_pdf:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_space_links:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_collection_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_spaces_in_collection_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_team_permissions_in_collection:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_user_permissions_in_collection:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_permissions_aggregate_in_collection:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_integrations:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_integration_by_name:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_integration_installations:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_integration_events:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_integration_event:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_integration_space_installations:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_integration_site_installations:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   render_integration_ui_with_get:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_integration_installation_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_integration_installation_spaces:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_integration_space_installation:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_integration_installation_sites:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_integration_site_installation:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_organization_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_member_in_organization_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_spaces_for_organization_member:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_teams_for_organization_member:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_teams_in_organization_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_team_in_organization_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_team_members_in_organization_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_organization_invite_links:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_organization_invite_link:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   search_organization_content:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_change_requests_for_organization:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_spaces_in_organization_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_collections_in_organization_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_organization_integrations:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_organization_integration_status:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_organization_installations:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_organization_integrations_status:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_saml_providers_in_organization_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_organization_saml_provider_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_sso_provider_logins_in_organization:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_recommended_questions_in_organization:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_open_api_specs:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_open_api_spec_by_slug:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_open_api_spec_versions:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_latest_open_api_spec_version:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_latest_open_api_spec_version_content:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_open_api_spec_version_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_open_api_spec_version_content_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_organization_agent_instructions:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_translations:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_translation:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_glossary_entries:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_glossary_entry:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_custom_fonts:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_custom_font:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_sites:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_site_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_site_git_sync_installations:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_site_adaptive_schema:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_site_adaptive_template_conditions:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_published_content_site:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_site_share_links:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_site_structure:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_site_publishing_auth_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_site_publishing_preview_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_site_customization_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_site_integration_scripts:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_site_integrations:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_site_spaces:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_site_section_groups:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_site_sections:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_site_context_records:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_site_context_record_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_site_scans:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_site_scan_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_site_findings:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_site_finding_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_change_requests_for_site_finding:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_pages_for_site_finding:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_questions_for_site_finding:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_records_for_site_finding:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_site_context_connections:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_site_context_connection_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_site_topics:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_site_topic_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_site_questions:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_site_question_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_site_question_sources:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_site_question_stats:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_site_question_answers:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_site_question_answer_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_site_question_answer_thread_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_site_question_answer_sources:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_site_space_customization_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_permissions_aggregate_in_site:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_user_permissions_in_site:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_team_permissions_in_site:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_site_agent_settings_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_site_visitor_segments:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_site_redirects:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_site_redirect_by_source:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_site_mcp_servers:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_site_mcp_server_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_site_channels:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_site_channel_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_subdomain:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_custom_hostname:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_organizations_for_email_domain:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   ads_list_sites:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_content_by_url:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_embed_by_url:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_published_content_by_url:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   get_git_sync_installation_by_id:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_git_hub_repositories_for_git_sync_installation:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_git_hub_repo_branches_for_git_sync_installation:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_git_lab_projects_for_git_sync_installation:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
   list_git_lab_project_branches_for_git_sync_installation:
     primary key: id
-    fields: id(), name(), object(), operation_id(), status(), title()
+    fields: id(string), name(string), object(string), operation_id(string), status(string), title(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

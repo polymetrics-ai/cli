@@ -35,16 +35,16 @@ Reads and writes ZapSign documents, signers, templates, and webhooks.
 
 - documents:
   - primary key: id
-  - fields: created_at(), id(), name(), status()
+  - fields: created_at(string), id(string), name(string), status(string)
 - signers:
   - primary key: id
-  - fields: email(), id(), name()
+  - fields: email(string), id(string), name(string)
 - templates:
   - primary key: id
-  - fields: created_at(), id(), name()
+  - fields: created_at(string), id(string), name(string)
 - webhooks:
   - primary key: id
-  - fields: enabled(), id(), type(), url()
+  - fields: enabled(boolean), id(string), type(string), url(string)
 
 ## Sync Modes
 

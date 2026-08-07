@@ -38,19 +38,19 @@ Reads and writes Campayn subscriber lists, signup forms, contacts, email campaig
 
 - lists:
   - primary key: id
-  - fields: contact_count(), id(), list_name(), tags()
+  - fields: contact_count(number), id(string), list_name(string), tags(string)
 - emails:
   - primary key: id
-  - fields: id(), name(), percent_responses(), percent_views(), preview_thumb(), preview_url(), send_count(), send_now(), status(), unique_responses(), unique_views()
+  - fields: id(string), name(string), percent_responses(number), percent_views(number), preview_thumb(string), preview_url(string), send_count(string), send_now(boolean), status(string), unique_responses(number), unique_views(number)
 - reports:
   - primary key: id
-  - fields: id(), name(), preview_url(), scheduled_date(), status()
+  - fields: id(string), name(string), preview_url(string), scheduled_date(string), status(string)
 - forms:
   - primary key: id
-  - fields: contact_list_id(), form_html(), form_title(), form_type(), id(), list_id(), signup_count()
+  - fields: contact_list_id(string), form_html(string), form_title(string), form_type(string), id(string), list_id(string), signup_count(string)
 - contacts:
   - primary key: id
-  - fields: confirmed(), email(), first_name(), id(), image_url(), last_name(), list_id()
+  - fields: confirmed(string), email(string), first_name(string), id(string), image_url(string), last_name(string), list_id(string)
 
 ## Sync Modes
 

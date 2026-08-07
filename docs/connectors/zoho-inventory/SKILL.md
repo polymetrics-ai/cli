@@ -46,15 +46,15 @@ Reads Zoho Inventory contacts, items, and sales orders through the Zoho Inventor
 - contacts:
   - primary key: id
   - cursor: updated_at
-  - fields: company_name(), contact_id(), contact_name(), contact_type(), created_time(), currency_code(), email(), id(), last_modified_time(), outstanding_receivable_amount(), phone(), status(), updated_at()
+  - fields: company_name(string), contact_id(string), contact_name(string), contact_type(string), created_time(string), currency_code(string), email(string), id(string), last_modified_time(string), outstanding_receivable_amount(number), phone(string), status(string), updated_at(string)
 - items:
   - primary key: id
   - cursor: updated_at
-  - fields: created_time(), description(), id(), item_id(), item_name(), last_modified_time(), name(), rate(), sku(), status(), unit(), updated_at()
+  - fields: created_time(string), description(string), id(string), item_id(string), item_name(string), last_modified_time(string), name(string), rate(number), sku(string), status(string), unit(string), updated_at(string)
 - salesorders:
   - primary key: id
   - cursor: updated_at
-  - fields: balance(), created_time(), currency_code(), customer_id(), customer_name(), date(), id(), last_modified_time(), salesorder_id(), salesorder_number(), shipment_date(), status(), total(), updated_at()
+  - fields: balance(number), created_time(string), currency_code(string), customer_id(string), customer_name(string), date(string), id(string), last_modified_time(string), salesorder_id(string), salesorder_number(string), shipment_date(string), status(string), total(number), updated_at(string)
 
 ## Sync Modes
 

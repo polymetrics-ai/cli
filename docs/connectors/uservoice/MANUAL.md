@@ -41,38 +41,38 @@ ETL STREAMS
   suggestions:
     primary key: id
     cursor: created_at
-    fields: created_at(), id(), state(), title()
+    fields: created_at(string), id(string), state(string), title(string)
   forums:
     primary key: id
     cursor: updated_at
-    fields: categories_count(), created_at(), id(), is_default(), is_open(), is_private(), is_public(), moderation_enabled(), name(), open_suggestions_count(), suggestions_count(), updated_at()
+    fields: categories_count(integer), created_at(string), id(integer), is_default(boolean), is_open(boolean), is_private(boolean), is_public(boolean), moderation_enabled(boolean), name(string), open_suggestions_count(integer), suggestions_count(integer), updated_at(string)
   users:
     primary key: id
     cursor: updated_at
-    fields: avatar_url(), created_at(), email_address(), guid(), id(), is_admin(), is_owner(), name(), state(), updated_at()
+    fields: avatar_url(string), created_at(string), email_address(string), guid(string), id(integer), is_admin(boolean), is_owner(boolean), name(string), state(string), updated_at(string)
   categories:
     primary key: id
     cursor: updated_at
-    fields: created_at(), id(), name(), open_suggestions_count(), position(), suggestions_count(), updated_at()
+    fields: created_at(string), id(integer), name(string), open_suggestions_count(integer), position(integer), suggestions_count(integer), updated_at(string)
   statuses:
     primary key: id
     cursor: updated_at
-    fields: allow_comments(), created_at(), hex_color(), id(), is_default(), is_open(), name(), position(), updated_at()
+    fields: allow_comments(boolean), created_at(string), hex_color(string), id(integer), is_default(boolean), is_open(boolean), name(string), position(integer), updated_at(string)
   labels:
     primary key: id
     cursor: updated_at
-    fields: can_recommend(), created_at(), full_name(), id(), level(), name(), open_suggestions_count(), updated_at()
+    fields: can_recommend(boolean), created_at(string), full_name(string), id(integer), level(integer), name(string), open_suggestions_count(integer), updated_at(string)
   comments:
     primary key: id
     cursor: updated_at
-    fields: body(), body_mime_type(), created_at(), id(), inappropriate_flags_count(), is_admin_comment(), state(), updated_at()
+    fields: body(string), body_mime_type(string), created_at(string), id(integer), inappropriate_flags_count(integer), is_admin_comment(boolean), state(string), updated_at(string)
   notes:
     primary key: id
     cursor: updated_at
-    fields: body(), body_mime_type(), created_at(), id(), reply_count(), updated_at()
+    fields: body(string), body_mime_type(string), created_at(string), id(integer), reply_count(integer), updated_at(string)
   teams:
     primary key: id
-    fields: id(), members_count(), name()
+    fields: id(integer), members_count(integer), name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

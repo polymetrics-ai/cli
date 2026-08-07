@@ -37,31 +37,31 @@ Reads BoldSign documents, templates, teams, contacts, brands, users, contact gro
 - documents:
   - primary key: document_id
   - cursor: created_date
-  - fields: created_date(), document_id(), enable_signing_order(), expiry_date(), is_deleted(), labels(), message_title(), sender_detail(), sender_email(), signer_details(), status()
+  - fields: created_date(integer), document_id(string), enable_signing_order(boolean), expiry_date(integer), is_deleted(boolean), labels(array), message_title(string), sender_detail(object), sender_email(string), signer_details(array), status(string)
 - templates:
   - primary key: document_id
   - cursor: created_date
-  - fields: created_date(), document_id(), is_shared_template(), labels(), sender_email(), template_description(), template_name()
+  - fields: created_date(integer), document_id(string), is_shared_template(boolean), labels(array), sender_email(string), template_description(string), template_name(string)
 - teams:
   - primary key: team_id
   - cursor: created_date
-  - fields: created_date(), team_id(), team_name(), users()
+  - fields: created_date(integer), team_id(string), team_name(string), users(array)
 - contacts:
   - primary key: id
-  - fields: company_name(), email(), id(), name(), phone_number()
+  - fields: company_name(string), email(string), id(string), name(string), phone_number(object)
 - brands:
   - primary key: brand_id
-  - fields: background_color(), brand_id(), brand_name(), button_color(), is_default()
+  - fields: background_color(string), brand_id(string), brand_name(string), button_color(string), is_default(boolean)
 - users:
   - primary key: user_id
   - cursor: created_date
-  - fields: created_date(), email(), first_name(), last_name(), meta_data(), modified_date(), role(), team_id(), team_name(), user_id(), user_status()
+  - fields: created_date(integer), email(string), first_name(string), last_name(string), meta_data(object), modified_date(integer), role(string), team_id(string), team_name(string), user_id(string), user_status(string)
 - contact_groups:
   - primary key: group_id
-  - fields: contacts(), directories(), group_id(), group_name()
+  - fields: contacts(array), directories(array), group_id(string), group_name(string)
 - sender_identities:
   - primary key: id
-  - fields: approved_date(), brand_id(), created_by(), email(), id(), meta_data(), name(), notification_settings(), redirect_url(), status()
+  - fields: approved_date(string), brand_id(string), created_by(string), email(string), id(string), meta_data(object), name(string), notification_settings(object), redirect_url(string), status(string)
 
 ## Sync Modes
 

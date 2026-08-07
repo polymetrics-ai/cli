@@ -38,13 +38,13 @@ Reads District of Columbia Master Address Repository (MAR 2) locations, units, a
 
 - locations:
   - primary key: MarId
-  - fields: AddrNum(), Anc(), CensusTract(), FullAddress(), Latitude(), Longitude(), MarId(), Quadrant(), ResidenceType(), SSL(), StName(), Status(), Ward(), Xcoord(), Ycoord(), Zipcode(), distance()
+  - fields: AddrNum(string), Anc(string), CensusTract(string), FullAddress(string), Latitude(number), Longitude(number), MarId(string), Quadrant(string), ResidenceType(string), SSL(string), StName(string), Status(string), Ward(string), Xcoord(number), Ycoord(number), Zipcode(string), distance(number)
 - units:
   - primary key: UnitNum
-  - fields: FullAddress(), MarId(), Status(), UnitNum(), UnitSSL(), UnitType()
+  - fields: FullAddress(string), MarId(string), Status(string), UnitNum(string), UnitSSL(string), UnitType(string)
 - ssls:
   - primary key: SSL
-  - fields: Col(), FullAddress(), Lot(), Lot_type(), MarId(), SSL(), Square()
+  - fields: Col(string), FullAddress(string), Lot(string), Lot_type(string), MarId(string), SSL(string), Square(string)
 
 ## Sync Modes
 

@@ -66487,7 +66487,7 @@
   {
     "name": "gorgias",
     "display_name": "Gorgias",
-    "description": "Reads Gorgias helpdesk tickets, customers, messages, and satisfaction surveys through the Gorgias REST API (read-only).",
+    "description": "Reads Gorgias helpdesk tickets, customers, messages, and satisfaction surveys through the Gorgias REST API; executes bounded direct reads and a file download across the account, custom fields, events, integrations, jobs, macros, metric cards, phone, rules, search, statistics, tags, teams, users, views, and widgets surface; models Gorgias mutations and a multipart file upload as typed reverse-ETL actions.",
     "integration_type": "api",
     "docs_url": "https://developers.gorgias.com/reference",
     "release_stage": "ga",
@@ -66495,7 +66495,7 @@
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -66583,8 +66583,458 @@
         ]
       }
     ],
+    "write_actions": [
+      {
+        "name": "create_account_setting",
+        "kind": "create",
+        "method": "POST",
+        "path": "/account/settings",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "update_account_setting",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/account/settings/{{ record.id }}",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "create_custom_field",
+        "kind": "create",
+        "method": "POST",
+        "path": "/custom-fields",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "update_custom_field",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/custom-fields/{{ record.id }}",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "update_custom_fields",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/custom-fields",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "create_customer",
+        "kind": "create",
+        "method": "POST",
+        "path": "/customers",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "update_customer",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/customers/{{ record.id }}",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "merge_customers",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/customers/merge",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "update_customer_custom_field_values",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/customers/{{ record.customer_id }}/custom-fields",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "update_customer_data",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/customers/{{ record.customer_id }}/data",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "delete_customer",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/customers/{{ record.id }}",
+        "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_customers",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/customers",
+        "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_integration",
+        "kind": "create",
+        "method": "POST",
+        "path": "/integrations",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "update_integration",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/integrations/{{ record.id }}",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "delete_integration",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/integrations/{{ record.id }}",
+        "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_job",
+        "kind": "create",
+        "method": "POST",
+        "path": "/jobs",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "update_job",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/jobs/{{ record.id }}",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "cancel_job",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/jobs/{{ record.id }}",
+        "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_macro",
+        "kind": "create",
+        "method": "POST",
+        "path": "/macros",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "update_macro",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/macros/{{ record.id }}",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "delete_macro",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/macros/{{ record.id }}",
+        "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "bulk_archive_macros",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/macros/archive",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "bulk_unarchive_macros",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/macros/unarchive",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "create_metric_card_feedback",
+        "kind": "create",
+        "method": "POST",
+        "path": "/metric-cards/{{ record.slug }}/feedback",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "delete_voice_call_recording",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/phone/voice-call-recordings/{{ record.id }}",
+        "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_rule",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rules",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "update_rule",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rules/{{ record.id }}",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "delete_rule",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rules/{{ record.id }}",
+        "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_rules_priorities",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rules/priorities",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "create_satisfaction_survey",
+        "kind": "create",
+        "method": "POST",
+        "path": "/satisfaction-surveys",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "update_satisfaction_survey",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/satisfaction-surveys/{{ record.id }}",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "create_tag",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tags",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "update_tag",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/tags/{{ record.id }}",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "delete_tag",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/tags/{{ record.id }}",
+        "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_tags",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/tags",
+        "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "merge_tags",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/tags/{{ record.destination_tag_id }}/merge",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "create_team",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teams",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "update_team",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/teams/{{ record.id }}",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "delete_team",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/teams/{{ record.id }}",
+        "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_ticket",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tickets",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "update_ticket",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/tickets/{{ record.id }}",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "delete_ticket",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/tickets/{{ record.id }}",
+        "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_ticket_custom_fields",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/tickets/{{ record.ticket_id }}/custom-fields",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "delete_ticket_custom_field",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/tickets/{{ record.ticket_id }}/custom-fields/{{ record.id }}",
+        "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_ticket_message",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tickets/{{ record.ticket_id }}/messages",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "update_ticket_message",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/tickets/{{ record.ticket_id }}/messages/{{ record.id }}",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "delete_ticket_message",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/tickets/{{ record.ticket_id }}/messages/{{ record.id }}",
+        "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_ticket_tags",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tickets/{{ record.ticket_id }}/tags",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "update_ticket_tags",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/tickets/{{ record.ticket_id }}/tags",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "delete_ticket_tags",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/tickets/{{ record.ticket_id }}/tags",
+        "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_user",
+        "kind": "create",
+        "method": "POST",
+        "path": "/users",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "update_user",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/users/{{ record.id }}",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "delete_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/users/{{ record.id }}",
+        "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_view",
+        "kind": "create",
+        "method": "POST",
+        "path": "/views",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "update_view",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/views/{{ record.id }}",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "delete_view",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/views/{{ record.id }}",
+        "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_widget",
+        "kind": "create",
+        "method": "POST",
+        "path": "/widgets",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "update_widget",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/widgets/{{ record.id }}",
+        "risk": "medium: mutates Gorgias API state; requires reverse ETL approval"
+      },
+      {
+        "name": "delete_widget",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/widgets/{{ record.id }}",
+        "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_customer_custom_field_value",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/customers/{{ record.customer_id }}/custom-fields/{{ record.id }}",
+        "risk": "high: removes Gorgias state; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "upload_file",
+        "kind": "create",
+        "method": "POST",
+        "path": "/upload",
+        "risk": "high: uploads a local file's bytes to Gorgias file storage; file path/content are redacted in plans and require reverse ETL approval",
+        "confirm": "destructive"
+      }
+    ],
     "risk": {
-      "read": "external Gorgias API read of helpdesk tickets, customers, messages, and satisfaction surveys"
+      "read": "external Gorgias API read of helpdesk tickets, customers, messages, satisfaction surveys, and bounded direct reads across account, custom field, event, integration, job, macro, metric card, phone, rule, search, statistics, tag, team, user, view, and widget resources; a bounded file download follows the provider's cross-host storage redirect without forwarding the connector credential",
+      "write": "typed Gorgias reverse ETL mutations for tickets, customers, users, teams, tags, views, macros, rules, widgets, integrations, jobs, account settings, custom fields, satisfaction surveys, and a multipart file upload",
+      "approval": "reverse ETL writes require plan, preview, approval, execute; destructive actions require --confirm destructive"
     },
     "icon": {
       "id": "pm-sample",

@@ -36,50 +36,50 @@ CONFIGURATION
 ETL STREAMS
   collections:
     primary key: id
-    fields: displayName(), id(), slug()
+    fields: displayName(string), id(string), slug(string)
   pages:
     primary key: id
-    fields: id(), slug(), title()
+    fields: id(string), slug(string), title(string)
   forms:
     primary key: id
-    fields: createdOn(), displayName(), id()
+    fields: createdOn(string), displayName(string), id(string)
   sites:
     primary key: id
-    fields: createdOn(), displayName(), id(), lastPublished(), lastUpdated(), parentFolderId(), shortName(), timeZone(), workspaceId()
+    fields: createdOn(string), displayName(string), id(string), lastPublished(string), lastUpdated(string), parentFolderId(string), shortName(string), timeZone(string), workspaceId(string)
   assets:
     primary key: id
-    fields: altText(), contentType(), createdOn(), displayName(), hostedUrl(), id(), lastUpdated(), originalFileName(), siteId(), size()
+    fields: altText(string), contentType(string), createdOn(string), displayName(string), hostedUrl(string), id(string), lastUpdated(string), originalFileName(string), siteId(string), size(integer)
   webhooks:
     primary key: id
-    fields: createdOn(), filter(), id(), lastTriggered(), siteId(), triggerType(), url(), workspaceId()
+    fields: createdOn(string), filter(object), id(string), lastTriggered(string), siteId(string), triggerType(string), url(string), workspaceId(string)
   redirects:
     primary key: id
-    fields: fromUrl(), id(), toUrl()
+    fields: fromUrl(string), id(string), toUrl(string)
   form_submissions:
     primary key: id
-    fields: dateSubmitted(), displayName(), formId(), formResponse(), id(), localeId(), siteId(), workspaceId()
+    fields: dateSubmitted(string), displayName(string), formId(string), formResponse(object), id(string), localeId(string), siteId(string), workspaceId(string)
   orders:
     primary key: orderId
-    fields: acceptedOn(), comment(), customerInfo(), customerPaymentDetails(), fulfilledOn(), orderComment(), orderId(), purchasedItems(), refundedOn(), shippingAddress(), status()
+    fields: acceptedOn(string), comment(string), customerInfo(object), customerPaymentDetails(object), fulfilledOn(string), orderComment(string), orderId(string), purchasedItems(array), refundedOn(string), shippingAddress(object), status(string)
   products:
     primary key: product_id
-    fields: product(), product_id(), skus()
+    fields: product(object), product_id(string), skus(array)
   custom_domains:
     primary key: id
-    fields: id(), lastPublished(), url()
+    fields: id(string), lastPublished(string), url(string)
   components:
     primary key: id
-    fields: description(), group(), id(), name(), readonly()
+    fields: description(string), group(string), id(string), name(string), readonly(boolean)
   asset_folders:
     primary key: id
-    fields: assets(), createdOn(), displayName(), id(), parentFolder(), siteId()
+    fields: assets(array), createdOn(string), displayName(string), id(string), parentFolder(string), siteId(string)
   ecommerce_settings:
     primary key: siteId
-    fields: createdOn(), defaultCurrency(), siteId()
+    fields: createdOn(string), defaultCurrency(string), siteId(string)
   collection_items:
     primary key: id
     cursor: lastUpdated
-    fields: cmsLocaleId(), collectionId(), createdOn(), fieldData(), id(), isArchived(), isDraft(), lastPublished(), lastUpdated()
+    fields: cmsLocaleId(string), collectionId(string), createdOn(string), fieldData(object), id(string), isArchived(boolean), isDraft(boolean), lastPublished(string), lastUpdated(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

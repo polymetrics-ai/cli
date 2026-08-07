@@ -39,30 +39,30 @@ Reads ConvertKit (Kit) subscribers, forms, sequences, tags, broadcasts, custom f
 - subscribers:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), email_address(), first_name(), id(), state()
+  - fields: created_at(string), email_address(string), first_name(string), id(integer), state(string)
 - forms:
   - primary key: id
   - cursor: created_at
-  - fields: archived(), created_at(), format(), id(), name(), type()
+  - fields: archived(boolean), created_at(string), format(string), id(integer), name(string), type(string)
 - sequences:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), hold(), id(), name(), repeat()
+  - fields: created_at(string), hold(boolean), id(integer), name(string), repeat(boolean)
 - tags:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), id(), name()
+  - fields: created_at(string), id(integer), name(string)
 - broadcasts:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), description(), id(), public(), published_at(), subject()
+  - fields: created_at(string), description(string), id(integer), public(boolean), published_at(string), subject(string)
 - custom_fields:
   - primary key: id
-  - fields: id(), key(), label(), name()
+  - fields: id(integer), key(string), label(string), name(string)
 - purchases:
   - primary key: id
   - cursor: transaction_time
-  - fields: currency(), discount(), email_address(), id(), shipping(), status(), subtotal(), tax(), total(), transaction_id(), transaction_time()
+  - fields: currency(string), discount(string), email_address(string), id(integer), shipping(string), status(string), subtotal(string), tax(string), total(string), transaction_id(string), transaction_time(string)
 
 ## Sync Modes
 

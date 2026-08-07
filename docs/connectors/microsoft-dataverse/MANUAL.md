@@ -41,19 +41,19 @@ CONFIGURATION
 ETL STREAMS
   accounts:
     primary key: id
-    fields: created_on(), email(), id(), modified_on(), name()
+    fields: created_on(string), email(string), id(string), modified_on(string), name(string)
   contacts:
     primary key: id
-    fields: created_on(), email(), id(), modified_on(), name()
+    fields: created_on(string), email(string), id(string), modified_on(string), name(string)
   leads:
     primary key: id
-    fields: created_on(), email(), id(), modified_on(), name()
+    fields: created_on(string), email(string), id(string), modified_on(string), name(string)
   opportunities:
     primary key: id
-    fields: created_on(), email(), id(), modified_on(), name()
+    fields: created_on(string), email(string), id(string), modified_on(string), name(string)
   systemusers:
     primary key: id
-    fields: created_on(), email(), id(), modified_on(), name()
+    fields: created_on(string), email(string), id(string), modified_on(string), name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

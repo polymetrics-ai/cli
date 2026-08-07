@@ -35,19 +35,19 @@ CONFIGURATION
 ETL STREAMS
   organizations:
     primary key: identifier
-    fields: account_identifier(), description(), identifier(), name()
+    fields: account_identifier(string), description(string), identifier(string), name(string)
   projects:
     primary key: identifier
-    fields: account_identifier(), color(), description(), identifier(), modules(), name(), org_identifier()
+    fields: account_identifier(string), color(string), description(string), identifier(string), modules(array), name(string), org_identifier(string)
   services:
     primary key: identifier
-    fields: account_identifier(), deleted(), description(), identifier(), name(), org_identifier(), project_identifier()
+    fields: account_identifier(string), deleted(boolean), description(string), identifier(string), name(string), org_identifier(string), project_identifier(string)
   connectors:
     primary key: identifier
-    fields: description(), identifier(), name(), org_identifier(), project_identifier(), type()
+    fields: description(string), identifier(string), name(string), org_identifier(string), project_identifier(string), type(string)
   pipelines:
     primary key: identifier
-    fields: description(), identifier(), name(), org_identifier(), project_identifier(), stage_count()
+    fields: description(string), identifier(string), name(string), org_identifier(string), project_identifier(string), stage_count(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

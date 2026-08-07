@@ -42,31 +42,31 @@ Reads Bitly organizations, groups, campaigns, channels, bitlinks, branded short 
 
 - organizations:
   - primary key: guid
-  - fields: created(), guid(), is_active(), modified(), name(), role(), tier(), tier_display_name(), tier_family()
+  - fields: created(string), guid(string), is_active(boolean), modified(string), name(string), role(string), tier(string), tier_display_name(string), tier_family(string)
 - groups:
   - primary key: guid
-  - fields: bsds(), created(), guid(), is_active(), modified(), name(), organization_guid(), role()
+  - fields: bsds(array), created(string), guid(string), is_active(boolean), modified(string), name(string), organization_guid(string), role(string)
 - campaigns:
   - primary key: guid
-  - fields: channel_guids(), created(), description(), group_guid(), guid(), modified(), name()
+  - fields: channel_guids(array), created(string), description(string), group_guid(string), guid(string), modified(string), name(string)
 - channels:
   - primary key: guid
-  - fields: bitlinks(), campaign_guid(), created(), group_guid(), guid(), modified(), name()
+  - fields: bitlinks(array), campaign_guid(string), created(string), group_guid(string), guid(string), modified(string), name(string)
 - bsds:
   - primary key: account
-  - fields: account(), bsds()
+  - fields: account(string), bsds(array)
 - webhooks:
   - primary key: guid
-  - fields: campaign_guid(), client_id(), created(), event(), group_guid(), guid(), is_active(), modified(), updated_by(), url()
+  - fields: campaign_guid(string), client_id(string), created(string), event(string), group_guid(string), guid(string), is_active(boolean), modified(string), updated_by(string), url(string)
 - qr_codes:
   - primary key: qrcode_id
-  - fields: archived(), bitlink_id(), created(), created_by(), destination(), expiration_at(), group_guid(), is_customized(), modified(), qr_code_type(), qrcode_id(), tags(), title()
+  - fields: archived(boolean), bitlink_id(string), created(string), created_by(string), destination(object), expiration_at(string), group_guid(string), is_customized(boolean), modified(string), qr_code_type(string), qrcode_id(string), tags(array), title(string)
 - group_tags:
   - primary key: group_guid
-  - fields: group_guid(), tags()
+  - fields: group_guid(string), tags(array)
 - bitlinks:
   - primary key: id
-  - fields: archived(), created_at(), deeplinks(), id(), link(), long_url(), references(), tags(), title()
+  - fields: archived(boolean), created_at(string), deeplinks(array), id(string), link(string), long_url(string), references(object), tags(array), title(string)
 
 ## Sync Modes
 

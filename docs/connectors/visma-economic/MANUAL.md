@@ -35,63 +35,63 @@ CONFIGURATION
 ETL STREAMS
   customers:
     primary key: id
-    fields: currency(), id(), name()
+    fields: currency(string), id(string), name(string)
   suppliers:
     primary key: id
     cursor: lastUpdated
-    fields: address(), balance(), city(), corporateIdentificationNumber(), country(), currency(), ean(), email(), id(), lastUpdated(), name(), telephoneAndFaxNumber(), vatNumber(), zip()
+    fields: address(string), balance(number), city(string), corporateIdentificationNumber(string), country(string), currency(string), ean(string), email(string), id(integer), lastUpdated(string), name(string), telephoneAndFaxNumber(string), vatNumber(string), zip(string)
   products:
     primary key: id
     cursor: lastUpdated
-    fields: barred(), costPrice(), description(), id(), lastUpdated(), name(), salesPrice()
+    fields: barred(boolean), costPrice(number), description(string), id(string), lastUpdated(string), name(string), salesPrice(number)
   invoices_booked:
     primary key: id
     cursor: lastUpdated
-    fields: currency(), date(), dueDate(), grossAmount(), id(), lastUpdated(), netAmount(), paymentTerms(), vatAmount()
+    fields: currency(string), date(string), dueDate(string), grossAmount(number), id(integer), lastUpdated(string), netAmount(number), paymentTerms(object), vatAmount(number)
   invoices_drafts:
     primary key: id
     cursor: lastUpdated
-    fields: currency(), date(), dueDate(), grossAmount(), id(), lastUpdated(), netAmount(), notes(), paymentTerms(), references(), vatAmount()
+    fields: currency(string), date(string), dueDate(string), grossAmount(number), id(integer), lastUpdated(string), netAmount(number), notes(object), paymentTerms(object), references(object), vatAmount(number)
   orders_drafts:
     primary key: id
     cursor: lastUpdated
-    fields: currency(), date(), grossAmount(), id(), lastUpdated(), netAmount(), notes(), references(), vatAmount()
+    fields: currency(string), date(string), grossAmount(number), id(integer), lastUpdated(string), netAmount(number), notes(object), references(object), vatAmount(number)
   orders_sent:
     primary key: id
     cursor: lastUpdated
-    fields: currency(), date(), grossAmount(), id(), lastUpdated(), netAmount(), notes(), references(), vatAmount()
+    fields: currency(string), date(string), grossAmount(number), id(integer), lastUpdated(string), netAmount(number), notes(object), references(object), vatAmount(number)
   quotes_drafts:
     primary key: id
     cursor: lastUpdated
-    fields: currency(), date(), grossAmount(), id(), lastUpdated(), netAmount(), notes(), references(), vatAmount()
+    fields: currency(string), date(string), grossAmount(number), id(integer), lastUpdated(string), netAmount(number), notes(object), references(object), vatAmount(number)
   quotes_sent:
     primary key: id
     cursor: lastUpdated
-    fields: currency(), date(), grossAmount(), id(), lastUpdated(), netAmount(), notes(), references(), vatAmount()
+    fields: currency(string), date(string), grossAmount(number), id(integer), lastUpdated(string), netAmount(number), notes(object), references(object), vatAmount(number)
   departments:
     primary key: id
-    fields: id(), name()
+    fields: id(integer), name(string)
   payment_terms:
     primary key: id
-    fields: duration(), id(), name(), paymentTermsType()
+    fields: duration(integer), id(integer), name(string), paymentTermsType(string)
   units:
     primary key: id
-    fields: id(), name()
+    fields: id(integer), name(string)
   vat_types:
     primary key: id
-    fields: accountingApplication(), id(), name(), vatPercentage()
+    fields: accountingApplication(string), id(integer), name(string), vatPercentage(number)
   vat_zones:
     primary key: id
-    fields: enabledForCustomer(), enabledForSupplier(), id(), name()
+    fields: enabledForCustomer(boolean), enabledForSupplier(boolean), id(integer), name(string)
   accounts:
     primary key: id
-    fields: accountType(), balance(), blocked(), id(), name()
+    fields: accountType(string), balance(number), blocked(boolean), id(integer), name(string)
   customer_groups:
     primary key: id
-    fields: accountNumber(), id(), name()
+    fields: accountNumber(integer), id(integer), name(string)
   product_groups:
     primary key: id
-    fields: id(), name(), salesAccount()
+    fields: id(integer), name(string), salesAccount(object)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

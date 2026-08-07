@@ -36,34 +36,34 @@ CONFIGURATION
 ETL STREAMS
   spaces:
     primary key: id
-    fields: authorId(), createdAt(), homepageId(), id(), key(), name(), status(), type()
+    fields: authorId(string), createdAt(string), homepageId(string), id(string), key(string), name(string), status(string), type(string)
   pages:
     primary key: id
     cursor: createdAt
-    fields: authorId(), createdAt(), id(), parentId(), spaceId(), status(), title(), version()
+    fields: authorId(string), createdAt(string), id(string), parentId(string), spaceId(string), status(string), title(string), version(integer)
   blogposts:
     primary key: id
     cursor: createdAt
-    fields: authorId(), createdAt(), id(), spaceId(), status(), title(), version()
+    fields: authorId(string), createdAt(string), id(string), spaceId(string), status(string), title(string), version(integer)
   labels:
     primary key: id
-    fields: id(), name(), prefix()
+    fields: id(string), name(string), prefix(string)
   attachments:
     primary key: id
     cursor: createdAt
-    fields: createdAt(), fileSize(), id(), mediaType(), pageId(), status(), title()
+    fields: createdAt(string), fileSize(integer), id(string), mediaType(string), pageId(string), status(string), title(string)
   footer_comments:
     primary key: id
-    fields: blogPostId(), id(), pageId(), parentCommentId(), status(), title(), version()
+    fields: blogPostId(string), id(string), pageId(string), parentCommentId(string), status(string), title(string), version(integer)
   inline_comments:
     primary key: id
-    fields: blogPostId(), id(), pageId(), parentCommentId(), resolutionStatus(), status(), title(), version()
+    fields: blogPostId(string), id(string), pageId(string), parentCommentId(string), resolutionStatus(string), status(string), title(string), version(integer)
   tasks:
     primary key: id
-    fields: assignedTo(), blogPostId(), completedAt(), completedBy(), createdAt(), createdBy(), dueAt(), id(), localId(), pageId(), spaceId(), status(), updatedAt()
+    fields: assignedTo(string), blogPostId(string), completedAt(string), completedBy(string), createdAt(string), createdBy(string), dueAt(string), id(string), localId(string), pageId(string), spaceId(string), status(string), updatedAt(string)
   custom_content:
     primary key: id
-    fields: authorId(), blogPostId(), createdAt(), id(), pageId(), spaceId(), status(), title(), type(), version()
+    fields: authorId(string), blogPostId(string), createdAt(string), id(string), pageId(string), spaceId(string), status(string), title(string), type(string), version(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

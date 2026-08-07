@@ -37,16 +37,16 @@ ETL STREAMS
   time_series:
     primary key: symbol, datetime
     cursor: datetime
-    fields: close(), datetime(), high(), low(), open(), symbol(), volume()
+    fields: close(string), datetime(string), high(string), low(string), open(string), symbol(string), volume(string)
   quote:
     primary key: symbol
-    fields: close(), currency(), name(), symbol()
+    fields: close(string), currency(string), name(string), symbol(string)
   stocks:
     primary key: symbol
-    fields: currency(), name(), symbol()
+    fields: currency(string), name(string), symbol(string)
   forex_pairs:
     primary key: symbol
-    fields: currency(), name(), symbol()
+    fields: currency(string), name(string), symbol(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

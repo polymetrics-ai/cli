@@ -40,11 +40,11 @@ ETL STREAMS
   lists:
     primary key: id
     cursor: lastModifiedDateTime
-    fields: displayName(), id(), lastModifiedDateTime(), name()
+    fields: displayName(string), id(string), lastModifiedDateTime(string), name(string)
   list_items:
     primary key: id
     cursor: lastModifiedDateTime
-    fields: fields(), id(), lastModifiedDateTime()
+    fields: fields(object), id(string), lastModifiedDateTime(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

@@ -37,18 +37,18 @@ Reads Dwolla customers, events, exchange partners, and business classifications,
 - customers:
   - primary key: id
   - cursor: created
-  - fields: businessName(), created(), email(), firstName(), id(), lastName(), status(), type()
+  - fields: businessName(string), created(string), email(string), firstName(string), id(string), lastName(string), status(string), type(string)
 - events:
   - primary key: id
   - cursor: created
-  - fields: created(), id(), resourceId(), topic()
+  - fields: created(string), id(string), resourceId(string), topic(string)
 - exchange_partners:
   - primary key: id
   - cursor: created
-  - fields: created(), id(), name(), status()
+  - fields: created(string), id(string), name(string), status(string)
 - business_classifications:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 
 ## Sync Modes
 

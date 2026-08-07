@@ -37,79 +37,79 @@ Reads Braze campaigns, Canvases, segments (list + per-id details/analytics-summa
 - campaigns:
   - primary key: id
   - cursor: last_edited
-  - fields: id(), is_api_campaign(), last_edited(), name(), tags()
+  - fields: id(string), is_api_campaign(boolean), last_edited(string), name(string), tags(array)
 - canvases:
   - primary key: id
   - cursor: last_edited
-  - fields: id(), last_edited(), name(), tags()
+  - fields: id(string), last_edited(string), name(string), tags(array)
 - segments:
   - primary key: id
-  - fields: analytics_tracking_enabled(), id(), name(), tags()
+  - fields: analytics_tracking_enabled(boolean), id(string), name(string), tags(array)
 - campaign_details:
   - primary key: campaign_id
-  - fields: archived(), campaign_id(), channels(), conversion_behaviors(), created_at(), description(), draft(), enabled(), first_sent(), has_post_launch_draft(), last_sent(), message(), messages(), name(), schedule_type(), tags(), teams(), updated_at()
+  - fields: archived(boolean), campaign_id(string), channels(string), conversion_behaviors(array), created_at(string), description(string), draft(boolean), enabled(boolean), first_sent(string), has_post_launch_draft(boolean), last_sent(string), message(string), messages(object), name(string), schedule_type(string), tags(string), teams(string), updated_at(string)
 - canvas_details:
   - primary key: canvas_id
-  - fields: archived(), canvas_id(), channels(), created_at(), description(), draft(), enabled(), first_entry(), last_entry(), message(), name(), schedule_type(), steps(), tags(), teams(), updated_at(), variants()
+  - fields: archived(boolean), canvas_id(string), channels(array), created_at(string), description(string), draft(boolean), enabled(boolean), first_entry(string), last_entry(string), message(string), name(string), schedule_type(string), steps(array), tags(string), teams(string), updated_at(string), variants(array)
 - canvas_data_summary:
   - primary key: canvas_id
-  - fields: canvas_id(), data(), message(), name()
+  - fields: canvas_id(string), data(array), message(string), name(string)
 - segment_details:
   - primary key: segment_id
-  - fields: created_at(), description(), message(), name(), segment_id(), tags(), text_description(), updated_at()
+  - fields: created_at(string), description(string), message(string), name(string), segment_id(string), tags(array), text_description(string), updated_at(string)
 - catalogs:
   - primary key: name
-  - fields: description(), fields(), name(), num_items(), updated_at()
+  - fields: description(string), fields(array), name(string), num_items(integer), updated_at(string)
 - content_blocks:
   - primary key: content_block_id
   - cursor: last_edited
-  - fields: content_block_id(), content_type(), created_at(), inclusion_count(), last_edited(), liquid_tag(), name(), tags()
+  - fields: content_block_id(string), content_type(string), created_at(string), inclusion_count(integer), last_edited(string), liquid_tag(string), name(string), tags(array)
 - email_templates:
   - primary key: email_template_id
   - cursor: updated_at
-  - fields: created_at(), email_template_id(), tags(), template_name(), updated_at()
+  - fields: created_at(string), email_template_id(string), tags(string), template_name(string), updated_at(string)
 - feed_cards:
   - primary key: id
-  - fields: id(), tags(), title(), type()
+  - fields: id(string), tags(array), title(string), type(string)
 - email_hard_bounces:
   - primary key: email, hard_bounced_at
   - cursor: hard_bounced_at
-  - fields: email(), hard_bounced_at()
+  - fields: email(string), hard_bounced_at(string)
 - email_unsubscribes:
   - primary key: email, unsubscribed_at
   - cursor: unsubscribed_at
-  - fields: email(), unsubscribed_at()
+  - fields: email(string), unsubscribed_at(string)
 - sms_invalid_phone_numbers:
   - primary key: phone, invalid_detected_at
   - cursor: invalid_detected_at
-  - fields: invalid_detected_at(), phone(), reason()
+  - fields: invalid_detected_at(string), phone(string), reason(string)
 - kpi_dau:
   - primary key: time
   - cursor: time
-  - fields: dau(), time()
+  - fields: dau(integer), time(string)
 - kpi_mau:
   - primary key: time
   - cursor: time
-  - fields: mau(), time()
+  - fields: mau(integer), time(string)
 - kpi_new_users:
   - primary key: time
   - cursor: time
-  - fields: new_users(), time()
+  - fields: new_users(integer), time(string)
 - kpi_uninstalls:
   - primary key: time
   - cursor: time
-  - fields: time(), uninstalls()
+  - fields: time(string), uninstalls(integer)
 - sessions:
   - primary key: time
   - cursor: time
-  - fields: sessions(), time()
+  - fields: sessions(integer), time(string)
 - preference_centers:
   - primary key: preference_center_api_id
   - cursor: updated_at
-  - fields: created_at(), name(), preference_center_api_id(), updated_at()
+  - fields: created_at(string), name(string), preference_center_api_id(string), updated_at(string)
 - scheduled_broadcasts:
   - primary key: id, next_send_time
-  - fields: id(), name(), next_send_time(), schedule_type(), tags(), type()
+  - fields: id(string), name(string), next_send_time(string), schedule_type(string), tags(string), type(string)
 
 ## Sync Modes
 

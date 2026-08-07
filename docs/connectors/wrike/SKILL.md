@@ -39,14 +39,14 @@ Reads Wrike tasks, folders, and contacts through the Wrike REST API. Read-only.
 - tasks:
   - primary key: id
   - cursor: updatedDate
-  - fields: id(), title(), updatedDate()
+  - fields: id(string), title(string), updatedDate(string)
 - folders:
   - primary key: id
   - cursor: updatedDate
-  - fields: id(), title(), updatedDate()
+  - fields: id(string), title(string), updatedDate(string)
 - contacts:
   - primary key: id
-  - fields: firstName(), id(), lastName()
+  - fields: firstName(string), id(string), lastName(string)
 
 ## Sync Modes
 

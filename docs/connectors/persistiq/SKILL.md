@@ -36,45 +36,45 @@ Reads PersistIQ leads, users, campaigns, mailboxes, activities, accounts, DNC do
 
 - leads:
   - primary key: id
-  - fields: email(), id(), name(), status(), updated_at()
+  - fields: email(string), id(string), name(string), status(string), updated_at(string)
 - users:
   - primary key: id
-  - fields: email(), id(), name(), status()
+  - fields: email(string), id(string), name(string), status(string)
 - campaigns:
   - primary key: id
-  - fields: email(), id(), name(), status()
+  - fields: email(string), id(string), name(string), status(string)
 - mailboxes:
   - primary key: id
-  - fields: email(), id(), name(), status()
+  - fields: email(string), id(string), name(string), status(string)
 - activities:
   - primary key: id
-  - fields: email(), id(), name(), status()
+  - fields: email(string), id(string), name(string), status(string)
 - accounts:
   - primary key: id
-  - fields: email(), id(), name(), status()
+  - fields: email(string), id(string), name(string), status(string)
 - dnc_domains:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - events:
   - primary key: id
-  - fields: created_at(), data(), event_type(), id()
+  - fields: created_at(string), data(object), event_type(string), id(string)
 - lead_fields:
   - primary key: id
-  - fields: id(), label(), name()
+  - fields: id(string), label(string), name(string)
 - lead_statuses:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - tags:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - webhook_plugin:
-  - fields: post_email_opened(), post_email_opened_url(), post_email_reply(), post_email_reply_url(), post_new_prospect(), post_new_prospect_url(), post_updated_prospect(), post_updated_prospect_url(), raw_events(), raw_events_url()
+  - fields: post_email_opened(boolean), post_email_opened_url(string), post_email_reply(boolean), post_email_reply_url(string), post_new_prospect(boolean), post_new_prospect_url(string), post_updated_prospect(boolean), post_updated_prospect_url(string), raw_events(boolean), raw_events_url(string)
 - campaign_leads:
   - primary key: id
-  - fields: campaign_id(), id(), lead(), mailbox_id()
+  - fields: campaign_id(string), id(string), lead(object), mailbox_id(string)
 - campaign_replies:
   - primary key: id
-  - fields: body(), campaign_id(), cc_emails(), from_email(), id(), kind(), lead_id(), preview(), sent_at(), sentiment(), step_message_id(), subject(), to_emails()
+  - fields: body(string), campaign_id(string), cc_emails(array), from_email(string), id(string), kind(string), lead_id(string), preview(string), sent_at(string), sentiment(string), step_message_id(string), subject(string), to_emails(array)
 
 ## Sync Modes
 

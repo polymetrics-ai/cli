@@ -35,19 +35,19 @@ ETL STREAMS
   incidents:
     primary key: id
     cursor: created_at
-    fields: created_at(), id(), incident_number(), status(), title()
+    fields: created_at(string), id(string), incident_number(integer), status(string), title(string)
   users:
     primary key: id
     cursor: created_at
-    fields: created_at(), email(), id(), name(), role()
+    fields: created_at(string), email(string), id(string), name(string), role(string)
   services:
     primary key: id
     cursor: created_at
-    fields: created_at(), description(), id(), name(), status()
+    fields: created_at(string), description(string), id(string), name(string), status(string)
   teams:
     primary key: id
     cursor: created_at
-    fields: created_at(), description(), id(), name()
+    fields: created_at(string), description(string), id(string), name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

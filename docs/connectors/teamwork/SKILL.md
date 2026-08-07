@@ -37,31 +37,31 @@ Reads Teamwork projects, people, companies, tags, time entries, tasklists, miles
 - projects:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), id(), name()
+  - fields: created_at(string), id(string), name(string)
 - people:
   - primary key: id
-  - fields: administrator(), company-id(), email-address(), first_name(), id(), last_name(), user-name()
+  - fields: administrator(boolean), company-id(string), email-address(string), first_name(string), id(string), last_name(string), user-name(string)
 - companies:
   - primary key: id
-  - fields: address_one(), id(), name(), phone(), website()
+  - fields: address_one(string), id(string), name(string), phone(string), website(string)
 - tags:
   - primary key: id
-  - fields: color(), id(), name()
+  - fields: color(string), id(string), name(string)
 - time_entries:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), date(), description(), hours(), id(), isbillable(), minutes(), person_id(), project_id(), todo_item_id()
+  - fields: created_at(string), date(string), description(string), hours(string), id(string), isbillable(string), minutes(string), person_id(string), project_id(string), todo_item_id(string)
 - tasklists:
   - primary key: id
-  - fields: complete(), description(), id(), milestone-id(), name(), project_id()
+  - fields: complete(boolean), description(string), id(string), milestone-id(string), name(string), project_id(string)
 - milestones:
   - primary key: id
   - cursor: created_at
-  - fields: completed(), created_at(), deadline(), description(), id(), project_id(), title()
+  - fields: completed(boolean), created_at(string), deadline(string), description(string), id(string), project_id(string), title(string)
 - tasks:
   - primary key: id
   - cursor: created_at
-  - fields: content(), created_at(), description(), id(), priority(), project-id(), project-name(), status(), todo-list-id(), todo-list-name()
+  - fields: content(string), created_at(string), description(string), id(string), priority(string), project-id(string), project-name(string), status(string), todo-list-id(string), todo-list-name(string)
 
 ## Sync Modes
 

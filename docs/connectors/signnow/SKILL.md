@@ -37,15 +37,15 @@ Reads signNow documents, templates, and users through the signNow REST API.
 - documents:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), updated_at()
+  - fields: id(string), name(string), updated_at(string)
 - templates:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), updated_at()
+  - fields: id(string), name(string), updated_at(string)
 - users:
   - primary key: id
   - cursor: updated_at
-  - fields: email(), id(), name(), updated_at()
+  - fields: email(string), id(string), name(string), updated_at(string)
 
 ## Sync Modes
 

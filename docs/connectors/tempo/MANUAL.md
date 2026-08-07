@@ -36,17 +36,17 @@ CONFIGURATION
 ETL STREAMS
   accounts:
     primary key: id
-    fields: global(), id(), key(), monthly_budget(), name(), status()
+    fields: global(boolean), id(integer), key(string), monthly_budget(number), name(string), status(string)
   customers:
     primary key: id
-    fields: id(), key(), name()
+    fields: id(integer), key(string), name(string)
   worklogs:
     primary key: tempo_worklog_id
     cursor: updated_at
-    fields: billable_seconds(), created_at(), description(), issue_id(), jira_worklog_id(), start_date(), start_time(), tempo_worklog_id(), time_spent_seconds(), updated_at()
+    fields: billable_seconds(integer), created_at(string), description(string), issue_id(integer), jira_worklog_id(integer), start_date(string), start_time(string), tempo_worklog_id(integer), time_spent_seconds(integer), updated_at(string)
   workload_schemes:
     primary key: id
-    fields: default_scheme(), description(), id(), name()
+    fields: default_scheme(boolean), description(string), id(integer), name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

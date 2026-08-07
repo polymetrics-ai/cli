@@ -35,34 +35,34 @@ CONFIGURATION
 ETL STREAMS
   accounts:
     primary key: id
-    fields: account_number(), account_type(), created_at(), crypto_status(), currency(), enabled_assets(), id(), kyc_results(), last_equity(), status()
+    fields: account_number(string), account_type(string), created_at(string), crypto_status(string), currency(string), enabled_assets(string), id(string), kyc_results(string), last_equity(string), status(string)
   assets:
     primary key: id
-    fields: class(), easy_to_borrow(), exchange(), fractionable(), id(), marginable(), name(), shortable(), status(), symbol(), tradable()
+    fields: class(string), easy_to_borrow(boolean), exchange(string), fractionable(boolean), id(string), marginable(boolean), name(string), shortable(boolean), status(string), symbol(string), tradable(boolean)
   calendar:
     primary key: date
-    fields: close(), date(), open(), session_close(), session_open()
+    fields: close(string), date(string), open(string), session_close(string), session_open(string)
   clock:
     primary key: timestamp
-    fields: is_open(), next_close(), next_open(), timestamp()
+    fields: is_open(boolean), next_close(string), next_open(string), timestamp(string)
   account_activities:
     primary key: id
-    fields: account_id(), activity_sub_type(), activity_type(), cum_qty(), cusip(), date(), description(), id(), leaves_qty(), net_amount(), order_id(), per_share_amount(), price(), qty(), side(), status(), symbol(), transaction_time(), type()
+    fields: account_id(string), activity_sub_type(string), activity_type(string), cum_qty(string), cusip(string), date(string), description(string), id(string), leaves_qty(string), net_amount(string), order_id(string), per_share_amount(string), price(string), qty(string), side(string), status(string), symbol(string), transaction_time(string), type(string)
   journals:
     primary key: id
-    fields: created_at(), description(), entry_type(), from_account(), id(), net_amount(), price(), qty(), settle_date(), status(), symbol(), system_date(), to_account()
+    fields: created_at(string), description(string), entry_type(string), from_account(string), id(string), net_amount(string), price(string), qty(string), settle_date(string), status(string), symbol(string), system_date(string), to_account(string)
   positions:
     primary key: id, account_id
-    fields: account_id(), asset_class(), asset_id(), avg_entry_price(), change_today(), cost_basis(), current_price(), exchange(), id(), lastday_price(), market_value(), qty(), qty_available(), side(), symbol(), unrealized_pl(), unrealized_plpc()
+    fields: account_id(string), asset_class(string), asset_id(string), avg_entry_price(string), change_today(string), cost_basis(string), current_price(string), exchange(string), id(string), lastday_price(string), market_value(string), qty(string), qty_available(string), side(string), symbol(string), unrealized_pl(string), unrealized_plpc(string)
   watchlists:
     primary key: id
-    fields: account_id(), created_at(), id(), name(), updated_at()
+    fields: account_id(string), created_at(string), id(string), name(string), updated_at(string)
   orders:
     primary key: id
-    fields: account_id(), asset_class(), canceled_at(), created_at(), filled_at(), filled_avg_price(), filled_qty(), id(), limit_price(), notional(), order_class(), order_type(), qty(), side(), status(), stop_price(), submitted_at(), symbol(), time_in_force(), type(), updated_at()
+    fields: account_id(string), asset_class(string), canceled_at(string), created_at(string), filled_at(string), filled_avg_price(string), filled_qty(string), id(string), limit_price(string), notional(string), order_class(string), order_type(string), qty(string), side(string), status(string), stop_price(string), submitted_at(string), symbol(string), time_in_force(string), type(string), updated_at(string)
   documents:
     primary key: id, account_id
-    fields: account_id(), date(), id(), name(), sub_type(), type()
+    fields: account_id(string), date(string), id(string), name(string), sub_type(string), type(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

@@ -34,11 +34,11 @@ ETL STREAMS
   podcasts:
     primary key: id
     cursor: updated_at
-    fields: id(), status(), title(), updated_at()
+    fields: id(string), status(string), title(string), updated_at(string)
   episodes:
     primary key: id
     cursor: updated_at
-    fields: id(), status(), title(), updated_at()
+    fields: id(string), status(string), title(string), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

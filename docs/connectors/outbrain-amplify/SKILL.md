@@ -46,13 +46,13 @@ Reads Outbrain Amplify marketers, campaigns, and performance reports via the Out
 
 - marketers:
   - primary key: id
-  - fields: clicks(), created_at(), enabled(), id(), impressions(), name(), spend(), status()
+  - fields: clicks(integer), created_at(string), enabled(boolean), id(string), impressions(integer), name(string), spend(number), status(string)
 - campaigns:
   - primary key: id
-  - fields: clicks(), created_at(), enabled(), id(), impressions(), name(), spend(), status()
+  - fields: clicks(integer), created_at(string), enabled(boolean), id(string), impressions(integer), name(string), spend(number), status(string)
 - performance_reports:
   - primary key: id
-  - fields: clicks(), created_at(), enabled(), id(), impressions(), name(), spend(), status()
+  - fields: clicks(integer), created_at(string), enabled(boolean), id(string), impressions(integer), name(string), spend(number), status(string)
 
 ## Sync Modes
 

@@ -35,10 +35,10 @@ CONFIGURATION
 ETL STREAMS
   coin:
     primary key: id
-    fields: categories(), hashing_algorithm(), id(), last_updated(), market_cap_rank(), market_data(), name(), symbol()
+    fields: categories(array), hashing_algorithm(string), id(string), last_updated(string), market_cap_rank(integer), market_data(object), name(string), symbol(string)
   tickers:
     primary key: coin_id, target_coin_id, market_identifier
-    fields: base(), bid_ask_spread_percentage(), coin_id(), converted_last(), converted_volume(), is_anomaly(), is_stale(), last(), last_fetch_at(), last_traded_at(), market(), market_identifier(), target(), target_coin_id(), timestamp(), trade_url(), trust_score(), volume()
+    fields: base(string), bid_ask_spread_percentage(number), coin_id(string), converted_last(object), converted_volume(object), is_anomaly(boolean), is_stale(boolean), last(number), last_fetch_at(string), last_traded_at(string), market(object), market_identifier(string), target(string), target_coin_id(string), timestamp(string), trade_url(string), trust_score(string), volume(number)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

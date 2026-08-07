@@ -33,16 +33,16 @@ CONFIGURATION
 ETL STREAMS
   documents:
     primary key: id
-    fields: created_at(), id(), name(), status()
+    fields: created_at(string), id(string), name(string), status(string)
   signers:
     primary key: id
-    fields: email(), id(), name()
+    fields: email(string), id(string), name(string)
   templates:
     primary key: id
-    fields: created_at(), id(), name()
+    fields: created_at(string), id(string), name(string)
   webhooks:
     primary key: id
-    fields: enabled(), id(), type(), url()
+    fields: enabled(boolean), id(string), type(string), url(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

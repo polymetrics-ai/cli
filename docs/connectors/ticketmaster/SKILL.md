@@ -38,16 +38,16 @@ Reads events, venues, attractions, and classifications from the Ticketmaster Dis
 
 - events:
   - primary key: id
-  - fields: id(), locale(), name(), type(), url()
+  - fields: id(string), locale(string), name(string), type(string), url(string)
 - venues:
   - primary key: id
-  - fields: city(), country(), id(), name(), url()
+  - fields: city(object), country(object), id(string), name(string), url(string)
 - attractions:
   - primary key: id
-  - fields: id(), locale(), name(), type(), url()
+  - fields: id(string), locale(string), name(string), type(string), url(string)
 - classifications:
   - primary key: id
-  - fields: genre(), id(), name(), segment(), subGenre()
+  - fields: genre(object), id(string), name(string), segment(object), subGenre(object)
 
 ## Sync Modes
 

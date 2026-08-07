@@ -39,9 +39,9 @@ Reads AppsFlyer raw-data CSV export reports (installs, in-app events) through th
 ## ETL Streams
 
 - installs_report:
-  - fields: appsflyer_id(), campaign(), event_time(), media_source()
+  - fields: appsflyer_id(string), campaign(string), event_time(string), media_source(string)
 - in_app_events_report:
-  - fields: appsflyer_id(), campaign(), event_time(), media_source()
+  - fields: appsflyer_id(string), campaign(string), event_time(string), media_source(string)
 
 ## Sync Modes
 

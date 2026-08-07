@@ -34,35 +34,35 @@ ETL STREAMS
   replicas:
     primary key: id
     cursor: created_at
-    fields: created_at(), id(), name()
+    fields: created_at(string), id(string), name(string)
   videos:
     primary key: id
-    fields: download_url(), error_details(), hosted_url(), id(), name(), status(), stream_url()
+    fields: download_url(string), error_details(string), hosted_url(string), id(string), name(string), status(string), stream_url(string)
   conversations:
     primary key: id
     cursor: created_at
-    fields: callback_url(), conversation_url(), created_at(), face_id(), id(), name(), pal_id(), status(), updated_at()
+    fields: callback_url(string), conversation_url(string), created_at(string), face_id(string), id(string), name(string), pal_id(string), status(string), updated_at(string)
   pals:
     primary key: id
-    fields: conferencing_email(), default_face_id(), id(), name(), system_prompt()
+    fields: conferencing_email(string), default_face_id(string), id(string), name(string), system_prompt(string)
   guardrails:
     primary key: id
-    fields: callback_url(), guardrail_prompt(), id(), modality(), name(), tags()
+    fields: callback_url(string), guardrail_prompt(string), id(string), modality(string), name(string), tags(array)
   objectives:
     primary key: id
-    fields: confirmation_mode(), id(), modality(), name(), objective_prompt(), output_variables()
+    fields: confirmation_mode(string), id(string), modality(string), name(string), objective_prompt(string), output_variables(array)
   documents:
     primary key: id
-    fields: document_url(), error_message(), id(), name(), progress(), status()
+    fields: document_url(string), error_message(string), id(string), name(string), progress(integer), status(string)
   pronunciation_dictionaries:
     primary key: id
-    fields: id(), name(), rules_count()
+    fields: id(string), name(string), rules_count(integer)
   voices:
     primary key: voice_name, face_id
-    fields: audio_url(), face_id(), voice_name()
+    fields: audio_url(string), face_id(string), voice_name(string)
   skills:
     primary key: skill_id
-    fields: description(), display_name(), skill_id()
+    fields: description(string), display_name(string), skill_id(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

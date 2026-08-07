@@ -27,7 +27,12 @@ type Request struct {
 	Config   connectors.RuntimeConfig
 	Limit    int
 	MaxBytes int
-	Preview  bool
+	// Page and PageCursor navigate a direct read's declared pagination. A
+	// direct read returns ONE page; these say which one. They are ignored by
+	// every other intent.
+	Page       int
+	PageCursor string
+	Preview    bool
 	// DestRoot is the directory a binary_download command writes beneath.
 	// Required for that intent and ignored by every other one.
 	DestRoot string
@@ -417,6 +422,8 @@ func runDirectRead(ctx context.Context, connector connectors.Connector, cmd conn
 		Query:        query,
 		MaxBytes:     maxBytes,
 		OutputPolicy: cmd.OutputPolicy,
+		Page:         req.Page,
+		PageCursor:   req.PageCursor,
 	})
 	if err != nil {
 		return Result{}, err
@@ -464,6 +471,8 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 		Body:         body,
 		MaxBytes:     maxBytes,
 		OutputPolicy: cmd.OutputPolicy,
+		Page:         req.Page,
+		PageCursor:   req.PageCursor,
 	})
 	if err != nil {
 		return Result{}, err

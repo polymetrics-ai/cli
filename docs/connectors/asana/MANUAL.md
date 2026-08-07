@@ -38,40 +38,40 @@ CONFIGURATION
 ETL STREAMS
   workspaces:
     primary key: gid
-    fields: gid(), name(), resource_type()
+    fields: gid(string), name(string), resource_type(string)
   projects:
     primary key: gid
-    fields: created_at(), gid(), modified_at(), name(), resource_type()
+    fields: created_at(string), gid(string), modified_at(string), name(string), resource_type(string)
   tasks:
     primary key: gid
-    fields: completed(), created_at(), gid(), modified_at(), name(), resource_type()
+    fields: completed(boolean), created_at(string), gid(string), modified_at(string), name(string), resource_type(string)
   users:
     primary key: gid
-    fields: email(), gid(), name(), resource_type()
+    fields: email(string), gid(string), name(string), resource_type(string)
   teams:
     primary key: gid
-    fields: description(), gid(), name(), resource_type(), visibility()
+    fields: description(string), gid(string), name(string), resource_type(string), visibility(string)
   tags:
     primary key: gid
-    fields: color(), created_at(), gid(), name(), notes(), resource_type()
+    fields: color(string), created_at(string), gid(string), name(string), notes(string), resource_type(string)
   sections:
     primary key: gid
-    fields: created_at(), gid(), name(), project_gid(), resource_type()
+    fields: created_at(string), gid(string), name(string), project_gid(string), resource_type(string)
   stories:
     primary key: gid
-    fields: created_at(), gid(), resource_subtype(), resource_type(), task_gid(), text(), type()
+    fields: created_at(string), gid(string), resource_subtype(string), resource_type(string), task_gid(string), text(string), type(string)
   custom_fields:
     primary key: gid
-    fields: description(), enabled(), gid(), name(), resource_type(), type()
+    fields: description(string), enabled(boolean), gid(string), name(string), resource_type(string), type(string)
   project_statuses:
     primary key: gid
-    fields: color(), created_at(), gid(), modified_at(), project_gid(), resource_type(), text(), title()
+    fields: color(string), created_at(string), gid(string), modified_at(string), project_gid(string), resource_type(string), text(string), title(string)
   team_memberships:
     primary key: gid
-    fields: gid(), is_admin(), is_guest(), is_limited_access(), resource_type()
+    fields: gid(string), is_admin(boolean), is_guest(boolean), is_limited_access(boolean), resource_type(string)
   workspace_memberships:
     primary key: gid
-    fields: gid(), is_active(), is_admin(), is_guest(), resource_type()
+    fields: gid(string), is_active(boolean), is_admin(boolean), is_guest(boolean), resource_type(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
@@ -409,12 +409,12 @@ COMMAND SURFACE
     allocations get-allocations - Planned fixed-target Asana read: Get multiple allocations. [intent=etl availability=planned operation=get_allocations]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.
     allocations create-allocation - Planned fixed-target Asana mutation: Create an allocation. [intent=reverse_etl availability=planned operation=create_allocation]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: high; notes: Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist.; flags: --data-json, --confirm
   Attachments
-    attachments get-attachment - Planned fixed-target Asana read: Get an attachment. [intent=direct_read availability=planned operation=get_attachment]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.; flags: --attachment-gid
+    attachments get-attachment - Planned fixed-target Asana read: Get an attachment. [intent=direct_read availability=planned operation=get_attachment]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.; flags: --attachment-gid, --page, --page-cursor
     attachments delete-attachment - Planned fixed-target Asana mutation: Delete an attachment. [intent=reverse_etl availability=planned operation=delete_attachment]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: high; notes: Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist.; flags: --attachment-gid, --confirm
-    attachments get-attachments-for-object - Planned fixed-target Asana read: Get attachments from an object. [intent=direct_read availability=planned operation=get_attachments_for_object]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.
+    attachments get-attachments-for-object - Planned fixed-target Asana read: Get attachments from an object. [intent=direct_read availability=planned operation=get_attachments_for_object]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.; flags: --page, --page-cursor
     attachments create-attachment-for-object - Planned fixed-target Asana mutation: Upload an attachment. [intent=direct_write availability=planned operation=create_attachment_for_object]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: high; notes: Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist.; flags: --data-json
   Audit log API
-    audit-log-api get-audit-log-events - Planned fixed-target Asana read: Get audit log events. [intent=direct_read availability=planned operation=get_audit_log_events]; notes: Blocked until CDC/changefeed foundations #2986/#2988 supply truthfulness and lifecycle evidence.; flags: --workspace-gid
+    audit-log-api get-audit-log-events - Planned fixed-target Asana read: Get audit log events. [intent=direct_read availability=planned operation=get_audit_log_events]; notes: Blocked until CDC/changefeed foundations #2986/#2988 supply truthfulness and lifecycle evidence.; flags: --workspace-gid, --page, --page-cursor
   Batch API
     batch-api create-batch-request - Planned fixed-target Asana mutation: Submit parallel requests. [intent=reverse_etl availability=unsupported_api operation=create_batch_request]; approval: not exposed; generic batch subrequests are disallowed to avoid raw API passthrough; risk: high; notes: Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist.; flags: --data-json
   Budgets
@@ -441,7 +441,7 @@ COMMAND SURFACE
     custom-types get-custom-types - Planned fixed-target Asana read: Get all custom types associated with an object. [intent=etl availability=planned operation=get_custom_types]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.
     custom-types get-custom-type - Planned fixed-target Asana read: Get a custom type. [intent=etl availability=planned operation=get_custom_type]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.; flags: --custom-type-gid
   Events
-    events get-events - Planned fixed-target Asana read: Get events on a resource. [intent=direct_read availability=planned operation=get_events]; notes: Blocked until CDC/changefeed foundations #2986/#2988 supply truthfulness and lifecycle evidence.
+    events get-events - Planned fixed-target Asana read: Get events on a resource. [intent=direct_read availability=planned operation=get_events]; notes: Blocked until CDC/changefeed foundations #2986/#2988 supply truthfulness and lifecycle evidence.; flags: --page, --page-cursor
   Exports
     exports create-graph-export - fixed-target Asana mutation: Initiate a graph export. [intent=reverse_etl availability=implemented write=create_graph_export]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: medium; notes: Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute.; flags: --parent
     exports create-resource-export - fixed-target Asana mutation: Initiate a resource export. [intent=reverse_etl availability=implemented write=create_resource_export]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: medium; notes: Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute.; flags: --fields, --resource-type, --workspace
@@ -465,7 +465,7 @@ COMMAND SURFACE
     goals add-custom-field-setting-for-goal - fixed-target Asana mutation: Add a custom field to a goal. [intent=reverse_etl availability=implemented write=add_custom_field_setting_for_goal]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: medium; notes: Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute.; flags: --goal-gid (required), --insert-after, --insert-before, --is-important
     goals remove-custom-field-setting-for-goal - Planned fixed-target Asana mutation: Remove a custom field from a goal. [intent=reverse_etl availability=planned operation=remove_custom_field_setting_for_goal]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: high; notes: Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist.; flags: --goal-gid, --data-json, --confirm
   Jobs
-    jobs get-job - Planned fixed-target Asana read: Get a job by id. [intent=direct_read availability=planned operation=get_job]; notes: Blocked until CDC/changefeed foundations #2986/#2988 supply truthfulness and lifecycle evidence.; flags: --job-gid
+    jobs get-job - Planned fixed-target Asana read: Get a job by id. [intent=direct_read availability=planned operation=get_job]; notes: Blocked until CDC/changefeed foundations #2986/#2988 supply truthfulness and lifecycle evidence.; flags: --job-gid, --page, --page-cursor
   Memberships
     memberships get-memberships - Planned fixed-target Asana read: Get multiple memberships. [intent=etl availability=planned operation=get_memberships]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.
     memberships create-membership - Planned fixed-target Asana mutation: Create a membership. [intent=reverse_etl availability=planned operation=create_membership]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: high; notes: Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist.; flags: --data-json, --confirm
@@ -535,7 +535,7 @@ COMMAND SURFACE
     projects create-project-for-team - fixed-target Asana mutation: Create a project in a team. [intent=reverse_etl availability=implemented write=create_project_for_team]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: medium; notes: Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute.; flags: --team-gid (required), --archived, --color, --data-current-status-color, --html-text, --text, --title, --data-current-status-update-title, --default-access-level, --default-view, --due-date, --due-on, --followers, --html-notes, --icon, --minimum-access-level-for-customization, --minimum-access-level-for-sharing, --name, --notes, --owner, --privacy-setting, --public, --start-on, --team, --workspace
     projects get-projects-for-workspace - Planned fixed-target Asana read: Get all projects in a workspace. [intent=etl availability=planned operation=get_projects_for_workspace]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.; flags: --workspace-gid
     projects create-project-for-workspace - fixed-target Asana mutation: Create a project in a workspace. [intent=reverse_etl availability=implemented write=create_project_for_workspace]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: medium; notes: Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute.; flags: --workspace-gid (required), --archived, --color, --data-current-status-color, --html-text, --text, --title, --data-current-status-update-title, --default-access-level, --default-view, --due-date, --due-on, --followers, --html-notes, --icon, --minimum-access-level-for-customization, --minimum-access-level-for-sharing, --name, --notes, --owner, --privacy-setting, --public, --start-on, --team, --workspace
-    projects search-projects-for-workspace - Planned fixed-target Asana read: Search projects in a workspace. [intent=direct_read availability=planned operation=search_projects_for_workspace]; notes: Blocked until provider-search foundation #2985 supplies bounded query execution.; flags: --workspace-gid, --text
+    projects search-projects-for-workspace - Planned fixed-target Asana read: Search projects in a workspace. [intent=direct_read availability=planned operation=search_projects_for_workspace]; notes: Blocked until provider-search foundation #2985 supplies bounded query execution.; flags: --workspace-gid, --text, --page, --page-cursor
     projects add-custom-field-setting-for-project - fixed-target Asana mutation: Add a custom field to a project. [intent=reverse_etl availability=implemented write=add_custom_field_setting_for_project]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: medium; notes: Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute.; flags: --project-gid (required), --insert-after, --insert-before, --is-important
     projects remove-custom-field-setting-for-project - Planned fixed-target Asana mutation: Remove a custom field from a project. [intent=reverse_etl availability=planned operation=remove_custom_field_setting_for_project]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: high; notes: Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist.; flags: --project-gid, --data-json, --confirm
     projects get-task-counts-for-project - Planned fixed-target Asana read: Get task count of a project. [intent=etl availability=planned operation=get_task_counts_for_project]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.; flags: --project-gid
@@ -622,7 +622,7 @@ COMMAND SURFACE
     tasks add-followers-for-task - fixed-target Asana mutation: Add followers to a task. [intent=reverse_etl availability=implemented write=add_followers_for_task]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: medium; notes: Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute.; flags: --task-gid (required), --followers
     tasks remove-follower-for-task - Planned fixed-target Asana mutation: Remove followers from a task. [intent=reverse_etl availability=planned operation=remove_follower_for_task]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: high; notes: Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist.; flags: --task-gid, --data-json, --confirm
     tasks get-task-for-custom-id - Planned fixed-target Asana read: Get a task for a given custom ID. [intent=etl availability=planned operation=get_task_for_custom_id]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.; flags: --workspace-gid, --custom-id
-    tasks search-tasks-for-workspace - Planned fixed-target Asana read: Search tasks in a workspace. [intent=direct_read availability=planned operation=search_tasks_for_workspace]; notes: Blocked until provider-search foundation #2985 supplies bounded query execution.; flags: --workspace-gid, --text
+    tasks search-tasks-for-workspace - Planned fixed-target Asana read: Search tasks in a workspace. [intent=direct_read availability=planned operation=search_tasks_for_workspace]; notes: Blocked until provider-search foundation #2985 supplies bounded query execution.; flags: --workspace-gid, --text, --page, --page-cursor
   Team memberships
     team-memberships get-team-membership - Planned fixed-target Asana read: Get a team membership. [intent=etl availability=planned operation=get_team_membership]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.; flags: --team-membership-gid
     team-memberships list - Get team memberships through the declared Asana ETL stream. [intent=etl availability=implemented stream=team_memberships]
@@ -659,7 +659,7 @@ COMMAND SURFACE
     timesheet-approval-statuses get-timesheet-approval-statuses - Planned fixed-target Asana read: Get multiple timesheet approval statuses. [intent=etl availability=planned operation=get_timesheet_approval_statuses]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.
     timesheet-approval-statuses create-timesheet-approval-status - Planned fixed-target Asana mutation: Create a timesheet approval status. [intent=reverse_etl availability=planned operation=create_timesheet_approval_status]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: high; notes: Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist.; flags: --data-json, --confirm
   Typeahead
-    typeahead for-workspace - Planned fixed-target Asana read: Get objects via typeahead. [intent=direct_read availability=planned operation=typeahead_for_workspace]; notes: Blocked until provider-search foundation #2985 supplies bounded query execution.; flags: --workspace-gid, --text
+    typeahead for-workspace - Planned fixed-target Asana read: Get objects via typeahead. [intent=direct_read availability=planned operation=typeahead_for_workspace]; notes: Blocked until provider-search foundation #2985 supplies bounded query execution.; flags: --workspace-gid, --text, --page, --page-cursor
   User task lists
     user-task-lists get-user-task-list - Planned fixed-target Asana read: Get a user task list. [intent=etl availability=planned operation=get_user_task_list]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.; flags: --user-task-list-gid
     user-task-lists get-user-task-list-for-user - Planned fixed-target Asana read: Get a user's task list. [intent=etl availability=planned operation=get_user_task_list_for_user]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.; flags: --user-gid
@@ -673,9 +673,9 @@ COMMAND SURFACE
     users get-user-for-workspace - Planned fixed-target Asana read: Get a user in a workspace or organization. [intent=etl availability=planned operation=get_user_for_workspace]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.; flags: --workspace-gid, --user-gid
     users update-user-for-workspace - fixed-target Asana mutation: Update a user in a workspace or organization. [intent=reverse_etl availability=implemented write=update_user_for_workspace]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: medium; notes: Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute.; flags: --workspace-gid (required), --user-gid (required), --name
   Webhooks
-    webhooks get-webhooks - Planned fixed-target Asana read: Get multiple webhooks. [intent=direct_read availability=planned operation=get_webhooks]; notes: Blocked until CDC/changefeed foundations #2986/#2988 supply truthfulness and lifecycle evidence.
+    webhooks get-webhooks - Planned fixed-target Asana read: Get multiple webhooks. [intent=direct_read availability=planned operation=get_webhooks]; notes: Blocked until CDC/changefeed foundations #2986/#2988 supply truthfulness and lifecycle evidence.; flags: --page, --page-cursor
     webhooks create-webhook - Planned fixed-target Asana mutation: Establish a webhook. [intent=reverse_etl availability=planned operation=create_webhook]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: medium; notes: Blocked until CDC/changefeed foundations #2986/#2988 supply truthfulness and lifecycle evidence.; flags: --data-json
-    webhooks get-webhook - Planned fixed-target Asana read: Get a webhook. [intent=direct_read availability=planned operation=get_webhook]; notes: Blocked until CDC/changefeed foundations #2986/#2988 supply truthfulness and lifecycle evidence.; flags: --webhook-gid
+    webhooks get-webhook - Planned fixed-target Asana read: Get a webhook. [intent=direct_read availability=planned operation=get_webhook]; notes: Blocked until CDC/changefeed foundations #2986/#2988 supply truthfulness and lifecycle evidence.; flags: --webhook-gid, --page, --page-cursor
     webhooks update-webhook - Planned fixed-target Asana mutation: Update a webhook. [intent=reverse_etl availability=planned operation=update_webhook]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: medium; notes: Blocked until CDC/changefeed foundations #2986/#2988 supply truthfulness and lifecycle evidence.; flags: --webhook-gid, --data-json
     webhooks delete-webhook - Planned fixed-target Asana mutation: Delete a webhook. [intent=reverse_etl availability=planned operation=delete_webhook]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: high; notes: Blocked until CDC/changefeed foundations #2986/#2988 supply truthfulness and lifecycle evidence.; flags: --webhook-gid, --confirm
   Workspace memberships

@@ -35,13 +35,13 @@ CONFIGURATION
 ETL STREAMS
   usage:
     primary key: period
-    fields: daily_processed(), monthly_limit(), monthly_processed(), period(), requests()
+    fields: daily_processed(integer), monthly_limit(integer), monthly_processed(integer), period(string), requests(integer)
   tags:
     primary key: image_url, tag
-    fields: confidence(), image_url(), tag()
+    fields: confidence(number), image_url(string), tag(string)
   categories:
     primary key: image_url, category
-    fields: category(), confidence(), image_url()
+    fields: category(string), confidence(number), image_url(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

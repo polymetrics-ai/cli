@@ -38,7 +38,7 @@ CONFIGURATION
 
 ETL STREAMS
   reports:
-    fields: app(), clicks(), cost(), country(), date(), installs()
+    fields: app(string), clicks(number), cost(number), country(string), date(string), installs(number)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite

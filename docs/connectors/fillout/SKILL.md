@@ -42,7 +42,7 @@ Reads Fillout forms and manages webhooks/submission deletion through the Fillout
 
 - forms:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 
 ## Sync Modes
 

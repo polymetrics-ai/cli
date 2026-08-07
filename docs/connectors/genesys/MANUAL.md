@@ -39,16 +39,16 @@ CONFIGURATION
 ETL STREAMS
   users:
     primary key: id
-    fields: display_name(), email(), id(), name(), state()
+    fields: display_name(string), email(string), id(string), name(string), state(string)
   queues:
     primary key: id
-    fields: description(), id(), name()
+    fields: description(string), id(string), name(string)
   groups:
     primary key: id
-    fields: description(), id(), name()
+    fields: description(string), id(string), name(string)
   divisions:
     primary key: id
-    fields: description(), id(), name()
+    fields: description(string), id(string), name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

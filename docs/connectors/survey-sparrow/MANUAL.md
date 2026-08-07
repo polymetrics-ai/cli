@@ -34,71 +34,71 @@ CONFIGURATION
 ETL STREAMS
   surveys:
     primary key: id
-    fields: id(), name(), survey_type()
+    fields: id(integer), name(string), survey_type(string)
   contacts:
     primary key: id
-    fields: email(), id(), name()
+    fields: email(string), id(integer), name(string)
   responses:
     primary key: id
     cursor: completed_time
-    fields: completed_time(), id(), survey_id()
+    fields: completed_time(string), id(integer), survey_id(integer)
   questions:
     primary key: id
-    fields: id(), question(), survey_id()
+    fields: id(integer), question(string), survey_id(integer)
   channels:
     primary key: id
-    fields: id(), name(), properties(), status(), type()
+    fields: id(integer), name(string), properties(object), status(string), type(string)
   contact_lists:
     primary key: id
-    fields: description(), id(), name()
+    fields: description(string), id(integer), name(string)
   contact_properties:
     primary key: id
-    fields: contact_property_group_id(), description(), group(), id(), label(), name(), type()
+    fields: contact_property_group_id(integer), description(string), group(string), id(integer), label(string), name(string), type(string)
   reminders:
     primary key: id
-    fields: account_id(), after_days(), created_at(), frequency(), id(), message(), sent_count(), subject(), survey_id(), type(), updated_at()
+    fields: account_id(integer), after_days(integer), created_at(string), frequency(string), id(integer), message(string), sent_count(integer), subject(string), survey_id(integer), type(string), updated_at(string)
   reputation_platforms:
     primary key: id
-    fields: id(), label(), logo_url(), type()
+    fields: id(integer), label(string), logo_url(string), type(string)
   reputation_app_platforms:
     primary key: id
-    fields: created_at(), data_fetch_address(), id(), is_active(), location(), platform_id(), updated_at()
+    fields: created_at(string), data_fetch_address(string), id(integer), is_active(boolean), location(string), platform_id(integer), updated_at(string)
   reputation_reviews:
     primary key: id
-    fields: app_platform_id(), id(), rating(), review_content(), review_date(), review_title(), reviewer_name(), reviewer_photo_url()
+    fields: app_platform_id(integer), id(integer), rating(number), review_content(string), review_date(string), review_title(string), reviewer_name(string), reviewer_photo_url(string)
   survey_folders:
     primary key: id
-    fields: auto_created(), description(), id(), name(), parent_survey_folder_id(), teams(), users(), visibility()
+    fields: auto_created(boolean), description(string), id(integer), name(string), parent_survey_folder_id(integer), teams(array), users(array), visibility(string)
   ticket_fields:
     primary key: id
-    fields: created_at(), description(), id(), internal_name(), is_default(), mandatory(), name(), options(), type(), updated_at()
+    fields: created_at(string), description(string), id(integer), internal_name(string), is_default(boolean), mandatory(boolean), name(string), options(array), type(string), updated_at(string)
   tickets:
     primary key: id
-    fields: agent(), created_at(), custom_fields(), deleted_at(), description(), description_html(), id(), priority(), requester(), source(), status(), subject(), team(), template_id(), updated_at()
+    fields: agent(object), created_at(string), custom_fields(object), deleted_at(string), description(string), description_html(string), id(integer), priority(object), requester(object), source(object), status(object), subject(string), team(object), template_id(integer), updated_at(string)
   teams:
     primary key: id
-    fields: account_id(), business_hour_id(), created_at(), deleted_at(), description(), id(), name(), round_robin_enabled(), type(), updated_at()
+    fields: account_id(integer), business_hour_id(integer), created_at(string), deleted_at(string), description(string), id(integer), name(string), round_robin_enabled(boolean), type(string), updated_at(string)
   roles:
     primary key: id
-    fields: account_id(), created_at(), deleted_at(), description(), id(), label(), name(), updated_at()
+    fields: account_id(integer), created_at(string), deleted_at(string), description(string), id(integer), label(string), name(string), updated_at(string)
   variables:
     primary key: id
-    fields: description(), id(), label(), name(), type()
+    fields: description(string), id(integer), label(string), name(string), type(string)
   webhooks:
     primary key: id
-    fields: description(), eventType(), httpMethod(), id(), name(), objectType(), url()
+    fields: description(string), eventType(string), httpMethod(string), id(integer), name(string), objectType(string), url(string)
   users:
     primary key: id
-    fields: admin(), agency_owner(), email(), id(), name(), owner(), phone(), role_id(), verified()
+    fields: admin(boolean), agency_owner(boolean), email(string), id(integer), name(string), owner(boolean), phone(string), role_id(integer), verified(boolean)
   templates:
     primary key: id
-    fields: created_at(), deleted_at(), description(), id(), name(), updated_at()
+    fields: created_at(string), deleted_at(string), description(string), id(integer), name(string), updated_at(string)
   email_themes:
     primary key: id
-    fields: created_at(), id(), is_public(), name(), properties(), updated_at()
+    fields: created_at(string), id(integer), is_public(boolean), name(string), properties(object), updated_at(string)
   expressions:
     primary key: id
-    fields: id(), name(), representation()
+    fields: id(integer), name(string), representation(array)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

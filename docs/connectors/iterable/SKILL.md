@@ -36,13 +36,13 @@ Reads Iterable lists, campaigns, and templates through the Iterable REST API. Re
 
 - lists:
   - primary key: id
-  - fields: createdAt(), id(), listType(), name(), updatedAt()
+  - fields: createdAt(string), id(integer), listType(string), name(string), updatedAt(string)
 - campaigns:
   - primary key: id
-  - fields: createdAt(), id(), name(), updatedAt()
+  - fields: createdAt(string), id(integer), name(string), updatedAt(string)
 - templates:
   - primary key: id
-  - fields: createdAt(), id(), name(), updatedAt()
+  - fields: createdAt(string), id(integer), name(string), updatedAt(string)
 
 ## Sync Modes
 

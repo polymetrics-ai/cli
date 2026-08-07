@@ -36,7 +36,7 @@ Reads Open Exchange Rates account usage/plan status through the Open Exchange Ra
 
 - usage:
   - primary key: app_id
-  - fields: app_id(), daily_average(), days_elapsed(), days_remaining(), plan(), requests(), requests_quota(), requests_remaining(), status()
+  - fields: app_id(string), daily_average(integer), days_elapsed(integer), days_remaining(integer), plan(string), requests(integer), requests_quota(integer), requests_remaining(integer), status(string)
 
 ## Sync Modes
 

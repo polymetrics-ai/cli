@@ -38,10 +38,10 @@ Reads Klaus (Zendesk QA) users and rating categories through the Klaus public RE
 
 - users:
   - primary key: id
-  - fields: email(), id(), name()
+  - fields: email(string), id(string), name(string)
 - categories:
   - primary key: id
-  - fields: archived(), critical(), description(), groupId(), groupName(), groupPosition(), id(), maxRating(), name(), position(), rootCauses(), scorecards(), weight()
+  - fields: archived(boolean), critical(boolean), description(string), groupId(string), groupName(string), groupPosition(integer), id(string), maxRating(integer), name(string), position(integer), rootCauses(array), scorecards(array), weight(number)
 
 ## Sync Modes
 

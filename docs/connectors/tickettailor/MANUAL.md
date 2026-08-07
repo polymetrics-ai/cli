@@ -39,55 +39,55 @@ CONFIGURATION
 ETL STREAMS
   events:
     primary key: id
-    fields: end_date(), id(), name(), start_date(), status()
+    fields: end_date(string), id(string), name(string), start_date(string), status(string)
   orders:
     primary key: id
-    fields: created_at(), email(), event_id(), id(), total()
+    fields: created_at(string), email(string), event_id(string), id(string), total(string)
   issued_tickets:
     primary key: id
-    fields: event_id(), id(), order_id(), status(), ticket_type_id()
+    fields: event_id(string), id(string), order_id(string), status(string), ticket_type_id(string)
   event_series:
     primary key: id
-    fields: created_at(), currency(), description(), id(), name()
+    fields: created_at(integer), currency(string), description(string), id(string), name(string)
   holds:
     primary key: id
-    fields: created_at(), event_id(), id(), note(), total_on_hold(), updated_at()
+    fields: created_at(integer), event_id(string), id(string), note(string), total_on_hold(integer), updated_at(integer)
   discounts:
     primary key: id
-    fields: code(), id(), max_redemptions(), name(), times_redeemed(), type()
+    fields: code(string), id(string), max_redemptions(integer), name(string), times_redeemed(integer), type(string)
   membership_types:
     primary key: id
-    fields: id(), max_redemptions(), name(), valid_from_type(), valid_to_type()
+    fields: id(string), max_redemptions(integer), name(string), valid_from_type(string), valid_to_type(string)
   issued_memberships:
     primary key: id
-    fields: code(), email(), first_name(), full_name(), id(), is_valid(), last_name(), membership_type_id(), membership_type_name()
+    fields: code(string), email(string), first_name(string), full_name(string), id(string), is_valid(boolean), last_name(string), membership_type_id(string), membership_type_name(string)
   products:
     primary key: id
-    fields: created_at(), currency(), description(), id(), name(), price()
+    fields: created_at(integer), currency(string), description(string), id(string), name(string), price(integer)
   stores:
     primary key: id
-    fields: currency(), id(), name()
+    fields: currency(string), id(string), name(string)
   vouchers:
     primary key: id
-    fields: available_codes(), expiry(), id(), name(), total_codes(), type(), value()
+    fields: available_codes(integer), expiry(integer), id(string), name(string), total_codes(integer), type(string), value(integer)
   checkout_forms:
     primary key: id
-    fields: created_at(), event_series_id(), id()
+    fields: created_at(integer), event_series_id(string), id(string)
   voucher_codes:
     primary key: id
-    fields: code(), expiry(), id(), used(), value(), voucher_id()
+    fields: code(string), expiry(integer), id(string), used(boolean), value(integer), voucher_id(string)
   checkout_form_elements:
     primary key: id, checkout_form_id
-    fields: checkout_form_id(), id(), per_ticket(), question(), required(), type()
+    fields: checkout_form_id(string), id(string), per_ticket(boolean), question(string), required(boolean), type(string)
   event_series_overrides:
     primary key: id, event_series_id
-    fields: created_at(), event_series_id(), id(), max_sellable_tickets(), name()
+    fields: created_at(integer), event_series_id(string), id(string), max_sellable_tickets(integer), name(string)
   event_series_waitlist_signups:
     primary key: id, event_series_id
-    fields: created_at(), email(), event_id(), event_series_id(), id(), notified_date()
+    fields: created_at(integer), email(string), event_id(string), event_series_id(string), id(string), notified_date(integer)
   overview:
     primary key: id
-    fields: box_office_name(), credits(), currency(), id()
+    fields: box_office_name(string), credits(number), currency(string), id(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

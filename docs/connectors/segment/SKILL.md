@@ -35,13 +35,13 @@ Reads Segment workspace, source, and destination metadata through the Segment Pu
 
 - workspaces:
   - primary key: id
-  - fields: id(), name(), slug(), updated_at()
+  - fields: id(string), name(string), slug(string), updated_at(string)
 - sources:
   - primary key: id
-  - fields: id(), name(), slug(), updated_at()
+  - fields: id(string), name(string), slug(string), updated_at(string)
 - destinations:
   - primary key: id
-  - fields: id(), name(), slug(), updated_at()
+  - fields: id(string), name(string), slug(string), updated_at(string)
 
 ## Sync Modes
 

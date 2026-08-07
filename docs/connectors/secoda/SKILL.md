@@ -35,16 +35,16 @@ Reads Secoda catalog metadata (tables, documents, collections, questions) throug
 
 - tables:
   - primary key: id
-  - fields: id(), name(), updated_at()
+  - fields: id(string), name(string), updated_at(string)
 - documents:
   - primary key: id
-  - fields: id(), name(), updated_at()
+  - fields: id(string), name(string), updated_at(string)
 - collections:
   - primary key: id
-  - fields: id(), name(), updated_at()
+  - fields: id(string), name(string), updated_at(string)
 - questions:
   - primary key: id
-  - fields: id(), name(), updated_at()
+  - fields: id(string), name(string), updated_at(string)
 
 ## Sync Modes
 

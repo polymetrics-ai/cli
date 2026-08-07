@@ -39,23 +39,23 @@ ETL STREAMS
   customers:
     primary key: id
     cursor: created
-    fields: balance(), created(), currency(), delinquent(), description(), email(), id(), livemode(), name(), object(), phone()
+    fields: balance(integer), created(integer), currency(string), delinquent(boolean), description(string), email(string), id(string), livemode(boolean), name(string), object(string), phone(string)
   charges:
     primary key: id
     cursor: created
-    fields: amount(), amount_captured(), amount_refunded(), created(), currency(), customer(), id(), livemode(), object(), paid(), refunded(), status()
+    fields: amount(integer), amount_captured(integer), amount_refunded(integer), created(integer), currency(string), customer(string), id(string), livemode(boolean), object(string), paid(boolean), refunded(boolean), status(string)
   invoices:
     primary key: id
     cursor: created
-    fields: amount_due(), amount_paid(), amount_remaining(), created(), currency(), customer(), id(), livemode(), object(), paid(), status(), subscription(), total()
+    fields: amount_due(integer), amount_paid(integer), amount_remaining(integer), created(integer), currency(string), customer(string), id(string), livemode(boolean), object(string), paid(boolean), status(string), subscription(string), total(integer)
   subscriptions:
     primary key: id
     cursor: created
-    fields: cancel_at_period_end(), canceled_at(), created(), currency(), current_period_end(), current_period_start(), customer(), id(), livemode(), object(), status()
+    fields: cancel_at_period_end(boolean), canceled_at(integer), created(integer), currency(string), current_period_end(integer), current_period_start(integer), customer(string), id(string), livemode(boolean), object(string), status(string)
   products:
     primary key: id
     cursor: created
-    fields: active(), created(), description(), id(), livemode(), name(), object(), type(), updated()
+    fields: active(boolean), created(integer), description(string), id(string), livemode(boolean), name(string), object(string), type(string), updated(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

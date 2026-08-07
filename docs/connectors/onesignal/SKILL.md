@@ -36,7 +36,7 @@ Reads OneSignal account-level applications through the OneSignal REST API. Devic
 
 - apps:
   - primary key: id
-  - fields: created_at(), id(), messageable_players(), name(), organization_id(), players(), updated_at()
+  - fields: created_at(string), id(string), messageable_players(integer), name(string), organization_id(string), players(integer), updated_at(string)
 
 ## Sync Modes
 

@@ -42,61 +42,61 @@ ETL STREAMS
   surveys:
     primary key: id
     cursor: updated_at
-    fields: created_at(), environment_id(), id(), name(), status(), type(), updated_at()
+    fields: created_at(string), environment_id(string), id(string), name(string), status(string), type(string), updated_at(string)
   survey_details:
     primary key: id
     cursor: updated_at
-    fields: blocks(), created_at(), created_by(), display_option(), endings(), hiddenFields(), id(), languages(), name(), questions(), segment(), singleUse(), status(), triggers(), type(), updated_at(), welcomeCard(), workspace_id()
+    fields: blocks(array), created_at(string), created_by(string), display_option(string), endings(array), hiddenFields(object), id(string), languages(array), name(string), questions(array), segment(object), singleUse(object), status(string), triggers(array), type(string), updated_at(string), welcomeCard(object), workspace_id(string)
   responses:
     primary key: id
     cursor: updated_at
-    fields: contact_id(), created_at(), data(), finished(), id(), meta(), survey_id(), updated_at()
+    fields: contact_id(string), created_at(string), data(object), finished(boolean), id(string), meta(object), survey_id(string), updated_at(string)
   response_details:
     primary key: id
     cursor: updated_at
-    fields: contact_id(), created_at(), data(), finished(), id(), language(), meta(), person(), personAttributes(), singleUseId(), survey_id(), tags(), ttc(), updated_at()
+    fields: contact_id(string), created_at(string), data(object), finished(boolean), id(string), language(string), meta(object), person(object), personAttributes(object), singleUseId(string), survey_id(string), tags(array), ttc(object), updated_at(string)
   action_classes:
     primary key: id
     cursor: updated_at
-    fields: created_at(), description(), environment_id(), id(), name(), type(), updated_at()
+    fields: created_at(string), description(string), environment_id(string), id(string), name(string), type(string), updated_at(string)
   action_class_details:
     primary key: id
     cursor: updated_at
-    fields: created_at(), description(), id(), name(), noCodeConfig(), type(), updated_at(), workspace_id()
+    fields: created_at(string), description(string), id(string), name(string), noCodeConfig(object), type(string), updated_at(string), workspace_id(string)
   attribute_classes:
     primary key: id
     cursor: updated_at
-    fields: archived(), created_at(), description(), environment_id(), id(), name(), type(), updated_at()
+    fields: archived(boolean), created_at(string), description(string), environment_id(string), id(string), name(string), type(string), updated_at(string)
   contact_attribute_keys:
     primary key: id
     cursor: updated_at
-    fields: created_at(), description(), id(), is_unique(), key(), name(), type(), updated_at(), workspace_id()
+    fields: created_at(string), description(string), id(string), is_unique(boolean), key(string), name(string), type(string), updated_at(string), workspace_id(string)
   contact_attribute_key_details:
     primary key: id
     cursor: updated_at
-    fields: created_at(), description(), id(), is_unique(), key(), name(), type(), updated_at(), workspace_id()
+    fields: created_at(string), description(string), id(string), is_unique(boolean), key(string), name(string), type(string), updated_at(string), workspace_id(string)
   contact_attributes:
     primary key: id
     cursor: updated_at
-    fields: attribute_key_id(), contact_id(), created_at(), id(), updated_at(), value()
+    fields: attribute_key_id(string), contact_id(string), created_at(string), id(string), updated_at(string), value(string)
   contacts:
     primary key: id
     cursor: updated_at
-    fields: created_at(), id(), updated_at(), user_id(), workspace_id()
+    fields: created_at(string), id(string), updated_at(string), user_id(string), workspace_id(string)
   contact_details:
     primary key: id
     cursor: updated_at
-    fields: created_at(), id(), updated_at(), user_id(), workspace_id()
+    fields: created_at(string), id(string), updated_at(string), user_id(string), workspace_id(string)
   me:
     primary key: id
-    fields: app_setup_completed(), created_at(), environment_permissions(), id(), organization_access(), organization_id(), project(), type(), updated_at(), website_setup_completed()
+    fields: app_setup_completed(boolean), created_at(string), environment_permissions(array), id(string), organization_access(object), organization_id(string), project(object), type(string), updated_at(string), website_setup_completed(boolean)
   webhooks:
     primary key: id
-    fields: created_at(), environment_id(), id(), source(), surveyIds(), triggers(), updated_at(), url()
+    fields: created_at(string), environment_id(string), id(string), source(string), surveyIds(array), triggers(array), updated_at(string), url(string)
   webhook_details:
     primary key: id
     cursor: updated_at
-    fields: created_at(), id(), name(), source(), surveyIds(), triggers(), updated_at(), url(), workspace_id()
+    fields: created_at(string), id(string), name(string), source(string), surveyIds(array), triggers(array), updated_at(string), url(string), workspace_id(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

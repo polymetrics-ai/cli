@@ -44,13 +44,13 @@ CONFIGURATION
 ETL STREAMS
   marketers:
     primary key: id
-    fields: clicks(), created_at(), enabled(), id(), impressions(), name(), spend(), status()
+    fields: clicks(integer), created_at(string), enabled(boolean), id(string), impressions(integer), name(string), spend(number), status(string)
   campaigns:
     primary key: id
-    fields: clicks(), created_at(), enabled(), id(), impressions(), name(), spend(), status()
+    fields: clicks(integer), created_at(string), enabled(boolean), id(string), impressions(integer), name(string), spend(number), status(string)
   performance_reports:
     primary key: id
-    fields: clicks(), created_at(), enabled(), id(), impressions(), name(), spend(), status()
+    fields: clicks(integer), created_at(string), enabled(boolean), id(string), impressions(integer), name(string), spend(number), status(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

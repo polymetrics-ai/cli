@@ -33,16 +33,16 @@ CONFIGURATION
 ETL STREAMS
   projects:
     primary key: id
-    fields: id(), name(), state(), updated_at()
+    fields: id(integer), name(string), state(string), updated_at(string)
   stories:
     primary key: id
-    fields: id(), name(), state(), updated_at()
+    fields: id(integer), name(string), state(string), updated_at(string)
   iterations:
     primary key: id
-    fields: id(), name(), state(), updated_at()
+    fields: id(integer), name(string), state(string), updated_at(string)
   epics:
     primary key: id
-    fields: id(), name(), state(), updated_at()
+    fields: id(integer), name(string), state(string), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

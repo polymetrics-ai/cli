@@ -39,16 +39,16 @@ Reads Jamf Pro buildings, departments, categories, and scripts through the Jamf 
 
 - buildings:
   - primary key: id
-  - fields: city(), country(), id(), name(), stateProvince(), streetAddress1(), streetAddress2(), zipPostalCode()
+  - fields: city(string), country(string), id(string), name(string), stateProvince(string), streetAddress1(string), streetAddress2(string), zipPostalCode(string)
 - departments:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - categories:
   - primary key: id
-  - fields: id(), name(), priority()
+  - fields: id(string), name(string), priority(integer)
 - scripts:
   - primary key: id
-  - fields: categoryId(), categoryName(), id(), info(), name(), notes(), osRequirements(), priority()
+  - fields: categoryId(string), categoryName(string), id(string), info(string), name(string), notes(string), osRequirements(string), priority(string)
 
 ## Sync Modes
 

@@ -45,22 +45,22 @@ ETL STREAMS
   blogs:
     primary key: id
     cursor: updated
-    fields: description(), id(), kind(), name(), pages_total(), posts_total(), published(), updated(), url()
+    fields: description(string), id(string), kind(string), name(string), pages_total(integer), posts_total(integer), published(string), updated(string), url(string)
   posts:
     primary key: id
     cursor: updated
-    fields: author_display_name(), author_id(), blog_id(), content(), id(), kind(), published(), replies_total(), status(), title(), updated(), url()
+    fields: author_display_name(string), author_id(string), blog_id(string), content(string), id(string), kind(string), published(string), replies_total(integer), status(string), title(string), updated(string), url(string)
   pages:
     primary key: id
     cursor: updated
-    fields: author_display_name(), author_id(), blog_id(), content(), id(), kind(), published(), status(), title(), updated(), url()
+    fields: author_display_name(string), author_id(string), blog_id(string), content(string), id(string), kind(string), published(string), status(string), title(string), updated(string), url(string)
   comments:
     primary key: id
     cursor: updated
-    fields: author_display_name(), author_id(), blog_id(), content(), id(), kind(), post_id(), published(), status(), updated()
+    fields: author_display_name(string), author_id(string), blog_id(string), content(string), id(string), kind(string), post_id(string), published(string), status(string), updated(string)
   pageviews:
     primary key: blog_id, time_range
-    fields: blog_id(), count(), time_range()
+    fields: blog_id(string), count(string), time_range(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

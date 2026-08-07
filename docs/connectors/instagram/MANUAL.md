@@ -35,14 +35,14 @@ CONFIGURATION
 ETL STREAMS
   users:
     primary key: id
-    fields: biography(), followers_count(), follows_count(), id(), media_count(), name(), profile_picture_url(), username(), website()
+    fields: biography(string), followers_count(integer), follows_count(integer), id(string), media_count(integer), name(string), profile_picture_url(string), username(string), website(string)
   media:
     primary key: id
     cursor: timestamp
-    fields: caption(), comments_count(), id(), like_count(), media_product_type(), media_type(), media_url(), permalink(), thumbnail_url(), timestamp(), username()
+    fields: caption(string), comments_count(integer), id(string), like_count(integer), media_product_type(string), media_type(string), media_url(string), permalink(string), thumbnail_url(string), timestamp(string), username(string)
   stories:
     primary key: id
-    fields: caption(), id(), media_product_type(), media_type(), media_url(), permalink(), thumbnail_url(), timestamp(), username()
+    fields: caption(string), id(string), media_product_type(string), media_type(string), media_url(string), permalink(string), thumbnail_url(string), timestamp(string), username(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

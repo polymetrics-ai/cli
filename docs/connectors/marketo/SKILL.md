@@ -39,13 +39,13 @@ Reads Marketo leads, programs, and activities through Marketo REST endpoints. Re
 
 - leads:
   - primary key: id
-  - fields: createdAt(), email(), id(), updatedAt()
+  - fields: createdAt(string), email(string), id(integer), updatedAt(string)
 - programs:
   - primary key: id
-  - fields: createdAt(), id(), name(), updatedAt()
+  - fields: createdAt(string), id(integer), name(string), updatedAt(string)
 - activities:
   - primary key: id
-  - fields: activityDate(), activityTypeId(), id(), leadId()
+  - fields: activityDate(string), activityTypeId(integer), id(integer), leadId(integer)
 
 ## Sync Modes
 

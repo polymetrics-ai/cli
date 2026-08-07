@@ -34,16 +34,16 @@ CONFIGURATION
 ETL STREAMS
   features:
     primary key: id
-    fields: created_at(), id(), name(), status(), title(), updated_at()
+    fields: created_at(string), id(string), name(string), status(object), title(string), updated_at(string)
   notes:
     primary key: id
-    fields: created_at(), id(), name(), status(), title(), updated_at()
+    fields: created_at(string), id(string), name(string), status(object), title(string), updated_at(string)
   components:
     primary key: id
-    fields: created_at(), id(), name(), status(), title(), updated_at()
+    fields: created_at(string), id(string), name(string), status(object), title(string), updated_at(string)
   products:
     primary key: id
-    fields: created_at(), id(), name(), status(), title(), updated_at()
+    fields: created_at(string), id(string), name(string), status(object), title(string), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

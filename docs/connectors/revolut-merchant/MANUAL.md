@@ -38,19 +38,19 @@ ETL STREAMS
   orders:
     primary key: id
     cursor: created_at
-    fields: amount(), created_at(), currency(), id(), state(), stream()
+    fields: amount(string), created_at(string), currency(string), id(string), state(string), stream(string)
   customers:
     primary key: id
     cursor: created_at
-    fields: created_at(), email(), full_name(), id(), stream()
+    fields: created_at(string), email(string), full_name(string), id(string), stream(string)
   settlements:
     primary key: id
     cursor: created_at
-    fields: amount(), created_at(), currency(), id(), stream()
+    fields: amount(string), created_at(string), currency(string), id(string), stream(string)
   payment_links:
     primary key: id
     cursor: created_at
-    fields: amount(), created_at(), currency(), id(), state(), stream()
+    fields: amount(string), created_at(string), currency(string), id(string), state(string), stream(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

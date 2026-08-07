@@ -37,40 +37,40 @@ Reads and writes Cisco Meraki organizations, networks, devices, admins, licenses
 
 - organizations:
   - primary key: id
-  - fields: api(), cloud(), id(), licensing(), management(), name(), url()
+  - fields: api(object), cloud(object), id(string), licensing(object), management(object), name(string), url(string)
 - organization_networks:
   - primary key: id
-  - fields: enrollmentString(), id(), isBoundToConfigTemplate(), name(), notes(), organizationId(), productTypes(), tags(), timeZone(), url()
+  - fields: enrollmentString(string), id(string), isBoundToConfigTemplate(boolean), name(string), notes(string), organizationId(string), productTypes(array), tags(array), timeZone(string), url(string)
 - organization_devices:
   - primary key: serial
-  - fields: address(), firmware(), lat(), lng(), mac(), model(), name(), networkId(), organizationId(), productType(), serial(), tags()
+  - fields: address(string), firmware(string), lat(number), lng(number), mac(string), model(string), name(string), networkId(string), organizationId(string), productType(string), serial(string), tags(array)
 - organization_admins:
   - primary key: id
-  - fields: accountStatus(), authenticationMethod(), email(), hasApiKey(), id(), lastActive(), name(), networks(), orgAccess(), organizationId(), tags(), twoFactorAuthEnabled()
+  - fields: accountStatus(string), authenticationMethod(string), email(string), hasApiKey(boolean), id(string), lastActive(string), name(string), networks(array), orgAccess(string), organizationId(string), tags(array), twoFactorAuthEnabled(boolean)
 - organization_licenses:
   - primary key: id
-  - fields: activationDate(), claimDate(), deviceSerial(), durationInDays(), expirationDate(), headLicenseId(), id(), licenseType(), networkId(), orderNumber(), organizationId(), seatCount(), state(), totalDurationInDays()
+  - fields: activationDate(string), claimDate(string), deviceSerial(string), durationInDays(integer), expirationDate(string), headLicenseId(string), id(string), licenseType(string), networkId(string), orderNumber(string), organizationId(string), seatCount(integer), state(string), totalDurationInDays(integer)
 - organization_config_templates:
   - primary key: id
-  - fields: id(), name(), organizationId(), productTypes(), timeZone()
+  - fields: id(string), name(string), organizationId(string), productTypes(array), timeZone(string)
 - organization_policy_objects:
   - primary key: id
   - cursor: updatedAt
-  - fields: category(), cidr(), createdAt(), groupIds(), id(), name(), networkIds(), organizationId(), type(), updatedAt()
+  - fields: category(string), cidr(string), createdAt(string), groupIds(array), id(string), name(string), networkIds(array), organizationId(string), type(string), updatedAt(string)
 - organization_branding_policies:
   - primary key: organizationId, name
-  - fields: adminSettings(), customLogo(), enabled(), helpSettings(), name(), organizationId()
+  - fields: adminSettings(object), customLogo(object), enabled(boolean), helpSettings(object), name(string), organizationId(string)
 - organization_saml_roles:
   - primary key: id
-  - fields: camera(), id(), networks(), orgAccess(), organizationId(), role(), tags()
+  - fields: camera(object), id(string), networks(array), orgAccess(string), organizationId(string), role(string), tags(array)
 - organization_configuration_changes:
   - primary key: organizationId, ts, label
   - cursor: ts
-  - fields: adminEmail(), adminId(), adminName(), client(), label(), networkId(), networkName(), networkUrl(), newValue(), oldValue(), organizationId(), page(), ssidName(), ssidNumber(), ts()
+  - fields: adminEmail(string), adminId(string), adminName(string), client(object), label(string), networkId(string), networkName(string), networkUrl(string), newValue(string), oldValue(string), organizationId(string), page(string), ssidName(string), ssidNumber(integer), ts(string)
 - organization_api_requests:
   - primary key: organizationId, ts, path, method
   - cursor: ts
-  - fields: adminId(), client(), host(), method(), operationId(), organizationId(), path(), queryString(), responseCode(), sourceIp(), ts(), userAgent(), version()
+  - fields: adminId(string), client(object), host(string), method(string), operationId(string), organizationId(string), path(string), queryString(string), responseCode(integer), sourceIp(string), ts(string), userAgent(string), version(integer)
 
 ## Sync Modes
 

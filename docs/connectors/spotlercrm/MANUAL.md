@@ -35,25 +35,25 @@ CONFIGURATION
 ETL STREAMS
   contacts:
     primary key: id
-    fields: email(), firstName(), id(), lastName()
+    fields: email(string), firstName(string), id(string), lastName(string)
   accounts:
     primary key: id
-    fields: id(), name(), status()
+    fields: id(string), name(string), status(string)
   opportunities:
     primary key: id
-    fields: id(), name(), status()
+    fields: id(string), name(string), status(string)
   tasks:
     primary key: id
-    fields: id(), name(), status()
+    fields: id(string), name(string), status(string)
   activities:
     primary key: id
-    fields: createddate(), id(), modifieddate(), ownerid()
+    fields: createddate(string), id(integer), modifieddate(string), ownerid(integer)
   campaigns:
     primary key: id
-    fields: createddate(), id(), modifieddate(), name(), ownerid()
+    fields: createddate(string), id(integer), modifieddate(string), name(string), ownerid(integer)
   cases:
     primary key: id
-    fields: createddate(), id(), modifieddate(), ownerid()
+    fields: createddate(string), id(integer), modifieddate(string), ownerid(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

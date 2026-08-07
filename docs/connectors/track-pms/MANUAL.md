@@ -34,22 +34,22 @@ ETL STREAMS
   reservations:
     primary key: id
     cursor: arrival_date
-    fields: arrival_date(), confirmation_number(), id(), status()
+    fields: arrival_date(string), confirmation_number(string), id(string), status(string)
   guests:
     primary key: id
-    fields: id(), name(), status()
+    fields: id(string), name(string), status(string)
   units:
     primary key: id
-    fields: id(), name(), status()
+    fields: id(string), name(string), status(string)
   owners:
     primary key: id
-    fields: id(), name(), status()
+    fields: id(string), name(string), status(string)
   contacts:
     primary key: id
-    fields: cell_phone(), country(), created_at(), first_name(), home_phone(), id(), is_owner_contact(), is_vip(), last_name(), locality(), name(), notes(), postal_code(), primary_email(), region(), secondary_email(), street_address(), updated_at(), work_phone()
+    fields: cell_phone(string), country(string), created_at(string), first_name(string), home_phone(string), id(integer), is_owner_contact(boolean), is_vip(boolean), last_name(string), locality(string), name(string), notes(string), postal_code(string), primary_email(string), region(string), secondary_email(string), street_address(string), updated_at(string), work_phone(string)
   unit_types:
     primary key: id
-    fields: bedrooms(), created_at(), id(), is_active(), is_bookable(), lodging_type_id(), max_occupancy(), name(), node_id(), short_name(), type_code(), updated_at()
+    fields: bedrooms(integer), created_at(string), id(integer), is_active(boolean), is_bookable(boolean), lodging_type_id(integer), max_occupancy(integer), name(string), node_id(integer), short_name(string), type_code(string), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

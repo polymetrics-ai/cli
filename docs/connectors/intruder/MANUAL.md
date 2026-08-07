@@ -36,16 +36,16 @@ CONFIGURATION
 ETL STREAMS
   issues:
     primary key: id
-    fields: description(), id(), occurrences(), remediation(), severity(), snooze_reason(), snooze_until(), snoozed(), title()
+    fields: description(string), id(integer), occurrences(string), remediation(string), severity(string), snooze_reason(string), snooze_until(string), snoozed(boolean), title(string)
   scans:
     primary key: id
-    fields: created_at(), id(), status()
+    fields: created_at(string), id(integer), status(string)
   targets:
     primary key: id
-    fields: address(), id(), tags()
+    fields: address(string), id(integer), tags(array)
   occurrences:
     primary key: id
-    fields: age(), extra_info(), id(), issue_id(), port(), snooze_reason(), snooze_until(), snoozed(), target()
+    fields: age(string), extra_info(object), id(integer), issue_id(string), port(integer), snooze_reason(string), snooze_until(string), snoozed(boolean), target(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

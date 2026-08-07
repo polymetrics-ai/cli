@@ -37,13 +37,13 @@ Reads Imagga account API usage and per-image tags/categories via the Imagga REST
 
 - usage:
   - primary key: period
-  - fields: daily_processed(), monthly_limit(), monthly_processed(), period(), requests()
+  - fields: daily_processed(integer), monthly_limit(integer), monthly_processed(integer), period(string), requests(integer)
 - tags:
   - primary key: image_url, tag
-  - fields: confidence(), image_url(), tag()
+  - fields: confidence(number), image_url(string), tag(string)
 - categories:
   - primary key: image_url, category
-  - fields: category(), confidence(), image_url()
+  - fields: category(string), confidence(number), image_url(string)
 
 ## Sync Modes
 

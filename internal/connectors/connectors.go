@@ -276,6 +276,11 @@ type DirectReadRequest struct {
 	MaxBytes     int
 	OutputPolicy string
 	RedactFields []string
+	// Page selects an addressable page (page_number/offset_limit strategies);
+	// PageCursor selects one by opaque token. They are mutually exclusive, and
+	// both are answered by the previous read's DirectReadPage.
+	Page       int
+	PageCursor string
 }
 
 type OperationDirectReadRequest struct {
@@ -287,6 +292,9 @@ type OperationDirectReadRequest struct {
 	MaxBytes     int
 	OutputPolicy string
 	RedactFields []string
+	// Page and PageCursor mirror DirectReadRequest's navigation inputs.
+	Page       int
+	PageCursor string
 }
 
 type DirectReadResult struct {
@@ -295,6 +303,55 @@ type DirectReadResult struct {
 	Path      string `json:"path"`
 	Status    int    `json:"status"`
 	Body      any    `json:"body"`
+	// Page answers "is this all of it?" — the question a direct-read caller
+	// previously had no way to ask. A single Status+Body cannot represent
+	// page 2..N, so before this field a truncated collection and a complete
+	// one were indistinguishable at status 200.
+	Page DirectReadPage `json:"page"`
+}
+
+// Reasons a direct read's page is not confirmed complete. They are declared
+// beside DirectReadPage so the engine that sets them and the CLI that renders
+// them cannot drift.
+const (
+	DirectReadPageReasonMorePages    = "more_pages"
+	DirectReadPageReasonNoPagination = "pagination_not_declared"
+	DirectReadPageReasonAmbiguous    = "ambiguous_collection_shape"
+)
+
+// DirectReadPage is the page context of one direct read.
+//
+// A direct read is page-wise EXPLORATION, not bulk extraction: it returns one
+// page and tells the caller how to reach the next. (Bulk extraction is the ETL
+// path, which stores what it reads; a direct read does not.) Complete is the
+// load-bearing field — false means records exist that this result does not
+// contain, and Reason says why the page stopped there.
+type DirectReadPage struct {
+	// Strategy is the pagination type the bundle declares, or "none" when it
+	// declares one that cannot page (or declares nothing at all).
+	Strategy string `json:"strategy"`
+	// Records counts the rows on THIS page; 0 for a response that is not a
+	// collection.
+	Records int `json:"records"`
+	// Size is the page size actually requested, taken from the declared spec.
+	Size int `json:"size,omitempty"`
+	// Number is the addressable page number. Only page_number and offset_limit
+	// have one; cursor, next_url and link_header address pages by opaque token
+	// and leave this zero.
+	Number int `json:"number,omitempty"`
+	// HasMore reports that the provider has at least one further page.
+	HasMore bool `json:"has_more"`
+	// NextNumber is the page to request next, set only for addressable
+	// strategies.
+	NextNumber int `json:"next_number,omitempty"`
+	// NextCursor is the opaque token to request next, set for the strategies
+	// that have no addressable page number.
+	NextCursor string `json:"next_cursor,omitempty"`
+	// Complete is true only when this page is provably the whole collection.
+	Complete bool `json:"complete"`
+	// Reason names why Complete is false: more pages exist, or the bundle
+	// declares no strategy that could prove otherwise.
+	Reason string `json:"reason,omitempty"`
 }
 
 type DirectReader interface {

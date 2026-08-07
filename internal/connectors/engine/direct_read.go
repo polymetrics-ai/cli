@@ -96,27 +96,32 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	}
 	maxBytes := clampOperationDirectReadMaxBytes(req.MaxBytes, op.REST.MaxBytes)
 	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
-	requester, err := rt.requesterFor(method, op.REST.Path)
+	decoded, pageInfo, resp, err := readDirectPage(ctx, b, rt, directReadWalk{
+		method:      method,
+		declaredPat: op.REST.Path,
+		requestPath: requestPath,
+		query:       query,
+		body:        body,
+		maxBytes:    maxBytes,
+		page:        req.Page,
+		pageCursor:  req.PageCursor,
+	})
 	if err != nil {
-		return connectors.DirectReadResult{}, err
-	}
-	resp, err := requester.DoLimited(ctx, method, requestPath, query, body, maxBytes)
-	if err != nil {
-		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
-		msg := completeEngineErrorText(err)
-		if hint != "" {
-			msg = msg + ": " + hint
+		var tooLarge errDirectReadTooLarge
+		if errors.As(err, &tooLarge) {
+			return connectors.DirectReadResult{}, fmt.Errorf("operation direct read %s", tooLarge.Error())
 		}
-		if class != "" {
-			msg = class + ": " + msg
+		if resp == nil {
+			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
+			msg := completeEngineErrorText(err)
+			if hint != "" {
+				msg = msg + ": " + hint
+			}
+			if class != "" {
+				msg = class + ": " + msg
+			}
+			return connectors.DirectReadResult{}, fmt.Errorf("operation direct read %s %s: %s", method, op.REST.Path, msg)
 		}
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read %s %s: %s", method, op.REST.Path, msg)
-	}
-	if len(resp.Body) > maxBytes {
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read response too large: %d bytes exceeds limit %d", len(resp.Body), maxBytes)
-	}
-	decoded, err := decodeDirectReadBody(resp.Body, maxBytes)
-	if err != nil {
 		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read response is not JSON: %w", err)
 	}
 	decoded, err = applyDirectReadOutputPolicy(policy, decoded)
@@ -130,7 +135,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if len(redactFields) > 0 {
 		decoded = redactNamedJSONFields(decoded, redactFields)
 	}
-	return connectors.DirectReadResult{Connector: b.Name, Method: method, Path: resolvedPath, Status: resp.Status, Body: decoded}, nil
+	return connectors.DirectReadResult{Connector: b.Name, Method: method, Path: resolvedPath, Status: resp.Status, Body: decoded, Page: pageInfo}, nil
 }
 
 // PreflightOperationDirectRead proves a command's named operation can reach
@@ -238,29 +243,31 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 
 	maxBytes := clampDirectReadMaxBytes(req.MaxBytes)
 	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
-	requester, err := rt.requesterFor(method, req.Path)
+	body, pageInfo, resp, err := readDirectPage(ctx, b, rt, directReadWalk{
+		method:      method,
+		declaredPat: req.Path,
+		requestPath: requestPath,
+		query:       query,
+		maxBytes:    maxBytes,
+		page:        req.Page,
+		pageCursor:  req.PageCursor,
+	})
 	if err != nil {
-		return connectors.DirectReadResult{}, err
-	}
-	resp, err := requester.DoLimited(ctx, method, requestPath, query, nil, maxBytes)
-	if err != nil {
-		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
-		msg := completeEngineErrorText(err)
-		if hint != "" {
-			msg = msg + ": " + hint
+		var tooLarge errDirectReadTooLarge
+		if errors.As(err, &tooLarge) {
+			return connectors.DirectReadResult{}, fmt.Errorf("direct read %s", tooLarge.Error())
 		}
-		if class != "" {
-			msg = class + ": " + msg
+		if resp == nil {
+			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
+			msg := completeEngineErrorText(err)
+			if hint != "" {
+				msg = msg + ": " + hint
+			}
+			if class != "" {
+				msg = class + ": " + msg
+			}
+			return connectors.DirectReadResult{}, fmt.Errorf("direct read %s %s: %s", method, req.Path, msg)
 		}
-		return connectors.DirectReadResult{}, fmt.Errorf("direct read %s %s: %s", method, req.Path, msg)
-	}
-
-	if len(resp.Body) > maxBytes {
-		return connectors.DirectReadResult{}, fmt.Errorf("direct read response too large: %d bytes exceeds limit %d", len(resp.Body), maxBytes)
-	}
-
-	body, err := decodeDirectReadBody(resp.Body, maxBytes)
-	if err != nil {
 		return connectors.DirectReadResult{}, fmt.Errorf("direct read response is not JSON: %w", err)
 	}
 	body, err = applyDirectReadOutputPolicy(req.OutputPolicy, body)
@@ -276,6 +283,7 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 		Path:      resolvedPath,
 		Status:    resp.Status,
 		Body:      body,
+		Page:      pageInfo,
 	}, nil
 }
 

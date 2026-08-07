@@ -35,53 +35,53 @@ CONFIGURATION
 ETL STREAMS
   products:
     primary key: id
-    fields: brand(), category(), cost(), id(), last_modified(), name(), price_tier1(), sku(), status(), type(), uom()
+    fields: brand(string), category(string), cost(number), id(string), last_modified(string), name(string), price_tier1(number), sku(string), status(string), type(string), uom(string)
   customers:
     primary key: id
-    fields: currency(), email(), id(), last_modified(), name(), payment_term(), phone(), status(), tax_rule()
+    fields: currency(string), email(string), id(string), last_modified(string), name(string), payment_term(string), phone(string), status(string), tax_rule(string)
   suppliers:
     primary key: id
-    fields: currency(), email(), id(), last_modified(), name(), payment_term(), phone(), status()
+    fields: currency(string), email(string), id(string), last_modified(string), name(string), payment_term(string), phone(string), status(string)
   sale_list:
     primary key: id
-    fields: customer(), customer_id(), id(), invoice_amount(), invoice_status(), last_modified(), order_date(), order_number(), order_status(), status()
+    fields: customer(string), customer_id(string), id(string), invoice_amount(number), invoice_status(string), last_modified(string), order_date(string), order_number(string), order_status(string), status(string)
   purchase_list:
     primary key: id
-    fields: id(), invoice_amount(), last_modified(), order_date(), order_number(), order_status(), status(), supplier(), supplier_id()
+    fields: id(string), invoice_amount(number), last_modified(string), order_date(string), order_number(string), order_status(string), status(string), supplier(string), supplier_id(string)
   product_families:
     primary key: id
     cursor: last_modified
-    fields: brand(), category(), id(), last_modified(), name(), sku(), uom()
+    fields: brand(string), category(string), id(string), last_modified(string), name(string), sku(string), uom(string)
   product_availability:
     primary key: id, location, bin
-    fields: allocated(), available(), bin(), id(), in_transit(), location(), name(), on_hand(), on_order(), sku(), stock_on_hand()
+    fields: allocated(number), available(number), bin(string), id(string), in_transit(number), location(string), name(string), on_hand(number), on_order(number), sku(string), stock_on_hand(number)
   locations:
     primary key: ID
-    fields: AddressCitySuburb(), AddressCountry(), AddressLine1(), AddressLine2(), AddressStateProvince(), AddressZipPostCode(), Bins(), FixedAssetsLocation(), ID(), IsCoMan(), IsDefault(), IsDeprecated(), IsShopfloor(), IsStaging(), Name(), ParentID(), ParentName(), PickZones(), ReferenceCount()
+    fields: AddressCitySuburb(string), AddressCountry(string), AddressLine1(string), AddressLine2(string), AddressStateProvince(string), AddressZipPostCode(string), Bins(array), FixedAssetsLocation(boolean), ID(string), IsCoMan(boolean), IsDefault(boolean), IsDeprecated(boolean), IsShopfloor(boolean), IsStaging(boolean), Name(string), ParentID(string), ParentName(string), PickZones(string), ReferenceCount(integer)
   product_categories:
     primary key: ID
-    fields: ID(), Name()
+    fields: ID(string), Name(string)
   brands:
     primary key: ID
-    fields: ID(), Name()
+    fields: ID(string), Name(string)
   carriers:
     primary key: CarrierID
-    fields: CarrierID(), Description()
+    fields: CarrierID(string), Description(string)
   chart_of_accounts:
     primary key: Code
-    fields: BankAccountId(), BankAccountNumber(), Class(), Code(), Description(), DisplayName(), ForPayments(), Name(), OldCode(), Status(), SystemAccount(), SystemAccountCode(), Type()
+    fields: BankAccountId(string), BankAccountNumber(string), Class(string), Code(string), Description(string), DisplayName(string), ForPayments(boolean), Name(string), OldCode(string), Status(string), SystemAccount(string), SystemAccountCode(string), Type(string)
   payment_terms:
     primary key: ID
-    fields: Duration(), ID(), IsActive(), IsDefault(), Method(), Name()
+    fields: Duration(integer), ID(string), IsActive(boolean), IsDefault(boolean), Method(string), Name(string)
   tax_rules:
     primary key: ID
-    fields: Account(), Components(), ID(), IsActive(), IsTaxForPurchase(), IsTaxForSale(), Name(), TaxInclusive(), TaxPercent()
+    fields: Account(string), Components(array), ID(string), IsActive(boolean), IsTaxForPurchase(boolean), IsTaxForSale(boolean), Name(string), TaxInclusive(boolean), TaxPercent(number)
   units_of_measure:
     primary key: ID
-    fields: ID(), Name()
+    fields: ID(string), Name(string)
   price_tiers:
     primary key: Code
-    fields: Code(), Name()
+    fields: Code(integer), Name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

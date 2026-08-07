@@ -35,7 +35,7 @@ Reads public API directory entries and categories from the api.publicapis.org di
 
 - entries:
   - primary key: id
-  - fields: api(), auth(), category(), cors(), description(), https(), id(), link()
+  - fields: api(string), auth(string), category(string), cors(string), description(string), https(boolean), id(string), link(string)
 
 ## Sync Modes
 

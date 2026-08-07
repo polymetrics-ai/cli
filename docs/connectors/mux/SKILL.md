@@ -38,18 +38,18 @@ Reads Mux Video assets, live streams, direct uploads, and system signing keys th
 - assets:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), duration(), encoding_tier(), id(), master_access(), max_resolution_tier(), mp4_support(), status(), test()
+  - fields: created_at(string), duration(number), encoding_tier(string), id(string), master_access(string), max_resolution_tier(string), mp4_support(string), status(string), test(boolean)
 - live_streams:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), id(), latency_mode(), max_continuous_duration(), reconnect_window(), status(), stream_key(), test()
+  - fields: created_at(string), id(string), latency_mode(string), max_continuous_duration(number), reconnect_window(number), status(string), stream_key(string), test(boolean)
 - uploads:
   - primary key: id
-  - fields: asset_id(), cors_origin(), id(), status(), test(), timeout(), url()
+  - fields: asset_id(string), cors_origin(string), id(string), status(string), test(boolean), timeout(number), url(string)
 - signing_keys:
   - primary key: id
   - cursor: created_at
-  - fields: created_at(), id()
+  - fields: created_at(string), id(string)
 
 ## Sync Modes
 

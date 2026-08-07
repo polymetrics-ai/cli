@@ -35,46 +35,46 @@ ETL STREAMS
   courses:
     primary key: id
     cursor: created_at
-    fields: created_at(), id(), name(), slug()
+    fields: created_at(string), id(integer), name(string), slug(string)
   users:
     primary key: id
-    fields: company(), created_at(), email(), first_name(), full_name(), id(), last_name(), roles()
+    fields: company(string), created_at(string), email(string), first_name(string), full_name(string), id(integer), last_name(string), roles(array)
   enrollments:
     primary key: id
-    fields: activated_at(), completed(), completed_at(), course_id(), course_name(), expired(), expiry_date(), id(), is_free_trial(), percentage_completed(), started_at(), updated_at(), user_email(), user_id(), user_name()
+    fields: activated_at(string), completed(boolean), completed_at(string), course_id(integer), course_name(string), expired(boolean), expiry_date(string), id(integer), is_free_trial(boolean), percentage_completed(number), started_at(string), updated_at(string), user_email(string), user_id(integer), user_name(string)
   collections:
     primary key: id
-    fields: created_at(), default(), description(), id(), name(), product_ids(), slug()
+    fields: created_at(string), default(boolean), description(string), id(integer), name(string), product_ids(array), slug(string)
   products:
     primary key: id
-    fields: created_at(), hidden(), id(), name(), price(), private(), productable_id(), productable_type(), slug(), status(), subscription()
+    fields: created_at(string), hidden(boolean), id(integer), name(string), price(number), private(boolean), productable_id(integer), productable_type(string), slug(string), status(string), subscription(boolean)
   orders:
     primary key: id
-    fields: amount_cents(), amount_dollars(), coupon_code(), id(), product_id(), product_name(), status(), subscription(), user_email(), user_id(), user_name()
+    fields: amount_cents(integer), amount_dollars(number), coupon_code(string), id(integer), product_id(integer), product_name(string), status(string), subscription(boolean), user_email(string), user_id(integer), user_name(string)
   coupons:
     primary key: id
-    fields: code(), created_at(), id(), note(), promotion_id(), quantity(), quantity_used()
+    fields: code(string), created_at(string), id(integer), note(string), promotion_id(integer), quantity(integer), quantity_used(integer)
   promotions:
     primary key: id
-    fields: amount(), coupon_ids(), description(), discount_type(), duration(), expires_at(), id(), name(), starts_at()
+    fields: amount(number), coupon_ids(array), description(string), discount_type(string), duration(number), expires_at(string), id(integer), name(string), starts_at(string)
   groups:
     primary key: id
-    fields: created_at(), id(), name(), token()
+    fields: created_at(string), id(integer), name(string), token(string)
   instructors:
     primary key: id
-    fields: bio(), created_at(), email(), first_name(), id(), last_name(), slug(), title(), user_id()
+    fields: bio(string), created_at(string), email(string), first_name(string), id(integer), last_name(string), slug(string), title(string), user_id(integer)
   course_reviews:
     primary key: id
-    fields: approved(), course_id(), created_at(), id(), rating(), review_text(), title(), user_id()
+    fields: approved(boolean), course_id(integer), created_at(string), id(integer), rating(number), review_text(string), title(string), user_id(integer)
   custom_profile_field_definitions:
     primary key: id
-    fields: field_type(), id(), label(), required()
+    fields: field_type(string), id(integer), label(string), required(boolean)
   site_scripts:
     primary key: id
-    fields: category(), content(), created_at(), description(), id(), load_method(), location(), name(), src(), updated_at()
+    fields: category(string), content(string), created_at(string), description(string), id(integer), load_method(string), location(string), name(string), src(string), updated_at(string)
   product_publish_requests:
     primary key: id
-    fields: completed_at(), created_at(), id(), product_id(), requesting_user_id(), responding_user_id(), response_text(), status(), updated_at()
+    fields: completed_at(string), created_at(string), id(integer), product_id(integer), requesting_user_id(integer), responding_user_id(integer), response_text(string), status(string), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

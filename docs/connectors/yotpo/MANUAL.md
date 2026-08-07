@@ -37,35 +37,35 @@ ETL STREAMS
   products:
     primary key: yotpo_id
     cursor: updated_at
-    fields: brand(), compare_at_price(), created_at(), currency(), custom_properties(), description(), external_id(), group_name(), gtins(), image_url(), inventory_quantity(), is_discontinued(), is_valid_url(), mpn(), name(), price(), sku(), status(), updated_at(), url(), yotpo_id()
+    fields: brand(string), compare_at_price(integer), created_at(string), currency(string), custom_properties(object), description(string), external_id(string), group_name(string), gtins(array), image_url(string), inventory_quantity(integer), is_discontinued(boolean), is_valid_url(boolean), mpn(string), name(string), price(integer), sku(string), status(string), updated_at(string), url(string), yotpo_id(integer)
   product_variants:
     primary key: id
     cursor: updated_at
-    fields: compare_at_price(), created_at(), currency(), description(), external_id(), gtins(), id(), image_url(), inventory_quantity(), is_discontinued(), is_valid_url(), name(), options(), price(), sku(), updated_at(), url(), yotpo_id()
+    fields: compare_at_price(integer), created_at(string), currency(string), description(string), external_id(string), gtins(array), id(integer), image_url(string), inventory_quantity(integer), is_discontinued(boolean), is_valid_url(boolean), name(string), options(array), price(integer), sku(string), updated_at(string), url(string), yotpo_id(integer)
   collections:
     primary key: id
     cursor: updated_at
-    fields: created_at(), external_id(), id(), name(), updated_at(), yotpo_id()
+    fields: created_at(string), external_id(string), id(integer), name(string), updated_at(string), yotpo_id(integer)
   customers:
     primary key: external_id
     cursor: account_updated_at
-    fields: accepts_email_marketing(), accepts_sms_marketing(), account_created_at(), account_status(), account_updated_at(), address(), custom_properties(), default_currency(), default_language(), email(), external_id(), first_name(), gender(), last_name(), phone_number(), tags()
+    fields: accepts_email_marketing(boolean), accepts_sms_marketing(boolean), account_created_at(string), account_status(string), account_updated_at(string), address(object), custom_properties(object), default_currency(string), default_language(string), email(string), external_id(string), first_name(string), gender(string), last_name(string), phone_number(string), tags(string)
   orders:
     primary key: yotpo_id
     cursor: order_date
-    fields: billing_address(), cancellation(), checkout_token(), currency(), custom_properties(), customer(), customer_locale(), external_id(), fulfillments(), landing_site_url(), line_items(), order_date(), order_name(), order_number(), payment_method(), payment_status(), shipping_address(), status(), subtotal_price(), total_price(), yotpo_id()
+    fields: billing_address(object), cancellation(object), checkout_token(string), currency(string), custom_properties(object), customer(object), customer_locale(string), external_id(string), fulfillments(array), landing_site_url(string), line_items(array), order_date(string), order_name(string), order_number(string), payment_method(string), payment_status(string), shipping_address(object), status(string), subtotal_price(integer), total_price(integer), yotpo_id(integer)
   webhook_targets:
     primary key: id
     cursor: updated_at
-    fields: created_at(), id(), updated_at(), url(), yotpo_id()
+    fields: created_at(string), id(integer), updated_at(string), url(string), yotpo_id(integer)
   webhook_filters:
     primary key: id
     cursor: updated_at
-    fields: created_at(), events(), id(), updated_at(), yotpo_id()
+    fields: created_at(string), events(array), id(integer), updated_at(string), yotpo_id(integer)
   webhook_subscriptions:
     primary key: id
     cursor: updated_at
-    fields: active(), created_at(), filter_id(), id(), target_id(), updated_at(), yotpo_id()
+    fields: active(boolean), created_at(string), filter_id(integer), id(integer), target_id(integer), updated_at(string), yotpo_id(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

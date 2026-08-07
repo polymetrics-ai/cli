@@ -41,45 +41,45 @@ CONFIGURATION
 ETL STREAMS
   clients:
     primary key: ClientID
-    fields: ClientID(), Name()
+    fields: ClientID(string), Name(string)
   campaigns:
     primary key: CampaignID
     cursor: SentDate
-    fields: CampaignID(), FromEmail(), FromName(), Name(), ReplyTo(), SentDate(), Subject(), TotalRecipients(), WebVersionTextURL(), WebVersionURL()
+    fields: CampaignID(string), FromEmail(string), FromName(string), Name(string), ReplyTo(string), SentDate(string), Subject(string), TotalRecipients(integer), WebVersionTextURL(string), WebVersionURL(string)
   lists:
     primary key: ListID
-    fields: ListID(), Name()
+    fields: ListID(string), Name(string)
   suppressionlist:
     primary key: EmailAddress
     cursor: Date
-    fields: Date(), EmailAddress(), State(), SuppressionType()
+    fields: Date(string), EmailAddress(string), State(string), SuppressionType(string)
   segments:
     primary key: SegmentID
-    fields: ListID(), OwningClientID(), SegmentID(), Title()
+    fields: ListID(string), OwningClientID(string), SegmentID(string), Title(string)
   templates:
     primary key: TemplateID
-    fields: Name(), OwningClientID(), PreviewURL(), ScreenshotURL(), TemplateID()
+    fields: Name(string), OwningClientID(string), PreviewURL(string), ScreenshotURL(string), TemplateID(string)
   list_custom_fields:
     primary key: ListID, Key
-    fields: DataType(), FieldName(), FieldOptions(), Key(), ListID(), VisibleInPreferenceCenter()
+    fields: DataType(string), FieldName(string), FieldOptions(array), Key(string), ListID(string), VisibleInPreferenceCenter(boolean)
   list_webhooks:
     primary key: WebhookID
-    fields: Events(), ListID(), PayloadFormat(), Status(), Url(), WebhookID()
+    fields: Events(array), ListID(string), PayloadFormat(string), Status(string), Url(string), WebhookID(string)
   active_subscribers:
     primary key: ListID, EmailAddress
-    fields: ConsentToTrack(), CustomFields(), Date(), EmailAddress(), ListID(), ListJoinedDate(), Name(), ReadsEmailWith(), State()
+    fields: ConsentToTrack(string), CustomFields(array), Date(string), EmailAddress(string), ListID(string), ListJoinedDate(string), Name(string), ReadsEmailWith(string), State(string)
   unconfirmed_subscribers:
     primary key: ListID, EmailAddress
-    fields: ConsentToTrack(), CustomFields(), Date(), EmailAddress(), ListID(), ListJoinedDate(), Name(), ReadsEmailWith(), State()
+    fields: ConsentToTrack(string), CustomFields(array), Date(string), EmailAddress(string), ListID(string), ListJoinedDate(string), Name(string), ReadsEmailWith(string), State(string)
   unsubscribed_subscribers:
     primary key: ListID, EmailAddress
-    fields: ConsentToTrack(), CustomFields(), Date(), EmailAddress(), ListID(), ListJoinedDate(), Name(), ReadsEmailWith(), State()
+    fields: ConsentToTrack(string), CustomFields(array), Date(string), EmailAddress(string), ListID(string), ListJoinedDate(string), Name(string), ReadsEmailWith(string), State(string)
   bounced_subscribers:
     primary key: ListID, EmailAddress
-    fields: ConsentToTrack(), CustomFields(), Date(), EmailAddress(), ListID(), ListJoinedDate(), Name(), ReadsEmailWith(), State()
+    fields: ConsentToTrack(string), CustomFields(array), Date(string), EmailAddress(string), ListID(string), ListJoinedDate(string), Name(string), ReadsEmailWith(string), State(string)
   deleted_subscribers:
     primary key: ListID, EmailAddress
-    fields: ConsentToTrack(), CustomFields(), Date(), EmailAddress(), ListID(), ListJoinedDate(), Name(), ReadsEmailWith(), State()
+    fields: ConsentToTrack(string), CustomFields(array), Date(string), EmailAddress(string), ListID(string), ListJoinedDate(string), Name(string), ReadsEmailWith(string), State(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

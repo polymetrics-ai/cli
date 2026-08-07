@@ -36,13 +36,13 @@ Reads Survicate surveys, survey questions, responses, and respondent attributes,
 - surveys:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), id(), name(), updated_at()
+  - fields: created_at(string), id(string), name(string), updated_at(string)
 - survey_questions:
   - primary key: survey_id, id
-  - fields: answer_choices(), columns(), fields(), id(), introduction(), question(), survey_id(), type()
+  - fields: answer_choices(array), columns(array), fields(array), id(integer), introduction(string), question(string), survey_id(string), type(string)
 - responses:
   - primary key: uuid
-  - fields: attributes(), collected_at(), device_type(), language(), operating_system(), questions(), respondent_uuid(), survey_id(), url(), uuid()
+  - fields: attributes(array), collected_at(string), device_type(string), language(string), operating_system(string), questions(array), respondent_uuid(string), survey_id(string), url(string), uuid(string)
 
 ## Sync Modes
 

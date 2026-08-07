@@ -42,18 +42,18 @@ Reads FullStory segments, users, events, and user-scoped sessions; writes server
 - segments:
   - primary key: id
   - cursor: created
-  - fields: created(), creator(), description(), id(), is_public(), name(), type()
+  - fields: created(string), creator(string), description(string), id(string), is_public(boolean), name(string), type(string)
 - users:
   - primary key: id
   - cursor: created
-  - fields: created(), display_name(), email(), id(), is_being_processed(), uid(), updated()
+  - fields: created(string), display_name(string), email(string), id(string), is_being_processed(boolean), uid(string), updated(string)
 - events:
   - primary key: id
   - cursor: event_time
-  - fields: device_id(), event_time(), id(), name(), session_id(), type(), user_id()
+  - fields: device_id(string), event_time(string), id(string), name(string), session_id(string), type(string), user_id(string)
 - sessions:
   - primary key: id
-  - fields: app_url(), duration_ms(), email(), id(), start_time(), uid()
+  - fields: app_url(string), duration_ms(integer), email(string), id(string), start_time(string), uid(string)
 
 ## Sync Modes
 

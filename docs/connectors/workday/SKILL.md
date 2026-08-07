@@ -38,15 +38,15 @@ Reads Workday tenant data (workers, organizations, positions) through conservati
 - workers:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), updated_at()
+  - fields: id(string), name(string), updated_at(string)
 - organizations:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), type(), updated_at()
+  - fields: id(string), name(string), type(string), updated_at(string)
 - positions:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), title(), updated_at(), worker_id()
+  - fields: id(string), title(string), updated_at(string), worker_id(string)
 
 ## Sync Modes
 

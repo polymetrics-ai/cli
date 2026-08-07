@@ -43,18 +43,18 @@ ETL STREAMS
   latest:
     primary key: article_id
     cursor: pubDate
-    fields: article_id(), category(), content(), country(), creator(), description(), duplicate(), image_url(), keywords(), language(), link(), pubDate(), source_id(), source_name(), source_url(), title()
+    fields: article_id(string), category(array), content(string), country(array), creator(array), description(string), duplicate(boolean), image_url(string), keywords(array), language(string), link(string), pubDate(string), source_id(string), source_name(string), source_url(string), title(string)
   crypto:
     primary key: article_id
     cursor: pubDate
-    fields: article_id(), category(), content(), country(), creator(), description(), duplicate(), image_url(), keywords(), language(), link(), pubDate(), source_id(), source_name(), source_url(), title()
+    fields: article_id(string), category(array), content(string), country(array), creator(array), description(string), duplicate(boolean), image_url(string), keywords(array), language(string), link(string), pubDate(string), source_id(string), source_name(string), source_url(string), title(string)
   archive:
     primary key: article_id
     cursor: pubDate
-    fields: article_id(), category(), content(), country(), creator(), description(), duplicate(), image_url(), keywords(), language(), link(), pubDate(), source_id(), source_name(), source_url(), title()
+    fields: article_id(string), category(array), content(string), country(array), creator(array), description(string), duplicate(boolean), image_url(string), keywords(array), language(string), link(string), pubDate(string), source_id(string), source_name(string), source_url(string), title(string)
   sources:
     primary key: id
-    fields: category(), country(), description(), icon(), id(), language(), name(), priority(), url()
+    fields: category(array), country(array), description(string), icon(string), id(string), language(array), name(string), priority(integer), url(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

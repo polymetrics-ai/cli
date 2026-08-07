@@ -39,15 +39,15 @@ Reads Planhat companies, end users, and licenses through the Planhat REST API.
 - companies:
   - primary key: id
   - cursor: updated_at
-  - fields: email(), id(), name(), phase(), updated_at()
+  - fields: email(string), id(string), name(string), phase(string), updated_at(string)
 - endusers:
   - primary key: id
   - cursor: updated_at
-  - fields: email(), id(), name(), phase(), updated_at()
+  - fields: email(string), id(string), name(string), phase(string), updated_at(string)
 - licenses:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), name(), phase(), updated_at()
+  - fields: id(string), name(string), phase(string), updated_at(string)
 
 ## Sync Modes
 

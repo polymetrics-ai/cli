@@ -38,34 +38,34 @@ Reads and manages Amplitude behavioral cohorts, chart annotations, annotation ca
 
 - cohorts:
   - primary key: id
-  - fields: archived(), createdAt(), description(), id(), lastComputed(), lastMod(), name(), owners(), published(), size(), type()
+  - fields: archived(boolean), createdAt(integer), description(string), id(string), lastComputed(integer), lastMod(integer), name(string), owners(array), published(boolean), size(integer), type(string)
 - cohorts_usage:
   - primary key: resets_at
-  - fields: limit(), resets_at(), usage()
+  - fields: limit(integer), resets_at(string), usage(integer)
 - annotations:
   - primary key: id
-  - fields: date(), details(), id(), label()
+  - fields: date(string), details(string), id(integer), label(string)
 - annotation_categories:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(integer), name(string)
 - events_list:
   - primary key: value
-  - fields: deleted(), display(), flow_hidden(), hidden(), non_active(), totals(), value()
+  - fields: deleted(boolean), display(string), flow_hidden(boolean), hidden(boolean), non_active(boolean), totals(integer), value(string)
 - taxonomy_categories:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(integer), name(string)
 - taxonomy_events:
   - primary key: event_type
-  - fields: category(), description(), display_name(), event_type(), is_active(), is_hidden_from_dropdowns(), is_hidden_from_pathfinder(), is_hidden_from_persona_results(), is_hidden_from_timeline(), owner(), tags()
+  - fields: category(object), description(string), display_name(string), event_type(string), is_active(boolean), is_hidden_from_dropdowns(boolean), is_hidden_from_pathfinder(boolean), is_hidden_from_persona_results(boolean), is_hidden_from_timeline(boolean), owner(string), tags(array)
 - taxonomy_event_properties:
   - primary key: event_property, event_type
-  - fields: classifications(), description(), enum_values(), event_property(), event_type(), is_array_type(), is_hidden(), is_required(), regex(), type()
+  - fields: classifications(array), description(string), enum_values(array), event_property(string), event_type(string), is_array_type(boolean), is_hidden(boolean), is_required(boolean), regex(string), type(string)
 - taxonomy_user_properties:
   - primary key: user_property
-  - fields: classifications(), deleted(), description(), enum_values(), is_array_type(), is_hidden(), regex(), type(), user_property()
+  - fields: classifications(array), deleted(boolean), description(string), enum_values(array), is_array_type(boolean), is_hidden(boolean), regex(string), type(string), user_property(string)
 - taxonomy_group_properties:
   - primary key: group_type, group_property
-  - fields: classifications(), description(), enum_values(), group_property(), group_type(), is_array_type(), is_hidden(), regex(), type()
+  - fields: classifications(array), description(string), enum_values(array), group_property(string), group_type(string), is_array_type(boolean), is_hidden(boolean), regex(string), type(string)
 
 ## Sync Modes
 

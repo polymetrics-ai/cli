@@ -37,31 +37,31 @@ Reads Smaily campaigns, segments, contacts, templates, automations, and organiza
 
 - campaigns:
   - primary key: id
-  - fields: created_at(), id(), name()
+  - fields: created_at(string), id(integer), name(string)
 - segments:
   - primary key: id
-  - fields: created_at(), id(), name()
+  - fields: created_at(string), id(integer), name(string)
 - subscribers:
   - primary key: id
-  - fields: created_at(), id(), name()
+  - fields: created_at(string), id(integer), name(string)
 - templates:
   - primary key: id
-  - fields: created_at(), id(), name()
+  - fields: created_at(string), id(integer), name(string)
 - automations:
   - primary key: id
-  - fields: created_at(), id(), name()
+  - fields: created_at(string), id(integer), name(string)
 - segment_rules:
   - primary key: id
-  - fields: filter_data(), filter_type(), id(), name(), subscribers_count()
+  - fields: filter_data(array), filter_type(string), id(integer), name(string), subscribers_count(integer)
 - segment_subscribers:
   - primary key: email
-  - fields: created_at(), email(), is_unsubscribed(), last_click_at(), last_open_at(), modified_at(), subscribed_at(), total_clicks(), total_opens()
+  - fields: created_at(string), email(string), is_unsubscribed(integer), last_click_at(string), last_open_at(string), modified_at(string), subscribed_at(string), total_clicks(string), total_opens(string)
 - ab_tests:
   - primary key: id
-  - fields: created_at(), id(), name()
+  - fields: created_at(string), id(integer), name(string)
 - organization_users:
   - primary key: id
-  - fields: email(), id(), label()
+  - fields: email(string), id(integer), label(string)
 
 ## Sync Modes
 

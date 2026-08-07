@@ -43,35 +43,35 @@ ETL STREAMS
   air_quality_current:
     primary key: datetime, latitude, longitude
     cursor: datetime
-    fields: data_available(), datetime(), health_recommendations(), indexes(), latitude(), longitude(), pollutants()
+    fields: data_available(boolean), datetime(string), health_recommendations(object), indexes(object), latitude(string), longitude(string), pollutants(object)
   air_quality_forecast:
     primary key: datetime, latitude, longitude
     cursor: datetime
-    fields: data_available(), datetime(), health_recommendations(), indexes(), latitude(), longitude(), pollutants()
+    fields: data_available(boolean), datetime(string), health_recommendations(object), indexes(object), latitude(string), longitude(string), pollutants(object)
   air_quality_history:
     primary key: datetime, latitude, longitude
     cursor: datetime
-    fields: data_available(), datetime(), health_recommendations(), indexes(), latitude(), longitude(), pollutants()
+    fields: data_available(boolean), datetime(string), health_recommendations(object), indexes(object), latitude(string), longitude(string), pollutants(object)
   pollen_forecast:
     primary key: datetime, latitude, longitude
     cursor: datetime
-    fields: data_available(), date(), datetime(), index(), latitude(), longitude(), plants(), types()
+    fields: data_available(boolean), date(string), datetime(string), index(object), latitude(string), longitude(string), plants(object), types(object)
   weather_current:
     primary key: datetime, latitude, longitude
     cursor: datetime
-    fields: data_available(), datetime(), feels_like_temperature(), latitude(), longitude(), precipitation(), relative_humidity(), temperature(), weather_condition(), wind()
+    fields: data_available(boolean), datetime(string), feels_like_temperature(object), latitude(string), longitude(string), precipitation(object), relative_humidity(integer), temperature(object), weather_condition(object), wind(object)
   weather_daily_forecast:
     primary key: start_date, latitude, longitude
     cursor: start_date
-    fields: latitude(), longitude(), max_uv_index(), moon(), start_date(), sun()
+    fields: latitude(string), longitude(string), max_uv_index(integer), moon(object), start_date(string), sun(object)
   wildfire_active_tracking:
     primary key: EventId, latitude, longitude
     cursor: LastUpdated
-    fields: CalculatedAcres(), CurrentLat(), CurrentLon(), DiscoveryDateTime(), EventId(), ExistenceConfidence(), LastUpdated(), MaxCalculatedAcres(), ShapeConfidence(), geometry(), latitude(), longitude()
+    fields: CalculatedAcres(number), CurrentLat(number), CurrentLon(number), DiscoveryDateTime(string), EventId(string), ExistenceConfidence(integer), LastUpdated(string), MaxCalculatedAcres(number), ShapeConfidence(integer), geometry(object), latitude(string), longitude(string)
   wildfire_burnt_area:
     primary key: latitude, longitude, DiscoveryDateTime
     cursor: ExtinguishedTS
-    fields: BurntAcres(), BurntLat(), BurntLon(), DiscoveryDateTime(), ExtinguishedTS(), InitialLat(), InitialLon(), geometry(), latitude(), longitude()
+    fields: BurntAcres(number), BurntLat(number), BurntLon(number), DiscoveryDateTime(string), ExtinguishedTS(string), InitialLat(number), InitialLon(number), geometry(object), latitude(string), longitude(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

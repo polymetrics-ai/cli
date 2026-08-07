@@ -37,19 +37,19 @@ ETL STREAMS
   projects:
     primary key: id
     cursor: last_activity_at
-    fields: archived(), created_at(), default_branch(), description(), forks_count(), id(), last_activity_at(), name(), open_issues_count(), path(), path_with_namespace(), star_count(), visibility(), web_url()
+    fields: archived(boolean), created_at(string), default_branch(string), description(string), forks_count(integer), id(integer), last_activity_at(string), name(string), open_issues_count(integer), path(string), path_with_namespace(string), star_count(integer), visibility(string), web_url(string)
   groups:
     primary key: id
     cursor: created_at
-    fields: created_at(), description(), full_name(), full_path(), id(), name(), parent_id(), path(), visibility(), web_url()
+    fields: created_at(string), description(string), full_name(string), full_path(string), id(integer), name(string), parent_id(integer), path(string), visibility(string), web_url(string)
   users:
     primary key: id
     cursor: created_at
-    fields: bot(), created_at(), id(), is_admin(), name(), state(), username(), web_url()
+    fields: bot(boolean), created_at(string), id(integer), is_admin(boolean), name(string), state(string), username(string), web_url(string)
   issues:
     primary key: id
     cursor: updated_at
-    fields: author_id(), closed_at(), created_at(), downvotes(), id(), iid(), project_id(), state(), title(), updated_at(), upvotes(), user_notes_count(), web_url()
+    fields: author_id(integer), closed_at(string), created_at(string), downvotes(integer), id(integer), iid(integer), project_id(integer), state(string), title(string), updated_at(string), upvotes(integer), user_notes_count(integer), web_url(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

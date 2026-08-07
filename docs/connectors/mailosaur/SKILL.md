@@ -40,15 +40,15 @@ Reads Mailosaur virtual servers, message summaries, and account usage transactio
 
 - servers:
   - primary key: id
-  - fields: id(), messages(), name(), users()
+  - fields: id(string), messages(integer), name(string), users(array)
 - messages:
   - primary key: id
   - cursor: received
-  - fields: bcc(), cc(), from(), id(), received(), server(), subject(), to(), type()
+  - fields: bcc(array), cc(array), from(array), id(string), received(string), server(string), subject(string), to(array), type(string)
 - transactions:
   - primary key: timestamp
   - cursor: timestamp
-  - fields: email(), previews(), sms(), timestamp()
+  - fields: email(integer), previews(integer), sms(integer), timestamp(string)
 
 ## Sync Modes
 

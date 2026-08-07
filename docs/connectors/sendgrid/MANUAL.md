@@ -33,19 +33,19 @@ CONFIGURATION
 ETL STREAMS
   lists:
     primary key: id
-    fields: contact_count(), id(), name()
+    fields: contact_count(integer), id(string), name(string)
   segments:
     primary key: id
     cursor: updated_at
-    fields: contacts_count(), created_at(), id(), name(), query_version(), sample_updated_at(), updated_at()
+    fields: contacts_count(integer), created_at(string), id(string), name(string), query_version(string), sample_updated_at(string), updated_at(string)
   contacts:
     primary key: id
     cursor: updated_at
-    fields: created_at(), email(), first_name(), id(), last_name(), phone_number(), updated_at()
+    fields: created_at(string), email(string), first_name(string), id(string), last_name(string), phone_number(string), updated_at(string)
   suppression_bounces:
     primary key: email
     cursor: created
-    fields: created(), email(), reason(), status()
+    fields: created(integer), email(string), reason(string), status(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

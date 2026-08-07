@@ -36,27 +36,27 @@ ETL STREAMS
   calls:
     primary key: id
     cursor: started_at
-    fields: answered_at(), archived(), direction(), duration(), ended_at(), id(), missed_call_reason(), raw_digits(), recording(), sid(), started_at(), status(), voicemail()
+    fields: answered_at(integer), archived(boolean), direction(string), duration(integer), ended_at(integer), id(integer), missed_call_reason(string), raw_digits(string), recording(string), sid(string), started_at(integer), status(string), voicemail(string)
   users:
     primary key: id
     cursor: created_at
-    fields: availability_status(), available(), created_at(), email(), id(), language(), name(), time_zone(), wrap_up_time()
+    fields: availability_status(string), available(boolean), created_at(string), email(string), id(integer), language(string), name(string), time_zone(string), wrap_up_time(integer)
   contacts:
     primary key: id
     cursor: created_at
-    fields: company_name(), created_at(), first_name(), id(), information(), is_shared(), last_name(), updated_at()
+    fields: company_name(string), created_at(string), first_name(string), id(integer), information(string), is_shared(boolean), last_name(string), updated_at(string)
   numbers:
     primary key: id
-    fields: country(), created_at(), digits(), id(), is_ivr(), live_recording_activated(), name(), open(), time_zone()
+    fields: country(string), created_at(string), digits(string), id(integer), is_ivr(boolean), live_recording_activated(boolean), name(string), open(boolean), time_zone(string)
   teams:
     primary key: id
-    fields: created_at(), id(), name()
+    fields: created_at(string), id(integer), name(string)
   tags:
     primary key: id
-    fields: color(), description(), id(), name()
+    fields: color(string), description(string), id(integer), name(string)
   webhooks:
     primary key: id
-    fields: active(), events(), id(), url()
+    fields: active(boolean), events(array), id(integer), url(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

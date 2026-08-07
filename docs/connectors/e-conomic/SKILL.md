@@ -37,46 +37,46 @@ Reads and writes e-conomic customers, products, suppliers, accounts, invoices (b
 
 - customers:
   - primary key: customer_number
-  - fields: address(), balance(), barred(), city(), country(), credit_limit(), currency(), customer_group_number(), customer_number(), email(), name(), self(), vat_zone_number(), zip()
+  - fields: address(string), balance(number), barred(boolean), city(string), country(string), credit_limit(number), currency(string), customer_group_number(integer), customer_number(integer), email(string), name(string), self(string), vat_zone_number(integer), zip(string)
 - products:
   - primary key: product_number
-  - fields: barred(), cost_price(), description(), name(), product_group_number(), product_number(), recommended_price(), sales_price(), self(), unit_number()
+  - fields: barred(boolean), cost_price(number), description(string), name(string), product_group_number(integer), product_number(string), recommended_price(number), sales_price(number), self(string), unit_number(integer)
 - suppliers:
   - primary key: supplier_number
-  - fields: address(), barred(), city(), country(), currency(), email(), name(), self(), supplier_group_number(), supplier_number(), vat_zone_number(), zip()
+  - fields: address(string), barred(boolean), city(string), country(string), currency(string), email(string), name(string), self(string), supplier_group_number(integer), supplier_number(integer), vat_zone_number(integer), zip(string)
 - accounts:
   - primary key: account_number
-  - fields: account_number(), account_type(), balance(), block_direct_entries(), debit_credit(), name(), self(), vat_code()
+  - fields: account_number(integer), account_type(string), balance(number), block_direct_entries(boolean), debit_credit(string), name(string), self(string), vat_code(string)
 - invoices:
   - primary key: booked_invoice_number
-  - fields: booked_invoice_number(), currency(), customer_number(), date(), due_date(), gross_amount(), net_amount(), payment_terms_number(), remainder(), self(), vat_amount()
+  - fields: booked_invoice_number(integer), currency(string), customer_number(integer), date(string), due_date(string), gross_amount(number), net_amount(number), payment_terms_number(integer), remainder(number), self(string), vat_amount(number)
 - invoices_drafts:
   - primary key: draft_invoice_number
-  - fields: currency(), customer_number(), date(), draft_invoice_number(), due_date(), gross_amount(), net_amount(), payment_terms_number(), self(), vat_amount()
+  - fields: currency(string), customer_number(integer), date(string), draft_invoice_number(integer), due_date(string), gross_amount(number), net_amount(number), payment_terms_number(integer), self(string), vat_amount(number)
 - customer_groups:
   - primary key: customer_group_number
-  - fields: customer_group_number(), name(), self()
+  - fields: customer_group_number(integer), name(string), self(string)
 - product_groups:
   - primary key: product_group_number
-  - fields: name(), product_group_number(), self()
+  - fields: name(string), product_group_number(integer), self(string)
 - supplier_groups:
   - primary key: supplier_group_number
-  - fields: name(), self(), supplier_group_number()
+  - fields: name(string), self(string), supplier_group_number(integer)
 - payment_terms:
   - primary key: payment_terms_number
-  - fields: days_of_credit(), name(), payment_terms_number(), self()
+  - fields: days_of_credit(integer), name(string), payment_terms_number(integer), self(string)
 - vat_zones:
   - primary key: vat_zone_number
-  - fields: name(), self(), vat_zone_number()
+  - fields: name(string), self(string), vat_zone_number(integer)
 - currencies:
   - primary key: code
-  - fields: code(), name(), self()
+  - fields: code(string), name(string), self(string)
 - orders_drafts:
   - primary key: draft_order_number
-  - fields: currency(), customer_number(), date(), draft_order_number(), gross_amount(), net_amount(), self()
+  - fields: currency(string), customer_number(integer), date(string), draft_order_number(integer), gross_amount(number), net_amount(number), self(string)
 - orders_archived:
   - primary key: order_number
-  - fields: currency(), customer_number(), date(), gross_amount(), net_amount(), order_number(), self()
+  - fields: currency(string), customer_number(integer), date(string), gross_amount(number), net_amount(number), order_number(integer), self(string)
 
 ## Sync Modes
 

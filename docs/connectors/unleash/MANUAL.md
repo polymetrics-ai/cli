@@ -35,16 +35,16 @@ CONFIGURATION
 ETL STREAMS
   projects:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   features:
     primary key: name
-    fields: enabled(), name(), project(), type()
+    fields: enabled(boolean), name(string), project(string), type(string)
   environments:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   segments:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

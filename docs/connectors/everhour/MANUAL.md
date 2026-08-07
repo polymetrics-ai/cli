@@ -34,37 +34,37 @@ CONFIGURATION
 ETL STREAMS
   projects:
     primary key: id
-    fields: createdAt(), favorite(), foreign(), id(), name(), platform(), status(), type(), workspaceId(), workspaceName()
+    fields: createdAt(string), favorite(boolean), foreign(boolean), id(string), name(string), platform(string), status(string), type(string), workspaceId(string), workspaceName(string)
   clients:
     primary key: id
-    fields: createdAt(), email(), favorite(), id(), name(), status()
+    fields: createdAt(string), email(string), favorite(boolean), id(string), name(string), status(string)
   users:
     primary key: id
-    fields: capacity(), createdAt(), email(), headline(), id(), isEmailVerified(), name(), role(), status(), type()
+    fields: capacity(integer), createdAt(string), email(string), headline(string), id(string), isEmailVerified(boolean), name(string), role(string), status(string), type(string)
   time:
     primary key: id
-    fields: createdAt(), date(), id(), time(), user()
+    fields: createdAt(string), date(string), id(string), time(integer), user(integer)
   tasks:
     primary key: id
-    fields: completed(), createdAt(), id(), name(), project_id(), status(), type(), url()
+    fields: completed(boolean), createdAt(string), id(string), name(string), project_id(string), status(string), type(string), url(string)
   sections:
     primary key: id
-    fields: id(), name(), position(), project_id(), status()
+    fields: id(integer), name(string), position(integer), project_id(string), status(string)
   time_off_types:
     primary key: id
-    fields: color(), description(), id(), name(), paid()
+    fields: color(string), description(string), id(integer), name(string), paid(boolean)
   allocations:
     primary key: id
-    fields: accrualFrequency(), completed(), days(), endDate(), id(), notes(), restrictOverAllocation(), startDate(), timeOffType()
+    fields: accrualFrequency(string), completed(boolean), days(number), endDate(string), id(integer), notes(string), restrictOverAllocation(boolean), startDate(string), timeOffType(integer)
   expense_categories:
     primary key: id
-    fields: color(), id(), name(), unitBased(), unitName(), unitPrice()
+    fields: color(string), id(integer), name(string), unitBased(boolean), unitName(string), unitPrice(number)
   expenses:
     primary key: id
-    fields: amount(), billable(), category(), date(), details(), id(), project(), quantity(), user()
+    fields: amount(number), billable(boolean), category(integer), date(string), details(string), id(integer), project(string), quantity(number), user(integer)
   invoices:
     primary key: id
-    fields: clientId(), createdAt(), discount(), dueDate(), id(), issueDate(), publicId(), reference(), status(), tax()
+    fields: clientId(string), createdAt(string), discount(number), dueDate(string), id(integer), issueDate(string), publicId(string), reference(string), status(string), tax(number)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

@@ -36,46 +36,46 @@ Reads Salesflare accounts, contacts, opportunities, users, tags, tasks, workflow
 
 - accounts:
   - primary key: id
-  - fields: city(), country(), created_at(), domain(), email(), id(), name(), phone_number(), updated_at()
+  - fields: city(string), country(string), created_at(string), domain(string), email(string), id(integer), name(string), phone_number(string), updated_at(string)
 - contacts:
   - primary key: id
-  - fields: account_id(), created_at(), email(), first_name(), id(), last_name(), name(), phone_number(), updated_at()
+  - fields: account_id(integer), created_at(string), email(string), first_name(string), id(integer), last_name(string), name(string), phone_number(string), updated_at(string)
 - opportunities:
   - primary key: id
-  - fields: account_id(), created_at(), currency(), email(), id(), name(), stage_id(), updated_at(), value()
+  - fields: account_id(integer), created_at(string), currency(string), email(string), id(integer), name(string), stage_id(integer), updated_at(string), value(number)
 - users:
   - primary key: id
-  - fields: email(), enabled(), id(), name()
+  - fields: email(string), enabled(boolean), id(integer), name(string)
 - tags:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(integer), name(string)
 - tasks:
   - primary key: id
-  - fields: account_id(), assignee_id(), completed(), description(), due_date(), id(), name()
+  - fields: account_id(integer), assignee_id(integer), completed(boolean), description(string), due_date(string), id(integer), name(string)
 - workflows:
   - primary key: id
-  - fields: id(), name(), state()
+  - fields: id(integer), name(string), state(string)
 - groups:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(integer), name(string)
 - stages:
   - primary key: id
-  - fields: id(), name(), pipeline_id()
+  - fields: id(integer), name(string), pipeline_id(integer)
 - pipelines:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(integer), name(string)
 - persons:
   - primary key: id
-  - fields: email(), id(), name()
+  - fields: email(string), id(integer), name(string)
 - currencies:
   - primary key: code
-  - fields: code(), name()
+  - fields: code(string), name(string)
 - custom_field_types:
   - primary key: type
-  - fields: name(), type()
+  - fields: name(string), type(string)
 - email_data_sources:
   - primary key: id
-  - fields: email(), id()
+  - fields: email(string), id(integer)
 
 ## Sync Modes
 

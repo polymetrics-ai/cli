@@ -42,78 +42,78 @@ Reads and writes the documented Luma public API for events, calendars, guests, c
 
 - events:
   - primary key: api_id
-  - fields: api_id(), calendar_api_id(), cover_url(), created_at(), description(), end_at(), name(), start_at(), timezone(), url(), visibility()
+  - fields: api_id(string), calendar_api_id(string), cover_url(string), created_at(string), description(string), end_at(string), name(string), start_at(string), timezone(string), url(string), visibility(string)
 - event_guests:
   - primary key: api_id
-  - fields: api_id(), approval_status(), checked_in_at(), email(), event_api_id(), name(), registered_at(), user_api_id(), user_name()
+  - fields: api_id(string), approval_status(string), checked_in_at(string), email(string), event_api_id(string), name(string), registered_at(string), user_api_id(string), user_name(string)
 - event_hosts:
   - primary key: api_id
-  - fields: access_level(), api_id(), avatar_url(), email(), name()
+  - fields: access_level(string), api_id(string), avatar_url(string), email(string), name(string)
 - event:
   - primary key: id
-  - fields: access(), calendar_id(), coordinate(), cover_url(), created_at(), description(), description_md(), duration_interval(), end_at(), feedback_email(), geo_address_json(), guest_counts(), hosts(), id(), location_type(), location_visibility(), meeting_url(), name(), platform(), registration_open(), registration_questions(), start_at(), timezone(), url(), user_id(), visibility(), waitlist_status()
+  - fields: access(string), calendar_id(string), coordinate(object), cover_url(string), created_at(string), description(string), description_md(string), duration_interval(string), end_at(string), feedback_email(object), geo_address_json(object), guest_counts(object), hosts(array), id(string), location_type(string), location_visibility(string), meeting_url(string), name(string), platform(string), registration_open(boolean), registration_questions(array), start_at(string), timezone(string), url(string), user_id(string), visibility(string), waitlist_status(string)
 - calendar:
   - primary key: id
-  - fields: avatar_url(), coordinate(), cover_image_url(), description(), id(), instagram_handle(), is_personal(), location(), name(), slug(), social_image_url(), twitter_handle(), url(), website(), youtube_handle()
+  - fields: avatar_url(string), coordinate(object), cover_image_url(string), description(string), id(string), instagram_handle(string), is_personal(boolean), location(object), name(string), slug(string), social_image_url(string), twitter_handle(string), url(string), website(string), youtube_handle(string)
 - calendar_events:
   - primary key: id
-  - fields: calendar_id(), coordinate(), created_at(), duration_interval(), end_at(), geo_address_json(), host(), id(), name(), platform(), start_at(), tags(), timezone(), url()
+  - fields: calendar_id(string), coordinate(object), created_at(string), duration_interval(string), end_at(string), geo_address_json(object), host(string), id(string), name(string), platform(string), start_at(string), tags(array), timezone(string), url(string)
 - guest:
   - primary key: id
-  - fields: approval_status(), check_in_qr_code(), eth_address(), event_ticket_orders(), event_tickets(), id(), invited_at(), joined_at(), phone_number(), registered_at(), registration_answers(), solana_address(), user_email(), user_first_name(), user_id(), user_last_name(), user_name(), utm_source()
+  - fields: approval_status(string), check_in_qr_code(string), eth_address(string), event_ticket_orders(array), event_tickets(array), id(string), invited_at(string), joined_at(string), phone_number(string), registered_at(string), registration_answers(array), solana_address(string), user_email(string), user_first_name(string), user_id(string), user_last_name(string), user_name(string), utm_source(string)
 - guests:
   - primary key: id
-  - fields: approval_status(), check_in_qr_code(), eth_address(), event_tickets(), id(), invited_at(), joined_at(), phone_number(), registered_at(), registration_answers(), solana_address(), user_email(), user_first_name(), user_id(), user_last_name(), user_name(), utm_source()
+  - fields: approval_status(string), check_in_qr_code(string), eth_address(string), event_tickets(array), id(string), invited_at(string), joined_at(string), phone_number(string), registered_at(string), registration_answers(array), solana_address(string), user_email(string), user_first_name(string), user_id(string), user_last_name(string), user_name(string), utm_source(string)
 - self_user:
   - primary key: id
-  - fields: avatar_url(), email(), first_name(), id(), last_name(), name()
+  - fields: avatar_url(string), email(string), first_name(string), id(string), last_name(string), name(string)
 - contact_tags:
   - primary key: id
-  - fields: color(), id(), name()
+  - fields: color(string), id(string), name(string)
 - event_tags:
   - primary key: id
-  - fields: color(), id(), name()
+  - fields: color(string), id(string), name(string)
 - calendar_admins:
   - primary key: id
-  - fields: avatar_url(), email(), first_name(), id(), last_name(), name()
+  - fields: avatar_url(string), email(string), first_name(string), id(string), last_name(string), name(string)
 - entity_lookup:
-  - fields: calendar(), event(), type()
+  - fields: calendar(object), event(object), type(string)
 - event_lookup:
   - primary key: id
-  - fields: id(), status()
+  - fields: id(string), status(string)
 - calendar_contacts:
   - primary key: id
-  - fields: avatar_url(), created_at(), email(), event_approved_count(), event_checked_in_count(), first_name(), id(), last_name(), membership(), name(), revenue_usd_cents(), tags(), user_id()
+  - fields: avatar_url(string), created_at(string), email(string), event_approved_count(number), event_checked_in_count(number), first_name(string), id(string), last_name(string), membership(object), name(string), revenue_usd_cents(number), tags(array), user_id(string)
 - event_coupons:
   - primary key: id
-  - fields: cents_off(), code(), currency(), event_ticket_type_id(), id(), percent_off(), remaining_count(), valid_end_at(), valid_start_at()
+  - fields: cents_off(number), code(string), currency(string), event_ticket_type_id(string), id(string), percent_off(number), remaining_count(integer), valid_end_at(string), valid_start_at(string)
 - calendar_coupons:
   - primary key: id
-  - fields: cents_off(), code(), currency(), event_ticket_type_id(), id(), percent_off(), remaining_count(), valid_end_at(), valid_start_at()
+  - fields: cents_off(number), code(string), currency(string), event_ticket_type_id(string), id(string), percent_off(number), remaining_count(integer), valid_end_at(string), valid_start_at(string)
 - event_ticket_types:
   - primary key: id
-  - fields: cents(), currency(), description(), id(), is_flexible(), is_hidden(), max_capacity(), min_cents(), name(), require_approval(), type(), valid_end_at(), valid_start_at()
+  - fields: cents(number), currency(string), description(string), id(string), is_flexible(boolean), is_hidden(boolean), max_capacity(number), min_cents(number), name(string), require_approval(boolean), type(string), valid_end_at(string), valid_start_at(string)
 - event_ticket_type:
   - primary key: id
-  - fields: cents(), currency(), description(), id(), is_flexible(), is_hidden(), max_capacity(), min_cents(), name(), require_approval(), type(), valid_end_at(), valid_start_at()
+  - fields: cents(number), currency(string), description(string), id(string), is_flexible(boolean), is_hidden(boolean), max_capacity(number), min_cents(number), name(string), require_approval(boolean), type(string), valid_end_at(string), valid_start_at(string)
 - membership_tiers:
   - primary key: id
-  - fields: access_info(), description(), id(), name(), tint_color()
+  - fields: access_info(object), description(string), id(string), name(string), tint_color(string)
 - webhooks:
   - primary key: id
-  - fields: created_at(), event_types(), id(), secret(), status(), url()
+  - fields: created_at(string), event_types(array), id(string), secret(string), status(string), url(string)
 - webhook:
   - primary key: id
-  - fields: created_at(), event_types(), id(), secret(), status(), url()
+  - fields: created_at(string), event_types(array), id(string), secret(string), status(string), url(string)
 - organization_admins:
   - primary key: id
-  - fields: api_id(), avatar_url(), email(), first_name(), id(), last_name(), name()
+  - fields: api_id(string), avatar_url(string), email(string), first_name(string), id(string), last_name(string), name(string)
 - organization_calendars:
   - primary key: id
-  - fields: avatar_url(), coordinate(), cover_image_url(), description(), id(), instagram_handle(), is_personal(), location(), name(), slug(), social_image_url(), twitter_handle(), url(), website(), youtube_handle()
+  - fields: avatar_url(string), coordinate(object), cover_image_url(string), description(string), id(string), instagram_handle(string), is_personal(boolean), location(object), name(string), slug(string), social_image_url(string), twitter_handle(string), url(string), website(string), youtube_handle(string)
 - organization_events:
   - primary key: id
-  - fields: api_id(), calendar_api_id(), calendar_id(), coordinate(), cover_url(), created_at(), description(), description_md(), duration_interval(), end_at(), feedback_email(), geo_address_json(), geo_latitude(), geo_longitude(), id(), location_type(), location_visibility(), managing_calendars(), meeting_url(), name(), platform(), registration_open(), registration_questions(), start_at(), timezone(), url(), user_api_id(), user_id(), visibility(), waitlist_status(), zoom_meeting_url()
+  - fields: api_id(string), calendar_api_id(string), calendar_id(string), coordinate(object), cover_url(string), created_at(string), description(string), description_md(string), duration_interval(string), end_at(string), feedback_email(object), geo_address_json(object), geo_latitude(string), geo_longitude(string), id(string), location_type(string), location_visibility(string), managing_calendars(array), meeting_url(string), name(string), platform(string), registration_open(boolean), registration_questions(array), start_at(string), timezone(string), url(string), user_api_id(string), user_id(string), visibility(string), waitlist_status(string), zoom_meeting_url(string)
 
 ## Sync Modes
 

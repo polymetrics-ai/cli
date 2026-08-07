@@ -43,13 +43,13 @@ Reads Discord guild, channel, and role data through the Discord REST API using a
 
 - guilds:
   - primary key: id
-  - fields: approximate_member_count(), approximate_presence_count(), description(), icon(), id(), name(), owner_id(), preferred_locale(), premium_tier()
+  - fields: approximate_member_count(integer), approximate_presence_count(integer), description(string), icon(string), id(string), name(string), owner_id(string), preferred_locale(string), premium_tier(integer)
 - channels:
   - primary key: id
-  - fields: guild_id(), id(), name(), nsfw(), parent_id(), position(), topic(), type()
+  - fields: guild_id(string), id(string), name(string), nsfw(boolean), parent_id(string), position(integer), topic(string), type(integer)
 - roles:
   - primary key: id
-  - fields: color(), hoist(), id(), managed(), mentionable(), name(), permissions(), position()
+  - fields: color(integer), hoist(boolean), id(string), managed(boolean), mentionable(boolean), name(string), permissions(string), position(integer)
 
 ## Sync Modes
 

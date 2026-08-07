@@ -36,11 +36,11 @@ Reads Simplecast podcasts and episodes through the Simplecast REST API.
 - podcasts:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), status(), title(), updated_at()
+  - fields: id(string), status(string), title(string), updated_at(string)
 - episodes:
   - primary key: id
   - cursor: updated_at
-  - fields: id(), status(), title(), updated_at()
+  - fields: id(string), status(string), title(string), updated_at(string)
 
 ## Sync Modes
 

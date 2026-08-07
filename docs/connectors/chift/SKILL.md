@@ -39,22 +39,22 @@ Reads and writes Chift consumers, connections, syncs, integrations, datastores, 
 
 - consumers:
   - primary key: consumerid
-  - fields: active(), consumerid(), created_on(), email(), name(), phone(), redirect_url()
+  - fields: active(boolean), consumerid(string), created_on(string), email(string), name(string), phone(string), redirect_url(string)
 - connections:
   - primary key: connectionid
-  - fields: api(), connectionid(), consumerid(), created_on(), name(), status()
+  - fields: api(string), connectionid(string), consumerid(string), created_on(string), name(string), status(string)
 - syncs:
   - primary key: syncid
-  - fields: consumerid(), created_on(), name(), status(), syncid(), updated_on()
+  - fields: consumerid(string), created_on(string), name(string), status(string), syncid(string), updated_on(string)
 - integrations:
   - primary key: integrationid
-  - fields: api(), description(), icon_url(), integrationid(), local_agent(), logo_url(), name(), status()
+  - fields: api(string), description(string), icon_url(string), integrationid(integer), local_agent(boolean), logo_url(string), name(string), status(string)
 - datastores:
   - primary key: id
-  - fields: id(), name(), status()
+  - fields: id(string), name(string), status(string)
 - webhook_definitions:
   - primary key: event, api
-  - fields: api(), event()
+  - fields: api(string), event(string)
 
 ## Sync Modes
 

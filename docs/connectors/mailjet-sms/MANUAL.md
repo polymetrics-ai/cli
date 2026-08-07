@@ -42,17 +42,17 @@ ETL STREAMS
   sms:
     primary key: ID
     cursor: CreationTS
-    fields: CreationTS(), From(), ID(), MessageId(), SMSCount(), SentTS(), To(), cost_currency(), cost_value(), status_code(), status_description(), status_name()
+    fields: CreationTS(integer), From(string), ID(string), MessageId(string), SMSCount(integer), SentTS(integer), To(string), cost_currency(string), cost_value(number), status_code(integer), status_description(string), status_name(string)
   sms_count:
-    fields: Count()
+    fields: Count(integer)
   sms_message:
     primary key: MessageID
     cursor: CreationTS
-    fields: CreationTS(), From(), MessageID(), SMSCount(), SentTS(), To(), cost_currency(), cost_value(), status_code(), status_description(), status_name()
+    fields: CreationTS(integer), From(string), MessageID(string), SMSCount(integer), SentTS(integer), To(string), cost_currency(string), cost_value(number), status_code(integer), status_description(string), status_name(string)
   sms_export:
     primary key: ID
     cursor: CreationTS
-    fields: CreationTS(), ExpirationTS(), ID(), URL(), status_code(), status_description(), status_name()
+    fields: CreationTS(integer), ExpirationTS(integer), ID(integer), URL(string), status_code(integer), status_description(string), status_name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

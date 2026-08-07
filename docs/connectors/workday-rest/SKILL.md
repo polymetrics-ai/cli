@@ -37,7 +37,7 @@ Reads Workday REST API resources (workers, organizations, job profiles) with bea
 - workers:
   - primary key: id
   - cursor: updated
-  - fields: descriptor(), id(), updated()
+  - fields: descriptor(string), id(string), updated(string)
 - organizations:
   - primary key: id
   - cursor: updated
@@ -45,7 +45,7 @@ Reads Workday REST API resources (workers, organizations, job profiles) with bea
 - jobs:
   - primary key: id
   - cursor: updated
-  - fields: descriptor(), id(), updated()
+  - fields: descriptor(string), id(string), updated(string)
 
 ## Sync Modes
 

@@ -43,19 +43,19 @@ ETL STREAMS
   conversations:
     primary key: id
     cursor: userUpdatedAt
-    fields: assigneeId(), closedAt(), createdAt(), folderId(), id(), mailboxId(), number(), preview(), state(), status(), subject(), threads(), type(), userUpdatedAt()
+    fields: assigneeId(integer), closedAt(string), createdAt(string), folderId(integer), id(integer), mailboxId(integer), number(integer), preview(string), state(string), status(string), subject(string), threads(integer), type(string), userUpdatedAt(string)
   customers:
     primary key: id
     cursor: updatedAt
-    fields: age(), createdAt(), firstName(), gender(), id(), jobTitle(), lastName(), organization(), photoUrl(), updatedAt()
+    fields: age(string), createdAt(string), firstName(string), gender(string), id(integer), jobTitle(string), lastName(string), organization(string), photoUrl(string), updatedAt(string)
   mailboxes:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), email(), id(), name(), slug(), updatedAt()
+    fields: createdAt(string), email(string), id(integer), name(string), slug(string), updatedAt(string)
   users:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), email(), firstName(), id(), jobTitle(), lastName(), role(), timezone(), type(), updatedAt()
+    fields: createdAt(string), email(string), firstName(string), id(integer), jobTitle(string), lastName(string), role(string), timezone(string), type(string), updatedAt(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

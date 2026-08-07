@@ -37,64 +37,64 @@ ETL STREAMS
   calls:
     primary key: id
     cursor: start_time
-    fields: answered(), business_phone_number(), company_id(), customer_city(), customer_country(), customer_name(), customer_phone_number(), customer_state(), direction(), duration(), id(), recording(), start_time(), tracking_phone_number(), voicemail()
+    fields: answered(boolean), business_phone_number(string), company_id(string), customer_city(string), customer_country(string), customer_name(string), customer_phone_number(string), customer_state(string), direction(string), duration(integer), id(string), recording(string), start_time(string), tracking_phone_number(string), voicemail(boolean)
   companies:
     primary key: id
     cursor: created_at
-    fields: callscore_enabled(), created_at(), disabled_at(), dni_active(), id(), name(), status(), time_zone()
+    fields: callscore_enabled(boolean), created_at(string), disabled_at(string), dni_active(boolean), id(string), name(string), status(string), time_zone(string)
   users:
     primary key: id
     cursor: created_at
-    fields: created_at(), email(), first_name(), id(), last_name(), name(), role()
+    fields: created_at(string), email(string), first_name(string), id(string), last_name(string), name(string), role(string)
   text_messages:
     primary key: id
     cursor: last_message_at
-    fields: company_id(), customer_name(), customer_phone_number(), id(), initial_tracker_id(), last_message_at(), state(), tracking_phone_number()
+    fields: company_id(string), customer_name(string), customer_phone_number(string), id(string), initial_tracker_id(string), last_message_at(string), state(string), tracking_phone_number(string)
   accounts:
     primary key: id
-    fields: hipaa_account(), id(), name(), outbound_recording_enabled()
+    fields: hipaa_account(boolean), id(string), name(string), outbound_recording_enabled(boolean)
   tags:
     primary key: id
     cursor: created_at
-    fields: background_color(), color(), company_id(), created_at(), id(), name(), status(), tag_level()
+    fields: background_color(string), color(string), company_id(string), created_at(string), id(string), name(string), status(string), tag_level(string)
   trackers:
     primary key: id
     cursor: created_at
-    fields: company_id(), company_name(), created_at(), destination_number(), disabled_at(), id(), name(), sms_enabled(), sms_supported(), status(), tracking_numbers(), type(), whisper_message()
+    fields: company_id(string), company_name(string), created_at(string), destination_number(string), disabled_at(string), id(string), name(string), sms_enabled(boolean), sms_supported(boolean), status(string), tracking_numbers(array), type(string), whisper_message(string)
   form_submissions:
     primary key: id
     cursor: submitted_at
-    fields: campaign(), company_id(), customer_email(), customer_name(), customer_phone_number(), first_form(), form_url(), id(), keywords(), landing_page_url(), medium(), person_id(), referrer(), referring_url(), source(), submitted_at()
+    fields: campaign(string), company_id(string), customer_email(string), customer_name(string), customer_phone_number(string), first_form(boolean), form_url(string), id(string), keywords(string), landing_page_url(string), medium(string), person_id(string), referrer(string), referring_url(string), source(string), submitted_at(string)
   integrations:
     primary key: id
-    fields: config(), id(), state(), type()
+    fields: config(object), id(integer), state(string), type(string)
   integration_filters:
     primary key: id
-    fields: call_type(), company_id(), id(), integration_id(), integration_type(), lead_status(), max_duration(), min_duration(), tracker_ids()
+    fields: call_type(string), company_id(string), id(integer), integration_id(integer), integration_type(string), lead_status(string), max_duration(integer), min_duration(integer), tracker_ids(array)
   notifications:
     primary key: id
-    fields: alert_type(), call_enabled(), company_id(), company_name(), id(), name(), send_desktop(), send_email(), send_push(), sms_enabled(), tracker_id(), tracker_name(), user_id()
+    fields: alert_type(string), call_enabled(boolean), company_id(string), company_name(string), id(integer), name(string), send_desktop(boolean), send_email(boolean), send_push(boolean), sms_enabled(boolean), tracker_id(string), tracker_name(string), user_id(string)
   caller_ids:
     primary key: id
     cursor: created_at
-    fields: company_id(), created_at(), id(), name(), phone_number(), validation_code(), verified()
+    fields: company_id(string), created_at(string), id(integer), name(string), phone_number(string), validation_code(string), verified(boolean)
   sms_threads:
     primary key: id
-    fields: company_id(), company_time_zone(), current_tracker_id(), current_tracking_number(), customer_name(), customer_phone_number(), id(), initial_tracker_id(), initial_tracking_number(), lead_qualification(), notes(), state(), tags(), value()
+    fields: company_id(string), company_time_zone(string), current_tracker_id(string), current_tracking_number(string), customer_name(string), customer_phone_number(string), id(string), initial_tracker_id(string), initial_tracking_number(string), lead_qualification(string), notes(string), state(string), tags(array), value(number)
   message_flows:
     primary key: id
-    fields: id(), initial_step_id(), name(), steps(), tracker_ids(), updated_at()
+    fields: id(string), initial_step_id(string), name(string), steps(object), tracker_ids(array), updated_at(string)
   leads:
     primary key: id
     cursor: created_at
-    fields: company_id(), company_name(), created_at(), email(), id(), name(), phone()
+    fields: company_id(string), company_name(string), created_at(string), email(string), id(string), name(string), phone(string)
   page_views:
     primary key: call_id, created_at
     cursor: created_at
-    fields: call_id(), created_at(), page_url(), referrer_url()
+    fields: call_id(string), created_at(string), page_url(string), referrer_url(string)
   lead_timeline:
     primary key: lead_id
-    fields: campaign(), customer_name(), customer_phone_number(), first_touch(), last_touch(), lead_creation(), lead_id(), lead_qualification(), medium(), source(), tags(), total_interactions(), transcript(), voice_assist()
+    fields: campaign(string), customer_name(string), customer_phone_number(string), first_touch(object), last_touch(object), lead_creation(object), lead_id(string), lead_qualification(object), medium(string), source(string), tags(array), total_interactions(integer), transcript(boolean), voice_assist(boolean)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped

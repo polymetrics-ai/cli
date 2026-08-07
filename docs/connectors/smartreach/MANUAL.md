@@ -36,27 +36,27 @@ CONFIGURATION
 ETL STREAMS
   campaigns:
     primary key: id
-    fields: created_at(), id(), name()
+    fields: created_at(string), id(string), name(string)
   prospects:
     primary key: id
-    fields: created_at(), id(), name()
+    fields: created_at(string), id(string), name(string)
   teams:
     primary key: id
-    fields: created_at(), id(), name()
+    fields: created_at(string), id(string), name(string)
   email_settings:
     primary key: id
-    fields: created_at(), id(), name()
+    fields: created_at(string), id(string), name(string)
   do_not_contact:
     primary key: id
-    fields: created_at(), id(), name()
+    fields: created_at(string), id(string), name(string)
   users:
     primary key: id
     cursor: created_at
-    fields: created_at(), email(), first_name(), id(), last_name(), object(), org_id(), status(), timezone()
+    fields: created_at(integer), email(string), first_name(string), id(string), last_name(string), object(string), org_id(string), status(string), timezone(string)
   accounts:
     primary key: id
     cursor: updated_at
-    fields: created_at(), custom_fields(), custom_id(), description(), id(), industry(), linkedin_url(), name(), object(), source(), updated_at(), website()
+    fields: created_at(number), custom_fields(object), custom_id(string), description(string), id(string), industry(string), linkedin_url(string), name(string), object(string), source(string), updated_at(number), website(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

@@ -35,19 +35,19 @@ CONFIGURATION
 ETL STREAMS
   answers:
     primary key: id
-    fields: choice(), choice_label(), choices(), comment(), created(), follow_up_answer(), follow_up_answer_choice(), follow_up_answer_choices(), id(), modified(), published_as_testimonial(), question(), sentiment(), survey()
+    fields: choice(string), choice_label(string), choices(array), comment(string), created(string), follow_up_answer(string), follow_up_answer_choice(string), follow_up_answer_choices(array), id(integer), modified(string), published_as_testimonial(boolean), question(object), sentiment(string), survey(object)
   surveys:
     primary key: id
-    fields: brand_name(), id(), metric(), name(), survey_token(), survey_type()
+    fields: brand_name(string), id(integer), metric(string), name(string), survey_token(string), survey_type(string)
   questions:
     primary key: id
-    fields: choices(), id(), metric(), order(), rating_scale(), required(), rules(), survey(), text()
+    fields: choices(array), id(integer), metric(string), order(integer), rating_scale(boolean), required(boolean), rules(array), survey(object), text(string)
   customers:
     primary key: id
-    fields: company(), created(), custom_attributes(), email(), external_id(), id(), language(), modified(), name(), subscribed(), tags()
+    fields: company(string), created(string), custom_attributes(object), email(string), external_id(string), id(integer), language(string), modified(string), name(string), subscribed(boolean), tags(array)
   responses:
     primary key: id
-    fields: answers(), created(), customer(), id(), ip_address(), language(), modified(), source(), survey(), tags(), team_members(), ticket()
+    fields: answers(array), created(string), customer(object), id(integer), ip_address(string), language(string), modified(string), source(string), survey(object), tags(array), team_members(array), ticket(object)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

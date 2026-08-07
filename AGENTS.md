@@ -162,6 +162,33 @@ This repo uses official GSD Core workflows through a project-local Pi adapter:
 - Resolve a Claude review thread only after every actionable finding has been addressed or
   explicitly dispositioned; resolve the conversation in GitHub rather than with a bot command.
 
+## Direct Reads Return One Page, And Say So
+
+A direct read is page-wise exploration, not bulk extraction: the ETL path stores
+what it reads, a direct read does not. One request, one page.
+
+Two rules keep that honest; both exist because the direct-read executor once sent
+no page-size parameter at all, so every connector returned the provider's default
+page (GitHub's is 30) at `status: 200` with nothing saying more remained.
+
+- Paging is DERIVED from the connector's own declared pagination spec
+  (`streams.json` `base.http.pagination`) through `engine/paginate.go`, the same
+  seven strategies the ETL path consumes. Never hand-author paging params into
+  `cli_surface.json` or `operations.json`: no bundle declares `page`/`per_page`
+  today and none should. The executor is
+  `internal/connectors/engine/direct_read_paginate.go`.
+- A result must never imply a completeness it cannot prove. `DirectReadPage`
+  carries `complete` plus a `reason`, and `--page`/`--page-cursor` are how a
+  caller reaches the rest. Strategies that address pages by number
+  (`page_number`, `offset_limit` — the two whose `Next()` ignores the response)
+  accept `--page`; the cursor/`next_url`/`link_header` families hand back
+  `next_cursor` instead, and asking them for a page number is refused rather than
+  quietly answered with page one.
+
+Regression tests assert RETURNED RECORD COUNTS against a known-larger fixture, in
+`engine/direct_read_pagination_test.go`. Never assert exit status for this class:
+the original defect exited 0 while discarding 97% of a collection.
+
 ## Command Surface Must Stay Executable
 
 `availability: implemented` is a claim the runtime has to honour. Two rules keep

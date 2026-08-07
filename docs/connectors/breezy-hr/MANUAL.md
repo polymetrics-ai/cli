@@ -35,31 +35,31 @@ CONFIGURATION
 ETL STREAMS
   positions:
     primary key: position_id
-    fields: country_id(), country_name(), creation_date(), department(), name(), org_type(), pipeline_id(), position_id(), state(), type(), updated_date()
+    fields: country_id(string), country_name(string), creation_date(string), department(string), name(string), org_type(string), pipeline_id(string), position_id(string), state(string), type(string), updated_date(string)
   pipelines:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   candidates:
     primary key: id
-    fields: creation_date(), email_address(), headline(), id(), name(), origin(), phone_number(), position_id(), stage(), updated_date()
+    fields: creation_date(string), email_address(string), headline(string), id(string), name(string), origin(string), phone_number(string), position_id(string), stage(string), updated_date(string)
   departments:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   categories:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   custom_attributes_candidate:
     primary key: id
-    fields: id(), name(), secure()
+    fields: id(string), name(string), secure(boolean)
   custom_attributes_position:
     primary key: id
-    fields: id(), name(), secure()
+    fields: id(string), name(string), secure(boolean)
   questionnaires:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
   templates:
     primary key: id
-    fields: id(), name()
+    fields: id(string), name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

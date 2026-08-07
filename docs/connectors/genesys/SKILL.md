@@ -41,16 +41,16 @@ Reads Genesys Cloud users, queues, groups, and divisions through the Genesys Clo
 
 - users:
   - primary key: id
-  - fields: display_name(), email(), id(), name(), state()
+  - fields: display_name(string), email(string), id(string), name(string), state(string)
 - queues:
   - primary key: id
-  - fields: description(), id(), name()
+  - fields: description(string), id(string), name(string)
 - groups:
   - primary key: id
-  - fields: description(), id(), name()
+  - fields: description(string), id(string), name(string)
 - divisions:
   - primary key: id
-  - fields: description(), id(), name()
+  - fields: description(string), id(string), name(string)
 
 ## Sync Modes
 

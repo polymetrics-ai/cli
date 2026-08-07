@@ -39,13 +39,13 @@ Reads Gridly views, per-view records (with flattened column cells), and per-view
 
 - views:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(string), name(string)
 - records:
   - primary key: view_id, id
-  - fields: cells(), id(), path(), view_id()
+  - fields: cells(array), id(string), path(string), view_id(string)
 - branches:
   - primary key: view_id, id
-  - fields: id(), name(), view_id()
+  - fields: id(string), name(string), view_id(string)
 
 ## Sync Modes
 

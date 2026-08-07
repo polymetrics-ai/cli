@@ -36,28 +36,28 @@ ETL STREAMS
   appointments:
     primary key: id
     cursor: datetime
-    fields: amount_paid(), appointment_type_id(), calendar(), calendar_id(), canceled(), date(), datetime(), datetime_created(), duration(), email(), end_time(), first_name(), id(), last_name(), paid(), phone(), price(), time(), type()
+    fields: amount_paid(string), appointment_type_id(integer), calendar(string), calendar_id(integer), canceled(boolean), date(string), datetime(string), datetime_created(string), duration(string), email(string), end_time(string), first_name(string), id(integer), last_name(string), paid(string), phone(string), price(string), time(string), type(string)
   clients:
     primary key: email
-    fields: email(), first_name(), last_name(), phone()
+    fields: email(string), first_name(string), last_name(string), phone(string)
   appointment_types:
     primary key: id
-    fields: active(), category(), color(), description(), duration(), id(), name(), price(), private(), type()
+    fields: active(boolean), category(string), color(string), description(string), duration(integer), id(integer), name(string), price(string), private(boolean), type(string)
   calendars:
     primary key: id
-    fields: description(), email(), id(), location(), name(), replyTo(), timezone()
+    fields: description(string), email(string), id(integer), location(string), name(string), replyTo(string), timezone(string)
   forms:
     primary key: id
-    fields: description(), hidden(), id(), name()
+    fields: description(string), hidden(boolean), id(integer), name(string)
   products:
     primary key: id
-    fields: description(), expires(), hidden(), id(), minutes(), name(), price(), type()
+    fields: description(string), expires(integer), hidden(boolean), id(integer), minutes(integer), name(string), price(string), type(string)
   orders:
     primary key: id
-    fields: email(), first_name(), id(), last_name(), notes(), phone(), status(), time(), title(), total()
+    fields: email(string), first_name(string), id(integer), last_name(string), notes(string), phone(string), status(string), time(string), title(string), total(string)
   labels:
     primary key: id
-    fields: color(), id(), name()
+    fields: color(string), id(integer), name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

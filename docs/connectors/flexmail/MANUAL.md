@@ -36,19 +36,19 @@ CONFIGURATION
 ETL STREAMS
   contacts:
     primary key: id
-    fields: custom_fields(), email(), first_name(), id(), language(), name()
+    fields: custom_fields(object), email(string), first_name(string), id(integer), language(string), name(string)
   custom_fields:
     primary key: id
-    fields: id(), name(), placeholder(), type()
+    fields: id(string), name(string), placeholder(string), type(string)
   interests:
     primary key: id
-    fields: description(), id(), label(), name(), visibility()
+    fields: description(string), id(string), label(string), name(string), visibility(string)
   segments:
     primary key: id
-    fields: id(), name(), number_of_contacts()
+    fields: id(string), name(string), number_of_contacts(integer)
   sources:
     primary key: id
-    fields: id(), name()
+    fields: id(integer), name(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

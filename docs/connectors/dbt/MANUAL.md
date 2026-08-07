@@ -35,37 +35,37 @@ CONFIGURATION
 ETL STREAMS
   projects:
     primary key: id
-    fields: account_id(), connection_id(), created_at(), dbt_project_subdirectory(), description(), id(), name(), repository_id(), state(), updated_at()
+    fields: account_id(integer), connection_id(integer), created_at(string), dbt_project_subdirectory(string), description(string), id(integer), name(string), repository_id(integer), state(integer), updated_at(string)
   runs:
     primary key: id
-    fields: account_id(), created_at(), environment_id(), finished_at(), id(), is_cancelled(), is_complete(), is_error(), job_definition_id(), project_id(), started_at(), status(), status_humanized(), updated_at()
+    fields: account_id(integer), created_at(string), environment_id(integer), finished_at(string), id(integer), is_cancelled(boolean), is_complete(boolean), is_error(boolean), job_definition_id(integer), project_id(integer), started_at(string), status(integer), status_humanized(string), updated_at(string)
   repositories:
     primary key: id
-    fields: account_id(), created_at(), git_clone_strategy(), id(), project_id(), remote_backend(), remote_url(), state(), updated_at()
+    fields: account_id(integer), created_at(string), git_clone_strategy(string), id(integer), project_id(integer), remote_backend(string), remote_url(string), state(integer), updated_at(string)
   users:
     primary key: id
-    fields: account_id(), created_at(), email(), first_name(), fullname(), id(), is_active(), last_name()
+    fields: account_id(integer), created_at(string), email(string), first_name(string), fullname(string), id(integer), is_active(boolean), last_name(string)
   environments:
     primary key: id
-    fields: account_id(), created_at(), custom_branch(), dbt_version(), id(), name(), project_id(), state(), type(), updated_at(), use_custom_branch()
+    fields: account_id(integer), created_at(string), custom_branch(string), dbt_version(string), id(integer), name(string), project_id(integer), state(integer), type(string), updated_at(string), use_custom_branch(boolean)
   jobs:
     primary key: id
     cursor: updated_at
-    fields: account_id(), created_at(), dbt_version(), description(), environment_id(), execute_steps(), generate_docs(), id(), job_type(), name(), project_id(), run_generate_sources(), state(), triggers_on_draft_pr(), updated_at()
+    fields: account_id(integer), created_at(string), dbt_version(string), description(string), environment_id(integer), execute_steps(array), generate_docs(boolean), id(integer), job_type(string), name(string), project_id(integer), run_generate_sources(boolean), state(integer), triggers_on_draft_pr(boolean), updated_at(string)
   invites:
     primary key: id
     cursor: created_at
-    fields: account_id(), created_at(), email_address(), group_ids(), id(), license_type(), redeemed_at(), status(), type()
+    fields: account_id(integer), created_at(string), email_address(string), group_ids(array), id(integer), license_type(string), redeemed_at(string), status(integer), type(string)
   licenses:
     primary key: account_id
-    fields: account_id(), analyst(), developer(), explorer(), it(), read_only()
+    fields: account_id(integer), analyst(object), developer(object), explorer(object), it(object), read_only(object)
   notifications:
     primary key: id
     cursor: updated_at
-    fields: account_id(), created_at(), external_email(), id(), on_cancel(), on_failure(), on_success(), on_warning(), slack_channel_id(), slack_channel_name(), state(), updated_at(), user_id()
+    fields: account_id(integer), created_at(string), external_email(string), id(integer), on_cancel(array), on_failure(array), on_success(array), on_warning(array), slack_channel_id(string), slack_channel_name(string), state(integer), updated_at(string), user_id(integer)
   ssh_tunnels:
     primary key: id
-    fields: account_id(), connection_id(), hostname(), id(), port(), public_key(), state(), username()
+    fields: account_id(integer), connection_id(integer), hostname(string), id(integer), port(integer), public_key(string), state(integer), username(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

@@ -62,81 +62,81 @@ ETL STREAMS
   workflows:
     primary key: id
     cursor: updatedAt
-    fields: active(), createdAt(), id(), isArchived(), name(), triggerCount(), updatedAt(), versionId()
+    fields: active(boolean), createdAt(string), id(string), isArchived(boolean), name(string), triggerCount(integer), updatedAt(string), versionId(string)
   workflow:
     primary key: id
     cursor: updatedAt
-    fields: active(), connections(), createdAt(), description(), id(), isArchived(), name(), nodes(), settings(), shared(), tags(), triggerCount(), updatedAt(), versionId()
+    fields: active(boolean), connections(object), createdAt(string), description(string), id(string), isArchived(boolean), name(string), nodes(array), settings(object), shared(array), tags(array), triggerCount(integer), updatedAt(string), versionId(string)
   workflow_version:
     primary key: versionId
     cursor: updatedAt
-    fields: authors(), connections(), createdAt(), description(), name(), nodeGroups(), nodes(), updatedAt(), versionId(), workflowId()
+    fields: authors(string), connections(object), createdAt(string), description(string), name(string), nodeGroups(array), nodes(array), updatedAt(string), versionId(string), workflowId(string)
   workflow_tags:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), id(), name(), updatedAt()
+    fields: createdAt(string), id(string), name(string), updatedAt(string)
   executions:
     primary key: id
     cursor: startedAt
-    fields: finished(), id(), mode(), retryOf(), startedAt(), status(), stoppedAt(), workflowId()
+    fields: finished(boolean), id(string), mode(string), retryOf(string), startedAt(string), status(string), stoppedAt(string), workflowId(string)
   execution:
     primary key: id
     cursor: startedAt
-    fields: customData(), data(), finished(), id(), mode(), retryOf(), retrySuccessId(), startedAt(), status(), stoppedAt(), waitTill(), workflowId()
+    fields: customData(object), data(object), finished(boolean), id(string), mode(string), retryOf(string), retrySuccessId(string), startedAt(string), status(string), stoppedAt(string), waitTill(string), workflowId(string)
   execution_tags:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), id(), name(), updatedAt()
+    fields: createdAt(string), id(string), name(string), updatedAt(string)
   tags:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), id(), name(), updatedAt()
+    fields: createdAt(string), id(string), name(string), updatedAt(string)
   tag:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), id(), name(), updatedAt()
+    fields: createdAt(string), id(string), name(string), updatedAt(string)
   users:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), email(), firstName(), id(), isPending(), lastName(), role(), updatedAt()
+    fields: createdAt(string), email(string), firstName(string), id(string), isPending(boolean), lastName(string), role(string), updatedAt(string)
   user:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), email(), firstName(), id(), isPending(), lastName(), mfaEnabled(), role(), updatedAt()
+    fields: createdAt(string), email(string), firstName(string), id(string), isPending(boolean), lastName(string), mfaEnabled(boolean), role(string), updatedAt(string)
   variables:
     primary key: id
-    fields: id(), key(), project(), projectId(), type(), value()
+    fields: id(string), key(string), project(object), projectId(string), type(string), value(string)
   projects:
     primary key: id
-    fields: id(), name(), type()
+    fields: id(string), name(string), type(string)
   project_members:
     primary key: id
-    fields: createdAt(), email(), firstName(), id(), lastName(), role(), updatedAt()
+    fields: createdAt(string), email(string), firstName(string), id(string), lastName(string), role(string), updatedAt(string)
   credentials:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), id(), isGlobal(), isManaged(), isResolvable(), name(), resolvableAllowFallback(), resolverId(), type(), updatedAt()
+    fields: createdAt(string), id(string), isGlobal(boolean), isManaged(boolean), isResolvable(boolean), name(string), resolvableAllowFallback(boolean), resolverId(string), type(string), updatedAt(string)
   credential:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), id(), isGlobal(), isManaged(), isResolvable(), name(), resolvableAllowFallback(), resolverId(), type(), updatedAt()
+    fields: createdAt(string), id(string), isGlobal(boolean), isManaged(boolean), isResolvable(boolean), name(string), resolvableAllowFallback(boolean), resolverId(string), type(string), updatedAt(string)
   credential_schema:
-    fields: displayName(), documentationUrl(), name(), properties()
+    fields: displayName(string), documentationUrl(string), name(string), properties(array)
   data_tables:
     primary key: id
     cursor: updatedAt
-    fields: columns(), createdAt(), id(), name(), projectId(), updatedAt()
+    fields: columns(array), createdAt(string), id(string), name(string), projectId(string), updatedAt(string)
   data_table:
     primary key: id
     cursor: updatedAt
-    fields: columns(), createdAt(), id(), name(), projectId(), updatedAt()
+    fields: columns(array), createdAt(string), id(string), name(string), projectId(string), updatedAt(string)
   data_table_rows:
     primary key: id
     cursor: updatedAt
-    fields: createdAt(), id(), updatedAt()
+    fields: createdAt(string), id(string), updatedAt(string)
   data_table_columns:
     primary key: id
-    fields: dataTableId(), id(), index(), name(), type()
+    fields: dataTableId(string), id(string), index(integer), name(string), type(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

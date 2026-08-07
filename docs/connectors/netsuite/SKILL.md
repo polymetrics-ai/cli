@@ -43,19 +43,19 @@ Reads selected NetSuite REST Record API resources (customers, vendors, items, sa
 - customers:
   - primary key: id
   - cursor: last_modified_date
-  - fields: email(), entity_id(), id(), last_modified_date(), name(), status()
+  - fields: email(string), entity_id(string), id(string), last_modified_date(string), name(string), status(string)
 - vendors:
   - primary key: id
   - cursor: last_modified_date
-  - fields: email(), entity_id(), id(), last_modified_date(), name(), status()
+  - fields: email(string), entity_id(string), id(string), last_modified_date(string), name(string), status(string)
 - items:
   - primary key: id
   - cursor: last_modified_date
-  - fields: email(), entity_id(), id(), last_modified_date(), name(), status()
+  - fields: email(string), entity_id(string), id(string), last_modified_date(string), name(string), status(string)
 - sales_orders:
   - primary key: id
   - cursor: last_modified_date
-  - fields: email(), entity_id(), id(), last_modified_date(), name(), status()
+  - fields: email(string), entity_id(string), id(string), last_modified_date(string), name(string), status(string)
 
 ## Sync Modes
 

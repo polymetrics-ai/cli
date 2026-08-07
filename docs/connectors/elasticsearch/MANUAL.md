@@ -40,10 +40,10 @@ CONFIGURATION
 ETL STREAMS
   indices:
     primary key: index
-    fields: docs.count(), index()
+    fields: docs.count(string), index(string)
   documents:
     primary key: id
-    fields: id()
+    fields: id(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

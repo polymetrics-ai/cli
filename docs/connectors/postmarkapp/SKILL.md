@@ -43,43 +43,43 @@ Reads Postmark server-token API resources including messages, bounces, templates
 - outbound_messages:
   - primary key: id
   - cursor: received_at
-  - fields: from(), id(), received_at(), status(), subject(), to()
+  - fields: from(string), id(string), received_at(string), status(string), subject(string), to(array)
 - inbound_messages:
   - primary key: id
-  - fields: from(), id(), status(), subject(), to()
+  - fields: from(string), id(string), status(string), subject(string), to(string)
 - current_server:
   - primary key: ID
-  - fields: ID()
+  - fields: ID(string)
 - bulk_email_status:
   - primary key: Id
-  - fields: Id()
+  - fields: Id(string)
 - delivery_stats:
 - bounces:
   - primary key: ID
-  - fields: ID()
+  - fields: ID(string)
 - bounce:
   - primary key: ID
-  - fields: ID()
+  - fields: ID(string)
 - bounce_dump:
 - templates:
   - primary key: TemplateId
-  - fields: TemplateId()
+  - fields: TemplateId(string)
 - template:
   - primary key: TemplateId
-  - fields: TemplateId()
+  - fields: TemplateId(string)
 - message_streams:
   - primary key: ID
-  - fields: ID()
+  - fields: ID(string)
 - message_stream:
   - primary key: ID
-  - fields: ID()
+  - fields: ID(string)
 - outbound_message_details:
   - primary key: MessageID
-  - fields: MessageID()
+  - fields: MessageID(string)
 - outbound_message_dump:
 - inbound_message_details:
   - primary key: MessageID
-  - fields: MessageID()
+  - fields: MessageID(string)
 - outbound_message_opens:
 - outbound_message_opens_by_message:
 - outbound_message_clicks:
@@ -98,13 +98,13 @@ Reads Postmark server-token API resources including messages, bounces, templates
 - stats_outbound_click_location:
 - inbound_rule_triggers:
   - primary key: ID
-  - fields: ID()
+  - fields: ID(string)
 - webhooks:
   - primary key: ID
-  - fields: ID()
+  - fields: ID(string)
 - webhook:
   - primary key: ID
-  - fields: ID()
+  - fields: ID(string)
 - suppressions:
 
 ## Sync Modes

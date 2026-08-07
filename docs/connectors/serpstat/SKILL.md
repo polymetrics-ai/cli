@@ -38,13 +38,13 @@ Reads Serpstat SEO domain keyword, competitor, and top-URL data through the Serp
 
 - domain_keywords:
   - primary key: keyword, url
-  - fields: keyword(), position(), updated_at(), url()
+  - fields: keyword(string), position(integer), updated_at(string), url(string)
 - domain_competitors:
   - primary key: domain
-  - fields: domain(), visibility()
+  - fields: domain(string), visibility(number)
 - domain_urls:
   - primary key: url
-  - fields: keywords(), url()
+  - fields: keywords(integer), url(string)
 
 ## Sync Modes
 

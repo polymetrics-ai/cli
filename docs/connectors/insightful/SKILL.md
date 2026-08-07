@@ -37,18 +37,18 @@ Reads Insightful workforce-analytics employees, teams, projects, and directory e
 - employee:
   - primary key: id
   - cursor: updatedAt
-  - fields: createdAt(), email(), id(), modelName(), name(), updatedAt()
+  - fields: createdAt(integer), email(string), id(string), modelName(string), name(string), updatedAt(integer)
 - team:
   - primary key: id
-  - fields: default(), description(), employees(), id(), modelName(), name(), projects()
+  - fields: default(boolean), description(string), employees(array), id(string), modelName(string), name(string), projects(array)
 - projects:
   - primary key: id
   - cursor: updatedAt
-  - fields: archived(), billable(), createdAt(), creatorId(), employees(), id(), modelName(), name(), organizationId(), updatedAt()
+  - fields: archived(boolean), billable(boolean), createdAt(integer), creatorId(string), employees(array), id(string), modelName(string), name(string), organizationId(string), updatedAt(integer)
 - directory:
   - primary key: id
   - cursor: updatedAt
-  - fields: createdAt(), id(), modelName(), name(), organizationId(), updatedAt()
+  - fields: createdAt(integer), id(string), modelName(string), name(string), organizationId(string), updatedAt(integer)
 
 ## Sync Modes
 

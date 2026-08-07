@@ -36,13 +36,13 @@ CONFIGURATION
 ETL STREAMS
   domain_keywords:
     primary key: keyword, url
-    fields: keyword(), position(), updated_at(), url()
+    fields: keyword(string), position(integer), updated_at(string), url(string)
   domain_competitors:
     primary key: domain
-    fields: domain(), visibility()
+    fields: domain(string), visibility(number)
   domain_urls:
     primary key: url
-    fields: keywords(), url()
+    fields: keywords(integer), url(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

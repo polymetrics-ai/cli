@@ -35,16 +35,16 @@ CONFIGURATION
 ETL STREAMS
   employees:
     primary key: id
-    fields: created_at(), email(), first_name(), id(), last_name(), name(), updated_at()
+    fields: created_at(string), email(string), first_name(string), id(integer), last_name(string), name(string), updated_at(string)
   projects:
     primary key: id
-    fields: created_at(), id(), name(), updated_at()
+    fields: created_at(string), id(integer), name(string), updated_at(string)
   clients:
     primary key: id
-    fields: created_at(), id(), name(), updated_at()
+    fields: created_at(string), id(integer), name(string), updated_at(string)
   roles:
     primary key: id
-    fields: created_at(), id(), name(), updated_at()
+    fields: created_at(string), id(integer), name(string), updated_at(string)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped

@@ -35,31 +35,31 @@ Reads Svix applications, endpoints, event types, messages, message delivery atte
 
 - applications:
   - primary key: id
-  - fields: created_at(), id(), name()
+  - fields: created_at(string), id(string), name(string)
 - endpoints:
   - primary key: id
   - cursor: updated_at
-  - fields: app_id(), channels(), created_at(), description(), disabled(), filterTypes(), id(), metadata(), rateLimit(), throttleRate(), uid(), updated_at(), url(), version()
+  - fields: app_id(string), channels(array), created_at(string), description(string), disabled(boolean), filterTypes(array), id(string), metadata(object), rateLimit(integer), throttleRate(integer), uid(string), updated_at(string), url(string), version(integer)
 - event_types:
   - primary key: name
   - cursor: updated_at
-  - fields: archived(), created_at(), deprecated(), description(), featureFlags(), groupName(), name(), schemas(), updated_at()
+  - fields: archived(boolean), created_at(string), deprecated(boolean), description(string), featureFlags(array), groupName(string), name(string), schemas(object), updated_at(string)
 - messages:
   - primary key: id
   - cursor: timestamp
-  - fields: app_id(), channels(), eventId(), eventType(), id(), payload(), tags(), timestamp()
+  - fields: app_id(string), channels(array), eventId(string), eventType(string), id(string), payload(object), tags(array), timestamp(string)
 - background_tasks:
   - primary key: id
   - cursor: updated_at
-  - fields: data(), id(), status(), task(), updated_at()
+  - fields: data(object), id(string), status(string), task(string), updated_at(string)
 - connectors:
   - primary key: id
   - cursor: updated_at
-  - fields: allowedEventTypes(), created_at(), description(), featureFlags(), id(), instructions(), kind(), logo(), name(), orgId(), productType(), transformation(), uid(), updated_at()
+  - fields: allowedEventTypes(array), created_at(string), description(string), featureFlags(array), id(string), instructions(string), kind(string), logo(string), name(string), orgId(string), productType(string), transformation(string), uid(string), updated_at(string)
 - operational_webhook_endpoints:
   - primary key: id
   - cursor: updated_at
-  - fields: created_at(), description(), disabled(), filterTypes(), id(), metadata(), rateLimit(), throttleRate(), uid(), updated_at(), url()
+  - fields: created_at(string), description(string), disabled(boolean), filterTypes(array), id(string), metadata(object), rateLimit(integer), throttleRate(integer), uid(string), updated_at(string), url(string)
 
 ## Sync Modes
 

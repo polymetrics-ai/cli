@@ -40,19 +40,19 @@ Reads Orb customers, subscriptions, plans, and invoices.
 - customers:
   - primary key: id
   - cursor: created_at
-  - fields: amount(), created_at(), currency(), customer_id(), email(), id(), name(), plan_id(), status(), updated_at()
+  - fields: amount(integer), created_at(string), currency(string), customer_id(string), email(string), id(string), name(string), plan_id(string), status(string), updated_at(string)
 - subscriptions:
   - primary key: id
   - cursor: created_at
-  - fields: amount(), created_at(), currency(), customer_id(), email(), id(), name(), plan_id(), status(), updated_at()
+  - fields: amount(integer), created_at(string), currency(string), customer_id(string), email(string), id(string), name(string), plan_id(string), status(string), updated_at(string)
 - plans:
   - primary key: id
   - cursor: created_at
-  - fields: amount(), created_at(), currency(), customer_id(), email(), id(), name(), plan_id(), status(), updated_at()
+  - fields: amount(integer), created_at(string), currency(string), customer_id(string), email(string), id(string), name(string), plan_id(string), status(string), updated_at(string)
 - invoices:
   - primary key: id
   - cursor: created_at
-  - fields: amount(), created_at(), currency(), customer_id(), email(), id(), name(), plan_id(), status(), updated_at()
+  - fields: amount(integer), created_at(string), currency(string), customer_id(string), email(string), id(string), name(string), plan_id(string), status(string), updated_at(string)
 
 ## Sync Modes
 
