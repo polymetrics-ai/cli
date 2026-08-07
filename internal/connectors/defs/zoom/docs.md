@@ -105,6 +105,17 @@ not a credential.
   contain `download`+`url`, matching `shouldRedactJSONField`'s download-URL rule) since they are
   direct download links to a user's AI conversation history/attachments.
 
+### Direct reads (my-notes module)
+
+- `pm zoom my-notes list` reads GET `/v2/my_notes/notes` (operation `zoom.list_my_notes`). No
+  request parameters; the live artifact documents none. Provider reference:
+  https://developers.zoom.us/docs/api/my-notes.md.
+- `pm zoom my-notes content get --note-id <id> [--include transcript]` reads GET
+  `/v2/my_notes/notes/{noteId}/content` (operation `zoom.get_my_notes_content`). Unlike qss's
+  response-only pagination fields, the `include=transcript` query parameter here is explicitly
+  documented in the provider's operation description prose, so it is exposed as an optional
+  `--include` flag. Provider reference: https://developers.zoom.us/docs/api/my-notes.md.
+
 ## Write actions & risks
 
 This connector surface is read-only through Wave 2. Read behavior: external Zoom API read of user,
@@ -122,13 +133,14 @@ destructive operations additionally require the typed confirmation gate.
 - Batch default: `read_page_size=100`.
 - Provider inventory: 1,913 operations across 35 published modules (881 reads, 1,032 writes). See
   issue #3915 for the full module-by-module tracking table.
-- Executable today: 7 operations — 3 stream-backed GET reads (`users`, `meetings`, `webinars`), 3
-  bounded `qss` module direct reads, and 1 bounded `ai-companion` module direct read.
+- Executable today: 9 operations — 3 stream-backed GET reads (`users`, `meetings`, `webinars`), 3
+  bounded `qss` module direct reads, 1 bounded `ai-companion` module direct read, and 2 bounded
+  `my-notes` module direct reads.
 - Direct-read commands in this connector take only their required id path parameter(s) unless the
   live provider artifact documents an explicit request-parameters section; a response-body field
   of the same name (e.g. `qss`'s pagination fields) is not sufficient evidence of an accepted
   request parameter. This is a deliberate module-by-module scope-narrowing, not an oversight.
-- Pending connector-local delivery: 1,835 operations have no shared foundation blocker, but still
+- Pending connector-local delivery: 1,833 operations have no shared foundation blocker, but still
   need bounded Zoom-specific contracts, schemas, safety evidence, and fixtures before they can
   become commands.
 - Provider-side restrictions: 17 operations (five Information Barriers, seven Chat migration, one

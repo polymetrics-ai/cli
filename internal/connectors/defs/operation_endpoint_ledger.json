@@ -12953,6 +12953,18 @@
     },
     {
       "method": "GET",
+      "path": "/v2/my_notes/notes",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/my_notes/notes/{noteId}/content",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/v2/videosdk/sessions/{sessionId}/users/qos_summary",
       "kind": "rest_read",
       "max_bytes": 1048576

@@ -59,6 +59,36 @@
         "path": "/v2/aic/users/{userId}/conversation_archive",
         "max_bytes": 1048576
       }
+    },
+    {
+      "id": "zoom.list_my_notes",
+      "kind": "rest_read",
+      "summary": "List my notes",
+      "description": "Bounded Zoom read for GET /v2/my_notes/notes; returns the authenticated user's My Notes.",
+      "source_url": "https://developers.zoom.us/docs/api/my-notes.md",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/my_notes/notes",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_my_notes_content",
+      "kind": "rest_read",
+      "summary": "Get My Notes content and transcript",
+      "description": "Bounded Zoom read for GET /v2/my_notes/notes/{noteId}/content; returns a note's metadata, manual/AI-generated content, and optionally its meeting transcript.",
+      "source_url": "https://developers.zoom.us/docs/api/my-notes.md",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/my_notes/notes/{noteId}/content",
+        "max_bytes": 1048576
+      }
     }
   ]
 }

@@ -36,6 +36,13 @@
       "commands": [
         "ai-companion"
       ]
+    },
+    {
+      "id": "my-notes",
+      "title": "My Notes",
+      "commands": [
+        "my-notes"
+      ]
     }
   ],
   "global_flags": [
@@ -250,6 +257,65 @@
         {
           "method": "GET",
           "path": "/v2/aic/users/{userId}/conversation_archive"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "my-notes list",
+      "summary": "List the authenticated user's My Notes.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_my_notes",
+      "source_url": "https://developers.zoom.us/docs/api/my-notes.md",
+      "notes": "Bounded Zoom read; fixed method and path with no request parameters (the live artifact documents none for this operation).",
+      "examples": [
+        "pm zoom my-notes list --credential zoom-fixture --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/my_notes/notes"
+        }
+      ],
+      "output_policy": "json_redacted"
+    },
+    {
+      "path": "my-notes content get",
+      "summary": "Get a My Notes note's content, and optionally its meeting transcript.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_my_notes_content",
+      "source_url": "https://developers.zoom.us/docs/api/my-notes.md",
+      "flags": [
+        {
+          "name": "note-id",
+          "type": "string",
+          "summary": "My Notes note ID.",
+          "maps_to": "path.noteId",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "include",
+          "type": "enum",
+          "values": [
+            "transcript"
+          ],
+          "summary": "Include the associated meeting transcript in the response.",
+          "maps_to": "query.include",
+          "required": false
+        }
+      ],
+      "notes": "Bounded Zoom read; fixed method and path with a typed required note-id path parameter and an optional include=transcript query flag (explicitly documented in provider prose, unlike qss's response-only pagination fields).",
+      "examples": [
+        "pm zoom my-notes content get --credential zoom-fixture --note-id note_abc123 --json",
+        "pm zoom my-notes content get --credential zoom-fixture --note-id note_abc123 --include transcript --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/my_notes/notes/{noteId}/content"
         }
       ],
       "output_policy": "json_redacted"
