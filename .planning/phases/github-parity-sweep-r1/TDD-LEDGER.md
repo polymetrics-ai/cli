@@ -131,3 +131,51 @@ the 749 implemented commands was re-swept under the fixed probe.
   place** rather than duplicated, so no endpoint gained a second command name.
 - **GitHub's GraphQL schema is still enumerated at 4 fixed operations.** That is a named scope gap
   carried from slice 1, not a completeness claim.
+
+---
+
+## Slice 3a — `covered_by.writes`, the change the synthetic rows actually needed
+
+The four `(close)`/`(reopen)` rows could not simply be deleted: `covered_by.write` is a single
+string, and validate requires **every** declared write action to be referenced by some row. Six
+actions sat on two endpoints.
+
+Deleting the extra actions looked like the cheaper fix and is wrong.
+`internal/connectors/hooks/github/hooks.go` assembles the close/reopen bodies by switching on the
+action **name**, and `internal/connectors/certify/pairing_test.go` binds `create_issue` to
+`close_issue` as its cleanup pair. Removing them would delete shipped, hook-backed,
+certification-bound behaviour inside a parity commit — the same mistake greenhouse finding 21
+declined to make.
+
+### RED
+
+```
+cmd/connectorgen/validate_surface_test.go:66:40: unknown field Writes in struct literal of type engine.SurfaceCoverage
+cmd/connectorgen/validate_surface_test.go:92:40: unknown field Writes in struct literal of type engine.SurfaceCoverage
+FAIL	polymetrics.ai/cmd/connectorgen [build failed]
+```
+
+Two tests, written before the field existed: one asserting an endpoint may back several write
+actions, one asserting a plural entry naming an **undeclared** action is still a finding. Widening
+the shape must not widen what goes unchecked.
+
+### GREEN
+
+| Gate | Result |
+| --- | --- |
+| Both new tests | **PASS** |
+| `internal/connectors/engine` | **ok** 5.361s |
+| `internal/connectors/conformance` | **ok** 15.851s |
+| `internal/connectors/commandrunner` | **ok** 8.335s |
+| `connectorgen validate` | 551 connectors, **0 findings** |
+| `connectorgen surface-sync --check` | 0 filled / 0 corrected |
+| `pm github issue close` / `pm github pr reopen` | still route |
+
+`SurfaceCoverage.WriteTargets()` returns singular and plural together, so no reader has to remember
+that both spellings exist; connectorgen validate, `conformance/static`, `batch` and
+`batch_materialize` all go through it. github's api_surface drops 886 → **882 real rows**.
+
+**Not done here, deliberately:** notion ships the same defect (`PATCH /v1/comments/{comment_id}
+(body=markdown)` and `POST /v1/pages/{page_id}/move (parent=data_source_id)`) and is already merged
+as #3894. It can now adopt `covered_by.writes`, but converting a merged connector is not this
+connector's parity commit. **Recorded, not folded in.**
