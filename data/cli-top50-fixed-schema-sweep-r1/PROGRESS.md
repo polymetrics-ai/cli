@@ -9,7 +9,7 @@ worktree. Nothing is lost; nothing is uncommitted.**
 | --- | --- |
 | Worktree | `/Users/karthiksivadas/.treehouse/cli-83d592/42/cli` |
 | **Branch** | **`fm/cli-top50-sweep-consolidated`** (pushed, synced with origin, tree clean) |
-| **Exact HEAD** | **`e585b456de8252d0fc99f25154a3d1f3aed9657f`** |
+| **HEAD** | Use the **branch tip** — it is authoritative. `git fetch origin && git checkout fm/cli-top50-sweep-consolidated && git reset --hard origin/fm/cli-top50-sweep-consolidated`. This handoff was introduced by `e585b456d` (a commit cannot record its own hash, so do not treat any single sha here as the tip). Last delivered connector commit: **`0829543e6`** lever-hiring. |
 | Cut from | `origin/main` @ `5d43d7c00` (post-Mailchimp #3562) |
 | Model | **ONE consolidated sweep PR** (captain, ordered twice). PR **not yet opened.** |
 | Master plan | `MASTER-PLAN.json` (sibling of this file) — all 30 counts, hazards, issue links |
