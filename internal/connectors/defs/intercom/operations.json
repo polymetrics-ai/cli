@@ -522,7 +522,7 @@
             },
             "body_markdown": {
               "type": "string",
-              "description": "The content of the article in markdown. For multilingual articles, this will be the body of the default language's content. An alternative to `body` — you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
+              "description": "The content of the article in markdown. For multilingual articles, this will be the body of the default language's content. An alternative to `body` \u2014 you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
             },
             "author_id": {
               "type": "integer",
@@ -4772,7 +4772,7 @@
                 "string",
                 "null"
               ],
-              "description": "ISO 8601 timestamp at which to schedule a future publish of the article. When set together with `state: \"published\"`, the article is scheduled instead of published immediately. Setting `null` cancels a pending publish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` — the value must be strictly in the future. Combining with `state: \"draft\"` returns 400 `parameter_invalid`. Sending in the same request as `scheduled_unpublish_at` returns 400 —",
+              "description": "ISO 8601 timestamp at which to schedule a future publish of the article. When set together with `state: \"published\"`, the article is scheduled instead of published immediately. Setting `null` cancels a pending publish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` \u2014 the value must be strictly in the future. Combining with `state: \"draft\"` returns 400 `parameter_invalid`. Sending in the same request as `scheduled_unpublish_at` returns 400 \u2014",
               "format": "date-time"
             },
             "scheduled_unpublish_at": {
@@ -4780,7 +4780,7 @@
                 "string",
                 "null"
               ],
-              "description": "ISO 8601 timestamp at which to schedule a future unpublish of the article. Setting `null` cancels a pending unpublish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` — the value must be strictly in the future. Rejected with 400 `parameter_invalid` if the article has never been published. Sending in the same request as `scheduled_publish_at` returns 400 — only one pending schedule per article. Empty string returns 400 `parameter_invalid`.",
+              "description": "ISO 8601 timestamp at which to schedule a future unpublish of the article. Setting `null` cancels a pending unpublish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` \u2014 the value must be strictly in the future. Rejected with 400 `parameter_invalid` if the article has never been published. Sending in the same request as `scheduled_publish_at` returns 400 \u2014 only one pending schedule per article. Empty string returns 400 `parameter_invalid`.",
               "format": "date-time"
             }
           },
@@ -4874,7 +4874,7 @@
             },
             "body_markdown": {
               "type": "string",
-              "description": "The content of the article in markdown. For multilingual articles, this will be the body of the default language's content. An alternative to `body` — you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
+              "description": "The content of the article in markdown. For multilingual articles, this will be the body of the default language's content. An alternative to `body` \u2014 you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
             },
             "author_id": {
               "type": "integer",
@@ -9124,7 +9124,7 @@
                 "string",
                 "null"
               ],
-              "description": "ISO 8601 timestamp at which to schedule a future publish of the article. When set together with `state: \"published\"`, the article is scheduled instead of published immediately. Setting `null` cancels a pending publish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` — the value must be strictly in the future. Combining with `state: \"draft\"` returns 400 `parameter_invalid`. Sending in the same request as `scheduled_unpublish_at` returns 400 —",
+              "description": "ISO 8601 timestamp at which to schedule a future publish of the article. When set together with `state: \"published\"`, the article is scheduled instead of published immediately. Setting `null` cancels a pending publish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` \u2014 the value must be strictly in the future. Combining with `state: \"draft\"` returns 400 `parameter_invalid`. Sending in the same request as `scheduled_unpublish_at` returns 400 \u2014",
               "format": "date-time"
             },
             "scheduled_unpublish_at": {
@@ -9132,7 +9132,7 @@
                 "string",
                 "null"
               ],
-              "description": "ISO 8601 timestamp at which to schedule a future unpublish of the article. Setting `null` cancels a pending unpublish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` — the value must be strictly in the future. Rejected with 400 `parameter_invalid` if the article has never been published. Sending in the same request as `scheduled_publish_at` returns 400 — only one pending schedule per article. Empty string returns 400 `parameter_invalid`.",
+              "description": "ISO 8601 timestamp at which to schedule a future unpublish of the article. Setting `null` cancels a pending unpublish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` \u2014 the value must be strictly in the future. Rejected with 400 `parameter_invalid` if the article has never been published. Sending in the same request as `scheduled_publish_at` returns 400 \u2014 only one pending schedule per article. Empty string returns 400 `parameter_invalid`.",
               "format": "date-time"
             }
           }
@@ -9273,7 +9273,7 @@
             },
             "body_markdown": {
               "type": "string",
-              "description": "The content of the article in markdown. For multilingual articles, this will be the body of the default language's content. An alternative to `body` — you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
+              "description": "The content of the article in markdown. For multilingual articles, this will be the body of the default language's content. An alternative to `body` \u2014 you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
             },
             "author_id": {
               "type": "integer",
@@ -13523,7 +13523,7 @@
                 "string",
                 "null"
               ],
-              "description": "ISO 8601 timestamp at which to schedule a future publish of the article. When set together with `state: \"published\"`, the article is scheduled instead of published immediately. Setting `null` cancels a pending publish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` — the value must be strictly in the future. Combining with `state: \"draft\"` returns 400 `parameter_invalid`. Sending in the same request as `scheduled_unpublish_at` returns 400 —",
+              "description": "ISO 8601 timestamp at which to schedule a future publish of the article. When set together with `state: \"published\"`, the article is scheduled instead of published immediately. Setting `null` cancels a pending publish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` \u2014 the value must be strictly in the future. Combining with `state: \"draft\"` returns 400 `parameter_invalid`. Sending in the same request as `scheduled_unpublish_at` returns 400 \u2014",
               "format": "date-time"
             },
             "scheduled_unpublish_at": {
@@ -13531,7 +13531,7 @@
                 "string",
                 "null"
               ],
-              "description": "ISO 8601 timestamp at which to schedule a future unpublish of the article. Setting `null` cancels a pending unpublish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` — the value must be strictly in the future. Rejected with 400 `parameter_invalid` if the article has never been published. Sending in the same request as `scheduled_publish_at` returns 400 — only one pending schedule per article. Empty string returns 400 `parameter_invalid`.",
+              "description": "ISO 8601 timestamp at which to schedule a future unpublish of the article. Setting `null` cancels a pending unpublish schedule. Timestamps in the past or equal to the current time are rejected with 400 `parameter_invalid` \u2014 the value must be strictly in the future. Rejected with 400 `parameter_invalid` if the article has never been published. Sending in the same request as `scheduled_publish_at` returns 400 \u2014 only one pending schedule per article. Empty string returns 400 `parameter_invalid`.",
               "format": "date-time"
             }
           }
@@ -13717,7 +13717,7 @@
         "content_type": "application/json",
         "body_schema": {
           "type": "object",
-          "description": "The request payload for updating an audience. All fields are optional — only provided fields will be updated.",
+          "description": "The request payload for updating an audience. All fields are optional \u2014 only provided fields will be updated.",
           "properties": {
             "name": {
               "type": "string",
@@ -14012,7 +14012,8 @@
         "body_schema": {
           "type": "object",
           "additionalProperties": false
-        }
+        },
+        "content_type": "application/json"
       }
     },
     {
@@ -14981,7 +14982,7 @@
             },
             "availability": {
               "type": "object",
-              "description": "Required when `action` is `set_availability`. Each field is optional — only the properties present in the request are toggled.",
+              "description": "Required when `action` is `set_availability`. Each field is optional \u2014 only the properties present in the request are toggled.",
               "properties": {
                 "ai_agent": {
                   "type": "boolean",
@@ -15096,7 +15097,7 @@
         "content_type": "application/json",
         "body_schema": {
           "type": "object",
-          "description": "The request payload for creating a content snippet. You must provide either `json_blocks` or `body_markdown` for the snippet content — they are mutually exclusive.",
+          "description": "The request payload for creating a content snippet. You must provide either `json_blocks` or `body_markdown` for the snippet content \u2014 they are mutually exclusive.",
           "properties": {
             "title": {
               "type": "string",
@@ -15111,7 +15112,7 @@
             },
             "body_markdown": {
               "type": "string",
-              "description": "The content of the snippet in markdown. An alternative to `json_blocks` — you can provide content as markdown instead of structured blocks. Mutually exclusive with `json_blocks`."
+              "description": "The content of the snippet in markdown. An alternative to `json_blocks` \u2014 you can provide content as markdown instead of structured blocks. Mutually exclusive with `json_blocks`."
             },
             "locale": {
               "type": "string",
@@ -15248,7 +15249,7 @@
         "content_type": "application/json",
         "body_schema": {
           "type": "object",
-          "description": "The request payload for updating a content snippet. All fields are optional — only provided fields will be updated. `json_blocks` and `body_markdown` are mutually exclusive.",
+          "description": "The request payload for updating a content snippet. All fields are optional \u2014 only provided fields will be updated. `json_blocks` and `body_markdown` are mutually exclusive.",
           "properties": {
             "title": {
               "type": "string",
@@ -15263,7 +15264,7 @@
             },
             "body_markdown": {
               "type": "string",
-              "description": "The content of the snippet in markdown. An alternative to `json_blocks` — you can provide content as markdown instead of structured blocks. Mutually exclusive with `json_blocks`."
+              "description": "The content of the snippet in markdown. An alternative to `json_blocks` \u2014 you can provide content as markdown instead of structured blocks. Mutually exclusive with `json_blocks`."
             },
             "locale": {
               "type": "string",
@@ -16733,7 +16734,7 @@
         "content_type": "application/json",
         "body_schema": {
           "type": "object",
-          "description": "Update an existing data connector. All fields are optional — only provided fields will be updated. Set `state` to `live` or `draft` to change the connector's state.",
+          "description": "Update an existing data connector. All fields are optional \u2014 only provided fields will be updated. Set `state` to `live` or `draft` to change the connector's state.",
           "properties": {
             "name": {
               "type": "string",
@@ -17062,7 +17063,7 @@
       "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
       "risk": "high",
       "approval": "none: blocked-by-default typed read/binary/CDC candidate; no live provider call without an approved runner",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "POST",
         "path": "/export/content/data",
@@ -17096,7 +17097,7 @@
       "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
       "risk": "high",
       "approval": "none: blocked-by-default typed read/binary/CDC candidate; no live provider call without an approved runner",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
         "path": "/export/content/data/{job_identifier}",
@@ -17111,7 +17112,7 @@
       "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
       "risk": "high",
       "approval": "none: blocked-by-default typed read/binary/CDC candidate; no live provider call without an approved runner",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "POST",
         "path": "/export/reporting_data/enqueue",
@@ -17170,7 +17171,7 @@
       "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
       "risk": "high",
       "approval": "none: blocked-by-default typed read/binary/CDC candidate; no live provider call without an approved runner",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
         "path": "/export/reporting_data/{job_identifier}",
@@ -17185,7 +17186,7 @@
       "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
       "risk": "high",
       "approval": "none: blocked-by-default typed read/binary/CDC candidate; no live provider call without an approved runner",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
         "path": "/export/workflows/{id}",
@@ -17212,11 +17213,11 @@
           "properties": {
             "conversation_id": {
               "type": "string",
-              "description": "Your external conversation ID — the same ID you started the conversation with, and the one echoed on the `csat_requested` event."
+              "description": "Your external conversation ID \u2014 the same ID you started the conversation with, and the one echoed on the `csat_requested` event."
             },
             "rating": {
               "type": "string",
-              "description": "The rating the user selected — one of the `key` values from the `csat_requested` event's options.",
+              "description": "The rating the user selected \u2014 one of the `key` values from the `csat_requested` event's options.",
               "enum": [
                 "terrible",
                 "bad",
@@ -17227,7 +17228,7 @@
             },
             "remark": {
               "type": "string",
-              "description": "Optional free-text comment the user left alongside the rating. Can be added to an already-rated survey, but only once — the rating locks after a remark is recorded."
+              "description": "Optional free-text comment the user left alongside the rating. Can be added to an already-rated survey, but only once \u2014 the rating locks after a remark is recorded."
             }
           },
           "required": [
@@ -20080,7 +20081,7 @@
             },
             "body_markdown": {
               "type": "string",
-              "description": "The content of the article in markdown. An alternative to `body` — you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
+              "description": "The content of the article in markdown. An alternative to `body` \u2014 you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
             },
             "author_id": {
               "type": "integer",
@@ -20200,7 +20201,7 @@
             },
             "body_markdown": {
               "type": "string",
-              "description": "The content of the article in markdown. An alternative to `body` — you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
+              "description": "The content of the article in markdown. An alternative to `body` \u2014 you can provide content as markdown instead of HTML. Mutually exclusive with `body`."
             },
             "author_id": {
               "type": "integer",
@@ -20872,7 +20873,7 @@
                   },
                   "day_of_week": {
                     "type": "integer",
-                    "description": "Derived day of the week the interval falls on (0 = Monday … 6 = Sunday). For exceptions, this is derived from `exception_date`."
+                    "description": "Derived day of the week the interval falls on (0 = Monday \u2026 6 = Sunday). For exceptions, this is derived from `exception_date`."
                   }
                 }
               }
@@ -20962,7 +20963,7 @@
                   },
                   "day_of_week": {
                     "type": "integer",
-                    "description": "Derived day of the week the interval falls on (0 = Monday … 6 = Sunday). For exceptions, this is derived from `exception_date`."
+                    "description": "Derived day of the week the interval falls on (0 = Monday \u2026 6 = Sunday). For exceptions, this is derived from `exception_date`."
                   }
                 }
               }
@@ -21042,7 +21043,7 @@
                   },
                   "day_of_week": {
                     "type": "integer",
-                    "description": "Derived day of the week the interval falls on (0 = Monday … 6 = Sunday). For exceptions, this is derived from `exception_date`."
+                    "description": "Derived day of the week the interval falls on (0 = Monday \u2026 6 = Sunday). For exceptions, this is derived from `exception_date`."
                   }
                 }
               }
@@ -21147,7 +21148,7 @@
                   },
                   "day_of_week": {
                     "type": "integer",
-                    "description": "Derived day of the week the interval falls on (0 = Monday … 6 = Sunday). For exceptions, this is derived from `exception_date`."
+                    "description": "Derived day of the week the interval falls on (0 = Monday \u2026 6 = Sunday). For exceptions, this is derived from `exception_date`."
                   }
                 }
               }
