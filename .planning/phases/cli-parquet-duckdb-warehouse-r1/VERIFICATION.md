@@ -170,3 +170,38 @@ are still built by **nfpm, the same tool GoReleaser embeds**, from a config that
 `internal/cli` (all ok) · `make tidy-check` · `make agent-contract-check` ·
 `make connectorgen-validate` · `make connectorgen-surface-sync` · `make connector-boundary` ·
 `make release-workflow-check` · `make docs-check` · `make smoke` · `make lint`.
+
+## Handoff — outstanding verification
+
+**State at `ebaf1701d`:** the three CI failures are fixed and their two packages pass locally.
+**A full-tree `go test ./...` has not been run against this commit.** That is the one thing
+outstanding, and it must be run with its output read *in full*.
+
+### The mistake that caused two extra CI rounds
+
+Every failure since the first green has been the **same fixture defect** — a test hand-writing a
+root-level warehouse table as JSONL, a format `pm` now refuses — and each round found more of them
+because my local sweeps were not authoritative:
+
+1. `go test ./internal/connectors/` does **not** cover `./internal/connectors/certify/` or
+   `./internal/connectors/defs/zendesk-support/`. Package paths without `/...` match one package.
+2. I read a sweep's output through `tail -12` and treated the visible failures as the complete set.
+   `TestQueryRunAgentModeSummaryProjectsFields` and `TestQueryRunAgentModeStreamProjectsNDJSON`
+   were truncated out of view in exactly that way.
+
+**Next session: run `CGO_ENABLED=1 go test -timeout 20m ./... 2>&1 | tee` to a file and grep the
+file for `^(FAIL|--- FAIL)`. Do not pipe the run through `tail`.**
+
+### If more fixtures turn up
+
+They will look identical. The fix is always the same: replace the hand-written JSONL with
+`warehouse.WriteTable(ctx, <path>+warehouse.TableFileExt, []warehouse.Row{...})`. Already converted:
+`internal/app` (4 helpers), `internal/warehouse/layout_test.go`, `internal/connectors/warehouse_test.go`,
+`internal/connectors/certify/stages_write_test.go`, `internal/cli/reverse_cli_test.go`,
+`internal/cli/agentmode_query_cli_test.go`,
+`internal/connectors/defs/zendesk-support/reverse_etl_execute_test.go`.
+
+Legitimate remaining `.jsonl` writes that must **not** be converted: the WAL
+(`wal/<stream>.jsonl`), the outbox, and the deliberate legacy-layout fixtures in
+`warehouse_connection_isolation_test.go` and `warehouse_parquet_test.go`, which exist to prove the
+refusal fires.
