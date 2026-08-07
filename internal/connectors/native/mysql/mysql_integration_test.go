@@ -28,27 +28,45 @@ const (
 	mysqlReplicationServerID = "731001"
 )
 
+// envConnection names the Podman connection to target. There is deliberately
+// no default: a bare podman command on a shared host addresses whichever
+// machine happens to be the global default, which belongs to another lane.
+const (
+	envEnabled     = "POLYMETRICS_DATABASE_INTEGRATION"
+	envConnection  = "POLYMETRICS_PODMAN_CONNECTION"
+	envMachine     = "POLYMETRICS_PODMAN_MACHINE"
+	envReclaimDisk = "POLYMETRICS_DATABASE_RECLAIM_DISK"
+	envKeepImage   = "POLYMETRICS_DATABASE_KEEP_IMAGE"
+)
+
 var errCollectedCDCEvents = errors.New("test collected required mysql change events")
 
 func TestMySQLContainerHarness(t *testing.T) {
-	if os.Getenv("POLYMETRICS_DATABASE_INTEGRATION") != "1" {
-		t.Skip("database integration skipped: set POLYMETRICS_DATABASE_INTEGRATION=1 to start the MySQL Docker/Colima proof")
+	// A skip here is loud on purpose. This test must never report success
+	// without having connected to a real engine.
+	if os.Getenv(envEnabled) != "1" {
+		t.Skipf("database integration skipped: set %s=1 to run the MySQL Podman proof", envEnabled)
 	}
-	dockerContext := strings.TrimSpace(os.Getenv("DOCKER_CONTEXT"))
-	if dockerContext == "" {
-		t.Skip("database integration skipped: DOCKER_CONTEXT must name the explicit Docker/Colima context")
+	connection := strings.TrimSpace(os.Getenv(envConnection))
+	if connection == "" {
+		t.Skipf("database integration skipped: %s must name the explicit Podman connection, because the default connection belongs to another lane", envConnection)
+	}
+	machine := strings.TrimSpace(os.Getenv(envMachine))
+	if machine == "" {
+		machine = connection
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
 	defer cancel()
 	harness, err := dbtest.New(dbtest.Config{
-		Engine:         "mysql",
-		Image:          mysqlIntegrationImage,
-		ContainerPort:  3306,
-		DataVolumePath: "/var/lib/mysql",
-		DockerContext:  dockerContext,
-		ResetColima:    os.Getenv("POLYMETRICS_DATABASE_RESET_COLIMA") == "1",
-		ColimaProfile:  "default",
+		Engine:          "mysql",
+		Image:           mysqlIntegrationImage,
+		ContainerPort:   3306,
+		DataVolumePath:  "/var/lib/mysql",
+		Connection:      connection,
+		Machine:         machine,
+		KeepImage:       os.Getenv(envKeepImage) == "1",
+		ReclaimHostDisk: os.Getenv(envReclaimDisk) == "1",
 		ContainerArgs: []string{
 			"--env", "MYSQL_ALLOW_EMPTY_PASSWORD=yes",
 			"--env", "MYSQL_ROOT_HOST=%",
@@ -72,12 +90,18 @@ func TestMySQLContainerHarness(t *testing.T) {
 			t.Errorf("MySQL database test cleanup failed")
 		}
 		report := harness.Report()
-		t.Logf("MySQL database test disk free bytes: before=%d after=%d colima_reset=%t", report.DiskFreeBefore, report.DiskFreeAfter, report.ColimaReset)
-		if !report.ColimaReset {
-			t.Log("MySQL database test did not reset Colima; set POLYMETRICS_DATABASE_RESET_COLIMA=1 to reclaim host disk")
+		t.Logf("MySQL database test disk free bytes: before=%d after=%d reclaimed=%t",
+			report.DiskFreeBefore, report.DiskFreeAfter, report.HostDiskReclaimed)
+		if !report.HostDiskReclaimed {
+			t.Logf("MySQL database test left host disk unreclaimed; set %s=1 to trim the backing machine", envReclaimDisk)
+			return
 		}
-		if report.ColimaReset && report.DiskFreeAfter+(128<<20) < report.DiskFreeBefore {
-			t.Errorf("MySQL database test reclaimed insufficient disk space")
+		// The image is roughly 830 MB. Allow one ordinary build's worth of
+		// noise, and no more: a harness that leaks disk is a failed harness.
+		const buildNoise = 256 << 20
+		if report.DiskFreeAfter+buildNoise < report.DiskFreeBefore {
+			t.Errorf("MySQL database test leaked host disk: before=%d after=%d",
+				report.DiskFreeBefore, report.DiskFreeAfter)
 		}
 	}()
 
@@ -92,7 +116,7 @@ func TestMySQLContainerHarness(t *testing.T) {
 
 	catalog, err := connector.Catalog(ctx, config)
 	if err != nil {
-		t.Fatal("MySQL connector schema discovery failed")
+		t.Fatalf("MySQL connector schema discovery failed: %v", err)
 	}
 	stream := mysqlIntegrationDatabase + "." + mysqlIntegrationTable
 	assertDiscoveredStream(t, catalog, stream)
@@ -102,7 +126,7 @@ func TestMySQLContainerHarness(t *testing.T) {
 		full = append(full, record)
 		return nil
 	}); err != nil {
-		t.Fatal("MySQL connector full read failed")
+		t.Fatalf("MySQL connector full read failed: %v", err)
 	}
 	assertRecordIDs(t, full, []string{"1", "2", "3", "4", "5"})
 
@@ -111,11 +135,73 @@ func TestMySQLContainerHarness(t *testing.T) {
 		incremental = append(incremental, record)
 		return nil
 	}); err != nil {
-		t.Fatal("MySQL connector incremental read failed")
+		t.Fatalf("MySQL connector incremental read failed: %v", err)
 	}
 	assertRecordIDs(t, incremental, []string{"4", "5"})
 
+	assertTransportSecurityIsEnforced(t, ctx, connector, endpoint)
 	assertBinaryLogCDC(t, ctx, connector, config, endpoint, stream)
+}
+
+// assertTransportSecurityIsEnforced proves against the live server that the
+// declared mode is what actually happens on the wire, rather than a spec
+// field nothing reads. The official MySQL image serves TLS with a generated
+// self-signed certificate, so required encrypts, disabled does not, and
+// verify-identity fails closed because that certificate chains to nothing the
+// host trusts.
+func assertTransportSecurityIsEnforced(t *testing.T, ctx context.Context, connector native.Connector, endpoint dbtest.Endpoint) {
+	t.Helper()
+	for _, tc := range []struct {
+		mode        string
+		wantConnect bool
+		wantCipher  bool
+	}{
+		{mode: "disabled", wantConnect: true},
+		{mode: "preferred", wantConnect: true, wantCipher: true},
+		{mode: "required", wantConnect: true, wantCipher: true},
+		{mode: "verify-identity"},
+	} {
+		t.Run("sslmode="+tc.mode, func(t *testing.T) {
+			config := mysqlConfig(endpoint)
+			config.Config["sslmode"] = tc.mode
+			err := connector.Check(ctx, config)
+			if !tc.wantConnect {
+				if err == nil {
+					t.Fatalf("Check() under sslmode %q succeeded against an untrusted self-signed certificate", tc.mode)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("Check() under sslmode %q failed: %v", tc.mode, err)
+			}
+			if cipher := sessionCipher(t, ctx, endpoint, tc.mode); (cipher != "") != tc.wantCipher {
+				t.Fatalf("sslmode %q negotiated cipher %q, want encrypted=%t", tc.mode, cipher, tc.wantCipher)
+			}
+		})
+	}
+}
+
+// sessionCipher asks the server what it actually negotiated. An empty
+// Ssl_cipher means the session is plaintext.
+func sessionCipher(t *testing.T, ctx context.Context, endpoint dbtest.Endpoint, mode string) string {
+	t.Helper()
+	config := mysqlConfig(endpoint)
+	config.Config["sslmode"] = mode
+	conn, err := native.DialForTest(ctx, config)
+	if err != nil {
+		t.Fatalf("could not reopen MySQL under sslmode %q: %v", mode, err)
+	}
+	defer func() { _ = conn.Close() }()
+	result, err := conn.Execute("SHOW SESSION STATUS LIKE 'Ssl_cipher'")
+	if err != nil {
+		t.Fatal("could not read the negotiated MySQL session cipher")
+	}
+	defer result.Close()
+	cipher, err := result.GetString(0, 1)
+	if err != nil {
+		t.Fatal("MySQL returned no session cipher status row")
+	}
+	return cipher
 }
 
 func mysqlConfig(endpoint dbtest.Endpoint) connectors.RuntimeConfig {
@@ -158,7 +244,7 @@ func seedMySQL(t *testing.T, ctx context.Context, endpoint dbtest.Endpoint) {
 	}
 	for _, statement := range statements {
 		if _, err := db.Execute(statement); err != nil {
-			t.Fatal("could not seed deterministic MySQL test data")
+			t.Fatalf("could not seed deterministic MySQL test data: %v", err)
 		}
 	}
 }

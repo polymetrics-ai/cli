@@ -85,14 +85,17 @@ WHERE s.table_schema = ?
   AND c.is_nullable = 'NO'
   AND NOT EXISTS (
     SELECT 1
-    FROM information_schema.statistics trailing
-    WHERE trailing.table_schema = s.table_schema
-      AND trailing.table_name = s.table_name
-      AND trailing.index_name = s.index_name
-      AND trailing.seq_in_index > 1
+    FROM information_schema.statistics later_part
+    WHERE later_part.table_schema = s.table_schema
+      AND later_part.table_name = s.table_name
+      AND later_part.index_name = s.index_name
+      AND later_part.seq_in_index > 1
   )`, database, cursorField)
 	if err != nil {
-		return nil, errors.New("catalog mysql cursor metadata failed")
+		// Wrap the server's own error. A swallowed cause here hid a reserved-word
+		// alias for a full integration run; a server-side SQL error carries no
+		// configuration or authentication material.
+		return nil, fmt.Errorf("catalog mysql cursor metadata: %w", err)
 	}
 	records, err := resultRecords(result)
 	result.Close()
