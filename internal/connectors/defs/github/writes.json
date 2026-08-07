@@ -2470,7 +2470,7 @@
       "name": "unarchive_repo",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
@@ -2486,7 +2486,7 @@
       "name": "archive_repo",
       "kind": "update",
       "method": "PATCH",
-      "path": "/repos/{owner}/{repo}",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}",
       "path_fields": [],
       "body_type": "json",
       "record_schema": {
