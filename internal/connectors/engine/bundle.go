@@ -2235,8 +2235,8 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		if hasOperationBaseURL != hasOperationAuth {
 			return fmt.Errorf("operation %d (%q) rest.base_url and rest.auth must be declared together", i, op.ID)
 		}
-		if (hasOperationBaseURL || hasOperationAuth) && op.Kind != "rest_write" {
-			return fmt.Errorf("operation %d (%q) rest.base_url/rest.auth are only valid for rest_write operations, got %q", i, op.ID, op.Kind)
+		if (hasOperationBaseURL || hasOperationAuth) && op.Kind != "rest_write" && op.Kind != "rest_read" {
+			return fmt.Errorf("operation %d (%q) rest.base_url/rest.auth are only valid for rest_write or rest_read operations, got %q", i, op.ID, op.Kind)
 		}
 	}
 	switch op.Kind {
