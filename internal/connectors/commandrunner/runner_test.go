@@ -1883,6 +1883,49 @@ func TestBuildOperationDirectWriteCommandUsesTypedInputsAndPlanLifecycle(t *test
 	}
 }
 
+// TestBuildOperationDirectWriteCommandMapsNamedRootJSONObject proves that a
+// provider-owned resource object can occupy the declared request-body root
+// without reintroducing the prohibited generic JSON/raw-HTTP input. SCIM2's
+// extensible resource shape is the motivating contract; the command still has
+// one named object flag and a fixed declared operation.
+func TestBuildOperationDirectWriteCommandMapsNamedRootJSONObject(t *testing.T) {
+	connector := &fakeConnector{
+		directWriteMetadata: connectors.OperationDirectWriteMetadata{
+			Operation:     "acme.scim_group_create",
+			MutationClass: "create",
+			Risk:          "high",
+			Approval:      "plan-preview-confirm-execute",
+			OutputPolicy:  "json_redacted",
+			Batchable:     false,
+		},
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path:         "scim groups create",
+			Intent:       "direct_write",
+			Availability: "implemented",
+			Operation:    "acme.scim_group_create",
+			APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodPost, Path: "/scim2/Groups"}},
+			OutputPolicy: "json_redacted",
+			Flags: []connectors.CommandSurfaceFlag{
+				{Name: "resource", Type: "json_object", MapsTo: "body", Required: true},
+			},
+		}}},
+	}
+
+	command, err := BuildWriteCommand(context.Background(), connector, Request{
+		Path:  []string{"scim", "groups", "create"},
+		Flags: map[string][]string{"resource": {`{"displayName":"fixture scim group","schemas":["urn:ietf:params:scim:schemas:core:2.0:Group"]}`}},
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand named root object: %v", err)
+	}
+	if command.Record["displayName"] != "fixture scim group" {
+		t.Fatalf("root object body = %#v, want provider resource fields at the request root", command.Record)
+	}
+	if schemas, ok := command.Record["schemas"].([]any); !ok || len(schemas) != 1 {
+		t.Fatalf("root object schemas = %#v, want typed provider resource array", command.Record["schemas"])
+	}
+}
+
 func TestBuildOperationDirectWriteCommandKeepsCompleteInputError(t *testing.T) {
 	connector := &fakeConnector{
 		directWriteMetadata: connectors.OperationDirectWriteMetadata{

@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"testing/fstest"
 
 	"polymetrics.ai/internal/connectors"
 )
@@ -555,6 +556,116 @@ func TestOperationDirectReadAppliesDeclaredSensitiveRedactFields(t *testing.T) {
 	}
 	if patient["uuid"] != "patient-opaque-ref" {
 		t.Fatalf("opaque patient uuid = %v, want retained", patient["uuid"])
+	}
+}
+
+// TestOperationDirectReadUsesDeclaredOperationOriginAndAuth locks the paired
+// origin/auth rule for bounded reads. A provider endpoint at a distinct base
+// path must never borrow ordinary API headers or credentials merely because it
+// shares a connector bundle.
+func TestOperationDirectReadUsesDeclaredOperationOriginAndAuth(t *testing.T) {
+	var ordinaryAPICalls, scim2APICalls int
+	ordinaryAPI := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		ordinaryAPICalls++
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"source":"ordinary"}`))
+	}))
+	t.Cleanup(ordinaryAPI.Close)
+
+	scim2Token := "fixture-scim2-bearer"
+	scim2API := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		scim2APICalls++
+		if r.Method != http.MethodGet || r.URL.Path != "/scim2/Groups" {
+			t.Fatalf("SCIM2 request = %s %s, want GET /scim2/Groups", r.Method, r.URL.Path)
+		}
+		if r.Header.Get("Authorization") != "Bearer "+scim2Token {
+			t.Fatal("SCIM2 request did not receive the operation-declared bearer credential")
+		}
+		if r.Header.Get("X-Ordinary-Token") != "" {
+			t.Fatal("SCIM2 request inherited an ordinary API secret header")
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"Resources":[{"id":"scim-group-fixture"}]}`))
+	}))
+	t.Cleanup(scim2API.Close)
+
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/spec.json"].Data = []byte(`{
+		"$schema": "http://json-schema.org/draft-07/schema#",
+		"type": "object",
+		"properties": {
+			"base_url": {"type": "string"},
+			"scim2_base_url": {"type": "string"},
+			"ordinary_token": {"type": "string", "x-secret": true},
+			"scim2_token": {"type": "string", "x-secret": true}
+		}
+	}`)
+	fsys["acme/streams.json"].Data = []byte(`{
+		"base": {
+			"url": "{{ config.base_url }}",
+			"auth": [{"mode": "bearer", "token": "{{ secrets.ordinary_token }}"}],
+			"headers": {"X-Ordinary-Token": "{{ secrets.ordinary_token }}"},
+			"pagination": {"type": "none"}
+		},
+		"streams": []
+	}`)
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [{
+			"id": "acme.list_scim2_groups",
+			"kind": "rest_read",
+			"summary": "List SCIM2 groups",
+			"risk": "medium",
+			"approval": "none",
+			"output_policy": "json_redacted",
+			"rest": {
+				"method": "GET",
+				"path": "/scim2/Groups",
+				"base_url": "{{ config.scim2_base_url }}",
+				"auth": [{"mode": "bearer", "token": "{{ secrets.scim2_token }}"}],
+				"max_bytes": 1024
+			}
+		}]
+	}`)}
+	fsys["acme/api_surface.json"].Data = []byte(`{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{"method": "GET", "path": "/widgets", "covered_by": {"stream": "widgets"}},
+			{"method": "GET", "path": "/scim2/Groups", "operation": {
+				"model": "direct_read", "status": "blocked", "risk": "medium", "blocked_by_default": true,
+				"reason": "declared operation origin/auth fixture"
+			}}
+		]
+	}`)
+
+	bundle, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load declared operation-scoped direct-read origin/auth bundle: %v", err)
+	}
+	result, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{
+		Operation: "acme.list_scim2_groups",
+		Config: connectors.RuntimeConfig{
+			Config: map[string]string{
+				"base_url":       ordinaryAPI.URL,
+				"scim2_base_url": scim2API.URL,
+			},
+			Secrets: map[string]string{
+				"ordinary_token": "fixture-ordinary-bearer",
+				"scim2_token":    scim2Token,
+			},
+		},
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead declared origin/auth: %v", err)
+	}
+	if result.Status != http.StatusOK {
+		t.Fatalf("SCIM2 status = %d, want 200", result.Status)
+	}
+	if ordinaryAPICalls != 0 {
+		t.Fatalf("ordinary API received %d request(s), want no ordinary credential routed to SCIM2", ordinaryAPICalls)
+	}
+	if scim2APICalls != 1 {
+		t.Fatalf("SCIM2 API received %d request(s), want 1", scim2APICalls)
 	}
 }
 

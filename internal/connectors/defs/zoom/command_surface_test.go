@@ -32,15 +32,15 @@ const zoomBundleName = "zoom"
 // operations.json/cli_surface.json entries exist.
 //
 // Landed modules: qss (3), ai-companion (1), my-notes (2), healthcare reads (2),
-// quality-management reads (5), Cobrowse SDK reads (4). Chatbot contributes
-// only typed mutations, so it is tracked by wantModuleDirectWriteCommandCount.
-const wantModuleOperationCommandCount = 17
+// quality-management reads (5), Cobrowse SDK reads (4), and SCIM2 reads (4).
+// Chatbot and SCIM2 mutations are tracked by wantModuleDirectWriteCommandCount.
+const wantModuleOperationCommandCount = 21
 
 // wantModuleDirectWriteCommandCount is the running total of implemented
 // operations.json rest_write commands. It is distinct from writes.json
 // reverse-ETL actions because direct writes are executable only through the
 // typed plan lifecycle.
-const wantModuleDirectWriteCommandCount = 5
+const wantModuleDirectWriteCommandCount = 12
 
 // wantModuleWriteCommandCount is the running total of implemented reverse_etl
 // write commands across the landed provider modules. Bump it first for each
@@ -151,11 +151,11 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 			t.Errorf("provider inventory %s rows = %d, want %d", method, got, want)
 		}
 	}
-	if got := covered; got != 27 {
-		t.Errorf("executable rows = %d, want 27", got)
+	if got := covered; got != 38 {
+		t.Errorf("executable rows = %d, want 38", got)
 	}
-	if got := implementableNow; got != 1815 {
-		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1815", got)
+	if got := implementableNow; got != 1804 {
+		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1804", got)
 	}
 	if got := providerRestricted; got != 17 {
 		t.Errorf("provider-restricted operations = %d, want 17", got)
@@ -288,6 +288,58 @@ func TestChatbotDirectWriteCommandsAreReachable(t *testing.T) {
 		}
 		if found == nil || found.Intent != "direct_write" || found.Availability != "implemented" || found.Operation != want.operation || len(found.APISurface) != 1 || found.APISurface[0].Method != want.method || found.APISurface[0].Path != want.apiPath {
 			t.Errorf("Chatbot command %q does not retain its declared operation/endpoint contract", want.path)
+		}
+	}
+}
+
+// TestSCIM2OperationCommandsAreReachable is the provider-category RED surface
+// contract. It enumerates every operation in Zoom's own SCIM2 category through
+// real commandrunner preflight, so an apparently complete JSON bundle cannot
+// claim that a compiled `pm zoom scim2 …` route is executable while it remains
+// an unknown command.
+func TestSCIM2OperationCommandsAreReachable(t *testing.T) {
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	wants := []struct {
+		path      string
+		operation string
+		intent    string
+		method    string
+		apiPath   string
+		policy    string
+	}{
+		{path: "scim2 groups list", operation: "zoom.list_scim2_groups", intent: "direct_read", method: http.MethodGet, apiPath: "/scim2/Groups", policy: "json_redacted"},
+		{path: "scim2 groups create", operation: "zoom.create_scim2_group", intent: "direct_write", method: http.MethodPost, apiPath: "/scim2/Groups", policy: "json_redacted"},
+		{path: "scim2 groups get", operation: "zoom.get_scim2_group", intent: "direct_read", method: http.MethodGet, apiPath: "/scim2/Groups/{groupId}", policy: "json_redacted"},
+		{path: "scim2 groups delete", operation: "zoom.delete_scim2_group", intent: "direct_write", method: http.MethodDelete, apiPath: "/scim2/Groups/{groupId}", policy: "none"},
+		{path: "scim2 groups update", operation: "zoom.update_scim2_group", intent: "direct_write", method: http.MethodPatch, apiPath: "/scim2/Groups/{groupId}", policy: "none"},
+		{path: "scim2 users list", operation: "zoom.list_scim2_users", intent: "direct_read", method: http.MethodGet, apiPath: "/scim2/Users", policy: "json_redacted"},
+		{path: "scim2 users create", operation: "zoom.create_scim2_user", intent: "direct_write", method: http.MethodPost, apiPath: "/scim2/Users", policy: "json_redacted"},
+		{path: "scim2 users get", operation: "zoom.get_scim2_user", intent: "direct_read", method: http.MethodGet, apiPath: "/scim2/Users/{userId}", policy: "json_redacted"},
+		{path: "scim2 users update", operation: "zoom.update_scim2_user", intent: "direct_write", method: http.MethodPut, apiPath: "/scim2/Users/{userId}", policy: "json_redacted"},
+		{path: "scim2 users delete", operation: "zoom.delete_scim2_user", intent: "direct_write", method: http.MethodDelete, apiPath: "/scim2/Users/{userId}", policy: "none"},
+		{path: "scim2 users deactivate", operation: "zoom.deactivate_scim2_user", intent: "direct_write", method: http.MethodPatch, apiPath: "/scim2/Users/{userId}", policy: "json_redacted"},
+	}
+	for _, want := range wants {
+		if err := commandrunner.Preflight(connector, strings.Fields(want.path)); err != nil {
+			t.Errorf("Preflight(%q) = %v, want declared executable SCIM2 action", want.path, err)
+			continue
+		}
+		var found *connectors.CommandSurfaceCommand
+		for i := range connector.CommandSurface().Commands {
+			if connector.CommandSurface().Commands[i].Path == want.path {
+				found = &connector.CommandSurface().Commands[i]
+				break
+			}
+		}
+		if found == nil || found.Intent != want.intent || found.Availability != "implemented" || found.Operation != want.operation || len(found.APISurface) != 1 || found.APISurface[0].Method != want.method || found.APISurface[0].Path != want.apiPath || found.OutputPolicy != want.policy {
+			t.Errorf("SCIM2 command %q does not retain its declared operation/endpoint/output contract", want.path)
+			continue
+		}
+		for _, flag := range found.Flags {
+			if flag.Name == "page" || flag.Name == "per-page" || flag.Name == "limit" {
+				t.Errorf("SCIM2 command %q invents paging flag --%s", want.path, flag.Name)
+			}
 		}
 	}
 }

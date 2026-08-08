@@ -4,7 +4,7 @@
   "sub_issue": 3942,
   "connector": "zoom",
   "provider_module": "scim2",
-  "state": "planned",
+  "state": "red_captured",
   "manual_gsd_fallback": {
     "reason": "provider-category phase is not registered by the official GSD runtime",
     "mode": "single-worker inline execution; parent contract forbids role spawning"
@@ -36,5 +36,9 @@
     "operation-scoped rest_read origin/auth isolation",
     "named json_object root body mapping"
   ],
-  "next": "add and run the test-only RED checkpoint before any production bundle or engine edit"
+  "red": {
+    "command": "go test -count=1 -timeout 20m ./internal/connectors/engine ./internal/connectors/commandrunner ./cmd/connectorgen ./internal/connectors/defs/zoom/...",
+    "result": "failed as expected: rest_read rejects paired operation origin/auth, named root json_object maps_to body is unsupported in runtime and static validation, Zoom remains 27/1815/17/5, and all eleven SCIM2 commands are unknown"
+  },
+  "next": "commit and push this RED-only checkpoint, then implement required foundations before Zoom declaration"
 }
