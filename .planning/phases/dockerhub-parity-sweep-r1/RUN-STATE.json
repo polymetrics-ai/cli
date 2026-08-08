@@ -2,7 +2,7 @@
   "phase": "dockerhub-parity-sweep-r1",
   "program": "cli-connector-parity-programme-pilot",
   "connector": "dockerhub",
-  "state": "implemented_live_e2e_complete_rate_limit_gap_planned",
+  "state": "implemented_live_e2e_complete_rate_limit_proven",
   "generated_from": null,
   "artifact": {
     "url": "https://docs.docker.com/reference/api/hub/latest.yaml",
@@ -84,6 +84,22 @@
       "scim-users create/update: valid Docker Hub Enterprise organization SCIM bearer token"
     ]
   },
+  "rate_limits": {
+    "declaration": "internal/connectors/defs/dockerhub/rate_limits.json",
+    "selectors": "registry-1.docker.io only; unauthenticated=100/21600s by non-secret registry_client_ip; authenticated free=200/21600s by non-secret docker_username; paid has no fixed policy; Hub abuse remains Retry-After-driven without invented budget",
+    "binary_proof": {
+      "logical_requests": 101,
+      "proxy_dispatches": 100,
+      "over_budget_dispatches": 0,
+      "blocked_before_transport": true,
+      "provider_head_status": 200,
+      "provider_limit_header": "100;w=3600",
+      "provider_remaining_header": "100;w=3600",
+      "provider_pull_gets_consumed": 0,
+      "same_pat_registry_probe": "Named dependency: Docker Registry v2 bearer-token acquisition and pull-operation support in pm; the 54 Hub management operations do not expose that protocol"
+    },
+    "evidence": ".planning/phases/dockerhub-parity-sweep-r1/VERIFICATION.md"
+  },
   "foundations_built": [
     {
       "name": "dockerhub AuthHook (username+PAT session login exchange, plus dualAuth SCIM second-credential routing)",
@@ -110,5 +126,5 @@
       "unblocks": "any connector with a documented HEAD-only existence-check endpoint (previously none could use one; dockerhub is the first)"
     }
   ],
-  "next_action": "captain-ordered Docker Hub rate-limit proof: verify the existing requester limiter stops a configured budget before the registry pull limit, then use Docker's free ratelimitpreview HEAD probe to prove provider headroom remains"
+  "next_action": "complete: rate-limit proof, final verification, and inline GSD review are recorded; commit and push final evidence"
 }
