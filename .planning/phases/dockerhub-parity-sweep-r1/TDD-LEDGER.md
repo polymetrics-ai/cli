@@ -549,3 +549,25 @@ Docker's free Registry quota HEAD immediately returned HTTP 200 with
 non-secret headers were retained. Thus the provider still had full observed
 headroom after local enforcement. The evidence records the header/documentation
 window discrepancy and the honest same-PAT limitation in `VERIFICATION.md`.
+
+## Planned RED — canonical Docker Hub SCIM schema URN (2026-08-08)
+
+Captain review found that `scim-schemas get` cannot reach Docker Hub for its documented canonical
+schema identifier: `urn:ietf:params:scim:schemas:core:2.0:User`. The existing direct-read path
+substitution applies `safety.ValidateIdentifier` to every placeholder and therefore rejects `:`
+before it can make a request. This is a correctness defect in our path-variable validation, not an
+Enterprise-plan limitation or a missing SCIM credential.
+
+**Red test contract:** `internal/connectors/defs/dockerhub/scim_schema_urn_test.go` will load the
+embedded Docker Hub bundle, route it to an `httptest` server with authentication disabled only for
+the isolated unit test, and invoke operation `dockerhub.get_scim_schema` with the canonical URN.
+It requires exactly one server request to the correctly escaped SCIM path and no query or fragment
+injection. Before production code changes it must fail locally with the colon-validation error and
+zero server requests. The literal test output is appended below after it runs; this ledger and the
+plan were committed before the test/production slice.
+
+**Green contract:** add a dedicated safe URI path-segment validator used only by direct-read
+substitution. It must accept the canonical colon-bearing URI identifier, preserve `url.PathEscape`,
+and reject separators, traversal, control/dangerous Unicode, query/fragment delimiters, and
+ambiguous percent encodings. Engine and Docker Hub tests must prove those boundaries; the fleet
+preflight sweep provides the cross-connector execution audit.
