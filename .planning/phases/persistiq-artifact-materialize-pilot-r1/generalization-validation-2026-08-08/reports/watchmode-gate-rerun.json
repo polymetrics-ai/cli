@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08/raw/watchmode-manifest.json",
+  "candidates": 1,
+  "included": [
+    {
+      "connector": "watchmode",
+      "commands_checked": 13,
+      "declared_operations": 45,
+      "operation_split": {
+        "executable": 13,
+        "provider_blocked": 23,
+        "excluded": 9
+      },
+      "warnings": []
+    }
+  ],
+  "dropped": [],
+  "provenance_refusals": 0,
+  "surveyed_operations": {
+    "total": 23,
+    "read": 23,
+    "write": 0
+  },
+  "declared_operations": 45,
+  "operation_split": {
+    "executable": 13,
+    "provider_blocked": 23,
+    "excluded": 9
+  }
+}

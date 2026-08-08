@@ -761,6 +761,96 @@ func TestBatchMaterializeRetainsSourceCoverageWhenArtifactIdentityDiffers(t *tes
 	}
 }
 
+func TestMaterializeAPISurfacePreservesMultiSourceProvenanceAlternatives(t *testing.T) {
+	bundle := engine.Bundle{
+		Surface: &engine.APISurface{
+			API: "Example API",
+			Endpoints: []engine.SurfaceEndpoint{{
+				Method:    http.MethodGet,
+				Path:      "/widgets",
+				CoveredBy: &engine.SurfaceCoverage{Stream: "widgets"},
+			}},
+		},
+		Streams: []engine.StreamSpec{{Name: "widgets"}},
+	}
+	candidate := BatchManifestConnector{Connector: "cli-surface", Artifact: BatchArtifact{
+		Kind:    "openapi",
+		URL:     "https://provider.example/openapi.json",
+		Version: "3.1.0",
+	}}
+	rootHash := strings.Repeat("a", 64)
+	refHash := strings.Repeat("b", 64)
+	surface, err := materializeAPISurface(
+		bundle,
+		candidate,
+		"2026-08-08",
+		rootHash,
+		[]batchArtifactEndpoint{{
+			Method:           http.MethodGet,
+			Path:             "/widgets",
+			SourceURL:        "https://provider.example/paths/widgets.yaml",
+			SourceKind:       "referenced-document",
+			SourceVersion:    "3.1.0",
+			SourceRetrieved:  "2026-08-08",
+			SourceSHA256:     refHash,
+			SourceCoordinate: "paths[\"/widgets\"].get",
+			Alternatives: []batchArtifactEndpointAlternative{{
+				SourceURL:        "https://provider.example/reference",
+				SourceKind:       "official-reference",
+				SourceVersion:    "2026-08-08",
+				SourceRetrieved:  "2026-08-08",
+				SourceSHA256:     rootHash,
+				SourceCoordinate: "https://provider.example/reference#GET /widgets",
+			}},
+		}},
+		[]batchArtifactSource{{
+			URL:       "https://provider.example/openapi.json",
+			Kind:      "openapi",
+			Version:   "3.1.0",
+			Retrieved: "2026-08-08",
+			SHA256:    rootHash,
+		}, {
+			URL:       "https://provider.example/paths/widgets.yaml",
+			Kind:      "referenced-document",
+			Version:   "3.1.0",
+			Retrieved: "2026-08-08",
+			SHA256:    refHash,
+		}, {
+			URL:       "https://provider.example/reference",
+			Kind:      "official-reference",
+			Version:   "2026-08-08",
+			Retrieved: "2026-08-08",
+			SHA256:    rootHash,
+		}},
+	)
+	if err != nil {
+		t.Fatalf("materialize multi-source surface: %v", err)
+	}
+	if len(surface.Artifacts) != 3 || len(surface.Endpoints) != 1 {
+		t.Fatalf("surface = %+v, want three cited sources and one canonical endpoint", surface)
+	}
+	provenance := surface.Endpoints[0].Provenance
+	if provenance == nil || provenance.SourceURL != "https://provider.example/paths/widgets.yaml" || provenance.SourceKind != "referenced-document" || provenance.SHA256 != refHash || provenance.Coordinate == "" {
+		t.Fatalf("primary provenance = %+v, want normalized referenced-document citation", provenance)
+	}
+	if len(provenance.Alternatives) != 1 || provenance.Alternatives[0].SourceURL != "https://provider.example/reference" || provenance.Alternatives[0].Coordinate == "" {
+		t.Fatalf("alternative provenance = %+v, want preserved official-reference disagreement", provenance.Alternatives)
+	}
+	catalogSurface := engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+		Method:     http.MethodGet,
+		Path:       "/widgets",
+		Provenance: provenance,
+		Operation:  &engine.SurfaceOperation{Reason: "documented read", Risk: "low"},
+	}}}
+	operations, err := materializeOperationCatalog(bundle, catalogSurface, candidate)
+	if err != nil {
+		t.Fatalf("materialize operation catalog: %v", err)
+	}
+	if len(operations) != 1 || operations[0].SourceURL != "https://provider.example/paths/widgets.yaml" {
+		t.Fatalf("operation provenance = %+v, want referenced-document source URL", operations)
+	}
+}
+
 func TestBatchMaterializeExcludesProtocolMetadataOperations(t *testing.T) {
 	bundle := engine.Bundle{
 		Surface: &engine.APISurface{
@@ -941,29 +1031,69 @@ func TestParseBatchOpenAPIArtifactResolvesLocalPathItemReferencesAndTrace(t *tes
 	}
 }
 
-func TestParseBatchOpenAPIArtifactFailsClosedForUnsupportedOperationContainers(t *testing.T) {
+func TestParseBatchOpenAPIArtifactMapsTopLevelWebhooks(t *testing.T) {
+	artifact := []byte(`{
+		"openapi": "3.1.0",
+		"paths": {"/widgets": {"get": {"summary": "List widgets"}}},
+		"webhooks": {
+			"widget.created": {"post": {"summary": "Widget created"}},
+			"widget.deleted": {"post": {"summary": "Widget deleted"}}
+		}
+	}`)
+
+	endpoints, err := parseBatchOpenAPIArtifact(artifact)
+	if err != nil {
+		t.Fatalf("parse top-level webhook artifact: %v", err)
+	}
+	if len(endpoints) != 3 {
+		t.Fatalf("parsed endpoints = %+v, want HTTP operation plus two webhook operations", endpoints)
+	}
+	var webhookCount int
+	for _, endpoint := range endpoints {
+		if endpoint.Method == "WEBHOOK" {
+			webhookCount++
+			if endpoint.SourceCoordinate == "" || !strings.HasPrefix(endpoint.SourceCoordinate, "webhooks[") {
+				t.Fatalf("webhook endpoint = %+v, want exact webhooks coordinate", endpoint)
+			}
+		}
+	}
+	if webhookCount != 2 {
+		t.Fatalf("parsed endpoints = %+v, want two visible webhook operations", endpoints)
+	}
+}
+
+func TestParseBatchOpenAPIArtifactResolvesExternalPathItemReferences(t *testing.T) {
+	artifact := []byte(`{
+		"swagger": "2.0",
+		"paths": {"/widgets": {"$ref": "paths/widgets.yaml#/widgets"}}
+	}`)
+	external := []byte(`widgets:
+  get:
+    summary: List widgets
+`)
+	inventory, err := parseBatchOpenAPIArtifactAt(artifact, "https://provider.example/openapi.yaml", func(rawURL string) ([]byte, error) {
+		if rawURL != "https://provider.example/paths/widgets.yaml" {
+			t.Fatalf("external reference URL = %q, want normalized provider URL", rawURL)
+		}
+		return external, nil
+	})
+	if err != nil {
+		t.Fatalf("parse external path-item artifact: %v", err)
+	}
+	if len(inventory.Endpoints) != 1 || inventory.Endpoints[0].Method != "GET" || inventory.Endpoints[0].Path != "/widgets" {
+		t.Fatalf("parsed endpoints = %+v, want resolved GET /widgets", inventory.Endpoints)
+	}
+	if len(inventory.Sources) != 2 || inventory.Sources[1].URL != "https://provider.example/paths/widgets.yaml" {
+		t.Fatalf("parsed sources = %+v, want root plus referenced document", inventory.Sources)
+	}
+}
+
+func TestParseBatchOpenAPIArtifactStillFailsClosedForUnsupportedOperationContainers(t *testing.T) {
 	tests := []struct {
 		name     string
 		artifact string
 		want     string
 	}{
-		{
-			name: "webhooks",
-			artifact: `{
-				"openapi": "3.1.0",
-				"paths": {"/widgets": {"get": {"summary": "List widgets"}}},
-				"webhooks": {"widget.created": {"post": {"summary": "Widget created"}}}
-			}`,
-			want: "top-level webhooks",
-		},
-		{
-			name: "external path item reference",
-			artifact: `{
-				"openapi": "3.1.0",
-				"paths": {"/widgets": {"$ref": "other.yaml#/components/pathItems/widgets"}}
-			}`,
-			want: "external path-item reference",
-		},
 		{
 			name: "noncanonical operation key",
 			artifact: `{
@@ -996,6 +1126,75 @@ paths:
 				t.Fatalf("parse error = %v, want concrete unknown-inventory reason containing %q", err, test.want)
 			}
 		})
+	}
+}
+
+func TestParseBatchPostmanArtifactNormalizesNestedRequestsAndDeduplicates(t *testing.T) {
+	artifact := []byte(`{
+		"info": {"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"},
+		"item": [
+			{"name": "Widgets", "item": [
+				{"name": "List widgets", "request": {"method": "GET", "url": {"raw": "{{base_url}}/widgets"}}},
+				{"name": "List widgets example", "request": {"method": "GET", "url": {"path": ["widgets"]}}},
+				{"name": "Update widget", "request": {"method": "PATCH", "url": "{{base_url}}/widgets/:widget_id"}}
+			]}
+		]
+	}`)
+	inventory, err := parseBatchPostmanArtifact(artifact, batchArtifactSource{URL: "https://provider.example/collection.json", Retrieved: "2026-08-08"})
+	if err != nil {
+		t.Fatalf("parse Postman artifact: %v", err)
+	}
+	if len(inventory.Endpoints) != 2 {
+		t.Fatalf("Postman endpoints = %+v, want duplicate-normalized GET plus PATCH", inventory.Endpoints)
+	}
+	if inventory.Endpoints[0].Path != "/widgets" || inventory.Endpoints[1].Path != "/widgets/{widget_id}" {
+		t.Fatalf("Postman paths = %+v, want normalized connector paths", inventory.Endpoints)
+	}
+	for _, endpoint := range inventory.Endpoints {
+		if endpoint.SourceCoordinate == "" || endpoint.SourceURL == "" {
+			t.Fatalf("Postman endpoint provenance = %+v, want collection coordinate and URL", endpoint)
+		}
+	}
+}
+
+func TestParseBatchHTMLReferenceTraversesOfficialMachineSource(t *testing.T) {
+	rootURL := "https://provider.example/reference"
+	machineURL := "https://provider.example/openapi.json"
+	root := []byte(`<html><body><p>GET /widgets</p><a href="/openapi.json">OpenAPI export</a></body></html>`)
+	machine := []byte(`{"openapi":"3.1.0","paths":{"/widgets":{"post":{"summary":"Create widget"}}}}`)
+	inventory, err := parseBatchHTMLReference(root, batchArtifactSource{URL: rootURL, Kind: "html_reference", Retrieved: "2026-08-08"}, func(rawURL string) ([]byte, error) {
+		if rawURL != machineURL {
+			t.Fatalf("traversed URL = %q, want official machine source", rawURL)
+		}
+		return machine, nil
+	})
+	if err != nil {
+		t.Fatalf("parse HTML reference: %v", err)
+	}
+	if len(inventory.Endpoints) != 2 || inventory.Endpoints[0].Path != "/widgets" || inventory.Endpoints[1].Path != "/widgets" {
+		t.Fatalf("HTML/source endpoints = %+v, want explicit GET plus linked POST", inventory.Endpoints)
+	}
+	if len(inventory.Sources) != 2 {
+		t.Fatalf("HTML/source provenance = %+v, want root and linked source", inventory.Sources)
+	}
+}
+
+func TestParseBatchHTMLReferenceTraversesMarkdownMachineSource(t *testing.T) {
+	rootURL := "https://provider.example/docs/llms.txt"
+	machineURL := "https://provider.example/docs/openapi.json"
+	root := []byte("GET /widgets\n[OpenAPI export](/docs/openapi.json)\n")
+	machine := []byte(`{"openapi":"3.1.0","paths":{"/widgets":{"post":{"summary":"Create widget"}}}}`)
+	inventory, err := parseBatchHTMLReference(root, batchArtifactSource{URL: rootURL, Kind: "openapi_fragments", Retrieved: "2026-08-08"}, func(rawURL string) ([]byte, error) {
+		if rawURL != machineURL {
+			t.Fatalf("traversed URL = %q, want Markdown-linked machine source", rawURL)
+		}
+		return machine, nil
+	})
+	if err != nil {
+		t.Fatalf("parse Markdown reference: %v", err)
+	}
+	if len(inventory.Endpoints) != 2 || len(inventory.Sources) != 2 {
+		t.Fatalf("Markdown/source inventory = %+v, want explicit GET plus linked POST and two sources", inventory)
 	}
 }
 
@@ -1046,6 +1245,21 @@ func TestBatchArtifactURLAndDestinationGuards(t *testing.T) {
 	})
 	if dialed != "8.8.8.8:443" {
 		t.Fatalf("dialed %q, want validated public address", dialed)
+	}
+}
+
+func TestReadBatchMaterializeArtifactCacheAcceptsOfficialReferenceText(t *testing.T) {
+	artifactDir := t.TempDir()
+	path := filepath.Join(artifactDir, "cli-surface.txt")
+	if err := os.WriteFile(path, []byte("GET /widgets\n"), 0o644); err != nil {
+		t.Fatalf("write text artifact cache: %v", err)
+	}
+	raw, err := readBatchMaterializeArtifactCache(artifactDir, "cli-surface")
+	if err != nil {
+		t.Fatalf("read text artifact cache: %v", err)
+	}
+	if string(raw) != "GET /widgets\n" {
+		t.Fatalf("cached text = %q, want exact provider reference source", raw)
 	}
 }
 

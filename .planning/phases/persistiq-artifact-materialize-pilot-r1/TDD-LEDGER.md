@@ -97,3 +97,45 @@
   implemented claims.
 - The generated PersistIQ bundle was installed only into a temporary embedded
   binary test and the original source bundle was restored exactly.
+
+## Generator-shape extension (2026-08-08)
+
+Red: added `TestParseBatchOpenAPIArtifactMapsTopLevelWebhooks` and
+`TestParseBatchOpenAPIArtifactResolvesExternalPathItemReferences` before the
+implementation. The focused package run failed at compile time because the
+generator had neither `batchArtifactEndpoint.SourceCoordinate` nor
+`parseBatchOpenAPIArtifactAt`, proving both requested seams were absent:
+
+```text
+cmd/connectorgen/batch_test.go:965:16: endpoint.SourceCoordinate undefined
+cmd/connectorgen/batch_test.go:984:20: undefined: parseBatchOpenAPIArtifactAt
+FAIL polymetrics.ai/cmd/connectorgen [build failed]
+```
+
+Green requires the focused tests, the three generalization pilots, and the
+existing static/runtime gates to pass after implementation. The old
+fails-closed cases for unsupported operation keys and multiple YAML documents
+remain regression coverage; only top-level webhooks and exhaustively
+resolvable external path-item references change policy.
+
+## Multi-source contract extension (2026-08-08)
+
+Red: the pre-extension materializer could not accept a provider source outside
+the root OpenAPI/Swagger document, had no normalized source alternatives, and
+the artifact cache only recognized JSON/YAML roots. The new red tests cover
+Markdown official-reference traversal, `openapi_fragments` inputs, text cache
+roots, and operation-catalog source URL fidelity.
+
+Green: `go test -timeout 20m ./cmd/connectorgen -count=1` passed. The final
+staged pilots materialized 4/4, mapped 23/34/102/77 operations for
+Watchmode/DocuSeal/Float/Copper, gated 4/4 with 0 drops, and ran one combined
+static gate. The three runtime-capable real binaries reached 45/45, 34/34,
+and 104/104 command paths with zero failures. Copper's static fallback passed;
+its legacy native scaffold has no production command surface, so reachability
+was not claimed.
+
+The complete multi-source evidence, normalized provenance maps, hashes, and
+timings are in
+`generalization-validation-2026-08-08/GENERALIZATION-VALIDATION.md` and its
+`reports/` and `reachability/` children. No production connector bundle was
+changed; the eligible 392 remain deferred until PR #3957 merges.

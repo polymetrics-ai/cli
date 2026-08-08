@@ -1,7 +1,7 @@
 # PersistIQ artifact materialization pilot - summary
 
 **Date:** 2026-08-08
-**Status:** passed static gates under captain complete-inventory policy; no second connector started
+**Status:** generator capability and staged multi-source generalization pilots passed static gates; production 392 remains deferred
 
 ## Executive result
 
@@ -86,6 +86,22 @@ Exact flagged discrepancies:
 The generated bundle and gate reports are under
 [`rerun-2026-08-08`](rerun-2026-08-08/).
 
+## Multi-source generalization summary
+
+Watchmode (23 read-only OpenAPI operations), DocuSeal (34 OpenAPI 3.1
+operations including 11 top-level webhooks), and Float (102 operations after
+bounded Swagger-2 external path traversal) all materialized and passed the
+combined static gate. Their real binaries reached every generated command path:
+45/45, 34/34, and 104/104 respectively, with zero failures. Copper's 77
+Postman operations also materialized and passed static gates; its current
+legacy native scaffold does not expose an embedded command surface, so the
+summary makes no reachability claim for it.
+
+The exact bucket counts, hashes, per-operation provenance, alternatives,
+discrepancies, and final wall-clock slices are in
+[`generalization-validation-2026-08-08/GENERALIZATION-VALIDATION.md`](generalization-validation-2026-08-08/GENERALIZATION-VALIDATION.md).
+All four outputs are staged evidence, not production connector bundles.
+
 ## Timed wall-clock results
 
 | Step | Wall-clock | Evidence |
@@ -110,6 +126,7 @@ PersistIQ provider**.
 
 ## Handoff / go-no-go input
 
-PersistIQ is the only connector attempted in this pilot. The eligible 392
-pool remains untouched in this phase evidence; the captain's batch-efficiency
-ruling is recorded for the next authorized phase.
+PersistIQ is the only connector materialized as the original end-to-end pilot;
+Watchmode, DocuSeal, Float, and Copper are staged generator-validation
+evidence. The eligible 392 pool remains untouched in this phase evidence; the
+captain's batch-efficiency ruling is recorded for the next authorized phase.

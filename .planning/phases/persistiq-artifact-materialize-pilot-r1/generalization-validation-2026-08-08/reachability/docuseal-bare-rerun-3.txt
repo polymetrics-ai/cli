@@ -1,0 +1,21 @@
+NAME
+  pm docuseal - DocuSeal command surface
+
+SYNOPSIS
+  pm docuseal <command> [flags]
+  pm docuseal <group> --help
+  pm docuseal <group> <command> --help
+
+DESCRIPTION
+  Run DocuSeal's declared streams and reverse-ETL actions.
+
+COMMAND GROUPS
+  api - see pm docuseal api --help
+  archive - see pm docuseal archive --help
+  clone - see pm docuseal clone --help
+  create - see pm docuseal create --help
+  submissions - see pm docuseal submissions --help
+  submitters - see pm docuseal submitters --help
+  template - see pm docuseal template --help
+  templates - see pm docuseal templates --help
+  update - see pm docuseal update --help

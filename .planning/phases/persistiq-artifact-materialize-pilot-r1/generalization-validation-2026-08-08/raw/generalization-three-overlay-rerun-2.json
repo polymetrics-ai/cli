@@ -1,0 +1,13 @@
+{
+  "Replace": {
+    "internal/connectors/defs/watchmode/api_surface.json": ".planning/phases/persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08/generated-defs/watchmode/api_surface.json",
+    "internal/connectors/defs/watchmode/operations.json": ".planning/phases/persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08/generated-defs/watchmode/operations.json",
+    "internal/connectors/defs/watchmode/cli_surface.json": ".planning/phases/persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08/generated-defs/watchmode/cli_surface.json",
+    "internal/connectors/defs/docuseal/api_surface.json": ".planning/phases/persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08/generated-defs/docuseal/api_surface.json",
+    "internal/connectors/defs/docuseal/operations.json": ".planning/phases/persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08/generated-defs/docuseal/operations.json",
+    "internal/connectors/defs/docuseal/cli_surface.json": ".planning/phases/persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08/generated-defs/docuseal/cli_surface.json",
+    "internal/connectors/defs/float/api_surface.json": ".planning/phases/persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08/generated-defs/float/api_surface.json",
+    "internal/connectors/defs/float/operations.json": ".planning/phases/persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08/generated-defs/float/operations.json",
+    "internal/connectors/defs/float/cli_surface.json": ".planning/phases/persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08/generated-defs/float/cli_surface.json"
+  }
+}

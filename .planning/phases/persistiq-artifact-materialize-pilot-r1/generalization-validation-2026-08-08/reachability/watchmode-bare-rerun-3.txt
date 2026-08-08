@@ -1,0 +1,22 @@
+NAME
+  pm watchmode - Watchmode command surface
+
+SYNOPSIS
+  pm watchmode <command> [flags]
+  pm watchmode <group> --help
+  pm watchmode <group> <command> --help
+
+DESCRIPTION
+  Run Watchmode's declared streams and reverse-ETL actions.
+
+COMMAND GROUPS
+  api - see pm watchmode api --help
+  genres - see pm watchmode genres --help
+  networks - see pm watchmode networks --help
+  person - see pm watchmode person --help
+  regions - see pm watchmode regions --help
+  releases - see pm watchmode releases --help
+  search - see pm watchmode search --help
+  sources - see pm watchmode sources --help
+  title - see pm watchmode title --help
+  titles - see pm watchmode titles --help

@@ -1,0 +1,192 @@
+definitions:
+  FxRate:
+    type: "object"
+    properties:
+      fx_rate:
+        type: "number"
+        format: "float"
+        example: 1.39
+        description: "The exchange rate from `source_currency` to `target_currency`"
+
+  Currency:
+    type: "object"
+    title: "Currency"
+    required:
+      - "target_currency"
+    properties:
+      id:
+        type: "integer"
+        example: 13
+        description: "The ID of the currency record"
+        readOnly: true
+      source_currency:
+        type: "string"
+        example: "USD"
+        description: "The ISO 4217 code of the base (company) currency"
+        readOnly: true
+      target_currency:
+        type: "string"
+        example: "CAD"
+        description: "The ISO 4217 code of the project currency. Cannot be changed after create"
+        readOnly: true
+      fx_rates:
+        type: "array"
+        items:
+          $ref: "#/definitions/FxRate"
+        description: "`expand` field. The exchange rates from `source_currency` to `target_currency`. Only returned when using `expand=fx_rates`"
+
+  CurrencyCreate:
+    type: "object"
+    title: "CurrencyCreate"
+    required:
+      - "target_currency"
+      - "fx_rate"
+    properties:
+      target_currency:
+        type: "string"
+        example: "CAD"
+        description: "The ISO 4217 code of the project currency"
+      fx_rate:
+        type: "number"
+        format: "float"
+        example: 1.35
+        description: "The exchange rate from the company's base currency to `target_currency`"
+
+  CurrencyPatch:
+    type: "object"
+    title: "CurrencyPatch"
+    properties:
+      fx_rate:
+        type: "number"
+        format: "float"
+        example: 1.39
+        description: "The new exchange rate for this currency mapping"
+
+parameters:
+  currency_id:
+    name: "currency_id"
+    in: "path"
+    description: "The currency record's ID"
+    required: true
+    type: "integer"
+  expand:
+    name: "expand"
+    in: "query"
+    description: "Comma-delimited values expands the response with additional fields: `fx_rates`"
+    required: false
+    type: "string"
+
+currencies:
+  get:
+    tags:
+      - "Currencies"
+    summary: "List currencies"
+    description: >
+      Returns the list of currencies configured for the company. Each record maps the company's source currency to a project target currency and optionally includes exchange rates.
+    operationId: "getCurrencies"
+    parameters:
+      - $ref: "../swagger-api-v3.yaml#/parameters/page"
+      - $ref: "../swagger-api-v3.yaml#/parameters/per-page"
+      - $ref: "#/parameters/expand"
+    responses:
+      200:
+        description: "The list of currencies"
+        schema:
+          type: "array"
+          title: "Array of currencies"
+          items:
+            $ref: "#/definitions/Currency"
+        headers:
+          X-Pagination-Total-Count:
+            type: "integer"
+            description: "Total number of items"
+          X-Pagination-Page-Count:
+            type: "integer"
+            description: "Total number of pages"
+          X-Pagination-Current-Page:
+            type: "integer"
+            description: "Current page number"
+          X-Pagination-Per-Page:
+            type: "integer"
+            description: "Number of items per page"
+  post:
+    tags:
+      - "Currencies"
+    summary: "Add a new currency"
+    description: >
+      Creates a new currency record for the company. The `source_currency` is set automatically to the company's base currency and cannot be overridden. Both `target_currency` and `fx_rate` are required in the request body.
+    operationId: "addCurrency"
+    parameters:
+      - in: "body"
+        name: "data"
+        description: "The currency to create, read-only fields are ignored"
+        required: true
+        schema:
+          $ref: "#/definitions/CurrencyCreate"
+    responses:
+      201:
+        description: "The currency was successfully created"
+        schema:
+          $ref: "#/definitions/Currency"
+      422:
+        description: "Data validation failure, see error for details"
+
+currencies-id:
+  get:
+    tags:
+      - "Currencies"
+    summary: "Retrieve a single currency"
+    description: >
+      Returns a single currency record by ID.
+    operationId: "getCurrency"
+    parameters:
+      - $ref: "#/parameters/currency_id"
+      - $ref: "#/parameters/expand"
+    responses:
+      200:
+        description: "A currency record"
+        schema:
+          $ref: "#/definitions/Currency"
+      404:
+        description: "The currency does not exist"
+  patch:
+    tags:
+      - "Currencies"
+    summary: "Update a currency, read-only fields are ignored"
+    description: >
+      Updates the exchange rate for an existing currency record. `target_currency` cannot be changed after create. Set the rate with `"fx_rate": 1.39` in the request body.
+    operationId: "updateCurrency"
+    parameters:
+      - $ref: "#/parameters/currency_id"
+      - $ref: "#/parameters/expand"
+      - in: "body"
+        name: "data"
+        description: "The currency data to update, read-only fields are ignored"
+        required: true
+        schema:
+          $ref: "#/definitions/CurrencyPatch"
+    responses:
+      200:
+        description: "Successful update of a currency record"
+        schema:
+          $ref: "#/definitions/Currency"
+      404:
+        description: "The currency does not exist"
+      422:
+        description: "Data validation failure, see error for details"
+  delete:
+    tags:
+      - "Currencies"
+    summary: "Delete a currency"
+    description: >
+      Deletes a currency record. Returns `422` if any projects are assigned this `target_currency`.
+    operationId: "deleteCurrency"
+    parameters:
+      - $ref: "#/parameters/currency_id"
+    responses:
+      204:
+        description: "Delete successful"
+      404:
+        description: "The currency does not exist"
+      422:
+        description: "The currency cannot be deleted because it is used in existing projects"

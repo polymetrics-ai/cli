@@ -1,0 +1,101 @@
+definitions:
+  PublicHoliday:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        example: 1
+        description: "The ID of the holiday per region"
+        readOnly: true
+      name:
+        type: "string"
+        example: "New Year's Day"
+        description: "The name of the holiday"
+      region:
+        type: "integer"
+        example: 1
+        description: "ID of the region to which this holiday belongs"
+      dates:
+        type: "array"
+        example:
+        - "2021-01-01"
+        - "2022-01-01"
+        description: "Array of dates for the holiday (format: YYYY-MM-DD)"
+        items:
+            type: "string"
+    title: "Public Holiday"
+
+public-holidays:
+  get:
+    tags:
+    - "Public Holidays"
+    summary: "List public holidays"
+    operationId: "getPublicHolidays"
+    parameters:
+    - in: query
+      name: year
+      description: "Returns all results in the given year in format YYYY. Default if omitted is the current year. Overridden by `start_date` and `end_date` parameters"
+      required: false
+      default: "2023"
+      type: string
+      format: "date:YYYY"
+    - in: query
+      name: region
+      description: "Filter results by one or more specific region ID (comma separated)"
+      required: false
+      type: integer
+    - $ref: "../swagger-api-v3.yaml#/parameters/start_date"
+    - $ref: "../swagger-api-v3.yaml#/parameters/end_date"
+    - $ref: "../swagger-api-v3.yaml#/parameters/page"
+    - $ref: "../swagger-api-v3.yaml#/parameters/per-page"
+    responses:
+      200:
+        description: "List of public holidays, including their respective dates filtered per year (see `year` query parameter) and regions"
+        schema:
+          type: "array"
+          title: "Array of public holidays"
+          items:
+            $ref: "#/definitions/PublicHoliday"
+        headers:
+          X-Pagination-Total-Count:
+            type: "integer"
+            description: "Total number of items"
+          X-Pagination-Page-Count:
+            type: "integer"
+            description: "Total number of pages"
+          X-Pagination-Current-Page:
+            type: "integer"
+            description: "Current page number"
+          X-Pagination-Per-Page:
+            type: "integer"
+            description: "Number of items per page"
+
+public-holidays-id:
+  get:
+    tags:
+    - "Public Holidays"
+    summary: "Retrieve a single public holiday"
+    description: "Retrieve a single public holiday"
+    operationId: "getPublicHoliday"
+    parameters:
+    - name: "public_holiday_id"
+      in: "path"
+      description: "The public holiday's ID"
+      required: true
+      type: "integer"
+    - in: query
+      name: year
+      description: "Returns all results in the given year in format YYYY. Default if omitted is the current year. Overridden by `start_date` and `end_date` parameters"
+      required: false
+      default: "2023"
+      type: string
+      format: "date:YYYY"
+    - $ref: "../swagger-api-v3.yaml#/parameters/start_date"
+    - $ref: "../swagger-api-v3.yaml#/parameters/end_date"
+    responses:
+      200:
+        description: "Details of a single public holiday"
+        schema:
+          $ref: "#/definitions/PublicHoliday"
+      404:
+        description: "The public holiday does not exist."

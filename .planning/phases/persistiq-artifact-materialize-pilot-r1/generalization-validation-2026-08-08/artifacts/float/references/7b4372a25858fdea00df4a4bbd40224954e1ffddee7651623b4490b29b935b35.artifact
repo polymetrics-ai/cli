@@ -1,0 +1,204 @@
+definitions:
+  Status:
+    title: "Status"
+    type: "object"
+    required:
+    - status_type_id
+    - people_id
+    - start_date
+    - end_date
+    properties:
+      status_id:
+        type: "integer"
+        example: 123
+        description: "The ID of this status"
+        readOnly: true
+      status_type_id:
+        type: "integer"
+        example: 1
+        description: "The status type ID set in the UI, the default values are `1` = Home, `2` = Travel, `3` = Custom and `4` = Office"
+      people_id:
+        type: "integer"
+        example: 123456
+        description: "The ID of the person assigned to this status"
+      status_name:
+        type: "string"
+        example: "Travelling"
+        description: "The name used for a custom status (`status_type_id` = `3`), all other types show the name as null"
+        maxLength: 200
+      start_date:
+        type: "string"
+        example: "2024-11-16"
+        description: "Start date of this status"
+      end_date:
+        type: "string"
+        example: "2024-12-06"
+        description: "End date of this status"
+      repeat_state:
+        type: "integer"
+        example: 0
+        description: "Frequency that this status repeats. `0` = No repeat, `1` = Weekly,\
+          \ `2` = Monthly, `3` = Every two weeks, `4` = Every three weeks, `5` = Every six weeks,\
+          \ `6` = Every two months, `7` = Every three months, `8` = Every six months, `9` = Yearly"
+      repeat_end_date:
+        type: "string"
+        example: "2023-03-16"
+        description: "Date that the repeating status will cease"
+
+      created:
+        type: "string"
+        example: "2024-02-05"
+        description: "Date this record was created"
+        readOnly: true
+      modified:
+        type: "string"
+        example: "2024-02-15"
+        description: "Date this record was modified"
+        readOnly: true
+      created_by:
+        type: "integer"
+        example: 12345
+        description: "Account ID of person who created this status"
+        readOnly: true
+      modified_by:
+        type: "integer"
+        example: 12345
+        description: "Account ID of person who last modified this status"
+        readOnly: true
+
+  StatusArrayResponse:
+    type: object
+    required:
+      - status
+    properties:
+      status:
+        type: "array"
+        items:
+          $ref: "#/definitions/Status"
+
+
+statuses:
+  get:
+    tags:
+    - "Statuses"
+    summary: "List statuses"
+    description: "An individual Status is determined by a date range for a single person and linked to a status type which can only be defined in Admin Settings area of the UI, the default values are `1` = Home, `2` = Travel, `3` = Custom and `4` = Office.  
+
+                  **Note:** repeating statues will also be returned if `repeat_end_date` is within the date range specified."
+    operationId: "getStatuses"
+    parameters:
+    - $ref: "../swagger-api-v3.yaml#/parameters/people_id"
+    - $ref: "../swagger-api-v3.yaml#/parameters/start_date"
+    - $ref: "../swagger-api-v3.yaml#/parameters/end_date"
+    - name: status_type_id
+      in: "query"
+      description: "A status type ID to filter the response on"
+      required: false
+      type: "integer"
+    - $ref: "../swagger-api-v3.yaml#/parameters/page"
+    - $ref: "../swagger-api-v3.yaml#/parameters/per-page"
+    - $ref: "../swagger-api-v3.yaml#/parameters/fields"
+    responses:
+      200:
+        description: "List of statuses"
+        schema:
+          type: "array"
+          title: "Array of statuses"
+          items:
+            $ref: "#/definitions/Status"
+        headers:
+          X-Pagination-Total-Count:
+            type: "integer"
+            description: "Total number of items"
+          X-Pagination-Page-Count:
+            type: "integer"
+            description: "Total number of pages"
+          X-Pagination-Current-Page:
+            type: "integer"
+            description: "Current page number"
+          X-Pagination-Per-Page:
+            type: "integer"
+            description: "Number of items per page"
+      204:
+        description: "No statuses found"
+        headers:
+          X-Pagination-Per-Page:
+            type: "integer"
+            description: "Number of items per page"
+  post:
+    tags:
+    - "Statuses"
+    summary: "Add a new status"
+    description: "Creating a new status requires a valid `status_type_id` which can be matched from the UI."
+
+    operationId: "addStatus"
+    parameters:
+    - in: "body"
+      name: "status"
+      description: "The status to create, read-only fields are ignored"
+      required: false
+      schema:
+        $ref: "#/definitions/Status"
+    responses:
+      201:
+        description: "If the status was successfully created, the response returns the full information about that status.
+                      If a status is created that replaces an existing status, the previous instance is first deleted and is returned in the response."
+        schema:
+          $ref: "#/definitions/StatusArrayResponse"
+      422:
+        description: "Data validation failure."
+
+statuses-id:
+  get:
+    tags:
+    - "Statuses"
+    summary: "Retrieve a single status"
+    description: "Returns a single status"
+    operationId: "getStatus"
+    parameters:
+    - name: "status_id"
+      in: "path"
+      description: "The status's id"
+      required: true
+      type: "integer"
+    responses:
+      200:
+        description: "Details of a single status"
+        schema:
+          $ref: "#/definitions/Status"
+      404:
+        description: "The status does not exist"
+  delete:
+    tags:
+    - "Statuses"
+    summary: "Delete a status"
+    operationId: "deleteStatus"
+    parameters:
+    - name: "status_id"
+      in: "path"
+      description: "status id to delete"
+      required: true
+      type: "integer"
+    responses:
+      204:
+        description: "Delete successful"
+      404:
+        description: "The status does not exist"
+  patch:
+    tags:
+    - "Statuses"
+    summary: "Update a status's details, read-only fields are ignored"
+    operationId: "updateStatus"
+    parameters:
+    - name: "status_id"
+      in: "path"
+      description: "The status's id"
+      required: true
+      type: "integer"
+    responses:
+      200:
+        description: "On a successful update of a status, the response returns the full information about that status."
+        schema:
+          $ref: "#/definitions/StatusArrayResponse"
+      422:
+        description: "Data validation failure."

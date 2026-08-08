@@ -1,0 +1,238 @@
+definitions:
+  ProjectTask:
+    type: "object"
+    required:
+    - "project_id"
+    - "task_name"
+    properties:
+      task_meta_id:
+        type: "integer"
+        example: 4567
+        description: "The ID of the project task (named for backwards compatibility)"
+        readOnly: true
+      project_id:
+        type: "integer"
+        example: 32154
+        description: "The ID of the project the project task belongs to"
+      phase_id:
+        type: "integer"
+        example: 123
+        description: "The ID of the phase the project task belongs to; `0` indicates it does not belong to a phase"
+        default: 0
+      task_name:
+        type: "string"
+        example: "Design"
+        description: "The name of the project task, an empty string is valid and is the default on the UI when a project task has not been chosen"
+        minLength: 0
+        maxLength: 200
+      billable:
+        type: "integer"
+        example: 1
+        description: "`1` = Billable, `0` = Non-billable - Billable project tasks may not belong to non-billable projects or phases"
+      budget:
+        type: "number"
+        example: 100.99
+        description: "The budget amount for 'hours by task' or 'fee by task' project budgets"
+      count_tasks:
+        type: "integer"
+        example: 150
+        description: "The number of allocations (`task_id`) this project task is associated with."
+        readOnly: true
+      count_logged_time:
+        type: "integer"
+        example: 100
+        description: "The number of logged time entries (`logged_time_id`) this project task is associated with."
+        readOnly: true
+
+      created:
+        type: "string"
+        example: "2023-10-22 23:11:23.578"
+        description: "Date this record was created"
+        readOnly: true
+      modified:
+        type: "string"
+        example: "2023-11-11 07:38:44"
+        description: "Date this record was last modified"
+        readOnly: true
+    title: "Project task"
+  MergeList:
+    type: "object"
+    required:
+    - "task_meta_ids"
+    - "task_name"
+    title: "Merge list request body"
+    properties:
+      task_meta_ids:
+        type: "array"
+        example:
+        - 12345
+        - 67890
+        description: "List of project task IDs as described by `task_meta_id`"
+        items:
+          type: "integer"
+      task_name:
+        type: "string"
+        example: "Design"
+        description: "The final name of the merged project task, an empty strings is valid. The final merged task will attempt to match existing names and if found merge into that `task_meta_id`"
+        minLength: 0
+        maxLength: 200
+      billable:
+        type: "integer"
+        example: 1
+        description: "The final state of the merged project tasks; `1` = Billable, `0` = Non-billable"
+
+
+
+project-tasks:
+  get:
+    tags:
+    - "Project Tasks"
+    summary: "List project tasks"
+    description: "Project tasks are used in Projects and Phases to associate allocations and logged time, e.g. Design, Admin etc
+
+
+                  A `task_name` with an empty string is the default for allocations and logged time when a project task has not been selected.
+
+
+                  They may be set to non-billable if the Project or Phase is billable (otherwise the non-billable status cascades).
+                  "
+    operationId: "getProjectTasks"
+    parameters:
+    - $ref: "../swagger-api-v3.yaml#/parameters/project_id"
+    - name: billable
+      in: "query"
+      description: Filter response on `1` = billable or `0` = non-billable entities
+      required: false
+      type: integer
+    - $ref: "../swagger-api-v3.yaml#/parameters/page"
+    - $ref: "../swagger-api-v3.yaml#/parameters/per-page"
+    - $ref: "../swagger-api-v3.yaml#/parameters/sort"
+    - $ref: "../swagger-api-v3.yaml#/parameters/fields"
+    responses:
+      200:
+        description: "The list of project tasks"
+        schema:
+          type: "array"
+          title: "Array of project tasks"
+          items:
+            $ref: "#/definitions/ProjectTask"
+        headers:
+          X-Pagination-Total-Count:
+            type: "integer"
+            description: "Total number of items"
+          X-Pagination-Page-Count:
+            type: "integer"
+            description: "Total number of pages"
+          X-Pagination-Current-Page:
+            type: "integer"
+            description: "Current page number"
+          X-Pagination-Per-Page:
+            type: "integer"
+            description: "Number of items per page"
+  post:
+    tags:
+    - "Project Tasks"
+    summary: "Add a new project task"
+    description: "Create project tasks to pre-configure a project before scheduling.
+
+
+                  **Note:** project tasks may be created automatically through `/tasks` (allocations) and `/logged-time` when a new name is used in the request.
+                  "
+    operationId: "addProjectTask"
+    parameters:
+    - in: "body"
+      name: "data"
+      description: "The project task to create, read-only fields are ignored"
+      required: false
+      schema:
+        $ref: "#/definitions/ProjectTask"
+    responses:
+      201:
+        description: "The project task was successfully created, and the response returns the full information."
+        schema:
+          $ref: "#/definitions/ProjectTask"
+      422:
+        description: "Data validation failure."
+
+project-task-id:
+  get:
+    tags:
+    - "Project Tasks"
+    summary: "Retrieve a single project task."
+    operationId: "getProjectTask"
+    parameters:
+    - name: "project_task_id"
+      in: "path"
+      description: "The project tasks ID as described in the `task_meta_id` field"
+      required: true
+      type: "integer"
+    responses:
+      200:
+        description: "Details of a single project task"
+        schema:
+          $ref: "#/definitions/ProjectTask"
+      404:
+        description: "The project task does not exist."
+  delete:
+    tags:
+    - "Project Tasks"
+    summary: "Delete a project task"
+    description: "Project Tasks may only be deleted if there are zero count associations. To remove associations, filter using the `task_meta_id` on the respective endpoints (`/tasks` or `/logged-time`) to update individually, before retrying this delete operation."
+    operationId: "deleteProjectTask"
+    parameters:
+    - name: "project_task_id"
+      in: "path"
+      description: "The project tasks ID as described in the `task_meta_id` field"
+      required: true
+      type: "integer"
+    responses:
+      204:
+        description: "Successful deletion will return a 204 response status."
+      404:
+        description: "The project task does not exist."
+      422:
+        description: "The project task has associations that must be updated."
+  patch:
+    tags:
+    - "Project Tasks"
+    summary: "Update a project tasks details"
+    operationId: "updateProjectTask"
+    parameters:
+    - name: "project_task_id"
+      in: "path"
+      description: "The project tasks ID as described in the `task_meta_id` field"
+      required: true
+      type: "integer"
+    - in: "body"
+      name: "data"
+      description: "The project task data to update, read-only fields are ignored"
+      required: true
+      schema:
+        $ref: "#/definitions/ProjectTask"
+    responses:
+      200:
+        description: "A successful update of a project task, the response returns the full information"
+        schema:
+          $ref: "#/definitions/ProjectTask"
+      422:
+        description: "Data validation failure."
+project-tasks-merge:
+  post:
+    tags:
+    - "Project Tasks"
+    summary: "Merges project tasks and all associations into a single, new or existing, project task"
+    operationId: "mergeProjectTasks"
+    parameters:
+    - in: "body"
+      name: "data"
+      description: "List of project tasks to merge and set the final state"
+      required: true
+      schema:
+        $ref: "#/definitions/MergeList"
+    responses:
+      200:
+        description: "All provided Project Tasks have successfully merged and all associated allocations and logged time are updated. The response returns the full information of the final Project Task."
+        schema:
+          $ref: "#/definitions/ProjectTask"
+      422:
+        description: "Data validation failure."

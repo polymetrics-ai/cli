@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "source_ledger": {
+    "schema_version": "cli-provider-artifact-sweep-r1",
+    "created_at": "2026-08-05T00:00:00Z",
+    "record_count": 526
+  },
+  "selection": {
+    "mode": "explicit",
+    "requested_size": 5,
+    "min_operations": 20,
+    "max_operations": 250,
+    "criteria": "status=done; authoritative artifact_kind=openapi|swagger|postman|html_reference|api_blueprint|graphql|asyncapi|wsdl; non-empty version; absolute HTTPS artifact URL; ISO full-date retrieved_at; public access; measured counts; in current defs scope"
+  },
+  "connectors": [
+    {
+      "connector": "copper",
+      "operations_total": 75,
+      "operations_read": 41,
+      "operations_write": 34,
+      "artifact": {
+        "url": "https://developer.copper.com/download/copper_postman_collection.json",
+        "kind": "postman",
+        "version": "Copper Developer API Postman Collection; collection schema v2.1.0; release version not supplied",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developer.copper.com/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; Copper's provider-published developer landing page directly links this downloadable Postman collection",
+      "counting_note": "Enumerated Copper's provider-published Postman collection. Its 83 example request items collapse to 78 unique method/URL rows after five repeat examples (including lead upsert and two repeated list/search samples). Excluded the external S3 upload request and the provider-to-customer webhook notification example, then collapsed the variable-driven custom-field search sample into the concrete resource /search actions it represents: 75 logical Copper API actions remain. They comprise 29 GET reads and 26 POST, nine PUT, and 11 DELETE actions; 12 POST search, fetch-by-email, and activity-list actions are semantic reads, yielding 41 reads / 34 writes. The named View subscription-by-ID item is retained as one documented operation despite a missing literal slash in its collection URL template.",
+      "processed_at": "2026-08-05T20:43:15Z",
+      "selection_reason": "selected explicitly after provider-artifact quality review; the record independently satisfies the machine-readable, versioned, public, bounded-operation evidence gate"
+    }
+  ]
+}

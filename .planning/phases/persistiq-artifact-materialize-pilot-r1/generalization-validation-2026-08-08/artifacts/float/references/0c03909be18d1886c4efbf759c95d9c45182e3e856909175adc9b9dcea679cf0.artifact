@@ -1,0 +1,158 @@
+definitions:
+  Account:
+    type: "object"
+    required:
+    - "email"
+    - "name"
+    properties:
+      account_id:
+        type: "integer"
+        example: 1
+        description: "The ID of this account"
+        readOnly: true
+      name:
+        type: "string"
+        example: "Donna Nobel"
+        description: "The name of the account"
+        maxLength: 200
+      email:
+        type: "string"
+        example: "donna@example.com"
+        description: "Email address for this account"
+        maxLength: 200
+      timezone:
+        type: string
+        description: "Timezone as a TZ identifier, set when using the time logging timer function"
+        example: America/New_York
+      avatar:
+        type: string
+        format: uri
+        description: "URL of an image file representing the account as an avatar"
+        example: https://floatcdn.com/icons/avatar1-80.png
+      account_type:
+        type: "integer"
+        example: 7
+        description: "High level permissions of the account; `1` = Account Owner, `2` = Admin, `4` = Member, `5` = Billing, `7` = Manager"
+      access:
+        type: "integer"
+        example: 3
+        description: "Used in conjunction with `account_type` to determine granular permissions, see response description"
+      department_filter_id:
+        type: "integer"
+        example: 443
+        description: "The department ID if this account is filtered by a department"
+      view_rights:
+        type: "integer"
+        example: 1
+        description: "(**Deprecated** - see `access`) Do they have rights to view the team? `1` = Yes, `0` = No"
+      edit_rights:
+        type: "integer"
+        example: 1
+        description: "(**Deprecated** - see `access`) If a Member, do they have rights to edit their schedule? `1` = Yes, `0` = No"
+      last_login:
+        type: "string"
+        example: "2026-03-25 19:14:13"
+        description: >
+          The date and time this account last signed in. This reflects authentication (sign-in), not general activity, a user may remain signed in and may only need to authenticate every 14 days.
+        readOnly: true
+      active:
+        type: "integer"
+        example: 1
+        description: "Is this account active? `1` = Yes, `0` = No"
+      created:
+        type: "string"
+        example: "2019-02-05"
+        description: "Date this record was created"
+        readOnly: true
+      modified:
+        type: "string"
+        example: "2019-08-02 09:21:13"
+        description: "Date this record was last modified"
+        readOnly: true
+    title: "Account"
+parameters:
+  account_id:
+    name: "account_id"
+    in: "path"
+    description: "The account ID"
+    required: true
+    type: "integer"
+  expand:
+    name: expand
+    in: "query"
+    description: "Use `people_id` to return an additional `people_id` field that can reference a record on `/people`, or `null` if a guest"
+    required: false
+    type: string
+
+accounts:
+  get:
+    tags:
+    - "Accounts"
+    summary: "List accounts"
+    operationId: "getAccounts"
+    parameters:
+    - $ref: "#/parameters/expand"
+    - $ref: "../swagger-api-v3.yaml#/parameters/page"
+    - $ref: "../swagger-api-v3.yaml#/parameters/per-page"
+    responses:
+      200:
+        description: >
+          Accounts are required to access a team. An account may be linked to a person on the schedule; if not, they are a guest.
+
+          **Note:** the API does not currently support account creation.
+
+
+          High-level permissions are denoted by `account_type`; `1` = Account Owner, `2` = Admin, `4` = Member, `5` = Billing, `7` = Manager
+
+
+          Granular permissions are denoted by `access`:
+            * Where `account_type` is `1`, `2` or `5` (Account Owner, Admin or Billing); `access` is always `0`
+            * Where `account_type` is `4` (Member); `1` = View all, `2` = Self-edit.
+            * Where `account_type` is `7` (Manager); `0` = No schedule management, `1` = Manage Projects, `2` = Manage People, `3` = Manage Projects & People.
+            * Additionally for any manager `access` values; `+4` = Create & edit People, `+8` = View rates & budgets e.g. `9` = Manager of projects that can view rates & budgets
+
+        schema:
+          type: "array"
+          title: "Array of accounts"
+          items:
+            $ref: "#/definitions/Account"
+        headers:
+          X-Pagination-Total-Count:
+            type: "integer"
+            description: "Total number of items"
+          X-Pagination-Page-Count:
+            type: "integer"
+            description: "Total number of pages"
+          X-Pagination-Current-Page:
+            type: "integer"
+            description: "Current page number"
+          X-Pagination-Per-Page:
+            type: "integer"
+            description: "Number of items per page"
+
+account-id:
+  get:
+    tags:
+    - "Accounts"
+    summary: "Retrieve a single account"
+    operationId: "getAccount"
+    parameters:
+    - $ref: "#/parameters/account_id"
+    - $ref: "#/parameters/expand"
+    responses:
+      200:
+        description: >
+          Accounts are required to access a team. An account may be linked to a person on the schedule; if not, they are a guest.
+
+          **Note:** the API does not currently support account creation.
+
+          High-level permissions are denoted by `account_type`; `1` = Account Owner, `2` = Admin, `4` = Member, `5` = Billing, `7` = Manager
+
+          Granular permissions are denoted by `access`:
+            * Where `account_type` is `1`, `2` or `5` (Account Owner, Admin or Billing); access is always `0`
+            * Where `account_type` is `4` (Member); `1` = View all, `2` = Self-edit.
+            * Where `account_type` is `7` (Manager); `0` = No schedule management, `1` = Manage Projects, `2` = Manage People, `3` = Manage Projects & People.
+            * Additionally for any manager `access` values; `+4` = Create & edit People, `+8` = View rates & budgets e.g. `9` = Manager of projects that can view rates & budgets
+
+        schema:
+          $ref: "#/definitions/Account"

@@ -1,0 +1,248 @@
+definitions:
+  LoggedTime:
+    title: LoggedTime
+    type: object
+    required:
+    - date
+    - hours
+    - people_id
+    - project_id
+    properties:
+      logged_time_id:
+        type: string
+        example: 5e38963be429adc74664c777
+        description: Unique ID of the logged time entry
+        readOnly: true
+      people_id:
+        type: integer
+        example: 9876
+        description: The ID of the person for the logged time entry
+      date:
+        type: string
+        format: "date:YYYY-MM-DD"
+        example: "2022-12-12"
+        description: Date of the logged time entry
+      reference_date:
+        type: string
+        format: "date:YYYY-MM-DD"
+        example: "2025-04-12"
+        description: The date on which to suppress a log time suggestion of the corresponding `task_id` in the UI
+      hours:
+        type: number
+        format: float
+        description: Total hours of the logged time entry, will be rounded to 2 decimal places, `0` values are valid however this acts as a soft-delete so the response is hidden
+        minimum: 0
+        maximum: 24
+        example: 5.25
+      billable:
+        type: integer
+        example: 1
+        description: Shows if logged time entry is `1` = billable or `0` = non-billable. Determined by the associated project, phase or task
+        readOnly: true
+      notes:
+        type: string
+        example: This took a lot longer than planned because I didn't have the original illustrations
+        description: Additional notes about this logged time entry
+        minLength: 0
+        maxLength: 1500
+      project_id:
+        type: integer
+        example: 4567
+        description: The ID of the project on which this entry was logged
+      phase_id:
+        type: integer
+        example: 335
+        description: The ID of the project phase for which this entry was logged. A value of `0` indicates no phase is used
+      task_id:
+        type: integer
+        example: 7654321
+        description: The ID of a scheduled allocation, when used with `reference_date` it suppresses a matching log time suggestion in the UI
+      task_name:
+        type: string
+        example: Front-end Development
+        description: The name of the project task against which this entry was logged, will create a project task name
+        minLength: 0
+        maxLength: 150
+      task_meta_id:
+        type: "integer"
+        example: 1234567
+        description: "The ID of the associated project task (named for backwards compatibility), takes higher priority over `task_name`"
+      locked:
+        type: integer
+        example: 1
+        description: Is the logged time entry locked? `1` = true, `0` = false
+        readOnly: true
+      locked_date:
+        type: string
+        format: 'date:YYYY-MM-DD'
+        example: '2025-04-01'
+        description: Date this logged time entry was last locked
+        readOnly: true
+      created:
+        type: string
+        format: "ISODate"
+        example: "2025-04-01T13:02:00+00:00"
+        description: Date/time this record was created
+        readOnly: true
+      created_by:
+        type: integer
+        example: 87655
+        description: ID of the account that created this record
+        readOnly: true
+      modified:
+        type: string
+        format: "ISODate"
+        example: "2025-07-02T14:02:00+00:00"
+        description: Date/time this record was last modified
+        readOnly: true
+      modified_by:
+        type: integer
+        example: 87655
+        description: ID of the account that last modified this record
+        readOnly: true
+
+
+# Paths
+logged-time:
+  post:
+    tags:
+    - Logged Time
+    summary: Log time for a person.
+    description: Create a logged time entry for a person
+    operationId: addLoggedTime
+    parameters:
+    - in: "body"
+      name: "body"
+      description: "The logged time entry to create, read-only fields are ignored"
+      required: true
+      schema:
+        $ref: "#/definitions/LoggedTime"
+    responses:
+      200:
+        description: If the time was successfully logged the response includes the full entry
+        schema:
+          type: array
+          title: Array of logged time entries
+          items:
+            $ref: "#/definitions/LoggedTime"
+      403:
+        description: Time Tracking is not enabled for this team
+      422:
+        description: Data validation error
+  get:
+    tags:
+    - Logged Time
+    summary: List logged time for a project or person.
+    description: Returns a list of logged time for the specified person or project within the specified date range
+    operationId: getLoggedTimes
+    parameters:
+    - $ref: "../swagger-api-v3.yaml#/parameters/people_id"
+    - $ref: "../swagger-api-v3.yaml#/parameters/project_id"
+    - $ref: "../swagger-api-v3.yaml#/parameters/phase_id"
+    - $ref: "../swagger-api-v3.yaml#/parameters/task_meta_id"
+    - $ref: "../swagger-api-v3.yaml#/parameters/start_date"
+    - $ref: "../swagger-api-v3.yaml#/parameters/end_date"
+    - $ref: "../swagger-api-v3.yaml#/parameters/page"
+    - $ref: "../swagger-api-v3.yaml#/parameters/per-page"
+    - $ref: "../swagger-api-v3.yaml#/parameters/sort"
+    - $ref: "../swagger-api-v3.yaml#/parameters/modified_since"
+    - $ref: "../swagger-api-v3.yaml#/parameters/fields"
+
+    responses:
+      200:
+        description: An array of logged time entries for the specified person/project between the specified dates
+        schema:
+          type: array
+          title: Array of logged time entries
+          items:
+            $ref: "#/definitions/LoggedTime"
+        headers:
+          X-Pagination-Total-Count:
+            type: "integer"
+            description: "Total number of items"
+          X-Pagination-Page-Count:
+            type: "integer"
+            description: "Total number of pages"
+          X-Pagination-Current-Page:
+            type: "integer"
+            description: "Current page number"
+          X-Pagination-Per-Page:
+            type: "integer"
+            description: "Number of items per page"
+      403:
+        description: Time Tracking is not enabled for this team
+      422:
+        description: Data validation error
+
+logged-time-id:
+  get:
+    tags:
+    - Logged Time
+    summary: Retrieve a single logged time entry.
+    description: Returns a single logged time entry
+    operationId: getLoggedTime
+    parameters:
+    - in: path
+      name: logged_time_id
+      description: Unique ID of the specific logged time entry to be retrieved
+      required: true
+      type: string
+    responses:
+      200:
+        description: A logged time entry
+        schema:
+          $ref: "#/definitions/LoggedTime"
+      403:
+        description: Time Tracking is not enabled for this team
+      404:
+        description: The specified logged time entry does not exist
+      422:
+        description: Data validation error
+  patch:
+    tags:
+    - Logged Time
+    summary: Modify an existing logged time entry.
+    operationId: updateLoggedTime
+    parameters:
+    - in: path
+      name: logged_time_id
+      description: Unique ID of the specific logged time entry to be updated
+      required: true
+      type: string
+    - in: "body"
+      name: "body"
+      description: "The logged time entry to create, read-only fields are ignored"
+      required: true
+      schema:
+        $ref: "#/definitions/LoggedTime"
+    responses:
+      200:
+        description: If the logged time was successfully updated the modified entry is returned
+        schema:
+          $ref: "#/definitions/LoggedTime"
+      403:
+        description: Time Tracking is not enabled for this team
+      404:
+        description: The specified logged time entry does not exist
+      422:
+        description: Data validation error
+  delete:
+    tags:
+    - Logged Time
+    summary: Delete an existing logged time entry.
+    operationId: deleteLoggedTime
+    parameters:
+    - in: path
+      name: logged_time_id
+      description: Unique ID of the specific logged time entry to be deleted
+      required: true
+      type: string
+    responses:
+      204:
+        description: Delete successful.
+      403:
+        description: Time Tracking is not enabled for this team. Or, the associated Project or Phase is archived.
+      404:
+        description: The specified logged time entry does not exist.
+      422:
+        description: Data validation error.

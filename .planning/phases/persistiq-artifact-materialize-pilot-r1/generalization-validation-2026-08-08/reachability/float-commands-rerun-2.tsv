@@ -1,0 +1,106 @@
+connector	command	exit
+float	__namespace__	0
+float	api delete clients client-id	0
+float	api delete currencies currency-id	0
+float	api delete departments department-id	0
+float	api delete holidays holiday-id	0
+float	api delete logged-time logged-time-id	0
+float	api delete milestones milestone-id	0
+float	api delete people people-id	0
+float	api delete phases phase-id	0
+float	api delete project-expenses project-expense-id	0
+float	api delete project-stages id	0
+float	api delete project-tasks project-task-id	0
+float	api delete projects project-id	0
+float	api delete rate-cards rate-card-id	0
+float	api delete roles role-id	0
+float	api delete status status-id	0
+float	api delete tasks task-id	0
+float	api delete timeoffs timeoff-id	0
+float	api get accounts	0
+float	api get accounts account-id	0
+float	api get allocations	0
+float	api get clients client-id	0
+float	api get currencies	0
+float	api get currencies currency-id	0
+float	api get deleted logged-time	0
+float	api get deleted tasks	0
+float	api get deleted timeoffs	0
+float	api get departments department-id	0
+float	api get holidays	0
+float	api get holidays holiday-id	0
+float	api get logged-time	0
+float	api get logged-time logged-time-id	0
+float	api get milestones	0
+float	api get milestones milestone-id	0
+float	api get people people-id	0
+float	api get phases	0
+float	api get phases phase-id	0
+float	api get project-expenses	0
+float	api get project-expenses project-expense-id	0
+float	api get project-stages	0
+float	api get project-stages id	0
+float	api get project-tasks	0
+float	api get project-tasks project-task-id	0
+float	api get project-templates	0
+float	api get project-templates project-template-id	0
+float	api get projects project-id	0
+float	api get public-holidays	0
+float	api get public-holidays public-holiday-id	0
+float	api get rate-cards	0
+float	api get rate-cards rate-card-id	0
+float	api get reports people	0
+float	api get reports projects	0
+float	api get roles	0
+float	api get roles role-id	0
+float	api get status	0
+float	api get status status-id	0
+float	api get statuses	0
+float	api get tasks task-id	0
+float	api get timeoff-types	0
+float	api get timeoff-types timeoff-type-id	0
+float	api get timeoffs	0
+float	api get timeoffs timeoff-id	0
+float	api patch clients client-id	0
+float	api patch currencies currency-id	0
+float	api patch departments department-id	0
+float	api patch holidays holiday-id	0
+float	api patch logged-time logged-time-id	0
+float	api patch milestones milestone-id	0
+float	api patch people people-id	0
+float	api patch phases phase-id	0
+float	api patch project-expenses project-expense-id	0
+float	api patch project-stages id	0
+float	api patch project-tasks project-task-id	0
+float	api patch projects project-id	0
+float	api patch rate-cards rate-card-id	0
+float	api patch roles role-id	0
+float	api patch status status-id	0
+float	api patch tasks task-id	0
+float	api patch timeoff-types timeoff-type-id	0
+float	api patch timeoffs timeoff-id	0
+float	api post clients	0
+float	api post currencies	0
+float	api post departments	0
+float	api post holidays	0
+float	api post logged-time	0
+float	api post milestones	0
+float	api post people	0
+float	api post phases	0
+float	api post project-expenses	0
+float	api post project-stages	0
+float	api post project-tasks	0
+float	api post project-tasks merge	0
+float	api post projects	0
+float	api post projects from-template project-template-id	0
+float	api post rate-cards	0
+float	api post roles	0
+float	api post status	0
+float	api post tasks	0
+float	api post timeoff-types	0
+float	api post timeoffs	0
+float	clients list	0
+float	departments list	0
+float	people list	0
+float	projects list	0
+float	tasks list	0

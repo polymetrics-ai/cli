@@ -62,3 +62,19 @@ the fallback reason are recorded in this phase directory.
 
 Bulk materialization, the 99-record feasibility plan, and all other connectors
 are deferred by the captain's scope change.
+
+## Captain order: multi-source mapping
+
+The generator must treat the ledger artifact URL as one authoritative source,
+not as a complete-surface guarantee. The implemented source order is
+OpenAPI/Swagger with bounded local/remote reference and webhook traversal,
+other provider machine exports (including Postman), then bounded official
+HTML/Markdown/source traversal. Every normalized operation retains its exact
+source metadata and alternative authoritative citations. A narrow source never
+deletes an existing operation; an unsupported runtime foundation becomes a
+visible named dependency, never a refusal or false `implemented` claim.
+
+The selected evidence extension is Watchmode, DocuSeal, Float, plus Copper as
+the requested non-OpenAPI fallback proof. All generated outputs remain staged;
+the production 392 sweep and seven-connector consolidation stay behind PR
+#3957's merge gate.

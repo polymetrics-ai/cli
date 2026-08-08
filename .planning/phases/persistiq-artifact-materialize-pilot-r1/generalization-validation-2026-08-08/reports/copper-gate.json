@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08/raw/copper-manifest.json",
+  "candidates": 1,
+  "included": [
+    {
+      "connector": "copper",
+      "commands_checked": 5,
+      "declared_operations": 82,
+      "operation_split": {
+        "executable": 5,
+        "provider_blocked": 40,
+        "excluded": 37
+      },
+      "warnings": []
+    }
+  ],
+  "dropped": [],
+  "provenance_refusals": 0,
+  "surveyed_operations": {
+    "total": 75,
+    "read": 41,
+    "write": 34
+  },
+  "declared_operations": 82,
+  "operation_split": {
+    "executable": 5,
+    "provider_blocked": 40,
+    "excluded": 37
+  }
+}

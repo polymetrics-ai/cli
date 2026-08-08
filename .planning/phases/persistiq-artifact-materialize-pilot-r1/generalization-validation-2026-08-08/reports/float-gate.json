@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08/raw/float-manifest.json",
+  "candidates": 1,
+  "included": [
+    {
+      "connector": "float",
+      "commands_checked": 5,
+      "declared_operations": 104,
+      "operation_split": {
+        "executable": 5,
+        "provider_blocked": 58,
+        "excluded": 41
+      },
+      "warnings": []
+    }
+  ],
+  "dropped": [],
+  "provenance_refusals": 0,
+  "surveyed_operations": {
+    "total": 95,
+    "read": 44,
+    "write": 51
+  },
+  "declared_operations": 104,
+  "operation_split": {
+    "executable": 5,
+    "provider_blocked": 58,
+    "excluded": 41
+  }
+}

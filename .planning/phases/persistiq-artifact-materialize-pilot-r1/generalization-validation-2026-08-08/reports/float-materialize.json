@@ -2,12 +2,29 @@
   "schema_version": 1,
   "manifest": ".planning/phases/persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08/raw/float-manifest.json",
   "candidates": 1,
-  "included": [],
-  "dropped": [
+  "included": [
     {
       "connector": "float",
-      "stage": "artifact_inventory_unknown",
-      "reason": "artifact operation inventory is unknown: external path-item reference \"paths/accounts.yaml#/accounts\" cannot be exhaustively resolved"
+      "artifact": {
+        "url": "https://developer.float.com/swagger-api-v3.yaml",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "d204eae066136386aea4ea955fb9d0d08ef9ca85eafabc2bb2dcd30b8751211c"
+      },
+      "artifact_operations": 102,
+      "declared_operations": 104,
+      "operation_split": {
+        "executable": 5,
+        "provider_blocked": 58,
+        "excluded": 41
+      },
+      "cli_commands": 104,
+      "implemented_commands": 5,
+      "named_dependency_commands": 99,
+      "flagged_discrepancies": 2,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 99
     }
-  ]
+  ],
+  "dropped": []
 }

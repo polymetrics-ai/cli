@@ -1,0 +1,2189 @@
+{
+  "tagline": "Run Float's declared streams and reverse-ETL actions.",
+  "usage": "pm float \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get accounts",
+        "api get accounts account-id",
+        "api get allocations",
+        "api get clients client-id",
+        "api get currencies",
+        "api get currencies currency-id",
+        "api get deleted logged-time",
+        "api get deleted tasks",
+        "api get deleted timeoffs",
+        "api get departments department-id",
+        "api get holidays",
+        "api get holidays holiday-id",
+        "api get logged-time",
+        "api get logged-time logged-time-id",
+        "api get milestones",
+        "api get milestones milestone-id",
+        "api get people people-id",
+        "api get phases",
+        "api get phases phase-id",
+        "api get project-expenses",
+        "api get project-expenses project-expense-id",
+        "api get project-stages",
+        "api get project-stages id",
+        "api get project-tasks",
+        "api get project-tasks project-task-id",
+        "api get project-templates",
+        "api get project-templates project-template-id",
+        "api get projects project-id",
+        "api get public-holidays",
+        "api get public-holidays public-holiday-id",
+        "api get rate-cards",
+        "api get rate-cards rate-card-id",
+        "api get reports people",
+        "api get reports projects",
+        "api get roles",
+        "api get roles role-id",
+        "api get status",
+        "api get status status-id",
+        "api get statuses",
+        "api get tasks task-id",
+        "api get timeoff-types",
+        "api get timeoff-types timeoff-type-id",
+        "api get timeoffs",
+        "api get timeoffs timeoff-id",
+        "clients list",
+        "departments list",
+        "people list",
+        "projects list",
+        "tasks list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete clients client-id",
+        "api delete currencies currency-id",
+        "api delete departments department-id",
+        "api delete holidays holiday-id",
+        "api delete logged-time logged-time-id",
+        "api delete milestones milestone-id",
+        "api delete people people-id",
+        "api delete phases phase-id",
+        "api delete project-expenses project-expense-id",
+        "api delete project-stages id",
+        "api delete project-tasks project-task-id",
+        "api delete projects project-id",
+        "api delete rate-cards rate-card-id",
+        "api delete roles role-id",
+        "api delete status status-id",
+        "api delete tasks task-id",
+        "api delete timeoffs timeoff-id",
+        "api patch clients client-id",
+        "api patch currencies currency-id",
+        "api patch departments department-id",
+        "api patch holidays holiday-id",
+        "api patch logged-time logged-time-id",
+        "api patch milestones milestone-id",
+        "api patch people people-id",
+        "api patch phases phase-id",
+        "api patch project-expenses project-expense-id",
+        "api patch project-stages id",
+        "api patch project-tasks project-task-id",
+        "api patch projects project-id",
+        "api patch rate-cards rate-card-id",
+        "api patch roles role-id",
+        "api patch status status-id",
+        "api patch tasks task-id",
+        "api patch timeoff-types timeoff-type-id",
+        "api patch timeoffs timeoff-id",
+        "api post clients",
+        "api post currencies",
+        "api post departments",
+        "api post holidays",
+        "api post logged-time",
+        "api post milestones",
+        "api post people",
+        "api post phases",
+        "api post project-expenses",
+        "api post project-stages",
+        "api post project-tasks",
+        "api post project-tasks merge",
+        "api post projects",
+        "api post projects from-template project-template-id",
+        "api post rate-cards",
+        "api post roles",
+        "api post status",
+        "api post tasks",
+        "api post timeoff-types",
+        "api post timeoffs"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete clients client-id",
+      "summary": "Documented DELETE /clients/{client_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api delete clients client-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/clients/{client_id}"
+        }
+      ],
+      "operation": "float.delete.clients-client-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete currencies currency-id",
+      "summary": "Documented DELETE /currencies/{currency_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api delete currencies currency-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/currencies/{currency_id}"
+        }
+      ],
+      "operation": "float.delete.currencies-currency-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete departments department-id",
+      "summary": "Documented DELETE /departments/{department_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api delete departments department-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/departments/{department_id}"
+        }
+      ],
+      "operation": "float.delete.departments-department-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete holidays holiday-id",
+      "summary": "Documented DELETE /holidays/{holiday_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api delete holidays holiday-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/holidays/{holiday_id}"
+        }
+      ],
+      "operation": "float.delete.holidays-holiday-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete logged-time logged-time-id",
+      "summary": "Documented DELETE /logged-time/{logged_time_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api delete logged-time logged-time-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/logged-time/{logged_time_id}"
+        }
+      ],
+      "operation": "float.delete.logged-time-logged-time-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete milestones milestone-id",
+      "summary": "Documented DELETE /milestones/{milestone_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api delete milestones milestone-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/milestones/{milestone_id}"
+        }
+      ],
+      "operation": "float.delete.milestones-milestone-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete people people-id",
+      "summary": "Documented DELETE /people/{people_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api delete people people-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/people/{people_id}"
+        }
+      ],
+      "operation": "float.delete.people-people-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete phases phase-id",
+      "summary": "Documented DELETE /phases/{phase_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api delete phases phase-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/phases/{phase_id}"
+        }
+      ],
+      "operation": "float.delete.phases-phase-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete project-expenses project-expense-id",
+      "summary": "Documented DELETE /project-expenses/{project_expense_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api delete project-expenses project-expense-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/project-expenses/{project_expense_id}"
+        }
+      ],
+      "operation": "float.delete.project-expenses-project-expense-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete project-stages id",
+      "summary": "Documented DELETE /project-stages/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api delete project-stages id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/project-stages/{id}"
+        }
+      ],
+      "operation": "float.delete.project-stages-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete project-tasks project-task-id",
+      "summary": "Documented DELETE /project-tasks/{project_task_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api delete project-tasks project-task-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/project-tasks/{project_task_id}"
+        }
+      ],
+      "operation": "float.delete.project-tasks-project-task-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete projects project-id",
+      "summary": "Documented DELETE /projects/{project_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api delete projects project-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/projects/{project_id}"
+        }
+      ],
+      "operation": "float.delete.projects-project-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete rate-cards rate-card-id",
+      "summary": "Documented DELETE /rate-cards/{rate_card_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api delete rate-cards rate-card-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rate-cards/{rate_card_id}"
+        }
+      ],
+      "operation": "float.delete.rate-cards-rate-card-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete roles role-id",
+      "summary": "Documented DELETE /roles/{role_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api delete roles role-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/roles/{role_id}"
+        }
+      ],
+      "operation": "float.delete.roles-role-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete status status-id",
+      "summary": "Documented DELETE /status/{status_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api delete status status-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/status/{status_id}"
+        }
+      ],
+      "operation": "float.delete.status-status-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete tasks task-id",
+      "summary": "Documented DELETE /tasks/{task_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api delete tasks task-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tasks/{task_id}"
+        }
+      ],
+      "operation": "float.delete.tasks-task-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete timeoffs timeoff-id",
+      "summary": "Documented DELETE /timeoffs/{timeoff_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api delete timeoffs timeoff-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/timeoffs/{timeoff_id}"
+        }
+      ],
+      "operation": "float.delete.timeoffs-timeoff-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get accounts",
+      "summary": "Documented GET /accounts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get accounts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts"
+        }
+      ],
+      "operation": "float.get.accounts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get accounts account-id",
+      "summary": "Documented GET /accounts/{account_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get accounts account-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts/{account_id}"
+        }
+      ],
+      "operation": "float.get.accounts-account-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get allocations",
+      "summary": "Documented GET /allocations (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get allocations --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/allocations"
+        }
+      ],
+      "operation": "float.get.allocations",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get clients client-id",
+      "summary": "Documented GET /clients/{client_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get clients client-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/clients/{client_id}"
+        }
+      ],
+      "operation": "float.get.clients-client-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get currencies",
+      "summary": "Documented GET /currencies (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get currencies --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/currencies"
+        }
+      ],
+      "operation": "float.get.currencies",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get currencies currency-id",
+      "summary": "Documented GET /currencies/{currency_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get currencies currency-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/currencies/{currency_id}"
+        }
+      ],
+      "operation": "float.get.currencies-currency-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get deleted logged-time",
+      "summary": "Documented GET /deleted/logged-time (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get deleted logged-time --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deleted/logged-time"
+        }
+      ],
+      "operation": "float.get.deleted-logged-time",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get deleted tasks",
+      "summary": "Documented GET /deleted/tasks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get deleted tasks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deleted/tasks"
+        }
+      ],
+      "operation": "float.get.deleted-tasks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get deleted timeoffs",
+      "summary": "Documented GET /deleted/timeoffs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get deleted timeoffs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deleted/timeoffs"
+        }
+      ],
+      "operation": "float.get.deleted-timeoffs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get departments department-id",
+      "summary": "Documented GET /departments/{department_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get departments department-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/departments/{department_id}"
+        }
+      ],
+      "operation": "float.get.departments-department-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get holidays",
+      "summary": "Documented GET /holidays (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get holidays --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/holidays"
+        }
+      ],
+      "operation": "float.get.holidays",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get holidays holiday-id",
+      "summary": "Documented GET /holidays/{holiday_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get holidays holiday-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/holidays/{holiday_id}"
+        }
+      ],
+      "operation": "float.get.holidays-holiday-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get logged-time",
+      "summary": "Documented GET /logged-time (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get logged-time --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/logged-time"
+        }
+      ],
+      "operation": "float.get.logged-time",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get logged-time logged-time-id",
+      "summary": "Documented GET /logged-time/{logged_time_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get logged-time logged-time-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/logged-time/{logged_time_id}"
+        }
+      ],
+      "operation": "float.get.logged-time-logged-time-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get milestones",
+      "summary": "Documented GET /milestones (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get milestones --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/milestones"
+        }
+      ],
+      "operation": "float.get.milestones",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get milestones milestone-id",
+      "summary": "Documented GET /milestones/{milestone_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get milestones milestone-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/milestones/{milestone_id}"
+        }
+      ],
+      "operation": "float.get.milestones-milestone-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get people people-id",
+      "summary": "Documented GET /people/{people_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get people people-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/people/{people_id}"
+        }
+      ],
+      "operation": "float.get.people-people-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get phases",
+      "summary": "Documented GET /phases (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get phases --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/phases"
+        }
+      ],
+      "operation": "float.get.phases",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get phases phase-id",
+      "summary": "Documented GET /phases/{phase_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get phases phase-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/phases/{phase_id}"
+        }
+      ],
+      "operation": "float.get.phases-phase-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get project-expenses",
+      "summary": "Documented GET /project-expenses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get project-expenses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project-expenses"
+        }
+      ],
+      "operation": "float.get.project-expenses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get project-expenses project-expense-id",
+      "summary": "Documented GET /project-expenses/{project_expense_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get project-expenses project-expense-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project-expenses/{project_expense_id}"
+        }
+      ],
+      "operation": "float.get.project-expenses-project-expense-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get project-stages",
+      "summary": "Documented GET /project-stages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get project-stages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project-stages"
+        }
+      ],
+      "operation": "float.get.project-stages",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get project-stages id",
+      "summary": "Documented GET /project-stages/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get project-stages id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project-stages/{id}"
+        }
+      ],
+      "operation": "float.get.project-stages-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get project-tasks",
+      "summary": "Documented GET /project-tasks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get project-tasks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project-tasks"
+        }
+      ],
+      "operation": "float.get.project-tasks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get project-tasks project-task-id",
+      "summary": "Documented GET /project-tasks/{project_task_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get project-tasks project-task-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project-tasks/{project_task_id}"
+        }
+      ],
+      "operation": "float.get.project-tasks-project-task-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get project-templates",
+      "summary": "Documented GET /project-templates (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get project-templates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project-templates"
+        }
+      ],
+      "operation": "float.get.project-templates",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get project-templates project-template-id",
+      "summary": "Documented GET /project-templates/{project_template_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get project-templates project-template-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/project-templates/{project_template_id}"
+        }
+      ],
+      "operation": "float.get.project-templates-project-template-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects project-id",
+      "summary": "Documented GET /projects/{project_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get projects project-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{project_id}"
+        }
+      ],
+      "operation": "float.get.projects-project-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get public-holidays",
+      "summary": "Documented GET /public-holidays (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get public-holidays --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public-holidays"
+        }
+      ],
+      "operation": "float.get.public-holidays",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get public-holidays public-holiday-id",
+      "summary": "Documented GET /public-holidays/{public_holiday_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get public-holidays public-holiday-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public-holidays/{public_holiday_id}"
+        }
+      ],
+      "operation": "float.get.public-holidays-public-holiday-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get rate-cards",
+      "summary": "Documented GET /rate-cards (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get rate-cards --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rate-cards"
+        }
+      ],
+      "operation": "float.get.rate-cards",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get rate-cards rate-card-id",
+      "summary": "Documented GET /rate-cards/{rate_card_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get rate-cards rate-card-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rate-cards/{rate_card_id}"
+        }
+      ],
+      "operation": "float.get.rate-cards-rate-card-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get reports people",
+      "summary": "Documented GET /reports/people (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get reports people --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/reports/people"
+        }
+      ],
+      "operation": "float.get.reports-people",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get reports projects",
+      "summary": "Documented GET /reports/projects (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get reports projects --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/reports/projects"
+        }
+      ],
+      "operation": "float.get.reports-projects",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get roles",
+      "summary": "Documented GET /roles (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get roles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/roles"
+        }
+      ],
+      "operation": "float.get.roles",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get roles role-id",
+      "summary": "Documented GET /roles/{role_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get roles role-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/roles/{role_id}"
+        }
+      ],
+      "operation": "float.get.roles-role-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get status",
+      "summary": "Documented GET /status (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/status"
+        }
+      ],
+      "operation": "float.get.status",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get status status-id",
+      "summary": "Documented GET /status/{status_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get status status-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/status/{status_id}"
+        }
+      ],
+      "operation": "float.get.status-status-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get statuses",
+      "summary": "Documented GET /statuses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get statuses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/statuses"
+        }
+      ],
+      "operation": "float.get.statuses",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get tasks task-id",
+      "summary": "Documented GET /tasks/{task_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get tasks task-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tasks/{task_id}"
+        }
+      ],
+      "operation": "float.get.tasks-task-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get timeoff-types",
+      "summary": "Documented GET /timeoff-types (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get timeoff-types --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/timeoff-types"
+        }
+      ],
+      "operation": "float.get.timeoff-types",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get timeoff-types timeoff-type-id",
+      "summary": "Documented GET /timeoff-types/{timeoff_type_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get timeoff-types timeoff-type-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/timeoff-types/{timeoff_type_id}"
+        }
+      ],
+      "operation": "float.get.timeoff-types-timeoff-type-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get timeoffs",
+      "summary": "Documented GET /timeoffs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get timeoffs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/timeoffs"
+        }
+      ],
+      "operation": "float.get.timeoffs",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get timeoffs timeoff-id",
+      "summary": "Documented GET /timeoffs/{timeoff_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api get timeoffs timeoff-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/timeoffs/{timeoff_id}"
+        }
+      ],
+      "operation": "float.get.timeoffs-timeoff-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch clients client-id",
+      "summary": "Documented PATCH /clients/{client_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api patch clients client-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/clients/{client_id}"
+        }
+      ],
+      "operation": "float.patch.clients-client-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch currencies currency-id",
+      "summary": "Documented PATCH /currencies/{currency_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api patch currencies currency-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/currencies/{currency_id}"
+        }
+      ],
+      "operation": "float.patch.currencies-currency-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch departments department-id",
+      "summary": "Documented PATCH /departments/{department_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api patch departments department-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/departments/{department_id}"
+        }
+      ],
+      "operation": "float.patch.departments-department-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch holidays holiday-id",
+      "summary": "Documented PATCH /holidays/{holiday_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api patch holidays holiday-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/holidays/{holiday_id}"
+        }
+      ],
+      "operation": "float.patch.holidays-holiday-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch logged-time logged-time-id",
+      "summary": "Documented PATCH /logged-time/{logged_time_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api patch logged-time logged-time-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/logged-time/{logged_time_id}"
+        }
+      ],
+      "operation": "float.patch.logged-time-logged-time-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch milestones milestone-id",
+      "summary": "Documented PATCH /milestones/{milestone_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api patch milestones milestone-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/milestones/{milestone_id}"
+        }
+      ],
+      "operation": "float.patch.milestones-milestone-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch people people-id",
+      "summary": "Documented PATCH /people/{people_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api patch people people-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/people/{people_id}"
+        }
+      ],
+      "operation": "float.patch.people-people-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch phases phase-id",
+      "summary": "Documented PATCH /phases/{phase_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api patch phases phase-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/phases/{phase_id}"
+        }
+      ],
+      "operation": "float.patch.phases-phase-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch project-expenses project-expense-id",
+      "summary": "Documented PATCH /project-expenses/{project_expense_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api patch project-expenses project-expense-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/project-expenses/{project_expense_id}"
+        }
+      ],
+      "operation": "float.patch.project-expenses-project-expense-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch project-stages id",
+      "summary": "Documented PATCH /project-stages/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api patch project-stages id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/project-stages/{id}"
+        }
+      ],
+      "operation": "float.patch.project-stages-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch project-tasks project-task-id",
+      "summary": "Documented PATCH /project-tasks/{project_task_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api patch project-tasks project-task-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/project-tasks/{project_task_id}"
+        }
+      ],
+      "operation": "float.patch.project-tasks-project-task-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch projects project-id",
+      "summary": "Documented PATCH /projects/{project_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api patch projects project-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/projects/{project_id}"
+        }
+      ],
+      "operation": "float.patch.projects-project-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch rate-cards rate-card-id",
+      "summary": "Documented PATCH /rate-cards/{rate_card_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api patch rate-cards rate-card-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rate-cards/{rate_card_id}"
+        }
+      ],
+      "operation": "float.patch.rate-cards-rate-card-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch roles role-id",
+      "summary": "Documented PATCH /roles/{role_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api patch roles role-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/roles/{role_id}"
+        }
+      ],
+      "operation": "float.patch.roles-role-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch status status-id",
+      "summary": "Documented PATCH /status/{status_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api patch status status-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/status/{status_id}"
+        }
+      ],
+      "operation": "float.patch.status-status-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch tasks task-id",
+      "summary": "Documented PATCH /tasks/{task_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api patch tasks task-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/tasks/{task_id}"
+        }
+      ],
+      "operation": "float.patch.tasks-task-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch timeoff-types timeoff-type-id",
+      "summary": "Documented PATCH /timeoff-types/{timeoff_type_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api patch timeoff-types timeoff-type-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/timeoff-types/{timeoff_type_id}"
+        }
+      ],
+      "operation": "float.patch.timeoff-types-timeoff-type-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch timeoffs timeoff-id",
+      "summary": "Documented PATCH /timeoffs/{timeoff_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api patch timeoffs timeoff-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/timeoffs/{timeoff_id}"
+        }
+      ],
+      "operation": "float.patch.timeoffs-timeoff-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post clients",
+      "summary": "Documented POST /clients (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api post clients --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/clients"
+        }
+      ],
+      "operation": "float.post.clients",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post currencies",
+      "summary": "Documented POST /currencies (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api post currencies --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/currencies"
+        }
+      ],
+      "operation": "float.post.currencies",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post departments",
+      "summary": "Documented POST /departments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api post departments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/departments"
+        }
+      ],
+      "operation": "float.post.departments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post holidays",
+      "summary": "Documented POST /holidays (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api post holidays --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/holidays"
+        }
+      ],
+      "operation": "float.post.holidays",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post logged-time",
+      "summary": "Documented POST /logged-time (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api post logged-time --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/logged-time"
+        }
+      ],
+      "operation": "float.post.logged-time",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post milestones",
+      "summary": "Documented POST /milestones (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api post milestones --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/milestones"
+        }
+      ],
+      "operation": "float.post.milestones",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post people",
+      "summary": "Documented POST /people (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api post people --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/people"
+        }
+      ],
+      "operation": "float.post.people",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post phases",
+      "summary": "Documented POST /phases (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api post phases --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/phases"
+        }
+      ],
+      "operation": "float.post.phases",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post project-expenses",
+      "summary": "Documented POST /project-expenses (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api post project-expenses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/project-expenses"
+        }
+      ],
+      "operation": "float.post.project-expenses",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post project-stages",
+      "summary": "Documented POST /project-stages (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api post project-stages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/project-stages"
+        }
+      ],
+      "operation": "float.post.project-stages",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post project-tasks",
+      "summary": "Documented POST /project-tasks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api post project-tasks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/project-tasks"
+        }
+      ],
+      "operation": "float.post.project-tasks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post project-tasks merge",
+      "summary": "Documented POST /project-tasks/merge (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api post project-tasks merge --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/project-tasks/merge"
+        }
+      ],
+      "operation": "float.post.project-tasks-merge",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post projects",
+      "summary": "Documented POST /projects (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api post projects --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects"
+        }
+      ],
+      "operation": "float.post.projects",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post projects from-template project-template-id",
+      "summary": "Documented POST /projects/from-template/{project_template_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api post projects from-template project-template-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/projects/from-template/{project_template_id}"
+        }
+      ],
+      "operation": "float.post.projects-from-template-project-template-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post rate-cards",
+      "summary": "Documented POST /rate-cards (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api post rate-cards --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rate-cards"
+        }
+      ],
+      "operation": "float.post.rate-cards",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post roles",
+      "summary": "Documented POST /roles (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api post roles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/roles"
+        }
+      ],
+      "operation": "float.post.roles",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post status",
+      "summary": "Documented POST /status (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api post status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/status"
+        }
+      ],
+      "operation": "float.post.status",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post tasks",
+      "summary": "Documented POST /tasks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api post tasks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tasks"
+        }
+      ],
+      "operation": "float.post.tasks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post timeoff-types",
+      "summary": "Documented POST /timeoff-types (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api post timeoff-types --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/timeoff-types"
+        }
+      ],
+      "operation": "float.post.timeoff-types",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post timeoffs",
+      "summary": "Documented POST /timeoffs (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float api post timeoffs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/timeoffs"
+        }
+      ],
+      "operation": "float.post.timeoffs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "clients list",
+      "summary": "Run the clients ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "clients",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float clients list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/clients"
+        }
+      ]
+    },
+    {
+      "path": "departments list",
+      "summary": "Run the departments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "departments",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float departments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/departments"
+        }
+      ]
+    },
+    {
+      "path": "people list",
+      "summary": "Run the people ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "people",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float people list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/people"
+        }
+      ]
+    },
+    {
+      "path": "projects list",
+      "summary": "Run the projects ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "projects",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float projects list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects"
+        }
+      ]
+    },
+    {
+      "path": "tasks list",
+      "summary": "Run the tasks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tasks",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "examples": [
+        "pm float tasks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tasks"
+        }
+      ]
+    }
+  ]
+}

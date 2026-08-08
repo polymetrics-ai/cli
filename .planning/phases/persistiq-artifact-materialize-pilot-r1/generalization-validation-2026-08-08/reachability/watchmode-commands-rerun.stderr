@@ -1,0 +1,1400 @@
+NAME
+  pm watchmode api get autocomplete-search - Documented GET /autocomplete-search (not implemented)
+
+SYNOPSIS
+  pm watchmode api get autocomplete-search [flags]
+  pm watchmode api get autocomplete-search --help
+
+DESCRIPTION
+  Documented GET /autocomplete-search (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.autocomplete-search
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get changes new-people - Documented GET /changes/new_people (not implemented)
+
+SYNOPSIS
+  pm watchmode api get changes new-people [flags]
+  pm watchmode api get changes new-people --help
+
+DESCRIPTION
+  Documented GET /changes/new_people (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.changes-new-people
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get changes new-titles - Documented GET /changes/new_titles (not implemented)
+
+SYNOPSIS
+  pm watchmode api get changes new-titles [flags]
+  pm watchmode api get changes new-titles --help
+
+DESCRIPTION
+  Documented GET /changes/new_titles (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.changes-new-titles
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get changes titles-details-changed - Documented GET /changes/titles_details_changed (not implemented)
+
+SYNOPSIS
+  pm watchmode api get changes titles-details-changed [flags]
+  pm watchmode api get changes titles-details-changed --help
+
+DESCRIPTION
+  Documented GET /changes/titles_details_changed (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.changes-titles-details-changed
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get changes titles-episodes-changed - Documented GET /changes/titles_episodes_changed (not implemented)
+
+SYNOPSIS
+  pm watchmode api get changes titles-episodes-changed [flags]
+  pm watchmode api get changes titles-episodes-changed --help
+
+DESCRIPTION
+  Documented GET /changes/titles_episodes_changed (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.changes-titles-episodes-changed
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get changes titles-sources-changed - Documented GET /changes/titles_sources_changed (not implemented)
+
+SYNOPSIS
+  pm watchmode api get changes titles-sources-changed [flags]
+  pm watchmode api get changes titles-sources-changed --help
+
+DESCRIPTION
+  Documented GET /changes/titles_sources_changed (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.changes-titles-sources-changed
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get genres - Documented GET /genres (not implemented)
+
+SYNOPSIS
+  pm watchmode api get genres [flags]
+  pm watchmode api get genres --help
+
+DESCRIPTION
+  Documented GET /genres (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.genres
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get list-titles - Documented GET /list-titles (not implemented)
+
+SYNOPSIS
+  pm watchmode api get list-titles [flags]
+  pm watchmode api get list-titles --help
+
+DESCRIPTION
+  Documented GET /list-titles (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.list-titles
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get networks - Documented GET /networks (not implemented)
+
+SYNOPSIS
+  pm watchmode api get networks [flags]
+  pm watchmode api get networks --help
+
+DESCRIPTION
+  Documented GET /networks (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.networks
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get person person-id - Documented GET /person/{person_id} (not implemented)
+
+SYNOPSIS
+  pm watchmode api get person person-id [flags]
+  pm watchmode api get person person-id --help
+
+DESCRIPTION
+  Documented GET /person/{person_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.person-person-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get regions - Documented GET /regions (not implemented)
+
+SYNOPSIS
+  pm watchmode api get regions [flags]
+  pm watchmode api get regions --help
+
+DESCRIPTION
+  Documented GET /regions (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.regions
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get releases - Documented GET /releases (not implemented)
+
+SYNOPSIS
+  pm watchmode api get releases [flags]
+  pm watchmode api get releases --help
+
+DESCRIPTION
+  Documented GET /releases (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.releases
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get search - Documented GET /search (not implemented)
+
+SYNOPSIS
+  pm watchmode api get search [flags]
+  pm watchmode api get search --help
+
+DESCRIPTION
+  Documented GET /search (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.search
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get sources - Documented GET /sources (not implemented)
+
+SYNOPSIS
+  pm watchmode api get sources [flags]
+  pm watchmode api get sources --help
+
+DESCRIPTION
+  Documented GET /sources (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.sources
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get status - Documented GET /status (not implemented)
+
+SYNOPSIS
+  pm watchmode api get status [flags]
+  pm watchmode api get status --help
+
+DESCRIPTION
+  Documented GET /status (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.status
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get title title-id cast-crew - Documented GET /title/{title_id}/cast-crew (not implemented)
+
+SYNOPSIS
+  pm watchmode api get title title-id cast-crew [flags]
+  pm watchmode api get title title-id cast-crew --help
+
+DESCRIPTION
+  Documented GET /title/{title_id}/cast-crew (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.title-title-id-cast-crew
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get title title-id details - Documented GET /title/{title_id}/details (not implemented)
+
+SYNOPSIS
+  pm watchmode api get title title-id details [flags]
+  pm watchmode api get title title-id details --help
+
+DESCRIPTION
+  Documented GET /title/{title_id}/details (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.title-title-id-details
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get title title-id episodes - Documented GET /title/{title_id}/episodes (not implemented)
+
+SYNOPSIS
+  pm watchmode api get title title-id episodes [flags]
+  pm watchmode api get title title-id episodes --help
+
+DESCRIPTION
+  Documented GET /title/{title_id}/episodes (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.title-title-id-episodes
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get title title-id episodes episode-id - Documented GET /title/{title_id}/episodes/{episode_id} (not implemented)
+
+SYNOPSIS
+  pm watchmode api get title title-id episodes episode-id [flags]
+  pm watchmode api get title title-id episodes episode-id --help
+
+DESCRIPTION
+  Documented GET /title/{title_id}/episodes/{episode_id} (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.title-title-id-episodes-episode-id
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get title title-id incorrect-data - Documented GET /title/{title_id}/incorrect-data (not implemented)
+
+SYNOPSIS
+  pm watchmode api get title title-id incorrect-data [flags]
+  pm watchmode api get title title-id incorrect-data --help
+
+DESCRIPTION
+  Documented GET /title/{title_id}/incorrect-data (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.title-title-id-incorrect-data
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get title title-id seasons - Documented GET /title/{title_id}/seasons (not implemented)
+
+SYNOPSIS
+  pm watchmode api get title title-id seasons [flags]
+  pm watchmode api get title title-id seasons --help
+
+DESCRIPTION
+  Documented GET /title/{title_id}/seasons (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.title-title-id-seasons
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get title title-id sources - Documented GET /title/{title_id}/sources (not implemented)
+
+SYNOPSIS
+  pm watchmode api get title title-id sources [flags]
+  pm watchmode api get title title-id sources --help
+
+DESCRIPTION
+  Documented GET /title/{title_id}/sources (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.title-title-id-sources
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get title-release-dates - Documented GET /title-release-dates (not implemented)
+
+SYNOPSIS
+  pm watchmode api get title-release-dates [flags]
+  pm watchmode api get title-release-dates --help
+
+DESCRIPTION
+  Documented GET /title-release-dates (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.title-release-dates
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  low
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get v1 autocomplete-search - Documented GET /v1/autocomplete-search/ (not implemented)
+
+SYNOPSIS
+  pm watchmode api get v1 autocomplete-search [flags]
+  pm watchmode api get v1 autocomplete-search --help
+
+DESCRIPTION
+  Documented GET /v1/autocomplete-search/ (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.v1-autocomplete-search
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get v1 changes new-people - Documented GET /v1/changes/new_people/ (not implemented)
+
+SYNOPSIS
+  pm watchmode api get v1 changes new-people [flags]
+  pm watchmode api get v1 changes new-people --help
+
+DESCRIPTION
+  Documented GET /v1/changes/new_people/ (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.v1-changes-new-people
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get v1 changes new-titles - Documented GET /v1/changes/new_titles/ (not implemented)
+
+SYNOPSIS
+  pm watchmode api get v1 changes new-titles [flags]
+  pm watchmode api get v1 changes new-titles --help
+
+DESCRIPTION
+  Documented GET /v1/changes/new_titles/ (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.v1-changes-new-titles
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get v1 changes titles-details-changed - Documented GET /v1/changes/titles_details_changed/ (not implemented)
+
+SYNOPSIS
+  pm watchmode api get v1 changes titles-details-changed [flags]
+  pm watchmode api get v1 changes titles-details-changed --help
+
+DESCRIPTION
+  Documented GET /v1/changes/titles_details_changed/ (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.v1-changes-titles-details-changed
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get v1 changes titles-episodes-changed - Documented GET /v1/changes/titles_episodes_changed/ (not implemented)
+
+SYNOPSIS
+  pm watchmode api get v1 changes titles-episodes-changed [flags]
+  pm watchmode api get v1 changes titles-episodes-changed --help
+
+DESCRIPTION
+  Documented GET /v1/changes/titles_episodes_changed/ (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.v1-changes-titles-episodes-changed
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get v1 changes titles-sources-changed - Documented GET /v1/changes/titles_sources_changed/ (not implemented)
+
+SYNOPSIS
+  pm watchmode api get v1 changes titles-sources-changed [flags]
+  pm watchmode api get v1 changes titles-sources-changed --help
+
+DESCRIPTION
+  Documented GET /v1/changes/titles_sources_changed/ (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.v1-changes-titles-sources-changed
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get v1 status - Documented GET /v1/status/ (not implemented)
+
+SYNOPSIS
+  pm watchmode api get v1 status [flags]
+  pm watchmode api get v1 status --help
+
+DESCRIPTION
+  Documented GET /v1/status/ (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.v1-status
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get v1 title title-id incorrect-data - Documented GET /v1/title/{title_id}/incorrect-data/ (not implemented)
+
+SYNOPSIS
+  pm watchmode api get v1 title title-id incorrect-data [flags]
+  pm watchmode api get v1 title title-id incorrect-data --help
+
+DESCRIPTION
+  Documented GET /v1/title/{title_id}/incorrect-data/ (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.v1-title-title-id-incorrect-data
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode api get v1 title-release-dates - Documented GET /v1/title-release-dates/ (not implemented)
+
+SYNOPSIS
+  pm watchmode api get v1 title-release-dates [flags]
+  pm watchmode api get v1 title-release-dates --help
+
+DESCRIPTION
+  Documented GET /v1/title-release-dates/ (not implemented)
+
+INTENT
+  direct_read
+
+AVAILABILITY
+  not_implemented
+
+OPERATION
+  watchmode.get.v1-title-release-dates
+
+APPROVAL
+  not implemented: the direct-read executor has no non-redacting output policy for this provider operation
+
+RISK
+  medium
+
+NOTES
+  named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation
+
+FLAGS
+  No command-specific flags.
+
+PAGE FLAGS
+  --page (integer): Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.
+  --page-cursor (string): Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).
+NAME
+  pm watchmode genres list - Run the genres ETL stream
+
+SYNOPSIS
+  pm watchmode genres list [flags]
+  pm watchmode genres list --json
+
+DESCRIPTION
+  Run the genres ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  genres
+
+NOTES
+  discrepancy=present-in-surface-absent-from-artifact
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm watchmode networks list - Run the networks ETL stream
+
+SYNOPSIS
+  pm watchmode networks list [flags]
+  pm watchmode networks list --json
+
+DESCRIPTION
+  Run the networks ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  networks
+
+NOTES
+  discrepancy=present-in-surface-absent-from-artifact
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm watchmode person details list - Run the person details ETL stream
+
+SYNOPSIS
+  pm watchmode person details list [flags]
+  pm watchmode person details list --json
+
+DESCRIPTION
+  Run the person details ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  person_details
+
+NOTES
+  discrepancy=present-in-surface-absent-from-artifact
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm watchmode regions list - Run the regions ETL stream
+
+SYNOPSIS
+  pm watchmode regions list [flags]
+  pm watchmode regions list --json
+
+DESCRIPTION
+  Run the regions ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  regions
+
+NOTES
+  discrepancy=present-in-surface-absent-from-artifact
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm watchmode releases list - Run the releases ETL stream
+
+SYNOPSIS
+  pm watchmode releases list [flags]
+  pm watchmode releases list --json
+
+DESCRIPTION
+  Run the releases ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  releases
+
+NOTES
+  discrepancy=present-in-surface-absent-from-artifact
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm watchmode search list - Run the search ETL stream
+
+SYNOPSIS
+  pm watchmode search list [flags]
+  pm watchmode search list --json
+
+DESCRIPTION
+  Run the search ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  search
+
+NOTES
+  discrepancy=present-in-surface-absent-from-artifact
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm watchmode sources list - Run the sources ETL stream
+
+SYNOPSIS
+  pm watchmode sources list [flags]
+  pm watchmode sources list --json
+
+DESCRIPTION
+  Run the sources ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  sources
+
+NOTES
+  discrepancy=present-in-surface-absent-from-artifact
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm watchmode title cast crew list - Run the title cast crew ETL stream
+
+SYNOPSIS
+  pm watchmode title cast crew list [flags]
+  pm watchmode title cast crew list --json
+
+DESCRIPTION
+  Run the title cast crew ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  title_cast_crew
+
+NOTES
+  discrepancy=present-in-surface-absent-from-artifact
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm watchmode title details list - Run the title details ETL stream
+
+SYNOPSIS
+  pm watchmode title details list [flags]
+  pm watchmode title details list --json
+
+DESCRIPTION
+  Run the title details ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  title_details
+
+NOTES
+  discrepancy=present-in-surface-absent-from-artifact
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm watchmode title episodes list - Run the title episodes ETL stream
+
+SYNOPSIS
+  pm watchmode title episodes list [flags]
+  pm watchmode title episodes list --json
+
+DESCRIPTION
+  Run the title episodes ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  title_episodes
+
+NOTES
+  discrepancy=present-in-surface-absent-from-artifact
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm watchmode title seasons list - Run the title seasons ETL stream
+
+SYNOPSIS
+  pm watchmode title seasons list [flags]
+  pm watchmode title seasons list --json
+
+DESCRIPTION
+  Run the title seasons ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  title_seasons
+
+NOTES
+  discrepancy=present-in-surface-absent-from-artifact
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm watchmode title sources list - Run the title sources ETL stream
+
+SYNOPSIS
+  pm watchmode title sources list [flags]
+  pm watchmode title sources list --json
+
+DESCRIPTION
+  Run the title sources ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  title_sources
+
+NOTES
+  discrepancy=present-in-surface-absent-from-artifact
+
+FLAGS
+  No command-specific flags.
+NAME
+  pm watchmode titles list - Run the titles ETL stream
+
+SYNOPSIS
+  pm watchmode titles list [flags]
+  pm watchmode titles list --json
+
+DESCRIPTION
+  Run the titles ETL stream
+
+INTENT
+  etl
+
+AVAILABILITY
+  implemented
+
+STREAM
+  titles
+
+NOTES
+  discrepancy=present-in-surface-absent-from-artifact
+
+FLAGS
+  No command-specific flags.

@@ -1,0 +1,36 @@
+connector	command	exit
+docuseal	__namespace__	0
+docuseal	api get submissions id	0
+docuseal	api get submissions id documents	0
+docuseal	api get submitters id	0
+docuseal	api post submissions docx	0
+docuseal	api post submissions emails	0
+docuseal	api post submissions html	0
+docuseal	api post submissions pdf	0
+docuseal	api post templates docx	0
+docuseal	api post templates html	0
+docuseal	api post templates merge	0
+docuseal	api post templates pdf	0
+docuseal	api put submissions id	0
+docuseal	api put templates id documents	0
+docuseal	api webhook formcompletedwebhook-post	0
+docuseal	api webhook formdeclinedwebhook-post	0
+docuseal	api webhook formstartedwebhook-post	0
+docuseal	api webhook formviewedwebhook-post	0
+docuseal	api webhook submissionarchivedwebhook-post	0
+docuseal	api webhook submissioncompletedwebhook-post	0
+docuseal	api webhook submissioncreatedwebhook-post	0
+docuseal	api webhook submissionexpiredwebhook-post	0
+docuseal	api webhook templatearchivedwebhook-post	0
+docuseal	api webhook templatecreatedwebhook-post	0
+docuseal	api webhook templateupdatedwebhook-post	0
+docuseal	archive submission apply	0
+docuseal	archive template apply	0
+docuseal	clone template apply	0
+docuseal	create submission apply	0
+docuseal	submissions list	0
+docuseal	submitters list	0
+docuseal	template detail list	0
+docuseal	templates list	0
+docuseal	update submitter apply	0
+docuseal	update template apply	0

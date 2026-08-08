@@ -1,0 +1,185 @@
+watchmode	api get autocomplete-search	0	not_implemented
+watchmode	api get changes new-people	0	not_implemented
+watchmode	api get changes new-titles	0	not_implemented
+watchmode	api get changes titles-details-changed	0	not_implemented
+watchmode	api get changes titles-episodes-changed	0	not_implemented
+watchmode	api get changes titles-sources-changed	0	not_implemented
+watchmode	api get genres	0	not_implemented
+watchmode	api get list-titles	0	not_implemented
+watchmode	api get networks	0	not_implemented
+watchmode	api get person person-id	0	not_implemented
+watchmode	api get regions	0	not_implemented
+watchmode	api get releases	0	not_implemented
+watchmode	api get search	0	not_implemented
+watchmode	api get sources	0	not_implemented
+watchmode	api get status	0	not_implemented
+watchmode	api get title title-id cast-crew	0	not_implemented
+watchmode	api get title title-id details	0	not_implemented
+watchmode	api get title title-id episodes	0	not_implemented
+watchmode	api get title title-id episodes episode-id	0	not_implemented
+watchmode	api get title title-id incorrect-data	0	not_implemented
+watchmode	api get title title-id seasons	0	not_implemented
+watchmode	api get title title-id sources	0	not_implemented
+watchmode	api get title-release-dates	0	not_implemented
+watchmode	api get v1 autocomplete-search	0	not_implemented
+watchmode	api get v1 changes new-people	0	not_implemented
+watchmode	api get v1 changes new-titles	0	not_implemented
+watchmode	api get v1 changes titles-details-changed	0	not_implemented
+watchmode	api get v1 changes titles-episodes-changed	0	not_implemented
+watchmode	api get v1 changes titles-sources-changed	0	not_implemented
+watchmode	api get v1 status	0	not_implemented
+watchmode	api get v1 title title-id incorrect-data	0	not_implemented
+watchmode	api get v1 title-release-dates	0	not_implemented
+watchmode	genres list	0	implemented
+watchmode	networks list	0	implemented
+watchmode	person details list	0	implemented
+watchmode	regions list	0	implemented
+watchmode	releases list	0	implemented
+watchmode	search list	0	implemented
+watchmode	sources list	0	implemented
+watchmode	title cast crew list	0	implemented
+watchmode	title details list	0	implemented
+watchmode	title episodes list	0	implemented
+watchmode	title seasons list	0	implemented
+watchmode	title sources list	0	implemented
+watchmode	titles list	0	implemented
+docuseal	<bare namespace>	0	bare
+docuseal	api get submissions id	0	not_implemented
+docuseal	api get submissions id documents	0	not_implemented
+docuseal	api get submitters id	0	not_implemented
+docuseal	api post submissions docx	0	not_implemented
+docuseal	api post submissions emails	0	not_implemented
+docuseal	api post submissions html	0	not_implemented
+docuseal	api post submissions pdf	0	not_implemented
+docuseal	api post templates docx	0	not_implemented
+docuseal	api post templates html	0	not_implemented
+docuseal	api post templates merge	0	not_implemented
+docuseal	api post templates pdf	0	not_implemented
+docuseal	api put submissions id	0	not_implemented
+docuseal	api put templates id documents	0	not_implemented
+docuseal	api webhook formcompletedwebhook-post	0	not_implemented
+docuseal	api webhook formdeclinedwebhook-post	0	not_implemented
+docuseal	api webhook formstartedwebhook-post	0	not_implemented
+docuseal	api webhook formviewedwebhook-post	0	not_implemented
+docuseal	api webhook submissionarchivedwebhook-post	0	not_implemented
+docuseal	api webhook submissioncompletedwebhook-post	0	not_implemented
+docuseal	api webhook submissioncreatedwebhook-post	0	not_implemented
+docuseal	api webhook submissionexpiredwebhook-post	0	not_implemented
+docuseal	api webhook templatearchivedwebhook-post	0	not_implemented
+docuseal	api webhook templatecreatedwebhook-post	0	not_implemented
+docuseal	api webhook templateupdatedwebhook-post	0	not_implemented
+docuseal	archive submission apply	0	implemented
+docuseal	archive template apply	0	implemented
+docuseal	clone template apply	0	implemented
+docuseal	create submission apply	0	not_implemented
+docuseal	submissions list	0	implemented
+docuseal	submitters list	0	implemented
+docuseal	template detail list	0	implemented
+docuseal	templates list	0	implemented
+docuseal	update submitter apply	0	implemented
+docuseal	update template apply	0	implemented
+float	<bare namespace>	0	bare
+float	api delete clients client-id	0	not_implemented
+float	api delete currencies currency-id	0	not_implemented
+float	api delete departments department-id	0	not_implemented
+float	api delete holidays holiday-id	0	not_implemented
+float	api delete logged-time logged-time-id	0	not_implemented
+float	api delete milestones milestone-id	0	not_implemented
+float	api delete people people-id	0	not_implemented
+float	api delete phases phase-id	0	not_implemented
+float	api delete project-expenses project-expense-id	0	not_implemented
+float	api delete project-stages id	0	not_implemented
+float	api delete project-tasks project-task-id	0	not_implemented
+float	api delete projects project-id	0	not_implemented
+float	api delete rate-cards rate-card-id	0	not_implemented
+float	api delete roles role-id	0	not_implemented
+float	api delete status status-id	0	not_implemented
+float	api delete tasks task-id	0	not_implemented
+float	api delete timeoffs timeoff-id	0	not_implemented
+float	api get accounts	0	not_implemented
+float	api get accounts account-id	0	not_implemented
+float	api get allocations	0	not_implemented
+float	api get clients client-id	0	not_implemented
+float	api get currencies	0	not_implemented
+float	api get currencies currency-id	0	not_implemented
+float	api get deleted logged-time	0	not_implemented
+float	api get deleted tasks	0	not_implemented
+float	api get deleted timeoffs	0	not_implemented
+float	api get departments department-id	0	not_implemented
+float	api get holidays	0	not_implemented
+float	api get holidays holiday-id	0	not_implemented
+float	api get logged-time	0	not_implemented
+float	api get logged-time logged-time-id	0	not_implemented
+float	api get milestones	0	not_implemented
+float	api get milestones milestone-id	0	not_implemented
+float	api get people people-id	0	not_implemented
+float	api get phases	0	not_implemented
+float	api get phases phase-id	0	not_implemented
+float	api get project-expenses	0	not_implemented
+float	api get project-expenses project-expense-id	0	not_implemented
+float	api get project-stages	0	not_implemented
+float	api get project-stages id	0	not_implemented
+float	api get project-tasks	0	not_implemented
+float	api get project-tasks project-task-id	0	not_implemented
+float	api get project-templates	0	not_implemented
+float	api get project-templates project-template-id	0	not_implemented
+float	api get projects project-id	0	not_implemented
+float	api get public-holidays	0	not_implemented
+float	api get public-holidays public-holiday-id	0	not_implemented
+float	api get rate-cards	0	not_implemented
+float	api get rate-cards rate-card-id	0	not_implemented
+float	api get reports people	0	not_implemented
+float	api get reports projects	0	not_implemented
+float	api get roles	0	not_implemented
+float	api get roles role-id	0	not_implemented
+float	api get status	0	not_implemented
+float	api get status status-id	0	not_implemented
+float	api get statuses	0	not_implemented
+float	api get tasks task-id	0	not_implemented
+float	api get timeoff-types	0	not_implemented
+float	api get timeoff-types timeoff-type-id	0	not_implemented
+float	api get timeoffs	0	not_implemented
+float	api get timeoffs timeoff-id	0	not_implemented
+float	api patch clients client-id	0	not_implemented
+float	api patch currencies currency-id	0	not_implemented
+float	api patch departments department-id	0	not_implemented
+float	api patch holidays holiday-id	0	not_implemented
+float	api patch logged-time logged-time-id	0	not_implemented
+float	api patch milestones milestone-id	0	not_implemented
+float	api patch people people-id	0	not_implemented
+float	api patch phases phase-id	0	not_implemented
+float	api patch project-expenses project-expense-id	0	not_implemented
+float	api patch project-stages id	0	not_implemented
+float	api patch project-tasks project-task-id	0	not_implemented
+float	api patch projects project-id	0	not_implemented
+float	api patch rate-cards rate-card-id	0	not_implemented
+float	api patch roles role-id	0	not_implemented
+float	api patch status status-id	0	not_implemented
+float	api patch tasks task-id	0	not_implemented
+float	api patch timeoff-types timeoff-type-id	0	not_implemented
+float	api patch timeoffs timeoff-id	0	not_implemented
+float	api post clients	0	not_implemented
+float	api post currencies	0	not_implemented
+float	api post departments	0	not_implemented
+float	api post holidays	0	not_implemented
+float	api post logged-time	0	not_implemented
+float	api post milestones	0	not_implemented
+float	api post people	0	not_implemented
+float	api post phases	0	not_implemented
+float	api post project-expenses	0	not_implemented
+float	api post project-stages	0	not_implemented
+float	api post project-tasks	0	not_implemented
+float	api post project-tasks merge	0	not_implemented
+float	api post projects	0	not_implemented
+float	api post projects from-template project-template-id	0	not_implemented
+float	api post rate-cards	0	not_implemented
+float	api post roles	0	not_implemented
+float	api post status	0	not_implemented
+float	api post tasks	0	not_implemented
+float	api post timeoff-types	0	not_implemented
+float	api post timeoffs	0	not_implemented
+float	clients list	0	implemented
+float	departments list	0	implemented
+float	people list	0	implemented
+float	projects list	0	implemented
+float	tasks list	0	implemented

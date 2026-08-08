@@ -1,0 +1,126 @@
+definitions:
+  Department:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      department_id:
+        type: "integer"
+        example: 123
+        description: "The ID of this department"
+        readOnly: true
+      parent_id:
+        type: "integer"
+        example: 123
+        description: "The ID of this department's parent department (identifies this as a sub-department if not `null`)"
+      name:
+        type: "string"
+        example: "Engineers"
+        description: "The name of the department"
+        maxLength: 200
+    title: "Department"
+
+departments:
+  get:
+    tags:
+    - "Departments"
+    summary: "List departments"
+    operationId: "getDepartments"
+    parameters:
+    - $ref: "../swagger-api-v3.yaml#/parameters/page"
+    - $ref: "../swagger-api-v3.yaml#/parameters/per-page"
+    responses:
+      200:
+        description: "List of departments"
+        schema:
+          type: "array"
+          title: "Array of departments"
+          items:
+            $ref: "#/definitions/Department"
+        headers:
+          X-Pagination-Total-Count:
+            type: "integer"
+            description: "Total number of items"
+          X-Pagination-Page-Count:
+            type: "integer"
+            description: "Total number of pages"
+          X-Pagination-Current-Page:
+            type: "integer"
+            description: "Current page number"
+          X-Pagination-Per-Page:
+            type: "integer"
+            description: "Number of items per page"
+  post:
+    tags:
+    - "Departments"
+    summary: "Add a new department"
+    operationId: "addDepartment"
+    parameters:
+    - in: "body"
+      name: "department"
+      description: "The department to create, read-only fields are ignored"
+      required: false
+      schema:
+        $ref: "#/definitions/Department"
+    responses:
+      201:
+        description: "If the department was successfully created, the response returns the full information about that department."
+        schema:
+          $ref: "#/definitions/Department"
+      422:
+        description: "Data validation failure."
+
+departments-id:
+  get:
+    tags:
+    - "Departments"
+    summary: "Retrieve a single department"
+    description: "Returns a single department."
+    operationId: "getDepartment"
+    parameters:
+    - name: "department_id"
+      in: "path"
+      description: "The department's id"
+      required: true
+      type: "integer"
+    responses:
+      200:
+        description: "Details of a single department."
+        schema:
+          $ref: "#/definitions/Department"
+      404:
+        description: "The department does not exist."
+  delete:
+    tags:
+    - "Departments"
+    summary: "Delete a department"
+    operationId: "deleteDepartment"
+    parameters:
+    - name: "department_id"
+      in: "path"
+      description: "department id to delete"
+      required: true
+      type: "integer"
+    responses:
+      204:
+        description: "Delete successful, if this `department_id` is currently used in any people it will be set to `null`."
+      404:
+        description: "The department does not exist."
+  patch:
+    tags:
+    - "Departments"
+    summary: "Update a department's details, read-only fields are ignored"
+    operationId: "updateDepartment"
+    parameters:
+    - name: "department_id"
+      in: "path"
+      description: "The department's id"
+      required: true
+      type: "integer"
+    responses:
+      200:
+        description: "On a successful update of a department, the response returns the full information about that department."
+        schema:
+          $ref: "#/definitions/Department"
+      422:
+        description: "Data validation failure."

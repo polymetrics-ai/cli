@@ -68,3 +68,26 @@ no credentials or provider data were used.
 The fresh artifact, exact operation map, generated bundle, timings, reports,
 and binary sweep outputs are under
 `.planning/phases/persistiq-artifact-materialize-pilot-r1/rerun-2026-08-08/`.
+
+## Multi-source extension verification
+
+The required generalization pilots now pass under the captain's source-order
+contract. Watchmode (23), DocuSeal (34 including 11 OpenAPI 3.1 webhooks), and
+Float (102 after external Swagger path traversal) materialized and reached
+45/45, 34/34, and 104/104 real-binary command paths respectively. Copper's 77
+Postman operations materialized and passed the same static gate; reachability
+is intentionally not claimed because the existing native scaffold has no
+embedded command surface.
+
+The one combined staged gate included 4/4 candidates, dropped 0, checked 32
+implemented commands, and saw 265 declared operation rows. `connectorgen
+validate` returned 0 findings and 0 warnings; `surface-sync --check` reported
+no drift. Per-operation source URL/kind/version/hash/date/coordinate and
+alternative citations are recorded in the staged `api_surface.json` files and
+the operation-map reports under
+`generalization-validation-2026-08-08/`.
+
+Final rerun timing evidence: materialize Watchmode 6.07s, DocuSeal 1.75s,
+Float 0.94s, Copper 0.99s; shared validate 1.02s, surface-sync derive/check
+0.89s/1.05s, batch gate 1.17s, binary build 12.27s; binary reachability
+105.88s/79.62s/251.73s. No provider operation was exercised.

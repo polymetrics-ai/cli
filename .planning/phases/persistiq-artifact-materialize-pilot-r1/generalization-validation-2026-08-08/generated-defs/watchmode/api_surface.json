@@ -3,11 +3,13 @@
   "docs": "https://api.watchmode.com/docs",
   "reviewed_at": "2026-08-08",
   "operation_ledger_version": 2,
-  "scope": "Provider-artifact inventory generated from the cited openapi artifact (23 documented HTTP operations). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (23 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
   "artifacts": [
     {
       "id": "watchmode-artifact-2026-08-08",
       "url": "https://api.watchmode.com/openapi.json",
+      "kind": "openapi",
+      "version": "3.0.3",
       "retrieved_at": "2026-08-08",
       "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48"
     }
@@ -18,7 +20,12 @@
       "path": "/autocomplete-search",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/autocomplete-search\"].get"
       },
       "operation": {
         "model": "direct_read",
@@ -34,7 +41,12 @@
       "path": "/changes/new_people",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/changes/new_people\"].get"
       },
       "operation": {
         "model": "direct_read",
@@ -50,7 +62,12 @@
       "path": "/changes/new_titles",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/changes/new_titles\"].get"
       },
       "operation": {
         "model": "direct_read",
@@ -66,7 +83,12 @@
       "path": "/changes/titles_details_changed",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/changes/titles_details_changed\"].get"
       },
       "operation": {
         "model": "direct_read",
@@ -82,7 +104,12 @@
       "path": "/changes/titles_episodes_changed",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/changes/titles_episodes_changed\"].get"
       },
       "operation": {
         "model": "direct_read",
@@ -98,7 +125,12 @@
       "path": "/changes/titles_sources_changed",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/changes/titles_sources_changed\"].get"
       },
       "operation": {
         "model": "direct_read",
@@ -114,7 +146,12 @@
       "path": "/genres",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/genres\"].get"
       },
       "operation": {
         "model": "direct_read",
@@ -130,7 +167,12 @@
       "path": "/list-titles",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/list-titles\"].get"
       },
       "operation": {
         "model": "direct_read",
@@ -146,7 +188,12 @@
       "path": "/networks",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/networks\"].get"
       },
       "operation": {
         "model": "direct_read",
@@ -162,7 +209,12 @@
       "path": "/person/{person_id}",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/person/{person_id}\"].get"
       },
       "operation": {
         "model": "direct_read",
@@ -178,7 +230,12 @@
       "path": "/regions",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/regions\"].get"
       },
       "operation": {
         "model": "direct_read",
@@ -194,7 +251,12 @@
       "path": "/releases",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/releases\"].get"
       },
       "operation": {
         "model": "direct_read",
@@ -210,7 +272,12 @@
       "path": "/search",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/search\"].get"
       },
       "operation": {
         "model": "direct_read",
@@ -226,7 +293,12 @@
       "path": "/sources",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/sources\"].get"
       },
       "operation": {
         "model": "direct_read",
@@ -242,7 +314,12 @@
       "path": "/status",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/status\"].get"
       },
       "operation": {
         "model": "direct_read",
@@ -258,7 +335,12 @@
       "path": "/title-release-dates",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/title-release-dates\"].get"
       },
       "operation": {
         "model": "direct_read",
@@ -274,7 +356,12 @@
       "path": "/title/{title_id}/cast-crew",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/title/{title_id}/cast-crew\"].get"
       },
       "operation": {
         "model": "direct_read",
@@ -290,7 +377,12 @@
       "path": "/title/{title_id}/details",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/title/{title_id}/details\"].get"
       },
       "operation": {
         "model": "direct_read",
@@ -306,7 +398,12 @@
       "path": "/title/{title_id}/episodes",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/title/{title_id}/episodes\"].get"
       },
       "operation": {
         "model": "direct_read",
@@ -322,7 +419,12 @@
       "path": "/title/{title_id}/episodes/{episode_id}",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/title/{title_id}/episodes/{episode_id}\"].get"
       },
       "operation": {
         "model": "direct_read",
@@ -338,7 +440,12 @@
       "path": "/title/{title_id}/incorrect-data",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/title/{title_id}/incorrect-data\"].get"
       },
       "operation": {
         "model": "direct_read",
@@ -354,7 +461,12 @@
       "path": "/title/{title_id}/seasons",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/title/{title_id}/seasons\"].get"
       },
       "operation": {
         "model": "direct_read",
@@ -370,7 +482,12 @@
       "path": "/title/{title_id}/sources",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/title/{title_id}/sources\"].get"
       },
       "operation": {
         "model": "direct_read",
@@ -387,7 +504,12 @@
       "discrepancy": "present-in-surface-absent-from-artifact",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/autocomplete-search/]"
       },
       "operation": {
         "model": "disallowed",
@@ -404,7 +526,12 @@
       "discrepancy": "present-in-surface-absent-from-artifact",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/changes/new_people/]"
       },
       "operation": {
         "model": "disallowed",
@@ -421,7 +548,12 @@
       "discrepancy": "present-in-surface-absent-from-artifact",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/changes/new_titles/]"
       },
       "operation": {
         "model": "disallowed",
@@ -438,7 +570,12 @@
       "discrepancy": "present-in-surface-absent-from-artifact",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/changes/titles_details_changed/]"
       },
       "operation": {
         "model": "disallowed",
@@ -455,7 +592,12 @@
       "discrepancy": "present-in-surface-absent-from-artifact",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/changes/titles_episodes_changed/]"
       },
       "operation": {
         "model": "disallowed",
@@ -472,7 +614,12 @@
       "discrepancy": "present-in-surface-absent-from-artifact",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/changes/titles_sources_changed/]"
       },
       "operation": {
         "model": "disallowed",
@@ -489,7 +636,12 @@
       "discrepancy": "present-in-surface-absent-from-artifact",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/genres/]"
       },
       "covered_by": {
         "stream": "genres"
@@ -501,7 +653,12 @@
       "discrepancy": "present-in-surface-absent-from-artifact",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/list-titles/]"
       },
       "covered_by": {
         "stream": "titles"
@@ -513,7 +670,12 @@
       "discrepancy": "present-in-surface-absent-from-artifact",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/networks/]"
       },
       "covered_by": {
         "stream": "networks"
@@ -525,7 +687,12 @@
       "discrepancy": "present-in-surface-absent-from-artifact",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/person/{person_id}/]"
       },
       "covered_by": {
         "stream": "person_details"
@@ -537,7 +704,12 @@
       "discrepancy": "present-in-surface-absent-from-artifact",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/regions/]"
       },
       "covered_by": {
         "stream": "regions"
@@ -549,7 +721,12 @@
       "discrepancy": "present-in-surface-absent-from-artifact",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/releases/]"
       },
       "covered_by": {
         "stream": "releases"
@@ -561,7 +738,12 @@
       "discrepancy": "present-in-surface-absent-from-artifact",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/search/]"
       },
       "covered_by": {
         "stream": "search"
@@ -573,7 +755,12 @@
       "discrepancy": "present-in-surface-absent-from-artifact",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/sources/]"
       },
       "covered_by": {
         "stream": "sources"
@@ -585,7 +772,12 @@
       "discrepancy": "present-in-surface-absent-from-artifact",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/status/]"
       },
       "operation": {
         "model": "disallowed",
@@ -602,7 +794,12 @@
       "discrepancy": "present-in-surface-absent-from-artifact",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/title-release-dates/]"
       },
       "operation": {
         "model": "disallowed",
@@ -619,7 +816,12 @@
       "discrepancy": "present-in-surface-absent-from-artifact",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/title/{title_id}/cast-crew/]"
       },
       "covered_by": {
         "stream": "title_cast_crew"
@@ -631,7 +833,12 @@
       "discrepancy": "present-in-surface-absent-from-artifact",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/title/{title_id}/details/]"
       },
       "covered_by": {
         "stream": "title_details"
@@ -643,7 +850,12 @@
       "discrepancy": "present-in-surface-absent-from-artifact",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/title/{title_id}/episodes/]"
       },
       "covered_by": {
         "stream": "title_episodes"
@@ -655,7 +867,12 @@
       "discrepancy": "present-in-surface-absent-from-artifact",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/title/{title_id}/incorrect-data/]"
       },
       "operation": {
         "model": "disallowed",
@@ -672,7 +889,12 @@
       "discrepancy": "present-in-surface-absent-from-artifact",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/title/{title_id}/seasons/]"
       },
       "covered_by": {
         "stream": "title_seasons"
@@ -684,7 +906,12 @@
       "discrepancy": "present-in-surface-absent-from-artifact",
       "provenance": {
         "artifact": "watchmode-artifact-2026-08-08",
-        "source_url": "https://api.watchmode.com/openapi.json"
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/title/{title_id}/sources/]"
       },
       "covered_by": {
         "stream": "title_sources"

@@ -1,0 +1,235 @@
+parameters:
+  rate_card_id:
+    name: "rate_card_id"
+    in: "path"
+    description: "The rate card's ID"
+    required: true
+    type: "integer"
+  expand:
+    name: "expand"
+    in: "query"
+    description: "Comma-delimited values expands the response with additional fields: `roles`, `project_count`"
+    required: false
+    type: "string"
+  client_ids:
+    name: "client_ids"
+    in: "query"
+    description: "Comma-delimited list of client IDs. Filters the response to rate cards restricted to any of the given clients"
+    required: false
+    type: "string"
+  currency_code:
+    name: "currency_code"
+    in: "query"
+    description: "Filter the response to rate cards with this currency code"
+    required: false
+    type: "string"
+  active:
+    name: "active"
+    in: "query"
+    description: "Filter response on `0` = inactive or `1` = active rate cards"
+    required: false
+    type: "integer"
+
+definitions:
+  RateCardRole:
+    type: "object"
+    title: "RateCardRole"
+    required:
+    - "role_id"
+    - "bill_rate"
+    properties:
+      rate_card_role_id:
+        type: "integer"
+        example: 96020
+        description: "The ID of this role rate within the rate card"
+        readOnly: true
+      role_id:
+        type: "integer"
+        example: 91001
+        description: "The ID of a [role](/api_reference#Roles)"
+      bill_rate:
+        type: "number"
+        format: "float"
+        example: 175.0
+        minimum: 0
+        maximum: 999999
+        description: "The bill rate applied to team members with this role when the rate card is used, from `0` to `999999`"
+
+  RateCard:
+    type: "object"
+    title: "RateCard"
+    required:
+    - "name"
+    properties:
+      rate_card_id:
+        type: "integer"
+        example: 95020
+        description: "The ID of the rate card"
+        readOnly: true
+      name:
+        type: "string"
+        example: "Premium USD Rates 2026"
+        description: "The name of the rate card, must be unique among rate cards with overlapping `client_ids`"
+        maxLength: 255
+      currency_code:
+        type: "string"
+        example: "USD"
+        description: "The ISO 4217 currency code for this rate card. Defaults to the company's currency if omitted; if provided it must match a currency configured for the company. Cannot be changed once a project is using this rate card"
+      active:
+        type: "integer"
+        example: 1
+        description: "Is this rate card active? `1` = Active, `0` = Inactive. Defaults to `1`"
+      client_ids:
+        type: "array"
+        example:
+        - 45672
+        items:
+          type: "integer"
+        description: "The IDs of the clients this rate card is restricted to. An empty array makes the rate card available to all projects. Restricting a rate card to specific clients requires a Pro or Enterprise plan"
+      roles:
+        type: "array"
+        items:
+          $ref: "#/definitions/RateCardRole"
+        description: "`expand` field. The bill rates defined for each role on this rate card. Only returned when using `expand=roles`. On PATCH, sending this field replaces the full set of roles: role rates omitted from the array are removed, existing `role_id` values are updated, and new ones are added"
+      project_count:
+        type: "integer"
+        example: 2
+        description: "`expand` field. The number of projects currently using this rate card. Only returned when using `expand=project_count`"
+        readOnly: true
+      created_by:
+        type: "integer"
+        example: 17393464
+        description: "Account ID of the person who created this rate card"
+        readOnly: true
+      modified_by:
+        type: "integer"
+        example: 17393464
+        description: "Account ID of the person who last modified this rate card"
+        readOnly: true
+      created:
+        type: "string"
+        example: "2026-06-30 02:40:40.000"
+        description: "Date this record was created"
+        readOnly: true
+      modified:
+        type: "string"
+        example: "2026-06-30 03:02:05.000"
+        description: "Date this record was last modified"
+        readOnly: true
+
+rate-cards:
+  get:
+    tags:
+    - "Rate Cards"
+    summary: "List rate cards"
+    description: "Returns the list of rate cards configured for the company."
+    operationId: "getRateCards"
+    parameters:
+    - $ref: "#/parameters/client_ids"
+    - $ref: "#/parameters/currency_code"
+    - $ref: "#/parameters/active"
+    - $ref: "../swagger-api-v3.yaml#/parameters/page"
+    - $ref: "../swagger-api-v3.yaml#/parameters/per-page"
+    - $ref: "#/parameters/expand"
+    responses:
+      200:
+        description: "The list of rate cards"
+        schema:
+          type: "array"
+          title: "Array of rate cards"
+          items:
+            $ref: "#/definitions/RateCard"
+        headers:
+          X-Pagination-Total-Count:
+            type: "integer"
+            description: "Total number of items"
+          X-Pagination-Page-Count:
+            type: "integer"
+            description: "Total number of pages"
+          X-Pagination-Current-Page:
+            type: "integer"
+            description: "Current page number"
+          X-Pagination-Per-Page:
+            type: "integer"
+            description: "Number of items per page"
+  post:
+    tags:
+    - "Rate Cards"
+    summary: "Add a new rate card"
+    description: "Creates a new rate card for the company. If `currency_code` is omitted, it defaults to the company's currency."
+    operationId: "addRateCard"
+    parameters:
+    - in: "body"
+      name: "data"
+      description: "The rate card to create, read-only fields are ignored"
+      required: false
+      schema:
+        $ref: "#/definitions/RateCard"
+    responses:
+      201:
+        description: "The rate card was successfully created"
+        schema:
+          $ref: "#/definitions/RateCard"
+      422:
+        description: "Data validation failure, see error for details"
+
+rate-cards-id:
+  get:
+    tags:
+    - "Rate Cards"
+    summary: "Retrieve a single rate card"
+    description: "Returns a single rate card by ID."
+    operationId: "getRateCard"
+    parameters:
+    - $ref: "#/parameters/rate_card_id"
+    - $ref: "#/parameters/expand"
+    responses:
+      200:
+        description: "A rate card record"
+        schema:
+          $ref: "#/definitions/RateCard"
+      404:
+        description: "The rate card does not exist"
+  patch:
+    tags:
+    - "Rate Cards"
+    summary: "Update a rate card, read-only fields are ignored"
+    description: >
+      Updates a rate card. `roles` and `client_ids`, when included, replace the full existing set rather than merging with it.
+
+
+      The `currency_code` cannot be changed once a project is using this rate card.
+    operationId: "updateRateCard"
+    parameters:
+    - $ref: "#/parameters/rate_card_id"
+    - $ref: "#/parameters/expand"
+    - in: "body"
+      name: "data"
+      description: "The rate card data to update, read-only fields are ignored"
+      required: false
+      schema:
+        $ref: "#/definitions/RateCard"
+    responses:
+      200:
+        description: "Successful update of a rate card"
+        schema:
+          $ref: "#/definitions/RateCard"
+      404:
+        description: "The rate card does not exist"
+      422:
+        description: "Data validation failure, see error for details"
+  delete:
+    tags:
+    - "Rate Cards"
+    summary: "Delete a rate card"
+    description: "Deletes a rate card. A rate card cannot be deleted while it is in use by a project or project template."
+    operationId: "deleteRateCard"
+    parameters:
+    - $ref: "#/parameters/rate_card_id"
+    responses:
+      204:
+        description: "Delete successful"
+      404:
+        description: "The rate card does not exist"
+      422:
+        description: "The rate card is in use by a project or project template and cannot be deleted"
