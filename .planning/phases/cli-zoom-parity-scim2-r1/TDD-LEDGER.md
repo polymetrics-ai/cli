@@ -122,6 +122,30 @@ extensible (including custom fields) while retaining a fixed operation, fixed en
 lifecycle, operation body-schema validation, and request cap. It does not create a raw JSON or raw
 HTTP command.
 
+## RED foundation — literal root-object member redaction
+
+SCIM extension members are literal JSON property names such as
+`urn:ietf:params:scim:schemas:extension:zoom:2.0:User`. The existing direct-write preview redactor
+split every declared field on `.`, so it could not redact that literal root property and a plan could
+expose extension contents. This is a reusable direct-write privacy defect, not a SCIM-specific
+exception: a declared root JSON object may legally contain provider-defined property names with dots.
+
+The focused RED test was added before the production redactor change and run without a provider
+credential:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/commandrunner -run '^TestBuildOperationDirectWriteCommandRedactsLiteralRootJSONObjectField$'
+--- FAIL: TestBuildOperationDirectWriteCommandRedactsLiteralRootJSONObjectField (0.00s)
+    runner_test.go:1952: literal root extension field was not redacted in direct-write preview
+FAIL
+FAIL    polymetrics.ai/internal/connectors/commandrunner
+FAIL
+```
+
+The narrow GREEN contract is to try the declared name as an exact root record key first, then retain
+the established dotted-path behavior for every non-literal field. It does not alter transport,
+operation selection, or input shaping.
+
 ## Planned GREEN connector contract
 
 - Four SCIM2 reads use bounded `json_redacted` output with declared PII/account field redaction.
