@@ -433,7 +433,8 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	maxBytes := clampOperationDirectWriteMaxBytes(op.REST.MaxBytes)
 	var form url.Values
 	var encodedBody string
-	if format == "multipart" {
+	switch format {
+	case "multipart":
 		object, ok := body.(map[string]any)
 		if !ok {
 			return preparedOperationDirectWrite{}, fmt.Errorf("operation %q multipart body must be a JSON object", op.ID)
@@ -447,7 +448,7 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 			return preparedOperationDirectWrite{}, fmt.Errorf("operation %q: encode canonical multipart request: %w", op.ID, marshalErr)
 		}
 		encodedBody = string(raw)
-	} else if format == "base64_upload" {
+	case "base64_upload":
 		object, ok := body.(map[string]any)
 		if !ok {
 			return preparedOperationDirectWrite{}, fmt.Errorf("operation %q base64 upload body must be a JSON object", op.ID)
@@ -461,7 +462,7 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 			return preparedOperationDirectWrite{}, fmt.Errorf("operation %q: encode canonical base64 upload request: %w", op.ID, marshalErr)
 		}
 		encodedBody = string(raw)
-	} else {
+	default:
 		form, encodedBody, err = operationDirectWritePreparedBody(op, body, format, maxBytes)
 		if err != nil {
 			return preparedOperationDirectWrite{}, err
