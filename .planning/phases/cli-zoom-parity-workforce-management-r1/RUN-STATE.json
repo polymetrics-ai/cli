@@ -1,0 +1,41 @@
+{
+  "phase": "cli-zoom-parity-workforce-management-r1",
+  "issue": 3938,
+  "parent_issue": 3915,
+  "status": "planned",
+  "lifecycle": {
+    "mode": "inline-manual-gsd-fallback",
+    "reason": "This provider-category phase is not registered by the official runtime and the parent issue contract forbids role spawning.",
+    "sources_resolved": [
+      "discuss-phase",
+      "plan-phase",
+      "execute-phase",
+      "verify-work",
+      "code-review"
+    ],
+    "sources_resolved_at": "2026-08-08"
+  },
+  "source_artifact": {
+    "url": "https://developers.zoom.us/docs/api/workforce-management.md",
+    "retrieved_at": "2026-08-08T16:39:34Z",
+    "http_status": 200,
+    "bytes": 91852,
+    "sha256": "d9d32ad906fed900608ba486b55c446923d99d06245c87bae6e2602061d3b414",
+    "openapi": "3.1.1",
+    "server": "https://api.zoom.us/v2",
+    "ledger_delta": 0
+  },
+  "operations": 18,
+  "target": {
+    "covered": 102,
+    "locally_blocked": 1740,
+    "direct_reads": 55,
+    "direct_writes": 42,
+    "unsafe_or_disallowed": 0
+  },
+  "foundation": "required: declaration-owned bounded CSV multipart content validation plus .csv source-name constraints; staffing is source-capped at 1 MB and historical queue metrics receives a 10 MB local safety cap because the artifact declares none",
+  "red": "pending",
+  "green": "pending",
+  "verification": "pending",
+  "review": "pending"
+}
