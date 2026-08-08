@@ -13,4 +13,3 @@ choice:
 - report the not-certified / never-live-tested status in the PR handoff.
 
 No remaining product decision is required before planning.
-
