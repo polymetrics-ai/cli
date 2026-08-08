@@ -3,7 +3,6 @@ package dbtest
 import (
 	"context"
 	"errors"
-	"fmt"
 	"os/exec"
 	"path/filepath"
 	"reflect"
@@ -11,6 +10,8 @@ import (
 	"testing"
 	"time"
 )
+
+const testEndpoint = "unix:///tmp/dbtest.sock"
 
 type scriptedRunner struct {
 	volumePresent       bool
@@ -23,13 +24,15 @@ type scriptedRunner struct {
 	runErr              error
 	infoErr             error
 	infoOutput          string
+	infoOutputs         []string
+	infoCalls           int
 	images              map[string]bool
 	commands            [][]string
-	connections         []string
+	endpoints           []string
 }
 
-func (r *scriptedRunner) Run(_ context.Context, connection string, args ...string) (string, error) {
-	r.connections = append(r.connections, connection)
+func (r *scriptedRunner) Run(_ context.Context, endpoint string, args ...string) (string, error) {
+	r.endpoints = append(r.endpoints, endpoint)
 	r.commands = append(r.commands, append([]string(nil), args...))
 	switch {
 	case len(args) > 0 && args[0] == "pull":
@@ -83,10 +86,19 @@ func (r *scriptedRunner) Run(_ context.Context, connection string, args ...strin
 		if r.infoErr != nil {
 			return "", r.infoErr
 		}
-		if r.infoOutput != "" {
-			return r.infoOutput, nil
+		output := r.infoOutput
+		if len(r.infoOutputs) > 0 {
+			index := r.infoCalls
+			if index >= len(r.infoOutputs) {
+				index = len(r.infoOutputs) - 1
+			}
+			output = r.infoOutputs[index]
 		}
-		return "/var/lib/containers/storage\n", nil
+		r.infoCalls++
+		if output == "" {
+			output = "/tmp/dbtest.sock\t/var/lib/containers/storage\n"
+		}
+		return output, nil
 	}
 	return "", nil
 }
@@ -119,165 +131,38 @@ func commandsContain(commands [][]string, prefix ...string) bool {
 	return false
 }
 
-// scriptedMachineRunner tracks the machines a test created through NewMachine
-// and answers "machine inspect" for exactly those, so ownership can be
-// exercised without a VM. inspectName and inspectErr override that answer to
-// model a host that disagrees with the record.
-type scriptedMachineRunner struct {
-	inspectName         string
-	inspectErr          error
-	initErr             error
-	defaultConnection   string
-	defaultListErr      error
-	defaultSetErr       error
-	switchDefaultOnInit bool
-	targetDiskFree      uint64
-	// initWritesBeforeFailing models the real command: podman writes the VM
-	// config and its disk image before init can fail, and a cancelled context
-	// kills it mid-write, so the machine exists even though init reported none.
-	initWritesBeforeFailing bool
-	created                 map[string]bool
-	commands                [][]string
-}
-
-func (r *scriptedMachineRunner) Run(ctx context.Context, args ...string) (string, error) {
-	r.commands = append(r.commands, append([]string(nil), args...))
-	if commandHasPrefix(args, "system", "connection", "list") {
-		if r.defaultListErr != nil {
-			return "", r.defaultListErr
-		}
-		if r.defaultConnection == "" {
-			return "", nil
-		}
-		return r.defaultConnection + "\ttrue\n", nil
-	}
-	if commandHasPrefix(args, "system", "connection", "default") {
-		if r.defaultSetErr != nil {
-			return "", r.defaultSetErr
-		}
-		r.defaultConnection = args[len(args)-1]
-		return "", nil
-	}
-	name := args[len(args)-1]
-	switch {
-	case commandHasPrefix(args, "machine", "init"):
-		if r.initWritesBeforeFailing {
-			r.setCreated(name, true)
-		}
-		if err := ctx.Err(); err != nil {
-			return "", err
-		}
-		if r.initErr != nil {
-			return "", r.initErr
-		}
-		r.setCreated(name, true)
-		if r.switchDefaultOnInit {
-			r.defaultConnection = name
-		}
-	case commandHasPrefix(args, "machine", "ssh"):
-		if len(args) >= 6 && args[3] == "df" && args[4] == "-Pk" {
-			free := r.targetDiskFree
-			if free == 0 {
-				free = 1 << 30
-			}
-			return fmt.Sprintf("Filesystem 1024-blocks Used Available Capacity Mounted on\n/dev/vda %d 0 %d 0%% /\n", free/1024, free/1024), nil
-		}
-	case commandHasPrefix(args, "machine", "stop"), commandHasPrefix(args, "machine", "rm"):
-		if !r.created[name] {
-			return "", fmt.Errorf("%w: no such machine", errPodmanResourceNotFound)
-		}
-		if commandHasPrefix(args, "machine", "rm") {
-			r.setCreated(name, false)
-			if r.defaultConnection == name || r.defaultConnection == name+"-root" {
-				r.defaultConnection = ""
-			}
-		}
-	case commandHasPrefix(args, "machine", "inspect"):
-		if r.inspectErr != nil {
-			return "", r.inspectErr
-		}
-		if r.inspectName != "" {
-			return r.inspectName + "\n", nil
-		}
-		if !r.created[name] {
-			return "", errors.New("no such machine")
-		}
-		return name + "\n", nil
-	}
-	return "", nil
-}
-
-func (r *scriptedMachineRunner) setCreated(name string, present bool) {
-	if r.created == nil {
-		r.created = make(map[string]bool)
-	}
-	if present {
-		r.created[name] = true
-		return
-	}
-	delete(r.created, name)
-}
-
-// newOwnedTestMachine creates a machine through the package's own API, which
-// is the only thing that establishes an ownership record.
-func newOwnedTestMachine(t *testing.T, runner *scriptedMachineRunner) *Machine {
-	t.Helper()
-	machine, err := NewMachine(context.Background(), MachineConfig{Engine: "mysql", RunMachine: runner})
-	if err != nil {
-		t.Fatalf("NewMachine(): %v", err)
-	}
-	t.Cleanup(func() { _ = machine.Remove(context.Background()) })
-	return machine
-}
-
 func testConfig(runner CommandRunner) Config {
-	machineRunner := &scriptedMachineRunner{inspectName: "lane-machine", targetDiskFree: 1 << 30}
 	return Config{
-		Engine:         "mysql",
-		Image:          "example.invalid/mysql:8.4.11",
-		ContainerPort:  3306,
-		DataVolumePath: "/var/lib/mysql",
-		Connection:     "lane-machine",
-		// Small enough that the default 123-byte disk clears the pull headroom;
-		// the low-disk cases below configure their own realistic sizes.
+		Engine:             "mysql",
+		Image:              "example.invalid/mysql:8.4.11",
+		ContainerPort:      3306,
+		DataVolumePath:     "/var/lib/mysql",
+		ContainerEndpoint:  testEndpoint,
 		ExpectedImageBytes: 32,
 		Run:                runner,
-		RunMachine:         machineRunner,
-		DiskFree: func() (uint64, error) {
+		DiskFreeAt: func(string) (uint64, error) {
 			return 123, nil
 		},
 	}
 }
 
-// ownedMachineConfig points a config at a machine this test created, which is
-// the only state in which the source image may be removed and the machine
-// trimmed.
-func ownedMachineConfig(t *testing.T, runner CommandRunner) (Config, *scriptedMachineRunner, *Machine) {
-	t.Helper()
-	machineRunner := &scriptedMachineRunner{targetDiskFree: 1 << 30}
-	machine := newOwnedTestMachine(t, machineRunner)
-	config := testConfig(runner)
-	config.Connection = machine.Connection()
-	config.Machine = machine.Name()
-	config.RunMachine = machineRunner
-	return config, machineRunner, machine
-}
-
-func TestNewRejectsUnscopedConnection(t *testing.T) {
+func TestNewRejectsUnsafeEndpoints(t *testing.T) {
 	for _, tc := range []struct {
-		name       string
-		connection string
+		name     string
+		endpoint string
 	}{
-		{name: "empty falls back to the default connection", connection: ""},
-		{name: "whitespace only", connection: "  "},
-		{name: "argument injection", connection: "lane --remote"},
-		{name: "newline injection", connection: "lane\nmachine"},
+		{name: "empty", endpoint: ""},
+		{name: "named connection", endpoint: "lane-machine"},
+		{name: "remote ssh endpoint", endpoint: "ssh://core@127.0.0.1/run/podman.sock"},
+		{name: "remote TCP endpoint", endpoint: "tcp://127.0.0.1:1234"},
+		{name: "hosted Unix endpoint", endpoint: "unix://localhost/tmp/dbtest.sock"},
+		{name: "newline", endpoint: "unix:///tmp/dbtest.sock\n"},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			config := testConfig(&scriptedRunner{})
-			config.Connection = tc.connection
+			config.ContainerEndpoint = tc.endpoint
 			if _, err := New(config); err == nil {
-				t.Fatal("New() accepted an unsafe or absent Podman connection")
+				t.Fatal("New() accepted an unsafe or non-local Podman endpoint")
 			}
 		})
 	}
@@ -309,7 +194,6 @@ func TestCleanupRemovesOnlyRunOwnedResources(t *testing.T) {
 	if err != nil {
 		t.Fatalf("New(): %v", err)
 	}
-
 	endpoint, err := h.Start(context.Background())
 	if err != nil {
 		t.Fatalf("Start(): %v", err)
@@ -326,12 +210,12 @@ func TestCleanupRemovesOnlyRunOwnedResources(t *testing.T) {
 	if runner.imagePresent(h.runImage) {
 		t.Fatalf("images after cleanup = %#v, want the run-generated reference removed", runner.images)
 	}
-	// The default connection names a machine this run did not create, so the
-	// shared source reference is not this run's to remove.
 	if !runner.imagePresent(config.Image) {
-		t.Fatalf("images after cleanup = %#v, want the shared source image left in place", runner.images)
+		t.Fatalf("images after cleanup = %#v, want the source image retained", runner.images)
 	}
-
+	if commandsContain(runner.commands, "image", "rm", config.Image) {
+		t.Fatalf("commands = %v, want no source image removal", runner.commands)
+	}
 	var gotCleanup [][]string
 	for _, command := range runner.commands {
 		if commandHasPrefix(command, "container", "rm") || commandHasPrefix(command, "volume", "rm") || commandHasPrefix(command, "image", "rm") {
@@ -342,67 +226,107 @@ func TestCleanupRemovesOnlyRunOwnedResources(t *testing.T) {
 	if !reflect.DeepEqual(gotCleanup, want) {
 		t.Fatalf("cleanup order = %v, want %v", gotCleanup, want)
 	}
-	for _, connection := range runner.connections {
-		if connection != "lane-machine" {
-			t.Fatalf("podman command used connection %q, want the explicit connection", connection)
+	for _, endpoint := range runner.endpoints {
+		if endpoint != config.ContainerEndpoint {
+			t.Fatalf("Podman command used endpoint %q, want the configured endpoint", endpoint)
 		}
 	}
 	report := h.Report()
-	if report.DiskFreeBefore != 123 || report.DiskFreeAfter != 123 || report.HostDiskReclaimed {
-		t.Fatalf("disk report = %+v, want before/after values without reclaim", report)
-	}
-	if report.HostDiskReclaimSkipped == "" {
-		t.Fatalf("disk report = %+v, want a named reason for the skipped reclaim", report)
+	if report.DiskFreeBefore != 123 || report.DiskFreeAfter != 123 {
+		t.Fatalf("disk report = %+v, want target measurements", report)
 	}
 }
 
-// The source reference is shared with every other lane on a machine this run
-// did not create, and a pull against an already-cached image is a no-op, so
-// pulling it successfully proves nothing about who put it there. Ownership of
-// the machine is the only evidence that removing it can affect nobody else.
-func TestCleanupRemovesTheSourceImageOnlyWithOwnershipOrAnExplicitOptIn(t *testing.T) {
-	for _, tc := range []struct {
-		name       string
-		ownMachine bool
-		optIn      bool
-		wantRemove bool
-	}{
-		{name: "machine this run did not create", wantRemove: false},
-		{name: "machine this run created", ownMachine: true, wantRemove: true},
-		{name: "shared machine with the explicit opt-in", optIn: true, wantRemove: true},
+func TestStartFailsClosedWhenCachedTargetIdentityCannotBeProven(t *testing.T) {
+	runner := &scriptedRunner{infoOutputs: []string{
+		"/tmp/dbtest.sock\t/var/lib/containers/storage\n",
+		"/tmp/other.sock\t/var/lib/containers/storage\n",
+	}}
+	config := testConfig(runner)
+	runner.setImage(config.Image, true)
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err == nil {
+		t.Fatal("Start() accepted a cached image after the target identity changed")
+	}
+	for _, prefix := range [][]string{{"pull"}, {"image", "tag"}, {"volume", "create"}, {"run"}} {
+		if commandsContain(runner.commands, prefix...) {
+			t.Fatalf("commands = %v, want no mutation after identity proof failed", runner.commands)
+		}
+	}
+}
+
+func TestStartFailsClosedWhenCachedTargetCapacityCannotBeProven(t *testing.T) {
+	runner := &scriptedRunner{}
+	config := testConfig(runner)
+	runner.setImage(config.Image, true)
+	config.DiskFreeAt = func(string) (uint64, error) {
+		return 0, errors.New("unavailable")
+	}
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	startErr := func() error {
+		_, err := h.Start(context.Background())
+		return err
+	}()
+	if startErr == nil || !strings.Contains(startErr.Error(), "capacity") {
+		t.Fatalf("Start() error = %v, want a target capacity failure", startErr)
+	}
+	for _, prefix := range [][]string{{"pull"}, {"image", "tag"}, {"volume", "create"}, {"run"}} {
+		if commandsContain(runner.commands, prefix...) {
+			t.Fatalf("commands = %v, want no mutation before target capacity is proven", runner.commands)
+		}
+	}
+}
+
+func TestEveryTargetCommandRechecksTargetIdentity(t *testing.T) {
+	runner := &scriptedRunner{}
+	h, err := New(testConfig(runner))
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err != nil {
+		t.Fatalf("Start(): %v", err)
+	}
+	if err := h.Close(context.Background()); err != nil {
+		t.Fatalf("Close(): %v", err)
+	}
+	for index, command := range runner.commands {
+		if commandHasPrefix(command, "info") {
+			continue
+		}
+		if index == 0 || !commandHasPrefix(runner.commands[index-1], "info") {
+			t.Fatalf("target command %v was not immediately preceded by an identity check: %v", command, runner.commands)
+		}
+	}
+}
+
+func TestCleanupFailsClosedWhenTargetIdentityChanges(t *testing.T) {
+	for _, changedIdentity := range []string{
+		"/tmp/other.sock\t/var/lib/containers/storage\n",
+		"/tmp/dbtest.sock\t/var/lib/other-storage\n",
 	} {
-		t.Run(tc.name, func(t *testing.T) {
+		t.Run(changedIdentity, func(t *testing.T) {
 			runner := &scriptedRunner{}
-			config := testConfig(runner)
-			if tc.ownMachine {
-				config, _, _ = ownedMachineConfig(t, runner)
-			}
-			config.RemoveSharedSourceImage = tc.optIn
-			h, err := New(config)
+			h, err := New(testConfig(runner))
 			if err != nil {
 				t.Fatalf("New(): %v", err)
 			}
 			if _, err := h.Start(context.Background()); err != nil {
 				t.Fatalf("Start(): %v", err)
 			}
-			if err := h.Close(context.Background()); err != nil {
-				t.Fatalf("Close(): %v", err)
+			runner.infoOutput = changedIdentity
+			if err := h.Close(context.Background()); err == nil {
+				t.Fatal("Close() removed resources after target identity changed")
 			}
-			// The run-generated reference is always this run's own.
-			if runner.imagePresent(h.runImage) {
-				t.Fatalf("images after cleanup = %#v, want the generated reference removed", runner.images)
-			}
-			removed := commandsContain(runner.commands, "image", "rm", config.Image)
-			if removed != tc.wantRemove || runner.imagePresent(config.Image) == tc.wantRemove {
-				t.Fatalf("source image removed = %t (present = %t), want removed = %t",
-					removed, runner.imagePresent(config.Image), tc.wantRemove)
-			}
-			report := h.Report()
-			if report.SourceImageRemoved != tc.wantRemove {
-				t.Fatalf("report = %+v, want SourceImageRemoved = %t", report, tc.wantRemove)
-			}
-			if (report.SourceImageRetainedReason == "") != tc.wantRemove {
-				t.Fatalf("report = %+v, want a named retention reason only when the image was kept", report)
+			for _, prefix := range [][]string{{"container", "rm"}, {"volume", "rm"}, {"image", "rm"}} {
+				if commandsContain(runner.commands, prefix...) {
+					t.Fatalf("commands = %v, want no cleanup mutation on an unproven endpoint", runner.commands)
+				}
 			}
 		})
 	}
@@ -422,7 +346,7 @@ func TestStartPlacesEngineArgumentsAfterImage(t *testing.T) {
 	}
 	defer func() { _ = h.Close(context.Background()) }()
 	for _, command := range runner.commands {
-		if command[0] != "run" {
+		if len(command) == 0 || command[0] != "run" {
 			continue
 		}
 		imageIndex, engineArgumentIndex := -1, -1
@@ -439,10 +363,10 @@ func TestStartPlacesEngineArgumentsAfterImage(t *testing.T) {
 		}
 		return
 	}
-	t.Fatal("Start did not issue a podman run command")
+	t.Fatal("Start did not issue a Podman run command")
 }
 
-func TestCopyFileFromContainerUsesTheScopedConnection(t *testing.T) {
+func TestCopyFileFromContainerUsesTheConfiguredEndpoint(t *testing.T) {
 	runner := &scriptedRunner{}
 	config := testConfig(runner)
 	h, err := New(config)
@@ -460,9 +384,9 @@ func TestCopyFileFromContainerUsesTheScopedConnection(t *testing.T) {
 	if !commandsContain(runner.commands, "cp", h.containerName+":"+"/var/lib/mysql/ca.pem", destination) {
 		t.Fatalf("commands = %v, want scoped container certificate copy", runner.commands)
 	}
-	for _, connection := range runner.connections {
-		if connection != config.Connection {
-			t.Fatalf("connection = %q, want %q", connection, config.Connection)
+	for _, endpoint := range runner.endpoints {
+		if endpoint != config.ContainerEndpoint {
+			t.Fatalf("endpoint = %q, want %q", endpoint, config.ContainerEndpoint)
 		}
 	}
 }
@@ -478,7 +402,7 @@ func TestStartPublishesOnlyLoopback(t *testing.T) {
 	}
 	defer func() { _ = h.Close(context.Background()) }()
 	for _, command := range runner.commands {
-		if command[0] != "run" {
+		if len(command) == 0 || command[0] != "run" {
 			continue
 		}
 		for index, arg := range command {
@@ -501,35 +425,10 @@ func TestStartCleansResourcesAfterIndeterminateEngineOutcomes(t *testing.T) {
 		wantClean        [][]string
 		wantNoImageClean bool
 	}{
-		{
-			name:             "pull returns an error before any reference is owned",
-			runner:           &scriptedRunner{pullErr: context.Canceled},
-			wantNoImageClean: true,
-		},
-		{
-			name:   "tag returns an error after the pull succeeded",
-			runner: &scriptedRunner{tagErr: context.Canceled},
-			wantClean: [][]string{
-				{"image", "rm"},
-			},
-		},
-		{
-			name:   "volume create returns an error after creating the volume",
-			runner: &scriptedRunner{volumeCreateErr: context.Canceled},
-			wantClean: [][]string{
-				{"volume", "rm"},
-				{"image", "rm"},
-			},
-		},
-		{
-			name:   "container run returns an error after creating the container",
-			runner: &scriptedRunner{runErr: context.Canceled},
-			wantClean: [][]string{
-				{"container", "rm"},
-				{"volume", "rm"},
-				{"image", "rm"},
-			},
-		},
+		{name: "pull returns an error before any generated reference is owned", runner: &scriptedRunner{pullErr: context.Canceled}, wantNoImageClean: true},
+		{name: "tag returns an error after the pull succeeded", runner: &scriptedRunner{tagErr: context.Canceled}, wantClean: [][]string{{"image", "rm"}}},
+		{name: "volume create returns an error after creating the volume", runner: &scriptedRunner{volumeCreateErr: context.Canceled}, wantClean: [][]string{{"volume", "rm"}, {"image", "rm"}}},
+		{name: "container run returns an error after creating the container", runner: &scriptedRunner{runErr: context.Canceled}, wantClean: [][]string{{"container", "rm"}, {"volume", "rm"}, {"image", "rm"}}},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			config := testConfig(tc.runner)
@@ -546,7 +445,7 @@ func TestStartCleansResourcesAfterIndeterminateEngineOutcomes(t *testing.T) {
 				}
 			}
 			if tc.wantNoImageClean && commandsContain(tc.runner.commands, "image", "rm") {
-				t.Fatalf("cleanup commands = %v, want no image removal when the pull failed", tc.runner.commands)
+				t.Fatalf("cleanup commands = %v, want no generated image removal when the pull failed", tc.runner.commands)
 			}
 			if !tc.wantNoImageClean && tc.runner.imagePresent(h.runImage) {
 				t.Fatalf("images after cleanup = %#v, want generated reference removed", tc.runner.images)
@@ -556,8 +455,6 @@ func TestStartCleansResourcesAfterIndeterminateEngineOutcomes(t *testing.T) {
 }
 
 func TestStartReleasesTheEngineSlotOnEveryExitPath(t *testing.T) {
-	// A leaked slot would deadlock the next sequential engine rather than
-	// fail it, so prove the slot returns after both outcomes.
 	for _, tc := range []struct {
 		name   string
 		runner *scriptedRunner
@@ -583,14 +480,11 @@ func TestStartReleasesTheEngineSlotOnEveryExitPath(t *testing.T) {
 	}
 }
 
-// The source inspect exists only to size the pull. A present source image is
-// not ownership evidence: it may have been cached by any other lane, so a run
-// against a machine it did not create must still leave it alone.
 func TestStartInspectsTheSourceImageOnlyToSizeThePull(t *testing.T) {
 	runner := &scriptedRunner{}
 	config := testConfig(runner)
 	config.ExpectedImageBytes = 830 << 20
-	config.DiskFree = func() (uint64, error) { return 8 << 30, nil }
+	config.DiskFreeAt = func(string) (uint64, error) { return 8 << 30, nil }
 	runner.setImage(config.Image, true)
 	h, err := New(config)
 	if err != nil {
@@ -606,7 +500,7 @@ func TestStartInspectsTheSourceImageOnlyToSizeThePull(t *testing.T) {
 		t.Fatalf("commands = %v, want generated image reference", runner.commands)
 	}
 	if commandsContain(runner.commands, "image", "rm", config.Image) {
-		t.Fatalf("commands = %v, want no removal of an image this run only found present", runner.commands)
+		t.Fatalf("commands = %v, want no source-image removal", runner.commands)
 	}
 }
 
@@ -614,8 +508,6 @@ func TestPodmanResourceNotFoundClassifiesOnlyKnownAbsence(t *testing.T) {
 	for _, stderr := range []string{
 		`Error: no such container "x"`,
 		`Error: no such volume "x"`,
-		// Podman's wording where Docker says "no such image". Missing this
-		// phrasing turns an ordinary absent image into a cleanup failure.
 		"Error: x: image not known",
 		"Error response from daemon: No such image",
 	} {
@@ -623,10 +515,7 @@ func TestPodmanResourceNotFoundClassifiesOnlyKnownAbsence(t *testing.T) {
 			t.Fatalf("podmanResourceNotFound(%q) = false, want recognized absence", stderr)
 		}
 	}
-	for _, stderr := range []string{
-		"Error response from daemon: access denied",
-		"Error: unable to connect to Podman socket",
-	} {
+	for _, stderr := range []string{"Error response from daemon: access denied", "Error: unable to connect to Podman socket"} {
 		if podmanResourceNotFound(&exec.ExitError{Stderr: []byte(stderr)}) {
 			t.Fatalf("podmanResourceNotFound(%q) = true, want indeterminate error", stderr)
 		}
@@ -647,315 +536,9 @@ func TestStartPreservesPreexistingGeneratedVolume(t *testing.T) {
 	}
 }
 
-func TestNewMachineCreatesAndRemovesOnlyItsOwnMachine(t *testing.T) {
-	runner := &scriptedMachineRunner{}
-	machine, err := NewMachine(context.Background(), MachineConfig{Engine: "mysql", RunMachine: runner})
-	if err != nil {
-		t.Fatalf("NewMachine(): %v", err)
-	}
-	if !strings.HasPrefix(machine.Name(), machineNamePrefix+"mysql-") || machine.Connection() != machine.Name() {
-		t.Fatalf("machine = %q / %q, want a generated name addressed by its own connection", machine.Name(), machine.Connection())
-	}
-	// Podman refuses a longer name, and the runner discards its output, so an
-	// over-long name would surface only as an opaque init failure.
-	if len(machine.Name()) > maxPodmanMachineNameLength {
-		t.Fatalf("machine name %q is %d characters, want at most %d", machine.Name(), len(machine.Name()), maxPodmanMachineNameLength)
-	}
-	if !machineIsOwned(machine.Name()) {
-		t.Fatal("NewMachine() did not record this run as the machine's owner")
-	}
-	if !commandsContain(runner.commands, "machine", "init", "--update-connection=false") || !commandsContain(runner.commands, "machine", "start") {
-		t.Fatalf("machine commands = %v, want init and start", runner.commands)
-	}
-
-	if err := machine.Remove(context.Background()); err != nil {
-		t.Fatalf("Remove(): %v", err)
-	}
-	if !commandsContain(runner.commands, "machine", "rm", "--force", machine.Name()) {
-		t.Fatalf("machine commands = %v, want the created machine removed by name", runner.commands)
-	}
-	// Ownership must not outlive the machine: a later run reusing the name
-	// would otherwise inherit a trim right over a VM this process no longer has.
-	if machineIsOwned(machine.Name()) {
-		t.Fatal("Remove() kept the ownership record for a deleted machine")
-	}
-	if err := machine.Remove(context.Background()); err != nil {
-		t.Fatalf("second Remove(): %v", err)
-	}
-}
-
-func TestNewMachineRestoresOnlyTheDefaultConnectionItChanged(t *testing.T) {
-	for _, tc := range []struct {
-		name           string
-		before         string
-		changeAfterNew string
-		wantDefault    string
-		wantRestore    bool
-	}{
-		{name: "restores its own switch", before: "other-lane", wantDefault: "other-lane", wantRestore: true},
-		{name: "does not overwrite a later switch", before: "other-lane", changeAfterNew: "third-party", wantDefault: "third-party"},
-		{name: "preserves an unset default", wantDefault: ""},
-	} {
-		t.Run(tc.name, func(t *testing.T) {
-			runner := &scriptedMachineRunner{defaultConnection: tc.before, switchDefaultOnInit: true}
-			machine, err := NewMachine(context.Background(), MachineConfig{Engine: "mysql", RunMachine: runner})
-			if err != nil {
-				t.Fatalf("NewMachine(): %v", err)
-			}
-			if tc.changeAfterNew != "" {
-				runner.defaultConnection = tc.changeAfterNew
-			}
-			if err := machine.Remove(context.Background()); err != nil {
-				t.Fatalf("Remove(): %v", err)
-			}
-			if runner.defaultConnection != tc.wantDefault {
-				t.Fatalf("default connection = %q, want %q", runner.defaultConnection, tc.wantDefault)
-			}
-			restored := commandsContain(runner.commands, "system", "connection", "default", tc.before)
-			if restored != tc.wantRestore {
-				t.Fatalf("default restore issued = %t, want %t (commands = %v)", restored, tc.wantRestore, runner.commands)
-			}
-		})
-	}
-}
-
-// `podman machine init` writes a multi-GiB disk image before it can fail, and
-// a cancelled context kills it mid-write, so a claim taken only on success
-// would leave that image on the host with nothing holding authority to delete
-// it.
-func TestNewMachineRemovesWhatAFailedInitLeftBehind(t *testing.T) {
-	for _, tc := range []struct {
-		name        string
-		runner      *scriptedMachineRunner
-		cancelled   bool
-		wantWritten bool
-	}{
-		{
-			name:        "init failed after writing the machine",
-			runner:      &scriptedMachineRunner{initErr: errors.New("init failed"), initWritesBeforeFailing: true},
-			wantWritten: true,
-		},
-		{
-			name:        "init was cancelled mid-write",
-			runner:      &scriptedMachineRunner{initWritesBeforeFailing: true},
-			cancelled:   true,
-			wantWritten: true,
-		},
-		{
-			name:   "init failed before writing anything",
-			runner: &scriptedMachineRunner{initErr: errors.New("init failed")},
-		},
-	} {
-		t.Run(tc.name, func(t *testing.T) {
-			ctx, cancel := context.WithCancel(context.Background())
-			defer cancel()
-			if tc.cancelled {
-				cancel()
-			}
-			machine, err := NewMachine(ctx, MachineConfig{Engine: "mysql", RunMachine: tc.runner})
-			if err == nil {
-				t.Fatal("NewMachine() reported success after the init failed")
-			}
-			// Without a handle the caller cannot clean up at all: the
-			// integration test only defers Remove on a non-nil machine.
-			if machine == nil {
-				t.Fatal("NewMachine() returned no handle for a machine init may have created")
-			}
-			if !commandsContain(tc.runner.commands, "machine", "rm", "--force", machine.Name()) {
-				t.Fatalf("machine commands = %v, want the attempted machine removed by name", tc.runner.commands)
-			}
-			if tc.runner.created[machine.Name()] {
-				t.Fatalf("machine %q survived the failed init", machine.Name())
-			}
-			if machineIsOwned(machine.Name()) {
-				t.Fatalf("ownership record for %q outlived the failed init", machine.Name())
-			}
-			// A machine init never created is absent, not leaked, so cleanup
-			// must not report a failure for it.
-			if err := machine.Remove(context.Background()); err != nil {
-				t.Fatalf("cleanup after the failed init reported: %v", err)
-			}
-			for _, command := range tc.runner.commands {
-				if commandHasPrefix(command, "machine") && command[len(command)-1] != machine.Name() {
-					t.Fatalf("machine command %v targeted something other than this run's machine", command)
-				}
-			}
-		})
-	}
-}
-
-func TestCleanupReclaimsHostDiskOnlyAfterContainerCleanup(t *testing.T) {
-	runner := &scriptedRunner{}
-	config, machineRunner, machine := ownedMachineConfig(t, runner)
-	h, err := New(config)
-	if err != nil {
-		t.Fatalf("New(): %v", err)
-	}
-	if _, err := h.Start(context.Background()); err != nil {
-		t.Fatalf("Start(): %v", err)
-	}
-	if err := h.Close(context.Background()); err != nil {
-		t.Fatalf("Close(): %v", err)
-	}
-	// Two passes are required: one discard immediately after an image removal
-	// returns only part of the space on Podman 5.3 with applehv.
-	var trims [][]string
-	for _, command := range machineRunner.commands {
-		if commandHasPrefix(command, "machine", "ssh", machine.Name(), "sudo fstrim -av") {
-			trims = append(trims, command)
-		}
-	}
-	trim := []string{"machine", "ssh", machine.Name(), "sudo fstrim -av"}
-	if want := [][]string{trim, trim}; !reflect.DeepEqual(trims, want) {
-		t.Fatalf("machine trim commands = %v, want %v", trims, want)
-	}
-	// Ownership is what permits the trim, so it has to be established first.
-	inspected, trimmed := -1, -1
-	for index, command := range machineRunner.commands {
-		if commandHasPrefix(command, "machine", "inspect", "--format", "{{.Name}}", machine.Name()) && inspected < 0 {
-			inspected = index
-		}
-		if commandHasPrefix(command, "machine", "ssh", machine.Name(), "sudo fstrim -av") && trimmed < 0 {
-			trimmed = index
-		}
-	}
-	if inspected < 0 || trimmed < inspected {
-		t.Fatalf("machine commands = %v, want the machine confirmed before the trim", machineRunner.commands)
-	}
-	report := h.Report()
-	if !report.HostDiskReclaimed || report.HostDiskReclaimSkipped != "" {
-		t.Fatalf("report = %+v, want a completed host-disk reclaim", report)
-	}
-	// Nothing else can be using an image on a machine this run created, so
-	// both references go before the trim that reclaims their bytes.
-	if runner.imagePresent(config.Image) || runner.imagePresent(h.runImage) {
-		t.Fatalf("images after cleanup = %#v, want both references removed on an owned machine", runner.images)
-	}
-	lastContainerCleanup := -1
-	for index, command := range runner.commands {
-		if len(command) > 1 && ((command[0] == "container" && command[1] == "rm") || (command[0] == "volume" && command[1] == "rm") || (command[0] == "image" && command[1] == "rm")) {
-			lastContainerCleanup = index
-		}
-	}
-	if lastContainerCleanup < 0 {
-		t.Fatal("container cleanup was not attempted before the host-disk reclaim")
-	}
-}
-
-// fstrim reaches every filesystem on a machine, so the gate has to be
-// ownership rather than a name that happens to match what a caller configured.
-func TestCleanupNeverTrimsAMachineThisRunDidNotCreate(t *testing.T) {
-	for _, tc := range []struct {
-		name  string
-		setup func(*testing.T, *Config) *scriptedMachineRunner
-	}{
-		{
-			// The decisive case: everything a name check could look at agrees,
-			// and the machine is still not this run's to trim.
-			name: "caller supplied a machine this run never created",
-			setup: func(_ *testing.T, config *Config) *scriptedMachineRunner {
-				runner := &scriptedMachineRunner{inspectName: "lane-machine"}
-				config.Connection = "lane-machine"
-				config.Machine = "lane-machine"
-				return runner
-			},
-		},
-		{
-			name: "ownership was released before cleanup",
-			setup: func(t *testing.T, config *Config) *scriptedMachineRunner {
-				runner := &scriptedMachineRunner{}
-				machine := newOwnedTestMachine(t, runner)
-				config.Connection = machine.Connection()
-				config.Machine = machine.Name()
-				runner.inspectName = machine.Name()
-				if err := machine.Remove(context.Background()); err != nil {
-					t.Fatalf("Remove(): %v", err)
-				}
-				return runner
-			},
-		},
-		{
-			name: "connection addresses another machine",
-			setup: func(t *testing.T, config *Config) *scriptedMachineRunner {
-				runner := &scriptedMachineRunner{}
-				machine := newOwnedTestMachine(t, runner)
-				config.Connection = "lane-machine"
-				config.Machine = machine.Name()
-				return runner
-			},
-		},
-		{
-			name: "machine is no longer defined on this host",
-			setup: func(t *testing.T, config *Config) *scriptedMachineRunner {
-				runner := &scriptedMachineRunner{}
-				machine := newOwnedTestMachine(t, runner)
-				config.Connection = machine.Connection()
-				config.Machine = machine.Name()
-				runner.inspectErr = errors.New("machine inspect failed")
-				return runner
-			},
-		},
-		{
-			name: "machine inspect names a different machine",
-			setup: func(t *testing.T, config *Config) *scriptedMachineRunner {
-				runner := &scriptedMachineRunner{}
-				machine := newOwnedTestMachine(t, runner)
-				config.Connection = machine.Connection()
-				config.Machine = machine.Name()
-				runner.inspectName = "someone-elses-machine"
-				return runner
-			},
-		},
-	} {
-		t.Run(tc.name, func(t *testing.T) {
-			runner := &scriptedRunner{}
-			config := testConfig(runner)
-			config.RunMachine = tc.setup(t, &config)
-			machineRunner := config.RunMachine.(*scriptedMachineRunner)
-			runner.setImage(config.Image, true)
-			free := []uint64{4096, 1024}
-			config.DiskFree = func() (uint64, error) {
-				value := free[0]
-				if len(free) > 1 {
-					free = free[1:]
-				}
-				return value, nil
-			}
-			h, err := New(config)
-			if err != nil {
-				t.Fatalf("New(): %v", err)
-			}
-			if _, err := h.Start(context.Background()); err != nil {
-				t.Fatalf("Start(): %v", err)
-			}
-			if err := h.Close(context.Background()); err != nil {
-				t.Fatalf("Close(): %v", err)
-			}
-			if commandsContain(machineRunner.commands, "machine", "ssh", config.Machine, "sudo fstrim -av") {
-				t.Fatalf("machine commands = %v, want no trim of an unowned machine", machineRunner.commands)
-			}
-			report := h.Report()
-			if report.HostDiskReclaimed || report.HostDiskReclaimSkipped == "" {
-				t.Fatalf("report = %+v, want a skipped reclaim with a named reason", report)
-			}
-			// The delta is reported as an estimate of what the run released,
-			// which is negative here because the run still holds the space a
-			// trim would have returned.
-			if report.HostDiskReleasedBytesEstimate != -3072 {
-				t.Fatalf("report = %+v, want the host free-space delta reported", report)
-			}
-			// The source image belongs to whoever else uses that machine.
-			if report.SourceImageRemoved || report.SourceImageRetainedReason == "" {
-				t.Fatalf("report = %+v, want the shared source image retained with a reason", report)
-			}
-		})
-	}
-}
-
 func TestInterruptCleanupClosesEveryLiveHarnessBeforeExiting(t *testing.T) {
 	SetMaxConcurrentEngines(2)
 	defer SetMaxConcurrentEngines(1)
-
 	runners := []*scriptedRunner{{}, {}}
 	harnesses := make([]*Harness, 0, len(runners))
 	for _, runner := range runners {
@@ -968,16 +551,10 @@ func TestInterruptCleanupClosesEveryLiveHarnessBeforeExiting(t *testing.T) {
 		}
 		harnesses = append(harnesses, h)
 	}
-
-	// A per-harness signal handler let the first finished cleanup exit the
-	// process while its siblings were still removing containers.
 	closeLiveHarnesses(context.Background())
 	for index, runner := range runners {
-		if runner.containerLive || runner.volumePresent {
-			t.Fatalf("harness %d kept container or volume through the interrupt", index)
-		}
-		if runner.imagePresent(harnesses[index].runImage) {
-			t.Fatalf("harness %d kept its generated image through the interrupt", index)
+		if runner.containerLive || runner.volumePresent || runner.imagePresent(harnesses[index].runImage) {
+			t.Fatalf("harness %d retained a generated resource through interrupt cleanup", index)
 		}
 	}
 	for _, h := range harnesses {
@@ -1016,9 +593,6 @@ func TestParseMappedPortRefusesTheEngineDefaultPort(t *testing.T) {
 	}
 }
 
-// interruptingRunner fires Close from inside a create command, which is where
-// a real signal is most damaging: cleanup that runs between an ownership
-// claim and the command acting on it would leave the resource behind.
 type interruptingRunner struct {
 	scriptedRunner
 	harness  *Harness
@@ -1028,7 +602,7 @@ type interruptingRunner struct {
 	closeErr error
 }
 
-func (r *interruptingRunner) Run(ctx context.Context, connection string, args ...string) (string, error) {
+func (r *interruptingRunner) Run(ctx context.Context, endpoint string, args ...string) (string, error) {
 	if !r.fired && len(args) > 0 && args[0] == r.on {
 		r.fired = true
 		r.done = make(chan struct{})
@@ -1036,28 +610,24 @@ func (r *interruptingRunner) Run(ctx context.Context, connection string, args ..
 			defer close(r.done)
 			r.closeErr = r.harness.Close(context.Background())
 		}()
-		// Cleanup must not complete while this create is still in flight.
-		// The caller waits for r.done only after Start has returned.
 		select {
 		case <-r.done:
 			r.closeErr = errors.New("Close finished while a create command was still running")
 		case <-time.After(25 * time.Millisecond):
 		}
 	}
-	return r.scriptedRunner.Run(ctx, connection, args...)
+	return r.scriptedRunner.Run(ctx, endpoint, args...)
 }
 
 func TestCloseDuringCreateStillRemovesTheCreatedResource(t *testing.T) {
 	for _, step := range []string{"run", "volume"} {
 		t.Run("interrupted during "+step, func(t *testing.T) {
 			runner := &interruptingRunner{on: step}
-			config := testConfig(runner)
-			h, err := New(config)
+			h, err := New(testConfig(runner))
 			if err != nil {
 				t.Fatalf("New(): %v", err)
 			}
 			runner.harness = h
-
 			if _, err := h.Start(context.Background()); err == nil {
 				t.Fatal("Start() succeeded after the harness was closed mid-startup")
 			}
@@ -1072,18 +642,8 @@ func TestCloseDuringCreateStillRemovesTheCreatedResource(t *testing.T) {
 			if runner.closeErr != nil {
 				t.Fatalf("Close() during startup: %v", runner.closeErr)
 			}
-			// Whatever the interrupted step created must have been removed.
-			if runner.containerLive {
-				t.Fatal("interrupt left the container behind")
-			}
-			if runner.volumePresent {
-				t.Fatal("interrupt left the volume behind")
-			}
-			// Only the run-generated reference is this run's to remove here:
-			// the config names a machine it did not create, so the shared
-			// source image stays whatever the interrupt found it as.
-			if runner.imagePresent(h.runImage) {
-				t.Fatalf("interrupt left the generated image behind: %#v", runner.images)
+			if runner.containerLive || runner.volumePresent || runner.imagePresent(h.runImage) {
+				t.Fatal("interrupt left a generated resource behind")
 			}
 			select {
 			case engineSlots <- struct{}{}:
@@ -1095,8 +655,6 @@ func TestCloseDuringCreateStillRemovesTheCreatedResource(t *testing.T) {
 	}
 }
 
-// teardownProbeRunner records whether this run is still covered by the
-// interrupt handler at the moment each removal command runs.
 type teardownProbeRunner struct {
 	scriptedRunner
 	harness *Harness
@@ -1109,7 +667,7 @@ type teardownProbe struct {
 	armed      bool
 }
 
-func (r *teardownProbeRunner) Run(ctx context.Context, connection string, args ...string) (string, error) {
+func (r *teardownProbeRunner) Run(ctx context.Context, endpoint string, args ...string) (string, error) {
 	if len(args) > 1 && args[1] == "rm" {
 		interruptCleanup.mu.Lock()
 		_, registered := interruptCleanup.live[r.harness]
@@ -1117,17 +675,12 @@ func (r *teardownProbeRunner) Run(ctx context.Context, connection string, args .
 		interruptCleanup.mu.Unlock()
 		r.probes = append(r.probes, teardownProbe{command: args[0] + " " + args[1], registered: registered, armed: armed})
 	}
-	return r.scriptedRunner.Run(ctx, connection, args...)
+	return r.scriptedRunner.Run(ctx, endpoint, args...)
 }
 
-// Unregistering first restored default signal handling for the whole teardown,
-// so a Ctrl-C between the first and last removal killed the process with this
-// run's container, volume, and images still on the machine.
 func TestCloseKeepsInterruptCleanupArmedUntilTeardownFinishes(t *testing.T) {
 	runner := &teardownProbeRunner{}
-	config := testConfig(runner)
-	config.RemoveSharedSourceImage = true
-	h, err := New(config)
+	h, err := New(testConfig(runner))
 	if err != nil {
 		t.Fatalf("New(): %v", err)
 	}
@@ -1138,16 +691,14 @@ func TestCloseKeepsInterruptCleanupArmedUntilTeardownFinishes(t *testing.T) {
 	if err := h.Close(context.Background()); err != nil {
 		t.Fatalf("Close(): %v", err)
 	}
-	if len(runner.probes) != 4 {
-		t.Fatalf("teardown probes = %+v, want one per removal", runner.probes)
+	if len(runner.probes) != 3 {
+		t.Fatalf("teardown probes = %+v, want one per generated resource", runner.probes)
 	}
 	for _, probe := range runner.probes {
 		if !probe.registered || !probe.armed {
 			t.Fatalf("%q ran outside the interrupt cleanup: registered=%t armed=%t", probe.command, probe.registered, probe.armed)
 		}
 	}
-	// The registration must not outlive the teardown either, or the process
-	// keeps a handler for a harness that owns nothing.
 	interruptCleanup.mu.Lock()
 	_, registered := interruptCleanup.live[h]
 	interruptCleanup.mu.Unlock()
@@ -1166,9 +717,6 @@ func TestNewRequiresTheImageFootprint(t *testing.T) {
 	}
 }
 
-// A pull that fills the disk partway through leaves a partial image and a
-// container to clean up on a host with nothing left to work with, so the
-// shortfall is reported before the download starts.
 func TestStartRefusesToPullWithoutHeadroomForTheImage(t *testing.T) {
 	const imageBytes = 830 << 20
 	for _, tc := range []struct {
@@ -1179,14 +727,13 @@ func TestStartRefusesToPullWithoutHeadroomForTheImage(t *testing.T) {
 	}{
 		{name: "free space barely exceeds the image itself", free: 854 << 20},
 		{name: "free space clears the documented headroom", free: imagePullFreeSpaceFactor * imageBytes, wantPull: true},
-		{name: "an already cached image needs no headroom", free: 854 << 20, cached: true, wantPull: true},
+		{name: "cached image needs no headroom after capacity proof", free: 854 << 20, cached: true, wantPull: true},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			runner := &scriptedRunner{}
 			config := testConfig(runner)
 			config.ExpectedImageBytes = imageBytes
-			config.DiskFree = func() (uint64, error) { return tc.free, nil }
-			config.RunMachine.(*scriptedMachineRunner).targetDiskFree = tc.free
+			config.DiskFreeAt = func(string) (uint64, error) { return tc.free, nil }
 			if tc.cached {
 				runner.setImage(config.Image, true)
 			}
@@ -1202,7 +749,7 @@ func TestStartRefusesToPullWithoutHeadroomForTheImage(t *testing.T) {
 				t.Fatalf("Start(): %v", startErr)
 			}
 			if !tc.wantPull && startErr == nil {
-				t.Fatal("Start() pulled an image the host had no room for")
+				t.Fatal("Start() pulled an image the target had no room for")
 			}
 			if pulled := commandsContain(runner.commands, "pull", config.Image); pulled != tc.wantPull {
 				t.Fatalf("pull issued = %t, want %t (commands = %v)", pulled, tc.wantPull, runner.commands)
@@ -1214,36 +761,14 @@ func TestStartRefusesToPullWithoutHeadroomForTheImage(t *testing.T) {
 	}
 }
 
-func TestStartRefusesAnUnmeasurableTargetBeforePull(t *testing.T) {
+func TestTargetCapacityUsesTheProvenStorePath(t *testing.T) {
 	runner := &scriptedRunner{}
 	config := testConfig(runner)
-	config.Connection = "remote-machine"
-	config.Machine = "remote-machine"
-	config.DiskFree = func() (uint64, error) { return 1 << 40, nil }
-	config.RunMachine = &scriptedMachineRunner{inspectErr: errors.New("remote machine unavailable")}
-	h, err := New(config)
-	if err != nil {
-		t.Fatalf("New(): %v", err)
+	var paths []string
+	config.DiskFreeAt = func(path string) (uint64, error) {
+		paths = append(paths, path)
+		return 1 << 30, nil
 	}
-	_, startErr := h.Start(context.Background())
-	if err := h.Close(context.Background()); err != nil {
-		t.Fatalf("Close(): %v", err)
-	}
-	if startErr == nil || !strings.Contains(startErr.Error(), "target image-store capacity cannot be measured") {
-		t.Fatalf("Start() error = %v, want an unmeasurable target capacity failure", startErr)
-	}
-	if commandsContain(runner.commands, "pull", config.Image) {
-		t.Fatalf("commands = %v, want no pull before target capacity is measured", runner.commands)
-	}
-}
-
-func TestStartUsesTargetCapacityInsteadOfLocalReportingDisk(t *testing.T) {
-	const imageBytes = 64 << 20
-	runner := &scriptedRunner{}
-	config := testConfig(runner)
-	config.ExpectedImageBytes = imageBytes
-	config.DiskFree = func() (uint64, error) { return 1, nil }
-	config.RunMachine.(*scriptedMachineRunner).targetDiskFree = imagePullFreeSpaceFactor * imageBytes
 	h, err := New(config)
 	if err != nil {
 		t.Fatalf("New(): %v", err)
@@ -1254,8 +779,13 @@ func TestStartUsesTargetCapacityInsteadOfLocalReportingDisk(t *testing.T) {
 	if err := h.Close(context.Background()); err != nil {
 		t.Fatalf("Close(): %v", err)
 	}
-	if !commandsContain(runner.commands, "pull", config.Image) {
-		t.Fatalf("commands = %v, want a pull after target capacity passed", runner.commands)
+	if len(paths) == 0 {
+		t.Fatal("target capacity was never measured")
+	}
+	for _, path := range paths {
+		if path != "/var/lib/containers/storage" {
+			t.Fatalf("capacity path = %q, want the proven image-store path", path)
+		}
 	}
 }
 
@@ -1274,13 +804,31 @@ func TestStartRefusesToCreateAfterClose(t *testing.T) {
 	if commandsContain(runner.commands, "run") || commandsContain(runner.commands, "volume", "create") {
 		t.Fatalf("commands = %v, want no creates after Close", runner.commands)
 	}
-	// Close returns the slot only once, so this refused Start has to return its
-	// own token. A leak here would not fail the next engine, it would block it
-	// until its context expired.
+	interruptCleanup.mu.Lock()
+	_, registered := interruptCleanup.live[h]
+	interruptCleanup.mu.Unlock()
+	if registered {
+		t.Fatal("Start() registered an already closed harness for interrupt cleanup")
+	}
 	select {
 	case engineSlots <- struct{}{}:
 		<-engineSlots
 	default:
 		t.Fatal("a Start refused after Close leaked the engine slot")
+	}
+}
+
+func TestParseTargetIdentity(t *testing.T) {
+	identity, err := parseTargetIdentity("/tmp/dbtest.sock\t/var/lib/containers/storage\n")
+	if err != nil {
+		t.Fatalf("parseTargetIdentity(): %v", err)
+	}
+	if identity.socketPath != "/tmp/dbtest.sock" || identity.graphRoot != "/var/lib/containers/storage" {
+		t.Fatalf("identity = %+v, want socket and image-store paths", identity)
+	}
+	for _, raw := range []string{"", "/tmp/socket", "/tmp/socket\t../store", "/tmp/socket\t/store\nsecond"} {
+		if _, err := parseTargetIdentity(raw); err == nil {
+			t.Fatalf("parseTargetIdentity(%q) accepted invalid target evidence", raw)
+		}
 	}
 }

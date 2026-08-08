@@ -15,14 +15,14 @@ bounded parallelism is explicit opt-in only.
 
 ## Design
 
-1. `dbtest` accepts one pinned image, explicit Podman connection and machine names, engine data
-   directory, and engine/container arguments. It allocates collision-resistant container/volume/run
-   image names, publishes `127.0.0.1::<engine-port>`, records disk free before and after, and
-   refuses default-host-port mappings.
+1. `dbtest` accepts one pinned image, a direct local Unix Podman endpoint, engine data directory,
+   and engine/container arguments. It allocates collision-resistant container/volume/run image
+   names, publishes `127.0.0.1::<engine-port>`, proves endpoint identity and target-store capacity,
+   records disk free before and after, and refuses default-host-port mappings.
 2. `Start` claims ownership before each indeterminate create, and `Close` is idempotent. It cancels
    in-flight startup on interrupt, waits for that create sequence, and then attempts all cleanup in
-   order: container, volume, run image, source image, optional two-pass host trim. A later cleanup
-   action still runs after an earlier error.
+   order: container, volume, run image. The source image is never removed, and a later cleanup action
+   still runs after an earlier error.
 3. MySQL validates identifiers, does dynamic catalog discovery, reads bounded keyset pages ordered
    by a primary key (or `(cursor, primary_key)`), and preserves an explicit empty cursor state. Its
    row-based/full-image binlog reader remains an internal proof rather than a declared executor.
@@ -36,7 +36,7 @@ bounded parallelism is explicit opt-in only.
 
 ## TDD sequence and evidence
 
-1. **Red:** missing scoped Podman connection, harness lifecycle, binlog declaration, and MySQL
+1. **Red:** missing scoped direct Podman endpoint, harness lifecycle, binlog declaration, and MySQL
    implementation contracts initially failed because no harness/native connector existed.
    **Green:** focused harness/native/engine tests passed after implementation.
 2. **Red:** after rebase, PostgreSQL's embedded definition rejected canonical `disabled` before the
@@ -51,7 +51,7 @@ bounded parallelism is explicit opt-in only.
    connector packages from support libraries, and the generated native set is regenerated from that
    source of truth.
 5. Run generated-surface regeneration, focused tests, CLI tests, vet/build, individual verify gates,
-   a live Podman proof with host reclaim, and an inline review. Record exact commands/results in
+   a live direct-endpoint Podman proof, and an inline review. Record exact commands/results in
    `VERIFICATION.md` and PR-ready facts in `PR-BODY.md`.
 
 ## Dependency legitimacy gate
@@ -67,4 +67,4 @@ in `PR-BODY.md`. No other direct dependency is added.
 - Seed data exceeds one SQL page and supports exact incremental assertions.
 - Internal change-capture proof asserts returned insert/update/delete records and acknowledgement-gated state.
 - Failure and interrupt teardown share the idempotent cleanup path.
-- A missing live engine cannot silently pass; an absent opt-in/connection emits a visible skip.
+- A missing live engine cannot silently pass; an absent opt-in/endpoint emits a visible skip.

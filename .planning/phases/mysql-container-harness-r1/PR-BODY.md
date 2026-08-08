@@ -15,10 +15,9 @@ None of the three is implemented here. The full inline GSD/TDD delivery record i
 
 ## What Changed
 
-- Added `internal/connectors/native/dbtest`: one sequential-by-default, explicit-Podman-connection
+- Added `internal/connectors/native/dbtest`: one sequential-by-default, direct-endpoint Podman
   harness with pinned image enforcement, unique container/volume/run-image ownership, dynamic
-  loopback port allocation, before/after disk reporting, unconditional cleanup, and optional
-  two-pass machine trim.
+  loopback port allocation, target-store disk reporting, and unconditional cleanup.
 - Added the native dynamic-schema MySQL source connector and bundle: check, catalog, and bounded
   full and incremental reads. The internally proven row-based binary-log reader remains non-public:
   `integration_type` is `database` and `cdc: false` until a production runtime entrypoint exists.
@@ -49,33 +48,19 @@ catalog/read pool creation, definition/docs, and tests; **no PostgreSQL write-pa
 A subsequent PostgreSQL writer should use the shared `conn.openPool` path rather than introduce a
 separate `pgxpool.New` construction that could ignore `sslservername`.
 
-### Podman ownership and disk
+### Podman endpoint and cleanup
 
-The documented command requires an explicit `POLYMETRICS_PODMAN_CONNECTION`; no bare container
-command is used. A fresh task-owned `fm-cli-db-harness-r1-20260808` Podman machine (2 CPU, 2 GiB,
-8 GiB) was created solely for the live proof. After the test, scoped container/volume/image listings
-were empty, then that exact machine was stopped and removed. No other machine, container, or volume
-was touched.
+The documented command requires a direct `POLYMETRICS_PODMAN_ENDPOINT` Unix URI. Every Podman
+command uses `--url` with that URI; the global default connection is neither read nor changed. Before
+startup and every command, the selected daemon must report that same socket path and a local,
+measurable image-store path. Named connections and remote endpoints fail closed, including when the
+source image is cached.
 
-The harness emits disk-free bytes before and after each engine, and reclaims host disk on every run
-whose machine it created itself through `dbtest.NewMachine`; its live assertion then allows only
-ordinary build noise after teardown, and the fresh proof passed that assertion. A machine this
-process did not create — caller-supplied, pre-existing, shared, or remote — is reported with its
-still-reclaimable byte count rather than trimmed, because `fstrim -av` reaches every filesystem on a
-machine and a matching name proves nothing about who else is using it. The same ownership answer now
-gates the pulled source image: it is removed on a machine this run created, and left alone on a
-caller-supplied, shared, or remote one, because that reference is shared with every other lane there
-and a pull against an already-cached image is a no-op that proves nothing about who put it there.
-`POLYMETRICS_DATABASE_REMOVE_SHARED_IMAGE=1` is the explicit opt-in to delete it anyway. A pull that
-would have to download the image is refused before it starts when the target image store is below
-three times the image's declared footprint; an unmeasurable target fails closed. The skipped-reclaim report is the host free-space delta across
-the run, labelled as the estimate it is rather than as per-image reclaimability.
-
-The ownership gate is proven, not inferred: `POLYMETRICS_DATABASE_OWN_MACHINE=1` re-ran the tagged
-live proof on a machine the test created (`pmdb-mysql-eddc7350dec5`), recorded `reclaimed=true` with
-host free rising from 18,050,224,128 to 22,241,910,784 bytes across teardown, and removed that exact
-machine afterwards. See VERIFICATION.md for the full transcript and the one disclosed Podman-side
-residue.
+The harness owns and removes only its generated container, volume, and run-image reference. The
+source image is always retained. It requires three times the declared image footprint before an
+absent-image pull and records target image-store free bytes before and after the run. The prior
+task-owned-machine proof does not cover this revised endpoint contract; the outer validation step
+must run the tagged proof with a direct endpoint before PR handoff.
 
 ## Dependency Evidence — `github.com/go-mysql-org/go-mysql v1.16.0`
 
@@ -124,9 +109,10 @@ make tidy-check docs-check-no-build smoke-no-build lint agent-contract-check \
 go run golang.org/x/vuln/cmd/govulncheck@latest ./...
 ```
 
-All passed. The tagged live proof also passed with `-timeout 20m`, explicit connection/machine,
-and host reclaim enabled. `TestGoldenTranscripts` was covered by `internal/cli` and passed without
-regeneration.
+The historical checks above passed before the endpoint-contract correction. The focused dbtest check
+for the correction is recorded in `TDD-LEDGER.md`; the tagged live proof must be re-run by the outer
+validation step with a direct endpoint. `TestGoldenTranscripts` was covered by `internal/cli` and
+passed without regeneration.
 
 ## TDD / GSD Delivery Record
 

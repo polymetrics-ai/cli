@@ -33,22 +33,9 @@ const (
 	mysqlIntegrationImageBytes = 830 << 20
 )
 
-// envConnection names the Podman connection to target. There is deliberately
-// no default: a bare podman command on a shared host addresses whichever
-// machine happens to be the global default, which belongs to another lane.
 const (
-	envEnabled    = "POLYMETRICS_DATABASE_INTEGRATION"
-	envConnection = "POLYMETRICS_PODMAN_CONNECTION"
-	envMachine    = "POLYMETRICS_PODMAN_MACHINE"
-	// envRemoveSharedImage opts in to deleting the pulled source image from a
-	// machine this run did not create. It is off by default because that image
-	// is shared with every other lane on such a machine; on a machine this run
-	// created, the image is always removed and this variable is irrelevant.
-	envRemoveSharedImage = "POLYMETRICS_DATABASE_REMOVE_SHARED_IMAGE"
-	// envOwnMachine makes this run create and delete its own Podman machine.
-	// Only a machine the test infrastructure created is trimmable, so this is
-	// the mode that proves the host-disk reclaim end to end.
-	envOwnMachine = "POLYMETRICS_DATABASE_OWN_MACHINE"
+	envEnabled           = "POLYMETRICS_DATABASE_INTEGRATION"
+	envContainerEndpoint = "POLYMETRICS_PODMAN_ENDPOINT"
 )
 
 var errCollectedCDCEvents = errors.New("test collected required mysql change events")
@@ -62,48 +49,17 @@ func TestMySQLContainerHarness(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Minute)
 	defer cancel()
 
-	connection := strings.TrimSpace(os.Getenv(envConnection))
-	machine := strings.TrimSpace(os.Getenv(envMachine))
-	ownsMachine := os.Getenv(envOwnMachine) == "1"
-	if ownsMachine {
-		// Registered before the harness defer below, so it runs last: the
-		// container has to be removed before the machine hosting it is.
-		created, err := dbtest.NewMachine(ctx, dbtest.MachineConfig{
-			Engine:    "mysql",
-			CPUs:      2,
-			MemoryMiB: 2048,
-			DiskGiB:   16,
-		})
-		if created != nil {
-			defer func() {
-				removeCtx, removeCancel := context.WithTimeout(context.Background(), 5*time.Minute)
-				defer removeCancel()
-				if err := created.Remove(removeCtx); err != nil {
-					t.Errorf("could not remove the task-owned MySQL test machine %q", created.Name())
-				}
-			}()
-		}
-		if err != nil {
-			t.Fatalf("could not create the task-owned MySQL test machine: %v", err)
-		}
-		connection, machine = created.Connection(), created.Name()
-		t.Logf("MySQL database test created task-owned Podman machine %q", machine)
-	} else if connection == "" {
-		t.Skipf("database integration skipped: set %s=1 to run against a task-owned machine, or %s to name an explicit existing Podman connection, because the default connection belongs to another lane",
-			envOwnMachine, envConnection)
-	}
-	if machine == "" {
-		machine = connection
+	containerEndpoint := strings.TrimSpace(os.Getenv(envContainerEndpoint))
+	if containerEndpoint == "" {
+		t.Skipf("database integration skipped: set %s to an explicit local Podman API endpoint", envContainerEndpoint)
 	}
 	harness, err := dbtest.New(dbtest.Config{
-		Engine:                  "mysql",
-		Image:                   mysqlIntegrationImage,
-		ContainerPort:           3306,
-		DataVolumePath:          "/var/lib/mysql",
-		Connection:              connection,
-		Machine:                 machine,
-		ExpectedImageBytes:      mysqlIntegrationImageBytes,
-		RemoveSharedSourceImage: os.Getenv(envRemoveSharedImage) == "1",
+		Engine:             "mysql",
+		Image:              mysqlIntegrationImage,
+		ContainerPort:      3306,
+		DataVolumePath:     "/var/lib/mysql",
+		ContainerEndpoint:  containerEndpoint,
+		ExpectedImageBytes: mysqlIntegrationImageBytes,
 		ContainerArgs: []string{
 			"--env", "MYSQL_ALLOW_EMPTY_PASSWORD=yes",
 			"--env", "MYSQL_ROOT_HOST=%",
@@ -127,31 +83,7 @@ func TestMySQLContainerHarness(t *testing.T) {
 			t.Errorf("MySQL database test cleanup failed")
 		}
 		report := harness.Report()
-		t.Logf("MySQL database test disk free bytes: before=%d after=%d reclaimed=%t source_image_removed=%t",
-			report.DiskFreeBefore, report.DiskFreeAfter, report.HostDiskReclaimed, report.SourceImageRemoved)
-		if !report.HostDiskReclaimed {
-			// On a machine this run created, a skip is a failure of the gate
-			// itself and must be red rather than a quiet log: the whole point
-			// of owning the machine is that the trim is permitted.
-			if ownsMachine {
-				t.Errorf("MySQL database test did not reclaim host disk on the machine it created: %s", report.HostDiskReclaimSkipped)
-				return
-			}
-			// A caller-supplied machine is never trimmed, and its shared source
-			// image is never removed, because both reach every other workload
-			// on it. Report the free-space delta instead of asserting against
-			// space the run was not allowed to free.
-			t.Logf("MySQL database test skipped the host-disk reclaim (%s); host free space changed by %d bytes across the run",
-				report.HostDiskReclaimSkipped, report.HostDiskReleasedBytesEstimate)
-			return
-		}
-		// The image is roughly 830 MB. Allow one ordinary build's worth of
-		// noise, and no more: a harness that leaks disk is a failed harness.
-		const buildNoise = 256 << 20
-		if report.DiskFreeAfter+buildNoise < report.DiskFreeBefore {
-			t.Errorf("MySQL database test leaked host disk: before=%d after=%d",
-				report.DiskFreeBefore, report.DiskFreeAfter)
-		}
+		t.Logf("MySQL database test target image-store free bytes: before=%d after=%d", report.DiskFreeBefore, report.DiskFreeAfter)
 	}()
 
 	endpoint, err := harness.Start(ctx)

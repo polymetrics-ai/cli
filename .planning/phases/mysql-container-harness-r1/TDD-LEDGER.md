@@ -2,14 +2,14 @@
 
 | ID | Guarantee | Red assertion | Green proof |
 | --- | --- | --- | --- |
-| H1 | Scoped execution | A missing or unsafe Podman connection can fall through to the global default. | `TestNewRejectsUnscopedConnection` rejects empty, whitespace, and argument-injecting names; every runner invocation receives the supplied connection. |
+| H1 | Direct endpoint scope | A named, default, or remote Podman target can reach another lane. | `TestNewRejectsUnsafeEndpoints` refuses all non-local targets; `TestEveryTargetCommandRechecksTargetIdentity` proves every daemon command is immediately preceded by target identity evidence. |
 | H2 | Isolation and sequencing | Runs can collide on a resource name or multiply database peak disk/memory. | Random generated container/volume/tag names are unit-tested; `TestStartReleasesTheEngineSlotOnEveryExitPath` proves the default one-slot semaphore returns on success and failure. |
 | H3 | Unconditional cleanup | Assertion failure or interrupt can leave a container, volume, or image behind. | `TestCloseDuringCreateStillRemovesTheCreatedResource` and `TestStartRefusesToCreateAfterClose` cover the create/interrupt race; `Close` continues all cleanup stages and the live post-run scoped listings were empty. |
-| H4 | Image ownership | Cleanup guesses whether a shared image existed and deletes another run's reference. | A successful pull is immediately re-tagged to a run-specific local reference before startup; `TestStartInspectsTheSourceImageOnlyToSizeThePull` and `TestCleanupRemovesTheSourceImageOnlyWithOwnershipOrAnExplicitOptIn` cover ownership, retention, and the explicit opt-in. |
+| H4 | Image ownership | Cleanup guesses whether a shared source image belongs to this run. | A successful pull is re-tagged to a run-specific local reference before startup; `TestCleanupRemovesOnlyRunOwnedResources` and `TestStartInspectsTheSourceImageOnlyToSizeThePull` prove source retention and generated-only cleanup. |
 | H7 | Interrupt coverage spans teardown | Cleanup drops the interrupt handler before its own removals, so a Ctrl-C during teardown exits with resources still on the machine. | `TestCloseKeepsInterruptCleanupArmedUntilTeardownFinishes` probes the registry at every removal command and asserts the handler is still installed, then that it is released once teardown returns. |
-| H8 | Pull headroom | A pull started on a target with insufficient image-store capacity fills it partway through and leaves a partial image plus a container to clean up. | `TestStartRefusesToPullWithoutHeadroomForTheImage` proves ~854 MiB free refuses a ~830 MiB image with no `pull` issued, that three times the footprint proceeds, and that an already-cached image needs no headroom; `TestStartRefusesAnUnmeasurableTargetBeforePull` proves an unmeasurable remote target fails before `pull`; `TestNewRequiresTheImageFootprint` stops an engine from silently skipping the gate. |
+| H8 | Pull headroom | A pull started on a target with insufficient or unproven image-store capacity fills it partway through and leaves a partial image plus a container to clean up. | `TestStartRefusesToPullWithoutHeadroomForTheImage` proves the documented threshold; `TestStartFailsClosedWhenCachedTargetCapacityCannotBeProven` proves cached sources still need capacity proof; `TestNewRequiresTheImageFootprint` stops an engine from silently skipping the gate. |
 | H5 | Non-default endpoint | A connector silently assumes 3306 on the host. | `TestStartPublishesOnlyLoopback` asserts `127.0.0.1::<port>` publishing; `TestParseMappedPortRefusesTheEngineDefaultPort` refuses a default host mapping. |
-| H6 | Host-disk reclamation | Removing an image returns space only inside the VM. | `TestCleanupReclaimsHostDiskOnlyAfterContainerCleanup` asserts two explicit `fstrim` passes after cleanup; the live test records before/after byte counts and fails if the reclaimed run exceeds ordinary build noise. |
+| H6 | Target-store accounting | Capacity can be measured on a different filesystem than the selected daemon's image store. | `TestTargetCapacityUsesTheProvenStorePath` checks `DiskFreeAt` receives the reported graph root; unprovable target identity or capacity fails before resource mutation. |
 | M1 | Honest CDC declaration | MySQL can advertise a CDC capability before a production runtime entrypoint exists. | Metadata, definition, catalog, generated docs, and website data keep `cdc: false`; no changefeed descriptor or executor is registered, while the native row-event reader remains covered by internal evidence. |
 | M2 | SQL safety | Stream/schema/cursor values are concatenated into SQL. | Identifier tests reject unsafe values; queries quote only validated identifiers and bind all values. |
 | M3 | Complete ETL paging and incrementals | A read proves a single record or repeats/skips at shared cursor values. | Keyset query tests cover primary-key and `(cursor, primary_key)` boundaries; the real five-row seed with `page_size=2` proves multiple pages and exact incremental rows. |
@@ -18,6 +18,9 @@
 | T1 | TLS is enforced, not declared | A strict TLS mode can quietly downgrade or be ignored by replication. | TLS-less server tests make strict modes refuse; certificate tests prove verification; live checks use the server's own `Ssl_cipher`; the binlog syncer receives the same TLS config. |
 | T2 | SQL option shape does not drift | MySQL and PostgreSQL expose incompatible TLS field names or validation. | `sqltls` centralizes the vocabulary. PostgreSQL's definition accepts the runtime vocabulary and `TestPostgresPoolConfigUsesSharedTransportSecurityOptions` proves CA/server-name application and no strict plaintext fallback. |
 | G1 | Production native wiring contains only connectors | A test harness or shared helper is blank-imported solely because it sits below `native/`. | `TestGen_NativesetImportsRuntimePackagesAndExcludesSupportLibraries` fails for `dbtest`/`sqltls`; `nativeSupportPackages` and regenerated wiring exclude both while retaining real connector packages. |
+
+> Historical machine/connection execution entries below remain as audit history. The direct-endpoint
+> rows above are the active harness contract.
 
 ## Red / Green execution evidence
 
@@ -228,3 +231,20 @@ Passed. The focused check includes the tagged MySQL integration source without o
 container. It covers the non-public CDC projection, default-connection restoration and concurrent
 change guard, target-capacity refusal, scoped certificate copy, and compilation of the new
 `verify-ca` live case.
+
+**Red — review round 7 endpoint ownership correction:**
+
+Source review confirmed that the removed task-owned-machine lifecycle required an unsupported Podman
+5.3 init flag and wrote the global default connection. It also found that cached source images could
+skip target capacity proof, shared source-image removal was caller-selectable, and a closed harness
+could register itself with interrupt cleanup after `closeOnce` had already run.
+
+**Green — review round 7 endpoint ownership correction:**
+
+```text
+go test -count=1 -timeout 5m ./internal/connectors/native/dbtest
+```
+
+Passed. The harness now accepts only a direct local Unix endpoint, binds its socket and graph-root
+identity before every daemon command, retains every shared source image, and refuses an interrupt
+registration after close.

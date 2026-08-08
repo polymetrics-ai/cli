@@ -11,33 +11,19 @@ path.
 ## Scope and constraints
 
 - The tagged test is sequential and opt-in (`POLYMETRICS_DATABASE_INTEGRATION=1`). A missing
-  opt-in or `POLYMETRICS_PODMAN_CONNECTION` produces a visible skip; once opted in, startup or
+  opt-in or `POLYMETRICS_PODMAN_ENDPOINT` produces a visible skip; once opted in, startup or
   reachability failure is red, never a green no-op.
-- Every container command has the caller-supplied `--connection`; the harness never uses or mutates
-  the Podman global default. Machine trim uses the explicit configured machine name.
+- Every Podman command has the caller-supplied direct Unix endpoint. The harness never reads or
+  mutates the Podman global default, and it refuses named connections and remote endpoints.
 - The host port is Podman-assigned on loopback and is rejected if it equals the
   engine default. The connector receives host and port as separate fields; it does not construct a
   logged endpoint.
 - The MySQL source image is pinned at `docker.io/library/mysql:8.4.11`. Each run creates a unique
-  local tag, then cleanup attempts container → volume → run tag → pulled source image even after an
-  earlier cleanup error. The source image is removed only on a machine this run created, where
-  nothing else can be using it; on a shared machine it is retained unless
-  `POLYMETRICS_DATABASE_REMOVE_SHARED_IMAGE=1` opts in. A pull that has to download the image is
-  refused when target image-store free space is below three times its declared footprint; an
-  unmeasurable remote or shared target fails closed before pull.
-- Cleanup runs two explicit `fstrim` passes against the configured machine after Podman cleanup.
-  This is required on macOS VM-backed storage to return freed guest blocks to the host sparse disk.
-  It is no longer an opt-in, but it runs only against a machine this process created through
-  `dbtest.NewMachine` and still holds an ownership record for. A matching name is not ownership:
-  `fstrim -av` reaches every filesystem on a machine, so a caller-supplied, pre-existing, shared, or
-  remote machine is reported with its still-reclaimable byte count and never trimmed. The scoped
-  connection and a live `podman machine inspect` follow as defence in depth.
-- `POLYMETRICS_DATABASE_OWN_MACHINE=1` is how the live proof creates, uses, and deletes its own
-  machine; that is the mode in which the reclaim is exercised at all.
-- The machine ownership record is taken before `podman machine init` runs, matching the container
-  path's claim-before-create rule: init writes a multi-GiB disk image before it can fail, and a
-  cancelled context kills it mid-write. A failed or cancelled init tears its own machine down on a
-  deadline of its own, against that exact generated name.
+  local tag, then cleanup attempts container → volume → run tag even after an earlier cleanup
+  error. The source image is never removed.
+- Before startup and before every Podman command, the endpoint must report the configured Unix socket and
+  a locally measurable image-store path. This check is required even when the source image is
+  cached. An absent source image also needs three times its declared footprint free.
 - The test database uses only its isolated ephemeral server configuration. No credential or
   connection string is printed, logged, or stored.
 - MySQL is a dynamic-schema Tier-3 native connector. Its binary-log mechanism is declared through

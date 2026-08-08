@@ -1,5 +1,17 @@
 # Verification — MySQL container harness R1
 
+## Current endpoint-contract correction — 2026-08-09
+
+The earlier task-owned-machine evidence below applies to a removed lifecycle and is retained only as
+historical context. The current harness accepts a direct local Unix endpoint, never changes a Podman
+global default, always retains the source image, and rechecks endpoint identity plus target-store
+capacity before every command. The outer validation phase must run the tagged MySQL proof against a
+direct endpoint after the focused dbtest check recorded in `TDD-LEDGER.md`.
+
+- [x] `go test -count=1 -timeout 5m ./internal/connectors/native/dbtest` passed for the current
+      endpoint-contract correction.
+- [ ] The tagged live MySQL proof against a direct local endpoint remains owned by outer validation.
+
 ## Fresh post-rebase evidence — 2026-08-08
 
 The branch was rebased onto current `origin/main` before this verification. Generated files were

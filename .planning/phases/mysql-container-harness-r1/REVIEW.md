@@ -5,9 +5,9 @@ forbids spawning the prescribed reviewer role in this task, so this is the requi
 
 ## Reviewed surfaces
 
-- `dbtest` scopes every container command to its supplied Podman connection, allocates only
-  run-named resources, and runs all cleanup stages after failure/interrupt. The narrow machine
-  command receives its explicit machine name only for opt-in disk reclaim.
+- `dbtest` scopes every container command to a direct local Unix Podman endpoint, allocates only
+  run-named resources, and runs all cleanup stages after failure/interrupt. Endpoint identity and
+  image-store capacity are rechecked before every command.
 - MySQL's full and incremental reader uses validated identifiers, parameterized keyset boundaries,
   primary-key tie-breaking, and bounded pages. The native reader does not masquerade as #3902
   page-wise direct-read functionality.
@@ -32,14 +32,14 @@ forbids spawning the prescribed reviewer role in this task, so this is the requi
 | PostgreSQL accepted canonical TLS aliases in runtime code but its definition rejected them before invocation. | Fixed in `41275a450`; red/green tests prove definition/runtime/pool alignment. |
 | A native SQL ETL reader could be mistaken for a #3902 page-context direct reader. | Documented and locked by `e36fbebc2`; no `DirectReader` is exposed. |
 | An opted-in live startup failure lost its sanitized stage reason. | Fixed locally: the integration test now displays the safe harness stage without exposing endpoint or authentication material. |
-| Earlier planning/PR text claimed actions on other Podman machines. | Removed; current evidence records only the task-owned machine created and removed during this verification. |
+| Earlier planning/PR text claimed actions on other Podman machines. | Superseded: the harness no longer creates or removes Podman machines. |
 | Recovery of the prior pipeline head showed generated production wiring blank-imported `dbtest`; current-main also placed shared `sqltls` alongside connectors. | Fixed before recovery: source has explicit support-library exclusions, the generated file was regenerated, and a red/green generator test covers both. |
 | MySQL advertised CDC without a production operator entrypoint. | Fixed: metadata, definition, catalog, docs, and website projections now keep `cdc: false`; the internal reader has no public changefeed descriptor or executor. |
-| A task-owned machine could leave Podman's global default altered, and a remote pull used local free-space reporting. | Fixed: initialization disables default updates, snapshots/restores only its own change, and an absent source image needs measured target image-store capacity. |
+| A task-owned machine could leave Podman's global default altered, and a remote pull used local free-space reporting. | Fixed: task-owned machine lifecycle was removed. A direct local Unix endpoint is identity-bound to its own reported socket and image-store path before every mutation; remote and named endpoints fail closed, including for cached images. |
 | The live TLS matrix omitted `verify-ca`, and public connector documentation contained harness maintenance instructions. | Fixed: the tagged proof copies the container CA for a live `verify-ca` session; maintenance instructions now live in `dbtest/README.md`. |
 
 ## Verdict
 
-No unresolved implementation finding remains. The focused tagged-source check passed without opting
-into a live container. Automated GitHub review and CI are PR-stage gates; their outcome must be
-recorded before handoff.
+No unresolved implementation finding remains. `go test -count=1 -timeout 5m
+./internal/connectors/native/dbtest` passed for the direct-endpoint correction. The tagged live proof,
+automated GitHub review, and CI remain outer PR-stage gates.

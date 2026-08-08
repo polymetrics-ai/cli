@@ -1,8 +1,8 @@
 // Package dbtest provides an opt-in, Podman-backed database integration-test
 // harness. It is test support only: callers supply one engine's pinned image
-// and server arguments, while this package owns Podman connection scoping,
-// ephemeral resource names, loopback port allocation, disk accounting, and
-// unconditional cleanup.
+// and server arguments, while this package owns endpoint scoping, ephemeral
+// resource names, loopback port allocation, disk accounting, and unconditional
+// cleanup.
 //
 // A second engine is added by supplying another Config, not by copying this
 // file. See mysql_integration_test.go for the reference caller.
@@ -14,6 +14,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"net/url"
 	"os"
 	"os/exec"
 	"os/signal"
@@ -58,18 +59,11 @@ type Endpoint struct {
 	Port int
 }
 
-// CommandRunner runs a Podman subcommand against one explicit connection. It
+// CommandRunner runs a Podman subcommand against one explicit endpoint. It
 // exists solely to make resource ownership and cleanup testable without a
 // running container engine.
 type CommandRunner interface {
 	Run(context.Context, string, ...string) (string, error)
-}
-
-// MachineRunner runs a Podman machine lifecycle command and returns its
-// standard output. It is separate from the container runner so a unit test can
-// prove machine ownership and the host-disk reclaim without requiring a VM.
-type MachineRunner interface {
-	Run(context.Context, ...string) (string, error)
 }
 
 // Config describes one supported database-engine container. It is internal
@@ -87,15 +81,8 @@ type Config struct {
 	ContainerPort int
 	// DataVolumePath is the engine's data directory inside the container.
 	DataVolumePath string
-	// Connection names the Podman connection to target. It is mandatory:
-	// the default connection on a shared host belongs to another lane, so
-	// falling back to it is refused before any Podman call.
-	Connection string
-	// Machine names the Podman machine backing Connection and defaults to
-	// Connection. The host-disk reclaim runs only against a machine this
-	// process created through NewMachine; a caller-supplied name is used for
-	// nothing but reporting. See reclaimHostDisk.
-	Machine string
+	// ContainerEndpoint is the local Unix Podman API endpoint.
+	ContainerEndpoint string
 	// ContainerArgs are passed to "podman run" before the image reference.
 	ContainerArgs []string
 	// EngineArgs are passed to the engine process after the image reference.
@@ -105,18 +92,8 @@ type Config struct {
 	// measured against; an engine that declares nothing would silently skip
 	// that check. See imagePullFreeSpaceFactor.
 	ExpectedImageBytes uint64
-	// RemoveSharedSourceImage opts in to removing the pulled source image from
-	// a machine this run did not create. It is off by default: the source
-	// reference is shared with every other lane on that machine, and a pull
-	// against an already-cached image is a no-op, so a run cannot tell whether
-	// it or someone else put the image there. The run-generated tag is always
-	// removed, and on a machine this run created through NewMachine the source
-	// image is removed too, because nothing else can be using it.
-	RemoveSharedSourceImage bool
-
-	Run        CommandRunner
-	RunMachine MachineRunner
-	DiskFree   func() (uint64, error)
+	Run                CommandRunner
+	DiskFreeAt         func(string) (uint64, error)
 }
 
 // imagePullFreeSpaceFactor is the multiple of Config.ExpectedImageBytes that
@@ -133,30 +110,16 @@ const imagePullFreeSpaceFactor = 3
 // multiplication above cannot overflow.
 const maxExpectedImageBytes = uint64(1) << 40
 
-// Report records disk free before startup and after all teardown work,
-// including the host-disk reclaim. A caller can print only these aggregate
-// byte values to make leaks visible without logging connection information.
+// Report records free bytes on the verified target image store before startup
+// and after all teardown work.
 type Report struct {
-	DiskFreeBefore    uint64
-	DiskFreeAfter     uint64
-	HostDiskReclaimed bool
-	// HostDiskReclaimSkipped names why the backing machine was left untrimmed
-	// and is empty when the trim ran. A machine this run cannot prove it owns
-	// is reported, never trimmed.
-	HostDiskReclaimSkipped string
-	// HostDiskReleasedBytesEstimate is the host free-space delta across the
-	// whole run (after minus before). It is an estimate of what this run gave
-	// back and nothing more: no image's own size is measured here, and any
-	// unrelated host activity during the run lands in the same number. A
-	// negative value is space the run still holds, which is what a skipped trim
-	// leaves inside a machine's sparse disk file.
-	HostDiskReleasedBytesEstimate int64
-	// SourceImageRemoved reports whether the shared source image reference was
-	// removed by this run.
-	SourceImageRemoved bool
-	// SourceImageRetainedReason names why the shared source image was left in
-	// place, and is empty when it was removed or was never pulled.
-	SourceImageRetainedReason string
+	DiskFreeBefore uint64
+	DiskFreeAfter  uint64
+}
+
+type targetIdentity struct {
+	socketPath string
+	graphRoot  string
 }
 
 // Harness owns exactly one generated container and one generated named
@@ -168,15 +131,16 @@ type Harness struct {
 	volumeName    string
 	runImage      string
 
-	mu               sync.Mutex
-	endpoint         Endpoint
-	runImageKnown    bool
-	sourceImageKnown bool
-	containerKnown   bool
-	volumeKnown      bool
-	slotHeld         bool
-	closed           bool
-	report           Report
+	mu             sync.Mutex
+	endpoint       Endpoint
+	runImageKnown  bool
+	containerKnown bool
+	volumeKnown    bool
+	slotHeld       bool
+	closed         bool
+	report         Report
+	target         targetIdentity
+	targetKnown    bool
 
 	// opMu serialises the create sequence against cleanup so an interrupt
 	// can never remove a resource while the command that creates it is still
@@ -187,10 +151,7 @@ type Harness struct {
 	closeErr  error
 }
 
-// New validates the test-only engine configuration. An explicit Podman
-// connection is mandatory: the default connection on this host points at
-// another lane's machine, so falling back to it is refused before any Podman
-// call rather than failing later with an opaque socket error.
+// New validates the test-only engine configuration.
 func New(config Config) (*Harness, error) {
 	if strings.TrimSpace(config.Engine) == "" {
 		return nil, errors.New("database test harness requires an engine name")
@@ -204,14 +165,8 @@ func New(config Config) (*Harness, error) {
 	if !filepath.IsAbs(config.DataVolumePath) || strings.ContainsAny(config.DataVolumePath, "\r\n:") {
 		return nil, errors.New("database test harness requires a safe absolute engine data-volume path")
 	}
-	if !safeName(config.Connection) {
-		return nil, errors.New("database test harness requires an explicit safe Podman connection")
-	}
-	if config.Machine == "" {
-		config.Machine = config.Connection
-	}
-	if !safeName(config.Machine) {
-		return nil, errors.New("database test harness requires a safe Podman machine name")
+	if _, err := podmanEndpointPath(config.ContainerEndpoint); err != nil {
+		return nil, errors.New("database test harness requires an explicit safe local Podman endpoint")
 	}
 	if config.ExpectedImageBytes == 0 || config.ExpectedImageBytes > maxExpectedImageBytes {
 		return nil, errors.New("database test harness requires the engine image's approximate size in bytes")
@@ -219,11 +174,8 @@ func New(config Config) (*Harness, error) {
 	if config.Run == nil {
 		config.Run = podmanRunner{}
 	}
-	if config.RunMachine == nil {
-		config.RunMachine = podmanMachineRunner{}
-	}
-	if config.DiskFree == nil {
-		config.DiskFree = diskFreeBytes
+	if config.DiskFreeAt == nil {
+		config.DiskFreeAt = diskFreeAt
 	}
 
 	suffix, err := randomSuffix()
@@ -278,14 +230,9 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 		h.releaseSlot()
 	}()
 
-	before, err := h.config.DiskFree()
-	if err != nil {
-		return Endpoint{}, fmt.Errorf("measure disk free before %s test: %w", h.config.Engine, err)
+	if !h.installInterruptCleanup() {
+		return Endpoint{}, errors.New("database test harness was closed during startup")
 	}
-	h.mu.Lock()
-	h.report.DiskFreeBefore = before
-	h.mu.Unlock()
-	h.installInterruptCleanup()
 
 	// Every create runs under a context Close can cancel, so an interrupt
 	// during a long pull aborts it instead of waiting for it.
@@ -300,41 +247,36 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 	if err := h.abortIfClosed(); err != nil {
 		return Endpoint{}, err
 	}
+	free, err := h.targetImageStoreFree(ctx)
+	if err != nil {
+		return Endpoint{}, fmt.Errorf("refusing to use the %s test target because its identity or image-store capacity cannot be proven: %w", h.config.Engine, err)
+	}
+	h.mu.Lock()
+	h.report.DiskFreeBefore = free
+	h.mu.Unlock()
 
-	// This inspect sizes the pull; it is never ownership evidence. A source
-	// reference that is already present may have been cached by any other lane
-	// on a shared machine, which is exactly why cleanup gates its removal on
-	// machine ownership rather than on presence.
 	sourceAbsent, err := h.resourceAbsent(ctx, "image", "inspect", h.config.Image)
 	if err != nil {
 		return Endpoint{}, fmt.Errorf("inspect %s test source image: %w", h.config.Engine, err)
 	}
-	// A cached image costs no disk to "pull", so the headroom gate applies only
-	// to a pull that has to download and extract one.
 	if sourceAbsent {
-		free, err := h.targetImageStoreFree(ctx)
-		if err != nil {
-			return Endpoint{}, fmt.Errorf("refusing to pull the %s test image because target image-store capacity cannot be measured: %w", h.config.Engine, err)
-		}
 		if err := h.assertPullHeadroom(free); err != nil {
 			return Endpoint{}, err
 		}
 	}
-	if _, err := h.config.Run.Run(ctx, h.config.Connection, "pull", h.config.Image); err != nil {
+	if _, err := h.runOnVerifiedTarget(ctx, "pull", h.config.Image); err != nil {
 		return Endpoint{}, fmt.Errorf("pull %s test image: %w", h.config.Engine, err)
 	}
-	// The source reference now exists because this run's pull returned success.
-	// Claim both references before issuing the tag. A tag that returns an
+	// Claim the generated reference before issuing the tag. A tag that returns an
 	// error may still have created the reference, so ownership is claimed
 	// ahead of the command and cleanup tolerates absence.
 	if err := h.abortIfClosed(); err != nil {
 		return Endpoint{}, err
 	}
 	h.mu.Lock()
-	h.sourceImageKnown = true
 	h.runImageKnown = true
 	h.mu.Unlock()
-	if _, err := h.config.Run.Run(ctx, h.config.Connection, "image", "tag", h.config.Image, h.runImage); err != nil {
+	if _, err := h.runOnVerifiedTarget(ctx, "image", "tag", h.config.Image, h.runImage); err != nil {
 		return Endpoint{}, fmt.Errorf("tag %s test image: %w", h.config.Engine, err)
 	}
 
@@ -351,7 +293,7 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 	h.mu.Lock()
 	h.volumeKnown = true
 	h.mu.Unlock()
-	if _, err := h.config.Run.Run(ctx, h.config.Connection, "volume", "create", h.volumeName); err != nil {
+	if _, err := h.runOnVerifiedTarget(ctx, "volume", "create", h.volumeName); err != nil {
 		return Endpoint{}, fmt.Errorf("create %s test volume: %w", h.config.Engine, err)
 	}
 
@@ -377,11 +319,11 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 	h.mu.Lock()
 	h.containerKnown = true
 	h.mu.Unlock()
-	if _, err := h.config.Run.Run(ctx, h.config.Connection, args...); err != nil {
+	if _, err := h.runOnVerifiedTarget(ctx, args...); err != nil {
 		return Endpoint{}, fmt.Errorf("start %s test container: %w", h.config.Engine, err)
 	}
 
-	mapping, err := h.config.Run.Run(ctx, h.config.Connection, "port", h.containerName, strconv.Itoa(h.config.ContainerPort)+"/tcp")
+	mapping, err := h.runOnVerifiedTarget(ctx, "port", h.containerName, strconv.Itoa(h.config.ContainerPort)+"/tcp")
 	if err != nil {
 		return Endpoint{}, fmt.Errorf("discover %s test port: %w", h.config.Engine, err)
 	}
@@ -402,14 +344,10 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 	return endpoint, nil
 }
 
-// Close unconditionally attempts container, volume, generated image, source
-// image, and host-disk reclaim cleanup in that order. Each later action still
-// runs if an earlier one fails. A tagged test must call this in a defer before
-// assertions, so a failing assertion cannot leak an image.
-//
-// The last two actions are gated on this run having created the backing
-// machine: the source image is shared with every other lane on a machine this
-// run did not create, and `fstrim -av` reaches every filesystem on it.
+// Close unconditionally attempts container, volume, and generated-image
+// cleanup in that order. Each later action still runs if an earlier one fails.
+// A tagged test must call this in a defer before assertions, so a failing
+// assertion cannot leak a generated resource.
 func (h *Harness) Close(ctx context.Context) error {
 	h.closeOnce.Do(func() {
 		// The interrupt registration outlives every removal below. Dropping it
@@ -432,88 +370,35 @@ func (h *Harness) Close(ctx context.Context) error {
 		h.opMu.Lock()
 		defer h.opMu.Unlock()
 
-		// Ownership is proven before the first image removal, not after it: the
-		// same answer decides whether the shared source image may be removed and
-		// whether the machine may be trimmed, so it has to be established once,
-		// ahead of both.
-		machineOwned, ownershipReason := h.machineOwnership(ctx)
-
 		var errs []error
 		if h.known(func(h *Harness) bool { return h.containerKnown }) {
-			if _, err := h.config.Run.Run(ctx, h.config.Connection, "container", "rm", "--force", h.containerName); err != nil && !errors.Is(err, errPodmanResourceNotFound) {
+			if _, err := h.runOnVerifiedTarget(ctx, "container", "rm", "--force", h.containerName); err != nil && !errors.Is(err, errPodmanResourceNotFound) {
 				errs = append(errs, fmt.Errorf("remove %s test container: %w", h.config.Engine, err))
 			}
 		}
 		if h.known(func(h *Harness) bool { return h.volumeKnown }) {
-			if _, err := h.config.Run.Run(ctx, h.config.Connection, "volume", "rm", "--force", h.volumeName); err != nil && !errors.Is(err, errPodmanResourceNotFound) {
+			if _, err := h.runOnVerifiedTarget(ctx, "volume", "rm", "--force", h.volumeName); err != nil && !errors.Is(err, errPodmanResourceNotFound) {
 				errs = append(errs, fmt.Errorf("remove %s test volume: %w", h.config.Engine, err))
 			}
 		}
 		if h.known(func(h *Harness) bool { return h.runImageKnown }) {
-			if _, err := h.config.Run.Run(ctx, h.config.Connection, "image", "rm", h.runImage); err != nil && !errors.Is(err, errPodmanResourceNotFound) {
+			if _, err := h.runOnVerifiedTarget(ctx, "image", "rm", h.runImage); err != nil && !errors.Is(err, errPodmanResourceNotFound) {
 				errs = append(errs, fmt.Errorf("remove %s test image: %w", h.config.Engine, err))
 			}
 		}
-		sourceRemoved, sourceRetained := false, ""
-		switch {
-		case !h.known(func(h *Harness) bool { return h.sourceImageKnown }):
-		case machineOwned || h.config.RemoveSharedSourceImage:
-			if _, err := h.config.Run.Run(ctx, h.config.Connection, "image", "rm", h.config.Image); err != nil && !errors.Is(err, errPodmanResourceNotFound) {
-				errs = append(errs, fmt.Errorf("remove %s test source image: %w", h.config.Engine, err))
+		if h.known(func(h *Harness) bool { return h.targetKnown }) {
+			after, err := h.targetImageStoreFree(ctx)
+			if err != nil {
+				errs = append(errs, fmt.Errorf("measure target image-store free space after %s test: %w", h.config.Engine, err))
 			} else {
-				sourceRemoved = true
+				h.mu.Lock()
+				h.report.DiskFreeAfter = after
+				h.mu.Unlock()
 			}
-		default:
-			sourceRetained = ownershipReason
 		}
-
-		reclaimed, skipped := false, ownershipReason
-		if machineOwned {
-			trimmed, reclaimErr := h.reclaimHostDisk(ctx)
-			if reclaimErr != nil {
-				errs = append(errs, reclaimErr)
-				skipped = "podman machine trim failed"
-			}
-			reclaimed = trimmed
-		}
-		after, err := h.config.DiskFree()
-		if err != nil {
-			errs = append(errs, fmt.Errorf("measure disk free after %s test: %w", h.config.Engine, err))
-		}
-		h.mu.Lock()
-		h.report.HostDiskReclaimed = reclaimed
-		h.report.HostDiskReclaimSkipped = skipped
-		h.report.SourceImageRemoved = sourceRemoved
-		h.report.SourceImageRetainedReason = sourceRetained
-		if err == nil {
-			h.report.DiskFreeAfter = after
-			h.report.HostDiskReleasedBytesEstimate = releasedBytesEstimate(h.report.DiskFreeBefore, after)
-		}
-		h.mu.Unlock()
 		h.closeErr = errors.Join(errs...)
 	})
 	return h.closeErr
-}
-
-// reclaimHostDisk discards freed guest blocks so the machine's sparse disk
-// file shrinks on the host, because removing an image frees space inside the
-// VM but leaves the host file inflated. It runs on every cleanup rather than
-// on an opt-in, but its caller invokes it only once machineOwnership has
-// proven this process created the machine; an unowned machine is reported
-// through the Report instead, never trimmed, because a pre-existing, shared,
-// or remote endpoint belongs to another lane.
-//
-// Two passes are required: measured on Podman 5.3 with applehv, a single
-// fstrim immediately after an image removal returns only part of the space,
-// because the guest has not finished committing the deletion when the first
-// discard is issued.
-func (h *Harness) reclaimHostDisk(ctx context.Context) (bool, error) {
-	for range 2 {
-		if _, err := h.config.RunMachine.Run(ctx, "machine", "ssh", h.config.Machine, "sudo fstrim -av"); err != nil {
-			return false, fmt.Errorf("reclaim host disk after %s test: %w", h.config.Engine, err)
-		}
-	}
-	return true, nil
 }
 
 // assertPullHeadroom refuses a pull the target image store cannot afford. Reporting the
@@ -530,29 +415,80 @@ func (h *Harness) assertPullHeadroom(free uint64) error {
 }
 
 func (h *Harness) targetImageStoreFree(ctx context.Context) (uint64, error) {
-	if h.config.Connection != h.config.Machine && h.config.Connection != h.config.Machine+"-root" {
-		return 0, errors.New("Podman connection cannot be measured through the configured local machine")
-	}
-	name, err := h.config.RunMachine.Run(ctx, "machine", "inspect", "--format", "{{.Name}}", h.config.Machine)
-	if err != nil {
-		return 0, errors.New("configured Podman machine is not locally inspectable")
-	}
-	if strings.TrimSpace(name) != h.config.Machine {
-		return 0, errors.New("configured Podman connection does not identify the local machine")
-	}
-	graphRoot, err := h.config.Run.Run(ctx, h.config.Connection, "info", "--format", "{{.Store.GraphRoot}}")
-	if err != nil {
-		return 0, errors.New("target Podman image store could not be located")
-	}
-	graphRoot, err = safePodmanStorePath(graphRoot)
+	target, err := h.assertTarget(ctx)
 	if err != nil {
 		return 0, err
 	}
-	df, err := h.config.RunMachine.Run(ctx, "machine", "ssh", h.config.Machine, "df", "-Pk", graphRoot)
+	free, err := h.config.DiskFreeAt(target.graphRoot)
 	if err != nil {
-		return 0, errors.New("target Podman image store capacity query failed")
+		return 0, errors.New("target Podman image-store capacity query failed")
 	}
-	return parseAvailableDiskBytes(df)
+	return free, nil
+}
+
+func (h *Harness) runOnVerifiedTarget(ctx context.Context, args ...string) (string, error) {
+	if _, err := h.assertTarget(ctx); err != nil {
+		return "", err
+	}
+	return h.config.Run.Run(ctx, h.config.ContainerEndpoint, args...)
+}
+
+func (h *Harness) assertTarget(ctx context.Context) (targetIdentity, error) {
+	endpointPath, err := podmanEndpointPath(h.config.ContainerEndpoint)
+	if err != nil {
+		return targetIdentity{}, err
+	}
+	raw, err := h.config.Run.Run(ctx, h.config.ContainerEndpoint, "info", "--format", "{{.Host.RemoteSocket.Path}}\t{{.Store.GraphRoot}}")
+	if err != nil {
+		return targetIdentity{}, errors.New("target Podman endpoint could not be inspected")
+	}
+	target, err := parseTargetIdentity(raw)
+	if err != nil {
+		return targetIdentity{}, err
+	}
+	if target.socketPath != endpointPath {
+		return targetIdentity{}, errors.New("target Podman endpoint identity does not match the configured socket")
+	}
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	if h.targetKnown && h.target != target {
+		return targetIdentity{}, errors.New("target Podman endpoint identity changed during the test")
+	}
+	h.target = target
+	h.targetKnown = true
+	return target, nil
+}
+
+func podmanEndpointPath(raw string) (string, error) {
+	value := strings.TrimSpace(raw)
+	if value == "" || value != raw || strings.ContainsAny(value, "\r\n\x00") {
+		return "", errors.New("target Podman endpoint is invalid")
+	}
+	endpoint, err := url.Parse(value)
+	if err != nil || endpoint.Scheme != "unix" || endpoint.Host != "" || endpoint.Opaque != "" || endpoint.RawQuery != "" || endpoint.Fragment != "" || endpoint.User != nil || endpoint.RawPath != "" {
+		return "", errors.New("target Podman endpoint must be a direct local Unix socket")
+	}
+	return safePodmanStorePath(endpoint.Path)
+}
+
+func parseTargetIdentity(raw string) (targetIdentity, error) {
+	line := strings.TrimSpace(raw)
+	if line == "" || strings.Contains(line, "\n") {
+		return targetIdentity{}, errors.New("target Podman endpoint returned an invalid identity")
+	}
+	fields := strings.Split(line, "\t")
+	if len(fields) != 2 {
+		return targetIdentity{}, errors.New("target Podman endpoint returned an invalid identity")
+	}
+	socketPath, err := safePodmanStorePath(fields[0])
+	if err != nil {
+		return targetIdentity{}, errors.New("target Podman endpoint returned an invalid socket path")
+	}
+	graphRoot, err := safePodmanStorePath(fields[1])
+	if err != nil {
+		return targetIdentity{}, errors.New("target Podman image store path is invalid")
+	}
+	return targetIdentity{socketPath: socketPath, graphRoot: graphRoot}, nil
 }
 
 func safePodmanStorePath(raw string) (string, error) {
@@ -566,59 +502,6 @@ func safePodmanStorePath(raw string) (string, error) {
 		}
 	}
 	return value, nil
-}
-
-func parseAvailableDiskBytes(raw string) (uint64, error) {
-	for _, line := range strings.Split(raw, "\n") {
-		fields := strings.Fields(line)
-		if len(fields) < 4 || fields[0] == "Filesystem" {
-			continue
-		}
-		available, err := strconv.ParseUint(fields[3], 10, 64)
-		if err != nil || available > ^uint64(0)/1024 {
-			return 0, errors.New("target Podman image store capacity is invalid")
-		}
-		return available * 1024, nil
-	}
-	return 0, errors.New("target Podman image store capacity was not returned")
-}
-
-// releasedBytesEstimate reports the host free-space delta across a run.
-// Negative means the run ended holding space it had not released, which is
-// what a skipped trim leaves behind.
-func releasedBytesEstimate(before, after uint64) int64 {
-	const maxInt64 = uint64(1)<<63 - 1
-	if after >= before {
-		return int64(min(after-before, maxInt64))
-	}
-	return -int64(min(before-after, maxInt64))
-}
-
-// machineOwnership proves, or refuses to prove, that trimming the configured
-// machine can only affect this run. The decisive fact is that this process
-// created the machine and still holds its ownership record: `fstrim -av`
-// reaches every filesystem on a machine, so a name that merely matches
-// caller-supplied configuration proves nothing about who else is using it.
-// Two weaker checks follow as defence in depth — the connection every
-// container command was scoped to must address that machine, which is how
-// Podman names a machine's own connections, and the machine must still be
-// locally defined. The returned reason names the failed check without echoing
-// configuration.
-func (h *Harness) machineOwnership(ctx context.Context) (bool, string) {
-	if !machineIsOwned(h.config.Machine) {
-		return false, "podman machine was not created by this run"
-	}
-	if h.config.Connection != h.config.Machine && h.config.Connection != h.config.Machine+"-root" {
-		return false, "podman connection does not address the machine this run created"
-	}
-	name, err := h.config.RunMachine.Run(ctx, "machine", "inspect", "--format", "{{.Name}}", h.config.Machine)
-	if err != nil {
-		return false, "podman machine ownership could not be verified"
-	}
-	if strings.TrimSpace(name) != h.config.Machine {
-		return false, "podman machine is not the local machine this run created"
-	}
-	return true, ""
 }
 
 // Report returns the aggregate disk measurement for this run.
@@ -641,7 +524,7 @@ func (h *Harness) CopyFileFromContainer(ctx context.Context, source, destination
 	if !known || closed {
 		return errors.New("database test harness container is not available")
 	}
-	if _, err := h.config.Run.Run(ctx, h.config.Connection, "cp", container+":"+source, destination); err != nil {
+	if _, err := h.runOnVerifiedTarget(ctx, "cp", container+":"+source, destination); err != nil {
 		return fmt.Errorf("copy database test container file: %w", err)
 	}
 	return nil
@@ -681,7 +564,7 @@ func (h *Harness) known(check func(*Harness) bool) bool {
 }
 
 func (h *Harness) resourceAbsent(ctx context.Context, args ...string) (bool, error) {
-	_, err := h.config.Run.Run(ctx, h.config.Connection, args...)
+	_, err := h.runOnVerifiedTarget(ctx, args...)
 	if err == nil {
 		return false, nil
 	}
@@ -698,28 +581,23 @@ func (h *Harness) resourceAbsent(ctx context.Context, args ...string) (bool, err
 // bounded parallel mode. One registry closes every live harness before the
 // process exits.
 var interruptCleanup = struct {
-	mu       sync.Mutex
-	live     map[*Harness]struct{}
-	machines map[*Machine]struct{}
-	signals  chan os.Signal
-	idle     chan struct{}
-}{live: make(map[*Harness]struct{}), machines: make(map[*Machine]struct{})}
+	mu      sync.Mutex
+	live    map[*Harness]struct{}
+	signals chan os.Signal
+	idle    chan struct{}
+}{live: make(map[*Harness]struct{})}
 
-func (h *Harness) installInterruptCleanup() {
+func (h *Harness) installInterruptCleanup() bool {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	if h.closed {
+		return false
+	}
 	interruptCleanup.mu.Lock()
 	defer interruptCleanup.mu.Unlock()
 	interruptCleanup.live[h] = struct{}{}
 	armInterruptWatchLocked()
-}
-
-// registerInterruptMachine adds a machine this process created, so an
-// interrupt removes a whole VM rather than leaking its disk image. Only owned
-// machines are ever registered here.
-func registerInterruptMachine(machine *Machine) {
-	interruptCleanup.mu.Lock()
-	defer interruptCleanup.mu.Unlock()
-	interruptCleanup.machines[machine] = struct{}{}
-	armInterruptWatchLocked()
+	return true
 }
 
 func armInterruptWatchLocked() {
@@ -744,15 +622,8 @@ func unregisterInterruptCleanup(h *Harness) {
 	disarmInterruptWatchLocked()
 }
 
-func unregisterInterruptMachine(machine *Machine) {
-	interruptCleanup.mu.Lock()
-	defer interruptCleanup.mu.Unlock()
-	delete(interruptCleanup.machines, machine)
-	disarmInterruptWatchLocked()
-}
-
 func disarmInterruptWatchLocked() {
-	if len(interruptCleanup.live) != 0 || len(interruptCleanup.machines) != 0 || interruptCleanup.signals == nil {
+	if len(interruptCleanup.live) != 0 || interruptCleanup.signals == nil {
 		return
 	}
 	signal.Stop(interruptCleanup.signals)
@@ -769,11 +640,8 @@ func awaitInterrupt(signals chan os.Signal, idle chan struct{}) {
 	}
 	signal.Stop(signals)
 	cleanupCtx, cancel := context.WithTimeout(context.Background(), 6*time.Minute)
-	// Containers first: they live inside the machines removed next, and a
-	// machine torn down underneath an in-flight container removal would report
-	// a cleanup failure for work that had already become moot.
+	// Complete every live harness before the process exits.
 	closeLiveHarnesses(cleanupCtx)
-	removeOwnedMachines(cleanupCtx)
 	cancel()
 	os.Exit(130)
 }
@@ -800,31 +668,10 @@ func closeLiveHarnesses(ctx context.Context) {
 	wg.Wait()
 }
 
-// removeOwnedMachines deletes every machine this process created. It removes
-// nothing else: a machine that was already on the host has no record here.
-func removeOwnedMachines(ctx context.Context) {
-	interruptCleanup.mu.Lock()
-	machines := make([]*Machine, 0, len(interruptCleanup.machines))
-	for machine := range interruptCleanup.machines {
-		machines = append(machines, machine)
-	}
-	interruptCleanup.mu.Unlock()
-
-	var wg sync.WaitGroup
-	for _, machine := range machines {
-		wg.Add(1)
-		go func(machine *Machine) {
-			defer wg.Done()
-			_ = machine.Remove(ctx)
-		}(machine)
-	}
-	wg.Wait()
-}
-
 type podmanRunner struct{}
 
-func (podmanRunner) Run(ctx context.Context, connection string, args ...string) (string, error) {
-	command := append([]string{"--connection", connection}, args...)
+func (podmanRunner) Run(ctx context.Context, endpoint string, args ...string) (string, error) {
+	command := append([]string{"--url", endpoint}, args...)
 	cmd := exec.CommandContext(ctx, defaultPodmanBinary, command...)
 	output, err := cmd.Output()
 	if err != nil {
@@ -855,32 +702,12 @@ func podmanResourceNotFound(err error) bool {
 		"no such object",
 		"image not known",
 		"no such network",
-		// Podman's wording for an absent machine, which cleanup after a failed
-		// `machine init` has to read as success rather than as a leak.
-		"vm does not exist",
-		"no such machine",
 	} {
 		if strings.Contains(stderr, absent) {
 			return true
 		}
 	}
 	return false
-}
-
-type podmanMachineRunner struct{}
-
-func (podmanMachineRunner) Run(ctx context.Context, args ...string) (string, error) {
-	output, err := exec.CommandContext(ctx, defaultPodmanBinary, args...).Output()
-	if err != nil {
-		// As for the container runner, keep command output and configuration
-		// values out of a test error, but classify absence so removing a
-		// machine that was never created is success rather than a leak report.
-		if podmanResourceNotFound(err) {
-			return "", fmt.Errorf("%w: podman machine command failed", errPodmanResourceNotFound)
-		}
-		return "", errors.New("podman machine command failed")
-	}
-	return string(output), nil
 }
 
 func parseMappedPort(raw string, defaultPort int) (int, error) {
@@ -906,21 +733,6 @@ func pinnedImage(image string) bool {
 	}
 	lastSlash := strings.LastIndexByte(image, '/')
 	return strings.LastIndexByte(image[lastSlash+1:], ':') > 0
-}
-
-// safeName accepts only the characters Podman connection and machine names
-// use, so a configured value can never introduce an extra argument or shell
-// metacharacter into a command line.
-func safeName(value string) bool {
-	if strings.TrimSpace(value) == "" || value != strings.TrimSpace(value) {
-		return false
-	}
-	for _, r := range value {
-		if (r < 'a' || r > 'z') && (r < 'A' || r > 'Z') && (r < '0' || r > '9') && r != '-' && r != '_' && r != '.' {
-			return false
-		}
-	}
-	return true
 }
 
 func randomSuffix() (string, error) {

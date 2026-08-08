@@ -7,11 +7,10 @@ import (
 	"syscall"
 )
 
-// diskFreeBytes reports the bytes available to an unprivileged process on the
-// filesystem holding the working directory.
-func diskFreeBytes() (uint64, error) {
+// diskFreeAt reports bytes available to an unprivileged process at path.
+func diskFreeAt(path string) (uint64, error) {
 	var stat syscall.Statfs_t
-	if err := syscall.Statfs(filepath.Clean("."), &stat); err != nil {
+	if err := syscall.Statfs(filepath.Clean(path), &stat); err != nil {
 		return 0, err
 	}
 	return uint64(stat.Bavail) * uint64(stat.Bsize), nil
