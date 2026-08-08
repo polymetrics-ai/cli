@@ -378,7 +378,11 @@ func parseBatchManifestArtifact(opts batchMaterializeOptions, candidate BatchMan
 }
 
 func parseBatchOpenAPIArtifactSource(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc) (batchArtifactInventory, error) {
-	inventory, err := parseBatchOpenAPIArtifactAt(raw, source.URL, fetch)
+	return parseBatchOpenAPIArtifactSourceWithBudget(raw, source, fetch, newBatchArtifactReferenceBudget(raw))
+}
+
+func parseBatchOpenAPIArtifactSourceWithBudget(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc, budget *batchArtifactReferenceBudget) (batchArtifactInventory, error) {
+	inventory, err := parseBatchOpenAPIArtifactAtWithBudget(raw, source.URL, fetch, budget)
 	if err != nil {
 		return batchArtifactInventory{}, err
 	}
@@ -423,6 +427,37 @@ type batchArtifactEndpointAlternative struct {
 	SourceCoordinate string
 }
 
+func batchArtifactEndpointPrimaryAlternative(endpoint batchArtifactEndpoint) batchArtifactEndpointAlternative {
+	return batchArtifactEndpointAlternative{
+		SourceURL:        endpoint.SourceURL,
+		SourceKind:       endpoint.SourceKind,
+		SourceVersion:    endpoint.SourceVersion,
+		SourceRetrieved:  endpoint.SourceRetrieved,
+		SourceSHA256:     endpoint.SourceSHA256,
+		SourceCoordinate: endpoint.SourceCoordinate,
+	}
+}
+
+func appendBatchArtifactEndpointAlternative(endpoint *batchArtifactEndpoint, alternative batchArtifactEndpointAlternative) {
+	if alternative.SourceURL == "" || alternative == batchArtifactEndpointPrimaryAlternative(*endpoint) {
+		return
+	}
+	for _, existing := range endpoint.Alternatives {
+		if existing == alternative {
+			return
+		}
+	}
+	endpoint.Alternatives = append(endpoint.Alternatives, alternative)
+}
+
+func normalizeBatchArtifactEndpointAlternatives(endpoint *batchArtifactEndpoint) {
+	alternatives := endpoint.Alternatives
+	endpoint.Alternatives = nil
+	for _, alternative := range alternatives {
+		appendBatchArtifactEndpointAlternative(endpoint, alternative)
+	}
+}
+
 func parseBatchArtifactByKind(raw []byte, source batchArtifactSource, fetch batchArtifactFetchFunc) (batchArtifactInventory, error) {
 	switch strings.ToLower(strings.TrimSpace(source.Kind)) {
 	case "postman":
@@ -453,20 +488,16 @@ func mergeBatchArtifactInventories(primary, fallback batchArtifactInventory) bat
 	}
 	seenEndpoints := map[string]int{}
 	for index, endpoint := range merged.Endpoints {
+		normalizeBatchArtifactEndpointAlternatives(&merged.Endpoints[index])
 		seenEndpoints[batchArtifactEndpointKey(endpoint.Method, endpoint.Path)] = index
 	}
 	for _, endpoint := range fallback.Endpoints {
+		normalizeBatchArtifactEndpointAlternatives(&endpoint)
 		key := batchArtifactEndpointKey(endpoint.Method, endpoint.Path)
 		if index, exists := seenEndpoints[key]; exists {
-			if endpoint.SourceURL != "" && (endpoint.SourceURL != merged.Endpoints[index].SourceURL || endpoint.SourceCoordinate != merged.Endpoints[index].SourceCoordinate) {
-				merged.Endpoints[index].Alternatives = append(merged.Endpoints[index].Alternatives, batchArtifactEndpointAlternative{
-					SourceURL:        endpoint.SourceURL,
-					SourceKind:       endpoint.SourceKind,
-					SourceVersion:    endpoint.SourceVersion,
-					SourceRetrieved:  endpoint.SourceRetrieved,
-					SourceSHA256:     endpoint.SourceSHA256,
-					SourceCoordinate: endpoint.SourceCoordinate,
-				})
+			appendBatchArtifactEndpointAlternative(&merged.Endpoints[index], batchArtifactEndpointPrimaryAlternative(endpoint))
+			for _, alternative := range endpoint.Alternatives {
+				appendBatchArtifactEndpointAlternative(&merged.Endpoints[index], alternative)
 			}
 			continue
 		}
@@ -910,7 +941,7 @@ func batchArtifactCredentialQueryParameter(key string) bool {
 		}
 		return r
 	}, strings.ToLower(key))
-	if normalized == "sig" {
+	if normalized == "sig" || normalized == "key" {
 		return true
 	}
 	for _, marker := range []string{"token", "secret", "password", "credential", "authorization", "apikey", "accesskey", "signature"} {
@@ -1070,11 +1101,40 @@ const (
 )
 
 type batchArtifactResolver struct {
-	fetch      batchArtifactFetchFunc
-	documents  map[string]batchArtifactDocument
-	sources    []batchArtifactSource
-	fetched    int
+	fetch     batchArtifactFetchFunc
+	documents map[string]batchArtifactDocument
+	sources   []batchArtifactSource
+	budget    *batchArtifactReferenceBudget
+}
+
+type batchArtifactReferenceBudget struct {
+	documents  int
 	totalBytes int
+}
+
+var (
+	errBatchArtifactReferenceDocumentLimit = errors.New("artifact reference document limit exceeded")
+	errBatchArtifactReferenceByteLimit     = errors.New("artifact reference byte budget exceeded")
+)
+
+func newBatchArtifactReferenceBudget(root []byte) *batchArtifactReferenceBudget {
+	return &batchArtifactReferenceBudget{documents: 1, totalBytes: len(root)}
+}
+
+func (budget *batchArtifactReferenceBudget) hasDocumentCapacity() bool {
+	return budget != nil && budget.documents < maxBatchArtifactReferenceDocuments
+}
+
+func (budget *batchArtifactReferenceBudget) addFetched(raw []byte) error {
+	if !budget.hasDocumentCapacity() {
+		return errBatchArtifactReferenceDocumentLimit
+	}
+	if len(raw) > maxMaterializeArtifactBytes || budget.totalBytes > maxBatchArtifactReferenceBytes-len(raw) {
+		return errBatchArtifactReferenceByteLimit
+	}
+	budget.documents++
+	budget.totalBytes += len(raw)
+	return nil
 }
 
 func parseBatchOpenAPIArtifact(raw []byte) ([]batchArtifactEndpoint, error) {
@@ -1089,6 +1149,10 @@ func parseBatchOpenAPIArtifact(raw []byte) ([]batchArtifactEndpoint, error) {
 // and by traversal tests. fetch is called only for validated HTTPS external
 // references and is bounded by the caller's artifact fetcher.
 func parseBatchOpenAPIArtifactAt(raw []byte, sourceURL string, fetch batchArtifactFetchFunc) (batchArtifactInventory, error) {
+	return parseBatchOpenAPIArtifactAtWithBudget(raw, sourceURL, fetch, newBatchArtifactReferenceBudget(raw))
+}
+
+func parseBatchOpenAPIArtifactAtWithBudget(raw []byte, sourceURL string, fetch batchArtifactFetchFunc, budget *batchArtifactReferenceBudget) (batchArtifactInventory, error) {
 	source := batchArtifactSource{URL: sourceURL, Kind: "openapi", SHA256: fmt.Sprintf("%x", sha256.Sum256(raw))}
 	document, err := parseBatchArtifactDocument(raw, source)
 	if err != nil {
@@ -1119,7 +1183,7 @@ func parseBatchOpenAPIArtifactAt(raw []byte, sourceURL string, fetch batchArtifa
 		return batchArtifactInventory{}, fmt.Errorf("artifact must declare OpenAPI 3.x or Swagger 2.0 (openapi=%q swagger=%q)", openAPI, swagger)
 	}
 	document.Source = source
-	resolver := newBatchArtifactResolver(document, fetch)
+	resolver := newBatchArtifactResolverWithBudget(document, fetch, budget)
 	endpoints := make([]batchArtifactEndpoint, 0)
 	seen := map[string]bool{}
 	if paths, ok := fields["paths"]; ok {
@@ -1193,10 +1257,18 @@ func parseBatchArtifactDocument(raw []byte, source batchArtifactSource) (batchAr
 }
 
 func newBatchArtifactResolver(root batchArtifactDocument, fetch batchArtifactFetchFunc) *batchArtifactResolver {
+	return newBatchArtifactResolverWithBudget(root, fetch, newBatchArtifactReferenceBudget(nil))
+}
+
+func newBatchArtifactResolverWithBudget(root batchArtifactDocument, fetch batchArtifactFetchFunc, budget *batchArtifactReferenceBudget) *batchArtifactResolver {
+	if budget == nil {
+		budget = newBatchArtifactReferenceBudget(nil)
+	}
 	resolver := &batchArtifactResolver{
 		fetch:     fetch,
 		documents: map[string]batchArtifactDocument{},
 		sources:   []batchArtifactSource{},
+		budget:    budget,
 	}
 	key := root.Source.URL
 	if key == "" {
@@ -1216,69 +1288,80 @@ func (resolver *batchArtifactResolver) documentKey(document batchArtifactDocumen
 	return document.Source.URL
 }
 
-func (resolver *batchArtifactResolver) resolvePathItem(document batchArtifactDocument, pathItem *yaml.Node, refs map[string]bool) (*yaml.Node, batchArtifactDocument, error) {
+func (resolver *batchArtifactResolver) resolvePathItem(document batchArtifactDocument, pathItem *yaml.Node, refs map[string]bool) (*yaml.Node, batchArtifactDocument, string, bool, error) {
 	pathItem, err := batchYAMLDeref(pathItem)
 	if err != nil {
-		return nil, document, err
+		return nil, document, "", false, err
 	}
 	fields, err := batchYAMLFields(pathItem)
 	if err != nil {
-		return nil, document, batchArtifactInventoryUnknown("path item is not a mapping")
+		return nil, document, "", false, batchArtifactInventoryUnknown("path item is not a mapping")
 	}
 	refNode, hasRef := fields["$ref"]
 	if !hasRef {
-		return pathItem, document, nil
+		return pathItem, document, "", false, nil
 	}
 	ref, err := batchYAMLFieldString(fields, "$ref")
 	if err != nil || ref == "" {
-		return nil, document, batchArtifactInventoryUnknown("path-item reference must be a non-empty string")
+		return nil, document, "", false, batchArtifactInventoryUnknown("path-item reference must be a non-empty string")
 	}
 	for _, key := range batchYAMLFieldNames(fields) {
 		if key == "$ref" || key == "summary" || key == "description" || strings.HasPrefix(key, "x-") {
 			continue
 		}
-		return nil, document, batchArtifactInventoryUnknown("path-item reference %q has unsupported sibling %q", ref, key)
+		return nil, document, "", false, batchArtifactInventoryUnknown("path-item reference %q has unsupported sibling %q", ref, key)
 	}
 	cycleKey := resolver.documentKey(document) + "#" + ref
 	if refs[cycleKey] {
-		return nil, document, batchArtifactInventoryUnknown("path-item reference cycle at %q", ref)
+		return nil, document, "", false, batchArtifactInventoryUnknown("path-item reference cycle at %q", ref)
 	}
 	refs[cycleKey] = true
 	defer delete(refs, cycleKey)
-	target, targetDocument, err := resolver.resolveReference(document, ref)
+	target, targetDocument, pointer, err := resolver.resolveReference(document, ref)
 	if err != nil {
-		return nil, document, err
+		return nil, document, "", false, err
 	}
 	if target == refNode {
-		return nil, document, batchArtifactInventoryUnknown("path-item reference %q resolves to itself", ref)
+		return nil, document, "", false, batchArtifactInventoryUnknown("path-item reference %q resolves to itself", ref)
 	}
-	return resolver.resolvePathItem(targetDocument, target, refs)
+	resolved, resolvedDocument, resolvedPointer, resolvedByReference, err := resolver.resolvePathItem(targetDocument, target, refs)
+	if err != nil {
+		return nil, document, "", false, err
+	}
+	if resolvedByReference {
+		return resolved, resolvedDocument, resolvedPointer, true, nil
+	}
+	return resolved, resolvedDocument, pointer, true, nil
 }
 
-func (resolver *batchArtifactResolver) resolveReference(document batchArtifactDocument, reference string) (*yaml.Node, batchArtifactDocument, error) {
+func (resolver *batchArtifactResolver) resolveReference(document batchArtifactDocument, reference string) (*yaml.Node, batchArtifactDocument, string, error) {
 	parsed, err := url.Parse(reference)
 	if err != nil {
-		return nil, document, batchArtifactInventoryUnknown("path-item reference %q is not a valid URL reference", reference)
+		return nil, document, "", batchArtifactInventoryUnknown("path-item reference %q is not a valid URL reference", reference)
 	}
 	if parsed.Scheme == "" && parsed.Host == "" && parsed.Path == "" {
 		node, err := resolveBatchArtifactJSONPointer(document.Root, parsed.Fragment, reference)
-		return node, document, err
+		return node, document, parsed.Fragment, err
 	}
 	if document.Base == nil {
-		return nil, document, batchArtifactInventoryUnknown("external path-item reference %q has no HTTPS base URL", reference)
+		return nil, document, "", batchArtifactInventoryUnknown("external path-item reference %q has no HTTPS base URL", reference)
 	}
 	resolvedURL := document.Base.ResolveReference(parsed)
 	fragment := resolvedURL.Fragment
 	resolvedURL.Fragment = ""
 	if err := validateBatchArtifactURLObject(resolvedURL); err != nil {
-		return nil, document, batchArtifactInventoryUnknown("external path-item reference %q is unsafe: %v", reference, err)
+		return nil, document, "", batchArtifactInventoryUnknown("external path-item reference %q is unsafe: %v", reference, err)
 	}
 	external, err := resolver.loadExternal(resolvedURL)
 	if err != nil {
-		return nil, document, err
+		return nil, document, "", err
 	}
 	node, err := resolveBatchArtifactJSONPointer(external.Root, fragment, reference)
-	return node, external, err
+	return node, external, fragment, err
+}
+
+func batchArtifactReferenceOperationCoordinate(pointer, method string) string {
+	return "#" + pointer + "/" + strings.ToLower(method)
 }
 
 func (resolver *batchArtifactResolver) loadExternal(resolvedURL *url.URL) (batchArtifactDocument, error) {
@@ -1289,18 +1372,19 @@ func (resolver *batchArtifactResolver) loadExternal(resolvedURL *url.URL) (batch
 	if resolver.fetch == nil {
 		return batchArtifactDocument{}, batchArtifactInventoryUnknown("external path-item reference %q cannot be fetched during materialization", key)
 	}
-	if resolver.fetched >= maxBatchArtifactReferenceDocuments {
+	if !resolver.budget.hasDocumentCapacity() {
 		return batchArtifactDocument{}, batchArtifactInventoryUnknown("external path-item reference limit %d exceeded", maxBatchArtifactReferenceDocuments)
 	}
-	resolver.fetched++
 	raw, err := resolver.fetch(key)
 	if err != nil {
 		return batchArtifactDocument{}, batchArtifactInventoryUnknown("external path-item reference %q fetch failed: %v", key, err)
 	}
-	if len(raw) > maxMaterializeArtifactBytes || resolver.totalBytes > maxBatchArtifactReferenceBytes-len(raw) {
+	if err := resolver.budget.addFetched(raw); err != nil {
+		if err == errBatchArtifactReferenceDocumentLimit {
+			return batchArtifactDocument{}, batchArtifactInventoryUnknown("external path-item reference limit %d exceeded", maxBatchArtifactReferenceDocuments)
+		}
 		return batchArtifactDocument{}, batchArtifactInventoryUnknown("external path-item references exceed the bounded %d-byte source budget", maxBatchArtifactReferenceBytes)
 	}
-	resolver.totalBytes += len(raw)
 	source := batchArtifactSource{URL: key, Kind: "referenced-document", SHA256: fmt.Sprintf("%x", sha256.Sum256(raw))}
 	document, err := parseBatchArtifactDocument(raw, source)
 	if err != nil {
@@ -1365,7 +1449,9 @@ func batchArtifactWebhookEndpoints(resolver *batchArtifactResolver, document bat
 			endpoint.Method = "WEBHOOK"
 			endpoint.Path = name + "#" + strings.ToUpper(originalMethod)
 			endpoint.Webhook = true
-			endpoint.SourceCoordinate = fmt.Sprintf("webhooks[%q].%s", name, strings.ToLower(originalMethod))
+			if endpoint.SourceCoordinate == fmt.Sprintf("paths[%q].%s", name, strings.ToLower(originalMethod)) {
+				endpoint.SourceCoordinate = fmt.Sprintf("webhooks[%q].%s", name, strings.ToLower(originalMethod))
+			}
 			endpoints = append(endpoints, endpoint)
 		}
 	}
@@ -1373,7 +1459,7 @@ func batchArtifactWebhookEndpoints(resolver *batchArtifactResolver, document bat
 }
 
 func batchArtifactPathItemEndpointsWithResolver(resolver *batchArtifactResolver, document batchArtifactDocument, path string, pathItem *yaml.Node) ([]batchArtifactEndpoint, error) {
-	resolved, resolvedDocument, err := resolver.resolvePathItem(document, pathItem, map[string]bool{})
+	resolved, resolvedDocument, resolvedPointer, resolvedByReference, err := resolver.resolvePathItem(document, pathItem, map[string]bool{})
 	if err != nil {
 		return nil, err
 	}
@@ -1396,7 +1482,11 @@ func batchArtifactPathItemEndpointsWithResolver(resolver *batchArtifactResolver,
 			endpoint.SourceRetrieved = resolvedDocument.Source.Retrieved
 			endpoint.SourceSHA256 = resolvedDocument.Source.SHA256
 			if endpoint.SourceCoordinate == "" {
-				endpoint.SourceCoordinate = fmt.Sprintf("paths[%q].%s", path, strings.ToLower(method))
+				if resolvedByReference {
+					endpoint.SourceCoordinate = batchArtifactReferenceOperationCoordinate(resolvedPointer, method)
+				} else {
+					endpoint.SourceCoordinate = fmt.Sprintf("paths[%q].%s", path, strings.ToLower(method))
+				}
 			}
 			endpoints = append(endpoints, endpoint)
 			continue
