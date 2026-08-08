@@ -150,3 +150,66 @@ then **failed at the test step for an external reason** — the agent's monthly 
 code failure. Its five commits were preserved unpublished in the local gate and recovered with
 `no-mistakes axi sync --recover` before pushing. The gates below were therefore re-run locally on
 the recovered head.
+
+---
+
+## Cycle 4 — review round: withheld-field re-supply, plural write coverage, CLI parity
+
+**Red 4a — a declared field that was never supplied became an unsatisfiable precondition.**
+`reconstituteConnectorCommandRecord` built its pending set from `plan.RedactFields` and treated
+"absent from the record" as "withheld". Those are different states: `withholdRecordFields` deletes
+nothing when the operator never supplied an optional declared-sensitive field, yet the field was
+still demanded back, and no later value could recover the plan because its hash was computed
+without the field. A sweep of the committed bundles found 71 implemented/partial reverse-ETL
+commands whose declared redact field has no mapping flag at all (for example `mailchimp actions
+post-batch-webhooks` -> `url`, `amazon-sqs queue create` -> `attributes`), permanently un-previewable
+and un-executable, plus 36 more that break whenever an operator omits an optional declared field.
+GitHub itself was unaffected: `actions_secrets_secret_name3` has `encrypted_value` in
+`record_schema.required`, so the field is always present and always genuinely withheld.
+**Green** — `internal/app/connector_command_withholding_test.go`
+`TestDeclaredButUnsuppliedFieldIsNotOwedBack` covers both shapes (declared field behind an
+omitted optional flag, and declared field with no flag on the command at all) and asserts plan,
+preview and run all succeed with no re-supply. `withholdRecordFields` now returns the fields it
+actually deleted, `ReversePlan.WithheldFields` persists that set, and reconstitution iterates it.
+Pre-existing plans carry no `withheld_fields` and therefore ask for nothing.
+
+**Red 4b — withhold and reconstitute disagreed on the field-path prefix.**
+`withholdRecordFields` stripped only `record.`, while `commandrunner.ReconstituteWithheldFields`
+strips `body.` for an operation-backed command. A `body.`-prefixed `sensitive_policy.redact_fields`
+entry would have left the secret in `state.json` while still forcing a re-supply. Latent today (no
+bundle uses that spelling, and the schema does not constrain it), so this is a same-cycle
+structural fix rather than a separate failing test: `connectorCommandRedactFields` now normalizes
+every declared path against `connectorCommandRecordPrefix(operation)`, which is the same mode
+dispatch the runner half uses, so the two halves cannot drift apart by construction.
+
+**Red 4c — `pm connectors certify github --full` failed on this branch.**
+`certify`'s surface inventory was never migrated to `SurfaceCoverage.WriteTargets()` when the
+plural `covered_by.writes` was introduced in this program. Three GitHub endpoints are covered only
+through the plural form (`PATCH /repos/{owner}/{repo}`, `.../issues/{issue_number}`,
+`.../pulls/{pull_number}`), none carries an `operation` block, so the stage fell to its default
+branch and failed with "api_surface endpoint N is neither covered nor blocked with typed reason".
+**Green** — `internal/connectors/certify/stages_surface_inventory_internal_test.go`
+`TestSurfaceInventoryCountsPluralWriteCoverage` pins a `writes`-only endpoint as covered with all
+its targets counted; `hasSurfaceCoverage` and `addSurfaceCoverageCounts` now route through
+`WriteTargets()`, the same helper `connectorgen` and `conformance` already use.
+
+**Red 4d — two certify counts were stale and red on this branch.**
+`internal/connectors/certify/` was not in the gate list of the previous verify-work run, so the
+sweep's growth of GitHub's declared surface went unnoticed there.
+`TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints` expected 509/440/69 and
+`TestGithubWriteActionInventoryAccountsForAllDeclaredActions` expected 231.
+**Green** — both updated to the surface this branch actually ships: 1224 endpoints, 1126 covered,
+98 blocked (the deliberately-blocked 98 foundations), `covered_by[write]` 555 and 555 declared
+write actions — the two agree, which is the coherence check. Assertions were tightened, not
+relaxed: `covered_by[direct_read]` (368) is now asserted too.
+
+**Red 4e — the re-supply step changed the CLI contract with no help, docs or website record.**
+`pm reverse preview` and `pm reverse run` now accept and require the connector command's own flags
+whenever a plan withheld a declared field, and nothing said so.
+**Green** — `reverseHelp` in `internal/cli/docs.go` documents the re-supply flags in USAGE, FLAGS,
+DESCRIPTION, both COMMANDS entries and SECURITY; `docs/cli/reverse.md` regenerated with
+`pm docs generate`; `internal/cli/testdata/golden_transcripts.json` regenerated (3 reverse
+entries); `website/content/docs/reverse-etl.mdx` gained a re-supply section and a security-model
+row, with `website/lib/docs.generated.ts` regenerated.
+
+No test was weakened, skipped, or deleted. Cycle 4 added two tests and corrected two stale counts.

@@ -16,20 +16,27 @@ func TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints(t *testing.T) 
 	if result.Result != "pass" {
 		t.Fatalf("Result = %q reason=%q", result.Result, result.Reason)
 	}
-	if result.Endpoints != 509 {
-		t.Fatalf("Endpoints = %d, want 509", result.Endpoints)
+	if result.Endpoints != 1224 {
+		t.Fatalf("Endpoints = %d, want 1224", result.Endpoints)
 	}
-	if result.Covered != 440 {
-		t.Fatalf("Covered = %d, want 440", result.Covered)
+	if result.Covered != 1126 {
+		t.Fatalf("Covered = %d, want 1126", result.Covered)
 	}
-	if result.Blocked != 69 {
-		t.Fatalf("Blocked = %d, want 69", result.Blocked)
+	if result.Blocked != 98 {
+		t.Fatalf("Blocked = %d, want 98", result.Blocked)
 	}
 	if result.CoveredBy["stream"] != 37 {
 		t.Fatalf("CoveredBy[stream] = %d, want 37", result.CoveredBy["stream"])
 	}
-	if result.CoveredBy["write"] != 231 {
-		t.Fatalf("CoveredBy[write] = %d, want 231", result.CoveredBy["write"])
+	// covered_by.writes is plural for the three PATCH endpoints that back
+	// several write contracts each, so this count has to come from
+	// WriteTargets(); reading only the singular field leaves those endpoints
+	// looking uncovered and fails the whole inventory.
+	if result.CoveredBy["write"] != 555 {
+		t.Fatalf("CoveredBy[write] = %d, want 555", result.CoveredBy["write"])
+	}
+	if result.CoveredBy["direct_read"] != 368 {
+		t.Fatalf("CoveredBy[direct_read] = %d, want 368", result.CoveredBy["direct_read"])
 	}
 	if result.CoveredBy["direct_reads"] != 173 {
 		t.Fatalf("CoveredBy[direct_reads] = %d, want 173", result.CoveredBy["direct_reads"])
@@ -45,6 +52,7 @@ func TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints(t *testing.T) 
 	}
 }
 
+<<<<<<< HEAD
 // TestSurfaceInventoryCountsPluralOnlyWriteCoverage pins the two shipped
 // bundles whose covered_by rows use ONLY the plural `writes` spelling. github
 // cannot catch a regression here: all 231 of its write rows use the singular
@@ -153,6 +161,36 @@ func TestSurfaceInventoryPluralOnlyBundlesUseNoSingularWrite(t *testing.T) {
 				t.Errorf("%s has %d plural covered_by.writes rows, want %d", connector, plural, wantPlural)
 			}
 		})
+	}
+}
+
+// TestSurfaceInventoryCountsPluralWriteCoverage pins the plural spelling of
+// covered_by. An endpoint that backs several write contracts names them under
+// "writes" and leaves "write" empty; reading only the singular field made it
+// read as uncovered, and with no typed operation block to fall back to, the
+// whole inventory failed.
+func TestSurfaceInventoryCountsPluralWriteCoverage(t *testing.T) {
+	raw := `{
+		"api": "test API",
+		"endpoints": [{
+			"method": "PATCH",
+			"path": "/widgets/{id}",
+			"covered_by": {"writes": ["update_widget", "close_widget", "reopen_widget"]}
+		}]
+	}`
+
+	result, err := surfaceInventoryFromRaw([]byte(raw))
+	if err != nil {
+		t.Fatalf("surfaceInventoryFromRaw: %v", err)
+	}
+	if result.Result != "pass" {
+		t.Fatalf("Result = %q reason = %q, want pass", result.Result, result.Reason)
+	}
+	if result.Covered != 1 {
+		t.Fatalf("Covered = %d, want 1", result.Covered)
+	}
+	if result.CoveredBy["write"] != 3 {
+		t.Fatalf("CoveredBy[write] = %d, want all 3 plural targets counted", result.CoveredBy["write"])
 	}
 }
 
