@@ -430,3 +430,27 @@ other 1031 doc files' generator drift is the pre-existing `main` condition and
 was reverted, as in every previous cycle. `connectorgen validate` (551 checked,
 0 findings), `connectorgen surface-sync --check` (no drift) and
 `pm docs validate` are clean.
+
+## Rebase verification — current `origin/main`
+
+The lane was rebased cleanly onto `origin/main` at
+`d453fbe256eb22d90ea77dbed634b245bd6e795b`. The only post-rebase repair was an
+unambiguous test adaptation to the current `PreviewReversePlan(ctx, id,
+withheldFlags)` signature: the existing tests now supply `nil` for no withheld
+flags. Cycle 13 in `TDD-LEDGER.md` records its compile-red and focused-green
+evidence.
+
+Post-rebase checks passed:
+
+```
+$ node --test scripts/tests/github-live-proof-sweep.test.mjs
+✔ 5 tests passed
+$ node scripts/github-live-proof-sweep.mjs --self-test
+github live proof self-test: ok
+$ go vet ./...
+$ go run ./cmd/connectorgen validate internal/connectors/defs
+connectorgen validate: 551 connector(s) checked, 0 findings
+$ go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+$ go build ./cmd/pm
+```

@@ -184,7 +184,7 @@ func TestLimitedReversePlanPreviewsAndRunsItsExactApprovedSlice(t *testing.T) {
 		t.Fatalf("planned records = %d, want 1", plan.RecordCount)
 	}
 
-	plan, preview, err := a.PreviewReversePlan(ctx, plan.ID)
+	plan, preview, err := a.PreviewReversePlan(ctx, plan.ID, nil)
 	if err != nil {
 		t.Fatalf("PreviewReversePlan() error = %v", err)
 	}
@@ -242,7 +242,7 @@ func TestGitHubCreateIssueReversePlanUsesDeclaredEndpoint(t *testing.T) {
 	if err != nil {
 		t.Fatalf("PlanReverseETL() error = %v", err)
 	}
-	if _, _, err := a.PreviewReversePlan(ctx, plan.ID); err != nil {
+	if _, _, err := a.PreviewReversePlan(ctx, plan.ID, nil); err != nil {
 		t.Fatalf("PreviewReversePlan() error = %v", err)
 	}
 	run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken})
