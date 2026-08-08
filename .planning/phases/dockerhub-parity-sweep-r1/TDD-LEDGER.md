@@ -571,3 +571,19 @@ substitution. It must accept the canonical colon-bearing URI identifier, preserv
 and reject separators, traversal, control/dangerous Unicode, query/fragment delimiters, and
 ambiguous percent encodings. Engine and Docker Hub tests must prove those boundaries; the fleet
 preflight sweep provides the cross-connector execution audit.
+
+### Verbatim RED failure
+
+No production source file had changed when the definition-owned test ran:
+
+```text
+=== RUN   TestDockerhubSCIMSchemaGetAcceptsCanonicalURNPathParameter
+    scim_schema_urn_test.go:51: read canonical Docker Hub SCIM schema URN: path variable id contains invalid character ':'
+--- FAIL: TestDockerhubSCIMSchemaGetAcceptsCanonicalURNPathParameter (0.01s)
+FAIL
+FAIL	polymetrics.ai/internal/connectors/defs/dockerhub	0.774s
+FAIL
+```
+
+Command: `go test -timeout 20m ./internal/connectors/defs/dockerhub -run
+TestDockerhubSCIMSchemaGetAcceptsCanonicalURNPathParameter -count=1 -v`.
