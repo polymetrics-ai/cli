@@ -125,7 +125,7 @@
       "contact_link": {
        "type": "string"
       },
-      "code_scanning_alerts": {
+      "secret_scanning_alerts": {
        "type": "array"
       },
       "generate_issues": {

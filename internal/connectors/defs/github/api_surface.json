@@ -7958,14 +7958,11 @@
     {
       "method": "POST",
       "path": "/orgs/{org}/attestations/delete-request",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented request body is rooted at oneOf with 2 arms, which is not one executable command contract",
-        "source_url": "https://docs.github.com/rest/orgs/attestations#delete-attestations-in-bulk",
-        "notes": "Named dependency: AGENTS.md 'Command Surface Must Stay Executable' -- runtime preflight expands oneOf arms and rejects promotion; each reachable arm must become a separately named action before this can be implemented"
+      "covered_by": {
+        "writes": [
+          "orgs_attestations_delete_request_by_subject_digests",
+          "orgs_attestations_delete_request_by_attestation_ids"
+        ]
       }
     },
     {
@@ -7999,14 +7996,11 @@
     {
       "method": "POST",
       "path": "/orgs/{org}/campaigns",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented request body is rooted at oneOf with 2 arms, which is not one executable command contract",
-        "source_url": "https://docs.github.com/rest/campaigns/campaigns#create-a-campaign-for-an-organization",
-        "notes": "Named dependency: AGENTS.md 'Command Surface Must Stay Executable' -- runtime preflight expands oneOf arms and rejects promotion; each reachable arm must become a separately named action before this can be implemented"
+      "covered_by": {
+        "writes": [
+          "orgs_campaigns_create_code_scanning",
+          "orgs_campaigns_create_secret_scanning"
+        ]
       }
     },
     {
@@ -8614,27 +8608,23 @@
     {
       "method": "POST",
       "path": "/orgs/{org}/projectsV2/{project_number}/fields",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented request body is rooted at oneOf with 4 arms, which is not one executable command contract",
-        "source_url": "https://docs.github.com/rest/projects/fields#add-a-field-to-an-organization-owned-project",
-        "notes": "Named dependency: AGENTS.md 'Command Surface Must Stay Executable' -- runtime preflight expands oneOf arms and rejects promotion; each reachable arm must become a separately named action before this can be implemented"
+      "covered_by": {
+        "writes": [
+          "orgs_projectsv2_fields_create_existing_issue_field",
+          "orgs_projectsv2_fields_create_new_field",
+          "orgs_projectsv2_fields_create_single_select",
+          "orgs_projectsv2_fields_create_iteration"
+        ]
       }
     },
     {
       "method": "POST",
       "path": "/orgs/{org}/projectsV2/{project_number}/items",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented request body is rooted at oneOf with 2 arms, which is not one executable command contract",
-        "source_url": "https://docs.github.com/rest/projects/items#add-item-to-organization-owned-project",
-        "notes": "Named dependency: AGENTS.md 'Command Surface Must Stay Executable' -- runtime preflight expands oneOf arms and rejects promotion; each reachable arm must become a separately named action before this can be implemented"
+      "covered_by": {
+        "writes": [
+          "orgs_projectsv2_items_create_by_id",
+          "orgs_projectsv2_items_create_by_repo_number"
+        ]
       }
     },
     {
@@ -9044,14 +9034,11 @@
     {
       "method": "POST",
       "path": "/user/codespaces",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented request body is rooted at oneOf with 2 arms, which is not one executable command contract",
-        "source_url": "https://docs.github.com/rest/codespaces/codespaces#create-a-codespace-for-the-authenticated-user",
-        "notes": "Named dependency: AGENTS.md 'Command Surface Must Stay Executable' -- runtime preflight expands oneOf arms and rejects promotion; each reachable arm must become a separately named action before this can be implemented"
+      "covered_by": {
+        "writes": [
+          "user_codespaces_create_from_repository",
+          "user_codespaces_create_from_pull_request"
+        ]
       }
     },
     {
@@ -9377,14 +9364,11 @@
     {
       "method": "POST",
       "path": "/users/{username}/attestations/delete-request",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented request body is rooted at oneOf with 2 arms, which is not one executable command contract",
-        "source_url": "https://docs.github.com/rest/users/attestations#delete-attestations-in-bulk",
-        "notes": "Named dependency: AGENTS.md 'Command Surface Must Stay Executable' -- runtime preflight expands oneOf arms and rejects promotion; each reachable arm must become a separately named action before this can be implemented"
+      "covered_by": {
+        "writes": [
+          "users_attestations_delete_request_by_subject_digests",
+          "users_attestations_delete_request_by_attestation_ids"
+        ]
       }
     },
     {
@@ -9495,27 +9479,22 @@
     {
       "method": "POST",
       "path": "/users/{username}/projectsV2/{project_number}/fields",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented request body is rooted at oneOf with 3 arms, which is not one executable command contract",
-        "source_url": "https://docs.github.com/rest/projects/fields#add-field-to-user-owned-project",
-        "notes": "Named dependency: AGENTS.md 'Command Surface Must Stay Executable' -- runtime preflight expands oneOf arms and rejects promotion; each reachable arm must become a separately named action before this can be implemented"
+      "covered_by": {
+        "writes": [
+          "users_projectsv2_fields_create_new_field",
+          "users_projectsv2_fields_create_single_select",
+          "users_projectsv2_fields_create_iteration"
+        ]
       }
     },
     {
       "method": "POST",
       "path": "/users/{username}/projectsV2/{project_number}/items",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "documented request body is rooted at oneOf with 2 arms, which is not one executable command contract",
-        "source_url": "https://docs.github.com/rest/projects/items#add-item-to-user-owned-project",
-        "notes": "Named dependency: AGENTS.md 'Command Surface Must Stay Executable' -- runtime preflight expands oneOf arms and rejects promotion; each reachable arm must become a separately named action before this can be implemented"
+      "covered_by": {
+        "writes": [
+          "users_projectsv2_items_create_by_id",
+          "users_projectsv2_items_create_by_repo_number"
+        ]
       }
     },
     {

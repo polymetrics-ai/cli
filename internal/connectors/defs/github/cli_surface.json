@@ -8310,7 +8310,7 @@
         {
           "name": "ref",
           "type": "string",
-          "summary": "The name of the commit/branch/tag. Default: the repository’s default branch.",
+          "summary": "The name of the commit/branch/tag. Default: the repository\u2019s default branch.",
           "maps_to": "query.ref"
         }
       ],
@@ -8339,7 +8339,7 @@
         {
           "name": "ref",
           "type": "string",
-          "summary": "The name of the commit/branch/tag. Default: the repository’s default branch.",
+          "summary": "The name of the commit/branch/tag. Default: the repository\u2019s default branch.",
           "maps_to": "query.ref"
         }
       ],
@@ -33397,6 +33397,825 @@
         {
           "method": "POST",
           "path": "/markdown/raw"
+        }
+      ]
+    },
+    {
+      "path": "orgs attestations delete-by-subject-digests",
+      "summary": "POST /orgs/{org}/attestations/delete-request (orgs_attestations_delete_request_by_subject_digests)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "orgs_attestations_delete_request_by_subject_digests",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "org",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true
+        },
+        {
+          "name": "subject-digests",
+          "type": "json",
+          "maps_to": "record.subject_digests",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "orgs attestations delete-by-attestation-ids",
+      "summary": "POST /orgs/{org}/attestations/delete-request (orgs_attestations_delete_request_by_attestation_ids)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "orgs_attestations_delete_request_by_attestation_ids",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "org",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true
+        },
+        {
+          "name": "attestation-ids",
+          "type": "json",
+          "maps_to": "record.attestation_ids",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "orgs campaigns create-code-scanning",
+      "summary": "POST /orgs/{org}/campaigns (orgs_campaigns_create_code_scanning)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "orgs_campaigns_create_code_scanning",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "org",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "maps_to": "record.description",
+          "required": true
+        },
+        {
+          "name": "managers",
+          "type": "json",
+          "maps_to": "record.managers"
+        },
+        {
+          "name": "team-managers",
+          "type": "json",
+          "maps_to": "record.team_managers"
+        },
+        {
+          "name": "ends-at",
+          "type": "string",
+          "maps_to": "record.ends_at",
+          "required": true
+        },
+        {
+          "name": "contact-link",
+          "type": "string",
+          "maps_to": "record.contact_link"
+        },
+        {
+          "name": "generate-issues",
+          "type": "boolean",
+          "maps_to": "record.generate_issues"
+        },
+        {
+          "name": "code-scanning-alerts",
+          "type": "json",
+          "maps_to": "record.code_scanning_alerts",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "orgs campaigns create-secret-scanning",
+      "summary": "POST /orgs/{org}/campaigns (orgs_campaigns_create_secret_scanning)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "orgs_campaigns_create_secret_scanning",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "org",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "maps_to": "record.description",
+          "required": true
+        },
+        {
+          "name": "managers",
+          "type": "json",
+          "maps_to": "record.managers"
+        },
+        {
+          "name": "team-managers",
+          "type": "json",
+          "maps_to": "record.team_managers"
+        },
+        {
+          "name": "ends-at",
+          "type": "string",
+          "maps_to": "record.ends_at",
+          "required": true
+        },
+        {
+          "name": "contact-link",
+          "type": "string",
+          "maps_to": "record.contact_link"
+        },
+        {
+          "name": "generate-issues",
+          "type": "boolean",
+          "maps_to": "record.generate_issues"
+        },
+        {
+          "name": "secret-scanning-alerts",
+          "type": "json",
+          "maps_to": "record.secret_scanning_alerts",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "orgs projects fields create-existing-issue-field",
+      "summary": "POST /orgs/{org}/projectsV2/{project_number}/fields (orgs_projectsv2_fields_create_existing_issue_field)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "orgs_projectsv2_fields_create_existing_issue_field",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "org",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true
+        },
+        {
+          "name": "project-number",
+          "type": "integer",
+          "maps_to": "record.project_number",
+          "required": true
+        },
+        {
+          "name": "issue-field-id",
+          "type": "integer",
+          "maps_to": "record.issue_field_id",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "orgs projects fields create-new-field",
+      "summary": "POST /orgs/{org}/projectsV2/{project_number}/fields (orgs_projectsv2_fields_create_new_field)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "orgs_projectsv2_fields_create_new_field",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "org",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true
+        },
+        {
+          "name": "project-number",
+          "type": "integer",
+          "maps_to": "record.project_number",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "data-type",
+          "type": "string",
+          "maps_to": "record.data_type",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "orgs projects fields create-single-select",
+      "summary": "POST /orgs/{org}/projectsV2/{project_number}/fields (orgs_projectsv2_fields_create_single_select)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "orgs_projectsv2_fields_create_single_select",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "org",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true
+        },
+        {
+          "name": "project-number",
+          "type": "integer",
+          "maps_to": "record.project_number",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "data-type",
+          "type": "string",
+          "maps_to": "record.data_type",
+          "required": true
+        },
+        {
+          "name": "single-select-options",
+          "type": "json",
+          "maps_to": "record.single_select_options",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "orgs projects fields create-iteration",
+      "summary": "POST /orgs/{org}/projectsV2/{project_number}/fields (orgs_projectsv2_fields_create_iteration)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "orgs_projectsv2_fields_create_iteration",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "org",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true
+        },
+        {
+          "name": "project-number",
+          "type": "integer",
+          "maps_to": "record.project_number",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "data-type",
+          "type": "string",
+          "maps_to": "record.data_type",
+          "required": true
+        },
+        {
+          "name": "iteration-configuration",
+          "type": "json",
+          "maps_to": "record.iteration_configuration",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "orgs projects items create-by-id",
+      "summary": "POST /orgs/{org}/projectsV2/{project_number}/items (orgs_projectsv2_items_create_by_id)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "orgs_projectsv2_items_create_by_id",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "org",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true
+        },
+        {
+          "name": "project-number",
+          "type": "integer",
+          "maps_to": "record.project_number",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "maps_to": "record.type",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "integer",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "owner",
+          "type": "string",
+          "maps_to": "record.owner"
+        },
+        {
+          "name": "repo",
+          "type": "string",
+          "maps_to": "record.repo"
+        },
+        {
+          "name": "number",
+          "type": "integer",
+          "maps_to": "record.number"
+        }
+      ]
+    },
+    {
+      "path": "orgs projects items create-by-repo-number",
+      "summary": "POST /orgs/{org}/projectsV2/{project_number}/items (orgs_projectsv2_items_create_by_repo_number)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "orgs_projectsv2_items_create_by_repo_number",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "org",
+          "type": "string",
+          "maps_to": "record.org",
+          "required": true
+        },
+        {
+          "name": "project-number",
+          "type": "integer",
+          "maps_to": "record.project_number",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "maps_to": "record.type",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "integer",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "owner",
+          "type": "string",
+          "maps_to": "record.owner",
+          "required": true
+        },
+        {
+          "name": "repo",
+          "type": "string",
+          "maps_to": "record.repo",
+          "required": true
+        },
+        {
+          "name": "number",
+          "type": "integer",
+          "maps_to": "record.number",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "codespaces create-from-repository",
+      "summary": "POST /user/codespaces (user_codespaces_create_from_repository)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "user_codespaces_create_from_repository",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "repository-id",
+          "type": "integer",
+          "maps_to": "record.repository_id",
+          "required": true
+        },
+        {
+          "name": "ref",
+          "type": "string",
+          "maps_to": "record.ref"
+        },
+        {
+          "name": "location",
+          "type": "string",
+          "maps_to": "record.location"
+        },
+        {
+          "name": "geo",
+          "type": "string",
+          "maps_to": "record.geo"
+        },
+        {
+          "name": "client-ip",
+          "type": "string",
+          "maps_to": "record.client_ip"
+        },
+        {
+          "name": "machine",
+          "type": "string",
+          "maps_to": "record.machine"
+        },
+        {
+          "name": "devcontainer-path",
+          "type": "string",
+          "maps_to": "record.devcontainer_path"
+        },
+        {
+          "name": "multi-repo-permissions-opt-out",
+          "type": "boolean",
+          "maps_to": "record.multi_repo_permissions_opt_out"
+        },
+        {
+          "name": "working-directory",
+          "type": "string",
+          "maps_to": "record.working_directory"
+        },
+        {
+          "name": "idle-timeout-minutes",
+          "type": "integer",
+          "maps_to": "record.idle_timeout_minutes"
+        },
+        {
+          "name": "display-name",
+          "type": "string",
+          "maps_to": "record.display_name"
+        },
+        {
+          "name": "retention-period-minutes",
+          "type": "integer",
+          "maps_to": "record.retention_period_minutes"
+        }
+      ]
+    },
+    {
+      "path": "codespaces create-from-pull-request",
+      "summary": "POST /user/codespaces (user_codespaces_create_from_pull_request)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "user_codespaces_create_from_pull_request",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "pull-request",
+          "type": "json",
+          "maps_to": "record.pull_request",
+          "required": true
+        },
+        {
+          "name": "location",
+          "type": "string",
+          "maps_to": "record.location"
+        },
+        {
+          "name": "geo",
+          "type": "string",
+          "maps_to": "record.geo"
+        },
+        {
+          "name": "machine",
+          "type": "string",
+          "maps_to": "record.machine"
+        },
+        {
+          "name": "devcontainer-path",
+          "type": "string",
+          "maps_to": "record.devcontainer_path"
+        },
+        {
+          "name": "working-directory",
+          "type": "string",
+          "maps_to": "record.working_directory"
+        },
+        {
+          "name": "idle-timeout-minutes",
+          "type": "integer",
+          "maps_to": "record.idle_timeout_minutes"
+        }
+      ]
+    },
+    {
+      "path": "users attestations delete-by-subject-digests",
+      "summary": "POST /users/{username}/attestations/delete-request (users_attestations_delete_request_by_subject_digests)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "users_attestations_delete_request_by_subject_digests",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "username",
+          "type": "string",
+          "maps_to": "record.username",
+          "required": true
+        },
+        {
+          "name": "subject-digests",
+          "type": "json",
+          "maps_to": "record.subject_digests",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "users attestations delete-by-attestation-ids",
+      "summary": "POST /users/{username}/attestations/delete-request (users_attestations_delete_request_by_attestation_ids)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "users_attestations_delete_request_by_attestation_ids",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "username",
+          "type": "string",
+          "maps_to": "record.username",
+          "required": true
+        },
+        {
+          "name": "attestation-ids",
+          "type": "json",
+          "maps_to": "record.attestation_ids",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "users projects fields create-new-field",
+      "summary": "POST /users/{username}/projectsV2/{project_number}/fields (users_projectsv2_fields_create_new_field)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "users_projectsv2_fields_create_new_field",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "username",
+          "type": "string",
+          "maps_to": "record.username",
+          "required": true
+        },
+        {
+          "name": "project-number",
+          "type": "integer",
+          "maps_to": "record.project_number",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "data-type",
+          "type": "string",
+          "maps_to": "record.data_type",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "users projects fields create-single-select",
+      "summary": "POST /users/{username}/projectsV2/{project_number}/fields (users_projectsv2_fields_create_single_select)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "users_projectsv2_fields_create_single_select",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "username",
+          "type": "string",
+          "maps_to": "record.username",
+          "required": true
+        },
+        {
+          "name": "project-number",
+          "type": "integer",
+          "maps_to": "record.project_number",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "data-type",
+          "type": "string",
+          "maps_to": "record.data_type",
+          "required": true
+        },
+        {
+          "name": "single-select-options",
+          "type": "json",
+          "maps_to": "record.single_select_options",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "users projects fields create-iteration",
+      "summary": "POST /users/{username}/projectsV2/{project_number}/fields (users_projectsv2_fields_create_iteration)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "users_projectsv2_fields_create_iteration",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "username",
+          "type": "string",
+          "maps_to": "record.username",
+          "required": true
+        },
+        {
+          "name": "project-number",
+          "type": "integer",
+          "maps_to": "record.project_number",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "data-type",
+          "type": "string",
+          "maps_to": "record.data_type",
+          "required": true
+        },
+        {
+          "name": "iteration-configuration",
+          "type": "json",
+          "maps_to": "record.iteration_configuration",
+          "required": true
+        }
+      ]
+    },
+    {
+      "path": "users projects items create-by-id",
+      "summary": "POST /users/{username}/projectsV2/{project_number}/items (users_projectsv2_items_create_by_id)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "users_projectsv2_items_create_by_id",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "username",
+          "type": "string",
+          "maps_to": "record.username",
+          "required": true
+        },
+        {
+          "name": "project-number",
+          "type": "integer",
+          "maps_to": "record.project_number",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "maps_to": "record.type",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "integer",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "owner",
+          "type": "string",
+          "maps_to": "record.owner"
+        },
+        {
+          "name": "repo",
+          "type": "string",
+          "maps_to": "record.repo"
+        },
+        {
+          "name": "number",
+          "type": "integer",
+          "maps_to": "record.number"
+        }
+      ]
+    },
+    {
+      "path": "users projects items create-by-repo-number",
+      "summary": "POST /users/{username}/projectsV2/{project_number}/items (users_projectsv2_items_create_by_repo_number)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "users_projectsv2_items_create_by_repo_number",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
+      "flags": [
+        {
+          "name": "username",
+          "type": "string",
+          "maps_to": "record.username",
+          "required": true
+        },
+        {
+          "name": "project-number",
+          "type": "integer",
+          "maps_to": "record.project_number",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "maps_to": "record.type",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "integer",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "owner",
+          "type": "string",
+          "maps_to": "record.owner",
+          "required": true
+        },
+        {
+          "name": "repo",
+          "type": "string",
+          "maps_to": "record.repo",
+          "required": true
+        },
+        {
+          "name": "number",
+          "type": "integer",
+          "maps_to": "record.number",
+          "required": true
         }
       ]
     }

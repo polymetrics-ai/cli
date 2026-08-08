@@ -7145,6 +7145,276 @@
           "type": "string"
         }
       }
+    },
+    {
+      "id": "github.orgs_attestations_delete_request_by_subject_digests",
+      "kind": "rest_write",
+      "summary": "POST /orgs/{org}/attestations/delete-request (orgs_attestations_delete_request_by_subject_digests)",
+      "source_url": "https://docs.github.com/rest/orgs/attestations#delete-attestations-in-bulk",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute (caller-supplied intent acknowledgement)",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "rest": {
+        "method": "POST",
+        "path": "/orgs/{org}/attestations/delete-request"
+      }
+    },
+    {
+      "id": "github.orgs_attestations_delete_request_by_attestation_ids",
+      "kind": "rest_write",
+      "summary": "POST /orgs/{org}/attestations/delete-request (orgs_attestations_delete_request_by_attestation_ids)",
+      "source_url": "https://docs.github.com/rest/orgs/attestations#delete-attestations-in-bulk",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute (caller-supplied intent acknowledgement)",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "rest": {
+        "method": "POST",
+        "path": "/orgs/{org}/attestations/delete-request"
+      }
+    },
+    {
+      "id": "github.orgs_campaigns_create_code_scanning",
+      "kind": "rest_write",
+      "summary": "POST /orgs/{org}/campaigns (orgs_campaigns_create_code_scanning)",
+      "source_url": "https://docs.github.com/rest/campaigns/campaigns#create-a-campaign-for-an-organization",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/orgs/{org}/campaigns"
+      }
+    },
+    {
+      "id": "github.orgs_campaigns_create_secret_scanning",
+      "kind": "rest_write",
+      "summary": "POST /orgs/{org}/campaigns (orgs_campaigns_create_secret_scanning)",
+      "source_url": "https://docs.github.com/rest/campaigns/campaigns#create-a-campaign-for-an-organization",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/orgs/{org}/campaigns"
+      }
+    },
+    {
+      "id": "github.orgs_projectsv2_fields_create_existing_issue_field",
+      "kind": "rest_write",
+      "summary": "POST /orgs/{org}/projectsV2/{project_number}/fields (orgs_projectsv2_fields_create_existing_issue_field)",
+      "source_url": "https://docs.github.com/rest/projects/fields#add-a-field-to-an-organization-owned-project",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/orgs/{org}/projectsV2/{project_number}/fields"
+      }
+    },
+    {
+      "id": "github.orgs_projectsv2_fields_create_new_field",
+      "kind": "rest_write",
+      "summary": "POST /orgs/{org}/projectsV2/{project_number}/fields (orgs_projectsv2_fields_create_new_field)",
+      "source_url": "https://docs.github.com/rest/projects/fields#add-a-field-to-an-organization-owned-project",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/orgs/{org}/projectsV2/{project_number}/fields"
+      }
+    },
+    {
+      "id": "github.orgs_projectsv2_fields_create_single_select",
+      "kind": "rest_write",
+      "summary": "POST /orgs/{org}/projectsV2/{project_number}/fields (orgs_projectsv2_fields_create_single_select)",
+      "source_url": "https://docs.github.com/rest/projects/fields#add-a-field-to-an-organization-owned-project",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/orgs/{org}/projectsV2/{project_number}/fields"
+      }
+    },
+    {
+      "id": "github.orgs_projectsv2_fields_create_iteration",
+      "kind": "rest_write",
+      "summary": "POST /orgs/{org}/projectsV2/{project_number}/fields (orgs_projectsv2_fields_create_iteration)",
+      "source_url": "https://docs.github.com/rest/projects/fields#add-a-field-to-an-organization-owned-project",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/orgs/{org}/projectsV2/{project_number}/fields"
+      }
+    },
+    {
+      "id": "github.orgs_projectsv2_items_create_by_id",
+      "kind": "rest_write",
+      "summary": "POST /orgs/{org}/projectsV2/{project_number}/items (orgs_projectsv2_items_create_by_id)",
+      "source_url": "https://docs.github.com/rest/projects/items#add-item-to-organization-owned-project",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/orgs/{org}/projectsV2/{project_number}/items"
+      }
+    },
+    {
+      "id": "github.orgs_projectsv2_items_create_by_repo_number",
+      "kind": "rest_write",
+      "summary": "POST /orgs/{org}/projectsV2/{project_number}/items (orgs_projectsv2_items_create_by_repo_number)",
+      "source_url": "https://docs.github.com/rest/projects/items#add-item-to-organization-owned-project",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/orgs/{org}/projectsV2/{project_number}/items"
+      }
+    },
+    {
+      "id": "github.user_codespaces_create_from_repository",
+      "kind": "rest_write",
+      "summary": "POST /user/codespaces (user_codespaces_create_from_repository)",
+      "source_url": "https://docs.github.com/rest/codespaces/codespaces#create-a-codespace-for-the-authenticated-user",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/user/codespaces"
+      }
+    },
+    {
+      "id": "github.user_codespaces_create_from_pull_request",
+      "kind": "rest_write",
+      "summary": "POST /user/codespaces (user_codespaces_create_from_pull_request)",
+      "source_url": "https://docs.github.com/rest/codespaces/codespaces#create-a-codespace-for-the-authenticated-user",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/user/codespaces"
+      }
+    },
+    {
+      "id": "github.users_attestations_delete_request_by_subject_digests",
+      "kind": "rest_write",
+      "summary": "POST /users/{username}/attestations/delete-request (users_attestations_delete_request_by_subject_digests)",
+      "source_url": "https://docs.github.com/rest/users/attestations#delete-attestations-in-bulk",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute (caller-supplied intent acknowledgement)",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "rest": {
+        "method": "POST",
+        "path": "/users/{username}/attestations/delete-request"
+      }
+    },
+    {
+      "id": "github.users_attestations_delete_request_by_attestation_ids",
+      "kind": "rest_write",
+      "summary": "POST /users/{username}/attestations/delete-request (users_attestations_delete_request_by_attestation_ids)",
+      "source_url": "https://docs.github.com/rest/users/attestations#delete-attestations-in-bulk",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute (caller-supplied intent acknowledgement)",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "rest": {
+        "method": "POST",
+        "path": "/users/{username}/attestations/delete-request"
+      }
+    },
+    {
+      "id": "github.users_projectsv2_fields_create_new_field",
+      "kind": "rest_write",
+      "summary": "POST /users/{username}/projectsV2/{project_number}/fields (users_projectsv2_fields_create_new_field)",
+      "source_url": "https://docs.github.com/rest/projects/fields#add-field-to-user-owned-project",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/users/{username}/projectsV2/{project_number}/fields"
+      }
+    },
+    {
+      "id": "github.users_projectsv2_fields_create_single_select",
+      "kind": "rest_write",
+      "summary": "POST /users/{username}/projectsV2/{project_number}/fields (users_projectsv2_fields_create_single_select)",
+      "source_url": "https://docs.github.com/rest/projects/fields#add-field-to-user-owned-project",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/users/{username}/projectsV2/{project_number}/fields"
+      }
+    },
+    {
+      "id": "github.users_projectsv2_fields_create_iteration",
+      "kind": "rest_write",
+      "summary": "POST /users/{username}/projectsV2/{project_number}/fields (users_projectsv2_fields_create_iteration)",
+      "source_url": "https://docs.github.com/rest/projects/fields#add-field-to-user-owned-project",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/users/{username}/projectsV2/{project_number}/fields"
+      }
+    },
+    {
+      "id": "github.users_projectsv2_items_create_by_id",
+      "kind": "rest_write",
+      "summary": "POST /users/{username}/projectsV2/{project_number}/items (users_projectsv2_items_create_by_id)",
+      "source_url": "https://docs.github.com/rest/projects/items#add-item-to-user-owned-project",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/users/{username}/projectsV2/{project_number}/items"
+      }
+    },
+    {
+      "id": "github.users_projectsv2_items_create_by_repo_number",
+      "kind": "rest_write",
+      "summary": "POST /users/{username}/projectsV2/{project_number}/items (users_projectsv2_items_create_by_repo_number)",
+      "source_url": "https://docs.github.com/rest/projects/items#add-item-to-user-owned-project",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/users/{username}/projectsV2/{project_number}/items"
+      }
     }
   ]
 }

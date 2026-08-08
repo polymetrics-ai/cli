@@ -216,6 +216,18 @@ func (c *Connector) PreflightWriteAction(name string) error {
 	return ValidatePromotableRecordSchema(action.RecordSchema)
 }
 
+// PreflightStructuredJSONRecordField makes the concrete write schema the
+// authority for a commandrunner `json` flag. It intentionally accepts a field
+// name rather than a raw body or arbitrary path, so the runner cannot grow a
+// generic JSON request escape hatch around the declarative write contract.
+func (c *Connector) PreflightStructuredJSONRecordField(actionName, field string) error {
+	action, err := findWriteAction(c.bundle, actionName)
+	if err != nil {
+		return err
+	}
+	return ValidateStructuredJSONRecordField(action.RecordSchema, field)
+}
+
 // DryRunWrite satisfies connectors.DryRunWriter.
 func (c *Connector) DryRunWrite(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WritePreview, error) {
 	if len(c.bundle.Writes) == 0 {

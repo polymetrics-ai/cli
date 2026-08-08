@@ -43,7 +43,7 @@
           "name": { "type": "string" },
           "type": {
             "type": "string",
-            "enum": ["boolean", "string", "integer", "number", "enum", "string_array"]
+            "enum": ["boolean", "string", "integer", "number", "enum", "string_array", "json"]
           },
           "summary": { "type": "string" },
           "values": {
@@ -115,7 +115,7 @@
                 "name": { "type": "string" },
                 "type": {
                   "type": "string",
-                  "enum": ["boolean", "string", "integer", "number", "enum", "string_array"]
+                  "enum": ["boolean", "string", "integer", "number", "enum", "string_array", "json"]
                 },
                 "summary": { "type": "string" },
                 "values": {

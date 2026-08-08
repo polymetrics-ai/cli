@@ -2,8 +2,10 @@ package commandrunner
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"math"
 	"net/http"
 	"sort"
@@ -20,6 +22,7 @@ const (
 	MaxDirectReadBytes          = 1 << 20
 	MaxOperationDirectReadBytes = 16 << 20
 	maxRecordPathArrayIndex     = 128
+	maxStructuredJSONFlagBytes  = 1 << 20
 )
 
 type Request struct {
@@ -79,6 +82,15 @@ var ErrNotWriteCommand = errors.New("connector command is not a reverse ETL writ
 // second, hand-maintained schema contract.
 type declarativeWritePreflighter interface {
 	PreflightWriteAction(name string) error
+}
+
+// structuredJSONRecordPreflighter is deliberately narrower than a generic
+// JSON parser. The engine owns the raw record schema, so it alone decides
+// whether a named, top-level record field may accept one structured JSON
+// value. Native connectors do not opt into this declarative flag type merely
+// by exposing a similarly named command.
+type structuredJSONRecordPreflighter interface {
+	PreflightStructuredJSONRecordField(actionName, field string) error
 }
 
 type BlockedCommandError struct {
@@ -331,6 +343,17 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 	if !ok {
 		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{Connector: connector.Name(), Command: command, Reason: "unknown command"}
 	}
+	if cmd.Availability == "implemented" {
+		if err := preflightStructuredJSONRecordFlags(connector, cmd); err != nil {
+			return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
+				Connector:    connector.Name(),
+				Command:      command,
+				Intent:       cmd.Intent,
+				Availability: cmd.Availability,
+				Reason:       err.Error(),
+			}
+		}
+	}
 	if cmd.Operation != "" && cmd.Intent != "binary_download" &&
 		(cmd.Intent != "direct_read" || cmd.Availability != "implemented") &&
 		(cmd.Intent != "direct_write" || cmd.Availability != "implemented") {
@@ -390,6 +413,33 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 		Availability: cmd.Availability,
 		Reason:       blockReason(cmd),
 	}
+}
+
+func preflightStructuredJSONRecordFlags(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
+	var preflighter structuredJSONRecordPreflighter
+	for _, flag := range cmd.Flags {
+		if flag.Type != "json" {
+			continue
+		}
+		if cmd.Intent != "reverse_etl" || strings.TrimSpace(cmd.Write) == "" {
+			return fmt.Errorf("structured JSON flag --%s is allowed only on a declared reverse-ETL record field", flag.Name)
+		}
+		field, ok := strings.CutPrefix(flag.MapsTo, "record.")
+		if !ok || field == "" {
+			return fmt.Errorf("structured JSON flag --%s must map to a record field", flag.Name)
+		}
+		if preflighter == nil {
+			var supported bool
+			preflighter, supported = connector.(structuredJSONRecordPreflighter)
+			if !supported {
+				return fmt.Errorf("structured JSON flag --%s requires a declarative record-schema preflight", flag.Name)
+			}
+		}
+		if err := preflighter.PreflightStructuredJSONRecordField(cmd.Write, field); err != nil {
+			return fmt.Errorf("structured JSON flag --%s is not declared safely: %w", flag.Name, err)
+		}
+	}
+	return nil
 }
 
 // directReadPageFlagNames are consumed as Request.Page/Request.PageCursor
@@ -1053,7 +1103,7 @@ func ReconstituteWithheldFields(connector connectors.Connector, path []string, f
 				missing = append(missing, "--"+flag.Name)
 				continue
 			}
-			value, err := coerceFlagValue(flag, values)
+			value, err := coerceRecordFlagValue(flag, values)
 			if err != nil {
 				return nil, nil, err
 			}
@@ -1103,7 +1153,7 @@ func reconstituteWithheldSubtree(record connectors.Record, byTarget map[string]c
 			}
 			continue
 		}
-		value, err := coerceFlagValue(flag, values)
+		value, err := coerceRecordFlagValue(flag, values)
 		if err != nil {
 			return nil, err
 		}
@@ -1488,7 +1538,7 @@ func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]st
 	})
 	record := connectors.Record{}
 	for _, app := range applications {
-		value, err := coerceFlagValue(app.flag, app.values)
+		value, err := coerceRecordFlagValue(app.flag, app.values)
 		if err != nil {
 			return nil, err
 		}
@@ -1532,12 +1582,59 @@ func setRecordValue(record connectors.Record, path string, value any) error {
 	return setBodyValue(map[string]any(record), path, value)
 }
 
+// coerceRecordFlagValue is the only route that admits the declarative `json`
+// flag kind. It is intentionally unavailable to direct reads, direct writes,
+// paths, queries, headers, and arbitrary body fields; preflight has already
+// tied it to one engine-validated reverse-ETL record property.
+func coerceRecordFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, error) {
+	if flag.Type == "json" {
+		return coerceDeclaredStructuredJSONRecordFlagValue(flag, values)
+	}
+	return coerceFlagValue(flag, values)
+}
+
+func coerceDeclaredStructuredJSONRecordFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, error) {
+	if len(values) != 1 {
+		return nil, fmt.Errorf("invalid --%s: structured JSON flags accept exactly one value", flag.Name)
+	}
+	raw := values[0]
+	if len(raw) > maxStructuredJSONFlagBytes {
+		return nil, fmt.Errorf("invalid --%s: structured JSON exceeds %d bytes", flag.Name, maxStructuredJSONFlagBytes)
+	}
+	if err := safety.RejectDangerousChars(raw, "flag value"); err != nil {
+		return nil, err
+	}
+
+	decoder := json.NewDecoder(strings.NewReader(raw))
+	decoder.UseNumber()
+	var value any
+	if err := decoder.Decode(&value); err != nil {
+		return nil, fmt.Errorf("invalid JSON for --%s: %w", flag.Name, err)
+	}
+	var trailing any
+	if err := decoder.Decode(&trailing); err != io.EOF {
+		if err == nil {
+			return nil, fmt.Errorf("invalid JSON for --%s: must contain exactly one value", flag.Name)
+		}
+		return nil, fmt.Errorf("invalid JSON for --%s: %w", flag.Name, err)
+	}
+	switch value.(type) {
+	case map[string]any, []any:
+		return value, nil
+	default:
+		return nil, fmt.Errorf("invalid --%s: structured JSON must be an object or array", flag.Name)
+	}
+}
+
 // coerceCommandFlagValue retains the normal command-line control-character
 // guard everywhere except a literal text/plain operation body. Markdown and
 // similar declared text documents need line breaks; they are never used as a
 // URL, header, or JSON field because only the exact body mapping reaches this
 // path. Other control characters remain refused.
 func coerceCommandFlagValue(cmd connectors.CommandSurfaceCommand, flag connectors.CommandSurfaceFlag, values []string) (any, error) {
+	if cmd.Intent == "reverse_etl" && strings.HasPrefix(flag.MapsTo, "record.") {
+		return coerceRecordFlagValue(flag, values)
+	}
 	if cmd.Intent == "direct_read" && flag.MapsTo == "body" {
 		return coerceDeclaredPlainTextBodyFlagValue(flag, values)
 	}

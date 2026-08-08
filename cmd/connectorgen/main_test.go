@@ -482,6 +482,75 @@ func TestValidate_CLISurfaceReverseETLRejectsStructuredStringAndMissingNestedMap
 	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceMissingMapping)
 }
 
+func TestValidate_CLISurfaceReverseETLStructuredJSONRequiresDeclaredTopLevelContainer(t *testing.T) {
+	const originalFlag = `{ "name": "name", "type": "string", "summary": "Widget name.", "maps_to": "record.name" }`
+	newBundle := func(target, payloadSchema string) fstest.MapFS {
+		cliSurface := strings.Replace(validCLISurfaceJSON(), originalFlag, `{"name": "payload", "type": "json", "summary": "Structured widget payload.", "maps_to": "`+target+`", "required": true}`, 1)
+		fsys := cliSurfaceBundleFS(cliSurface)
+		fsys["cli-surface/writes.json"] = &fstest.MapFile{Data: []byte(`{
+			"actions": [{
+				"name": "create_widget",
+				"kind": "create",
+				"method": "POST",
+				"path": "/widgets",
+				"record_schema": {
+					"type": "object",
+					"required": ["payload"],
+					"properties": {"payload": ` + payloadSchema + `},
+					"additionalProperties": false
+				},
+				"risk": "creates a widget"
+			}]
+		}`)}
+		return fsys
+	}
+
+	for _, tc := range []struct {
+		name, target, payloadSchema string
+		wantFinding                 bool
+	}{
+		{
+			name:          "closed object field is accepted",
+			target:        "record.payload",
+			payloadSchema: `{"type":"object","properties":{"kind":{"type":"string"}},"additionalProperties":false}`,
+		},
+		{
+			name:          "scalar field is rejected",
+			target:        "record.payload",
+			payloadSchema: `{"type":"string"}`,
+			wantFinding:   true,
+		},
+		{
+			name:          "nested field is rejected",
+			target:        "record.payload.kind",
+			payloadSchema: `{"type":"object","properties":{"kind":{"type":"string"}},"additionalProperties":false}`,
+			wantFinding:   true,
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			report, err := validateDir(newBundle(tc.target, tc.payloadSchema))
+			if err != nil {
+				t.Fatalf("validateDir: %v", err)
+			}
+			if tc.wantFinding {
+				assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+				return
+			}
+			if len(report.Findings) != 0 {
+				t.Fatalf("valid declared structured JSON flag has findings: %+v", report.Findings)
+			}
+		})
+	}
+
+	findings := checkCLISurfaceStructuredJSONFlags(engine.Bundle{Name: "cli-surface"}, 0, engine.CLICommand{
+		Path: "widget raw", Intent: "direct_read", Availability: "implemented", Operation: "widgets.raw",
+		Flags: []engine.CLIFlag{{Name: "payload", Type: "json", MapsTo: "body.payload"}},
+	})
+	if len(findings) != 1 || !strings.Contains(findings[0].Message, "allowed only on a declared reverse-ETL record field") {
+		t.Fatalf("non-reverse structured JSON findings = %+v, want closed placement rejection", findings)
+	}
+}
+
 func TestValidate_CLISurfaceImplementedRawAPIIsBlocked(t *testing.T) {
 	cliSurface := strings.Replace(validCLISurfaceJSON(), `"intent": "etl"`, `"intent": "raw_api"`, 1)
 	report, err := validateDir(cliSurfaceBundleFS(cliSurface))

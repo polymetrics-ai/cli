@@ -828,8 +828,35 @@ func checkCLISurface(b engine.Bundle) []Finding {
 		findings = append(findings, checkCLISurfaceIntent(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceRiskApproval(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceValidationDeclarations(b, i, cmd)...)
+		findings = append(findings, checkCLISurfaceStructuredJSONFlags(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceWriteFlags(b, i, cmd, writes)...)
 		findings = append(findings, checkCLISurfaceEndpointCoverage(b, i, cmd, endpoints)...)
+	}
+	return findings
+}
+
+// checkCLISurfaceStructuredJSONFlags keeps the schema vocabulary closed even
+// though the bundle meta-schema must recognize `json` before the engine can
+// inspect an authored command. Runtime preflight permits it only for a named,
+// top-level reverse-ETL record field; this static half rejects every other
+// executable placement before it can become an `implemented` claim.
+func checkCLISurfaceStructuredJSONFlags(b engine.Bundle, i int, cmd engine.CLICommand) []Finding {
+	if cmd.Availability != "implemented" {
+		return nil
+	}
+	var findings []Finding
+	for _, flag := range cmd.Flags {
+		if flag.Type != "json" {
+			continue
+		}
+		if cmd.Intent != "reverse_etl" || strings.TrimSpace(cmd.Write) == "" || !strings.HasPrefix(flag.MapsTo, "record.") {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("implemented command %d (%q) structured JSON flag --%s is allowed only on a declared reverse-ETL record field", i, cmd.Path, flag.Name),
+			})
+		}
 	}
 	return findings
 }
@@ -1339,6 +1366,16 @@ func checkCLISurfaceWriteFlags(
 		leaf, err := schema.recordPath(target)
 		if err != nil {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) flag --%s maps outside write %q schema: %v", i, cmd.Path, flag.Name, cmd.Write, err)})
+			continue
+		}
+		if flag.Type == "json" {
+			// Runtime preflight delegates this exact check to the engine owning
+			// the write's raw record schema. Keep the static authoring gate on
+			// that shared rule: a hand-copied object/array test here would drift
+			// as soon as the declarative schema contract changes.
+			if err := engine.ValidateStructuredJSONRecordField(action.RecordSchema, target); err != nil {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) structured JSON flag --%s is not declared safely: %v", i, cmd.Path, flag.Name, err)})
+			}
 			continue
 		}
 		if !cliFlagTypeMatchesSchema(flag.Type, leaf) {
