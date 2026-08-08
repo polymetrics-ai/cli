@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector zoom [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API; includes approval-gated clinical-note and Quality Management interaction actions.
+  Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API; includes sensitive Cobrowse SDK session reads and approval-gated clinical-note and Quality Management interaction actions.
 
 ICON
   id: zoom
@@ -59,13 +59,13 @@ REVERSE ETL ACTIONS
     risk: high: imports a third-party interaction into Zoom Quality Management; requires reverse ETL approval
 
 SECURITY
-  read risk: external Zoom API read of user, meeting, webinar, Quality of Service, AI Companion, My Notes, healthcare clinical-note, and Quality Management data
+  read risk: external Zoom API read of user, meeting, webinar, Quality of Service, AI Companion, My Notes, healthcare clinical-note, Quality Management, and Cobrowse SDK session data
   write risk: typed Zoom reverse ETL mutation of a healthcare clinical-note completion status or Quality Management interaction creation
   approval: reverse ETL writes require plan, preview, explicit approval, and execute; read-only commands require none
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 COMMAND SURFACE
-  Run declared Zoom stream reads, bounded module-specific direct reads, and approval-gated clinical-note and Quality Management interaction actions.
+  Run declared Zoom stream reads, bounded module-specific direct reads including sensitive Cobrowse SDK sessions, and approval-gated clinical-note and Quality Management interaction actions.
   Usage: pm zoom <group> <command> [flags]
   Source CLI: Zoom API reference (OpenAPI 3.1.1; docs static build 2026-08-03T14-58-19-06-00; retrieved 2026-08-05)
   Global flags:
@@ -99,6 +99,11 @@ COMMAND SURFACE
     quality-management interactions list - List Quality Management interactions. [intent=direct_read availability=implemented operation=zoom.list_quality_management_interactions]; notes: Bounded sensitive Zoom read with no provider-declared request parameters. Response-only pagination/date fields are not CLI flags; identifiers and personal-contact fields are redacted before output.
     quality-management interactions get - View one Quality Management interaction. [intent=direct_read availability=implemented operation=zoom.get_quality_management_interaction]; notes: Bounded sensitive Zoom read with a typed required interaction-id path parameter; identifiers and personal-contact fields are redacted before output.; flags: --interaction-id (required)
     quality-management interactions create - Plan creation of a Quality Management interaction from a third-party download URL. [intent=reverse_etl availability=implemented write=create_quality_management_interaction]; approval: reverse ETL plan -> preview -> explicit approval -> execute; risk: high: imports a third-party interaction into Zoom Quality Management through an approval-gated reverse ETL action; notes: Typed high-risk mutation. Download URL and interaction-info fields are redacted in generic write errors; preview and explicit approval are required before execute. If any interaction-info field is supplied, Zoom requires interaction-channel-type.; flags: --download-url (required), --direction, --disposition, --interaction-channel-type, --interaction-agent-email, --interaction-agent-id, --interaction-consumer-name, --interaction-from, --interaction-to, --primary-language, --queue-id, --start-time
+  Cobrowse SDK
+    cobrowse-sdk live-sessions list - List live Cobrowse SDK sessions for an optional monthly date range. [intent=direct_read availability=implemented operation=zoom.list_cobrowse_live_sessions]; notes: Bounded sensitive Zoom read. The provider explicitly permits an optional monthly from/to date range; page_size and next_page_token are response-only fields and are not CLI flags.; flags: --from, --to
+    cobrowse-sdk past-sessions list - List past Cobrowse SDK sessions for an optional monthly date range. [intent=direct_read availability=implemented operation=zoom.list_cobrowse_past_sessions]; notes: Bounded sensitive Zoom read. The provider explicitly permits an optional monthly from/to date range; page_size and next_page_token are response-only fields and are not CLI flags.; flags: --from, --to
+    cobrowse-sdk sessions get - Get details for one Cobrowse SDK session. [intent=direct_read availability=implemented operation=zoom.get_cobrowse_session]; notes: Bounded sensitive Zoom read with a typed required session-id path parameter; session pins, user/session identifiers, display names, connection IDs, and IP addresses are redacted before output.; flags: --session-id (required)
+    cobrowse-sdk sessions users list - List users from one Cobrowse SDK session. [intent=direct_read availability=implemented operation=zoom.list_cobrowse_session_users]; notes: Bounded sensitive Zoom read with a typed required session-id path parameter; page_size and next_page_token are response-only fields and session/user connection data is redacted before output.; flags: --session-id (required)
   Help topics:
     provider-inventory - The Zoom provider ledger tracks 1,913 documented REST operations; Wave 1 executes three stream-backed reads; Wave 2+ adds bounded direct-read/write operations module by module (see #3915).
 

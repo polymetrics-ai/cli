@@ -12444,6 +12444,30 @@
     },
     {
       "method": "GET",
+      "path": "/v2/cobrowsesdk/live_sessions",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cobrowsesdk/past_sessions",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cobrowsesdk/sessions/{sessionId}",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
+      "path": "/v2/cobrowsesdk/sessions/{sessionId}/users",
+      "kind": "rest_read",
+      "max_bytes": 1048576
+    },
+    {
+      "method": "GET",
       "path": "/v2/metrics/meetings/{meetingId}/participants/qos_summary",
       "kind": "rest_read",
       "max_bytes": 1048576
