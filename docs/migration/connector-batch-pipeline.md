@@ -213,6 +213,13 @@ the fetched artifact. DocuSeal's `create_submission` remains a real generic
 reverse-ETL write action but is not a connector-namespace command because its
 required `submitters` value is an object array, not a truthful scalar CLI flag.
 
+The `dockerhub` row is the immutable 2026-08-06 batch record and is deliberately
+not restated: a later parity sweep covered all 54 of its artifact operations, so
+its excluded count no longer reflects the connector. A connector's current
+coverage is owned by its own `api_surface.json` `covered_by` entries and the
+generated [`dockerhub` manual](../connectors/dockerhub/MANUAL.md), never by a
+batch table.
+
 ### Post-main capability re-gate
 
 After rebasing on current `origin/main` at `5da755596`, batch 001's checked-in
