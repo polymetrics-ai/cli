@@ -1,6 +1,6 @@
 {
-  "tagline": "Read the currently stream-backed Zoom users, meetings, and webinars API routes, plus bounded Quality of Service summary reads.",
-  "usage": "pm zoom <users|meetings|webinars|qss> <list> [flags]",
+  "tagline": "Run declared Zoom stream reads, bounded module-specific direct reads, and approval-gated clinical-note status updates.",
+  "usage": "pm zoom <group> <command> [flags]",
   "source_cli": {
     "name": "Zoom API reference",
     "docs": "https://developers.zoom.us/docs/api/",
@@ -42,6 +42,13 @@
       "title": "My Notes",
       "commands": [
         "my-notes"
+      ]
+    },
+    {
+      "id": "healthcare",
+      "title": "Healthcare",
+      "commands": [
+        "healthcare"
       ]
     }
   ],
@@ -319,6 +326,110 @@
         }
       ],
       "output_policy": "json_redacted"
+    },
+    {
+      "path": "healthcare clinical-notes list",
+      "summary": "List clinical notes, optionally filtered by owner and/or meeting.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.list_clinical_notes",
+      "source_url": "https://developers.zoom.us/docs/api/healthcare.md",
+      "flags": [
+        {
+          "name": "note-owner-user-id",
+          "type": "string",
+          "summary": "Return only clinical notes owned by this Zoom user.",
+          "maps_to": "query.note_owner_user_id",
+          "required": false,
+          "allow_empty": false
+        },
+        {
+          "name": "meeting-id",
+          "type": "string",
+          "summary": "Return only clinical notes associated with this meeting.",
+          "maps_to": "query.meeting_id",
+          "required": false,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Zoom read. Only note-owner-user-id and meeting-id are explicit provider request inputs; response-only dates and paging fields are not CLI flags. The clinical_json_redacted policy redacts clinical-note content and identifiers.",
+      "examples": [
+        "pm zoom healthcare clinical-notes list --credential zoom-fixture --json",
+        "pm zoom healthcare clinical-notes list --credential zoom-fixture --meeting-id 123456789 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/clinical_notes/notes"
+        }
+      ],
+      "output_policy": "clinical_json_redacted"
+    },
+    {
+      "path": "healthcare clinical-notes get",
+      "summary": "Get a single clinical note by ID.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "zoom.get_clinical_note",
+      "source_url": "https://developers.zoom.us/docs/api/healthcare.md",
+      "flags": [
+        {
+          "name": "note-id",
+          "type": "string",
+          "summary": "Clinical note ID.",
+          "maps_to": "path.noteId",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
+      "notes": "Bounded sensitive Zoom read with a typed required note-id path parameter. The clinical_json_redacted policy redacts clinical-note content and identifiers.",
+      "examples": [
+        "pm zoom healthcare clinical-notes get --credential zoom-fixture --note-id fixture-note --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/clinical_notes/notes/{noteId}"
+        }
+      ],
+      "output_policy": "clinical_json_redacted"
+    },
+    {
+      "path": "healthcare clinical-notes update",
+      "summary": "Plan an update to a clinical note's completion status.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_clinical_note",
+      "source_url": "https://developers.zoom.us/docs/api/healthcare.md",
+      "risk": "high: changes a patient's clinical note completion status through an approval-gated reverse ETL action",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
+      "flags": [
+        {
+          "name": "note-id",
+          "type": "string",
+          "summary": "Clinical note ID.",
+          "maps_to": "record.note_id",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "is-note-completed",
+          "type": "boolean",
+          "summary": "Whether the clinical note is marked completed.",
+          "maps_to": "record.is_note_completed",
+          "required": true
+        }
+      ],
+      "notes": "Typed high-risk mutation; preview and explicit approval are required before execute. The clinical note ID is redacted in write errors.",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/clinical_notes/notes/{noteId}"
+        }
+      ],
+      "examples": [
+        "pm zoom healthcare clinical-notes update --note-id fixture-note --is-note-completed true --preview --json"
+      ]
     }
   ],
   "help_topics": [

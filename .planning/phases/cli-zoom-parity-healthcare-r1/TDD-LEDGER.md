@@ -47,14 +47,46 @@ This red state contains only the test, synthetic Zoom-local fixtures, and delive
 `operations.json`, `writes.json`, `cli_surface.json`, `api_surface.json`, metadata, generated
 ledger, or connector documentation production file has changed.
 
-## GREEN — pending
+## GREEN — captured
 
-1. Add the two `rest_read` operation declarations and the typed `update_clinical_note` write action.
-2. Add Healthcare command-surface declarations, leaving derivable metadata to `surface-sync`.
-3. Add sanitized fixtures, update metadata/docs, run generation, then run the red test to green.
-4. Record the exact green commands and output in this ledger and `VERIFICATION.md`.
+1. Added two `rest_read` declarations with the existing `clinical_json_redacted` response policy,
+   and the typed `update_clinical_note` PATCH action with a closed two-field record schema.
+2. Added the three Healthcare commands. `surface-sync` generated the direct-read endpoint/output
+   metadata and runtime endpoint projection; the scoped reconciler generated only the two
+   `covered_by.direct_read` rows. The PATCH ledger row is linked to
+   `covered_by.write=update_clinical_note`.
+3. Kept the synthetic fixture-only execution test: direct reads assert redaction and documented
+   request inputs, while PATCH asserts exact JSON body/path and a successful `204 No Content`.
+4. Generated the connector documentation, retained the Zoom/catalog delta only, and verified the
+   binary routes using a temporary local credential with a synthetic environment token. No token
+   value was printed or retained.
 
-## Refactor / review — pending
+### Green evidence
+
+```text
+$ go test -count=1 ./internal/connectors/defs/zoom/...
+ok  	polymetrics.ai/internal/connectors/defs/zoom	0.859s
+
+$ go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+
+$ go run ./cmd/connectorgen validate internal/connectors/defs/zoom
+connectorgen validate: 1 connector(s) checked, 0 findings
+
+$ go run ./cmd/connectorgen surface-reconcile internal/connectors/defs/zoom --notes-contains provider_module=healthcare
+zoom: reconciled covered=2 blocked=0 unchanged=0 refused=1
+```
+
+Built-binary evidence (`go build -o <temporary>/pm ./cmd/pm`): `pm help zoom`, bare `pm zoom`,
+bare `pm zoom healthcare`, and all three Healthcare route helps resolved. With a synthetic token
+stored only through `--from-env`, list and get each reached Zoom and returned HTTP `401` (exit `1`),
+not `unknown command`. The update command returned a typed preview (exit `0`) and made no live PATCH.
+
+## Refactor / review — captured
+
+Inline `verify-work` and `code-review` are complete under the documented manual-GSD fallback.
+The final focused test, both surface checks, full connector validation, and diff-scope check passed
+after the implementation. See `VERIFICATION.md` and `REVIEW.md` for commands and dispositions.
 
 - Retain the generic command-count helper; do not add provider-specific branches in shared runtime code.
 - Review declaration ownership, path/body mapping, clinical redaction, 204 acceptance, and generated-file scope.

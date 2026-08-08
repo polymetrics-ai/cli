@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector zoom [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Zoom users, meetings, and webinars through the Zoom REST API, plus bounded Quality of Service summary reads.
+  Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API; includes approval-gated clinical-note status updates.
 
 ICON
   id: zoom
@@ -20,7 +20,7 @@ ICON
   review_url: https://developers.zoom.us/docs/api/
 
 CAPABILITIES
-  check=true catalog=true read=true write=false query=false
+  check=true catalog=true read=true write=true query=false
   Integration type: api
 
 AUTHENTICATION
@@ -48,14 +48,21 @@ ETL STREAMS
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
+REVERSE ETL ACTIONS
+  update_clinical_note:
+    endpoint: PATCH /clinical_notes/notes/{{ record.note_id }}
+    required fields: note_id, is_note_completed
+    risk: high: mutates a patient's clinical note completion status; requires reverse ETL approval
+
 SECURITY
-  read risk: external Zoom API read of user, meeting, and webinar data
-  approval: none; read-only
+  read risk: external Zoom API read of user, meeting, webinar, Quality of Service, AI Companion, My Notes, and healthcare clinical-note data
+  write risk: typed Zoom reverse ETL mutation of a healthcare clinical-note completion status
+  approval: reverse ETL writes require plan, preview, explicit approval, and execute; read-only commands require none
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 COMMAND SURFACE
-  Read the currently stream-backed Zoom users, meetings, and webinars API routes, plus bounded Quality of Service summary reads.
-  Usage: pm zoom <users|meetings|webinars|qss> <list> [flags]
+  Run declared Zoom stream reads, bounded module-specific direct reads, and approval-gated clinical-note status updates.
+  Usage: pm zoom <group> <command> [flags]
   Source CLI: Zoom API reference (OpenAPI 3.1.1; docs static build 2026-08-03T14-58-19-06-00; retrieved 2026-08-05)
   Global flags:
     --credential (string): Credential name to use for the Zoom request.
@@ -77,6 +84,10 @@ COMMAND SURFACE
   My Notes
     my-notes list - List the authenticated user's My Notes. [intent=direct_read availability=implemented operation=zoom.list_my_notes]; notes: Bounded Zoom read; fixed method and path with no request parameters (the live artifact documents none for this operation).
     my-notes content get - Get a My Notes note's content, and optionally its meeting transcript. [intent=direct_read availability=implemented operation=zoom.get_my_notes_content]; notes: Bounded Zoom read; fixed method and path with a typed required note-id path parameter and an optional include=transcript query flag (explicitly documented in provider prose, unlike qss's response-only pagination fields).; flags: --note-id (required), --include
+  Healthcare
+    healthcare clinical-notes list - List clinical notes, optionally filtered by owner and/or meeting. [intent=direct_read availability=implemented operation=zoom.list_clinical_notes]; notes: Bounded sensitive Zoom read. Only note-owner-user-id and meeting-id are explicit provider request inputs; response-only dates and paging fields are not CLI flags. The clinical_json_redacted policy redacts clinical-note content and identifiers.; flags: --note-owner-user-id, --meeting-id
+    healthcare clinical-notes get - Get a single clinical note by ID. [intent=direct_read availability=implemented operation=zoom.get_clinical_note]; notes: Bounded sensitive Zoom read with a typed required note-id path parameter. The clinical_json_redacted policy redacts clinical-note content and identifiers.; flags: --note-id (required)
+    healthcare clinical-notes update - Plan an update to a clinical note's completion status. [intent=reverse_etl availability=implemented write=update_clinical_note]; approval: reverse ETL plan -> preview -> explicit approval -> execute; risk: high: changes a patient's clinical note completion status through an approval-gated reverse ETL action; notes: Typed high-risk mutation; preview and explicit approval are required before execute. The clinical note ID is redacted in write errors.; flags: --note-id (required), --is-note-completed (required)
   Help topics:
     provider-inventory - The Zoom provider ledger tracks 1,913 documented REST operations; Wave 1 executes three stream-backed reads; Wave 2+ adds bounded direct-read/write operations module by module (see #3915).
 
@@ -91,6 +102,7 @@ AGENT WORKFLOW
   - Run pm connectors inspect zoom before creating credentials or plans.
   - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
   - Never ask the user to paste secret values into chat.
+  - For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.
 
 EXIT STATUS
   0 success

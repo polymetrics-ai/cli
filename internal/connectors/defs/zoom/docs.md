@@ -1,7 +1,8 @@
 # Overview
 
-Reads Zoom users, meetings, and webinars through the Zoom REST API, plus bounded Quality of Service
-(QoS) summary reads.
+Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API.
+The current direct-read surface includes Quality of Service (QoS), AI Companion, My Notes, and
+Healthcare clinical-note routes; the Healthcare completion-status update remains approval-gated.
 
 The provider-owned inventory contains 1,913 callable REST operations from Zoom's OpenAPI 3.1.1
 reference corpus (881 reads and 1,032 writes), retrieved on 2026-08-05 from the docs static build
@@ -11,8 +12,9 @@ three existing stream-backed reads: `pm zoom users list`, `pm zoom meetings list
 `pm zoom webinars list`. Later waves add bounded direct-read/write commands module by module; see
 "Direct reads" below and "Executable today" in Known limits for the exact current set.
 
-No Zoom write action is implemented in this slice. The remaining provider operations stay explicitly
-disposed in `api_surface.json`; the ledger is not a claim that those operations are executable.
+One high-risk Zoom write action is implemented for the Healthcare module. All remaining provider
+operations stay explicitly disposed in `api_surface.json`; the ledger is not a claim that those
+operations are executable.
 
 Service API documentation: https://developers.zoom.us/docs/api/.
 
@@ -116,31 +118,54 @@ not a credential.
   documented in the provider's operation description prose, so it is exposed as an optional
   `--include` flag. Provider reference: https://developers.zoom.us/docs/api/my-notes.md.
 
+### Direct reads (healthcare module)
+
+The Healthcare routes return clinical note content and clinical identifiers, so both commands use
+the existing `clinical_json_redacted` policy. It redacts note content, EHR appointment/patient/
+provider identifiers, note owner/modifier identifiers, and token-shaped response fields before
+output. Sanitized fixtures exercise the returned structure; no provider clinical example is retained
+in this repository.
+
+- `pm zoom healthcare clinical-notes list [--note-owner-user-id <id>] [--meeting-id <id>]` reads
+  GET `/v2/clinical_notes/notes` (operation `zoom.list_clinical_notes`). The two optional filters
+  are explicitly described by Zoom's operation prose. `from`, `to`, `page_size`, and
+  `next_page_token` appear only in the `200` response schema and are not request flags. Provider
+  reference: https://developers.zoom.us/docs/api/healthcare.md.
+- `pm zoom healthcare clinical-notes get --note-id <id>` reads GET
+  `/v2/clinical_notes/notes/{noteId}` (operation `zoom.get_clinical_note`). Provider reference:
+  https://developers.zoom.us/docs/api/healthcare.md.
+
 ## Write actions & risks
 
-This connector surface is read-only through Wave 2. Read behavior: external Zoom API read of user,
-meeting, webinar, and QoS summary data.
+Read behavior includes external Zoom API reads of user, meeting, webinar, QoS, AI Companion, My
+Notes, and healthcare clinical-note data.
 
-The provider inventory records 1,032 documented writes, but none is a declared Zoom write action.
-The 997 write operations classified as implementable now remain blocked on connector-local typed
-request contracts, safety/approval evidence, and fixtures; that is not a shared runtime blocker.
-The 12 provider-restricted writes remain unavailable pending the corresponding Zoom account
-entitlement. Future writes must use the existing plan → preview → explicit approval → execute path;
-destructive operations additionally require the typed confirmation gate.
+- `pm zoom healthcare clinical-notes update --note-id <id> --is-note-completed <true|false>`
+  plans the typed PATCH `/v2/clinical_notes/notes/{noteId}` action
+  (`update_clinical_note`). It changes a clinical-note completion status and therefore must use the
+  existing plan → preview → explicit approval → execute path. The note ID is redacted in write
+  errors. Zoom's `204 No Content` success response is recorded as a successful action.
+
+The provider inventory records 1,032 documented writes. Only the Healthcare completion-status
+action is currently declared; all remaining write rows are either blocked on connector-local typed
+contracts, safety/approval evidence, and fixtures, or on the corresponding Zoom account entitlement.
+Future writes must use the existing plan → preview → explicit approval → execute path; destructive
+operations additionally require the typed confirmation gate.
 
 ## Known limits
 
 - Batch default: `read_page_size=100`.
 - Provider inventory: 1,913 operations across 35 published modules (881 reads, 1,032 writes). See
   issue #3915 for the full module-by-module tracking table.
-- Executable today: 9 operations — 3 stream-backed GET reads (`users`, `meetings`, `webinars`), 3
-  bounded `qss` module direct reads, 1 bounded `ai-companion` module direct read, and 2 bounded
-  `my-notes` module direct reads.
-- Direct-read commands in this connector take only their required id path parameter(s) unless the
-  live provider artifact documents an explicit request-parameters section; a response-body field
-  of the same name (e.g. `qss`'s pagination fields) is not sufficient evidence of an accepted
-  request parameter. This is a deliberate module-by-module scope-narrowing, not an oversight.
-- Pending connector-local delivery: 1,833 operations have no shared foundation blocker, but still
+- Executable today: 12 operations — 3 stream-backed GET reads (`users`, `meetings`, `webinars`), 3
+  bounded `qss` module direct reads, 1 bounded `ai-companion` module direct read, 2 bounded
+  `my-notes` module direct reads, 2 Healthcare direct reads, and 1 approval-gated Healthcare PATCH
+  action.
+- Direct-read commands in this connector take only the request inputs the live provider artifact
+  expressly documents. A response-body field of the same name (including Healthcare's `from`, `to`,
+  `page_size`, and `next_page_token`) is not sufficient evidence of an accepted request parameter.
+  This is a deliberate module-by-module scope-narrowing, not an oversight.
+- Pending connector-local delivery: 1,830 operations have no shared foundation blocker, but still
   need bounded Zoom-specific contracts, schemas, safety evidence, and fixtures before they can
   become commands.
 - Provider-side restrictions: 17 operations (five Information Barriers, seven Chat migration, one
