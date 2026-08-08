@@ -700,6 +700,9 @@ func (a *App) ListCredentials() []CredentialMeta {
 }
 
 func (a *App) validateCredentialConfig(connector string, config map[string]string) error {
+	if connector == "dockerhub" && strings.TrimSpace(config["namespace"]) == "" {
+		return errors.New("dockerhub namespace is required")
+	}
 	path := config["path"]
 	if path == "" {
 		return nil

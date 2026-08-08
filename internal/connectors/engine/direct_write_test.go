@@ -405,3 +405,26 @@ func TestOperationDirectWriteRefusesRedirectReplay(t *testing.T) {
 		t.Fatalf("redirect calls = total %d / followed %d, want exactly 1 / 0", calls, redirectedCalls)
 	}
 }
+
+func TestOperationDirectWriteProxyBasePathConsumesAPIRootOnce(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost || r.URL.Path != "/dockerhub/v2/namespaces/acme/repositories" {
+			t.Fatalf("request = %s %s, want POST proxy base plus one provider root", r.Method, r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer srv.Close()
+	bundle := Bundle{
+		Name: "dockerhub",
+		HTTP: HTTPBase{URL: srv.URL + "/dockerhub/v2", APIRoot: "/v2"},
+		Operations: []OperationSpec{{
+			ID: "dockerhub.create-repository", Kind: "rest_write", Summary: "Create repository", Risk: "low", Approval: "plan-preview-approve-execute", OutputPolicy: "json", MutationClass: "create",
+			REST: &RESTOperationSpec{Method: http.MethodPost, Path: "/v2/namespaces/acme/repositories", ContentType: "application/json", MaxBytes: 1024, BodySchema: json.RawMessage(`{"type":"object","required":["name"],"properties":{"name":{"type":"string"}},"additionalProperties":false}`)},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodPost, Path: "/v2/namespaces/acme/repositories", Operation: &SurfaceOperation{Model: "write_action"}}}},
+	}
+	if _, err := OperationDirectWrite(context.Background(), bundle, connectors.OperationDirectWriteRequest{Operation: "dockerhub.create-repository", Body: map[string]any{"name": "fixture"}}, nil); err != nil {
+		t.Fatalf("OperationDirectWrite: %v", err)
+	}
+}

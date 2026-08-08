@@ -108,7 +108,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
+	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg), b.HTTP.APIRoot)
 	decoded, pageInfo, resp, err := readDirectPage(ctx, b, rt, directReadWalk{
 		method:          method,
 		declaredPat:     op.REST.Path,
@@ -120,6 +120,8 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		maxBytes:        maxBytes,
 		page:            req.Page,
 		pageCursor:      req.PageCursor,
+		pagination:      op.REST.Pagination,
+		recordsPath:     op.REST.RecordsPath,
 	})
 	if err != nil {
 		var tooLarge errDirectReadTooLarge
@@ -289,7 +291,7 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 	}
 
 	maxBytes := clampDirectReadMaxBytes(req.MaxBytes)
-	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
+	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg), b.HTTP.APIRoot)
 	body, pageInfo, resp, err := readDirectPage(ctx, b, rt, directReadWalk{
 		method:       method,
 		declaredPat:  req.Path,
@@ -746,7 +748,7 @@ func directReadBaseURL(b Bundle, cfg connectors.RuntimeConfig) string {
 	return baseURL
 }
 
-func normalizeDirectReadPathForBaseURL(resolvedPath, baseURL string) string {
+func normalizeDirectReadPathForBaseURL(resolvedPath, baseURL, apiRoot string) string {
 	parsed, err := url.Parse(baseURL)
 	if err != nil {
 		return resolvedPath
@@ -761,6 +763,18 @@ func normalizeDirectReadPathForBaseURL(resolvedPath, baseURL string) string {
 	prefix := basePath + "/"
 	if strings.HasPrefix(resolvedPath, prefix) {
 		return "/" + strings.TrimPrefix(resolvedPath, prefix)
+	}
+	root := strings.Trim(strings.TrimSpace(apiRoot), "/")
+	if root == "" {
+		return resolvedPath
+	}
+	root = "/" + root
+	if (basePath == root || strings.HasSuffix(basePath, root)) && (resolvedPath == root || strings.HasPrefix(resolvedPath, root+"/")) {
+		relative := strings.TrimPrefix(resolvedPath, root)
+		if relative == "" {
+			return "/"
+		}
+		return relative
 	}
 	return resolvedPath
 }

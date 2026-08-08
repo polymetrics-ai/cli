@@ -153,31 +153,14 @@ func (h *Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig,
 // Docker Hub API root.
 const scimAPIPath = "/scim/2.0/"
 
-// scimPathPrefixes returns the outgoing request-path prefixes that address
-// Docker Hub's SCIM surface for the configured base_url.
-//
-// Routing cannot test a fixed "/v2/scim/2.0/" prefix: base_url is documented
-// as overridable for tests and self-hosted proxies, and a proxy base_url
-// carrying its own path (https://proxy.internal/dockerhub/v2) shifts every
-// outgoing path by that prefix. A fixed test fails OPEN there — the SCIM
-// request stops matching and gets signed with the account session JWT, which
-// is exactly the credential substitution dualAuth exists to prevent. The
-// prefixes are therefore derived from the resolved base path, and BOTH forms
-// are accepted because the declared operation path ("/v2/scim/2.0/...") is
-// stripped of the base path only when it actually starts with it
-// (engine.normalizeDirectReadPathForBaseURL), so a proxy base leaves the
-// declared "/v2" in place and the wire path carries it twice.
-//
-// Anchoring on the base path rather than searching for "/scim/2.0/" anywhere
-// matters in the other direction too: a repository read of namespace "scim",
-// repository "2.0" produces a path CONTAINING "/scim/2.0/" that must keep
-// using the session JWT, never the SCIM token.
 func scimPathPrefixes(cfg connectors.RuntimeConfig) []string {
-	basePath := ""
+	basePath := "/v2"
 	if parsed, err := url.Parse(strings.TrimSpace(cfg.Config["base_url"])); err == nil {
-		basePath = strings.TrimRight(parsed.EscapedPath(), "/")
+		if path := strings.TrimRight(parsed.EscapedPath(), "/"); path != "" {
+			basePath = path
+		}
 	}
-	return []string{basePath + scimAPIPath, basePath + "/v2" + scimAPIPath}
+	return []string{basePath + scimAPIPath}
 }
 
 // dualAuth routes each outgoing request to one of two independent
@@ -326,7 +309,11 @@ func (a *sessionLoginAuth) sessionToken(ctx context.Context) (string, error) {
 	httpReq.Header.Set("Content-Type", "application/json")
 	httpReq.Header.Set("Accept", "application/json")
 
-	resp, err := a.httpClient().Do(httpReq)
+	client := *a.httpClient()
+	client.CheckRedirect = func(_ *http.Request, _ []*http.Request) error {
+		return http.ErrUseLastResponse
+	}
+	resp, err := client.Do(httpReq)
 	if err != nil {
 		return "", fmt.Errorf("dockerhub auth: login request: %w", err)
 	}

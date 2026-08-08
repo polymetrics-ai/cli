@@ -392,6 +392,10 @@ func (r *Requester) resolveURL(path string, query url.Values) (string, error) {
 // failures, and returns the captured response. A 4xx/5xx after retries is
 // returned as *HTTPError.
 func (r *Requester) Do(ctx context.Context, method, path string, query url.Values, body any) (*Response, error) {
+	return r.DoWithContentType(ctx, method, path, query, body, "application/json")
+}
+
+func (r *Requester) DoWithContentType(ctx context.Context, method, path string, query url.Values, body any, contentType string) (*Response, error) {
 	var payload []byte
 	if body != nil {
 		var err error
@@ -400,13 +404,17 @@ func (r *Requester) Do(ctx context.Context, method, path string, query url.Value
 			return nil, fmt.Errorf("encode request body: %w", err)
 		}
 	}
-	return r.do(ctx, method, path, query, payload, "application/json", defaultMaxResponseBody)
+	return r.do(ctx, method, path, query, payload, contentType, defaultMaxResponseBody)
 }
 
 // DoLimited performs Do while bounding the captured successful response body to
 // maxBodyBytes+1. Callers can reject len(resp.Body) > maxBodyBytes without ever
 // buffering the default 64 MiB response cap.
 func (r *Requester) DoLimited(ctx context.Context, method, path string, query url.Values, body any, maxBodyBytes int) (*Response, error) {
+	return r.DoWithContentTypeLimited(ctx, method, path, query, body, "application/json", maxBodyBytes)
+}
+
+func (r *Requester) DoWithContentTypeLimited(ctx context.Context, method, path string, query url.Values, body any, contentType string, maxBodyBytes int) (*Response, error) {
 	var payload []byte
 	if body != nil {
 		var err error
@@ -415,7 +423,7 @@ func (r *Requester) DoLimited(ctx context.Context, method, path string, query ur
 			return nil, fmt.Errorf("encode request body: %w", err)
 		}
 	}
-	return r.do(ctx, method, path, query, payload, "application/json", maxBodyBytes+1)
+	return r.do(ctx, method, path, query, payload, contentType, maxBodyBytes+1)
 }
 
 // DoTextLimited performs a bounded request with one literal text/plain body.

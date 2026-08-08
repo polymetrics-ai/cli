@@ -90,12 +90,7 @@ func TestSchemaWithoutConfigurationConstraintsIsNotAdvertised(t *testing.T) {
 	}
 }
 
-// A declared-required non-secret property with no default IS a checkable
-// configuration constraint: type/additional-properties rules stay out of the
-// credential boundary, but admitting a credential that omits a value the
-// connector interpolates into every request just defers the failure to a
-// connector-internal template error at read time.
-func TestSchemaRequiredConfigurationKeyIsAdvertisedAndEnforced(t *testing.T) {
+func TestSchemaRequiredConfigurationKeyIsNotCredentialAdmission(t *testing.T) {
 	sch, err := CompileSchema(json.RawMessage(`{
 		"type": "object",
 		"required": ["namespace"],
@@ -107,14 +102,12 @@ func TestSchemaRequiredConfigurationKeyIsAdvertisedAndEnforced(t *testing.T) {
 	if err != nil {
 		t.Fatalf("CompileSchema() error = %v", err)
 	}
-	if !sch.HasConfigurationConstraints() {
-		t.Fatal("HasConfigurationConstraints() = false, want true for a spec declaring a required non-secret config key")
+	if sch.HasConfigurationConstraints() {
+		t.Fatal("HasConfigurationConstraints() = true, want false for required-only schema")
 	}
 	for _, config := range []map[string]string{nil, {}, {"label": "x"}, {"namespace": "  "}} {
-		if err := sch.ValidateConfiguration(config); err == nil {
-			t.Fatalf("ValidateConfiguration(%v) = nil, want a required-property rejection", config)
-		} else if !strings.Contains(err.Error(), "namespace") {
-			t.Fatalf("ValidateConfiguration(%v) error = %q, want it to name namespace", config, err)
+		if err := sch.ValidateConfiguration(config); err != nil {
+			t.Fatalf("ValidateConfiguration(%v) error = %v, want required-only admission", config, err)
 		}
 	}
 	if err := sch.ValidateConfiguration(map[string]string{"namespace": "target"}); err != nil {

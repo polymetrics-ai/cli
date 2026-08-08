@@ -68,6 +68,7 @@ type WriteCommand struct {
 	ConfirmationChallenge string                   `json:"confirmation_challenge,omitempty"`
 	Record                connectors.Record        `json:"record,omitempty"`
 	RedactedRecord        connectors.Record        `json:"redacted_record,omitempty"`
+	RedactFields          []string                 `json:"redact_fields,omitempty"`
 	PathParams            map[string]string        `json:"path_params,omitempty"`
 	Query                 map[string]string        `json:"query,omitempty"`
 	Batchable             bool                     `json:"batchable"`
@@ -246,7 +247,8 @@ func buildOperationDirectWriteCommand(ctx context.Context, connector connectors.
 		Approval:              firstNonEmpty(cmd.Approval, metadata.Approval, "direct writes require plan, preview, approval, execute"),
 		ConfirmationChallenge: metadata.ConfirmationChallenge,
 		Record:                cloneRecord(record),
-		RedactedRecord:        cloneRecord(record),
+		RedactedRecord:        redactCommandRecord(record, cmd.RedactFields),
+		RedactFields:          append([]string(nil), cmd.RedactFields...),
 		PathParams:            cloneStringMap(pathParams),
 		Query:                 cloneStringMap(query),
 		Batchable:             metadata.Batchable,
@@ -1832,7 +1834,62 @@ func targetResourceOf(cmd connectors.CommandSurfaceCommand) string {
 func cloneRecord(in connectors.Record) connectors.Record {
 	out := make(connectors.Record, len(in))
 	for k, v := range in {
-		out[k] = v
+		out[k] = cloneRecordValue(v)
+	}
+	return out
+}
+
+func cloneRecordValue(value any) any {
+	switch typed := value.(type) {
+	case connectors.Record:
+		return cloneRecord(typed)
+	case map[string]any:
+		out := make(map[string]any, len(typed))
+		for key, item := range typed {
+			out[key] = cloneRecordValue(item)
+		}
+		return out
+	case []any:
+		out := make([]any, len(typed))
+		for i, item := range typed {
+			out[i] = cloneRecordValue(item)
+		}
+		return out
+	case []string:
+		return append([]string(nil), typed...)
+	default:
+		return value
+	}
+}
+
+func redactCommandRecord(record connectors.Record, fields []string) connectors.Record {
+	out := cloneRecord(record)
+	for _, field := range fields {
+		parts := strings.Split(strings.TrimPrefix(strings.TrimSpace(field), "record."), ".")
+		if len(parts) == 0 || parts[0] == "" {
+			continue
+		}
+		current := map[string]any(out)
+		for _, part := range parts[:len(parts)-1] {
+			next, ok := current[part]
+			if !ok {
+				current = nil
+				break
+			}
+			switch typed := next.(type) {
+			case map[string]any:
+				current = typed
+			case connectors.Record:
+				current = map[string]any(typed)
+			default:
+				current = nil
+			}
+		}
+		if current != nil {
+			if _, ok := current[parts[len(parts)-1]]; ok {
+				current[parts[len(parts)-1]] = "redacted"
+			}
+		}
 	}
 	return out
 }

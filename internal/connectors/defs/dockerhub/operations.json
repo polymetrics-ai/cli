@@ -284,6 +284,11 @@
       "rest": {
         "method": "GET",
         "path": "/v2/scim/2.0/ResourceTypes",
+        "pagination": {
+          "type": "start_index",
+          "page_size": 100
+        },
+        "records_path": "Resources",
         "max_bytes": 1048576
       }
     },
@@ -314,6 +319,11 @@
       "rest": {
         "method": "GET",
         "path": "/v2/scim/2.0/Schemas",
+        "pagination": {
+          "type": "start_index",
+          "page_size": 100
+        },
+        "records_path": "Resources",
         "max_bytes": 1048576
       }
     },
@@ -359,6 +369,11 @@
       "rest": {
         "method": "GET",
         "path": "/v2/scim/2.0/Users",
+        "pagination": {
+          "type": "start_index",
+          "page_size": 100
+        },
+        "records_path": "Resources",
         "max_bytes": 1048576
       }
     },
@@ -375,6 +390,90 @@
         "method": "GET",
         "path": "/v2/scim/2.0/Users/{id}",
         "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "dockerhub.create_auth_token",
+      "kind": "rest_write",
+      "summary": "Exchange identifier and secret for an access token",
+      "description": "Docker Hub token exchange for POST /v2/auth/token.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "requires a plan, preview, explicit approval, and execution",
+      "mutation_class": "create",
+      "batchable": false,
+      "output_policy": "json",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/auth/token",
+        "content_type": "application/json",
+        "auth_mode": "none",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "required": ["identifier", "secret"],
+          "properties": {
+            "identifier": { "type": "string" },
+            "secret": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "dockerhub.create_login",
+      "kind": "rest_write",
+      "summary": "Exchange username and password for a session token",
+      "description": "Docker Hub login for POST /v2/users/login.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "requires a plan, preview, explicit approval, and execution",
+      "mutation_class": "create",
+      "batchable": false,
+      "output_policy": "json",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/users/login",
+        "content_type": "application/json",
+        "auth_mode": "none",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "required": ["username", "password"],
+          "properties": {
+            "username": { "type": "string" },
+            "password": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "dockerhub.create_2fa_login",
+      "kind": "rest_write",
+      "summary": "Complete a second-factor login",
+      "description": "Docker Hub second-factor login for POST /v2/users/2fa-login.",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "risk": "high",
+      "approval": "requires a plan, preview, explicit approval, and execution",
+      "mutation_class": "create",
+      "batchable": false,
+      "output_policy": "json",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/users/2fa-login",
+        "content_type": "application/json",
+        "auth_mode": "none",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "required": ["login_2fa_token", "code"],
+          "properties": {
+            "login_2fa_token": { "type": "string" },
+            "code": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
       }
     }
   ]

@@ -1,10 +1,8 @@
 package engine
 
 import (
-	"fmt"
 	"net/url"
 	"sort"
-	"strings"
 	"time"
 )
 
@@ -15,8 +13,8 @@ func (s *Schema) HasConfigurationConstraints() bool {
 	if s == nil || s.node == nil {
 		return false
 	}
-	for name, property := range s.node.properties {
-		if property.hasConfigurationConstraints() || s.admitsRequiredConfigurationKey(name) {
+	for _, property := range s.node.properties {
+		if property.hasConfigurationConstraints() {
 			return true
 		}
 	}
@@ -27,40 +25,11 @@ func (n *schemaNode) hasConfigurationConstraints() bool {
 	return len(n.enum) > 0 || n.pattern != nil || n.format != ""
 }
 
-// admitsRequiredConfigurationKey reports whether name is a root property whose
-// absence from a credential's configuration is checkable at the credential
-// boundary: declared required, non-secret (secrets are supplied through a
-// separate map and never appear in config), and carrying no "default" (which
-// materializeConfigDefaults supplies for the caller, so an omitted value is
-// complete, not missing).
-func (s *Schema) admitsRequiredConfigurationKey(name string) bool {
-	property, declared := s.node.properties[name]
-	if !declared || property.secret || property.hasDefault {
-		return false
-	}
-	for _, req := range s.node.required {
-		if req == name {
-			return true
-		}
-	}
-	return false
-}
-
-// ValidateConfiguration evaluates declared configuration constraints, and the
-// presence of declared-required keys, on supplied top-level credential fields.
+// ValidateConfiguration evaluates declared configuration constraints on
+// supplied top-level credential fields.
 // It deliberately does not apply the full schema's type/additional-properties
 // rules: credentials are accepted as a flat string map, and changing those
 // existing semantics is not part of configuration-constraint validation.
-//
-// Required-key presence IS applied, because the alternative is admitting a
-// credential the connector can never use: dockerhub declares `namespace`
-// required and interpolates it into every stream path and the connection
-// check, so a credential saved without it fails at read/check time with a
-// connector-internal template error, long after the point where the operator
-// could have been told what was missing. Only the keys this boundary can
-// actually see are checked (admitsRequiredConfigurationKey): a required secret
-// lives in the separate secrets map, and a required property with a declared
-// default is filled in by the engine rather than the caller.
 //
 // Supplied values are checked before omitted ones: a caller who typed a value
 // this schema rejects is told what is wrong with what they typed, not handed a
@@ -83,18 +52,6 @@ func (s *Schema) ValidateConfiguration(config map[string]string) error {
 		}
 		if err := property.validateConfigurationString(config[key], "/"+key); err != nil {
 			return err
-		}
-	}
-	return s.validateRequiredConfiguration(config)
-}
-
-func (s *Schema) validateRequiredConfiguration(config map[string]string) error {
-	for _, name := range s.node.required {
-		if !s.admitsRequiredConfigurationKey(name) {
-			continue
-		}
-		if strings.TrimSpace(config[name]) == "" {
-			return fmt.Errorf("%s: required property missing", displayPath("/"+name))
 		}
 	}
 	return nil

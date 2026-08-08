@@ -95,6 +95,7 @@
               "method": { "type": "string" },
               "path": { "type": "string" },
               "content_type": { "type": "string" },
+              "auth_mode": { "type": "string", "enum": ["none"] },
               "max_bytes": { "type": "integer" },
               "parameters": {
                 "type": "array",
@@ -136,6 +137,7 @@
                 "additionalProperties": true
               },
               "body_schema": { "type": "object" },
+              "records_path": { "type": "string" },
               "multipart": {
                 "type": "object",
                 "required": ["max_bytes", "parts"],

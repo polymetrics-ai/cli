@@ -336,26 +336,116 @@
     {
       "path": "auth 2fa-login create",
       "summary": "Second factor authentication (completes a 2FA-challenged login)",
-      "intent": "reverse_etl",
-      "availability": "planned",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "dockerhub.create_2fa_login",
+      "risk": "high: exchanges a live intermediate login token and second factor code for a session token",
+      "approval": "Requires plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "login-2fa-token",
+          "type": "string",
+          "summary": "Intermediate Docker Hub login token.",
+          "maps_to": "body.login_2fa_token",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "code",
+          "type": "string",
+          "summary": "Second-factor verification code.",
+          "maps_to": "body.code",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
       "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-      "notes": "Docker Hub's documented second-factor login completion. Not implemented: this command's only inputs are a live intermediate token and a TOTP code and its only output is a live session JWT, and the reverse-ETL path it would run on maps flags to a plan record that is written to the project state file in plaintext and echoed in plan output. Blocked on a named dependency — requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token."
+      "output_policy": "json",
+      "redact_fields": ["login_2fa_token", "code"],
+      "accepts_secret_input": true,
+      "api_surface": [
+        { "method": "POST", "path": "/v2/users/2fa-login" }
+      ],
+      "examples": [
+        "pm dockerhub auth 2fa-login create --from-env login_2fa_token=DOCKERHUB_LOGIN_2FA_TOKEN --value-stdin code --json"
+      ],
+      "notes": "Credential exchange inputs are retained in plaintext local project state for the command plan; use --from-env or --value-stdin for redacted fields. The provider response is returned unchanged by the approved runtime output."
     },
     {
       "path": "auth login create",
       "summary": "Create an authentication token (username+password/PAT session login)",
-      "intent": "reverse_etl",
-      "availability": "planned",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "dockerhub.create_login",
+      "risk": "high: exchanges a live username and password for a session token",
+      "approval": "Requires plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "username",
+          "type": "string",
+          "summary": "Docker Hub username.",
+          "maps_to": "body.username",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "password",
+          "type": "string",
+          "summary": "Docker Hub password or personal access token.",
+          "maps_to": "body.password",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
       "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-      "notes": "Docker Hub's documented username+password/PAT session login. Not implemented: this command's only input is a live credential and its only output is a live session JWT, and the reverse-ETL path it would run on maps flags to a plan record that is written to the project state file in plaintext and echoed in plan output. Blocked on a named dependency — requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token. The same exchange is already performed internally, without a plan record, by the dockerhub AuthHook when docker_pat is configured."
+      "output_policy": "json",
+      "redact_fields": ["password"],
+      "accepts_secret_input": true,
+      "api_surface": [
+        { "method": "POST", "path": "/v2/users/login" }
+      ],
+      "examples": [
+        "pm dockerhub auth login create --username \"<username>\" --value-stdin password --json"
+      ],
+      "notes": "Credential exchange inputs are retained in plaintext local project state for the command plan; use --from-env or --value-stdin for redacted fields. The provider response is returned unchanged by the approved runtime output."
     },
     {
       "path": "auth token create",
       "summary": "Create access token (identifier+secret to short-lived access token exchange)",
-      "intent": "reverse_etl",
-      "availability": "planned",
+      "intent": "direct_write",
+      "availability": "implemented",
+      "operation": "dockerhub.create_auth_token",
+      "risk": "high: exchanges an identifier and secret for an access token",
+      "approval": "Requires plan, preview, explicit approval, and execute.",
+      "flags": [
+        {
+          "name": "identifier",
+          "type": "string",
+          "summary": "Docker Hub account identifier.",
+          "maps_to": "body.identifier",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "secret",
+          "type": "string",
+          "summary": "Docker Hub account secret.",
+          "maps_to": "body.secret",
+          "required": true,
+          "allow_empty": false
+        }
+      ],
       "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-      "notes": "Docker Hub's documented identifier+secret to short-lived access token exchange. Not implemented: this command's only input is a live credential and its only output is a live token, and the reverse-ETL path it would run on maps flags to a plan record that is written to the project state file in plaintext and echoed in plan output. Blocked on a named dependency — requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token. The same exchange is already performed internally, without a plan record, by the dockerhub AuthHook when docker_pat is configured."
+      "output_policy": "json",
+      "redact_fields": ["secret"],
+      "accepts_secret_input": true,
+      "api_surface": [
+        { "method": "POST", "path": "/v2/auth/token" }
+      ],
+      "examples": [
+        "pm dockerhub auth token create --identifier \"<identifier>\" --from-env secret=DOCKERHUB_SECRET --json"
+      ],
+      "notes": "Credential exchange inputs are retained in plaintext local project state for the command plan; use --from-env or --value-stdin for redacted fields. The provider response is returned unchanged by the approved runtime output."
     },
     {
       "path": "groups create",
@@ -1786,7 +1876,7 @@
       "examples": [
         "pm dockerhub scim-users create --schemas \"urn:ietf:params:scim:schemas:core:2.0:User\" --user-name \"jon.snow@example.com\" --json"
       ],
-      "notes": "The provider documents this endpoint's request/response media type as application/scim+json (RFC 7644); this bundle's write executor sends application/json, which is the widely-accepted compatible variant most SCIM 2.0 server implementations accept, but Docker Hub's own leniency here is not independently live-verified."
+      "notes": "The provider documents this endpoint's request/response media type as application/scim+json (RFC 7644); the declared write sends that media type."
     },
     {
       "path": "scim-users get",

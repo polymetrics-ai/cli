@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"mime"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -474,8 +475,32 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 			}
 			payload = body
 		}
-		_, err := requester.Do(ctx, method, path, query, payload)
+		contentType, err := writeActionContentType(action)
+		if err != nil {
+			return err
+		}
+		_, err = requester.DoWithContentType(ctx, method, path, query, payload, contentType)
 		return err
+	}
+}
+
+func writeActionContentType(action WriteAction) (string, error) {
+	declared := strings.TrimSpace(action.ContentType)
+	if declared == "" {
+		return "application/json", nil
+	}
+	mediaType, _, err := mime.ParseMediaType(declared)
+	if err != nil {
+		return "", fmt.Errorf("engine: write action %q: invalid content_type %q: %w", action.Name, declared, err)
+	}
+	if bodyTypeOf(action) != "json" {
+		return "", fmt.Errorf("engine: write action %q: content_type requires body_type json", action.Name)
+	}
+	switch strings.ToLower(mediaType) {
+	case "application/json", "application/scim+json":
+		return mediaType, nil
+	default:
+		return "", fmt.Errorf("engine: write action %q: content_type %q is not supported", action.Name, declared)
 	}
 }
 

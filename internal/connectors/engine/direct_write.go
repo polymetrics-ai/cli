@@ -44,6 +44,8 @@ type preparedOperationDirectWrite struct {
 	maxBytes        int
 	redactionValues []string
 	prepared        PreparedWrite
+	contentType     string
+	authMode        string
 }
 
 type operationDirectWriteError struct {
@@ -103,12 +105,17 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		}
 		requester := *resolvedRequester
 		requester.DisableRetries = true
+		if prepared.authMode == "none" {
+			requester.Auth = nil
+		}
 
 		var response *connsdk.Response
 		switch prepared.format {
 		case "form":
 			response, err = requester.DoFormLimited(requestCtx, prepared.method, prepared.requestPath, prepared.query, prepared.form, prepared.maxBytes)
-		case "json", "none", "graphql":
+		case "json":
+			response, err = requester.DoWithContentTypeLimited(requestCtx, prepared.method, prepared.requestPath, prepared.query, prepared.body, prepared.contentType, prepared.maxBytes)
+		case "none", "graphql":
 			response, err = requester.DoLimited(requestCtx, prepared.method, prepared.requestPath, prepared.query, prepared.body, prepared.maxBytes)
 		case "multipart":
 			root, rootErr := openMultipartRoot(prepared.cfg.ProjectDir)
@@ -400,7 +407,7 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
-	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, baseURL)
+	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, baseURL, b.HTTP.APIRoot)
 	targetURL, err := operationDirectWriteRequestURL(baseURL, requestPath, query)
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
@@ -452,6 +459,8 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 		body:            body,
 		form:            form,
 		format:          format,
+		contentType:     contentType,
+		authMode:        op.REST.AuthMode,
 		policy:          policy,
 		maxBytes:        maxBytes,
 		redactionValues: operationDirectWriteRedactionValues(op, body),
@@ -494,7 +503,7 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
-	requestPath := normalizeDirectReadPathForBaseURL(op.GraphQL.Path, baseURL)
+	requestPath := normalizeDirectReadPathForBaseURL(op.GraphQL.Path, baseURL, b.HTTP.APIRoot)
 	targetURL, err := operationDirectWriteRequestURL(baseURL, requestPath, nil)
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
@@ -596,15 +605,17 @@ func requireOperationDirectWriteEndpoint(b Bundle, method, endpointPath, operati
 	for _, endpoint := range surface.Endpoints {
 		if strings.EqualFold(endpoint.Method, method) && endpoint.Path == endpointPath {
 			if operation != "" {
-				for _, target := range endpoint.CoveredBy.OperationTargets() {
-					if target == operation {
-						return nil
+				if endpoint.CoveredBy != nil {
+					for _, target := range endpoint.CoveredBy.OperationTargets() {
+						if target == operation {
+							return nil
+						}
 					}
 				}
 				return fmt.Errorf("api_surface endpoint %s %s does not cover GraphQL operation %q", method, endpointPath, operation)
 			}
-			if endpoint.Operation == nil {
-				return fmt.Errorf("api_surface endpoint %s %s is not declared as an operation", method, endpointPath)
+			if endpoint.Operation == nil && (endpoint.CoveredBy == nil || endpoint.CoveredBy.DirectWrite == "") {
+				return fmt.Errorf("api_surface endpoint %s %s is not declared as an operation or direct write", method, endpointPath)
 			}
 			return nil
 		}
@@ -657,11 +668,11 @@ func operationDirectWriteContentType(op OperationSpec, body map[string]any) (con
 		return "", "", fmt.Errorf("operation %q has invalid rest content_type %q: %w", op.ID, declared, parseErr)
 	}
 	switch strings.ToLower(mediaType) {
-	case "application/json":
+	case "application/json", "application/scim+json":
 		if len(body) == 0 {
 			return "", "none", nil
 		}
-		return "application/json", "json", nil
+		return mediaType, "json", nil
 	case "application/x-www-form-urlencoded":
 		if len(body) == 0 {
 			return "", "none", nil

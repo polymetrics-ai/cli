@@ -813,6 +813,7 @@ func connectorHelpFlagsArePassive(flags parsedFlags, surface *connectors.Command
 		"limit": true, "max-bytes": true,
 		"page": true, "page-cursor": true,
 		"dest-root": true, "file-name": true,
+		"from-env": true, "value-stdin": true,
 	}
 	for _, flag := range surface.GlobalFlags {
 		declared[flag.Name] = true
@@ -976,6 +977,7 @@ func renderConnectorCommandDetail(connectorName string, connector connectors.Con
 	}
 	writeConnectorDownloadFlags(&b, cmd)
 	writeConnectorPageFlags(&b, cmd)
+	writeConnectorSecretInputFlags(&b, cmd)
 	writeConnectorGlobalFlags(&b, surface)
 	return b.String()
 }
@@ -1029,6 +1031,15 @@ func writeConnectorDownloadFlags(b *strings.Builder, cmd connectors.CommandSurfa
 	for _, flag := range connectors.BinaryDownloadFlags() {
 		writeConnectorFlag(b, flag)
 	}
+}
+
+func writeConnectorSecretInputFlags(b *strings.Builder, cmd connectors.CommandSurfaceCommand) {
+	if !commandRetainsSensitiveInputs(cmd) {
+		return
+	}
+	b.WriteString("\nSECRET INPUT FLAGS\n")
+	b.WriteString("  --from-env (field=ENV_VAR) reads a redacted command field from an environment variable.\n")
+	b.WriteString("  --value-stdin (field) reads one redacted command field from standard input.\n")
 }
 
 func writeConnectorField(b *strings.Builder, title, value string) {
@@ -1210,6 +1221,17 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 	// accepted-and-ignored, which is the same quiet wrongness --page exists to
 	// remove.
 	commandFlags := connectorCommandFlags(resolvedFlags)
+	cmd, err := connectorCommandSurfaceCommand(connector, path)
+	if err != nil {
+		return err
+	}
+	commandFlags, err = applySensitiveCommandInputs(commandFlags, flags, cmd)
+	if err != nil {
+		return err
+	}
+	if commandRetainsSensitiveInputs(cmd) {
+		_, _ = fmt.Fprintln(stderr, "Warning: supplied credential values are retained in plaintext local project state for this command plan.")
+	}
 
 	if err := runConnectorWriteCommand(ctx, a, connectorName, credential, config, path, commandFlags, flags, stdout, jsonOut); err != commandrunner.ErrNotWriteCommand {
 		if err != nil {
@@ -1304,7 +1326,7 @@ func connectorCommandFlags(values map[string][]string) map[string][]string {
 	commandFlags := map[string][]string{}
 	for name, entries := range values {
 		switch name {
-		case "_", "credential", "connection", "config", "limit", "max-bytes", "plan", "preview", "approve", "confirm", "plan-name", "dest-root", "file-name", "from-env":
+		case "_", "credential", "connection", "config", "limit", "max-bytes", "plan", "preview", "approve", "confirm", "plan-name", "dest-root", "file-name", "from-env", "value-stdin":
 			continue
 		default:
 			commandFlags[name] = append([]string(nil), entries...)
@@ -1354,7 +1376,11 @@ func resolveConnectorCommandEnvironmentOnlyFlags(surface *connectors.CommandSurf
 		field = strings.TrimSpace(field)
 		envName = strings.TrimSpace(envName)
 		if _, ok := envOnly[field]; !ok {
-			return nil, validationErrorf("--from-env %s is not declared for connector command %q", field, command.Path)
+			// Declared redacted direct-write inputs are resolved by
+			// applySensitiveCommandInputs after this env_only pass. Leaving them
+			// here preserves env_only's closed contract without turning it into
+			// a second, incompatible secret-input channel.
+			continue
 		}
 		if _, duplicate := seen[field]; duplicate {
 			return nil, validationErrorf("--from-env supplies %s more than once", field)
@@ -1385,6 +1411,123 @@ func resolveReversePlanEnvironmentOnlyFlags(plan app.ReversePlan, values map[str
 		return nil, fmt.Errorf("connector %q has no command surface", plan.DestinationConnector)
 	}
 	return resolveConnectorCommandEnvironmentOnlyFlags(surfaceProvider.CommandSurface(), plan.ConnectorCommandPath, values)
+}
+
+func connectorCommandSurfaceCommand(connector connectors.Connector, path []string) (connectors.CommandSurfaceCommand, error) {
+	provider, ok := connector.(connectors.CommandSurfaceProvider)
+	if !ok || provider.CommandSurface() == nil {
+		return connectors.CommandSurfaceCommand{}, usageErrorf("connector %q has no command surface", connector.Name())
+	}
+	want := strings.Join(path, " ")
+	for _, cmd := range provider.CommandSurface().Commands {
+		if cmd.Path == want {
+			return cmd, nil
+		}
+	}
+	return connectors.CommandSurfaceCommand{}, usageErrorf("unknown connector command %q", want)
+}
+
+func commandRetainsSensitiveInputs(cmd connectors.CommandSurfaceCommand) bool {
+	return cmd.Intent == "direct_write" && cmd.AcceptsSecretInput && len(cmd.RedactFields) > 0
+}
+
+func applySensitiveCommandInputs(commandFlags map[string][]string, flags parsedFlags, cmd connectors.CommandSurfaceCommand) (map[string][]string, error) {
+	if len(flags.values["from-env"]) == 0 && len(flags.values["value-stdin"]) == 0 {
+		return commandFlags, nil
+	}
+	envOnly := map[string]bool{}
+	for _, flag := range cmd.Flags {
+		if flag.EnvOnly {
+			envOnly[flag.Name] = true
+		}
+	}
+	hasSensitiveInput := len(flags.values["value-stdin"]) > 0
+	for _, assignment := range flags.values["from-env"] {
+		field, _, ok := strings.Cut(assignment, "=")
+		if !ok || !envOnly[strings.TrimSpace(field)] {
+			hasSensitiveInput = true
+		}
+	}
+	if !hasSensitiveInput {
+		return commandFlags, nil
+	}
+	if !commandRetainsSensitiveInputs(cmd) {
+		return nil, usageErrorf("--from-env and --value-stdin are only available for commands with declared redacted inputs")
+	}
+	lookup := sensitiveCommandFlagLookup(cmd)
+	out := make(map[string][]string, len(commandFlags)+1)
+	for name, values := range commandFlags {
+		out[name] = append([]string(nil), values...)
+	}
+	seen := map[string]bool{}
+	set := func(rawField, value string) error {
+		field, ok := lookup[rawField]
+		if !ok {
+			return usageErrorf("--from-env/--value-stdin field %q is not a declared redacted command input", rawField)
+		}
+		if len(out[field]) > 0 || seen[field] {
+			return usageErrorf("redacted command input --%s was supplied more than once", field)
+		}
+		out[field] = []string{value}
+		seen[field] = true
+		return nil
+	}
+	for _, assignment := range flags.values["from-env"] {
+		field, envName, ok := strings.Cut(assignment, "=")
+		if !ok || strings.TrimSpace(field) == "" || strings.TrimSpace(envName) == "" {
+			return nil, usageErrorf("invalid --from-env %q, want field=ENV_VAR", assignment)
+		}
+		field = strings.TrimSpace(field)
+		envName = strings.TrimSpace(envName)
+		if envOnly[field] {
+			continue
+		}
+		value, present := os.LookupEnv(envName)
+		if !present {
+			return nil, usageErrorf("environment variable %q is not set", envName)
+		}
+		if err := set(field, value); err != nil {
+			return nil, err
+		}
+	}
+	stdinFields := flags.values["value-stdin"]
+	if len(stdinFields) > 1 {
+		return nil, usageErrorf("--value-stdin accepts exactly one field")
+	}
+	if len(stdinFields) == 1 {
+		field := strings.TrimSpace(stdinFields[0])
+		if field == "" || field == "true" {
+			return nil, usageErrorf("--value-stdin requires a field")
+		}
+		value, err := io.ReadAll(os.Stdin)
+		if err != nil {
+			return nil, fmt.Errorf("read --value-stdin: %w", err)
+		}
+		secret := strings.TrimSuffix(strings.TrimSuffix(string(value), "\n"), "\r")
+		if err := set(field, secret); err != nil {
+			return nil, err
+		}
+	}
+	return out, nil
+}
+
+func sensitiveCommandFlagLookup(cmd connectors.CommandSurfaceCommand) map[string]string {
+	redacted := map[string]bool{}
+	for _, field := range cmd.RedactFields {
+		redacted[strings.TrimPrefix(strings.TrimSpace(field), "record.")] = true
+		redacted[strings.TrimPrefix(strings.TrimSpace(field), "body.")] = true
+	}
+	lookup := map[string]string{}
+	for _, flag := range cmd.Flags {
+		mapped := strings.TrimPrefix(strings.TrimSpace(flag.MapsTo), "body.")
+		mapped = strings.TrimPrefix(mapped, "record.")
+		if !redacted[mapped] {
+			continue
+		}
+		lookup[flag.Name] = flag.Name
+		lookup[mapped] = flag.Name
+	}
+	return lookup
 }
 
 func validateConnectorLifecycleFlagValues(flags parsedFlags) error {
@@ -1523,6 +1666,13 @@ func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connector
 			return writeJSON(stdout, envelope{"kind": "ReverseRun", "run": run})
 		}
 		_, _ = fmt.Fprintf(stdout, "Reverse ETL run %s completed: succeeded=%d failed=%d\n", run.ID, run.RecordsSucceeded, run.RecordsFailed)
+		if run.OperationDirectWrite != nil {
+			body, marshalErr := json.MarshalIndent(run.OperationDirectWrite.Body, "", "  ")
+			if marshalErr != nil {
+				return marshalErr
+			}
+			_, _ = fmt.Fprintln(stdout, string(body))
+		}
 		return nil
 	}
 	if preview {

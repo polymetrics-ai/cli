@@ -1415,3 +1415,26 @@ func TestOperationDirectReadRequiredQueryEveryGroupMustBeSatisfied(t *testing.T)
 		t.Fatal("request must not be issued while a group is unsatisfied")
 	}
 }
+
+func TestOperationDirectReadProxyBasePathConsumesAPIRootOnce(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/dockerhub/v2/namespaces/acme/repositories" {
+			t.Fatalf("request path = %q, want proxy base plus one provider root", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`[]`))
+	}))
+	defer srv.Close()
+	bundle := Bundle{
+		Name: "dockerhub",
+		HTTP: HTTPBase{URL: srv.URL + "/dockerhub/v2", APIRoot: "/v2"},
+		Operations: []OperationSpec{{
+			ID: "dockerhub.repositories", Kind: "rest_read", Summary: "Repositories", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/v2/namespaces/acme/repositories", MaxBytes: 1024},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/v2/namespaces/acme/repositories", Operation: &SurfaceOperation{Model: "direct_read"}}}},
+	}
+	if _, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{Operation: "dockerhub.repositories"}, nil); err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+}

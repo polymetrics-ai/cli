@@ -108,6 +108,7 @@ type RiskSpec struct {
 // every stream in the bundle.
 type HTTPBase struct {
 	URL        string            `json:"url"`
+	APIRoot    string            `json:"api_root,omitempty"`
 	UserAgent  string            `json:"user_agent,omitempty"`
 	Headers    map[string]string `json:"headers,omitempty"`
 	Auth       []AuthSpec        `json:"auth,omitempty"`
@@ -461,6 +462,7 @@ type WriteAction struct {
 	// samples and returned write errors. DryRunWrite preview warnings preserve
 	// their resolved values.
 	RedactFields []string `json:"redact_fields,omitempty"`
+	ContentType  string   `json:"content_type,omitempty"`
 	BodyType     string   `json:"body_type,omitempty"` // json (default) | form | none | graphql | json_array | multipart | base64_upload
 	// BodyRequired forces an empty JSON object onto the wire when body construction
 	// resolves no fields. It is valid only for the default json body type.
@@ -687,7 +689,8 @@ type SurfaceCoverage struct {
 	// transport endpoint. It is intentionally distinct from direct_read:
 	// GraphQL's physical POST /graphql path is not an OpenAPI read endpoint,
 	// so an operation ID is the only unambiguous executable binding.
-	Operations []string `json:"operations,omitempty"`
+	Operations  []string `json:"operations,omitempty"`
+	DirectWrite string   `json:"direct_write,omitempty"`
 }
 
 // WriteTargets returns every write action a coverage entry names, singular and
@@ -790,6 +793,7 @@ type RESTOperationSpec struct {
 	Method      string `json:"method"`
 	Path        string `json:"path"`
 	ContentType string `json:"content_type,omitempty"`
+	AuthMode    string `json:"auth_mode,omitempty"`
 	MaxBytes    int    `json:"max_bytes,omitempty"`
 	// Parameters is the operation's accepted parameter set, imported from the
 	// connector's own provider specification by `connectorgen params-import`.
@@ -800,10 +804,12 @@ type RESTOperationSpec struct {
 	// requiredness, enum values, summary) and nothing about paging: page and
 	// page-size parameters are excluded at import, because paging comes from
 	// the connector's declared pagination spec instead.
-	Parameters []OperationParameter `json:"parameters,omitempty"`
-	Query      map[string]string    `json:"query,omitempty"`
-	Body       map[string]any       `json:"body,omitempty"`
-	BodySchema json.RawMessage      `json:"body_schema,omitempty"`
+	Parameters  []OperationParameter `json:"parameters,omitempty"`
+	Query       map[string]string    `json:"query,omitempty"`
+	Body        map[string]any       `json:"body,omitempty"`
+	BodySchema  json.RawMessage      `json:"body_schema,omitempty"`
+	Pagination  *PaginationSpec      `json:"pagination,omitempty"`
+	RecordsPath string               `json:"records_path,omitempty"`
 	// Multipart is an opt-in, operation-level multipart/form-data contract.
 	// It deliberately reuses writes.json's bounded field/file part model; an
 	// absent block preserves metadata-only multipart rows until their connector
@@ -998,24 +1004,25 @@ type CLIConstraint struct {
 
 // CLICommand is one provider-inspired command path.
 type CLICommand struct {
-	Path          string                  `json:"path"`
-	Summary       string                  `json:"summary"`
-	Intent        string                  `json:"intent"`
-	Availability  string                  `json:"availability"`
-	Stream        string                  `json:"stream,omitempty"`
-	Write         string                  `json:"write,omitempty"`
-	SourceCLIPath string                  `json:"source_cli_path,omitempty"`
-	SourceURL     string                  `json:"source_url,omitempty"`
-	Flags         []CLIFlag               `json:"flags,omitempty"`
-	Constraints   []CLIConstraint         `json:"constraints,omitempty"`
-	Examples      []string                `json:"examples,omitempty"`
-	APISurface    []CLISurfaceEndpointRef `json:"api_surface,omitempty"`
-	OutputPolicy  string                  `json:"output_policy,omitempty"`
-	RedactFields  []string                `json:"redact_fields,omitempty"`
-	Operation     string                  `json:"operation,omitempty"`
-	Risk          string                  `json:"risk,omitempty"`
-	Approval      string                  `json:"approval,omitempty"`
-	Notes         string                  `json:"notes,omitempty"`
+	Path               string                  `json:"path"`
+	Summary            string                  `json:"summary"`
+	Intent             string                  `json:"intent"`
+	Availability       string                  `json:"availability"`
+	Stream             string                  `json:"stream,omitempty"`
+	Write              string                  `json:"write,omitempty"`
+	SourceCLIPath      string                  `json:"source_cli_path,omitempty"`
+	SourceURL          string                  `json:"source_url,omitempty"`
+	Flags              []CLIFlag               `json:"flags,omitempty"`
+	Constraints        []CLIConstraint         `json:"constraints,omitempty"`
+	Examples           []string                `json:"examples,omitempty"`
+	APISurface         []CLISurfaceEndpointRef `json:"api_surface,omitempty"`
+	OutputPolicy       string                  `json:"output_policy,omitempty"`
+	RedactFields       []string                `json:"redact_fields,omitempty"`
+	AcceptsSecretInput bool                    `json:"accepts_secret_input,omitempty"`
+	Operation          string                  `json:"operation,omitempty"`
+	Risk               string                  `json:"risk,omitempty"`
+	Approval           string                  `json:"approval,omitempty"`
+	Notes              string                  `json:"notes,omitempty"`
 }
 
 // CLISurfaceEndpointRef points from a command to a tracked api_surface row.
@@ -1604,6 +1611,9 @@ func compileDynamicKeyPattern(pattern string) (*regexp.Regexp, error) {
 
 func validateWriteBodies(actions []WriteAction) error {
 	for i, action := range actions {
+		if _, err := writeActionContentType(action); err != nil {
+			return fmt.Errorf("action %d (%q): %w", i, action.Name, err)
+		}
 		if err := validateDynamicFields(i, action); err != nil {
 			return err
 		}
@@ -2297,6 +2307,9 @@ func multipartSchemaString(node map[string]any) bool {
 }
 
 func validateOperationSemantics(i int, op OperationSpec) error {
+	if op.REST != nil && op.REST.AuthMode != "" && op.REST.AuthMode != "none" {
+		return fmt.Errorf("operation %d (%q) rest auth_mode must be none when declared, got %q", i, op.ID, op.REST.AuthMode)
+	}
 	if err := validateRequiredQuery(i, op); err != nil {
 		return err
 	}

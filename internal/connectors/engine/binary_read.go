@@ -153,7 +153,7 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 		return BinaryDownloadResult{}, err
 	}
 
-	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
+	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg), b.HTTP.APIRoot)
 	requester, err := rt.requesterFor(http.MethodGet, spec.Path)
 	if err != nil {
 		return BinaryDownloadResult{}, err

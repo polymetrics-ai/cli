@@ -613,16 +613,44 @@ func TestAuthenticator_SCIMRoutingHonorsProxyBaseURLPathPrefix(t *testing.T) {
 		t.Fatalf("Authenticator: %v", err)
 	}
 
-	// A declared operation path of "/v2/scim/2.0/Users" is NOT stripped when
-	// the proxy base path is "/dockerhub/v2", so the wire path carries both.
-	for _, path := range []string{
-		"/dockerhub/v2/v2/scim/2.0/Users",
-		"/dockerhub/v2/scim/2.0/Users",
-	} {
-		req := doAuthenticatedRequestToPath(t, auth, path)
-		if got := req.Header.Get("Authorization"); got != "Bearer fixture-scim-token" {
-			t.Fatalf("proxy SCIM path %q Authorization = %q, want the SCIM bearer token (a fixed /v2/scim/2.0/ prefix test fails OPEN here)", path, got)
+	req := doAuthenticatedRequestToPath(t, auth, "/dockerhub/v2/scim/2.0/Users")
+	if got := req.Header.Get("Authorization"); got != "Bearer fixture-scim-token" {
+		t.Fatalf("proxy SCIM Authorization = %q, want the SCIM bearer token", got)
+	}
+	doubled, err := http.NewRequest(http.MethodGet, "https://example.invalid/dockerhub/v2/v2/scim/2.0/Users", nil)
+	if err != nil {
+		t.Fatalf("build doubled proxy request: %v", err)
+	}
+	if err := auth.Apply(context.Background(), doubled); err == nil {
+		t.Fatal("doubled proxy path authenticated as SCIM, want a closed non-SCIM failure")
+	}
+}
+
+func TestAuthenticator_LoginRedirectDoesNotReplayPAT(t *testing.T) {
+	var destinationHits int32
+	server, client := httpsTestServer(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/redirect-target" {
+			atomic.AddInt32(&destinationHits, 1)
+			w.WriteHeader(http.StatusOK)
+			return
 		}
+		http.Redirect(w, r, "/redirect-target", http.StatusTemporaryRedirect)
+	}))
+	h := newClientHooks(client)
+	auth, err := h.Authenticator(context.Background(), baseCfg(), baseSpec(server.URL))
+	if err != nil {
+		t.Fatalf("Authenticator: %v", err)
+	}
+	req, err := http.NewRequest(http.MethodGet, "https://example.invalid/x", nil)
+	if err != nil {
+		t.Fatalf("build resource request: %v", err)
+	}
+	err = auth.Apply(context.Background(), req)
+	if err == nil || !strings.Contains(err.Error(), "307") {
+		t.Fatalf("redirect login error = %v, want rejected 307", err)
+	}
+	if got := atomic.LoadInt32(&destinationHits); got != 0 {
+		t.Fatalf("redirect target hits = %d, want 0 so the PAT body is never replayed", got)
 	}
 }
 

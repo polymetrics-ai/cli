@@ -802,6 +802,7 @@
       "kind": "create",
       "method": "POST",
       "path": "/scim/2.0/Users",
+      "content_type": "application/scim+json",
       "record_schema": {
         "type": "object",
         "required": [
@@ -844,6 +845,7 @@
       "kind": "update",
       "method": "PUT",
       "path": "/scim/2.0/Users/{{ record.id }}",
+      "content_type": "application/scim+json",
       "record_schema": {
         "type": "object",
         "required": [

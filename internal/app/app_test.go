@@ -248,6 +248,33 @@ func TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime
 	}
 }
 
+func TestAddCredentialDockerhubNamespaceAdmissionIsConnectorSpecific(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject() error = %v", err)
+	}
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open() error = %v", err)
+	}
+	if _, err := a.AddCredential(ctx, app.AddCredentialRequest{
+		Name: "dockerhub-missing-namespace", Connector: "dockerhub", Config: map[string]string{"docker_username": "identity"},
+	}); err == nil || !strings.Contains(err.Error(), "namespace") {
+		t.Fatalf("AddCredential(dockerhub missing namespace) error = %v, want namespace admission rejection", err)
+	}
+	if _, err := a.AddCredential(ctx, app.AddCredentialRequest{
+		Name: "dockerhub-namespace-only", Connector: "dockerhub", Config: map[string]string{"namespace": "target-namespace"},
+	}); err != nil {
+		t.Fatalf("AddCredential(dockerhub namespace-only) error = %v, want no docker_username fallback admission", err)
+	}
+	if _, err := a.AddCredential(ctx, app.AddCredentialRequest{
+		Name: "drip-no-account", Connector: "drip", Secrets: map[string]string{"api_key": "fixture"},
+	}); err != nil {
+		t.Fatalf("AddCredential(drip without account_id) error = %v, want credential admission", err)
+	}
+}
+
 func TestAddCredentialLeavesConstraintFreeConnectorUnconstrained(t *testing.T) {
 	ctx := context.Background()
 	root := t.TempDir()

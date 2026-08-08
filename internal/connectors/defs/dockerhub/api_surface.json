@@ -3,7 +3,7 @@
   "docs": "https://docs.docker.com/reference/api/hub/latest/",
   "reviewed_at": "2026-08-06",
   "operation_ledger_version": 2,
-  "scope": "Provider-artifact inventory generated from the cited openapi artifact (54 documented HTTP operations). Existing executable stream/write bindings are retained only when the fetched provider method/path still matches; every other operation is explicitly provider-blocked or excluded.",
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (54 documented HTTP operations). Every listed operation has a typed executable binding; Enterprise-only operations remain fixture-verified rather than live-certified.",
   "artifacts": [
     {
       "id": "dockerhub-artifact-2026-08-06",
@@ -97,13 +97,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "credential-for-token exchange whose only input is a live secret and only output is a live access token; requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token",
-        "notes": "named_dependency=requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token"
+      "covered_by": {
+        "direct_write": "auth token create"
       }
     },
     {
@@ -597,13 +592,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "credential-for-token exchange whose only inputs are a live intermediate token and a TOTP code and only output is a live session JWT; requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token",
-        "notes": "named_dependency=requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token"
+      "covered_by": {
+        "direct_write": "auth 2fa-login create"
       }
     },
     {
@@ -613,13 +603,8 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "credential-for-token exchange whose only input is a live secret and only output is a live session JWT; requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token",
-        "notes": "named_dependency=requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token"
+      "covered_by": {
+        "direct_write": "auth login create"
       }
     }
   ]

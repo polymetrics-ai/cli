@@ -84,10 +84,11 @@ type CommandSurfaceCommand struct {
 	// consults neither this field nor a merge of the three: two sources
 	// feeding one path is how a withhold set silently resolves to the wrong
 	// list. Wiring it in needs a deliberate decision, not a default.
-	RedactFields []string
-	Risk         string
-	Approval     string
-	Notes        string
+	RedactFields       []string
+	AcceptsSecretInput bool
+	Risk               string
+	Approval           string
+	Notes              string
 }
 
 type CommandSurfaceEndpointRef struct {
