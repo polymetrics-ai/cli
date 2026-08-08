@@ -477,3 +477,92 @@ func TestCompileSchemaRejectsInvalidArrayCardinality(t *testing.T) {
 		})
 	}
 }
+
+// --- numeric range (minimum/maximum) ---------------------------------------
+//
+// Workforce Management's staffing import accepts forecast_duration_weeks in
+// the provider-published numeric range [1, 4]. A closed bundle must be able to
+// preserve and enforce that contract instead of weakening it to an unbounded
+// number or inventing an integer-only enum.
+
+func TestCompileSchemaNumericRangeKeywords(t *testing.T) {
+	for _, raw := range []string{
+		`{"type":"number","minimum":1}`,
+		`{"type":"number","maximum":4}`,
+		`{"type":"number","minimum":1,"maximum":4}`,
+		`{"type":"object","properties":{"weeks":{"type":"number","minimum":1,"maximum":4}}}`,
+	} {
+		if _, err := CompileSchema(json.RawMessage(raw)); err != nil {
+			t.Fatalf("CompileSchema(%s): unexpected error: %v", raw, err)
+		}
+	}
+}
+
+func TestSchemaValidateNumericRange(t *testing.T) {
+	sch, err := CompileSchema(json.RawMessage(`{"type":"number","minimum":1,"maximum":4}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+
+	for _, tt := range []struct {
+		name    string
+		value   json.Number
+		wantErr string
+	}{
+		{name: "minimum boundary", value: json.Number("1")},
+		{name: "fraction within range", value: json.Number("2.5")},
+		{name: "maximum boundary", value: json.Number("4")},
+		{name: "below minimum", value: json.Number("0.99"), wantErr: "minimum"},
+		{name: "above maximum", value: json.Number("4.01"), wantErr: "maximum"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			err := sch.Validate(tt.value)
+			if tt.wantErr == "" && err != nil {
+				t.Fatalf("Validate(%s): unexpected error: %v", tt.value, err)
+			}
+			if tt.wantErr != "" {
+				if err == nil {
+					t.Fatalf("Validate(%s): want %s rejection, got nil", tt.value, tt.wantErr)
+				}
+				if !strings.Contains(err.Error(), tt.wantErr) {
+					t.Fatalf("Validate(%s): error should mention %q, got %v", tt.value, tt.wantErr, err)
+				}
+			}
+		})
+	}
+}
+
+func TestSchemaNumericRangeIgnoresNonNumbers(t *testing.T) {
+	sch, err := CompileSchema(json.RawMessage(`{"minimum":1,"maximum":4}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	for _, value := range []any{"string", true, nil, map[string]any{}, []any{"x"}} {
+		if err := sch.Validate(value); err != nil {
+			t.Fatalf("Validate(%T): want numeric bounds ignored, got %v", value, err)
+		}
+	}
+}
+
+func TestCompileSchemaRejectsInvalidNumericRange(t *testing.T) {
+	tests := []struct {
+		name string
+		raw  string
+		want string
+	}{
+		{name: "non numeric minimum", raw: `{"type":"number","minimum":"1"}`, want: "minimum"},
+		{name: "non numeric maximum", raw: `{"type":"number","maximum":true}`, want: "maximum"},
+		{name: "maximum below minimum", raw: `{"type":"number","minimum":4,"maximum":1}`, want: "maximum"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := CompileSchema(json.RawMessage(tt.raw))
+			if err == nil {
+				t.Fatal("want compile error, got nil")
+			}
+			if !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("error should mention %q, got %v", tt.want, err)
+			}
+		})
+	}
+}
