@@ -998,6 +998,156 @@ func TestBatchMaterializeConvertsLegacyExclusionsAndDerivesWriteFlags(t *testing
 	}
 }
 
+// TestBatchMaterializePluralOnlyWriteCoverage drives the real `batch
+// materialize` command over a bundle whose covered_by rows use ONLY the plural
+// `writes` spelling, so it exercises batchSurfaceSplit (the api_surface gate),
+// materializeAPISurface/copyMaterializedClassifier, ensureMaterializedCoverage
+// and materializeCLISurface in one pass.
+//
+// Without the plural migration each of those three fails a different way:
+// batchSurfaceSplit reports "has an empty covered_by classifier",
+// ensureMaterializedCoverage reports "has no matching endpoint in the cited
+// artifact", and materializeCLISurface reports "has no materialized
+// api_surface reference".
+//
+// POST /widgets carries TWO write actions in one array — the cardinality the
+// shared foundation exists for, which no shipped bundle currently uses (all
+// 544 jira/workday-rest arrays are singletons). PUT /widgets/{id} carries a
+// single-element array, the form those bundles actually ship.
+func TestBatchMaterializePluralOnlyWriteCoverage(t *testing.T) {
+	sourceDefsRoot := t.TempDir()
+	defsRoot := t.TempDir()
+	fsys := cliSurfaceBundleFS(validCLISurfaceJSON())
+	fsys["cli-surface/writes.json"] = &fstest.MapFile{Data: []byte(`{
+		"actions": [
+			{
+				"name": "create_widget",
+				"kind": "create",
+				"method": "POST",
+				"path": "/widgets",
+				"record_schema": { "type": "object", "required": ["name"], "properties": { "name": { "type": "string" } } },
+				"risk": "creates a widget"
+			},
+			{
+				"name": "import_widget",
+				"kind": "create",
+				"method": "POST",
+				"path": "/widgets",
+				"record_schema": { "type": "object", "required": ["source_id"], "properties": { "source_id": { "type": "string" } } },
+				"risk": "imports a widget from an external system"
+			},
+			{
+				"name": "rename_widget",
+				"kind": "update",
+				"method": "PUT",
+				"path": "/widgets/{id}",
+				"path_fields": ["id"],
+				"record_schema": { "type": "object", "required": ["id", "name"], "properties": { "id": { "type": "string" }, "name": { "type": "string" } } },
+				"risk": "renames a widget"
+			}
+		]
+	}`)}
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"api": "test API v1",
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "writes": ["create_widget", "import_widget"] } },
+			{ "method": "PUT", "path": "/widgets/{id}", "covered_by": { "writes": ["rename_widget"] } }
+		]
+	}`)}
+	writeBatchBundle(t, sourceDefsRoot, fsys)
+	manifestPath := writeBatchManifestFixture(t, "cli-surface")
+	artifactDir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(artifactDir, "cli-surface.json"), []byte(`{
+		"openapi": "3.0.0",
+		"paths": {
+			"/widgets": { "get": {"summary": "List widgets"}, "post": {"summary": "Create widget"} },
+			"/widgets/{id}": { "put": {"summary": "Rename widget"} }
+		}
+	}`), 0o644); err != nil {
+		t.Fatalf("write artifact: %v", err)
+	}
+	reportPath := filepath.Join(t.TempDir(), "materialize.json")
+	var stdout, stderr bytes.Buffer
+
+	code := run([]string{"batch", "materialize", "--manifest", manifestPath, "--source-defs-root", sourceDefsRoot, "--defs-root", defsRoot, "--artifact-dir", artifactDir, "--retrieved-at", "2026-08-06", "--report", reportPath}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("batch materialize exit = %d, want 0; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+
+	validation, err := validatePath(filepath.Join(defsRoot, "cli-surface"))
+	if err != nil {
+		t.Fatalf("validate materialized bundle: %v", err)
+	}
+	if len(validation.Findings) != 0 {
+		t.Fatalf("materialized bundle findings = %+v, want none for plural-only coverage", validation.Findings)
+	}
+
+	surfaceRaw, err := os.ReadFile(filepath.Join(defsRoot, "cli-surface", "api_surface.json"))
+	if err != nil {
+		t.Fatalf("read generated api surface: %v", err)
+	}
+	var surface engine.APISurface
+	if err := json.Unmarshal(surfaceRaw, &surface); err != nil {
+		t.Fatalf("decode generated api surface: %v", err)
+	}
+	// batchSurfaceSplit must count the plural rows as executable, not as an
+	// empty classifier.
+	split, err := batchSurfaceSplit(&surface)
+	if err != nil {
+		t.Fatalf("batchSurfaceSplit over plural-only coverage: %v", err)
+	}
+	if split.Executable != 3 {
+		t.Errorf("split.Executable = %d, want 3 (1 stream + 2 plural write rows)", split.Executable)
+	}
+
+	writeTargets := map[string][]string{}
+	for _, endpoint := range surface.Endpoints {
+		if endpoint.CoveredBy == nil {
+			continue
+		}
+		writeTargets[endpoint.Method+" "+endpoint.Path] = endpoint.CoveredBy.WriteTargets()
+	}
+	if got := writeTargets["POST /widgets"]; len(got) != 2 {
+		t.Errorf("POST /widgets write targets = %v, want both plural actions preserved through materialization", got)
+	}
+	if got := writeTargets["PUT /widgets/{id}"]; len(got) != 1 {
+		t.Errorf("PUT /widgets/{id} write targets = %v, want the single-element plural array preserved", got)
+	}
+
+	// materializeCLISurface must resolve an api_surface reference for EVERY
+	// declared write action, including the two that share one endpoint.
+	cliRaw, err := os.ReadFile(filepath.Join(defsRoot, "cli-surface", "cli_surface.json"))
+	if err != nil {
+		t.Fatalf("read generated CLI surface: %v", err)
+	}
+	var cli engine.CLISurface
+	if err := json.Unmarshal(cliRaw, &cli); err != nil {
+		t.Fatalf("decode generated CLI surface: %v", err)
+	}
+	byWrite := map[string]engine.CLICommand{}
+	for _, cmd := range cli.Commands {
+		if cmd.Write != "" {
+			byWrite[cmd.Write] = cmd
+		}
+	}
+	for _, action := range []string{"create_widget", "import_widget", "rename_widget"} {
+		cmd, ok := byWrite[action]
+		if !ok {
+			t.Fatalf("generated CLI surface has no command for write %q; commands=%s", action, cliRaw)
+		}
+		if len(cmd.APISurface) == 0 {
+			t.Errorf("write %q command has no api_surface reference", action)
+		}
+	}
+	if ref := byWrite["create_widget"].APISurface; len(ref) != 1 || ref[0].Path != "/widgets" {
+		t.Errorf("create_widget api_surface = %+v, want the shared POST /widgets row", ref)
+	}
+	if ref := byWrite["import_widget"].APISurface; len(ref) != 1 || ref[0].Path != "/widgets" {
+		t.Errorf("import_widget api_surface = %+v, want the same shared POST /widgets row", ref)
+	}
+}
+
 func writeBatchLedger(t *testing.T, records []map[string]any) string {
 	t.Helper()
 	path := filepath.Join(t.TempDir(), "ledger.json")

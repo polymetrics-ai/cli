@@ -203,9 +203,20 @@ func checkInterpolationsResolve(b engine.Bundle) error {
 		}
 		return engine.ResolveCheckWhen(template, specKeys)
 	}
+	checkPath := func(what, template string) error {
+		if template == "" {
+			return nil
+		}
+		return engine.ResolveCheckRequestPath(what, template, specKeys)
+	}
 
-	if err := check(b.HTTP.URL); err != nil {
+	if err := checkPath("base.url", b.HTTP.URL); err != nil {
 		return err
+	}
+	if b.HTTP.Check != nil {
+		if err := checkPath("base.check.path", b.HTTP.Check.Path); err != nil {
+			return err
+		}
 	}
 	for _, h := range b.HTTP.Headers {
 		if err := check(h); err != nil {
@@ -224,8 +235,13 @@ func checkInterpolationsResolve(b engine.Bundle) error {
 		}
 	}
 	for _, s := range b.Streams {
-		if err := check(s.Path); err != nil {
+		if err := checkPath("path", s.Path); err != nil {
 			return fmt.Errorf("stream %q: %w", s.Name, err)
+		}
+		if s.FanOut != nil && s.FanOut.IDsFrom.Request != nil {
+			if err := checkPath("fan_out.ids_from.request.path", s.FanOut.IDsFrom.Request.Path); err != nil {
+				return fmt.Errorf("stream %q: %w", s.Name, err)
+			}
 		}
 		for _, v := range s.Query {
 			// engine.StreamSpec.Query values are engine.QueryParam (gap-loop
