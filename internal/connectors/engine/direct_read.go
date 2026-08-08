@@ -963,7 +963,7 @@ func encodeSurfacePathValue(name, value string) (string, error) {
 		}
 		return strings.Join(parts, "/"), nil
 	}
-	if err := safety.ValidateIdentifier(value, "path variable "+name); err != nil {
+	if err := safety.ValidateURLPathSegment(value, "path variable "+name); err != nil {
 		return "", err
 	}
 	return url.PathEscape(value), nil
