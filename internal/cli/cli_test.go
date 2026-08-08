@@ -707,6 +707,154 @@ func TestGitHubCommandSurfaceRunsDirectReadFile(t *testing.T) {
 	}
 }
 
+// TestGitHubDirectReadParametersAndPageContextReachWire drives the real CLI,
+// embedded GitHub bundle, command runner, and direct-read executor against a
+// known-larger fixture. It asserts returned records and the server-observed
+// query, never a successful exit code alone.
+func TestGitHubDirectReadParametersAndPageContextReachWire(t *testing.T) {
+	const since = "2026-01-02T03:04:05Z"
+	type observedRequest struct {
+		path  string
+		query string
+	}
+	var observed []observedRequest
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		observed = append(observed, observedRequest{path: r.URL.Path, query: r.URL.RawQuery})
+		w.Header().Set("Content-Type", "application/json")
+		switch r.URL.Path {
+		case "/repos/octocat/hello-world/notifications":
+			if got := r.URL.Query().Get("since"); got != since {
+				t.Errorf("notifications since = %q, want %q", got, since)
+			}
+			if got := r.URL.Query().Get("per_page"); got != "100" {
+				t.Errorf("notifications per_page = %q, want declared 100", got)
+			}
+			_, _ = w.Write([]byte(`[{"id":"thread-1"},{"id":"thread-2"}]`))
+		case "/repos/octocat/hello-world/pulls/42/files":
+			if got := r.URL.Query().Get("per_page"); got != "100" {
+				t.Errorf("pull files per_page = %q, want declared 100", got)
+			}
+			page := r.URL.Query().Get("page")
+			if page == "" {
+				page = "1"
+			}
+			count := 100
+			if page == "2" {
+				count = 20
+			}
+			if page != "1" && page != "2" {
+				t.Errorf("pull files page = %q, want 1 or 2", page)
+			}
+			rows := make([]map[string]any, count)
+			for i := range rows {
+				rows[i] = map[string]any{"filename": fmt.Sprintf("file-%03d", i)}
+			}
+			_ = json.NewEncoder(w).Encode(rows)
+		default:
+			t.Errorf("unexpected request %s", r.URL.Path)
+		}
+	}))
+	t.Cleanup(srv.Close)
+
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "github-local",
+		"--connector", "github",
+		"--config", "owner=octocat",
+		"--config", "repo=hello-world",
+		"--config", "base_url=" + srv.URL,
+		"--config", "public_access=true",
+		"--root", root,
+		"--json",
+	})
+
+	// Both rejections occur before the handler is reached, and the enum
+	// rejection names every accepted option instead of deferring to GitHub.
+	for _, tc := range []struct {
+		args []string
+		want string
+	}{
+		{[]string{"github", "issue", "list", "--credential", "github-local", "--state", "impossible", "--root", root, "--json"}, "all|closed|open"},
+		{[]string{"github", "pulls", "files", "view", "--credential", "github-local", "--root", root, "--json"}, "missing path variable \"pull_number\""},
+	} {
+		var stdout, stderr bytes.Buffer
+		if code := cli.Run(tc.args, &stdout, &stderr); code == 0 {
+			t.Fatalf("Run(%v) code = 0, want parser refusal", tc.args)
+		}
+		if got := stdout.String() + stderr.String(); !strings.Contains(got, tc.want) {
+			t.Fatalf("Run(%v) output = %q, want %q", tc.args, got, tc.want)
+		}
+		if len(observed) != 0 {
+			t.Fatalf("Run(%v) reached the provider: %#v", tc.args, observed)
+		}
+	}
+
+	notificationOut, _ := runCLI(t, []string{
+		"github", "notifications", "view", "--credential", "github-local",
+		"--since", since, "--root", root, "--json",
+	})
+	var notification struct {
+		Response []map[string]any `json:"response"`
+		Page     struct {
+			Records  int  `json:"records"`
+			Size     int  `json:"size"`
+			Complete bool `json:"complete"`
+		} `json:"page"`
+	}
+	if err := json.Unmarshal([]byte(notificationOut), &notification); err != nil {
+		t.Fatalf("decode notifications output: %v\n%s", err, notificationOut)
+	}
+	if len(notification.Response) != 2 || notification.Page.Records != 2 || notification.Page.Size != 100 || !notification.Page.Complete {
+		t.Fatalf("notifications response/page = %#v/%+v, want two real rows and a complete 100-size page", notification.Response, notification.Page)
+	}
+
+	readPage := func(page string) struct {
+		Response []map[string]any `json:"response"`
+		Page     struct {
+			Records    int  `json:"records"`
+			Size       int  `json:"size"`
+			Number     int  `json:"number"`
+			NextNumber int  `json:"next_number"`
+			HasMore    bool `json:"has_more"`
+			Complete   bool `json:"complete"`
+		} `json:"page"`
+	} {
+		args := []string{"github", "pulls", "files", "view", "--credential", "github-local", "--pull-number", "42", "--root", root, "--json"}
+		if page != "" {
+			args = append(args, "--page", page)
+		}
+		stdout, _ := runCLI(t, args)
+		var out struct {
+			Response []map[string]any `json:"response"`
+			Page     struct {
+				Records    int  `json:"records"`
+				Size       int  `json:"size"`
+				Number     int  `json:"number"`
+				NextNumber int  `json:"next_number"`
+				HasMore    bool `json:"has_more"`
+				Complete   bool `json:"complete"`
+			} `json:"page"`
+		}
+		if err := json.Unmarshal([]byte(stdout), &out); err != nil {
+			t.Fatalf("decode pull-files page %q: %v\n%s", page, err, stdout)
+		}
+		return out
+	}
+
+	first := readPage("")
+	if len(first.Response) != 100 || first.Page.Records != 100 || first.Page.Size != 100 || first.Page.Number != 1 || first.Page.NextNumber != 2 || !first.Page.HasMore || first.Page.Complete {
+		t.Fatalf("first pull-files page = %#v/%+v, want 100 rows and an addressable incomplete page", first.Response, first.Page)
+	}
+	second := readPage("2")
+	if len(second.Response) != 20 || second.Page.Records != 20 || second.Page.Number != 2 || second.Page.HasMore || !second.Page.Complete {
+		t.Fatalf("second pull-files page = %#v/%+v, want final 20-row page", second.Response, second.Page)
+	}
+	if total := len(first.Response) + len(second.Response); total != 120 {
+		t.Fatalf("records reached across pages = %d, want 120", total)
+	}
+}
+
 func TestGitHubCommandSurfacePlansReverseETLCommand(t *testing.T) {
 	root := t.TempDir()
 	runCLI(t, []string{"init", "--root", root, "--json"})

@@ -283,7 +283,8 @@ func TestCrispListCommandPreservesFixtureContent(t *testing.T) {
 	connector := engine.New(bundle, nil)
 	var records []connectors.Record
 	result, err := commandrunner.Run(context.Background(), connector, commandrunner.Request{
-		Path: strings.Fields("conversations list"),
+		Path:  strings.Fields("conversations list"),
+		Flags: map[string][]string{"per-page": {"37"}},
 		Config: connectors.RuntimeConfig{
 			Config: map[string]string{
 				"base_url":    server.URL,
@@ -311,8 +312,8 @@ func TestCrispListCommandPreservesFixtureContent(t *testing.T) {
 	if got := records[0]["content"]; got != "fixture-visible-crisp-content" {
 		t.Fatalf("emitted fixture content = %#v, want complete Crisp content", got)
 	}
-	if gotMethod != http.MethodGet || gotPath != "/v1/website/fixture-website/conversations/1" || gotQuery != "per_page=50" {
-		t.Fatalf("fixture request = %s %s?%s, want GET /v1/website/fixture-website/conversations/1?per_page=50", gotMethod, gotPath, gotQuery)
+	if gotMethod != http.MethodGet || gotPath != "/v1/website/fixture-website/conversations/1" || gotQuery != "per_page=37" {
+		t.Fatalf("fixture request = %s %s?%s, want caller-selected GET /v1/website/fixture-website/conversations/1?per_page=37", gotMethod, gotPath, gotQuery)
 	}
 	if gotTier != "website" || gotUser != "fixture-identifier" || gotKey != "fixture-key" {
 		t.Fatalf("fixture auth = tier=%q user=%q key=%q, want complete declared auth", gotTier, gotUser, gotKey)

@@ -341,22 +341,22 @@ you already own. Hand-writing either one is a bug, not a shortcut.
 
 ### Paging
 
-Never declare a `page`, `per_page`, `cursor`, `limit` or `offset` flag on a
-command. Paging comes from the connector's `streams.json` `base.pagination`
-spec, which the direct-read executor consumes through the same seven strategies
-the ETL path uses. The runtime supplies `--page` (for `page_number` and
-`offset_limit`, the only strategies with an addressable page number) and
-`--page-cursor` (for `cursor`, `next_url`, `link_header`).
+Never declare an opaque provider cursor (`cursor`, `start_cursor`,
+`page_token`, or an equivalent) on a command. Navigation comes from the
+connector's `streams.json` `base.pagination` spec, which the direct-read
+executor consumes through the same seven strategies the ETL path uses. The
+runtime supplies `--page` (for `page_number` and `offset_limit`, the only
+strategies with an addressable page number) and `--page-cursor` (for `cursor`,
+`next_url`, `link_header`). A raw cursor flag gives a caller a second,
+unchecked route that bypasses the completeness contract and is removed by
+`surface-sync`.
 
-Declaring a paging flag by hand gives a caller a second, unchecked way to page
-that bypasses the completeness contract.
-
-A handful of bundles authored one before this rule existed (notion's
-`page-size`/`start-cursor`, bahmni's `start-index`, gong's `cursor`). The
-executor honours the caller's value over the declared default rather than
-discarding it, refuses it alongside `--page`/`--page-cursor`, and reports no
-page number for a window it did not choose. That is damage control, not a
-precedent: do not add another.
+A declared page/window or addressable-position control such as Notion's
+`page-size` or Bahmni's `start-index` is different: keep it only when the
+runtime sends the caller's value and reports the window it actually used. The
+executor honours that value over a declared default and measures completeness
+against the effective size. Legacy opaque cursors such as Notion
+`start-cursor` and Gong `cursor` are generated-surface drift, not precedent.
 
 ### Other parameters
 

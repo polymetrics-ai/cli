@@ -171,13 +171,16 @@ Five rules keep that honest; all exist because the direct-read executor once sen
 no page-size parameter at all, so every connector returned the provider's default
 page (GitHub's is 30) at `status: 200` with nothing saying more remained.
 
-- Paging is DERIVED from the connector's own declared pagination spec
-  (`streams.json` `base.pagination`) through `engine/paginate.go`, the same
-  seven strategies the ETL path consumes. Never hand-author paging params into
-  `cli_surface.json` or `operations.json`. A few bundles did before the rule
-  existed — notion's `page-size`/`start-cursor`, bahmni's `start-index`, gong's
-  `cursor` — and they are damage control, not precedent. The executor is
-  `internal/connectors/engine/direct_read_paginate.go`.
+- Paging navigation is DERIVED from the connector's own declared pagination
+  spec (`streams.json` `base.pagination`) through `engine/paginate.go`, the
+  same seven strategies the ETL path consumes. Never hand-author an opaque
+  provider cursor into `cli_surface.json` or `operations.json`: direct reads
+  use `--page`/`--page-cursor` as their only navigation channels. A declared
+  size/window or addressable-position control (for example Notion's
+  `page-size` or Bahmni's `start-index`) may remain only when the engine sends
+  and accounts for it; legacy cursors such as Notion `start-cursor` and Gong
+  `cursor` are generated-surface drift and are removed by `surface-sync`. The
+  executor is `internal/connectors/engine/direct_read_paginate.go`.
 - A result must never imply a completeness it cannot prove. `DirectReadPage`
   carries `complete` plus a `reason`, and `--page`/`--page-cursor` are how a
   caller reaches the rest. Strategies that address pages by number
@@ -236,10 +239,13 @@ accepted parameter set into `operations.json` as `rest.parameters`;
 hand-authored flag is left as written. The split keeps CI hermetic —
 `surface-sync --check` needs no artifact and no network.
 
-Never hand-author a paging flag (`page`, `per_page`, `cursor`, `limit`,
-`offset`). Paging is answered by `--page`/`--page-cursor` from the declared
-pagination spec, and a hand-written paging flag is a second unchecked way to
-page that bypasses the completeness contract.
+Never hand-author an opaque provider cursor (`cursor`, `start_cursor`,
+`page_token`, and equivalents). Navigation is answered by `--page` or
+`--page-cursor` from the declared pagination spec, and a raw cursor flag is a
+second unchecked way to page that bypasses the completeness contract. A
+declared page/window control (`page_size`, `per_page`, `limit`, `offset`) is
+kept only when the runtime can honor the caller's value and report the actual
+window it sent.
 
 `params-import` drops a parameter by MEANING, not by the names one bundle
 declares: a well-known paging name, or any parameter whose own specification

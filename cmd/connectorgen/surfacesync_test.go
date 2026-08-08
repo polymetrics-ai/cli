@@ -158,6 +158,100 @@ func TestSyncBundleReportsDivergentFlagMapsTo(t *testing.T) {
 	}
 }
 
+// A direct read has exactly one opaque-cursor channel: --page-cursor. Legacy
+// command surfaces predate that contract and can still carry raw provider
+// cursor flags. Keep an explicit size override, but never leave a second
+// unvalidated cursor route that can bypass page context.
+func TestSyncBundleRemovesLegacyDirectReadCursorFlag(t *testing.T) {
+	surface := []any{map[string]any{"method": "GET", "path": "/issues/{issue_id}"}}
+	cli, ops := directReadBundle(surface, "json_redacted", "path.issue_id")
+	command := cli.(map[string]any)["commands"].([]any)[0].(map[string]any)
+	command["flags"] = []any{
+		map[string]any{"name": "issue-id", "type": "string", "maps_to": "path.issue_id"},
+		map[string]any{"name": "start-cursor", "type": "string", "summary": "Opaque provider cursor.", "maps_to": "query.start_cursor"},
+		map[string]any{"name": "page-size", "type": "integer", "summary": "Requested records per page.", "maps_to": "query.page_size"},
+	}
+	dir := writeSyncBundle(t, cli, ops)
+
+	if _, err := syncBundle(dir, false); err != nil {
+		t.Fatalf("syncBundle: %v", err)
+	}
+	flags, _ := readSyncedCommand(t, dir)["flags"].([]any)
+	var startCursor, pageSize bool
+	for _, raw := range flags {
+		flag, _ := raw.(map[string]any)
+		switch flag["name"] {
+		case "start-cursor":
+			startCursor = true
+		case "page-size":
+			pageSize = true
+		}
+	}
+	if startCursor {
+		t.Fatalf("flags = %v, want the legacy raw cursor removed", flags)
+	}
+	if !pageSize {
+		t.Fatalf("flags = %v, want explicit page-size override preserved", flags)
+	}
+}
+
+// Legacy direct-read commands without an operation-backed REST declaration
+// still receive the runtime page flags. They must not retain a raw provider
+// cursor merely because the rest of surface synchronization cannot derive
+// endpoint metadata for them.
+func TestSyncBundleRemovesLegacyDirectReadCursorWithoutOperation(t *testing.T) {
+	surface := []any{map[string]any{"method": "GET", "path": "/logs"}}
+	cli, ops := directReadBundle(surface, "json_redacted", "")
+	command := cli.(map[string]any)["commands"].([]any)[0].(map[string]any)
+	delete(command, "operation")
+	command["flags"] = []any{
+		map[string]any{"name": "cursor", "type": "string", "summary": "Opaque provider cursor for the next page.", "maps_to": "query.cursor"},
+		map[string]any{"name": "page-size", "type": "integer", "summary": "Requested records per page.", "maps_to": "query.page_size"},
+	}
+	dir := writeSyncBundle(t, cli, ops)
+
+	if _, err := syncBundle(dir, false); err != nil {
+		t.Fatalf("syncBundle: %v", err)
+	}
+	flags, _ := readSyncedCommand(t, dir)["flags"].([]any)
+	for _, raw := range flags {
+		flag, _ := raw.(map[string]any)
+		if flag["name"] == "cursor" {
+			t.Fatalf("flags = %v, want the legacy raw cursor removed", flags)
+		}
+	}
+}
+
+func TestSyncBundleRemovesCursorDescribedAfterButPreservesTimestampBefore(t *testing.T) {
+	surface := []any{map[string]any{"method": "GET", "path": "/notifications"}}
+	cli, ops := directReadBundle(surface, "json_redacted", "")
+	command := cli.(map[string]any)["commands"].([]any)[0].(map[string]any)
+	delete(command, "operation")
+	command["flags"] = []any{
+		map[string]any{"name": "after", "type": "string", "summary": "Cursor token from the previous page.", "maps_to": "query.after"},
+		map[string]any{"name": "before", "type": "string", "summary": "ISO-8601 timestamp filter.", "maps_to": "query.before"},
+	}
+	dir := writeSyncBundle(t, cli, ops)
+
+	if _, err := syncBundle(dir, false); err != nil {
+		t.Fatalf("syncBundle: %v", err)
+	}
+	flags, _ := readSyncedCommand(t, dir)["flags"].([]any)
+	var after, before bool
+	for _, raw := range flags {
+		flag, _ := raw.(map[string]any)
+		switch flag["name"] {
+		case "after":
+			after = true
+		case "before":
+			before = true
+		}
+	}
+	if after || !before {
+		t.Fatalf("flags = %v, want cursor-described after removed and timestamp before preserved", flags)
+	}
+}
+
 // A rest_write command has no author-selected output policy: its declared
 // operation is the one source of truth for both the response contract and the
 // endpoint the executor will call. Keeping either hand-edited means a command

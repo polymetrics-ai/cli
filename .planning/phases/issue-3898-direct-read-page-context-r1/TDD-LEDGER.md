@@ -375,3 +375,94 @@ go test ./internal/cli/ -run 'DirectRead|ConnectorCommand|Manual|Help|Limits' -c
 
 No live provider call is made by any test in this ledger; every fixture is a
 local `httptest` server with fabricated record identifiers.
+
+## Captain completion audit: legacy cursor flag leakage
+
+The live command help retained `--start-cursor` on Notion direct reads even
+though the page contract requires the opaque continuation to flow only through
+`--page-cursor`. A focused `surface-sync` regression will begin RED by giving
+an implemented direct read both `--start-cursor` and `--page-size`: sync must
+remove the cursor flag while retaining the explicit page-size override. This
+protects the real rule rather than merely checking help text.
+
+Red before the generator correction:
+
+```text
+--- FAIL: TestSyncBundleRemovesLegacyDirectReadCursorFlag
+    flags = [... maps_to:query.start_cursor name:start-cursor ...],
+        want the legacy raw cursor removed
+FAIL
+```
+
+Green after `removeLegacyDirectReadCursorFlags` made the surface synchronizer
+own this derived contract:
+
+```sh
+go test -timeout 3m ./cmd/connectorgen \
+  -run '^(TestSyncBundleRemovesLegacyDirectReadCursorFlag|TestParamsImportExcludesProviderPagingParametersByMeaning|TestSyncBundleReportsDivergentFlagMapsTo|TestSyncBundleConsistentBundleIsClean)$' \
+  -count=1
+# ok   polymetrics.ai/cmd/connectorgen
+
+go run ./cmd/connectorgen surface-sync --check
+# connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+```
+
+The rebuilt binary's `pm notion block children list --help` exposes
+`--page-cursor` and the caller-owned `--page-size`, but no `--start-cursor`.
+The retained size flag is intentional: it controls the page window, and the
+engine uses that exact value when it determines completeness.
+
+The first green run exposed one more executable legacy shape: Gong `logs list`
+has no `operation` field, so it returned early from the old synchronization
+loop and kept `--cursor`. Its focused regression was deliberately red first:
+
+```text
+--- FAIL: TestSyncBundleRemovesLegacyDirectReadCursorWithoutOperation
+    flags = [... maps_to:query.cursor name:cursor ...], want the legacy raw cursor removed
+FAIL
+```
+
+Green after moving the cursor-only cleanup before the operation metadata gate:
+
+```sh
+go test -timeout 3m ./cmd/connectorgen \
+  -run '^(TestSyncBundleRemovesLegacyDirectReadCursorFlag|TestSyncBundleRemovesLegacyDirectReadCursorWithoutOperation|TestSyncBundleRemovesCursorDescribedAfterButPreservesTimestampBefore|TestParamsImportExcludesProviderPagingParametersByMeaning|TestSyncBundleReportsDivergentFlagMapsTo|TestSyncBundleConsistentBundleIsClean)$' \
+  -count=1
+# ok   polymetrics.ai/cmd/connectorgen
+
+go run ./cmd/connectorgen surface-sync
+# gong: ... corrected ... flag_derived=1 ...
+go run ./cmd/connectorgen surface-sync --check
+# 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+```
+
+The rebuilt `pm gong logs list --help` now exposes `--page-cursor` but no raw
+`--cursor`. A whole-surface scan found zero named opaque cursor/token mappings
+and zero cursor-described `after`/`before` mappings across implemented direct
+reads. The `after`/`before` regression additionally preserves a timestamp
+`before` filter, so an ordinary provider filter is not lost merely because its
+name resembles cursor navigation.
+
+## Captain parameter and real-result proof
+
+The final focused CLI regression drives the embedded GitHub bundle through a
+local server and asserts the server-observed request and returned record counts:
+
+```sh
+go test -timeout 3m ./internal/cli \
+  -run '^TestGitHubDirectReadParametersAndPageContextReachWire$' -count=1
+# ok   polymetrics.ai/internal/cli
+```
+
+It proves an invalid enum names `all|closed|open` and reaches no provider, a
+missing `pull_number` reaches no provider, `since` is sent exactly, and two
+pages of 100 then 20 returned rows report `complete: false` then `true` while
+reaching all 120 fixture rows. A separate connector regression proves the
+declared `--per-page 37` reaches the wire and preserves the returned fixture
+content:
+
+```sh
+go test -timeout 3m ./internal/connectors/defs/crisp \
+  -run '^TestCrispListCommandPreservesFixtureContent$' -count=1
+# ok   polymetrics.ai/internal/connectors/defs/crisp
+```

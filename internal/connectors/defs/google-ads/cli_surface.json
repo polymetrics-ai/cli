@@ -379,12 +379,6 @@
           "maps_to": "body.pageSize",
           "summary": "Google Ads request field pageSize.",
           "type": "integer"
-        },
-        {
-          "name": "page-token",
-          "maps_to": "body.pageToken",
-          "summary": "Google Ads request field pageToken.",
-          "type": "string"
         }
       ]
     },

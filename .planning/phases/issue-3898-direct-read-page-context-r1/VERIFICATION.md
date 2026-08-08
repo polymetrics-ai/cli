@@ -27,73 +27,90 @@ Human-readable path: stdout stays clean JSON, the notice goes to stderr —
 ## Gates
 
 ```
-gofmt -l cmd internal                     clean
-go vet ./internal/... ./cmd/...           clean
-go test ./internal/connectors/...         ok
-go test ./internal/cli/ -timeout 30m      ok (660s; exceeds the 600s default — pre-existing)
-go test ./internal/app/...                ok
-make lint                                 0 issues
-make tidy-check docs-check                ok
-make agent-contract-check                 ok
-make connectorgen-validate                551 connectors, 0 findings
-make connectorgen-surface-sync            551 scanned, 0 fields changed  <-- sweep not invalidated
-make connector-boundary                   ok
-make release-workflow-check               ok
-make smoke-no-build                       ok
-node website/scripts/cli-surface.test.mjs 7/7 pass
+gofmt -w changed Go files                  clean
+go test -timeout 20m ./cmd/connectorgen   ok
+go test -timeout 20m ./internal/connectors/engine  ok
+go test -timeout 20m ./internal/connectors/defs/crisp  ok
+go vet ./...                               clean
+go build ./cmd/pm                          clean
+git diff --check                           clean
+go test -timeout 20m ./internal/cli        ok (full suite, 584.394s)
+
+Focused acceptance regressions:
+  cmd/connectorgen cursor/parameter suite  ok
+  internal/cli GitHub wire/page-context     ok
+  Crisp --per-page wire/content             ok
+  engine caller-size/completeness suite     ok
+  connectorgen surface-sync --check         551 scanned, 0 changes
+
+npm --prefix website run gen:catalog        regenerated 551 connector records
+npm --prefix website run gen:connectors     regenerated connector type data
+npm --prefix website run gen:docs           current
+node website/scripts/cli-surface.test.mjs   7/7 pass
+npm --prefix website run typecheck           not run: tsc is not installed in this worktree
 ```
+
+## Inline GSD verify-work and code-review fallback
+
+`scripts/gsd sources` and `scripts/gsd prompt` were resolved for both
+`verify-work` and `code-review`. This session cannot invoke the project-local
+Pi workers, and the canonical issue contract forbids substituting spawned
+planner/reviewer roles, so the documented inline fallback is used and recorded
+here.
+
+Verify-work accepted the automated fixture counts, server-observed parameter
+assertions, generated-help checks, full CLI suite, and the captain-authorized
+live PM/`gh-axi` evidence above. No human-judgment-only product assertion
+remains: the one intentional product boundary (no local clone) is explicitly
+declared and the archive redirect failure is explicitly recorded as a separate
+gap rather than treated as a success.
+
+Manual code review covered the cursor cleaner's scope, the legacy no-operation
+branch, ambiguous `after`/`before` semantics, page-size preservation, the
+fixture count assertions, and generated artifacts. It found and corrected one
+coverage gap during review: legacy Gong `logs list` returned before the
+operation metadata gate, so a new red/green regression moves the cursor cleanup
+before that gate. Final disposition: no unresolved critical or warning finding.
 
 ## Known, stated plainly
 
-- The GitHub live reverse trace did not send `/issues%22`: the `pm` argv,
-  stored connection/plan state, and resolved target immediately before
-  `client.Do` were quote-free. `%22` was introduced by the former
-  `RedactErrorText` URL regex when it absorbed Go's quoted error delimiter;
-  the safety regression now prevents that misleading rendering while preserving
-  query redaction. The underlying GitHub result was transport `EOF`, not a
-  malformed endpoint.
-- The follow-up same-machine controls isolate the EOF to PM's transport path:
-  curl POST (including PM's HTTP/1.1, `Connection: close`, User-Agent, and API
-  version shape) and `gh api` POST each received HTTP 201, while a fresh PM
-  plan → preview → approved run read and declared exactly 44 body bytes then
-  received EOF. Header values and credentials were never captured. The private
-  repository contains only the four intentional curl/`gh` diagnostic issues;
-  no PM write reached it. The live-write completion gate remains blocked.
-- A deterministic stale-idle connection test disproved the proposed missing
-  `GetBody` explanation. JSON already reaches `http.NewRequest` as a concrete
-  `*bytes.Reader`; strict writes deliberately clear replay capability only
-  after construction and instead force a fresh connection. Re-enabling replay
-  would weaken the non-idempotent mutation safety contract, so no such change
-  was made.
-- `httptrace` places the GitHub EOF after `WroteRequest` and before any first
-  response byte; TCP and TLS both completed. The same binary successfully
-  dispatched one normal reverse write to a loopback fixture, while a self-signed
-  local TLS fixture was correctly refused rather than weakening certificate
-  verification. PM and curl inherit no configured HTTP proxy, but the machine
-  does have one connected VPN service. No network change was made; the live
-  GitHub write gate remains blocked.
-- The credential path is not the explanation: a fresh credential constructed
-  from the same `gh auth token` source passed `pm credentials test` against the
-  private repository, resolved the GitHub bundle's bearer branch (not App or
-  public auth), survived an internal hash-and-length-only vault comparison
-  without newline/surrounding whitespace, and the authenticated repository
-  permission response reported `admin`, `push`, and `pull` as true. The prior
-  disposable vault was intentionally removed, so this is a reconstruction of
-  the same construction path rather than an assertion about inaccessible
-  historical ciphertext.
-- Strict transport was the live failure surface, not writes: its exact former
-  configuration returned EOF for a GET with no body and both non-mutating
-  GitHub POSTs, while ordinary transport returned HTTP 200. `httptrace` then
-  showed the former HTTP/1-only transport still advertised and negotiated
-  `h2` via ALPN, reproducing locally as HTTP/1.1 bytes written onto an HTTP/2
-  connection. The fix removes only that forced-protocol setting, allowing the
-  cloned transport to negotiate and speak HTTP/2 consistently. The local ALPN
-  regressions and existing no-replay/fresh-connection tests pass; all six live
-  ordinary/strict matrix cells now return HTTP 200. `DisableKeepAlives`,
-  request `Close`, cleared replay material, zero requester retries, and
-  redirect refusal remain intact.
-- `docs/connectors/**` regeneration carries unrelated pre-existing drift
-  (field types). Verifiable by running `pm docs generate` on a clean tree, which
-  changes 1028 files with no code changes at all.
-- `internal/cli` needs ~660s and exceeds `go test`'s 600s default on this
-  machine. Pre-existing, not caused by this change.
+- The original 30-record loss was **shared**, not GitHub-only: real fixture
+  command runs across GitHub, Gong, and Notion established that every direct
+  read used the shared one-page executor. Direct reads now return the declared
+  page and explicit context (`records`, `size`, `has_more`, next address, and
+  `complete`), so a caller can distinguish a complete small result from a
+  bounded page with more records.
+- The strict mutation transport had a separate ALPN defect: it forced HTTP/1
+  while its TLS configuration advertised `h2`. Removing only the forced
+  protocol restored honest negotiation; fresh connections, closed requests,
+  no request replay, zero requester retries, and redirect refusal stay intact.
+- Captain-authorized GitHub validation is now green. Through PM reverse ETL in
+  the dedicated private repository, issue creation, issue comment, creation of
+  the disposable deletion target, and deletion all completed; each requested
+  state transition was independently checked with read-only `gh-axi`. A PM
+  GitHub ETL run then read five issue rows, including the created issue.
+- The parameter contract is proved on actual returned fixture rows, not exit
+  status: invalid enums and missing required path parameters make zero
+  requests; `since` and `--per-page 37` reach the wire; raw opaque cursor flags
+  are absent from **all implemented direct reads** (including legacy Gong); and
+  100 + 20 returned rows expose incomplete then complete page context and total
+  120.
+- GitHub local clone is a deliberate unsupported-local boundary, not a hidden
+  shell escape hatch: `repo clone` blocks before dispatch with
+  `intent=local_workflow`, `availability=unsupported_local`. Supporting it
+  would require a separately designed, validated local-git/filesystem
+  operation; no implementation was added here.
+- Content-path audit: PM `repo read-file` returned HTTP 200 metadata and
+  intentionally redacted file bytes/URL; PM release-asset list and individual
+  asset metadata calls returned HTTP 200. The declared release-to-disk command
+  is also intentionally unsupported-local. The declared tarball and zipball
+  binary commands currently fail live because GitHub redirects to
+  `codeload.github.com`, which is not allowlisted by the binary downloader.
+  That is a separate, unmodified gap recorded for captain decision; no archive
+  file was written.
+- PR #3902's current body predates this validation and still says the branch is
+  paused, GitHub-only, and unverified. It must be updated during delivery to
+  state the shared 13-connector/362-command scope, the explicit page-context
+  user behavior, the completed PM live-write validation, and the binary-path
+  gap. It was inspected read-only only: changing a PR outside the dedicated
+  private test repository is not authorized by the captain's live-test boundary.

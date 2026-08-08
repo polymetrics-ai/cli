@@ -648,12 +648,6 @@
           "type": "string",
           "summary": "The time until which to retrieve log records, in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC); if not specified, the lo",
           "maps_to": "query.toDateTime"
-        },
-        {
-          "name": "cursor",
-          "type": "string",
-          "summary": "When paging is needed, provide the value supplied by the previous API call to bring the following page of records.",
-          "maps_to": "query.cursor"
         }
       ],
       "api_surface": [
@@ -1605,12 +1599,6 @@
           "maps_to": "body.filter.workspaceId"
         },
         {
-          "name": "cursor",
-          "type": "string",
-          "summary": "Pagination cursor returned by Gong.",
-          "maps_to": "body.cursor"
-        },
-        {
           "name": "context",
           "type": "enum",
           "summary": "Context expansion level.",
@@ -1797,12 +1785,6 @@
           "type": "boolean",
           "summary": "Include Gong avatar users.",
           "maps_to": "body.filter.includeAvatars"
-        },
-        {
-          "name": "cursor",
-          "type": "string",
-          "summary": "Pagination cursor returned by Gong.",
-          "maps_to": "body.cursor"
         }
       ],
       "examples": [
@@ -1913,12 +1895,6 @@
           "type": "string",
           "summary": "Optional ISO-8601 creation upper bound.",
           "maps_to": "body.filter.createdToDateTime"
-        },
-        {
-          "name": "cursor",
-          "type": "string",
-          "summary": "Pagination cursor returned by Gong.",
-          "maps_to": "body.cursor"
         }
       ],
       "examples": [
@@ -1989,12 +1965,6 @@
           "summary": "Scorecard ID; repeat or comma-separate.",
           "maps_to": "body.filter.scorecardIds",
           "required": true
-        },
-        {
-          "name": "cursor",
-          "type": "string",
-          "summary": "Pagination cursor returned by Gong.",
-          "maps_to": "body.cursor"
         }
       ],
       "examples": [
@@ -2049,12 +2019,6 @@
           "type": "string",
           "summary": "Optional ISO-8601 creation upper bound.",
           "maps_to": "body.filter.createdToDateTime"
-        },
-        {
-          "name": "cursor",
-          "type": "string",
-          "summary": "Pagination cursor returned by Gong.",
-          "maps_to": "body.cursor"
         }
       ],
       "examples": [
@@ -2109,12 +2073,6 @@
           "type": "string",
           "summary": "Optional ISO-8601 creation upper bound.",
           "maps_to": "body.filter.createdToDateTime"
-        },
-        {
-          "name": "cursor",
-          "type": "string",
-          "summary": "Pagination cursor returned by Gong.",
-          "maps_to": "body.cursor"
         }
       ],
       "examples": [
@@ -2169,12 +2127,6 @@
           "type": "string",
           "summary": "Optional ISO-8601 creation upper bound.",
           "maps_to": "body.filter.createdToDateTime"
-        },
-        {
-          "name": "cursor",
-          "type": "string",
-          "summary": "Pagination cursor returned by Gong.",
-          "maps_to": "body.cursor"
         },
         {
           "name": "aggregation-period",
@@ -2322,12 +2274,6 @@
           "type": "string",
           "summary": "Gong workspace ID.",
           "maps_to": "body.filter.workspaceId"
-        },
-        {
-          "name": "cursor",
-          "type": "string",
-          "summary": "Pagination cursor returned by Gong.",
-          "maps_to": "body.cursor"
         }
       ],
       "examples": [

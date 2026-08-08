@@ -4695,14 +4695,6 @@
               "allow_empty": false
             },
             {
-              "name": "next-token",
-              "type": "string",
-              "summary": "Pagination token from a prior response.",
-              "values": [],
-              "maps_to": "body.next_token",
-              "allow_empty": false
-            },
-            {
               "name": "max-results",
               "type": "integer",
               "summary": "Maximum queue URLs to return (bounded by SQS).",
@@ -4777,14 +4769,6 @@
           "source_cli_path": "",
           "source_url": "",
           "flags": [
-            {
-              "name": "next-token",
-              "type": "string",
-              "summary": "Pagination token from a prior response.",
-              "values": [],
-              "maps_to": "body.next_token",
-              "allow_empty": false
-            },
             {
               "name": "max-results",
               "type": "integer",
@@ -78836,13 +78820,6 @@
               "maps_to": "query.toDateTime"
             },
             {
-              "name": "cursor",
-              "type": "string",
-              "summary": "When paging is needed, provide the value supplied by the previous API call to bring the following page of records.",
-              "values": [],
-              "maps_to": "query.cursor"
-            },
-            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -80105,13 +80082,6 @@
               "maps_to": "body.filter.workspaceId"
             },
             {
-              "name": "cursor",
-              "type": "string",
-              "summary": "Pagination cursor returned by Gong.",
-              "values": [],
-              "maps_to": "body.cursor"
-            },
-            {
               "name": "context",
               "type": "enum",
               "summary": "Context expansion level.",
@@ -80346,13 +80316,6 @@
               "maps_to": "body.filter.includeAvatars"
             },
             {
-              "name": "cursor",
-              "type": "string",
-              "summary": "Pagination cursor returned by Gong.",
-              "values": [],
-              "maps_to": "body.cursor"
-            },
-            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -80497,13 +80460,6 @@
               "maps_to": "body.filter.createdToDateTime"
             },
             {
-              "name": "cursor",
-              "type": "string",
-              "summary": "Pagination cursor returned by Gong.",
-              "values": [],
-              "maps_to": "body.cursor"
-            },
-            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -80592,13 +80548,6 @@
               "required": true
             },
             {
-              "name": "cursor",
-              "type": "string",
-              "summary": "Pagination cursor returned by Gong.",
-              "values": [],
-              "maps_to": "body.cursor"
-            },
-            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -80668,13 +80617,6 @@
               "summary": "Optional ISO-8601 creation upper bound.",
               "values": [],
               "maps_to": "body.filter.createdToDateTime"
-            },
-            {
-              "name": "cursor",
-              "type": "string",
-              "summary": "Pagination cursor returned by Gong.",
-              "values": [],
-              "maps_to": "body.cursor"
             },
             {
               "name": "page",
@@ -80748,13 +80690,6 @@
               "maps_to": "body.filter.createdToDateTime"
             },
             {
-              "name": "cursor",
-              "type": "string",
-              "summary": "Pagination cursor returned by Gong.",
-              "values": [],
-              "maps_to": "body.cursor"
-            },
-            {
               "name": "page",
               "type": "integer",
               "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
@@ -80824,13 +80759,6 @@
               "summary": "Optional ISO-8601 creation upper bound.",
               "values": [],
               "maps_to": "body.filter.createdToDateTime"
-            },
-            {
-              "name": "cursor",
-              "type": "string",
-              "summary": "Pagination cursor returned by Gong.",
-              "values": [],
-              "maps_to": "body.cursor"
             },
             {
               "name": "aggregation-period",
@@ -81034,13 +80962,6 @@
               "summary": "Gong workspace ID.",
               "values": [],
               "maps_to": "body.filter.workspaceId"
-            },
-            {
-              "name": "cursor",
-              "type": "string",
-              "summary": "Pagination cursor returned by Gong.",
-              "values": [],
-              "maps_to": "body.cursor"
             },
             {
               "name": "page",
@@ -81774,13 +81695,6 @@
               "summary": "Google Ads request field pageSize.",
               "values": [],
               "maps_to": "body.pageSize"
-            },
-            {
-              "name": "page-token",
-              "type": "string",
-              "summary": "Google Ads request field pageToken.",
-              "values": [],
-              "maps_to": "body.pageToken"
             },
             {
               "name": "page",
@@ -229939,13 +229853,6 @@
               "required": true
             },
             {
-              "name": "start-cursor",
-              "type": "string",
-              "summary": "Query parameter `start_cursor`.",
-              "values": [],
-              "maps_to": "query.start_cursor"
-            },
-            {
               "name": "page-size",
               "type": "number",
               "summary": "Query parameter `page_size`.",
@@ -229993,13 +229900,6 @@
               "values": [],
               "maps_to": "query.block_id",
               "required": true
-            },
-            {
-              "name": "start-cursor",
-              "type": "string",
-              "summary": "If supplied, this endpoint will return a page of results starting after the cursor provided. If not supplied, this endpoint will return the first page of results.",
-              "values": [],
-              "maps_to": "query.start_cursor"
             },
             {
               "name": "page-size",
@@ -230140,13 +230040,6 @@
               "summary": "Filter templates by name (case-insensitive substring match).",
               "values": [],
               "maps_to": "query.name"
-            },
-            {
-              "name": "start-cursor",
-              "type": "string",
-              "summary": "If supplied, this endpoint will return a page of results starting after the cursor provided. If not supplied, this endpoint will return the first page of results.",
-              "values": [],
-              "maps_to": "query.start_cursor"
             },
             {
               "name": "page-size",
@@ -230388,13 +230281,6 @@
               "required": true
             },
             {
-              "name": "start-cursor",
-              "type": "string",
-              "summary": "Query parameter `start_cursor`.",
-              "values": [],
-              "maps_to": "query.start_cursor"
-            },
-            {
               "name": "page-size",
               "type": "integer",
               "summary": "Query parameter `page_size`.",
@@ -230570,13 +230456,6 @@
               "required": true
             },
             {
-              "name": "start-cursor",
-              "type": "string",
-              "summary": "If supplied, this endpoint will return a page of results starting after the cursor provided.",
-              "values": [],
-              "maps_to": "query.start_cursor"
-            },
-            {
               "name": "page-size",
               "type": "integer",
               "summary": "The number of results to return per page. Maximum: 100",
@@ -230631,13 +230510,6 @@
               "summary": "Query parameter `filter_properties`.",
               "values": [],
               "maps_to": "query.filter_properties"
-            },
-            {
-              "name": "start-cursor",
-              "type": "string",
-              "summary": "Body field `start_cursor`.",
-              "values": [],
-              "maps_to": "body.start_cursor"
             },
             {
               "name": "page-size",

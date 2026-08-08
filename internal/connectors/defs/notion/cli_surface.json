@@ -322,12 +322,6 @@
           "required": true
         },
         {
-          "name": "start-cursor",
-          "type": "string",
-          "summary": "Query parameter `start_cursor`.",
-          "maps_to": "query.start_cursor"
-        },
-        {
           "name": "page-size",
           "type": "number",
           "summary": "Query parameter `page_size`.",
@@ -360,12 +354,6 @@
           "summary": "Identifier for a Notion block or page.",
           "maps_to": "query.block_id",
           "required": true
-        },
-        {
-          "name": "start-cursor",
-          "type": "string",
-          "summary": "If supplied, this endpoint will return a page of results starting after the cursor provided. If not supplied, this endpoint will return the first page of results.",
-          "maps_to": "query.start_cursor"
         },
         {
           "name": "page-size",
@@ -462,12 +450,6 @@
           "type": "string",
           "summary": "Filter templates by name (case-insensitive substring match).",
           "maps_to": "query.name"
-        },
-        {
-          "name": "start-cursor",
-          "type": "string",
-          "summary": "If supplied, this endpoint will return a page of results starting after the cursor provided. If not supplied, this endpoint will return the first page of results.",
-          "maps_to": "query.start_cursor"
         },
         {
           "name": "page-size",
@@ -635,12 +617,6 @@
           "required": true
         },
         {
-          "name": "start-cursor",
-          "type": "string",
-          "summary": "Query parameter `start_cursor`.",
-          "maps_to": "query.start_cursor"
-        },
-        {
           "name": "page-size",
           "type": "integer",
           "summary": "Query parameter `page_size`.",
@@ -758,12 +734,6 @@
           "required": true
         },
         {
-          "name": "start-cursor",
-          "type": "string",
-          "summary": "If supplied, this endpoint will return a page of results starting after the cursor provided.",
-          "maps_to": "query.start_cursor"
-        },
-        {
           "name": "page-size",
           "type": "integer",
           "summary": "The number of results to return per page. Maximum: 100",
@@ -802,12 +772,6 @@
           "type": "string",
           "summary": "Query parameter `filter_properties`.",
           "maps_to": "query.filter_properties"
-        },
-        {
-          "name": "start-cursor",
-          "type": "string",
-          "summary": "Body field `start_cursor`.",
-          "maps_to": "body.start_cursor"
         },
         {
           "name": "page-size",

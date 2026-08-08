@@ -83,14 +83,19 @@ error: direct read pagination strategy "cursor" has no addressable page number;
 accept them. `--page 0` names no page and is refused rather than treated as
 unset.
 
-### When a command has its own paging flag
+### When a command has its own window flag
 
-A few connectors declared a paging flag by hand before the derivation existed —
-notion's `--page-size` and `--start-cursor`, bahmni's `--start-index`, gong's
-`--cursor`. Where one exists, **your value wins**: it is sent as written and the
-declared default never overwrites it. A size flag also becomes the page size the
-completeness check compares against, so a smaller page is not mistaken for the
-end of the collection.
+A few connectors declare a window-size or addressable-position flag — for
+example, Notion's `--page-size` and Bahmni's `--start-index`. Where one exists,
+**your value wins**: it is sent as written and the declared default never
+overwrites it. A size flag also becomes the page size the completeness check
+compares against, so a smaller page is not mistaken for the end of the
+collection.
+
+Opaque provider cursors are never command flags on an implemented direct read.
+Follow the returned `next_cursor` through `--page-cursor`; that keeps the
+cursor and its page context together instead of creating a second, unchecked
+navigation channel.
 
 Where the flag selects *which* page rather than how big it is, you own the
 position: the result reports no `number`/`next_number`, because the engine has
@@ -133,14 +138,15 @@ $ pm github code-scanning analyses view --direction sideways
 error: invalid --direction "sideways", want one of asc|desc
 ```
 
-Paging parameters are deliberately **not** derived. They are answered by
-`--page` / `--page-cursor` from the connector's declared pagination spec. The
-exclusion is by meaning rather than by name: a parameter whose own specification
-calls it a cursor is dropped even when the connector's pagination spec never
-mentions it, so a derived flag can never become a second way to page. A
-parameter that merely shares a name with a paging one is kept — github's
-`before` on `/repos/{owner}/{repo}/notifications` is an ISO 8601 timestamp
-filter, and it survives.
+Opaque paging parameters are deliberately **not** derived. They are answered
+by `--page` / `--page-cursor` from the connector's declared pagination spec.
+The exclusion is by meaning rather than by name: a parameter whose own
+specification calls it a cursor is dropped even when the connector's pagination
+spec never mentions it, so a derived flag can never become a second way to
+page. A parameter that merely shares a name with a paging one is kept —
+GitHub's `before` on `/repos/{owner}/{repo}/notifications` is an ISO 8601
+timestamp filter, and it survives. A declared size/window control remains when
+the runtime can honor it and reports the exact size that reached the wire.
 
 A path variable the connection already supplies — github's `owner`/`repo`,
 interpolated into the endpoint's own path template — is not derived either.

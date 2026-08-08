@@ -308,6 +308,18 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 		if stringField(cmd, "availability") != "implemented" {
 			continue
 		}
+		if intent == "direct_read" {
+			// Legacy surfaces can predate parameter import and still expose a
+			// provider cursor directly. A direct read has one opaque cursor
+			// channel: --page-cursor. Retaining a raw cursor lets callers bypass
+			// the page-context contract, so it is derived drift rather than an
+			// author choice. This applies even to legacy direct reads without an
+			// operation-backed REST declaration. A size override is deliberately
+			// not removed: it changes the page window rather than naming the next
+			// page, and the engine measures completeness against the size actually
+			// sent.
+			stats.Corrected.FlagDerived += removeLegacyDirectReadCursorFlags(cmd)
+		}
 		operation := stringField(cmd, "operation")
 		if operation == "" {
 			continue
@@ -450,6 +462,65 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 		}
 	}
 	return stats, nil
+}
+
+// removeLegacyDirectReadCursorFlags removes old raw provider-cursor flags from
+// one direct-read command. The parameter importer already omits these for
+// newly imported operations; this keeps hand-authored pre-import surfaces
+// honest as well.
+//
+// Only opaque cursor selectors are removed. Parameters such as page_size,
+// limit, and offset remain because a caller may legitimately select a window
+// size or explicit offset, and direct-read pagination reports that caller-owned
+// position without inventing a --page number for it.
+func removeLegacyDirectReadCursorFlags(cmd *orderedObject) int {
+	flags := arrayField(cmd, "flags")
+	if len(flags) == 0 {
+		return 0
+	}
+	kept := make([]any, 0, len(flags))
+	removed := 0
+	for _, raw := range flags {
+		flag, ok := raw.(*orderedObject)
+		if ok && isLegacyDirectReadCursorFlag(flag) {
+			removed++
+			continue
+		}
+		kept = append(kept, raw)
+	}
+	if removed > 0 {
+		cmd.set("flags", kept)
+	}
+	return removed
+}
+
+// isLegacyDirectReadCursorFlag identifies an opaque provider cursor by the
+// mapped request field, with summary wording for ambiguous `after`/`before`
+// names. The latter is intentionally semantic: GitHub notifications' `before`
+// is a timestamp filter and must remain available, whereas an `after`
+// described as a cursor must not become a second paging API.
+func isLegacyDirectReadCursorFlag(flag *orderedObject) bool {
+	target := strings.TrimSpace(stringField(flag, "maps_to"))
+	var parameter string
+	switch {
+	case strings.HasPrefix(target, "query."):
+		parameter = strings.TrimPrefix(target, "query.")
+	case strings.HasPrefix(target, "body."):
+		parameter = strings.TrimPrefix(target, "body.")
+	default:
+		return false
+	}
+	normalized := strings.NewReplacer("_", "", "-", "", ".", "").Replace(strings.ToLower(strings.TrimSpace(parameter)))
+	switch normalized {
+	case "cursor", "startcursor", "endcursor", "pagecursor", "nextcursor", "nextpagecursor",
+		"pagetoken", "nextpagetoken", "continuationtoken", "nexttoken", "scrollid":
+		return true
+	case "after", "before":
+		summary := strings.ToLower(stringField(flag, "summary"))
+		return strings.Contains(summary, "cursor") || strings.Contains(summary, "page token") || strings.Contains(summary, "pagination token")
+	default:
+		return false
+	}
 }
 
 // derivedAPISurface builds the single-endpoint api_surface an operation-backed

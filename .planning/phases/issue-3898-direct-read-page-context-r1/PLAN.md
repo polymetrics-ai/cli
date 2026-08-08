@@ -73,9 +73,11 @@ result carries the context needed to reach the next one.
 - Paging derives from each connector's already-declared pagination spec through
   the existing `engine/paginate.go` strategies. No second pagination
   implementation.
-- **Zero files under `internal/connectors/defs/` change.**
-  `connectorgen surface-sync --check` reports 0 fields changed across 551
-  connectors, so the in-flight authoring sweep is not invalidated.
+- Cursor-surface regeneration changes only four derived `cli_surface.json`
+  files: Amazon SQS (2 opaque tokens), Gong (8 cursors), Google Ads (1 page
+  token), and Notion (6 start cursors). `connectorgen surface-sync --check`
+  is green across all 551 connectors after regeneration; this intentional
+  derived correction supersedes the earlier no-`defs/`-changes expectation.
 - No test was weakened, skipped or deleted.
 
 ## Tasks
@@ -152,3 +154,22 @@ result carries the context needed to reach the next one.
     the cloned transport and TLS ALPN negotiation agree. Green the existing
     no-replay tests, the new ALPN test, and the live non-mutating matrix before
     any future captain-authorized mutation retest.
+17. Captain completion validation found legacy direct-read cursor flags still
+    present in generated command surfaces (for example Notion's
+    `--start-cursor`), despite the documented single-navigation contract.
+    Add a red `surface-sync` regression that preserves a page-size override
+    but removes an opaque cursor override, then make the generator enforce
+    that contract for both operation-backed and legacy direct-read commands
+    and regenerate only the affected derived surfaces. Record the resulting
+    live/help evidence before declaring the parameter proof complete.
+18. Re-run the captain-authorized GitHub acceptance path through `pm` only:
+    create an issue through reverse ETL, comment on it, and delete a file
+    (creating the disposable deletion target through the same approved PM
+    path when the private repository is empty). Independently verify each
+    state transition with read-only `gh-axi`; then prove the ETL read-back and
+    parameter/page contract against real returned records and local
+    server-observed fixtures.
+19. Audit the GitHub connector's declared local/binary surface without adding
+    a generic shell or raw-HTTP escape hatch. Report clone support honestly and
+    exercise each existing read-only file, release-asset, and archive path;
+    do not extend the product surface without a captain decision.
