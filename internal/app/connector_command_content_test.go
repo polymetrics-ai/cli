@@ -50,6 +50,9 @@ func TestPlanConnectorCommandPersistsCompleteDeclaredContent(t *testing.T) {
 	if preview == nil || preview.Digest == "" {
 		t.Fatalf("preview = %#v, want no-network preview with digest", preview)
 	}
+	if len(plan.ConnectorCommandBody) != 0 {
+		t.Fatalf("legacy reverse-ETL plan body = %s, want legacy record-only storage", plan.ConnectorCommandBody)
+	}
 	if connector.dryRuns != 1 || connector.writes != 0 {
 		t.Fatalf("connector calls dry-runs/writes = %d/%d, want preview only", connector.dryRuns, connector.writes)
 	}

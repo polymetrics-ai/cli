@@ -381,6 +381,24 @@ FAIL
 
 This is a test-only checkpoint; the artifact and fixture use no credential or token-derived value.
 
+### Legacy reverse-ETL record compatibility — RED 2026-08-09
+
+The root-array foundation widened the operation-body helper, but initially treated a legacy
+`connectors.Record` dynamic value as if it were not an object. The existing record-only
+connector-plan regression was strengthened to assert that legacy reverse-ETL plans still leave
+the new operation-body field empty, then failed before the compatibility repair:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/app -run '^TestPlanConnectorCommandPersistsCompleteDeclaredContent$'
+--- FAIL: TestPlanConnectorCommandPersistsCompleteDeclaredContent (1.36s)
+    connector_command_content_test.go:48: PlanConnectorCommand: connector command record must be a JSON object
+FAIL
+FAIL	polymetrics.ai/internal/app	2.154s
+FAIL
+```
+
+The regression fixture contains synthetic content only and no credential or token-derived value.
+
 ## Verification/review — pending
 
 Record scoped verification and inline manual review findings here after green.
