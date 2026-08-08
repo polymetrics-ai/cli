@@ -101,11 +101,24 @@ func commandsContain(commands [][]string, prefix ...string) bool {
 	return false
 }
 
-type scriptedMachineRunner struct{ commands [][]string }
+// scriptedMachineRunner answers "machine inspect" with the local machine it
+// was told exists, so a test can choose whether this run owns the machine
+// without a VM. The zero value owns nothing.
+type scriptedMachineRunner struct {
+	localMachine string
+	inspectErr   error
+	commands     [][]string
+}
 
-func (r *scriptedMachineRunner) Run(_ context.Context, args ...string) error {
+func (r *scriptedMachineRunner) Run(_ context.Context, args ...string) (string, error) {
 	r.commands = append(r.commands, append([]string(nil), args...))
-	return nil
+	if commandHasPrefix(args, "machine", "inspect") {
+		if r.inspectErr != nil {
+			return "", r.inspectErr
+		}
+		return r.localMachine + "\n", nil
+	}
+	return "", nil
 }
 
 func testConfig(runner CommandRunner) Config {
@@ -116,6 +129,7 @@ func testConfig(runner CommandRunner) Config {
 		DataVolumePath: "/var/lib/mysql",
 		Connection:     "lane-machine",
 		Run:            runner,
+		RunMachine:     &scriptedMachineRunner{},
 		DiskFree: func() (uint64, error) {
 			return 123, nil
 		},
@@ -204,6 +218,9 @@ func TestCleanupRemovesOnlyRunOwnedResources(t *testing.T) {
 	report := h.Report()
 	if report.DiskFreeBefore != 123 || report.DiskFreeAfter != 123 || report.HostDiskReclaimed {
 		t.Fatalf("disk report = %+v, want before/after values without reclaim", report)
+	}
+	if report.HostDiskReclaimSkipped == "" {
+		t.Fatalf("disk report = %+v, want a named reason for the skipped reclaim", report)
 	}
 }
 
@@ -440,9 +457,8 @@ func TestStartPreservesPreexistingGeneratedVolume(t *testing.T) {
 
 func TestCleanupReclaimsHostDiskOnlyAfterContainerCleanup(t *testing.T) {
 	runner := &scriptedRunner{}
-	machine := &scriptedMachineRunner{}
+	machine := &scriptedMachineRunner{localMachine: "lane-machine"}
 	config := testConfig(runner)
-	config.ReclaimHostDisk = true
 	config.Machine = "lane-machine"
 	config.RunMachine = machine
 	h, err := New(config)
@@ -457,12 +473,14 @@ func TestCleanupReclaimsHostDiskOnlyAfterContainerCleanup(t *testing.T) {
 	}
 	// Two passes are required: one discard immediately after an image removal
 	// returns only part of the space on Podman 5.3 with applehv.
+	inspect := []string{"machine", "inspect", "--format", "{{.Name}}", "lane-machine"}
 	trim := []string{"machine", "ssh", "lane-machine", "sudo fstrim -av"}
-	if want := [][]string{trim, trim}; !reflect.DeepEqual(machine.commands, want) {
+	if want := [][]string{inspect, trim, trim}; !reflect.DeepEqual(machine.commands, want) {
 		t.Fatalf("machine lifecycle commands = %v, want %v", machine.commands, want)
 	}
-	if !h.Report().HostDiskReclaimed {
-		t.Fatal("report did not record the completed host-disk reclaim")
+	report := h.Report()
+	if !report.HostDiskReclaimed || report.HostDiskReclaimSkipped != "" {
+		t.Fatalf("report = %+v, want a completed host-disk reclaim", report)
 	}
 	lastContainerCleanup := -1
 	for index, command := range runner.commands {
@@ -473,6 +491,119 @@ func TestCleanupReclaimsHostDiskOnlyAfterContainerCleanup(t *testing.T) {
 	if lastContainerCleanup < 0 {
 		t.Fatal("container cleanup was not attempted before the host-disk reclaim")
 	}
+}
+
+func TestCleanupNeverTrimsAMachineThisRunCannotProveItOwns(t *testing.T) {
+	for _, tc := range []struct {
+		name    string
+		machine *scriptedMachineRunner
+		mutate  func(*Config)
+	}{
+		{
+			name:    "connection addresses another machine",
+			machine: &scriptedMachineRunner{localMachine: "other-machine"},
+			mutate:  func(c *Config) { c.Machine = "other-machine" },
+		},
+		{
+			name:    "machine is not defined on this host",
+			machine: &scriptedMachineRunner{inspectErr: errors.New("machine inspect failed")},
+			mutate:  func(c *Config) { c.Machine = "lane-machine" },
+		},
+		{
+			name:    "machine inspect names a different machine",
+			machine: &scriptedMachineRunner{localMachine: "someone-elses-machine"},
+			mutate:  func(c *Config) { c.Machine = "lane-machine" },
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			runner := &scriptedRunner{}
+			config := testConfig(runner)
+			config.RunMachine = tc.machine
+			tc.mutate(&config)
+			free := []uint64{4096, 1024}
+			config.DiskFree = func() (uint64, error) {
+				value := free[0]
+				if len(free) > 1 {
+					free = free[1:]
+				}
+				return value, nil
+			}
+			h, err := New(config)
+			if err != nil {
+				t.Fatalf("New(): %v", err)
+			}
+			if _, err := h.Start(context.Background()); err != nil {
+				t.Fatalf("Start(): %v", err)
+			}
+			if err := h.Close(context.Background()); err != nil {
+				t.Fatalf("Close(): %v", err)
+			}
+			if commandsContain(tc.machine.commands, "machine", "ssh") {
+				t.Fatalf("machine commands = %v, want no trim of an unowned machine", tc.machine.commands)
+			}
+			report := h.Report()
+			if report.HostDiskReclaimed || report.HostDiskReclaimSkipped == "" {
+				t.Fatalf("report = %+v, want a skipped reclaim with a named reason", report)
+			}
+			if report.HostDiskReclaimableBytes != 3072 {
+				t.Fatalf("report = %+v, want the still-held host bytes reported", report)
+			}
+		})
+	}
+}
+
+func TestInterruptCleanupClosesEveryLiveHarnessBeforeExiting(t *testing.T) {
+	SetMaxConcurrentEngines(2)
+	defer SetMaxConcurrentEngines(1)
+
+	runners := []*scriptedRunner{{}, {}}
+	harnesses := make([]*Harness, 0, len(runners))
+	for _, runner := range runners {
+		h, err := New(testConfig(runner))
+		if err != nil {
+			t.Fatalf("New(): %v", err)
+		}
+		if _, err := h.Start(context.Background()); err != nil {
+			t.Fatalf("Start(): %v", err)
+		}
+		harnesses = append(harnesses, h)
+	}
+
+	// A per-harness signal handler let the first finished cleanup exit the
+	// process while its siblings were still removing containers.
+	closeLiveHarnesses(context.Background())
+	for index, runner := range runners {
+		if runner.containerLive || runner.volumePresent {
+			t.Fatalf("harness %d kept container or volume through the interrupt", index)
+		}
+		if runner.imagePresent(harnesses[index].runImage) {
+			t.Fatalf("harness %d kept its generated image through the interrupt", index)
+		}
+	}
+	for _, h := range harnesses {
+		if err := h.Close(context.Background()); err != nil {
+			t.Fatalf("Close(): %v", err)
+		}
+	}
+}
+
+func TestSetMaxConcurrentEnginesRefusesAChangeWhileASlotIsHeld(t *testing.T) {
+	h, err := New(testConfig(&scriptedRunner{}))
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err != nil {
+		t.Fatalf("Start(): %v", err)
+	}
+	defer func() {
+		if recovered := recover(); recovered == nil {
+			t.Error("SetMaxConcurrentEngines() replaced the slot channel while a harness held a token")
+		}
+		if err := h.Close(context.Background()); err != nil {
+			t.Errorf("Close(): %v", err)
+		}
+	}()
+	SetMaxConcurrentEngines(2)
 }
 
 func TestParseMappedPortRefusesTheEngineDefaultPort(t *testing.T) {
@@ -575,5 +706,14 @@ func TestStartRefusesToCreateAfterClose(t *testing.T) {
 	}
 	if commandsContain(runner.commands, "run") || commandsContain(runner.commands, "volume", "create") {
 		t.Fatalf("commands = %v, want no creates after Close", runner.commands)
+	}
+	// Close returns the slot only once, so this refused Start has to return its
+	// own token. A leak here would not fail the next engine, it would block it
+	// until its context expired.
+	select {
+	case engineSlots <- struct{}{}:
+		<-engineSlots
+	default:
+		t.Fatal("a Start refused after Close leaked the engine slot")
 	}
 }

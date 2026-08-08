@@ -74,7 +74,7 @@ func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit fu
 	}
 	defer func() { _ = db.Close() }()
 
-	primaryKeys, err := discoverPrimaryKeys(ctx, db, database)
+	primaryKeys, err := discoverPrimaryKeys(ctx, db, database, table)
 	if err != nil {
 		return err
 	}

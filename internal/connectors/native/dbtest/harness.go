@@ -36,11 +36,15 @@ var engineSlots = make(chan struct{}, 1)
 
 // SetMaxConcurrentEngines bounds how many harnesses may hold a container at
 // once. It is the opt-in parallel mode; the default of one keeps engines
-// sequential. It must be called before any Start and panics on a
-// non-positive or unbounded value.
+// sequential. It panics on a non-positive or unbounded value, and on a change
+// made while a harness still holds a slot: that harness would return its token
+// to the replaced channel and block Close forever after cleanup had run.
 func SetMaxConcurrentEngines(n int) {
 	if n < 1 || n > 8 {
 		panic("dbtest: concurrent engine limit must be between 1 and 8")
+	}
+	if len(engineSlots) != 0 {
+		panic("dbtest: concurrent engine limit must be set before any harness starts")
 	}
 	engineSlots = make(chan struct{}, n)
 }
@@ -60,11 +64,11 @@ type CommandRunner interface {
 	Run(context.Context, string, ...string) (string, error)
 }
 
-// MachineRunner runs a Podman machine lifecycle command. It is separate from
-// the container runner so a unit test can prove the optional host-disk
-// reclaim happens after container cleanup without requiring a VM.
+// MachineRunner runs a Podman machine lifecycle command and returns its
+// standard output. It is separate from the container runner so a unit test can
+// prove machine ownership and the host-disk reclaim without requiring a VM.
 type MachineRunner interface {
-	Run(context.Context, ...string) error
+	Run(context.Context, ...string) (string, error)
 }
 
 // Config describes one supported database-engine container. It is internal
@@ -86,8 +90,9 @@ type Config struct {
 	// the default connection on a shared host belongs to another lane, so
 	// falling back to it is refused before any Podman call.
 	Connection string
-	// Machine names the Podman machine backing Connection. It is required
-	// only for ReclaimHostDisk and defaults to Connection.
+	// Machine names the Podman machine backing Connection and defaults to
+	// Connection. The host-disk reclaim runs only when this run can prove it
+	// owns that machine; see reclaimHostDisk.
 	Machine string
 	// ContainerArgs are passed to "podman run" before the image reference.
 	ContainerArgs []string
@@ -97,10 +102,6 @@ type Config struct {
 	// default removes it, because on a VM-backed host a retained image holds
 	// its bytes in the machine's disk file.
 	KeepImage bool
-	// ReclaimHostDisk trims the backing machine after cleanup so freed guest
-	// blocks are punched out of the host's sparse disk file. Without it,
-	// removing an image frees space inside the VM but not on the host.
-	ReclaimHostDisk bool
 
 	Run        CommandRunner
 	RunMachine MachineRunner
@@ -108,13 +109,20 @@ type Config struct {
 }
 
 // Report records disk free before startup and after all teardown work,
-// including an optional host-disk reclaim. A caller can print only these
-// aggregate byte values to make leaks visible without logging connection
-// information.
+// including the host-disk reclaim. A caller can print only these aggregate
+// byte values to make leaks visible without logging connection information.
 type Report struct {
 	DiskFreeBefore    uint64
 	DiskFreeAfter     uint64
 	HostDiskReclaimed bool
+	// HostDiskReclaimSkipped names why the backing machine was left untrimmed
+	// and is empty when the trim ran. A machine this run cannot prove it owns
+	// is reported, never trimmed.
+	HostDiskReclaimSkipped string
+	// HostDiskReclaimableBytes is how much host free space the run still holds
+	// when the trim was skipped, so an unreclaimed run reports its cost instead
+	// of reading as a clean one.
+	HostDiskReclaimableBytes uint64
 }
 
 // Harness owns exactly one generated container and one generated named
@@ -139,11 +147,10 @@ type Harness struct {
 	// opMu serialises the create sequence against cleanup so an interrupt
 	// can never remove a resource while the command that creates it is still
 	// in flight, which would leave the created resource behind.
-	opMu       sync.Mutex
-	runCancel  context.CancelFunc
-	closeOnce  sync.Once
-	closeErr   error
-	stopSignal chan struct{}
+	opMu      sync.Mutex
+	runCancel context.CancelFunc
+	closeOnce sync.Once
+	closeErr  error
 }
 
 // New validates the test-only engine configuration. An explicit Podman
@@ -192,7 +199,6 @@ func New(config Config) (*Harness, error) {
 		containerName: prefix,
 		volumeName:    prefix + "-data",
 		runImage:      "localhost/" + prefix + ":run",
-		stopSignal:    make(chan struct{}),
 	}, nil
 }
 
@@ -216,17 +222,12 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 	h.mu.Lock()
 	h.slotHeld = true
 	h.mu.Unlock()
-
-	before, err := h.config.DiskFree()
-	if err != nil {
-		return Endpoint{}, fmt.Errorf("measure disk free before %s test: %w", h.config.Engine, err)
-	}
-	h.mu.Lock()
-	h.report.DiskFreeBefore = before
-	h.mu.Unlock()
-	h.installInterruptCleanup()
 	// Registered before the opMu unlock below, so on return the unlock runs
-	// first and this cleanup never calls Close while still holding opMu.
+	// first and this cleanup never calls Close while still holding opMu. It is
+	// also registered before the first failure point, and releases the slot
+	// itself: Close returns the slot only on its first call, so a Start against
+	// an already-closed harness would otherwise hold the token forever and
+	// block every later engine on this process.
 	defer func() {
 		if startErr == nil {
 			return
@@ -236,7 +237,17 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 		if cleanupErr := h.Close(cleanupCtx); cleanupErr != nil {
 			startErr = errors.Join(startErr, cleanupErr)
 		}
+		h.releaseSlot()
 	}()
+
+	before, err := h.config.DiskFree()
+	if err != nil {
+		return Endpoint{}, fmt.Errorf("measure disk free before %s test: %w", h.config.Engine, err)
+	}
+	h.mu.Lock()
+	h.report.DiskFreeBefore = before
+	h.mu.Unlock()
+	h.installInterruptCleanup()
 
 	// Every create runs under a context Close can cancel, so an interrupt
 	// during a long pull aborts it instead of waiting for it.
@@ -341,7 +352,7 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 // a defer before assertions, so a failing assertion cannot leak an image.
 func (h *Harness) Close(ctx context.Context) error {
 	h.closeOnce.Do(func() {
-		close(h.stopSignal)
+		unregisterInterruptCleanup(h)
 		defer h.releaseSlot()
 		// Refuse further creates, abort any in flight, then wait for the
 		// create sequence to settle. Without this wait, cleanup could run
@@ -378,40 +389,70 @@ func (h *Harness) Close(ctx context.Context) error {
 				errs = append(errs, fmt.Errorf("remove %s test source image: %w", h.config.Engine, err))
 			}
 		}
-		if h.config.ReclaimHostDisk {
-			if err := h.reclaimHostDisk(ctx); err != nil {
-				errs = append(errs, err)
-			} else {
-				h.mu.Lock()
-				h.report.HostDiskReclaimed = true
-				h.mu.Unlock()
-			}
+		reclaimed, skipped, reclaimErr := h.reclaimHostDisk(ctx)
+		if reclaimErr != nil {
+			errs = append(errs, reclaimErr)
 		}
 		after, err := h.config.DiskFree()
 		if err != nil {
 			errs = append(errs, fmt.Errorf("measure disk free after %s test: %w", h.config.Engine, err))
-		} else {
-			h.mu.Lock()
-			h.report.DiskFreeAfter = after
-			h.mu.Unlock()
 		}
+		h.mu.Lock()
+		h.report.HostDiskReclaimed = reclaimed
+		h.report.HostDiskReclaimSkipped = skipped
+		if err == nil {
+			h.report.DiskFreeAfter = after
+			if !reclaimed && h.report.DiskFreeBefore > after {
+				h.report.HostDiskReclaimableBytes = h.report.DiskFreeBefore - after
+			}
+		}
+		h.mu.Unlock()
 		h.closeErr = errors.Join(errs...)
 	})
 	return h.closeErr
 }
 
 // reclaimHostDisk discards freed guest blocks so the machine's sparse disk
-// file shrinks on the host. Two passes are required: measured on Podman 5.3
-// with applehv, a single fstrim immediately after an image removal returns
-// only part of the space, because the guest has not finished committing the
-// deletion when the first discard is issued.
-func (h *Harness) reclaimHostDisk(ctx context.Context) error {
+// file shrinks on the host, because removing an image frees space inside the
+// VM but leaves the host file inflated. It runs on every cleanup rather than
+// on an opt-in, but only against a machine this run can prove it owns; an
+// unproven machine is reported through the Report instead, never trimmed,
+// because a shared or remote endpoint belongs to another lane.
+//
+// Two passes are required: measured on Podman 5.3 with applehv, a single
+// fstrim immediately after an image removal returns only part of the space,
+// because the guest has not finished committing the deletion when the first
+// discard is issued.
+func (h *Harness) reclaimHostDisk(ctx context.Context) (reclaimed bool, skipped string, err error) {
+	if owned, reason := h.machineOwnership(ctx); !owned {
+		return false, reason, nil
+	}
 	for range 2 {
-		if err := h.config.RunMachine.Run(ctx, "machine", "ssh", h.config.Machine, "sudo fstrim -av"); err != nil {
-			return fmt.Errorf("reclaim host disk after %s test: %w", h.config.Engine, err)
+		if _, err := h.config.RunMachine.Run(ctx, "machine", "ssh", h.config.Machine, "sudo fstrim -av"); err != nil {
+			return false, "", fmt.Errorf("reclaim host disk after %s test: %w", h.config.Engine, err)
 		}
 	}
-	return nil
+	return true, "", nil
+}
+
+// machineOwnership proves, or refuses to prove, that trimming the configured
+// machine can only affect this run's host. Two independent facts must hold:
+// the connection every container command was scoped to addresses that machine
+// by name, which is how Podman names a machine's own connections; and the
+// machine is one this host defines locally, which a remote endpoint is not.
+// The returned reason names the failed check without echoing configuration.
+func (h *Harness) machineOwnership(ctx context.Context) (bool, string) {
+	if h.config.Connection != h.config.Machine && h.config.Connection != h.config.Machine+"-root" {
+		return false, "podman connection does not address the configured machine"
+	}
+	name, err := h.config.RunMachine.Run(ctx, "machine", "inspect", "--format", "{{.Name}}", h.config.Machine)
+	if err != nil {
+		return false, "podman machine ownership could not be verified"
+	}
+	if strings.TrimSpace(name) != h.config.Machine {
+		return false, "podman machine is not a local machine this run owns"
+	}
+	return true, ""
 }
 
 // Report returns the aggregate disk measurement for this run.
@@ -458,21 +499,83 @@ func (h *Harness) resourceAbsent(ctx context.Context, args ...string) (bool, err
 	return false, err
 }
 
+// interruptCleanup is the single process-level signal handler. signal.Notify
+// delivers to every registered channel, so a handler per harness let the first
+// finished cleanup call os.Exit while a sibling's container, volume, or image
+// removal was still in flight, leaving those resources behind under the
+// bounded parallel mode. One registry closes every live harness before the
+// process exits.
+var interruptCleanup = struct {
+	mu      sync.Mutex
+	live    map[*Harness]struct{}
+	signals chan os.Signal
+	idle    chan struct{}
+}{live: make(map[*Harness]struct{})}
+
 func (h *Harness) installInterruptCleanup() {
+	interruptCleanup.mu.Lock()
+	defer interruptCleanup.mu.Unlock()
+	interruptCleanup.live[h] = struct{}{}
+	if interruptCleanup.signals != nil {
+		return
+	}
 	signals := make(chan os.Signal, 1)
+	idle := make(chan struct{})
 	signal.Notify(signals, os.Interrupt, syscall.SIGTERM)
-	go func() {
-		select {
-		case <-h.stopSignal:
-			signal.Stop(signals)
-		case <-signals:
-			signal.Stop(signals)
-			cleanupCtx, cancel := context.WithTimeout(context.Background(), 3*time.Minute)
-			_ = h.Close(cleanupCtx)
-			cancel()
-			os.Exit(130)
-		}
-	}()
+	interruptCleanup.signals = signals
+	interruptCleanup.idle = idle
+	go awaitInterrupt(signals, idle)
+}
+
+// unregisterInterruptCleanup drops a closed harness and stops watching once no
+// harness owns a resource, so the process keeps default signal handling after
+// the last engine has been torn down.
+func unregisterInterruptCleanup(h *Harness) {
+	interruptCleanup.mu.Lock()
+	defer interruptCleanup.mu.Unlock()
+	delete(interruptCleanup.live, h)
+	if len(interruptCleanup.live) != 0 || interruptCleanup.signals == nil {
+		return
+	}
+	signal.Stop(interruptCleanup.signals)
+	close(interruptCleanup.idle)
+	interruptCleanup.signals = nil
+	interruptCleanup.idle = nil
+}
+
+func awaitInterrupt(signals chan os.Signal, idle chan struct{}) {
+	select {
+	case <-idle:
+		return
+	case <-signals:
+	}
+	signal.Stop(signals)
+	cleanupCtx, cancel := context.WithTimeout(context.Background(), 3*time.Minute)
+	closeLiveHarnesses(cleanupCtx)
+	cancel()
+	os.Exit(130)
+}
+
+// closeLiveHarnesses tears every registered harness down concurrently and
+// returns only once the last one has finished, so nothing can exit while a
+// sibling's Podman removal is still running.
+func closeLiveHarnesses(ctx context.Context) {
+	interruptCleanup.mu.Lock()
+	live := make([]*Harness, 0, len(interruptCleanup.live))
+	for harness := range interruptCleanup.live {
+		live = append(live, harness)
+	}
+	interruptCleanup.mu.Unlock()
+
+	var wg sync.WaitGroup
+	for _, harness := range live {
+		wg.Add(1)
+		go func(harness *Harness) {
+			defer wg.Done()
+			_ = harness.Close(ctx)
+		}(harness)
+	}
+	wg.Wait()
 }
 
 type podmanRunner struct{}
@@ -519,13 +622,14 @@ func podmanResourceNotFound(err error) bool {
 
 type podmanMachineRunner struct{}
 
-func (podmanMachineRunner) Run(ctx context.Context, args ...string) error {
-	if err := exec.CommandContext(ctx, defaultPodmanBinary, args...).Run(); err != nil {
+func (podmanMachineRunner) Run(ctx context.Context, args ...string) (string, error) {
+	output, err := exec.CommandContext(ctx, defaultPodmanBinary, args...).Output()
+	if err != nil {
 		// As for the container runner, keep command output and configuration
 		// values out of a test error.
-		return errors.New("podman machine command failed")
+		return "", errors.New("podman machine command failed")
 	}
-	return nil
+	return string(output), nil
 }
 
 func parseMappedPort(raw string, defaultPort int) (int, error) {

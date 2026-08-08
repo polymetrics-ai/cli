@@ -48,7 +48,7 @@ ORDER BY c.table_name, c.ordinal_position`, conn.database)
 		return connectors.Catalog{}, err
 	}
 
-	pks, err := discoverPrimaryKeys(ctx, db, conn.database)
+	pks, err := discoverPrimaryKeys(ctx, db, conn.database, "")
 	if err != nil {
 		return connectors.Catalog{}, err
 	}
@@ -116,19 +116,30 @@ WHERE s.table_schema = ?
 	return tables, nil
 }
 
-func discoverPrimaryKeys(ctx context.Context, db mysqlExecutor, database string) (map[string][]string, error) {
+// discoverPrimaryKeys returns table -> ordered primary-key columns. An empty
+// table discovers the whole schema, which is what Catalog needs; a named table
+// bounds this information_schema join to the one stream a Read is about to
+// page, because that join is the expensive part of starting a read on a large
+// schema.
+func discoverPrimaryKeys(ctx context.Context, db mysqlExecutor, database, table string) (map[string][]string, error) {
 	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
-	result, err := db.Execute(`
+	query := `
 SELECT k.table_name AS table_name, k.column_name AS column_name
 FROM information_schema.table_constraints t
 JOIN information_schema.key_column_usage k
   ON t.constraint_name = k.constraint_name
  AND t.table_schema = k.table_schema
  AND t.table_name = k.table_name
-WHERE t.table_schema = ? AND t.constraint_type = 'PRIMARY KEY'
-ORDER BY k.table_name, k.ordinal_position`, database)
+WHERE t.table_schema = ? AND t.constraint_type = 'PRIMARY KEY'`
+	args := []any{database}
+	if table != "" {
+		query += "\n  AND t.table_name = ?"
+		args = append(args, table)
+	}
+	query += "\nORDER BY k.table_name, k.ordinal_position"
+	result, err := db.Execute(query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("catalog mysql primary keys: %w", err)
 	}

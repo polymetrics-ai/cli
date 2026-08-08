@@ -52,10 +52,11 @@ command is used. A fresh task-owned `fm-cli-db-harness-r1-20260808` Podman machi
 were empty, then that exact machine was stopped and removed. No other machine, container, or volume
 was touched.
 
-The harness emits disk-free bytes before and after each engine. With
-`POLYMETRICS_DATABASE_RECLAIM_DISK=1`, its live assertion allows only ordinary build noise after
-teardown; the fresh proof passed that assertion. Retaining the source image is opt-in only via
-`POLYMETRICS_DATABASE_KEEP_IMAGE=1`.
+The harness emits disk-free bytes before and after each engine, and reclaims host disk on every run
+whose machine it can prove it owns; its live assertion then allows only ordinary build noise after
+teardown, and the fresh proof passed that assertion. A machine that cannot be proven owned is
+reported with its still-reclaimable byte count rather than trimmed. Retaining the source image is
+opt-in only via `POLYMETRICS_DATABASE_KEEP_IMAGE=1`.
 
 ## Dependency Evidence — `github.com/go-mysql-org/go-mysql v1.16.0`
 

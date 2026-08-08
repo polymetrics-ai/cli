@@ -164,14 +164,27 @@ func (c connConfig) open(ctx context.Context) (*client.Conn, error) {
 		return conn, nil
 	}
 	if tlsConfig == nil || !c.tls.MayFallBackToPlaintext() || !strings.Contains(err.Error(), serverRefusedTLS) {
-		// Client errors can include the endpoint or authentication details. Keep
-		// configuration values out of caller-visible errors and logs.
-		return nil, errors.New("connect mysql failed")
+		return nil, dialError(ctx, err)
 	}
 	if conn, err = c.dial(ctx, nil); err != nil {
-		return nil, errors.New("connect mysql failed")
+		return nil, dialError(ctx, err)
 	}
 	return conn, nil
+}
+
+// dialError keeps a cancellation or deadline distinguishable with errors.Is
+// while never returning driver text, which can include the endpoint or
+// authentication details. The sentinel itself is returned rather than the
+// wrapped client error, so an operator's Ctrl-C during a sync propagates as a
+// cancellation instead of reading as a connection failure, and no
+// configuration value reaches a caller-visible error or log.
+func dialError(ctx context.Context, err error) error {
+	for _, cause := range []error{context.Canceled, context.DeadlineExceeded} {
+		if errors.Is(err, cause) || errors.Is(ctx.Err(), cause) {
+			return cause
+		}
+	}
+	return errors.New("connect mysql failed")
 }
 
 func (c connConfig) dial(ctx context.Context, tlsConfig *tls.Config) (*client.Conn, error) {
@@ -202,7 +215,7 @@ func (c connConfig) replicationTLS(ctx context.Context) (*tls.Config, error) {
 		if strings.Contains(err.Error(), serverRefusedTLS) {
 			return nil, nil
 		}
-		return nil, errors.New("connect mysql failed")
+		return nil, dialError(ctx, err)
 	}
 	_ = probe.Close()
 	return tlsConfig, nil

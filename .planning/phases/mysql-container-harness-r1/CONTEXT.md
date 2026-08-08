@@ -21,9 +21,12 @@ path.
 - The MySQL source image is pinned at `docker.io/library/mysql:8.4.11`. Each run creates a unique
   local tag, then cleanup attempts container → volume → run tag → pulled source image even after an
   earlier cleanup error. `POLYMETRICS_DATABASE_KEEP_IMAGE=1` is the only retention opt-in.
-- `POLYMETRICS_DATABASE_RECLAIM_DISK=1` runs two explicit `fstrim` passes against the configured
-  machine after Podman cleanup. This is required on macOS VM-backed storage to return freed guest
-  blocks to the host sparse disk.
+- Cleanup runs two explicit `fstrim` passes against the configured machine after Podman cleanup.
+  This is required on macOS VM-backed storage to return freed guest blocks to the host sparse disk.
+  It is no longer an opt-in, but it runs only against a machine the run can prove it owns: the
+  scoped connection must address that machine by name and `podman machine inspect` must confirm it
+  is defined on this host. An unproven machine is reported with the still-reclaimable byte count,
+  never trimmed, because a shared or remote endpoint belongs to another lane.
 - The test database uses only its isolated ephemeral server configuration. No credential or
   connection string is printed, logged, or stored.
 - MySQL is a dynamic-schema Tier-3 native connector. Its binary-log mechanism is declared through

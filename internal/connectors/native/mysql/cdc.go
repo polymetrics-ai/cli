@@ -134,7 +134,7 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 			continue
 		}
 		if query, ok := event.Event.(*replication.QueryEvent); ok {
-			if err := validateCDCQueryEvent(query); err != nil {
+			if err := validateCDCQueryEvent(query, database); err != nil {
 				return err
 			}
 			continue
@@ -173,7 +173,17 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 	}
 }
 
-func validateCDCQueryEvent(event *replication.QueryEvent) error {
+// validateCDCQueryEvent decides whether a statement event on this server-wide
+// binary log may be skipped. The log carries every schema, so a DDL, GRANT, or
+// ANALYZE run against an unrelated database must not end this changefeed; only
+// a statement that can reach the configured database may.
+//
+// A binlog-format or row-image change is still rejected whatever schema it
+// arrives under, because it silences the row events this connector depends on
+// everywhere at once. Everything else is skipped only when every object the
+// statement can name lies outside the configured database, and is rejected
+// when it does not or when that cannot be decided.
+func validateCDCQueryEvent(event *replication.QueryEvent, database string) error {
 	if event == nil {
 		return errors.New("mysql CDC received an invalid statement event")
 	}
@@ -186,11 +196,102 @@ func validateCDCQueryEvent(event *replication.QueryEvent) error {
 		return nil
 	case "SET":
 		statement := strings.ToUpper(strings.Join(fields, " "))
-		if !strings.Contains(statement, "BINLOG_FORMAT") && !strings.Contains(statement, "BINLOG_ROW_IMAGE") {
-			return nil
+		if strings.Contains(statement, "BINLOG_FORMAT") || strings.Contains(statement, "BINLOG_ROW_IMAGE") {
+			return errors.New("mysql CDC encountered a replication format change; resnapshot required")
+		}
+		return nil
+	}
+	if statementReachesDatabase(string(event.Query), string(event.Schema), database) {
+		return errors.New("mysql CDC encountered a statement event; resnapshot required")
+	}
+	return nil
+}
+
+// statementReachesDatabase reports whether a statement could affect database.
+// It fails closed on every uncertainty. QueryEvent.Schema is only the default
+// for the statement's unqualified names, never proof of what it touched: a
+// statement logged under one schema can name another with a qualified
+// identifier, so both the default schema and every identifier the statement
+// spells are considered. An absent default schema is treated as reaching the
+// database, because an unqualified name then resolves against nothing this
+// connector can check.
+func statementReachesDatabase(statement, defaultSchema, database string) bool {
+	if strings.TrimSpace(defaultSchema) == "" || strings.EqualFold(defaultSchema, database) {
+		return true
+	}
+	for _, identifier := range statementIdentifiers(statement) {
+		if strings.EqualFold(identifier, database) {
+			return true
 		}
 	}
-	return errors.New("mysql CDC encountered a statement event; resnapshot required")
+	return false
+}
+
+// statementIdentifiers extracts every bare or backquoted identifier a
+// statement spells. It over-collects — a keyword or a column name is returned
+// too — which only ever makes the caller more conservative, and it skips
+// quoted literals so a string constant cannot look like an object reference.
+func statementIdentifiers(statement string) []string {
+	var identifiers []string
+	runes := []rune(statement)
+	for index := 0; index < len(runes); {
+		switch character := runes[index]; {
+		case character == '\'' || character == '"':
+			index = skipQuotedLiteral(runes, index)
+		case character == '`':
+			identifier, next := readQuotedIdentifier(runes, index)
+			identifiers = append(identifiers, identifier)
+			index = next
+		case isIdentifierRune(character):
+			start := index
+			for index < len(runes) && isIdentifierRune(runes[index]) {
+				index++
+			}
+			identifiers = append(identifiers, string(runes[start:index]))
+		default:
+			index++
+		}
+	}
+	return identifiers
+}
+
+func skipQuotedLiteral(runes []rune, index int) int {
+	quote := runes[index]
+	for index++; index < len(runes); index++ {
+		if runes[index] == '\\' {
+			index++
+			continue
+		}
+		if runes[index] == quote {
+			return index + 1
+		}
+	}
+	return index
+}
+
+func readQuotedIdentifier(runes []rune, index int) (string, int) {
+	var identifier strings.Builder
+	for index++; index < len(runes); index++ {
+		if runes[index] != '`' {
+			identifier.WriteRune(runes[index])
+			continue
+		}
+		// MySQL escapes a backquote inside a quoted identifier by doubling it.
+		if index+1 < len(runes) && runes[index+1] == '`' {
+			identifier.WriteRune('`')
+			index++
+			continue
+		}
+		return identifier.String(), index + 1
+	}
+	return identifier.String(), index
+}
+
+func isIdentifierRune(character rune) bool {
+	return character == '_' || character == '$' ||
+		(character >= 'a' && character <= 'z') ||
+		(character >= 'A' && character <= 'Z') ||
+		(character >= '0' && character <= '9')
 }
 
 func binlogPositionFromState(state map[string]string) (gomysql.Position, error) {

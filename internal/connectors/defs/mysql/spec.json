@@ -52,7 +52,7 @@
     },
     "replication_server_id": {
       "type": "string",
-      "description": "Positive unique MySQL replication server ID required only for binary-log change capture."
+      "description": "Positive unique MySQL replication server ID required only for binary-log change capture. Change capture requires MySQL 8.4 or newer (verified against 8.4.11); reads, discovery, and checks carry no version bound."
     }
   }
 }

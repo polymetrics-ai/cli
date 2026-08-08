@@ -31,10 +31,14 @@ explicit connection/machine name:
 POLYMETRICS_DATABASE_INTEGRATION=1 \
   POLYMETRICS_PODMAN_CONNECTION=<task-owned-machine> \
   POLYMETRICS_PODMAN_MACHINE=<task-owned-machine> \
-  POLYMETRICS_DATABASE_RECLAIM_DISK=1 \
   go test -tags=databaseintegration -count=1 -timeout 20m \
     -run '^TestMySQLContainerHarness$' ./internal/connectors/native/mysql
 ```
+
+The live proof above predates the review fix that made the host-disk reclaim unconditional on a
+proven-owned machine; at that time it was requested with `POLYMETRICS_DATABASE_RECLAIM_DISK=1`. The
+trim itself, its two passes, and the leak assertion are unchanged — only the gate moved from an
+environment opt-in to proven machine ownership, which the task-owned machine above satisfies.
 
 - [x] The non-cached live invocation completed successfully; a follow-up identical invocation was
       reported by Go as cached pass.

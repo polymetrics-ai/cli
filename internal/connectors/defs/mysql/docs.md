@@ -28,8 +28,9 @@ use the canonical modes in the table for a portable policy across SQL connectors
 to discovery, reads, and the binary-log replication stream alike.
 
 For CDC, configure a positive `replication_server_id` unique among replication clients. The MySQL
-server must enable binary logging with row format and full row images; it must also grant the
-configured account the narrowly appropriate replication-read privilege for the deployed server.
+server must be **8.4 or newer**, enable binary logging with row format and full row images, and
+grant the configured account the narrowly appropriate replication-read privilege for the deployed
+server. Reads, discovery, and checks carry no such version bound.
 
 ## Streams notes
 
@@ -54,9 +55,17 @@ it does not create, alter, or delete database data.
 - CDC guarantees source ordering and at-least-once delivery. A replay at the committed binary-log
   boundary is possible; downstream consumers must use the file/position/row-ordinal dedupe
   identity.
-- CDC requires row-based binary logging and full row images. Statement events, including DDL and
-  runtime binlog format or row-image changes, are rejected before a later row or checkpoint is
-  emitted. New CDC subscriptions capture their binary-log position before loading column metadata.
+- CDC requires MySQL 8.4 or newer. A new subscription reads its starting position with
+  `SHOW BINARY LOG STATUS`, which replaced `SHOW MASTER STATUS` in 8.4; against 8.0.x or 5.7 that
+  first read fails rather than silently capturing a wrong position. MySQL 8.4.11 is the verified
+  server; pre-8.4 support is tracked separately and is not part of this connector today.
+- CDC requires row-based binary logging and full row images. A runtime binlog format or row-image
+  change is rejected wherever it happens, because it silences row events for every schema at once.
+  Other statement events, including DDL, are rejected only when they can reach the configured
+  database: the binary log is server-wide, so unrelated schema activity does not end a changefeed,
+  while a statement that names the configured database — including one qualified from another
+  default schema — does. A statement that cannot be attributed to a schema is rejected too. New CDC
+  subscriptions capture their binary-log position before loading column metadata.
 - Tables and columns whose identifiers this connector cannot safely quote are omitted from the
   catalog rather than advertised, because a Read against them would always fail.
 - GTID checkpointing, client certificate authentication, schema-change event projection, and
@@ -73,7 +82,6 @@ the records actually returned.
 ```bash
 POLYMETRICS_DATABASE_INTEGRATION=1 \
   POLYMETRICS_PODMAN_CONNECTION=<your-machine> \
-  POLYMETRICS_DATABASE_RECLAIM_DISK=1 \
   go test -tags=databaseintegration -count=1 -v ./internal/connectors/native/mysql
 ```
 
@@ -87,12 +95,19 @@ Cleanup runs on every exit path, including a failed assertion and an interrupt: 
 container, its named volume, the run-owned image tag, and the pulled source image are all removed.
 `POLYMETRICS_DATABASE_KEEP_IMAGE=1` retains the source image for a subsequent run.
 
-`POLYMETRICS_DATABASE_RECLAIM_DISK=1` additionally trims the backing machine so freed guest blocks
-are punched out of the host's sparse disk file. This matters on macOS: removing an image frees space
-inside the VM but leaves the host file inflated. The trim runs **twice**, because a single pass
-immediately after an image removal was measured to return only about a quarter of the space, while a
-second pass returns effectively all of it. Measured on Podman 5.3.2 with applehv, one full run moved
-host free space by under 2 MiB end to end.
+Cleanup also trims the backing machine so freed guest blocks are punched out of the host's sparse
+disk file. This matters on macOS: removing an image frees space inside the VM but leaves the host
+file inflated. The trim runs **twice**, because a single pass immediately after an image removal was
+measured to return only about a quarter of the space, while a second pass returns effectively all of
+it. Measured on Podman 5.3.2 with applehv, one full run moved host free space by under 2 MiB end to
+end.
+
+The trim runs only against a machine the run can prove it owns: the Podman connection every command
+was scoped to must address that machine by name (`<machine>` or `<machine>-root`), and
+`podman machine inspect` must confirm the machine is defined on this host. A shared or remote
+endpoint satisfies neither, so the trim is skipped and the run reports the reason together with the
+host bytes still reclaimable, rather than trimming a machine that belongs to someone else. Set
+`POLYMETRICS_PODMAN_MACHINE` when the connection name differs from the machine name.
 
 ### Adding a second engine
 

@@ -32,11 +32,10 @@ const (
 // no default: a bare podman command on a shared host addresses whichever
 // machine happens to be the global default, which belongs to another lane.
 const (
-	envEnabled     = "POLYMETRICS_DATABASE_INTEGRATION"
-	envConnection  = "POLYMETRICS_PODMAN_CONNECTION"
-	envMachine     = "POLYMETRICS_PODMAN_MACHINE"
-	envReclaimDisk = "POLYMETRICS_DATABASE_RECLAIM_DISK"
-	envKeepImage   = "POLYMETRICS_DATABASE_KEEP_IMAGE"
+	envEnabled    = "POLYMETRICS_DATABASE_INTEGRATION"
+	envConnection = "POLYMETRICS_PODMAN_CONNECTION"
+	envMachine    = "POLYMETRICS_PODMAN_MACHINE"
+	envKeepImage  = "POLYMETRICS_DATABASE_KEEP_IMAGE"
 )
 
 var errCollectedCDCEvents = errors.New("test collected required mysql change events")
@@ -59,14 +58,13 @@ func TestMySQLContainerHarness(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
 	defer cancel()
 	harness, err := dbtest.New(dbtest.Config{
-		Engine:          "mysql",
-		Image:           mysqlIntegrationImage,
-		ContainerPort:   3306,
-		DataVolumePath:  "/var/lib/mysql",
-		Connection:      connection,
-		Machine:         machine,
-		KeepImage:       os.Getenv(envKeepImage) == "1",
-		ReclaimHostDisk: os.Getenv(envReclaimDisk) == "1",
+		Engine:         "mysql",
+		Image:          mysqlIntegrationImage,
+		ContainerPort:  3306,
+		DataVolumePath: "/var/lib/mysql",
+		Connection:     connection,
+		Machine:        machine,
+		KeepImage:      os.Getenv(envKeepImage) == "1",
 		ContainerArgs: []string{
 			"--env", "MYSQL_ALLOW_EMPTY_PASSWORD=yes",
 			"--env", "MYSQL_ROOT_HOST=%",
@@ -93,7 +91,11 @@ func TestMySQLContainerHarness(t *testing.T) {
 		t.Logf("MySQL database test disk free bytes: before=%d after=%d reclaimed=%t",
 			report.DiskFreeBefore, report.DiskFreeAfter, report.HostDiskReclaimed)
 		if !report.HostDiskReclaimed {
-			t.Logf("MySQL database test left host disk unreclaimed; set %s=1 to trim the backing machine", envReclaimDisk)
+			// A machine this run cannot prove it owns is never trimmed, because
+			// the trim would reach a shared or remote host. Report the cost
+			// instead of asserting against space the run was not allowed to free.
+			t.Logf("MySQL database test skipped the host-disk reclaim (%s); %d bytes remain reclaimable on the backing machine",
+				report.HostDiskReclaimSkipped, report.HostDiskReclaimableBytes)
 			return
 		}
 		// The image is roughly 830 MB. Allow one ordinary build's worth of

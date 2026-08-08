@@ -57,3 +57,44 @@ unit.
 
 **Green — pipeline-custody recovery:** `nativeSupportPackages` excludes both support libraries,
 `go run ./cmd/connectorgen gen` regenerated `nativeset_gen.go`, and the focused test passed.
+
+**Red — review round 1 fixes (harness lifecycle, machine ownership, CDC blast radius):**
+
+```text
+go test -count=1 -timeout 5m ./internal/connectors/native/dbtest \
+  -run 'Test(StartRefusesToCreateAfterClose|CleanupNeverTrimsAMachineThisRunCannotProveItOwns|SetMaxConcurrentEnginesRefusesAChangeWhileASlotIsHeld)'
+go test -count=1 -timeout 5m ./internal/connectors/native/mysql \
+  -run 'Test(CDCQueryEventsFailClosed|PrimaryKeyDiscoveryIsBoundedToTheStreamBeingRead|DialErrorsKeepCancellationDistinguishableWithoutLeakingConfiguration)'
+```
+
+Each new assertion was run against the pre-fix behaviour, restored one at a time, and observed red:
+
+- `TestStartRefusesToCreateAfterClose` failed with "a Start refused after Close leaked the engine
+  slot" while `Close` alone returned the token, because `closeOnce` had already fired.
+- `TestSetMaxConcurrentEnginesRefusesAChangeWhileASlotIsHeld` did not fail cleanly without the
+  precondition guard — it hung until the 60s package timeout, which is the exact deadlock the guard
+  now refuses: `releaseSlot` blocked forever on the replaced channel after cleanup had run.
+- `TestCleanupNeverTrimsAMachineThisRunCannotProveItOwns` failed on all three cases when ownership
+  was assumed rather than proven, showing an `fstrim` issued against an unowned machine.
+- `TestCDCQueryEventsFailClosed` failed on `unrelated_schema_change`,
+  `unrelated_qualified_schema_change`, `server_wide_grant`, `unrelated_analyze`, and
+  `database_name_only_inside_a_literal` while every non-benign statement ended the changefeed
+  regardless of which schema it touched.
+- `TestInterruptCleanupClosesEveryLiveHarnessBeforeExiting` had no target at all before the fix:
+  each harness registered its own signal handler and exited the process from whichever cleanup
+  finished first, so there was no process-level registry to close the siblings.
+- `TestPrimaryKeyDiscoveryIsBoundedToTheStreamBeingRead` and
+  `TestDialErrorsKeepCancellationDistinguishableWithoutLeakingConfiguration` did not compile against
+  the pre-fix signatures (`discoverPrimaryKeys` took no table, `dialError` did not exist).
+
+**Green — review round 1 fixes:**
+
+```text
+go vet ./internal/connectors/native/...
+go test -count=1 -timeout 5m ./internal/connectors/native/dbtest ./internal/connectors/native/mysql
+```
+
+Both packages passed with the sources restored. `internal/connectors/defs/mysql/docs.md` now records
+the MySQL 8.4+ CDC bound with 8.4.11 as the verified server, the scoped statement-event rejection
+rule, and the proven-ownership host-disk reclaim; the website connector artifacts were regenerated
+from that bundle and changed only the `mysql` entry.

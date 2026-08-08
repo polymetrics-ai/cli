@@ -3,6 +3,7 @@ package mysql
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net"
 	"reflect"
 	"strings"
@@ -355,26 +356,51 @@ func TestValidateBinlogRequirementsFailsClosed(t *testing.T) {
 	}
 }
 
+// TestCDCQueryEventsFailClosed pins the blast radius of a statement event. The
+// binary log is server-wide, so a changefeed on one database must survive
+// unrelated schema activity while still failing closed on anything that can
+// reach its own database or that cannot be attributed at all.
 func TestCDCQueryEventsFailClosed(t *testing.T) {
+	const database = "pm_harness"
 	for _, tc := range []struct {
 		name    string
+		schema  string
 		query   string
 		wantErr bool
 	}{
-		{name: "begin", query: "BEGIN"},
-		{name: "commit", query: "COMMIT;"},
-		{name: "rollback", query: "ROLLBACK"},
-		{name: "session metadata", query: "SET TIMESTAMP=1723034096"},
-		{name: "session binlog format", query: "SET SESSION binlog_format = 'STATEMENT'", wantErr: true},
-		{name: "session row image", query: "SET SESSION binlog_row_image = 'MINIMAL'", wantErr: true},
-		{name: "schema change", query: "ALTER TABLE events ADD COLUMN ignored INT", wantErr: true},
-		{name: "statement mutation", query: "INSERT INTO events VALUES (1)", wantErr: true},
-		{name: "empty statement", wantErr: true},
+		{name: "begin", schema: database, query: "BEGIN"},
+		{name: "commit", schema: database, query: "COMMIT;"},
+		{name: "rollback", schema: database, query: "ROLLBACK"},
+		{name: "session metadata", schema: database, query: "SET TIMESTAMP=1723034096"},
+		{name: "session binlog format", schema: database, query: "SET SESSION binlog_format = 'STATEMENT'", wantErr: true},
+		{name: "session row image", schema: database, query: "SET SESSION binlog_row_image = 'MINIMAL'", wantErr: true},
+		// A replication format change silences row events for every schema, so
+		// it is rejected even when it arrives under an unrelated one.
+		{name: "row image change from another schema", schema: "other_app", query: "SET GLOBAL binlog_row_image = 'MINIMAL'", wantErr: true},
+		{name: "schema change", schema: database, query: "ALTER TABLE events ADD COLUMN ignored INT", wantErr: true},
+		{name: "statement mutation", schema: database, query: "INSERT INTO events VALUES (1)", wantErr: true},
+		{name: "empty statement", schema: database, wantErr: true},
+		// Unrelated schema activity must not end this changefeed.
+		{name: "unrelated schema change", schema: "other_app", query: "ALTER TABLE events ADD COLUMN ignored INT"},
+		{name: "unrelated qualified schema change", schema: "other_app", query: "ALTER TABLE other_app.events ADD COLUMN ignored INT"},
+		{name: "server wide grant", schema: "other_app", query: "GRANT SELECT ON other_app.* TO 'reader'@'%'"},
+		{name: "unrelated analyze", schema: "other_app", query: "ANALYZE TABLE inventory"},
+		// A qualified name reaches across the default schema, so the default is
+		// never proof of what a statement touched.
+		{name: "cross schema qualified alter", schema: "other_app", query: "ALTER TABLE pm_harness.events ADD COLUMN ignored INT", wantErr: true},
+		{name: "cross schema backquoted alter", schema: "other_app", query: "ALTER TABLE `pm_harness`.`events` ADD COLUMN ignored INT", wantErr: true},
+		{name: "cross schema drop database", schema: "other_app", query: "DROP DATABASE pm_harness", wantErr: true},
+		{name: "cross schema rename into target", schema: "other_app", query: "RENAME TABLE other_app.events TO pm_harness.events", wantErr: true},
+		// A literal that merely spells the database name is not an object
+		// reference, but an unattributable statement still fails closed.
+		{name: "database name only inside a literal", schema: "other_app", query: "INSERT INTO audit (note) VALUES ('pm_harness')"},
+		{name: "absent default schema", query: "ANALYZE TABLE inventory", wantErr: true},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			err := validateCDCQueryEvent(&replication.QueryEvent{Query: []byte(tc.query)})
+			event := &replication.QueryEvent{Query: []byte(tc.query), Schema: []byte(tc.schema)}
+			err := validateCDCQueryEvent(event, database)
 			if (err != nil) != tc.wantErr {
-				t.Fatalf("validateCDCQueryEvent(%q) error = %v, want error=%t", tc.query, err, tc.wantErr)
+				t.Fatalf("validateCDCQueryEvent(%q) under schema %q error = %v, want error=%t", tc.query, tc.schema, err, tc.wantErr)
 			}
 		})
 	}
@@ -543,6 +569,83 @@ func serveTLSLessMySQLGreeting(listener net.Listener) {
 			header := []byte{byte(len(body)), byte(len(body) >> 8), byte(len(body) >> 16), 0}
 			_, _ = conn.Write(append(header, body...))
 		}(conn)
+	}
+}
+
+// recordingExecutor captures the statement a discovery helper issues. It
+// returns a server error so the caller stops at the query it was asked about.
+type recordingExecutor struct {
+	queries []string
+	args    [][]any
+}
+
+func (e *recordingExecutor) Execute(query string, args ...any) (*gomysql.Result, error) {
+	e.queries = append(e.queries, query)
+	e.args = append(e.args, append([]any(nil), args...))
+	return nil, errors.New("scripted server error")
+}
+
+// Catalog needs every table's primary key; a Read needs one. The
+// information_schema join is the expensive part of starting a read, so it must
+// be bounded to the stream actually being paged.
+func TestPrimaryKeyDiscoveryIsBoundedToTheStreamBeingRead(t *testing.T) {
+	read := &recordingExecutor{}
+	if _, err := discoverPrimaryKeys(context.Background(), read, "analytics", "events"); err == nil {
+		t.Fatal("discoverPrimaryKeys() swallowed the server error")
+	}
+	if !strings.Contains(read.queries[0], "t.table_name = ?") {
+		t.Fatalf("read discovery query = %q, want a single-table predicate", read.queries[0])
+	}
+	if want := []any{"analytics", "events"}; !reflect.DeepEqual(read.args[0], want) {
+		t.Fatalf("read discovery args = %v, want %v", read.args[0], want)
+	}
+
+	catalog := &recordingExecutor{}
+	if _, err := discoverPrimaryKeys(context.Background(), catalog, "analytics", ""); err == nil {
+		t.Fatal("discoverPrimaryKeys() swallowed the server error")
+	}
+	if strings.Contains(catalog.queries[0], "t.table_name = ?") {
+		t.Fatalf("catalog discovery query = %q, want the whole schema", catalog.queries[0])
+	}
+	if want := []any{"analytics"}; !reflect.DeepEqual(catalog.args[0], want) {
+		t.Fatalf("catalog discovery args = %v, want %v", catalog.args[0], want)
+	}
+}
+
+// A cancelled sync must surface as a cancellation, not as a connection
+// failure, while still returning none of the driver's endpoint text.
+func TestDialErrorsKeepCancellationDistinguishableWithoutLeakingConfiguration(t *testing.T) {
+	const leaky = "dial tcp 10.0.0.5:3306: user=admin: connection refused"
+	cancelled, cancel := context.WithCancel(context.Background())
+	cancel()
+
+	for _, tc := range []struct {
+		name string
+		ctx  context.Context
+		err  error
+		want error
+	}{
+		{name: "cancelled context", ctx: cancelled, err: errors.New(leaky), want: context.Canceled},
+		{name: "cancelled dial", ctx: context.Background(), err: fmt.Errorf("dial: %w", context.Canceled), want: context.Canceled},
+		{name: "expired dial", ctx: context.Background(), err: fmt.Errorf("dial: %w", context.DeadlineExceeded), want: context.DeadlineExceeded},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			err := dialError(tc.ctx, tc.err)
+			if !errors.Is(err, tc.want) {
+				t.Fatalf("dialError() = %v, want %v", err, tc.want)
+			}
+			if strings.Contains(err.Error(), "10.0.0.5") || strings.Contains(err.Error(), "admin") {
+				t.Fatalf("dialError() = %q, want no configuration or endpoint material", err)
+			}
+		})
+	}
+
+	generic := dialError(context.Background(), errors.New(leaky))
+	if generic.Error() != "connect mysql failed" {
+		t.Fatalf("dialError() = %q, want the opaque connection failure", generic)
+	}
+	if errors.Is(generic, context.Canceled) || errors.Is(generic, context.DeadlineExceeded) {
+		t.Fatalf("dialError() = %v, want an ordinary failure to stay distinct from cancellation", generic)
 	}
 }
 
