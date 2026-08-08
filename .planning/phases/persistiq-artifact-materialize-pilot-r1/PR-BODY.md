@@ -7,9 +7,9 @@ machine-checkable `named_dependency=<slug>` note; and source-surface rows that
 the artifact omits remain present with
 `present-in-surface-absent-from-artifact`.
 
-No numbered issue was supplied with the captain dispatch. The dispatch and the
-GSD phase evidence in `.planning/phases/persistiq-artifact-materialize-pilot-r1/`
-are the source contract for this PR.
+Closes #3958. The GSD phase evidence in
+`.planning/phases/persistiq-artifact-materialize-pilot-r1/` records the
+delivery contract and red/green proof.
 
 ## What Changed
 
