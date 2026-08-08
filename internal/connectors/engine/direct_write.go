@@ -79,6 +79,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 	}
 	redactFields := operationDirectWriteRedactFields(prepared.op, req.RedactFields)
 	redactionValues := operationDirectWriteRedactionValues(prepared.body, redactFields)
+	redactionValues = append(redactionValues, operationDirectWritePathRedactionValues(req.PathParams)...)
 
 	var result connectors.OperationDirectWriteResult
 	err = ExecutePreparedWrite(ctx, prepared.prepared, req.Approval, req.PreviewDigest, func(gated context.Context) error {
@@ -179,15 +180,14 @@ func operationDirectWriteErrorText(err error, policy string, redactFields, redac
 		if message == "" {
 			message = http.StatusText(httpErr.Status)
 		}
-		if policy != directWritePolicyJSONRedacted {
-			return fmt.Sprintf("http %d for %s: %s", httpErr.Status, httpErr.URL, message)
+		if policy == directWritePolicyJSONRedacted {
+			message = redactOperationDirectWriteErrorBody(message, policy, redactFields)
+			return safety.RedactErrorText(redactWriteLiterals(fmt.Sprintf("http %d for %s: %s", httpErr.Status, httpErr.URL, message), redactionValues))
 		}
-		message = redactOperationDirectWriteErrorBody(message, policy, redactFields)
-		message = redactWriteLiterals(message, redactionValues)
-		return safety.RedactErrorText(fmt.Sprintf("http %d for %s: %s", httpErr.Status, httpErr.URL, message))
+		return redactWriteLiterals(fmt.Sprintf("http %d for %s: %s", httpErr.Status, httpErr.URL, message), redactionValues)
 	}
 	if policy != directWritePolicyJSONRedacted {
-		return err.Error()
+		return redactWriteLiterals(err.Error(), redactionValues)
 	}
 	return safety.RedactErrorText(redactWriteLiterals(err.Error(), redactionValues))
 }
@@ -246,6 +246,27 @@ func operationDirectWriteRedactionValues(body map[string]any, fields []string) [
 			continue
 		}
 		collectWriteRedactionValues(value, seen)
+	}
+	values := make([]string, 0, len(seen))
+	for value := range seen {
+		values = append(values, value)
+	}
+	sortWriteRedactionLiterals(values)
+	return values
+}
+
+// operationDirectWritePathRedactionValues protects path-bound input from
+// transport diagnostics. HTTP errors include their request URL, unlike a
+// decoded response body, so every typed path parameter is treated as private
+// in the terminal-facing error even when the operation's output policy is
+// status-only.
+func operationDirectWritePathRedactionValues(pathParams map[string]string) []string {
+	if len(pathParams) == 0 {
+		return nil
+	}
+	seen := make(map[string]bool, len(pathParams))
+	for _, value := range pathParams {
+		addWriteRedactionValue(value, seen)
 	}
 	values := make([]string, 0, len(seen))
 	for value := range seen {
