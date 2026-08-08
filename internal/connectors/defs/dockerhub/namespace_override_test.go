@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"sync"
 	"testing"
 
@@ -38,6 +39,28 @@ func TestDockerhubNamespaceOverrideDrivesAllStreamAndCheckPaths(t *testing.T) {
 		"repository":      "fixture-repository",
 		"tag":             "fixture-tag",
 	}}
+
+	t.Run("missing namespace fails before HTTP", func(t *testing.T) {
+		mu.Lock()
+		gotPaths = nil
+		mu.Unlock()
+
+		missingNamespace := connectors.RuntimeConfig{Config: map[string]string{
+			"base_url":        server.URL,
+			"docker_username": "auth-identity",
+		}}
+		err := engine.Read(context.Background(), bundle, connectors.ReadRequest{
+			Stream: "repositories",
+			Config: missingNamespace,
+		}, nil, func(connectors.Record) error { return nil })
+		if err == nil {
+			t.Fatal("read without namespace: want local unresolved-namespace error")
+		}
+		if !strings.Contains(err.Error(), "namespace") {
+			t.Fatalf("read without namespace error = %q, want namespace failure", err)
+		}
+		assertDockerhubNoRequest(t, &mu, gotPaths)
+	})
 
 	readCases := []struct {
 		stream string
@@ -88,5 +111,14 @@ func assertDockerhubRequestPath(t *testing.T, mu *sync.Mutex, gotPaths []string,
 	}
 	if gotPaths[0] != want {
 		t.Errorf("request path = %q, want namespace override path %q", gotPaths[0], want)
+	}
+}
+
+func assertDockerhubNoRequest(t *testing.T, mu *sync.Mutex, gotPaths []string) {
+	t.Helper()
+	mu.Lock()
+	defer mu.Unlock()
+	if len(gotPaths) != 0 {
+		t.Fatalf("request paths = %v, want no request when namespace is absent", gotPaths)
 	}
 }

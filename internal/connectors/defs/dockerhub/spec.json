@@ -2,12 +2,17 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Docker Hub Connection Specification",
   "type": "object",
-  "required": ["docker_username"],
+  "required": ["docker_username", "namespace"],
   "properties": {
     "docker_username": {
       "type": "string",
       "pattern": "^[a-z0-9_-]+$",
-      "description": "Docker Hub username or organization namespace to read repositories, tags, and the namespace profile for. Lowercase alphanumerics, underscores, and hyphens only."
+      "description": "Docker Hub username used to authenticate the optional Personal Access Token. Lowercase alphanumerics, underscores, and hyphens only."
+    },
+    "namespace": {
+      "type": "string",
+      "pattern": "^[a-z0-9_-]+$",
+      "description": "Docker Hub user or organization namespace targeted by repository, tag, and connection-check requests. Required separately from docker_username so a requested target namespace is never silently replaced by the authentication identity. Lowercase alphanumerics, underscores, and hyphens only."
     },
     "repository": {
       "type": "string",

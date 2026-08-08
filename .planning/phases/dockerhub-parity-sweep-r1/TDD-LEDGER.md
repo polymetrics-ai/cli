@@ -169,6 +169,12 @@ fail before `spec.json` or `streams.json` is edited. Its failure and command tra
 recorded below verbatim, then the test will become the green regression guard after `namespace`
 is declared required and all five templates interpolate it.
 
+The engine's credential-boundary validator intentionally checks only constraints expressible over
+flat string maps; it does not enforce JSON Schema `required`. The green assertion therefore proves
+the relevant runtime safety property instead: a read without `namespace` returns its local
+unresolved-configuration error before any HTTP request is sent. This preserves existing shared
+validation semantics while ensuring the Docker Hub target is never silently substituted.
+
 ### Verbatim RED failure
 
 ```text
@@ -192,6 +198,40 @@ Command: `go test ./internal/connectors/defs/dockerhub -run
 TestDockerhubNamespaceOverrideDrivesAllStreamAndCheckPaths -count=1`. No production bundle file
 had changed when this command ran; `namespace_override_test.go` plus this ledger entry are the
 committed red state.
+
+### GREEN — distinct target namespace is honored
+
+`namespace_override_test.go` now proves all five runtime routes use an explicitly supplied target
+namespace, while an omitted namespace causes the `repositories` stream to fail locally before the
+`httptest` server sees any request. The green command was:
+
+```text
+go test -timeout 20m ./internal/connectors/defs/dockerhub
+ok   polymetrics.ai/internal/connectors/defs/dockerhub  0.757s
+```
+
+The adjacent contract gates also passed:
+
+```text
+go run ./cmd/connectorgen validate internal/connectors/defs/dockerhub
+connectorgen validate: 1 connector(s) checked, 0 findings
+
+go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+
+go test -timeout 20m ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1
+ok   polymetrics.ai/internal/connectors/commandrunner  2.265s
+
+make connector-boundary
+go run ./cmd/connectorgen boundary . --json
+```
+
+After rebuilding `pm`, `pm docs generate --dir docs/cli` regenerated the Docker Hub manual and
+skill. It also exposed 1,027 unrelated baseline documentation changes; those exact non-Docker Hub
+generated paths were restored. The retained website generated artifacts were compared as parsed
+objects against `HEAD`: both `website/data/connectors.generated.json` and
+`website/lib/connectors.catalog.data.generated.json` changed **only** the `dockerhub` object
+(`description` and `docs_md`/`docsMd`). No golden transcript changed.
 
 ## Live E2E gap — reverse-ETL paths (2026-08-08)
 
