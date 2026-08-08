@@ -375,11 +375,11 @@ func TestOperationDirectWriteJSONRedactedErrorsHideDeclaredRequestAndResponseFie
 			OutputPolicy:  "json_redacted",
 			MutationClass: "update",
 			SensitivePolicy: &SensitivePolicySpec{
-				RedactFields: []string{"key_id", "plainkey"},
+				RedactFields: []string{"key_id", "message_id", "plainkey"},
 			},
 			REST: &RESTOperationSpec{
 				Method:      http.MethodPost,
-				Path:        "/api/decrypt",
+				Path:        "/api/decrypt/{message_id}",
 				ContentType: "application/json",
 				MaxBytes:    1024,
 				BodySchema:  json.RawMessage(`{"type":"object","required":["key_id"],"properties":{"key_id":{"type":"string"}}}`),
@@ -387,7 +387,7 @@ func TestOperationDirectWriteJSONRedactedErrorsHideDeclaredRequestAndResponseFie
 		}},
 		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
 			Method: http.MethodPost,
-			Path:   "/api/decrypt",
+			Path:   "/api/decrypt/{message_id}",
 			Operation: &SurfaceOperation{
 				Model:            "sensitive_reverse_etl",
 				Status:           "blocked",
@@ -397,7 +397,11 @@ func TestOperationDirectWriteJSONRedactedErrorsHideDeclaredRequestAndResponseFie
 			},
 		}}},
 	}
-	req := connectors.OperationDirectWriteRequest{Operation: "acme.decrypt", Body: map[string]any{"key_id": "fixture-key-id"}}
+	req := connectors.OperationDirectWriteRequest{
+		Operation:  "acme.decrypt",
+		PathParams: map[string]string{"message_id": "fixture-message-id"},
+		Body:       map[string]any{"key_id": "fixture-key-id"},
+	}
 	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
 	if err != nil {
 		t.Fatalf("PreviewOperationDirectWrite: %v", err)
@@ -407,7 +411,7 @@ func TestOperationDirectWriteJSONRedactedErrorsHideDeclaredRequestAndResponseFie
 	if err == nil {
 		t.Fatal("OperationDirectWrite error = nil, want provider rejection")
 	}
-	for _, sensitive := range []string{"fixture-key-id", "fixture-plaintext-key", "server-token"} {
+	for _, sensitive := range []string{"fixture-key-id", "fixture-message-id", "fixture-plaintext-key", "server-token"} {
 		if strings.Contains(err.Error(), sensitive) {
 			t.Fatal("json_redacted direct-write error exposed sensitive request or response content")
 		}
