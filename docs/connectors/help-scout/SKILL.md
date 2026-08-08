@@ -7,7 +7,7 @@ description: Help Scout connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Help Scout conversations, customers, mailboxes, and users through the Mailbox API using OAuth2 client-credentials authentication.
+Reads and writes the documented Help Scout Mailbox API v2 surface: conversations and threads, customers and their email/phone/chat/social/website contact records, organizations, mailboxes and mailbox configuration, users, teams, tags, webhooks, and workflows, through OAuth2 client-credentials authentication.
 
 ## Icon
 
@@ -35,7 +35,12 @@ Reads Help Scout conversations, customers, mailboxes, and users through the Mail
 ## Configuration
 
 - base_url
+- conversationid
+- customerid
+- mailboxid
+- organizationid
 - start_date
+- teamid
 - token_url
 - client_id (secret)
 - client_secret (secret)
@@ -381,8 +386,9 @@ Reads Help Scout conversations, customers, mailboxes, and users through the Mail
 
 ## Security
 
-- read risk: external Help Scout API read of conversation, customer, mailbox, and user data
-- approval: none; read-only, no obviously-safe reverse-ETL writes
+- read risk: external Help Scout API read of conversation, thread, customer, organization, mailbox, team, tag, webhook, workflow, and user data
+- write risk: external Help Scout Mailbox API mutation of conversations, threads, customers and their contact records, organizations, users, teams, tags, webhooks, and workflows; 18 of the 65 write actions are permanent DELETEs that remove Help Scout records outright, including delete_customer, delete_conversation, delete_attachment, delete_email, and delete_phone
+- approval: required for every write action; reverse ETL plan, preview, explicit approval, then execute, and the 18 destructive delete actions additionally require a typed confirmation
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Command Surface

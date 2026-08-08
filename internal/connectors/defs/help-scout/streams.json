@@ -52,7 +52,7 @@
     },
     {
       "name": "conversations_threads",
-      "path": "/conversations/{conversationId}/threads",
+      "path": "/conversations/{{ config.conversationid }}/threads",
       "records": {
         "path": "_embedded.threads"
       },
@@ -84,7 +84,7 @@
     },
     {
       "name": "customers_chats",
-      "path": "/customers/{customerId}/chats",
+      "path": "/customers/{{ config.customerid }}/chats",
       "records": {
         "path": "_embedded.chats"
       },
@@ -92,7 +92,7 @@
     },
     {
       "name": "customers_emails",
-      "path": "/customers/{customerId}/emails",
+      "path": "/customers/{{ config.customerid }}/emails",
       "records": {
         "path": "_embedded.emails"
       },
@@ -100,7 +100,7 @@
     },
     {
       "name": "customers_phones",
-      "path": "/customers/{customerId}/phones",
+      "path": "/customers/{{ config.customerid }}/phones",
       "records": {
         "path": "_embedded.phones"
       },
@@ -108,7 +108,7 @@
     },
     {
       "name": "customers_social_profiles",
-      "path": "/customers/{customerId}/social-profiles",
+      "path": "/customers/{{ config.customerid }}/social-profiles",
       "records": {
         "path": "_embedded.profiles"
       },
@@ -116,7 +116,7 @@
     },
     {
       "name": "customers_websites",
-      "path": "/customers/{customerId}/websites",
+      "path": "/customers/{{ config.customerid }}/websites",
       "records": {
         "path": "_embedded.websites"
       },
@@ -140,7 +140,7 @@
     },
     {
       "name": "mailboxes_fields",
-      "path": "/mailboxes/{mailboxId}/fields",
+      "path": "/mailboxes/{{ config.mailboxid }}/fields",
       "records": {
         "path": "_embedded.fields"
       },
@@ -148,7 +148,7 @@
     },
     {
       "name": "mailboxes_folders",
-      "path": "/mailboxes/{mailboxId}/folders",
+      "path": "/mailboxes/{{ config.mailboxid }}/folders",
       "records": {
         "path": "_embedded.folders"
       },
@@ -156,7 +156,7 @@
     },
     {
       "name": "mailboxes_saved_replies",
-      "path": "/mailboxes/{mailboxId}/saved-replies",
+      "path": "/mailboxes/{{ config.mailboxid }}/saved-replies",
       "records": {
         "path": "_embedded.replies"
       },
@@ -180,7 +180,7 @@
     },
     {
       "name": "organizations_conversations",
-      "path": "/organizations/{organizationId}/conversations",
+      "path": "/organizations/{{ config.organizationid }}/conversations",
       "records": {
         "path": "_embedded.conversations"
       },
@@ -188,7 +188,7 @@
     },
     {
       "name": "organizations_customers",
-      "path": "/organizations/{organizationId}/customers",
+      "path": "/organizations/{{ config.organizationid }}/customers",
       "records": {
         "path": "_embedded.customers"
       },
@@ -212,7 +212,7 @@
     },
     {
       "name": "teams_members",
-      "path": "/teams/{teamId}/members",
+      "path": "/teams/{{ config.teamid }}/members",
       "records": {
         "path": "_embedded.users"
       },

@@ -1008,7 +1008,8 @@ REVERSE ETL ACTIONS
 
 SECURITY
   read risk: external Workday REST API read across HCM, Financials, Student and Platform services (HR/PII-adjacent)
-  approval: reverse ETL writes require plan, preview, approval, execute; reads are bearer-token authenticated
+  write risk: external Workday REST API mutation across HCM, Financials, Student and Platform services, including HR/PII-adjacent worker, absence, payroll, and financial records; 32 of the 252 write actions are DELETEs that permanently remove Workday records
+  approval: required for every write action; reverse ETL plan, preview, approval, execute, and every DELETE action is gated as destructive and additionally requires a typed confirmation; reads are bearer-token authenticated
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 COMMAND SURFACE

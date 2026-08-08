@@ -217,7 +217,7 @@
 - [harvest](harvest/MANUAL.md): Reads Harvest clients, contacts, company settings, projects, tasks, task assignments, users, time entries, invoices, estimates, expenses, item categories, expense categories, and roles through the Harvest v2 REST API.
 - [height](height/MANUAL.md): Reads Height tasks, lists, field templates, users, and workspace through the Height REST API.
 - [hellobaton](hellobaton/MANUAL.md): Reads Hellobaton projects, milestones, tasks, phases, companies, and users through the Hellobaton REST API.
-- [help-scout](help-scout/MANUAL.md): Reads Help Scout conversations, customers, mailboxes, and users through the Mailbox API using OAuth2 client-credentials authentication.
+- [help-scout](help-scout/MANUAL.md): Reads and writes the documented Help Scout Mailbox API v2 surface: conversations and threads, customers and their email/phone/chat/social/website contact records, organizations, mailboxes and mailbox configuration, users, teams, tags, webhooks, and workflows, through OAuth2 client-credentials authentication.
 - [hibob](hibob/MANUAL.md): Reads HiBob HR data: employee profiles, company named lists, and people field definitions via the HiBob REST API (read-only).
 - [high-level](high-level/MANUAL.md): Reads HighLevel (Go HighLevel / LeadConnector) contacts, opportunities, pipelines, custom fields, and form submissions for a location through the HighLevel REST API.
 - [hoorayhr](hoorayhr/MANUAL.md): Reads HoorayHR users, time-off, leave-types, and sick-leave records through the HoorayHR REST API using session-token authentication.

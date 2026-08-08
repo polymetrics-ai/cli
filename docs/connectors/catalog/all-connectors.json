@@ -69708,7 +69708,7 @@
   {
     "name": "help-scout",
     "display_name": "Help Scout",
-    "description": "Reads Help Scout conversations, customers, mailboxes, and users through the Mailbox API using OAuth2 client-credentials authentication.",
+    "description": "Reads and writes the documented Help Scout Mailbox API v2 surface: conversations and threads, customers and their email/phone/chat/social/website contact records, organizations, mailboxes and mailbox configuration, users, teams, tags, webhooks, and workflows, through OAuth2 client-credentials authentication.",
     "integration_type": "api",
     "docs_url": "https://developer.helpscout.com/",
     "release_stage": "ga",
@@ -69754,6 +69754,26 @@
           "type": "string",
           "format": "date-time",
           "description": "RFC3339 lower bound; sent as modifiedSince to scope conversations/customers to records changed at or after this time."
+        },
+        "conversationid": {
+          "type": "string",
+          "description": "Help Scout conversation id that scopes the conversations_threads stream; supplied per read with --conversation-id."
+        },
+        "customerid": {
+          "type": "string",
+          "description": "Help Scout customer id that scopes the customers_chats, customers_emails, customers_phones, customers_social_profiles, and customers_websites streams; supplied per read with --customer-id."
+        },
+        "mailboxid": {
+          "type": "string",
+          "description": "Help Scout mailbox id that scopes the mailboxes_fields, mailboxes_folders, and mailboxes_saved_replies streams; supplied per read with --mailbox-id."
+        },
+        "organizationid": {
+          "type": "string",
+          "description": "Help Scout organization id that scopes the organizations_conversations and organizations_customers streams; supplied per read with --organization-id."
+        },
+        "teamid": {
+          "type": "string",
+          "description": "Help Scout team id that scopes the teams_members stream; supplied per read with --team-id."
         }
       }
     },
@@ -70503,8 +70523,9 @@
       }
     ],
     "risk": {
-      "read": "external Help Scout API read of conversation, customer, mailbox, and user data",
-      "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+      "read": "external Help Scout API read of conversation, thread, customer, organization, mailbox, team, tag, webhook, workflow, and user data",
+      "write": "external Help Scout Mailbox API mutation of conversations, threads, customers and their contact records, organizations, users, teams, tags, webhooks, and workflows; 18 of the 65 write actions are permanent DELETEs that remove Help Scout records outright, including delete_customer, delete_conversation, delete_attachment, delete_email, and delete_phone",
+      "approval": "required for every write action; reverse ETL plan, preview, explicit approval, then execute, and the 18 destructive delete actions additionally require a typed confirmation"
     },
     "icon": {
       "id": "simple-icons-helpscout",
@@ -78156,7 +78177,8 @@
     ],
     "risk": {
       "read": "external Jira Cloud API read of issue, project, and user data",
-      "approval": "reverse ETL writes require plan, preview, approval, execute; reads are HTTP Basic authenticated with an Atlassian API token"
+      "write": "external Jira Cloud API mutation across issues, projects, users, fields, workflows, dashboards, and instance administration; 84 of the 292 write actions are DELETEs that permanently remove Jira issues, projects, or instance configuration",
+      "approval": "required for every write action; reverse ETL plan, preview, approval, execute, and every DELETE action is gated as destructive and additionally requires a typed confirmation; reads are HTTP Basic authenticated with an Atlassian API token"
     },
     "icon": {
       "id": "jira",
@@ -167069,7 +167091,8 @@
     ],
     "risk": {
       "read": "external Workday REST API read across HCM, Financials, Student and Platform services (HR/PII-adjacent)",
-      "approval": "reverse ETL writes require plan, preview, approval, execute; reads are bearer-token authenticated"
+      "write": "external Workday REST API mutation across HCM, Financials, Student and Platform services, including HR/PII-adjacent worker, absence, payroll, and financial records; 32 of the 252 write actions are DELETEs that permanently remove Workday records",
+      "approval": "required for every write action; reverse ETL plan, preview, approval, execute, and every DELETE action is gated as destructive and additionally requires a typed confirmation; reads are bearer-token authenticated"
     },
     "icon": {
       "id": "pm-sample",
