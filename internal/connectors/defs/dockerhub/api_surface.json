@@ -97,8 +97,13 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "covered_by": {
-        "write": "create_auth_token"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "credential-for-token exchange whose only input is a live secret and only output is a live access token; requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token",
+        "notes": "named_dependency=requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token"
       }
     },
     {
@@ -592,8 +597,13 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "covered_by": {
-        "write": "create_2fa_login"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "credential-for-token exchange whose only inputs are a live intermediate token and a TOTP code and only output is a live session JWT; requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token",
+        "notes": "named_dependency=requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token"
       }
     },
     {
@@ -603,8 +613,13 @@
         "artifact": "dockerhub-artifact-2026-08-06",
         "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
       },
-      "covered_by": {
-        "write": "create_user_login"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "credential-for-token exchange whose only input is a live secret and only output is a live session JWT; requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token",
+        "notes": "named_dependency=requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token"
       }
     }
   ]

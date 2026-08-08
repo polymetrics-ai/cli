@@ -98,9 +98,28 @@ const fallbackTokenTTL = 4 * time.Minute
 // would otherwise reject every non-SCIM command too when the operator has
 // not configured SCIM at all) — a second, independently-configured secret,
 // never derived from or substituted for docker_pat.
+//
+// The two credentials are also INDEPENDENTLY configurable. streams.json
+// declares two custom-auth specs: one gated on secrets.docker_pat carrying
+// the login-exchange fields, and one gated on secrets.scim_bearer_token
+// carrying none of them (the `when` grammar has no OR, so one spec cannot
+// express "either secret"). A spec with no login fields therefore means
+// "SCIM-only connection": every SCIM command works with no docker_pat, and
+// every non-SCIM command fails closed naming docker_pat rather than being
+// sent unauthenticated.
 func (h *Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig, spec engine.AuthSpec) (connsdk.Authenticator, error) {
 	if err := ctx.Err(); err != nil {
 		return nil, err
+	}
+
+	scimToken := strings.TrimSpace(cfg.Secrets["scim_bearer_token"])
+	auth := &dualAuth{scimToken: scimToken, scimPrefixes: scimPathPrefixes(cfg)}
+
+	if strings.TrimSpace(spec.Username) == "" && strings.TrimSpace(spec.Password) == "" {
+		if scimToken == "" {
+			return nil, errors.New("dockerhub auth: docker_pat or scim_bearer_token is required")
+		}
+		return auth, nil
 	}
 
 	tokenURL, err := interpolateRequired(spec.TokenURL, "token_url", cfg)
@@ -118,23 +137,48 @@ func (h *Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig,
 	if err != nil {
 		return nil, err
 	}
-	scimToken := cfg.Secrets["scim_bearer_token"]
 
-	return &dualAuth{
-		session: &sessionLoginAuth{
-			tokenURL: tokenURL,
-			username: username,
-			password: password,
-			client:   h.Client,
-			now:      h.Now,
-		},
-		scimToken: scimToken,
-	}, nil
+	auth.session = &sessionLoginAuth{
+		tokenURL: tokenURL,
+		username: username,
+		password: password,
+		client:   h.Client,
+		now:      h.Now,
+	}
+	return auth, nil
 }
 
-// scimPathPrefix identifies every SCIM 2.0 endpoint documented under
-// bearerSCIMAuth (dockerhub's api_surface.json /v2/scim/2.0/** rows).
-const scimPathPrefix = "/v2/scim/2.0/"
+// scimAPIPath is the SCIM 2.0 sub-path every bearerSCIMAuth endpoint sits
+// under (dockerhub's api_surface.json /v2/scim/2.0/** rows), relative to the
+// Docker Hub API root.
+const scimAPIPath = "/scim/2.0/"
+
+// scimPathPrefixes returns the outgoing request-path prefixes that address
+// Docker Hub's SCIM surface for the configured base_url.
+//
+// Routing cannot test a fixed "/v2/scim/2.0/" prefix: base_url is documented
+// as overridable for tests and self-hosted proxies, and a proxy base_url
+// carrying its own path (https://proxy.internal/dockerhub/v2) shifts every
+// outgoing path by that prefix. A fixed test fails OPEN there — the SCIM
+// request stops matching and gets signed with the account session JWT, which
+// is exactly the credential substitution dualAuth exists to prevent. The
+// prefixes are therefore derived from the resolved base path, and BOTH forms
+// are accepted because the declared operation path ("/v2/scim/2.0/...") is
+// stripped of the base path only when it actually starts with it
+// (engine.normalizeDirectReadPathForBaseURL), so a proxy base leaves the
+// declared "/v2" in place and the wire path carries it twice.
+//
+// Anchoring on the base path rather than searching for "/scim/2.0/" anywhere
+// matters in the other direction too: a repository read of namespace "scim",
+// repository "2.0" produces a path CONTAINING "/scim/2.0/" that must keep
+// using the session JWT, never the SCIM token.
+func scimPathPrefixes(cfg connectors.RuntimeConfig) []string {
+	basePath := ""
+	if parsed, err := url.Parse(strings.TrimSpace(cfg.Config["base_url"])); err == nil {
+		basePath = strings.TrimRight(parsed.EscapedPath(), "/")
+	}
+	return []string{basePath + scimAPIPath, basePath + "/v2" + scimAPIPath}
+}
 
 // dualAuth routes each outgoing request to one of two independent
 // credentials by request path: the account session JWT (sessionLoginAuth)
@@ -142,21 +186,36 @@ const scimPathPrefix = "/v2/scim/2.0/"
 // /v2/scim/2.0/** requests. It never falls back from one credential to the
 // other — a SCIM request with no scimToken configured fails closed with a
 // named error rather than silently sending the account session JWT to an
-// endpoint Docker Hub documents as requiring a different credential.
+// endpoint Docker Hub documents as requiring a different credential, and a
+// non-SCIM request on a SCIM-only connection fails closed naming docker_pat
+// rather than sending the SCIM token to a bearerAuth endpoint.
 type dualAuth struct {
-	session   *sessionLoginAuth
-	scimToken string
+	session      *sessionLoginAuth
+	scimToken    string
+	scimPrefixes []string
 }
 
 func (a *dualAuth) Apply(ctx context.Context, req *http.Request) error {
-	if strings.HasPrefix(req.URL.Path, scimPathPrefix) {
+	if a.isSCIMPath(req.URL.Path) {
 		if strings.TrimSpace(a.scimToken) == "" {
 			return errors.New("dockerhub auth: scim_bearer_token is required for /v2/scim/2.0/** commands")
 		}
 		req.Header.Set("Authorization", "Bearer "+a.scimToken)
 		return nil
 	}
+	if a.session == nil {
+		return errors.New("dockerhub auth: docker_pat is required for every non-SCIM command")
+	}
 	return a.session.Apply(ctx, req)
+}
+
+func (a *dualAuth) isSCIMPath(path string) bool {
+	for _, prefix := range a.scimPrefixes {
+		if strings.HasPrefix(path, prefix) {
+			return true
+		}
+	}
+	return false
 }
 
 // interpolateRequired resolves tmpl via engine.Interpolate and wraps any error

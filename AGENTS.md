@@ -299,19 +299,6 @@ drifted and let 174 commands validate clean while blocking on every invocation.
   not one executable command contract. Runtime preflight expands its arms and
   rejects promotion; model each reachable arm as a separate named action, or
   leave it non-implemented until the required runtime capability exists.
-- `rest_read` operation direct reads support `HEAD` for status-only existence
-  checks (added for `dockerhub`, the first connector to use it): a HEAD
-  response never carries a body, so the result is `{"status_code": N}` and
-  `output_policy` must be `"json_redacted"`. Adding a genuinely new runtime
-  capability like this means updating every mirror site together, not just
-  `commandrunner`/`connectorgen`: `internal/connectors/engine/bundle.go`
-  (load-time), `engine/direct_read.go` (execution),
-  `engine/operation_endpoint_ledger.go` (both the deriver *and* the
-  persisted-ledger loader the real binary reads — easy to miss),
-  `internal/connectors/conformance/static.go`, and every
-  `cmd/connectorgen/validate.go` site restating the old method allowlist.
-  `TestEveryImplementedCommandPassesRuntimePreflight` across all 551
-  connectors is what proves nothing else regressed.
 
 Never invent an `api_surface` endpoint to make a command look implemented. If
 the endpoint is not in the connector's own `api_surface.json` and

@@ -7,10 +7,11 @@ repositories, and (with a second, separately-configured SCIM token) SCIM-provisi
 
 Readable streams: `repositories`, `tags`, `repository_detail`, `tag_detail`.
 
-Direct reads, status-only existence checks, and reverse-ETL writes cover all 50 remaining
+Direct reads, status-only existence checks, and reverse-ETL writes cover 47 of the 50 remaining
 documented Docker Hub operations: repositories, personal/organization access tokens, audit logs,
-groups (teams), invites, organization settings/members, authentication, and SCIM. All 54
-documented Docker Hub API operations are implemented.
+groups (teams), invites, organization settings/members, and SCIM. All 54 documented Docker Hub API
+operations are modelled; 51 are implemented and 3 (the credential-for-token authentication
+exchanges) are declared blocked on a named dependency — see "Write actions & risks".
 
 Service API documentation: https://docs.docker.com/docker-hub/api/latest/.
 
@@ -72,6 +73,11 @@ Authentication behavior:
   (`dualAuth`) and never substitutes one credential for the other. A SCIM command with no
   `scim_bearer_token` configured fails closed with a named error, even if a session JWT is already
   cached from a prior non-SCIM command.
+- The two credentials are independently sufficient. `scim_bearer_token` alone (no `docker_pat`)
+  authenticates every SCIM command, and every non-SCIM command then fails closed naming
+  `docker_pat` rather than being sent unauthenticated. SCIM routing is anchored on the resolved
+  `base_url` path, so a proxy `base_url` carrying its own path prefix still routes SCIM requests to
+  the SCIM credential instead of falling back to the account session JWT.
 
 Requests use the configured `base_url` value after applying defaults.
 
@@ -100,9 +106,13 @@ limitation tracked separately, not specific to this connector).
 
 The 3 `*-check` commands (`repository check`, `repository tags check`, `repository tag check`) are
 status-only: Docker Hub's `HEAD` existence-check endpoints never return a response body, so these
-commands return `{"status_code": N}` — the HTTP status is the entire signal. This is a new runtime
-capability (`internal/connectors/engine/direct_read.go`'s HEAD branch); no other connector's
-commands are affected by it.
+commands return `{"status_code": N}` — the HTTP status is the entire signal. Both answers the check
+exists to give are results, not errors: `{"status_code": 200}` when the resource exists and
+`{"status_code": 404}` when it does not. Every other status is still a failure — 401/403 report an
+auth problem rather than a fact about the resource, and 429/5xx are the provider declining to
+answer. This is a new runtime capability (`internal/connectors/engine/direct_read.go`'s HEAD
+branch), narrowed to status-only HEAD operations; no other connector's commands and no non-HEAD
+direct read are affected by it (a GET 404 remains an error).
 
 ## Write actions & risks
 
@@ -120,10 +130,17 @@ removal) additionally require typed destructive confirmation.
   nested array of objects with no typed scalar leaf and is not flag-mapped — supply it via a
   reverse-ETL source record), `org access-tokens update`, `org access-tokens delete` (destructive).
 - Audit logs: `audit-logs list`, `audit-logs actions list` (both direct reads).
-- Authentication: `auth token create` (identifier+secret to short-lived access token exchange),
-  `auth login create` (username+password/PAT session login — the same exchange this connector's
-  own AuthHook performs internally when `docker_pat` is configured), `auth 2fa-login create`
-  (completes a 2FA-challenged login). All three redact the returned token from their output.
+- Authentication (declared, NOT implemented): `auth token create`, `auth login create`, and
+  `auth 2fa-login create` remain in the documented 54-operation surface as `availability: planned`
+  and are not executable. Each one's only input is a live credential and only output is a live
+  token, and the reverse-ETL path they would run on maps command flags into a plan record that is
+  persisted to the project state file in plaintext and echoed in plan output; an action's
+  `redact_fields` names a RESPONSE field and does not redact the request credential, so nothing
+  here would make a password, PAT, or TOTP code safe on the command line or on disk. They are
+  blocked on a named dependency: requires secure secret input (stdin/env/vault-reference),
+  encrypted or ephemeral plan storage, and a secure sink for the returned token. The session-login
+  exchange itself is still performed internally, with no plan record, by the `dockerhub` AuthHook
+  whenever `docker_pat` is configured.
 - Groups (teams): `groups list`/`get` (direct read), `groups create`, `groups replace` (PUT, full
   update), `groups update` (PATCH, partial update), `groups delete` (destructive), `groups members
   list` (direct read), `groups members add`, `groups members remove` (destructive).
@@ -150,8 +167,9 @@ removal) additionally require typed destructive confirmation.
   pulls per window by Docker username; paid Registry profiles deliberately match no fixed budget.
   Docker's separate Hub API abuse limiter publishes no numeric budget, so no synthetic limiter is
   declared for it. A bare 429 still follows the shared requester's provider `Retry-After` backoff.
-- API coverage: all 54 documented Docker Hub operations are implemented (4 stream-backed, 50
-  direct-read/status-check/write). Zero operations remain blocked.
+- API coverage: all 54 documented Docker Hub operations are modelled; 51 are implemented (4
+  stream-backed, 47 direct-read/status-check/write) and 3 are blocked — the credential-for-token
+  authentication exchanges, on the named secure-secret-input/secure-token-sink dependency above.
 - Two independent optional credentials gate different command groups: `docker_pat` (most commands)
   and `scim_bearer_token` (SCIM only) — Docker Hub's own OpenAPI document declares these under
   separate security schemes (`bearerAuth` vs `bearerSCIMAuth`) and this bundle never substitutes

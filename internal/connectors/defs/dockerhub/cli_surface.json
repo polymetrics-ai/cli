@@ -337,118 +337,25 @@
       "path": "auth 2fa-login create",
       "summary": "Second factor authentication (completes a 2FA-challenged login)",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "create_2fa_login",
-      "risk": "high: exchanges a 2FA challenge for a live session JWT; the token is redacted from command output; requires reverse ETL approval",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
-      "flags": [
-        {
-          "name": "login-2fa-token",
-          "type": "string",
-          "summary": "The intermediate 2FA token returned from `auth login create`.",
-          "maps_to": "record.login_2fa_token",
-          "required": true
-        },
-        {
-          "name": "code",
-          "type": "string",
-          "summary": "The Time-based One-Time Password (TOTP) of the Docker Hub account.",
-          "maps_to": "record.code",
-          "required": true
-        }
-      ],
+      "availability": "planned",
       "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v2/users/2fa-login"
-        }
-      ],
-      "examples": [
-        "pm dockerhub auth 2fa-login create --login-2fa-token \"<token>\" --code \"123456\" --json"
-      ],
-      "notes": "The provider returns a live session JWT in the response. This command redacts the `token` field from its own output; it is never printed or logged.",
-      "redact_fields": [
-        "token"
-      ]
+      "notes": "Docker Hub's documented second-factor login completion. Not implemented: this command's only inputs are a live intermediate token and a TOTP code and its only output is a live session JWT, and the reverse-ETL path it would run on maps flags to a plan record that is written to the project state file in plaintext and echoed in plan output. Blocked on a named dependency — requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token."
     },
     {
       "path": "auth login create",
       "summary": "Create an authentication token (username+password/PAT session login)",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "create_user_login",
-      "risk": "high: exchanges a credential for a live session JWT; the token is redacted from command output; requires reverse ETL approval",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
-      "flags": [
-        {
-          "name": "username",
-          "type": "string",
-          "summary": "Docker Hub account username.",
-          "maps_to": "record.username",
-          "required": true
-        },
-        {
-          "name": "password",
-          "type": "string",
-          "summary": "Docker Hub account password or Personal Access Token.",
-          "maps_to": "record.password",
-          "required": true
-        }
-      ],
+      "availability": "planned",
       "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v2/users/login"
-        }
-      ],
-      "examples": [
-        "pm dockerhub auth login create --username \"myusername\" --password \"<pat-or-password>\" --json"
-      ],
-      "notes": "The provider returns a live session JWT in the response (used internally by this connector's own dockerhub AuthHook when docker_pat is configured for every other command). This command redacts the `token` field from its own output; it is never printed or logged. If the account has 2FA enabled, the response is an intermediate token consumed by `auth 2fa-login create`, not a final session token.",
-      "redact_fields": [
-        "token"
-      ]
+      "notes": "Docker Hub's documented username+password/PAT session login. Not implemented: this command's only input is a live credential and its only output is a live session JWT, and the reverse-ETL path it would run on maps flags to a plan record that is written to the project state file in plaintext and echoed in plan output. Blocked on a named dependency — requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token. The same exchange is already performed internally, without a plan record, by the dockerhub AuthHook when docker_pat is configured."
     },
     {
       "path": "auth token create",
       "summary": "Create access token (identifier+secret to short-lived access token exchange)",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "create_auth_token",
-      "risk": "high: exchanges a credential for a live 10-minute access token; the token is redacted from command output; requires reverse ETL approval",
-      "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
-      "flags": [
-        {
-          "name": "identifier",
-          "type": "string",
-          "summary": "Username (password/PAT auth) or organization name (organization access token auth).",
-          "maps_to": "record.identifier",
-          "required": true
-        },
-        {
-          "name": "secret",
-          "type": "string",
-          "summary": "Password, personal access token, or organization access token.",
-          "maps_to": "record.secret",
-          "required": true
-        }
-      ],
+      "availability": "planned",
       "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v2/auth/token"
-        }
-      ],
-      "examples": [
-        "pm dockerhub auth token create --identifier \"myusername\" --secret \"<pat-or-password>\" --json"
-      ],
-      "notes": "The provider returns a live access token (10-minute lifetime) in the response. This command redacts the `access_token` field from its own output; it is never printed or logged.",
-      "redact_fields": [
-        "access_token"
-      ]
+      "notes": "Docker Hub's documented identifier+secret to short-lived access token exchange. Not implemented: this command's only input is a live credential and its only output is a live token, and the reverse-ETL path it would run on maps flags to a plan record that is written to the project state file in plaintext and echoed in plan output. Blocked on a named dependency — requires secure secret input (stdin/env/vault-reference), encrypted or ephemeral plan storage, and a secure sink for the returned token. The same exchange is already performed internally, without a plan record, by the dockerhub AuthHook when docker_pat is configured."
     },
     {
       "path": "groups create",
