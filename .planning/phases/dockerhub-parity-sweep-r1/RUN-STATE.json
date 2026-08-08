@@ -140,5 +140,5 @@
       "unblocks": "declared typed endpoints whose legal opaque one-segment values include colon, plus, or at-sign; local connector/credential identifiers remain strict"
     }
   ],
-  "next_action": "run final scoped/package gates, inline verify-work and code-review, then open the explicitly not-certified parent PR"
+  "next_action": "run the no-mistakes delivery pipeline, respond only to its gates, then open the explicitly not-certified parent PR"
 }

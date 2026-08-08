@@ -375,7 +375,7 @@ their commands and outcomes are recorded in `TDD-LEDGER.md`, `VERIFICATION.md`, 
 
 ## Captain evidence-reconciliation and SCIM schema-ID corrective slice (2026-08-08)
 
-**Status: executing; PR/no-mistakes held.** The captain rejected the prior live matrix because
+**Status: corrective evidence complete; final delivery pipeline in progress.** The captain rejected the prior live matrix because
 it retained superseded pre-upgrade observations alongside post-upgrade successes. Its historical
 rows remain provenance only; the replacement final ledger will carry exactly one mutually
 exclusive outcome for every documented operation and will never mix a stale result with a current

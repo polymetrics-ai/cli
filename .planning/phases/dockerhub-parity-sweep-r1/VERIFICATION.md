@@ -125,4 +125,4 @@ pm has no OCI/Registry v2 image pull/push operation or Registry bearer-acquisiti
 
 ## GSD/TDD evidence
 
-The required inline lifecycle evidence is recorded in PLAN.md, TDD-LEDGER.md, RUN-STATE.json, and REVIEW.md. The canonical parent-worker contract prohibits role spawning in this worktree, so the lifecycle uses the documented inline/manual fallback. Final package and delivery-gate results are appended after the last verification pass.
+The required inline lifecycle evidence is recorded in PLAN.md, TDD-LEDGER.md, RUN-STATE.json, and REVIEW.md. The canonical parent-worker contract prohibits role spawning in this worktree, so the lifecycle uses the documented inline/manual fallback. Final focused/package gates, 54/54 rebuilt-binary help reachability, and standard inline review are green; the next gate is the requested no-mistakes delivery pipeline.
