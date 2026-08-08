@@ -50,6 +50,7 @@ func TestValidateURLPathSegment(t *testing.T) {
 	valid := []string{
 		"fixture-item",
 		"urn:ietf:params:scim:schemas:core:2.0:User",
+		"person+coverage@example.test",
 	}
 	for _, in := range valid {
 		t.Run("accept_"+in, func(t *testing.T) {

@@ -612,3 +612,31 @@ The original definition-owned test now observed one local request at
 `/v2/scim/2.0/Schemas/urn:ietf:params:scim:schemas:core:2.0:User`; it did not use
 a credential or contact Docker Hub. The shared change is therefore proven at the actual Docker
 Hub operation boundary rather than merely by a helper test.
+
+### Planned RED — other documented opaque path-segment values
+
+The required cross-connector audit found that the same shared path-value guard is also used for
+HubSpot's documented `emailAddress` path parameter (three declared communication-preferences
+endpoints). A normal mailbox such as `person+coverage@example.test` is an opaque single segment,
+but the first colon-only repair still rejected both `+` and `@`. This is the same class of our
+runtime defect, not a HubSpot entitlement result. The red test is deliberately in the shared
+safety package because it exercises the exact validator every typed direct read, binary read, and
+direct write uses.
+
+**Verbatim RED failure before production changes:**
+
+```text
+=== RUN   TestValidateURLPathSegment
+=== RUN   TestValidateURLPathSegment/accept_person+coverage@example.test
+    safety_test.go:58: ValidateURLPathSegment("person+coverage@example.test") error = test contains invalid path-segment character '+'
+--- FAIL: TestValidateURLPathSegment (0.00s)
+FAIL
+FAIL	polymetrics.ai/internal/safety	0.443s
+FAIL
+```
+
+Command: `go test -timeout 20m ./internal/safety -run TestValidateURLPathSegment -count=1 -v`.
+This red checkpoint is committed before broadening the validator. The green contract permits only
+the additional RFC 3986-safe opaque-segment characters required by documented values while
+preserving rejection of raw separators, traversal, controls, query/fragment delimiters, and
+pre-escaped percent sequences.
