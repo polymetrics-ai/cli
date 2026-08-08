@@ -1,0 +1,49 @@
+{
+  "record": {
+    "account_id": "fixture-chatbot-account",
+    "content": {
+      "body": [
+        {
+          "type": "section",
+          "text": "fixture chatbot message"
+        }
+      ]
+    },
+    "robot_jid": "fixture-robot-jid",
+    "to_jid": "fixture-recipient-jid",
+    "user_jid": "fixture-sender-jid",
+    "is_markdown_support": true,
+    "reply_to": "fixture-reply-jid",
+    "visible_to_user": "true"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/im/chat/messages",
+    "body": {
+      "account_id": "fixture-chatbot-account",
+      "content": {
+        "body": [
+          {
+            "type": "section",
+            "text": "fixture chatbot message"
+          }
+        ]
+      },
+      "robot_jid": "fixture-robot-jid",
+      "to_jid": "fixture-recipient-jid",
+      "user_jid": "fixture-sender-jid",
+      "is_markdown_support": true,
+      "reply_to": "fixture-reply-jid",
+      "visible_to_user": "true"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "account_id": "fixture-chatbot-account",
+      "message_id": "fixture-chatbot-message",
+      "content": "fixture chatbot response",
+      "token": "fixture-chatbot-response-token"
+    }
+  }
+}

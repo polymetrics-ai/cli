@@ -1,0 +1,14 @@
+{
+  "record": {},
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/im/chat/messages/fixture-chatbot-message"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "message_id": "fixture-chatbot-message",
+      "token": "fixture-chatbot-response-token"
+    }
+  }
+}
