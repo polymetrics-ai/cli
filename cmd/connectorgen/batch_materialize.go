@@ -85,9 +85,12 @@ type batchMaterializeOptions struct {
 // runBatchMaterialize is the one post-#3869 artifact-to-bundle authoring
 // path. It reads public OpenAPI/Swagger documents from the manifest, upgrades
 // the existing surface inventory to v2 provenance, and maps every documented
-// operation into the bundle. Commands are marked implemented only when the
-// real runtime can preflight them; unsupported operation metadata remains
-// visible as a not_implemented command with a named dependency.
+// operation into the bundle. It deliberately does not run the repository-wide
+// runtime preflight: materialization is the cheap authoring phase, and batch
+// gate performs the single end-of-run preflight over the staged result.
+// Commands are marked implemented only when the real runtime can preflight
+// them; unsupported operation metadata remains visible as a not_implemented
+// command with a named dependency.
 func runBatchMaterialize(args []string, stdout, stderr io.Writer) int {
 	for _, arg := range args {
 		if arg == "-h" || arg == "--help" || arg == "help" {
@@ -275,17 +278,9 @@ func materializeBatchCandidate(opts batchMaterializeOptions, candidate BatchMani
 	if err != nil {
 		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, "cli_surface", err)
 	}
-	materializedBundle := bundle
-	materializedBundle.Surface = &surface
-	materializedBundle.Operations = operations
-	materializedBundle.CLISurface = &cli
 	split, err := batchSurfaceSplit(&surface)
 	if err != nil {
 		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, "api_surface", err)
-	}
-	checked, err := batchRuntimePreflight(materializedBundle)
-	if err != nil {
-		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, "runtime_preflight", err)
 	}
 
 	surfaceRaw, err := json.MarshalIndent(surface, "", "  ")
@@ -329,7 +324,7 @@ func materializeBatchCandidate(opts batchMaterializeOptions, candidate BatchMani
 		ImplementedCommands:      implementedCommands,
 		NamedDependencyCommands:  namedDependencyCommands,
 		FlaggedDiscrepancies:     flaggedDiscrepancies,
-		RuntimePreflightCommands: checked,
+		RuntimePreflightCommands: 0,
 		OperationExecutors:       len(operations),
 	}, nil
 }
