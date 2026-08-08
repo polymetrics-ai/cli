@@ -2,14 +2,19 @@
 
 ## GSD execution record
 
-**Manual-GSD fallback, recorded deliberately.** The GSD lifecycle commands
-(`discuss-phase` → `plan-phase --tdd` → `execute-phase` → `verify-work`) were
-not driven through `scripts/gsd` for this phase: the work began from a live
-connector-validation report against a running defect rather than from a phase
-prompt, and the fix had to ship as a release blocker alongside the warehouse
-fix. AGENTS.md ("GSD Core Runtime For Agents") permits inline/manual execution
-when the runtime cannot provide compatible isolated agents, provided the
-fallback is recorded. This file is that record.
+**Restarted manual-GSD fallback, recorded deliberately.** This recovery run
+resolved the installed adapter and generated the `discuss-phase` and
+`plan-phase --tdd` prompts through `scripts/gsd`; `doctor` and
+`go run ./cmd/agentcontractgen check` passed. The canonical issue-agent
+contract forbids spawning planner/reviewer roles for this one-worker issue, so
+the generated prompts are executed inline and their decisions are recorded in
+this phase directory. The remaining generated prompts (`execute-phase`,
+`verify-work`, then `code-review`) are run in that order before handoff.
+
+Required skills loaded for the restart: `golang-how-to`, `golang-cli`,
+`golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`,
+`golang-design-patterns`, `golang-structs-interfaces`,
+`golang-documentation`, and `golang-lint`.
 
 TDD was followed for real: every behaviour below was written as a failing test
 first, and the red output is retained verbatim in TDD-LEDGER.md.
@@ -38,6 +43,20 @@ each issued exactly one request, none sent a page-size parameter, all returned
 362 implemented `direct_read` commands across 13 connectors. Confirmed
 structurally: 0 of 1964 `rest_read` operations across all 551 bundles declare
 any page-size parameter.
+
+The restart independently repeated the execution proof against the current
+binary and actual connector bundles, pointed at a local 120-record fixture:
+
+- Gong's legacy `DirectRead` command (`pm gong logs list`) returned four
+  cursor-addressable pages of 30; page one reported `complete: false` and the
+  final page reported `complete: true`.
+- Notion's `OperationDirectRead` command (`pm notion comment list`) returned
+  the declared 100-row page followed by 20 rows through `--page-cursor`; it
+  reported the same explicit incomplete/complete transition.
+
+Those are real command-surface runs, not a structural inference. Together
+with the retained red fixture evidence for GitHub, they establish a shared
+executor release blocker rather than a GitHub-only defect.
 
 ## Design, as ruled by the project owner
 
@@ -68,3 +87,11 @@ result carries the context needed to reach the next one.
 4. Add `--page` / `--page-cursor`, declared once in
    `direct_read_page_flags.json` and rendered by all three renderers.
 5. Regenerate the generated docs/website artifacts for parity.
+6. Recovery validation: prove the GitHub command surface against observable
+   data, including parameter validation and page context; then run ETL and
+   reverse ETL only through `pm github` against one captain-authorized private
+   disposable repository. Reverse ETL remains plan → preview → approval →
+   execute. No write may target `polymetrics-ai/cli` or any other repository.
+7. Record each live operation's outcome, returned record count, and any exact
+   failure before the verify-work and code-review gates. The private test
+   repository is deliberately retained for the captain to delete.
