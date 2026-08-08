@@ -363,6 +363,24 @@ non-replay behavior while keeping the compatibility check buildable.
 Record the real runner fixture lifecycle, source reconciliation, and command reachability here
 after all 21 endpoint rows are covered.
 
+### Clip transfer cardinality correction — RED 2026-08-08
+
+The live artifact's partial-transfer payload requires a non-empty `clip_id_list` as well as its
+maximum of fifty. The category surface test was extended before correcting either the CLI flag or
+the closed operation schema, and failed verbatim:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/defs/zoom -run '^TestClipsOperationCommandsAreReachable$'
+--- FAIL: TestClipsOperationCommandsAreReachable (0.13s)
+    command_surface_test.go:676: Clips command "clips transfers partial" clip-id-list min_items = 0, want 1
+    command_surface_test.go:698: Clips operation "zoom.transfer_clips_partial" clip_id_list minItems = 0, want 1
+FAIL
+FAIL	polymetrics.ai/internal/connectors/defs/zoom	0.900s
+FAIL
+```
+
+This is a test-only checkpoint; the artifact and fixture use no credential or token-derived value.
+
 ## Verification/review — pending
 
 Record scoped verification and inline manual review findings here after green.
