@@ -1,0 +1,20 @@
+{
+  "phase": "cli-sweep-seven-connector-extract-r1",
+  "status": "planned",
+  "source_commit": "c28bc75a3",
+  "execution_mode": "inline_manual_gsd",
+  "red_failure": "pending target-specific acceptance-test import",
+  "green_evidence": "pending",
+  "scope": [
+    "workday-rest",
+    "jira",
+    "help-scout",
+    "greenhouse",
+    "chatwoot",
+    "gmail",
+    "lever-hiring"
+  ],
+  "excluded": ["github", "zendesk-support"],
+  "live_credentials_used": false,
+  "certification_claim": "implemented_not_certified_never_live_tested"
+}
