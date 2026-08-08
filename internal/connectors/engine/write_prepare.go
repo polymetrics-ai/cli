@@ -252,6 +252,28 @@ func prepareCanonicalOperationMultipart(op OperationSpec, record connectors.Reco
 	return prepareCanonicalMultipartSpec(fmt.Sprintf("operation %q", op.ID), op.REST.Multipart, record, recordIndex, cfg, requirePayloadApproval)
 }
 
+// prepareCanonicalOperationBase64Upload gives a declared rest_write the
+// compact, path-free preview representation used by declarative base64
+// actions, while deliberately doing more than the legacy dry-run helper: a
+// direct operation cannot be previewed until its local bytes have been
+// bounded, content-checked, and proven equal to the payload hash the planner
+// supplied. That makes a later filesystem change fail before the request is
+// constructed or the approval gate can dispatch it.
+func prepareCanonicalOperationBase64Upload(op OperationSpec, record connectors.Record, recordIndex int, cfg connectors.RuntimeConfig) (any, error) {
+	if op.REST == nil || op.REST.Base64Upload == nil {
+		return nil, fmt.Errorf("engine: operation %q: rest base64_upload spec is required", op.ID)
+	}
+	action := WriteAction{
+		Name:         op.ID,
+		BodyType:     "base64_upload",
+		Base64Upload: op.REST.Base64Upload,
+	}
+	if _, err := resolveBase64UploadPayload(action, op.REST.Base64Upload, record, recordIndex, cfg); err != nil {
+		return nil, err
+	}
+	return prepareCanonicalBase64Upload(action, record, recordIndex, cfg, true)
+}
+
 // prepareCanonicalMultipartSpec is shared by reverse-ETL actions and declared
 // rest_write operations. It intentionally carries identities and approved
 // hashes, not file bytes or caller-selected wire shape, so the preview digest

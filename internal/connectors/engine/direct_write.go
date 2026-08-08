@@ -140,6 +140,17 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 				return buildErr
 			}
 			response, err = requester.DoMultipartLimited(requestCtx, prepared.method, prepared.requestPath, prepared.query, multipart, prepared.maxBytes)
+		case "base64_upload":
+			object, ok := prepared.body.(map[string]any)
+			if !ok {
+				return fmt.Errorf("operation %q base64 upload body must be a JSON object", prepared.op.ID)
+			}
+			action := WriteAction{Name: prepared.op.ID, BodyType: "base64_upload", Base64Upload: prepared.op.REST.Base64Upload}
+			payload, buildErr := buildBase64UploadPayload(action, connectors.Record(object), 0, prepared.cfg)
+			if buildErr != nil {
+				return buildErr
+			}
+			response, err = requester.DoLimited(requestCtx, prepared.method, prepared.requestPath, prepared.query, payload, prepared.maxBytes)
 		default:
 			return fmt.Errorf("operation %q has unsupported prepared body format %q", prepared.op.ID, prepared.format)
 		}
@@ -336,12 +347,22 @@ func PreflightOperationDirectWrite(b Bundle, operation, method, endpointPath, ou
 	return validateOperationDirectWriteOutputPolicy(outputPolicy)
 }
 
-// operationDirectWritePayloadFileFields keeps multipart file identity
-// discovery declaration-owned. Returning a non-nil empty slice for a multipart
-// operation distinguishes it from the legacy name-based fallback used by
-// non-multipart direct writes.
+// operationDirectWritePayloadFileFields keeps declared local-file identity
+// discovery declaration-owned. Returning a non-nil empty slice for a typed
+// file operation distinguishes it from the legacy name-based fallback used by
+// ordinary direct writes.
 func operationDirectWritePayloadFileFields(op OperationSpec) []string {
-	if op.REST == nil || op.REST.Multipart == nil {
+	if op.REST == nil {
+		return nil
+	}
+	if op.REST.Base64Upload != nil {
+		field := strings.TrimSpace(op.REST.Base64Upload.SourceField)
+		if field == "" {
+			return []string{}
+		}
+		return []string{field}
+	}
+	if op.REST.Multipart == nil {
 		return nil
 	}
 	seen := make(map[string]struct{})
@@ -426,6 +447,20 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 			return preparedOperationDirectWrite{}, fmt.Errorf("operation %q: encode canonical multipart request: %w", op.ID, marshalErr)
 		}
 		encodedBody = string(raw)
+	} else if format == "base64_upload" {
+		object, ok := body.(map[string]any)
+		if !ok {
+			return preparedOperationDirectWrite{}, fmt.Errorf("operation %q base64 upload body must be a JSON object", op.ID)
+		}
+		canonical, canonicalErr := prepareCanonicalOperationBase64Upload(op, connectors.Record(object), 0, cfg)
+		if canonicalErr != nil {
+			return preparedOperationDirectWrite{}, canonicalErr
+		}
+		raw, marshalErr := json.Marshal(canonical)
+		if marshalErr != nil {
+			return preparedOperationDirectWrite{}, fmt.Errorf("operation %q: encode canonical base64 upload request: %w", op.ID, marshalErr)
+		}
+		encodedBody = string(raw)
 	} else {
 		form, encodedBody, err = operationDirectWritePreparedBody(op, body, format, maxBytes)
 		if err != nil {
@@ -457,6 +492,9 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 		// parts and their limits, rather than only the values present in this
 		// invocation's canonical body.
 		definition["multipart"] = op.REST.Multipart
+	}
+	if format == "base64_upload" {
+		definition["base64_upload"] = op.REST.Base64Upload
 	}
 	if op.REST.Redirect != nil {
 		// The admitted host boundary and finite replay cap are preview-bound
@@ -518,6 +556,14 @@ func operationDirectWriteSpec(b Bundle, id string) (OperationSpec, string, error
 	hasOperationAuth := len(op.REST.Auth) > 0
 	if hasOperationBaseURL != hasOperationAuth {
 		return OperationSpec{}, "", fmt.Errorf("operation direct write requires rest.base_url and rest.auth to be declared together")
+	}
+	if op.REST.Base64Upload != nil {
+		if err := validateOperationBase64UploadSemantics(0, op); err != nil {
+			return OperationSpec{}, "", err
+		}
+	}
+	if err := validateOperationMutationRedirectSemantics(0, op); err != nil {
+		return OperationSpec{}, "", err
 	}
 	if err := requireOperationDirectWriteEndpoint(b, method, op.REST.Path); err != nil {
 		return OperationSpec{}, "", err
@@ -636,6 +682,13 @@ func operationDirectWriteContentType(op OperationSpec, body any) (contentType, f
 		return "", "", fmt.Errorf("operation %q has no rest declaration", op.ID)
 	}
 	declared := strings.TrimSpace(op.REST.ContentType)
+	if op.REST.Base64Upload != nil {
+		mediaType, _, parseErr := mime.ParseMediaType(declared)
+		if parseErr != nil || !strings.EqualFold(mediaType, "application/json") {
+			return "", "", fmt.Errorf("operation %q rest.base64_upload requires content_type application/json", op.ID)
+		}
+		return "application/json", "base64_upload", nil
+	}
 	if op.REST.Multipart != nil {
 		if op.REST.ContentType != "multipart/form-data" {
 			return "", "", fmt.Errorf("operation %q rest.multipart requires literal content_type multipart/form-data", op.ID)

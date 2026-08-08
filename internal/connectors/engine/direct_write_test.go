@@ -483,6 +483,122 @@ func TestOperationBase64UploadAdmitsDeclaredMutationRedirect(t *testing.T) {
 	}
 }
 
+// TestOperationDirectWriteBase64UploadFollowsDeclaredRedirect proves that the
+// narrowly admitted JSON upload reuses the mutation redirect transport without
+// widening it into a caller-selected redirect or credential policy.
+func TestOperationDirectWriteBase64UploadFollowsDeclaredRedirect(t *testing.T) {
+	const accessToken = "fixture-base64-redirect-token"
+	decoded, err := base64.StdEncoding.DecodeString("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9WlCkZYAAAAASUVORK5CYII=")
+	if err != nil {
+		t.Fatalf("decode fixture png: %v", err)
+	}
+	encoded := base64.StdEncoding.EncodeToString(decoded)
+	digest := sha256.Sum256(decoded)
+	dir := t.TempDir()
+	sourcePath := dir + "/temporary.png"
+	if err := os.WriteFile(sourcePath, decoded, 0o600); err != nil {
+		t.Fatalf("write temporary fixture image: %v", err)
+	}
+
+	var redirectURL string
+	var initialCalls, redirectedCalls int
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		if request.Header.Get("Authorization") != "Bearer "+accessToken {
+			t.Fatal("declared base64 redirect did not retain the operation bearer")
+		}
+		switch request.URL.Path {
+		case "/clips/files/tmp":
+			initialCalls++
+			http.Redirect(w, request, redirectURL, http.StatusTemporaryRedirect)
+		case "/redirected":
+			redirectedCalls++
+			if !strings.HasPrefix(request.Header.Get("Content-Type"), "application/json") {
+				t.Fatal("redirected base64 request did not retain JSON content type")
+			}
+			var body map[string]any
+			if err := json.NewDecoder(request.Body).Decode(&body); err != nil {
+				t.Fatalf("decode redirected base64 request: %v", err)
+			}
+			if got, _ := body["file"].(string); got != encoded {
+				t.Fatal("redirected base64 request did not retain the bounded file payload")
+			}
+			if _, leaked := body["file_path"]; leaked {
+				t.Fatal("redirected base64 request exposed the local source path")
+			}
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusCreated)
+			_, _ = w.Write([]byte(`{"file_id":"fixture-temporary-file"}`))
+		default:
+			t.Fatalf("unexpected base64 redirect path %q", request.URL.Path)
+		}
+	}))
+	defer server.Close()
+	baseURL := localhostBinaryURL(t, server.URL)
+	redirectURL = baseURL + "/redirected"
+
+	bundle := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: baseURL},
+		Operations: []OperationSpec{{
+			ID:            "acme.clips.temporary_file",
+			Kind:          "rest_write",
+			Summary:       "Upload one bounded temporary image",
+			Risk:          "high",
+			Approval:      "plan-preview-confirm-execute",
+			OutputPolicy:  "json_redacted",
+			MutationClass: "create",
+			REST: &RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/clips/files/tmp",
+				BaseURL:     baseURL,
+				Auth:        []AuthSpec{{Mode: "bearer", Token: "{{ secrets.fixture_token }}"}},
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				BodySchema:  json.RawMessage(`{"type":"object","additionalProperties":false,"required":["file_path"],"properties":{"file_path":{"type":"string"}}}`),
+				Base64Upload: &Base64UploadSpec{
+					Source:                "path",
+					SourceField:           "file_path",
+					ContentField:          "file",
+					MaxDecodedBytes:       2 << 20,
+					AllowedMediaTypes:     []string{"image/png", "image/jpeg", "image/gif"},
+					AllowedFileExtensions: []string{".png", ".jpg", ".jpeg", ".gif"},
+				},
+				Redirect: &MutationRedirectSpec{AllowedHostSuffixes: []string{"localhost"}, MaxHops: 1},
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method:    http.MethodPost,
+			Path:      "/clips/files/tmp",
+			Operation: &SurfaceOperation{Model: "sensitive_reverse_etl", Status: "blocked", Risk: "high", BlockedByDefault: true, Reason: "operation metadata is bound by the executor"},
+		}}},
+	}
+	req := connectors.OperationDirectWriteRequest{
+		Operation: "acme.clips.temporary_file",
+		Config: connectors.RuntimeConfig{
+			ProjectDir:            dir,
+			Secrets:               map[string]string{"fixture_token": accessToken},
+			CredentialRevision:    "fixture-credential-revision",
+			ConfigurationDigest:   "fixture-configuration-digest",
+			WriteApprovalScope:    connectors.WriteApprovalScopeFixture,
+			ApprovedPayloadSHA256: map[string]string{connectors.PayloadApprovalKey(0, "file_path"): hex.EncodeToString(digest[:])},
+		},
+		Body: map[string]any{"file_path": sourcePath},
+	}
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite declared base64 redirect: %v", err)
+	}
+	req.PreviewDigest = preview.Digest
+	req.Approval = approvedEvidenceForPreview(t, preview)
+	result, err := OperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectWrite declared base64 redirect: %v", err)
+	}
+	if result.Status != http.StatusCreated || initialCalls != 1 || redirectedCalls != 1 {
+		t.Fatalf("base64 redirect result/status/calls = %#v/%d/%d, want one admitted redirect", result, initialCalls, redirectedCalls)
+	}
+}
+
 func TestOperationDirectWriteLegacyRedactingPolicyNamesKeepResponseBody(t *testing.T) {
 	raw := []byte(`{"ok":true,"token":"server-token","nested":{"value":"visible"}}`)
 	for _, policy := range []string{
