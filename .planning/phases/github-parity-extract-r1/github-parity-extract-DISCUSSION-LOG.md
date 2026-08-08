@@ -87,3 +87,17 @@ credential is not a substitute for the provider's documented authentication requ
 ## Deferred Ideas
 
 - Other connector phantom-flag remediation is deferred to the relevant parity lane.
+
+---
+
+## OneOf request-body contracts
+
+| Option | Description | Selected |
+|---|---|---|
+| Flatten a union into one permissive command | Let one command accept incompatible documented request shapes. | |
+| Separate named actions | Model each disjoint documented request arm as its own preflightable write contract. | ✓ |
+
+**Choice:** Separate named actions. The existing `covered_by.writes` array is the intended
+one-provider-endpoint-to-many-write-contract relationship, so no shared engine extension is needed.
+The four bulk-attestation delete-request contracts remain destructive caller-supplied intent
+acknowledgements; campaign, ProjectsV2, and Codespaces contracts remain approval-only creates.

@@ -90,6 +90,14 @@ does, and keeps destructive-write safety intact.
   contract is absent. Token-bearing request or response fields remain withheld
   from plans, reports, and persisted state.
 
+- **D-16:** The first remaining request-body gap is GitHub's eight top-level
+  `oneOf` endpoints. Their 19 disjoint documented arms are individual write
+  contracts, not a generic union: use the existing plural `covered_by.writes`
+  relationship and generate one named action per arm. Bulk attestation delete
+  requests are destructive despite using `POST`; their command contracts use
+  the existing caller-supplied `--confirm destructive` acknowledgement. The
+  campaigns, ProjectsV2, and Codespaces arms are approval-only creates.
+
 ### the agent's Discretion
 
 - Select the smallest existing harness and test seams that prove returned data and
