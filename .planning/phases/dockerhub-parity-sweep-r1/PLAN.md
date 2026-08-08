@@ -125,3 +125,71 @@ Settings, SCIM). Single PR scoped to the parent, closing the parent and all 9 ch
 - Regenerating docs rewrites ~1,027 files of pre-existing `main` drift each pass — reverted every
   non-dockerhub path every time.
 - Website catalog diffs inspected by object (Python dict comparison), not by line.
+
+## Live E2E gap closure — reverse-ETL path resolution (2026-08-08)
+
+Captain-authorized live testing reached the connector-command plan/preview gate for
+`repository create` without dispatching a mutation. The preview recorded the unsafe
+request line `POST https://hub.docker.com/v2/v2/namespaces/{namespace}/repositories`:
+the bundle's `writes.json` copied OpenAPI's provider-rooted `/v2/...` paths even
+though this bundle's configured engine base URL already ends in `/v2`, and it left
+OpenAPI `{parameter}` placeholders where the write engine requires
+`{{ record.parameter }}` templates. This is a real executable-surface defect, not
+a live-account limitation; no repository was created by the failed attempt.
+
+**Scope:** `internal/connectors/defs/dockerhub/writes.json`, the Docker Hub
+definition-owned regression test, the shared strict-write ALPN fix and its isolated
+`connsdk` regression test, generated artifacts only if their checks report drift,
+and this phase's evidence. The new shared-runtime scope was discovered only after
+the corrected request hit Docker Hub's HTTP/2 transport; it is a provider-neutral
+one-shot-write safety fix, not a Docker Hub-specific workaround.
+
+**GSD inline fallback:** the project canonical single-worker contract forbids
+spawning planner/executor/reviewer roles. The gap workflow is therefore run inline
+after `scripts/gsd doctor` and `scripts/gsd sources plan-phase|execute-phase|
+verify-work|code-review`, with the generated command prompts recorded in this plan
+and the ledger.
+
+### TDD gap slice
+
+1. **Red:** add `internal/connectors/defs/dockerhub/write_paths_test.go`. Load the
+   embedded Docker Hub bundle and assert every reverse-ETL action is engine-relative
+   (no leading `/v2/`), has no raw OpenAPI `{parameter}` token, and declares every
+   record-derived path segment in `path_fields`. Dry-run `create_repository` with
+   `base_url=https://hub.docker.com/v2` and assert the fully resolved request is
+   exactly `POST https://hub.docker.com/v2/namespaces/polymetrics/<test-repo>`.
+   Run the focused test and capture its failure before changing production JSON.
+2. **Green:** translate every Docker Hub `writes.json` action from a provider-rooted
+   path to its engine-relative equivalent; replace each raw path parameter with the
+   matching `{{ record.<field> }}` template; add `namespace` to
+   `create_repository.path_fields` so it does not leak into the JSON body.
+3. **Verification:** run the focused test, Docker Hub bundle validation, command
+   preflight sweep, surface-sync check, connector-boundary gate, scoped tests/build,
+   and a rebuilt-binary plan/preview/live execution. Confirm the live-created
+   repository is private before Docker image push. Record every live result without
+   secret, approval-token, or token-derived values.
+
+### Strict-write transport TDD follow-up
+
+The first post-path-fix approved execution produced a malformed HTTP/1 response
+whose bytes identify an HTTP/2 SETTINGS frame. The plan record and config were
+checked mechanically and contain no trailing quote or base URL override. The
+provider-neutral reproduction is an `httptest` TLS server advertising HTTP/2:
+
+1. **Red:** `TestRequesterDisableRetriesUsesHTTP1WithHTTP2CapableServer` fails when
+   `noReplayClient` pins `Transport.Protocols` but retains a caller TLS ALPN list
+   advertising `h2`.
+2. **Green:** clone the transport's TLS config and advertise only `http/1.1` for a
+   strict one-shot mutation, retaining its no-keepalive/no-redirect/no-replay
+   behavior and every unrelated TLS setting.
+3. **Verification:** focused connsdk test plus package suite; rebuild `pm`; create
+   a new private Docker Hub repository plan/preview/approval/run once, then verify
+   the response using documented read operations before progressing through the
+   remaining live-safe operation matrix.
+
+### CLI/doc parity disposition
+
+No command, flag, help text, output shape, generated manual, or website catalog
+contract changes: this corrects the bundle-internal execution target behind existing
+commands. Runtime help/manual/website regeneration is intentionally not applicable;
+the rebuilt binary's existing command help remains rechecked as part of live reachability.

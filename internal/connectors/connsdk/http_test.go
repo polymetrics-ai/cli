@@ -622,6 +622,29 @@ func TestRequesterDisableRetriesMakesMutationNonReplayable(t *testing.T) {
 	}
 }
 
+// A strict mutation must preserve the no-replay guarantee without forcing a
+// protocol mismatch when its caller otherwise has an HTTP/2-capable client.
+// Docker Hub serves HTTP/2, so this covers the real provider transport shape
+// with an isolated local TLS server.
+func TestRequesterDisableRetriesUsesHTTP1WithHTTP2CapableServer(t *testing.T) {
+	var receivedProtocol string
+	srv := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		receivedProtocol = req.Proto
+		w.WriteHeader(http.StatusOK)
+	}))
+	srv.EnableHTTP2 = true
+	srv.StartTLS()
+	defer srv.Close()
+
+	r := &Requester{BaseURL: srv.URL, Client: srv.Client(), DisableRetries: true}
+	if _, err := r.Do(context.Background(), http.MethodPost, "/mutate", nil, map[string]string{"name": "fixture"}); err != nil {
+		t.Fatalf("Do: %v", err)
+	}
+	if got, want := receivedProtocol, "HTTP/1.1"; got != want {
+		t.Fatalf("mutation protocol = %q, want %q to prevent replay", got, want)
+	}
+}
+
 func TestRequesterDisableRetriesPreventsBodylessMutationTransportReplay(t *testing.T) {
 	var mutationHits int32
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
