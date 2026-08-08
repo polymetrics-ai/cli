@@ -1159,6 +1159,7 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 	pathParams := map[string]string{}
 	query := map[string]string{}
 	body := map[string]any{}
+	rootBodySet := false
 	for name, values := range flags {
 		if len(values) == 0 {
 			continue
@@ -1193,7 +1194,31 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 				return nil, nil, nil, err
 			}
 			query[target] = stringifyCommandValue(value)
+		case flag.MapsTo == "body":
+			// A named root object is intentionally narrower than generic JSON:
+			// only a direct_write command can use it, it must be the declared
+			// json_object type, and it cannot be mixed with dotted body fields.
+			// The linked operation's body schema still validates the complete
+			// object before the plan can issue a request.
+			if cmd.Intent != "direct_write" {
+				return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s may map to the root operation body only for direct_write commands", name)}
+			}
+			if flag.Type != "json_object" {
+				return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s root operation body requires json_object type", name)}
+			}
+			if rootBodySet || len(body) > 0 {
+				return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "root operation body cannot be combined with another body mapping"}
+			}
+			object, ok := value.(map[string]any)
+			if !ok {
+				return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s root operation body must be one JSON object", name)}
+			}
+			body = object
+			rootBodySet = true
 		case strings.HasPrefix(flag.MapsTo, "body."):
+			if rootBodySet {
+				return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "root operation body cannot be combined with another body mapping"}
+			}
 			target := strings.TrimPrefix(flag.MapsTo, "body.")
 			if err := setBodyValue(body, target, value); err != nil {
 				return nil, nil, nil, err

@@ -99,6 +99,29 @@ and mixed root/field body mappings. The declared operation remains responsible f
 limits. This is needed for Zoom SCIM2's documented extensible User/Group/PatchOp object bodies,
 including custom extension attributes, without creating raw transport capability.
 
+## GREEN foundation — named root JSON-object body
+
+This foundation is now implemented before any SCIM2 bundle declaration. Exact `maps_to: "body"`
+is legal only for one named `json_object` flag on a `direct_write` command. Runtime shaping rejects
+root/path/query misuse, non-object types, and any mix of root and dotted body mappings. Static
+validation mirrors that closed contract, requires an operation body schema, and treats a required
+root object as covering each schema-required member. The existing generic `json` flag remains
+rejected.
+
+The RED tests now prove both the real plan command shaper and `connectorgen` accept only the named
+root object contract:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/commandrunner ./cmd/connectorgen
+ok      polymetrics.ai/internal/connectors/commandrunner
+ok      polymetrics.ai/cmd/connectorgen
+```
+
+This standalone foundation unblocks declared provider resource objects whose published schema is
+extensible (including custom fields) while retaining a fixed operation, fixed endpoint, typed plan
+lifecycle, operation body-schema validation, and request cap. It does not create a raw JSON or raw
+HTTP command.
+
 ## Planned GREEN connector contract
 
 - Four SCIM2 reads use bounded `json_redacted` output with declared PII/account field redaction.
