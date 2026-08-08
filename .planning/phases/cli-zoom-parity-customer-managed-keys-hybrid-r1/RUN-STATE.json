@@ -4,7 +4,7 @@
   "sub_issue": 3950,
   "connector": "zoom",
   "provider_module": "customer-managed-keys-hybrid",
-  "state": "direct_write_endpoint_ledger_red",
+  "state": "direct_write_endpoint_ledger_green",
   "manual_gsd_fallback": {
     "reason": "provider-category phase is not registered by the official GSD runtime",
     "mode": "single-worker inline execution; parent contract forbids role spawning"
@@ -62,14 +62,19 @@
     ]
   },
   "direct_write_endpoint_ledger_foundation": {
-    "state": "red",
+    "state": "green",
+    "red_commit": "016f7e558",
+    "green_commit": "410eb1bb7",
     "red_command": "go test -count=1 -timeout 20m -run TestRunSurfaceReconcileCoversSensitiveDirectWriteWithRuntimePreflight ./cmd/connectorgen",
     "red_result": "failed as expected: the reconciler refused a sensitive rest_write operation despite a matching implemented command that passes runtime preflight",
-    "scope": "operation-ledger direct_write coverage, validator/conformance accounting, and exact operation-to-command preflight binding"
+    "scope": "operation-ledger direct_write coverage, validator/conformance accounting, and exact operation-to-command preflight binding",
+    "verification": [
+      "go test -count=1 -timeout 20m ./cmd/connectorgen ./internal/connectors/engine ./internal/connectors/commandrunner ./internal/connectors/conformance ./internal/connectors/certify"
+    ]
   },
   "green": {
     "commit": "",
     "result": "pending"
   },
-  "next": "author the one Zoom rest_write declaration with the now-green operation-scoped Key Connector transport; Zoom command-surface test remains intentionally RED until that connector commit"
+  "next": "reconcile the one authored Zoom rest_write declaration into covered_by.direct_write, then run the Zoom command surface and binary reachability verification"
 }
