@@ -48,8 +48,12 @@ type RateLimitSelector struct {
 	All              bool                        `json:"all,omitempty"`
 	Endpoints        []RateLimitEndpointSelector `json:"endpoints,omitempty"`
 	ExcludeEndpoints []RateLimitEndpointSelector `json:"exclude_endpoints,omitempty"`
-	Tiers            []string                    `json:"tiers,omitempty"`
-	AuthTypes        []string                    `json:"auth_types,omitempty"`
+	// Hosts selects exact request hostnames. A policy that names a host does
+	// not apply to another provider host merely because both hosts share the
+	// same connector bundle (for example, Docker Registry versus Docker Hub).
+	Hosts     []string `json:"hosts,omitempty"`
+	Tiers     []string `json:"tiers,omitempty"`
+	AuthTypes []string `json:"auth_types,omitempty"`
 }
 
 // RateLimitEndpointSelector is a provider endpoint selector. Path is a

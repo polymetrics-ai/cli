@@ -3,15 +3,19 @@ package engine
 import (
 	"context"
 	"encoding/json"
+	"errors"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	connectorDefs "polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/coordination"
 )
 
@@ -29,6 +33,33 @@ func (c *engineRateLimitClock) Sleep(ctx context.Context, d time.Duration) error
 	c.waits = append(c.waits, d)
 	c.now = c.now.Add(d)
 	return nil
+}
+
+// blockingRateLimitClock lets a test observe that admission reached its wait
+// before cancelling the caller. It never advances time, so a blocked request
+// cannot be admitted accidentally while the test is asserting no transport
+// dispatch occurred.
+type blockingRateLimitClock struct {
+	now         time.Time
+	waitStarted chan time.Duration
+}
+
+func (c *blockingRateLimitClock) Now() time.Time { return c.now }
+
+func (c *blockingRateLimitClock) Sleep(ctx context.Context, d time.Duration) error {
+	select {
+	case c.waitStarted <- d:
+	case <-ctx.Done():
+		return ctx.Err()
+	}
+	<-ctx.Done()
+	return ctx.Err()
+}
+
+type rateLimitRoundTripper func(*http.Request) (*http.Response, error)
+
+func (f rateLimitRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
+	return f(req)
 }
 
 func rateLimitTestConfig(t *testing.T) connectors.RuntimeConfig {
@@ -108,6 +139,126 @@ func TestDeclaredRateLimitFixtureSelectsEndpointTierAndAuth(t *testing.T) {
 			t.Fatalf("%s mismatch acquired an admission", key)
 		}
 	}
+}
+
+func TestRateLimitSelectorMatchesExactHost(t *testing.T) {
+	selector := connsdk.RateLimitSelector{
+		Hosts:     []string{"registry-1.docker.io"},
+		Tiers:     []string{"free"},
+		AuthTypes: []string{"authenticated"},
+	}
+	config := map[string]string{"tier": "free", "auth_type": "authenticated"}
+	if !rateLimitSelectorMatches(selector, http.MethodHead, "/v2/ratelimitpreview/test/manifests/latest", "registry-1.docker.io", config) {
+		t.Fatal("Registry host did not match its declared policy")
+	}
+	if rateLimitSelectorMatches(selector, http.MethodHead, "/v2/ratelimitpreview/test/manifests/latest", "hub.docker.com", config) {
+		t.Fatal("Hub API host incorrectly matched Docker Registry pull policy")
+	}
+}
+
+func TestDockerHubRegistryPullPolicyBlocksBeforeTransport(t *testing.T) {
+	bundle, err := Load(connectorDefs.FS, "dockerhub")
+	if err != nil {
+		t.Fatalf("Load dockerhub: %v", err)
+	}
+	stream, err := findStream(bundle, "tags")
+	if err != nil {
+		t.Fatalf("find tags stream: %v", err)
+	}
+	const testLimit = 2
+	for i := range bundle.RateLimits.Policies {
+		if bundle.RateLimits.Policies[i].ID == "registry-pull-unauthenticated" {
+			bundle.RateLimits.Policies[i].Budgets[0].Limit = intPtr(testLimit)
+		}
+	}
+
+	clock := &blockingRateLimitClock{
+		now:         time.Date(2026, 8, 8, 12, 0, 0, 0, time.UTC),
+		waitStarted: make(chan time.Duration, 1),
+	}
+	restore := replaceRateLimitRegistryForTest(coordination.NewRateLimitRegistry(clock))
+	t.Cleanup(restore)
+
+	cfg := dockerHubRateLimitConfig(t, "https://registry-1.docker.io/v2")
+	runtime, err := newRuntime(context.Background(), bundle, cfg, nil)
+	if err != nil {
+		t.Fatalf("newRuntime registry: %v", err)
+	}
+	requester, err := runtime.RequesterFor(http.MethodGet, stream.Path)
+	if err != nil {
+		t.Fatalf("RequesterFor registry tags: %v", err)
+	}
+	if requester.Admission == nil {
+		t.Fatal("Registry request did not acquire the documented pull policy")
+	}
+
+	sent := 0
+	requester.Client = &http.Client{Transport: rateLimitRoundTripper(func(req *http.Request) (*http.Response, error) {
+		sent++
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(strings.NewReader(`{}`)),
+			Request:    req,
+		}, nil
+	})}
+	for attempt := 0; attempt < testLimit; attempt++ {
+		if _, err := requester.Do(context.Background(), http.MethodGet, stream.Path, nil, nil); err != nil {
+			t.Fatalf("permitted request %d: %v", attempt+1, err)
+		}
+	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	blocked := make(chan error, 1)
+	go func() {
+		_, err := requester.Do(ctx, http.MethodGet, stream.Path, nil, nil)
+		blocked <- err
+	}()
+	select {
+	case wait := <-clock.waitStarted:
+		if got, want := wait, 6*time.Hour; got != want {
+			t.Fatalf("documented Registry wait = %s, want %s", got, want)
+		}
+	case <-time.After(time.Second):
+		t.Fatal("over-budget Registry request did not stop in rate-limit admission")
+	}
+	cancel()
+	if err := <-blocked; !errors.Is(err, context.Canceled) {
+		t.Fatalf("blocked request error = %v, want context cancellation from admission", err)
+	}
+	if got, want := sent, testLimit; got != want {
+		t.Fatalf("transport sends = %d, want %d: over-budget request reached transport", got, want)
+	}
+
+	hubCfg := dockerHubRateLimitConfig(t, "https://hub.docker.com/v2")
+	hubRuntime, err := newRuntime(context.Background(), bundle, hubCfg, nil)
+	if err != nil {
+		t.Fatalf("newRuntime Hub API: %v", err)
+	}
+	hubRequester, err := hubRuntime.RequesterFor(http.MethodGet, stream.Path)
+	if err != nil {
+		t.Fatalf("RequesterFor Hub tags: %v", err)
+	}
+	if hubRequester.Admission != nil {
+		t.Fatal("Hub API request incorrectly acquired the Registry pull policy")
+	}
+}
+
+func dockerHubRateLimitConfig(t *testing.T, baseURL string) connectors.RuntimeConfig {
+	t.Helper()
+	cfg := rateLimitTestConfig(t)
+	cfg.Config = map[string]string{
+		"base_url":           baseURL,
+		"docker_username":    "dockerhub-rate-test",
+		"namespace":          "ratelimitpreview",
+		"repository":         "test",
+		"page_size":          "1",
+		"tier":               "free",
+		"auth_type":          "unauthenticated",
+		"registry_client_ip": "198.51.100.24",
+	}
+	return cfg
 }
 
 func TestUnknownRateLimitFixturePreservesRequesterBehavior(t *testing.T) {

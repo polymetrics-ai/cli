@@ -38,13 +38,24 @@ Connection fields:
 - `page_size` (optional, integer); default `100`; Page size (1-100) for the initial request of each
   paginated stream (Docker Hub's page_size query param); subsequent pages follow the API's own
   absolute next URL verbatim.
+- `tier` (optional, string); default `free`; Docker Registry subscription profile for the cited
+  image-pull quota. Set `paid` for Pro, Team, Business, or partner/unlimited Registry access. This
+  does not manufacture a numeric rate limit for the separate Docker Hub API abuse guard.
+- `auth_type` (optional, string); default `unauthenticated`; Docker Registry pull profile for the
+  cited quota. Set `authenticated` only when the request path is backed by a Registry bearer token;
+  the optional Hub API PAT/session exchange remains a distinct authentication mechanism.
+- `registry_client_ip` (optional, string); public IPv4 address or IPv6 /64 used only as the
+  non-secret scope of an unauthenticated Registry pull quota. Required when `base_url` targets
+  `registry-1.docker.io` with `auth_type=unauthenticated`; it is not a credential and is never sent
+  to Docker.
 - `repository` (optional, string); Repository name (without the namespace prefix) the
   'tags'/'repository_detail'/'tag_detail' streams are scoped to. Required only when reading one of
   those streams.
 - `tag` (optional, string); Tag name the 'tag_detail' stream reads a single tag record for (e.g.
   'latest'). Required only when reading the 'tag_detail' stream.
 
-Default configuration values: `base_url=https://hub.docker.com/v2`, `page_size=100`.
+Default configuration values: `base_url=https://hub.docker.com/v2`, `page_size=100`, `tier=free`,
+`auth_type=unauthenticated`.
 
 Authentication behavior:
 
@@ -133,6 +144,12 @@ removal) additionally require typed destructive confirmation.
 ## Known limits
 
 - Batch defaults: read_page_size=100.
+- The documented pull quota is selector-scoped to `registry-1.docker.io`, not to the Hub API host
+  used by this connector's 54 documented management operations. The bundle declares 100
+  unauthenticated pulls per 21,600-second window by public IP/IPv6-/64 and 200 authenticated free
+  pulls per window by Docker username; paid Registry profiles deliberately match no fixed budget.
+  Docker's separate Hub API abuse limiter publishes no numeric budget, so no synthetic limiter is
+  declared for it. A bare 429 still follows the shared requester's provider `Retry-After` backoff.
 - API coverage: all 54 documented Docker Hub operations are implemented (4 stream-backed, 50
   direct-read/status-check/write). Zero operations remain blocked.
 - Two independent optional credentials gate different command groups: `docker_pat` (most commands)

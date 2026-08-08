@@ -490,3 +490,46 @@ Commands: `go test ./internal/connectors/connsdk -run
 TestRateLimitObservationParsesDockerWindowedBudgetHeaders -count=1 -v` and
 `go test ./internal/connectors/defs/dockerhub -run
 TestDockerHubRegistryPullRateLimitsAreEmbedded -count=1 -v`.
+
+### GREEN — registry-only declaration and pre-transport admission
+
+Added `internal/connectors/defs/dockerhub/rate_limits.json` with the two provider-cited
+Registry pull policies only: unauthenticated `100 / 21600s`, scoped by the
+non-secret `registry_client_ip`; and authenticated free `200 / 21600s`, scoped by
+the non-secret `docker_username`. Both select the exact `registry-1.docker.io`
+hostname. Paid Registry access matches no fixed policy, and Docker Hub's separate
+unnumbered abuse limiter has no invented budget; the existing requester's HTTP 429
+path honors a provider `Retry-After`.
+
+The shared declaration schema now has an exact `hosts` selector. This is not a new
+limiter: `Runtime.requesterFor` still resolves every path through the existing
+`coordination.RateLimitRegistry`. The Docker header parser retains the leading
+numeric value in parameterized fields such as `200;w=21600`, without claiming the
+inline window is a reset timestamp.
+
+Focused green evidence:
+
+```text
+go test -timeout 20m ./internal/connectors/connsdk ./internal/connectors/engine ./internal/connectors/defs/dockerhub
+ok   polymetrics.ai/internal/connectors/connsdk
+ok   polymetrics.ai/internal/connectors/engine
+ok   polymetrics.ai/internal/connectors/defs/dockerhub
+
+go run ./cmd/connectorgen validate internal/connectors/defs/dockerhub
+connectorgen validate: 1 connector(s) checked, 0 findings
+
+go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+```
+
+`TestDockerHubRegistryPullPolicyBlocksBeforeTransport` loads the production Docker
+Hub bundle, injects a two-request test budget, sends the two allowed requests to a
+local transport, then observes the third blocked in admission for the documented
+six-hour window and cancels it before any transport dispatch. It also proves the
+same declared stream on `hub.docker.com` acquires no Registry pull admission.
+
+Documentation was regenerated with `pm docs generate --dir docs/cli`: the generator
+rewrote 1,029 unrelated connector outputs, all restored from the known clean base;
+only Docker Hub's `MANUAL.md` and `SKILL.md` remain. `npm run gen:catalog` was run;
+parsed-object comparison confirms both website catalog outputs changed only the
+`dockerhub` object. No golden transcript changed.

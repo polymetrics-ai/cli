@@ -176,18 +176,21 @@ func hasCredentialLikeRateLimitFragment(rawFragment string) bool {
 
 func validateRateLimitSelector(selector connsdk.RateLimitSelector) error {
 	if selector.All {
-		if len(selector.Endpoints) != 0 || len(selector.ExcludeEndpoints) != 0 || len(selector.Tiers) != 0 || len(selector.AuthTypes) != 0 {
-			return fmt.Errorf("all cannot be combined with endpoints, exclude_endpoints, tiers, or auth_types")
+		if len(selector.Endpoints) != 0 || len(selector.ExcludeEndpoints) != 0 || len(selector.Hosts) != 0 || len(selector.Tiers) != 0 || len(selector.AuthTypes) != 0 {
+			return fmt.Errorf("all cannot be combined with endpoints, exclude_endpoints, hosts, tiers, or auth_types")
 		}
 		return nil
 	}
-	if len(selector.Endpoints) == 0 && len(selector.Tiers) == 0 && len(selector.AuthTypes) == 0 {
-		return fmt.Errorf("must select all or at least one endpoint, tier, or auth type")
+	if len(selector.Endpoints) == 0 && len(selector.Hosts) == 0 && len(selector.Tiers) == 0 && len(selector.AuthTypes) == 0 {
+		return fmt.Errorf("must select all or at least one endpoint, host, tier, or auth type")
 	}
 	if err := validateRateLimitEndpoints("endpoints", selector.Endpoints); err != nil {
 		return err
 	}
 	if err := validateRateLimitEndpoints("exclude_endpoints", selector.ExcludeEndpoints); err != nil {
+		return err
+	}
+	if err := validateRateLimitHosts(selector.Hosts); err != nil {
 		return err
 	}
 	if err := validateRateLimitNames("tiers", selector.Tiers); err != nil {
@@ -205,6 +208,26 @@ func validateRateLimitEndpoints(field string, endpoints []connsdk.RateLimitEndpo
 		if path != endpoint.Path || !strings.HasPrefix(path, "/") || strings.HasPrefix(path, "//") || strings.ContainsAny(path, "\r\n?#") {
 			return fmt.Errorf("%s[%d].path must be a rooted connector-relative path", field, i)
 		}
+	}
+	return nil
+}
+
+func validateRateLimitHosts(values []string) error {
+	seen := make(map[string]bool, len(values))
+	for i, value := range values {
+		trimmed := strings.TrimSpace(value)
+		if trimmed == "" || trimmed != value || strings.ContainsAny(trimmed, "/?#@:") {
+			return fmt.Errorf("hosts[%d] %q must be an exact hostname without scheme, port, path, query, or fragment", i, value)
+		}
+		parsed, err := url.Parse("https://" + trimmed)
+		if err != nil || parsed.Hostname() == "" || parsed.Hostname() != trimmed || parsed.Port() != "" {
+			return fmt.Errorf("hosts[%d] %q must be an exact hostname without scheme, port, path, query, or fragment", i, value)
+		}
+		key := strings.ToLower(trimmed)
+		if seen[key] {
+			return fmt.Errorf("hosts[%d] %q is duplicated", i, value)
+		}
+		seen[key] = true
 	}
 	return nil
 }
@@ -374,8 +397,23 @@ func validateRateLimitCostHeaderConflicts(policies []connsdk.RateLimitPolicy, he
 
 func rateLimitSelectorsOverlap(left, right connsdk.RateLimitSelector) bool {
 	return rateLimitEndpointSelectorsOverlap(left, right) &&
+		rateLimitHostSelectorsOverlap(left.Hosts, right.Hosts) &&
 		rateLimitSelectorValuesOverlap(left.Tiers, right.Tiers) &&
 		rateLimitSelectorValuesOverlap(left.AuthTypes, right.AuthTypes)
+}
+
+func rateLimitHostSelectorsOverlap(left, right []string) bool {
+	if len(left) == 0 || len(right) == 0 {
+		return true
+	}
+	for _, leftHost := range left {
+		for _, rightHost := range right {
+			if strings.EqualFold(leftHost, rightHost) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func rateLimitEndpointSelectorsOverlap(left, right connsdk.RateLimitSelector) bool {
