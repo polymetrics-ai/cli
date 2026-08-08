@@ -1,0 +1,21 @@
+{
+  "phase": "cli-zoom-parity-healthcare-r1",
+  "parent_issue": 3915,
+  "sub_issue": 3946,
+  "connector": "zoom",
+  "provider_module": "healthcare",
+  "state": "planned",
+  "manual_gsd_fallback": {
+    "reason": "gsd-sdk query init.phase-op cli-zoom-parity-healthcare-r1 returned phase_found=false",
+    "mode": "single-worker inline execution; role spawning is forbidden by the parent contract"
+  },
+  "source_audit": {
+    "url": "https://developers.zoom.us/docs/api/healthcare.md",
+    "retrieved_at": "2026-08-08T08:22:55Z",
+    "http_status": 200,
+    "bytes": 13783,
+    "ledger_delta": 0,
+    "operations": 3
+  },
+  "next": "write and run the red Zoom Healthcare surface test before any production bundle edit"
+}

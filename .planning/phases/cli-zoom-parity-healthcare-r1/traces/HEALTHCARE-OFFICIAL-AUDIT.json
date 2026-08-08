@@ -1,0 +1,38 @@
+{
+  "source_url": "https://developers.zoom.us/docs/api/healthcare.md",
+  "retrieved_at": "2026-08-08T08:22:55Z",
+  "http_status": 200,
+  "byte_count": 13783,
+  "openapi_version": "3.1.1",
+  "api_version": "2",
+  "server": "https://api.zoom.us/v2",
+  "operations": [
+    {
+      "method": "GET",
+      "path": "/clinical_notes/notes",
+      "title": "List clinical notes",
+      "ledger_model_before": "direct_read"
+    },
+    {
+      "method": "GET",
+      "path": "/clinical_notes/notes/{noteId}",
+      "title": "Get a Clinical Note",
+      "ledger_model_before": "direct_read"
+    },
+    {
+      "method": "PATCH",
+      "path": "/clinical_notes/notes/{noteId}",
+      "title": "Update a Clinical Note",
+      "ledger_model_before": "sensitive_reverse_etl",
+      "request_body": {
+        "required": ["is_note_completed"],
+        "properties": {
+          "is_note_completed": "boolean"
+        }
+      },
+      "success_status": 204
+    }
+  ],
+  "ledger_delta": 0,
+  "response_only_fields_not_flags": ["from", "to", "page_size", "next_page_token"]
+}
