@@ -755,3 +755,34 @@ The test requires declared policies for authenticated-user, GitHub App installat
 Actions token, and unauthenticated traffic, provider source/date, a non-secret scope for each,
 the documented primary hourly capacity, and both admission/observation hooks. It intentionally
 does not permit a raw token scope, an `unknown` placeholder, or a no-op attachment.
+
+**Green 12a — declaration through the existing requester.** `rate_limits.json` now contains four
+GitHub-documentation-cited policies, all retrieved `2026-08-08`:
+
+| policy | selector | opaque non-secret subject | primary budget |
+| --- | --- | --- | --- |
+| `authenticated-user` | `token`, `oauth` | `rate_limit_account` | 5,000 requests/hour |
+| `app-installation` | `github_app` | `installation_id` | 5,000 requests/hour minimum |
+| `actions-token` | `github_token` | `rate_limit_repository` | 1,000 requests/hour per repository |
+| `unauthenticated` | `public`, `none`, `anonymous`, `unauthenticated` | `rate_limit_ip` | 60 requests/hour per originating IP |
+
+Each also carries the documented 900-point/minute REST secondary ceiling as a conservative
+five-points-per-request sliding budget. GitHub leaves some REST point costs unpublished, so that
+strict client accounting can only stop before the provider's published ceiling; it never claims an
+unpublished cost is known. The normal response parser still tightens the policy from
+`x-ratelimit-*` and `retry-after` without retaining raw headers.
+
+No limiter, request path, registry, or credential-derived key was added. The first production
+declaration only adds `*/rate_limits.json` to `defs.FS`; `Runtime.RequesterFor` and its existing
+`Admit`/`Observe` wiring remain the sole mechanism.
+
+```
+$ go test -timeout 20m ./internal/connectors/engine/ -run 'TestGitHubDeclaredRateLimits|TestProductionDefinitionsEmbedEveryRateLimitDeclaration' -count=1
+ok   polymetrics.ai/internal/connectors/engine  0.794s
+
+$ go run ./cmd/connectorgen validate internal/connectors/defs
+connectorgen validate: 551 connector(s) checked, 0 findings
+
+$ go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+```

@@ -65,6 +65,13 @@ Connection fields:
   auth_type=github_app (alternative to private_key). Never logged.
 - `public_access` (optional, string); Explicit opt-in for unauthenticated (public) reads. Set to any
   non-empty value (e.g. 'true') to allow reads with no token/app credentials configured.
+- `rate_limit_account` (optional, string); Authenticated GitHub login used only as the non-secret
+  coordination subject for `auth_type=token` or `oauth` rate limits. It is not a token and need not
+  match the target repository owner.
+- `rate_limit_ip` (optional, string); Originating public IP address used only as the non-secret
+  coordination subject for unauthenticated GitHub rate limits.
+- `rate_limit_repository` (optional, string); Repository identity in `owner/repo` form used only as
+  the non-secret coordination subject for `auth_type=github_token` GitHub Actions rate limits.
 - `repo` (required, string); Repository name (without the owner prefix).
 - `since` (optional, string); format `date-time`; Lower-bound timestamp for issues, issue_comments,
   and pull_request_review_comments (incremental start; also usable as a fresh-sync start_config_key
@@ -88,6 +95,22 @@ Authentication behavior:
 Requests use the configured `base_url` value after applying defaults.
 
 Connection checks call GET `/repos/{{ config.owner }}/{{ config.repo }}`.
+
+## Rate-limit policy
+
+`rate_limits.json` declares GitHub's documented primary quotas: 5,000 requests/hour per
+authenticated user, 5,000 requests/hour minimum per GitHub App installation, 1,000
+requests/hour per repository for `GITHUB_TOKEN`, and 60 requests/hour per originating IP for
+unauthenticated traffic. The configured `auth_type` selects the matching policy; its scope is an
+explicit non-secret account, installation, repository, or IP subject and is projected by the
+coordination identity before it reaches the local registry.
+
+GitHub also documents a 900-point-per-minute REST secondary ceiling, with most writes costing five
+points and some endpoint costs unpublished. The declaration therefore charges every request five
+points against that budget. This is deliberately conservative for reads and keeps client traffic
+below the provider's per-endpoint limit rather than pretending the bundle can know unpublished
+endpoint costs. GitHub response `x-ratelimit-*` and `retry-after` values further tighten, never
+expand, the declared ceiling.
 
 ## Connector command writes
 
