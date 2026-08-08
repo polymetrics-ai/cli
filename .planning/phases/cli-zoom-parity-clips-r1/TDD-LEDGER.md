@@ -83,6 +83,25 @@ FAIL
 The fixtures use synthetic values only; no credential, token-derived value, or signed URL was
 emitted.
 
+### Connectorgen root-array declaration gate — additional RED 2026-08-08
+
+The runtime root-array foundation already admits a named `json_array` command input for a closed
+operation body. While authoring the real Clips collaborator command, the declarative validator
+still rejected the same safe shape solely because it assumed every root body was an object. The
+test was added before the validator change and failed verbatim:
+
+```text
+$ go test -count=1 -timeout 20m ./cmd/connectorgen -run '^TestValidate_CLISurfaceImplementedDirectWriteNamedRootJSONArrayPasses$'
+--- FAIL: TestValidate_CLISurfaceImplementedDirectWriteNamedRootJSONArrayPasses (0.00s)
+    main_test.go:599: expected zero findings for named root-array direct_write cli surface, got [{Connector:cli-surface File:operations.json Rule:cli_surface_safety Message:implemented direct write command 0 ("widget archive") operation "cli-surface.widgets.archive" root body mapping requires an object body_schema}]
+FAIL
+FAIL	polymetrics.ai/cmd/connectorgen	0.745s
+FAIL
+```
+
+The fixture contains only an invalid-domain synthetic recipient address and does not load a
+credential, issue a request, or permit a generic raw-body route.
+
 ## GREEN foundations
 
 ### Root JSON-array direct writes — green 2026-08-08
