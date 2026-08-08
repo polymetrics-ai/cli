@@ -276,3 +276,82 @@ warning callout and the security-model row the same qualification. Docs only, no
 `website/lib/docs.generated.ts` regenerated.
 
 No test was weakened, skipped, or deleted. Cycle 5 added three tests.
+
+## Cycle 6 — review round: the captain's per-command confirmation classification
+
+The captain superseded the "retain repo delete as unsafe_or_disallowed" criterion: keep complete
+documented-operation parity, build no new gate, and put every named destructive command on the
+**existing** typed confirmation path. Each of the eight named commands was inspected before any
+edit, because the order was explicit that a correct declaration must not be duplicated.
+
+| command | inspected state | action taken |
+| --- | --- | --- |
+| `repo delete` | DELETE + `confirm: destructive` | none — already correct |
+| `cache delete` | DELETE, destructive by method | none — already correct |
+| `secret delete` | DELETE, destructive by method | none — already correct |
+| `repo archive` | PATCH, no challenge, hook-executed | `confirm: destructive` + moved the pin to the record |
+| `repo unarchive` | PATCH, no challenge, hook-executed | `confirm: destructive` + moved the pin to the record |
+| `issue delete` | blocked; GraphQL-only `deleteIssue` | none — no REST endpoint to confirm |
+| `issue transfer` | blocked; GraphQL-only `transferIssue` | none — no REST endpoint to confirm |
+| `pr revert` | blocked; web-UI workflow, no endpoint | none — no REST endpoint to confirm |
+
+`repo create` and `secret set` stay approval-only creates, as ordered.
+
+**Red 6a — `repo delete` had no test that it cannot reach execution.**
+`TestGitHubRestoredCommandsAreExecutable` asserted the classification and the resolver, not the
+runtime. Written first and failing against no gate assertions at all:
+`internal/app/github_repo_delete_gate_test.go`
+`TestGitHubRepoDeleteRequiresConfirmationAndSingleUseGrant` walks plan → run-without-grant →
+preview → run-without-confirmation → confirmed run → replay, asserting the DELETE call count at
+every stage, because a gate that rejects after dispatching has already deleted the repository.
+**Green** — the plan mints no token (preview first), an unconfirmed run is rejected with zero
+calls, the confirmed run dispatches exactly once, and the replay is refused with the count still
+at one.
+
+**Red 6b — a scripted, non-interactive caller had no test that it cannot obtain a grant.**
+`internal/cli/github_repo_delete_cli_test.go`
+`TestGitHubRepoDeleteScriptedRunCannotObtainAGrant` drives the whole path through `pm --json`,
+the documented agent surface. **Green** — `--json` plan output carries
+`confirmation_challenge: destructive` and an empty `approval_token`, and `--json` preview emits
+no token either; the token exists only in human-readable preview output, which is what stops an
+agent from approving its own repository deletion. Single-use replay is refused there too.
+
+**Red 6c — declaring `confirm: destructive` on `repo archive` broke it instead of gating it.**
+The first attempt added the declaration alone. Preview then failed with
+`engine: destructive write action "archive_repo" uses a hook without an exact prepared-request
+preview`: `prepareDeclarativeWrite` refuses a destructive action whose hook overrides execution,
+because the approved preview would not be the dispatched request. The narrow fix produced a
+command that cannot run.
+**Green** — the pin moved from the request to the record. New optional
+`engine.WriteRecordHook`, applied by both `prepareDeclarativeWrite` and `executeApprovedWrite`,
+so the approved body is the dispatched body by construction; `archive_repo`/`unarchive_repo`
+declare `body_fields: ["archived"]` so the pinned field stays the only field sent.
+`internal/connectors/engine/write_record_hook_test.go` pins both sides — the refusal for a
+hook-executed destructive action, and the exact `{"archived":true}` prepared body for a
+record-mapped one — plus no-op and no-mutation guarantees for the 550 connectors that do not
+implement it. `internal/app/github_repo_delete_gate_test.go`
+`TestGitHubRepoArchiveIsConfirmedAndSendsPinnedField` asserts end to end that the dispatched
+body is exactly `archived=true`/`archived=false`.
+
+**Red 6d — the approval-only classification was asserted in one direction only.**
+`TestGitHubRestoredCommandsAreExecutable` checked the challenge when it expected one and skipped
+the check otherwise, so `repo create` or `secret set` could gain a typed challenge silently.
+**Green** — the else branch now fails on a non-empty challenge for an approval-only create.
+`TestGitHubApprovalOnlyCreatesCarryNoTypedChallenge` asserts the same through a real plan.
+
+**Red 6e — the three commands with no REST endpoint were unpinned.**
+`TestGitHubHeldCommandsStayBlocked` covered `auth token` and `api` only, and asserted
+availability alone. **Green** — `issue delete`, `issue transfer` and `pr revert` are in the held
+list, and the test now also asserts each binds no write action and no operation and is refused by
+the real `Preflight`. That is a stronger gate than a typed confirmation: the command reaches no
+executor at all. `AGENTS.md` forbids inventing an `api_surface` endpoint to make one look
+implemented, and GitHub documents none for any of the three.
+
+Also in this round, from the same review: the dead equality branch in
+`reconstituteWithheldSubtree`'s comparator was dropped for `sort.Strings` (the slice is built
+from map keys, so its entries are unique by construction and the branch was unreachable), and a
+dropped clause in the `pm help reverse` withholding paragraph was repaired in `internal/cli/docs.go`,
+`docs/cli/reverse.md` and the regenerated `internal/cli/testdata/golden_transcripts.json`.
+
+No test was weakened, skipped, or deleted. The two archive hook tests kept their assertions and
+their reasoning and moved to the seam the pin moved to. Cycle 6 added nine tests.

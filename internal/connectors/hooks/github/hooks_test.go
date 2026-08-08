@@ -552,56 +552,68 @@ func TestConnectorName(t *testing.T) {
 // pins. These two tests are what stop them collapsing back into "PATCH
 // whatever the caller sent" — a `repo unarchive` that forwards an empty body
 // silently does nothing while reporting success.
-func TestExecuteWrite_ArchiveRepoPinsArchivedTrue(t *testing.T) {
-	srv, reqs := newWriteCaptureServer(t, nil)
+//
+// They pin through MapWriteRecord rather than ExecuteWrite because both actions
+// carry a destructive typed confirmation, and the engine refuses to prepare a
+// destructive action whose hook overrides execution: the preview an operator
+// approves would not be the request that runs.
+func TestMapWriteRecord_ArchiveRepoPinsArchivedTrue(t *testing.T) {
 	h := githubhooks.New()
-	rt := newTestRuntime(srv.URL, newRuntimeConfig(srv.URL, nil, nil))
-
 	action := engine.WriteAction{Name: "archive_repo", Method: "PATCH", Path: "/repos/{owner}/{repo}"}
 
-	handled, err := h.ExecuteWrite(context.Background(), action, connectors.Record{}, rt)
+	pinned, handled, err := h.MapWriteRecord(action, connectors.Record{})
 	if err != nil {
-		t.Fatalf("ExecuteWrite() error = %v", err)
+		t.Fatalf("MapWriteRecord() error = %v", err)
 	}
 	if !handled {
-		t.Fatal("ExecuteWrite() handled = false, want true for archive_repo")
+		t.Fatal("MapWriteRecord() handled = false, want true for archive_repo")
 	}
-	if len(*reqs) != 1 {
-		t.Fatalf("requests = %d, want 1, got %+v", len(*reqs), *reqs)
+	if pinned["archived"] != true {
+		t.Fatalf("archive record = %+v, want archived=true", pinned)
 	}
-	got := (*reqs)[0]
-	if got.Method != http.MethodPatch || got.Path != "/repos/octocat/hello-world" {
-		t.Fatalf("archive request = %+v, want PATCH /repos/octocat/hello-world", got)
+	if handled, err := h.ExecuteWrite(context.Background(), action, connectors.Record{}, nil); handled || err != nil {
+		t.Fatalf("ExecuteWrite() = (%v, %v), want (false, nil): a destructive action must stay declarative", handled, err)
 	}
-	if got.Body["archived"] != true {
-		t.Fatalf("archive body = %+v, want archived=true", got.Body)
+	if h.HandlesWriteAction(action) {
+		t.Fatal("HandlesWriteAction(archive_repo) = true; the engine reads this to refuse a destructive hook-executed action")
 	}
 }
 
-func TestExecuteWrite_UnarchiveRepoPinsArchivedFalse(t *testing.T) {
-	srv, reqs := newWriteCaptureServer(t, nil)
+func TestMapWriteRecord_UnarchiveRepoPinsArchivedFalse(t *testing.T) {
 	h := githubhooks.New()
-	rt := newTestRuntime(srv.URL, newRuntimeConfig(srv.URL, nil, nil))
-
 	action := engine.WriteAction{Name: "unarchive_repo", Method: "PATCH", Path: "/repos/{owner}/{repo}"}
 
 	// A caller-supplied archived=true must not survive: the command name is the
 	// instruction, not the record.
-	handled, err := h.ExecuteWrite(context.Background(), action, connectors.Record{"archived": true}, rt)
+	pinned, handled, err := h.MapWriteRecord(action, connectors.Record{"archived": true})
 	if err != nil {
-		t.Fatalf("ExecuteWrite() error = %v", err)
+		t.Fatalf("MapWriteRecord() error = %v", err)
 	}
 	if !handled {
-		t.Fatal("ExecuteWrite() handled = false, want true for unarchive_repo")
+		t.Fatal("MapWriteRecord() handled = false, want true for unarchive_repo")
 	}
-	if len(*reqs) != 1 {
-		t.Fatalf("requests = %d, want 1, got %+v", len(*reqs), *reqs)
+	if pinned["archived"] != false {
+		t.Fatalf("unarchive record = %+v, want archived=false", pinned)
 	}
-	got := (*reqs)[0]
-	if got.Method != http.MethodPatch || got.Path != "/repos/octocat/hello-world" {
-		t.Fatalf("unarchive request = %+v, want PATCH /repos/octocat/hello-world", got)
+	if handled, err := h.ExecuteWrite(context.Background(), action, connectors.Record{}, nil); handled || err != nil {
+		t.Fatalf("ExecuteWrite() = (%v, %v), want (false, nil): a destructive action must stay declarative", handled, err)
 	}
-	if got.Body["archived"] != false {
-		t.Fatalf("unarchive body = %+v, want archived=false", got.Body)
+	if h.HandlesWriteAction(action) {
+		t.Fatal("HandlesWriteAction(unarchive_repo) = true; the engine reads this to refuse a destructive hook-executed action")
+	}
+}
+
+// The pinned record must not leak back into the caller's record: bulk reverse
+// ETL reuses the staged rows across preview and execution.
+func TestMapWriteRecord_DoesNotMutateCallerRecord(t *testing.T) {
+	h := githubhooks.New()
+	action := engine.WriteAction{Name: "archive_repo", Method: "PATCH", Path: "/repos/{owner}/{repo}"}
+
+	original := connectors.Record{}
+	if _, _, err := h.MapWriteRecord(action, original); err != nil {
+		t.Fatalf("MapWriteRecord() error = %v", err)
+	}
+	if _, ok := original["archived"]; ok {
+		t.Fatalf("caller record = %+v, want untouched", original)
 	}
 }

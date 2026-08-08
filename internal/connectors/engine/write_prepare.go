@@ -55,16 +55,20 @@ func prepareDeclarativeWrite(ctx context.Context, b Bundle, req connectors.Write
 	}
 
 	cfg := materializeConfigDefaults(b, req.Config)
+	mapped, err := applyWriteRecordHook(h, action, records)
+	if err != nil {
+		return PreparedWrite{}, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: -1, Err: err}
+	}
 	warnings := []string{fmt.Sprintf("%s executes a live mutation only after approval; dry run performs no external call", action.Name)}
-	if len(records) > 0 {
-		method, path, err := resolveWriteRequestLine(b, action, records[0], cfg)
+	if len(mapped) > 0 {
+		method, path, err := resolveWriteRequestLine(b, action, mapped[0], cfg)
 		if err != nil {
 			return PreparedWrite{}, err
 		}
 		warnings = append(warnings, fmt.Sprintf("resolved request: %s %s", method, path))
 	}
-	requests := make([]PreparedRequest, 0, len(records))
-	for index, record := range records {
+	requests := make([]PreparedRequest, 0, len(mapped))
+	for index, record := range mapped {
 		prepared, err := prepareDeclarativeRequest(b, action, record, index, cfg, target.RequiresApproval())
 		if err != nil {
 			return PreparedWrite{}, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: index, Err: redactWriteActionError(err, action, record)}

@@ -232,10 +232,6 @@ func (h *Hooks) ExecuteWrite(ctx context.Context, action engine.WriteAction, rec
 		return true, createLabel(ctx, rt, rec)
 	case "update_label":
 		return true, updateLabel(ctx, rt, rec)
-	case "archive_repo":
-		return true, setRepoArchived(ctx, rt, true)
-	case "unarchive_repo":
-		return true, setRepoArchived(ctx, rt, false)
 	default:
 		return false, nil
 	}
@@ -243,23 +239,41 @@ func (h *Hooks) ExecuteWrite(ctx context.Context, action engine.WriteAction, rec
 
 func (h *Hooks) HandlesWriteAction(action engine.WriteAction) bool {
 	switch action.Name {
-	case "close_issue", "close_pull_request", "reopen_issue", "reopen_pull_request", "create_pull_request", "update_pull_request", "create_label", "update_label", "archive_repo", "unarchive_repo":
+	case "close_issue", "close_pull_request", "reopen_issue", "reopen_pull_request", "create_pull_request", "update_pull_request", "create_label", "update_label":
 		return true
 	default:
 		return false
 	}
 }
 
-// setRepoArchived pins the one field that distinguishes `repo archive` from
+// MapWriteRecord pins the one field that distinguishes `repo archive` from
 // `repo unarchive`. Both ride PATCH /repos/{owner}/{repo}, the same endpoint as
 // the generic `repo update`, which is why they exist as separate write actions
 // rather than as flags: a command named "archive" that only archives when the
-// caller also supplies archived=true is a command that lies. The declarative
-// path cannot pin a body constant, so this mirrors closeResource/reopenResource
-// — the same shape, for the same reason.
-func setRepoArchived(ctx context.Context, rt *engine.Runtime, archived bool) error {
-	_, err := rt.Requester.Do(ctx, http.MethodPatch, repoPath(rt), nil, map[string]any{"archived": archived})
-	return err
+// caller also supplies archived=true is a command that lies.
+//
+// They pin the record rather than the request, unlike closeResource, because
+// both carry a destructive typed confirmation and the engine refuses to prepare
+// a destructive hook-executed action: the preview would not be the request. The
+// action's body_fields allow-list keeps the pinned field the only one sent.
+func (h *Hooks) MapWriteRecord(action engine.WriteAction, rec connectors.Record) (connectors.Record, bool, error) {
+	switch action.Name {
+	case "archive_repo":
+		return pinRepoArchived(rec, true), true, nil
+	case "unarchive_repo":
+		return pinRepoArchived(rec, false), true, nil
+	default:
+		return rec, false, nil
+	}
+}
+
+func pinRepoArchived(rec connectors.Record, archived bool) connectors.Record {
+	pinned := make(connectors.Record, len(rec)+1)
+	for key, value := range rec {
+		pinned[key] = value
+	}
+	pinned["archived"] = archived
+	return pinned
 }
 
 // createLabel/updateLabel reproduce githubCreateLabelPayload/

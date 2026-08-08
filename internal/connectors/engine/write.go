@@ -311,6 +311,28 @@ func Write(ctx context.Context, b Bundle, req connectors.WriteRequest, records [
 	return result, err
 }
 
+// applyWriteRecordHook returns the records the declarative body is built from.
+// prepareDeclarativeWrite and executeApprovedWrite both call it, so the request
+// an operator approves in the preview is the request that runs.
+func applyWriteRecordHook(h Hooks, action WriteAction, records []connectors.Record) ([]connectors.Record, error) {
+	mapper, ok := h.(WriteRecordHook)
+	if !ok {
+		return records, nil
+	}
+	mapped := make([]connectors.Record, 0, len(records))
+	for _, rec := range records {
+		pinned, handled, err := mapper.MapWriteRecord(action, rec)
+		if err != nil {
+			return nil, err
+		}
+		if !handled {
+			pinned = rec
+		}
+		mapped = append(mapped, pinned)
+	}
+	return mapped, nil
+}
+
 func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req connectors.WriteRequest, records []connectors.Record, h Hooks) (connectors.WriteResult, error) {
 	cfg := materializeConfigDefaults(b, req.Config)
 
@@ -337,7 +359,12 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 			}
 		}
 
-		if err := executeWriteRecord(ctx, b, action, rec, i, cfg, rt); err != nil {
+		pinned, err := applyWriteRecordHook(h, action, []connectors.Record{rec})
+		if err != nil {
+			result.RecordsFailed = len(records) - result.RecordsWritten
+			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: redactWriteActionError(err, action, rec)}
+		}
+		if err := executeWriteRecord(ctx, b, action, pinned[0], i, cfg, rt); err != nil {
 			if isMissingOkDelete(action, err) {
 				result.RecordsWritten++
 				continue
