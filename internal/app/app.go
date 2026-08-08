@@ -2408,10 +2408,10 @@ func (a *App) finishReverseWrite(planID string, run ReverseRun, result connector
 	})
 }
 
-// finishOperationDirectWrite preserves the direct-write error text in its
-// persisted report. The generic reverse-ETL path deliberately retains its
-// existing rendering behavior; only rest_write has the captain's complete
-// runtime-content policy.
+// finishOperationDirectWrite persists the direct-write error text prepared by
+// the engine's declared output policy. A json_redacted rest_write has already
+// removed response and echoed-request sensitive content before this boundary;
+// other established direct-write policies retain their existing diagnostics.
 func (a *App) finishOperationDirectWrite(planID string, run ReverseRun, result connectors.WriteResult, staged int, writeErr error) (ReverseRun, error) {
 	return a.finishReverseWriteWithErrorText(planID, run, result, staged, writeErr, func(err error) string {
 		return err.Error()

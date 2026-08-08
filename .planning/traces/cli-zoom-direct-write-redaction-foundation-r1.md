@@ -31,5 +31,7 @@ secret material. Zoom CMK Hybrid is the first consumer.
 
 ## TDD evidence
 
-- RED: pending.
-- GREEN: pending.
+- RED: `5a0172053`, captured in the CMK Hybrid phase ledger before any foundation or Zoom
+  production declaration.
+- GREEN: targeted engine, commandrunner, and app lifecycle tests pass. The foundation commit ID
+  is recorded after its separate commit is created.

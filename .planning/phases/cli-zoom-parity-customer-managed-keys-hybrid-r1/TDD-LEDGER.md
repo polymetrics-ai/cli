@@ -48,13 +48,35 @@ No `operations.json`, `streams.json`, `spec.json`, `cli_surface.json`, `api_surf
 metadata, docs, website catalog, or generated endpoint ledger changes in this checkpoint. The
 foundation/connector GREEN commits follow this red commit.
 
-## GREEN foundation — pending
+## GREEN foundation — completed before Zoom authoring
 
-The foundation is intentionally separate from Zoom authoring. Its red/green evidence will show
-that redacted direct-write policies redact generic and declared response fields, redact declared
-request literals from failure text, and keep a raw execution record while exposing only a redacted
-plan sample. A `secret_sensitive` operation's typed-confirmation policy will be reflected in the
-prepared write target and command lifecycle.
+The foundation is intentionally separate from Zoom authoring. It changes only the reusable
+direct-write engine/command surface path:
+
+- `json_redacted` now redacts generic secret-shaped response fields and every declared
+  `sensitive_policy.redact_fields` value before result output.
+- A `json_redacted` provider error preserves status/URL context but treats the body as redacted;
+  declared request literals are additionally removed before error persistence.
+- A direct-write plan sample applies its command-declared redaction fields while retaining the
+  private typed execution record needed to bind preview and execution.
+- `secret_sensitive` (or `mutation_class=secret`) plus
+  `sensitive_policy.approval_mode=typed_confirmation` now maps to the existing closed destructive
+  confirmation grant. There is no new prompt or approval vocabulary.
+
+The foundation tests are green while the Zoom surface intentionally remains red until the next
+connector declaration commit:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine ./internal/connectors/commandrunner
+ok  polymetrics.ai/internal/connectors/engine  4.801s
+ok  polymetrics.ai/internal/connectors/commandrunner  7.491s
+
+$ go test -count=1 -timeout 20m -run 'TestDirectWriteCommand(PlanPreviewApprovalAndExecute|FailureRedactsDeclaredOutputPolicyContent)$' ./internal/app
+ok  polymetrics.ai/internal/app  3.241s
+```
+
+This reusable foundation is committed separately from Zoom JSON authoring. Its commit ID is added
+to `RUN-STATE.json`, this ledger, and the parent issue handoff after the commit is created.
 
 ## GREEN connector — pending
 

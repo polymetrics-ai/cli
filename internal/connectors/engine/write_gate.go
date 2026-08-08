@@ -65,6 +65,9 @@ func DestructiveTargetForOperation(connector string, operation OperationSpec) De
 	if operation.Confirmation != nil {
 		confirmation = connectors.ConfirmationKind(strings.TrimSpace(string(operation.Confirmation.Kind)))
 	}
+	if confirmation == "" && operationRequiresTypedConfirmation(operation) {
+		confirmation = connectors.ConfirmationKindDestructive
+	}
 	method := ""
 	if operation.REST != nil {
 		method = operation.REST.Method
@@ -77,6 +80,17 @@ func DestructiveTargetForOperation(connector string, operation OperationSpec) De
 		Destructive:   operation.Destructive,
 		Confirmation:  confirmation,
 	}
+}
+
+// operationRequiresTypedConfirmation maps the declared sensitive-operation
+// policy onto the existing closed confirmation vocabulary. A secret-returning
+// rest_write has no safe "preview only" shortcut: its policy's typed
+// confirmation must bind the prepared request to the project approval grant.
+func operationRequiresTypedConfirmation(operation OperationSpec) bool {
+	if !(operation.SecretSensitive || strings.EqualFold(strings.TrimSpace(operation.MutationClass), "secret")) || operation.SensitivePolicy == nil {
+		return false
+	}
+	return strings.EqualFold(strings.TrimSpace(operation.SensitivePolicy.ApprovalMode), "typed_confirmation")
 }
 
 // GateDestructiveExecution validates typed approval evidence before invoking

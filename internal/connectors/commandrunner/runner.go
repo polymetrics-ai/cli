@@ -233,7 +233,7 @@ func buildOperationDirectWriteCommand(ctx context.Context, connector connectors.
 		Approval:              firstNonEmpty(cmd.Approval, metadata.Approval, "direct writes require plan, preview, approval, execute"),
 		ConfirmationChallenge: metadata.ConfirmationChallenge,
 		Record:                cloneRecord(record),
-		RedactedRecord:        cloneRecord(record),
+		RedactedRecord:        redactDirectWriteRecord(record, cmd.RedactFields),
 		PathParams:            cloneStringMap(pathParams),
 		Query:                 cloneStringMap(query),
 		Batchable:             metadata.Batchable,
@@ -1485,6 +1485,77 @@ func cloneRecord(in connectors.Record) connectors.Record {
 		out[k] = v
 	}
 	return out
+}
+
+// redactDirectWriteRecord keeps the typed execution record private while
+// producing the safe plan sample exposed by the command lifecycle. This is
+// deliberately limited to direct_write; legacy reverse_etl presentation keeps
+// its existing manifest-owned redaction path.
+func redactDirectWriteRecord(in connectors.Record, fields []string) connectors.Record {
+	out := cloneDirectWriteRecord(in)
+	for _, raw := range fields {
+		field := strings.TrimPrefix(strings.TrimSpace(raw), "record.")
+		if field == "" {
+			continue
+		}
+		redactDirectWriteRecordField(out, strings.Split(field, "."))
+	}
+	return out
+}
+
+func cloneDirectWriteRecord(in connectors.Record) connectors.Record {
+	out := make(connectors.Record, len(in))
+	for key, value := range in {
+		out[key] = cloneDirectWriteRecordValue(value)
+	}
+	return out
+}
+
+func cloneDirectWriteRecordValue(value any) any {
+	switch typed := value.(type) {
+	case connectors.Record:
+		return cloneDirectWriteRecord(typed)
+	case map[string]any:
+		out := make(map[string]any, len(typed))
+		for key, nested := range typed {
+			out[key] = cloneDirectWriteRecordValue(nested)
+		}
+		return out
+	case []any:
+		out := make([]any, len(typed))
+		for index, nested := range typed {
+			out[index] = cloneDirectWriteRecordValue(nested)
+		}
+		return out
+	case []string:
+		return append([]string(nil), typed...)
+	default:
+		return value
+	}
+}
+
+func redactDirectWriteRecordField(record connectors.Record, parts []string) {
+	if len(parts) == 0 {
+		return
+	}
+	current := map[string]any(record)
+	for _, part := range parts[:len(parts)-1] {
+		next, ok := current[part]
+		if !ok {
+			return
+		}
+		switch typed := next.(type) {
+		case connectors.Record:
+			current = map[string]any(typed)
+		case map[string]any:
+			current = typed
+		default:
+			return
+		}
+	}
+	if _, exists := current[parts[len(parts)-1]]; exists {
+		current[parts[len(parts)-1]] = "redacted"
+	}
 }
 
 func cloneStringMap(in map[string]string) map[string]string {
