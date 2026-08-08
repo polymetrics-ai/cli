@@ -786,3 +786,21 @@ connectorgen validate: 551 connector(s) checked, 0 findings
 $ go run ./cmd/connectorgen surface-sync --check
 connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
 ```
+
+**Red 12b — no committed live-proof accounting runner existed.** The deterministic Node test
+defines the non-negotiable accounting contract before a runner exists: it enumerates only
+`availability: implemented`, rejects an omitted command, rejects fixture coverage as a terminal
+state, requires either a returned-data assertion or a concrete untestable reason, and proves that
+raw subprocess output cannot enter a report record. With no runner at the specified path, the
+first test run failed at module resolution:
+
+```
+$ node --test scripts/tests/github-live-proof-sweep.test.mjs
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module
+'.../scripts/github-live-proof-sweep.mjs' imported from
+'.../scripts/tests/github-live-proof-sweep.test.mjs'
+✖ scripts/tests/github-live-proof-sweep.test.mjs
+```
+
+The fixture string is deliberately token-shaped but non-secret; the assertion rejects it from the
+serialized record rather than putting a credential in a test fixture or report.
