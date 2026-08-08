@@ -8,7 +8,7 @@
 |---|---|---:|
 | 1. Identify ledger link | pass | 0.02s |
 | 2. Map 21 operations | pass | 0.04s |
-| 3. Fetch, digest, parse | pending | — |
+| 3. Fetch, digest, parse | pass | 2.75s |
 | 4. Materialize and static gates | pending | — |
 | 5. Binary reachability/report | pending | — |
 | Total | pending | — |
@@ -28,12 +28,12 @@
 | Measure | Count |
 |---|---:|
 | Ledger operations | 21 |
-| Fetched | pending |
-| Parsed as OpenAPI 3/Swagger 2 | pending |
+| Fetched | 1 |
+| Parsed as OpenAPI 3/Swagger 2 | 1 |
 | Materialized | pending |
 | Gated | pending |
 | Reachable | pending |
-| Failed | pending |
+| Failed | 0 |
 
 ## Certification
 
