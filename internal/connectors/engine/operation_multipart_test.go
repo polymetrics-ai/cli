@@ -175,6 +175,26 @@ func TestOperationDirectWriteMultipartValidatesDeclaredJSONFile(t *testing.T) {
 	}
 }
 
+// TestOperationDirectWriteMultipartAcceptsDeclaredCSVFile captures the source
+// format contract used by Zoom Workforce Management imports. A filename suffix
+// alone is not an honest CSV guarantee; the bounded multipart policy must
+// recognize a declaration-owned CSV validator before the connector can expose
+// either published upload.
+func TestOperationDirectWriteMultipartAcceptsDeclaredCSVFile(t *testing.T) {
+	rest := strings.Replace(
+		validMultipartRestWrite,
+		`"content_type": "text/plain",
+				"allowed_media_types": ["text/plain"]`,
+		`"content_type": "text/csv",
+				"content_validation": "csv",
+				"allowed_file_extensions": [".csv"]`,
+		1,
+	)
+	if _, err := Load(multipartRestWriteBundleFS(rest, "rest_write"), "acme"); err != nil {
+		t.Fatalf("Load declared CSV multipart contract: %v", err)
+	}
+}
+
 // TestOperationDirectWriteMultipartFollowsDeclaredRedirect captures the
 // provider-required exception to ordinary direct-write redirect refusal. The
 // declaration is closed: only the declared localhost suffix may receive the
