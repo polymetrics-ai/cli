@@ -117,7 +117,22 @@ The command exited `1`, exactly as expected. The required green foundation must 
 finite JSON numbers, reject an unsatisfiable maximum below a declared minimum at compile time,
 and apply the bounds only to numeric instances just as Draft-07 specifies.
 
-## GREEN numeric-range foundation — pending
+## GREEN numeric-range foundation — captured before connector authoring
+
+The engine now accepts Draft-07 `minimum` and `maximum` only as finite JSON numbers, rejects an
+unsatisfiable declared maximum below minimum at bundle-load time, and applies bounds to numeric
+instances only. This preserves provider decimals and the normal Draft-07 applicability rule; it
+does not create a generic validation tool or weaken the closed bundle dialect.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run 'TestCompileSchemaNumericRangeKeywords|TestSchemaValidateNumericRange|TestSchemaNumericRangeIgnoresNonNumbers|TestCompileSchemaRejectsInvalidNumericRange'
+ok      polymetrics.ai/internal/connectors/engine    0.738s
+```
+
+The test covers lower/upper source boundaries, an in-range fraction, both out-of-range failures,
+nonnumeric applicability, malformed bounds, and a contradictory declared range. This foundation
+unblocks any declarative connector that must preserve provider-published numeric request bounds;
+its implementation commit is separate from the Workforce Management authoring commit.
 
 ## GREEN connector — pending
 
