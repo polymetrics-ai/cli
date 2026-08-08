@@ -766,10 +766,17 @@ type OperationParameter struct {
 }
 
 type RESTOperationSpec struct {
-	Method      string `json:"method"`
-	Path        string `json:"path"`
-	ContentType string `json:"content_type,omitempty"`
-	MaxBytes    int    `json:"max_bytes,omitempty"`
+	Method string `json:"method"`
+	Path   string `json:"path"`
+	// BaseURL and Auth are a paired, operation-scoped transport override for
+	// a rest_write whose provider documents a separate, customer-hosted origin
+	// and credential from the connector's ordinary API. They are deliberately
+	// unavailable to reads and must be declared together, so a new origin can
+	// never silently inherit the bundle-wide bearer credential.
+	BaseURL     string     `json:"base_url,omitempty"`
+	Auth        []AuthSpec `json:"auth,omitempty"`
+	ContentType string     `json:"content_type,omitempty"`
+	MaxBytes    int        `json:"max_bytes,omitempty"`
 	// Parameters is the operation's accepted parameter set, imported from the
 	// connector's own provider specification by `connectorgen params-import`.
 	// It is the source command flags are DERIVED from — a command's flags are
@@ -2232,6 +2239,16 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 	}
 	if err := validateOperationMultipartSemantics(i, op); err != nil {
 		return err
+	}
+	if op.REST != nil {
+		hasOperationBaseURL := strings.TrimSpace(op.REST.BaseURL) != ""
+		hasOperationAuth := len(op.REST.Auth) > 0
+		if hasOperationBaseURL != hasOperationAuth {
+			return fmt.Errorf("operation %d (%q) rest.base_url and rest.auth must be declared together", i, op.ID)
+		}
+		if (hasOperationBaseURL || hasOperationAuth) && op.Kind != "rest_write" {
+			return fmt.Errorf("operation %d (%q) rest.base_url/rest.auth are only valid for rest_write operations, got %q", i, op.ID, op.Kind)
+		}
 	}
 	switch op.Kind {
 	case "rest_read":
