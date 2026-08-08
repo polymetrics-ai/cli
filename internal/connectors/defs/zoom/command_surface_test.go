@@ -32,16 +32,16 @@ const zoomBundleName = "zoom"
 // operations.json/cli_surface.json entries exist.
 //
 // Landed modules: qss (3), ai-companion (1), my-notes (2), healthcare reads (2),
-// quality-management reads (5), Cobrowse SDK reads (4), SCIM2 reads (4), and
-// Virtual Agent reads (9). Chatbot, SCIM2, and Virtual Agent mutations are
-// tracked by wantModuleDirectWriteCommandCount.
-const wantModuleOperationCommandCount = 30
+// quality-management reads (5), Cobrowse SDK reads (4), SCIM2 reads (4),
+// Virtual Agent reads (9), and Auto Dialer reads (8). Chatbot, SCIM2, Virtual
+// Agent, and Auto Dialer mutations are tracked by wantModuleDirectWriteCommandCount.
+const wantModuleOperationCommandCount = 38
 
 // wantModuleDirectWriteCommandCount is the running total of implemented
 // operations.json rest_write commands. It is distinct from writes.json
 // reverse-ETL actions because direct writes are executable only through the
 // typed plan lifecycle.
-const wantModuleDirectWriteCommandCount = 16
+const wantModuleDirectWriteCommandCount = 24
 
 // wantModuleWriteCommandCount is the running total of implemented reverse_etl
 // write commands across the landed provider modules. Bump it first for each
@@ -152,11 +152,11 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 			t.Errorf("provider inventory %s rows = %d, want %d", method, got, want)
 		}
 	}
-	if got := covered; got != 51 {
-		t.Errorf("executable rows = %d, want 51", got)
+	if got := covered; got != 67 {
+		t.Errorf("executable rows = %d, want 67", got)
 	}
-	if got := implementableNow; got != 1791 {
-		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1791", got)
+	if got := implementableNow; got != 1775 {
+		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1775", got)
 	}
 	if got := providerRestricted; got != 17 {
 		t.Errorf("provider-restricted operations = %d, want 17", got)
@@ -394,6 +394,63 @@ func TestVirtualAgentOperationCommandsAreReachable(t *testing.T) {
 		for _, flag := range found.Flags {
 			if flag.Name == "page" || flag.Name == "per-page" || flag.Name == "limit" || flag.Name == "page-size" || flag.Name == "next-page-token" {
 				t.Errorf("Virtual Agent command %q invents paging flag --%s", want.path, flag.Name)
+			}
+		}
+	}
+}
+
+// TestAutoDialerOperationCommandsAreReachable is the provider-category RED
+// surface contract. It enumerates every action in Zoom's published Auto Dialer
+// artifact through the real commandrunner preflight, so an apparently complete
+// JSON bundle cannot claim a compiled `pm zoom auto-dialer …` route is
+// executable while it remains an unknown command.
+func TestAutoDialerOperationCommandsAreReachable(t *testing.T) {
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	wants := []struct {
+		path      string
+		operation string
+		intent    string
+		method    string
+		apiPath   string
+		policy    string
+	}{
+		{path: "auto-dialer call-histories get", operation: "zoom.get_auto_dialer_call_history", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/dialer/call-histories/{callHistoryId}", policy: "json_redacted"},
+		{path: "auto-dialer call-history list", operation: "zoom.list_auto_dialer_call_history", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/dialer/call-history", policy: "json_redacted"},
+		{path: "auto-dialer reports call-history list", operation: "zoom.list_auto_dialer_report_call_history", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/dialer/reports/call-history", policy: "json_redacted"},
+		{path: "auto-dialer reports seller-productivity get", operation: "zoom.get_auto_dialer_seller_productivity_report", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/dialer/reports/seller-productivity", policy: "json_redacted"},
+		{path: "auto-dialer call-lists list", operation: "zoom.list_auto_dialer_call_lists", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/dialer/call-lists", policy: "json_redacted"},
+		{path: "auto-dialer call-lists create", operation: "zoom.create_auto_dialer_call_list", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/dialer/call-lists", policy: "json_redacted"},
+		{path: "auto-dialer call-lists get", operation: "zoom.get_auto_dialer_call_list", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/dialer/call-lists/{callListId}", policy: "json_redacted"},
+		{path: "auto-dialer call-lists delete", operation: "zoom.delete_auto_dialer_call_list", intent: "direct_write", method: http.MethodDelete, apiPath: "/v2/dialer/call-lists/{callListId}", policy: "none"},
+		{path: "auto-dialer call-lists update", operation: "zoom.update_auto_dialer_call_list", intent: "direct_write", method: http.MethodPatch, apiPath: "/v2/dialer/call-lists/{callListId}", policy: "none"},
+		{path: "auto-dialer call-lists prospects list", operation: "zoom.list_auto_dialer_call_list_prospects", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/dialer/call-lists/{callListId}/prospects", policy: "json_redacted"},
+		{path: "auto-dialer call-lists prospects create", operation: "zoom.create_auto_dialer_prospect", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/dialer/call-lists/{callListId}/prospects", policy: "json_redacted"},
+		{path: "auto-dialer call-lists prospects update-batch", operation: "zoom.update_auto_dialer_prospects_batch", intent: "direct_write", method: http.MethodPatch, apiPath: "/v2/dialer/call-lists/{callListId}/prospects", policy: "json_redacted"},
+		{path: "auto-dialer call-lists prospects create-batch", operation: "zoom.create_auto_dialer_prospects_batch", intent: "direct_write", method: http.MethodPost, apiPath: "/v2/dialer/call-lists/{callListId}/prospects/batch", policy: "json_redacted"},
+		{path: "auto-dialer call-lists prospects delete", operation: "zoom.delete_auto_dialer_prospect", intent: "direct_write", method: http.MethodDelete, apiPath: "/v2/dialer/call-lists/{callListId}/prospects/{prospectId}", policy: "none"},
+		{path: "auto-dialer call-lists prospects update", operation: "zoom.update_auto_dialer_prospect", intent: "direct_write", method: http.MethodPatch, apiPath: "/v2/dialer/call-lists/{callListId}/prospects/{prospectId}", policy: "none"},
+		{path: "auto-dialer prospects get", operation: "zoom.get_auto_dialer_prospect", intent: "direct_read", method: http.MethodGet, apiPath: "/v2/dialer/prospects/{prospectId}", policy: "json_redacted"},
+	}
+	for _, want := range wants {
+		if err := commandrunner.Preflight(connector, strings.Fields(want.path)); err != nil {
+			t.Errorf("Preflight(%q) = %v, want declared executable Auto Dialer action", want.path, err)
+			continue
+		}
+		var found *connectors.CommandSurfaceCommand
+		for i := range connector.CommandSurface().Commands {
+			if connector.CommandSurface().Commands[i].Path == want.path {
+				found = &connector.CommandSurface().Commands[i]
+				break
+			}
+		}
+		if found == nil || found.Intent != want.intent || found.Availability != "implemented" || found.Operation != want.operation || len(found.APISurface) != 1 || found.APISurface[0].Method != want.method || found.APISurface[0].Path != want.apiPath || found.OutputPolicy != want.policy {
+			t.Errorf("Auto Dialer command %q does not retain its declared operation/endpoint/output contract", want.path)
+			continue
+		}
+		for _, flag := range found.Flags {
+			if flag.Name == "page" || flag.Name == "per-page" || flag.Name == "limit" || flag.Name == "page-size" || flag.Name == "next-page-token" {
+				t.Errorf("Auto Dialer command %q invents paging flag --%s", want.path, flag.Name)
 			}
 		}
 	}

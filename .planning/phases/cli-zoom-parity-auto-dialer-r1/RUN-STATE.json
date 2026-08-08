@@ -2,7 +2,7 @@
   "phase": "cli-zoom-parity-auto-dialer-r1",
   "issue": 3940,
   "parent_issue": 3915,
-  "status": "planned",
+  "status": "red-captured",
   "lifecycle": {
     "mode": "inline-manual-gsd-fallback",
     "reason": "This provider-category phase is not registered by the official runtime and the parent issue contract forbids role spawning.",
@@ -33,7 +33,7 @@
     "direct_writes": 24,
     "unsafe_or_disallowed": 0
   },
-  "red": "pending",
+  "red": "captured: go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/... failed only on the target ledger totals and 16 unknown Auto Dialer command paths before production changes",
   "green": "pending",
   "verification": "pending",
   "review": "pending"
