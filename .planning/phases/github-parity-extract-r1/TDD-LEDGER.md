@@ -950,3 +950,33 @@ ok	polymetrics.ai/internal/connectors/commandrunner
 $ go test -timeout 20m ./internal/connectors/engine/ -run 'TestGitHubDeclaredRateLimits|TestGitHubArchiveDownloadsAllowOnlyCodeloadRedirect|TestPreparedWritePreviewDeclaresConfirmationOnlyWhereTheGateDemandsIt|TestBundleLoadEmbeddedGitHub(Operations|CLISurface)' -count=1
 ok	polymetrics.ai/internal/connectors/engine
 ```
+
+---
+
+## Cycle 14 — bounded status/text direct reads (GitHub parity gap closure)
+
+**Red 14a — a successful empty or text response was incorrectly treated as malformed JSON.**
+The focused operation-level test defines five declaration-bound cases before any policy or transport
+change: a `204 No Content` status check must return `nil`; a nonempty status response must fail
+closed; text must be valid UTF-8 and bounded by `rest.max_bytes`. Current code rejects the first
+policy check, before issuing an untyped request:
+
+```
+$ go test -timeout 20m ./internal/connectors/engine/ -run TestOperationDirectReadSupportsBoundedStatusAndTextResponses -count=1
+--- FAIL: TestOperationDirectReadSupportsBoundedStatusAndTextResponses (0.00s)
+    --- FAIL: .../status_only_accepts_an_empty_success_body
+        OperationDirectRead: direct read output policy "none" is not supported
+    --- FAIL: .../text_response_is_bounded_and_valid_UTF-8
+        OperationDirectRead: direct read output policy "text" is not supported
+    --- FAIL: .../status_only_rejects_a_nonempty_success_body
+        ... want nonempty status-only response rejection
+    --- FAIL: .../text_response_rejects_invalid_UTF-8
+        ... want UTF-8 rejection
+    --- FAIL: .../text_response_retains_its_declared_cap
+        ... want response cap rejection
+FAIL
+```
+
+This is a foundation red, not a GitHub fixture assertion: the test uses local `httptest` responses,
+an operation ledger row, and the real `OperationDirectRead` path. It proves the executor's JSON-only
+assumption is the blocker for GitHub's nine 204 checks plus text endpoints.
