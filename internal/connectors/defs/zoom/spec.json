@@ -2,18 +2,29 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Zoom Connection Specification",
   "type": "object",
-  "required": ["access_token"],
+  "required": [],
   "properties": {
     "access_token": {
       "type": "string",
       "x-secret": true,
-      "description": "Zoom OAuth access token, sent as a Bearer token (Authorization: Bearer <access_token>). Never logged."
+      "description": "Zoom OAuth access token for the ordinary Zoom API, sent as a Bearer token. Never logged."
+    },
+    "key_connector_jwt": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Customer Managed Keys Hybrid archival JWT, signed by the operator's JWKS and sent only to the declared Key Connector operation origin. Supply through environment or stdin; never logged."
     },
     "base_url": {
       "type": "string",
       "format": "uri",
       "default": "https://api.zoom.us/v2",
-      "description": "Zoom API base URL override for tests or proxies."
+      "description": "Ordinary Zoom API base URL override for tests or proxies."
+    },
+    "key_connector_base_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://[^/?#]+/api/v2/?$",
+      "description": "Customer Managed Keys Hybrid Key Connector base URL, including the required /api/v2 suffix. Used only by the archival key-decryption operation and must point to the operator-provisioned customer-hosted Key Connector."
     },
     "user_id": {
       "type": "string",

@@ -59,10 +59,11 @@ ledger-exact `/api/v2/...` path while the existing base-URL normalizer sends the
 - The operation is `secret_sensitive` with `sensitive_policy` input mode `env_or_stdin`, transform
   `none`, fields `encrypt_context`, `key_id`, and `plainkey`, and typed confirmation. The declared
   operation—not a hand-authored flag—owns sensitive output behavior.
-- Add the optional credential profile `auth_type=key_connector_jwt` and a separately stored
-  `key_connector_jwt` secret. It selects that bearer only when explicitly configured; default
-  `auth_type=zoom_oauth` keeps the existing Zoom OAuth bearer and default Zoom API base URL.
-  This prevents a normal Zoom OAuth token from being sent to an arbitrary customer host.
+- Add separately stored `key_connector_jwt` and `key_connector_base_url` credential fields.
+  The Key Connector base URL is explicitly provisioned and must end in `/api/v2`. The one
+  operation declares its own paired `rest.base_url` and `rest.auth`, so it cannot inherit or
+  send the normal Zoom OAuth bearer to that customer-hosted origin; ordinary Zoom streams retain
+  their existing base URL and bearer declaration.
 - Expose only `--encrypt-context` and `--key-id`, both required typed JSON body inputs. Do not
   hand-author `page`, `per_page`, `limit`, cursor, or other undocumented flags.
 - `surface-sync` owns derivable command metadata and the endpoint-ledger projection. Regenerate

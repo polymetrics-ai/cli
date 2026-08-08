@@ -112,8 +112,8 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 				t.Errorf("executable %s carries another disposition", key)
 			}
 			covering := endpoint.CoveredBy
-			if covering.Stream == "" && covering.Write == "" && covering.DirectRead == "" && len(covering.DirectReads) == 0 {
-				t.Errorf("executable %s is not bound to a stream, write, or direct_read command", key)
+			if covering.Stream == "" && covering.Write == "" && covering.DirectRead == "" && len(covering.DirectReads) == 0 && covering.DirectWrite == "" && len(covering.DirectWrites) == 0 {
+				t.Errorf("executable %s is not bound to a stream, write, direct_read, or direct_write command", key)
 			}
 			covered++
 		case endpoint.Operation != nil:
@@ -1138,9 +1138,9 @@ func TestCobrowseSDKCommandsExecuteWithFixtures(t *testing.T) {
 // TestCustomerManagedKeysHybridCommandExecutesWithFixture pins Zoom's one
 // customer-hosted Key Connector archival operation. It runs the real
 // connector-command plan lifecycle against a loopback key connector so the
-// declared customer host, isolated key-connector JWT auth profile, exact POST,
-// no-pagination contract, typed confirmation, and redacted key response are
-// all executable without contacting an operator deployment.
+// declared customer host, operation-scoped key-connector JWT auth, exact
+// POST, no-pagination contract, typed confirmation, and redacted key response
+// are all executable without contacting an operator deployment.
 func TestCustomerManagedKeysHybridCommandExecutesWithFixture(t *testing.T) {
 	const (
 		credentialName = "zoom-cmk-fixture"
@@ -1198,8 +1198,7 @@ func TestCustomerManagedKeysHybridCommandExecutesWithFixture(t *testing.T) {
 		Name:      credentialName,
 		Connector: zoomBundleName,
 		Config: map[string]string{
-			"base_url":  server.URL + "/api/v2",
-			"auth_type": "key_connector_jwt",
+			"key_connector_base_url": server.URL + "/api/v2",
 		},
 		Secrets: map[string]string{"key_connector_jwt": fixtureJWT},
 	}); err != nil {

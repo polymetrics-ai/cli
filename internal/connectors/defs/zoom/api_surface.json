@@ -8701,14 +8701,8 @@
     {
       "method": "POST",
       "path": "/api/v2/kms/cse/archival/datakey/decrypt",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/customer-managed-keys-hybrid.md",
-        "notes": "classification=implementable_now; provider_module=customer-managed-keys-hybrid; operation_title=Key connector archival API; provider_server=https://{keyConnectorLb}/api/v2; provider_path=/kms/cse/archival/datakey/decrypt; artifact=https://developers.zoom.us/docs/api/customer-managed-keys-hybrid.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "customer-managed-keys-hybrid archival-key decrypt"
       }
     },
     {

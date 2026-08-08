@@ -1,7 +1,7 @@
 {
   "name": "zoom",
   "display_name": "Zoom",
-  "description": "Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API; includes sensitive Cobrowse SDK session reads and approval-gated clinical-note and Quality Management interaction actions.",
+  "description": "Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API; includes sensitive Cobrowse SDK session reads, approval-gated clinical-note and Quality Management interaction actions, and a redacted Customer Managed Keys Hybrid archival key action.",
   "integration_type": "api",
   "docs_url": "https://developers.zoom.us/docs/api/",
   "release_stage": "ga",
@@ -18,7 +18,7 @@
   },
   "risk": {
     "read": "external Zoom API read of user, meeting, webinar, Quality of Service, AI Companion, My Notes, healthcare clinical-note, Quality Management, and Cobrowse SDK session data",
-    "write": "typed Zoom reverse ETL mutation of a healthcare clinical-note completion status or Quality Management interaction creation",
-    "approval": "reverse ETL writes require plan, preview, explicit approval, and execute; read-only commands require none"
+    "write": "typed Zoom reverse ETL mutation of a healthcare clinical-note completion status or Quality Management interaction creation, plus Customer Managed Keys Hybrid archival key decryption with redacted output",
+    "approval": "mutating commands require plan, preview, explicit approval, and execute; Customer Managed Keys Hybrid archival key decryption additionally requires typed confirmation; read-only commands require none"
   }
 }
