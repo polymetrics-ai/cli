@@ -31,6 +31,10 @@
         "properties": {
           "method": { "type": "string" },
           "path": { "type": "string" },
+          "discrepancy": {
+            "type": "string",
+            "enum": ["present-in-surface-absent-from-artifact"]
+          },
           "provenance": {
             "type": "object",
             "additionalProperties": false,

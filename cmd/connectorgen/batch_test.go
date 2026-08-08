@@ -485,8 +485,14 @@ func TestBatchMaterializeGeneratesV2ProvenanceAndReachableSurface(t *testing.T) 
 	if err != nil {
 		t.Fatalf("read generated operations: %v", err)
 	}
-	if string(opsRaw) != "{\n  \"operations\": []\n}\n" {
-		t.Fatalf("operations.json = %s, want explicit no-direct-executor catalog", opsRaw)
+	var operations struct {
+		Operations []engine.OperationSpec `json:"operations"`
+	}
+	if err := json.Unmarshal(opsRaw, &operations); err != nil {
+		t.Fatalf("decode operations.json: %v", err)
+	}
+	if len(operations.Operations) != 1 || operations.Operations[0].REST == nil || operations.Operations[0].REST.Method != http.MethodDelete {
+		t.Fatalf("operations.json = %s, want typed metadata for the documented DELETE", opsRaw)
 	}
 
 	cliRaw, err := os.ReadFile(filepath.Join(defsRoot, "cli-surface", "cli_surface.json"))
@@ -509,11 +515,20 @@ func TestBatchMaterializeGeneratesV2ProvenanceAndReachableSurface(t *testing.T) 
 	if err := json.Unmarshal(cliRaw, &cli); err != nil {
 		t.Fatalf("decode generated cli surface: %v", err)
 	}
-	if len(cli.Commands) != 2 || cli.Commands[0].Intent != "reverse_etl" || cli.Commands[0].Write != "create_widget" || cli.Commands[1].Intent != "etl" || cli.Commands[1].Stream != "widgets" {
-		t.Fatalf("generated CLI commands = %+v, want reachable stream/write commands", cli.Commands)
+	if len(cli.Commands) != 3 {
+		t.Fatalf("generated CLI commands = %+v, want stream, write, and blocked artifact operation", cli.Commands)
 	}
-	if len(cli.Commands[0].APISurface) != 1 || len(cli.Commands[1].APISurface) != 1 {
+	if len(cli.Commands[0].APISurface) != 1 || len(cli.Commands[1].APISurface) != 1 || len(cli.Commands[2].APISurface) != 1 {
 		t.Fatalf("generated CLI command endpoint bindings = %+v, want one per command", cli.Commands)
+	}
+	var blocked int
+	for _, command := range cli.Commands {
+		if command.Availability == materializeAvailabilityNotImplemented {
+			blocked++
+		}
+	}
+	if blocked != 1 {
+		t.Fatalf("generated CLI commands = %+v, want one named-dependency command", cli.Commands)
 	}
 
 	if reportRaw, err := os.ReadFile(reportPath); err != nil || !strings.Contains(string(reportRaw), `"cli-surface"`) || !strings.Contains(string(reportRaw), `"included"`) {
@@ -521,7 +536,101 @@ func TestBatchMaterializeGeneratesV2ProvenanceAndReachableSurface(t *testing.T) 
 	}
 }
 
-func TestBatchMaterializeDropsMissingExecutableCoverageWithoutMutatingBundle(t *testing.T) {
+func TestBatchMaterializeMapsUnsupportedOperationsAndFlagsSurfaceDiscrepancies(t *testing.T) {
+	sourceDefsRoot := t.TempDir()
+	fsys := cliSurfaceBundleFS(validCLISurfaceJSON())
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"api": "test API v1",
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+			{ "method": "GET", "path": "/legacy", "covered_by": { "stream": "widgets" } }
+		]
+	}`)}
+	writeBatchBundle(t, sourceDefsRoot, fsys)
+	defsRoot := t.TempDir()
+	manifestPath := writeBatchManifestFixture(t, "cli-surface")
+	artifactDir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(artifactDir, "cli-surface.json"), []byte(`{
+		"openapi": "3.0.0",
+		"paths": {
+			"/widgets": {
+				"get": {"summary": "List widgets"},
+				"post": {"summary": "Create widget"}
+			},
+			"/new": {
+				"delete": {"summary": "Delete a widget"}
+			}
+		}
+	}`), 0o644); err != nil {
+		t.Fatalf("write artifact: %v", err)
+	}
+	reportPath := filepath.Join(t.TempDir(), "materialize.json")
+	var stdout, stderr bytes.Buffer
+
+	code := run([]string{"batch", "materialize", "--manifest", manifestPath, "--source-defs-root", sourceDefsRoot, "--defs-root", defsRoot, "--artifact-dir", artifactDir, "--retrieved-at", "2026-08-06", "--report", reportPath}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("batch materialize exit = %d, want complete inventory materialization; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+
+	bundleDir := filepath.Join(defsRoot, "cli-surface")
+	var surface engine.APISurface
+	decodeJSONFile(t, filepath.Join(bundleDir, "api_surface.json"), &surface)
+	if len(surface.Endpoints) != 4 {
+		t.Fatalf("materialized endpoints = %d, want three artifact operations plus one source discrepancy", len(surface.Endpoints))
+	}
+	var discrepancy, unsupported *engine.SurfaceEndpoint
+	for i := range surface.Endpoints {
+		endpoint := &surface.Endpoints[i]
+		if endpoint.Discrepancy == "present-in-surface-absent-from-artifact" {
+			discrepancy = endpoint
+		}
+		if endpoint.Method == http.MethodDelete && endpoint.Path == "/new" {
+			unsupported = endpoint
+		}
+	}
+	if discrepancy == nil || discrepancy.Method != http.MethodGet || discrepancy.Path != "/legacy" || discrepancy.CoveredBy == nil {
+		t.Fatalf("source-only endpoint = %+v, want retained executable endpoint with exact discrepancy", discrepancy)
+	}
+	if unsupported == nil || unsupported.Operation == nil || !strings.HasPrefix(unsupported.Operation.Notes, "named_dependency=") {
+		t.Fatalf("unsupported endpoint = %+v, want blocked operation with named dependency", unsupported)
+	}
+
+	var operations struct {
+		Operations []engine.OperationSpec `json:"operations"`
+	}
+	decodeJSONFile(t, filepath.Join(bundleDir, "operations.json"), &operations)
+	if len(operations.Operations) != 1 || operations.Operations[0].REST == nil {
+		t.Fatalf("generated operations = %+v, want one typed metadata operation", operations.Operations)
+	}
+
+	var cli engine.CLISurface
+	decodeJSONFile(t, filepath.Join(bundleDir, "cli_surface.json"), &cli)
+	if len(cli.Commands) != 3 {
+		t.Fatalf("generated commands = %d, want stream, write, and not-implemented artifact operation", len(cli.Commands))
+	}
+	var notImplemented int
+	for _, command := range cli.Commands {
+		if command.Availability == "not_implemented" {
+			notImplemented++
+			if !strings.HasPrefix(command.Notes, "named_dependency=") {
+				t.Fatalf("not-implemented command = %+v, want named dependency note", command)
+			}
+		}
+	}
+	if notImplemented != 1 {
+		t.Fatalf("not-implemented commands = %d, want one", notImplemented)
+	}
+	validation, err := validatePath(bundleDir)
+	if err != nil {
+		t.Fatalf("validate materialized bundle: %v", err)
+	}
+	if len(validation.Findings) != 0 {
+		t.Fatalf("materialized bundle findings = %+v, want zero", validation.Findings)
+	}
+}
+
+func TestBatchMaterializeRetainsMissingExecutableCoverageAsDiscrepancy(t *testing.T) {
 	sourceDefsRoot := t.TempDir()
 	writeBatchBundle(t, sourceDefsRoot, cliSurfaceBundleFS(validCLISurfaceJSON()))
 	defsRoot := t.TempDir()
@@ -537,36 +646,36 @@ func TestBatchMaterializeDropsMissingExecutableCoverageWithoutMutatingBundle(t *
 	var stdout, stderr bytes.Buffer
 
 	code := run([]string{"batch", "materialize", "--manifest", manifestPath, "--source-defs-root", sourceDefsRoot, "--defs-root", defsRoot, "--artifact-dir", artifactDir, "--retrieved-at", "2026-08-06", "--report", reportPath}, &stdout, &stderr)
-	if code == 0 {
-		t.Fatalf("batch materialize exit = 0, want missing coverage drop; stdout=%s stderr=%s", stdout.String(), stderr.String())
+	if code != 0 {
+		t.Fatalf("batch materialize exit = %d, want source coverage retained as discrepancy; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
 	}
-	reportRaw, err := os.ReadFile(reportPath)
-	if err != nil {
-		t.Fatalf("read materialize report: %v", err)
+	var surface engine.APISurface
+	decodeJSONFile(t, filepath.Join(defsRoot, "cli-surface", "api_surface.json"), &surface)
+	if len(surface.Endpoints) != 3 {
+		t.Fatalf("materialized endpoints = %d, want artifact endpoint plus two retained source rows", len(surface.Endpoints))
 	}
-	if !strings.Contains(string(reportRaw), `"coverage"`) || !strings.Contains(string(reportRaw), `"cli-surface"`) {
-		t.Fatalf("materialize report = %s, want named coverage drop", reportRaw)
+	var discrepancies int
+	for _, endpoint := range surface.Endpoints {
+		if endpoint.Discrepancy == materializeSurfaceDiscrepancy {
+			discrepancies++
+		}
 	}
-	surfaceRaw, err := os.ReadFile(filepath.Join(sourceDefsRoot, "cli-surface", "api_surface.json"))
-	if err != nil {
-		t.Fatalf("read original api surface: %v", err)
+	if discrepancies != 2 {
+		t.Fatalf("materialized surface = %+v, want two source-only discrepancy rows", surface.Endpoints)
 	}
-	if strings.Contains(string(surfaceRaw), `"operation_ledger_version": 2`) {
-		t.Fatalf("materializer mutated dropped bundle api surface: %s", surfaceRaw)
-	}
-	if _, err := os.Stat(filepath.Join(sourceDefsRoot, "cli-surface", "operations.json")); !os.IsNotExist(err) {
-		t.Fatalf("materializer wrote operations.json for dropped bundle: %v", err)
+	if _, err := os.Stat(filepath.Join(defsRoot, "cli-surface", "operations.json")); err != nil {
+		t.Fatalf("materializer did not write generated operations catalog: %v", err)
 	}
 }
 
-func TestBatchMaterializeRequiresExactArtifactEndpointIdentity(t *testing.T) {
+func TestBatchMaterializeRetainsSourceCoverageWhenArtifactIdentityDiffers(t *testing.T) {
 	tests := []struct {
-		name           string
-		sourceMethod   string
-		sourcePath     string
-		artifactMethod string
-		artifactPath   string
-		wantErr        bool
+		name            string
+		sourceMethod    string
+		sourcePath      string
+		artifactMethod  string
+		artifactPath    string
+		wantDiscrepancy bool
 	}{
 		{
 			name:           "exact method and path",
@@ -576,28 +685,28 @@ func TestBatchMaterializeRequiresExactArtifactEndpointIdentity(t *testing.T) {
 			artifactPath:   "/widgets",
 		},
 		{
-			name:           "trailing slash is distinct",
-			sourceMethod:   http.MethodGet,
-			sourcePath:     "/widgets",
-			artifactMethod: http.MethodGet,
-			artifactPath:   "/widgets/",
-			wantErr:        true,
+			name:            "trailing slash is distinct",
+			sourceMethod:    http.MethodGet,
+			sourcePath:      "/widgets",
+			artifactMethod:  http.MethodGet,
+			artifactPath:    "/widgets/",
+			wantDiscrepancy: true,
 		},
 		{
-			name:           "method case is distinct",
-			sourceMethod:   "get",
-			sourcePath:     "/widgets",
-			artifactMethod: http.MethodGet,
-			artifactPath:   "/widgets",
-			wantErr:        true,
+			name:            "method case is distinct",
+			sourceMethod:    "get",
+			sourcePath:      "/widgets",
+			artifactMethod:  http.MethodGet,
+			artifactPath:    "/widgets",
+			wantDiscrepancy: true,
 		},
 		{
-			name:           "artifact method case is distinct",
-			sourceMethod:   http.MethodGet,
-			sourcePath:     "/widgets",
-			artifactMethod: "get",
-			artifactPath:   "/widgets",
-			wantErr:        true,
+			name:            "artifact method case is distinct",
+			sourceMethod:    http.MethodGet,
+			sourcePath:      "/widgets",
+			artifactMethod:  "get",
+			artifactPath:    "/widgets",
+			wantDiscrepancy: true,
 		},
 	}
 
@@ -627,14 +736,23 @@ func TestBatchMaterializeRequiresExactArtifactEndpointIdentity(t *testing.T) {
 				"sha256",
 				[]batchArtifactEndpoint{{Method: test.artifactMethod, Path: test.artifactPath}},
 			)
-			if test.wantErr {
-				if err == nil || !strings.Contains(err.Error(), "absent from the cited artifact") {
-					t.Fatalf("materialize error = %v, want exact-identity coverage rejection", err)
-				}
-				return
-			}
 			if err != nil {
 				t.Fatalf("materialize exact endpoint: %v", err)
+			}
+			if test.wantDiscrepancy {
+				if len(surface.Endpoints) != 2 {
+					t.Fatalf("materialized endpoints = %+v, want artifact operation plus retained source discrepancy", surface.Endpoints)
+				}
+				var found bool
+				for _, endpoint := range surface.Endpoints {
+					if endpoint.Method == test.sourceMethod && endpoint.Path == test.sourcePath && endpoint.Discrepancy == materializeSurfaceDiscrepancy {
+						found = true
+					}
+				}
+				if !found {
+					t.Fatalf("materialized endpoints = %+v, want exact source discrepancy", surface.Endpoints)
+				}
+				return
 			}
 			if len(surface.Endpoints) != 1 || surface.Endpoints[0].CoveredBy == nil || surface.Endpoints[0].CoveredBy.Stream != "widgets" {
 				t.Fatalf("materialized endpoints = %+v, want exact cited stream coverage", surface.Endpoints)
@@ -1145,6 +1263,17 @@ func TestBatchMaterializePluralOnlyWriteCoverage(t *testing.T) {
 	}
 	if ref := byWrite["import_widget"].APISurface; len(ref) != 1 || ref[0].Path != "/widgets" {
 		t.Errorf("import_widget api_surface = %+v, want the same shared POST /widgets row", ref)
+	}
+}
+
+func decodeJSONFile(t *testing.T, path string, value any) {
+	t.Helper()
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("read %s: %v", path, err)
+	}
+	if err := json.Unmarshal(raw, value); err != nil {
+		t.Fatalf("decode %s: %v", path, err)
 	}
 }
 

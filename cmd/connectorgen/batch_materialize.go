@@ -25,8 +25,11 @@ import (
 )
 
 const (
-	batchMaterializeReportSchemaVersion = 1
-	maxMaterializeArtifactBytes         = 16 << 20
+	batchMaterializeReportSchemaVersion   = 1
+	maxMaterializeArtifactBytes           = 16 << 20
+	materializeAvailabilityNotImplemented = "not_implemented"
+	materializeNamedDependencyPrefix      = "named_dependency="
+	materializeSurfaceDiscrepancy         = "present-in-surface-absent-from-artifact"
 )
 
 // BatchMaterializeReport records exactly which manifest candidates received a
@@ -45,13 +48,17 @@ type BatchMaterializeReport struct {
 // artifact table carries URL, retrieval date, and digest and is referenced by
 // every endpoint-local provenance row.
 type BatchMaterializeIncluded struct {
-	Connector          string                `json:"connector"`
-	Artifact           BatchMaterialArtifact `json:"artifact"`
-	ArtifactOperations int                   `json:"artifact_operations"`
-	DeclaredOperations int                   `json:"declared_operations"`
-	OperationSplit     BatchOperationSplit   `json:"operation_split"`
-	CLICommands        int                   `json:"cli_commands"`
-	OperationExecutors int                   `json:"operation_executors"`
+	Connector                string                `json:"connector"`
+	Artifact                 BatchMaterialArtifact `json:"artifact"`
+	ArtifactOperations       int                   `json:"artifact_operations"`
+	DeclaredOperations       int                   `json:"declared_operations"`
+	OperationSplit           BatchOperationSplit   `json:"operation_split"`
+	CLICommands              int                   `json:"cli_commands"`
+	ImplementedCommands      int                   `json:"implemented_commands"`
+	NamedDependencyCommands  int                   `json:"named_dependency_commands"`
+	FlaggedDiscrepancies     int                   `json:"flagged_discrepancies"`
+	RuntimePreflightCommands int                   `json:"runtime_preflight_commands"`
+	OperationExecutors       int                   `json:"operation_executors"`
 }
 
 // BatchMaterialArtifact combines the survey's immutable version with the
@@ -77,10 +84,10 @@ type batchMaterializeOptions struct {
 
 // runBatchMaterialize is the one post-#3869 artifact-to-bundle authoring
 // path. It reads public OpenAPI/Swagger documents from the manifest, upgrades
-// the existing surface inventory to v2 provenance, and derives only
-// stream/write command declarations that the real runtime can preflight.
-// Direct reads are deliberately not promoted: current runtime policies for
-// them are redacting, which this batch lane rejects.
+// the existing surface inventory to v2 provenance, and maps every documented
+// operation into the bundle. Commands are marked implemented only when the
+// real runtime can preflight them; unsupported operation metadata remains
+// visible as a not_implemented command with a named dependency.
 func runBatchMaterialize(args []string, stdout, stderr io.Writer) int {
 	for _, arg := range args {
 		if arg == "-h" || arg == "--help" || arg == "help" {
@@ -260,12 +267,17 @@ func materializeBatchCandidate(opts batchMaterializeOptions, candidate BatchMani
 	if err != nil {
 		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, "coverage", err)
 	}
-	cli, err := materializeCLISurface(bundle, surface, candidate)
+	operations, err := materializeOperationCatalog(bundle, surface, candidate)
+	if err != nil {
+		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, "operations", err)
+	}
+	cli, err := materializeCLISurface(bundle, surface, candidate, operations)
 	if err != nil {
 		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, "cli_surface", err)
 	}
 	materializedBundle := bundle
 	materializedBundle.Surface = &surface
+	materializedBundle.Operations = operations
 	materializedBundle.CLISurface = &cli
 	split, err := batchSurfaceSplit(&surface)
 	if err != nil {
@@ -284,7 +296,13 @@ func materializeBatchCandidate(opts batchMaterializeOptions, candidate BatchMani
 	if err != nil {
 		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, "write", fmt.Errorf("encode cli_surface.json: %w", err))
 	}
-	operationsRaw := []byte("{\n  \"operations\": []\n}\n")
+	operationsRaw, err := json.MarshalIndent(struct {
+		Operations []engine.OperationSpec `json:"operations"`
+	}{Operations: operations}, "", "  ")
+	if err != nil {
+		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, "write", fmt.Errorf("encode operations.json: %w", err))
+	}
+	operationsRaw = append(operationsRaw, '\n')
 	destination, err := createBatchMaterializeDestination(sourceBundleDir, bundleDir)
 	if err != nil {
 		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, batchMaterializeDestinationStage(err), err)
@@ -294,6 +312,8 @@ func materializeBatchCandidate(opts batchMaterializeOptions, candidate BatchMani
 		return BatchMaterializeIncluded{}, batchGateDrop(candidate.Connector, "write", fmt.Errorf("write materialized bundle: %w", err))
 	}
 
+	implementedCommands, namedDependencyCommands := materializedCLICommandCounts(cli)
+	flaggedDiscrepancies := materializedDiscrepancyCount(surface)
 	return BatchMaterializeIncluded{
 		Connector: candidate.Connector,
 		Artifact: BatchMaterialArtifact{
@@ -302,11 +322,15 @@ func materializeBatchCandidate(opts batchMaterializeOptions, candidate BatchMani
 			RetrievedAt: opts.retrievedAt,
 			SHA256:      sha,
 		},
-		ArtifactOperations: len(artifactEndpoints),
-		DeclaredOperations: split.total(),
-		OperationSplit:     split,
-		CLICommands:        checked,
-		OperationExecutors: 0,
+		ArtifactOperations:       len(artifactEndpoints),
+		DeclaredOperations:       split.total(),
+		OperationSplit:           split,
+		CLICommands:              len(cli.Commands),
+		ImplementedCommands:      implementedCommands,
+		NamedDependencyCommands:  namedDependencyCommands,
+		FlaggedDiscrepancies:     flaggedDiscrepancies,
+		RuntimePreflightCommands: checked,
+		OperationExecutors:       len(operations),
 	}, nil
 }
 
@@ -1192,22 +1216,13 @@ func materializeAPISurface(bundle engine.Bundle, candidate BatchManifestConnecto
 		}
 		existingExact[key] = endpoint
 	}
-	for _, endpoint := range bundle.Surface.Endpoints {
-		if endpoint.CoveredBy == nil {
-			continue
-		}
-		if !artifactKeys[batchArtifactEndpointKey(endpoint.Method, endpoint.Path)] {
-			return engine.APISurface{}, fmt.Errorf("executable coverage %s %s is absent from the cited artifact", endpoint.Method, endpoint.Path)
-		}
-	}
-
 	artifactID := fmt.Sprintf("%s-artifact-%s", candidate.Connector, retrievedAt)
 	surface := engine.APISurface{
 		API:                    materializedAPIName(bundle.Surface.API, candidate.Artifact.Version),
 		Docs:                   bundle.Surface.Docs,
 		ReviewedAt:             retrievedAt,
 		OperationLedgerVersion: 2,
-		Scope:                  fmt.Sprintf("Provider-artifact inventory generated from the cited %s artifact (%d documented HTTP operations). Existing executable stream/write bindings are retained only when the fetched provider method/path still matches; every other operation is explicitly provider-blocked or excluded.", candidate.Artifact.Kind, len(artifactEndpoints)),
+		Scope:                  fmt.Sprintf("Provider-artifact inventory generated from the cited %s artifact (%d documented HTTP operations). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with %s.", candidate.Artifact.Kind, len(artifactEndpoints), materializeSurfaceDiscrepancy),
 		Artifacts: []engine.SurfaceArtifact{{
 			ID:          artifactID,
 			URL:         candidate.Artifact.URL,
@@ -1237,6 +1252,32 @@ func materializeAPISurface(bundle engine.Bundle, candidate BatchManifestConnecto
 		}
 		surface.Endpoints = append(surface.Endpoints, endpoint)
 	}
+	for _, existing := range bundle.Surface.Endpoints {
+		key := batchArtifactEndpointKey(existing.Method, existing.Path)
+		if artifactKeys[key] {
+			continue
+		}
+		endpoint := engine.SurfaceEndpoint{
+			Method: existing.Method,
+			Path:   existing.Path,
+			Provenance: &engine.SurfaceProvenance{
+				Artifact:  artifactID,
+				SourceURL: candidate.Artifact.URL,
+			},
+			Discrepancy: materializeSurfaceDiscrepancy,
+		}
+		copyMaterializedClassifier(&endpoint, existing)
+		if endpoint.CoveredBy == nil && endpoint.Excluded == nil && endpoint.Operation == nil {
+			endpoint.Operation = defaultMaterializedOperation(batchArtifactEndpoint{Method: existing.Method, Path: existing.Path, Summary: fmt.Sprintf("%s %s", existing.Method, existing.Path)})
+		}
+		surface.Endpoints = append(surface.Endpoints, endpoint)
+	}
+	sort.Slice(surface.Endpoints, func(i, j int) bool {
+		if surface.Endpoints[i].Path != surface.Endpoints[j].Path {
+			return surface.Endpoints[i].Path < surface.Endpoints[j].Path
+		}
+		return batchArtifactMethodRank(surface.Endpoints[i].Method) < batchArtifactMethodRank(surface.Endpoints[j].Method)
+	})
 	if err := ensureMaterializedCoverage(bundle, surface); err != nil {
 		return engine.APISurface{}, err
 	}
@@ -1286,12 +1327,14 @@ func materializedLegacyExclusion(exclusion engine.SurfaceExclusion, method strin
 	if reason == "" {
 		reason = fmt.Sprintf("The provider operation is intentionally excluded from this batch (%s).", exclusion.Category)
 	}
+	dependency, dependencyReason := materializedNamedDependency(method, "", reason)
 	return &engine.SurfaceOperation{
 		Model:            model,
 		Status:           "blocked",
 		Risk:             risk,
 		BlockedByDefault: true,
 		Reason:           reason,
+		Notes:            materializedNamedDependencyNote(dependency, dependencyReason),
 	}
 }
 
@@ -1305,6 +1348,7 @@ func batchArtifactMutationMethod(method string) bool {
 }
 
 func defaultMaterializedOperation(endpoint batchArtifactEndpoint) *engine.SurfaceOperation {
+	dependency, dependencyReason := materializedNamedDependency(endpoint.Method, endpoint.Path, "")
 	switch endpoint.Method {
 	case http.MethodGet, http.MethodHead:
 		return &engine.SurfaceOperation{
@@ -1313,6 +1357,7 @@ func defaultMaterializedOperation(endpoint batchArtifactEndpoint) *engine.Surfac
 			Risk:             "low",
 			BlockedByDefault: true,
 			Reason:           "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+			Notes:            materializedNamedDependencyNote(dependency, dependencyReason),
 		}
 	case http.MethodDelete:
 		return &engine.SurfaceOperation{
@@ -1321,6 +1366,7 @@ func defaultMaterializedOperation(endpoint batchArtifactEndpoint) *engine.Surfac
 			Risk:             "high",
 			BlockedByDefault: true,
 			Reason:           "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+			Notes:            materializedNamedDependencyNote(dependency, dependencyReason),
 		}
 	default:
 		return &engine.SurfaceOperation{
@@ -1329,8 +1375,30 @@ func defaultMaterializedOperation(endpoint batchArtifactEndpoint) *engine.Surfac
 			Risk:             "high",
 			BlockedByDefault: true,
 			Reason:           "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+			Notes:            materializedNamedDependencyNote(dependency, dependencyReason),
 		}
 	}
+}
+
+func materializedNamedDependency(method, path, reason string) (string, string) {
+	method = strings.ToUpper(strings.TrimSpace(method))
+	lowerReason := strings.ToLower(reason)
+	switch {
+	case method == http.MethodGet || method == http.MethodHead:
+		return "engine.direct_read_executor", "the direct-read executor has no non-redacting output policy for this provider operation"
+	case strings.Contains(lowerReason, "wrapper") || strings.Contains(lowerReason, "envelope"):
+		return "engine.rest_write_body_envelope", "the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+	case strings.Contains(lowerReason, "webhook"):
+		return "review.webhook_url_mutation", "the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+	case method == http.MethodOptions || method == http.MethodTrace:
+		return "engine.protocol_metadata_executor", "the runtime has no provider command executor for protocol-metadata operations"
+	default:
+		return "engine.rest_write_operation_contract", "the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+	}
+}
+
+func materializedNamedDependencyNote(dependency, description string) string {
+	return materializeNamedDependencyPrefix + dependency + ": " + description
 }
 
 func ensureMaterializedCoverage(bundle engine.Bundle, surface engine.APISurface) error {
@@ -1372,10 +1440,102 @@ func materializedAPIName(existing, artifactVersion string) string {
 	return base + marker + artifactVersion
 }
 
-func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, candidate BatchManifestConnector) (engine.CLISurface, error) {
+func materializeOperationCatalog(bundle engine.Bundle, surface engine.APISurface, candidate BatchManifestConnector) ([]engine.OperationSpec, error) {
+	operations := append([]engine.OperationSpec(nil), bundle.Operations...)
+	usedIDs := make(map[string]bool, len(operations))
+	for _, operation := range operations {
+		usedIDs[operation.ID] = true
+	}
+	for _, endpoint := range surface.Endpoints {
+		if endpoint.Operation == nil {
+			continue
+		}
+		_, dependencyReason := materializedNamedDependency(endpoint.Method, endpoint.Path, endpoint.Operation.Reason)
+		id := materializedOperationID(bundle.Name, endpoint.Method, endpoint.Path, usedIDs)
+		operation := engine.OperationSpec{
+			ID:           id,
+			Summary:      fmt.Sprintf("%s %s", endpoint.Method, endpoint.Path),
+			Description:  endpoint.Operation.Reason,
+			SourceURL:    candidate.Artifact.URL,
+			Risk:         endpoint.Operation.Risk,
+			Approval:     "not implemented: " + dependencyReason,
+			OutputPolicy: "json",
+		}
+		if operation.Risk == "" {
+			operation.Risk = "high"
+		}
+		method := strings.ToUpper(strings.TrimSpace(endpoint.Method))
+		switch method {
+		case http.MethodGet:
+			operation.Kind = "rest_read"
+			operation.REST = &engine.RESTOperationSpec{Method: method, Path: endpoint.Path, MaxBytes: maxMaterializeArtifactBytes}
+		case http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete:
+			operation.Kind = "rest_write"
+			operation.MutationClass = materializedMutationClass(method)
+			operation.REST = &engine.RESTOperationSpec{Method: method, Path: endpoint.Path, MaxBytes: maxMaterializeArtifactBytes}
+		default:
+			operation.Kind = "composite"
+			operation.Composite = &engine.CompositeOperationSpec{Steps: []string{fmt.Sprintf("%s %s", method, endpoint.Path)}}
+		}
+		operations = append(operations, operation)
+	}
+	return operations, nil
+}
+
+func materializedOperationID(connector, method, path string, used map[string]bool) string {
+	base := strings.ToLower(strings.TrimSpace(connector)) + "." + strings.ToLower(strings.TrimSpace(method)) + "." + materializedSlug(path)
+	if !used[base] {
+		used[base] = true
+		return base
+	}
+	for index := 2; ; index++ {
+		candidate := fmt.Sprintf("%s-%d", base, index)
+		if !used[candidate] {
+			used[candidate] = true
+			return candidate
+		}
+	}
+}
+
+func materializedSlug(value string) string {
+	value = strings.ToLower(strings.TrimSpace(value))
+	var builder strings.Builder
+	separator := false
+	for _, r := range value {
+		if (r >= 'a' && r <= 'z') || (r >= '0' && r <= '9') {
+			if separator && builder.Len() > 0 {
+				builder.WriteByte('-')
+			}
+			builder.WriteRune(r)
+			separator = false
+			continue
+		}
+		separator = builder.Len() > 0
+	}
+	result := strings.Trim(builder.String(), "-")
+	if result == "" {
+		return "operation"
+	}
+	return result
+}
+
+func materializedMutationClass(method string) string {
+	switch method {
+	case http.MethodPost:
+		return "create"
+	case http.MethodDelete:
+		return "delete"
+	default:
+		return "update"
+	}
+}
+
+func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, candidate BatchManifestConnector, operations []engine.OperationSpec) (engine.CLISurface, error) {
 	streamRefs := map[string][]engine.CLISurfaceEndpointRef{}
 	writeRefs := map[string][]engine.CLISurfaceEndpointRef{}
+	endpointByKey := map[string]engine.SurfaceEndpoint{}
 	for _, endpoint := range surface.Endpoints {
+		endpointByKey[batchArtifactEndpointKey(endpoint.Method, endpoint.Path)] = endpoint
 		if endpoint.CoveredBy == nil {
 			continue
 		}
@@ -1388,16 +1548,17 @@ func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, cand
 		}
 	}
 
-	commands := make([]engine.CLICommand, 0, len(bundle.Streams)+len(bundle.Writes))
+	commands := make([]engine.CLICommand, 0, len(bundle.Streams)+len(bundle.Writes)+len(operations))
 	readPaths := make([]string, 0, len(bundle.Streams))
 	writePaths := make([]string, 0, len(bundle.Writes))
+	usedPaths := map[string]bool{}
 	for _, stream := range bundle.Streams {
 		refs := sortedMaterializedReferences(streamRefs[stream.Name])
 		if len(refs) == 0 {
 			return engine.CLISurface{}, fmt.Errorf("stream %q has no materialized api_surface reference", stream.Name)
 		}
 		path := materializedCommandPath(stream.Name, "list")
-		commands = append(commands, engine.CLICommand{
+		command := engine.CLICommand{
 			Path:         path,
 			Summary:      fmt.Sprintf("Run the %s ETL stream", strings.ReplaceAll(stream.Name, "_", " ")),
 			Intent:       "etl",
@@ -1406,7 +1567,12 @@ func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, cand
 			SourceURL:    candidate.Artifact.URL,
 			APISurface:   refs,
 			Examples:     []string{fmt.Sprintf("pm %s %s --json", bundle.Name, path)},
-		})
+		}
+		if note := materializedDiscrepancyNote(refs, endpointByKey); note != "" {
+			command.Notes = note
+		}
+		commands = append(commands, command)
+		usedPaths[path] = true
 		readPaths = append(readPaths, path)
 	}
 	for _, action := range bundle.Writes {
@@ -1418,16 +1584,8 @@ func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, cand
 		if err != nil {
 			return engine.CLISurface{}, fmt.Errorf("write action %q flags: %w", action.Name, err)
 		}
-		// A reverse-ETL action with a required object/array record cannot be
-		// honestly exposed as a scalar CLI-flag command. The action remains
-		// executable through the existing generic plan/preview/approval/execute
-		// workflow; this connector namespace deliberately advertises only the
-		// actions whose required record contract can be derived and validated.
-		if !representable {
-			continue
-		}
 		path := materializedCommandPath(action.Name, "apply")
-		commands = append(commands, engine.CLICommand{
+		command := engine.CLICommand{
 			Path:         path,
 			Summary:      fmt.Sprintf("Plan and execute the %s reverse-ETL action", strings.ReplaceAll(action.Name, "_", " ")),
 			Intent:       "reverse_etl",
@@ -1439,8 +1597,56 @@ func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, cand
 			Risk:         action.Risk,
 			Approval:     "requires plan, preview, approval, and execute",
 			Examples:     []string{fmt.Sprintf("pm %s %s --plan <plan-name>", bundle.Name, path)},
-		})
+		}
+		if !representable {
+			command.Availability = materializeAvailabilityNotImplemented
+			command.Notes = materializedNamedDependencyNote("engine.reverse_etl_scalar_flag_contract", "the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags")
+		}
+		commands = append(commands, command)
+		usedPaths[path] = true
 		writePaths = append(writePaths, path)
+	}
+	for _, endpoint := range surface.Endpoints {
+		if endpoint.Operation == nil {
+			continue
+		}
+		operationID := materializedOperationForEndpoint(operations, endpoint)
+		if operationID == "" {
+			return engine.CLISurface{}, fmt.Errorf("blocked operation %s %s has no generated operation metadata", endpoint.Method, endpoint.Path)
+		}
+		dependency, dependencyReason := materializedNamedDependency(endpoint.Method, endpoint.Path, endpoint.Operation.Reason)
+		path := materializedOperationCommandPath(endpoint.Method, endpoint.Path)
+		if usedPaths[path] {
+			path += " operation"
+		}
+		for usedPaths[path] {
+			path += " operation"
+		}
+		usedPaths[path] = true
+		intent := "docs_only"
+		paths := &readPaths
+		method := strings.ToUpper(strings.TrimSpace(endpoint.Method))
+		if method == http.MethodGet {
+			intent = "direct_read"
+		} else if batchArtifactMutationMethod(method) {
+			intent = "direct_write"
+			paths = &writePaths
+		}
+		command := engine.CLICommand{
+			Path:         path,
+			Summary:      fmt.Sprintf("Documented %s %s (not implemented)", endpoint.Method, endpoint.Path),
+			Intent:       intent,
+			Availability: materializeAvailabilityNotImplemented,
+			SourceURL:    candidate.Artifact.URL,
+			APISurface:   []engine.CLISurfaceEndpointRef{{Method: endpoint.Method, Path: endpoint.Path}},
+			Operation:    operationID,
+			Risk:         endpoint.Operation.Risk,
+			Approval:     "not implemented: " + dependencyReason,
+			Notes:        materializedNamedDependencyNote(dependency, dependencyReason),
+			Examples:     []string{fmt.Sprintf("pm %s %s --help", bundle.Name, path)},
+		}
+		commands = append(commands, command)
+		*paths = append(*paths, path)
 	}
 	sort.Slice(commands, func(i, j int) bool { return commands[i].Path < commands[j].Path })
 	sort.Strings(readPaths)
@@ -1460,11 +1666,67 @@ func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, cand
 	}, nil
 }
 
+func materializedOperationForEndpoint(operations []engine.OperationSpec, endpoint engine.SurfaceEndpoint) string {
+	method := strings.ToUpper(strings.TrimSpace(endpoint.Method))
+	for _, operation := range operations {
+		if operation.REST != nil && strings.EqualFold(operation.REST.Method, method) && operation.REST.Path == endpoint.Path {
+			return operation.ID
+		}
+		if operation.Composite != nil && len(operation.Composite.Steps) == 1 && operation.Composite.Steps[0] == fmt.Sprintf("%s %s", method, endpoint.Path) {
+			return operation.ID
+		}
+	}
+	return ""
+}
+
+func materializedOperationCommandPath(method, path string) string {
+	parts := []string{"api", strings.ToLower(strings.TrimSpace(method))}
+	for _, part := range strings.FieldsFunc(path, func(r rune) bool {
+		return r == '/' || r == '{' || r == '}'
+	}) {
+		if token := materializedSlug(part); token != "" {
+			parts = append(parts, token)
+		}
+	}
+	return strings.Join(parts, " ")
+}
+
+func materializedDiscrepancyNote(refs []engine.CLISurfaceEndpointRef, endpoints map[string]engine.SurfaceEndpoint) string {
+	for _, ref := range refs {
+		if endpoint, ok := endpoints[batchArtifactEndpointKey(ref.Method, ref.Path)]; ok && endpoint.Discrepancy != "" {
+			return "discrepancy=" + endpoint.Discrepancy
+		}
+	}
+	return ""
+}
+
+func materializedDiscrepancyCount(surface engine.APISurface) int {
+	count := 0
+	for _, endpoint := range surface.Endpoints {
+		if endpoint.Discrepancy == materializeSurfaceDiscrepancy {
+			count++
+		}
+	}
+	return count
+}
+
+func materializedCLICommandCounts(surface engine.CLISurface) (implemented, namedDependency int) {
+	for _, command := range surface.Commands {
+		if command.Availability == "implemented" {
+			implemented++
+		}
+		if command.Availability == materializeAvailabilityNotImplemented && strings.HasPrefix(strings.TrimSpace(command.Notes), materializeNamedDependencyPrefix) {
+			namedDependency++
+		}
+	}
+	return implemented, namedDependency
+}
+
 // materializedWriteFlags derives the smallest complete flag contract for a
-// reverse-ETL command. It intentionally refuses to flatten object or
-// object-array inputs into made-up scalar flags: those actions are still
-// available via the typed generic reverse-ETL workflow, but are not promoted
-// as a connector command unless every required value has a faithful flag type.
+// reverse-ETL command. It intentionally does not flatten object or
+// object-array inputs into made-up scalar flags: the caller receives a
+// visible not_implemented command with a named dependency until the command
+// surface has a faithful structured-input contract.
 func materializedWriteFlags(action engine.WriteAction) ([]engine.CLIFlag, bool, error) {
 	if len(action.RecordSchema) == 0 {
 		return nil, false, errors.New("record_schema is required")

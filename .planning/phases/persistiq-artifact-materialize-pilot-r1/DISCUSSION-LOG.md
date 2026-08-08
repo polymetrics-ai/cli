@@ -39,6 +39,17 @@ binary_download, 0 unclassified before artifact reconciliation.
 
 **Decision:** Certification remains explicitly withheld.
 
+## Captain ruling: complete operation inventory
+
+The captain replaced the prior fail-closed materialization policy before the
+rerun. Every documented artifact operation is now mapped into the bundle.
+Missing runtime foundations are represented as `not_implemented` commands with
+named dependencies, while existing source-surface operations absent from the
+artifact remain present and are marked
+`present-in-surface-absent-from-artifact`. An implemented command still must
+pass the real runtime preflight; this ruling does not authorize an executable
+claim the runtime cannot honor.
+
 ## GSD execution mode
 
 The requested pilot is not represented as a phase in `ROADMAP.md`, and the
