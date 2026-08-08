@@ -146,6 +146,22 @@ The narrow GREEN contract is to try the declared name as an exact root record ke
 the established dotted-path behavior for every non-literal field. It does not alter transport,
 operation selection, or input shaping.
 
+## GREEN foundation — literal root-object member redaction
+
+`redactDirectWriteRecord` now redacts an exact root record key before falling back to its existing
+dotted-path traversal. A SCIM extension URN is therefore private in previews, while every existing
+`record.nested` declaration keeps its prior behavior. The change is reusable for any declared root
+JSON resource whose provider-defined property name contains a dot; it exposes no new command or
+transport capability.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/commandrunner -run '^(TestBuildOperationDirectWriteCommandRedactsLiteralRootJSONObjectField|TestBuildOperationDirectWriteCommandMapsNamedRootJSONObject)$'
+ok      polymetrics.ai/internal/connectors/commandrunner
+
+$ go test -count=1 -timeout 20m ./internal/connectors/defs/zoom/... -run '^TestSCIM2DirectWriteCommandsExecuteWithFixtures$'
+ok      polymetrics.ai/internal/connectors/defs/zoom
+```
+
 ## Planned GREEN connector contract
 
 - Four SCIM2 reads use bounded `json_redacted` output with declared PII/account field redaction.

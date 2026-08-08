@@ -1557,6 +1557,14 @@ func redactDirectWriteRecord(in connectors.Record, fields []string) connectors.R
 		if field == "" {
 			continue
 		}
+		// Provider-defined root JSON resource members may themselves contain
+		// dots (for example a SCIM extension URN). Prefer an exact root key
+		// before interpreting the declaration as an established dotted record
+		// path, so those literal members cannot escape preview redaction.
+		if _, exists := out[field]; exists {
+			out[field] = "redacted"
+			continue
+		}
 		redactDirectWriteRecordField(out, strings.Split(field, "."))
 	}
 	return out
