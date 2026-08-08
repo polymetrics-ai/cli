@@ -734,3 +734,24 @@ pre-existing `main` drift across the other 1031 doc files; reverted as in cycles
 
 No test was weakened, skipped, or deleted. Cycle 11 rewrote three assertions to the classification
 the decision states and moved one help case between the two converse tests.
+
+---
+
+## Cycle 12 — GitHub rate-limit declaration and live-proof harness
+
+**Red 12a — GitHub shipped no provider-cited active policy.** The new GitHub-focused engine test
+loads the production embedded bundle, not a hand-made fixture, and asks the existing
+`Runtime.RequesterFor` resolver for every intended auth scope. Before any declaration, spec, or
+embed change it failed exactly because GitHub has no `rate_limits.json`:
+
+```
+$ go test -timeout 20m ./internal/connectors/engine/ -run TestGitHubDeclaredRateLimits -count=1
+--- FAIL: TestGitHubDeclaredRateLimits (0.05s)
+    github_rate_limits_test.go:20: GitHub has no rate_limits.json declaration
+FAIL
+```
+
+The test requires declared policies for authenticated-user, GitHub App installation, GitHub
+Actions token, and unauthenticated traffic, provider source/date, a non-secret scope for each,
+the documented primary hourly capacity, and both admission/observation hooks. It intentionally
+does not permit a raw token scope, an `unknown` placeholder, or a no-op attachment.
