@@ -574,6 +574,15 @@ func validateDirectReadCommand(connector connectors.Connector, cmd connectors.Co
 			Reason:       "direct_read commands require an explicit supported output_policy",
 		}
 	}
+	if isOperationOnlyDirectReadOutputPolicy(cmd.OutputPolicy) {
+		return &BlockedCommandError{
+			Connector:    connector.Name(),
+			Command:      cmd.Path,
+			Intent:       cmd.Intent,
+			Availability: cmd.Availability,
+			Reason:       fmt.Sprintf("direct_read output policy %q requires an operation-backed command", cmd.OutputPolicy),
+		}
+	}
 	return nil
 }
 
@@ -657,6 +666,8 @@ var (
 		"repository_contents_directory":     {},
 		"json_redacted":                     {},
 		"clinical_json_redacted":            {},
+		"none":                              {},
+		"text":                              {},
 	}
 	supportedDirectWriteOutputPolicies = map[string]struct{}{
 		"none":                        {},
@@ -670,6 +681,10 @@ var (
 func isSupportedDirectReadOutputPolicy(policy string) bool {
 	_, ok := supportedDirectReadOutputPolicies[policy]
 	return ok
+}
+
+func isOperationOnlyDirectReadOutputPolicy(policy string) bool {
+	return policy == "none" || policy == "text"
 }
 
 func isSupportedDirectWriteOutputPolicy(policy string) bool {

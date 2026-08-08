@@ -50,14 +50,15 @@ func isAddressableStrategy(t string) bool {
 // (DirectRead and OperationDirectRead) fill it identically, so neither can
 // drift from the other's page contract.
 type directReadWalk struct {
-	method      string
-	declaredPat string
-	requestPath string
-	query       url.Values
-	body        any
-	maxBytes    int
-	page        int
-	pageCursor  string
+	method       string
+	declaredPat  string
+	requestPath  string
+	query        url.Values
+	body         any
+	outputPolicy string
+	maxBytes     int
+	page         int
+	pageCursor   string
 }
 
 // directReadPageMode is what the bundle's declared pagination can actually do
@@ -231,7 +232,7 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 	if len(resp.Body) > w.maxBytes {
 		return nil, connectors.DirectReadPage{}, resp, errDirectReadTooLarge{got: len(resp.Body), limit: w.maxBytes}
 	}
-	decoded, err := decodeDirectReadBody(resp.Body, w.maxBytes)
+	decoded, err := decodeDirectReadResponse(w.outputPolicy, resp.Body, w.maxBytes)
 	if err != nil {
 		return nil, connectors.DirectReadPage{}, resp, err
 	}

@@ -142,6 +142,30 @@ func TestDirectReadRejectsMutationMethod(t *testing.T) {
 	}
 }
 
+func TestDirectReadRejectsOperationOnlyResponsePoliciesBeforeNetwork(t *testing.T) {
+	for _, policy := range []string{"none", "text"} {
+		t.Run(policy, func(t *testing.T) {
+			var hits int
+			srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+				hits++
+			}))
+			defer srv.Close()
+
+			_, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/items"), connectors.DirectReadRequest{
+				Method:       http.MethodGet,
+				Path:         "/items",
+				OutputPolicy: policy,
+			}, nil)
+			if err == nil || !strings.Contains(err.Error(), "operation-backed") {
+				t.Fatalf("DirectRead error = %v, want operation-backed policy refusal", err)
+			}
+			if hits != 0 {
+				t.Fatalf("server hits = %d, want 0", hits)
+			}
+		})
+	}
+}
+
 func TestDirectReadMissingPathVariableFailsBeforeNetwork(t *testing.T) {
 	var hits int
 	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {

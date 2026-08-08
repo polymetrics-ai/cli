@@ -980,3 +980,25 @@ FAIL
 This is a foundation red, not a GitHub fixture assertion: the test uses local `httptest` responses,
 an operation ledger row, and the real `OperationDirectRead` path. It proves the executor's JSON-only
 assumption is the blocker for GitHub's nine 204 checks plus text endpoints.
+
+**Green 14a — closed response policies, not an alternate transport.** `none` and `text` are now
+recognized only by `OperationDirectRead`. The shared read walk keeps its existing bounded
+requester and checks the cap before policy decoding: `none` returns `nil` only for an empty 2xx
+body, while `text` requires valid UTF-8 and returns its bounded string. JSON policies still take
+the existing decoder/redactor path. The legacy `DirectRead` path explicitly refuses both policies
+before network, so a command cannot attach `none` to an arbitrary GET merely to discard its result.
+
+The closed policy sets in commandrunner, `connectorgen`, and the CLI schema now agree; an
+implemented operation command can use the declarations, while a non-operation command receives a
+validator/preflight finding. No provider credential or GitHub request was used.
+
+```
+$ go test -timeout 20m ./internal/connectors/engine/ -run 'TestOperationDirectReadSupportsBoundedStatusAndTextResponses|TestDirectReadRejectsOperationOnlyResponsePoliciesBeforeNetwork' -count=1
+ok	polymetrics.ai/internal/connectors/engine
+
+$ go test -timeout 20m ./internal/connectors/commandrunner/ -run 'TestCLISurfaceOutputPolicyEnumMatchesRuntimePolicySets|TestRunDirectReadRequiresOutputPolicy' -count=1
+ok	polymetrics.ai/internal/connectors/commandrunner
+
+$ go test -timeout 20m ./cmd/connectorgen/ -run 'TestValidate_CLISurface' -count=1
+ok	polymetrics.ai/cmd/connectorgen
+```

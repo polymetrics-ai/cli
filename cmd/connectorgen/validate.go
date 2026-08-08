@@ -126,6 +126,8 @@ var directReadOutputPolicies = map[string]bool{
 	"repository_contents_directory":     true,
 	"json_redacted":                     true,
 	"clinical_json_redacted":            true,
+	"none":                              true,
+	"text":                              true,
 }
 
 // directWriteOutputPolicies mirrors engine.validateOperationDirectWriteOutputPolicy
@@ -143,6 +145,11 @@ var directWriteOutputPolicies = map[string]bool{
 var repositoryDirectReadOutputPolicies = map[string]bool{
 	"repository_contents_file_metadata": true,
 	"repository_contents_directory":     true,
+}
+
+var operationOnlyDirectReadOutputPolicies = map[string]bool{
+	"none": true,
+	"text": true,
 }
 
 var sourceRequiredOperationModels = map[string]bool{
@@ -1621,6 +1628,14 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 				File:      "cli_surface.json",
 				Rule:      ruleCLISurfaceSafety,
 				Message:   fmt.Sprintf("implemented direct read command %d (%q) must declare a supported output_policy", i, cmd.Path),
+			})
+		}
+		if cmd.Operation == "" && operationOnlyDirectReadOutputPolicies[cmd.OutputPolicy] {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("implemented direct read command %d (%q) output_policy %q requires an operation", i, cmd.Path, cmd.OutputPolicy),
 			})
 		}
 		if len(findings) > 0 {
