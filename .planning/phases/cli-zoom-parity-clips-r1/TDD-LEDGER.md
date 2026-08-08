@@ -102,6 +102,27 @@ FAIL
 The fixture contains only an invalid-domain synthetic recipient address and does not load a
 credential, issue a request, or permit a generic raw-body route.
 
+### Binary-download surface reconciliation — additional RED 2026-08-08
+
+The source ledger's valid `binary_read` model was still refused by
+`surface-reconcile`, even though the commandrunner already admits the bounded,
+declared binary executor. The test copies the existing YouTube Analytics
+download declaration into a temporary fixture, changes only its endpoint row
+to blocked `binary_read`, and requires real runtime preflight before promotion.
+It failed before the reconciler change:
+
+```text
+$ go test -count=1 -timeout 20m ./cmd/connectorgen -run '^TestRunSurfaceReconcileCoversBinaryDownloadWithRuntimePreflight$'
+--- FAIL: TestRunSurfaceReconcileCoversBinaryDownloadWithRuntimePreflight (0.01s)
+    surfacereconcile_test.go:85: stats = {Scanned:1 Covered:0 Blocked:0 Unchanged:0 Refused:1}, want one runtime-covered binary download
+FAIL
+FAIL	polymetrics.ai/cmd/connectorgen	0.740s
+FAIL
+```
+
+The fixture invokes no network or filesystem download and contains no credential,
+token-derived value, or signed URL.
+
 ## GREEN foundations
 
 ### Root JSON-array direct writes — green 2026-08-08
