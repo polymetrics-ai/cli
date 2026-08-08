@@ -49,6 +49,26 @@ func TestRunSurfaceReconcileRequiresRuntimePreflightForCoverage(t *testing.T) {
 	}
 }
 
+func TestRunSurfaceReconcileCoversSensitiveDirectWriteWithRuntimePreflight(t *testing.T) {
+	root, surfacePath := writeSurfaceReconcileDirectWriteFixture(t)
+
+	stats, err := reconcileBundle(filepath.Join(root, "gong"), false, "", "")
+	if err != nil {
+		t.Fatalf("reconcileBundle: %v", err)
+	}
+	if stats.Covered != 1 || stats.Blocked != 0 || stats.Refused != 0 {
+		t.Fatalf("stats = %+v, want one runtime-covered direct write", stats)
+	}
+
+	endpoint := readSurfaceReconcileEndpointAt(t, surfacePath, "PUT", "/v2/calls/{id}/media")
+	if endpoint.Operation != nil {
+		t.Fatalf("reconciled direct-write endpoint still has operation = %+v", endpoint.Operation)
+	}
+	if endpoint.CoveredBy == nil || endpoint.CoveredBy.DirectWrite != "meetings integration-status" {
+		t.Fatalf("reconciled covered_by = %+v, want runtime-reachable direct_write command", endpoint.CoveredBy)
+	}
+}
+
 func TestRunSurfaceReconcileHelp(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	if code := run([]string{"surface-reconcile", "--help"}, &stdout, &stderr); code != 0 {
@@ -144,8 +164,83 @@ type reconcileFixtureEndpoint struct {
 		Reason string `json:"reason"`
 	} `json:"operation"`
 	CoveredBy *struct {
-		DirectRead string `json:"direct_read"`
+		DirectRead  string `json:"direct_read"`
+		DirectWrite string `json:"direct_write"`
 	} `json:"covered_by"`
+}
+
+func writeSurfaceReconcileDirectWriteFixture(t *testing.T) (string, string) {
+	t.Helper()
+	root, surfacePath := writeSurfaceReconcileFixture(t, "implemented", "direct_read")
+
+	var surface map[string]any
+	raw, err := os.ReadFile(surfacePath)
+	if err != nil {
+		t.Fatalf("read fixture api surface: %v", err)
+	}
+	if err := json.Unmarshal(raw, &surface); err != nil {
+		t.Fatalf("decode fixture api surface: %v", err)
+	}
+	endpoints, ok := surface["endpoints"].([]any)
+	if !ok {
+		t.Fatal("fixture api surface endpoints are not an array")
+	}
+	for _, rawEndpoint := range endpoints {
+		endpoint, ok := rawEndpoint.(map[string]any)
+		if !ok {
+			t.Fatal("fixture api surface endpoint is not an object")
+		}
+		switch {
+		case endpoint["method"] == reconcileFixtureMethod && endpoint["path"] == reconcileFixturePath:
+			delete(endpoint, "operation")
+			endpoint["covered_by"] = map[string]any{"direct_read": "meetings integration-status"}
+		case endpoint["method"] == "PUT" && endpoint["path"] == "/v2/calls/{id}/media":
+			delete(endpoint, "covered_by")
+			endpoint["operation"] = map[string]any{
+				"model":              "sensitive_reverse_etl",
+				"status":             "blocked",
+				"risk":               "high",
+				"blocked_by_default": true,
+				"reason":             "Missing a runtime-proven direct-write endpoint ledger binding.",
+				"notes":              "provider_module=customer-managed-keys-hybrid",
+			}
+		}
+	}
+	writeSurfaceReconcileJSON(t, surfacePath, surface)
+
+	cliPath := filepath.Join(root, "gong", "cli_surface.json")
+	var cli map[string]any
+	raw, err = os.ReadFile(cliPath)
+	if err != nil {
+		t.Fatalf("read fixture cli surface: %v", err)
+	}
+	if err := json.Unmarshal(raw, &cli); err != nil {
+		t.Fatalf("decode fixture cli surface: %v", err)
+	}
+	commands, ok := cli["commands"].([]any)
+	if !ok {
+		t.Fatal("fixture cli surface commands are not an array")
+	}
+	for _, rawCommand := range commands {
+		command, ok := rawCommand.(map[string]any)
+		if !ok {
+			t.Fatal("fixture cli surface command is not an object")
+		}
+		if command["path"] != "meetings integration-status" {
+			continue
+		}
+		command["intent"] = "direct_write"
+		command["operation"] = "gong.calls_media_upload"
+		command["output_policy"] = "gong_bounded_input_redacted"
+		command["api_surface"] = []any{map[string]any{
+			"method": "PUT",
+			"path":   "/v2/calls/{id}/media",
+		}}
+		writeSurfaceReconcileJSON(t, cliPath, cli)
+		return root, surfacePath
+	}
+	t.Fatal("Gong fixture lacks meetings integration-status command")
+	return "", ""
 }
 
 func writeSurfaceReconcileFixture(t *testing.T, availability, model string, commandOperation ...string) (string, string) {
@@ -263,6 +358,10 @@ func writeSurfaceReconcileJSON(t *testing.T, path string, value any) {
 }
 
 func readSurfaceReconcileEndpoint(t *testing.T, path string) reconcileFixtureEndpoint {
+	return readSurfaceReconcileEndpointAt(t, path, reconcileFixtureMethod, reconcileFixturePath)
+}
+
+func readSurfaceReconcileEndpointAt(t *testing.T, path, method, endpointPath string) reconcileFixtureEndpoint {
 	t.Helper()
 	var surface struct {
 		Endpoints []reconcileFixtureEndpoint `json:"endpoints"`
@@ -275,10 +374,10 @@ func readSurfaceReconcileEndpoint(t *testing.T, path string) reconcileFixtureEnd
 		t.Fatalf("decode %s: %v", path, err)
 	}
 	for _, endpoint := range surface.Endpoints {
-		if endpoint.Method == reconcileFixtureMethod && endpoint.Path == reconcileFixturePath {
+		if endpoint.Method == method && endpoint.Path == endpointPath {
 			return endpoint
 		}
 	}
-	t.Fatalf("endpoint %s %s not found", reconcileFixtureMethod, reconcileFixturePath)
+	t.Fatalf("endpoint %s %s not found", method, endpointPath)
 	return reconcileFixtureEndpoint{}
 }

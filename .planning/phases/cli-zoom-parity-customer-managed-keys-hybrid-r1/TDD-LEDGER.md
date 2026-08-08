@@ -132,6 +132,27 @@ This foundation is separate from the Zoom declaration and is pushed in 833a2d9d4
 to any future declarative customer-hosted rest_write that needs a distinct origin and credential;
 no other connector bundle is changed by this foundation commit.
 
+## RED direct-write endpoint-ledger foundation — captured before production code
+
+The Customer Managed Keys Hybrid declaration reaches the real direct-write preflight, but the
+endpoint ledger reconciler only knows `direct_read` operation rows. It therefore refuses the
+provider's `sensitive_reverse_etl` row instead of replacing it with a runtime-proven executable
+coverage binding. The focused fixture uses a declared `rest_write` operation, its matching
+approval-gated direct-write command, and the real `commandrunner.Preflight` path; it contains no
+provider credential or key material.
+
+```text
+$ go test -count=1 -timeout 20m -run TestRunSurfaceReconcileCoversSensitiveDirectWriteWithRuntimePreflight ./cmd/connectorgen
+--- FAIL: TestRunSurfaceReconcileCoversSensitiveDirectWriteWithRuntimePreflight (0.02s)
+    surfacereconcile_test.go:60: stats = {Scanned:1 Covered:0 Blocked:0 Unchanged:0 Refused:1}, want one runtime-covered direct write
+FAIL
+FAIL	polymetrics.ai/cmd/connectorgen	0.754s
+FAIL
+```
+
+The RED checkpoint commits only this test and GSD/TDD evidence. It leaves the pending Zoom
+declaration uncommitted, so the foundation remains independently reviewable.
+
 ## GREEN connector — pending
 
 The connector declaration will make the existing RED Zoom surface test green: one exact POST,
