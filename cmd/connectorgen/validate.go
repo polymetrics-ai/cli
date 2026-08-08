@@ -1175,6 +1175,9 @@ func checkCLISurfaceValidationDeclarations(b engine.Bundle, i int, cmd engine.CL
 		if flag.AllowEmpty != nil && flag.Type != "string" {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s allow_empty is supported only for string flags", i, cmd.Path, flag.Name)})
 		}
+		if flag.Type == "json_object" && !strings.HasPrefix(flag.MapsTo, "body.") {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s json_object type may map only to an operation body", i, cmd.Path, flag.Name)})
+		}
 		// The meta-schema dialect has no "minimum", so these bounds are checked
 		// here instead of being declarable in cli_surface.schema.json.
 		if (flag.MaxItems != 0 || flag.MinItems != 0) && flag.Type != "string_array" {
@@ -1573,6 +1576,8 @@ func cliFlagTypeMatchesSchema(flagType string, node *cliRecordSchemaNode) bool {
 		return schemaTypes["boolean"] || schemaTypes["any"]
 	case "string_array":
 		return schemaTypes["array"] || schemaTypes["any"]
+	case "json_object":
+		return schemaTypes["object"] || schemaTypes["any"]
 	default:
 		return false
 	}

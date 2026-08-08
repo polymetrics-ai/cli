@@ -2,8 +2,10 @@ package commandrunner
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"math"
 	"net/http"
 	"sort"
@@ -1009,7 +1011,7 @@ func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
 		return err
 	}
 	switch flag.Type {
-	case "", "string", "boolean", "integer", "number", "string_array":
+	case "", "string", "boolean", "integer", "number", "string_array", "json_object":
 		return validateFlagMinimum(flag, value)
 	case "enum":
 		for _, allowed := range flag.Values {
@@ -1107,6 +1109,9 @@ func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string]
 		if !ok {
 			return nil, nil, fmt.Errorf("unknown flag --%s for command %q", name, cmd.Path)
 		}
+		if flag.Type == "json_object" {
+			return nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s json_object values may map only to an operation body", name)}
+		}
 		value := values[len(values)-1]
 		if err := safety.RejectDangerousChars(value, "flag value"); err != nil {
 			return nil, nil, err
@@ -1171,12 +1176,18 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 		}
 		switch {
 		case strings.HasPrefix(flag.MapsTo, "path."):
+			if flag.Type == "json_object" {
+				return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s json_object values may map only to an operation body", name)}
+			}
 			target := strings.TrimPrefix(flag.MapsTo, "path.")
 			if err := safety.ValidateIdentifier(target, "path parameter"); err != nil {
 				return nil, nil, nil, err
 			}
 			pathParams[target] = stringifyCommandValue(value)
 		case strings.HasPrefix(flag.MapsTo, "query."):
+			if flag.Type == "json_object" {
+				return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s json_object values may map only to an operation body", name)}
+			}
 			target := strings.TrimPrefix(flag.MapsTo, "query.")
 			if err := safety.ValidateIdentifier(target, "query parameter"); err != nil {
 				return nil, nil, nil, err
@@ -1448,6 +1459,22 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 			return nil, fmt.Errorf("invalid --%s: %d values is below the minimum of %d", flag.Name, len(out), flag.MinItems)
 		}
 		return out, nil
+	case "json_object":
+		decoder := json.NewDecoder(strings.NewReader(value))
+		decoder.UseNumber()
+		var parsed any
+		if err := decoder.Decode(&parsed); err != nil {
+			return nil, fmt.Errorf("invalid --%s, want one JSON object", flag.Name)
+		}
+		object, ok := parsed.(map[string]any)
+		if !ok || object == nil {
+			return nil, fmt.Errorf("invalid --%s, want one JSON object", flag.Name)
+		}
+		var trailing any
+		if err := decoder.Decode(&trailing); err != io.EOF {
+			return nil, fmt.Errorf("invalid --%s, want one JSON object", flag.Name)
+		}
+		return object, nil
 	default:
 		return nil, &BlockedCommandError{
 			Command: "unknown",
