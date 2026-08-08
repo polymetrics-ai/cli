@@ -1,0 +1,11 @@
+{
+  "record": {
+    "note_id": "fixture-note",
+    "is_note_completed": true
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/clinical_notes/notes/fixture-note",
+    "status": 204
+  }
+}

@@ -30,8 +30,16 @@ const zoomBundleName = "zoom"
 // TestCoveredStreamsHaveReachableCommands fail red before the module's
 // operations.json/cli_surface.json entries exist.
 //
-// Landed modules: qss (3), ai-companion (1), my-notes (2).
-const wantModuleOperationCommandCount = 6
+// Landed modules: qss (3), ai-companion (1), my-notes (2), healthcare reads (2).
+const wantModuleOperationCommandCount = 8
+
+// wantModuleWriteCommandCount is the running total of implemented reverse_etl
+// write commands across the landed provider modules. Bump it first for each
+// module so the command runner proves the typed action is promotable before a
+// production bundle change can turn its ledger row into covered_by.write.
+//
+// Landed modules: healthcare (1, update_clinical_note).
+const wantModuleWriteCommandCount = 1
 
 func loadZoomBundle(t *testing.T) engine.Bundle {
 	t.Helper()
@@ -133,11 +141,11 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 			t.Errorf("provider inventory %s rows = %d, want %d", method, got, want)
 		}
 	}
-	if got := covered; got != 9 {
-		t.Errorf("executable stream-backed rows = %d, want 9", got)
+	if got := covered; got != 12 {
+		t.Errorf("executable rows = %d, want 12", got)
 	}
-	if got := implementableNow; got != 1833 {
-		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1833", got)
+	if got := implementableNow; got != 1830 {
+		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1830", got)
 	}
 	if got := providerRestricted; got != 17 {
 		t.Errorf("provider-restricted operations = %d, want 17", got)
@@ -233,6 +241,7 @@ func TestCoveredStreamsHaveReachableCommands(t *testing.T) {
 	}
 
 	verifyOperationCommands(t, bundle, connector, surface, wantModuleOperationCommandCount)
+	verifyWriteCommands(t, bundle, connector, surface, wantModuleWriteCommandCount)
 }
 
 // verifyOperationCommands generically verifies every reachable operation
@@ -296,6 +305,49 @@ func verifyOperationCommands(t *testing.T, bundle engine.Bundle, connector conne
 	}
 	if got != wantCount {
 		t.Errorf("reachable direct_read operation commands = %d, want %d", got, wantCount)
+	}
+}
+
+// verifyWriteCommands verifies every implemented reverse_etl route through the
+// same commandrunner preflight the CLI uses. Unlike direct reads, write paths
+// deliberately stay inside the plan -> preview -> approval -> execute flow;
+// preflight proves the typed declaration is safe to promote without issuing a
+// mutation.
+func verifyWriteCommands(t *testing.T, bundle engine.Bundle, connector connectors.Connector, surface *connectors.CommandSurface, wantCount int) {
+	t.Helper()
+	writes := make(map[string]struct{}, len(bundle.Writes))
+	for _, write := range bundle.Writes {
+		writes[write.Name] = struct{}{}
+	}
+
+	got := 0
+	for _, command := range surface.Commands {
+		if command.Intent != "reverse_etl" {
+			continue
+		}
+		got++
+		if command.Availability != "implemented" {
+			t.Errorf("write command %q availability = %q, want implemented", command.Path, command.Availability)
+			continue
+		}
+		if command.Write == "" {
+			t.Errorf("write command %q has no writes.json action", command.Path)
+			continue
+		}
+		if _, ok := writes[command.Write]; !ok {
+			t.Errorf("write command %q references action %q, not found in writes.json", command.Path, command.Write)
+		}
+		for _, flag := range command.Flags {
+			if !strings.HasPrefix(flag.MapsTo, "record.") {
+				t.Errorf("write command %q flag --%s maps_to %q, want a typed record.* field", command.Path, flag.Name, flag.MapsTo)
+			}
+		}
+		if err := commandrunner.Preflight(connector, strings.Fields(command.Path)); err != nil {
+			t.Errorf("Preflight(%q) = %v, want nil", command.Path, err)
+		}
+	}
+	if got != wantCount {
+		t.Errorf("reachable reverse_etl write commands = %d, want %d", got, wantCount)
 	}
 }
 
@@ -532,6 +584,164 @@ func TestQSSOperationDirectReadCommandsExecuteWithFixtures(t *testing.T) {
 				t.Errorf("fixture requests for %s = %d, want 1", test.requestPath, got)
 			}
 		})
+	}
+}
+
+// TestHealthcareClinicalNoteCommandsExecuteWithFixtures proves that the two
+// sensitive direct reads reach their fixed Zoom paths with only documented
+// request inputs, and that the single PATCH action remains approval-gated at
+// the command layer while accepting a provider-successful 204 in the isolated
+// write executor.
+func TestHealthcareClinicalNoteCommandsExecuteWithFixtures(t *testing.T) {
+	readTests := []struct {
+		name        string
+		path        []string
+		flags       map[string][]string
+		requestPath string
+		query       map[string]string
+		fixture     string
+	}{
+		{
+			name:        "list",
+			path:        []string{"healthcare", "clinical-notes", "list"},
+			flags:       map[string][]string{"note-owner-user-id": {"fixture-owner"}, "meeting-id": {"fixture-meeting"}},
+			requestPath: "/v2/clinical_notes/notes",
+			query:       map[string]string{"note_owner_user_id": "fixture-owner", "meeting_id": "fixture-meeting"},
+			fixture:     "list_clinical_notes.json",
+		},
+		{
+			name:        "get",
+			path:        []string{"healthcare", "clinical-notes", "get"},
+			flags:       map[string][]string{"note-id": {"fixture-note"}},
+			requestPath: "/v2/clinical_notes/notes/fixture-note",
+			fixture:     "get_clinical_note.json",
+		},
+	}
+
+	for _, test := range readTests {
+		t.Run(test.name, func(t *testing.T) {
+			wantStatus, wantBody := zoomDirectReadFixture(t, test.fixture)
+			requests := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+				requests++
+				if request.Method != http.MethodGet {
+					t.Errorf("method = %s, want GET", request.Method)
+				}
+				if request.URL.Path != test.requestPath {
+					http.NotFound(w, request)
+					return
+				}
+				for key, want := range test.query {
+					if got := request.URL.Query().Get(key); got != want {
+						t.Errorf("query %s = %q, want %q", key, got, want)
+					}
+				}
+				for _, responseOnly := range []string{"from", "to", "page_size", "next_page_token"} {
+					if got := request.URL.Query().Get(responseOnly); got != "" {
+						t.Errorf("response-only field %s was sent as query %q", responseOnly, got)
+					}
+				}
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(wantStatus)
+				_, _ = w.Write(wantBody)
+			}))
+			defer server.Close()
+
+			bundle := loadZoomBundle(t)
+			connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+			result, err := commandrunner.Run(context.Background(), connector, commandrunner.Request{
+				Path:   test.path,
+				Flags:  test.flags,
+				Config: connectors.RuntimeConfig{Config: map[string]string{"base_url": server.URL + "/v2"}, Secrets: map[string]string{"access_token": "synthetic-test-token"}},
+			}, func(connectors.Record) error {
+				t.Fatal("emit called for a direct_read command")
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Run(%q) = %v", strings.Join(test.path, " "), err)
+			}
+			if result.DirectRead == nil || result.DirectRead.Status != wantStatus {
+				t.Fatalf("Run(%q) direct read = %#v, want status %d", strings.Join(test.path, " "), result.DirectRead, wantStatus)
+			}
+			assertClinicalResponseRedacted(t, result.DirectRead.Body)
+			if requests != 1 {
+				t.Errorf("requests = %d, want 1", requests)
+			}
+		})
+	}
+
+	t.Run("update plans before mutation and accepts no content", func(t *testing.T) {
+		requests := 0
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+			requests++
+			if request.Method != http.MethodPatch {
+				t.Errorf("method = %s, want PATCH", request.Method)
+			}
+			if request.URL.Path != "/v2/clinical_notes/notes/fixture-note" {
+				t.Errorf("path = %s, want clinical-note path", request.URL.Path)
+			}
+			var body map[string]any
+			if err := json.NewDecoder(request.Body).Decode(&body); err != nil {
+				t.Errorf("decode PATCH body: %v", err)
+			}
+			if got, want := body["is_note_completed"], true; got != want {
+				t.Errorf("is_note_completed = %#v, want %t", got, want)
+			}
+			if _, present := body["note_id"]; present {
+				t.Error("note_id was sent in the PATCH body as well as the declared path")
+			}
+			w.WriteHeader(http.StatusNoContent)
+		}))
+		defer server.Close()
+
+		bundle := loadZoomBundle(t)
+		connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+		config := connectors.RuntimeConfig{Config: map[string]string{"base_url": server.URL + "/v2"}, Secrets: map[string]string{"access_token": "synthetic-test-token"}}
+		planned, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{
+			Path:    []string{"healthcare", "clinical-notes", "update"},
+			Flags:   map[string][]string{"note-id": {"fixture-note"}, "is-note-completed": {"true"}},
+			Config:  config,
+			Preview: true,
+		})
+		if err != nil {
+			t.Fatalf("BuildWriteCommand = %v", err)
+		}
+		if planned.Write != "update_clinical_note" || planned.Preview == nil {
+			t.Fatalf("planned Healthcare write = %#v, want typed action with preview", planned)
+		}
+		if requests != 0 {
+			t.Fatalf("preview reached network; requests = %d, want 0", requests)
+		}
+
+		result, err := connector.Write(context.Background(), connectors.WriteRequest{Action: "update_clinical_note", Config: config}, []connectors.Record{{"note_id": "fixture-note", "is_note_completed": true}})
+		if err != nil {
+			t.Fatalf("Write(update_clinical_note) = %v", err)
+		}
+		if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
+			t.Fatalf("Write result = %#v, want one successful 204 action", result)
+		}
+		if requests != 1 {
+			t.Fatalf("PATCH requests = %d, want 1", requests)
+		}
+	})
+}
+
+func assertClinicalResponseRedacted(t *testing.T, body any) {
+	t.Helper()
+	encoded, err := json.Marshal(body)
+	if err != nil {
+		t.Fatalf("marshal clinical response: %v", err)
+	}
+	got := string(encoded)
+	for _, raw := range []string{"fixture-clinical-content", "fixture-patient", "fixture-provider", "fixture-appointment", "fixture-owner", "fixture-editor", "fixture-page-token"} {
+		if strings.Contains(got, raw) {
+			t.Errorf("clinical response exposed %q: %s", raw, got)
+		}
+	}
+	for _, field := range []string{"note_content", "patient_id", "provider_id", "appointment_id", "note_owner_user_id", "note_last_modified_user_id", "next_page_token"} {
+		if !strings.Contains(got, "\\\""+field+"_redacted\\\":true") {
+			t.Errorf("clinical response is missing %s_redacted marker: %s", field, got)
+		}
 	}
 }
 

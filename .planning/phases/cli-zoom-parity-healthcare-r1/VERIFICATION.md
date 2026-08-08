@@ -6,7 +6,8 @@
 - [x] `scripts/gsd doctor`, command provenance, all five generated prompts, and `agentcontractgen check` completed.
 - [x] Official GSD phase lookup recorded `phase_found: false`; inline/manual fallback recorded in `PLAN.md`.
 - [x] Live Healthcare artifact re-fetched before test or production work; URL, retrieval time, HTTP status, and byte count recorded.
-- [ ] RED state captured and committed before production JSON/doc edits.
+- [x] RED state captured before production JSON/doc edits: `go test -count=1 ./internal/connectors/defs/zoom/...` failed with the expected 9→12, 6→8, 0→1, and unknown-command assertions (verbatim output in `TDD-LEDGER.md`).
+- [ ] RED state committed and pushed before production JSON/doc edits.
 - [ ] GREEN implementation committed and pushed.
 - [ ] Inline verify-work evidence recorded.
 - [ ] Inline code-review findings/dispositions recorded.
