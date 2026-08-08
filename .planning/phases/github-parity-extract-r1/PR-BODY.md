@@ -130,6 +130,29 @@ all 551 connectors, plus the catalog's `gorgias` and `warehouse` entries; that i
 pre-existing drift on `main` the earlier regeneration commit isolated, and it is reverted here
 again. Both website catalogs were diffed per connector: the only entry that changes is GitHub.
 
+**`--help` states it for every destructive command, not just the annotated ten.** A `notes` string
+is prose an author writes per command, so it is silent on the 163 github commands nobody
+annotated — and once ten commands carry the marker, its absence on the rest reads as "no
+confirmation needed". `pm <connector> <command> --help` now renders a `CONFIRMATION` section
+resolved by `commandrunner.ConfirmationChallengeForCommand`, the same declarations
+`buildWriteCommand`/`buildOperationDirectWriteCommand` read at plan time, so help and runtime
+cannot disagree — the boundary `writeConnectorDownloadFlags` already sets for download flags:
+
+```
+pm github release delete --help          # no bundle note
+-> APPROVAL      Reverse ETL writes require plan, preview, approval, execute.
+   CONFIRMATION  execution requires the typed confirmation --confirm destructive
+```
+
+The ten scoped notes are unchanged and no note was added to the other 163. `guide.go` is
+deliberately untouched: marking all 183 actions there would rewrite all 551 committed connector
+manuals, which is both the bulk change that was declined and unrelated-connector churn.
+
+The runtime plan output already carried this signal exhaustively — `pm github release delete`
+prints `Confirmation required: --confirm destructive` with no note in its bundle — so the
+described failure (plan, then an unexplained error at run) never occurred. `--help` was the one
+generated path that could mislead, and it is the one that changed.
+
 **Two needed more than a classification change.** `repo archive`/`repo unarchive` ride the same
 endpoint as the generic `repo update`, so the body is the only thing separating them — an
 "archive" command that only archives when the caller separately remembers `archived: true` is a

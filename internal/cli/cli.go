@@ -826,7 +826,7 @@ func renderConnectorCommandManual(connectorName string, connector connectors.Con
 	if len(path) > 0 {
 		command := strings.Join(path, " ")
 		if cmd, ok := connectorSurfaceCommand(surface, command); ok {
-			return connectorName + " " + command, renderConnectorCommandDetail(connectorName, surface, cmd)
+			return connectorName + " " + command, renderConnectorCommandDetail(connectorName, connector, surface, cmd)
 		}
 		if len(path) == 1 && connectorSurfaceHasPrefix(surface, path[0]) {
 			return connectorName + " " + path[0], renderConnectorCommandGroup(connectorName, connector, surface, path[0])
@@ -928,7 +928,7 @@ func renderConnectorCommandGroup(connectorName string, connector connectors.Conn
 	return b.String()
 }
 
-func renderConnectorCommandDetail(connectorName string, surface *connectors.CommandSurface, cmd connectors.CommandSurfaceCommand) string {
+func renderConnectorCommandDetail(connectorName string, connector connectors.Connector, surface *connectors.CommandSurface, cmd connectors.CommandSurfaceCommand) string {
 	var b strings.Builder
 	b.WriteString("NAME\n")
 	fmt.Fprintf(&b, "  pm %s %s", connectorName, cmd.Path)
@@ -952,6 +952,7 @@ func renderConnectorCommandDetail(connectorName string, surface *connectors.Comm
 	writeConnectorField(&b, "WRITE", cmd.Write)
 	writeConnectorField(&b, "OPERATION", cmd.Operation)
 	writeConnectorField(&b, "APPROVAL", cmd.Approval)
+	writeConnectorField(&b, "CONFIRMATION", connectorCommandConfirmationHelp(connector, cmd))
 	writeConnectorField(&b, "RISK", cmd.Risk)
 	writeConnectorField(&b, "OUTPUT POLICY", cmd.OutputPolicy)
 	writeConnectorField(&b, "NOTES", cmd.Notes)
@@ -984,6 +985,22 @@ func writeConnectorPageFlags(b *strings.Builder, cmd connectors.CommandSurfaceCo
 	for _, flag := range connectors.DirectReadPageFlags() {
 		writeConnectorFlag(b, flag)
 	}
+}
+
+// connectorCommandConfirmationHelp states the typed confirmation the command
+// will demand at run, phrased as the flag the operator has to type.
+//
+// It resolves through commandrunner rather than reading the bundle's notes, for
+// the same reason writeConnectorDownloadFlags reads BinaryDownloadFlags: help
+// and the runtime must not be able to disagree. A note is prose one author
+// wrote on one command, so it is absent on every command nobody annotated, and
+// an absent note reads exactly like "no confirmation needed".
+func connectorCommandConfirmationHelp(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) string {
+	challenge := strings.TrimSpace(commandrunner.ConfirmationChallengeForCommand(connector, cmd))
+	if challenge == "" {
+		return ""
+	}
+	return "execution requires the typed confirmation --confirm " + challenge
 }
 
 // writeConnectorDownloadFlags documents the destination flags that only a
