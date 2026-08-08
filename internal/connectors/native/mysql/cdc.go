@@ -219,7 +219,11 @@ func statementReachesDatabase(statement, defaultSchema, database string) bool {
 	if strings.TrimSpace(defaultSchema) == "" || strings.EqualFold(defaultSchema, database) {
 		return true
 	}
-	for _, identifier := range statementIdentifiers(statement) {
+	identifiers, ambiguous := statementIdentifiers(statement)
+	if ambiguous {
+		return true
+	}
+	for _, identifier := range identifiers {
 		if strings.EqualFold(identifier, database) {
 			return true
 		}
@@ -228,26 +232,36 @@ func statementReachesDatabase(statement, defaultSchema, database string) bool {
 }
 
 // statementIdentifiers extracts every name a statement could be spelling as an
-// object reference. It over-collects — a keyword, a column name, and the body
-// of a double-quoted span are all returned — which only ever makes the caller
-// more conservative.
+// object reference, and reports whether the scan lost track of the statement's
+// quoting. It over-collects — a keyword, a column name, and the body of a
+// double-quoted span are all returned — which only ever makes the caller more
+// conservative.
 //
 // A double-quoted span is collected rather than skipped because what it means
 // is not decidable from the statement alone: under sql_mode=ANSI_QUOTES, which
 // the ANSI combination also sets, `"` quotes an identifier rather than a string.
 // Skipping it let a fully-qualified `"db"."table"` reach the target database
 // while spelling no identifier this scan could see. Only a single-quoted span
-// is a string constant under every sql_mode, so only that one is skipped.
-func statementIdentifiers(statement string) []string {
-	var identifiers []string
+// is a string constant under every sql_mode, so only that one is discarded.
+//
+// A span that never finds its closing quote means the scan and the statement
+// disagree about where every later quote sits, so no identifier list drawn from
+// it can be trusted. That is reported as ambiguous rather than returned,
+// because a shifted boundary can swallow a target reference whole.
+func statementIdentifiers(statement string) (identifiers []string, ambiguous bool) {
 	runes := []rune(statement)
 	for index := 0; index < len(runes); {
 		switch character := runes[index]; {
-		case character == '\'':
-			index = skipQuotedLiteral(runes, index)
-		case character == '`' || character == '"':
-			identifier, next := readQuotedIdentifier(runes, index)
-			identifiers = append(identifiers, identifier)
+		case character == '\'' || character == '`' || character == '"':
+			contents, next, terminated := readQuotedSpan(runes, index)
+			if !terminated {
+				return nil, true
+			}
+			// A single-quoted span is a string constant under every sql_mode,
+			// so its contents name nothing.
+			if character != '\'' {
+				identifiers = append(identifiers, contents)
+			}
 			index = next
 		case isIdentifierRune(character):
 			start := index
@@ -259,40 +273,39 @@ func statementIdentifiers(statement string) []string {
 			index++
 		}
 	}
-	return identifiers
+	return identifiers, false
 }
 
-func skipQuotedLiteral(runes []rune, index int) int {
+// readQuotedSpan reads one quoted span and reports its contents, the index
+// after its closing quote, and whether that closing quote was found.
+//
+// A doubled quote is a literal one in every span. A backslash escapes the next
+// character in a string and in an ANSI_QUOTES identifier, but never inside a
+// backquoted identifier, which is the one case MySQL settles independently of
+// sql_mode. Where the remaining dialects disagree — a trailing backslash under
+// NO_BACKSLASH_ESCAPES, or a backslash inside an ANSI_QUOTES identifier — the
+// span runs past its real end and reaches the end of the statement without a
+// closing quote, which the caller reads as unattributable rather than as proof
+// that the statement is unrelated.
+func readQuotedSpan(runes []rune, index int) (string, int, bool) {
 	quote := runes[index]
+	escapes := quote != '`'
+	var contents strings.Builder
 	for index++; index < len(runes); index++ {
-		if runes[index] == '\\' {
+		switch {
+		case escapes && runes[index] == '\\' && index+1 < len(runes):
 			index++
-			continue
-		}
-		if runes[index] == quote {
-			return index + 1
+			contents.WriteRune(runes[index])
+		case runes[index] != quote:
+			contents.WriteRune(runes[index])
+		case index+1 < len(runes) && runes[index+1] == quote:
+			contents.WriteRune(quote)
+			index++
+		default:
+			return contents.String(), index + 1, true
 		}
 	}
-	return index
-}
-
-func readQuotedIdentifier(runes []rune, index int) (string, int) {
-	quote := runes[index]
-	var identifier strings.Builder
-	for index++; index < len(runes); index++ {
-		if runes[index] != quote {
-			identifier.WriteRune(runes[index])
-			continue
-		}
-		// MySQL escapes a quote inside a quoted identifier by doubling it.
-		if index+1 < len(runes) && runes[index+1] == quote {
-			identifier.WriteRune(quote)
-			index++
-			continue
-		}
-		return identifier.String(), index + 1
-	}
-	return identifier.String(), index
+	return contents.String(), index, false
 }
 
 func isIdentifierRune(character rune) bool {

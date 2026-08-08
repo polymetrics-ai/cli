@@ -396,6 +396,19 @@ func TestCDCQueryEventsFailClosed(t *testing.T) {
 		{name: "cross schema ansi quoted alter", schema: "other_app", query: `ALTER TABLE "pm_harness"."events" CHANGE COLUMN label title VARCHAR(64)`, wantErr: true},
 		{name: "cross schema ansi quoted drop", schema: "other_app", query: `DROP TABLE "pm_harness"."events"`, wantErr: true},
 		{name: "unrelated ansi quoted alter", schema: "other_app", query: `ALTER TABLE "other_app"."events" CHANGE COLUMN label title VARCHAR(64)`},
+		// An escaped quote inside a double-quoted span used to end it one quote
+		// early, shifting every later boundary until the target reference was
+		// swallowed into one unread blob. A RENAME keeps the column count, so
+		// nothing downstream would have caught the mis-projection.
+		{name: "escaped double quote before a target reference", schema: "other_app", query: `ALTER TABLE t COMMENT "a\"b", RENAME TO pm_harness.t2`, wantErr: true},
+		{name: "escaped single quote before a target reference", schema: "other_app", query: `ALTER TABLE t COMMENT 'a\'b', RENAME TO pm_harness.t2`, wantErr: true},
+		{name: "doubled quote inside an ansi quoted target", schema: "other_app", query: `ALTER TABLE "pm_harness"."od""d" ADD COLUMN ignored INT`, wantErr: true},
+		{name: "doubled quote inside an unrelated backquoted name", schema: "other_app", query: "ALTER TABLE `od``d` ADD COLUMN ignored INT"},
+		// A span the scan cannot close means it no longer knows where any later
+		// quote sits, so the statement is unattributable rather than unrelated.
+		{name: "unterminated double quoted span", schema: "other_app", query: `ALTER TABLE t COMMENT "never closed`, wantErr: true},
+		{name: "unterminated single quoted span", schema: "other_app", query: `INSERT INTO audit (note) VALUES ('never closed`, wantErr: true},
+		{name: "unterminated backquoted identifier", schema: "other_app", query: "ALTER TABLE `never closed", wantErr: true},
 		{name: "cross schema drop database", schema: "other_app", query: "DROP DATABASE pm_harness", wantErr: true},
 		{name: "cross schema rename into target", schema: "other_app", query: "RENAME TABLE other_app.events TO pm_harness.events", wantErr: true},
 		// A literal that merely spells the database name is not an object

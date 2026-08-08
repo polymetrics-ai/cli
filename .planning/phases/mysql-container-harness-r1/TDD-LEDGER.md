@@ -140,3 +140,40 @@ and the machine runner discards command output by design, so the first attempt f
 shorter budget than container names and the length is asserted in `NewMachine` and in
 `TestNewMachineCreatesAndRemovesOnlyItsOwnMachine`, so the limit fails as a named error rather than
 as an unattributable Podman exit.
+
+**Red — review round 4 fixes (machine-init leak, CDC quoted-span desync):**
+
+```text
+go test -count=1 ./internal/connectors/native/dbtest -run TestNewMachineRemovesWhatAFailedInitLeftBehind
+go test -count=1 ./internal/connectors/native/mysql -run TestCDCQueryEventsFailClosed
+```
+
+Both were run against the pre-fix behaviour, restored, and observed red:
+
+- `TestNewMachineRemovesWhatAFailedInitLeftBehind` failed all three cases with "NewMachine()
+  returned no handle for a machine init may have created" while the ownership record and the
+  interrupt registration were taken only after init reported success. `podman machine init` writes
+  the VM config and a multi-GiB disk image before it can fail, and `exec.CommandContext` SIGKILLs it
+  when the caller's context expires, so a machine created by a killed init had no handle, no
+  ownership record, and no interrupt entry — and the integration test only defers `Remove` on a
+  non-nil handle, so the disk image leaked.
+- `TestCDCQueryEventsFailClosed` failed on `escaped_double_quote_before_a_target_reference`,
+  `escaped_single_quote_before_a_target_reference` and all three unterminated-span cases. A `\"`
+  inside a quoted span ended it one quote early, shifting every later boundary until
+  `, RENAME TO pm_harness.t2` was swallowed into a single uncollected blob — no identifier matched
+  the target, the default schema differed, and the statement was skipped. A RENAME keeps the column
+  count, so `rows.ColumnCount != uint64(len(columns))` does not catch it either.
+
+**Green — review round 4 fixes:**
+
+```text
+gofmt -l cmd internal
+go vet ./internal/connectors/native/... && go vet -tags databaseintegration ./internal/connectors/native/mysql
+go test -race -count=1 -timeout 5m ./internal/connectors/native/dbtest ./internal/connectors/native/mysql
+```
+
+Both packages passed. The quoting scan now applies one boundary rule — doubled quotes everywhere,
+backslash escapes everywhere except a backquoted identifier, which is the single case MySQL settles
+independently of `sql_mode` — and reports an unterminated span as unattributable so
+`statementReachesDatabase` fails closed instead of concluding the statement is unrelated. The
+existing "database name only inside a literal" case stays skipped.

@@ -65,8 +65,10 @@ it does not create, alter, or delete database data.
   database: the binary log is server-wide, so unrelated schema activity does not end a changefeed,
   while a statement that names the configured database — including one qualified from another
   default schema, in backquotes or in `sql_mode=ANSI_QUOTES` double quotes — does. A statement that
-  cannot be attributed to a schema is rejected too. New CDC subscriptions capture their binary-log
-  position before loading column metadata.
+  cannot be attributed to a schema is rejected too, as is one whose quoting the connector cannot
+  follow: an unterminated quoted span means every later quote boundary is in doubt, so the statement
+  is treated as reaching the database rather than as unrelated. New CDC subscriptions capture their
+  binary-log position before loading column metadata.
 - Tables and columns whose identifiers this connector cannot safely quote are omitted from the
   catalog rather than advertised, because a Read against them would always fail.
 - GTID checkpointing, client certificate authentication, schema-change event projection, and
@@ -99,6 +101,13 @@ Cleanup runs on every exit path, including a failed assertion and an interrupt: 
 container, its named volume, the run-owned image tag, the pulled source image, and any machine this
 run created are all removed. `POLYMETRICS_DATABASE_KEEP_IMAGE=1` retains the source image for a
 subsequent run.
+
+A machine is claimed before `podman machine init` runs, not after it succeeds, because init writes
+the VM config and a multi-GiB disk image before it can fail and a cancelled context kills it
+mid-write. A failed or cancelled init therefore still tears down its own machine, on a deadline of
+its own so the cancellation that killed init cannot also cancel the cleanup, and against that exact
+generated name and nothing else. A machine init never got as far as creating reads as absent rather
+than as a cleanup failure.
 
 Cleanup also trims the backing machine so freed guest blocks are punched out of the host's sparse
 disk file. This matters on macOS: removing an image frees space inside the VM but leaves the host

@@ -30,6 +30,10 @@ path.
   connection and a live `podman machine inspect` follow as defence in depth.
 - `POLYMETRICS_DATABASE_OWN_MACHINE=1` is how the live proof creates, uses, and deletes its own
   machine; that is the mode in which the reclaim is exercised at all.
+- The machine ownership record is taken before `podman machine init` runs, matching the container
+  path's claim-before-create rule: init writes a multi-GiB disk image before it can fail, and a
+  cancelled context kills it mid-write. A failed or cancelled init tears its own machine down on a
+  deadline of its own, against that exact generated name.
 - The test database uses only its isolated ephemeral server configuration. No credential or
   connection string is printed, logged, or stored.
 - MySQL is a dynamic-schema Tier-3 native connector. Its binary-log mechanism is declared through

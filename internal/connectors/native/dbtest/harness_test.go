@@ -3,6 +3,7 @@ package dbtest
 import (
 	"context"
 	"errors"
+	"fmt"
 	"os/exec"
 	"reflect"
 	"strings"
@@ -110,20 +111,36 @@ type scriptedMachineRunner struct {
 	inspectName string
 	inspectErr  error
 	initErr     error
-	created     map[string]bool
-	commands    [][]string
+	// initWritesBeforeFailing models the real command: podman writes the VM
+	// config and its disk image before init can fail, and a cancelled context
+	// kills it mid-write, so the machine exists even though init reported none.
+	initWritesBeforeFailing bool
+	created                 map[string]bool
+	commands                [][]string
 }
 
-func (r *scriptedMachineRunner) Run(_ context.Context, args ...string) (string, error) {
+func (r *scriptedMachineRunner) Run(ctx context.Context, args ...string) (string, error) {
 	r.commands = append(r.commands, append([]string(nil), args...))
+	name := args[len(args)-1]
 	switch {
 	case commandHasPrefix(args, "machine", "init"):
+		if r.initWritesBeforeFailing {
+			r.setCreated(name, true)
+		}
+		if err := ctx.Err(); err != nil {
+			return "", err
+		}
 		if r.initErr != nil {
 			return "", r.initErr
 		}
-		r.setCreated(args[len(args)-1], true)
-	case commandHasPrefix(args, "machine", "rm"):
-		r.setCreated(args[len(args)-1], false)
+		r.setCreated(name, true)
+	case commandHasPrefix(args, "machine", "stop"), commandHasPrefix(args, "machine", "rm"):
+		if !r.created[name] {
+			return "", fmt.Errorf("%w: no such machine", errPodmanResourceNotFound)
+		}
+		if commandHasPrefix(args, "machine", "rm") {
+			r.setCreated(name, false)
+		}
 	case commandHasPrefix(args, "machine", "inspect"):
 		if r.inspectErr != nil {
 			return "", r.inspectErr
@@ -131,7 +148,6 @@ func (r *scriptedMachineRunner) Run(_ context.Context, args ...string) (string, 
 		if r.inspectName != "" {
 			return r.inspectName + "\n", nil
 		}
-		name := args[len(args)-1]
 		if !r.created[name] {
 			return "", errors.New("no such machine")
 		}
@@ -531,6 +547,71 @@ func TestNewMachineCreatesAndRemovesOnlyItsOwnMachine(t *testing.T) {
 	}
 	if err := machine.Remove(context.Background()); err != nil {
 		t.Fatalf("second Remove(): %v", err)
+	}
+}
+
+// `podman machine init` writes a multi-GiB disk image before it can fail, and
+// a cancelled context kills it mid-write, so a claim taken only on success
+// would leave that image on the host with nothing holding authority to delete
+// it.
+func TestNewMachineRemovesWhatAFailedInitLeftBehind(t *testing.T) {
+	for _, tc := range []struct {
+		name        string
+		runner      *scriptedMachineRunner
+		cancelled   bool
+		wantWritten bool
+	}{
+		{
+			name:        "init failed after writing the machine",
+			runner:      &scriptedMachineRunner{initErr: errors.New("init failed"), initWritesBeforeFailing: true},
+			wantWritten: true,
+		},
+		{
+			name:        "init was cancelled mid-write",
+			runner:      &scriptedMachineRunner{initWritesBeforeFailing: true},
+			cancelled:   true,
+			wantWritten: true,
+		},
+		{
+			name:   "init failed before writing anything",
+			runner: &scriptedMachineRunner{initErr: errors.New("init failed")},
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			ctx, cancel := context.WithCancel(context.Background())
+			defer cancel()
+			if tc.cancelled {
+				cancel()
+			}
+			machine, err := NewMachine(ctx, MachineConfig{Engine: "mysql", RunMachine: tc.runner})
+			if err == nil {
+				t.Fatal("NewMachine() reported success after the init failed")
+			}
+			// Without a handle the caller cannot clean up at all: the
+			// integration test only defers Remove on a non-nil machine.
+			if machine == nil {
+				t.Fatal("NewMachine() returned no handle for a machine init may have created")
+			}
+			if !commandsContain(tc.runner.commands, "machine", "rm", "--force", machine.Name()) {
+				t.Fatalf("machine commands = %v, want the attempted machine removed by name", tc.runner.commands)
+			}
+			if tc.runner.created[machine.Name()] {
+				t.Fatalf("machine %q survived the failed init", machine.Name())
+			}
+			if machineIsOwned(machine.Name()) {
+				t.Fatalf("ownership record for %q outlived the failed init", machine.Name())
+			}
+			// A machine init never created is absent, not leaked, so cleanup
+			// must not report a failure for it.
+			if err := machine.Remove(context.Background()); err != nil {
+				t.Fatalf("cleanup after the failed init reported: %v", err)
+			}
+			for _, command := range tc.runner.commands {
+				if command[len(command)-1] != machine.Name() {
+					t.Fatalf("machine command %v targeted something other than this run's machine", command)
+				}
+			}
+		})
 	}
 }
 

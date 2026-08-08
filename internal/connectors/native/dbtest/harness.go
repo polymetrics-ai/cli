@@ -671,6 +671,10 @@ func podmanResourceNotFound(err error) bool {
 		"no such object",
 		"image not known",
 		"no such network",
+		// Podman's wording for an absent machine, which cleanup after a failed
+		// `machine init` has to read as success rather than as a leak.
+		"vm does not exist",
+		"no such machine",
 	} {
 		if strings.Contains(stderr, absent) {
 			return true
@@ -685,7 +689,11 @@ func (podmanMachineRunner) Run(ctx context.Context, args ...string) (string, err
 	output, err := exec.CommandContext(ctx, defaultPodmanBinary, args...).Output()
 	if err != nil {
 		// As for the container runner, keep command output and configuration
-		// values out of a test error.
+		// values out of a test error, but classify absence so removing a
+		// machine that was never created is success rather than a leak report.
+		if podmanResourceNotFound(err) {
+			return "", fmt.Errorf("%w: podman machine command failed", errPodmanResourceNotFound)
+		}
 		return "", errors.New("podman machine command failed")
 	}
 	return string(output), nil

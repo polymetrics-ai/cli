@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 )
 
 // ownedMachines records the Podman machines this process created. It is the
@@ -90,9 +91,13 @@ type Machine struct {
 // this process as its owner. The caller must call Remove in a defer: the
 // machine is this run's to delete and nothing else will collect it.
 //
-// A failed start still returns the machine, because `machine init` may have
-// created the VM before the start failed; removing it is then the caller's
-// only way to avoid leaking a whole disk image.
+// Every failure after the name is generated still returns the machine, and the
+// ownership record is taken before the first command that can create state.
+// `podman machine init` writes the VM config and a multi-GiB disk image before
+// it can fail, and a cancelled context SIGKILLs it mid-write, so a claim taken
+// only on success would leave a whole disk image on the host with nothing
+// holding the authority to delete it. This mirrors the container path, which
+// claims each resource before issuing the command that creates it.
 func NewMachine(ctx context.Context, config MachineConfig) (*Machine, error) {
 	if strings.TrimSpace(config.Engine) == "" {
 		return nil, errors.New("database test machine requires an engine name")
@@ -122,6 +127,8 @@ func NewMachine(ctx context.Context, config MachineConfig) (*Machine, error) {
 	}
 
 	machine := &Machine{name: name, run: config.RunMachine}
+	registerOwnedMachine(name)
+	registerInterruptMachine(machine)
 	if _, err := config.RunMachine.Run(ctx,
 		"machine", "init",
 		"--cpus", strconv.Itoa(config.CPUs),
@@ -129,16 +136,25 @@ func NewMachine(ctx context.Context, config MachineConfig) (*Machine, error) {
 		"--disk-size", strconv.Itoa(config.DiskGiB),
 		name,
 	); err != nil {
-		return nil, fmt.Errorf("create database test machine: %w", err)
+		return machine, errors.Join(fmt.Errorf("create database test machine: %w", err), machine.removeDetached())
 	}
-	// Claimed only after init reported success, and before start, so an
-	// interrupt during the start still finds a machine it is allowed to remove.
-	registerOwnedMachine(name)
-	registerInterruptMachine(machine)
 	if _, err := config.RunMachine.Run(ctx, "machine", "start", name); err != nil {
 		return machine, fmt.Errorf("start database test machine: %w", err)
 	}
 	return machine, nil
+}
+
+// machineRemoveTimeout bounds the detached teardown. Removing a machine is a
+// handful of local file operations once the VM is stopped.
+const machineRemoveTimeout = 5 * time.Minute
+
+// removeDetached tears the machine down on a context of its own, because the
+// caller's context may be exactly what killed the command whose partial state
+// needs removing. It targets only this run's generated name.
+func (m *Machine) removeDetached() error {
+	ctx, cancel := context.WithTimeout(context.Background(), machineRemoveTimeout)
+	defer cancel()
+	return m.Remove(ctx)
 }
 
 // Connection is the Podman connection name that addresses this machine. Podman
@@ -155,7 +171,9 @@ func (m *Machine) Remove(ctx context.Context) error {
 		// A machine that is already stopped makes this fail; the removal below
 		// is what has to succeed, and it stops a running machine itself.
 		_, _ = m.run.Run(ctx, "machine", "stop", m.name)
-		if _, err := m.run.Run(ctx, "machine", "rm", "--force", m.name); err != nil {
+		// A machine `init` never got as far as creating is absent, not leaked,
+		// so its absence is the outcome this wanted rather than a failure.
+		if _, err := m.run.Run(ctx, "machine", "rm", "--force", m.name); err != nil && !errors.Is(err, errPodmanResourceNotFound) {
 			m.removeErr = fmt.Errorf("remove database test machine: %w", err)
 		}
 		unregisterOwnedMachine(m.name)
