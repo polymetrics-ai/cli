@@ -13,6 +13,7 @@ import (
 	"regexp"
 	"strings"
 	"time"
+	"unicode/utf8"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
@@ -27,6 +28,14 @@ const (
 	directReadPolicyRepositoryContentsDirectory    = "repository_contents_directory"
 	directReadPolicyJSONRedacted                   = "json_redacted"
 	directReadPolicyClinicalJSONRedacted           = "clinical_json_redacted"
+	// directReadPolicyNone is an explicitly status-only operation contract.
+	// It accepts a successful empty response such as GitHub's membership checks;
+	// it is not a generic way to discard an otherwise meaningful response.
+	directReadPolicyNone = "none"
+	// directReadPolicyText is a bounded UTF-8 response contract for declared
+	// text endpoints such as GitHub's Markdown renderer and /zen. Binary output
+	// remains in the binary_download executor.
+	directReadPolicyText = "text"
 )
 
 var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
@@ -97,14 +106,15 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	maxBytes := clampOperationDirectReadMaxBytes(req.MaxBytes, op.REST.MaxBytes)
 	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
 	decoded, pageInfo, resp, err := readDirectPage(ctx, b, rt, directReadWalk{
-		method:      method,
-		declaredPat: op.REST.Path,
-		requestPath: requestPath,
-		query:       query,
-		body:        body,
-		maxBytes:    maxBytes,
-		page:        req.Page,
-		pageCursor:  req.PageCursor,
+		method:       method,
+		declaredPat:  op.REST.Path,
+		requestPath:  requestPath,
+		query:        query,
+		body:         body,
+		outputPolicy: policy,
+		maxBytes:     maxBytes,
+		page:         req.Page,
+		pageCursor:   req.PageCursor,
 	})
 	if err != nil {
 		var tooLarge errDirectReadTooLarge
@@ -226,6 +236,9 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 	if err := requireDirectReadEndpoint(b, method, req.Path); err != nil {
 		return connectors.DirectReadResult{}, err
 	}
+	if isOperationOnlyDirectReadOutputPolicy(req.OutputPolicy) {
+		return connectors.DirectReadResult{}, fmt.Errorf("direct read output policy %q requires an operation-backed direct read", req.OutputPolicy)
+	}
 	cfg := materializeConfigDefaults(b, req.Config)
 	resolvedPath, err := resolveSurfaceEndpointPath(req.Path, cfg, req.PathParams)
 	if err != nil {
@@ -250,13 +263,14 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 	maxBytes := clampDirectReadMaxBytes(req.MaxBytes)
 	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
 	body, pageInfo, resp, err := readDirectPage(ctx, b, rt, directReadWalk{
-		method:      method,
-		declaredPat: req.Path,
-		requestPath: requestPath,
-		query:       query,
-		maxBytes:    maxBytes,
-		page:        req.Page,
-		pageCursor:  req.PageCursor,
+		method:       method,
+		declaredPat:  req.Path,
+		requestPath:  requestPath,
+		query:        query,
+		outputPolicy: req.OutputPolicy,
+		maxBytes:     maxBytes,
+		page:         req.Page,
+		pageCursor:   req.PageCursor,
 	})
 	if err != nil {
 		var tooLarge errDirectReadTooLarge
@@ -419,6 +433,28 @@ func decodeDirectReadBody(raw []byte, maxBytes int) (any, error) {
 	return body, nil
 }
 
+// decodeDirectReadResponse is the single decoder for a declared direct-read
+// response policy. It deliberately selects only between the bounded response
+// contracts the operation declared; Requester has already captured at most the
+// operation cap plus one byte, and readDirectPage rejects that sentinel byte
+// before this function runs.
+func decodeDirectReadResponse(policy string, raw []byte, maxBytes int) (any, error) {
+	switch policy {
+	case directReadPolicyNone:
+		if len(raw) != 0 {
+			return nil, fmt.Errorf("status-only response must be empty, got %d bytes", len(raw))
+		}
+		return nil, nil
+	case directReadPolicyText:
+		if !utf8.Valid(raw) {
+			return nil, fmt.Errorf("text response must be valid UTF-8")
+		}
+		return string(raw), nil
+	default:
+		return decodeDirectReadBody(raw, maxBytes)
+	}
+}
+
 func clampDirectReadMaxBytes(maxBytes int) int {
 	if maxBytes <= 0 || maxBytes > defaultDirectReadMaxBytes {
 		return defaultDirectReadMaxBytes
@@ -437,11 +473,20 @@ func validateDirectReadOutputPolicy(policy, endpointPath string, pathParams map[
 			return err
 		}
 		return nil
-	case directReadPolicyJSONRedacted, directReadPolicyClinicalJSONRedacted:
+	case directReadPolicyJSONRedacted, directReadPolicyClinicalJSONRedacted,
+		directReadPolicyNone, directReadPolicyText:
 		return nil
 	default:
 		return fmt.Errorf("direct read output policy %q is not supported", policy)
 	}
+}
+
+// isOperationOnlyDirectReadOutputPolicy identifies response contracts that need
+// an operation's reviewed REST declaration. The legacy DirectRead path has only
+// a caller-supplied endpoint and must not become a way to discard arbitrary
+// provider responses.
+func isOperationOnlyDirectReadOutputPolicy(policy string) bool {
+	return policy == directReadPolicyNone || policy == directReadPolicyText
 }
 
 func repositoryDirectReadPathValue(policy, endpointPath string, pathParams map[string]string, cfg connectors.RuntimeConfig) (string, error) {
@@ -493,6 +538,17 @@ func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
 		return out, nil
 	case directReadPolicyJSONRedacted, directReadPolicyClinicalJSONRedacted:
 		return redactJSONValue(body), nil
+	case directReadPolicyNone:
+		if body != nil {
+			return nil, fmt.Errorf("direct read output policy %q received a response body", policy)
+		}
+		return nil, nil
+	case directReadPolicyText:
+		text, ok := body.(string)
+		if !ok {
+			return nil, fmt.Errorf("direct read output policy %q requires a text response", policy)
+		}
+		return text, nil
 	default:
 		return nil, fmt.Errorf("direct read output policy %q is not supported", policy)
 	}
