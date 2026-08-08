@@ -1,0 +1,31 @@
+{
+  "record": {
+    "prospects": [{
+      "primary_name": "Fixture batch Auto Dialer prospect",
+      "company": "Fixture Auto Dialer company",
+      "phone_numbers": [{"number": "+15550000002", "type": "PRIMARY_PHONE"}],
+      "email_addresses": [{"email": "batch.fixture.prospect@example.invalid", "type": "PRIMARY_EMAIL"}]
+    }]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/dialer/call-lists/fixture-ad-call-list/prospects/batch",
+    "body": {
+      "prospects": [{
+        "primary_name": "Fixture batch Auto Dialer prospect",
+        "company": "Fixture Auto Dialer company",
+        "phone_numbers": [{"number": "+15550000002", "type": "PRIMARY_PHONE"}],
+        "email_addresses": [{"email": "batch.fixture.prospect@example.invalid", "type": "PRIMARY_EMAIL"}]
+      }]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "success_list": [{"prospect_id": "fixture-ad-batch-prospect", "name": "Fixture batch Auto Dialer prospect", "phone": "+15550000002"}],
+      "assigned_to_user_id": "fixture-ad-user",
+      "assigned_to_user_email": "fixture.user@example.invalid",
+      "token": "fixture-ad-response-token"
+    }
+  }
+}

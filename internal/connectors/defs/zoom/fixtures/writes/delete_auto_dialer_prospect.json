@@ -1,0 +1,10 @@
+{
+  "record": {},
+  "expect": {
+    "method": "DELETE",
+    "path": "/v2/dialer/call-lists/fixture-ad-call-list/prospects/fixture-ad-prospect"
+  },
+  "response": {
+    "status": 204
+  }
+}

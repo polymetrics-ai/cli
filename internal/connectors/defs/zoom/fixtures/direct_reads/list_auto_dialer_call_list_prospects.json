@@ -1,0 +1,8 @@
+{
+  "status": 200,
+  "body": {
+    "prospects": [{"prospect_id": "fixture-ad-prospect", "primary_name": "Fixture Auto Dialer prospect", "phone_numbers": [{"number": "+15550000000", "type": "PRIMARY_PHONE"}]}],
+    "next_page_token": "fixture-ad-page-token",
+    "token": "fixture-ad-response-token"
+  }
+}

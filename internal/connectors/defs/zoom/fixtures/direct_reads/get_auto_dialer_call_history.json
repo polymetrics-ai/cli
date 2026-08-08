@@ -1,0 +1,11 @@
+{
+  "status": 200,
+  "body": {
+    "call_history_id": "fixture-ad-call-history",
+    "call_id": "fixture-ad-call",
+    "prospect_id": "fixture-ad-prospect",
+    "call_note": "fixture Auto Dialer private call note",
+    "email_addresses": [{"email": "fixture.ad@example.invalid", "type": "PRIMARY_EMAIL"}],
+    "token": "fixture-ad-response-token"
+  }
+}

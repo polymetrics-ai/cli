@@ -1,0 +1,27 @@
+{
+  "record": {
+    "assigned_to_user_id": "fixture-ad-user",
+    "name": "Fixture Auto Dialer call list",
+    "prospect_type": "CONTACT",
+    "description": "fixture call-list description"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/dialer/call-lists",
+    "body": {
+      "assigned_to_user_id": "fixture-ad-user",
+      "name": "Fixture Auto Dialer call list",
+      "prospect_type": "CONTACT",
+      "description": "fixture call-list description"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "call_list_id": "fixture-ad-call-list",
+      "assigned_to_user_id": "fixture-ad-user",
+      "name": "Fixture Auto Dialer call list",
+      "token": "fixture-ad-response-token"
+    }
+  }
+}

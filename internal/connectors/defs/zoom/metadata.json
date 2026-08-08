@@ -1,7 +1,7 @@
 {
   "name": "zoom",
   "display_name": "Zoom",
-  "description": "Reads Zoom users, meetings, webinars, bounded module-specific data, SCIM2 groups/users, and Virtual Agent knowledge-base/report data through the Zoom REST API; includes sensitive Cobrowse SDK, SCIM2, and Virtual Agent reads, approval-gated Chatbot, SCIM2, Virtual Agent, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
+  "description": "Reads Zoom users, meetings, webinars, bounded module-specific data, SCIM2 groups/users, Virtual Agent knowledge-base/report data, and Auto Dialer call history, reports, call lists, and prospects through the Zoom REST API; includes sensitive Cobrowse SDK, SCIM2, Virtual Agent, and Auto Dialer reads, approval-gated Chatbot, SCIM2, Virtual Agent, Auto Dialer, clinical-note, and Quality Management actions, and a redacted Customer Managed Keys Hybrid archival key action.",
   "integration_type": "api",
   "docs_url": "https://developers.zoom.us/docs/api/",
   "release_stage": "ga",
@@ -17,8 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Zoom API read of user, meeting, webinar, Quality of Service, AI Companion, My Notes, healthcare clinical-note, Quality Management, Cobrowse SDK session, SCIM2 user/group, and Virtual Agent knowledge-base/report data",
-    "write": "typed Zoom Chatbot message, Link Unfurls, SCIM2 group/user, Virtual Agent article/sync, healthcare clinical-note, and Quality Management actions, plus Customer Managed Keys Hybrid archival key decryption with redacted output",
-    "approval": "mutating commands require plan, preview, explicit approval, and execute; Chatbot, SCIM2, and Virtual Agent article deletion plus Customer Managed Keys Hybrid archival key decryption additionally require typed confirmation; read-only commands require none"
+    "read": "external Zoom API read of user, meeting, webinar, Quality of Service, AI Companion, My Notes, healthcare clinical-note, Quality Management, Cobrowse SDK session, SCIM2 user/group, Virtual Agent knowledge-base/report, and Auto Dialer call-history/report/call-list/prospect data",
+    "write": "typed Zoom Chatbot message, Link Unfurls, SCIM2 group/user, Virtual Agent article/sync, Auto Dialer call-list/prospect, healthcare clinical-note, and Quality Management actions, plus Customer Managed Keys Hybrid archival key decryption with redacted output",
+    "approval": "mutating commands require plan, preview, explicit approval, and execute; Chatbot, SCIM2, Virtual Agent article, and Auto Dialer call-list/prospect deletion plus Customer Managed Keys Hybrid archival key decryption additionally require typed confirmation; read-only commands require none"
   }
 }

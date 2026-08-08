@@ -1,0 +1,34 @@
+{
+  "record": {
+    "prospects": [{
+      "prospect_id": "fixture-ad-prospect",
+      "primary_name": "Updated Fixture Auto Dialer prospect",
+      "phone_numbers": [{"number": "+15550000001", "type": "MOBILE_PHONE"}],
+      "email_addresses": [{"email": "updated.fixture.prospect@example.invalid", "type": "SECONDARY_EMAIL"}]
+    }],
+    "assign_to_call_list_id": "fixture-ad-other-call-list"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v2/dialer/call-lists/fixture-ad-call-list/prospects",
+    "body": {
+      "prospects": [{
+        "prospect_id": "fixture-ad-prospect",
+        "primary_name": "Updated Fixture Auto Dialer prospect",
+        "phone_numbers": [{"number": "+15550000001", "type": "MOBILE_PHONE"}],
+        "email_addresses": [{"email": "updated.fixture.prospect@example.invalid", "type": "SECONDARY_EMAIL"}]
+      }],
+      "assign_to_call_list_id": "fixture-ad-other-call-list"
+    }
+  },
+  "response": {
+    "status": 207,
+    "body": {
+      "success_list": [{"prospect_id": "fixture-ad-prospect"}],
+      "failed_list": [{"prospect_id": "fixture-ad-failed-prospect", "error_message": "fixture validation detail"}],
+      "assigned_to_user_id": "fixture-ad-user",
+      "assigned_to_user_email": "fixture.user@example.invalid",
+      "token": "fixture-ad-response-token"
+    }
+  }
+}
