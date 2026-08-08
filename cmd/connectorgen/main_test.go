@@ -512,6 +512,46 @@ func TestValidate_CLISurfaceImplementedDirectWritePasses(t *testing.T) {
 	}
 }
 
+// TestValidate_CLISurfaceImplementedDirectWriteNamedRootJSONObjectPasses
+// captures the narrow SCIM-style root-resource contract. It is deliberately a
+// named json_object flag on one declared operation, never a generic raw JSON
+// input or an arbitrary transport target.
+func TestValidate_CLISurfaceImplementedDirectWriteNamedRootJSONObjectPasses(t *testing.T) {
+	fsys := directWriteCLISurfaceBundleFS()
+	cli := string(fsys["cli-surface/cli_surface.json"].Data)
+	originalCLI := cli
+	cli = strings.Replace(cli, `
+					{ "name": "id", "type": "string", "maps_to": "path.id" }
+				`, `
+					{ "name": "id", "type": "string", "maps_to": "path.id" },
+					{ "name": "resource", "type": "json_object", "maps_to": "body", "required": true }
+				`, 1)
+	if cli == originalCLI {
+		t.Fatal("add named root-object flag to cli surface")
+	}
+	fsys["cli-surface/cli_surface.json"] = &fstest.MapFile{Data: []byte(cli)}
+
+	operations := string(fsys["cli-surface/operations.json"].Data)
+	originalOperations := operations
+	operations = strings.Replace(operations, `"max_bytes": 1024`, `"body_schema": {
+						"type": "object",
+						"additionalProperties": true
+					},
+					"max_bytes": 1024`, 1)
+	if operations == originalOperations {
+		t.Fatal("add declared root-object body schema to operation")
+	}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for named root-object direct_write cli surface, got %+v", report.Findings)
+	}
+}
+
 func TestValidate_CLISurfaceImplementedMultipartDirectWritePasses(t *testing.T) {
 	fsys := directWriteCLISurfaceBundleFS()
 	cli := string(fsys["cli-surface/cli_surface.json"].Data)

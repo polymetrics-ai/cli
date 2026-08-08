@@ -15,8 +15,48 @@ planning evidence. It must fail against the current branch because:
 - A declared rest-read operation still uses the ordinary bundle origin/auth and therefore cannot
   honor a provider root endpoint such as `/scim2/...` independently of ordinary `/v2` calls.
 
-The pending RED run is test-only and will be captured verbatim below before any production change.
-It contains no provider credential or token value.
+The RED run occurred before any production change. It contains no provider credential or token
+value:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine ./internal/connectors/commandrunner ./cmd/connectorgen ./internal/connectors/defs/zoom/...
+--- FAIL: TestOperationDirectReadUsesDeclaredOperationOriginAndAuth (0.00s)
+    direct_read_test.go:643: Load declared operation-scoped direct-read origin/auth bundle: load bundle acme: operations.json: operation 0 ("acme.list_scim2_groups") rest.base_url/rest.auth are only valid for rest_write operations, got "rest_read"
+FAIL
+FAIL    polymetrics.ai/internal/connectors/engine
+--- FAIL: TestBuildOperationDirectWriteCommandMapsNamedRootJSONObject (0.00s)
+    runner_test.go:1905: BuildWriteCommand named root object: connector command "scim groups create" is blocked: intent=direct_write: availability=implemented: flag --resource maps to unsupported target "body"
+FAIL
+FAIL    polymetrics.ai/internal/connectors/commandrunner
+--- FAIL: TestValidate_CLISurfaceImplementedDirectWriteNamedRootJSONObjectPasses (0.00s)
+    main_test.go:551: expected zero findings for named root-object direct_write cli surface, got [{Connector:cli-surface File:cli_surface.json Rule:cli_surface_safety Message:implemented direct write command 0 ("widget archive") flag --resource maps to unsupported target "body"} {Connector:cli-surface File:cli_surface.json Rule:cli_surface_safety Message:command 0 ("widget archive") flag --resource json_object type may map only to an operation body}]
+FAIL
+FAIL    polymetrics.ai/cmd/connectorgen
+--- FAIL: TestProviderInventoryLedgerIsComplete (0.04s)
+    command_surface_test.go:155: executable rows = 27, want 38
+    command_surface_test.go:158: operations awaiting Zoom-local contracts = 1815, want 1804
+--- FAIL: TestCoveredStreamsHaveReachableCommands (0.03s)
+    command_surface_test.go:253: reachable direct_read operation commands = 17, want 21
+    command_surface_test.go:254: reachable direct_write operation commands = 5, want 12
+--- FAIL: TestSCIM2OperationCommandsAreReachable (0.03s)
+    command_surface_test.go:325: Preflight("scim2 groups list") = connector command "scim2 groups list" is blocked: unknown command, want declared executable SCIM2 action
+    command_surface_test.go:325: Preflight("scim2 groups create") = connector command "scim2 groups create" is blocked: unknown command, want declared executable SCIM2 action
+    command_surface_test.go:325: Preflight("scim2 groups get") = connector command "scim2 groups get" is blocked: unknown command, want declared executable SCIM2 action
+    command_surface_test.go:325: Preflight("scim2 groups delete") = connector command "scim2 groups delete" is blocked: unknown command, want declared executable SCIM2 action
+    command_surface_test.go:325: Preflight("scim2 groups update") = connector command "scim2 groups update" is blocked: unknown command, want declared executable SCIM2 action
+    command_surface_test.go:325: Preflight("scim2 users list") = connector command "scim2 users list" is blocked: unknown command, want declared executable SCIM2 action
+    command_surface_test.go:325: Preflight("scim2 users create") = connector command "scim2 users create" is blocked: unknown command, want declared executable SCIM2 action
+    command_surface_test.go:325: Preflight("scim2 users get") = connector command "scim2 users get" is blocked: unknown command, want declared executable SCIM2 action
+    command_surface_test.go:325: Preflight("scim2 users update") = connector command "scim2 users update" is blocked: unknown command, want declared executable SCIM2 action
+    command_surface_test.go:325: Preflight("scim2 users delete") = connector command "scim2 users delete" is blocked: unknown command, want declared executable SCIM2 action
+    command_surface_test.go:325: Preflight("scim2 users deactivate") = connector command "scim2 users deactivate" is blocked: unknown command, want declared executable SCIM2 action
+FAIL
+FAIL    polymetrics.ai/internal/connectors/defs/zoom
+FAIL
+```
+
+The test-only RED checkpoint will be committed and pushed before any production foundation or
+connector change.
 
 ## Planned GREEN foundation — operation-scoped direct-read origin/auth
 

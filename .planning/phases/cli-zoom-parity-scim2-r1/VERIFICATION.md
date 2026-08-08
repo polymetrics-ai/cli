@@ -6,7 +6,8 @@
 - [x] Required skills and canonical connector/CLI references are recorded in `PLAN.md`.
 - [x] Live provider artifact URL, retrieval date, HTTP result, byte count, SHA-256, and exact
   eleven-operation audit are recorded before RED.
-- [ ] RED failure captured before production changes and committed/pushed.
+- [x] RED failure captured verbatim before production changes; this test-only checkpoint is staged
+  for its required commit/push.
 - [ ] Required reusable foundations red/green tested and separately committed/pushed.
 - [ ] Connector declaration, generated output, docs, and website catalog committed/pushed.
 - [ ] Inline verify-work and code-review evidence complete.
