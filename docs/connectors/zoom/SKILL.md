@@ -7,7 +7,7 @@ description: Zoom connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API; includes sensitive Cobrowse SDK session reads and approval-gated clinical-note and Quality Management interaction actions.
+Reads Zoom users, meetings, webinars, and bounded module-specific data through the Zoom REST API; includes sensitive Cobrowse SDK session reads, approval-gated clinical-note and Quality Management interaction actions, and a redacted Customer Managed Keys Hybrid archival key action.
 
 ## Icon
 
@@ -29,11 +29,13 @@ Reads Zoom users, meetings, webinars, and bounded module-specific data through t
 ## Configuration
 
 - base_url
+- key_connector_base_url
 - max_pages
 - mode
 - page_size
 - user_id
 - access_token (secret)
+- key_connector_jwt (secret)
 
 ## ETL Streams
 
@@ -65,13 +67,13 @@ Reads Zoom users, meetings, webinars, and bounded module-specific data through t
 ## Security
 
 - read risk: external Zoom API read of user, meeting, webinar, Quality of Service, AI Companion, My Notes, healthcare clinical-note, Quality Management, and Cobrowse SDK session data
-- write risk: typed Zoom reverse ETL mutation of a healthcare clinical-note completion status or Quality Management interaction creation
-- approval: reverse ETL writes require plan, preview, explicit approval, and execute; read-only commands require none
+- write risk: typed Zoom reverse ETL mutation of a healthcare clinical-note completion status or Quality Management interaction creation, plus Customer Managed Keys Hybrid archival key decryption with redacted output
+- approval: mutating commands require plan, preview, explicit approval, and execute; Customer Managed Keys Hybrid archival key decryption additionally requires typed confirmation; read-only commands require none
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Command Surface
 
-- Run declared Zoom stream reads, bounded module-specific direct reads including sensitive Cobrowse SDK sessions, and approval-gated clinical-note and Quality Management interaction actions.
+- Run declared Zoom stream reads, bounded module-specific direct reads including sensitive Cobrowse SDK sessions, approval-gated clinical-note and Quality Management interaction actions, and a redacted Customer Managed Keys Hybrid archival key action.
 - Usage: pm zoom <group> <command> [flags]
 - Source CLI: Zoom API reference (OpenAPI 3.1.1; docs static build 2026-08-03T14-58-19-06-00; retrieved 2026-08-05)
 - Global flags:
@@ -110,6 +112,8 @@ Reads Zoom users, meetings, webinars, and bounded module-specific data through t
   - cobrowse-sdk past-sessions list - List past Cobrowse SDK sessions for an optional monthly date range. [intent=direct_read availability=implemented operation=zoom.list_cobrowse_past_sessions]; notes: Bounded sensitive Zoom read. The provider explicitly permits an optional monthly from/to date range; page_size and next_page_token are response-only fields and are not CLI flags.; flags: --from, --to
   - cobrowse-sdk sessions get - Get details for one Cobrowse SDK session. [intent=direct_read availability=implemented operation=zoom.get_cobrowse_session]; notes: Bounded sensitive Zoom read with a typed required session-id path parameter; session pins, user/session identifiers, display names, connection IDs, and IP addresses are redacted before output.; flags: --session-id (required)
   - cobrowse-sdk sessions users list - List users from one Cobrowse SDK session. [intent=direct_read availability=implemented operation=zoom.list_cobrowse_session_users]; notes: Bounded sensitive Zoom read with a typed required session-id path parameter; page_size and next_page_token are response-only fields and session/user connection data is redacted before output.; flags: --session-id (required)
+- Customer Managed Keys Hybrid
+  - customer-managed-keys-hybrid archival-key decrypt - Decrypt one Customer Managed Keys Hybrid archival data key. [intent=direct_write availability=implemented operation=zoom.decrypt_customer_managed_key_archival]; approval: Requires plan, no-network preview, explicit single-use approval, typed confirmation, then execute.; risk: Returns sensitive key material only through a redacted output policy.; notes: Requires an operator-provisioned Customer Managed Keys Hybrid credential with key_connector_base_url ending in /api/v2 and an environment- or stdin-supplied key_connector_jwt. The operation declares its own customer-hosted origin and bearer; it never reuses the ordinary Zoom OAuth bearer.; flags: --encrypt-context (required), --key-id (required)
 - Help topics:
   - provider-inventory - The Zoom provider ledger tracks 1,913 documented REST operations; Wave 1 executes three stream-backed reads; Wave 2+ adds bounded direct-read/write operations module by module (see #3915).
 
