@@ -153,6 +153,37 @@ FAIL
 The RED checkpoint commits only this test and GSD/TDD evidence. It leaves the pending Zoom
 declaration uncommitted, so the foundation remains independently reviewable.
 
+## GREEN direct-write endpoint-ledger foundation
+
+Commit `410eb1bb7` adds the reusable direct-write endpoint coverage contract:
+
+- `api_surface.json` can record `covered_by.direct_write` or `covered_by.direct_writes`; both
+  resolve only to implemented direct-write commands and only on mutation methods.
+- `surface-reconcile` promotes the eligible sensitive/admin/destructive operation models only
+  after the exact command passes the real runtime preflight. It retains a typed blocked reason
+  when no candidate passes and refuses all other operation models.
+- Direct-write command preflight now carries its operation, HTTP method, path, and output policy
+  to the engine. A command cannot claim a different endpoint from its declared `rest_write`
+  operation.
+- The runtime accepts a generated direct-write ledger row after reconciliation, while its embedded
+  fallback remains derived solely from the shipped operation declaration.
+- Static validation, conformance, and certification inventory accounting treat direct-write
+  coverage as executable mutation surface and enforce `capabilities.write`.
+
+This foundation unblocks every declarative connector with a safely promotable `rest_write`
+operation that is currently held in `sensitive_reverse_etl`, `admin_reverse_etl`, or
+`destructive_action` ledger state; no existing connector ledger was reclassified in this commit.
+It is separate from Zoom JSON authoring.
+
+```text
+$ go test -count=1 -timeout 20m ./cmd/connectorgen ./internal/connectors/engine ./internal/connectors/commandrunner ./internal/connectors/conformance ./internal/connectors/certify
+ok  polymetrics.ai/cmd/connectorgen  14.463s
+ok  polymetrics.ai/internal/connectors/engine  5.791s
+ok  polymetrics.ai/internal/connectors/commandrunner  9.483s
+ok  polymetrics.ai/internal/connectors/conformance  20.228s
+ok  polymetrics.ai/internal/connectors/certify  13.560s
+```
+
 ## GREEN connector — pending
 
 The connector declaration will make the existing RED Zoom surface test green: one exact POST,
