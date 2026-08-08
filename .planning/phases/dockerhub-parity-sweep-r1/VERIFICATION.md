@@ -160,6 +160,50 @@ silently unauthenticated/successful; without wire-header visibility, HTTP 401 al
 still cannot distinguish an invalid bearer from an omitted bearer header. The SCIM
 classification therefore remains unchanged, as directed.
 
+## Docker Registry rate-limit live proof (2026-08-08)
+
+The rate policy was exercised through the rebuilt `pm` binary, not inferred from
+source inspection. An isolated temporary project held a non-secret Docker Hub
+configuration with `base_url=http://registry-1.docker.io/v2`,
+`auth_type=unauthenticated`, and a documentation-only public-IP scope value. A
+loopback HTTP proxy returned one valid `tags` record and a same-host next URL per
+page. Its requested authority remained `registry-1.docker.io`, so the production
+host selector and requester admission path were used while no test page reached
+Docker.
+
+`pm dockerhub tags list --limit 101 --json` made 101 logical requests. The proxy
+received exactly **100** requests, then remained at **100** after the CLI had been
+blocked for five seconds on the 101st admission. The process was interrupted
+deliberately rather than waiting out the documented six-hour window. Therefore the
+local limiter stopped one request before transport dispatch; **zero** Registry pull
+GETs were consumed for this saturation proof.
+
+Immediately afterwards, Docker's free `HEAD
+https://registry-1.docker.io/v2/ratelimitpreview/test/manifests/latest` probe
+returned:
+
+```text
+HTTP/2 200
+ratelimit-limit: 100;w=3600
+ratelimit-remaining: 100;w=3600
+```
+
+This proves Docker still reported 100 pulls of headroom after local admission
+stopped the run. The live header's `w=3600` conflicts with the captain-supplied
+documentation value of 21,600 seconds; the declaration retains the documented,
+conservative six-hour window and records the observed contradiction rather than
+silently substituting it. The HEAD itself does not consume a pull.
+
+Rate-proof accounting: **101 exercised / 2 worked checks (local pre-transport
+stop and provider HEAD) / 0 failed / 1 not literally testable condition**. The
+unmet literal condition is “the same PAT-backed Registry request”: **Named
+dependency: Docker Registry v2 bearer-token acquisition and pull-operation support
+in `pm`**. Docker Hub's 54-operation management surface has neither an OCI/Registry
+pull operation nor a Registry bearer-token acquisition action; its PAT AuthHook is
+intentionally Hub-session based. The proof therefore honestly uses the declared
+unauthenticated Registry profile and an anonymous bearer solely for Docker's free
+quota HEAD, without claiming a PAT was sent to Registry.
+
 ## TDD and local verification
 
 - Captured RED before production changes for the provider-rooted `/v2` paths and
@@ -171,6 +215,26 @@ classification therefore remains unchanged, as directed.
 - `go run ./cmd/connectorgen validate internal/connectors/defs/dockerhub` → 0 findings.
 - `go run ./cmd/connectorgen surface-sync --check` → 551 connectors scanned, 0 corrections.
 - Rebuilt `./pm`, then ran all 54 `pm dockerhub <command> --help` routes: 54/54 exit 0.
+
+### Rate-limit final verification
+
+- `go test -timeout 20m ./internal/connectors/connsdk ./internal/connectors/engine
+  ./internal/connectors/defs/dockerhub` → PASS.
+- `go test -race -timeout 20m ./internal/connectors/engine -run
+  'Test(DockerHubRegistryPullPolicyBlocksBeforeTransport|RateLimitSelectorMatchesExactHost)'` → PASS.
+- `go test -timeout 20m ./internal/connectors/commandrunner -run
+  TestEveryImplementedCommandPassesRuntimePreflight -count=1` → PASS for all 551 bundles.
+- `go vet` on changed packages and `go build ./cmd/pm` → PASS.
+- `make tidy-check`, `make lint`, `make docs-check`, `make smoke-no-build`,
+  `make agent-contract-check`, `make connectorgen-validate`,
+  `make connectorgen-surface-sync`, `make connector-boundary`, and
+  `make release-workflow-check` → PASS.
+- `go test -timeout 20m ./internal/cli/...` → PASS in 566.239s.
+- Rechecked `pm dockerhub`, `pm help dockerhub`, `pm dockerhub tags list --help`,
+  and `pm docs validate --connectors-dir docs/connectors` → PASS.
+- Regenerated website data was compared as parsed objects against `HEAD`: only the
+  `dockerhub` object changed in `website/data/connectors.generated.json` and
+  `website/lib/connectors.catalog.data.generated.json`; no golden transcript changed.
 
 ## Pilot friction points
 
@@ -193,6 +257,15 @@ classification therefore remains unchanged, as directed.
   action-input foundation rather than raw credential flags.
 - Full route-help verification must be chunked in this execution environment; one
   54-process sweep exceeds a single command window even though all routes pass.
+- Docker's live Registry quota headers reported a one-hour parameter while the
+  provided published documentation says six hours. The declaration intentionally
+  retains the longer documented window, but this discrepancy makes provider-policy
+  evidence less mechanically stable than the JSON declaration model assumes.
+- A Docker Hub PAT/session credential is not a Docker Registry bearer credential.
+  The 54 management commands have no Registry v2 pull or bearer-token action, so
+  the literal same-credential quota proof cannot be expressed without a future
+  typed protocol foundation; the pilot used the documented unauthenticated profile
+  and stated that limitation rather than faking authenticated coverage.
 
 ## GSD inline verify-work and code-review
 
@@ -217,3 +290,21 @@ roles, so both phases use the documented inline/manual fallback.
 - **additional review evidence:** `go test -race ./internal/connectors/connsdk -run
   TestRequesterDisableRetriesUsesHTTP1WithHTTP2CapableServer -count=1` → PASS;
   `git diff --check` → clean.
+
+### Rate-limit inline verify-work and code-review completion
+
+Sources for `verify-work` and `code-review` were re-resolved with
+`scripts/gsd sources <command>` and their generated prompts were followed. The
+canonical parent-worker contract still forbids GSD role spawning, so this is the
+documented inline/manual fallback.
+
+- **verify-work verdict:** PASS. The production bundle has the two cited
+  Registry-only policies; the shared requester stops an over-budget binary run
+  before transport, and the free provider HEAD shows remaining headroom.
+- **code-review scope:** `connsdk/rate_limits.go`, parameterized header parsing,
+  engine selector/validation/resolution, Docker Hub rate declaration/spec/docs,
+  generated Docker Hub docs/catalog objects, tests, and phase evidence.
+- **code-review findings:** no Critical, Warning, or Info findings. Exact host
+  matching prevents the Registry policy from throttling Hub management calls;
+  scope material stays non-secret; the response parser retains only typed numeric
+  fields; and the test verifies the over-budget request never reaches transport.

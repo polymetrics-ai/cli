@@ -48,3 +48,36 @@ colon-bearing SCIM schema URN fails local direct-read path validation before it 
 be dispatched. A safe sentinel path does reach Docker Hub and returns explicit HTTP
 401 with the SCIM-only credential. This does not alter the previous source review
 verdict; it is a follow-up TDD candidate once scope authorizes a code change.
+
+## Docker Registry rate-limit declaration follow-up
+
+### Method
+
+Inline standard review after re-resolving `scripts/gsd sources code-review` and
+reading the generated prompt. The canonical parent-worker delivery contract forbids
+spawning the official reviewer role, so this is its documented manual fallback.
+
+### Reviewed scope
+
+- `internal/connectors/connsdk/rate_limits.go`
+- `internal/connectors/connsdk/rate_limit_requester.go`
+- `internal/connectors/engine/rate_limits.go`
+- `internal/connectors/engine/rate_limit_runtime.go`
+- `internal/connectors/engine/read.go`
+- `internal/connectors/engine/schema/rate_limits.schema.json`
+- `internal/connectors/defs/dockerhub/{rate_limits.json,spec.json,docs.md}`
+- corresponding Go tests, generated Docker Hub docs/catalog, and phase evidence
+
+### Findings
+
+No Critical, Warning, or Info findings.
+
+The `hosts` selector is exact and validated, then resolved from the connector base
+URL before policy matching. This prevents `registry-1.docker.io` pull limits from
+incorrectly applying to the `hub.docker.com` management API. The resolver still uses
+the existing `Runtime.requesterFor` and `coordination.RateLimitRegistry`; no second
+limiter or secret-derived key was introduced. Docker's parameterized limit headers
+are parsed into numeric observations without promoting their inline window parameter
+to a reset timestamp. The deterministic production-bundle test proves an over-budget
+send is blocked before transport, and the separate binary/proxy proof corroborates
+that behavior end to end.
