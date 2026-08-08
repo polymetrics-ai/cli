@@ -87,7 +87,8 @@ func DestructiveTargetForOperation(connector string, operation OperationSpec) De
 // rest_write has no safe "preview only" shortcut: its policy's typed
 // confirmation must bind the prepared request to the project approval grant.
 func operationRequiresTypedConfirmation(operation OperationSpec) bool {
-	if !(operation.SecretSensitive || strings.EqualFold(strings.TrimSpace(operation.MutationClass), "secret")) || operation.SensitivePolicy == nil {
+	hasSecretMaterial := operation.SecretSensitive || strings.EqualFold(strings.TrimSpace(operation.MutationClass), "secret")
+	if !hasSecretMaterial || operation.SensitivePolicy == nil {
 		return false
 	}
 	return strings.EqualFold(strings.TrimSpace(operation.SensitivePolicy.ApprovalMode), "typed_confirmation")
