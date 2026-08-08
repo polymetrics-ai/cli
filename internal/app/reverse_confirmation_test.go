@@ -151,6 +151,65 @@ func TestGenericDestructivePlanMintsApprovalOnlyAfterPreview(t *testing.T) {
 	}
 }
 
+// A reverse plan may intentionally stage only a prefix of a larger source.
+// Preview and execution must re-read and hash that exact approved slice; an
+// extra row is not source drift for a plan that never included it.
+func TestLimitedReversePlanPreviewsAndRunsItsExactApprovedSlice(t *testing.T) {
+	ctx := context.Background()
+	var calls atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls.Add(1)
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+
+	a, root := setupGitHubApp(t, ctx, server.URL)
+	warehouseDir := filepath.Join(root, ".polymetrics", "warehouse")
+	if err := os.MkdirAll(warehouseDir, 0o700); err != nil {
+		t.Fatalf("mkdir warehouse: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(warehouseDir, "repo_deletes.jsonl"), []byte("{\"id\":\"row-1\"}\n{\"id\":\"row-2\"}\n"), 0o600); err != nil {
+		t.Fatalf("write warehouse rows: %v", err)
+	}
+	plan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
+		Name:                  "delete_one_repo",
+		SourceTable:           "repo_deletes",
+		DestinationConnector:  "github",
+		DestinationCredential: "github-local",
+		Action:                "repo",
+		Mappings:              map[string]string{"id": "id"},
+		Limit:                 1,
+	})
+	if err != nil {
+		t.Fatalf("PlanReverseETL() error = %v", err)
+	}
+	if plan.RecordCount != 1 {
+		t.Fatalf("planned records = %d, want 1", plan.RecordCount)
+	}
+
+	plan, preview, err := a.PreviewReversePlan(ctx, plan.ID)
+	if err != nil {
+		t.Fatalf("PreviewReversePlan() error = %v", err)
+	}
+	if preview.RecordsStaged != 1 {
+		t.Fatalf("preview records staged = %d, want 1", preview.RecordsStaged)
+	}
+	run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:        plan.ID,
+		ApprovalToken: plan.ApprovalToken,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	})
+	if err != nil {
+		t.Fatalf("RunReverseETL() error = %v", err)
+	}
+	if run.RecordsStaged != 1 || run.RecordsSucceeded != 1 {
+		t.Fatalf("run staged/succeeded = %d/%d, want 1/1", run.RecordsStaged, run.RecordsSucceeded)
+	}
+	if calls.Load() != 1 {
+		t.Fatalf("write calls = %d, want 1", calls.Load())
+	}
+}
+
 func TestRunReverseETLAcceptsDestructiveConnectorCommandWithMatchingConfirmation(t *testing.T) {
 	ctx := context.Background()
 	calls := 0

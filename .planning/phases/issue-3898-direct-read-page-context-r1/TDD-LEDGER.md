@@ -43,6 +43,25 @@ page happened to be the last one. Reverting the fix reproduces
 `panic: assignment to entry in nil map` in `tokenPathCursor.Next`, which is the
 retained red evidence for that row.
 
+## Captain validation regression: limited reverse plan
+
+The captain-required private-repository validation staged one row from the
+three-row sample table. `pm reverse plan` succeeded, but `pm reverse run`
+rejected the untouched source before any GitHub request. The local regression
+below reproduces the same condition without credentials or a network write:
+
+```
+--- FAIL: TestLimitedReversePlanPreviewsAndRunsItsExactApprovedSlice (1.43s)
+    reverse_confirmation_test.go:192: PreviewReversePlan() error = reverse plan source rows or payload files changed before preview
+FAIL
+```
+
+The red test plans `Limit: 1` from a two-record warehouse fixture, then
+requires preview and run to stage exactly one record. Before the correction,
+preview and execution instead read `RecordCount + 1`, hashing a second,
+unapproved record as if it were drift. The pre-existing changed-row rejection
+remains a separate green regression.
+
 ## Red/green commands
 
 ```sh
