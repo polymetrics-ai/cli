@@ -35,7 +35,7 @@ captain decision rather than a plan adjustment.
 
 ## Plan 04 review — response/body parity foundation
 
-**Date:** 2026-08-08  
+**Date:** 2026-08-08
 **Mode:** Inline/manual plan-checker fallback
 
 | Check | Result | Evidence |
@@ -50,3 +50,22 @@ captain decision rather than a plan adjustment.
 **Approval:** Plan 04 is ready for inline TDD execution. The next implementation checkpoint must
 record actual test failures and green results in `TDD-LEDGER.md` before any generated GitHub
 surface is promoted.
+
+---
+
+## Plan 05 review — oneOf request-body parity
+
+**Date:** 2026-08-08
+**Mode:** Inline/manual plan-checker fallback
+
+| Check | Result | Evidence |
+|---|---|---|
+| Context decisions covered | PASS | Plan 05 carries D-13, D-14, D-15 exclusion, and D-16's exact 19-arm scope. |
+| TDD order | PASS | The first task adds a loaded-bundle/preflight test that must fail before generator changes. |
+| Runtime boundary | PASS | `covered_by.writes` already supports multiple actions per endpoint; no shared runtime or generic union feature is proposed. |
+| Safety classification | PASS | Bulk attestation deletion is destructive despite its POST verb; all documented creation arms remain approval-only. |
+| Generated-artifact ownership | PASS | Only `scripts/gen-github-parity.py` is edited as the declaration source; GitHub JSON and the shared ledger are regenerated. |
+| Scope restraint | PASS | OAuth Basic-auth, anyOf, root polymorphism, genuine duplicates, credential minting, and live writes are explicitly deferred. |
+
+**Approval:** Plan 05 is ready for inline RED/GREEN execution. The ledger must record the actual
+red command result before any GitHub declaration is regenerated.
