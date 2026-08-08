@@ -4,7 +4,7 @@
   "sub_issue": 3942,
   "connector": "zoom",
   "provider_module": "scim2",
-  "state": "direct_read_origin_foundation_green",
+  "state": "root_object_foundation_green",
   "manual_gsd_fallback": {
     "reason": "provider-category phase is not registered by the official GSD runtime",
     "mode": "single-worker inline execution; parent contract forbids role spawning"
@@ -32,9 +32,7 @@
     "direct_writes": 12,
     "reverse_etl_writes": 2
   },
-  "planned_foundations": [
-    "named json_object root body mapping"
-  ],
+  "planned_foundations": [],
   "red": {
     "command": "go test -count=1 -timeout 20m ./internal/connectors/engine ./internal/connectors/commandrunner ./cmd/connectorgen ./internal/connectors/defs/zoom/...",
     "result": "failed as expected: rest_read rejects paired operation origin/auth, named root json_object maps_to body is unsupported in runtime and static validation, Zoom remains 27/1815/17/5, and all eleven SCIM2 commands are unknown"
@@ -48,5 +46,13 @@
       "go test -count=1 -timeout 20m ./internal/connectors/engine"
     ]
   },
-  "next": "commit and push this direct-read foundation, then implement named root-object mapping before Zoom declaration"
+  "named_root_json_object_foundation": {
+    "state": "green",
+    "scope": "one named json_object flag may map to exact body root for direct_write only; root and dotted body mappings cannot mix",
+    "unblocks": "declared extensible provider resource and patch objects, including Zoom SCIM2 User, Group, and PatchOp bodies",
+    "verification": [
+      "go test -count=1 -timeout 20m ./internal/connectors/commandrunner ./cmd/connectorgen"
+    ]
+  },
+  "next": "commit and push this root-object foundation, then declare all eleven Zoom SCIM2 operations"
 }

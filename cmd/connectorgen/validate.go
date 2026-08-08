@@ -986,6 +986,8 @@ func checkCLISurfaceOperationSafety(
 			if method != "POST" {
 				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) flag --%s maps to body for non-POST operation", i, cmd.Path, flag.Name)})
 			}
+		case mapsTo == "body":
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) flag --%s root body mapping is supported only for direct_write", i, cmd.Path, flag.Name)})
 		default:
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) flag --%s maps to unsupported target %q", i, cmd.Path, flag.Name, flag.MapsTo)})
 		}
@@ -1032,14 +1034,34 @@ func checkCLISurfaceDirectWriteOperationSafety(
 	}
 
 	bodyMapped := false
+	rootBodyFlag := ""
+	bodyFieldFlag := ""
 	for _, flag := range cmd.Flags {
 		mapsTo := strings.TrimSpace(flag.MapsTo)
 		switch {
 		case strings.HasPrefix(mapsTo, "path."), strings.HasPrefix(mapsTo, "query."):
 			// Typed path/query bindings are supported by the shared operation
 			// shaper and validated again at command runtime.
+		case mapsTo == "body":
+			bodyMapped = true
+			if flag.Type != "json_object" {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) root body flag --%s must use json_object", i, cmd.Path, flag.Name)})
+			}
+			if rootBodyFlag != "" {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) flags --%s and --%s both map to the root body", i, cmd.Path, rootBodyFlag, flag.Name)})
+			}
+			if bodyFieldFlag != "" {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) flags --%s and --%s cannot mix root and dotted body mappings", i, cmd.Path, flag.Name, bodyFieldFlag)})
+			}
+			rootBodyFlag = flag.Name
 		case strings.HasPrefix(mapsTo, "body."):
 			bodyMapped = true
+			if rootBodyFlag != "" {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) flags --%s and --%s cannot mix root and dotted body mappings", i, cmd.Path, rootBodyFlag, flag.Name)})
+			}
+			if bodyFieldFlag == "" {
+				bodyFieldFlag = flag.Name
+			}
 		default:
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct write command %d (%q) flag --%s maps to unsupported target %q", i, cmd.Path, flag.Name, flag.MapsTo)})
 		}
@@ -1085,17 +1107,26 @@ func checkCLISurfaceOperationBodyMappingsForIntent(b engine.Bundle, i int, cmd e
 		return []Finding{{Connector: b.Name, File: "operations.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("operation %q has invalid body_schema for CLI validation: %v", op.ID, err)}}
 	}
 	requiredPaths := schema.requiredMappingPaths("")
-	if len(requiredPaths) == 0 {
-		return nil
-	}
 	mappedTargets := make([]cliBodyFlagMapping, 0, len(cmd.Flags))
 	for _, flag := range cmd.Flags {
+		if strings.TrimSpace(flag.MapsTo) == "body" {
+			mappedTargets = append(mappedTargets, cliBodyFlagMapping{root: true, name: flag.Name, required: flag.Required})
+			continue
+		}
 		target, ok := strings.CutPrefix(flag.MapsTo, "body.")
 		if ok && target != "" {
 			mappedTargets = append(mappedTargets, cliBodyFlagMapping{target: target, name: flag.Name, required: flag.Required})
 		}
 	}
 	var findings []Finding
+	for _, mapping := range mappedTargets {
+		if mapping.root && !schema.isObject() {
+			findings = append(findings, Finding{Connector: b.Name, File: "operations.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented %s command %d (%q) operation %q root body mapping requires an object body_schema", intent, i, cmd.Path, op.ID)})
+		}
+	}
+	if len(requiredPaths) == 0 {
+		return findings
+	}
 	for _, requiredPath := range requiredPaths {
 		if operationStaticBodyProvidesPath(op.REST.Body, requiredPath) {
 			continue
@@ -1116,6 +1147,7 @@ type cliBodyFlagMapping struct {
 	target   string
 	name     string
 	required bool
+	root     bool
 }
 
 func operationStaticBodyProvidesPath(body map[string]any, path string) bool {
@@ -1141,7 +1173,7 @@ func commandBodyFlagCoveringRequiredPath(schema *cliRecordSchemaNode, mappedTarg
 	var optional cliBodyFlagMapping
 	optionalFound := false
 	for _, mapping := range mappedTargets {
-		covers := mapping.target == requiredPath
+		covers := mapping.root || mapping.target == requiredPath
 		if !covers && err == nil && requiredNode != nil && (requiredNode.isObject() || requiredNode.isArray()) && dottedPathPrefix(requiredPath, mapping.target) {
 			covers = true
 		}
@@ -1175,8 +1207,15 @@ func checkCLISurfaceValidationDeclarations(b engine.Bundle, i int, cmd engine.CL
 		if flag.AllowEmpty != nil && flag.Type != "string" {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s allow_empty is supported only for string flags", i, cmd.Path, flag.Name)})
 		}
-		if flag.Type == "json_object" && !strings.HasPrefix(flag.MapsTo, "body.") {
+		mapsTo := strings.TrimSpace(flag.MapsTo)
+		if flag.Type == "json_object" && mapsTo != "body" && !strings.HasPrefix(mapsTo, "body.") {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s json_object type may map only to an operation body", i, cmd.Path, flag.Name)})
+		}
+		if mapsTo == "body" && flag.Type != "json_object" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s root body mapping requires json_object type", i, cmd.Path, flag.Name)})
+		}
+		if mapsTo == "body" && cmd.Intent != "direct_write" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s root body mapping is supported only for direct_write", i, cmd.Path, flag.Name)})
 		}
 		// The meta-schema dialect has no "minimum", so these bounds are checked
 		// here instead of being declarable in cli_surface.schema.json.
