@@ -139,3 +139,10 @@ result carries the context needed to reach the next one.
     the `gh auth token` source with no leading, trailing, or newline
     whitespace. Confirm the authenticated GitHub identity has `push` access
     to the dedicated repository through a read-only permission response.
+15. Complete the transport 2×2 without mutating repository state. Run an
+    authenticated private-repository GET through the exact strict transport
+    configuration (`noReplayClient`, no keep-alive, HTTP/1, one-use request)
+    and run GitHub's non-mutating Markdown-render and read-only GraphQL POSTs
+    through the ordinary transport. Also run those safe POSTs through strict
+    transport so method, body, and `/issues` are not confounders. Do not alter
+    the no-duplicate-write contract based on this diagnostic.

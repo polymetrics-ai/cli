@@ -285,6 +285,31 @@ and repository write permission as explanations for the observed PM EOF. It
 does not claim byte-for-byte access to the already-deleted historical vault;
 that limitation is explicit.
 
+## Strict-versus-ordinary transport matrix — strict transport isolated
+
+The remaining hypothesis was that the write-only looking symptom actually
+belonged to the transport configuration selected for a strict, non-replayable
+request. An opt-in live diagnostic used the production `connsdk.Requester` and
+the exact `noReplayClient` settings. For the safe GET, the test explicitly
+applied the strict cloned transport and one-use `Close` request because the
+production code intentionally does **not** apply strict write behavior to a
+safe GET automatically.
+
+| Request | Ordinary transport | Strict transport |
+| --- | --- | --- |
+| Authenticated private-repository GET | HTTP 200 | transport EOF |
+| `POST /markdown` with `{"text":"hi"}` | HTTP 200 | transport EOF |
+| `POST /graphql` with read-only `viewer { login }` query | HTTP 200 | transport EOF |
+
+The POST endpoints are GitHub render/query operations and create no repository
+or account state. This is decisive: a strict GET has no request body and no
+mutation semantics, so `GetBody`, issue payload construction, authorization,
+and the `/issues` endpoint cannot explain its EOF. The common variable is the
+strict client configuration — fresh/no-keep-alive connection, forced HTTP/1,
+and one-use `Close` request — not method or body. No no-duplicate-write
+safeguard was changed. The next investigation must isolate the safe transport
+configuration detail before any production edit.
+
 ## Red/green commands
 
 ```sh
