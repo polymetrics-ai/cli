@@ -108,6 +108,37 @@ func ValidateIdentifier(value, field string) error {
 	return nil
 }
 
+// ValidateURLPathSegment accepts one safe, opaque URL path-segment value.
+//
+// It is deliberately narrower than RFC 3986 pchar: callers that substitute a
+// value into a declared connector endpoint do not need arbitrary sub-delimiters
+// or pre-escaped data. The extra colon support is required for documented URI
+// identifiers such as SCIM schema URNs. Slashes, query/fragment delimiters,
+// percent escapes, whitespace, controls, dangerous Unicode, and traversal all
+// stay rejected before url.PathEscape constructs the request URL.
+func ValidateURLPathSegment(value, field string) error {
+	if strings.TrimSpace(value) == "" {
+		return fmt.Errorf("%s is required", field)
+	}
+	if err := RejectDangerousChars(value, field); err != nil {
+		return err
+	}
+	for _, r := range value {
+		switch {
+		case r >= 'a' && r <= 'z':
+		case r >= 'A' && r <= 'Z':
+		case r >= '0' && r <= '9':
+		case r == '_' || r == '-' || r == '.' || r == ':':
+		default:
+			return fmt.Errorf("%s contains invalid path-segment character %q", field, r)
+		}
+	}
+	if strings.Contains(value, "..") {
+		return fmt.Errorf("%s must not contain path traversal", field)
+	}
+	return nil
+}
+
 func ValidateRelativePath(value, field string) error {
 	if strings.TrimSpace(value) == "" {
 		return fmt.Errorf("%s is required", field)

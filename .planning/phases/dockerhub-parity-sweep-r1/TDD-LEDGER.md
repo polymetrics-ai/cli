@@ -566,7 +566,7 @@ injection. Before production code changes it must fail locally with the colon-va
 zero server requests. The literal test output is appended below after it runs; this ledger and the
 plan were committed before the test/production slice.
 
-**Green contract:** add a dedicated safe URI path-segment validator used only by direct-read
+**Green contract:** add a dedicated safe URI path-segment validator used by typed operation endpoint
 substitution. It must accept the canonical colon-bearing URI identifier, preserve `url.PathEscape`,
 and reject separators, traversal, control/dangerous Unicode, query/fragment delimiters, and
 ambiguous percent encodings. Engine and Docker Hub tests must prove those boundaries; the fleet
@@ -587,3 +587,28 @@ FAIL
 
 Command: `go test -timeout 20m ./internal/connectors/defs/dockerhub -run
 TestDockerhubSCIMSchemaGetAcceptsCanonicalURNPathParameter -count=1 -v`.
+
+### GREEN — canonical URI path segment reaches the declared Docker Hub route
+
+Added `safety.ValidateURLPathSegment`, deliberately separate from
+`ValidateIdentifier`. It permits the existing identifier alphabet plus `:` and rejects all other
+characters before `url.PathEscape`: slash/backslash separators, query/fragment delimiters,
+percent escapes (therefore no double-encoding ambiguity), whitespace, control/dangerous Unicode,
+and traversal. `resolveSurfaceEndpointPath` now uses that new typed segment validator, so the same
+safe behavior applies uniformly to declarative direct reads, binary reads, and direct writes that
+substitute a one-segment endpoint variable; command/config/field identifiers retain their original
+strict rule.
+
+Focused green evidence:
+
+```text
+go test -timeout 20m ./internal/safety ./internal/connectors/engine ./internal/connectors/defs/dockerhub -run 'TestValidateURLPathSegment|TestDockerhubSCIMSchemaGetAcceptsCanonicalURNPathParameter|TestDirectRead' -count=1 -v
+ok   polymetrics.ai/internal/safety
+ok   polymetrics.ai/internal/connectors/engine
+ok   polymetrics.ai/internal/connectors/defs/dockerhub
+```
+
+The original definition-owned test now observed one local request at
+`/v2/scim/2.0/Schemas/urn:ietf:params:scim:schemas:core:2.0:User`; it did not use
+a credential or contact Docker Hub. The shared change is therefore proven at the actual Docker
+Hub operation boundary rather than merely by a helper test.
