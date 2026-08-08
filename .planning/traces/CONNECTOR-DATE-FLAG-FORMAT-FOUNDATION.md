@@ -23,5 +23,14 @@ FAIL    polymetrics.ai/internal/connectors/commandrunner    0.783s
 FAIL
 ```
 
-The red test is committed before the schema/validator/runtime implementation. Green evidence is
-added in the follow-up foundation commit.
+The red test is committed before the schema/validator/runtime implementation.
+
+## GREEN — shared capability implemented
+
+- The CLI surface schema permits `format: date` for global and command flags alongside its existing
+  `date-time` support.
+- `connectorgen validate` accepts it only for string flags.
+- The command runner parses exact ISO dates with `time.DateOnly`; invalid calendar dates and
+  date-times in a date-only flag are rejected before a request is built.
+- The added commandrunner and connectorgen tests are run before the foundation commit. This is a
+  reusable declarative foundation that will also serve future date-only provider parameters.
