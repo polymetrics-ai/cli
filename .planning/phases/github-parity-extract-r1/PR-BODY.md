@@ -83,20 +83,31 @@ blocking the name while `repo delete-2` runs the same `DELETE` is a naming accid
 safety property. The captain's later order asks for it explicitly, and the typed confirmation
 is unchanged either way.
 
+**Confirmed at review.** The reviewer raised this deviation for the captain rather than passing
+it, and the captain's later decision governs: do not reclassify `repo delete` or `repo create`.
+`repo delete` stays destructive — plan, preview, caller-supplied intent acknowledgement, expiry,
+request binding, single-use grant. That is a typed machine gate on a plan, not human approval:
+it implies no TTY, no operator identity, and no separation of duties, and nothing here should be
+read as claiming otherwise. `repo create`, `repo archive`, `repo unarchive` and `secret set` stay
+non-destructive; `issue delete` stays blocked, because there is no GraphQL mutation executor to
+reach. Four corrections were attached to that decision and are implemented in cycle 10 below.
+
 ### Restored — 7 commands, on the gate the write path already imposed
 
 All become `intent: reverse_etl`, `availability: implemented`, pointed at the write action
-their twin already uses, inheriting **plan → preview → approval → execute** unchanged. No gate
-was invented; none was relaxed.
+their twin already uses, inheriting that action's gate unchanged. No gate was invented; none was
+relaxed. A destructive write is **plan → preview → typed `--confirm destructive` → approval →
+execute**; a safe one is **plan → approval → execute**, with preview available but not required —
+see cycle 10, which corrected the metadata that claimed otherwise.
 
 | command | write action | method | mutation class | confirmation now required | source of the challenge |
 | --- | --- | --- | --- | --- | --- |
-| `repo create` | `repos_create_for_authenticated_user` | POST | create | plan → preview → approval token → execute | none — approval-only create |
+| `repo create` | `repos_create_for_authenticated_user` | POST | create | plan → approval token → execute | none — approval-only create |
 | `repo delete` | `repo` | DELETE | delete | + closed typed `--confirm destructive`, digest recomputed at execution | DELETE method **and** declared `confirm: destructive` |
 | `repo archive` | `archive_repo` *(new)* | PATCH | update | + closed typed `--confirm destructive` | declared `confirm: destructive` |
 | `repo unarchive` | `unarchive_repo` *(new)* | PATCH | update | + closed typed `--confirm destructive` | declared `confirm: destructive` |
 | `cache delete` | `actions_caches_cache_id` | DELETE | delete | + closed typed `--confirm destructive` | DELETE method |
-| `secret set` | `actions_secrets_secret_name3` | PUT | update | plan → preview → approval token → execute; `encrypted_value` redacted | none — approval-only create |
+| `secret set` | `actions_secrets_secret_name3` | PUT | update | plan → approval token → execute; `encrypted_value` redacted | none — approval-only create |
 | `secret delete` | `actions_secrets_secret_name` | DELETE | delete | + closed typed `--confirm destructive` | DELETE method |
 
 `connectors.ConfirmationForWriteAction` returns `destructive` for **any** DELETE regardless of
@@ -372,8 +383,27 @@ suite spans 551 connectors and routinely exceeds an agent's per-command timeout,
 is indistinguishable from a hang. Scoped package runs plus each `make verify` gate individually
 were run instead; CI carries the whole suite.
 
-**No test was weakened, skipped, or deleted. Three were added.**
+### Review cycle 10 — the declared contract now matches the enforced one
+
+Four corrections, all the same shape: a place where the surface described a gate that differs
+from the one the runtime imposes.
+
+| correction | before | after |
+| --- | --- | --- |
+| safe previews claimed a confirmation | `PreviewPreparedWrite` stamped `confirmation: destructive` on every approval target, so `repo create --preview --json` announced a challenge `--confirm` rejects | keyed on `DestructiveTarget.RequiresApproval()`, the same predicate `GateDestructiveExecution` uses |
+| approval metadata claimed every write needs a preview | one blanket sentence on all 525 github `reverse_etl` commands | the 349 safe ones declare `plan, approval, execute; preview is optional` — provably true: the token is issued at plan and the write executes with no preview step. The 176 destructive ones are unchanged, because the sentence is accurate for them |
+| a marker naming a flag that does not exist could return | `scripts/gen-github-parity.py` still emitted `requires --allow-destructive + typed confirmation` for every `destructive_action` | the generator emits no `notes` marker; the confirmation is derived once and rendered by the help/manual/skill CONFIRMATION field |
+| `repo delete-2` parity was unpinned | both names already resolved the same destructive contract, but nothing asserted it | `TestGitHubGeneratedTwinsShareTheirAliasWriteContract` discovers every write action reachable under two names and requires matching confirmation, availability and approval — **it passed on first run; verified, not fixed** |
+
+Narrowing the preview declaration surfaced one caller that had been minting a grant for writes
+nothing was holding back: `conformance.approvedFixtureWriteRequest` requested one for every
+action. It now returns the request unchanged when the preview declares no confirmation. The
+failure was precisely diagnostic — `delete_*` checks passed while `create_*`/`upsert_*` failed —
+and no conformance check was relaxed: destructive actions still mint, verify and consume a real
+grant.
+
+**No test was weakened, skipped, or deleted. Six were added across the branch, three in cycle 10.**
 
 GSD evidence: `.planning/phases/github-parity-extract-r1/` — `PLAN.md`, `TDD-LEDGER.md`
-(both red/green cycles with observed output), `VERIFICATION.md`, `SUMMARY.md`,
+(every red/green cycle with observed output), `VERIFICATION.md`, `SUMMARY.md`,
 `CLASSIFICATION-REPORT.md`, `RUN-STATE.json`.

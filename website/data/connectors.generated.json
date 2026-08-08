@@ -63519,7 +63519,7 @@
           ],
           "output_policy": "",
           "risk": "Creates a visible issue in the configured repository.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -63606,7 +63606,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates title, body, labels, assignees, milestone, or state on an existing issue.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -63647,7 +63647,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Closes an existing issue.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -63671,7 +63671,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Reopens a previously closed issue.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -63702,7 +63702,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Adds a visible issue comment.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -63738,7 +63738,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Locks issue conversation for repository users.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -63994,7 +63994,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates a visible pull request and may request reviewers.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -64091,7 +64091,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates an existing pull request.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -64122,7 +64122,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Closes an existing pull request.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -64146,7 +64146,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Reopens a previously closed pull request.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -64177,7 +64177,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Comments on a pull request (PRs are issues in GitHub's data model).",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -64233,7 +64233,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Merges code into the pull request base branch.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -64282,7 +64282,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Adds a visible pull request review.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -64377,7 +64377,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Updates a pull request branch from its base branch.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -64429,7 +64429,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Locks a pull request's conversation.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -64576,7 +64576,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -64662,7 +64662,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates a fork of the configured repository.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -64881,7 +64881,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Adds a deploy key to the repository.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -65042,7 +65042,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates a visible release.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -65122,7 +65122,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates an existing release.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -65282,7 +65282,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Triggers a GitHub Actions workflow run.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -65370,7 +65370,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Reruns a GitHub Actions workflow run.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -65394,7 +65394,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Cancels a GitHub Actions workflow run.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -65544,7 +65544,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates a repository label.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -65589,7 +65589,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates a repository label.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -65723,7 +65723,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates repository rules that can affect contribution workflows.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Connector-native write action; the current gh ruleset surface documents check, list, and view, but not create."
         },
         {
@@ -65776,7 +65776,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Updates repository rules that can affect contribution workflows.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Connector-native write action; the current gh ruleset surface documents check, list, and view, but not update."
         },
         {
@@ -65854,7 +65854,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -66578,7 +66578,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -66665,7 +66665,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -66698,7 +66698,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -66910,7 +66910,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -66943,7 +66943,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -67010,7 +67010,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -67043,7 +67043,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -67076,7 +67076,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -67109,7 +67109,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -67142,7 +67142,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -67175,7 +67175,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -67208,7 +67208,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -67258,7 +67258,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -67274,7 +67274,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -67290,7 +67290,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -67412,7 +67412,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -67436,7 +67436,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -67516,7 +67516,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -67683,7 +67683,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -67828,7 +67828,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -67974,7 +67974,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -68007,7 +68007,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -68080,7 +68080,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -68104,7 +68104,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -68128,7 +68128,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -68194,7 +68194,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -68235,7 +68235,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -68308,7 +68308,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -68381,7 +68381,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -68454,7 +68454,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -68527,7 +68527,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -68600,7 +68600,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -68673,7 +68673,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -68746,7 +68746,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -68770,7 +68770,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -68892,7 +68892,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -68916,7 +68916,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -68989,7 +68989,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -69013,7 +69013,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -69086,7 +69086,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -69110,7 +69110,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -69150,7 +69150,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -69199,7 +69199,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -69248,7 +69248,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -69264,7 +69264,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -69280,7 +69280,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -69354,7 +69354,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -69429,7 +69429,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -69478,7 +69478,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -69502,7 +69502,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -69675,7 +69675,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -69772,7 +69772,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -69788,7 +69788,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -69880,7 +69880,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -70055,7 +70055,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -70104,7 +70104,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -70451,7 +70451,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -70619,7 +70619,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -70692,7 +70692,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -70708,7 +70708,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -70757,7 +70757,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -70851,7 +70851,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -70900,7 +70900,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -71132,7 +71132,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -71181,7 +71181,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -71275,7 +71275,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -71291,7 +71291,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -71332,7 +71332,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -71398,7 +71398,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -71528,7 +71528,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -71552,7 +71552,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "low",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -71576,7 +71576,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "low",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -71625,7 +71625,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -71674,7 +71674,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -71690,7 +71690,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -71731,7 +71731,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -71764,7 +71764,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -71830,7 +71830,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -71879,7 +71879,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -71927,7 +71927,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -71992,7 +71992,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -72041,7 +72041,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -72153,7 +72153,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -72258,7 +72258,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -72282,7 +72282,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -72387,7 +72387,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -72491,7 +72491,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -72515,7 +72515,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -72548,7 +72548,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -72606,7 +72606,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -72655,7 +72655,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -72671,7 +72671,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -72704,7 +72704,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -72762,7 +72762,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -72811,7 +72811,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -72877,7 +72877,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -72910,7 +72910,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -72959,7 +72959,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -73014,7 +73014,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -73253,7 +73253,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "low",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -73302,7 +73302,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -73351,7 +73351,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -73522,7 +73522,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -73555,7 +73555,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -73571,7 +73571,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -73595,7 +73595,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -73619,7 +73619,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -73643,7 +73643,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -73752,7 +73752,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -73801,7 +73801,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -73998,7 +73998,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -84002,7 +84002,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Start a task.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -84027,7 +84027,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a GitHub App from a manifest.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -84072,7 +84072,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update a webhook configuration for an app.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -84097,7 +84097,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Redeliver a delivery for an app webhook.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -84147,7 +84147,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Suspend an app installation.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -84226,7 +84226,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a scoped access token.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -84251,7 +84251,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Revoke a list of credentials.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -84283,7 +84283,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set GitHub Actions cache retention limit for an enterprise.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -84315,7 +84315,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set GitHub Actions cache storage limit for an enterprise.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -84348,7 +84348,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create an OIDC custom property inclusion for an enterprise.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -84619,7 +84619,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a code security configuration for an enterprise.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -84864,7 +84864,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update a custom code security configuration for an enterprise.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -84941,7 +84941,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Attach an enterprise configuration to repositories.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -84986,7 +84986,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set a code security configuration as a default for an enterprise.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -85024,7 +85024,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set the coding agent policy for an enterprise.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -85056,7 +85056,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Add organizations to the enterprise coding agent policy.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -85113,7 +85113,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Updates Dependabot's repository access list for an enterprise.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -85149,7 +85149,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set the default repository access level for Dependabot in an enterprise.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -85227,7 +85227,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create an enterprise team.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -85260,7 +85260,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Bulk add team members.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -85293,7 +85293,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Bulk remove team members.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -85326,7 +85326,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Add team member.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -85392,7 +85392,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Add organization assignments.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -85425,7 +85425,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Remove organization assignments.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -85458,7 +85458,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Add an organization assignment.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -85576,7 +85576,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update an enterprise team.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -85640,7 +85640,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a gist.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) files have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -85672,7 +85672,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update a gist.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -85730,7 +85730,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a gist comment.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -85771,7 +85771,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update a gist comment.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -85829,7 +85829,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Fork a gist.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -85854,7 +85854,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Star a gist.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -85926,7 +85926,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Mark notifications as read.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -85951,7 +85951,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Mark a thread as read.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -86008,7 +86008,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set a thread subscription.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -86065,7 +86065,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set GitHub Actions cache retention limit for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -86097,7 +86097,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set GitHub Actions cache storage limit for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -86176,7 +86176,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a budget for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -86265,7 +86265,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update a budget for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -86542,7 +86542,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -86637,7 +86637,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a GitHub-hosted runner for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) image have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -86811,7 +86811,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update a GitHub-hosted runner for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -86877,7 +86877,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create an OIDC custom property inclusion for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -86949,7 +86949,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set the customization template for an OIDC subject claim for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -87004,7 +87004,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set GitHub Actions permissions for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -87037,7 +87037,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set artifact and log retention settings for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -87074,7 +87074,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set fork PR contributor approval permissions for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -87128,7 +87128,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set private repo fork PR workflow settings for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -87153,7 +87153,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set selected repositories enabled for GitHub Actions in an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -87186,7 +87186,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Enable a selected repository for GitHub Actions in an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -87265,7 +87265,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set allowed actions and reusable workflows for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -87302,7 +87302,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set self-hosted runners settings for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -87327,7 +87327,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set repositories allowed to use self-hosted runners in an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -87360,7 +87360,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Add a repository to the list of repositories allowed to use self-hosted runners in an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -87435,7 +87435,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set default workflow permissions for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -87507,7 +87507,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a self-hosted runner group for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -87587,7 +87587,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update a self-hosted runner group for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -87653,7 +87653,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set repository access for a self-hosted runner group in an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -87694,7 +87694,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Add repository access to a self-hosted runner group in an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -87768,7 +87768,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set self-hosted runners in a group for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) runners have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -87809,7 +87809,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Add a self-hosted runner to a group for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -87906,7 +87906,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create configuration for a just-in-time runner for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -87931,7 +87931,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a registration token for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -87956,7 +87956,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a remove token for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -88030,7 +88030,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Add custom labels to a self-hosted runner for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -88071,7 +88071,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set custom labels for a self-hosted runner for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -88206,7 +88206,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Create or update an organization secret.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -88272,7 +88272,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set selected repositories for an organization secret.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -88313,7 +88313,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Add selected repository to an organization secret.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -88407,7 +88407,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create an organization variable.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -88458,7 +88458,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update an organization variable.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -88524,7 +88524,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set selected repositories for an organization variable.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -88565,7 +88565,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Add selected repository to an organization variable.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -88667,7 +88667,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Create or update an organization secret.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -88733,7 +88733,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set selected repositories for an organization secret.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -88774,7 +88774,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Add selected repository to an organization secret.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -88868,7 +88868,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create an organization variable.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -88919,7 +88919,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update an organization variable.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -88985,7 +88985,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set selected repositories for an organization variable.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -89026,7 +89026,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Add selected repository to an organization variable.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -89177,7 +89177,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create an artifact deployment record.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -89239,7 +89239,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Set cluster deployment records.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) deployments have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -89287,7 +89287,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a cluster deployment records job.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) deployments have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -89389,7 +89389,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create artifact metadata storage record.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -89529,7 +89529,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Block a user from an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -89647,7 +89647,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update a campaign.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -89940,7 +89940,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a code security configuration.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -90232,7 +90232,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update a code security configuration.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -90312,7 +90312,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Attach a configuration to repositories.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -90357,7 +90357,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set a code security configuration as a default for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -90402,7 +90402,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Manage access control for organization codespaces (deprecated by GitHub, still documented).",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -90435,7 +90435,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Add users to Codespaces access for an organization (deprecated by GitHub, still documented).",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -90527,7 +90527,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Create or update an organization secret.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -90593,7 +90593,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set selected repositories for an organization secret.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -90634,7 +90634,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Add selected repository to an organization secret.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -90734,7 +90734,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create an organization Copilot Space.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -90800,7 +90800,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set an organization Copilot Space.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -90897,7 +90897,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Add a collaborator to an organization Copilot Space.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -90959,7 +90959,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set a collaborator role for an organization Copilot Space.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -91055,7 +91055,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a resource for an organization Copilot Space.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) metadata have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -91096,7 +91096,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set a resource for an organization Copilot Space.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -91170,7 +91170,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Add teams to the Copilot subscription for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -91236,7 +91236,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Add users to the Copilot subscription for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -91306,7 +91306,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set Copilot cloud agent permissions for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -91331,7 +91331,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set selected repositories for Copilot cloud agent in an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -91364,7 +91364,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Enable a repository for Copilot cloud agent in an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -91422,7 +91422,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set Copilot content exclusion rules for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -91447,7 +91447,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Updates Dependabot's repository access list for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -91483,7 +91483,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set the default repository access level for Dependabot.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -91549,7 +91549,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Create or update an organization secret.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -91615,7 +91615,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set selected repositories for an organization secret.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -91656,7 +91656,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Add selected repository to an organization secret.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -91752,7 +91752,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create an organization webhook.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -91806,7 +91806,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update an organization webhook.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -91900,7 +91900,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update a webhook configuration for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -91941,7 +91941,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Redeliver a delivery for an organization webhook.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -91974,7 +91974,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Ping an organization webhook.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -92024,7 +92024,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set interaction restrictions for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -92089,7 +92089,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update pull request creation cap for an org.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -92140,7 +92140,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create an organization invitation.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -92237,7 +92237,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create issue field for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -92294,7 +92294,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update issue field for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -92391,7 +92391,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create issue type for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -92463,7 +92463,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update issue type for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -92611,7 +92611,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Stop a codespace for an organization user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -92654,7 +92654,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set organization membership for a user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -92776,7 +92776,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Start an organization migration.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -92924,7 +92924,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Assign an organization role to a team.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -93039,7 +93039,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Assign an organization role to a user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -93120,7 +93120,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Convert an organization member to outside collaborator.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -93235,7 +93235,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Restore a package for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -93333,7 +93333,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Restore package version for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -93376,7 +93376,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Review requests to access organization resources with fine-grained personal access tokens.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -93427,7 +93427,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Review a request to access organization resources with a fine-grained personal access token.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -93462,7 +93462,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Update the access to organization resources via fine-grained personal access tokens.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) pat_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -93505,7 +93505,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Update the access a fine-grained personal access token has to organization resources.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -93722,7 +93722,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a private registry for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -93944,7 +93944,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update a private registry for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -94025,7 +94025,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create draft item for organization owned project.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -94066,7 +94066,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update project item for organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) fields have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -94167,7 +94167,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a view for an organization-owned project.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -94192,7 +94192,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Create or update custom properties for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) properties have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -94284,7 +94284,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Create or update a custom property for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -94350,7 +94350,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Create or update custom property values for organization repositories.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) properties have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -94383,7 +94383,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set public organization membership for the authenticated user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -94627,7 +94627,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create an organization repository.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -94684,7 +94684,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create an organization repository ruleset.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -94747,7 +94747,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update an organization repository ruleset.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -94805,7 +94805,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Bulk create organization custom patterns.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) patterns have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -94872,7 +94872,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update organization pattern configurations.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -94905,7 +94905,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Add a security manager team (deprecated by GitHub, still documented).",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -94975,7 +94975,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set immutable releases settings for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -95000,7 +95000,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set selected repositories for immutable releases enforcement.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -95033,7 +95033,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Enable a selected repository for immutable releases in an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -95131,7 +95131,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a hosted compute network configuration for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -95202,7 +95202,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update a hosted compute network configuration for an organization.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -95333,7 +95333,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a team.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -95425,7 +95425,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update a team.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -95509,7 +95509,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Add or update team membership for a user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -95590,7 +95590,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Add or update team repository permissions.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -95674,7 +95674,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Enable or disable a security feature for an organization (deprecated by GitHub, still documented).",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -95706,7 +95706,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update pull request creation cap for a repository.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -95739,7 +95739,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Approve an issue suggestion.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -95772,7 +95772,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Dismiss an issue suggestion.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -95840,7 +95840,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Merge a pull request asynchronously.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -95856,7 +95856,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Bulk create repository custom patterns.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) patterns have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -95899,7 +95899,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a pull request stack.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) pull_requests have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -95924,7 +95924,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Add pull requests to a pull request stack.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) pull_requests have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -95949,7 +95949,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Remove pull requests from a pull request stack.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -96018,7 +96018,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a repository using a template.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -96103,7 +96103,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update a team (Legacy) (deprecated by GitHub, still documented).",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -96161,7 +96161,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Add team member (Legacy) (deprecated by GitHub, still documented).",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -96237,7 +96237,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Add or update team membership for a user (Legacy) (deprecated by GitHub, still documented).",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -96306,7 +96306,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Add or update team repository permissions (Legacy) (deprecated by GitHub, still documented).",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -96404,7 +96404,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update the authenticated user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -96429,7 +96429,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Block a user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -96501,7 +96501,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Create or update a secret for the authenticated user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -96551,7 +96551,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set selected repositories for a user secret.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -96584,7 +96584,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Add a selected repository to a user secret.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -96663,7 +96663,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update a codespace for the authenticated user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -96713,7 +96713,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Export a codespace for the authenticated user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -96752,7 +96752,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a repository from an unpublished codespace.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -96777,7 +96777,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Start a codespace for the authenticated user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -96802,7 +96802,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Stop a codespace for the authenticated user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -96830,7 +96830,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set primary email visibility for the authenticated user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -96855,7 +96855,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Follow a user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -96912,7 +96912,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a GPG key for the authenticated user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -96970,7 +96970,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Add a repository to an app installation.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -97045,7 +97045,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set interaction restrictions for your public repositories.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -97093,7 +97093,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a public SSH key for the authenticated user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -97153,7 +97153,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update an organization membership for the authenticated user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -97234,7 +97234,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Start a user migration.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -97358,7 +97358,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Restore a package for the authenticated user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -97440,7 +97440,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Restore a package version for the authenticated user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -97633,7 +97633,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a repository for the authenticated user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -97658,7 +97658,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Accept a repository invitation.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -97708,7 +97708,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Add social accounts for the authenticated user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -97765,7 +97765,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a SSH signing key for the authenticated user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -97806,7 +97806,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Star a repository for the authenticated user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -97870,7 +97870,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create draft item for user owned project.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -97930,7 +97930,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a view for a user-owned project.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -98094,7 +98094,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a Copilot Space for a user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -98158,7 +98158,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set a Copilot Space for a user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -98255,7 +98255,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Add a collaborator to a Copilot Space for a user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -98317,7 +98317,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set a collaborator role for a Copilot Space for a user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -98413,7 +98413,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Create a resource for a Copilot Space for a user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) metadata have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {
@@ -98454,7 +98454,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Set a resource for a Copilot Space for a user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -98577,7 +98577,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Restore a package for a user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -98675,7 +98675,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Creates provider-side state: Restore package version for a user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": ""
         },
         {
@@ -98716,7 +98716,7 @@
           "examples": [],
           "output_policy": "",
           "risk": "Mutates existing provider-side state: Update project item for user.",
-          "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+          "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
           "notes": "Required record field(s) fields have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
         },
         {

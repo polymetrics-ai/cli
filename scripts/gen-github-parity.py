@@ -34,6 +34,20 @@ def slugify(s):
 def path_params(path):
     return PATH_PARAM_RE.findall(path)
 
+# The two contracts the runtime actually enforces, mirroring
+# connectors.ConfirmationForWriteAction: a DELETE is destructive by
+# construction, and destructive_action declares confirm=destructive on any
+# method. Everything else is a safe write, and PlanConnectorCommand hands those
+# an approval token at plan time, so a preview is available but not required.
+# Emitting the destructive sentence for all of them documented a gate that is
+# not there.
+SAFE_WRITE_APPROVAL = "Reverse ETL writes require plan, approval, execute; preview is optional."
+DESTRUCTIVE_WRITE_APPROVAL = "Reverse ETL writes require plan, preview, approval, execute."
+
+def command_approval(method, model):
+    destructive = method.upper() == "DELETE" or model == "destructive_action"
+    return DESTRUCTIVE_WRITE_APPROVAL if destructive else SAFE_WRITE_APPROVAL
+
 def derive_cli_path(method, api_path, model):
     # strip /repos/{owner}/{repo} prefix -> segments
     p = api_path
@@ -177,10 +191,14 @@ for e in api["endpoints"]:
         cmd = {"path": cli_path, "summary": f"{method} {api_path}", "intent": "reverse_etl",
                "availability": "implemented", "write": wname, "source_cli_path": "",
                "risk": op.get("risk", "medium"),
-               "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+               "approval": command_approval(method, model),
                "flags": flags}
-        if model == "destructive_action":
-            cmd["notes"] = "destructive; requires --allow-destructive + typed confirmation"
+        # No `notes` marker. The typed confirmation is derived from the bound
+        # write action by commandrunner.ConfirmationChallengeForCommand and
+        # rendered once by the help/manual/skill CONFIRMATION field. The marker
+        # this used to emit named an opt-in flag pm has never parsed, and a
+        # per-command note is silent on every command nobody annotated, which
+        # reads as "no confirmation needed". See the phase TDD ledger, red 7b.
         new_cmds.append(cmd)
         e["covered_by"] = {"write": wname}
     elif is_binary:

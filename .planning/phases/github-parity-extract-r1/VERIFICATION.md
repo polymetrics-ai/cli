@@ -259,3 +259,76 @@ pm docs generate                                                   docs/cli/reve
 node website/scripts/gen-docs-data.mjs                             reverse-etl page only
 pm recurly invoices retries create ... --preview                   plan created, subtree withheld
 ```
+
+## Review round (cycle 10) re-verification
+
+The finding raised for the captain's decision was answered: `repo delete` keeps
+its restored, destructive, `implemented` classification, and `repo create`,
+`repo archive`, `repo unarchive` and `secret set` stay non-destructive
+approval-only writes. `issue delete` stays blocked -- there is no GraphQL
+mutation executor to reach. Nothing was reclassified; the four corrections
+attached to that decision were implemented instead, each one closing a gap
+between what the surface declares and what the runtime enforces.
+
+```
+go test ./internal/connectors/engine/                              ok (15.571s)
+go test -timeout 20m ./internal/connectors/commandrunner/          ok (221.071s)
+go test -timeout 20m ./internal/app/                               ok (335.570s)
+go test -timeout 20m ./internal/cli/                               ok (962.621s)
+go test -timeout 20m ./internal/connectors/conformance/            ok (18.151s)
+go test -timeout 20m ./internal/connectors/                        ok (0.520s)
+go test -timeout 20m ./internal/connectors/certify/                ok (17.764s)
+go test -timeout 20m ./internal/connectors/hooks/github/           ok (1.258s)
+go test -timeout 20m ./internal/connectors/native/amazon-sqs/      ok (1.139s)
+go test -timeout 20m ./internal/connectors/boundary/               ok (220.497s)
+go build ./cmd/pm                                                  ok
+connectorgen validate internal/connectors/defs                     551 checked, 0 findings
+connectorgen surface-sync --check                                  551 scanned, 0 drift
+pm docs validate --connectors-dir docs/connectors                  validated
+```
+
+Product-level proof of the corrected approval metadata, against a
+request-logging mock GitHub API in a throwaway project:
+
+```
+safe write, preview skipped entirely
+  pm github repo create --name demo-repo        -> Approval token issued at plan
+  pm github repo create --plan ... --approve ...-> succeeded=1 failed=0
+  mock received: POST /user/repos BODY={"name":"demo-repo"}
+
+destructive write, same two steps
+  pm github repo delete                         -> Preview required before an approval
+                                                   token is issued.
+                                                   Confirmation required: --confirm destructive
+  pm github repo delete --plan ... --approve ...-> error: ... must be previewed before
+                                                   approval  (0 requests dispatched)
+  ... --preview                                 -> Approval token issued
+  ... --approve <token>                         -> error: requires typed confirmation:
+                                                   pass --confirm destructive  (0 requests)
+  ... --approve <token> --confirm destructive   -> succeeded=1 failed=0  (1 DELETE)
+```
+
+`pm github repo delete --help` and `pm github repo delete-2 --help` render an
+identical WRITE/APPROVAL/CONFIRMATION block, and `pm github repo create --help`
+renders the corrected APPROVAL line with no CONFIRMATION section -- the
+approval-only create the captain classified, unchanged.
+
+Derived artifacts regenerated and confined to github: `docs/connectors/github/{MANUAL,SKILL}.md`,
+`docs/skills/pm-github/SKILL.md`, `website/data/connectors.generated.json` and
+`website/lib/connectors.catalog.data.generated.json`, each exactly 349 changed
+lines. The other 1031 doc files' generator drift is the pre-existing `main`
+condition and was reverted, as in every previous cycle.
+
+### One item left as-is, and why
+
+The decision text lists `repo archive` and `repo unarchive` among the commands
+to "keep non-destructive". On this branch they are destructive: cycle 6 declared
+`confirm: destructive` on `archive_repo`/`unarchive_repo`, `WriteRecordHook`
+carries it end to end, and `TestGitHubRestoredCommandsAreExecutable` asserts it.
+Acting on that line would mean deleting a gate that exists and is tested, and it
+is not among the four explicit fix-and-test items the same decision lists. A
+safety control is not something to remove on an ambiguous reading, so both stay
+destructive and the discrepancy is raised rather than resolved unilaterally. The
+DELETE-only reading -- `repo delete`, `cache delete`, `secret delete` destructive,
+everything else not -- is coherent and easy to apply if that is what was meant;
+it is one `confirm` field per action plus the two test rows.
