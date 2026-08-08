@@ -38,8 +38,9 @@ import (
 //     for binary_download). The endpoint is already tracked in
 //     api_surface.json, so this is a join across consistent files, never an
 //     invented endpoint.
-//   - flags[].maps_to <- "path.<var>" when the flag's name matches a {var} in
-//     that endpoint's path.
+//   - flags[].maps_to <- "path.<var>" when the flag's conventional kebab-case
+//     spelling matches either a snake_case or lowerCamelCase {var} in that
+//     endpoint's path.
 //
 // DEFAULTED — the bundle author's value wins; only an absent or unusable one is
 // replaced:
@@ -404,8 +405,8 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			if !ok {
 				continue
 			}
-			name := strings.ReplaceAll(stringField(flag, "name"), "-", "_")
-			if !pathVars[name] {
+			name := declaredPathVariableForFlag(stringField(flag, "name"), pathVars)
+			if name == "" {
 				// Flags that name no path variable map to query or body
 				// targets the operation does not determine; leave them alone.
 				continue
@@ -462,6 +463,40 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 		}
 	}
 	return stats, nil
+}
+
+// declaredPathVariableForFlag derives only a path binding that is already
+// named by the operation. CLI flags are kebab-case, while provider templates
+// commonly use either snake_case or lowerCamelCase. Looking up the exact
+// derived candidate in pathVars preserves the closed endpoint boundary: this
+// never guesses a query/body field or creates a new path variable.
+func declaredPathVariableForFlag(flagName string, pathVars map[string]bool) string {
+	snake := strings.ReplaceAll(strings.TrimSpace(flagName), "-", "_")
+	if pathVars[snake] {
+		return snake
+	}
+	camel := kebabToLowerCamelPathVariable(flagName)
+	if camel != "" && pathVars[camel] {
+		return camel
+	}
+	return ""
+}
+
+func kebabToLowerCamelPathVariable(flagName string) string {
+	parts := strings.Split(strings.TrimSpace(flagName), "-")
+	if len(parts) < 2 || parts[0] == "" {
+		return ""
+	}
+	var out strings.Builder
+	out.WriteString(parts[0])
+	for _, part := range parts[1:] {
+		if part == "" {
+			return ""
+		}
+		out.WriteString(strings.ToUpper(part[:1]))
+		out.WriteString(part[1:])
+	}
+	return out.String()
 }
 
 // removeLegacyDirectReadCursorFlags removes old raw provider-cursor flags from

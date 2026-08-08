@@ -75,6 +75,22 @@ FAIL
 The fixture is local only, declares no credential or request, and proves a reusable metadata
 derivation gap rather than a CRC-specific handwritten exception.
 
+### Derived camelCase path mapping — GREEN 2026-08-08
+
+`surface-sync` now tries its established kebab-to-snake spelling first, then derives a lower-camel
+candidate and accepts it only if that exact variable occurs in the operation's declared path.
+It cannot create a path variable, map a query/body field, or override a non-path author choice.
+The foundation is independent of Zoom and allows future provider bundles to keep path metadata
+generated instead of copied.
+
+```text
+$ go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestSyncBundleDerivesKebabFlagToCamelCasePathVariable|TestSyncBundleReportsDivergentFlagMapsTo|TestSyncBundleDirectWriteDerivesOperationContract)$'
+ok  	polymetrics.ai/cmd/connectorgen	0.727s
+
+$ go test -count=1 -timeout 20m ./cmd/connectorgen
+ok  	polymetrics.ai/cmd/connectorgen	11.417s
+```
+
 ## GREEN — pending
 
 The passing command and output will be appended after the category declaration and generated
