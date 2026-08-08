@@ -128,6 +128,25 @@ operation, rather than an ad-hoc caller option, selects the narrow policy.
 
 Remaining foundation: operation-level bounded base64 path upload.
 
+### Operation-level base64 path upload — additional RED 2026-08-08
+
+The original RED fixture was strengthened to declare the exact closed operation-level path
+contract: a required source field, bounded PNG/JPEG/GIF source policy, a plan-provided payload
+digest, no local path/base64 bytes in preview, and a changed-file rejection before network
+dispatch. Before the missing canonical preview path was implemented, the focused command failed
+verbatim:
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestOperationDirectWriteBase64PathUploadIsPreviewBound$'
+# polymetrics.ai/internal/connectors/engine [polymetrics.ai/internal/connectors/engine.test]
+internal/connectors/engine/direct_write.go:455:30: undefined: prepareCanonicalOperationBase64Upload
+FAIL	polymetrics.ai/internal/connectors/engine [build failed]
+FAIL
+```
+
+The fixture uses a synthetic one-pixel image and contains no credential, token-derived value, or
+signed URL.
+
 ## GREEN connector — pending
 
 Record the real runner fixture lifecycle, source reconciliation, and command reachability here

@@ -2,7 +2,9 @@ package engine
 
 import (
 	"context"
+	"crypto/sha256"
 	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -344,6 +346,7 @@ func TestOperationDirectWriteBase64PathUploadIsPreviewBound(t *testing.T) {
 		t.Fatalf("write fixture image: %v", err)
 	}
 	want := base64.StdEncoding.EncodeToString(decoded)
+	digest := sha256.Sum256(decoded)
 	calls := 0
 	gotFile := ""
 	leakedPath := false
@@ -378,6 +381,15 @@ func TestOperationDirectWriteBase64PathUploadIsPreviewBound(t *testing.T) {
 				ContentType: "application/json",
 				MaxBytes:    1024,
 				BodySchema:  json.RawMessage(`{"type":"object","additionalProperties":false,"required":["file_path"],"properties":{"file_path":{"type":"string"}}}`),
+				Base64Upload: &Base64UploadSpec{
+					Source:                "path",
+					SourceField:           "file_path",
+					ContentField:          "file",
+					MaxDecodedBytes:       2 << 20,
+					MaxEncodedBytes:       int64(base64.StdEncoding.EncodedLen(2 << 20)),
+					AllowedMediaTypes:     []string{"image/png", "image/jpeg", "image/gif"},
+					AllowedFileExtensions: []string{".png", ".jpg", ".jpeg", ".gif"},
+				},
 			},
 		}},
 		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
@@ -389,12 +401,20 @@ func TestOperationDirectWriteBase64PathUploadIsPreviewBound(t *testing.T) {
 	req := connectors.OperationDirectWriteRequest{
 		Operation: "acme.clips.temporary_file",
 		Config: connectors.RuntimeConfig{
-			ProjectDir:          dir,
-			CredentialRevision:  "fixture-credential-revision",
-			ConfigurationDigest: "fixture-configuration-digest",
-			WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
+			ProjectDir:            dir,
+			CredentialRevision:    "fixture-credential-revision",
+			ConfigurationDigest:   "fixture-configuration-digest",
+			WriteApprovalScope:    connectors.WriteApprovalScopeFixture,
+			ApprovedPayloadSHA256: map[string]string{connectors.PayloadApprovalKey(0, "file_path"): hex.EncodeToString(digest[:])},
 		},
 		Body: map[string]any{"file_path": sourcePath},
+	}
+	metadata, err := OperationDirectWriteMetadata(bundle, req.Operation)
+	if err != nil {
+		t.Fatalf("OperationDirectWriteMetadata temporary image: %v", err)
+	}
+	if len(metadata.PayloadFileFields) != 1 || metadata.PayloadFileFields[0] != "file_path" {
+		t.Fatalf("temporary-image payload file fields = %#v, want file_path", metadata.PayloadFileFields)
 	}
 	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
 	if err != nil {
@@ -407,8 +427,23 @@ func TestOperationDirectWriteBase64PathUploadIsPreviewBound(t *testing.T) {
 	if strings.Contains(string(encodedPreview), sourcePath) {
 		t.Fatal("temporary-file preview exposed local source path")
 	}
+	if strings.Contains(string(encodedPreview), want) {
+		t.Fatal("temporary-file preview exposed local base64 payload")
+	}
 	req.PreviewDigest = preview.Digest
 	req.Approval = approvedEvidenceForPreview(t, preview)
+	if err := os.WriteFile(sourcePath, append(append([]byte(nil), decoded...), 0), 0o600); err != nil {
+		t.Fatalf("change fixture image after preview: %v", err)
+	}
+	if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err == nil || !strings.Contains(err.Error(), "does not match its approved digest") {
+		t.Fatalf("OperationDirectWrite changed temporary image = %v, want approved-digest rejection", err)
+	}
+	if calls != 0 {
+		t.Fatalf("changed temporary-file image reached network; calls = %d, want 0", calls)
+	}
+	if err := os.WriteFile(sourcePath, decoded, 0o600); err != nil {
+		t.Fatalf("restore fixture image: %v", err)
+	}
 	if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err != nil {
 		t.Fatalf("OperationDirectWrite temporary image: %v", err)
 	}
