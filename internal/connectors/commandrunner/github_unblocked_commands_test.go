@@ -29,8 +29,8 @@ func TestGitHubRestoredCommandsAreExecutable(t *testing.T) {
 	}{
 		{command: "repo create", write: "repos_create_for_authenticated_user"},
 		{command: "repo delete", write: "repo", destructive: true},
-		{command: "repo archive", write: "archive_repo", destructive: true},
-		{command: "repo unarchive", write: "unarchive_repo", destructive: true},
+		{command: "repo archive", write: "archive_repo"},
+		{command: "repo unarchive", write: "unarchive_repo"},
 		{command: "cache delete", write: "actions_caches_cache_id", destructive: true},
 		{command: "secret set", write: "actions_secrets_secret_name3"},
 		{command: "secret delete", write: "actions_secrets_secret_name", destructive: true},
@@ -92,10 +92,13 @@ func TestGitHubRestoredCommandsAreExecutable(t *testing.T) {
 						tc.command, action.Method, action.Path, kind)
 				}
 			} else if kind != "" {
-				// The captain classified `repo create` and `secret set` as
-				// approval-only creates. Adding a typed challenge to them is as
-				// much a drift from that decision as dropping one from a delete.
-				t.Fatalf("github %q reaches %s %s with confirmation %q; an approval-only create must not gain a typed challenge",
+				// The captain classified `repo create`, `secret set`,
+				// `repo archive` and `repo unarchive` as approval-only writes.
+				// Adding a typed challenge to one is as much a drift from that
+				// decision as dropping one from a delete, and `repo archive`
+				// carried exactly that drift: it declared `confirm: destructive`
+				// on an update the decision names as non-destructive.
+				t.Fatalf("github %q reaches %s %s with confirmation %q; an approval-only write must not gain a typed challenge",
 					tc.command, action.Method, action.Path, kind)
 			}
 

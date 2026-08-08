@@ -13,15 +13,14 @@ import (
 // CONFIRMATION section and a hand-authored NOTES string three lines below it.
 //
 // The notes are gone, so these cases are chosen to fail if the help ever
-// regresses to reading them: none of these commands carries a note now, and two
-// of them (`repo delete`, `repo archive`) are ones that did.
+// regresses to reading them: none of these commands carries a note now, and
+// `repo delete` is one that did.
 func TestConnectorCommandHelpStatesTheTypedConfirmation(t *testing.T) {
 	const want = "execution requires the typed confirmation --confirm destructive"
 
 	for _, path := range [][]string{
 		{"repo", "delete"},
-		{"repo", "archive"},
-		{"repo", "unarchive"},
+		{"repo", "delete-2"},
 		{"transfer", "create"},
 		{"release", "delete"},
 		{"repo", "deploy-key", "delete"},
@@ -41,10 +40,20 @@ func TestConnectorCommandHelpStatesTheTypedConfirmation(t *testing.T) {
 }
 
 // The converse: a command that reaches no typed gate must not claim one, or the
-// marker stops meaning anything. `issue create`, `repo create` and `secret set`
-// are approval-only writes and `issue list` reads.
+// marker stops meaning anything. `issue create`, `repo create`, `secret set`,
+// `repo archive` and `repo unarchive` are approval-only writes and `issue list`
+// reads. The two archive commands are here because they used to print the
+// CONFIRMATION section from a declared `confirm: destructive` the captain's
+// decision does not give them.
 func TestConnectorCommandHelpOmitsConfirmationWhereNoneIsDemanded(t *testing.T) {
-	for _, path := range [][]string{{"issue", "create"}, {"repo", "create"}, {"secret", "set"}, {"issue", "list"}} {
+	for _, path := range [][]string{
+		{"issue", "create"},
+		{"repo", "create"},
+		{"secret", "set"},
+		{"repo", "archive"},
+		{"repo", "unarchive"},
+		{"issue", "list"},
+	} {
 		t.Run(strings.Join(path, " "), func(t *testing.T) {
 			help := connectorCommandHelp(t, path)
 			if strings.Contains(help, "CONFIRMATION") {

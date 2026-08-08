@@ -648,3 +648,89 @@ nothing else. The generators again wanted the pre-existing `main` drift across t
 files; reverted as before.
 
 No test was weakened, skipped, or deleted. Cycle 10 added three tests.
+
+## Cycle 11 — `repo archive`/`repo unarchive` were gated against their own classification
+
+Cycle 10 closed every place the *declared* contract disagreed with the *enforced* one except the
+one it created a decision about rather than resolved. Cycle 6 gave `repo archive` and
+`repo unarchive` `confirm: destructive`, reading "destructive" as a mutation class. The captain's
+decision uses it to name the gate, and lists both commands with `repo create` and `secret set` as
+non-destructive. Cycle 10 flagged the disagreement and left the gate on, on the reasoning that
+removing a working gate on an ambiguous reading is worse than leaving one that is too strict. The
+captain has now resolved the ambiguity in the other direction, so this cycle removes it.
+
+The direction matters and is worth stating plainly: this **removes a gate**. What makes that
+correct is not that the gate was useless but that it was never authorized. `pm github repo archive`
+demanded a typed confirmation no decision granted it, and every command that carries the typed
+confirmation without being on the destructive list makes the marker mean less on the ones that are.
+
+**Red 11a — the runtime resolved a typed challenge on an approval-only write.**
+`TestGitHubRestoredCommandsAreExecutable` already classifies each restored command and asserts
+against `connectors.ConfirmationForWriteAction`, the same resolver the runtime uses; the two rows
+were flipped to non-destructive:
+
+```
+--- FAIL: TestGitHubRestoredCommandsAreExecutable/repo_archive
+    github "repo archive" reaches PATCH /repos/{{ config.owner }}/{{ config.repo }} with
+    confirmation "destructive"; an approval-only write must not gain a typed challenge
+--- FAIL: TestGitHubRestoredCommandsAreExecutable/repo_unarchive
+    (identical)
+```
+
+**Red 11b — the whole approval path was pinned to the destructive shape.**
+`internal/app/github_repo_delete_gate_test.go` asserted plan-with-no-token, preview-first and
+`--confirm`-or-refusal for both commands. Rewritten as
+`TestGitHubRepoArchiveIsApprovalOnlyAndSendsPinnedField`, which asserts the safe contract
+end to end — plan mints the token, the preview publishes an empty confirmation, an unapproved run
+is still refused with zero requests dispatched, and the plan-time token executes with no preview
+and no `--confirm`:
+
+```
+--- FAIL: TestGitHubRepoArchiveIsApprovalOnlyAndSendsPinnedField/archive
+    repo archive ConfirmationChallenge = "destructive", want none for an approval-only write
+--- FAIL: .../unarchive   (identical)
+```
+
+**Red 11c — the published help demanded the flag.** `repo archive`/`repo unarchive` moved from
+`TestConnectorCommandHelpStatesTheTypedConfirmation` to
+`TestConnectorCommandHelpOmitsConfirmationWhereNoneIsDemanded`. Red, from `pm github repo
+unarchive --help` as shipped:
+
+```
+APPROVAL
+  Reverse ETL writes require plan, preview, approval, execute.
+
+CONFIRMATION
+  execution requires the typed confirmation --confirm destructive
+```
+
+`repo delete-2` took the vacated slot in the states-it test, so the generated twin of the one
+command that *is* destructive is now covered there by name as well as by
+`TestGitHubGeneratedTwinsShareTheirAliasWriteContract`.
+
+**Green — two declarations, and nothing else.** `confirm: destructive` was deleted from
+`archive_repo` and `unarchive_repo` in `internal/connectors/defs/github/writes.json`. Everything
+downstream is derived and followed: the approval sentence became the safe one on both commands
+(github's reverse-ETL split moves 176/349 → **174 destructive / 351 safe**, total unchanged at
+525), the help drops the CONFIRMATION section, and `PreviewPreparedWrite` publishes an empty
+confirmation kind because cycle 10 keyed that on `RequiresApproval()` rather than on a constant.
+
+**What did not change, deliberately.** `repo delete` keeps its full contract — no token at plan,
+preview required, typed `--confirm destructive`, single-use request-bound grant — and its tests are
+untouched. `issue delete`, `issue transfer` and `pr revert` stay blocked: GitHub documents no REST
+endpoint for any of them and there is no GraphQL mutation executor, so they remain unreachable
+rather than confirmable. The `WriteRecordHook` that pins `archived` stays exactly as cycle 6 built
+it: it was introduced *because* the actions were destructive, but its real value is that preview
+and execution build one body from one record, which is the reason a `repo unarchive` cannot
+silently forward an empty body. Only the stale rationale in its comments was corrected.
+
+Derived artifacts regenerated: `docs/connectors/github/{MANUAL,SKILL}.md`,
+`docs/skills/pm-github/SKILL.md`, `docs/connectors/catalog/all-connectors.json`,
+`website/data/connectors.generated.json`, `website/lib/connectors.catalog.data.generated.json` and
+`internal/cli/testdata/golden_transcripts.json` — two changed lines each and nothing else.
+`TestGoldenTranscripts/connectors_inspect_github_json` caught the last of those on its own before
+the regeneration, which is the artifact gate working as intended. The generators again wanted the
+pre-existing `main` drift across the other 1031 doc files; reverted as in cycles 7 and 10.
+
+No test was weakened, skipped, or deleted. Cycle 11 rewrote three assertions to the classification
+the decision states and moved one help case between the two converse tests.

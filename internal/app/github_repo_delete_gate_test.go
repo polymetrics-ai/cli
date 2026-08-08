@@ -116,12 +116,18 @@ func TestGitHubRepoDeleteRequiresConfirmationAndSingleUseGrant(t *testing.T) {
 }
 
 // `repo archive` and `repo unarchive` ride PATCH, so no method makes them
-// destructive by construction. They carry the captain's typed confirmation by
-// declaration instead, which means the engine will only prepare them while the
-// pinned `archived` field is built declaratively — the same body the preview
-// digest binds. This asserts both halves: the gate is on end to end, and the
-// dispatched body is the one field that separates archive from unarchive.
-func TestGitHubRepoArchiveIsConfirmedAndSendsPinnedField(t *testing.T) {
+// destructive by construction, and the captain's decision classes them with
+// `repo create` and `secret set` as approval-only writes. They shipped a
+// declared `confirm: destructive` anyway, which made `pm github repo archive`
+// demand a typed confirmation the decision never granted it.
+//
+// So the contract asserted here is the safe one, end to end: `plan` mints the
+// approval token itself, no preview is required, and `--confirm` is not. What
+// survives the reclassification is the pinned `archived` field — it is still
+// built declaratively through MapWriteRecord, so the dispatched body is the
+// one the preview digest bound, and it is the single field that separates
+// archive from unarchive.
+func TestGitHubRepoArchiveIsApprovalOnlyAndSendsPinnedField(t *testing.T) {
 	for _, tc := range []struct {
 		command  string
 		archived bool
@@ -156,35 +162,39 @@ func TestGitHubRepoArchiveIsConfirmedAndSendsPinnedField(t *testing.T) {
 			if err != nil {
 				t.Fatalf("PlanConnectorCommand(repo %s) error = %v", tc.command, err)
 			}
-			if plan.ConfirmationChallenge != string(connectors.ConfirmationKindDestructive) {
-				t.Fatalf("repo %s ConfirmationChallenge = %q, want destructive", tc.command, plan.ConfirmationChallenge)
+			if plan.ConfirmationChallenge != "" {
+				t.Fatalf("repo %s ConfirmationChallenge = %q, want none for an approval-only write", tc.command, plan.ConfirmationChallenge)
 			}
-			if plan.ApprovalToken != "" {
-				t.Fatalf("planning repo %s minted an approval token; the preview must come first", tc.command)
+			if plan.ApprovalToken == "" {
+				t.Fatalf("planning repo %s issued no approval token; a safe write is approved from its plan", tc.command)
 			}
 
+			// The preview stays available, and must publish the same empty
+			// confirmation the plan did: a preview that names a gate the
+			// execution will not meet is the drift this reclassification fixes.
 			previewed, _, err := a.PreviewConnectorCommandPlan(ctx, plan.ID, nil)
 			if err != nil {
 				t.Fatalf("PreviewConnectorCommandPlan(repo %s) error = %v", tc.command, err)
+			}
+			if previewed.ConfirmationChallenge != "" {
+				t.Fatalf("previewing repo %s declared confirmation %q, want none", tc.command, previewed.ConfirmationChallenge)
 			}
 			if calls != 0 {
 				t.Fatalf("previewing repo %s dispatched a request; calls=%d", tc.command, calls)
 			}
 
-			if _, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{
-				PlanID:        previewed.ID,
-				ApprovalToken: previewed.ApprovalToken,
-			}); err == nil {
-				t.Fatalf("RunReverseETL() ran repo %s without the typed confirmation", tc.command)
+			// The approval gate itself stays: no token, no write.
+			if _, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID}); err == nil {
+				t.Fatalf("RunReverseETL() ran repo %s with no approval token", tc.command)
 			}
 			if calls != 0 {
-				t.Fatalf("unconfirmed repo %s dispatched a request; calls=%d", tc.command, calls)
+				t.Fatalf("unapproved repo %s dispatched a request; calls=%d", tc.command, calls)
 			}
 
+			// The plan-time token executes, with no preview and no --confirm.
 			run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{
-				PlanID:        previewed.ID,
-				ApprovalToken: previewed.ApprovalToken,
-				Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+				PlanID:        plan.ID,
+				ApprovalToken: plan.ApprovalToken,
 			})
 			if err != nil {
 				t.Fatalf("RunReverseETL(repo %s) error = %v", tc.command, err)

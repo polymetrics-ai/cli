@@ -60757,16 +60757,14 @@
         "kind": "update",
         "method": "PATCH",
         "path": "/repos/{{ config.owner }}/{{ config.repo }}",
-        "risk": "returns the configured repository to a writable state",
-        "confirm": "destructive"
+        "risk": "returns the configured repository to a writable state"
       },
       {
         "name": "archive_repo",
         "kind": "update",
         "method": "PATCH",
         "path": "/repos/{{ config.owner }}/{{ config.repo }}",
-        "risk": "archives the configured repository, making it read-only for every consumer",
-        "confirm": "destructive"
+        "risk": "archives the configured repository, making it read-only for every consumer"
       },
       {
         "name": "actions_cache_retention_limit2",

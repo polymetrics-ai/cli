@@ -173,14 +173,14 @@
         "command": "repo archive",
         "write": "archive_repo",
         "method": "PATCH",
-        "confirmation": "plan/preview/typed --confirm destructive/approval/execute",
+        "confirmation": "plan/approval/execute (preview optional); cycle 6 declared confirm: destructive, cycle 11 removed it per the captain decision",
         "new_write_action": true
       },
       {
         "command": "repo unarchive",
         "write": "unarchive_repo",
         "method": "PATCH",
-        "confirmation": "plan/preview/typed --confirm destructive/approval/execute",
+        "confirmation": "plan/approval/execute (preview optional); cycle 6 declared confirm: destructive, cycle 11 removed it per the captain decision",
         "new_write_action": true
       },
       {
@@ -239,7 +239,7 @@
       "issue delete": "stays blocked; no GraphQL mutation executor exists",
       "reclassified": "none",
       "repo create / secret set": "stay non-destructive",
-      "repo archive / repo unarchive": "LEFT AS THE BRANCH HAS THEM: destructive, via the declared confirm: destructive that cycle 6 added and TestGitHubRestoredCommandsAreExecutable pins. The decision text lists them as non-destructive, but that is not among its four explicit fix-and-test items, and acting on it would REMOVE an existing tested gate. Flagged for the captain rather than weakened on an ambiguous reading."
+      "repo archive / repo unarchive": "RESOLVED IN CYCLE 11: non-destructive, as the decision lists them. Cycle 10 left the cycle-6 confirm: destructive in place and flagged the disagreement rather than acting on an ambiguous reading, because removing it removes a working gate; the captain then confirmed the non-destructive classification explicitly. Both declarations are deleted, the approval sentence and help follow, and the app-level test now pins the safe contract end to end (plan mints the token, preview optional, no --confirm)."
     }
   },
   "downstream": {
@@ -267,6 +267,57 @@
       "docs/skills/pm-github/SKILL.md": 349,
       "website/data/connectors.generated.json": 349,
       "website/lib/connectors.catalog.data.generated.json": "1 (minified single-line file)"
+    }
+  },
+  "cycle_11_correction": {
+    "decision": "the captain confirmed repo archive and repo unarchive as non-destructive, like repo create and secret set",
+    "change": "deleted confirm: destructive from archive_repo and unarchive_repo in internal/connectors/defs/github/writes.json; nothing else was declared",
+    "direction": "this REMOVES a gate. It is correct because the gate was never authorized, not because it was harmless: a typed confirmation on a command the decision lists as non-destructive dilutes the marker on the commands that carry it by right",
+    "enforced_now": "plan mints the approval token, preview is optional and publishes an empty confirmation kind, the plan-time token executes with no --confirm, and an unapproved run is still refused with zero requests dispatched",
+    "unchanged": {
+      "repo delete": "no token at plan, preview required, typed --confirm destructive, single-use request-bound grant; tests untouched",
+      "issue delete / issue transfer / pr revert": "stay blocked; no REST endpoint and no GraphQL mutation executor",
+      "WriteRecordHook": "kept: preview and execution build one body from one record, which is what stops repo unarchive forwarding an empty body. Only its stale destructive rationale in comments was corrected"
+    },
+    "reverse_etl_split": {
+      "before": "176 destructive / 349 safe",
+      "after": "174 destructive / 351 safe",
+      "total": 525
+    },
+    "declared_confirmations_github": {
+      "before_cycle_6": 181,
+      "after_cycle_6": 183,
+      "after_cycle_11": 181
+    },
+    "tests": "red-first and GitHub-scoped: TestGitHubRestoredCommandsAreExecutable rows flipped; TestGitHubRepoArchiveIsConfirmedAndSendsPinnedField rewritten as TestGitHubRepoArchiveIsApprovalOnlyAndSendsPinnedField; repo archive/unarchive moved to TestConnectorCommandHelpOmitsConfirmationWhereNoneIsDemanded with repo delete-2 taking the vacated states-it slot",
+    "tests_added": 0,
+    "tests_weakened_skipped_or_deleted": 0,
+    "phantom_flag_survey": {
+      "scope_of_fix": "github only; no repo-wide flag test added",
+      "other_instances_counted_not_changed": {
+        "commands": 21,
+        "command_flag_pairs": 26,
+        "connectors": 5,
+        "per_connector": {
+          "ashby": "12 commands / 16 pairs",
+          "youtube-analytics": "4 / 5",
+          "recurly": "3 / 3",
+          "gong": "1 / 1",
+          "gorgias": "1 / 1"
+        },
+        "difference_from_github": "these declare a flag as blocked pending a named foundation; github's claimed a flag was required. Same class, lower severity"
+      },
+      "widening_plan": "one issue per connector taking the github shape (read the note against declared flags and the parser, fix bundle and generator, add a connector-scoped guard test); promote the guard to a defs.FS sweep only once all five are closed"
+    },
+    "regenerated_artifacts_changed_lines": {
+      "internal/connectors/defs/github/cli_surface.json": 2,
+      "docs/connectors/github/MANUAL.md": 2,
+      "docs/connectors/github/SKILL.md": 2,
+      "docs/skills/pm-github/SKILL.md": 2,
+      "docs/connectors/catalog/all-connectors.json": 2,
+      "website/data/connectors.generated.json": 2,
+      "website/lib/connectors.catalog.data.generated.json": "1 (minified single-line file)",
+      "internal/cli/testdata/golden_transcripts.json": "1 (connectors_inspect_github_json; the two confirm lines, regenerated with POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1)"
     }
   }
 }

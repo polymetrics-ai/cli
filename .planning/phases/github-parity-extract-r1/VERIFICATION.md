@@ -319,16 +319,89 @@ Derived artifacts regenerated and confined to github: `docs/connectors/github/{M
 lines. The other 1031 doc files' generator drift is the pre-existing `main`
 condition and was reverted, as in every previous cycle.
 
-### One item left as-is, and why
+## Review round (cycle 11) re-verification
 
-The decision text lists `repo archive` and `repo unarchive` among the commands
-to "keep non-destructive". On this branch they are destructive: cycle 6 declared
-`confirm: destructive` on `archive_repo`/`unarchive_repo`, `WriteRecordHook`
-carries it end to end, and `TestGitHubRestoredCommandsAreExecutable` asserts it.
-Acting on that line would mean deleting a gate that exists and is tested, and it
-is not among the four explicit fix-and-test items the same decision lists. A
-safety control is not something to remove on an ambiguous reading, so both stay
-destructive and the discrepancy is raised rather than resolved unilaterally. The
-DELETE-only reading -- `repo delete`, `cache delete`, `secret delete` destructive,
-everything else not -- is coherent and easy to apply if that is what was meant;
-it is one `confirm` field per action plus the two test rows.
+Cycle 10 raised one item rather than resolving it: the decision lists
+`repo archive` and `repo unarchive` among the commands to keep non-destructive,
+and on this branch both were destructive by cycle 6's declared
+`confirm: destructive`. Removing a gate that exists and is tested is not
+something to do on an ambiguous reading, so it was flagged. The captain
+confirmed the non-destructive classification, and cycle 11 applies it: the two
+`confirm` declarations are deleted from
+`internal/connectors/defs/github/writes.json`, and nothing else is declared.
+
+Red first, then green (full output in `TDD-LEDGER.md` cycle 11):
+
+```
+go test ./internal/connectors/commandrunner/ -run TestGitHubRestoredCommandsAreExecutable
+  RED   repo archive / repo unarchive reach PATCH ... with confirmation "destructive"
+  GREEN ok
+go test ./internal/app/ -run GitHubRepoArchive
+  RED   repo archive ConfirmationChallenge = "destructive", want none
+  GREEN ok
+go test ./internal/cli/ -run 'TestConnectorCommandHelp(States|Omits)...'
+  RED   pm github repo unarchive --help printed the CONFIRMATION section
+  GREEN ok
+```
+
+Automated tests do not show the operator-facing contract, so the whole path was
+walked with the built binary against a mock GitHub API that logs every dispatched
+request, in a scratch project with a mock credential:
+
+```
+$ pm github repo archive --help
+  APPROVAL      Reverse ETL writes require plan, approval, execute; preview is optional.
+  (no CONFIRMATION section)
+
+$ pm github repo archive --credential github-local
+  Created connector command plan rplan_17ab35fc3e572543 for repo archive
+  Approval token: 81c18f3e...                  <- issued at plan; no preview demanded
+  requests dispatched: 0
+
+$ pm github repo archive ... --plan rplan_17ab... --preview --json
+  plan.confirmation                          = {"kind": ""}
+  write_preview.approval_target.confirmation = {"kind": ""}
+
+$ pm github repo archive ... --plan rplan_17ab... --approve 81c18f3e...   # no --confirm
+  Reverse ETL run rrun_00a2... completed: succeeded=1 failed=0
+  mock received: PATCH /repos/acme/widgets BODY={"archived":true}
+
+$ pm github repo unarchive ... --plan rplan_f4ff... --approve <wrong token>
+  error: approval token is invalid            (requests dispatched: 0)
+$ pm github repo unarchive ... --plan rplan_f4ff... --approve 924b380a...
+  succeeded=1 failed=0
+  mock received: PATCH /repos/acme/widgets BODY={"archived":false}
+```
+
+The approval gate is intact — an invalid token is refused with zero requests
+dispatched — and the pinned `archived` field still separates the two commands,
+so the `WriteRecordHook` keeps doing the job it was built for even though the
+confirmation that forced its introduction is gone. The path resolves through
+`{{ config.owner }}/{{ config.repo }}` to the configured repository.
+
+`repo delete` is untouched and re-confirmed on the same binary:
+
+```
+$ pm github repo delete --credential github-local
+  Created connector command plan rplan_af16... for repo delete
+  Preview required before an approval token is issued.
+  Confirmation required: --confirm destructive
+```
+
+Derived artifacts regenerated and confined to github --
+`internal/connectors/defs/github/cli_surface.json`,
+`docs/connectors/github/{MANUAL,SKILL}.md`, `docs/skills/pm-github/SKILL.md`,
+`docs/connectors/catalog/all-connectors.json`,
+`website/data/connectors.generated.json`,
+`website/lib/connectors.catalog.data.generated.json` and
+`internal/cli/testdata/golden_transcripts.json` -- two changed lines each, with
+github's catalog entry verified byte-identical to generator output. The golden
+transcript was the one gate that caught the artifact it owns:
+`TestGoldenTranscripts/connectors_inspect_github_json` failed on the stale
+`confirm` lines before being regenerated with
+`POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1`, and its diff is exactly those two
+lines. The
+other 1031 doc files' generator drift is the pre-existing `main` condition and
+was reverted, as in every previous cycle. `connectorgen validate` (551 checked,
+0 findings), `connectorgen surface-sync --check` (no drift) and
+`pm docs validate` are clean.
