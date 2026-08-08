@@ -106,6 +106,30 @@ approval-only creates, and gaining a typed challenge is as much a drift from tha
 losing one. No declaration was duplicated: the three DELETEs already carried the challenge by
 method, and only the two PATCH actions needed one declared.
 
+**The documented surface says so too.** `repo archive`/`repo unarchive` now carry the same
+`notes` marker every other destructive github command carries, so `pm connectors inspect github
+--json`, `MANUAL.md` and `SKILL.md` state the requirement instead of leaving an agent to discover
+it as an unexplained failure at run.
+
+That marker was itself wrong, on all eight commands that already had it. It read `destructive;
+requires --allow-destructive + typed confirmation`, and there is no `--allow-destructive` flag —
+`pm github repo delete --allow-destructive` fails with `unknown flag --allow-destructive for
+command "repo delete"`. Copying it onto two more commands would have documented a second trap of
+exactly the kind this fix exists to remove, so all ten now read `destructive; requires typed
+confirmation --confirm destructive`, which is the flag the runtime actually takes.
+
+Every derived artifact was regenerated from those declarations rather than hand-edited:
+`docs/connectors/github/{MANUAL,SKILL}.md` and `docs/skills/pm-github/SKILL.md` via
+`./pm docs generate` / `./pm skills generate`, `docs/connectors/catalog/all-connectors.json`
+(`archive_repo`/`unarchive_repo` gain `confirm: destructive`, taking github from 181 to 183
+declared confirmations), and `website/data/connectors.generated.json` plus
+`website/lib/connectors.catalog.data.generated.json` via `npm --prefix website run gen:catalog`.
+`body_fields: ["archived"]` now also renders as an `optional fields: archived` line on both
+actions, taking github's manual from 9 such lines to 11. The generators again wanted to rewrite
+all 551 connectors, plus the catalog's `gorgias` and `warehouse` entries; that is the same
+pre-existing drift on `main` the earlier regeneration commit isolated, and it is reverted here
+again. Both website catalogs were diffed per connector: the only entry that changes is GitHub.
+
 **Two needed more than a classification change.** `repo archive`/`repo unarchive` ride the same
 endpoint as the generic `repo update`, so the body is the only thing separating them — an
 "archive" command that only archives when the caller separately remembers `archived: true` is a
