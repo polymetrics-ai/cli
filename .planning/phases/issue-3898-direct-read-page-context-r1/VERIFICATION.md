@@ -108,9 +108,9 @@ before that gate. Final disposition: no unresolved critical or warning finding.
   `codeload.github.com`, which is not allowlisted by the binary downloader.
   That is a separate, unmodified gap recorded for captain decision; no archive
   file was written.
-- PR #3902's current body predates this validation and still says the branch is
-  paused, GitHub-only, and unverified. It must be updated during delivery to
-  state the shared 13-connector/362-command scope, the explicit page-context
-  user behavior, the completed PM live-write validation, and the binary-path
-  gap. It was inspected read-only only: changing a PR outside the dedicated
-  private test repository is not authorized by the captain's live-test boundary.
+- PR #3902's body was corrected on 2026-08-08 under the captain's explicit
+  authorization for the owner PR: it now states the shared
+  13-connector/362-command scope, the explicit page-context user behavior, the
+  completed PM live-write validation, and the binary-path gap. The PR branch
+  was then refreshed against `main`; no GitHub content outside the dedicated
+  private test repository was changed.
