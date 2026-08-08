@@ -250,6 +250,41 @@ The remaining plausible environmental interaction is a VPN/middlebox or
 GitHub-edge response reset specific to PM/Go's successfully written request.
 No network setting or no-duplicate-write safeguard was changed.
 
+## Credential and authentication validation
+
+The captain asked whether the failing write could instead be using a different,
+anonymous, malformed, or non-writing credential. The original disposable
+live-test vault had already been deliberately removed, so its historical
+ciphertext cannot be reopened. To test the same construction path without
+retaining a secret, a fresh disposable project added the GitHub credential from
+the current `gh auth token` source, with the same private repository scope.
+
+Observable results, with no token, digest, length, header value, or body
+logged:
+
+- `pm credentials test github-live-write --json` returned
+  `CredentialTest` with `status: ok`. Its GitHub check is a GET of the private
+  repository, so this is authenticated traffic; an anonymous lookup could not
+  have read that private repository.
+- Credential metadata recorded the `token` secret field, no `app_id`, no
+  enabled `public_access`, and no `auth_type` override. GitHub's declared auth
+  rules select bearer first when `secrets.token` is present, before the app and
+  public branches. The reconstructed live path therefore resolved **bearer
+  token auth**, not GitHub App or anonymous/public auth.
+- An internal comparison computed SHA-256 and byte-length equality only. Both
+  matched the `gh auth token` source; the stored token had neither a trailing
+  newline nor surrounding whitespace. Neither digest nor length was emitted.
+- A read-only authenticated repository permission response reported
+  `admin: true`, `push: true`, and `pull: true` for the dedicated private
+  repository. This is direct evidence of write permission for the same source
+  credential, even if an OAuth-scope header does not advertise a classic
+  `repo` label (for example, a fine-grained token).
+
+This removes credential selection, validity, storage corruption/whitespace,
+and repository write permission as explanations for the observed PM EOF. It
+does not claim byte-for-byte access to the already-deleted historical vault;
+that limitation is explicit.
+
 ## Red/green commands
 
 ```sh

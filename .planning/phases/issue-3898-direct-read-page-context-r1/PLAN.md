@@ -131,3 +131,11 @@ result carries the context needed to reach the next one.
     trusted chain and never bypass certificate verification. Compare proxy
     variable presence as seen by curl and Go without revealing their values,
     and inspect VPN state read-only. Keep all no-replay safeguards unchanged.
+14. Before attributing the remaining EOF to a tunnel, validate the credential
+    path without logging secret material: `pm credentials test` must succeed
+    against the private repository; the resolved configuration must select the
+    bearer-token branch rather than GitHub App or public auth; and an internal
+    hash-and-length-only round trip through the encrypted vault must preserve
+    the `gh auth token` source with no leading, trailing, or newline
+    whitespace. Confirm the authenticated GitHub identity has `push` access
+    to the dedicated repository through a read-only permission response.

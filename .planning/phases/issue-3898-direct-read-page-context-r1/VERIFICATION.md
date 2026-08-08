@@ -72,6 +72,15 @@ node website/scripts/cli-surface.test.mjs 7/7 pass
   verification. PM and curl inherit no configured HTTP proxy, but the machine
   does have one connected VPN service. No network change was made; the live
   GitHub write gate remains blocked.
+- The credential path is not the explanation: a fresh credential constructed
+  from the same `gh auth token` source passed `pm credentials test` against the
+  private repository, resolved the GitHub bundle's bearer branch (not App or
+  public auth), survived an internal hash-and-length-only vault comparison
+  without newline/surrounding whitespace, and the authenticated repository
+  permission response reported `admin`, `push`, and `pull` as true. The prior
+  disposable vault was intentionally removed, so this is a reconstruction of
+  the same construction path rather than an assertion about inaccessible
+  historical ciphertext.
 - `docs/connectors/**` regeneration carries unrelated pre-existing drift
   (field types). Verifiable by running `pm docs generate` on a clean tree, which
   changes 1028 files with no code changes at all.
