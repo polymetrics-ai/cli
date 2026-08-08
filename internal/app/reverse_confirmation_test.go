@@ -164,13 +164,10 @@ func TestLimitedReversePlanPreviewsAndRunsItsExactApprovedSlice(t *testing.T) {
 	defer server.Close()
 
 	a, root := setupGitHubApp(t, ctx, server.URL)
-	warehouseDir := filepath.Join(root, ".polymetrics", "warehouse")
-	if err := os.MkdirAll(warehouseDir, 0o700); err != nil {
-		t.Fatalf("mkdir warehouse: %v", err)
-	}
-	if err := os.WriteFile(filepath.Join(warehouseDir, "repo_deletes.jsonl"), []byte("{\"id\":\"row-1\"}\n{\"id\":\"row-2\"}\n"), 0o600); err != nil {
-		t.Fatalf("write warehouse rows: %v", err)
-	}
+	seedWarehouseTableRows(t, root, "repo_deletes",
+		`{"id":"row-1"}`,
+		`{"id":"row-2"}`,
+	)
 	plan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
 		Name:                  "delete_one_repo",
 		SourceTable:           "repo_deletes",
@@ -231,13 +228,9 @@ func TestGitHubCreateIssueReversePlanUsesDeclaredEndpoint(t *testing.T) {
 	defer server.Close()
 
 	a, root := setupGitHubApp(t, ctx, server.URL)
-	warehouseDir := filepath.Join(root, ".polymetrics", "warehouse")
-	if err := os.MkdirAll(warehouseDir, 0o700); err != nil {
-		t.Fatalf("mkdir warehouse: %v", err)
-	}
-	if err := os.WriteFile(filepath.Join(warehouseDir, "issue_candidates.jsonl"), []byte("{\"title\":\"fixture issue\",\"body\":\"fixture body\"}\n"), 0o600); err != nil {
-		t.Fatalf("write issue candidate: %v", err)
-	}
+	seedWarehouseTableRows(t, root, "issue_candidates",
+		`{"title":"fixture issue","body":"fixture body"}`,
+	)
 	plan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
 		Name:                  "create_fixture_issue",
 		SourceTable:           "issue_candidates",

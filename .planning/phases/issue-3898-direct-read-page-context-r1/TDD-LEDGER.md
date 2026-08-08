@@ -443,6 +443,53 @@ reads. The `after`/`before` regression additionally preserves a timestamp
 `before` filter, so an ordinary provider filter is not lost merely because its
 name resembles cursor navigation.
 
+## Post-main-refresh Parquet fixture compatibility gap
+
+**Manual GSD gap fallback:** `scripts/gsd sources plan-phase` and
+`scripts/gsd sources execute-phase` resolved the installed lifecycle sources.
+The project-local Pi workers are unavailable in this session and the issue
+contract forbids substituting spawned roles, so this small CI compatibility gap
+is planned and executed inline. It is limited to two tests this branch added
+before the Parquet transition; no production warehouse behavior is changed.
+
+**Red:** the GitHub Verify run on refreshed head
+`5391499fa8b99dc7f73abcd269f6527328889f1e` and the local focused reproduction
+both failed because those fixtures wrote `repo_deletes.jsonl` and
+`issue_candidates.jsonl`, which the now-correct legacy-format guard refuses:
+
+```sh
+go test -timeout 3m ./internal/app \
+  -run '^(TestLimitedReversePlanPreviewsAndRunsItsExactApprovedSlice|TestGitHubCreateIssueReversePlanUsesDeclaredEndpoint)$' \
+  -count=1
+# FAIL: warehouse tables are stored as Parquet, but 1 table(s) are still JSONL
+```
+
+**Green plan:** replace only the hand-written JSONL setup in those two tests
+with the existing `seedWarehouseTableRows` helper. That helper uses the real
+`warehouse.WriteTable` Parquet writer, so fixtures follow the production format
+without adding a second writer or weakening the legacy-JSONL refusal.
+
+**Green:** both exact regressions and the complete affected package now pass:
+
+```sh
+go test -timeout 3m ./internal/app \
+  -run '^(TestLimitedReversePlanPreviewsAndRunsItsExactApprovedSlice|TestGitHubCreateIssueReversePlanUsesDeclaredEndpoint)$' \
+  -count=1
+# ok  polymetrics.ai/internal/app  3.470s
+
+go test -timeout 20m ./internal/app -count=1
+# ok  polymetrics.ai/internal/app  228.607s
+
+go vet ./internal/app
+```
+
+A whole-test-tree scan found no other ordinary fixture that builds a legacy
+JSONL warehouse table. The remaining JSONL table references are intentional
+legacy-format refusal coverage in `internal/app/warehouse_parquet_test.go`,
+`internal/app/warehouse_connection_isolation_test.go`, and
+`internal/connectors/warehouse_test.go`; outbox, WAL, and unrelated JSONL
+fixtures are not warehouse table fixtures and remain untouched.
+
 ## Captain parameter and real-result proof
 
 The final focused CLI regression drives the embedded GitHub bundle through a

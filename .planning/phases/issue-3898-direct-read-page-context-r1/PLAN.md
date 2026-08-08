@@ -173,3 +173,9 @@ result carries the context needed to reach the next one.
     a generic shell or raw-HTTP escape hatch. Report clone support honestly and
     exercise each existing read-only file, release-asset, and archive path;
     do not extend the product surface without a captain decision.
+20. Post-`main` refresh compatibility gap: the two branch-owned reverse-plan
+    regressions added before the Parquet warehouse transition still hand-write
+    root-level JSONL tables. Record their CI-reproduced RED failure, replace
+    only those test fixtures with the existing real Parquet fixture helper,
+    and prove the exact tests plus `internal/app` are green. This is test
+    fixture alignment, not a change to the legacy-JSONL refusal contract.

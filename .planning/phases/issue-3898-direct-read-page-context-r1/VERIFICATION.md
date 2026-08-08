@@ -114,3 +114,17 @@ before that gate. Final disposition: no unresolved critical or warning finding.
   completed PM live-write validation, and the binary-path gap. The PR branch
   was then refreshed against `main`; no GitHub content outside the dedicated
   private test repository was changed.
+
+## Post-main-refresh CI recovery
+
+The refreshed-head Verify run exposed two pre-Parquet, branch-owned reverse
+plan fixtures in `internal/app/reverse_confirmation_test.go`. Their JSONL
+tables were correctly refused by the new warehouse contract; the product code
+was not changed. The fixture setup now calls the existing
+`seedWarehouseTableRows` helper, which uses `warehouse.WriteTable` to create
+the same Parquet format the runtime reads. The two focused tests, the full
+`internal/app` package, and `go vet ./internal/app` are green locally. A
+whole-test-tree scan found no other ordinary legacy JSONL warehouse-table
+fixture; the remaining references are deliberate refusal coverage. Inline
+manual code review confirmed the diff changes only those fixtures and the
+required GSD/TDD evidence. GitHub Verify is rerun from the committed fix.
