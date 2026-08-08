@@ -1042,8 +1042,7 @@
       "source_cli_path": "gh repo delete",
       "risk": "critical",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": [],
-      "notes": "destructive; requires typed confirmation --confirm destructive"
+      "flags": []
     },
     {
       "path": "repo archive",
@@ -1054,8 +1053,7 @@
       "source_cli_path": "gh repo archive",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": [],
-      "notes": "destructive; requires typed confirmation --confirm destructive"
+      "flags": []
     },
     {
       "path": "repo unarchive",
@@ -1066,8 +1064,7 @@
       "source_cli_path": "gh repo unarchive",
       "risk": "high",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": [],
-      "notes": "destructive; requires typed confirmation --confirm destructive"
+      "flags": []
     },
     {
       "path": "repo fork",
@@ -1756,8 +1753,7 @@
           "summary": "Actions cache id to delete.",
           "maps_to": "record.cache_id"
         }
-      ],
-      "notes": "destructive; requires typed confirmation --confirm destructive"
+      ]
     },
     {
       "path": "label list",
@@ -2090,8 +2086,7 @@
           "summary": "Repository Actions secret name.",
           "maps_to": "record.secret_name"
         }
-      ],
-      "notes": "destructive; requires typed confirmation --confirm destructive"
+      ]
     },
     {
       "path": "variable list",
@@ -2530,8 +2525,7 @@
       "source_cli_path": "",
       "risk": "critical",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": [],
-      "notes": "destructive; requires typed confirmation --confirm destructive"
+      "flags": []
     },
     {
       "path": "repo update",
@@ -3520,8 +3514,7 @@
           "summary": "run_id path parameter",
           "maps_to": "record.run_id"
         }
-      ],
-      "notes": "destructive; requires typed confirmation --confirm destructive"
+      ]
     },
     {
       "path": "run logs view-3",
@@ -4647,8 +4640,7 @@
           "summary": "branch path parameter",
           "maps_to": "record.branch"
         }
-      ],
-      "notes": "destructive; requires typed confirmation --confirm destructive"
+      ]
     },
     {
       "path": "check-runs create",
@@ -6116,8 +6108,7 @@
           "summary": "deployment_id path parameter",
           "maps_to": "record.deployment_id"
         }
-      ],
-      "notes": "destructive; requires typed confirmation --confirm destructive"
+      ]
     },
     {
       "path": "deployments statuses view",
@@ -9048,8 +9039,7 @@
       "source_cli_path": "",
       "risk": "critical",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": [],
-      "notes": "destructive; requires typed confirmation --confirm destructive"
+      "flags": []
     },
     {
       "path": "vulnerability-alerts delete",
