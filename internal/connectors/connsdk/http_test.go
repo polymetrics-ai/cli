@@ -625,7 +625,7 @@ func TestRequesterDisableRetriesMakesMutationNonReplayable(t *testing.T) {
 }
 
 func TestNoReplayClientKeepsHTTPNegotiationAvailable(t *testing.T) {
-	client := noReplayClient(&http.Client{Transport: http.DefaultTransport})
+	client := noReplayClient(&http.Client{Transport: http.DefaultTransport}, false)
 	transport, ok := client.Transport.(*http.Transport)
 	if !ok {
 		t.Fatalf("strict transport type = %T, want *http.Transport", client.Transport)
@@ -659,7 +659,7 @@ func TestNoReplayClientALPNMatchesConfiguredProtocol(t *testing.T) {
 	transport.TLSClientConfig = tlsConfig
 	base.Transport = transport
 
-	strictClient := noReplayClient(base)
+	strictClient := noReplayClient(base, false)
 	strictTransport, ok := strictClient.Transport.(*http.Transport)
 	if !ok {
 		t.Fatalf("strict transport type = %T, want *http.Transport", strictClient.Transport)

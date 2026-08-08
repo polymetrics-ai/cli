@@ -2,7 +2,7 @@
   "phase": "cli-zoom-parity-clips-r1",
   "issue": 3936,
   "parent_issue": 3915,
-  "status": "json-mutation-redirect-red",
+  "status": "foundations-green",
   "lifecycle": {
     "mode": "inline-manual-gsd-fallback",
     "reason": "This provider-category phase is not registered by the official runtime and the parent issue contract forbids role spawning.",
@@ -50,7 +50,7 @@
     }
   },
   "red": "captured: current 102/1740/55/42 totals fail the 123/1719/61/58 target; all 23 Clips commands are unknown; json_array is unsupported; a permitted binary redirect strips bearer; operation base64 source path is not transformed.",
-  "green": "root-json-array plan lifecycle, declared bearer binary redirect, and operation-level bounded base64 path upload foundations passed",
-  "verification": "captain rebase completed and published; JSON mutation redirect foundation remains red by committed test",
+  "green": "root-json-array plan lifecycle, declared bearer binary redirect, operation-level bounded base64 path upload, and recursively closed JSON mutation redirect foundations passed",
+  "verification": "captain rebase completed and published; post-rebase engine, connsdk, commandrunner, connectorgen, and Zoom bundle validation pass",
   "review": "pending"
 }

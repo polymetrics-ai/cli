@@ -35,9 +35,10 @@ const maxDeclaredMutationRedirectHops = 3
 
 // DeclaredMutationRedirect is a declaration-owned exception to the default
 // no-redirect policy for strict mutation requests. It exists only so an
-// operation-level multipart or bounded base64 upload can rebuild its already
-// snapshot-bound body at a provider-documented, same-provider host; callers
-// never provide a target URL or authentication header.
+// operation-level multipart, bounded base64 upload, or closed JSON body can
+// rebuild its already snapshot-bound body at a provider-documented,
+// same-provider host; callers never provide a target URL or authentication
+// header.
 type DeclaredMutationRedirect struct {
 	AllowedHostSuffixes []string
 	MaxHops             int

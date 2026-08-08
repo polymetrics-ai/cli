@@ -254,6 +254,42 @@ FAIL
 The tests use synthetic local endpoints and secret templates only. No request
 was sent in this RED state.
 
+### JSON multipart-event mutation redirect — green after rebase 2026-08-08
+
+The mutation redirect declaration now accepts only a `rest_write` that is
+already a multipart/base64 upload or declares `application/json` with a
+recursively closed object body schema. The JSON path requires the same fixed
+literal operation base URL, one declared bearer authenticator, finite provider
+suffix, and 307/308-only policy as the existing upload path. Its target URL
+and authorization header remain declaration-owned. An open nested object (and
+any open `allOf`/`anyOf`/`oneOf` branch) is refused before a command can reach
+the transport.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run '^(TestOperationJSONWriteAdmitsDeclaredMutationRedirect|TestOperationJSONMutationRedirectRequiresClosedBody|TestOperationDirectWriteJSONFollowsDeclaredRedirect)$'
+ok  polymetrics.ai/internal/connectors/engine
+
+$ go test -count=1 -timeout 20m ./internal/connectors/engine
+ok  polymetrics.ai/internal/connectors/engine
+
+$ go test -count=1 -timeout 20m ./internal/connectors/connsdk
+ok  polymetrics.ai/internal/connectors/connsdk
+
+$ go test -count=1 -timeout 20m ./internal/connectors/commandrunner
+ok  polymetrics.ai/internal/connectors/commandrunner
+
+$ go test -count=1 -timeout 20m ./cmd/connectorgen
+ok  polymetrics.ai/cmd/connectorgen
+
+$ go run ./cmd/connectorgen validate internal/connectors/defs/zoom
+connectorgen validate: 1 connector(s) checked, 0 findings
+```
+
+During the rebase check, two pre-existing `noReplayClient` test callers were
+updated to pass `false` for the helper's current declared-redirect argument.
+They exercise the no-declared-redirect branch, so this preserves the original
+non-replay behavior while keeping the compatibility check buildable.
+
 ## GREEN connector — pending
 
 Record the real runner fixture lifecycle, source reconciliation, and command reachability here

@@ -10,6 +10,8 @@
 - [x] Declared bearer redirect foundation is green without permitting arbitrary credential forwarding.
 - [x] Closed operation-level base64 image upload foundation is green with pre-network bounds,
   media/name, snapshot, redaction, and provider-bounded bearer-redirect assertions.
+- [x] Closed JSON multipart-event mutation redirect foundation follows one admitted provider hop,
+  retains only its declared bearer, and refuses open nested/composed JSON schema branches.
 - [ ] All 21 endpoint rows and 23 concrete commands run through real preflight and fixtures.
 - [ ] Every documented `204` action is status-only and destructive confirmation-gated.
 - [ ] Endpoint ledger reconciliation is confined to Zoom Clips; zero Zoom rows are
@@ -24,3 +26,11 @@ The 2026-08-08 RED checkpoint recorded the failing 102/1,740/55/42 inventory tot
 twenty-three unknown Clips command paths, root `json_array` rejection, bearer stripping on the
 declared binary redirect fixture, and missing direct-write base64 transformation. The verbatim
 output is retained in `TDD-LEDGER.md`; its fixtures contain only synthetic values.
+
+Captain-ordered rebase evidence is recorded in `RUN-STATE.json`: pre-checkpoint head
+`fdc67b059`, checkpoint old head `23c4fc25a`, fetched/current merge base `d453fbe256`, and
+force-with-lease published rebased head `8c389ae8a`. The initial scoped Zoom load was expected to
+remain red because the committed Clips JSON-event declarations intentionally awaited this
+foundation. After the green implementation, `engine`, `connsdk`, `commandrunner`,
+`cmd/connectorgen`, and the Zoom bundle validator all pass; verbatim commands are in the TDD
+ledger.
